@@ -176,10 +176,10 @@ class RuleCollectorSpec {
         @Test
         fun `contains no configuration options by default`() {
             val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass : Rule
+                /**
+                 * description
+                 */
+                class SomeRandomClass : Rule
             """
             val items = subject.run(code)
             assertThat(items[0].configuration).isEmpty()
@@ -188,13 +188,13 @@ class RuleCollectorSpec {
         @Test
         fun `contains one configuration option with correct formatting`() {
             val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val config: String by config("[A-Z$]")
-                        }                        
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Configuration("description")
+                    private val config: String by config("[A-Z$]")
+                }                        
             """
             val items = subject.run(code)
             assertThat(items[0].configuration).hasSize(1)
@@ -211,13 +211,13 @@ class RuleCollectorSpec {
         @Test
         fun `contains one configuration option of type Int`() {
             val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val config: Int by config(1_999_000)
-                        }                        
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Configuration("description")
+                    private val config: Int by config(1_999_000)
+                }                        
             """
             val items = subject.run(code)
             assertThat(items[0].configuration).hasSize(1)
@@ -227,13 +227,13 @@ class RuleCollectorSpec {
         @Test
         fun `extracts default value when it is a multi line string`() {
             val code = """
-                    /**
-                     * description
-                     */
-                    class SomeRandomClass() : Rule {
-                        @Configuration("description")
-                        private val config: String by config(""${"\""}abcd""${"\""})
-                    }                        
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Configuration("description")
+                    private val config: String by config(""${"\""}abcd""${"\""})
+                }                        
             """
             val items = subject.run(code)
             assertThat(items[0].configuration[0].defaultValue).isEqualTo(of("abcd"))
@@ -242,13 +242,13 @@ class RuleCollectorSpec {
         @Test
         fun `extracts default value when defined with named parameter`() {
             val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val config: Int by config(defaultValue = 99)
-                        }                        
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Configuration("description")
+                    private val config: Int by config(defaultValue = 99)
+                }                        
             """
             val items = subject.run(code)
             assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(99))
@@ -257,18 +257,18 @@ class RuleCollectorSpec {
         @Test
         fun `extracts default value for list of strings`() {
             val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val config: List<String> by config(
-                                listOf(
-                                    "a", 
-                                    "b"
-                                )
-                            )
-                        }                        
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Configuration("description")
+                    private val config: List<String> by config(
+                        listOf(
+                            "a", 
+                            "b"
+                        )
+                    )
+                }                        
             """
             val items = subject.run(code)
             val expected = of(listOf("a", "b"))
@@ -278,16 +278,16 @@ class RuleCollectorSpec {
         @Test
         fun `contains multiple configuration options`() {
             val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val config: String by config("")
-                            
-                            @Configuration("description")
-                            private val config2: String by config("")
-                        }                        
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Configuration("description")
+                    private val config: String by config("")
+                    
+                    @Configuration("description")
+                    private val config2: String by config("")
+                }                        
             """
             val items = subject.run(code)
             assertThat(items[0].configuration).hasSize(2)
@@ -296,16 +296,16 @@ class RuleCollectorSpec {
         @Test
         fun `has description that is concatenated`() {
             val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration(
-                                "This is a " +
-                                "multi line " +
-                                "description")
-                            private val config: String by config("a")
-                        }                        
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Configuration(
+                        "This is a " +
+                        "multi line " +
+                        "description")
+                    private val config: String by config("a")
+                }                        
             """
             val items = subject.run(code)
             assertThat(items[0].configuration[0].description).isEqualTo("This is a multi line description")
@@ -315,17 +315,17 @@ class RuleCollectorSpec {
         @Test
         fun `extracts default value when it is an Int constant`() {
             val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val config: Int by config(DEFAULT_CONFIG_VALUE)
-                            
-                            companion object {
-                                private const val DEFAULT_CONFIG_VALUE = 99
-                            }
-                        }                        
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Configuration("description")
+                    private val config: Int by config(DEFAULT_CONFIG_VALUE)
+                    
+                    companion object {
+                        private const val DEFAULT_CONFIG_VALUE = 99
+                    }
+                }                        
             """
             val items = subject.run(code)
             assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(99))
@@ -334,17 +334,17 @@ class RuleCollectorSpec {
         @Test
         fun `extracts default value when it is an Int constant as named parameter`() {
             val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val config: Int by config(defaultValue = DEFAULT_CONFIG_VALUE)
-                            
-                            companion object {
-                                private const val DEFAULT_CONFIG_VALUE = 99
-                            }
-                        }                        
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Configuration("description")
+                    private val config: Int by config(defaultValue = DEFAULT_CONFIG_VALUE)
+                    
+                    companion object {
+                        private const val DEFAULT_CONFIG_VALUE = 99
+                    }
+                }                        
             """
             val items = subject.run(code)
             assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(99))
@@ -353,17 +353,17 @@ class RuleCollectorSpec {
         @Test
         fun `extracts default value when it is a String constant`() {
             val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val config: String by config(DEFAULT_CONFIG_VALUE)
-                            
-                            companion object {
-                                private const val DEFAULT_CONFIG_VALUE = "a"
-                            }
-                        }                        
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Configuration("description")
+                    private val config: String by config(DEFAULT_CONFIG_VALUE)
+                    
+                    companion object {
+                        private const val DEFAULT_CONFIG_VALUE = "a"
+                    }
+                }                        
             """
             val items = subject.run(code)
             assertThat(items[0].configuration[0].defaultValue).isEqualTo(of("a"))
@@ -372,21 +372,21 @@ class RuleCollectorSpec {
         @Test
         fun `extracts default value for list of strings from constant`() {
             val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val config1: List<String> by config(DEFAULT_CONFIG_VALUE)
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Configuration("description")
+                    private val config1: List<String> by config(DEFAULT_CONFIG_VALUE)
 
-                            @Configuration("description")
-                            private val config2: List<String> by config(listOf(DEFAULT_CONFIG_VALUE_A, "b"))
+                    @Configuration("description")
+                    private val config2: List<String> by config(listOf(DEFAULT_CONFIG_VALUE_A, "b"))
 
-                            companion object {
-                                private val DEFAULT_CONFIG_VALUE = listOf("a", "b")
-                                private val DEFAULT_CONFIG_VALUE_A = "a"
-                            }
-                        }                        
+                    companion object {
+                        private val DEFAULT_CONFIG_VALUE = listOf("a", "b")
+                        private val DEFAULT_CONFIG_VALUE_A = "a"
+                    }
+                }                        
             """
             val items = subject.run(code)
             val expected = of(listOf("a", "b"))
@@ -397,16 +397,16 @@ class RuleCollectorSpec {
         @Test
         fun `extracts emptyList default value`() {
             val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val config1: List<String> by config(listOf())
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Configuration("description")
+                    private val config1: List<String> by config(listOf())
 
-                            @Configuration("description")
-                            private val config2: List<String> by config(emptyList())
-                        }                        
+                    @Configuration("description")
+                    private val config2: List<String> by config(emptyList())
+                }                        
             """
             val items = subject.run(code)
             val expected = of(emptyList())
@@ -417,20 +417,20 @@ class RuleCollectorSpec {
         @Test
         fun `extracts emptyList default value of transformed list`() {
             val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val config1: List<Int> by config(listOf<String>()) { it.map(String::toInt) }
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Configuration("description")
+                    private val config1: List<Int> by config(listOf<String>()) { it.map(String::toInt) }
 
-                            @Configuration("description")
-                            private val config2: List<Int> by config(DEFAULT_CONFIG_VALUE) { it.map(String::toInt) }
+                    @Configuration("description")
+                    private val config2: List<Int> by config(DEFAULT_CONFIG_VALUE) { it.map(String::toInt) }
 
-                            companion object {
-                                private val DEFAULT_CONFIG_VALUE: List<String> = emptyList()
-                            }
-                        }                        
+                    companion object {
+                        private val DEFAULT_CONFIG_VALUE: List<String> = emptyList()
+                    }
+                }                        
             """
             val items = subject.run(code)
             val expected = of(emptyList())
@@ -441,14 +441,14 @@ class RuleCollectorSpec {
         @Test
         fun `is marked as deprecated as well`() {
             val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Deprecated("use config1 instead")
-                            @Configuration("description")
-                            private val config: String by config("")
-                        }                        
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Deprecated("use config1 instead")
+                    @Configuration("description")
+                    private val config: String by config("")
+                }                        
             """
             val items = subject.run(code)
             assertThat(items[0].configuration[0].deprecated).isEqualTo("use config1 instead")
@@ -457,12 +457,12 @@ class RuleCollectorSpec {
         @Test
         fun `fails if kdoc is used to define configuration`() {
             val code = """
-                        /**
-                         * description
-                         * @configuration config1 - description (default: `''`)
-                         */
-                        class SomeRandomClass() : Rule {
-                        }                        
+                /**
+                 * description
+                 * @configuration config1 - description (default: `''`)
+                 */
+                class SomeRandomClass() : Rule {
+                }                        
             """
             assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
         }
@@ -470,13 +470,13 @@ class RuleCollectorSpec {
         @Test
         fun `fails if not used in combination with delegate`() {
             val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val config: String = "foo"
-                        }                        
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Configuration("description")
+                    private val config: String = "foo"
+                }                        
             """
             assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
         }
@@ -484,13 +484,13 @@ class RuleCollectorSpec {
         @Test
         fun `fails if not used in combination with config delegate`() {
             val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val config: String by lazy { "foo" }
-                        }                        
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Configuration("description")
+                    private val config: String by lazy { "foo" }
+                }                        
             """
             assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
         }
@@ -563,19 +563,19 @@ class RuleCollectorSpec {
             @Test
             fun `extracts default value`() {
                 val code = """
-                /**
-                 * description
-                 */
-                class SomeRandomClass() : Rule {
-                    @Configuration("description")
-                    val prop: Int by config(1)
-                    @Configuration("description")
-                    private val config1: Int by configWithFallback(this::prop, 99)
-                    @Configuration("description")
-                    private val config2: Int by configWithFallback(fallbackProperty = ::prop, defaultValue = 99)
-                    @Configuration("description")
-                    private val config3: Int by configWithFallback(defaultValue = 99, fallbackProperty = ::prop)
-                }                        
+                    /**
+                     * description
+                     */
+                    class SomeRandomClass() : Rule {
+                        @Configuration("description")
+                        val prop: Int by config(1)
+                        @Configuration("description")
+                        private val config1: Int by configWithFallback(this::prop, 99)
+                        @Configuration("description")
+                        private val config2: Int by configWithFallback(fallbackProperty = ::prop, defaultValue = 99)
+                        @Configuration("description")
+                        private val config3: Int by configWithFallback(defaultValue = 99, fallbackProperty = ::prop)
+                    }                        
                 """
                 val items = subject.run(code)
                 val fallbackProperties = items[0].configuration.filter { it.name.startsWith("config") }
@@ -586,14 +586,14 @@ class RuleCollectorSpec {
             @Test
             fun `reports an error if the property to fallback on exists but is not a config property`() {
                 val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            val prop: Int = 1
-                            @Configuration("description")
-                            private val config: Int by configWithFallback(::prop, 99)
-                        }                        
+                    /**
+                     * description
+                     */
+                    class SomeRandomClass() : Rule {
+                        val prop: Int = 1
+                        @Configuration("description")
+                        private val config: Int by configWithFallback(::prop, 99)
+                    }                        
                 """
                 assertThatThrownBy { subject.run(code) }
                     .isInstanceOf(InvalidDocumentationException::class.java)
@@ -604,15 +604,15 @@ class RuleCollectorSpec {
         @Nested
         inner class `transformed property` {
             val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val config1: Regex by config("[a-z]+") { it.toRegex() }
-                            @Configuration("description")
-                            private val config2: String by config(false, Boolean::toString)
-                        }                        
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Configuration("description")
+                    private val config1: Regex by config("[a-z]+") { it.toRegex() }
+                    @Configuration("description")
+                    private val config2: String by config(false, Boolean::toString)
+                }                        
             """
 
             @Test
@@ -707,10 +707,10 @@ class RuleCollectorSpec {
         @Test
         fun `has no type resolution by default`() {
             val code = """
-                    /**
-                     * description
-                     */
-                    class SomeRandomClass : Rule
+                /**
+                 * description
+                 */
+                class SomeRandomClass : Rule
             """
             val items = subject.run(code)
             assertThat(items[0].requiresTypeResolution).isFalse()
@@ -719,11 +719,11 @@ class RuleCollectorSpec {
         @Test
         fun `collects the flag that it requires type resolution`() {
             val code = """
-                    /**
-                     * description
-                     */
-                    @RequiresTypeResolution
-                    class SomeRandomClass : Rule
+                /**
+                 * description
+                 */
+                @RequiresTypeResolution
+                class SomeRandomClass : Rule
             """
             val items = subject.run(code)
             assertThat(items[0].requiresTypeResolution).isTrue()
@@ -732,11 +732,11 @@ class RuleCollectorSpec {
         @Test
         fun `collects the flag that it requires type resolution from fully qualified annotation`() {
             val code = """
-                    /**
-                     * description
-                     */
-                    @io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-                    class SomeRandomClass : Rule
+                /**
+                 * description
+                 */
+                @io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+                class SomeRandomClass : Rule
             """
             val items = subject.run(code)
             assertThat(items[0].requiresTypeResolution).isTrue()
@@ -746,18 +746,18 @@ class RuleCollectorSpec {
     @Test
     fun `contains compliant and noncompliant code examples`() {
         val code = """
-                /**
-                 * description
-                 *
-                 * <noncompliant>
-                 * val one = 2
-                 * </noncompliant>
-                 *
-                 * <compliant>
-                 * val one = 1
-                 * </compliant>
-                 */
-                class RandomClass : Rule
+            /**
+             * description
+             *
+             * <noncompliant>
+             * val one = 2
+             * </noncompliant>
+             *
+             * <compliant>
+             * val one = 1
+             * </compliant>
+             */
+            class RandomClass : Rule
         """
         val items = subject.run(code)
         assertThat(items[0].nonCompliantCodeExample).isEqualTo("val one = 2")
@@ -767,12 +767,12 @@ class RuleCollectorSpec {
     @Test
     fun `has wrong noncompliant code example declaration`() {
         val code = """
-                /**
-                 * description
-                 *
-                 * <noncompliant>
-                 */
-                class RandomClass : Rule
+            /**
+             * description
+             *
+             * <noncompliant>
+             */
+            class RandomClass : Rule
         """
         assertThatExceptionOfType(InvalidCodeExampleDocumentationException::class.java)
             .isThrownBy { subject.run(code) }
@@ -781,15 +781,15 @@ class RuleCollectorSpec {
     @Test
     fun `has wrong compliant code example declaration`() {
         val code = """
-                /**
-                 * description
-                 *
-                 * <noncompliant>
-                 * val one = 2
-                 * </noncompliant>
-                 * <compliant>
-                 */
-                class RandomClass : Rule
+            /**
+             * description
+             *
+             * <noncompliant>
+             * val one = 2
+             * </noncompliant>
+             * <compliant>
+             */
+            class RandomClass : Rule
         """
         assertThatExceptionOfType(InvalidCodeExampleDocumentationException::class.java)
             .isThrownBy { subject.run(code) }
@@ -798,14 +798,14 @@ class RuleCollectorSpec {
     @Test
     fun `has wrong compliant without noncompliant code example declaration`() {
         val code = """
-                /**
-                 * description
-                 *
-                 * <compliant>
-                 * val one = 1
-                 * </compliant>
-                 */
-                class RandomClass : Rule
+            /**
+             * description
+             *
+             * <compliant>
+             * val one = 1
+             * </compliant>
+             */
+            class RandomClass : Rule
         """
         assertThatExceptionOfType(InvalidCodeExampleDocumentationException::class.java)
             .isThrownBy { subject.run(code) }
@@ -814,17 +814,17 @@ class RuleCollectorSpec {
     @Test
     fun `has wrong issue style property`() {
         val code = """
-                /**
-                 * description
-                 */
-                class SomeRandomClass : Rule {
+            /**
+             * description
+             */
+            class SomeRandomClass : Rule {
 
-                    val style = Severity.Style
-                    override val issue = Issue(javaClass.simpleName,
-                            style,
-                            "",
-                            debt = Debt.TEN_MINS)
-                }
+                val style = Severity.Style
+                override val issue = Issue(javaClass.simpleName,
+                        style,
+                        "",
+                        debt = Debt.TEN_MINS)
+            }
         """
         assertThatExceptionOfType(InvalidIssueDeclaration::class.java).isThrownBy { subject.run(code) }
     }
@@ -832,18 +832,18 @@ class RuleCollectorSpec {
     @Test
     fun `has wrong aliases property structure`() {
         val code = """
-                /**
-                 * description
-                 */
-                class SomeRandomClass : Rule {
+            /**
+             * description
+             */
+            class SomeRandomClass : Rule {
 
-                    val a = setOf("UNUSED_VARIABLE")
-                    override val defaultRuleIdAliases = a
-                    override val issue = Issue(javaClass.simpleName,
-                            Severity.Style,
-                            "",
-                            debt = Debt.TEN_MINS)
-                }
+                val a = setOf("UNUSED_VARIABLE")
+                override val defaultRuleIdAliases = a
+                override val issue = Issue(javaClass.simpleName,
+                        Severity.Style,
+                        "",
+                        debt = Debt.TEN_MINS)
+            }
         """
         assertThatExceptionOfType(InvalidAliasesDeclaration::class.java).isThrownBy { subject.run(code) }
     }
@@ -852,10 +852,10 @@ class RuleCollectorSpec {
     fun `contains tabs in KDoc`() {
         val description = "\tdescription"
         val code = """
-                /**
-                 * $description
-                 */
-                class SomeRandomClass : Rule
+            /**
+             * $description
+             */
+            class SomeRandomClass : Rule
         """
         assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
     }
