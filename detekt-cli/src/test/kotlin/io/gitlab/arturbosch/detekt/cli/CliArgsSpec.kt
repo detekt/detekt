@@ -121,4 +121,26 @@ internal class CliArgsSpec {
             assertThat(spec.rulesSpec.activateAllRules).isTrue()
         }
     }
+
+    @Nested
+    inner class `type resolution parameters are accepted` {
+
+        @Test
+        fun `--jvm-target is accepted`() {
+            val spec = parseArguments(arrayOf("--jvm-target", "11")).toSpec()
+            assertThat(spec.compilerSpec.jvmTarget).isEqualTo("11")
+        }
+
+        @Test
+        fun `--jvm-target with decimal is accepted`() {
+            val spec = parseArguments(arrayOf("--jvm-target", "1.8")).toSpec()
+            assertThat(spec.compilerSpec.jvmTarget).isEqualTo("1.8")
+        }
+
+        @Test
+        fun `--language-version is accepted`() {
+            val spec = parseArguments(arrayOf("--language-version", "1.6")).toSpec()
+            assertThat(spec.compilerSpec.languageVersion).isEqualTo("1.6")
+        }
+    }
 }

@@ -47,13 +47,21 @@ class MultipleExistingPathConverter : DetektInputPathConverter<Path> {
 }
 
 class LanguageVersionConverter : IStringConverter<LanguageVersion> {
-    override fun convert(value: String): LanguageVersion =
-        checkNotNull(LanguageVersion.fromFullVersionString(value)) { "Invalid value passed to --language-version" }
+    override fun convert(value: String): LanguageVersion {
+        val validValues by lazy { LanguageVersion.values().joinToString { it.versionString } }
+        return requireNotNull(LanguageVersion.fromFullVersionString(value)) {
+            "\"$value\" passed to --language-version, expected one of [$validValues]"
+        }
+    }
 }
 
 class JvmTargetConverter : IStringConverter<JvmTarget> {
-    override fun convert(value: String): JvmTarget =
-        checkNotNull(JvmTarget.fromString(value)) { "Invalid value passed to --jvm-target" }
+    override fun convert(value: String): JvmTarget {
+        val validValues by lazy { JvmTarget.values().joinToString { it.description } }
+        return requireNotNull(JvmTarget.fromString(value)) {
+            "\"$value\" passed to --jvm-target, expected one of [$validValues]"
+        }
+    }
 }
 
 class ClasspathResourceConverter : IStringConverter<URL> {

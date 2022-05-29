@@ -41,6 +41,7 @@ private object TestExclusions : Exclusions() {
         "UndocumentedPublicFunction",
         "UndocumentedPublicProperty",
         "UnsafeCallOnNullableType",
+        "KDocReferencesNonPublicProperty",
     )
 }
 

@@ -24,12 +24,12 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/detekt/detekt/edit/main/docs/',
+          editUrl: 'https://github.com/detekt/detekt/edit/main/website/',
         },
         blog: {
           showReadingTime: true,
           editUrl:
-            'https://github.com/detekt/detekt/edit/main/docs/blog/',
+            'https://github.com/detekt/detekt/edit/main/website/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -169,6 +169,12 @@ const config = {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
         additionalLanguages: ['kotlin', 'groovy', 'java'],
+      },
+      algolia: {
+        appId: '5PZNXB7M3G',
+        apiKey: '6f23d0811156d77c936736893b97c5fd',
+        indexName: 'detekt',
+        contextualSearch: true,
       },
     }),
 

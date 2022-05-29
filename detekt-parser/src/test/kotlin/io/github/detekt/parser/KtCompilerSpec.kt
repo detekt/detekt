@@ -1,5 +1,6 @@
 package io.github.detekt.parser
 
+import io.github.davidburstrom.contester.ConTesterDriver
 import io.github.detekt.psi.BASE_PATH
 import io.github.detekt.psi.LINE_SEPARATOR
 import io.github.detekt.psi.RELATIVE_PATH
@@ -8,10 +9,24 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.jetbrains.kotlin.com.intellij.psi.PsiErrorElement
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class KtCompilerSpec {
+    @AfterEach
+    internal fun tearDown() {
+        ConTesterDriver.cleanUp()
+    }
+
+    @Test
+    fun `parallel construction of KtCompilers should be thread safe`() {
+        val thread1 = ConTesterDriver.thread { KtCompiler() }
+        val thread2 = ConTesterDriver.thread { KtCompiler() }
+        ConTesterDriver.runToBreakpoint(thread1, "DetektPomModel.registerExtensionPoint")
+        ConTesterDriver.runUntilBlockedOrTerminated(thread2)
+        ConTesterDriver.join(thread1)
+    }
 
     @Nested
     inner class `Kotlin Compiler` {

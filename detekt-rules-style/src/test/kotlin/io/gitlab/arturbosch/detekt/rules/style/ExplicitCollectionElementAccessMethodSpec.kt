@@ -346,6 +346,19 @@ class ExplicitCollectionElementAccessMethodSpec {
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
+
+            @Test
+            fun `does not report custom get operator with type parameters`() {
+                val code = """
+                    class C {
+                        operator fun <T> get(key: String): List<T>? = null
+                    }
+                    fun test(c: C) {
+                        c.get<Int>("key")
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
         }
 
         @Nested
