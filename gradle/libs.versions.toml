@@ -4,6 +4,7 @@ jacoco = "0.8.8"
 kotlin = "1.6.21"
 ktlint = "0.45.2"
 junit = "5.8.2"
+contester = "0.2.0"
 
 [libraries]
 githubRelease-gradle = "com.github.breadmoirai:github-release:2.3.7"
@@ -37,6 +38,8 @@ reflections = "org.reflections:reflections:0.10.2"
 mockk = "io.mockk:mockk:1.12.4"
 snakeyaml = "org.yaml:snakeyaml:1.30"
 jcommander = "com.beust:jcommander:1.82"
+contester-breakpoint = { module = "io.github.davidburstrom.contester:contester-breakpoint", version.ref = "contester" }
+contester-driver = { module = "io.github.davidburstrom.contester:contester-driver", version.ref = "contester" }
 
 [plugins]
 binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.10.0" }
