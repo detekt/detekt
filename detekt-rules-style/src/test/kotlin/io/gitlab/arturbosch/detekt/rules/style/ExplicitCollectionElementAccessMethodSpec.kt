@@ -156,10 +156,10 @@ class ExplicitCollectionElementAccessMethodSpec {
             @Test
             fun `does not report calls on implicit receiver`() {
                 val code = """
-                fun f() {
-                    val map = mapOf<String, Int>()
-                    with(map) { get("a") }
-                }
+                    fun f() {
+                        val map = mapOf<String, Int>()
+                        with(map) { get("a") }
+                    }
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
             }
@@ -215,10 +215,10 @@ class ExplicitCollectionElementAccessMethodSpec {
             @Test
             fun `does not report calls on implicit receiver`() {
                 val code = """
-                fun f() {
-                    val list = listOf<String>()
-                    val value = with(list) { get(0) }
-                }
+                    fun f() {
+                        val list = listOf<String>()
+                        val value = with(list) { get(0) }
+                    }
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
             }
@@ -394,10 +394,10 @@ class ExplicitCollectionElementAccessMethodSpec {
             @Test
             fun `does not crash for getter`() {
                 val code = """
-                class A {
-                    val i: Int get() = 1 + 2
-                    val c: Char? get() = "".first() ?: throw IllegalArgumentException("getter")
-                }
+                    class A {
+                        val i: Int get() = 1 + 2
+                        val c: Char? get() = "".first() ?: throw IllegalArgumentException("getter")
+                    }
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
@@ -405,8 +405,8 @@ class ExplicitCollectionElementAccessMethodSpec {
             @Test
             fun `does not crash for fluent api`() {
                 val code = """
-                val string = ""
-                    .toString()
+                    val string = ""
+                        .toString()
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
@@ -414,10 +414,10 @@ class ExplicitCollectionElementAccessMethodSpec {
             @Test
             fun `does not report for unresolvable code`() {
                 val code = """
-                 fun f() {
-                    val unknownType = UnknownType()
-                    val value = unknownType.put("answer", 42)
-                 }
+                     fun f() {
+                        val unknownType = UnknownType()
+                        val value = unknownType.put("answer", 42)
+                     }
                 """
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
@@ -425,10 +425,10 @@ class ExplicitCollectionElementAccessMethodSpec {
             @Test
             fun `does not report for put functions without caller`() {
                 val code = """
-                fun put() { }
-                fun f() {
-                    put()
-                }
+                    fun put() { }
+                    fun f() {
+                        put()
+                    }
                 """
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
@@ -443,12 +443,12 @@ class ExplicitCollectionElementAccessMethodSpec {
         fun `reports setter from java with 2 or less parameters`() {
             // this test case ensures that the test environment are set up correctly.
             val code = """
-                    import com.example.fromjava.Rect
-    
-                    fun foo() {
-                        val rect = Rect()
-                        rect.set(0, 1)
-                    }
+                import com.example.fromjava.Rect
+
+                fun foo() {
+                    val rect = Rect()
+                    rect.set(0, 1)
+                }
             """
             assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
@@ -456,12 +456,12 @@ class ExplicitCollectionElementAccessMethodSpec {
         @Test
         fun `does not report if the function has 3 or more arguments and it's defined in java - #4288`() {
             val code = """
-                    import com.example.fromjava.Rect
-    
-                    fun foo() {
-                        val rect = Rect()
-                        rect.set(0, 1, 2)
-                    }
+                import com.example.fromjava.Rect
+
+                fun foo() {
+                    val rect = Rect()
+                    rect.set(0, 1, 2)
+                }
             """
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }

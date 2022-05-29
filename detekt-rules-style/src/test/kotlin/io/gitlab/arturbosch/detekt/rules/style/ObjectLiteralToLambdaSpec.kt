@@ -22,13 +22,13 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `is property`() {
                 val code = """
-                fun interface Sam {
-                    fun foo()
-                }
-                val a = object : Sam {
-                    override fun foo() {
+                    fun interface Sam {
+                        fun foo()
                     }
-                }   
+                    val a = object : Sam {
+                        override fun foo() {
+                        }
+                    }   
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -39,15 +39,15 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `is in function`() {
                 val code = """
-            fun interface Sam {
-                fun foo()
-            }
-            fun bar() {
-                object : Sam {
-                    override fun foo() {
+                    fun interface Sam {
+                        fun foo()
                     }
-                }
-            }
+                    fun bar() {
+                        object : Sam {
+                            override fun foo() {
+                            }
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -58,17 +58,17 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `is in init`() {
                 val code = """
-            fun interface Sam {
-                fun foo()
-            }
-            object B {
-                init {
-                    object : Sam {
-                        override fun foo() {
+                    fun interface Sam {
+                        fun foo()
+                    }
+                    object B {
+                        init {
+                            object : Sam {
+                                override fun foo() {
+                                }
+                            }
                         }
                     }
-                }
-            }
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -79,14 +79,14 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `is generic`() {
                 val code = """
-            fun interface Sam<T> {
-                fun foo(): T
-            }
-            val a = object : Sam<Int> {
-                override fun foo(): Int {
-                    return 1
-                }
-            }   
+                    fun interface Sam<T> {
+                        fun foo(): T
+                    }
+                    val a = object : Sam<Int> {
+                        override fun foo(): Int {
+                            return 1
+                        }
+                    }   
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -97,14 +97,14 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `has other default method`() {
                 val code = """
-            fun interface Sam {
-                fun foo()
-                fun bar() {}
-            }
-            val a = object : Sam {
-                override fun foo() {
-                }
-            }   
+                    fun interface Sam {
+                        fun foo()
+                        fun bar() {}
+                    }
+                    val a = object : Sam {
+                        override fun foo() {
+                        }
+                    }   
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -115,17 +115,17 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `nested declaration`() {
                 val code = """
-            interface First {
-                fun foo()
-            }
-            fun interface Second: First
-
-            fun bar() {
-                object : Second {
-                    override fun foo(){
+                    interface First {
+                        fun foo()
                     }
-                }
-            }
+                    fun interface Second: First
+        
+                    fun bar() {
+                        object : Second {
+                            override fun foo(){
+                            }
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -136,12 +136,12 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `expression body syntax`() {
                 val code = """
-            fun interface Sam {
-                fun foo(): Int
-            }
-            val a = object : Sam {
-                override fun foo() = 3
-            }
+                    fun interface Sam {
+                        fun foo(): Int
+                    }
+                    val a = object : Sam {
+                        override fun foo() = 3
+                    }
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -155,13 +155,13 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `without type resolution`() {
                 val code = """
-            fun interface Sam {
-                fun foo()
-            }
-            val a = object : Sam {
-                override fun foo() {
-                }
-            }
+                    fun interface Sam {
+                        fun foo()
+                    }
+                    val a = object : Sam {
+                        override fun foo() {
+                        }
+                    }
                 """
                 subject.compileAndLint(code).assert().isEmpty()
             }
@@ -169,8 +169,8 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `is empty interface`() {
                 val code = """
-            interface Sam
-            val a = object : Sam {}
+                    interface Sam
+                    val a = object : Sam {}
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
@@ -178,11 +178,11 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `is empty interface and has own function`() {
                 val code = """
-            interface Sam
-            val a = object : Sam {
-                fun foo() {
-                }
-            }
+                    interface Sam
+                    val a = object : Sam {
+                        fun foo() {
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
@@ -190,12 +190,12 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `is single property interface`() {
                 val code = """
-            interface Sam {
-                val foo: Int
-            }
-            val a = object : Sam {
-                override val foo = 1
-            }
+                    interface Sam {
+                        val foo: Int
+                    }
+                    val a = object : Sam {
+                        override val foo = 1
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
@@ -203,10 +203,10 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `is empty interface and has own property`() {
                 val code = """
-            interface Sam
-            val a = object : Sam {
-                val b = 1
-            }
+                    interface Sam
+                    val a = object : Sam {
+                        val b = 1
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
@@ -214,13 +214,13 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `is not fun interface`() {
                 val code = """
-            interface Sam {
-                fun foo()
-            }
-            val a = object : Sam {
-                override fun foo() {
-                }
-            }
+                    interface Sam {
+                        fun foo()
+                    }
+                    val a = object : Sam {
+                        override fun foo() {
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
@@ -228,13 +228,13 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `is not interface`() {
                 val code = """
-            abstract class Something {
-                abstract fun foo()
-            }
-            val a = object : Something() {
-                override fun foo() {
-                }
-            }
+                    abstract class Something {
+                        abstract fun foo()
+                    }
+                    val a = object : Something() {
+                        override fun foo() {
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
@@ -242,15 +242,15 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `has multi implement`() {
                 val code = """
-            fun interface First {
-                fun foo()
-            }
-            interface Second
-
-            val a: First = object : First, Second {
-                override fun foo() {
-                }
-            }
+                    fun interface First {
+                        fun foo()
+                    }
+                    interface Second
+        
+                    val a: First = object : First, Second {
+                        override fun foo() {
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
@@ -258,17 +258,17 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `has complex implement`() {
                 val code = """
-            abstract class First {
-                abstract fun foo()
-            }
-            fun interface Second {
-                fun foo()
-            }
-
-            val a: First = object : First(), Second {
-                override fun foo() {
-                }
-            }
+                    abstract class First {
+                        abstract fun foo()
+                    }
+                    fun interface Second {
+                        fun foo()
+                    }
+        
+                    val a: First = object : First(), Second {
+                        override fun foo() {
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
@@ -279,15 +279,15 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `has more than one method`() {
                 val code = """
-            fun interface Sam {
-                fun foo()
-            }
-            val a = object : Sam {
-                override fun foo() {
-                }
-                fun bar() {
-                }
-            }
+                    fun interface Sam {
+                        fun foo()
+                    }
+                    val a = object : Sam {
+                        override fun foo() {
+                        }
+                        fun bar() {
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
@@ -295,14 +295,14 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `has property`() {
                 val code = """
-            fun interface Sam {
-                fun foo()
-            }
-            val a = object : Sam {
-                private var bar = 0
-                override fun foo() {
-                }
-            }
+                    fun interface Sam {
+                        fun foo()
+                    }
+                    val a = object : Sam {
+                        private var bar = 0
+                        override fun foo() {
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
@@ -310,15 +310,15 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `has init`() {
                 val code = """
-            fun interface Sam {
-                fun foo()
-            }
-            val a = object : Sam {
-                init {
-                }
-                override fun foo() {
-                }
-            }
+                    fun interface Sam {
+                        fun foo()
+                    }
+                    val a = object : Sam {
+                        init {
+                        }
+                        override fun foo() {
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
@@ -329,10 +329,10 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `is convertible`() {
                 val code = """
-            val a = object : Runnable { 
-                override fun run(){
-                }
-            }
+                    val a = object : Runnable { 
+                        override fun run(){
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -343,12 +343,12 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `is convertible Callable generic`() {
                 val code = """
-            import java.util.concurrent.Callable
-            val a = object : Callable<Int> {
-                override fun call(): Int {
-                    return 1
-                }
-            }
+                    import java.util.concurrent.Callable
+                    val a = object : Callable<Int> {
+                        override fun call(): Int {
+                            return 1
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -359,11 +359,11 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `empty interface`() {
                 val code = """
-            import java.util.EventListener
-            val a = object : EventListener {
-                fun foo() {
-                }
-            }
+                    import java.util.EventListener
+                    val a = object : EventListener {
+                        fun foo() {
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
@@ -371,16 +371,16 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `is convertible Enumeration generic`() {
                 val code = """
-            import java.util.Enumeration
-            val a = object : Enumeration<Int> {
-                override fun hasMoreElements(): Boolean {
-                    return true
-                }
-
-                    override fun nextElement(): Int {
-                        return 1
+                    import java.util.Enumeration
+                    val a = object : Enumeration<Int> {
+                        override fun hasMoreElements(): Boolean {
+                            return true
+                        }
+        
+                        override fun nextElement(): Int {
+                            return 1
+                        }
                     }
-                }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
@@ -391,17 +391,17 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `call 'this'`() {
                 val code = """
-            fun interface Sam {
-                fun foo()
-            }
-        
-            fun aa() {
-                object : Sam {
-                    override fun foo() {
-                        this
+                    fun interface Sam {
+                        fun foo()
                     }
-                }
-            }
+                
+                    fun aa() {
+                        object : Sam {
+                            override fun foo() {
+                                this
+                            }
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
@@ -409,19 +409,19 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `use 'this'`() {
                 val code = """
-            fun interface Sam {
-                fun foo()
-            }
-
-            fun Sam.bar() {}
-        
-            fun aa() {
-                object : Sam {
-                    override fun foo() {
-                        bar()
+                    fun interface Sam {
+                        fun foo()
                     }
-                }
-            }
+        
+                    fun Sam.bar() {}
+                
+                    fun aa() {
+                        object : Sam {
+                            override fun foo() {
+                                bar()
+                            }
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
@@ -429,17 +429,17 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `use class method`() {
                 val code = """
-            fun interface Sam {
-                fun foo()
-            }
-        
-            fun aa() {
-                object : Sam {
-                    override fun foo() {
-                        hashCode()
+                    fun interface Sam {
+                        fun foo()
                     }
-                }
-            }
+                
+                    fun aa() {
+                        object : Sam {
+                            override fun foo() {
+                                hashCode()
+                            }
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
@@ -447,21 +447,21 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `call 'this' inside nested object`() {
                 val code = """
-            fun interface Sam {
-                fun foo()
-            }
-        
-            fun aa() {
-                object : Sam {
-                    override fun foo() {
+                    fun interface Sam {
+                        fun foo()
+                    }
+                
+                    fun aa() {
                         object : Sam {
                             override fun foo() {
-                                this
+                                object : Sam {
+                                    override fun foo() {
+                                        this
+                                    }
+                                }
                             }
                         }
                     }
-                }
-            }
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -472,19 +472,19 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `call labeled 'this'`() {
                 val code = """
-            fun interface Sam {
-                fun foo()
-            }
-        
-            class Target {
-                init {
-                    object : Sam {
-                        override fun foo() {
-                            this@Target
+                    fun interface Sam {
+                        fun foo()
+                    }
+                
+                    class Target {
+                        init {
+                            object : Sam {
+                                override fun foo() {
+                                    this@Target
+                                }
+                            }
                         }
                     }
-                }
-            }
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -495,17 +495,17 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `recursive call`() {
                 val code = """
-            fun interface Sam {
-                fun foo()
-            }
-        
-            fun a() {
-                object : Sam {
-                    override fun foo() {
-                        foo()
+                    fun interface Sam {
+                        fun foo()
                     }
-                }
-            }
+                
+                    fun a() {
+                        object : Sam {
+                            override fun foo() {
+                                foo()
+                            }
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
@@ -517,19 +517,19 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `Anonymous objects are always newly created, but lambdas are singletons, so they have the same reference`() {
                 val code = """
-            fun interface Sam {
-                fun foo()
-            }
-
-            fun newObject() = object : Sam {
-                override fun foo() {
-                }
-            }
-
-            fun lambda() = Sam {}
-
-            val a = newObject() === newObject() // false
-            val b = lambda() === lambda() // true
+                    fun interface Sam {
+                        fun foo()
+                    }
+        
+                    fun newObject() = object : Sam {
+                        override fun foo() {
+                        }
+                    }
+        
+                    fun lambda() = Sam {}
+        
+                    val a = newObject() === newObject() // false
+                    val b = lambda() === lambda() // true
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -546,15 +546,15 @@ class ObjectLiteralToLambdaSpec {
         @Test
         fun `has other default methods`() {
             val code = """
-                    import com.example.fromjava.SamWithDefaultMethods
-                    
-                    fun main() {
-                        val x = object : SamWithDefaultMethods {
-                            override fun foo() {
-                                println()
-                            }
+                import com.example.fromjava.SamWithDefaultMethods
+                
+                fun main() {
+                    val x = object : SamWithDefaultMethods {
+                        override fun foo() {
+                            println()
                         }
-                    } 
+                    }
+                } 
             """
 
             subject.lintWithContext(env, code).assert().hasSize(1)
@@ -563,12 +563,12 @@ class ObjectLiteralToLambdaSpec {
         @Test
         fun `has only default methods`() {
             val code = """
-                    import com.example.fromjava.OnlyDefaultMethods
-                    
-                    fun main() {
-                        val x = object : OnlyDefaultMethods {
-                        }
-                    } 
+                import com.example.fromjava.OnlyDefaultMethods
+                
+                fun main() {
+                    val x = object : OnlyDefaultMethods {
+                    }
+                } 
             """
             subject.lintWithContext(env, code).assert().isEmpty()
         }
@@ -576,15 +576,15 @@ class ObjectLiteralToLambdaSpec {
         @Test
         fun `implements a default method`() {
             val code = """
-                    import com.example.fromjava.OnlyDefaultMethods
-                    
-                    fun main() {
-                        val x = object : OnlyDefaultMethods {
-                            override fun foo() {
-                                println()
-                            }
+                import com.example.fromjava.OnlyDefaultMethods
+                
+                fun main() {
+                    val x = object : OnlyDefaultMethods {
+                        override fun foo() {
+                            println()
                         }
-                    } 
+                    }
+                } 
             """
             subject.lintWithContext(env, code).assert().isEmpty()
         }
