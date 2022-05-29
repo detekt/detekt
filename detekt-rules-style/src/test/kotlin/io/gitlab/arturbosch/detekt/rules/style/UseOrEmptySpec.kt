@@ -146,6 +146,20 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
+
+        @Test
+        fun `indexing operator call`() {
+            val code = """
+                class C {
+                    operator fun get(key: String): List<Int>? = null
+                }
+                fun test(c: C) {
+                    c["key"] ?: emptyList()
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
     }
 
     @Nested
@@ -178,6 +192,9 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(x: List<Int>?) {
                     val a = x ?: emptySet()
                 }
+                fun test(c: Any?) {
+                    val x = c ?: emptyList<Int>()
+                }
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
@@ -199,6 +216,22 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun test(x: IntArray?) {
                     val a = x ?: intArrayOf()
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `indexing operator call with type parameter`() {
+            val code = """
+                class C {
+                    operator fun <T> get(key: String): List<T>? = null
+                }
+                fun test(c: C) {
+                    val x = c["key"] ?: emptyList<Int>()
+                    val y: List<Int> = c["key"] ?: emptyList()
+                    val z = (c["key"]) ?: emptyList<Int>()
                 }
             """
             val findings = subject.compileAndLintWithContext(env, code)

@@ -97,6 +97,7 @@ class DetektPlugin : Plugin<Project> {
 
         project.tasks.withType(DetektGenerateConfigTask::class.java).configureEach {
             it.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
+            it.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
         }
     }
 

@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.backend.common.pop
 import org.jetbrains.kotlin.descriptors.ClassifierDescriptor
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtExpressionWithLabel
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
@@ -85,6 +86,11 @@ class UnnecessaryInnerClass(config: Config = Config.empty) : Rule(config) {
         checkForOuterUsage(expression)
     }
 
+    override fun visitExpressionWithLabel(expression: KtExpressionWithLabel) {
+        super.visitExpressionWithLabel(expression)
+        checkForOuterUsage(expression)
+    }
+
     // Replace this "constructor().apply{}" pattern with buildList() when the Kotlin
     // API version is upgraded to 1.6
     private fun findParentClasses(ktClass: KtClass): List<KtClass> = ArrayList<KtClass>().apply {
@@ -111,8 +117,24 @@ class UnnecessaryInnerClass(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun findResolvedContainingClassId(reference: KtReferenceExpression): ClassId? {
-        return bindingContext[BindingContext.REFERENCE_TARGET, reference]
+    private fun checkForOuterUsage(expressionToResolve: KtExpressionWithLabel) {
+        val currentClass = classChain.peek() ?: return
+        val parentClasses = candidateClassToParentClasses[currentClass] ?: return
+
+        val resolvedContainingClassName = expressionToResolve.getLabelName()
+        /*
+         * If class A -> inner class B -> inner class C, and class C has outer usage of A,
+         * then both B and C should stay as inner classes.
+         */
+        val index = parentClasses.indexOfFirst { it.name == resolvedContainingClassName }
+        if (index >= 0) {
+            candidateClassToParentClasses.remove(currentClass)
+            parentClasses.subList(0, index).forEach { candidateClassToParentClasses.remove(it) }
+        }
+    }
+
+    private fun findResolvedContainingClassId(expression: KtReferenceExpression): ClassId? {
+        return bindingContext[BindingContext.REFERENCE_TARGET, expression]
             ?.containingDeclaration
             ?.safeAs<ClassifierDescriptor>()
             ?.classId

@@ -24,12 +24,12 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/detekt/detekt/edit/main/docs/',
+          editUrl: 'https://github.com/detekt/detekt/edit/main/website/',
         },
         blog: {
           showReadingTime: true,
           editUrl:
-            'https://github.com/detekt/detekt/edit/main/docs/blog/',
+            'https://github.com/detekt/detekt/edit/main/website/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -52,6 +52,7 @@ const config = {
           { to: '/docs/introduction/extensions', from: '/extensions.html' },
           { to: '/docs/introduction/snapshots', from: '/snapshots.html' },
           { to: '/docs/introduction/compatibility', from: '/compatibility.html' },
+          { to: '/docs/introduction/compose', from: '/compose.html' },
           { to: '/docs/gettingstarted/cli', from: '/cli.html' },
           { to: '/docs/gettingstarted/gradle', from: '/gradle.html' },
           { to: '/docs/gettingstarted/gradle', from: '/groovydsl.html' },
@@ -168,6 +169,12 @@ const config = {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
         additionalLanguages: ['kotlin', 'groovy', 'java'],
+      },
+      algolia: {
+        appId: '5PZNXB7M3G',
+        apiKey: '6f23d0811156d77c936736893b97c5fd',
+        indexName: 'detekt',
+        contextualSearch: true,
       },
     }),
 

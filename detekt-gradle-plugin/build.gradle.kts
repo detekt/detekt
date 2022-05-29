@@ -6,7 +6,10 @@ plugins {
     `java-gradle-plugin`
     `java-test-fixtures`
     idea
+    signing
     alias(libs.plugins.pluginPublishing)
+    // We use this published version of the Detekt plugin to self analyse this project.
+    id("io.gitlab.arturbosch.detekt") version "1.20.0"
 }
 
 repositories {
@@ -17,6 +20,13 @@ repositories {
 group = "io.gitlab.arturbosch.detekt"
 version = Versions.currentOrSnapshot()
 
+detekt {
+    source.from("src/functionalTest/kotlin")
+    buildUponDefaultConfig = true
+    baseline = file("config/gradle-plugin-baseline.xml")
+    config = files("config/gradle-plugin-detekt.yml")
+}
+
 testing {
     suites {
         getByName("test", JvmTestSuite::class) {
@@ -25,9 +35,7 @@ testing {
                 implementation(libs.kotlin.gradle)
                 implementation(gradleKotlinDsl())
 
-                // Workaround for gradle/gradle#16774, see
-                // https://github.com/gradle/gradle/issues/16774#issuecomment-853407822
-                // This should be reviewed and dropped if fixed as planned in Gradle 7.5
+                // See https://github.com/gradle/gradle/issues/16774#issuecomment-853407822
                 runtimeOnly(
                     files(
                         serviceOf<ModuleRegistry>()
@@ -66,18 +74,18 @@ dependencies {
     compileOnly(libs.kotlin.gradlePluginApi)
     implementation(libs.sarif4k)
 
-    // Migrate to `implementation(testFixtures(project))` in test suite configuration when Gradle 7.5 released
-    // (https://github.com/gradle/gradle/pull/19472)
+    // Migrate to `implementation(testFixtures(project))` in test suite configuration when this issue is fixed:
+    // https://github.com/gradle/gradle/pull/19472
     functionalTestImplementation(testFixtures(project))
 
     pluginCompileOnly(libs.android.gradle)
     pluginCompileOnly(libs.kotlin.gradle)
+
+    // We use this published version of the detekt-formatting to self analyse this project.
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
 }
 
 gradlePlugin {
-    // hack to prevent building two jar's overwriting each other and leading to invalid signatures
-    // when publishing the Gradle plugin, this property must be present
-    isAutomatedPublishing = System.getProperty("automatePublishing")?.toBoolean() ?: false
     plugins {
         register("detektPlugin") {
             id = "io.gitlab.arturbosch.detekt"
@@ -150,3 +158,23 @@ with(components["java"] as AdhocComponentWithVariants) {
     withVariantsFromConfiguration(configurations["testFixturesApiElements"]) { skip() }
     withVariantsFromConfiguration(configurations["testFixturesRuntimeElements"]) { skip() }
 }
+
+tasks.withType<Sign>().configureEach {
+    notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13470")
+}
+
+val signingKey = "SIGNING_KEY".byProperty
+val signingPwd = "SIGNING_PWD".byProperty
+if (signingKey.isNullOrBlank() || signingPwd.isNullOrBlank()) {
+    logger.info("Signing disabled as the GPG key was not found")
+} else {
+    logger.info("GPG Key found - Signing enabled")
+    afterEvaluate {
+        signing {
+            useInMemoryPgpKeys(signingKey, signingPwd)
+            publishing.publications.forEach(::sign)
+        }
+    }
+}
+
+val String.byProperty: String? get() = findProperty(this) as? String

@@ -7,6 +7,8 @@ plugins {
 dependencies {
     api(libs.kotlin.compilerEmbeddable)
     implementation(projects.detektPsiUtils)
+    implementation(libs.contester.breakpoint)
+    testImplementation(libs.contester.driver)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj)
 }

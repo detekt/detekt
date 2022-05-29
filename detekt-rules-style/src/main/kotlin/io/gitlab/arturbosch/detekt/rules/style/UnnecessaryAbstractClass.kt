@@ -79,27 +79,29 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
         super.visitClass(klass)
     }
 
+    @Suppress("ComplexMethod")
     private fun KtClass.check() {
+        val nameIdentifier = this.nameIdentifier ?: return
         if (annotationExcluder.shouldExclude(annotationEntries) || isInterface() || !isAbstract()) return
         val members = members()
         when {
             members.isNotEmpty() -> {
                 val (abstractMembers, concreteMembers) = members.partition { it.isAbstract() }
                 if (abstractMembers.isEmpty() && !hasInheritedMember(true)) {
-                    report(CodeSmell(issue, Entity.from(this), noAbstractMember))
+                    report(CodeSmell(issue, Entity.from(nameIdentifier), noAbstractMember))
                     return
                 }
                 if (abstractMembers.any { it.isInternal() || it.isProtected() } || hasConstructorParameter()) {
                     return
                 }
                 if (concreteMembers.isEmpty() && !hasInheritedMember(false)) {
-                    report(CodeSmell(issue, Entity.from(this), noConcreteMember))
+                    report(CodeSmell(issue, Entity.from(nameIdentifier), noConcreteMember))
                 }
             }
             !hasConstructorParameter() ->
-                report(CodeSmell(issue, Entity.from(this), noConcreteMember))
+                report(CodeSmell(issue, Entity.from(nameIdentifier), noConcreteMember))
             else ->
-                report(CodeSmell(issue, Entity.from(this), noAbstractMember))
+                report(CodeSmell(issue, Entity.from(nameIdentifier), noAbstractMember))
         }
     }
 

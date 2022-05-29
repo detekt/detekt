@@ -609,4 +609,29 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         """
         assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
     }
+
+    @Test
+    fun `does not report unused import for import used in kdoc - #4815`() {
+        val mainFile = """
+        import x.y.z.SomeClass
+
+        class MyView
+
+        /**
+         * Style for [MyView]
+         * Blablabla
+         * 
+         * @property someVal Someval for [SomeClass]
+         */
+         data class StyleClass(val someVal: String)
+        """
+
+        val additionalFile = """
+        package x.y.z
+
+        class SomeClass
+        """
+
+        assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
+    }
 }
