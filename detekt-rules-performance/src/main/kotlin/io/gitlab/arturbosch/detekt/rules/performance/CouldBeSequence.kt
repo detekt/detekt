@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * </noncompliant>
  *
  * <compliant>
- * listOf(1, 2, 3, 4).asSequence().map { it*2 }.filter { it < 4 }.map { it*it }
+ * listOf(1, 2, 3, 4).asSequence().map { it*2 }.filter { it < 4 }.map { it*it }.toList()
  *
  * listOf(1, 2, 3, 4).map { it*2 }
  * </compliant>
