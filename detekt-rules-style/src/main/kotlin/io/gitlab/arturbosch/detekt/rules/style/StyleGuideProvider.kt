@@ -73,6 +73,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             PreferToOverPairSyntax(config),
             MandatoryBracesIfStatements(config),
             MandatoryBracesLoops(config),
+            NullableBooleanCheck(config),
             VarCouldBeVal(config),
             ForbiddenVoid(config),
             ExplicitItLambdaParameter(config),
