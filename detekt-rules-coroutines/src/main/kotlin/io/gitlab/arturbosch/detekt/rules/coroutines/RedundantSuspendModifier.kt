@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.Modality
@@ -54,6 +55,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
  *
  */
 @RequiresTypeResolution
+@ActiveByDefault(since = "1.21.0")
 class RedundantSuspendModifier(config: Config) : Rule(config) {
 
     override val issue = Issue(

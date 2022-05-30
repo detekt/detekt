@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.psi.KtDestructuringDeclaration
 
@@ -26,6 +27,7 @@ import org.jetbrains.kotlin.psi.KtDestructuringDeclaration
  * val (a, b, c) = TooManyElements(1, 2, 3)
  * </compliant>
  */
+@ActiveByDefault(since = "1.21.0")
 class DestructuringDeclarationWithTooManyEntries(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
