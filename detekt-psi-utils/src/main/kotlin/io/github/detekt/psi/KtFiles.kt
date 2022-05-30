@@ -19,7 +19,7 @@ fun PsiFile.fileNameWithoutSuffix(): String {
     return fileName.removeSuffix(KOTLIN_SUFFIX)
 }
 
-fun PsiFile.absolutePath(): Path = Paths.get(name)
+fun PsiFile.absolutePath(): Path = Paths.get(virtualFile.presentableUrl)
 
 fun PsiFile.relativePath(): Path? = getUserData(RELATIVE_PATH)?.let { Paths.get(it) }
 
