@@ -657,6 +657,7 @@ style:
     active: false
   UnnecessaryParentheses:
     active: false
+    allowForUnclearPrecedence: false
   UntilInsteadOfRangeTo:
     active: false
   UnusedImports:
