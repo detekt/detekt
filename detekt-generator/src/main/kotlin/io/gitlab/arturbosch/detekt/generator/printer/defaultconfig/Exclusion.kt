@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.generator.collection.Rule
 /**
  * Holds a list of extra exclusions for rules and rule sets.
  */
-val exclusions = arrayOf(TestExclusions, KotlinScriptExclusions, LibraryExclusions)
+val exclusions = arrayOf(TestExclusions, KotlinScriptExclusions, KotlinScriptAndTestExclusions, LibraryExclusions)
 
 /**
  * Tracks rules and rule sets which needs an extra `excludes: $pattern` property
@@ -28,7 +28,6 @@ private object TestExclusions : Exclusions() {
     override val rules = setOf(
         "FunctionNaming",
         "WildcardImport",
-        "MagicNumber",
         "LateinitUsage",
         "StringLiteralDuplication",
         "SpreadOperator",
@@ -49,6 +48,14 @@ private object KotlinScriptExclusions : Exclusions() {
 
     override val pattern = "['**/*.kts']"
     override val rules = setOf("MissingPackageDeclaration")
+}
+
+private object KotlinScriptAndTestExclusions : Exclusions() {
+
+    override val pattern =
+        "['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**', " +
+            "'**/*.kts']"
+    override val rules = setOf("MagicNumber")
 }
 
 private object LibraryExclusions : Exclusions() {
