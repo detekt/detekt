@@ -86,6 +86,34 @@ class AnalyzerSpec {
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).isEmpty()
         }
+
+        @Test
+        fun `with faulty rule`() {
+            val testFile = path.resolve("Test.kt")
+            val settings = createProcessingSettings(
+                testFile,
+                yamlConfig("configs/config-value-type-correct.yml")
+            )
+            val analyzer = Analyzer(settings, listOf(FaultyRuleSetProvider()), emptyList())
+
+            assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
+                .hasCauseInstanceOf(IllegalStateException::class.java)
+                .hasMessageContaining("Location: ${FaultyRule::class.java.name}")
+        }
+
+        @Test
+        fun `with faulty rule without stack trace`() {
+            val testFile = path.resolve("Test.kt")
+            val settings = createProcessingSettings(
+                testFile,
+                yamlConfig("configs/config-value-type-correct.yml")
+            )
+            val analyzer = Analyzer(settings, listOf(FaultyRuleNoStackTraceSetProvider()), emptyList())
+
+            assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
+                .hasCauseInstanceOf(IllegalStateException::class.java)
+                .hasMessageContaining("Location: ${null}")
+        }
     }
 }
 
@@ -103,6 +131,32 @@ private class MaxLineLength(config: Config, threshold: Int?) : Rule(config) {
             if (line.length > lengthThreshold) {
                 report(CodeSmell(issue, Entity.atPackageOrFirstDecl(file), issue.description))
             }
+        }
+    }
+}
+
+private class FaultyRuleSetProvider : RuleSetProvider {
+    override val ruleSetId: String = "style"
+    override fun instance(config: Config) = RuleSet(ruleSetId, listOf(FaultyRule(config)))
+}
+
+private class FaultyRule(config: Config) : Rule(config) {
+    override val issue = Issue(this::class.java.simpleName, Severity.Style, "", Debt.FIVE_MINS)
+    override fun visitKtFile(file: KtFile) {
+        throw object : IllegalStateException("Deliberately triggered error.") {}
+    }
+}
+
+private class FaultyRuleNoStackTraceSetProvider : RuleSetProvider {
+    override val ruleSetId: String = "style"
+    override fun instance(config: Config) = RuleSet(ruleSetId, listOf(FaultyRuleNoStackTrace(config)))
+}
+
+private class FaultyRuleNoStackTrace(config: Config) : Rule(config) {
+    override val issue = Issue(this::class.java.simpleName, Severity.Style, "", Debt.FIVE_MINS)
+    override fun visitKtFile(file: KtFile) {
+        throw object : IllegalStateException("Deliberately triggered error without stack trace.") {
+            init { stackTrace = emptyArray() }
         }
     }
 }
