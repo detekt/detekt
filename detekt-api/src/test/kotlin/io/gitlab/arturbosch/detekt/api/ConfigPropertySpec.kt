@@ -8,8 +8,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.concurrent.atomic.AtomicInteger
 
-class
-ConfigPropertySpec {
+class ConfigPropertySpec {
 
     @Nested
     inner class `simple property` {
