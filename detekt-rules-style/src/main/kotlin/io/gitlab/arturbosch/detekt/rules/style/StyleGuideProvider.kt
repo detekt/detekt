@@ -38,6 +38,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             ForbiddenImport(config),
             ForbiddenMethodCall(config),
             ForbiddenPublicDataClass(config),
+            ForbiddenSuppress(config),
             FunctionOnlyReturningConstant(config),
             SpacingBetweenPackageAndImports(config),
             LoopWithTooManyJumpStatements(config),

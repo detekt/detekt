@@ -526,6 +526,9 @@ style:
     ignorePackages:
       - '*.internal'
       - '*.internal.*'
+  ForbiddenSuppress:
+    active: false
+    rules: []
   ForbiddenVoid:
     active: true
     ignoreOverridden: false
