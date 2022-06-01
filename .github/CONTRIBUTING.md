@@ -125,20 +125,20 @@ the detailed description of the rule.
 
 ```kotlin
 /**
-  * Summary of the violation that this rule is concerned with,
-  * potentially extended by a brief description on why it is
-  * bad practice and what is usually done to eliminate it.
-  *
-  * Add more details if applicable...
-  *
-  * <noncompliant>
-  * // add the non-compliant code example here
-  * </noncompliant>
-  *
-  * <compliant>
-  * // add the compliant code example here
-  * </compliant>
-  */
+ * Summary of the violation that this rule is concerned with,
+ * potentially extended by a brief description on why it is
+ * bad practice and what is usually done to eliminate it.
+ *
+ * Add more details if applicable...
+ *
+ * <noncompliant>
+ * // add the non-compliant code example here
+ * </noncompliant>
+ *
+ * <compliant>
+ * // add the compliant code example here
+ * </compliant>
+ */
 class SomeRule(config: Config = Config.empty) : Rule(config) {
 
 }
