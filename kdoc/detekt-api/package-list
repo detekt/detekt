@@ -59,6 +59,8 @@ $dokka.location:io.gitlab.arturbosch.detekt.api//configWithFallback/#kotlin.refl
 $dokka.location:io.gitlab.arturbosch.detekt.api//configWithFallback/#kotlin.reflect.KProperty0[TypeParam(bounds=[kotlin.Any])]#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/config-with-fallback.html
 $dokka.location:io.gitlab.arturbosch.detekt.api//getOrNull/io.gitlab.arturbosch.detekt.api.PropertiesAware#kotlin.String/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/get-or-null.html
 $dokka.location:io.gitlab.arturbosch.detekt.api//simplePatternToRegex/kotlin.String#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/simple-pattern-to-regex.html
+$dokka.location:io.gitlab.arturbosch.detekt.api//valuesWithReason/#kotlin.Array[kotlin.Pair[kotlin.String,kotlin.String?]]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/values-with-reason.html
+$dokka.location:io.gitlab.arturbosch.detekt.api//valuesWithReason/#kotlin.collections.List[io.gitlab.arturbosch.detekt.api.ValueWithReason]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/values-with-reason.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/AnnotationExcluder///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-annotation-excluder/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/AnnotationExcluder/AnnotationExcluder/#org.jetbrains.kotlin.psi.KtFile#io.gitlab.arturbosch.detekt.api.SplitPattern/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-annotation-excluder/-annotation-excluder.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/AnnotationExcluder/AnnotationExcluder/#org.jetbrains.kotlin.psi.KtFile#kotlin.collections.List[kotlin.String]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-annotation-excluder/-annotation-excluder.html
@@ -337,6 +339,11 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/ThresholdedCodeSmell/value/#/Poi
 $dokka.location:io.gitlab.arturbosch.detekt.api/UnstableApi///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-unstable-api/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/UnstableApi/UnstableApi/#kotlin.String/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-unstable-api/-unstable-api.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/UnstableApi/reason/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-unstable-api/reason.html
+$dokka.location:io.gitlab.arturbosch.detekt.api/ValueWithReason///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-value-with-reason/index.html
+$dokka.location:io.gitlab.arturbosch.detekt.api/ValueWithReason/ValueWithReason/#kotlin.String#kotlin.String?/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-value-with-reason/-value-with-reason.html
+$dokka.location:io.gitlab.arturbosch.detekt.api/ValueWithReason/reason/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-value-with-reason/reason.html
+$dokka.location:io.gitlab.arturbosch.detekt.api/ValueWithReason/value/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-value-with-reason/value.html
+$dokka.location:io.gitlab.arturbosch.detekt.api/ValuesWithReason///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-values-with-reason/index.html
 io.gitlab.arturbosch.detekt.api
 io.gitlab.arturbosch.detekt.api.internal
 
