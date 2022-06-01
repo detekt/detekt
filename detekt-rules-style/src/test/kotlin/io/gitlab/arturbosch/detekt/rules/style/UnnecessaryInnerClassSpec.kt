@@ -446,4 +446,19 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
 
         assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
+
+    @Test
+    fun `reports when an inner class has this references`() {
+        val code = """
+            class A {
+                inner class B {
+                    fun foo() {
+                        this
+                    }
+                }
+            }
+        """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
 }
