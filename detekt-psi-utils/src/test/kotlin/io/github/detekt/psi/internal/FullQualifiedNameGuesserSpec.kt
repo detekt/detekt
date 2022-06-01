@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class FullQualifiedNameGuesserSpec {
 
     @Nested
-    class `With package` {
+    inner class `With package` {
         private val sut = FullQualifiedNameGuesser(
             compileContentForTest(
                 """
@@ -75,7 +75,7 @@ class FullQualifiedNameGuesserSpec {
     }
 
     @Nested
-    class `Without package` {
+    inner class `Without package` {
         private val sut = FullQualifiedNameGuesser(compileContentForTest("import kotlin.jvm.JvmField"))
 
         @Test
