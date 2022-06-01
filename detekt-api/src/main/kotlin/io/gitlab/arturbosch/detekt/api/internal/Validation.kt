@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
-private val identifierRegex = Regex("[aA-zZ]+([-][aA-zZ]+)*")
+private val identifierRegex = Regex("[aA-zZ]+(-[aA-zZ]+)*")
 
 /**
  * Checks if given string matches the criteria of an id - [aA-zZ]+([-][aA-zZ]+)* .
