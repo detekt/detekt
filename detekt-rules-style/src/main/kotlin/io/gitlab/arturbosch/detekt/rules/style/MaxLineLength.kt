@@ -96,7 +96,7 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
     companion object {
         private const val DEFAULT_IDEA_LINE_LENGTH = 120
-        private val BLANK_OR_QUOTES = """[\s\"]*""".toRegex()
+        private val BLANK_OR_QUOTES = """[\s"]*""".toRegex()
 
         private fun findFirstMeaningfulKtElementInParents(file: KtFile, offset: Int, line: String): PsiElement? {
             return findKtElementInParents(file, offset, line)
