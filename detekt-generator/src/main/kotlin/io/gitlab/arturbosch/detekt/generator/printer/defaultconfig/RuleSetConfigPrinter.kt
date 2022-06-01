@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.generator.collection.RuleSetPage
 import io.gitlab.arturbosch.detekt.generator.collection.RuleSetProvider
 import io.gitlab.arturbosch.detekt.generator.out.YamlNode
 import io.gitlab.arturbosch.detekt.generator.out.keyValue
-import io.gitlab.arturbosch.detekt.generator.out.list
 import io.gitlab.arturbosch.detekt.generator.out.node
 
 internal fun YamlNode.printRuleSetPage(ruleSetPage: RuleSetPage) {
@@ -47,9 +46,5 @@ internal fun YamlNode.printRule(rule: Rule) {
 internal fun YamlNode.printConfiguration(configuration: Configuration) {
     if (configuration.isDeprecated()) return
 
-    if (configuration.isDefaultValueNonEmptyList()) {
-        list(configuration.name, configuration.getDefaultValueAsList())
-    } else {
-        keyValue { configuration.name to configuration.defaultValue.getQuotedIfNecessary() }
-    }
+    configuration.defaultValue.printAsYaml(configuration.name, this)
 }

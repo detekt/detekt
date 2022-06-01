@@ -126,6 +126,46 @@ class YamlConfigSpec {
             assertThat(config).isNotNull
         }
 
+        @Nested
+        inner class `Values with reason` {
+            private val config = YamlConfig.load(resourceAsPath("values-with-reason.yml"))
+
+            @Test
+            fun `can be parsed`() {
+                assertThat(config).isNotNull
+            }
+
+            @Test
+            fun `supports lists`() {
+                val actualAsList: List<*>? = config
+                    .subConfig("style")
+                    .subConfig("AsList")
+                    .valueOrNull("values")
+                assertThat(actualAsList).hasSize(3)
+            }
+
+            @Test
+            fun `supports dictionaries`() {
+                val actualAsMap: List<Map<*, *>>? = config
+                    .subConfig("style")
+                    .subConfig("AsListOfMaps")
+                    .valueOrNull("values")
+                assertThat(actualAsMap)
+                    .hasSize(3)
+            }
+
+            @Test
+            fun `supports empty dictionaries`() {
+                val actualAsMap: List<Map<*, *>>? = config
+                    .subConfig("style")
+                    .subConfig("EmptyListOfMaps")
+                    .valueOrNull("values")
+                assertThat(actualAsMap)
+                    .isNotNull
+                    .isEmpty()
+            }
+        }
+
         @Test
         fun `throws an exception on an non-existing file`() {
             val path = Paths.get("doesNotExist.yml")

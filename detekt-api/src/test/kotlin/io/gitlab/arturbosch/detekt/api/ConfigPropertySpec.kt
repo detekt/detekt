@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.api
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.assertj.core.api.Assertions.tuple
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.concurrent.atomic.AtomicInteger
@@ -63,6 +64,104 @@ class ConfigPropertySpec {
                 @Test
                 fun `uses the value provided in config if present`() {
                     assertThat(subject.present).isEqualTo(configValue)
+                }
+            }
+
+            @Nested
+            inner class `ValuesWithReason property` {
+                private val defaultValue = valuesWithReason("aValue" to "aReason")
+
+                @Nested
+                inner class `value defined as list` {
+                    private val subject = object : TestConfigAware("present" to listOf("a", "b", "c")) {
+                        val present: ValuesWithReason by config(defaultValue)
+                        val notPresent: ValuesWithReason by config(defaultValue)
+                    }
+
+                    @Test
+                    fun `uses the value provided in config if present`() {
+                        assertThat(subject.present)
+                            .extracting(ValueWithReason::value, ValueWithReason::reason)
+                            .containsExactly(tuple("a", null), tuple("b", null), tuple("c", null))
+                    }
+
+                    @Test
+                    fun `uses the default value if not present`() {
+                        assertThat(subject.notPresent).isEqualTo(defaultValue)
+                    }
+                }
+
+                @Nested
+                inner class `value defined as list of maps` {
+                    private val subject = object : TestConfigAware(
+                        "present" to listOf(
+                            mapOf("value" to "a", "reason" to "reasonA"),
+                            mapOf("value" to "b", "reason" to null),
+                            mapOf("value" to "c"),
+                        )
+                    ) {
+                        val present: ValuesWithReason by config(defaultValue)
+                        val notPresent: ValuesWithReason by config(defaultValue)
+                    }
+
+                    @Test
+                    fun `uses the value provided in config if present`() {
+                        assertThat(subject.present)
+                            .extracting(ValueWithReason::value, ValueWithReason::reason)
+                            .containsExactly(
+                                tuple("a", "reasonA"),
+                                tuple("b", null),
+                                tuple("c", null)
+                            )
+                    }
+
+                    @Test
+                    fun `uses the default value if not present`() {
+                        assertThat(subject.notPresent).isEqualTo(defaultValue)
+                    }
+                }
+
+                @Nested
+                inner class `value defined as list of maps with invalid data` {
+
+                    @Test
+                    fun `value missing`() {
+                        assertThatThrownBy {
+                            object : TestConfigAware(
+                                "present" to listOf(
+                                    mapOf("reason" to "reason")
+                                )
+                            ) {
+                                val present: ValuesWithReason by config(defaultValue)
+                            }.present
+                        }.isInstanceOf(Config.InvalidConfigurationError::class.java)
+                    }
+
+                    @Test
+                    fun `value with an invalid type`() {
+                        assertThatThrownBy {
+                            object : TestConfigAware(
+                                "present" to listOf(
+                                    mapOf("value" to 42, "reason" to "reason")
+                                )
+                            ) {
+                                val present: ValuesWithReason by config(defaultValue)
+                            }.present
+                        }.isInstanceOf(Config.InvalidConfigurationError::class.java)
+                    }
+
+                    @Test
+                    fun `reason with an invalid type`() {
+                        assertThatThrownBy {
+                            object : TestConfigAware(
+                                "present" to listOf(
+                                    mapOf("value" to "a", "reason" to 42)
+                                )
+                            ) {
+                                val present: ValuesWithReason by config(defaultValue)
+                            }.present
+                        }.isInstanceOf(Config.InvalidConfigurationError::class.java)
+                    }
                 }
             }
         }

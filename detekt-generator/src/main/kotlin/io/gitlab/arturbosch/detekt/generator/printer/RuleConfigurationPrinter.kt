@@ -18,8 +18,8 @@ internal object RuleConfigurationPrinter : DocumentationPrinter<List<Configurati
             h4 { "Configuration options:" }
             list {
                 item.forEach {
-                    val defaultValues = it.defaultValue.getQuotedIfNecessary()
-                    val defaultAndroidValues = it.defaultAndroidValue?.getQuotedIfNecessary()
+                    val defaultValues = it.defaultValue.printAsMarkdownCode()
+                    val defaultAndroidValues = it.defaultAndroidValue?.printAsMarkdownCode()
                     val defaultString = if (defaultAndroidValues != null) {
                         "(default: ${code { defaultValues }}) (android default: ${code { defaultAndroidValues }})"
                     } else {

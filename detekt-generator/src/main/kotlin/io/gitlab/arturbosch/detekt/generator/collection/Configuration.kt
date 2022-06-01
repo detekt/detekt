@@ -8,8 +8,4 @@ data class Configuration(
     val deprecated: String?
 ) {
     fun isDeprecated() = deprecated != null
-
-    fun isDefaultValueNonEmptyList() = defaultValue.isNonEmptyList()
-
-    fun getDefaultValueAsList(): List<String> = defaultValue.getAsList()
 }

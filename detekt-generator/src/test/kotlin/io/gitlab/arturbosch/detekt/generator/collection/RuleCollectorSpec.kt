@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.api.valuesWithReason
 import io.gitlab.arturbosch.detekt.generator.collection.DefaultValue.Companion.of
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidAliasesDeclaration
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidCodeExampleDocumentationException
@@ -562,19 +563,19 @@ class RuleCollectorSpec {
             @Test
             fun `extracts default value`() {
                 val code = """
-                /**
-                 * description
-                 */
-                class SomeRandomClass() : Rule {
-                    @Configuration("description")
-                    val prop: Int by config(1)
-                    @Configuration("description")
-                    private val config1: Int by configWithFallback(this::prop, 99)
-                    @Configuration("description")
-                    private val config2: Int by configWithFallback(fallbackProperty = ::prop, defaultValue = 99)
-                    @Configuration("description")
-                    private val config3: Int by configWithFallback(defaultValue = 99, fallbackProperty = ::prop)
-                }                        
+                    /**
+                     * description
+                     */
+                    class SomeRandomClass() : Rule {
+                        @Configuration("description")
+                        val prop: Int by config(1)
+                        @Configuration("description")
+                        private val config1: Int by configWithFallback(this::prop, 99)
+                        @Configuration("description")
+                        private val config2: Int by configWithFallback(fallbackProperty = ::prop, defaultValue = 99)
+                        @Configuration("description")
+                        private val config3: Int by configWithFallback(defaultValue = 99, fallbackProperty = ::prop)
+                    }                        
                 """
                 val items = subject.run(code)
                 val fallbackProperties = items[0].configuration.filter { it.name.startsWith("config") }
@@ -585,14 +586,14 @@ class RuleCollectorSpec {
             @Test
             fun `reports an error if the property to fallback on exists but is not a config property`() {
                 val code = """
-                /**
-                 * description
-                 */
-                class SomeRandomClass() : Rule {
-                    val prop: Int = 1
-                    @Configuration("description")
-                    private val config: Int by configWithFallback(::prop, 99)
-                }                        
+                    /**
+                     * description
+                     */
+                    class SomeRandomClass() : Rule {
+                        val prop: Int = 1
+                        @Configuration("description")
+                        private val config: Int by configWithFallback(::prop, 99)
+                    }                        
                 """
                 assertThatThrownBy { subject.run(code) }
                     .isInstanceOf(InvalidDocumentationException::class.java)
@@ -624,6 +625,79 @@ class RuleCollectorSpec {
             fun `extracts default value with method reference`() {
                 val items = subject.run(code)
                 assertThat(items[0].configuration[1].defaultValue).isEqualTo(of(false))
+            }
+        }
+
+        @Nested
+        inner class `values with reason property` {
+            private val code = """
+                        /**
+                         * description
+                         */
+                        class SomeRandomClass() : Rule {
+                            @Configuration("description")
+                            private val singleWithPositionalParam: ValuesWithReason 
+                                by config(valuesWithReason("value" to "reason"))
+                            @Configuration("description")
+                            private val singleWithNamedParam 
+                                by config(defaultValue = valuesWithReason("value" to "reason"))
+                            @Configuration("description")
+                            private val singleWithConstant by config(DEFAULT_VALUE)
+                            @Configuration("description")
+                            private val noValues by config(valuesWithReason())
+                            @Configuration("description")
+                            private val multipleValues by config(valuesWithReason("a" to "A and A", "b" to "B and B"))
+                            @Configuration("description")
+                            private val multipleLines 
+                                by config(valuesWithReason(
+                                    "a" to "A " +
+                                        "and A", 
+                                    "b" to ""${"\""}B and B""${"\""}))
+                            
+                            companion object {
+                                private val DEFAULT_VALUE = valuesWithReason("value" to "reason")
+                            }
+                        }
+            """
+
+            @Test
+            fun `parse options of type ValuesWithReason`() {
+                val rule = subject.run(code)[0]
+                assertThat(rule.configuration).hasSize(6)
+            }
+
+            @Test
+            fun `no values`() {
+                val rule = subject.run(code)[0]
+                val config = rule.configuration.first { it.name == "noValues" }
+                assertThat(config.defaultValue).isEqualTo(of(valuesWithReason()))
+            }
+
+            @Test
+            fun `single value`() {
+                val rule = subject.run(code)[0]
+                val expected = of(valuesWithReason("value" to "reason"))
+                val singleValueConfigs = rule.configuration.filter { it.name.startsWith("single") }
+                assertThat(singleValueConfigs)
+                    .hasSize(3)
+                    .extracting("defaultValue")
+                    .containsOnly(expected)
+            }
+
+            @Test
+            fun `multiple values`() {
+                val rule = subject.run(code)[0]
+                val configs = rule.configuration.filter { it.name.startsWith("multiple") }
+                val expected = of(
+                    valuesWithReason(
+                        "a" to "A and A",
+                        "b" to "B and B"
+                    )
+                )
+                assertThat(configs)
+                    .hasSize(2)
+                    .extracting("defaultValue")
+                    .containsOnly(expected)
             }
         }
     }

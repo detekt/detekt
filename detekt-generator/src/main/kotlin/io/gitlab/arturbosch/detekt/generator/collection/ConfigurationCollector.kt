@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.api.ValueWithReason
+import io.gitlab.arturbosch.detekt.api.valuesWithReason
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithAndroidVariantsSupport.ANDROID_VARIANTS_DELEGATE_NAME
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithAndroidVariantsSupport.DEFAULT_ANDROID_VALUE_ARGUMENT_NAME
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithAndroidVariantsSupport.isAndroidVariantConfigDelegate
@@ -9,7 +11,12 @@ import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.C
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.DefaultValueSupport.getAndroidDefaultValue
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.DefaultValueSupport.getDefaultValue
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.DefaultValueSupport.toDefaultValueIfLiteral
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.StringListSupport.getListDefaultOrNull
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.StringListSupport.hasListDeclaration
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ValuesWithReasonSupport.getValuesWithReasonDefaultOrNull
+import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ValuesWithReasonSupport.hasValuesWithReasonDeclaration
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
@@ -56,8 +63,13 @@ class ConfigurationCollector {
     }
 
     private fun KtProperty.getConstantValue(): DefaultValue? {
+        if (hasValuesWithReasonDeclaration()) {
+            return getValuesWithReasonDefaultOrNull()
+                ?: invalidDocumentation { "Invalid declaration of values with reasons default for property '$text'" }
+        }
         if (hasListDeclaration()) {
-            return DefaultValue.of(getListDeclaration().valueArguments.map { it.text.withoutQuotes() })
+            return getListDefaultOrNull(emptyMap())
+                ?: invalidDocumentation { "Invalid declaration of string list default for property '$text'" }
         }
 
         return findDescendantOfType<KtConstantExpression>()?.toDefaultValueIfLiteral()
@@ -125,15 +137,9 @@ class ConfigurationCollector {
         }
 
         fun KtExpression.toDefaultValue(constantsByName: Map<String, DefaultValue>): DefaultValue {
-            val listDeclarationForDefault = getListDeclarationOrNull()
-            if (listDeclarationForDefault != null) {
-                val listValues = listDeclarationForDefault.valueArguments.map {
-                    (constantsByName[it.text]?.getAsPlainString() ?: it.text.withoutQuotes())
-                }
-                return DefaultValue.of(listValues)
-            }
-
-            return toDefaultValueIfLiteral()
+            return getValuesWithReasonDefaultOrNull()
+                ?: getListDefaultOrNull(constantsByName)
+                ?: toDefaultValueIfLiteral()
                 ?: constantsByName[text.withoutQuotes()]
                 ?: error("$text is neither a literal nor a constant")
         }
@@ -176,6 +182,63 @@ class ConfigurationCollector {
             delegate?.expression?.referenceExpression()?.text == ANDROID_VARIANTS_DELEGATE_NAME
     }
 
+    private object ValuesWithReasonSupport {
+        private const val VALUES_WITH_REASON_FACTORY_METHOD = "valuesWithReason"
+
+        fun KtElement.getValuesWithReasonDefaultOrNull(): DefaultValue? {
+            return getValuesWithReasonDeclarationOrNull()
+                ?.valueArguments
+                ?.map(::toValueWithReason)
+                ?.let { DefaultValue.of(valuesWithReason(it)) }
+        }
+
+        fun KtElement.getValuesWithReasonDeclarationOrNull(): KtCallExpression? =
+            findDescendantOfType { it.isValuesWithReasonDeclaration() }
+
+        fun KtCallExpression.isValuesWithReasonDeclaration(): Boolean {
+            return referenceExpression()?.text == VALUES_WITH_REASON_FACTORY_METHOD
+        }
+
+        fun KtProperty.hasValuesWithReasonDeclaration(): Boolean =
+            anyDescendantOfType<KtCallExpression> { it.isValuesWithReasonDeclaration() }
+
+        private fun toValueWithReason(arg: KtValueArgument): ValueWithReason {
+            val keyToValue = arg.children.first() as? KtBinaryExpression
+            return keyToValue?.let {
+                ValueWithReason(
+                    value = it.left?.text?.withoutQuotes()
+                        ?: error("left side of value with reason argument is null"),
+                    reason = it.right?.text?.withoutQuotes()
+                        ?: error("right side of value with reason argument is null")
+                )
+            } ?: error("invalid value argument '${arg.text}'")
+        }
+    }
+
+    private object StringListSupport {
+        private const val LIST_OF = "listOf"
+        private const val EMPTY_LIST = "emptyList"
+        private val LIST_CREATORS = setOf(LIST_OF, EMPTY_LIST)
+
+        fun KtElement.getListDefaultOrNull(constantsByName: Map<String, DefaultValue>): DefaultValue? {
+            return getListDeclarationOrNull()?.valueArguments?.map {
+                (constantsByName[it.text]?.getPlainValue() ?: it.text.withoutQuotes())
+            }?.let { DefaultValue.of(it) }
+        }
+
+        fun KtElement.getListDeclarationOrNull(): KtCallExpression? =
+            findDescendantOfType { it.isListDeclaration() }
+
+        fun KtProperty.hasListDeclaration(): Boolean =
+            anyDescendantOfType<KtCallExpression> { it.isListDeclaration() }
+
+        fun KtElement.getListDeclaration(): KtCallExpression =
+            checkNotNull(getListDeclarationOrNull())
+
+        fun KtCallExpression.isListDeclaration() =
+            referenceExpression()?.text in LIST_CREATORS
+    }
+
     companion object {
         private const val SIMPLE_DELEGATE_NAME = "config"
         private val DELEGATE_NAMES = listOf(
@@ -184,24 +247,9 @@ class ConfigurationCollector {
             ANDROID_VARIANTS_DELEGATE_NAME
         )
         private const val DEFAULT_VALUE_ARGUMENT_NAME = "defaultValue"
-        private const val LIST_OF = "listOf"
-        private const val EMPTY_LIST = "emptyList"
-        private val LIST_CREATORS = setOf(LIST_OF, EMPTY_LIST)
-
-        private fun KtElement.getListDeclaration(): KtCallExpression =
-            checkNotNull(getListDeclarationOrNull())
-
-        private fun KtElement.getListDeclarationOrNull(): KtCallExpression? =
-            findDescendantOfType { it.isListDeclaration() }
 
         private fun KtProperty.isInitializedWithConfigDelegate(): Boolean =
             delegate?.expression?.referenceExpression()?.text in DELEGATE_NAMES
-
-        private fun KtProperty.hasListDeclaration(): Boolean =
-            anyDescendantOfType<KtCallExpression> { it.isListDeclaration() }
-
-        private fun KtCallExpression.isListDeclaration() =
-            referenceExpression()?.text in LIST_CREATORS
 
         private fun KtElement.invalidDocumentation(message: () -> String): Nothing {
             throw InvalidDocumentationException("[${containingFile.name}] ${message.invoke()}")
