@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.ParameterException
-import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.io.File
 import java.net.URL
@@ -47,13 +46,12 @@ class MultipleExistingPathConverter : DetektInputPathConverter<Path> {
 }
 
 class LanguageVersionConverter : IStringConverter<LanguageVersion> {
-    override fun convert(value: String): LanguageVersion =
-        checkNotNull(LanguageVersion.fromFullVersionString(value)) { "Invalid value passed to --language-version" }
-}
-
-class JvmTargetConverter : IStringConverter<JvmTarget> {
-    override fun convert(value: String): JvmTarget =
-        checkNotNull(JvmTarget.fromString(value)) { "Invalid value passed to --jvm-target" }
+    override fun convert(value: String): LanguageVersion {
+        val validValues by lazy { LanguageVersion.values().joinToString { it.versionString } }
+        return requireNotNull(LanguageVersion.fromFullVersionString(value)) {
+            "\"$value\" passed to --language-version, expected one of [$validValues]"
+        }
+    }
 }
 
 class ClasspathResourceConverter : IStringConverter<URL> {

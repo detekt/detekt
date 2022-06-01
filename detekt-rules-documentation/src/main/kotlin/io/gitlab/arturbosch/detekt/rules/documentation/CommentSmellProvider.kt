@@ -24,7 +24,8 @@ class CommentSmellProvider : DefaultRuleSetProvider {
             UndocumentedPublicClass(config),
             UndocumentedPublicFunction(config),
             UndocumentedPublicProperty(config),
-            AbsentOrWrongFileLicense(config)
+            AbsentOrWrongFileLicense(config),
+            KDocReferencesNonPublicProperty(config)
         )
     )
 }

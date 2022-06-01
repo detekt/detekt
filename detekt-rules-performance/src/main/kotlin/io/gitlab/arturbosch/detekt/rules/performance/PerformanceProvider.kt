@@ -19,7 +19,8 @@ class PerformanceProvider : DefaultRuleSetProvider {
             ForEachOnRange(config),
             SpreadOperator(config),
             UnnecessaryTemporaryInstantiation(config),
-            ArrayPrimitive(config)
+            ArrayPrimitive(config),
+            CouldBeSequence(config)
         )
     )
 }

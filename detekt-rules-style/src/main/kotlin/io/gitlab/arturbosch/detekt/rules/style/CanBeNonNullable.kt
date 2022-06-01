@@ -14,6 +14,7 @@ import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
 import io.gitlab.arturbosch.detekt.rules.isNullCheck
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
+import org.jetbrains.kotlin.com.intellij.codeInsight.NullableNotNullManager.isNullable
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
@@ -52,6 +53,8 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.getKotlinTypeForComparison
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
+import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.TypeUtils
 import org.jetbrains.kotlin.types.isNullable
 
 /**
@@ -445,7 +448,8 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         }
 
         override fun visitProperty(property: KtProperty) {
-            if (property.getKotlinTypeForComparison(bindingContext)?.isNullable() == true) {
+            val type = property.getKotlinTypeForComparison(bindingContext)
+            if (type?.isNullableAndCanBeNonNullable() == true) {
                 val fqName = property.fqName
                 if (property.isCandidate() && fqName != null) {
                     candidateProps[fqName] = property
@@ -472,6 +476,21 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                 }
             }
             super.visitBinaryExpression(expression)
+        }
+
+        /**
+         * Determines whether a type is nullable and can be made non-nullable; for most properties
+         * this is simply whether they are nullable, but for type parameters they can only be made
+         * non-nullable when explicitly marked nullable.
+         *
+         * Note that [KotlinType.isNullable] for type parameter types is true unless it inherits
+         * from a non-nullable type, e.g.:
+         * - nullable: <T> or <T : Any?>
+         * - non-nullable: <T : Any>
+         * But even if T is nullable, a property `val t: T` cannot be made into a non-nullable type.
+         */
+        private fun KotlinType.isNullableAndCanBeNonNullable(): Boolean {
+            return if (TypeUtils.isTypeParameter(this)) isMarkedNullable else isNullable()
         }
 
         private fun KtProperty.isCandidate(): Boolean {
@@ -512,7 +531,11 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                             )
                 }
                 else -> {
-                    this?.getType(bindingContext)?.isNullable() == true
+                    // only consider types which can be made non-nullable as nullable to warn on
+                    // cases where a field has declared type `T?` but is only assigned as `T`; here
+                    // `T` should not be considered nullable to enforce that the field could be
+                    // declared as just `T`
+                    this?.getType(bindingContext)?.isNullableAndCanBeNonNullable() == true
                 }
             }
         }

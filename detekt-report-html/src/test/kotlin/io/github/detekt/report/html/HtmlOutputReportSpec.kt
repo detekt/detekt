@@ -115,6 +115,26 @@ class HtmlOutputReportSpec {
     }
 
     @Test
+    fun `renders the right documentation links for the rules`() {
+        val detektion = object : TestDetektion() {
+            override val findings: Map<String, List<Finding>> = mapOf(
+                "Style" to listOf(
+                    createFinding(createIssue("ValCouldBeVar"), createEntity(""))
+                ),
+                "empty" to listOf(
+                    createFinding(createIssue("EmptyBody"), createEntity("")),
+                    createFinding(createIssue("EmptyIf"), createEntity(""))
+                )
+            )
+        }
+
+        val result = htmlReport.render(detektion)
+        assertThat(result).contains("<a href=\"https://detekt.dev/docs/rules/style#valcouldbevar\">Documentation</a>")
+        assertThat(result).contains("<a href=\"https://detekt.dev/docs/rules/empty#emptybody\">Documentation</a>")
+        assertThat(result).contains("<a href=\"https://detekt.dev/docs/rules/empty#emptyif\">Documentation</a>")
+    }
+
+    @Test
     fun `renders a metric report correctly`() {
         val detektion = object : TestDetektion() {
             override val metrics: Collection<ProjectMetric> = listOf(

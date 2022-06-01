@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
@@ -49,6 +50,39 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
             """
 
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report private variables that are re-assigned inside an unknown type`() {
+            val code = """
+            private var a = 1
+
+            fun foo() {
+                with(UnknownReference) {
+                    a = 2
+                }
+            }
+            """
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `reports private variables that have the same name as those re-assigned within a known type`() {
+            val code = """
+            class MyClass(var a: Int)
+
+            private var a = 1
+            private val myObj = MyClass(1)
+
+            fun foo() {
+                with(myObj) {
+                    a = 2
+                }
+            }
+            """
+
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }
 
