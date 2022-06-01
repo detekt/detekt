@@ -142,6 +142,11 @@ potential-bugs:
     active: true
   MapGetWithNotNullAssertionOperator:
     active: true
+  MissingPackageDeclaration:
+    active: true
+    excludes:
+      - '**/*.kts'
+      - '**/build-logic/**'
   UnconditionalJumpStatementInLoop:
     active: true
   UnreachableCatchBlock:
