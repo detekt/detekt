@@ -31,4 +31,4 @@ internal fun String.withoutQuotes() = removeSurrounding(TRIPLE_QUOTES)
 
 private const val SINGLE_QUOTES = "\""
 private const val TRIPLE_QUOTES = "\"\"\""
-private val STRING_CONCAT_REGEX = """["]\s*\+[\n\s]*["]""".toRegex()
+private val STRING_CONCAT_REGEX = """"\s*\+[\n\s]*"""".toRegex()
