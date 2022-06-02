@@ -452,7 +452,7 @@ potential-bugs:
   MapGetWithNotNullAssertionOperator:
     active: true
   MissingPackageDeclaration:
-    active: true
+    active: false
     excludes: ['**/*.kts']
   MissingWhenCase:
     active: true
