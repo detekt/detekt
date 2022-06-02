@@ -5,6 +5,97 @@ keywords: [changelog, release-notes, migration]
 sidebar_position: 1
 ---
 
+#### 1.21.0-RC1 - 2022-06-02
+
+##### Notable Changes
+
+- We enabled ~30 new rules by default which we believe are now stable enough. - [#4875](https://github.com/detekt/detekt/pull/4875)
+- We added **3** new Rules to Detekt
+  - `NullableBooleanCheck` - [#4872](https://github.com/detekt/detekt/pull/4872)
+  - `CouldBeSequence` - [#4855](https://github.com/detekt/detekt/pull/4855)
+  - `UnnecessaryBackticks` - [#4764](https://github.com/detekt/detekt/pull/4764)
+- We now allow users and rule authors to specify a **reason** for every value in the config file - [#4611](https://github.com/detekt/detekt/pull/4611)
+- We now report as warnings the in the config file that should converted to be an array - [#4793](https://github.com/detekt/detekt/pull/4793)
+- We added a dependency on **ConTester** to help us verify concurrency scenarios for Detekt - [#4672](https://github.com/detekt/detekt/pull/4672)
+- For contributors: we restructured our build setup to be use **Gradle composite build** - [#4751](https://github.com/detekt/detekt/pull/4751)
+
+##### Changelog
+
+- Simplify regular expressions - [#4893](https://github.com/detekt/detekt/pull/4893)
+- Remove redundant character escape in RegExp - [#4892](https://github.com/detekt/detekt/pull/4892)
+- Reformat Markdown files to comply with the spec - [#4891](https://github.com/detekt/detekt/pull/4891)
+- UnnecessaryInnerClass: fix false negative with `this` references - [#4884](https://github.com/detekt/detekt/pull/4884)
+- UselessCallOnNotNull: fix false positive for unresolved types - [#4880](https://github.com/detekt/detekt/pull/4880)
+- Update MagicNumber rule to exclude .kts files - [#4877](https://github.com/detekt/detekt/pull/4877)
+- CanBeNonNullable: fix false positives for parameterized types - [#4870](https://github.com/detekt/detekt/pull/4870)
+- UnnecessaryInnerClass: fix false positives labeled expression to outer class - [#4865](https://github.com/detekt/detekt/pull/4865)
+- UnnecessaryInnerClass: add test for safe qualified expressions - [#4864](https://github.com/detekt/detekt/pull/4864)
+- Fix a confusing Regex in the Compose webpage - [#4852](https://github.com/detekt/detekt/pull/4852)
+- Fix edit URLs for the website - [#4850](https://github.com/detekt/detekt/pull/4850)
+- detektGenerateConfig adds the configuration of plugins - [#4844](https://github.com/detekt/detekt/pull/4844)
+- Update dependency prism-react-renderer to v1.3.3 - [#4833](https://github.com/detekt/detekt/pull/4833)
+- Search in all versions.properties, not just the first one #4830 - [#4831](https://github.com/detekt/detekt/pull/4831)
+- Improve exception message - [#4823](https://github.com/detekt/detekt/pull/4823)
+- Fix ValShouldBeVar false positive inside unknown type - [#4820](https://github.com/detekt/detekt/pull/4820)
+- Add a recent conference talk link - [#4819](https://github.com/detekt/detekt/pull/4819)
+- False positive for unused imports #4815 - [#4818](https://github.com/detekt/detekt/pull/4818)
+- Revert "Display dynamic --jvm-target values when using --help flag (#4694)" - [#4816](https://github.com/detekt/detekt/pull/4816)
+- UnnecessaryAbstractClass: report only the class name - [#4808](https://github.com/detekt/detekt/pull/4808)
+- Fix wrong replacement suggestion for UnnecessaryFilter - [#4807](https://github.com/detekt/detekt/pull/4807)
+- UseOrEmpty: fix false positive for indexing operator calls with type parameters - [#4804](https://github.com/detekt/detekt/pull/4804)
+- ExplicitCollectionElementAccessMethod: fix false positive for get operators with type parameters - [#4803](https://github.com/detekt/detekt/pull/4803)
+- Add tests for #4786 - [#4801](https://github.com/detekt/detekt/pull/4801)
+- Add documentation link for rules in html report - [#4799](https://github.com/detekt/detekt/pull/4799)
+- Improve rule documentaion and smell message of NamedArguments - [#4796](https://github.com/detekt/detekt/pull/4796)
+- Improve issue description and smell message of DestructuringDeclarationWithTooManyEntries - [#4795](https://github.com/detekt/detekt/pull/4795)
+- NestedScopeFunctions - Add rule for nested scope functions - [#4788](https://github.com/detekt/detekt/pull/4788)
+- Partially drop redundant usage of "dry run" in Gradle plugin tests - [#4776](https://github.com/detekt/detekt/pull/4776)
+- Allow additionalJavaSourceRootPaths to be defined on @KotlinCoreEnvironmentTest - [#4771](https://github.com/detekt/detekt/pull/4771)
+- Report KDoc comments that refer to non-public properties of a class - [#4768](https://github.com/detekt/detekt/pull/4768)
+- Self-inspect the detekt-gradle-plugin - [#4765](https://github.com/detekt/detekt/pull/4765)
+- Pass args to DetektInvoker as List&lt;String&gt; - [#4762](https://github.com/detekt/detekt/pull/4762)
+- Cleanup Gradle Plugin Publications - [#4752](https://github.com/detekt/detekt/pull/4752)
+- Break a dependency between `detekt-gradle-plugin` and `detekt-utils` - [#4748](https://github.com/detekt/detekt/pull/4748)
+- Remove suspend lambda rule with CoroutineScope receiver due to not de… - [#4747](https://github.com/detekt/detekt/pull/4747)
+- `VarCouldBeVal`: Add configuration flag `ignoreLateinitVar` - [#4745](https://github.com/detekt/detekt/pull/4745)
+- UnnecessaryInnerClass: fix false positive with references to function type variables - [#4738](https://github.com/detekt/detekt/pull/4738)
+- Fix false positive on VarCouldBeVal in generic classes - [#4733](https://github.com/detekt/detekt/pull/4733)
+- OutdatedDocumentation: fix false positive with no primary constructor - [#4728](https://github.com/detekt/detekt/pull/4728)
+- Android Gradle: add javac intermediates to classpath - [#4723](https://github.com/detekt/detekt/pull/4723)
+- OptionalWhenBraces: fix false negative when the single statement has comments inside - [#4722](https://github.com/detekt/detekt/pull/4722)
+- Document pre-commit hook for staged files - [#4711](https://github.com/detekt/detekt/pull/4711)
+- Enable rules by default for `1.21` - [#4643](https://github.com/detekt/detekt/issues/4643)
+
+##### Dependency Updates
+
+- Update dependency org.jetbrains.kotlinx:kotlinx-coroutines-core to v1.6.2 - [#4868](https://github.com/detekt/detekt/pull/4868)
+- Update dependency com.android.tools.build:gradle to v7.2.1 - [#4861](https://github.com/detekt/detekt/pull/4861)
+- Update plugin binaryCompatibilityValidator to v0.10.0 - [#4837](https://github.com/detekt/detekt/pull/4837)
+- Update dependency io.mockk:mockk to v1.12.4 - [#4829](https://github.com/detekt/detekt/pull/4829)
+- Update dependency com.android.tools.build:gradle to v7.2.0 - [#4824](https://github.com/detekt/detekt/pull/4824)
+- Add dependency-analysis plugin and implement some recommendations - [#4798](https://github.com/detekt/detekt/pull/4798)
+- Add dependency on slf4j-nop to silence warning - [#4775](https://github.com/detekt/detekt/pull/4775)
+- Update plugin dokka to v1.6.21 - [#4770](https://github.com/detekt/detekt/pull/4770)
+- Update org.jetbrains.kotlin to v1.6.21 - [#4737](https://github.com/detekt/detekt/pull/4737)
+- Update dependency com.github.breadmoirai:github-release to v2.3.7 - [#4734](https://github.com/detekt/detekt/pull/4734)
+- Update plugin binaryCompatibilityValidator to v0.9.0 - [#4729](https://github.com/detekt/detekt/pull/4729)
+
+##### Housekeeping & Refactorings
+
+- Declare nested test classes as non-static - [#4894](https://github.com/detekt/detekt/pull/4894)
+- Remove deprecated usages in gradle-plugin test - [#4889](https://github.com/detekt/detekt/pull/4889)
+- Remove reference to contributor list - [#4871](https://github.com/detekt/detekt/pull/4871)
+- Add missing image - [#4834](https://github.com/detekt/detekt/pull/4834)
+- Upgrade to GE enterprise 3.10 - [#4802](https://github.com/detekt/detekt/pull/4802)
+- Fix broken snapshot publishing - [#4783](https://github.com/detekt/detekt/pull/4783)
+- Remove pending Gradle version milestones from comments - [#4777](https://github.com/detekt/detekt/pull/4777)
+- Add more tests for Annotation Suppressor - [#4774](https://github.com/detekt/detekt/pull/4774)
+- fix: add test case that fails if environment is not properly set up - [#4769](https://github.com/detekt/detekt/pull/4769)
+- Disable UnusedImports for the Detekt project - [#4741](https://github.com/detekt/detekt/pull/4741)
+- Remove Unnecesary @Nested - [#4740](https://github.com/detekt/detekt/pull/4740)
+- Update the argsfile to unblock `runWithArgsFile` failing locally - [#4718](https://github.com/detekt/detekt/pull/4718)
+
+See all issues at: [1.21.0](https://github.com/detekt/detekt/milestone/86)
 
 #### 1.20.0 - 2022-04-14
 
