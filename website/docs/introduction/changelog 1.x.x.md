@@ -53,7 +53,7 @@ sidebar_position: 1
 - Allow additionalJavaSourceRootPaths to be defined on @KotlinCoreEnvironmentTest - [#4771](https://github.com/detekt/detekt/pull/4771)
 - Report KDoc comments that refer to non-public properties of a class - [#4768](https://github.com/detekt/detekt/pull/4768)
 - Self-inspect the detekt-gradle-plugin - [#4765](https://github.com/detekt/detekt/pull/4765)
-- Pass args to DetektInvoker as List<String> - [#4762](https://github.com/detekt/detekt/pull/4762)
+- Pass args to DetektInvoker as List&lt;String&gt; - [#4762](https://github.com/detekt/detekt/pull/4762)
 - Cleanup Gradle Plugin Publications - [#4752](https://github.com/detekt/detekt/pull/4752)
 - Break a dependency between `detekt-gradle-plugin` and `detekt-utils` - [#4748](https://github.com/detekt/detekt/pull/4748)
 - Remove suspend lambda rule with CoroutineScope receiver due to not de… - [#4747](https://github.com/detekt/detekt/pull/4747)
