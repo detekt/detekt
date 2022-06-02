@@ -179,7 +179,7 @@ const config = {
     }),
 
   customFields: {
-    detektVersion: '1.20.0'
+    detektVersion: '1.21.0-RC1'
   },
 };
 
