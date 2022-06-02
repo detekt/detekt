@@ -136,6 +136,15 @@ complexity:
   NestedBlockDepth:
     active: true
     threshold: 4
+  NestedScopeFunctions:
+    active: false
+    threshold: 1
+    functions:
+      - 'kotlin.apply'
+      - 'kotlin.run'
+      - 'kotlin.with'
+      - 'kotlin.let'
+      - 'kotlin.also'
   ReplaceSafeCallChainWithRun:
     active: false
   StringLiteralDuplication:
