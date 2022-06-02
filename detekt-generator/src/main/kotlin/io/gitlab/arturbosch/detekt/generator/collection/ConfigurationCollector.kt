@@ -232,9 +232,6 @@ class ConfigurationCollector {
         fun KtProperty.hasListDeclaration(): Boolean =
             anyDescendantOfType<KtCallExpression> { it.isListDeclaration() }
 
-        fun KtElement.getListDeclaration(): KtCallExpression =
-            checkNotNull(getListDeclarationOrNull())
-
         fun KtCallExpression.isListDeclaration() =
             referenceExpression()?.text in LIST_CREATORS
     }
