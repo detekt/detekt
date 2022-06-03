@@ -118,5 +118,7 @@ val detektProjectBaseline by tasks.registering(DetektCreateBaselineTask::class) 
 }
 
 tasks.register("build") {
+    dependsOn("publishToMavenLocal")
+    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishToMavenLocal"))
     dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":build"))
 }

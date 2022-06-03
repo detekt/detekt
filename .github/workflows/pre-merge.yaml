@@ -51,10 +51,6 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         arguments: :detekt-cli:runWithArgsFile
-    - name: Try to publish to Maven Local
-      uses: gradle/gradle-build-action@v2
-      with:
-        arguments: publishToMavenLocal
 
   verify-generated-config-file:
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
