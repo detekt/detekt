@@ -23,13 +23,14 @@ project.afterEvaluate {
         repo.set("detekt")
         overwrite.set(true)
         dryRun.set(false)
+        draft.set(true)
         targetCommitish.set("main")
         body {
-            var changelog = project.file("docs/pages/changelog 1.x.x.md").readText()
-            val nextNonBetaVersion = project.version.toString().substringBeforeLast("-")
+            var changelog = project.file("website/docs/introduction/changelog 1.x.x.md").readText()
+            val nextNonBetaVersion = project.version.toString()
             val sectionStart = "#### $nextNonBetaVersion"
-            changelog = changelog.substring(changelog.indexOf(sectionStart) + sectionStart.length)
-            changelog = changelog.substring(0, changelog.indexOf("#### 1."))
+            changelog = changelog.substring(changelog.indexOf(sectionStart))
+            changelog = changelog.substring(0, changelog.indexOf("#### 1.", changelog.indexOf(sectionStart) + 1))
             changelog.trim()
         }
         val cliBuildDir = project(":detekt-cli").buildDir
