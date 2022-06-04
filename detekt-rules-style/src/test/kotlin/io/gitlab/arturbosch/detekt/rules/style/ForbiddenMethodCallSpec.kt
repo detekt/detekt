@@ -23,13 +23,18 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         }
         """
         val findings = ForbiddenMethodCall(TestConfig()).compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(2)
-        assertThat(findings).hasSourceLocations(
-            SourceLocation(2, 5),
-            SourceLocation(3, 5)
-        )
-        assertThat(findings[0]).hasMessage("The method `kotlin.io.print` has been forbidden in the Detekt config.")
-        assertThat(findings[1]).hasMessage("The method `kotlin.io.println` has been forbidden in the Detekt config.")
+
+        assertThat(findings)
+            .hasSize(2)
+            .hasSourceLocations(
+                SourceLocation(2, 5),
+                SourceLocation(3, 5),
+            )
+            .extracting("message")
+            .containsExactly(
+                "The method `kotlin.io.print` has been forbidden: print does not allow you to configure the output stream. Use a logger instead.",
+                "The method `kotlin.io.println` has been forbidden: println does not allow you to configure the output stream. Use a logger instead.",
+            )
     }
 
     @Test
@@ -480,7 +485,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                 }
             """
         val findings =
-            ForbiddenMethodCall(TestConfig(mapOf(METHODS to "java.util.Calendar.setFirstDayOfWeek"))).compileAndLintWithContext(
+            ForbiddenMethodCall(TestConfig(mapOf(METHODS to listOf("java.util.Calendar.setFirstDayOfWeek")))).compileAndLintWithContext(
                 env,
                 code
             )
@@ -498,7 +503,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                 }
             """
         val findings =
-            ForbiddenMethodCall(TestConfig(mapOf(METHODS to "java.util.Calendar.compareTo"))).compileAndLintWithContext(
+            ForbiddenMethodCall(TestConfig(mapOf(METHODS to listOf("java.util.Calendar.compareTo")))).compileAndLintWithContext(
                 env,
                 code
             )
