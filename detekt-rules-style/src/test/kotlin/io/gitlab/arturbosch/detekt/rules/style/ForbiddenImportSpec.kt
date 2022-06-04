@@ -1,7 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.ValueWithReason
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.toConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -48,6 +50,18 @@ class ForbiddenImportSpec {
             .isEqualTo("The import `kotlin.jvm.JvmField` has been forbidden in the Detekt config.")
         assertThat(findings[1].message)
             .isEqualTo("The import `kotlin.SinceKotlin` has been forbidden in the Detekt config.")
+    }
+
+    @Test
+    @DisplayName("should report kotlin.* when imports are kotlin.* with reasons")
+    fun reportKotlinWildcardImports2() {
+        val config = TestConfig(mapOf(IMPORTS to listOf(ValueWithReason("kotlin.*", "I'm just joking!").toConfig())))
+        val findings = ForbiddenImport(config).lint(code)
+        assertThat(findings).hasSize(2)
+        assertThat(findings[0].message)
+            .isEqualTo("The import `kotlin.jvm.JvmField` has been forbidden: I'm just joking!")
+        assertThat(findings[1].message)
+            .isEqualTo("The import `kotlin.SinceKotlin` has been forbidden: I'm just joking!")
     }
 
     @Test

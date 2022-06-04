@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
+import io.gitlab.arturbosch.detekt.api.valuesWithReason
 import org.jetbrains.kotlin.psi.KtImportDirective
 
 /**
@@ -33,8 +34,8 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("imports which should not be used")
-    private val imports: List<Regex> by config(emptyList<String>()) {
-        it.distinct().map(String::simplePatternToRegex)
+    private val imports: List<Forbidden> by config(valuesWithReason()) { list ->
+        list.map { Forbidden(it.value.simplePatternToRegex(), it.reason) }
     }
 
     @Configuration("reports imports which match the specified regular expression. For example `net.*R`.")
@@ -44,17 +45,29 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
         super.visitImportDirective(importDirective)
 
         val import = importDirective.importedFqName?.asString().orEmpty()
-        if (imports.any { it.matches(import) } || containsForbiddenPattern(import)) {
-            report(
-                CodeSmell(
-                    issue,
-                    Entity.from(importDirective),
-                    "The import `$import` has been forbidden in the Detekt config."
-                )
-            )
+
+        val forbidden = imports.find { it.import.matches(import) }
+        val reason = if (forbidden != null) {
+            if (forbidden.reason != null) {
+                "The import `$import` has been forbidden: ${forbidden.reason}"
+            } else {
+                defaultReason(import)
+            }
+        } else {
+            if (containsForbiddenPattern(import)) defaultReason(import) else null
         }
+
+        if (reason != null) {
+            report(CodeSmell(issue, Entity.from(importDirective), reason))
+        }
+    }
+
+    private fun defaultReason(forbiddenImport: String): String {
+        return "The import `$forbiddenImport` has been forbidden in the Detekt config."
     }
 
     private fun containsForbiddenPattern(import: String): Boolean =
         forbiddenPatterns.pattern.isNotEmpty() && forbiddenPatterns.containsMatchIn(import)
 }
+
+private class Forbidden(val import: Regex, val reason: String?)
