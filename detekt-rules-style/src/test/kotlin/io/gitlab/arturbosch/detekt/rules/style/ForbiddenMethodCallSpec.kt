@@ -28,6 +28,8 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             SourceLocation(2, 5),
             SourceLocation(3, 5)
         )
+        assertThat(findings[0]).hasMessage("The method kotlin.io.print has been forbidden in the Detekt config.")
+        assertThat(findings[1]).hasMessage("The method kotlin.io.println has been forbidden in the Detekt config.")
     }
 
     @Test
@@ -202,6 +204,8 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasSourceLocation(5, 26)
+        assertThat(findings[0])
+            .hasMessage("The method java.time.LocalDate.now() has been forbidden in the Detekt config.")
     }
 
     @Test
