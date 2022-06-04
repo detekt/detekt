@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.generator.printer.defaultconfig
 
 import io.github.detekt.tooling.out.YamlNode
 import io.github.detekt.tooling.out.keyValue
-import io.github.detekt.tooling.out.list
 import io.github.detekt.tooling.out.node
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.generator.collection.Configuration
@@ -47,9 +46,5 @@ internal fun YamlNode.printRule(rule: Rule) {
 internal fun YamlNode.printConfiguration(configuration: Configuration) {
     if (configuration.isDeprecated()) return
 
-    if (configuration.isDefaultValueNonEmptyList()) {
-        list(configuration.name, configuration.getDefaultValueAsList())
-    } else {
-        keyValue { configuration.name to configuration.defaultValue.getQuotedIfNecessary() }
-    }
+    configuration.defaultValue.printAsYaml(configuration.name, this)
 }

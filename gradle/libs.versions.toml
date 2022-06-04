@@ -4,6 +4,7 @@ jacoco = "0.8.8"
 kotlin = "1.6.21"
 ktlint = "0.45.2"
 junit = "5.8.2"
+contester = "0.2.0"
 
 [libraries]
 githubRelease-gradle = "com.github.breadmoirai:github-release:2.3.7"
@@ -18,9 +19,9 @@ kotlin-scriptingCompilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-scr
 kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 
 kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.5"
-kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
+kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.2"
 
-android-gradle = "com.android.tools.build:gradle:7.2.0"
+android-gradle = "com.android.tools.build:gradle:7.2.1"
 
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktlint" }
 ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint" }
@@ -37,9 +38,12 @@ reflections = "org.reflections:reflections:0.10.2"
 mockk = "io.mockk:mockk:1.12.4"
 snakeyaml = "org.yaml:snakeyaml:1.30"
 jcommander = "com.beust:jcommander:1.82"
+contester-breakpoint = { module = "io.github.davidburstrom.contester:contester-breakpoint", version.ref = "contester" }
+contester-driver = { module = "io.github.davidburstrom.contester:contester-driver", version.ref = "contester" }
 
 [plugins]
-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.9.0" }
+binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.10.0" }
+dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis", version = "1.4.0" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 gradleVersions = { id = "com.github.ben-manes.versions", version = "0.42.0" }
 pluginPublishing = { id = "com.gradle.plugin-publish", version = "0.21.0" }

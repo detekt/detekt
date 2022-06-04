@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
@@ -230,6 +231,32 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
             val strings = listOfNotNull("string", null)                
         """
         val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report when calling listOfNotNull with values whose type is unknown`() {
+        val code = """
+            fun test() {
+                listOfNotNull(unknown)
+            }
+        """.trimIndent()
+
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report when calling listOfNotNull with values whose type is derived and unknown`() {
+        val code = """
+            import kotlin.random.Random
+
+            fun test() {
+                listOfNotNull(unknown.takeIf { Random.nextBoolean() })
+            }
+        """.trimIndent()
+
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 

@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.detektApi)
+    compileOnly(projects.detektApi)
     implementation(libs.ktlint.rulesetStandard) {
         exclude(group = "org.jetbrains.kotlin")
     }

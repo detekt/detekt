@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
+import org.jetbrains.kotlin.types.ErrorType
 import org.jetbrains.kotlin.types.isNullable
 
 /*
@@ -92,14 +93,18 @@ class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
         val fqName = resolvedCall.resultingDescriptor.fqNameOrNull()
         if (fqName == listOfNotNull) {
             val varargs = resolvedCall.valueArguments.entries.single().value.arguments
-            if (varargs.none { it.isNullable() }) {
+            if (varargs.all { it.isNullable() == false }) {
                 report(CodeSmell(issue, Entity.from(expression), "Replace listOfNotNull with listOf"))
             }
         }
     }
 
-    private fun ValueArgument.isNullable(): Boolean {
-        val wrapperType = getArgumentExpression()?.getType(bindingContext) ?: return false
+    /**
+     * Determines whether this [ValueArgument] is nullable, returning null if its type cannot be
+     * determined.
+     */
+    private fun ValueArgument.isNullable(): Boolean? {
+        val wrapperType = getArgumentExpression()?.getType(bindingContext) ?: return null
         val type = if (getSpreadElement() != null) {
             // in case of a spread operator (`*list`),
             // we actually want to get the generic parameter from the collection
@@ -107,7 +112,10 @@ class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
         } else {
             wrapperType
         }
-        return type.isNullable()
+
+        return type
+            .takeUnless { it is ErrorType }
+            ?.isNullable()
     }
 
     private data class Conversion(val replacementName: String? = null)

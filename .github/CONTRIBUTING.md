@@ -10,9 +10,8 @@
 - We use [JUnit 5](https://junit.org/junit5/docs/current/user-guide/) for testing. Please use the `Spec.kt` suffix on
   new test classes. If your new rule requires type resolution (i.e. it utilises `BindingContext`) then annotate your
   test class with `@KotlinCoreEnvironmentTest` and have the test class accept `KotlinCoreEnvironment` as a parameter.
-  See "Testing a rule that uses type resolution" section of the [Using Type Resolution](../docs/pages/gettingstarted/type-resolution.md)
+  See "Testing a rule that uses type resolution" section of the [Using Type Resolution](../website/docs/gettingstarted/type-resolution.md)
   guide for details.
-- Feel free to add your name to the contributors list at the end of the readme file when opening a pull request.
 - The code in `detekt-api` and any rule in `detekt-rules` must be documented. We generate documentation for our website based on these modules.
 - If some Kotlin code in `resources` folder (like `detekt-formatting`) shows a compilation error, right click on it and use `Mark as plain text`.
 
@@ -126,20 +125,20 @@ the detailed description of the rule.
 
 ```kotlin
 /**
-  * Summary of the violation that this rule is concerned with,
-  * potentially extended by a brief description on why it is
-  * bad practice and what is usually done to eliminate it.
-  *
-  * Add more details if applicable...
-  *
-  * <noncompliant>
-  * // add the non-compliant code example here
-  * </noncompliant>
-  *
-  * <compliant>
-  * // add the compliant code example here
-  * </compliant>
-  */
+ * Summary of the violation that this rule is concerned with,
+ * potentially extended by a brief description on why it is
+ * bad practice and what is usually done to eliminate it.
+ *
+ * Add more details if applicable...
+ *
+ * <noncompliant>
+ * // add the non-compliant code example here
+ * </noncompliant>
+ *
+ * <compliant>
+ * // add the compliant code example here
+ * </compliant>
+ */
 class SomeRule(config: Config = Config.empty) : Rule(config) {
 
 }

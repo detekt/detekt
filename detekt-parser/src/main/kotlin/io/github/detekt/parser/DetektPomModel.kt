@@ -1,5 +1,6 @@
 package io.github.detekt.parser
 
+import io.github.davidburstrom.contester.ConTesterBreakpoint
 import org.jetbrains.kotlin.com.intellij.openapi.extensions.ExtensionPoint
 import org.jetbrains.kotlin.com.intellij.openapi.extensions.Extensions.getRootArea
 import org.jetbrains.kotlin.com.intellij.openapi.project.Project
@@ -26,6 +27,9 @@ class DetektPomModel(project: Project) : UserDataHolderBase(), PomModel {
             // Addresses https://github.com/detekt/detekt/issues/4609
             synchronized(extensionArea) {
                 if (!extensionArea.hasExtensionPoint(extension)) {
+                    ConTesterBreakpoint.defineBreakpoint("DetektPomModel.registerExtensionPoint") {
+                        extensionArea == getRootArea()
+                    }
                     extensionArea.registerExtensionPoint(
                         extension,
                         extensionClass,

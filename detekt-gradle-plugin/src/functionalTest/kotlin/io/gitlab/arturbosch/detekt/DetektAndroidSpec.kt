@@ -553,9 +553,7 @@ private val SAMPLE_ACTIVITY_LAYOUT = """
         />
 """.trimIndent()
 
-private val SAMPLE_ACTIVITY_USING_VIEW_BINDING = """
-    package io.gitlab.arturbosch.detekt.app
-    
+private val SAMPLE_ACTIVITY_USING_VIEW_BINDING = """    
     import android.app.Activity
     import android.os.Bundle
     import android.view.LayoutInflater

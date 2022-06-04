@@ -58,8 +58,8 @@ class DetektPlainSpec {
 
                 tasks.withType(Detekt::class.java).configureEach {
                     it.reports { reports ->
-                        reports.sarif.enabled = true
-                        reports.txt.enabled = false
+                        reports.sarif.required.set(true)
+                        reports.txt.required.set(false)
                     }
                 }
             },

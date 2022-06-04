@@ -24,6 +24,7 @@ class ComplexityProvider : DefaultRuleSetProvider {
             StringLiteralDuplication(config),
             MethodOverloading(config),
             NestedBlockDepth(config),
+            NestedScopeFunctions(config),
             TooManyFunctions(config),
             ComplexCondition(config),
             LabeledExpression(config),

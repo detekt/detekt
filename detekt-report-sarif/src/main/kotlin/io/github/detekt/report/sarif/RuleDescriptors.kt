@@ -13,7 +13,7 @@ import java.util.ServiceLoader
 /**
  * Given the existing config, return a list of [ReportingDescriptor] for the rules.
  */
-fun toReportingDescriptors(config: Config): List<ReportingDescriptor> {
+internal fun toReportingDescriptors(config: Config): List<ReportingDescriptor> {
     val sets =
         ServiceLoader.load(RuleSetProvider::class.java, SarifOutputReport::class.java.classLoader)
             .map { it.instance(config.subConfig(it.ruleSetId)) }

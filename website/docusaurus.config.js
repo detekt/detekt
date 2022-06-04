@@ -24,12 +24,12 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/detekt/detekt/edit/main/docs/',
+          editUrl: 'https://github.com/detekt/detekt/edit/main/website/',
         },
         blog: {
           showReadingTime: true,
           editUrl:
-            'https://github.com/detekt/detekt/edit/main/docs/blog/',
+            'https://github.com/detekt/detekt/edit/main/website/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -179,7 +179,7 @@ const config = {
     }),
 
   customFields: {
-    detektVersion: '1.20.0'
+    detektVersion: '1.21.0-RC1'
   },
 };
 

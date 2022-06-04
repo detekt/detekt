@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
@@ -47,6 +48,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.isSubclassOf
  *
  */
 @RequiresTypeResolution
+@ActiveByDefault(since = "1.21.0")
 class UnreachableCatchBlock(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
