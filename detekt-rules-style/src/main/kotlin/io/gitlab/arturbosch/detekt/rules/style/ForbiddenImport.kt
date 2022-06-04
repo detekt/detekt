@@ -18,7 +18,6 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * or deprecated APIs. Detekt will then report all imports that are forbidden.
  *
  * <noncompliant>
- * package foo
  * import kotlin.jvm.JvmField
  * import kotlin.SinceKotlin
  * </noncompliant>
