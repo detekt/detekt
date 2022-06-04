@@ -29,38 +29,41 @@ class ForbiddenImportSpec {
 
     @Test
     fun `should report nothing when imports are blank`() {
-        val findings = ForbiddenImport(TestConfig(mapOf(IMPORTS to "  "))).lint(code)
+        val findings = ForbiddenImport(TestConfig(mapOf(IMPORTS to listOf("  ")))).lint(code)
         assertThat(findings).isEmpty()
     }
 
     @Test
     fun `should report nothing when imports do not match`() {
-        val findings = ForbiddenImport(TestConfig(mapOf(IMPORTS to "org.*"))).lint(code)
+        val findings = ForbiddenImport(TestConfig(mapOf(IMPORTS to listOf("org.*")))).lint(code)
         assertThat(findings).isEmpty()
     }
 
     @Test
     @DisplayName("should report kotlin.* when imports are kotlin.*")
     fun reportKotlinWildcardImports() {
-        val findings = ForbiddenImport(TestConfig(mapOf(IMPORTS to "kotlin.*"))).lint(code)
+        val findings = ForbiddenImport(TestConfig(mapOf(IMPORTS to listOf("kotlin.*")))).lint(code)
         assertThat(findings).hasSize(2)
+        assertThat(findings[0].message)
+            .isEqualTo("The import kotlin.jvm.JvmField has been forbidden in the Detekt config.")
+        assertThat(findings[1].message)
+            .isEqualTo("The import kotlin.SinceKotlin has been forbidden in the Detekt config.")
     }
 
     @Test
     @DisplayName("should report kotlin.SinceKotlin when specified via fully qualified name")
     fun reportKotlinSinceKotlinWhenFqdnSpecified() {
-        val findings =
-            ForbiddenImport(TestConfig(mapOf(IMPORTS to "kotlin.SinceKotlin"))).lint(code)
-        assertThat(findings).hasSize(1)
+        val findings = ForbiddenImport(TestConfig(mapOf(IMPORTS to listOf("kotlin.SinceKotlin")))).lint(code)
+        assertThat(findings)
+            .hasSize(1)
     }
 
     @Test
     @DisplayName("should report kotlin.SinceKotlin and kotlin.jvm.JvmField when specified via fully qualified names")
     fun reportMultipleConfiguredImportsCommaSeparated() {
         val findings =
-            ForbiddenImport(TestConfig(mapOf(IMPORTS to "kotlin.SinceKotlin,kotlin.jvm.JvmField"))).lint(
-                code
-            )
+            ForbiddenImport(TestConfig(mapOf(IMPORTS to listOf("kotlin.SinceKotlin", "kotlin.jvm.JvmField"))))
+                .lint(code)
         assertThat(findings).hasSize(2)
     }
 
@@ -81,14 +84,14 @@ class ForbiddenImportSpec {
     @Test
     @DisplayName("should report kotlin.SinceKotlin when specified via kotlin.Since*")
     fun reportsKotlinSinceKotlinWhenSpecifiedWithWildcard() {
-        val findings = ForbiddenImport(TestConfig(mapOf(IMPORTS to "kotlin.Since*"))).lint(code)
+        val findings = ForbiddenImport(TestConfig(mapOf(IMPORTS to listOf("kotlin.Since*")))).lint(code)
         assertThat(findings).hasSize(1)
     }
 
     @Test
     @DisplayName("should report all of com.example.R.string, net.example.R.dimen, and net.example.R.dimension")
     fun preAndPostWildcard() {
-        val findings = ForbiddenImport(TestConfig(mapOf(IMPORTS to "*.R.*"))).lint(code)
+        val findings = ForbiddenImport(TestConfig(mapOf(IMPORTS to listOf("*.R.*")))).lint(code)
         assertThat(findings).hasSize(3)
     }
 
@@ -96,7 +99,7 @@ class ForbiddenImportSpec {
     @DisplayName("should report net.example.R.dimen but not net.example.R.dimension")
     fun doNotReportSubstringOfFqdn() {
         val findings =
-            ForbiddenImport(TestConfig(mapOf(IMPORTS to "net.example.R.dimen"))).lint(code)
+            ForbiddenImport(TestConfig(mapOf(IMPORTS to listOf("net.example.R.dimen")))).lint(code)
         assertThat(findings).hasSize(1)
     }
 
@@ -112,5 +115,9 @@ class ForbiddenImportSpec {
         val findings =
             ForbiddenImport(TestConfig(mapOf(FORBIDDEN_PATTERNS to "net.*R|com.*expiremental"))).lint(code)
         assertThat(findings).hasSize(2)
+        assertThat(findings[0].message)
+            .isEqualTo("The import net.example.R.dimen has been forbidden in the Detekt config.")
+        assertThat(findings[1].message)
+            .isEqualTo("The import net.example.R.dimension has been forbidden in the Detekt config.")
     }
 }
