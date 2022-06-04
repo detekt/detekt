@@ -40,11 +40,9 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             System.out.println("hello")
         }
         """
-        val findings =
-            ForbiddenMethodCall(TestConfig(mapOf(METHODS to "  "))).compileAndLintWithContext(
-                env,
-                code
-            )
+        val findings = ForbiddenMethodCall(
+            TestConfig(mapOf(METHODS to listOf("  ")))
+        ).compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -109,22 +107,6 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                     )
                 )
             )
-        ).compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(2)
-        assertThat(findings).hasTextLocations(48 to 64, 76 to 80)
-    }
-
-    @Test
-    fun `should report multiple different methods config with sting`() {
-        val code = """
-        import java.lang.System
-        fun main() {
-        System.out.println("hello")
-            System.gc()
-        }
-        """
-        val findings = ForbiddenMethodCall(
-            TestConfig(mapOf(METHODS to "java.io.PrintStream.println, java.lang.System.gc"))
         ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(2)
         assertThat(findings).hasTextLocations(48 to 64, 76 to 80)
@@ -461,7 +443,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                 }
             """
             val findings =
-                ForbiddenMethodCall(TestConfig(mapOf(METHODS to "java.util.Calendar.getFirstDayOfWeek"))).compileAndLintWithContext(
+                ForbiddenMethodCall(TestConfig(mapOf(METHODS to listOf("java.util.Calendar.getFirstDayOfWeek")))).compileAndLintWithContext(
                     env,
                     code
                 )
@@ -479,7 +461,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                 }
             """
             val findings =
-                ForbiddenMethodCall(TestConfig(mapOf(METHODS to "java.util.Calendar.getFirstDayOfWeek"))).compileAndLintWithContext(
+                ForbiddenMethodCall(TestConfig(mapOf(METHODS to listOf("java.util.Calendar.getFirstDayOfWeek")))).compileAndLintWithContext(
                     env,
                     code
                 )
