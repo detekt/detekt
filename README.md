@@ -1,4 +1,4 @@
-# __detekt__
+# detekt
 
 [![Join the chat at #detekt on KotlinLang](https://img.shields.io/badge/%23detekt-on_slack-red.svg?logo=slack)](https://kotlinlang.slack.com/archives/C88E12QH4)
 [![Visit the website at detekt.dev/](https://img.shields.io/badge/visit-website-red.svg?logo=firefox)](https://detekt.dev/)
@@ -11,7 +11,7 @@
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B25591%2Fgithub.com%2Fdetekt%2Fdetekt.svg?type=small)](https://app.fossa.com/projects/custom%2B25591%2Fgithub.com%2Fdetekt%2Fdetekt?ref=badge_small)
 
 Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
-It operates on the abstract syntax tree provided by the Kotlin compiler.
+Visit [the project website](https://detekt.dev/) for installation guides, rule descriptions, configuration options and more.
 
 ![detekt in action](website/static/img/tutorial/detekt_in_action.png "detekt in action")
 
@@ -25,10 +25,6 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - Code Smell baseline and suppression for legacy projects
 - [Gradle plugin](#with-gradle) for code analysis via Gradle builds
 - Extensibility by enabling incorporation of personal rule sets, `FileProcessListener's` and `OutputReport's`
-
-### Project Website
-
-Visit [the project website](https://detekt.dev/) for installation guides, release notes, migration guides, rule descriptions and configuration options.
 
 #### Quick-Links
 
@@ -117,7 +113,7 @@ The list of [recommended versions for previous detekt version is listed here](ht
 
 ### Adding more rule sets
 
-detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as a `formatting` rule set
+detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as the `formatting` rule set
 which can be easily added to the Gradle configuration:
 
 ```kotlin
