@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.test
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.ValueWithReason
 import io.gitlab.arturbosch.detekt.core.config.tryParseBasedOnDefault
 import io.gitlab.arturbosch.detekt.core.config.valueOrDefaultInternal
 
@@ -52,4 +53,8 @@ open class TestConfig(
     companion object {
         operator fun invoke(vararg pairs: Pair<String, Any>) = TestConfig(mapOf(*pairs))
     }
+}
+
+fun ValueWithReason.toConfig(): Map<String, String?> {
+    return mapOf("value" to value, "reason" to reason)
 }

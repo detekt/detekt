@@ -55,6 +55,10 @@ public final class io/gitlab/arturbosch/detekt/test/TestConfig$Companion {
 	public final fun invoke ([Lkotlin/Pair;)Lio/gitlab/arturbosch/detekt/test/TestConfig;
 }
 
+public final class io/gitlab/arturbosch/detekt/test/TestConfigKt {
+	public static final fun toConfig (Lio/gitlab/arturbosch/detekt/api/ValueWithReason;)Ljava/util/Map;
+}
+
 public final class io/gitlab/arturbosch/detekt/test/ThresholdedCodeSmellAssert : org/assertj/core/api/AbstractAssert {
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/ThresholdedCodeSmell;)V
 	public final fun hasThreshold (I)V
