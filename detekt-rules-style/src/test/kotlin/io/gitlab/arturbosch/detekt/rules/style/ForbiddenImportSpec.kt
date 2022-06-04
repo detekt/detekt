@@ -45,9 +45,9 @@ class ForbiddenImportSpec {
         val findings = ForbiddenImport(TestConfig(mapOf(IMPORTS to listOf("kotlin.*")))).lint(code)
         assertThat(findings).hasSize(2)
         assertThat(findings[0].message)
-            .isEqualTo("The import kotlin.jvm.JvmField has been forbidden in the Detekt config.")
+            .isEqualTo("The import `kotlin.jvm.JvmField` has been forbidden in the Detekt config.")
         assertThat(findings[1].message)
-            .isEqualTo("The import kotlin.SinceKotlin has been forbidden in the Detekt config.")
+            .isEqualTo("The import `kotlin.SinceKotlin` has been forbidden in the Detekt config.")
     }
 
     @Test
@@ -116,8 +116,8 @@ class ForbiddenImportSpec {
             ForbiddenImport(TestConfig(mapOf(FORBIDDEN_PATTERNS to "net.*R|com.*expiremental"))).lint(code)
         assertThat(findings).hasSize(2)
         assertThat(findings[0].message)
-            .isEqualTo("The import net.example.R.dimen has been forbidden in the Detekt config.")
+            .isEqualTo("The import `net.example.R.dimen` has been forbidden in the Detekt config.")
         assertThat(findings[1].message)
-            .isEqualTo("The import net.example.R.dimension has been forbidden in the Detekt config.")
+            .isEqualTo("The import `net.example.R.dimension` has been forbidden in the Detekt config.")
     }
 }

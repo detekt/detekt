@@ -49,8 +49,7 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
                 CodeSmell(
                     issue,
                     Entity.from(importDirective),
-                    "The import " +
-                        "$import has been forbidden in the Detekt config."
+                    "The import `$import` has been forbidden in the Detekt config."
                 )
             )
         }
