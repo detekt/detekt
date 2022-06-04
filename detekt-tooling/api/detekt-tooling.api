@@ -408,6 +408,7 @@ public final class io/github/detekt/tooling/out/YamlKt {
 	public static final fun keyValue (Lio/github/detekt/tooling/out/YamlNode;Ljava/lang/String;Lkotlin/jvm/functions/Function0;)V
 	public static synthetic fun keyValue$default (Lio/github/detekt/tooling/out/YamlNode;Ljava/lang/String;Lkotlin/jvm/functions/Function0;ILjava/lang/Object;)V
 	public static final fun list (Lio/github/detekt/tooling/out/YamlNode;Ljava/lang/String;Ljava/util/List;)V
+	public static final fun listOfMaps (Lio/github/detekt/tooling/out/YamlNode;Ljava/lang/String;Ljava/util/List;)V
 	public static final fun node (Lio/github/detekt/tooling/out/YamlNode;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public static final fun times (ILkotlin/jvm/functions/Function0;)V
 	public static final fun yaml (Lio/github/detekt/tooling/out/YamlNode;Lkotlin/jvm/functions/Function0;)V
