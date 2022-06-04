@@ -11,7 +11,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See <a href="https://ktlint.github.io/#rule-indentation">ktlint-website</a> for documentation.
+ * See [ktlint-website](https://ktlint.github.io#rule-indentation) for documentation.
  */
 @AutoCorrectable(since = "1.20.0")
 class CommentWrapping(config: Config) : FormattingRule(config) {
