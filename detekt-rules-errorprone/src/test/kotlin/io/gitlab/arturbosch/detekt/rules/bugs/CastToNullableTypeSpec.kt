@@ -41,4 +41,15 @@ class CastToNullableTypeSpec {
         val findings = subject.compileAndLint(code)
         assertThat(findings).isEmpty()
     }
+
+    @Test
+    fun `cast null to nullable type is allowed`() {
+        val code = """
+            fun foo(a: Any?) {
+                val x = null as String?
+            }
+        """
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
+    }
 }

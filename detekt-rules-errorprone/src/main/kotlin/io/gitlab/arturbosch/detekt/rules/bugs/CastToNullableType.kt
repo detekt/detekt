@@ -42,6 +42,7 @@ class CastToNullableType(config: Config = Config.empty) : Rule(config) {
 
         val operationReference = expression.operationReference
         if (operationReference.getReferencedNameElementType() != KtTokens.AS_KEYWORD) return
+        if (expression.left.text == KtTokens.NULL_KEYWORD.value) return
         val nullableTypeElement = expression.right?.typeElement as? KtNullableType ?: return
 
         val message = "Use the safe cast ('as? ${nullableTypeElement.innerType?.text}')" +
