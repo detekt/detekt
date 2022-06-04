@@ -24,9 +24,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - Specification of quality gates which will break your build
 - Code Smell baseline and suppression for legacy projects
 - [Gradle plugin](#with-gradle) for code analysis via Gradle builds
-- [SonarQube integration](https://github.com/detekt/sonar-kotlin)
 - Extensibility by enabling incorporation of personal rule sets, `FileProcessListener's` and `OutputReport's`
-- [IntelliJ integration](https://github.com/detekt/detekt-intellij-plugin)
 
 ### Project Website
 
@@ -159,6 +157,8 @@ As mentioned in...
 
 Integrations:
 
+- [IntelliJ integration](https://github.com/detekt/detekt-intellij-plugin)
+- [SonarQube integration](https://github.com/detekt/sonar-kotlin)
 - [Codacy](https://www.codacy.com)
 - [Gradle plugin that configures Error Prone, Checkstyle, PMD, CPD, Lint, Detekt & Ktlint](https://github.com/vanniktech/gradle-code-quality-tools-plugin)
 - [Violations Lib](https://github.com/tomasbjerre/violations-lib) is a Java library for parsing report files like static code analysis.
