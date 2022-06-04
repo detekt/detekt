@@ -10,14 +10,14 @@
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B25591%2Fgithub.com%2Fdetekt%2Fdetekt.svg?type=small)](https://app.fossa.com/projects/custom%2B25591%2Fgithub.com%2Fdetekt%2Fdetekt?ref=badge_small)
 
-Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
+Meet _detekt_, a static code analysis tool for the [_Kotlin_ programming language](https://kotlinlang.org/).
 Visit [the project website](https://detekt.dev/) for installation guides, rule descriptions, configuration options and more.
 
 ![detekt in action](website/static/img/tutorial/detekt_in_action.png "detekt in action")
 
 ### Features
 
-- Code smell analysis for your Kotlin projects.
+- Code smell analysis for your [Kotlin projects](https://kotlinlang.org/).
 - Highly configurable rule sets.
 - Code Smell baseline and suppression for legacy projects.
 - Suppression of findings with `@Suppress` annotations.
