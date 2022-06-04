@@ -114,7 +114,7 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
 
         for (descriptor in descriptors) {
             methods.find { it.match(descriptor) }?.let { functionMatcher ->
-                val message = "The method $functionMatcher has been forbidden in the Detekt config."
+                val message = "The method `$functionMatcher` has been forbidden in the Detekt config."
                 report(CodeSmell(issue, Entity.from(expression), message))
             }
         }
