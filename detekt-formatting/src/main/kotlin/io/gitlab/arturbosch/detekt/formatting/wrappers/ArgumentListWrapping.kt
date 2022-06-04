@@ -12,7 +12,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
+ * See [ktlint-website](https://ktlint.github.io) for documentation.
  */
 @OptIn(FeatureInAlphaState::class)
 @AutoCorrectable(since = "1.0.0")
