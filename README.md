@@ -173,7 +173,7 @@ Custom rules and reports from 3rd parties:
 - [detekt-verify-implementation](https://github.com/cph-cachet/detekt-verify-implementation) by cph-cachet
 - [detekt-hint](https://github.com/mkohm/detekt-hint) by mkohm is a plugin to detekt that provides detection of design principle violations through integration with Danger
 - [GitLab report format](https://gitlab.com/cromefire_/detekt-gitlab-report)
-- There are mote third-party plugins out there. You can find some of them [in this list](https://github.com/topics/detekt-plugin).
+- There are more third-party plugins out there. You can find some of them [in this list](https://github.com/topics/detekt-plugin).
 
 #### Credits
 
