@@ -2,16 +2,16 @@ package io.github.detekt.report.md
 
 import io.github.detekt.metrics.ComplexityReportGenerator
 import io.github.detekt.psi.toUnifiedString
-import io.github.detekt.tooling.out.MarkdownContent
-import io.github.detekt.tooling.out.codeBlock
-import io.github.detekt.tooling.out.emptyLine
-import io.github.detekt.tooling.out.h1
-import io.github.detekt.tooling.out.h2
-import io.github.detekt.tooling.out.h3
-import io.github.detekt.tooling.out.item
-import io.github.detekt.tooling.out.list
-import io.github.detekt.tooling.out.markdown
-import io.github.detekt.tooling.out.paragraph
+import io.github.detekt.utils.MarkdownContent
+import io.github.detekt.utils.codeBlock
+import io.github.detekt.utils.emptyLine
+import io.github.detekt.utils.h1
+import io.github.detekt.utils.h2
+import io.github.detekt.utils.h3
+import io.github.detekt.utils.item
+import io.github.detekt.utils.list
+import io.github.detekt.utils.markdown
+import io.github.detekt.utils.paragraph
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport

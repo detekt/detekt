@@ -5,7 +5,7 @@ plugins {
 dependencies {
     implementation(projects.detektMetrics)
     implementation(projects.detektApi)
-    implementation(projects.detektTooling)
+    implementation(projects.detektUtils)
 
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.mockk)

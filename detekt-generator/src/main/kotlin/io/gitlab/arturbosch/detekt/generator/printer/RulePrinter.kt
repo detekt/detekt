@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.generator.printer
 
-import io.github.detekt.tooling.out.MarkdownContent
-import io.github.detekt.tooling.out.bold
-import io.github.detekt.tooling.out.codeBlock
-import io.github.detekt.tooling.out.h3
-import io.github.detekt.tooling.out.h4
-import io.github.detekt.tooling.out.markdown
-import io.github.detekt.tooling.out.paragraph
+import io.github.detekt.utils.MarkdownContent
+import io.github.detekt.utils.bold
+import io.github.detekt.utils.codeBlock
+import io.github.detekt.utils.h3
+import io.github.detekt.utils.h4
+import io.github.detekt.utils.markdown
+import io.github.detekt.utils.paragraph
 import io.gitlab.arturbosch.detekt.generator.collection.Active
 import io.gitlab.arturbosch.detekt.generator.collection.Rule
 

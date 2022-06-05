@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.generator.printer
 
-import io.github.detekt.tooling.out.markdown
-import io.github.detekt.tooling.out.paragraph
+import io.github.detekt.utils.markdown
+import io.github.detekt.utils.paragraph
 import io.gitlab.arturbosch.detekt.generator.collection.RuleSetPage
 
 object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
