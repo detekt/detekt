@@ -81,5 +81,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
         # - 'TxtOutputReport'
         # - 'XmlOutputReport'
         # - 'HtmlOutputReport'
+        # - 'MdOutputReport'
     """.trimIndent()
 }
