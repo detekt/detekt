@@ -881,4 +881,70 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
             assertThat(findings).isEmpty()
         }
     }
+
+    @Nested
+    inner class `return value types default config` {
+        private val subject = IgnoredReturnValue()
+
+        @Test
+        fun `reports when result of function returning Flow is ignored`() {
+            val code = """
+                import kotlinx.coroutines.flow.flowOf
+                
+                fun foo() {
+                    flowOf(1, 2, 3)
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+
+            assertThat(findings)
+                .singleElement()
+                .hasSourceLocation(line = 4, column = 5)
+                .hasMessage("The call flowOf is returning a value that is ignored.")
+        }
+
+        @Test
+        fun `reports when a function returned result is used in a chain that returns a Flow`() {
+            val code = """
+                import kotlinx.coroutines.flow.*
+                
+                fun foo() {
+                    flowOf(1, 2, 3)
+                        .onEach { println(it) }
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+
+            assertThat(findings)
+                .singleElement()
+                .hasSourceLocation(line = 5, column = 10)
+                .hasMessage("The call onEach is returning a value that is ignored.")
+        }
+
+        @Test
+        fun `does not report when a function returned value is used to be returned`() {
+            val code = """
+                import kotlinx.coroutines.flow.flowOf
+                
+                fun foo() = flowOf(1, 2, 3)
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when a function returned value is consumed in a chain that returns an Unit`() {
+            val code = """
+                import kotlinx.coroutines.flow.*
+                
+                suspend fun foo() {
+                    flowOf(1, 2, 3)
+                        .onEach { println(it) }
+                        .collect()
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+    }
 }

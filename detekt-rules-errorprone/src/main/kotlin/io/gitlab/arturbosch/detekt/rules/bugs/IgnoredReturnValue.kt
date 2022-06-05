@@ -13,11 +13,14 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
+import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
+import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 
 /**
@@ -61,6 +64,15 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         it.map(String::simplePatternToRegex)
     }
 
+    @Configuration("List of return types that should not be ignored")
+    private val returnValueTypes: List<Regex> by config(
+        listOf(
+            "kotlin.sequences.Sequence",
+            "kotlinx.coroutines.flow.*Flow",
+            "java.util.stream.*Stream",
+        ),
+    ) { it.map(String::simplePatternToRegex) }
+
     @Configuration(
         "List of function signatures which should be ignored by this rule. " +
             "Specifying fully-qualified function signature with name only (i.e. `java.time.LocalDate.now`) will " +
@@ -87,6 +99,7 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         val annotations = resultingDescriptor.annotations
         if (annotations.any { it in ignoreReturnValueAnnotations }) return
         if (restrictToAnnotatedMethods &&
+            resultingDescriptor.returnType !in returnValueTypes &&
             (annotations + resultingDescriptor.containingDeclaration.annotations).none { it in returnValueAnnotations }
         ) return
 
@@ -100,9 +113,11 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         )
     }
 
-    @Suppress("UnusedPrivateMember")
-    private operator fun List<Regex>.contains(annotation: AnnotationDescriptor): Boolean {
-        val fqName = annotation.fqName?.asString() ?: return false
-        return any { it.matches(fqName) }
+    private operator fun List<Regex>.contains(type: KotlinType?) = contains(type?.fqNameOrNull())
+    private operator fun List<Regex>.contains(annotation: AnnotationDescriptor) = contains(annotation.fqName)
+
+    private operator fun List<Regex>.contains(fqName: FqName?): Boolean {
+        val name = fqName?.asString() ?: return false
+        return any { it.matches(name) }
     }
 }
