@@ -62,7 +62,7 @@ tasks.withType<KotlinCompile>().configureEach {
         // To ensure CI ~ Local build cache hit, we shouldn't use system env CI.
         allWarningsAsErrors = when (project.name) {
             "detekt-gradle-plugin" -> false
-            else -> true
+            else -> project.findProperty("warningsAsErrors") == "true"
         }
     }
 }
