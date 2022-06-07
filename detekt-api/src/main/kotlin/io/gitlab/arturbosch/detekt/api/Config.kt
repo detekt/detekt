@@ -39,7 +39,8 @@ interface Config {
      */
     class InvalidConfigurationError(throwable: Throwable? = null /* nullable to not break signature */) :
         RuntimeException(
-            "Provided configuration file is invalid: Structure must be from type Map<String,Any>!",
+            "Provided configuration file is invalid: Structure must be from type Map<String,Any>!" +
+                throwable?.let { "\n" + it.message }.orEmpty(),
             throwable
         )
 
