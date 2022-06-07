@@ -72,6 +72,7 @@ const config = {
           { to: '/docs/rules/performance', from: '/performance.html' },
           { to: '/docs/rules/potential-bugs', from: '/potential-bugs.html' },
           { to: '/docs/rules/style', from: '/style.html' },
+          { to: '/docs/introduction/suppressors', from: '/suppressors.html'}
         ],
       },
     ],
