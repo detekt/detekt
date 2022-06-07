@@ -46,20 +46,21 @@ testing {
                     )
                 )
             }
-            targets {
-                all {
-                    testTask.configure {
-                        inputs.property("androidSdkRoot", System.getenv("ANDROID_SDK_ROOT")).optional(true)
-                        inputs.property("androidHome", System.getenv("ANDROID_HOME")).optional(true)
-                    }
-                }
-            }
         }
         register("functionalTest", JvmTestSuite::class) {
             useJUnitJupiter(libs.versions.junit.get())
 
             dependencies {
                 implementation(libs.assertj)
+            }
+
+            targets {
+                all {
+                    // If `androidSdkInstalled` is false, skip running DetektAndroidSpec
+                    testTask.configure {
+                        inputs.property("androidSdkInstalled", System.getenv("ANDROID_SDK_ROOT") != null || System.getenv("ANDROID_HOME") != null).optional(true)
+                    }
+                }
             }
         }
     }
