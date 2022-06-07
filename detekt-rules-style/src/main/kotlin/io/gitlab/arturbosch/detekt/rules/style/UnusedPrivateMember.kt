@@ -153,7 +153,7 @@ private class UnusedFunctionVisitor(
                     else -> emptyList()
                 }
                 unusedFunctions.map {
-                    CodeSmell(issue, Entity.from(it), "Private function `$functionName` is unused.")
+                    CodeSmell(issue, Entity.atName(it), "Private function `$functionName` is unused.")
                 }
             }
     }
@@ -212,7 +212,7 @@ private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(
 
     override fun getUnusedReports(issue: Issue): List<CodeSmell> {
         return unusedParameters.map {
-            CodeSmell(issue, Entity.from(it), "Function parameter `${it.nameAsSafeName.identifier}` is unused.")
+            CodeSmell(issue, Entity.atName(it), "Function parameter `${it.nameAsSafeName.identifier}` is unused.")
         }
     }
 
@@ -284,7 +284,7 @@ private class UnusedPropertyVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
             .map {
                 CodeSmell(
                     issue,
-                    Entity.from(it),
+                    Entity.atName(it),
                     "Private property `${it.nameAsSafeName.identifier}` is unused."
                 )
             }
