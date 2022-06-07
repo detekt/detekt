@@ -56,9 +56,11 @@ testing {
 
             targets {
                 all {
-                    // If `androidSdkInstalled` is false, skip running DetektAndroidSpec
                     testTask.configure {
-                        inputs.property("androidSdkInstalled", System.getenv("ANDROID_SDK_ROOT") != null || System.getenv("ANDROID_HOME") != null).optional(true)
+                        // If `androidSdkInstalled` is false, skip running DetektAndroidSpec
+                        val isAndroidSdkInstalled = System.getenv("ANDROID_SDK_ROOT") != null ||
+                            System.getenv("ANDROID_HOME") != null
+                        inputs.property("isAndroidSdkInstalled", isAndroidSdkInstalled).optional(true)
                     }
                 }
             }
