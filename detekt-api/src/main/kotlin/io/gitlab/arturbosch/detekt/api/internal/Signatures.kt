@@ -92,21 +92,15 @@ private fun buildClassSignature(classOrObject: KtClassOrObject): String {
 }
 
 private fun buildFunctionSignature(element: KtNamedFunction): String {
-    var methodStart = 0
-    element.docComment?.let {
-        methodStart = it.endOffset - it.startOffset
-    }
-    var methodEnd = element.endOffset - element.startOffset
-    val typeReference = element.typeReference
-    if (typeReference != null) {
-        methodEnd = typeReference.endOffset - element.startOffset
+    val startOffset = element.startOffset
+    val endOffset = if (element.typeReference != null) {
+        element.typeReference?.endOffset ?: 0
     } else {
-        element.valueParameterList?.let {
-            methodEnd = it.endOffset - element.startOffset
-        }
+        element.valueParameterList?.endOffset ?: 0
     }
-    require(methodStart < methodEnd) {
-        "Error building function signature with range $methodStart - $methodEnd for element: ${element.text}"
+
+    require(startOffset < endOffset) {
+        "Error building function signature with range $startOffset - $endOffset for element: ${element.text}"
     }
-    return element.text.substring(methodStart, methodEnd)
+    return element.text.substring(0, endOffset - startOffset)
 }
