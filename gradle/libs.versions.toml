@@ -43,7 +43,7 @@ contester-driver = { module = "io.github.davidburstrom.contester:contester-drive
 
 [plugins]
 binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.10.0" }
-dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis", version = "1.4.0" }
+dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis", version = "1.5.0" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 gradleVersions = { id = "com.github.ben-manes.versions", version = "0.42.0" }
 pluginPublishing = { id = "com.gradle.plugin-publish", version = "0.21.0" }
