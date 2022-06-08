@@ -11,9 +11,11 @@ import io.gitlab.arturbosch.detekt.core.reporting.red
 import io.gitlab.arturbosch.detekt.core.reporting.yellow
 
 internal fun checkConfiguration(settings: ProcessingSettings, baseline: Config) {
-    val props = settings.config.subConfig("config")
-    val shouldValidate = props.valueOrDefault("validation", true)
-
+    var shouldValidate = settings.spec.configSpec.shouldValidateBeforeAnalysis
+    if (shouldValidate == null) {
+        val props = settings.config.subConfig("config")
+        shouldValidate = props.valueOrDefault("validation", true)
+    }
     if (shouldValidate) {
         val validators =
             loadExtensions<ConfigValidator>(settings) + DefaultPropertiesConfigValidator(settings, baseline)
