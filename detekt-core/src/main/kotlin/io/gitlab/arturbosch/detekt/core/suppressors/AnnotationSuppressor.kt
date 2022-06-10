@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.core.suppressors
 
 import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.ConfigAware
+import io.gitlab.arturbosch.detekt.api.Suppressor
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType

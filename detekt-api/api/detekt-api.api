@@ -583,6 +583,9 @@ public final class io/gitlab/arturbosch/detekt/api/SplitPatternKt {
 	public static synthetic fun commaSeparatedPattern$default (Ljava/lang/String;[Ljava/lang/String;ILjava/lang/Object;)Lkotlin/sequences/Sequence;
 	public static final fun simplePatternToRegex (Ljava/lang/String;)Lkotlin/text/Regex;
 }
+public abstract interface class io/gitlab/arturbosch/detekt/api/Suppressor {
+    public abstract fun shouldSuppress (Lio/gitlab/arturbosch/detekt/api/Finding;)Z
+}
 
 public final class io/gitlab/arturbosch/detekt/api/TextLocation {
 	public fun <init> (II)V
