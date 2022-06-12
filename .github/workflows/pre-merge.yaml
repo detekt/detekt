@@ -89,3 +89,19 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: test -Pcompile-test-snippets=true
+
+  warnings-as-errors:
+    if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'temurin'
+      - name: Run with allWarningsAsErrors
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build -x detekt -PwarningsAsErrors=true

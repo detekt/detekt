@@ -59,7 +59,6 @@ tasks.withType<KotlinCompile>().configureEach {
         )
         // Note: Currently there are warnings for detekt-gradle-plugin that seemingly can't be fixed
         //       until Gradle releases an update (https://github.com/gradle/gradle/issues/16345)
-        // To ensure CI ~ Local build cache hit, we shouldn't use system env CI.
         allWarningsAsErrors = when (project.name) {
             "detekt-gradle-plugin" -> false
             else -> project.findProperty("warningsAsErrors") == "true"
