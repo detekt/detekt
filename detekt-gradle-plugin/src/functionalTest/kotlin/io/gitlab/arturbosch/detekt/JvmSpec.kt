@@ -1,16 +1,15 @@
 package io.gitlab.arturbosch.detekt
 
+import io.gitlab.arturbosch.detekt.testkit.withResourceDir
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.jupiter.api.Test
-import java.io.File
 
 class JvmSpec {
     @Test
     fun `Type resolution on JVM`() {
-        val projectDir = checkNotNull(javaClass.classLoader.getResource("jvm")?.file)
         val result = GradleRunner.create()
-            .withProjectDir(File(projectDir))
+            .withResourceDir("jvm")
             .withPluginClasspath()
             .withArguments("detektMain")
             .buildAndFail()

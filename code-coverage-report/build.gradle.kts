@@ -63,4 +63,5 @@ val customClassDirectories = configurations.allCodeCoverageReportClassDirectorie
 
 tasks.named("jacocoMergedReport", JacocoReport::class).configure {
     this.classDirectories.setFrom(customClassDirectories.files)
+    mustRunAfter(rootProject.project("detekt-generator").tasks.named("generateDocumentation"))
 }
