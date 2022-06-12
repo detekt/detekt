@@ -76,13 +76,15 @@ class HasPlatformTypeSpec(private val env: KotlinCoreEnvironment) {
         val code = """
             import java.net.URLEncoder.encode
 
-            private fun doFoo(a: String) {
-                println(a)
-            }
-            
-            fun foo() {
-                doFoo(System.getProperty("foo"))
-                doFoo(encode("foo", "UTF-8"))
+            class Foo {
+                private fun doFoo(a: String) {
+                    println(a)
+                }
+                
+                fun foo() {
+                    doFoo(System.getProperty("foo"))
+                    doFoo(encode("foo", "UTF-8"))
+                }
             }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
@@ -93,12 +95,14 @@ class HasPlatformTypeSpec(private val env: KotlinCoreEnvironment) {
         val code = """
             import java.net.URLEncoder.encode
 
-            private fun doFoo(vararg aArgs: String) {
-                aArgs.forEach(::println)
-            }
-            
-            fun foo() {
-                doFoo("SomeArg", System.getProperty("foo"), encode("foo", "UTF-8"))
+            class Foo {
+                private fun doFoo(vararg aArgs: String) {
+                    aArgs.forEach(::println)
+                }
+                
+                fun foo() {
+                    doFoo("SomeArg", System.getProperty("foo"), encode("foo", "UTF-8"))
+                }
             }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
@@ -107,13 +111,15 @@ class HasPlatformTypeSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does not report when a platform type is used directly as a nullable function argument`() {
         val code = """
-            private fun doFoo(a: String?) {
-                if (a != null) println(a) else println("'a' is null")
-            }
-            
-            fun foo() {
-                doFoo(System.getProperty("foo"))
-                doFoo(encode("foo", "UTF-8"))
+            class Foo {
+                private fun doFoo(a: String?) {
+                    if (a != null) println(a) else println("'a' is null")
+                }
+                
+                fun foo() {
+                    doFoo(System.getProperty("foo"))
+                    doFoo(encode("foo", "UTF-8"))
+                }
             }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -124,14 +130,15 @@ class HasPlatformTypeSpec(private val env: KotlinCoreEnvironment) {
         val code = """
             import java.net.URLEncoder.encode
 
-            private fun doFoo(a: String) {
-                println(a)
-            }
-            
-            fun foo() {
-                doFoo(System.getProperty("foo")!!)
-                doFoo(System.getProperty("foo")?.plus("bar"))
-                doFoo(encode("foo", "UTF-8") ?: "foo")
+            class Foo {
+                private fun doFoo(a: String) {
+                    println(a)
+                }
+                
+                fun foo() {
+                    doFoo(System.getProperty("foo")!!)
+                    doFoo(encode("foo", "UTF-8") ?: "foo")
+                }
             }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
