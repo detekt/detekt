@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.internal.SimpleGlob
@@ -16,12 +17,12 @@ import org.jetbrains.kotlin.lexer.KtTokens.EQEQEQ
 import org.jetbrains.kotlin.lexer.KtTokens.EXCLEQEQEQ
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getType
+import org.jetbrains.kotlin.resolve.calls.util.getType
 
 /**
  * Kotlin supports two types of equality: structural equality and referential equality. While there are
  * use cases for both, checking for referential equality for some types (such as `String` or `List`) is
- * likely not intentional and may case unexpected results.
+ * likely not intentional and may cause unexpected results.
  *
  * <noncompliant>
  *     val areEqual = "aString" === otherString
@@ -34,6 +35,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
  * </compliant>
  */
 @RequiresTypeResolution
+@ActiveByDefault(since = "1.21.0")
 class AvoidReferentialEquality(config: Config) : Rule(config) {
 
     override val issue = Issue(

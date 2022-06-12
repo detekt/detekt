@@ -3,19 +3,22 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UnusedPrivateClassSpec : Spek({
+class UnusedPrivateClassSpec {
 
-    val subject by memoized { UnusedPrivateClass() }
+    val subject = UnusedPrivateClass()
 
-    describe("top level interfaces") {
-        it("should report them if not used") {
+    @Nested
+    inner class `top level interfaces` {
+        @Test
+        fun `should report them if not used`() {
             val code = """
                 private interface Foo
                 class Bar
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -23,9 +26,11 @@ class UnusedPrivateClassSpec : Spek({
             assertThat(findings).hasSourceLocation(1, 1)
         }
 
-        describe("top level private classes") {
+        @Nested
+        inner class `top level private classes` {
 
-            it("should report them if not used") {
+            @Test
+            fun `should report them if not used`() {
                 val code = """
                 private class Foo
                 class Bar
@@ -37,7 +42,8 @@ class UnusedPrivateClassSpec : Spek({
                 assertThat(findings).hasSourceLocation(1, 1)
             }
 
-            it("should not report them if used as parent") {
+            @Test
+            fun `should not report them if used as parent`() {
                 val code = """
                 private open class Foo
                 private class Bar : Foo()
@@ -49,7 +55,8 @@ class UnusedPrivateClassSpec : Spek({
                 assertThat(findings).hasSourceLocation(2, 1)
             }
 
-            it("should not report them used as generic parent type") {
+            @Test
+            fun `should not report them used as generic parent type`() {
                 val code = """
                 class Bar
                 private interface Foo<in T> {
@@ -67,88 +74,96 @@ class UnusedPrivateClassSpec : Spek({
             }
         }
 
-        it("should not report them if used inside a function") {
+        @Test
+        fun `should not report them if used inside a function`() {
             val code = """
                 private class Foo
                 fun something() {
                     val foo: Foo = Foo()
                 }
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("should not report them if used as function parameter") {
+        @Test
+        fun `should not report them if used as function parameter`() {
             val code = """
                 private class Foo
                 private object Bar {
                   fun bar(foo: Foo) = Unit
                 }
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("should not report them if used as nullable variable type") {
+        @Test
+        fun `should not report them if used as nullable variable type`() {
             val code = """
                 private class Foo
                 private val a: Foo? = null
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("should not report them if used as variable type") {
+        @Test
+        fun `should not report them if used as variable type`() {
             val code = """
                 private class Foo
                 private lateinit var a: Foo
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("should not report them if used as generic type") {
+        @Test
+        fun `should not report them if used as generic type`() {
             val code = """
                 private class Foo
                 private lateinit var foos: List<Foo>
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("should not report them if used as inner type parameter") {
+        @Test
+        fun `should not report them if used as inner type parameter`() {
             val code = """
                 private val elements = listOf(42).filterIsInstance<Set<Item>>()
                 private class Item
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("should not report them if used as outer type parameter") {
+        @Test
+        fun `should not report them if used as outer type parameter`() {
             val code = """
                 private val elements = listOf(42).filterIsInstance<Something<Int>>()
                 private abstract class Something<E>: Collection<E>
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("should not report them if used as generic type in functions") {
+        @Test
+        fun `should not report them if used as generic type in functions`() {
             val code = """
                 private class Foo
                 private var a = bar<Foo>()
@@ -156,115 +171,125 @@ class UnusedPrivateClassSpec : Spek({
                 fun <T> bar(): T {
                     throw Exception()
                 }
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("should not report them if used as nested generic type") {
+        @Test
+        fun `should not report them if used as nested generic type`() {
             val code = """
                 private class Foo
                 private lateinit var foos: List<List<Foo>>
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("should not report them if used as type with generics") {
+        @Test
+        fun `should not report them if used as type with generics`() {
             val code = """
                 private class Foo<T>
                 private lateinit var foos: Foo<String>
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("should not report them if used as nullable type with generics") {
+        @Test
+        fun `should not report them if used as nullable type with generics`() {
             val code = """
                 private class Foo<T>
                 private var foos: Foo<String>? = Foo()
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("should not report them if used as non-argument constructor") {
+        @Test
+        fun `should not report them if used as non-argument constructor`() {
             val code = """
                 private class Foo
                 private val a = Foo()
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("should not report them if used as constructor with arguments") {
+        @Test
+        fun `should not report them if used as constructor with arguments`() {
             val code = """
                 private class Foo(val a: String)
                 private val a = Foo("test")
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("should not report them if used as function return type") {
+        @Test
+        fun `should not report them if used as function return type`() {
             val code = """
                 private class Foo(val a: String)
                 private object Bar {
                   fun foo(): Foo? = null
                 }
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("should not report them if used as lambda declaration parameter") {
+        @Test
+        fun `should not report them if used as lambda declaration parameter`() {
             val code = """
                 private class Foo
                 private val lambda: ((Foo) -> Unit)? = null
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("should not report them if used as lambda declaration return type") {
+        @Test
+        fun `should not report them if used as lambda declaration return type`() {
             val code = """
                 private class Foo
                 private val lambda: (() -> Foo)? = null
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("should not report them if used as lambda declaration generic type") {
+        @Test
+        fun `should not report them if used as lambda declaration generic type`() {
             val code = """
                 private class Foo
                 private val lambda: (() -> List<Foo>)? = null
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("should not report them if used as inline object type") {
+        @Test
+        fun `should not report them if used as inline object type`() {
             val code = """
                 private abstract class Foo {
                     abstract fun bar()
@@ -275,7 +300,7 @@ class UnusedPrivateClassSpec : Spek({
                         override fun bar() = Unit
                     }
                 }
-                """
+            """
 
             val findings = subject.compileAndLint(code)
 
@@ -283,9 +308,11 @@ class UnusedPrivateClassSpec : Spek({
         }
     }
 
-    describe("testcase for reported false positives") {
+    @Nested
+    inner class `testcase for reported false positives` {
 
-        it("does not crash when using wildcards in generics - #1345") {
+        @Test
+        fun `does not crash when using wildcards in generics - #1345`() {
             val code = """
                 import kotlin.reflect.KClass
                 
@@ -298,7 +325,9 @@ class UnusedPrivateClassSpec : Spek({
             assertThat(findings).hasSize(1)
         }
 
-        it("does not report (companion-)object/named-dot references - #1347") {
+        @Test
+        @DisplayName("does not report (companion-)object/named-dot references - #1347")
+        fun doesNotReportObjectNamedDotReferences() {
             val code = """
                     class Test {
                         val items = Item.values().map { it.text }.toList()
@@ -309,14 +338,16 @@ class UnusedPrivateClassSpec : Spek({
                         B("B"),
                         C("C")
                     }
-                """
+            """
 
             val findings = UnusedPrivateClass().compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("does not report classes that are used with ::class - #1390") {
+        @Test
+        @DisplayName("does not report classes that are used with ::class - #1390")
+        fun doesNotReportClassesUsedWithinClass() {
             val code = """
                     class UnusedPrivateClassTest {
 
@@ -332,14 +363,15 @@ class UnusedPrivateClassSpec : Spek({
                         fun getSomeObject(): ((String) -> Any) = ::InternalClass
                         private class InternalClass(val param: String)
                     }
-                """
+            """
 
             val findings = UnusedPrivateClass().compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
 
-        it("does not report used private annotations - #2093") {
+        @Test
+        fun `does not report used private annotations - #2093`() {
             val code = """
                 private annotation class Test1
                 private annotation class Test2
@@ -357,7 +389,8 @@ class UnusedPrivateClassSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("does not report imported enum class - #2809") {
+        @Test
+        fun `does not report imported enum class - #2809`() {
             val code = """
                 package com.example
 
@@ -379,7 +412,8 @@ class UnusedPrivateClassSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("should report not imported enum class - #2809, #2816") {
+        @Test
+        fun `should report not imported enum class - #2809, #2816`() {
             val code = """
                 package com.example
 
@@ -404,4 +438,4 @@ class UnusedPrivateClassSpec : Spek({
             assertThat(findings).hasSourceLocation(10, 5)
         }
     }
-})
+}

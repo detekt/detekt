@@ -11,65 +11,76 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
 
-class InclusionExclusionPatternsSpec : Spek({
+class InclusionExclusionPatternsSpec {
 
-    describe("rule should only run on library file specified by 'includes' pattern") {
+    @Nested
+    inner class `rule should only run on library file specified by 'includes' pattern` {
 
-        val config by memoized { TestConfig(mapOf(Config.INCLUDES_KEY to "**/library/*.kt")) }
+        private val config = TestConfig(mapOf(Config.INCLUDES_KEY to "**/library/*.kt"))
 
-        it("should run") {
+        @Test
+        fun `should run`() {
             resourceAsPath("library/Library.kt")
                 .runWith(DummyRule(config))
                 .assertWasVisited()
         }
 
-        it("should not run") {
+        @Test
+        fun `should not run`() {
             resourceAsPath("Default.kt")
                 .runWith(DummyRule(config))
                 .assertNotVisited()
         }
     }
 
-    describe("rule should only run on library file not matching the specified 'excludes' pattern") {
+    @Nested
+    inner class `rule should only run on library file not matching the specified 'excludes' pattern` {
 
-        val config by memoized { TestConfig(mapOf(Config.EXCLUDES_KEY to "glob:**/Default.kt")) }
+        private val config = TestConfig(mapOf(Config.EXCLUDES_KEY to "glob:**/Default.kt"))
 
-        it("should run") {
+        @Test
+        fun `should run`() {
             resourceAsPath("library/Library.kt")
                 .runWith(DummyRule(config))
                 .assertWasVisited()
         }
 
-        it("should not run") {
+        @Test
+        fun `should not run`() {
             resourceAsPath("Default.kt")
                 .runWith(DummyRule(config))
                 .assertNotVisited()
         }
     }
 
-    describe("rule should report on both runs without config") {
+    @Nested
+    inner class `rule should report on both runs without config` {
 
-        it("should run on library file") {
+        @Test
+        fun `should run on library file`() {
             resourceAsPath("library/Library.kt")
                 .runWith(DummyRule())
                 .assertWasVisited()
         }
 
-        it("should run on non library file") {
+        @Test
+        fun `should run on non library file`() {
             resourceAsPath("Default.kt")
                 .runWith(DummyRule())
                 .assertWasVisited()
         }
     }
 
-    describe("rule should only run on included files") {
+    @Nested
+    inner class `rule should only run on included files` {
 
-        it("should only run on dummies") {
+        @Test
+        fun `should only run on dummies`() {
             val config = TestConfig(
                 mapOf(
                     Config.INCLUDES_KEY to "**Dummy*.kt",
@@ -86,7 +97,8 @@ class InclusionExclusionPatternsSpec : Spek({
             }
         }
 
-        it("should only run on library file") {
+        @Test
+        fun `should only run on library file`() {
             val config = TestConfig(
                 mapOf(
                     Config.INCLUDES_KEY to "**Library.kt",
@@ -103,7 +115,7 @@ class InclusionExclusionPatternsSpec : Spek({
             }
         }
     }
-})
+}
 
 private fun Path.runWith(rule: DummyRule): DummyRule {
     rule.lint(this)

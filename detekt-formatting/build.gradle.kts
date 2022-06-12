@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.detektApi)
+    compileOnly(projects.detektApi)
     implementation(libs.ktlint.rulesetStandard) {
         exclude(group = "org.jetbrains.kotlin")
     }
@@ -13,18 +13,19 @@ dependencies {
     implementation(libs.ktlint.rulesetExperimental) {
         exclude(group = "org.jetbrains.kotlin")
     }
+    runtimeOnly(libs.slf4j.nop)
 
     testImplementation(projects.detektTest)
-    testImplementation(libs.bundles.testImplementation)
-
-    testRuntimeOnly(libs.spek.runner)
+    testImplementation(libs.assertj)
 }
 
 tasks.build { finalizedBy(":detekt-generator:generateDocumentation") }
 
 val depsToPackage = setOf(
     "org.ec4j.core",
-    "com.pinterest.ktlint"
+    "com.pinterest.ktlint",
+    "io.github.microutils",
+    "org.slf4j",
 )
 
 tasks.jar {

@@ -1,15 +1,17 @@
 # Contributing to detekt
 
 - Read [this article](https://chris.beams.io/posts/git-commit/) before writing commit messages.
-- Use `gradle build -x dokkaJekyll` to build the source but exclude documentation JAR generation to save time.
+- Use `gradle build -x dokkaHtml` to build the source but exclude documentation JAR generation to save time.
 - Make sure that `gradle detekt` does not report any errors.
 - This repository follows the [Kotlin coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html),
   which are enforced by ktlint when running `gradle detekt`.
 - Make sure your IDE uses [ktlint](https://github.com/pinterest/ktlint) formatting rules as well
   as the settings in [.editorconfig](../.editorconfig).
-- We use [Spek](https://github.com/spekframework/spek) for testing. Please use the `Spec.kt`-Suffix.
-  For easier testing you might want to use the [Spek IntelliJ Plugin](https://plugins.jetbrains.com/plugin/10915-spek-framework).
-- Feel free to add your name to the contributors list at the end of the readme file when opening a pull request.
+- We use [JUnit 5](https://junit.org/junit5/docs/current/user-guide/) for testing. Please use the `Spec.kt` suffix on
+  new test classes. If your new rule requires type resolution (i.e. it utilises `BindingContext`) then annotate your
+  test class with `@KotlinCoreEnvironmentTest` and have the test class accept `KotlinCoreEnvironment` as a parameter.
+  See "Testing a rule that uses type resolution" section of the [Using Type Resolution](../website/docs/gettingstarted/type-resolution.md)
+  guide for details.
 - The code in `detekt-api` and any rule in `detekt-rules` must be documented. We generate documentation for our website based on these modules.
 - If some Kotlin code in `resources` folder (like `detekt-formatting`) shows a compilation error, right click on it and use `Mark as plain text`.
 
@@ -36,7 +38,7 @@ In order for your PR to get accepted, it is important that you add
 suitable **annotations** and provide all required types of **descriptions**.
 The following two subsections describe how to
 properly annotate a rule and how to compose the different types
-of descriptoins, respectively.
+of descriptions, respectively.
 
 ### Rule annotations
 
@@ -81,7 +83,7 @@ types of descriptions:
    subclass implementing the considered rule. Documentation strings associated
    with built-in rules are automatically pulled from the detekt codebase and
    used to generate the rule set overview available on the
-   [detekt website](https://detekt.github.io/detekt).
+   [detekt website](https://detekt.dev).
 2. **Issue description**: The issue description gives a summary of the code
    smells that the respective rule is supposed to detect. From an implementation
    point of view, it is the string that `Rule` subclasses pass to the
@@ -123,20 +125,20 @@ the detailed description of the rule.
 
 ```kotlin
 /**
-  * Summary of the violation that this rule is concerned with,
-  * potentially extended by a brief description on why it is
-  * bad practice and what is usually done to eliminate it.
-  *
-  * Add more details if applicable...
-  *
-  * <noncompliant>
-  * // add the non-compliant code example here
-  * </noncompliant>
-  *
-  * <compliant>
-  * // add the compliant code example here
-  * </compliant>
-  */
+ * Summary of the violation that this rule is concerned with,
+ * potentially extended by a brief description on why it is
+ * bad practice and what is usually done to eliminate it.
+ *
+ * Add more details if applicable...
+ *
+ * <noncompliant>
+ * // add the non-compliant code example here
+ * </noncompliant>
+ *
+ * <compliant>
+ * // add the compliant code example here
+ * </compliant>
+ */
 class SomeRule(config: Config = Config.empty) : Rule(config) {
 
 }
@@ -280,19 +282,7 @@ it is not possible to incorporate it into the generic issue description.
 
 ## Contributing to the website
 
-Make sure to test your changes locally:
-
-- install ruby and jekyll
-- gem install bundler
-- bundler install
-- jekyll build
-- jekyll serve
-
-The following warning is expected until [Jekyll](https://github.com/jekyll/jekyll/issues/7947) adopts to Ruby 2.7.0:
-
-```
-warning: Using the last argument as keyword parameters is deprecated (Ruby 2.7.0)
-```
+Check the [README.md inside website/](https://github.com/detekt/detekt/blob/main/website/README.md).
 
 ## Working on the Gradle plugin
 
@@ -307,8 +297,33 @@ warning: Using the last argument as keyword parameters is deprecated (Ruby 2.7.0
 - `gradle increment<Patch|Minor|Major>` - update version
 - `./scripts/release.sh` - publish all artifacts
 
+## Gradle Enterprise Access
+
+We do have access to a managed [Gradle Enterprise instance](6) that is publishing
+build scans for all the builds executed on CI (not from forks).
+
+This is extremely helpful to debug build failures and have access to remote build cache.
+Build scans are public so everyone can get insights on our build status.
+
+If you're a **maintainer** of a project under github.com/detekt/, you can request an access token
+to connect your local machine to the Gradle Enterprise instance, so you will also be publishing scans.
+
+You must follow the steps below:
+
+1. Email us at [info@detekt.dev][7] or get in touch with one of the existing maintainers.
+2. An account on https://ge.detekt.dev/ will be created for you, which you need to configure upon login (e.g. reset your password).
+3. Run the `./gradlew provisionGradleEnterpriseAccessKey` task from the detekt root folder
+4. Complete the access key provisioning process (you will have to go through a browser).
+5. Verify that the access key is correctly stored inside `~/.gradle/enterprise/keys.properties`
+6. Do a test run (say with `./gradlew tasks`) to verify that a scan is correctly published.
+
+More information on this process could be found on the [official Gradle Enterprise documentation][8].
+
 [1]: https://github.com/detekt/detekt/blob/v1.19.0/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/Issue.kt
 [2]: https://github.com/detekt/detekt/blob/v1.19.0/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/CodeSmell.kt
 [3]: https://kotlinlang.org/docs/kotlin-doc.html
 [4]: https://daringfireball.net/projects/markdown/syntax
 [5]: https://kotlinlang.org/docs/functions.html#named-arguments
+[6]: https://ge.detekt.dev/
+[7]: mailto:info@detekt.dev
+[8]: https://docs.gradle.com/enterprise/gradle-plugin/#automated_access_key_provisioning

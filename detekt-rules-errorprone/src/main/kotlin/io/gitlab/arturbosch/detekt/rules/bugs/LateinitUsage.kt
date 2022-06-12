@@ -40,8 +40,8 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
     @Configuration("Allows you to provide a list of annotations that disable this check.")
     @Deprecated("Use `ignoreAnnotated` instead")
-    private val excludeAnnotatedProperties: List<String> by config(emptyList<String>()) { list ->
-        list.map { it.removePrefix("*").removeSuffix("*") }
+    private val excludeAnnotatedProperties: List<Regex> by config(emptyList<String>()) { list ->
+        list.map { it.replace(".", "\\.").replace("*", ".*").toRegex() }
     }
 
     @Configuration("Allows you to disable the rule for a list of classes")
@@ -60,7 +60,11 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
         super.visit(root)
 
-        val annotationExcluder = AnnotationExcluder(root, @Suppress("DEPRECATION") excludeAnnotatedProperties)
+        val annotationExcluder = AnnotationExcluder(
+            root,
+            @Suppress("DEPRECATION") excludeAnnotatedProperties,
+            bindingContext,
+        )
 
         properties.filterNot { annotationExcluder.shouldExclude(it.annotationEntries) }
             .filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) == true }

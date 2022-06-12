@@ -1,0 +1,53 @@
+name: Build and Deploy Website
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**'
+
+permissions:
+  contents: write  # for JamesIves/github-pages-deploy-action to push changes in repo
+
+jobs:
+  build-detekt-docs:
+    if: github.repository == 'detekt/detekt'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'temurin'
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: 'website/yarn.lock'
+
+      - name: Build Detekt Documentation
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: :detekt-generator:generateDocumentation
+
+      - name: Install Yarn Dependencies
+        working-directory: website/
+        run: yarn install
+
+      - name: Build the Detekt Website
+        working-directory: website/
+        run: yarn build
+
+      - name: Deploy Github Pages (only on main)
+        uses: JamesIves/github-pages-deploy-action@v4
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        with:
+          branch: gh-pages
+          folder: website/build/

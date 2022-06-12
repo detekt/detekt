@@ -13,13 +13,9 @@ dependencies {
     implementation(projects.detektUtils)
 
     testImplementation(projects.detektTest)
-    testImplementation(libs.bundles.testImplementation)
-
-    testRuntimeOnly(libs.spek.runner)
+    testImplementation(libs.assertj)
 
     testFixturesApi(libs.kotlin.stdlibJdk8)
-
-    dokkaJekyllPlugin(libs.dokka.jekyll)
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants
@@ -32,7 +28,11 @@ listOf(configurations.testFixturesApiElements, configurations.testFixturesRuntim
 }
 
 tasks.withType<DokkaTask>().configureEach {
-    outputDirectory.set(rootDir.resolve("docs/pages/kdoc"))
+    outputDirectory.set(rootDir.resolve("website/static/kdoc"))
+}
+
+tasks.dokkaHtml {
+    notCompatibleWithConfigurationCache("https://github.com/Kotlin/dokka/issues/1217")
 }
 
 apiValidation {

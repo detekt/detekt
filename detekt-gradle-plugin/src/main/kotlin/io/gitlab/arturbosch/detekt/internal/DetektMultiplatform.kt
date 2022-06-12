@@ -3,16 +3,15 @@ package io.gitlab.arturbosch.detekt.internal
 import com.android.build.gradle.BaseExtension
 import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import io.gitlab.arturbosch.detekt.extensions.DetektReport
+import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
 import org.jetbrains.kotlin.gradle.dsl.KotlinCommonOptions
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.androidJvm
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.common
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.js
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.jvm
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.native
 import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmAndroidCompilation
 import java.io.File
@@ -108,34 +107,7 @@ internal class DetektMultiplatform(private val project: Project) {
             }?.let { baselineFile ->
                 baseline.set(layout.file(provider { baselineFile }))
             }
-            reports.xml.outputLocation.convention(
-                layout.projectDirectory.file(
-                    providers.provider {
-                        File(extension.reportsDir, compilation.name + ".xml").absolutePath
-                    }
-                )
-            )
-            reports.html.outputLocation.convention(
-                layout.projectDirectory.file(
-                    providers.provider {
-                        File(extension.reportsDir, compilation.name + ".html").absolutePath
-                    }
-                )
-            )
-            reports.txt.outputLocation.convention(
-                layout.projectDirectory.file(
-                    providers.provider {
-                        File(extension.reportsDir, compilation.name + ".txt").absolutePath
-                    }
-                )
-            )
-            reports.sarif.outputLocation.convention(
-                layout.projectDirectory.file(
-                    providers.provider {
-                        File(extension.reportsDir, compilation.name + ".sarif").absolutePath
-                    }
-                )
-            )
+            setReportOutputConventions(reports, extension, compilation.name)
             description =
                 "Run detekt analysis for target ${target.name} and source set ${compilation.name}"
             if (runWithTypeResolution) {
@@ -168,10 +140,29 @@ internal class DetektMultiplatform(private val project: Project) {
     }
 }
 
+internal fun Project.setReportOutputConventions(reports: DetektReports, extension: DetektExtension, name: String) {
+    setReportOutputConvention(extension, reports.xml, name, "xml")
+    setReportOutputConvention(extension, reports.html, name, "html")
+    setReportOutputConvention(extension, reports.txt, name, "txt")
+    setReportOutputConvention(extension, reports.sarif, name, "sarif")
+}
+
+private fun Project.setReportOutputConvention(
+    extension: DetektExtension,
+    report: DetektReport,
+    name: String,
+    format: String
+) {
+    report.outputLocation.convention(
+        layout.projectDirectory.file(
+            providers.provider {
+                File(extension.reportsDir, "$name.$format").absolutePath
+            }
+        )
+    )
+}
+
 // We currently run type resolution only for Jvm & Android targets as
 // native/js targets needs a different compiler classpath.
 private val KotlinTarget.runWithTypeResolution: Boolean
-    get() = when (platformType) {
-        jvm, androidJvm -> true
-        common, js, native -> false
-    }
+    get() = platformType in setOf(jvm, androidJvm)

@@ -33,7 +33,7 @@ class ProcessingSettings(
     LoggingAware by LoggingFacade(spec.loggingSpec),
     PropertiesAware by PropertiesFacade(),
     EnvironmentAware by EnvironmentFacade(spec.projectSpec, spec.compilerSpec),
-    ClassloaderAware by ExtensionFacade(spec.extensionsSpec),
+    ClassloaderAware by ExtensionFacade(spec.extensionsSpec.plugins),
     SetupContext {
 
     override val configUris: Collection<URI> = spec.configSpec.extractUris()

@@ -76,6 +76,9 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     @Configuration("if the order of declarations should be preserved")
     private val matchDeclarationsOrder: Boolean by config(true)
 
+    @Configuration("if we allow constructor parameters to be marked as @param instead of @property")
+    private val allowParamOnConstructorProperties: Boolean by config(false)
+
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
         reportIfDocumentationIsOutdated(klass) { getClassDeclarations(klass) }
@@ -92,8 +95,8 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun getClassDeclarations(klass: KtClass): List<Declaration> {
-        val ctor = klass.primaryConstructor ?: return emptyList()
-        val constructorDeclarations = getPrimaryConstructorDeclarations(ctor)
+        val ctor = klass.primaryConstructor
+        val constructorDeclarations = if (ctor != null) getPrimaryConstructorDeclarations(ctor) else emptyList()
         val typeParams = if (matchTypeParameters) {
             klass.typeParameters.mapNotNull { it.name.toParamOrNull() }
         } else emptyList()
@@ -119,7 +122,15 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     private fun getDeclarationsForValueParameters(valueParameters: List<KtParameter>): List<Declaration> {
         return valueParameters.mapNotNull {
             it.name?.let { name ->
-                val type = if (it.isPropertyParameter()) DeclarationType.PROPERTY else DeclarationType.PARAM
+                val type = if (it.isPropertyParameter()) {
+                    if (allowParamOnConstructorProperties) {
+                        DeclarationType.ANY
+                    } else {
+                        DeclarationType.PROPERTY
+                    }
+                } else {
+                    DeclarationType.PARAM
+                }
                 Declaration(name, type)
             }
         }
@@ -141,6 +152,7 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
             .fold(emptyList()) { acc, declarations -> acc + declarations }
     }
 
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     private fun processDocTag(docTag: KDocTag): List<Declaration> {
         val knownTag = docTag.knownTag
         val subjectName = docTag.getSubjectName() ?: return emptyList()
@@ -166,11 +178,21 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun declarationsMatch(doc: List<Declaration>, element: List<Declaration>): Boolean {
-        return if (matchDeclarationsOrder) {
-            doc == element
-        } else {
-            doc.sortedBy { it.name } == element.sortedBy { it.name }
+        if (doc.size != element.size) {
+            return false
         }
+
+        val zippedElements = if (matchDeclarationsOrder) {
+            doc.zip(element)
+        } else {
+            doc.sortedBy { it.name }.zip(element.sortedBy { it.name })
+        }
+
+        return zippedElements.all { (doc, element) -> declarationMatches(doc, element) }
+    }
+
+    private fun declarationMatches(doc: Declaration, element: Declaration): Boolean {
+        return element.name == doc.name && (element.type == DeclarationType.ANY || element.type == doc.type)
     }
 
     private fun reportCodeSmell(element: KtNamedDeclaration) {
@@ -193,6 +215,6 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     )
 
     enum class DeclarationType {
-        PARAM, PROPERTY
+        PARAM, PROPERTY, ANY
     }
 }

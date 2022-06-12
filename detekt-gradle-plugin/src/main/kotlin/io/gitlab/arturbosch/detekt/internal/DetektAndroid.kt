@@ -14,9 +14,9 @@ import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.DomainObjectSet
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.TaskProvider
-import java.io.File
 
 internal class DetektAndroid(private val project: Project) {
 
@@ -72,9 +72,10 @@ internal class DetektAndroid(private val project: Project) {
             baseExtension.variants
                 ?.matching { !extension.matchesIgnoredConfiguration(it) }
                 ?.all { variant ->
-                    project.registerAndroidDetektTask(bootClasspath, extension, variant).also { provider ->
-                        mainTaskProvider.dependsOn(provider)
-                    }
+                    project.registerAndroidDetektTask(bootClasspath, extension, variant)
+                        .also { provider ->
+                            mainTaskProvider.dependsOn(provider)
+                        }
                     project.registerAndroidCreateBaselineTask(bootClasspath, extension, variant)
                         .also { provider ->
                             mainBaselineTaskProvider.dependsOn(provider)
@@ -113,42 +114,19 @@ internal fun Project.registerAndroidDetektTask(
     extraInputSource: FileCollection? = null
 ): TaskProvider<Detekt> =
     registerDetektTask(taskName, extension) {
-        setSource(variant.sourceSets.map { it.javaDirectories })
+        setSource(variant.sourceSets.map { it.javaDirectories + it.kotlinDirectories })
         extraInputSource?.let { source(it) }
-        classpath.setFrom(variant.getCompileClasspath(null).filter { it.exists() } + bootClasspath)
+        classpath.setFrom(
+            variant.getCompileClasspath(null).filter { it.exists() },
+            bootClasspath,
+            javaCompileDestination(variant),
+        )
         // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
         // We try to find the configured baseline or alternatively a specific variant matching this task.
         extension.baseline?.existingVariantOrBaseFile(variant.name)?.let { baselineFile ->
             baseline.set(layout.file(project.provider { baselineFile }))
         }
-        reports.xml.outputLocation.convention(
-            layout.projectDirectory.file(
-                providers.provider {
-                    File(extension.reportsDir, variant.name + ".xml").absolutePath
-                }
-            )
-        )
-        reports.html.outputLocation.convention(
-            layout.projectDirectory.file(
-                providers.provider {
-                    File(extension.reportsDir, variant.name + ".html").absolutePath
-                }
-            )
-        )
-        reports.txt.outputLocation.convention(
-            layout.projectDirectory.file(
-                providers.provider {
-                    File(extension.reportsDir, variant.name + ".txt").absolutePath
-                }
-            )
-        )
-        reports.sarif.outputLocation.convention(
-            layout.projectDirectory.file(
-                providers.provider {
-                    File(extension.reportsDir, variant.name + ".sarif").absolutePath
-                }
-            )
-        )
+        setReportOutputConventions(reports, extension, variant.name)
         description = "EXPERIMENTAL: Run detekt analysis for ${variant.name} classes with type resolution"
     }
 
@@ -160,10 +138,25 @@ internal fun Project.registerAndroidCreateBaselineTask(
     extraInputSource: FileCollection? = null
 ): TaskProvider<DetektCreateBaselineTask> =
     registerCreateBaselineTask(taskName, extension) {
-        setSource(variant.sourceSets.map { it.javaDirectories })
+        setSource(variant.sourceSets.map { it.javaDirectories + it.kotlinDirectories })
         extraInputSource?.let { source(it) }
-        classpath.setFrom(variant.getCompileClasspath(null).filter { it.exists() } + bootClasspath)
+        classpath.setFrom(
+            variant.getCompileClasspath(null).filter { it.exists() },
+            bootClasspath,
+            javaCompileDestination(variant),
+        )
         val variantBaselineFile = extension.baseline?.addVariantName(variant.name)
         baseline.set(project.layout.file(project.provider { variantBaselineFile }))
         description = "EXPERIMENTAL: Creates detekt baseline for ${variant.name} classes with type resolution"
     }
+
+private fun Project.javaCompileDestination(variant: BaseVariant): DirectoryProperty? {
+    val javaCompile = variant.javaCompileProvider.orNull
+    if (javaCompile == null) {
+        logger.warn(
+            "Unable to find Java compiler on variant '{}'. Detekt analysis can show false negatives.",
+            variant.name,
+        )
+    }
+    return javaCompile?.destinationDirectory
+}

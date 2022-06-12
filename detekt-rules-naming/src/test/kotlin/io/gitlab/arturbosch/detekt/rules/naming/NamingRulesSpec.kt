@@ -2,20 +2,18 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Test
 
-class NamingRulesSpec : Spek({
+class NamingRulesSpec {
 
-    describe("naming like in constants is allowed for destructuring") {
-        it("should not detect any") {
-            val code = """
-                data class D(val i: Int, val j: Int)
-                fun doStuff() {
-                    val (_, HOLY_GRAIL) = D(5, 4)
-                }
-            """
-            assertThat(NamingRules().compileAndLint(code)).isEmpty()
-        }
+    @Test
+    fun `should not detect any`() {
+        val code = """
+            data class D(val i: Int, val j: Int)
+            fun doStuff() {
+                val (_, HOLY_GRAIL) = D(5, 4)
+            }
+        """
+        assertThat(NamingRules().compileAndLint(code)).isEmpty()
     }
-})
+}

@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
+ * See [ktlint-website](https://ktlint.github.io) for documentation.
  */
 @AutoCorrectable(since = "1.0.0")
 class AnnotationOnSeparateLine(config: Config) : FormattingRule(config) {

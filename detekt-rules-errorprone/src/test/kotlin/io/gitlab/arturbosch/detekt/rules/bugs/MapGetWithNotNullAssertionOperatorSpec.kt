@@ -1,73 +1,79 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Test
 
-class MapGetWithNotNullAssertionOperatorSpec : Spek({
-    setupKotlinEnvironment()
+@KotlinCoreEnvironmentTest
+class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironment) {
+    private val subject = MapGetWithNotNullAssertionOperator(Config.empty)
 
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { MapGetWithNotNullAssertionOperator(Config.empty) }
-
-    describe("check for MapGetWithNotNullAssert") {
-
-        it("reports map[] with not null assertion") {
-            val code = """
+    @Test
+    fun `reports map get operator function with not null assertion when assigned`() {
+        val code = """
                 fun f() {
                     val map = emptyMap<Any, Any>()
                     val value = map["key"]!!
-                }"""
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
+                }
+        """
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
 
-        it("reports map.get() with not null assertion") {
-            val code = """
+    @Test
+    fun `reports map_get() with not null assertion`() {
+        val code = """
                 fun f() {
                     val map = emptyMap<Any, Any>()
                     val value = map.get("key")!!
-                }"""
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
+                }
+        """
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
 
-        it("does not report map[] call without not-null assert") {
-            val code = """
+    @Test
+    fun `does not report map get operator function call without not-null assert`() {
+        val code = """
                 fun f() {
                     val map = emptyMap<String, String>()
                     map["key"]
-                }"""
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
+                }
+        """
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+    }
 
-        it("does not report map.getValue() call") {
-            val code = """
+    @Test
+    fun `does not report map_getValue() call`() {
+        val code = """
                 fun f() {
                     val map = emptyMap<String, String>()
                     map.getValue("key")
-                }"""
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
+                }
+        """
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+    }
 
-        it("does not report map.getOrDefault() call") {
-            val code = """
+    @Test
+    fun `does not report map_getOrDefault() call`() {
+        val code = """
                 fun f() {
                     val map = emptyMap<String, String>()
                     map.getOrDefault("key", "")
-                }"""
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
+                }
+        """
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+    }
 
-        it("does not report map.getOrElse() call") {
-            val code = """
+    @Test
+    fun `does not report map_getOrElse() call`() {
+        val code = """
                 fun f() {
                     val map = emptyMap<String, String>()
                     map.getOrElse("key", { "" })
-                }"""
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
+                }
+        """
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
-})
+}

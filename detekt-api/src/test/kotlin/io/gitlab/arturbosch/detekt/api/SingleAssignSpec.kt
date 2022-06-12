@@ -2,34 +2,36 @@ package io.gitlab.arturbosch.detekt.api
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_METHOD
 
-internal class SingleAssignSpec : Spek({
-    describe("value is unset") {
-        var unassigned: Int by SingleAssign()
-        it("should fail when value is retrieved") {
-            assertThatIllegalStateException().isThrownBy {
-                @Suppress("UNUSED_EXPRESSION")
-                unassigned
-            }
-        }
+@TestInstance(PER_METHOD)
+internal class SingleAssignSpec {
+    private var value: Int by SingleAssign()
 
-        it("should succeed when value is assigned") {
-            unassigned = 15
+    @Test
+    fun `should fail when value is retrieved`() {
+        assertThatIllegalStateException().isThrownBy {
+            @Suppress("UNUSED_EXPRESSION")
+            value
         }
     }
 
-    describe("value is set") {
-        var assigned: Int by SingleAssign()
-        assigned = 15
-
-        it("should succeed when value is retrieved") {
-            assertThat(assigned).isEqualTo(15)
-        }
-
-        it("should fail when value is assigned") {
-            assertThatIllegalStateException().isThrownBy { assigned = -1 }
-        }
+    @Test
+    fun `should succeed when value is assigned`() {
+        value = 15
     }
-})
+
+    @Test
+    fun `should succeed when value is retrieved`() {
+        value = 15
+        assertThat(value).isEqualTo(15)
+    }
+
+    @Test
+    fun `should fail when value is assigned`() {
+        value = 15
+        assertThatIllegalStateException().isThrownBy { value = -1 }
+    }
+}

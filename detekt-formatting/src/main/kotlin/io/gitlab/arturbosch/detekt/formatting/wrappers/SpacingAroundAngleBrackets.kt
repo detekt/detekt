@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
+ * See [ktlint-website](https://ktlint.github.io#rule-spacing) for documentation.
  */
 @AutoCorrectable(since = "1.16.0")
 class SpacingAroundAngleBrackets(config: Config) : FormattingRule(config) {

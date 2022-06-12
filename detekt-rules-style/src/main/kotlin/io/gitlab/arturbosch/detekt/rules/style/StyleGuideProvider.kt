@@ -38,6 +38,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             ForbiddenImport(config),
             ForbiddenMethodCall(config),
             ForbiddenPublicDataClass(config),
+            ForbiddenSuppress(config),
             FunctionOnlyReturningConstant(config),
             SpacingBetweenPackageAndImports(config),
             LoopWithTooManyJumpStatements(config),
@@ -46,6 +47,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UnnecessaryAnnotationUseSiteTarget(config),
             UnnecessaryParentheses(config),
             UnnecessaryInheritance(config),
+            UnnecessaryInnerClass(config),
             UtilityClassWithPublicConstructor(config),
             ObjectLiteralToLambda(config),
             OptionalAbstractKeyword(config),
@@ -72,6 +74,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             PreferToOverPairSyntax(config),
             MandatoryBracesIfStatements(config),
             MandatoryBracesLoops(config),
+            NullableBooleanCheck(config),
             VarCouldBeVal(config),
             ForbiddenVoid(config),
             ExplicitItLambdaParameter(config),
@@ -94,6 +97,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseIsNullOrEmpty(config),
             UseOrEmpty(config),
             UseAnyOrNoneInsteadOfFind(config),
+            UnnecessaryBackticks(config),
         )
     )
 }

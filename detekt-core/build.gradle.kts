@@ -3,12 +3,12 @@ plugins {
 }
 
 dependencies {
+    api(projects.detektApi)
+    api(projects.detektParser)
+    api(projects.detektTooling)
     implementation(libs.snakeyaml)
-    implementation(projects.detektApi)
     implementation(projects.detektMetrics)
-    implementation(projects.detektParser)
     implementation(projects.detektPsiUtils)
-    implementation(projects.detektTooling)
     implementation(projects.detektReportHtml)
     implementation(projects.detektReportTxt)
     implementation(projects.detektReportXml)
@@ -16,11 +16,9 @@ dependencies {
     implementation(projects.detektUtils)
 
     testRuntimeOnly(projects.detektRules)
-    testRuntimeOnly(projects.detektFormatting)
-    testRuntimeOnly(libs.spek.runner)
     testImplementation(projects.detektTest)
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.mockk)
     testImplementation(libs.reflections)
-    testImplementation(libs.bundles.testImplementation)
+    testImplementation(libs.assertj)
 }

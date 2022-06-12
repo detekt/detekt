@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See <a href="https://ktlint.github.io/#rule-empty-class-body">ktlint-website</a> for documentation.
+ * See [ktlint-website](https://ktlint.github.io#rule-empty-class-body) for documentation.
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")

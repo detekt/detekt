@@ -13,9 +13,10 @@ import java.util.ServiceLoader
 /**
  * Given the existing config, return a list of [ReportingDescriptor] for the rules.
  */
-fun toReportingDescriptors(config: Config): List<ReportingDescriptor> {
-    val sets = ServiceLoader.load(RuleSetProvider::class.java, SarifOutputReport::class.java.classLoader)
-        .map { it.instance(config.subConfig(it.ruleSetId)) }
+internal fun toReportingDescriptors(config: Config): List<ReportingDescriptor> {
+    val sets =
+        ServiceLoader.load(RuleSetProvider::class.java, SarifOutputReport::class.java.classLoader)
+            .map { it.instance(config.subConfig(it.ruleSetId)) }
     val ruleSetIdAndRules = sets.flatMap { ruleSet ->
         ruleSet.rules.map { rule ->
             ruleSet.id to rule
@@ -24,10 +25,8 @@ fun toReportingDescriptors(config: Config): List<ReportingDescriptor> {
     val descriptors = mutableListOf<ReportingDescriptor>()
     ruleSetIdAndRules.forEach { (ruleSetId, rule) ->
         when (rule) {
-            is MultiRule ->
-                descriptors.addAll(rule.toDescriptors(ruleSetId))
-            is Rule ->
-                descriptors.add(rule.toDescriptor(ruleSetId))
+            is MultiRule -> descriptors.addAll(rule.toDescriptors(ruleSetId))
+            is Rule -> descriptors.add(rule.toDescriptor(ruleSetId))
         }
     }
     return descriptors
@@ -44,6 +43,6 @@ private fun Rule.toDescriptor(ruleSetId: RuleSetId): ReportingDescriptor {
         id = "detekt.$ruleSetId.$ruleId",
         name = ruleId,
         shortDescription = MultiformatMessageString(text = issue.description),
-        helpURI = "https://detekt.github.io/detekt/$formattedRuleSetId.html#$formattedRuleId"
+        helpURI = "https://detekt.dev/$formattedRuleSetId.html#$formattedRuleId"
     )
 }

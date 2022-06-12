@@ -1,22 +1,26 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.pinterest.ktlint.core.Rule.Modifier.Last
-import com.pinterest.ktlint.core.Rule.Modifier.RestrictToRoot
-import com.pinterest.ktlint.core.Rule.Modifier.RestrictToRootLast
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationOnSeparateLine
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ArgumentListWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.BlockCommentInitialStarAlignment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentSpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.DiscouragedCommentLocation
 import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumEntryNameCase
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Filename
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FinalNewline
+import io.gitlab.arturbosch.detekt.formatting.wrappers.FunKeywordSpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionTypeReferenceSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ImportOrdering
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Indentation
+import io.gitlab.arturbosch.detekt.formatting.wrappers.KdocWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.MaximumLineLength
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ModifierListSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ModifierOrdering
 import io.gitlab.arturbosch.detekt.formatting.wrappers.MultiLineIfElse
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoBlankLineBeforeRbrace
@@ -48,11 +52,14 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclaration
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithComments
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplate
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TrailingComma
+import io.gitlab.arturbosch.detekt.formatting.wrappers.TypeArgumentListSpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.UnnecessaryParenthesesBeforeTrailingLambda
+import io.gitlab.arturbosch.detekt.formatting.wrappers.Wrapping
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyHolder
 import org.jetbrains.kotlin.psi.KtFile
-import java.util.LinkedList
+import java.util.*
 
 /**
  * Runs all KtLint rules.
@@ -90,12 +97,20 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         SpacingAroundParens(config),
         SpacingAroundRangeOperator(config),
         StringTemplate(config),
+        Wrapping(config),
 
         // Wrappers for ktlint-ruleset-experimental rules. Disabled by default.
         AnnotationOnSeparateLine(config),
         AnnotationSpacing(config),
         ArgumentListWrapping(config),
+        BlockCommentInitialStarAlignment(config),
+        CommentWrapping(config),
+        DiscouragedCommentLocation(config),
         EnumEntryNameCase(config),
+        FunctionTypeReferenceSpacing(config),
+        FunKeywordSpacing(config),
+        KdocWrapping(config),
+        ModifierListSpacing(config),
         MultiLineIfElse(config),
         NoEmptyFirstLineInMethodBlock(config),
         PackageName(config),
@@ -105,6 +120,8 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         SpacingBetweenDeclarationsWithAnnotations(config),
         SpacingBetweenDeclarationsWithComments(config),
         TrailingComma(config),
+        TypeArgumentListSpacing(config),
+        UnnecessaryParenthesesBeforeTrailingLambda(config),
     )
 
     override fun visit(root: KtFile) {
@@ -121,11 +138,10 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         val runLastOnRoot = mutableListOf<FormattingRule>()
         val runLast = mutableListOf<FormattingRule>()
         for (rule in activeRules.filterIsInstance<FormattingRule>()) {
-            when (rule.wrapping) {
-                is Last -> runLast.add(rule)
-                // RestrictToRootLast implements RestrictToRoot, so we have to perform this check first
-                is RestrictToRootLast -> runLastOnRoot.add(rule)
-                is RestrictToRoot -> runFirstOnRoot.add(rule)
+            when {
+                rule.runOnRootNodeOnly && rule.runAsLateAsPossible -> runLastOnRoot.add(rule)
+                rule.runOnRootNodeOnly -> runFirstOnRoot.add(rule)
+                rule.runAsLateAsPossible -> runLast.add(rule)
                 else -> other.add(rule)
             }
         }

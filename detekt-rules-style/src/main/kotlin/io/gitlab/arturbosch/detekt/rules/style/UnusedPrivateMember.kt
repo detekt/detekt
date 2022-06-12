@@ -44,7 +44,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isProtected
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
 import org.jetbrains.kotlin.util.OperatorNameConventions
 
@@ -97,58 +97,65 @@ private class UnusedFunctionVisitor(
     private val functionReferences = mutableMapOf<String, MutableList<KtReferenceExpression>>()
     private val propertyDelegates = mutableListOf<KtPropertyDelegate>()
 
+    @Suppress("ComplexMethod")
     override fun getUnusedReports(issue: Issue): List<CodeSmell> {
         val propertyDelegateResultingDescriptors by lazy(LazyThreadSafetyMode.NONE) {
             propertyDelegates.flatMap { it.resultingDescriptors() }
         }
-        return functionDeclarations.flatMap { (functionName, functions) ->
-            val isOperator = functions.any { it.isOperator() }
-            val references = functionReferences[functionName].orEmpty()
-            val unusedFunctions = when {
-                (functions.size > 1 || isOperator) && bindingContext != BindingContext.EMPTY -> {
-                    val functionNameAsName = Name.identifier(functionName)
-                    val referencesViaOperator = if (isOperator) {
-                        val operatorToken = OperatorConventions.getOperationSymbolForName(functionNameAsName)
-                        val operatorValue = (operatorToken as? KtSingleValueToken)?.value
-                        val directReferences = operatorValue?.let { functionReferences[it] }.orEmpty()
-                        val assignmentReferences = when (operatorToken) {
-                            KtTokens.PLUS,
-                            KtTokens.MINUS,
-                            KtTokens.MUL,
-                            KtTokens.DIV,
-                            KtTokens.PERC -> operatorValue?.let { functionReferences["$it="] }.orEmpty()
-                            else -> emptyList()
-                        }
-                        val containingReferences = if (functionNameAsName == OperatorNameConventions.CONTAINS) {
-                            listOf(KtTokens.IN_KEYWORD, KtTokens.NOT_IN).flatMap {
-                                functionReferences[it.value].orEmpty()
+        return functionDeclarations
+            .filterNot { (_, functions) ->
+                // Without a binding context we can't know if an operator is called. So we ignore it to avoid
+                // false positives. More context at #4242
+                bindingContext == BindingContext.EMPTY && functions.any { it.isOperator() }
+            }
+            .flatMap { (functionName, functions) ->
+                val isOperator = functions.any { it.isOperator() }
+                val references = functionReferences[functionName].orEmpty()
+                val unusedFunctions = when {
+                    (functions.size > 1 || isOperator) && bindingContext != BindingContext.EMPTY -> {
+                        val functionNameAsName = Name.identifier(functionName)
+                        val referencesViaOperator = if (isOperator) {
+                            val operatorToken = OperatorConventions.getOperationSymbolForName(functionNameAsName)
+                            val operatorValue = (operatorToken as? KtSingleValueToken)?.value
+                            val directReferences = operatorValue?.let { functionReferences[it] }.orEmpty()
+                            val assignmentReferences = when (operatorToken) {
+                                KtTokens.PLUS,
+                                KtTokens.MINUS,
+                                KtTokens.MUL,
+                                KtTokens.DIV,
+                                KtTokens.PERC -> operatorValue?.let { functionReferences["$it="] }.orEmpty()
+                                else -> emptyList()
                             }
-                        } else emptyList()
-                        directReferences + assignmentReferences + containingReferences
-                    } else {
-                        emptyList()
-                    }
-                    val referenceDescriptors = (references + referencesViaOperator)
-                        .mapNotNull { it.getResolvedCall(bindingContext)?.resultingDescriptor }
-                        .map { it.original }
-                        .let {
-                            if (functionNameAsName in OperatorNameConventions.DELEGATED_PROPERTY_OPERATORS) {
-                                it + propertyDelegateResultingDescriptors
-                            } else {
-                                it
-                            }
+                            val containingReferences = if (functionNameAsName == OperatorNameConventions.CONTAINS) {
+                                listOf(KtTokens.IN_KEYWORD, KtTokens.NOT_IN).flatMap {
+                                    functionReferences[it.value].orEmpty()
+                                }
+                            } else emptyList()
+                            directReferences + assignmentReferences + containingReferences
+                        } else {
+                            emptyList()
                         }
-                    functions.filterNot {
-                        bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, it] in referenceDescriptors
+                        val referenceDescriptors = (references + referencesViaOperator)
+                            .mapNotNull { it.getResolvedCall(bindingContext)?.resultingDescriptor }
+                            .map { it.original }
+                            .let {
+                                if (functionNameAsName in OperatorNameConventions.DELEGATED_PROPERTY_OPERATORS) {
+                                    it + propertyDelegateResultingDescriptors
+                                } else {
+                                    it
+                                }
+                            }
+                        functions.filterNot {
+                            bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, it] in referenceDescriptors
+                        }
                     }
+                    references.isEmpty() -> functions
+                    else -> emptyList()
                 }
-                references.isEmpty() -> functions
-                else -> emptyList()
+                unusedFunctions.map {
+                    CodeSmell(issue, Entity.atName(it), "Private function `$functionName` is unused.")
+                }
             }
-            unusedFunctions.map {
-                CodeSmell(issue, Entity.from(it), "Private function $functionName is unused.")
-            }
-        }
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
@@ -205,7 +212,7 @@ private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(
 
     override fun getUnusedReports(issue: Issue): List<CodeSmell> {
         return unusedParameters.map {
-            CodeSmell(issue, Entity.from(it), "Function parameter ${it.nameAsSafeName.identifier} is unused.")
+            CodeSmell(issue, Entity.atName(it), "Function parameter `${it.nameAsSafeName.identifier}` is unused.")
         }
     }
 
@@ -277,8 +284,8 @@ private class UnusedPropertyVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
             .map {
                 CodeSmell(
                     issue,
-                    Entity.from(it),
-                    "Private property ${it.nameAsSafeName.identifier} is unused."
+                    Entity.atName(it),
+                    "Private property `${it.nameAsSafeName.identifier}` is unused."
                 )
             }
     }

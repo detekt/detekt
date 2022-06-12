@@ -1,20 +1,22 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class UseIsNullOrEmptySpec : Spek({
-    setupKotlinEnvironment()
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { UseIsNullOrEmpty() }
+@KotlinCoreEnvironmentTest
+class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
+    val subject = UseIsNullOrEmpty()
 
-    describe("report UseIsNullOrEmpty rule") {
-        context("List") {
-            it("null or isEmpty()") {
+    @Nested
+    inner class `report UseIsNullOrEmpty rule` {
+        @Nested
+        inner class `List` {
+            @Test
+            fun `null or isEmpty()`() {
                 val code = """
                     fun test(x: List<Int>?) {
                         if (x == null || x.isEmpty()) return
@@ -27,7 +29,9 @@ class UseIsNullOrEmptySpec : Spek({
                     "This 'x == null || x.isEmpty()' can be replaced with 'isNullOrEmpty()' call"
                 )
             }
-            it("null or count() == 0") {
+
+            @Test
+            fun `null or count() == 0`() {
                 val code = """
                     fun test(x: List<Int>?) {
                         if (x == null || x.count() == 0) return
@@ -36,7 +40,9 @@ class UseIsNullOrEmptySpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
-            it("null or size == 0") {
+
+            @Test
+            fun `null or size == 0`() {
                 val code = """
                     fun test(x: List<Int>?) {
                         if (x == null || x.size == 0) return
@@ -45,7 +51,9 @@ class UseIsNullOrEmptySpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
-            it("flipped null check") {
+
+            @Test
+            fun `flipped null check`() {
                 val code = """
                     fun test(x: List<Int>?) {
                         if (null == x || x.isEmpty()) return
@@ -54,7 +62,9 @@ class UseIsNullOrEmptySpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
-            it("flipped count check") {
+
+            @Test
+            fun `flipped count check`() {
                 val code = """
                     fun test(x: List<Int>?) {
                         if (x == null || 0 == x.count()) return
@@ -63,7 +73,9 @@ class UseIsNullOrEmptySpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
-            it("flipped size check") {
+
+            @Test
+            fun `flipped size check`() {
                 val code = """
                     fun test(x: List<Int>?) {
                         if (x == null || 0 == x.size) return
@@ -74,8 +86,10 @@ class UseIsNullOrEmptySpec : Spek({
             }
         }
 
-        context("Set") {
-            it("null or isEmpty()") {
+        @Nested
+        inner class `Set` {
+            @Test
+            fun `null or isEmpty()`() {
                 val code = """
                     fun test(x: Set<Int>?) {
                         if (x == null || x.isEmpty()) return
@@ -84,7 +98,9 @@ class UseIsNullOrEmptySpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
-            it("null or count() == 0") {
+
+            @Test
+            fun `null or count() == 0`() {
                 val code = """
                     fun test(x: Set<Int>?) {
                         if (x == null || x.count() == 0) return
@@ -93,7 +109,9 @@ class UseIsNullOrEmptySpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
-            it("null or size == 0") {
+
+            @Test
+            fun `null or size == 0`() {
                 val code = """
                     fun test(x: Set<Int>?) {
                         if (x == null || x.size == 0) return
@@ -104,8 +122,10 @@ class UseIsNullOrEmptySpec : Spek({
             }
         }
 
-        context("Collection") {
-            it("null or isEmpty()") {
+        @Nested
+        inner class `Collection` {
+            @Test
+            fun `null or isEmpty()`() {
                 val code = """
                     fun test(x: Collection<Int>?) {
                         if (x == null || x.isEmpty()) return
@@ -114,7 +134,9 @@ class UseIsNullOrEmptySpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
-            it("null or count() == 0") {
+
+            @Test
+            fun `null or count() == 0`() {
                 val code = """
                     fun test(x: Collection<Int>?) {
                         if (x == null || x.count() == 0) return
@@ -123,7 +145,9 @@ class UseIsNullOrEmptySpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
-            it("null or size == 0") {
+
+            @Test
+            fun `null or size == 0`() {
                 val code = """
                     fun test(x: Collection<Int>?) {
                         if (x == null || x.size == 0) return
@@ -134,8 +158,10 @@ class UseIsNullOrEmptySpec : Spek({
             }
         }
 
-        context("Map") {
-            it("null or isEmpty()") {
+        @Nested
+        inner class `Map` {
+            @Test
+            fun `null or isEmpty()`() {
                 val code = """
                     fun test(x: Map<Int, String>?) {
                         if (x == null || x.isEmpty()) return
@@ -144,7 +170,9 @@ class UseIsNullOrEmptySpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
-            it("null or count() == 0") {
+
+            @Test
+            fun `null or count() == 0`() {
                 val code = """
                     fun test(x: Map<Int, String>?) {
                         if (x == null || x.count() == 0) return
@@ -153,7 +181,9 @@ class UseIsNullOrEmptySpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
-            it("null or size == 0") {
+
+            @Test
+            fun `null or size == 0`() {
                 val code = """
                     fun test(x: Map<Int, String>?) {
                         if (x == null || x.size == 0) return
@@ -164,8 +194,10 @@ class UseIsNullOrEmptySpec : Spek({
             }
         }
 
-        context("Array") {
-            it("null or isEmpty()") {
+        @Nested
+        inner class `Array` {
+            @Test
+            fun `null or isEmpty()`() {
                 val code = """
                     fun test(x: Array<Int>?) {
                         if (x == null || x.isEmpty()) return
@@ -174,7 +206,9 @@ class UseIsNullOrEmptySpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
-            it("null or count() == 0") {
+
+            @Test
+            fun `null or count() == 0`() {
                 val code = """
                     fun test(x: Array<Int>?) {
                         if (x == null || x.count() == 0) return
@@ -183,7 +217,9 @@ class UseIsNullOrEmptySpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
-            it("null or size == 0") {
+
+            @Test
+            fun `null or size == 0`() {
                 val code = """
                     fun test(x: Array<Int>?) {
                         if (x == null || x.size == 0) return
@@ -194,8 +230,10 @@ class UseIsNullOrEmptySpec : Spek({
             }
         }
 
-        context("String") {
-            it("null or isEmpty()") {
+        @Nested
+        inner class `String` {
+            @Test
+            fun `null or isEmpty()`() {
                 val code = """
                     fun test(x: String?) {
                         if (x == null || x.isEmpty()) return
@@ -204,7 +242,9 @@ class UseIsNullOrEmptySpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
-            it("null or count() == 0") {
+
+            @Test
+            fun `null or count() == 0`() {
                 val code = """
                     fun test(x: String?) {
                         if (x == null || x.count() == 0) return
@@ -213,7 +253,9 @@ class UseIsNullOrEmptySpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
-            it("null or length == 0") {
+
+            @Test
+            fun `null or length == 0`() {
                 val code = """
                     fun test(x: String?) {
                         if (x == null || x.length == 0) return
@@ -223,7 +265,8 @@ class UseIsNullOrEmptySpec : Spek({
                 assertThat(findings).hasSize(1)
             }
 
-            it("null or equal empty string") {
+            @Test
+            fun `null or equal empty string`() {
                 val code = """
                     fun test(x: String?) {
                         if (x == null || x == "") return
@@ -234,8 +277,10 @@ class UseIsNullOrEmptySpec : Spek({
             }
         }
 
-        context("MutableList") {
-            it("null or isEmpty()") {
+        @Nested
+        inner class `MutableList` {
+            @Test
+            fun `null or isEmpty()`() {
                 val code = """
                     fun test(x: MutableList<Int>?) {
                         if (x == null || x.isEmpty()) return
@@ -246,8 +291,10 @@ class UseIsNullOrEmptySpec : Spek({
             }
         }
 
-        context("MutableSet") {
-            it("null or isEmpty()") {
+        @Nested
+        inner class `MutableSet` {
+            @Test
+            fun `null or isEmpty()`() {
                 val code = """
                     fun test(x: MutableSet<Int>?) {
                         if (x == null || x.isEmpty()) return
@@ -258,8 +305,10 @@ class UseIsNullOrEmptySpec : Spek({
             }
         }
 
-        context("MutableCollection") {
-            it("null or isEmpty()") {
+        @Nested
+        inner class `MutableCollection` {
+            @Test
+            fun `null or isEmpty()`() {
                 val code = """
                     fun test(x: MutableCollection<Int>?) {
                         if (x == null || x.isEmpty()) return
@@ -270,8 +319,10 @@ class UseIsNullOrEmptySpec : Spek({
             }
         }
 
-        context("MutableMap") {
-            it("null or isEmpty()") {
+        @Nested
+        inner class `MutableMap` {
+            @Test
+            fun `null or isEmpty()`() {
                 val code = """
                     fun test(x: MutableMap<Int, String>?) {
                         if (x == null || x.isEmpty()) return
@@ -283,9 +334,12 @@ class UseIsNullOrEmptySpec : Spek({
         }
     }
 
-    describe("does not report UseIsNullOrEmpty rule") {
-        context("IntArray") {
-            it("null or isEmpty()") {
+    @Nested
+    inner class `does not report UseIsNullOrEmpty rule` {
+        @Nested
+        inner class `IntArray` {
+            @Test
+            fun `null or isEmpty()`() {
                 val code = """
                     fun test(x: IntArray?) {
                         if (x == null || x.isEmpty()) return
@@ -294,7 +348,9 @@ class UseIsNullOrEmptySpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
-            it("null or count() == 0") {
+
+            @Test
+            fun `null or count() == 0`() {
                 val code = """
                     fun test(x: IntArray?) {
                         if (x == null || x.count() == 0) return
@@ -303,7 +359,9 @@ class UseIsNullOrEmptySpec : Spek({
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
-            it("null or size == 0") {
+
+            @Test
+            fun `null or size == 0`() {
                 val code = """
                     fun test(x: IntArray?) {
                         if (x == null || x.size == 0) return
@@ -314,19 +372,22 @@ class UseIsNullOrEmptySpec : Spek({
             }
         }
 
-        context("Sequence") {
-            it("null or count() == 0") {
+        @Nested
+        inner class `Sequence` {
+            @Test
+            fun `null or count() == 0`() {
                 val code = """
                 fun test(x: Sequence<Int>?) {
                     if (x == null || x.count() == 0) return
                 }
-            """
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
         }
 
-        it("different variables") {
+        @Test
+        fun `different variables`() {
             val code = """
                 fun test(x: List<Int>?, y: List<Int>) {
                     if (x == null || y.isEmpty()) return
@@ -336,7 +397,8 @@ class UseIsNullOrEmptySpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("not null check") {
+        @Test
+        fun `not null check`() {
             val code = """
                 fun test(x: List<Int>?) {
                     if (x != null && x.isEmpty()) return
@@ -346,7 +408,8 @@ class UseIsNullOrEmptySpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("not size zero check") {
+        @Test
+        fun `not size zero check`() {
             val code = """
                 fun test(x: List<Int>?) {
                     if (x == null || x.count() == 1) return
@@ -356,7 +419,8 @@ class UseIsNullOrEmptySpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("not null") {
+        @Test
+        fun `not null`() {
             val code = """
                 fun test(x: List<Int>) {
                     if (x == null || x.isEmpty()) return
@@ -366,7 +430,8 @@ class UseIsNullOrEmptySpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("var class member") {
+        @Test
+        fun `var class member`() {
             val code = """
                 class Test {
                     var x: List<Int>? = null
@@ -380,4 +445,4 @@ class UseIsNullOrEmptySpec : Spek({
             assertThat(findings).isEmpty()
         }
     }
-})
+}

@@ -11,70 +11,77 @@ import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.lifecycle.CachingMode
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-internal class ComplexityReportGeneratorSpec : Spek({
+internal class ComplexityReportGeneratorSpec {
 
-    describe("complexity report generator") {
+    private lateinit var detektion: TestDetektion
 
-        val detektion by memoized(CachingMode.TEST) {
-            val finding = mockk<Finding>()
-            every { finding.id }.returns("test")
-            TestDetektion(finding).withTestData()
-        }
+    @BeforeEach
+    fun setupMocks() {
+        val finding = mockk<Finding>()
+        every { finding.id }.returns("test")
+        detektion = TestDetektion(finding).withTestData()
+    }
 
-        context("several complexity metrics") {
+    @Nested
+    inner class `several complexity metrics` {
 
-            it("successfully generates a complexity report") {
-                val expectedContent = listOf(
-                    "1,000 lines of code (loc)",
-                    "6 source lines of code (sloc)",
-                    "5 logical lines of code (lloc)",
-                    "4 comment lines of code (cloc)",
-                    "2 cyclomatic complexity (mcc)",
-                    "2 cognitive complexity",
-                    "1 number of total code smells",
-                    "66% comment source ratio",
-                    "400 mcc per 1,000 lloc",
-                    "200 code smells per 1,000 lloc"
-                )
+        @Test
+        fun `successfully generates a complexity report`() {
+            val expectedContent = listOf(
+                "1,000 lines of code (loc)",
+                "6 source lines of code (sloc)",
+                "5 logical lines of code (lloc)",
+                "4 comment lines of code (cloc)",
+                "2 cyclomatic complexity (mcc)",
+                "2 cognitive complexity",
+                "1 number of total code smells",
+                "66% comment source ratio",
+                "400 mcc per 1,000 lloc",
+                "200 code smells per 1,000 lloc"
+            )
 
-                assertThat(generateComplexityReport(detektion)).isEqualTo(expectedContent)
-            }
-        }
-
-        context("several invalid complexity metrics") {
-
-            it("returns null for missing mcc") {
-                detektion.removeData(complexityKey)
-                assertThat(generateComplexityReport(detektion)).isNull()
-            }
-
-            it("returns null for missing lloc") {
-                detektion.removeData(logicalLinesKey)
-                assertThat(generateComplexityReport(detektion)).isNull()
-
-                detektion.addData(logicalLinesKey, 0)
-                assertThat(generateComplexityReport(detektion)).isNull()
-            }
-
-            it("returns null for missing sloc") {
-                detektion.removeData(sourceLinesKey)
-                assertThat(generateComplexityReport(detektion)).isNull()
-
-                detektion.addData(sourceLinesKey, 0)
-                assertThat(generateComplexityReport(detektion)).isNull()
-            }
-
-            it("returns null for missing cloc") {
-                detektion.removeData(complexityKey)
-                assertThat(generateComplexityReport(detektion)).isNull()
-            }
+            assertThat(generateComplexityReport(detektion)).isEqualTo(expectedContent)
         }
     }
-})
+
+    @Nested
+    inner class `several invalid complexity metrics` {
+
+        @Test
+        fun `returns null for missing mcc`() {
+            detektion.removeData(complexityKey)
+            assertThat(generateComplexityReport(detektion)).isNull()
+        }
+
+        @Test
+        fun `returns null for missing lloc`() {
+            detektion.removeData(logicalLinesKey)
+            assertThat(generateComplexityReport(detektion)).isNull()
+
+            detektion.addData(logicalLinesKey, 0)
+            assertThat(generateComplexityReport(detektion)).isNull()
+        }
+
+        @Test
+        fun `returns null for missing sloc`() {
+            detektion.removeData(sourceLinesKey)
+            assertThat(generateComplexityReport(detektion)).isNull()
+
+            detektion.addData(sourceLinesKey, 0)
+            assertThat(generateComplexityReport(detektion)).isNull()
+        }
+
+        @Test
+        fun `returns null for missing cloc`() {
+            detektion.removeData(complexityKey)
+            assertThat(generateComplexityReport(detektion)).isNull()
+        }
+    }
+}
 
 private fun TestDetektion.withTestData(): TestDetektion {
     addData(complexityKey, 2)

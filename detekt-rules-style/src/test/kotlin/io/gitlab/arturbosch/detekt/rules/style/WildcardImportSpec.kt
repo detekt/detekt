@@ -5,100 +5,107 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 private const val EXCLUDED_IMPORTS = "excludeImports"
 
-class WildcardImportSpec : Spek({
+class WildcardImportSpec {
 
-    describe("WildcardImport rule") {
-
-        context("a kt file with wildcard imports") {
-            val code = """
-                import io.gitlab.arturbosch.detekt.*
-                import org.spekframework.*
-
-                class Test {
-                }
-            """
-
-            it("should not report anything when the rule is turned off") {
-                val rule = WildcardImport(TestConfig(mapOf(Config.ACTIVE_KEY to "false")))
-
-                val findings = rule.compileAndLint(code)
-                assertThat(findings).isEmpty()
-            }
-
-            it("should report all wildcard imports") {
-                val rule = WildcardImport()
-
-                val findings = rule.compileAndLint(code)
-                assertThat(findings).hasSize(2)
-            }
-
-            it("should not report excluded wildcard imports") {
-                val rule = WildcardImport(TestConfig(mapOf(EXCLUDED_IMPORTS to listOf("org.spekframework.*"))))
-
-                val findings = rule.compileAndLint(code)
-                assertThat(findings).hasSize(1)
-            }
-
-            it("should not report excluded wildcard imports when multiple are excluded") {
-                val rule = WildcardImport(
-                    TestConfig(
-                        mapOf(
-                            EXCLUDED_IMPORTS to listOf(
-                                "org.spekframework.*",
-                                "io.gitlab.arturbosch.detekt"
-                            )
-                        )
-                    )
-                )
-
-                val findings = rule.compileAndLint(code)
-                assertThat(findings).isEmpty()
-            }
-
-            it("should not report excluded wildcard imports when multiple are excluded using config string") {
-                val rule =
-                    WildcardImport(TestConfig(mapOf(EXCLUDED_IMPORTS to "org.spekframework.*, io.gitlab.arturbosch.detekt")))
-
-                val findings = rule.compileAndLint(code)
-                assertThat(findings).isEmpty()
-            }
-
-            it("ignores excludes that are not matching") {
-                val rule = WildcardImport(TestConfig(mapOf(EXCLUDED_IMPORTS to listOf("other.test.*"))))
-
-                val findings = rule.compileAndLint(code)
-                assertThat(findings).hasSize(2)
-            }
-
-            it("ignores the default values") {
-                val code2 = """
-                    import java.util.*
-                """
-
-                val findings = WildcardImport().lint(code2)
-                assertThat(findings).isEmpty()
-            }
-        }
-
-        context("a kt file with no wildcard imports") {
-            val code = """
-            package org
-
-            import org.spekframework.spek2.Spek
+    @Nested
+    inner class `a kt file with wildcard imports` {
+        val code = """
+            import io.gitlab.arturbosch.detekt.*
+            import io.mockk.*
 
             class Test {
             }
         """
 
-            it("should not report any issues") {
-                val findings = WildcardImport().compileAndLint(code)
-                assertThat(findings).isEmpty()
-            }
+        @Test
+        fun `should not report anything when the rule is turned off`() {
+            val rule = WildcardImport(TestConfig(mapOf(Config.ACTIVE_KEY to "false")))
+
+            val findings = rule.compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should report all wildcard imports`() {
+            val rule = WildcardImport()
+
+            val findings = rule.compileAndLint(code)
+            assertThat(findings).hasSize(2)
+        }
+
+        @Test
+        fun `should not report excluded wildcard imports`() {
+            val rule = WildcardImport(TestConfig(mapOf(EXCLUDED_IMPORTS to listOf("io.mockk.*"))))
+
+            val findings = rule.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should not report excluded wildcard imports when multiple are excluded`() {
+            val rule = WildcardImport(
+                TestConfig(
+                    mapOf(
+                        EXCLUDED_IMPORTS to listOf(
+                            "io.mockk.*",
+                            "io.gitlab.arturbosch.detekt"
+                        )
+                    )
+                )
+            )
+
+            val findings = rule.compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should not report excluded wildcard imports when multiple are excluded using config string`() {
+            val rule =
+                WildcardImport(TestConfig(mapOf(EXCLUDED_IMPORTS to "io.mockk.*, io.gitlab.arturbosch.detekt")))
+
+            val findings = rule.compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `ignores excludes that are not matching`() {
+            val rule = WildcardImport(TestConfig(mapOf(EXCLUDED_IMPORTS to listOf("other.test.*"))))
+
+            val findings = rule.compileAndLint(code)
+            assertThat(findings).hasSize(2)
+        }
+
+        @Test
+        fun `ignores the default values`() {
+            val code2 = """
+                import java.util.*
+            """
+
+            val findings = WildcardImport().lint(code2)
+            assertThat(findings).isEmpty()
         }
     }
-})
+
+    @Nested
+    inner class `a kt file with no wildcard imports` {
+        val code = """
+        package org
+
+        import io.mockk.mockk
+
+        class Test {
+        }
+        """
+
+        @Test
+        fun `should not report any issues`() {
+            val findings = WildcardImport().compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
+    }
+}

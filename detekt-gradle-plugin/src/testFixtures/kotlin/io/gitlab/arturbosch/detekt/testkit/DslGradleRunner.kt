@@ -28,13 +28,13 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
         |rootProject.name = "rootDir-project"
         |include(${projectLayout.submodules.joinToString(",") { "\"${it.name}\"" }})
         |
-        """.trimMargin()
+    """.trimMargin()
 
     private val baselineContent = """
         |<some>
         |   <xml/>
         |</some>
-        """.trimMargin()
+    """.trimMargin()
 
     private val configFileContent = """
         |build:
@@ -42,7 +42,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
         |style:
         |  MagicNumber:
         |    active: true
-        """.trimMargin()
+    """.trimMargin()
 
     /**
      * Each generated file is different so the artifacts are not cached in between test runs
@@ -122,7 +122,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
 
     @OptIn(ExperimentalStdlibApi::class)
     private fun buildGradleRunner(tasks: List<String>): GradleRunner {
-        val args = buildList<String> {
+        val args = buildList {
             add("--stacktrace")
             add("--info")
             add("--build-cache")

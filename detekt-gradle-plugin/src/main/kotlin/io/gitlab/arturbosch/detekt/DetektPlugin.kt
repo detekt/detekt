@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.internal.DetektAndroid
 import io.gitlab.arturbosch.detekt.internal.DetektJvm
@@ -10,7 +9,6 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
-import java.util.Properties
 
 class DetektPlugin : Plugin<Project> {
 
@@ -80,7 +78,7 @@ class DetektPlugin : Plugin<Project> {
             configuration.description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
 
             configuration.defaultDependencies { dependencySet ->
-                val version = extension.toolVersion ?: loadDetektVersion(DetektPlugin::class.java.classLoader)
+                val version = extension.toolVersion
                 dependencySet.add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
             }
         }
@@ -99,6 +97,7 @@ class DetektPlugin : Plugin<Project> {
 
         project.tasks.withType(DetektGenerateConfigTask::class.java).configureEach {
             it.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
+            it.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
         }
     }
 
@@ -119,8 +118,3 @@ class DetektPlugin : Plugin<Project> {
 
 const val CONFIGURATION_DETEKT = "detekt"
 const val CONFIGURATION_DETEKT_PLUGINS = "detektPlugins"
-
-internal fun loadDetektVersion(classLoader: ClassLoader): String = Properties().run {
-    load(classLoader.getResource("versions.properties")!!.openSafeStream())
-    getProperty("detektVersion")
-}

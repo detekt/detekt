@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.lexer.KtTokens.MINUSMINUS
 import org.jetbrains.kotlin.lexer.KtTokens.PLUSPLUS
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -53,6 +54,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  * }
  * </compliant>
  */
+@ActiveByDefault(since = "1.21.0")
 class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
@@ -78,15 +80,17 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
             report(postfixExpression)
         }
 
-        getPostfixExpressionChildren(expression.returnedExpression)
-            ?.forEach { report(it) }
+        expression.returnedExpression
+            ?.let(this::getPostfixExpressionChildren)
+            ?.forEach(this::report)
     }
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         val postfixExpression = expression.right?.asPostFixExpression()
         val leftIdentifierText = expression.left?.text
-        checkPostfixExpression(postfixExpression, leftIdentifierText)
-        getPostfixExpressionChildren(expression.right)
+        postfixExpression?.let { checkPostfixExpression(it, leftIdentifierText) }
+        expression.right
+            ?.let(this::getPostfixExpressionChildren)
             ?.forEach { checkPostfixExpression(it, leftIdentifierText) }
     }
 
@@ -94,8 +98,8 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
         (operationToken === PLUSPLUS || operationToken === MINUSMINUS)
     ) this else null
 
-    private fun checkPostfixExpression(postfixExpression: KtPostfixExpression?, leftIdentifierText: String?) {
-        if (postfixExpression != null && leftIdentifierText == postfixExpression.firstChild?.text) {
+    private fun checkPostfixExpression(postfixExpression: KtPostfixExpression, leftIdentifierText: String?) {
+        if (leftIdentifierText == postfixExpression.firstChild?.text) {
             report(postfixExpression)
         }
     }
@@ -118,7 +122,7 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
         )
     }
 
-    private fun getPostfixExpressionChildren(expression: KtExpression?) =
-        expression?.getChildrenOfType<KtPostfixExpression>()
-            ?.filter { it.operationToken === PLUSPLUS || it.operationToken === MINUSMINUS }
+    private fun getPostfixExpressionChildren(expression: KtExpression) =
+        expression.getChildrenOfType<KtPostfixExpression>()
+            .filter { it.operationToken === PLUSPLUS || it.operationToken === MINUSMINUS }
 }

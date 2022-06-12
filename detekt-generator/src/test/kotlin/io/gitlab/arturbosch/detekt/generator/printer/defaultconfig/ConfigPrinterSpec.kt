@@ -3,40 +3,50 @@ package io.gitlab.arturbosch.detekt.generator.printer.defaultconfig
 import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.generator.util.createRuleSetPage
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Test
 
-class ConfigPrinterSpec : Spek({
+class ConfigPrinterSpec {
 
-    describe("Config printer") {
-        val ruleSetPage by memoized { createRuleSetPage() }
-        val yamlString by memoized { ConfigPrinter.print(listOf(ruleSetPage)) }
+    private val ruleSetPage = createRuleSetPage()
+    private val yamlString = ConfigPrinter.print(listOf(ruleSetPage))
 
-        it("prints the rule set in the correct yaml format") {
-            val expectedRulePart = readResourceContent("RuleSetConfig.yml")
+    @Test
+    fun `prints the rule set in the correct yaml format`() {
+        val expectedRulePart = readResourceContent("RuleSetConfig.yml")
 
-            assertThat(yamlString).contains(expectedRulePart)
-        }
-        it("prints default build configuration") {
-            assertThat(yamlString).contains("build:")
-        }
-        it("prints default config configuration") {
-            assertThat(yamlString).contains("config:")
-        }
-        it("prints default processor configuration") {
-            assertThat(yamlString).contains("processors:")
-        }
-        it("prints default report configuration") {
-            assertThat(yamlString).contains("output-reports:")
-            assertThat(yamlString).contains("console-reports:")
-        }
-        it("omits deprecated ruleset properties") {
-            assertThat(yamlString).doesNotContain("deprecatedSimpleConfig")
-            assertThat(yamlString).doesNotContain("deprecatedListConfig")
-        }
-        it("omits deprecated rule properties") {
-            assertThat(yamlString).doesNotContain("conf2")
-            assertThat(yamlString).doesNotContain("conf4")
-        }
+        assertThat(yamlString).contains(expectedRulePart)
     }
-})
+
+    @Test
+    fun `prints default build configuration`() {
+        assertThat(yamlString).contains("build:")
+    }
+
+    @Test
+    fun `prints default config configuration`() {
+        assertThat(yamlString).contains("config:")
+    }
+
+    @Test
+    fun `prints default processor configuration`() {
+        assertThat(yamlString).contains("processors:")
+    }
+
+    @Test
+    fun `prints default report configuration`() {
+        assertThat(yamlString).contains("output-reports:")
+        assertThat(yamlString).contains("console-reports:")
+    }
+
+    @Test
+    fun `omits deprecated ruleset properties`() {
+        assertThat(yamlString).doesNotContain("deprecatedSimpleConfig")
+        assertThat(yamlString).doesNotContain("deprecatedListConfig")
+    }
+
+    @Test
+    fun `omits deprecated rule properties`() {
+        assertThat(yamlString).doesNotContain("conf2")
+        assertThat(yamlString).doesNotContain("conf4")
+    }
+}

@@ -16,33 +16,30 @@ import io.gitlab.arturbosch.detekt.rules.naming.NamingProvider
 import io.gitlab.arturbosch.detekt.rules.performance.PerformanceProvider
 import io.gitlab.arturbosch.detekt.rules.style.StyleGuideProvider
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 import org.reflections.Reflections
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
 import java.lang.reflect.Modifier
 
-class RuleProviderSpec : Spek({
+class RuleProviderSpec {
 
-    describe("Rule Provider") {
-
-        it("checks whether all rules are called in the corresponding RuleSetProvider") {
-            val reflections = Reflections("io.gitlab.arturbosch.detekt.rules")
-            val providers = reflections.getSubTypesOf(DefaultRuleSetProvider::class.java)
-            providers.forEach { providerType ->
-                val packageName = getRulesPackageNameForProvider(providerType)
-                val provider = providerType.getDeclaredConstructor().newInstance()
-                val rules = getRules(provider)
-                val classes = getClasses(packageName)
-                classes.forEach { clazz ->
-                    val rule = rules.singleOrNull { it.javaClass.simpleName == clazz.simpleName }
-                    assertThat(rule).withFailMessage(
-                        "Rule $clazz is not called in the corresponding RuleSetProvider $providerType"
-                    ).isNotNull()
-                }
+    @Test
+    fun `checks whether all rules are called in the corresponding RuleSetProvider`() {
+        val reflections = Reflections("io.gitlab.arturbosch.detekt.rules")
+        val providers = reflections.getSubTypesOf(DefaultRuleSetProvider::class.java)
+        providers.forEach { providerType ->
+            val packageName = getRulesPackageNameForProvider(providerType)
+            val provider = providerType.getDeclaredConstructor().newInstance()
+            val rules = getRules(provider)
+            val classes = getClasses(packageName)
+            classes.forEach { clazz ->
+                val rule = rules.singleOrNull { it.javaClass.simpleName == clazz.simpleName }
+                assertThat(rule).withFailMessage(
+                    "Rule $clazz is not called in the corresponding RuleSetProvider $providerType"
+                ).isNotNull()
             }
         }
     }
-})
+}
 
 private val ruleMap = mapOf<Class<*>, String>(
     CommentSmellProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.documentation",

@@ -1,90 +1,66 @@
 plugins {
-    id("java")
-    id("jacoco")
+    id("base")
+    id("jacoco-report-aggregation")
+}
+
+reporting {
+    reports {
+        create("jacocoMergedReport", JacocoCoverageReport::class) {
+            testType.set(TestSuiteType.UNIT_TEST)
+        }
+    }
 }
 
 jacoco.toolVersion = libs.versions.jacoco.get()
 
 dependencies {
-    implementation(projects.customChecks)
-    implementation(projects.detektApi)
-    implementation(projects.detektCli)
-    implementation(projects.detektCore)
-    implementation(projects.detektFormatting)
-    implementation(projects.detektGenerator)
-    implementation(projects.detektMetrics)
-    implementation(projects.detektParser)
-    implementation(projects.detektPsiUtils)
-    implementation(projects.detektReportHtml)
-    implementation(projects.detektReportSarif)
-    implementation(projects.detektReportTxt)
-    implementation(projects.detektReportXml)
-    implementation(projects.detektRules)
-    implementation(projects.detektRulesComplexity)
-    implementation(projects.detektRulesCoroutines)
-    implementation(projects.detektRulesDocumentation)
-    implementation(projects.detektRulesEmpty)
-    implementation(projects.detektRulesErrorprone)
-    implementation(projects.detektRulesExceptions)
-    implementation(projects.detektRulesNaming)
-    implementation(projects.detektRulesPerformance)
-    implementation(projects.detektRulesStyle)
-    implementation(projects.detektTooling)
-}
-
-// A resolvable configuration to collect source code
-val jacocoSourceDirs: Configuration by configurations.creating {
-    isVisible = false
-    isCanBeResolved = true
-    isCanBeConsumed = false
-    isTransitive = false
-    extendsFrom(configurations.implementation.get())
-    attributes {
-        attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage.JAVA_RUNTIME))
-        attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category.DOCUMENTATION))
-        attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named("source-folders"))
-    }
-}
-
-// A resolvable configuration to collect JaCoCo coverage data
-val jacocoExecutionData: Configuration by configurations.creating {
-    isVisible = false
-    isCanBeResolved = true
-    isCanBeConsumed = false
-    isTransitive = false
-    extendsFrom(configurations.implementation.get())
-    attributes {
-        attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage.JAVA_RUNTIME))
-        attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category.DOCUMENTATION))
-        attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named("jacoco-coverage-data"))
-    }
-}
-
-val jacocoClassDirs: Configuration by configurations.creating {
-    extendsFrom(configurations.implementation.get())
-    isVisible = false
-    isCanBeResolved = true
-    isCanBeConsumed = false
-    isTransitive = false
-    attributes {
-        attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements.CLASSES))
-    }
-}
-
-val jacocoMergedReport by tasks.registering(JacocoReport::class) {
-    description = "Merge JaCoCo reports from dependencies."
-    group = "verification"
-
-    executionData.from(jacocoExecutionData.incoming.artifacts.artifactFiles)
-    sourceDirectories.from(jacocoSourceDirs.incoming.artifacts.artifactFiles)
-    classDirectories.from(jacocoClassDirs.incoming.artifacts.artifactFiles)
-
-    reports {
-        xml.required.set(true)
-        html.required.set(true)
-    }
+    jacocoAggregation(projects.detektApi)
+    jacocoAggregation(projects.detektCli)
+    jacocoAggregation(projects.detektCore)
+    jacocoAggregation(projects.detektFormatting)
+    jacocoAggregation(projects.detektGenerator)
+    jacocoAggregation(projects.detektMetrics)
+    jacocoAggregation(projects.detektParser)
+    jacocoAggregation(projects.detektPsiUtils)
+    jacocoAggregation(projects.detektReportHtml)
+    jacocoAggregation(projects.detektReportSarif)
+    jacocoAggregation(projects.detektReportTxt)
+    jacocoAggregation(projects.detektReportXml)
+    jacocoAggregation(projects.detektRules)
+    jacocoAggregation(projects.detektRulesComplexity)
+    jacocoAggregation(projects.detektRulesCoroutines)
+    jacocoAggregation(projects.detektRulesDocumentation)
+    jacocoAggregation(projects.detektRulesEmpty)
+    jacocoAggregation(projects.detektRulesErrorprone)
+    jacocoAggregation(projects.detektRulesExceptions)
+    jacocoAggregation(projects.detektRulesNaming)
+    jacocoAggregation(projects.detektRulesPerformance)
+    jacocoAggregation(projects.detektRulesStyle)
+    jacocoAggregation(projects.detektTooling)
 }
 
 tasks.check {
-    dependsOn(jacocoMergedReport)
+    dependsOn(tasks.named("jacocoMergedReport"))
+}
+
+// The `allCodeCoverageReportClassDirectories` configuration provided by the jacoco-report-aggregation plugin actually
+// resolves JARs and not class directories as the name suggests. Because the detekt-formatting JAR bundles ktlint and
+// other dependencies in its JAR, they are incorrectly displayed on the coverage report even though they're external
+// dependencies.
+configurations.allCodeCoverageReportClassDirectories.get().attributes {
+    attributes.attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category::class, Category.LIBRARY))
+    attributes.attribute(
+        LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements::class, LibraryElements.CLASSES)
+    )
+}
+
+val customClassDirectories = configurations.allCodeCoverageReportClassDirectories.get().incoming.artifactView {
+    componentFilter {
+        it is ProjectComponentIdentifier
+    }
+    lenient(true)
+}
+
+tasks.named("jacocoMergedReport", JacocoReport::class).configure {
+    this.classDirectories.setFrom(customClassDirectories.files)
 }

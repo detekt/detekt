@@ -14,14 +14,13 @@ dependencies {
 
     testImplementation(projects.detektCore)
     testImplementation(projects.detektTestUtils)
-    testImplementation(libs.bundles.testImplementation)
-    testRuntimeOnly(libs.spek.runner)
+    testImplementation(libs.assertj)
     testImplementation(libs.reflections)
 }
 
-val documentationDir = "${rootProject.rootDir}/docs/pages/documentation"
+val documentationDir = "${rootProject.rootDir}/website/docs/rules"
 val configDir = "${rootProject.rootDir}/detekt-core/src/main/resources"
-val cliOptionsFile = "${rootProject.rootDir}/docs/pages/gettingstarted/cli-options.md"
+val cliOptionsFile = "${rootProject.rootDir}/website/docs/gettingstarted/_cli-options.md"
 val defaultConfigFile = "$configDir/default-detekt-config.yml"
 val deprecationFile = "$configDir/deprecation.properties"
 
@@ -32,7 +31,7 @@ val ruleModules = rootProject.subprojects
     .map { "${rootProject.rootDir}/$it/src/main/kotlin" }
 
 val generateDocumentation by tasks.registering(JavaExec::class) {
-    dependsOn(tasks.assemble, ":detekt-api:dokkaJekyll")
+    dependsOn(tasks.assemble, ":detekt-api:dokkaHtml")
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
     group = "documentation"
 
@@ -57,7 +56,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     mainClass.set("io.gitlab.arturbosch.detekt.generator.Main")
     args = listOf(
         "--input",
-        ruleModules.joinToString(",") + "," + "${rootProject.rootDir}/detekt-formatting/src/main/kotlin",
+        ruleModules.plus("${rootProject.rootDir}/detekt-formatting/src/main/kotlin").joinToString(","),
         "--documentation",
         documentationDir,
         "--config",
@@ -68,6 +67,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
 }
 
 val verifyGeneratorOutput by tasks.registering(Exec::class) {
+    notCompatibleWithConfigurationCache("cannot serialize object of type java.io.ByteArrayOutputStream")
     dependsOn(generateDocumentation)
     description = "Verifies that the default-detekt-config.yml is up-to-date"
     val configDiff = ByteArrayOutputStream()

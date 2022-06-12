@@ -4,48 +4,34 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ParameterListWrapping
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-class ParameterListWrappingSpec : Spek({
+class ParameterListWrappingSpec {
 
-    val subject by memoized { ParameterListWrapping(Config.empty) }
+    private lateinit var subject: ParameterListWrapping
 
-    describe("ParameterListWrapping rule") {
-
-        describe("indent size equals 1") {
-
-            val code = """
-                fun f(
-                 a: Int
-                ) {}
-            """.trimIndent()
-
-            it("reports wrong indent size") {
-                assertThat(subject.lint(code)).hasSize(1)
-            }
-
-            it("does not report when using an indentation level config of 1") {
-                val config = TestConfig("indentSize" to "1")
-                assertThat(ParameterListWrapping(config).lint(code)).isEmpty()
-            }
-        }
-
-        it("does not report correct ParameterListWrapping level") {
-            val code = """
-                fun f(
-                    a: Int
-                ) {}
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        it("reports when max line length is exceeded") {
-            val code = """
-                fun f(a: Int, b: Int, c: Int) {}
-            """.trimIndent()
-            val config = TestConfig("maxLineLength" to "10")
-            assertThat(ParameterListWrapping(config).lint(code)).hasSize(4)
-        }
+    @BeforeEach
+    fun createSubject() {
+        subject = ParameterListWrapping(Config.empty)
     }
-})
+
+    @Test
+    fun `does not report correct ParameterListWrapping level`() {
+        val code = """
+            fun f(
+                a: Int
+            ) {}
+        """.trimIndent()
+        assertThat(subject.lint(code)).isEmpty()
+    }
+
+    @Test
+    fun `reports when max line length is exceeded`() {
+        val code = """
+            fun f(a: Int, b: Int, c: Int) {}
+        """.trimIndent()
+        val config = TestConfig("maxLineLength" to "10")
+        assertThat(ParameterListWrapping(config).lint(code)).hasSize(4)
+    }
+}

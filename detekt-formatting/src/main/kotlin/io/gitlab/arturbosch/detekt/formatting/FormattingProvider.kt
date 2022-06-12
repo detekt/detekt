@@ -10,10 +10,10 @@ import io.gitlab.arturbosch.detekt.api.internal.ruleSetConfig
 /**
  * This rule set provides wrappers for rules implemented by ktlint - https://ktlint.github.io/.
  *
- * Note: Issues reported by this rule set can only be suppressed on file level (@file:Suppress("detekt.rule").
+ * Note: Issues reported by this rule set can only be suppressed on file level (`@file:Suppress("detekt.rule")`).
  * Note: The formatting rule set is not included in the detekt-cli or gradle plugin.
  *
- * To enable this rule set, add <i>detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$version"</i>
+ * To enable this rule set, add `detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$version"`
  * to your gradle dependencies or reference the `detekt-formatting`-jar with the `--plugins` option
  * in the command line interface.
  */

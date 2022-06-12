@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.psi.KtDestructuringDeclaration
 
@@ -20,17 +21,18 @@ import org.jetbrains.kotlin.psi.KtDestructuringDeclaration
  * data class TooManyElements(val a: Int, val b: Int, val c: Int, val d: Int)
  * val (a, b, c, d) = TooManyElements(1, 2, 3, 4)
  * </noncompliant>
+ *
  * <compliant>
  * data class FewerElements(val a: Int, val b: Int, val c: Int)
  * val (a, b, c) = TooManyElements(1, 2, 3)
  * </compliant>
  */
+@ActiveByDefault(since = "1.21.0")
 class DestructuringDeclarationWithTooManyEntries(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "The destructuring declaration contains too many entries, making it difficult to read. Consider refactoring " +
-            "to avoid using a destructuring declaration for this case.",
+        "Too many entries in a destructuring declaration make the code hard to understand.",
         Debt.TEN_MINS
     )
 
@@ -39,7 +41,9 @@ class DestructuringDeclarationWithTooManyEntries(config: Config = Config.empty) 
 
     override fun visitDestructuringDeclaration(destructuringDeclaration: KtDestructuringDeclaration) {
         if (destructuringDeclaration.entries.size > maxDestructuringEntries) {
-            report(CodeSmell(issue, Entity.from(destructuringDeclaration), issue.description))
+            val message = "The destructuring declaration contains ${destructuringDeclaration.entries.size} but only " +
+                "$maxDestructuringEntries are allowed."
+            report(CodeSmell(issue, Entity.from(destructuringDeclaration), message))
         }
         super.visitDestructuringDeclaration(destructuringDeclaration)
     }

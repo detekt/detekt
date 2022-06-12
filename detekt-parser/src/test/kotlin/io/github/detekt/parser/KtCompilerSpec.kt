@@ -1,5 +1,6 @@
 package io.github.detekt.parser
 
+import io.github.davidburstrom.contester.ConTesterDriver
 import io.github.detekt.psi.BASE_PATH
 import io.github.detekt.psi.LINE_SEPARATOR
 import io.github.detekt.psi.RELATIVE_PATH
@@ -8,18 +9,33 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.jetbrains.kotlin.com.intellij.psi.PsiErrorElement
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.lifecycle.CachingMode
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class KtCompilerSpec : Spek({
+class KtCompilerSpec {
+    @AfterEach
+    internal fun tearDown() {
+        ConTesterDriver.cleanUp()
+    }
 
-    describe("Kotlin Compiler") {
+    @Test
+    fun `parallel construction of KtCompilers should be thread safe`() {
+        val thread1 = ConTesterDriver.thread { KtCompiler() }
+        val thread2 = ConTesterDriver.thread { KtCompiler() }
+        ConTesterDriver.runToBreakpoint(thread1, "DetektPomModel.registerExtensionPoint")
+        ConTesterDriver.runUntilBlockedOrTerminated(thread2)
+        ConTesterDriver.join(thread1)
+    }
+
+    @Nested
+    inner class `Kotlin Compiler` {
 
         val path = resourceAsPath("/cases")
-        val ktCompiler by memoized(CachingMode.SCOPE) { KtCompiler() }
+        private val ktCompiler = KtCompiler()
 
-        it("Kotlin file with LF line separators has extra user data") {
+        @Test
+        fun `Kotlin file with LF line separators has extra user data`() {
             val ktFile = ktCompiler.compile(path, path.resolve("DefaultLf.kt"))
 
             assertThat(ktFile.getUserData(LINE_SEPARATOR)).isEqualTo("\n")
@@ -29,7 +45,8 @@ class KtCompilerSpec : Spek({
                 .endsWith("cases")
         }
 
-        it("Kotlin file with CRLF line separators has extra user data") {
+        @Test
+        fun `Kotlin file with CRLF line separators has extra user data`() {
             val ktFile = ktCompiler.compile(path, path.resolve("DefaultCrLf.kt"))
 
             assertThat(ktFile.getUserData(LINE_SEPARATOR)).isEqualTo("\r\n")
@@ -39,7 +56,8 @@ class KtCompilerSpec : Spek({
                 .endsWith("cases")
         }
 
-        it("Kotlin file with LF line separators does not store extra data for relative path if not provided") {
+        @Test
+        fun `Kotlin file with LF line separators does not store extra data for relative path if not provided`() {
             val ktFile = ktCompiler.compile(null, path.resolve("DefaultLf.kt"))
 
             assertThat(ktFile.getUserData(LINE_SEPARATOR)).isEqualTo("\n")
@@ -47,7 +65,8 @@ class KtCompilerSpec : Spek({
             assertThat(ktFile.getUserData(BASE_PATH)).isNull()
         }
 
-        it("Kotlin file with CRLF line separators does not store extra data for relative path if not provided") {
+        @Test
+        fun `Kotlin file with CRLF line separators does not store extra data for relative path if not provided`() {
             val ktFile = ktCompiler.compile(null, path.resolve("DefaultCrLf.kt"))
 
             assertThat(ktFile.getUserData(LINE_SEPARATOR)).isEqualTo("\r\n")
@@ -55,14 +74,16 @@ class KtCompilerSpec : Spek({
             assertThat(ktFile.getUserData(BASE_PATH)).isNull()
         }
 
-        it("throws an exception for an invalid sub path") {
+        @Test
+        fun `throws an exception for an invalid sub path`() {
             assertThatIllegalArgumentException()
                 .isThrownBy { ktCompiler.compile(path, path) }
                 .withMessageStartingWith("Given sub path (")
                 .withMessageEndingWith(") should be a regular file!")
         }
 
-        it("parses with errors for non kotlin files") {
+        @Test
+        fun `parses with errors for non kotlin files`() {
             val cssPath = resourceAsPath("css")
             val ktFile = ktCompiler.compile(cssPath, cssPath.resolve("test.css"))
 
@@ -77,17 +98,21 @@ class KtCompilerSpec : Spek({
         }
     }
 
-    describe("line ending detection") {
-        it("detects CRLF line endings") {
+    @Nested
+    inner class `line ending detection` {
+        @Test
+        fun `detects CRLF line endings`() {
             assertThat("1\r\n2".determineLineSeparator()).isEqualTo("\r\n")
         }
 
-        it("detects LF line endings") {
+        @Test
+        fun `detects LF line endings`() {
             assertThat("1\n2".determineLineSeparator()).isEqualTo("\n")
         }
 
-        it("detects CR line endings") {
+        @Test
+        fun `detects CR line endings`() {
             assertThat("1\r2".determineLineSeparator()).isEqualTo("\r")
         }
     }
-})
+}

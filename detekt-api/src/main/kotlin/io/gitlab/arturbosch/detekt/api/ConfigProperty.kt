@@ -111,14 +111,8 @@ fun <T : Any, U : Any> configWithAndroidVariants(
 private fun <T : Any> getValueOrDefault(configAware: ConfigAware, propertyName: String, defaultValue: T): T {
     @Suppress("UNCHECKED_CAST")
     return when (defaultValue) {
-        is List<*> -> {
-            if (defaultValue.all { it is String }) {
-                val defaultValueAsListOfStrings = defaultValue as List<String>
-                configAware.valueOrDefaultCommaSeparated(propertyName, defaultValueAsListOfStrings) as T
-            } else {
-                error("Only lists of strings are supported. '$propertyName' is invalid. ")
-            }
-        }
+        is ValuesWithReason -> configAware.getValuesWithReasonOrDefault(propertyName, defaultValue) as T
+        is List<*> -> configAware.getListOrDefault(propertyName, defaultValue) as T
         is String,
         is Boolean,
         is Int -> configAware.valueOrDefault(propertyName, defaultValue)
@@ -127,6 +121,45 @@ private fun <T : Any> getValueOrDefault(configAware: ConfigAware, propertyName: 
                 "Use one of String, Boolean, Int or List<String> instead."
         )
     }
+}
+
+private fun ConfigAware.getListOrDefault(propertyName: String, defaultValue: List<*>): List<String> {
+    return if (defaultValue.all { it is String }) {
+        @Suppress("UNCHECKED_CAST")
+        val defaultValueAsListOfStrings = defaultValue as List<String>
+        valueOrDefaultCommaSeparated(propertyName, defaultValueAsListOfStrings)
+    } else {
+        error("Only lists of strings are supported. '$propertyName' is invalid. ")
+    }
+}
+
+private fun ConfigAware.getValuesWithReasonOrDefault(
+    propertyName: String,
+    defaultValue: ValuesWithReason
+): ValuesWithReason {
+    val valuesAsList: List<*> = valueOrNull(propertyName) ?: return defaultValue
+    if (valuesAsList.all { it is String }) {
+        return ValuesWithReason(values = valuesAsList.map { ValueWithReason(it as String) })
+    }
+    if (valuesAsList.all { it is Map<*, *> }) {
+        return ValuesWithReason(
+            valuesAsList
+                .map { it as Map<*, *> }
+                .map { dict ->
+                    try {
+                        ValueWithReason(
+                            value = dict["value"] as String,
+                            reason = dict["reason"] as String?
+                        )
+                    } catch (e: ClassCastException) {
+                        throw Config.InvalidConfigurationError(e)
+                    } catch (@Suppress("TooGenericExceptionCaught") e: NullPointerException) {
+                        throw Config.InvalidConfigurationError(e)
+                    }
+                }
+        )
+    }
+    error("Only lists of strings or maps with keys 'value' and 'reason' are supported. '$propertyName' is invalid.")
 }
 
 private abstract class MemoizedConfigProperty<U : Any> : ReadOnlyProperty<ConfigAware, U> {

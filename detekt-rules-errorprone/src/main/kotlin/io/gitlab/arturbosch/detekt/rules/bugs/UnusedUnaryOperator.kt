@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
@@ -20,7 +21,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getTopmostParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.leaves
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
 /**
  * This rule detects unused unary operators.
@@ -38,6 +39,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
  *
  */
 @RequiresTypeResolution
+@ActiveByDefault(since = "1.21.0")
 class UnusedUnaryOperator(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,

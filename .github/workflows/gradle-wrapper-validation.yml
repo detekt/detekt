@@ -7,12 +7,15 @@ on:
     branches:
       - '**'
 
+permissions:
+  contents: read
+
 jobs:
   validation:
     name: Validation
     runs-on: ubuntu-latest
     steps:
       - name: Checkout latest code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1

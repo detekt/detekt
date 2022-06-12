@@ -22,53 +22,50 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtAnnotation
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Test
 
-class TopLevelAutoCorrectSpec : Spek({
+class TopLevelAutoCorrectSpec {
 
-    describe("autoCorrect: false on top level") {
-
-        it("should format the test file but not print the modified content to disc") {
-            val fileContentBeforeAutoCorrect = readResourceContent("cases/Test.kt")
-            val fileUnderTest = resourceAsPath("cases/Test.kt")
-            val spec = ProcessingSpec {
-                project {
-                    inputPaths = listOf(fileUnderTest)
-                }
-                config {
-                    resources = listOf(resourceUrl("configs/rule-and-ruleset-autocorrect-true.yaml"))
-                }
-                rules {
-                    autoCorrect = false // fixture
-                }
-                logging {
-                    outputChannel = NullPrintStream()
-                    errorChannel = NullPrintStream()
-                }
+    @Test
+    fun `should format the test file but not print the modified content to disc`() {
+        val fileContentBeforeAutoCorrect = readResourceContent("cases/Test.kt")
+        val fileUnderTest = resourceAsPath("cases/Test.kt")
+        val spec = ProcessingSpec {
+            project {
+                inputPaths = listOf(fileUnderTest)
             }
-
-            val contentChangedListener = object : FileProcessListener {
-                override fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
-                    assertThat(files).hasSize(1)
-                    assertThat(files[0].text).isNotEqualToIgnoringWhitespace(fileContentBeforeAutoCorrect)
-                }
+            config {
+                resources = listOf(resourceUrl("configs/rule-and-ruleset-autocorrect-true.yaml"))
             }
-
-            AnalysisFacade(spec).runAnalysis {
-                DefaultLifecycle(
-                    mockk(),
-                    it,
-                    inputPathsToKtFiles,
-                    processorsProvider = { listOf(contentChangedListener) },
-                    ruleSetsProvider = { listOf(TopLevelAutoCorrectProvider()) }
-                )
+            rules {
+                autoCorrect = false // fixture
             }
-
-            assertThat(readResourceContent("cases/Test.kt")).isEqualTo(fileContentBeforeAutoCorrect)
+            logging {
+                outputChannel = NullPrintStream()
+                errorChannel = NullPrintStream()
+            }
         }
+
+        val contentChangedListener = object : FileProcessListener {
+            override fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
+                assertThat(files).hasSize(1)
+                assertThat(files[0].text).isNotEqualToIgnoringWhitespace(fileContentBeforeAutoCorrect)
+            }
+        }
+
+        AnalysisFacade(spec).runAnalysis {
+            DefaultLifecycle(
+                mockk(),
+                it,
+                inputPathsToKtFiles,
+                processorsProvider = { listOf(contentChangedListener) },
+                ruleSetsProvider = { listOf(TopLevelAutoCorrectProvider()) }
+            )
+        }
+
+        assertThat(readResourceContent("cases/Test.kt")).isEqualTo(fileContentBeforeAutoCorrect)
     }
-})
+}
 
 private class DeleteAnnotationsRule : Rule() {
     override val issue = Issue("test-rule", Severity.CodeSmell, "", Debt.FIVE_MINS)

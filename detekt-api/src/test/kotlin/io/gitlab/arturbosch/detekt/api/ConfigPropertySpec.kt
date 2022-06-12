@@ -3,351 +3,524 @@ package io.gitlab.arturbosch.detekt.api
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.assertj.core.api.Assertions.tuple
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.util.concurrent.atomic.AtomicInteger
 
-class ConfigPropertySpec : Spek({
+class ConfigPropertySpec {
 
-    describe("Config property delegate") {
-        context("simple property") {
-            context("String property") {
-                val configValue = "value"
-                val defaultValue = "default"
-                val subject by memoized {
-                    object : TestConfigAware("present" to configValue) {
-                        val present: String by config(defaultValue)
-                        val notPresent: String by config(defaultValue)
-                    }
+    @Nested
+    inner class `simple property` {
+        @Nested
+        inner class `String property` {
+            private val configValue = "value"
+            private val defaultValue = "default"
+            private val subject = object : TestConfigAware("present" to configValue) {
+                val present: String by config(defaultValue)
+                val notPresent: String by config(defaultValue)
+            }
+
+            @Test
+            fun `uses the value provided in config if present`() {
+                assertThat(subject.present).isEqualTo(configValue)
+            }
+
+            @Test
+            fun `uses the default value if not present`() {
+                assertThat(subject.notPresent).isEqualTo(defaultValue)
+            }
+        }
+
+        @Nested
+        inner class `Int property` {
+            private val configValue = 99
+            private val defaultValue = -1
+
+            @Nested
+            inner class `defined as number` {
+                private val subject = object : TestConfigAware("present" to configValue) {
+                    val present: Int by config(defaultValue)
+                    val notPresent: Int by config(defaultValue)
                 }
-                it("uses the value provided in config if present") {
+
+                @Test
+                fun `uses the value provided in config if present`() {
                     assertThat(subject.present).isEqualTo(configValue)
                 }
-                it("uses the default value if not present") {
+
+                @Test
+                fun `uses the default value if not present`() {
                     assertThat(subject.notPresent).isEqualTo(defaultValue)
                 }
             }
-            context("Int property") {
-                val configValue = 99
-                val defaultValue = -1
 
-                context("defined as number") {
-                    val subject by memoized {
-                        object : TestConfigAware("present" to configValue) {
-                            val present: Int by config(defaultValue)
-                            val notPresent: Int by config(defaultValue)
-                        }
-                    }
-                    it("uses the value provided in config if present") {
-                        assertThat(subject.present).isEqualTo(configValue)
-                    }
-                    it("uses the default value if not present") {
-                        assertThat(subject.notPresent).isEqualTo(defaultValue)
-                    }
+            @Nested
+            inner class `defined as string` {
+                private val subject = object : TestConfigAware("present" to "$configValue") {
+                    val present: Int by config(defaultValue)
                 }
-                context("defined as string") {
-                    val subject by memoized {
-                        object : TestConfigAware("present" to "$configValue") {
-                            val present: Int by config(defaultValue)
-                        }
-                    }
-                    it("uses the value provided in config if present") {
-                        assertThat(subject.present).isEqualTo(configValue)
-                    }
-                }
-            }
-            context("Boolean property") {
-                val configValue by memoized { false }
-                val defaultValue by memoized { true }
 
-                context("defined as Boolean") {
-                    val subject by memoized {
-                        object : TestConfigAware("present" to configValue) {
-                            val present: Boolean by config(defaultValue)
-                            val notPresent: Boolean by config(defaultValue)
-                        }
-                    }
-                    it("uses the value provided in config if present") {
-                        assertThat(subject.present).isEqualTo(configValue)
-                    }
-                    it("uses the default value if not present") {
-                        assertThat(subject.notPresent).isEqualTo(defaultValue)
-                    }
-                }
-                context("defined as string") {
-                    val subject by memoized {
-                        object : TestConfigAware("present" to "$configValue") {
-                            val present: Boolean by config(defaultValue)
-                        }
-                    }
-                    it("uses the value provided in config if present") {
-                        assertThat(subject.present).isEqualTo(configValue)
-                    }
-                }
-            }
-            context("List property") {
-                val defaultValue by memoized { listOf("x") }
-                context("defined as list") {
-                    val subject by memoized {
-                        object : TestConfigAware("present" to "a,b,c") {
-                            val present: List<String> by config(defaultValue)
-                            val notPresent: List<String> by config(defaultValue)
-                        }
-                    }
-                    it("uses the value provided in config if present") {
-                        assertThat(subject.present).isEqualTo(listOf("a", "b", "c"))
-                    }
-                    it("uses the default value if not present") {
-                        assertThat(subject.notPresent).isEqualTo(defaultValue)
-                    }
-                }
-                context("defined as comma separated string") {
-                    val subject by memoized {
-                        object : TestConfigAware("present" to "a,b,c") {
-                            val present: List<String> by config(defaultValue)
-                            val notPresent: List<String> by config(defaultValue)
-                        }
-                    }
-                    it("uses the value provided in config if present") {
-                        assertThat(subject.present).isEqualTo(listOf("a", "b", "c"))
-                    }
-                    it("uses the default value if not present") {
-                        assertThat(subject.notPresent).isEqualTo(defaultValue)
-                    }
-                }
-            }
-        }
-        context("invalid type") {
-            context("Long") {
-                val defaultValue by memoized { 1L }
-                val subject by memoized {
-                    object : TestConfigAware() {
-                        val prop: Long by config(defaultValue)
-                    }
-                }
-                it("throws") {
-                    assertThatThrownBy { subject.prop }
-                        .isInstanceOf(IllegalStateException::class.java)
-                        .hasMessageContaining("is not supported")
-                }
-            }
-            context("Regex") {
-                val defaultValue by memoized { Regex("a") }
-                val subject by memoized {
-                    object : TestConfigAware() {
-                        val prop: Regex by config(defaultValue)
-                    }
-                }
-                it("throws") {
-                    assertThatThrownBy { subject.prop }
-                        .isInstanceOf(IllegalStateException::class.java)
-                        .hasMessageContaining("is not supported")
-                }
-            }
-            context("Set") {
-                val defaultValue by memoized { setOf("a") }
-                val subject by memoized {
-                    object : TestConfigAware() {
-                        val prop: Set<String> by config(defaultValue)
-                    }
-                }
-                it("throws") {
-                    assertThatThrownBy { subject.prop }
-                        .isInstanceOf(IllegalStateException::class.java)
-                        .hasMessageContaining("is not supported")
-                }
-            }
-            context("List of Int") {
-                val defaultValue by memoized { listOf(1) }
-                val subject by memoized {
-                    object : TestConfigAware() {
-                        val prop: List<Int> by config(defaultValue)
-                    }
-                }
-                it("throws") {
-                    assertThatThrownBy { subject.prop }
-                        .isInstanceOf(IllegalStateException::class.java)
-                        .hasMessageContaining("lists of strings are supported")
-                }
-            }
-        }
-
-        context("transform") {
-            context("primitive") {
-                context("String property is transformed to regex") {
-                    val defaultValue = ".*"
-                    val configValue = "[a-z]+"
-                    val subject by memoized {
-                        object : TestConfigAware("present" to configValue) {
-                            val present: Regex by config(defaultValue) { it.toRegex() }
-                            val notPresent: Regex by config(defaultValue) { it.toRegex() }
-                        }
-                    }
-                    it("applies the mapping function to the configured value") {
-                        assertThat(subject.present.matches("abc")).isTrue
-                        assertThat(subject.present.matches("123")).isFalse()
-                    }
-                    it("applies the mapping function to the default") {
-                        assertThat(subject.notPresent.matches("abc")).isTrue
-                        assertThat(subject.notPresent.matches("123")).isTrue
-                    }
-                }
-                context("Int property is transformed to String") {
-                    val configValue = 99
-                    val defaultValue = -1
-                    val subject by memoized {
-                        object : TestConfigAware("present" to configValue) {
-                            val present: String by config(defaultValue) { it.toString() }
-                            val notPresent: String by config(defaultValue) { it.toString() }
-                        }
-                    }
-                    it("applies the mapping function to the configured value") {
-                        assertThat(subject.present).isEqualTo("$configValue")
-                    }
-                    it("applies the mapping function to the default") {
-                        assertThat(subject.notPresent).isEqualTo("$defaultValue")
-                    }
-                }
-                context("Boolean property is transformed to String") {
-                    val configValue by memoized { true }
-                    val defaultValue by memoized { false }
-                    val subject by memoized {
-                        object : TestConfigAware("present" to configValue) {
-                            val present: String by config(defaultValue) { it.toString() }
-                            val notPresent: String by config(defaultValue) { it.toString() }
-                        }
-                    }
-                    it("applies the mapping function to the configured value") {
-                        assertThat(subject.present).isEqualTo("$configValue")
-                    }
-                    it("applies the mapping function to the default") {
-                        assertThat(subject.notPresent).isEqualTo("$defaultValue")
-                    }
-                }
-                context("Boolean property is transformed to String with function reference") {
-                    val defaultValue by memoized { false }
-                    val subject by memoized {
-                        object : TestConfigAware() {
-                            val prop1: String by config(defaultValue, Boolean::toString)
-                            val prop2: String by config(transformer = Boolean::toString, defaultValue = defaultValue)
-                        }
-                    }
-                    it("transforms properties") {
-                        assertThat(subject.prop1).isEqualTo("$defaultValue")
-                        assertThat(subject.prop2).isEqualTo("$defaultValue")
-                    }
-                }
-            }
-            context("list of strings") {
-                val defaultValue by memoized { listOf("99") }
-                val subject by memoized {
-                    object : TestConfigAware("present" to "1,2,3") {
-                        val present: Int by config(defaultValue) { it.sumOf(String::toInt) }
-                        val notPresent: Int by config(defaultValue) { it.sumOf(String::toInt) }
-                    }
-                }
-                it("applies transformer to list configured") {
-                    assertThat(subject.present).isEqualTo(6)
-                }
-                it("applies transformer to default list") {
-                    assertThat(subject.notPresent).isEqualTo(99)
-                }
-            }
-            context("empty list of strings") {
-                val subject by memoized {
-                    object : TestConfigAware() {
-                        val defaultValue: List<String> = emptyList()
-                        val prop1: List<Int> by config(defaultValue) { it.map(String::toInt) }
-                        val prop2: List<Int> by config(emptyList<String>()) { it.map(String::toInt) }
-                    }
-                }
-                it("can be defined as variable") {
-                    assertThat(subject.prop1).isEmpty()
-                }
-                it("can be defined using listOf<String>()") {
-                    assertThat(subject.prop2).isEmpty()
-                }
-            }
-            context("memoization") {
-                val subject by memoized {
-                    object : TestConfigAware() {
-                        val counter = AtomicInteger(0)
-                        val prop: String by config(1) {
-                            counter.getAndIncrement()
-                            it.toString()
-                        }
-
-                        fun useProperty(): String {
-                            return "something with $prop"
-                        }
-                    }
-                }
-                it("transformer is called only once") {
-                    repeat(5) {
-                        assertThat(subject.useProperty()).isEqualTo("something with 1")
-                    }
-                    assertThat(subject.counter.get()).isEqualTo(1)
-                }
-            }
-        }
-        @OptIn(UnstableApi::class)
-        context("configWithFallback") {
-            context("primitive") {
-                val configValue = 99
-                val defaultValue = 0
-                val fallbackValue = -1
-                val subject by memoized {
-                    object : TestConfigAware("present" to "$configValue", "fallback" to fallbackValue) {
-                        private val fallback: Int by config(42)
-                        private val missing: Int by config(42)
-                        val present: Int by configWithFallback(::fallback, defaultValue)
-                        val notPresentWithFallback: Int by configWithFallback(::fallback, defaultValue)
-                        val notPresentFallbackMissing: Int by configWithFallback(::missing, defaultValue)
-                    }
-                }
-                it("uses the value provided in config if present") {
+                @Test
+                fun `uses the value provided in config if present`() {
                     assertThat(subject.present).isEqualTo(configValue)
                 }
-                it("uses the value from fallback property if value is missing and fallback exists") {
-                    assertThat(subject.notPresentWithFallback).isEqualTo(fallbackValue)
-                }
-                it("uses the default value if not present") {
-                    assertThat(subject.notPresentFallbackMissing).isEqualTo(defaultValue)
-                }
             }
-            context("with transformation") {
-                val configValue = 99
-                val defaultValue = 0
-                val fallbackValue = -1
-                val fallbackOffset = 10
-                val subject by memoized {
-                    object : TestConfigAware("present" to configValue, "fallback" to fallbackValue) {
-                        private val fallback: String by config(42) { (it + fallbackOffset).toString() }
-                        private val missing: String by config(42) { (it + fallbackOffset).toString() }
-                        val present: String by configWithFallback(::fallback, defaultValue) { v ->
-                            v.toString()
-                        }
-                        val notPresentWithFallback: String by configWithFallback(::fallback, defaultValue) { v ->
-                            v.toString()
-                        }
-                        val notPresentFallbackMissing: String by configWithFallback(::missing, defaultValue) { v ->
-                            v.toString()
-                        }
+
+            @Nested
+            inner class `ValuesWithReason property` {
+                private val defaultValue = valuesWithReason("aValue" to "aReason")
+
+                @Nested
+                inner class `value defined as list` {
+                    private val subject = object : TestConfigAware("present" to listOf("a", "b", "c")) {
+                        val present: ValuesWithReason by config(defaultValue)
+                        val notPresent: ValuesWithReason by config(defaultValue)
+                    }
+
+                    @Test
+                    fun `uses the value provided in config if present`() {
+                        assertThat(subject.present)
+                            .extracting(ValueWithReason::value, ValueWithReason::reason)
+                            .containsExactly(tuple("a", null), tuple("b", null), tuple("c", null))
+                    }
+
+                    @Test
+                    fun `uses the default value if not present`() {
+                        assertThat(subject.notPresent).isEqualTo(defaultValue)
                     }
                 }
-                it("uses the value provided in config if present") {
-                    assertThat(subject.present).isEqualTo("$configValue")
+
+                @Nested
+                inner class `value defined as list of maps` {
+                    private val subject = object : TestConfigAware(
+                        "present" to listOf(
+                            mapOf("value" to "a", "reason" to "reasonA"),
+                            mapOf("value" to "b", "reason" to null),
+                            mapOf("value" to "c"),
+                        )
+                    ) {
+                        val present: ValuesWithReason by config(defaultValue)
+                        val notPresent: ValuesWithReason by config(defaultValue)
+                    }
+
+                    @Test
+                    fun `uses the value provided in config if present`() {
+                        assertThat(subject.present)
+                            .extracting(ValueWithReason::value, ValueWithReason::reason)
+                            .containsExactly(
+                                tuple("a", "reasonA"),
+                                tuple("b", null),
+                                tuple("c", null)
+                            )
+                    }
+
+                    @Test
+                    fun `uses the default value if not present`() {
+                        assertThat(subject.notPresent).isEqualTo(defaultValue)
+                    }
                 }
-                it("transforms the value from fallback property if value is missing and fallback exists") {
-                    assertThat(subject.notPresentWithFallback).isEqualTo("${fallbackValue + fallbackOffset}")
+
+                @Nested
+                inner class `value defined as list of maps with invalid data` {
+
+                    @Test
+                    fun `value missing`() {
+                        assertThatThrownBy {
+                            object : TestConfigAware(
+                                "present" to listOf(
+                                    mapOf("reason" to "reason")
+                                )
+                            ) {
+                                val present: ValuesWithReason by config(defaultValue)
+                            }.present
+                        }.isInstanceOf(Config.InvalidConfigurationError::class.java)
+                    }
+
+                    @Test
+                    fun `value with an invalid type`() {
+                        assertThatThrownBy {
+                            object : TestConfigAware(
+                                "present" to listOf(
+                                    mapOf("value" to 42, "reason" to "reason")
+                                )
+                            ) {
+                                val present: ValuesWithReason by config(defaultValue)
+                            }.present
+                        }.isInstanceOf(Config.InvalidConfigurationError::class.java)
+                    }
+
+                    @Test
+                    fun `reason with an invalid type`() {
+                        assertThatThrownBy {
+                            object : TestConfigAware(
+                                "present" to listOf(
+                                    mapOf("value" to "a", "reason" to 42)
+                                )
+                            ) {
+                                val present: ValuesWithReason by config(defaultValue)
+                            }.present
+                        }.isInstanceOf(Config.InvalidConfigurationError::class.java)
+                    }
                 }
-                it("uses the default value if not present") {
-                    assertThat(subject.notPresentFallbackMissing).isEqualTo("$defaultValue")
+            }
+        }
+
+        @Nested
+        inner class `Boolean property` {
+            private val configValue = false
+            private val defaultValue = true
+
+            @Nested
+            inner class `defined as Boolean` {
+                private val subject = object : TestConfigAware("present" to configValue) {
+                    val present: Boolean by config(defaultValue)
+                    val notPresent: Boolean by config(defaultValue)
+                }
+
+                @Test
+                fun `uses the value provided in config if present`() {
+                    assertThat(subject.present).isEqualTo(configValue)
+                }
+
+                @Test
+                fun `uses the default value if not present`() {
+                    assertThat(subject.notPresent).isEqualTo(defaultValue)
+                }
+            }
+
+            @Nested
+            inner class `defined as string` {
+                private val subject = object : TestConfigAware("present" to "$configValue") {
+                    val present: Boolean by config(defaultValue)
+                }
+
+                @Test
+                fun `uses the value provided in config if present`() {
+                    assertThat(subject.present).isEqualTo(configValue)
+                }
+            }
+        }
+
+        @Nested
+        inner class `List property` {
+            private val defaultValue = listOf("x")
+
+            @Nested
+            inner class `defined as list` {
+                private val subject = object : TestConfigAware("present" to "a,b,c") {
+                    val present: List<String> by config(defaultValue)
+                    val notPresent: List<String> by config(defaultValue)
+                }
+
+                @Test
+                fun `uses the value provided in config if present`() {
+                    assertThat(subject.present).isEqualTo(listOf("a", "b", "c"))
+                }
+
+                @Test
+                fun `uses the default value if not present`() {
+                    assertThat(subject.notPresent).isEqualTo(defaultValue)
+                }
+            }
+
+            @Nested
+            inner class `defined as comma separated string` {
+                private val subject = object : TestConfigAware("present" to "a,b,c") {
+                    val present: List<String> by config(defaultValue)
+                    val notPresent: List<String> by config(defaultValue)
+                }
+
+                @Test
+                fun `uses the value provided in config if present`() {
+                    assertThat(subject.present).isEqualTo(listOf("a", "b", "c"))
+                }
+
+                @Test
+                fun `uses the default value if not present`() {
+                    assertThat(subject.notPresent).isEqualTo(defaultValue)
                 }
             }
         }
     }
-})
+
+    @Nested
+    inner class `invalid type` {
+        @Nested
+        inner class `Long property` {
+            private val defaultValue = 1L
+            private val subject = object : TestConfigAware() {
+                val prop: Long by config(defaultValue)
+            }
+
+            @Test
+            fun `throws`() {
+                assertThatThrownBy { subject.prop }
+                    .isInstanceOf(IllegalStateException::class.java)
+                    .hasMessageContaining("is not supported")
+            }
+        }
+
+        @Nested
+        inner class `Regex property` {
+            private val defaultValue = Regex("a")
+            private val subject = object : TestConfigAware() {
+                val prop: Regex by config(defaultValue)
+            }
+
+            @Test
+            fun `throws`() {
+                assertThatThrownBy { subject.prop }
+                    .isInstanceOf(IllegalStateException::class.java)
+                    .hasMessageContaining("is not supported")
+            }
+        }
+
+        @Nested
+        inner class `Set property` {
+            private val defaultValue = setOf("a")
+            private val subject = object : TestConfigAware() {
+                val prop: Set<String> by config(defaultValue)
+            }
+
+            @Test
+            fun `throws`() {
+                assertThatThrownBy { subject.prop }
+                    .isInstanceOf(IllegalStateException::class.java)
+                    .hasMessageContaining("is not supported")
+            }
+        }
+
+        @Nested
+        inner class `List of Int` {
+            private val defaultValue = listOf(1)
+            private val subject = object : TestConfigAware() {
+                val prop: List<Int> by config(defaultValue)
+            }
+
+            @Test
+            fun `throws`() {
+                assertThatThrownBy { subject.prop }
+                    .isInstanceOf(IllegalStateException::class.java)
+                    .hasMessageContaining("lists of strings are supported")
+            }
+        }
+    }
+
+    @Nested
+    inner class `transform` {
+        @Nested
+        inner class `primitive` {
+            @Nested
+            inner class `String property is transformed to regex` {
+                private val defaultValue = ".*"
+                private val configValue = "[a-z]+"
+                private val subject = object : TestConfigAware("present" to configValue) {
+                    val present: Regex by config(defaultValue) { it.toRegex() }
+                    val notPresent: Regex by config(defaultValue) { it.toRegex() }
+                }
+
+                @Test
+                fun `applies the mapping function to the configured value`() {
+                    assertThat(subject.present.matches("abc")).isTrue
+                    assertThat(subject.present.matches("123")).isFalse()
+                }
+
+                @Test
+                fun `applies the mapping function to the default`() {
+                    assertThat(subject.notPresent.matches("abc")).isTrue
+                    assertThat(subject.notPresent.matches("123")).isTrue
+                }
+            }
+
+            @Nested
+            inner class `Int property is transformed to String` {
+                private val configValue = 99
+                private val defaultValue = -1
+                private val subject = object : TestConfigAware("present" to configValue) {
+                    val present: String by config(defaultValue) { it.toString() }
+                    val notPresent: String by config(defaultValue) { it.toString() }
+                }
+
+                @Test
+                fun `applies the mapping function to the configured value`() {
+                    assertThat(subject.present).isEqualTo("$configValue")
+                }
+
+                @Test
+                fun `applies the mapping function to the default`() {
+                    assertThat(subject.notPresent).isEqualTo("$defaultValue")
+                }
+            }
+
+            @Nested
+            inner class `Boolean property is transformed to String` {
+                private val configValue = true
+                private val defaultValue = false
+                private val subject = object : TestConfigAware("present" to configValue) {
+                    val present: String by config(defaultValue) { it.toString() }
+                    val notPresent: String by config(defaultValue) { it.toString() }
+                }
+
+                @Test
+                fun `applies the mapping function to the configured value`() {
+                    assertThat(subject.present).isEqualTo("$configValue")
+                }
+
+                @Test
+                fun `applies the mapping function to the default`() {
+                    assertThat(subject.notPresent).isEqualTo("$defaultValue")
+                }
+            }
+
+            @Nested
+            inner class `Boolean property is transformed to String with function reference` {
+                private val defaultValue = false
+                private val subject = object : TestConfigAware() {
+                    val prop1: String by config(defaultValue, Boolean::toString)
+                    val prop2: String by config(transformer = Boolean::toString, defaultValue = defaultValue)
+                }
+
+                @Test
+                fun `transforms properties`() {
+                    assertThat(subject.prop1).isEqualTo("$defaultValue")
+                    assertThat(subject.prop2).isEqualTo("$defaultValue")
+                }
+            }
+        }
+
+        @Nested
+        inner class `list of strings` {
+            private val defaultValue = listOf("99")
+            private val subject = object : TestConfigAware("present" to "1,2,3") {
+                val present: Int by config(defaultValue) { it.sumOf(String::toInt) }
+                val notPresent: Int by config(defaultValue) { it.sumOf(String::toInt) }
+            }
+
+            @Test
+            fun `applies transformer to list configured`() {
+                assertThat(subject.present).isEqualTo(6)
+            }
+
+            @Test
+            fun `applies transformer to default list`() {
+                assertThat(subject.notPresent).isEqualTo(99)
+            }
+        }
+
+        @Nested
+        inner class `empty list of strings` {
+            private val subject = object : TestConfigAware() {
+                val defaultValue: List<String> = emptyList()
+                val prop1: List<Int> by config(defaultValue) { it.map(String::toInt) }
+                val prop2: List<Int> by config(emptyList<String>()) { it.map(String::toInt) }
+            }
+
+            @Test
+            fun `can be defined as variable`() {
+                assertThat(subject.prop1).isEmpty()
+            }
+
+            @Test
+            fun `can be defined using listOf`() {
+                assertThat(subject.prop2).isEmpty()
+            }
+        }
+
+        @Nested
+        inner class `memoization` {
+            private val subject = object : TestConfigAware() {
+                val counter = AtomicInteger(0)
+                val prop: String by config(1) {
+                    counter.getAndIncrement()
+                    it.toString()
+                }
+
+                fun useProperty(): String {
+                    return "something with $prop"
+                }
+            }
+
+            @Test
+            fun `transformer is called only once`() {
+                repeat(5) {
+                    assertThat(subject.useProperty()).isEqualTo("something with 1")
+                }
+                assertThat(subject.counter.get()).isEqualTo(1)
+            }
+        }
+    }
+
+    @OptIn(UnstableApi::class)
+    @Nested
+    inner class `configWithFallback` {
+        @Nested
+        inner class `primitive` {
+            private val configValue = 99
+            private val defaultValue = 0
+            private val fallbackValue = -1
+            private val subject =
+                object : TestConfigAware("present" to "$configValue", "fallback" to fallbackValue) {
+                    private val fallback: Int by config(42)
+                    private val missing: Int by config(42)
+                    val present: Int by configWithFallback(::fallback, defaultValue)
+                    val notPresentWithFallback: Int by configWithFallback(::fallback, defaultValue)
+                    val notPresentFallbackMissing: Int by configWithFallback(::missing, defaultValue)
+                }
+
+            @Test
+            fun `uses the value provided in config if present`() {
+                assertThat(subject.present).isEqualTo(configValue)
+            }
+
+            @Test
+            fun `uses the value from fallback property if value is missing and fallback exists`() {
+                assertThat(subject.notPresentWithFallback).isEqualTo(fallbackValue)
+            }
+
+            @Test
+            fun `uses the default value if not present`() {
+                assertThat(subject.notPresentFallbackMissing).isEqualTo(defaultValue)
+            }
+        }
+
+        @Nested
+        inner class `with transformation` {
+            private val configValue = 99
+            private val defaultValue = 0
+            private val fallbackValue = -1
+            private val fallbackOffset = 10
+            private val subject = object : TestConfigAware("present" to configValue, "fallback" to fallbackValue) {
+                private val fallback: String by config(42) { (it + fallbackOffset).toString() }
+                private val missing: String by config(42) { (it + fallbackOffset).toString() }
+                val present: String by configWithFallback(::fallback, defaultValue) { v ->
+                    v.toString()
+                }
+                val notPresentWithFallback: String by configWithFallback(::fallback, defaultValue) { v ->
+                    v.toString()
+                }
+                val notPresentFallbackMissing: String by configWithFallback(::missing, defaultValue) { v ->
+                    v.toString()
+                }
+            }
+
+            @Test
+            fun `uses the value provided in config if present`() {
+                assertThat(subject.present).isEqualTo("$configValue")
+            }
+
+            @Test
+            fun `transforms the value from fallback property if value is missing and fallback exists`() {
+                assertThat(subject.notPresentWithFallback).isEqualTo("${fallbackValue + fallbackOffset}")
+            }
+
+            @Test
+            fun `uses the default value if not present`() {
+                assertThat(subject.notPresentFallbackMissing).isEqualTo("$defaultValue")
+            }
+        }
+    }
+}
 
 private open class TestConfigAware(private vararg val data: Pair<String, Any>) : ConfigAware {
     override val ruleId: RuleId

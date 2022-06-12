@@ -3,41 +3,36 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Test
 
-class GenerateConfigTaskSpec : Spek({
+class GenerateConfigTaskSpec {
 
-    describe("The generate config task of the Detekt Gradle plugin") {
+    @Test
+    fun `can be executed without any configuration`() {
+        val builder = DslTestBuilder.kotlin()
+        val gradleRunner = builder.withConfigFile("config/detekt/detekt.yml").build()
 
-        listOf(DslTestBuilder.groovy(), DslTestBuilder.kotlin()).forEach { builder ->
-
-            describe("using ${builder.gradleBuildName}") {
-
-                it("can be executed without any configuration") {
-                    val gradleRunner = builder.build()
-
-                    gradleRunner.runTasksAndCheckResult("detektGenerateConfig") { result ->
-                        assertThat(result.task(":detektGenerateConfig")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        assertThat(projectFile("config/detekt/detekt.yml")).exists()
-                    }
-                }
-
-                it("chooses the last config file when configured") {
-                    val gradleRunner = builder.withDetektConfig(
-                        """
-                        |detekt {
-                        |   config = files("config/detekt/detekt.yml", "config/other/detekt.yml")
-                        |}
-                    """
-                    ).build()
-
-                    gradleRunner.runTasksAndCheckResult("detektGenerateConfig") { result ->
-                        assertThat(result.task(":detektGenerateConfig")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        assertThat(projectFile("config/other/detekt.yml")).exists()
-                    }
-                }
-            }
+        gradleRunner.runTasksAndCheckResult("detektGenerateConfig") { result ->
+            assertThat(result.task(":detektGenerateConfig")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+            assertThat(projectFile("config/detekt/detekt.yml")).exists()
         }
     }
-})
+
+    @Test
+    fun `chooses the last config file when configured`() {
+        val builder = DslTestBuilder.kotlin()
+        val gradleRunner = builder.withDetektConfig(
+            """
+                    |detekt {
+                    |   config = files("config/detekt/detekt.yml", "config/other/detekt.yml")
+                    |}
+            """
+        ).withConfigFile("config/detekt/detekt.yml").build()
+        gradleRunner.writeProjectFile("config/other/detekt.yml", content = "")
+
+        gradleRunner.runTasksAndCheckResult("detektGenerateConfig") { result ->
+            assertThat(result.task(":detektGenerateConfig")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+            assertThat(projectFile("config/other/detekt.yml")).exists()
+        }
+    }
+}

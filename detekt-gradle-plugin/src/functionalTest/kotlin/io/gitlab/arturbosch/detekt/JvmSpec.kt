@@ -2,12 +2,12 @@ package io.gitlab.arturbosch.detekt
 
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.GradleRunner
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Test
 import java.io.File
 
-object JvmSpec : Spek({
-    describe("Type resolution on JVM") {
+class JvmSpec {
+    @Test
+    fun `Type resolution on JVM`() {
         val projectDir = checkNotNull(javaClass.classLoader.getResource("jvm")?.file)
         val result = GradleRunner.create()
             .withProjectDir(File(projectDir))
@@ -15,8 +15,9 @@ object JvmSpec : Spek({
             .withArguments("detektMain")
             .buildAndFail()
 
-        assertThat(result.output).contains("Build failed with 2 weighted issues.")
-        assertThat(result.output).contains("ExitOutsideMain - [kotlinExit]")
-        assertThat(result.output).contains("ExitOutsideMain - [javaExit]")
+        assertThat(result.output).contains("failed with 2 weighted issues.")
+        assertThat(result.output).contains("Do not directly exit the process outside the `main` function. Throw an exception(…)")
+        assertThat(result.output).contains("Errors.kt:7:9")
+        assertThat(result.output).contains("Errors.kt:12:16")
     }
-})
+}

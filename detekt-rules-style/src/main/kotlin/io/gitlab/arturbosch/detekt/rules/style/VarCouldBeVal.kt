@@ -8,8 +8,12 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.isLateinit
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -32,7 +36,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isObjectLiteral
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.util.containingNonLocalDeclaration
 
 /**
@@ -67,9 +71,13 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    @Configuration("Whether to ignore uninitialized lateinit vars")
+    private val ignoreLateinitVar: Boolean by config(defaultValue = false)
+
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
-        val assignmentVisitor = AssignmentVisitor(bindingContext)
+        if (bindingContext == BindingContext.EMPTY) return
+        val assignmentVisitor = AssignmentVisitor(bindingContext, ignoreLateinitVar)
         file.accept(assignmentVisitor)
 
         assignmentVisitor.getNonReAssignedDeclarations().forEach {
@@ -78,7 +86,10 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
     }
 
     @Suppress("TooManyFunctions")
-    private class AssignmentVisitor(private val bindingContext: BindingContext) : DetektVisitor() {
+    private class AssignmentVisitor(
+        private val bindingContext: BindingContext,
+        private val ignoreLateinitVar: Boolean
+    ) : DetektVisitor() {
 
         private val declarationCandidates = mutableSetOf<KtNamedDeclaration>()
         private val assignments = mutableMapOf<String, MutableSet<KtExpression>>()
@@ -94,7 +105,10 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
             if (assignments.isNullOrEmpty()) return false
             val declarationDescriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this]
             return assignments.any {
-                it.getResolvedCall(bindingContext)?.resultingDescriptor == declarationDescriptor
+                it.getResolvedCall(bindingContext)?.resultingDescriptor?.original == declarationDescriptor ||
+                    // inside an unknown types context? (example: with-statement with unknown type)
+                    // (i.e, it can't be resolved if the assignment is from the context or from an outer variable)
+                    it.getResolvedCall(bindingContext) == null
             }
         }
 
@@ -112,28 +126,32 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
             }
 
             // Check for whether the initializer contains an object literal.
-            bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, property]?.let {
-                evaluateAssignmentExpression(it, property.initializer)
+            val descriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, property]
+            val initializer = property.initializer
+            if (descriptor != null && initializer != null) {
+                evaluateAssignmentExpression(descriptor, initializer)
             }
         }
 
         override fun visitUnaryExpression(expression: KtUnaryExpression) {
             super.visitUnaryExpression(expression)
             if (expression.operationToken in unaryAssignmentOperators) {
-                visitAssignment(expression.baseExpression)
+                expression.baseExpression?.let(::visitAssignment)
             }
         }
 
         override fun visitBinaryExpression(expression: KtBinaryExpression) {
             super.visitBinaryExpression(expression)
             if (expression.operationToken in KtTokens.ALL_ASSIGNMENTS) {
-                visitAssignment(expression.left)
+                expression.left?.let(::visitAssignment)
 
                 // Check for whether the assignment contains an object literal.
-                (expression.left as? KtNameReferenceExpression)?.let {
+                val descriptor = (expression.left as? KtNameReferenceExpression)?.let {
                     it.getResolvedCall(bindingContext)?.resultingDescriptor
-                }?.let {
-                    evaluateAssignmentExpression(it, expression.right)
+                }
+                val expressionRight = expression.right
+                if (descriptor != null && expressionRight != null) {
+                    evaluateAssignmentExpression(descriptor, expressionRight)
                 }
             }
         }
@@ -145,7 +163,7 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
 
         private fun evaluateAssignmentExpression(
             descriptor: DeclarationDescriptor,
-            rightExpression: KtExpression?
+            rightExpression: KtExpression,
         ) {
             when (rightExpression) {
                 is KtObjectLiteralExpression -> {
@@ -154,8 +172,8 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
                     }
                 }
                 is KtIfExpression -> {
-                    evaluateAssignmentExpression(descriptor, rightExpression.then)
-                    evaluateAssignmentExpression(descriptor, rightExpression.`else`)
+                    rightExpression.then?.let { evaluateAssignmentExpression(descriptor, it) }
+                    rightExpression.`else`?.let { evaluateAssignmentExpression(descriptor, it) }
                 }
                 is KtBlockExpression -> {
                     rightExpression.lastBlockStatementOrThis()
@@ -191,7 +209,7 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
 
         private fun KtProperty.isDeclarationCandidate(): Boolean {
             return when {
-                !isVar -> false
+                !isVar || isOverride() || (ignoreLateinitVar && isLateinit()) -> false
                 isLocal || isPrivate() -> true
                 else -> {
                     // Check for whether property belongs to an anonymous object
@@ -208,8 +226,7 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
                 (containingClassOrObject as? KtObjectDeclaration)?.isObjectLiteral() == true
         }
 
-        private fun visitAssignment(assignedExpression: KtExpression?) {
-            if (assignedExpression == null) return
+        private fun visitAssignment(assignedExpression: KtExpression) {
             val name = if (assignedExpression is KtQualifiedExpression) {
                 assignedExpression.selectorExpression
             } else {

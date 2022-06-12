@@ -1,15 +1,3 @@
-config:
-  # is automatically ignored when custom-checks.jar is on the classpath
-  # however other CI checks use the argsfile where our plugin is not applied
-  # we need to care take of this by explicitly allowing this properties
-  excludes: 'custom-checks.*'
-
-custom-checks:
-  active: true
-  SpekTestDiscovery:
-    active: true
-    includes: ['**/test/**/*Spec.kt']
-
 comments:
   CommentOverPrivateProperty:
     active: true
@@ -43,6 +31,8 @@ complexity:
     excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
   MethodOverloading:
     active: true
+  TooManyFunctions:
+    excludes: ['**/test/**', '**/functionalTest/**']
 
 coroutines:
   active: true
@@ -103,6 +93,18 @@ formatting:
     active: true
 
 naming:
+  ClassNaming:
+    excludes: ['**/*Spec.kt']
+  FunctionNaming:
+    active: true
+    excludes:
+      - '**/test/**'
+      - '**/androidTest/**'
+      - '**/commonTest/**'
+      - '**/functionalTest/**'
+      - '**/jvmTest/**'
+      - '**/jsTest/**'
+      - '**/iosTest/**'
   TopLevelPropertyNaming:
     constantPattern: '[a-z][_A-Za-z0-9]*|[A-Z][_A-Z0-9]*'
   InvalidPackageDeclaration:
@@ -117,6 +119,10 @@ naming:
   VariableMinLength:
     active: true
 
+performance:
+  SpreadOperator:
+    excludes: ['**/test/**', '**/functionalTest/**']
+
 potential-bugs:
   AvoidReferentialEquality:
     active: true
@@ -124,6 +130,8 @@ potential-bugs:
     active: true
   DoubleMutabilityForCollection:
     active: false
+  ElseCaseInsteadOfExhaustiveWhen:
+    active: true
   ExitOutsideMain:
     active: false
   HasPlatformType:
@@ -229,10 +237,13 @@ style:
     active: true
   UnnecessaryLet:
     active: true
+  UnnecessaryInnerClass:
+    active: true
+    ignoreAnnotated: ['Nested']
   UntilInsteadOfRangeTo:
     active: true
   UnusedImports:
-    active: true
+    active: false # formatting already have this rule enabled
   UnusedPrivateMember:
     active: true
     allowedNames: '(_|ignored|expected)'

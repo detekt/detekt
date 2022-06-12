@@ -1,34 +1,34 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assert
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-class ObjectLiteralToLambdaSpec : Spek({
-    setupKotlinEnvironment(additionalJavaSourceRootPath = resourceAsPath("java"))
+class ObjectLiteralToLambdaSpec {
+    val subject = ObjectLiteralToLambda()
 
-    val env: KotlinCoreEnvironment by memoized()
-    val subject by memoized { ObjectLiteralToLambda() }
+    @Nested
+    @KotlinCoreEnvironmentTest
+    inner class WithDefaultSources(val env: KotlinCoreEnvironment) {
 
-    describe("ObjectLiteralToLambda rule") {
-
-        context("report convertible expression") {
-            it("is property") {
+        @Nested
+        inner class `report convertible expression` {
+            @Test
+            fun `is property`() {
                 val code = """
-                fun interface Sam {
-                    fun foo()
-                }
-                val a = object : Sam {
-                    override fun foo() {
+                    fun interface Sam {
+                        fun foo()
                     }
-                }   
+                    val a = object : Sam {
+                        override fun foo() {
+                        }
+                    }   
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -36,17 +36,18 @@ class ObjectLiteralToLambdaSpec : Spek({
                     .hasSourceLocations(SourceLocation(4, 9))
             }
 
-            it("is in function") {
+            @Test
+            fun `is in function`() {
                 val code = """
-                fun interface Sam {
-                    fun foo()
-                }
-                fun bar() {
-                    object : Sam {
-                        override fun foo() {
+                    fun interface Sam {
+                        fun foo()
+                    }
+                    fun bar() {
+                        object : Sam {
+                            override fun foo() {
+                            }
                         }
                     }
-                }
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -54,19 +55,20 @@ class ObjectLiteralToLambdaSpec : Spek({
                     .hasSourceLocations(SourceLocation(5, 5))
             }
 
-            it("is in init") {
+            @Test
+            fun `is in init`() {
                 val code = """
-                fun interface Sam {
-                    fun foo()
-                }
-                object B {
-                    init {
-                        object : Sam {
-                            override fun foo() {
+                    fun interface Sam {
+                        fun foo()
+                    }
+                    object B {
+                        init {
+                            object : Sam {
+                                override fun foo() {
+                                }
                             }
                         }
                     }
-                }
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -74,16 +76,17 @@ class ObjectLiteralToLambdaSpec : Spek({
                     .hasSourceLocations(SourceLocation(6, 9))
             }
 
-            it("is generic") {
+            @Test
+            fun `is generic`() {
                 val code = """
-                fun interface Sam<T> {
-                    fun foo(): T
-                }
-                val a = object : Sam<Int> {
-                    override fun foo(): Int {
-                        return 1
+                    fun interface Sam<T> {
+                        fun foo(): T
                     }
-                }   
+                    val a = object : Sam<Int> {
+                        override fun foo(): Int {
+                            return 1
+                        }
+                    }   
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -91,16 +94,17 @@ class ObjectLiteralToLambdaSpec : Spek({
                     .hasSourceLocations(SourceLocation(4, 9))
             }
 
-            it("has other default method") {
+            @Test
+            fun `has other default method`() {
                 val code = """
-                fun interface Sam {
-                    fun foo()
-                    fun bar() {}
-                }
-                val a = object : Sam {
-                    override fun foo() {
+                    fun interface Sam {
+                        fun foo()
+                        fun bar() {}
                     }
-                }   
+                    val a = object : Sam {
+                        override fun foo() {
+                        }
+                    }   
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -108,19 +112,20 @@ class ObjectLiteralToLambdaSpec : Spek({
                     .hasSourceLocations(SourceLocation(5, 9))
             }
 
-            it("nested declaration") {
+            @Test
+            fun `nested declaration`() {
                 val code = """
-                interface First {
-                    fun foo()
-                }
-                fun interface Second: First
-
-                fun bar() {
-                    object : Second {
-                        override fun foo(){
+                    interface First {
+                        fun foo()
+                    }
+                    fun interface Second: First
+        
+                    fun bar() {
+                        object : Second {
+                            override fun foo(){
+                            }
                         }
                     }
-                }
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -128,14 +133,15 @@ class ObjectLiteralToLambdaSpec : Spek({
                     .hasSourceLocations(SourceLocation(7, 5))
             }
 
-            it("expression body syntax") {
+            @Test
+            fun `expression body syntax`() {
                 val code = """
-                fun interface Sam {
-                    fun foo(): Int
-                }
-                val a = object : Sam {
-                    override fun foo() = 3
-                }
+                    fun interface Sam {
+                        fun foo(): Int
+                    }
+                    val a = object : Sam {
+                        override fun foo() = 3
+                    }
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -144,173 +150,189 @@ class ObjectLiteralToLambdaSpec : Spek({
             }
         }
 
-        context("is not correct implement") {
-            it("without type resolution") {
+        @Nested
+        inner class `is not correct implement` {
+            @Test
+            fun `without type resolution`() {
                 val code = """
-                fun interface Sam {
-                    fun foo()
-                }
-                val a = object : Sam {
-                    override fun foo() {
+                    fun interface Sam {
+                        fun foo()
                     }
-                }
+                    val a = object : Sam {
+                        override fun foo() {
+                        }
+                    }
                 """
                 subject.compileAndLint(code).assert().isEmpty()
             }
 
-            it("is empty interface") {
+            @Test
+            fun `is empty interface`() {
                 val code = """
-                interface Sam
-                val a = object : Sam {}
+                    interface Sam
+                    val a = object : Sam {}
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
-            it("is empty interface and has own function") {
+            @Test
+            fun `is empty interface and has own function`() {
                 val code = """
-                interface Sam
-                val a = object : Sam {
-                    fun foo() {
+                    interface Sam
+                    val a = object : Sam {
+                        fun foo() {
+                        }
                     }
-                }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
-            it("is single property interface") {
+            @Test
+            fun `is single property interface`() {
                 val code = """
-                interface Sam {
-                    val foo: Int
-                }
-                val a = object : Sam {
-                    override val foo = 1
-                }
+                    interface Sam {
+                        val foo: Int
+                    }
+                    val a = object : Sam {
+                        override val foo = 1
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
-            it("is empty interface and has own property") {
+            @Test
+            fun `is empty interface and has own property`() {
                 val code = """
-                interface Sam
-                val a = object : Sam {
-                    val b = 1
-                }
+                    interface Sam
+                    val a = object : Sam {
+                        val b = 1
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
-            it("is not fun interface") {
+            @Test
+            fun `is not fun interface`() {
                 val code = """
-                interface Sam {
-                    fun foo()
-                }
-                val a = object : Sam {
-                    override fun foo() {
+                    interface Sam {
+                        fun foo()
                     }
-                }
+                    val a = object : Sam {
+                        override fun foo() {
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
-            it("is not interface") {
+            @Test
+            fun `is not interface`() {
                 val code = """
-                abstract class Something {
-                    abstract fun foo()
-                }
-                val a = object : Something() {
-                    override fun foo() {
+                    abstract class Something {
+                        abstract fun foo()
                     }
-                }
+                    val a = object : Something() {
+                        override fun foo() {
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
-            it("has multi implement") {
+            @Test
+            fun `has multi implement`() {
                 val code = """
-                fun interface First {
-                    fun foo()
-                }
-                interface Second
-
-                val a: First = object : First, Second {
-                    override fun foo() {
+                    fun interface First {
+                        fun foo()
                     }
-                }
+                    interface Second
+        
+                    val a: First = object : First, Second {
+                        override fun foo() {
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
-            it("has complex implement") {
+            @Test
+            fun `has complex implement`() {
                 val code = """
-                abstract class First {
-                    abstract fun foo()
-                }
-                fun interface Second {
-                    fun foo()
-                }
-
-                val a: First = object : First(), Second {
-                    override fun foo() {
+                    abstract class First {
+                        abstract fun foo()
                     }
-                }
-                """
-                subject.compileAndLintWithContext(env, code).assert().isEmpty()
-            }
-        }
-
-        context("has impurities") {
-            it("has more than one method") {
-                val code = """
-                fun interface Sam {
-                    fun foo()
-                }
-                val a = object : Sam {
-                    override fun foo() {
+                    fun interface Second {
+                        fun foo()
                     }
-                    fun bar() {
+        
+                    val a: First = object : First(), Second {
+                        override fun foo() {
+                        }
                     }
-                }
-                """
-                subject.compileAndLintWithContext(env, code).assert().isEmpty()
-            }
-
-            it("has property") {
-                val code = """
-                fun interface Sam {
-                    fun foo()
-                }
-                val a = object : Sam {
-                    private var bar = 0
-                    override fun foo() {
-                    }
-                }
-                """
-                subject.compileAndLintWithContext(env, code).assert().isEmpty()
-            }
-
-            it("has init") {
-                val code = """
-                fun interface Sam {
-                    fun foo()
-                }
-                val a = object : Sam {
-                    init {
-                    }
-                    override fun foo() {
-                    }
-                }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
         }
 
-        context("java interface") {
-            it("is convertible") {
+        @Nested
+        inner class `has impurities` {
+            @Test
+            fun `has more than one method`() {
                 val code = """
-                val a = object : Runnable { 
-                    override fun run(){
+                    fun interface Sam {
+                        fun foo()
                     }
-                }
+                    val a = object : Sam {
+                        override fun foo() {
+                        }
+                        fun bar() {
+                        }
+                    }
+                """
+                subject.compileAndLintWithContext(env, code).assert().isEmpty()
+            }
+
+            @Test
+            fun `has property`() {
+                val code = """
+                    fun interface Sam {
+                        fun foo()
+                    }
+                    val a = object : Sam {
+                        private var bar = 0
+                        override fun foo() {
+                        }
+                    }
+                """
+                subject.compileAndLintWithContext(env, code).assert().isEmpty()
+            }
+
+            @Test
+            fun `has init`() {
+                val code = """
+                    fun interface Sam {
+                        fun foo()
+                    }
+                    val a = object : Sam {
+                        init {
+                        }
+                        override fun foo() {
+                        }
+                    }
+                """
+                subject.compileAndLintWithContext(env, code).assert().isEmpty()
+            }
+        }
+
+        @Nested
+        inner class `java interface` {
+            @Test
+            fun `is convertible`() {
+                val code = """
+                    val a = object : Runnable { 
+                        override fun run(){
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -318,14 +340,15 @@ class ObjectLiteralToLambdaSpec : Spek({
                     .hasSourceLocations(SourceLocation(1, 9))
             }
 
-            it("is convertible generic") {
+            @Test
+            fun `is convertible Callable generic`() {
                 val code = """
-                import java.util.concurrent.Callable
-                val a = object : Callable<Int> {
-                    override fun call(): Int {
-                        return 1
+                    import java.util.concurrent.Callable
+                    val a = object : Callable<Int> {
+                        override fun call(): Int {
+                            return 1
+                        }
                     }
-                }
                 """
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -333,35 +356,196 @@ class ObjectLiteralToLambdaSpec : Spek({
                     .hasSourceLocations(SourceLocation(2, 9))
             }
 
-            it("empty interface") {
+            @Test
+            fun `empty interface`() {
                 val code = """
-                import java.util.EventListener
-                val a = object : EventListener {
-                    fun foo() {
+                    import java.util.EventListener
+                    val a = object : EventListener {
+                        fun foo() {
+                        }
                     }
-                }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
-            it("is convertible generic") {
+            @Test
+            fun `is convertible Enumeration generic`() {
                 val code = """
-                import java.util.Enumeration
-                val a = object : Enumeration<Int> {
-                    override fun hasMoreElements(): Boolean {
-                        return true
+                    import java.util.Enumeration
+                    val a = object : Enumeration<Int> {
+                        override fun hasMoreElements(): Boolean {
+                            return true
+                        }
+        
+                        override fun nextElement(): Int {
+                            return 1
+                        }
                     }
+                """
+                subject.compileAndLintWithContext(env, code).assert().isEmpty()
+            }
+        }
 
-                    override fun nextElement(): Int {
-                        return 1
+        @Nested
+        inner class `object use itself` {
+            @Test
+            fun `call 'this'`() {
+                val code = """
+                    fun interface Sam {
+                        fun foo()
                     }
-                }
+                
+                    fun aa() {
+                        object : Sam {
+                            override fun foo() {
+                                this
+                            }
+                        }
+                    }
                 """
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
-            it("has other default methods") {
+            @Test
+            fun `use 'this'`() {
                 val code = """
+                    fun interface Sam {
+                        fun foo()
+                    }
+        
+                    fun Sam.bar() {}
+                
+                    fun aa() {
+                        object : Sam {
+                            override fun foo() {
+                                bar()
+                            }
+                        }
+                    }
+                """
+                subject.compileAndLintWithContext(env, code).assert().isEmpty()
+            }
+
+            @Test
+            fun `use class method`() {
+                val code = """
+                    fun interface Sam {
+                        fun foo()
+                    }
+                
+                    fun aa() {
+                        object : Sam {
+                            override fun foo() {
+                                hashCode()
+                            }
+                        }
+                    }
+                """
+                subject.compileAndLintWithContext(env, code).assert().isEmpty()
+            }
+
+            @Test
+            fun `call 'this' inside nested object`() {
+                val code = """
+                    fun interface Sam {
+                        fun foo()
+                    }
+                
+                    fun aa() {
+                        object : Sam {
+                            override fun foo() {
+                                object : Sam {
+                                    override fun foo() {
+                                        this
+                                    }
+                                }
+                            }
+                        }
+                    }
+                """
+                subject.compileAndLintWithContext(env, code)
+                    .assert()
+                    .hasSize(1)
+                    .hasSourceLocations(SourceLocation(6, 5))
+            }
+
+            @Test
+            fun `call labeled 'this'`() {
+                val code = """
+                    fun interface Sam {
+                        fun foo()
+                    }
+                
+                    class Target {
+                        init {
+                            object : Sam {
+                                override fun foo() {
+                                    this@Target
+                                }
+                            }
+                        }
+                    }
+                """
+                subject.compileAndLintWithContext(env, code)
+                    .assert()
+                    .hasSize(1)
+                    .hasSourceLocations(SourceLocation(7, 9))
+            }
+
+            @Test
+            fun `recursive call`() {
+                val code = """
+                    fun interface Sam {
+                        fun foo()
+                    }
+                
+                    fun a() {
+                        object : Sam {
+                            override fun foo() {
+                                foo()
+                            }
+                        }
+                    }
+                """
+                subject.compileAndLintWithContext(env, code).assert().isEmpty()
+            }
+        }
+
+        @Nested
+        inner class `Edge case` {
+            // https://github.com/detekt/detekt/pull/3599#issuecomment-806389701
+            @Test
+            fun `Anonymous objects are always newly created, but lambdas are singletons, so they have the same reference`() {
+                val code = """
+                    fun interface Sam {
+                        fun foo()
+                    }
+        
+                    fun newObject() = object : Sam {
+                        override fun foo() {
+                        }
+                    }
+        
+                    fun lambda() = Sam {}
+        
+                    val a = newObject() === newObject() // false
+                    val b = lambda() === lambda() // true
+                """
+                subject.compileAndLintWithContext(env, code)
+                    .assert()
+                    .hasSize(1)
+                    .hasSourceLocations(SourceLocation(5, 19))
+            }
+        }
+    }
+
+    @Nested
+    @KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
+    inner class WithAdditionalJavaSources(val env: KotlinCoreEnvironment) {
+
+        @Test
+        fun `has other default methods`() {
+            val code = """
                 import com.example.fromjava.SamWithDefaultMethods
                 
                 fun main() {
@@ -371,24 +555,27 @@ class ObjectLiteralToLambdaSpec : Spek({
                         }
                     }
                 } 
-                """
-                subject.lintWithContext(env, code).assert().hasSize(1)
-            }
+            """
 
-            it("has only default methods") {
-                val code = """
+            subject.lintWithContext(env, code).assert().hasSize(1)
+        }
+
+        @Test
+        fun `has only default methods`() {
+            val code = """
                 import com.example.fromjava.OnlyDefaultMethods
                 
                 fun main() {
                     val x = object : OnlyDefaultMethods {
                     }
                 } 
-                """
-                subject.lintWithContext(env, code).assert().isEmpty()
-            }
+            """
+            subject.lintWithContext(env, code).assert().isEmpty()
+        }
 
-            it("implements a default method") {
-                val code = """
+        @Test
+        fun `implements a default method`() {
+            val code = """
                 import com.example.fromjava.OnlyDefaultMethods
                 
                 fun main() {
@@ -398,156 +585,8 @@ class ObjectLiteralToLambdaSpec : Spek({
                         }
                     }
                 } 
-                """
-                subject.lintWithContext(env, code).assert().isEmpty()
-            }
-        }
-
-        context("object use itself") {
-            it("call `this`") {
-                val code = """
-                fun interface Sam {
-                    fun foo()
-                }
-            
-                fun aa() {
-                    object : Sam {
-                        override fun foo() {
-                            this
-                        }
-                    }
-                }
-                """
-                subject.compileAndLintWithContext(env, code).assert().isEmpty()
-            }
-
-            it("use `this`") {
-                val code = """
-                fun interface Sam {
-                    fun foo()
-                }
-
-                fun Sam.bar() {}
-            
-                fun aa() {
-                    object : Sam {
-                        override fun foo() {
-                            bar()
-                        }
-                    }
-                }
-                """
-                subject.compileAndLintWithContext(env, code).assert().isEmpty()
-            }
-
-            it("use class method") {
-                val code = """
-                fun interface Sam {
-                    fun foo()
-                }
-            
-                fun aa() {
-                    object : Sam {
-                        override fun foo() {
-                            hashCode()
-                        }
-                    }
-                }
-                """
-                subject.compileAndLintWithContext(env, code).assert().isEmpty()
-            }
-
-            it("call `this` inside nested object") {
-                val code = """
-                fun interface Sam {
-                    fun foo()
-                }
-            
-                fun aa() {
-                    object : Sam {
-                        override fun foo() {
-                            object : Sam {
-                                override fun foo() {
-                                    this
-                                }
-                            }
-                        }
-                    }
-                }
-                """
-                subject.compileAndLintWithContext(env, code)
-                    .assert()
-                    .hasSize(1)
-                    .hasSourceLocations(SourceLocation(6, 5))
-            }
-
-            it("call labeled `this`") {
-                val code = """
-                fun interface Sam {
-                    fun foo()
-                }
-            
-                class Target {
-                    init {
-                        object : Sam {
-                            override fun foo() {
-                                this@Target
-                            }
-                        }
-                    }
-                }
-                """
-                subject.compileAndLintWithContext(env, code)
-                    .assert()
-                    .hasSize(1)
-                    .hasSourceLocations(SourceLocation(7, 9))
-            }
-
-            it("recursive call") {
-                val code = """
-                fun interface Sam {
-                    fun foo()
-                }
-            
-                fun a() {
-                    object : Sam {
-                        override fun foo() {
-                            foo()
-                        }
-                    }
-                }
-                """
-                subject.compileAndLintWithContext(env, code).assert().isEmpty()
-            }
-        }
-
-        context("Edge case") {
-            // https://github.com/detekt/detekt/pull/3599#issuecomment-806389701
-            it(
-                """Anonymous objects are always newly created,
-                |but lambdas are singletons,
-                |so they have the same reference.""".trimMargin()
-            ) {
-                val code = """
-                fun interface Sam {
-                    fun foo()
-                }
-    
-                fun newObject() = object : Sam {
-                    override fun foo() {
-                    }
-                }
-    
-                fun lambda() = Sam {}
-
-                val a = newObject() === newObject() // false
-                val b = lambda() === lambda() // true
-                """
-                subject.compileAndLintWithContext(env, code)
-                    .assert()
-                    .hasSize(1)
-                    .hasSourceLocations(SourceLocation(5, 19))
-            }
+            """
+            subject.lintWithContext(env, code).assert().isEmpty()
         }
     }
-})
+}

@@ -6,30 +6,36 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import java.nio.file.Path
 import java.nio.file.Paths
 
-internal class CliArgsSpec : Spek({
+internal class CliArgsSpec {
 
-    val projectPath = resourceAsPath("/").parent.parent.parent.parent.toAbsolutePath()
+    private val projectPath: Path = resourceAsPath("/").parent.parent.parent.parent.toAbsolutePath()
 
-    describe("Parsing the input path") {
+    @Nested
+    inner class `Parsing the input path` {
 
-        it("the current working directory is used if parameter is not set") {
+        @Test
+        fun `the current working directory is used if parameter is not set`() {
             val cli = parseArguments(emptyArray())
             assertThat(cli.inputPaths).hasSize(1)
             assertThat(cli.inputPaths.first()).isEqualTo(Paths.get(System.getProperty("user.dir")))
         }
 
-        it("a single value is converted to a path") {
+        @Test
+        fun `a single value is converted to a path`() {
             val cli = parseArguments(arrayOf("--input", "$projectPath"))
             assertThat(cli.inputPaths).hasSize(1)
             assertThat(cli.inputPaths.first().toAbsolutePath()).isEqualTo(projectPath)
         }
 
-        it("multiple input paths can be separated by comma") {
+        @Test
+        fun `multiple input paths can be separated by comma`() {
             val mainPath = projectPath.resolve("src/main").toAbsolutePath()
             val testPath = projectPath.resolve("src/test").toAbsolutePath()
             val cli = parseArguments(arrayOf("--input", "$mainPath,$testPath"))
@@ -37,7 +43,8 @@ internal class CliArgsSpec : Spek({
             assertThat(cli.inputPaths.map(Path::toAbsolutePath)).containsExactlyInAnyOrder(mainPath, testPath)
         }
 
-        it("reports an error if the input path does not exist") {
+        @Test
+        fun `reports an error if the input path does not exist`() {
             val pathToNonExistentDirectory = projectPath.resolve("nonExistent")
             val params = arrayOf("--input", "$pathToNonExistentDirectory")
 
@@ -47,9 +54,11 @@ internal class CliArgsSpec : Spek({
         }
     }
 
-    describe("parsing config parameters") {
+    @Nested
+    inner class `parsing config parameters` {
 
-        it("should fail on invalid config value") {
+        @Test
+        fun `should fail on invalid config value`() {
             assertThatIllegalArgumentException()
                 .isThrownBy { parseArguments(arrayOf("--config", ",")).toSpec() }
             assertThatExceptionOfType(ParameterException::class.java)
@@ -59,24 +68,29 @@ internal class CliArgsSpec : Spek({
         }
     }
 
-    describe("Valid combination of options") {
+    @Nested
+    inner class `Valid combination of options` {
 
-        describe("Baseline feature") {
+        @Nested
+        inner class `Baseline feature` {
 
-            it("reports an error when using --create-baseline without a --baseline file") {
+            @Test
+            fun `reports an error when using --create-baseline without a --baseline file`() {
                 assertThatCode { parseArguments(arrayOf("--create-baseline")) }
                     .isInstanceOf(HandledArgumentViolation::class.java)
                     .hasMessageContaining("Creating a baseline.xml requires the --baseline parameter to specify a path")
             }
 
-            it("reports an error when using --baseline file does not exist") {
+            @Test
+            fun `reports an error when using --baseline file does not exist`() {
                 val nonExistingDirectory = projectPath.resolve("nonExistent").toString()
                 assertThatCode { parseArguments(arrayOf("--baseline", nonExistingDirectory)) }
                     .isInstanceOf(HandledArgumentViolation::class.java)
                     .hasMessageContaining("The file specified by --baseline should exist '$nonExistingDirectory'.")
             }
 
-            it("reports an error when using --baseline file which is not a file") {
+            @Test
+            fun `reports an error when using --baseline file which is not a file`() {
                 val directory = resourceAsPath("/cases").toString()
                 assertThatCode { parseArguments(arrayOf("--baseline", directory)) }
                     .isInstanceOf(HandledArgumentViolation::class.java)
@@ -84,24 +98,49 @@ internal class CliArgsSpec : Spek({
             }
         }
 
-        it("throws HelpRequest on --help") {
+        @Test
+        fun `throws HelpRequest on --help`() {
             assertThatExceptionOfType(HelpRequest::class.java)
                 .isThrownBy { parseArguments(arrayOf("--help")) }
         }
 
-        it("throws HandledArgumentViolation on wrong options") {
+        @Test
+        fun `throws HandledArgumentViolation on wrong options`() {
             assertThatExceptionOfType(HandledArgumentViolation::class.java)
                 .isThrownBy { parseArguments(arrayOf("--unknown-to-us-all")) }
         }
     }
 
-    describe("--all-rules and --fail-fast lead to all rules being activated") {
+    @Nested
+    inner class `--all-rules and --fail-fast lead to all rules being activated` {
 
-        arrayOf("--all-rules", "--fail-fast").forEach { flag ->
-            it("is true for flag $flag") {
-                val spec = parseArguments(arrayOf(flag)).toSpec()
-                assertThat(spec.rulesSpec.activateAllRules).isTrue()
-            }
+        @ParameterizedTest
+        @ValueSource(strings = ["--all-rules", "--fail-fast"])
+        fun `all rules active`(flag: String) {
+            val spec = parseArguments(arrayOf(flag)).toSpec()
+            assertThat(spec.rulesSpec.activateAllRules).isTrue()
         }
     }
-})
+
+    @Nested
+    inner class `type resolution parameters are accepted` {
+
+        @Test
+        fun `--jvm-target is accepted`() {
+            val spec = parseArguments(arrayOf("--jvm-target", "11")).toSpec()
+            assertThat(spec.compilerSpec.jvmTarget).isEqualTo("11")
+        }
+
+        @Test
+        fun `--jvm-target with decimal is accepted`() {
+            val spec = parseArguments(arrayOf("--jvm-target", "1.8")).toSpec()
+            assertThat(spec.compilerSpec.jvmTarget).isEqualTo("1.8")
+        }
+
+        @Test
+        fun `--language-version is accepted`() {
+            val spec = parseArguments(arrayOf("--language-version", "1.6")).toSpec()
+            assertThat(spec.compilerSpec.languageVersion).isEqualTo("1.6")
+        }
+    }
+}

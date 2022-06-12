@@ -5,10 +5,11 @@ plugins {
 
 dependencies {
     api(libs.kotlin.stdlibJdk8)
+    api(libs.junit.api)
     compileOnly(libs.spek.dsl)
     implementation(projects.detektParser)
-    implementation(projects.detektPsiUtils)
-    implementation(libs.kotlin.scriptRuntime)
     implementation(libs.kotlin.scriptUtil)
-    implementation(libs.kotlin.scriptingCompilerEmbeddable)
+
+    testImplementation(libs.assertj)
+    runtimeOnly(libs.kotlin.scriptingCompilerEmbeddable)
 }

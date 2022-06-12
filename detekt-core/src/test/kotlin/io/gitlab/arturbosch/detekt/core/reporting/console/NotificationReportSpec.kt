@@ -4,25 +4,23 @@ import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.core.NL
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Test
 
-class NotificationReportSpec : Spek({
+class NotificationReportSpec {
 
-    val subject by memoized { NotificationReport() }
+    private val subject = NotificationReport()
 
-    describe("notification report") {
-
-        it("reports two notifications") {
-            val detektion = object : TestDetektion() {
-                override val notifications = listOf(SimpleNotification("test"), SimpleNotification("test"))
-            }
-            assertThat(subject.render(detektion)).isEqualTo("test${NL}test")
+    @Test
+    fun `reports two notifications`() {
+        val detektion = object : TestDetektion() {
+            override val notifications = listOf(SimpleNotification("test"), SimpleNotification("test"))
         }
-
-        it("reports no findings") {
-            val detektion = TestDetektion()
-            assertThat(subject.render(detektion)).isNull()
-        }
+        assertThat(subject.render(detektion)).isEqualTo("test${NL}test")
     }
-})
+
+    @Test
+    fun `reports no findings`() {
+        val detektion = TestDetektion()
+        assertThat(subject.render(detektion)).isNull()
+    }
+}

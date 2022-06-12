@@ -4,21 +4,18 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.sample.extensions.rules.TooManyFunctions
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Test
 
-class TooManyFunctionsSpec : Spek({
+class TooManyFunctionsSpec {
 
-    val subject by memoized { TooManyFunctions(Config.empty) }
+    private val subject = TooManyFunctions(Config.empty)
 
-    describe("a simple test") {
-
-        it("should find one file with too many functions") {
-            val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-        }
+    @Test
+    fun `it should find one file with too many functions`() {
+        val findings = subject.lint(code)
+        assertThat(findings).hasSize(1)
     }
-})
+}
 
 private const val code: String = """
     class TooManyFunctions : Rule("TooManyFunctions") {

@@ -1,52 +1,50 @@
 [versions]
-dokka = "1.6.10"
-jacoco = "0.8.7"
-kotlin = "1.6.10"
-ktlint = "0.43.2"
-spek = "2.0.17"
+dokka = "1.6.21"
+jacoco = "0.8.8"
+kotlin = "1.6.21"
+ktlint = "0.45.2"
+junit = "5.8.2"
+contester = "0.2.0"
 
 [libraries]
-githubRelease-gradle = "com.github.breadmoirai:github-release:2.2.12"
+githubRelease-gradle = "com.github.breadmoirai:github-release:2.3.7"
 nexusStaging-gradle = "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.30.0"
 semver4j-gradle = "com.vdurmont:semver4j:3.1.0"
 
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-gradlePluginApi = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }
-kotlin-scriptRuntime = { module = "org.jetbrains.kotlin:kotlin-script-runtime", version.ref = "kotlin" }
 kotlin-scriptUtil = { module = "org.jetbrains.kotlin:kotlin-script-util", version.ref = "kotlin" }
 kotlin-scriptingCompilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable", version.ref = "kotlin" }
 kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 
-kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3"
-kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0"
+kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.5"
+kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.2"
 
-android-gradle = "com.android.tools.build:gradle:4.2.2"
+android-gradle = "com.android.tools.build:gradle:7.2.1"
 
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktlint" }
 ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint" }
 ktlint-rulesetExperimental = { module = "com.pinterest.ktlint:ktlint-ruleset-experimental", version.ref = "ktlint" }
+slf4j-nop = { module = "org.slf4j:slf4j-nop", version = "1.7.36"  }
 
-dokka-jekyll = { module = "org.jetbrains.dokka:jekyll-plugin", version.ref = "dokka"}
+spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version = "2.0.18" }
 
-spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version.ref = "spek" }
-spek-runner = { module = "org.spekframework.spek2:spek-runner-junit5", version.ref = "spek" }
+junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.0.1"
 assertj = "org.assertj:assertj-core:3.20.2"
 reflections = "org.reflections:reflections:0.10.2"
-mockk = "io.mockk:mockk:1.12.2"
+mockk = "io.mockk:mockk:1.12.4"
 snakeyaml = "org.yaml:snakeyaml:1.30"
-jcommander = "com.beust:jcommander:1.81"
+jcommander = "com.beust:jcommander:1.82"
+contester-breakpoint = { module = "io.github.davidburstrom.contester:contester-breakpoint", version.ref = "contester" }
+contester-driver = { module = "io.github.davidburstrom.contester:contester-driver", version.ref = "contester" }
 
 [plugins]
-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.8.0" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.19.0" }
+binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.10.0" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-gradleVersions = { id = "com.github.ben-manes.versions", version = "0.41.0" }
-pluginPublishing = { id = "com.gradle.plugin-publish", version = "0.18.0" }
+gradleVersions = { id = "com.github.ben-manes.versions", version = "0.42.0" }
+pluginPublishing = { id = "com.gradle.plugin-publish", version = "0.21.0" }
 shadow = { id = "com.github.johnrengelman.shadow", version = "7.1.2" }
 sonarqube = { id = "org.sonarqube", version = "3.3" }
-
-[bundles]
-testImplementation = ["assertj", "spek-dsl"]

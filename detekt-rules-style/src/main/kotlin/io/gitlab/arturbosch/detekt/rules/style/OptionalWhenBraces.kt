@@ -7,10 +7,12 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.hasCommentInside
+import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
+import org.jetbrains.kotlin.psi.psiUtil.allChildren
 
 /**
  * This rule reports unnecessary braces in when expressions. These optional braces should be removed.
@@ -50,10 +52,11 @@ class OptionalWhenBraces(config: Config = Config.empty) : Rule(config) {
         super.visitWhenExpression(expression)
     }
 
-    private fun KtBlockExpression.hasUnnecessaryBraces(): Boolean {
-        val singleStatement = statements.singleOrNull()?.takeIf {
-            !(it is KtLambdaExpression && it.functionLiteral.arrow == null)
-        }
-        return singleStatement != null && !hasCommentInside() && lBrace != null && rBrace != null
-    }
+    private fun KtBlockExpression.hasUnnecessaryBraces(): Boolean =
+        lBrace != null && rBrace != null &&
+            statements.singleOrNull()?.takeIf { !it.isLambdaExpressionWithoutArrow() } != null &&
+            allChildren.none { it is PsiComment }
+
+    private fun KtExpression.isLambdaExpressionWithoutArrow(): Boolean =
+        this is KtLambdaExpression && this.functionLiteral.arrow == null
 }

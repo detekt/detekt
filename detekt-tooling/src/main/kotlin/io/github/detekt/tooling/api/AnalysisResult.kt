@@ -19,5 +19,5 @@ fun AnalysisResult.exitCode(): Int = when (error) {
     is UnexpectedError -> 1
     is MaxIssuesReached -> 2
     is InvalidConfig -> 3
-    else -> 0
+    null -> 0
 }

@@ -11,6 +11,8 @@ import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.psi.KtFile
 
 /**
  * This rule reports lines of code which exceed a defined maximum line length.
@@ -49,7 +51,7 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
         for (line in lines) {
             offset += line.length
             if (!isValidLine(line)) {
-                val ktElement = findFirstKtElementInParents(file, offset, line)
+                val ktElement = findFirstMeaningfulKtElementInParents(file, offset, line)
                 if (ktElement != null) {
                     report(CodeSmell(issue, Entity.from(ktElement), issue.description))
                 } else {
@@ -94,5 +96,11 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
     companion object {
         private const val DEFAULT_IDEA_LINE_LENGTH = 120
+        private val BLANK_OR_QUOTES = """[\s"]*""".toRegex()
+
+        private fun findFirstMeaningfulKtElementInParents(file: KtFile, offset: Int, line: String): PsiElement? {
+            return findKtElementInParents(file, offset, line)
+                .firstOrNull { !BLANK_OR_QUOTES.matches(it.text) }
+        }
     }
 }

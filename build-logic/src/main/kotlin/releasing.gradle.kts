@@ -23,13 +23,14 @@ project.afterEvaluate {
         repo.set("detekt")
         overwrite.set(true)
         dryRun.set(false)
+        draft.set(true)
         targetCommitish.set("main")
         body {
-            var changelog = project.file("docs/pages/changelog 1.x.x.md").readText()
-            val nextNonBetaVersion = project.version.toString().substringBeforeLast("-")
+            var changelog = project.file("website/docs/introduction/changelog 1.x.x.md").readText()
+            val nextNonBetaVersion = project.version.toString()
             val sectionStart = "#### $nextNonBetaVersion"
-            changelog = changelog.substring(changelog.indexOf(sectionStart) + sectionStart.length)
-            changelog = changelog.substring(0, changelog.indexOf("#### 1."))
+            changelog = changelog.substring(changelog.indexOf(sectionStart))
+            changelog = changelog.substring(0, changelog.indexOf("#### 1.", changelog.indexOf(sectionStart) + 1))
             changelog.trim()
         }
         val cliBuildDir = project(":detekt-cli").buildDir
@@ -65,16 +66,38 @@ tasks {
     register("incrementMajor") { doLast { updateVersion { it.nextMajor() } } }
 
     register<UpdateVersionInFileTask>("applyDocVersion") {
-        fileToUpdate.set(file("${rootProject.rootDir}/docs/_config.yml"))
-        linePartToFind.set("detekt_version:")
-        lineTransformation.set("detekt_version: ${Versions.DETEKT}")
+        fileToUpdate.set(file("${rootProject.rootDir}/website/docusaurus.config.js"))
+        linePartToFind.set("    detektVersion:")
+        lineTransformation.set("    detektVersion: '${Versions.DETEKT}'")
     }
+}
 
-    register<UpdateVersionInFileTask>("applySelfAnalysisVersion") {
-        fileToUpdate.set(file("${rootProject.rootDir}/gradle/libs.versions.toml"))
-        linePartToFind.set("detekt = { id = \"io.gitlab.arturbosch.detekt\"")
-        lineTransformation.set(
-            "detekt = { id = \"io.gitlab.arturbosch.detekt\", version = \"${Versions.DETEKT}\" }"
-        )
+tasks.register("publishToMavenLocal") {
+    description = "Publish all the projects to Maven Local"
+    subprojects {
+        if (this.plugins.hasPlugin("publishing")) {
+            dependsOn(tasks.named("publishToMavenLocal"))
+        }
     }
+    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishToMavenLocal"))
+}
+
+tasks.register("publishAllToSonatypeSnapshot") {
+    description = "Publish all the projects to Sonatype Snapshot Repository"
+    subprojects {
+        if (this.plugins.hasPlugin("publishing")) {
+            dependsOn(tasks.named("publishAllPublicationsToSonatypeSnapshotRepository"))
+        }
+    }
+    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishAllPublicationsToSonatypeSnapshotRepository"))
+}
+
+tasks.register("publishAllToMavenCentral") {
+    description = "Publish all the projects to Sonatype Staging Repository"
+    subprojects {
+        if (this.plugins.hasPlugin("publishing")) {
+            dependsOn(tasks.named("publishAllPublicationsToMavenCentralRepository"))
+        }
+    }
+    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishAllPublicationsToMavenCentralRepository"))
 }

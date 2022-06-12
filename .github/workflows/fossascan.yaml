@@ -5,13 +5,16 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   fossa-scan:
     if: ${{ github.repository == 'detekt/detekt' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Run FOSSA Scan
         uses: fossas/fossa-action@v1

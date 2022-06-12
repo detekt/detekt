@@ -1,7 +1,7 @@
 # __detekt__
 
 [![Join the chat at #detekt on KotlinLang](https://img.shields.io/badge/%23detekt-on_slack-red.svg?logo=slack)](https://kotlinlang.slack.com/archives/C88E12QH4)
-[![Visit the website at detekt.github.io/detekt/](https://img.shields.io/badge/visit-website-red.svg?logo=firefox)](https://detekt.github.io/detekt/)
+[![Visit the website at detekt.dev/](https://img.shields.io/badge/visit-website-red.svg?logo=firefox)](https://detekt.dev/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.gitlab.arturbosch.detekt/detekt-cli?label=MavenCentral&logo=apache-maven)](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli)
 [![Gradle Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/io/gitlab/arturbosch/detekt/io.gitlab.arturbosch.detekt.gradle.plugin/maven-metadata.xml.svg?label=Gradle&logo=gradle)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
@@ -13,7 +13,7 @@
 Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
 It operates on the abstract syntax tree provided by the Kotlin compiler.
 
-![detekt in action](docs/images/detekt_in_action.png "detekt in action")
+![detekt in action](website/static/img/tutorial/detekt_in_action.png "detekt in action")
 
 ### Features
 
@@ -31,23 +31,21 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 
 ### Project Website
 
-Visit [the project website](https://detekt.github.io/detekt/) for installation guides, release notes, migration guides, rule descriptions and configuration options.
+Visit [the project website](https://detekt.dev/) for installation guides, release notes, migration guides, rule descriptions and configuration options.
 
 #### Quick-Links
 
-- [Changelog and migration guides](https://detekt.github.io/detekt/changelog.html)
-- [Available CLI options](https://detekt.github.io/detekt/cli.html)
-- [Rule set and rule descriptions](https://detekt.github.io/detekt/complexity.html)
-- [Writing custom rules and extending detekt](https://detekt.github.io/detekt/extensions.html)
-- [Suppressing issues in code](https://detekt.github.io/detekt/suppressing-rules.html)
-- [Suppressing issues via baseline file](https://detekt.github.io/detekt/baseline.html)
-- [Configuring detekt](https://detekt.github.io/detekt/configurations.html)
+- [Changelog and migration guides](https://detekt.dev/changelog.html)
+- [Available CLI options](https://detekt.dev/cli.html)
+- [Rule set and rule descriptions](https://detekt.dev/complexity.html)
+- [Writing custom rules and extending detekt](https://detekt.dev/extensions.html)
+- [Suppressing issues in code](https://detekt.dev/suppressing-rules.html)
+- [Suppressing issues via baseline file](https://detekt.dev/baseline.html)
+- [Configuring detekt](https://detekt.dev/configurations.html)
 - Sample Gradle integrations examples:
-    - [multi project (Kotlin DSL) with precompiled script plugin](https://github.com/detekt/detekt/blob/main/build-logic/src/main/kotlin/detekt.gradle.kts)
-    - [single project (Groovy DSL)](https://github.com/arturbosch/kutils/blob/main/build.gradle)
+    - [multi project (Kotlin DSL)](https://github.com/detekt/detekt/blob/main/build.gradle.kts)
+    - [single project (Groovy DSL)](https://github.com/arturbosch/kutils/blob/master/build.gradle)
     - [single project (Unofficial Maven plugin)](https://github.com/detekt/sonar-kotlin/blob/main/pom.xml)
-    - [setup additional detekt task for all modules (Kotlin DSL)](https://github.com/detekt/detekt/blob/3357abba87e1550c65b6610012bb291e0fbb64ce/build.gradle.kts#L280-L295)
-    - [setup additional formatting task for all modules (Kotlin DSL)](https://github.com/detekt/detekt/blob/3357abba87e1550c65b6610012bb291e0fbb64ce/build.gradle.kts#L262-L278)
 
 ### Quick Start ...
 
@@ -58,7 +56,7 @@ curl -sSLO https://github.com/detekt/detekt/releases/download/v[version]/detekt-
 java -jar detekt-cli-[version]-all.jar --help
 ```
 
-You can find [other ways to install detekt here](https://detekt.github.io/detekt/cli.html)
+You can find [other ways to install detekt here](https://detekt.dev/cli.html)
 
 #### with Gradle
 
@@ -108,17 +106,17 @@ tasks.withType<DetektCreateBaselineTask>().configureEach {
 
 See [maven central](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli) for releases and [sonatype](https://oss.sonatype.org/#view-repositories;snapshots~browsestorage~io/gitlab/arturbosch/detekt) for snapshots.
 
-If you want to use a SNAPSHOT version, you can find more info on [this documentation page](https://detekt.github.io/detekt/snapshots.html).
+If you want to use a SNAPSHOT version, you can find more info on [this documentation page](https://detekt.dev/snapshots.html).
 
 #### Requirements
 
 Gradle 6.1+ is the minimum requirement. However, the recommended versions together with the other tools recommended versions are:
 
-| Detekt Version | Gradle | Kotlin | AGP | Java Target Level | JDK Max Version |
-| -------------- | ------ | ------ | --- | ----------------- | --------------- |
-| `1.19.0`       | `7.3.0` | `1.5.31` | `4.2.2`| `1.8`       | `17`            |
+| Detekt Version | Gradle  | Kotlin   | AGP     | Java Target Level | JDK Max Version |
+| -------------- | ------- | -------- | ------- | ----------------- | --------------- |
+| `1.20.0`       | `7.4.2` | `1.6.20` | `7.1.3` | `1.8`             | `17`            |
 
-The list of [recommended versions for previous detekt version is listed here](https://detekt.github.io/detekt/compatibility.html).
+The list of [recommended versions for previous detekt version is listed here](https://detekt.dev/compatibility.html).
 
 ### Adding more rule sets
 
@@ -131,7 +129,7 @@ dependencies {
 }
 ```
 
-Likewise custom [extensions](https://detekt.github.io/detekt/extensions.html) can be added to detekt.
+Likewise custom [extensions](https://detekt.dev/extensions.html) can be added to detekt.
 
 ### Contributing
 
@@ -150,6 +148,7 @@ Thanks to all the people who contributed to detekt!
 
 As mentioned in...
 
+- [driodcon London 2021 - Detekt - State of the Union](https://www.droidcon.com/2021/11/17/detekt-state-of-the-union-2/)
 - [KotlinConf 2018 - Safe(r) Kotlin Code - Static Analysis Tools for Kotlin by Marvin Ramin](https://www.youtube.com/watch?v=yjhQiP0329M)
 - [droidcon NYC 2018 - Static Code Analysis For Kotlin](https://www.youtube.com/watch?v=LT6m5_LO2DQ)
 - Kotlin on Code Quality Tools - by @vanniktech [Slides](https://docs.google.com/presentation/d/1sUoQCRHTR01JfaS67Qkd7K1rdRLOhO6QGCelZZwxOKs/edit) [Presentation](https://www.youtube.com/watch?v=FKDNE6PPTTE)

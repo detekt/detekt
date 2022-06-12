@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.types.KotlinType
  * Classes that simply hold data should be refactored into a `data class`. Data classes are specialized to hold data
  * and generate `hashCode`, `equals` and `toString` implementations as well.
  *
- * Read more about `data class`: https://kotlinlang.org/docs/data-classes.html
+ * Read more about [data classes](https://kotlinlang.org/docs/data-classes.html)
  *
  * <noncompliant>
  * class DataClassCandidate(val i: Int) {
@@ -56,8 +56,8 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
     @Configuration("allows to provide a list of annotations that disable this check")
     @Deprecated("Use `ignoreAnnotated` instead")
-    private val excludeAnnotatedClasses: List<String> by config(emptyList<String>()) { classes ->
-        classes.map { it.removePrefix("*").removeSuffix("*") }
+    private val excludeAnnotatedClasses: List<Regex> by config(emptyList<String>()) { list ->
+        list.map { it.replace(".", "\\.").replace("*", ".*").toRegex() }
     }
 
     @Configuration("allows to relax this rule in order to exclude classes that contains one (or more) vars")
@@ -65,7 +65,11 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
     override fun visit(root: KtFile) {
         super.visit(root)
-        val annotationExcluder = AnnotationExcluder(root, @Suppress("DEPRECATION") excludeAnnotatedClasses)
+        val annotationExcluder = AnnotationExcluder(
+            root,
+            @Suppress("DEPRECATION") excludeAnnotatedClasses,
+            bindingContext,
+        )
         root.forEachDescendantOfType<KtClass> { visitKlass(it, annotationExcluder) }
     }
 

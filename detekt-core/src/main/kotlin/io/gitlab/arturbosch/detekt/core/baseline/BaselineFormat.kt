@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.core.baseline
 import org.xml.sax.SAXParseException
 import java.nio.file.Files
 import java.nio.file.Path
+import javax.xml.XMLConstants
 import javax.xml.parsers.SAXParserFactory
 import javax.xml.stream.XMLStreamException
 import javax.xml.stream.XMLStreamWriter
@@ -17,7 +18,11 @@ internal class BaselineFormat {
     fun read(path: Path): Baseline {
         try {
             Files.newInputStream(path).use {
-                val reader = SAXParserFactory.newInstance().newSAXParser()
+                val reader = SAXParserFactory.newInstance()
+                    .apply {
+                        setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true)
+                    }
+                    .newSAXParser()
                 val handler = BaselineHandler()
                 reader.parse(it, handler)
                 return handler.createBaseline()

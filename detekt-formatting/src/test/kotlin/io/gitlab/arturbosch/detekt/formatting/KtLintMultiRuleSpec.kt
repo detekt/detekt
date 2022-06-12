@@ -1,32 +1,26 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.pinterest.ktlint.core.Rule.Modifier.Last
-import com.pinterest.ktlint.core.Rule.Modifier.RestrictToRoot
-import com.pinterest.ktlint.core.Rule.Modifier.RestrictToRootLast
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.Config
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Test
 
-class KtLintMultiRuleSpec : Spek({
+class KtLintMultiRuleSpec {
 
-    describe("KtLintMultiRule rule") {
-
-        it("sorts rules correctly") {
-            val ktlintRule = KtLintMultiRule(Config.empty)
-            ktlintRule.visitFile(compileContentForTest(""))
-            val sortedRules = ktlintRule.getSortedRules()
-            assertThat(sortedRules).isNotEmpty
-            assertThat(sortedRules.indexOfFirst { it.wrapping is RestrictToRoot })
-                .isGreaterThan(-1)
-                .isLessThan(sortedRules.indexOfFirst { it.wrapping !is RestrictToRoot })
-            assertThat(sortedRules.indexOfFirst { it.wrapping !is RestrictToRoot })
-                .isGreaterThan(-1)
-                .isLessThan(sortedRules.indexOfFirst { it.wrapping is RestrictToRootLast })
-            assertThat(sortedRules.indexOfFirst { it.wrapping is RestrictToRootLast })
-                .isGreaterThan(-1)
-                .isLessThan(sortedRules.indexOfFirst { it.wrapping is Last })
-        }
+    @Test
+    fun `sorts rules correctly`() {
+        val ktlintRule = KtLintMultiRule(Config.empty)
+        ktlintRule.visitFile(compileContentForTest(""))
+        val sortedRules = ktlintRule.getSortedRules()
+        assertThat(sortedRules).isNotEmpty
+        assertThat(sortedRules.indexOfFirst { it.runOnRootNodeOnly })
+            .isGreaterThan(-1)
+            .isLessThan(sortedRules.indexOfFirst { !it.runOnRootNodeOnly })
+        assertThat(sortedRules.indexOfFirst { !it.runOnRootNodeOnly })
+            .isGreaterThan(-1)
+            .isLessThan(sortedRules.indexOfFirst { it.runOnRootNodeOnly && it.runAsLateAsPossible })
+        assertThat(sortedRules.indexOfFirst { it.runOnRootNodeOnly && it.runAsLateAsPossible })
+            .isGreaterThan(-1)
+            .isLessThan(sortedRules.indexOfFirst { it.runAsLateAsPossible && !it.runOnRootNodeOnly })
     }
-})
+}

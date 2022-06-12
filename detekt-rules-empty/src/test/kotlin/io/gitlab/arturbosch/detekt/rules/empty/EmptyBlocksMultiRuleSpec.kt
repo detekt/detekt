@@ -6,53 +6,59 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-class EmptyBlocksMultiRuleSpec : Spek({
+class EmptyBlocksMultiRuleSpec {
 
-    val subject by memoized { EmptyBlocks() }
+    private val file = compileForTest(resourceAsPath("Empty.kt"))
 
-    val file by memoized { compileForTest(resourceAsPath("Empty.kt")) }
+    private lateinit var subject: EmptyBlocks
 
-    describe("multi rule with all empty block rules") {
+    @BeforeEach
+    fun createSubject() {
+        subject = EmptyBlocks()
+    }
 
-        it("should report one finding per rule") {
-            val findings = subject.lint(file)
-            // -1 because the empty kt file rule doesn't get triggered in the 'Empty' test file
-            val rulesSize = subject.rules.size - 1
-            assertThat(findings).hasSize(rulesSize)
-        }
+    @Test
+    fun `should report one finding per rule`() {
+        val findings = subject.lint(file)
+        // -1 because the empty kt file rule doesn't get triggered in the 'Empty' test file
+        val rulesSize = subject.rules.size - 1
+        assertThat(findings).hasSize(rulesSize)
+    }
 
-        it("should not report any as all empty block rules are deactivated") {
-            val config = yamlConfig("deactivated-empty-blocks.yml")
-            val ruleSet = EmptyCodeProvider().instance(config)
+    @Test
+    fun `should not report any as all empty block rules are deactivated`() {
+        val config = yamlConfig("deactivated-empty-blocks.yml")
+        val ruleSet = EmptyCodeProvider().instance(config)
 
-            @Suppress("DEPRECATION")
-            val findings = ruleSet.accept(file)
+        @Suppress("DEPRECATION")
+        val findings = ruleSet.accept(file)
 
-            assertThat(findings).isEmpty()
-        }
+        assertThat(findings).isEmpty()
+    }
 
-        it("reports an empty kt file") {
-            assertThat(subject.compileAndLint("")).hasSize(1)
-        }
+    @Test
+    fun `reports an empty kt file`() {
+        assertThat(subject.compileAndLint("")).hasSize(1)
+    }
 
-        it("reports no duplicated findings - issue #1605") {
-            val findings = subject.compileAndLint(
-                """
-                class EmptyBlocks {
-                    class EmptyClass {}
-                    fun exceptionHandling() {
-                        try {
-                            println()
-                        } finally {
-                        }
+    @Test
+    fun `reports no duplicated findings - issue #1605`() {
+        val findings = subject.compileAndLint(
+            """
+            class EmptyBlocks {
+                class EmptyClass {}
+                fun exceptionHandling() {
+                    try {
+                        println()
+                    } finally {
                     }
                 }
+            }
             """
-            )
-            assertThat(findings).hasSize(2)
-        }
+        )
+        assertThat(findings).hasSize(2)
     }
-})
+}

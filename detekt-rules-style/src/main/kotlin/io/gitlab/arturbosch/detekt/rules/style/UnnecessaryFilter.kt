@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -16,7 +17,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiver
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
 import org.jetbrains.kotlin.psi.unpackFunctionLiteral
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
@@ -43,6 +44,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *
  */
 @RequiresTypeResolution
+@ActiveByDefault(since = "1.21.0")
 class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
@@ -94,7 +96,7 @@ class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
         )
 
         private val secondCalls = listOf(
-            SecondCall(FqName("kotlin.collections.List.size")),
+            SecondCall(FqName("kotlin.collections.List.size"), "count"),
             SecondCall(FqName("kotlin.collections.List.isEmpty"), "any"),
             SecondCall(FqName("kotlin.collections.isNotEmpty"), "none"),
             SecondCall(FqName("kotlin.collections.count")),

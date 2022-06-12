@@ -1,5 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
+import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties
+import com.pinterest.ktlint.core.api.FeatureInAlphaState
+import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
 import com.pinterest.ktlint.ruleset.experimental.ArgumentListWrappingRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.config
@@ -7,12 +10,11 @@ import io.gitlab.arturbosch.detekt.api.configWithAndroidVariants
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
-import io.gitlab.arturbosch.detekt.formatting.INDENT_SIZE_KEY
-import io.gitlab.arturbosch.detekt.formatting.MAX_LINE_LENGTH_KEY
 
 /**
- * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
+ * See [ktlint-website](https://ktlint.github.io) for documentation.
  */
+@OptIn(FeatureInAlphaState::class)
 @AutoCorrectable(since = "1.0.0")
 class ArgumentListWrapping(config: Config) : FormattingRule(config) {
 
@@ -25,8 +27,9 @@ class ArgumentListWrapping(config: Config) : FormattingRule(config) {
     @Configuration("maximum line length")
     private val maxLineLength by configWithAndroidVariants(120, 100)
 
-    override fun overrideEditorConfig() = mapOf(
-        INDENT_SIZE_KEY to indentSize,
-        MAX_LINE_LENGTH_KEY to maxLineLength
-    )
+    override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
+        mapOf(
+            DefaultEditorConfigProperties.indentSizeProperty to indentSize.toString(),
+            DefaultEditorConfigProperties.maxLineLengthProperty to maxLineLength.toString()
+        )
 }

@@ -4,53 +4,55 @@ import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.nio.file.Files
 
-internal class DefaultConfigProviderSpec : Spek({
-    describe("defaultConfigProvider without plugins") {
-        val spec by memoized {
-            createNullLoggingSpec {}
-        }
+class DefaultConfigProviderSpec {
+    @Nested
+    inner class `defaultConfigProvider without plugins` {
+        private val extensionsSpec = createNullLoggingSpec {}.extensionsSpec
 
-        it("gets") {
-            val config = DefaultConfigProvider().apply { init(spec) }.get()
+        @Test
+        fun `gets`() {
+            val config = DefaultConfigProvider().apply { init(extensionsSpec) }.get()
 
             assertThat(config.parentPath).isNull()
             assertThat(config.subConfig("build").valueOrNull<Int>("maxIssues")).isEqualTo(0)
             assertThat(config.valueOrNull<Any>("sample")).isNull()
         }
 
-        it("copies") {
+        @Test
+        fun `copies`() {
             val path = createTempFileForTest("test", "test")
-            DefaultConfigProvider().apply { init(spec) }.copy(path)
+            DefaultConfigProvider().apply { init(extensionsSpec) }.copy(path)
 
             assertThat(path)
                 .hasSameTextualContentAs(resourceAsPath("default-detekt-config.yml"))
         }
     }
 
-    describe("defaultConfigProvider with plugins") {
-        val spec by memoized {
-            createNullLoggingSpec {
-                extensions {
-                    fromPaths { listOf(resourceAsPath("sample-rule-set.jar")) }
-                }
+    @Nested
+    inner class `defaultConfigProvider with plugins` {
+        private val extensionsSpec = createNullLoggingSpec {
+            extensions {
+                fromPaths { listOf(resourceAsPath("sample-rule-set.jar")) }
             }
-        }
+        }.extensionsSpec
 
-        it("gets") {
-            val config = DefaultConfigProvider().apply { init(spec) }.get()
+        @Test
+        fun `gets`() {
+            val config = DefaultConfigProvider().apply { init(extensionsSpec) }.get()
 
             assertThat(config.parentPath).isNull()
             assertThat(config.subConfig("build").valueOrNull<Int>("maxIssues")).isEqualTo(0)
             assertThat(config.valueOrNull<Any>("sample")).isNotNull()
         }
 
-        it("copies") {
+        @Test
+        fun `copies`() {
             val path = createTempFileForTest("test", "test")
-            DefaultConfigProvider().apply { init(spec) }.copy(path)
+            DefaultConfigProvider().apply { init(extensionsSpec) }.copy(path)
 
             val actual = String(Files.readAllBytes(path), Charsets.UTF_8)
             val expected = String(Files.readAllBytes(resourceAsPath("default-detekt-config.yml")), Charsets.UTF_8) +
@@ -67,4 +69,4 @@ internal class DefaultConfigProviderSpec : Spek({
             assertThat(actual).isEqualTo(expected)
         }
     }
-})
+}

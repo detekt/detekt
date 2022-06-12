@@ -13,11 +13,12 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtLambdaArgument
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getParameterForArgument
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getParameterForArgument
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
 /**
- * Reports function invocations which have more parameters than a certain threshold and are all not named.
+ * Reports function invocations which have more arguments than a certain threshold and are all not named. Calls with
+ * too many arguments are more difficult to understand so a named arguments help.
  *
  * <noncompliant>
  * fun sum(a: Int, b: Int, c: Int, d: Int) {
@@ -37,18 +38,23 @@ class NamedArguments(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "NamedArguments",
         Severity.Maintainability,
-        "Named arguments are required for function invocation with many parameters.",
+        "Named arguments are required for function calls with many arguments.",
         Debt.FIVE_MINS
     )
 
     @Configuration("number of parameters that triggers this inspection")
     private val threshold: Int by config(defaultValue = 3)
 
+    @Configuration("ignores when argument values are the same as the parameter names")
+    private val ignoreArgumentsMatchingNames: Boolean by config(defaultValue = false)
+
     override fun visitCallExpression(expression: KtCallExpression) {
         if (bindingContext == BindingContext.EMPTY) return
         val valueArguments = expression.valueArguments
         if (valueArguments.size > threshold && expression.canNameArguments()) {
-            report(CodeSmell(issue, Entity.from(expression), issue.description))
+            val message = "This function call has ${valueArguments.size} arguments. To call a function with more " +
+                "than $threshold arguments you should set the name of each argument."
+            report(CodeSmell(issue, Entity.from(expression), message))
         } else {
             super.visitCallExpression(expression)
         }
@@ -56,12 +62,21 @@ class NamedArguments(config: Config = Config.empty) : Rule(config) {
 
     @Suppress("ReturnCount")
     private fun KtCallExpression.canNameArguments(): Boolean {
-        val unnamedArguments = valueArguments.filterNot { it.isNamed() || it is KtLambdaArgument }
-        if (unnamedArguments.isEmpty()) return false
         val resolvedCall = getResolvedCall(bindingContext) ?: return false
         if (!resolvedCall.candidateDescriptor.hasStableParameterNames()) return false
-        return unnamedArguments.all {
-            resolvedCall.getParameterForArgument(it)?.varargElementType == null || it.getSpreadElement() != null
+
+        val unnamedArguments = valueArguments.mapNotNull { argument ->
+            if (argument.isNamed() || argument is KtLambdaArgument) return@mapNotNull null
+            val parameter = resolvedCall.getParameterForArgument(argument) ?: return@mapNotNull null
+            if (ignoreArgumentsMatchingNames &&
+                parameter.name.asString() == argument.getArgumentExpression()?.text
+            ) return@mapNotNull null
+            argument to parameter
+        }
+        if (unnamedArguments.isEmpty()) return false
+
+        return unnamedArguments.all { (argument, parameter) ->
+            argument.getSpreadElement() != null || parameter.varargElementType == null
         }
     }
 }

@@ -3,22 +3,20 @@ package io.github.detekt.metrics.processors
 import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Test
 
-class KtFileCountVisitorSpec : Spek({
-    describe("files") {
+class KtFileCountVisitorSpec {
 
-        it("twoFiles") {
-            val files = arrayOf(
-                compileContentForTest(default),
-                compileContentForTest(complexClass)
-            )
-            val count = files.sumOf { getData(it) }
-            assertThat(count).isEqualTo(2)
-        }
+    @Test
+    fun `twoFiles`() {
+        val files = arrayOf(
+            compileContentForTest(default),
+            compileContentForTest(complexClass)
+        )
+        val count = files.sumOf { getData(it) }
+        assertThat(count).isEqualTo(2)
     }
-})
+}
 
 private fun getData(file: KtFile): Int {
     return with(file) {

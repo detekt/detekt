@@ -2,32 +2,31 @@ package io.github.detekt.metrics.processors
 
 import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Test
 
-class LLOCVisitorSpec : Spek({
-    describe("LLOC Visitor") {
+class LLOCVisitorSpec {
 
-        it("defaultCaseHasOneClassAndAnnotationLine") {
-            val file = compileContentForTest(default)
+    @Test
+    fun `defaultCaseHasOneClassAndAnnotationLine`() {
+        val file = compileContentForTest(default)
 
-            val lloc = with(file) {
-                accept(LLOCVisitor())
-                getUserData(logicalLinesKey)
-            }
-
-            assertThat(lloc).isEqualTo(2)
+        val lloc = with(file) {
+            accept(LLOCVisitor())
+            getUserData(logicalLinesKey)
         }
 
-        it("llocOfComplexClass") {
-            val file = compileContentForTest(complexClass)
-
-            val lloc = with(file) {
-                accept(LLOCVisitor())
-                getUserData(logicalLinesKey)
-            }
-
-            assertThat(lloc).isEqualTo(85)
-        }
+        assertThat(lloc).isEqualTo(2)
     }
-})
+
+    @Test
+    fun `llocOfComplexClass`() {
+        val file = compileContentForTest(complexClass)
+
+        val lloc = with(file) {
+            accept(LLOCVisitor())
+            getUserData(logicalLinesKey)
+        }
+
+        assertThat(lloc).isEqualTo(85)
+    }
+}

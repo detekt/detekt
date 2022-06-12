@@ -16,13 +16,13 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.types.ErrorType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
 
 /**
  * In Kotlin functions `get` or `set` can be replaced with the shorter operator — `[]`,
- * see https://kotlinlang.org/docs/operator-overloading.html#indexed-access-operator.
+ * see [Indexed access operator](https://kotlinlang.org/docs/operator-overloading.html#indexed-access-operator).
  * Prefer the usage of the indexed access operator `[]` for map or list element access or insert methods.
  *
  * <noncompliant>
@@ -57,8 +57,11 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
         }
     }
 
-    private fun isIndexableGetter(expression: KtCallExpression): Boolean =
-        expression.calleeExpression?.text == "get" && expression.getFunctionDescriptor()?.isOperator == true
+    private fun isIndexableGetter(expression: KtCallExpression): Boolean {
+        if (expression.calleeExpression?.text != "get") return false
+        val descriptor = expression.getFunctionDescriptor() ?: return false
+        return descriptor.isOperator && descriptor.typeParameters.isEmpty()
+    }
 
     private fun isIndexableSetter(expression: KtCallExpression): Boolean =
         when (expression.calleeExpression?.text) {

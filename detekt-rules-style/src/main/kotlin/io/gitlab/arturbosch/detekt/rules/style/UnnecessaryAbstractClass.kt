@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
@@ -17,9 +16,9 @@ import io.gitlab.arturbosch.detekt.rules.isInternal
 import io.gitlab.arturbosch.detekt.rules.isProtected
 import org.jetbrains.kotlin.descriptors.MemberDescriptor
 import org.jetbrains.kotlin.descriptors.Modality
+import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -60,65 +59,65 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 
     @Configuration("Allows you to provide a list of annotations that disable this check.")
     @Deprecated("Use `ignoreAnnotated` instead")
-    private val excludeAnnotatedClasses: List<String> by config(emptyList<String>()) { classes ->
-        classes.map { it.removePrefix("*").removeSuffix("*") }
+    private val excludeAnnotatedClasses: List<Regex> by config(emptyList<String>()) { list ->
+        list.map { it.replace(".", "\\.").replace("*", ".*").toRegex() }
     }
 
     private lateinit var annotationExcluder: AnnotationExcluder
 
     override fun visitKtFile(file: KtFile) {
-        annotationExcluder = AnnotationExcluder(file, @Suppress("DEPRECATION") excludeAnnotatedClasses)
+        annotationExcluder = AnnotationExcluder(
+            file,
+            @Suppress("DEPRECATION") excludeAnnotatedClasses,
+            bindingContext,
+        )
         super.visitKtFile(file)
     }
 
     override fun visitClass(klass: KtClass) {
-        if (!klass.isInterface() && klass.isAbstract()) {
-            val namedMembers = klass.body?.children.orEmpty().filterIsInstance<KtNamedDeclaration>()
-            if (namedMembers.isNotEmpty()) {
-                NamedClassMembers(klass, namedMembers).detectAbstractAndConcreteType()
-            } else if (!klass.hasConstructorParameter()) {
-                report(CodeSmell(issue, Entity.from(klass), noConcreteMember), klass)
-            } else {
-                report(CodeSmell(issue, Entity.from(klass), noAbstractMember), klass)
-            }
-        }
+        klass.check()
         super.visitClass(klass)
     }
 
-    private fun report(finding: Finding, klass: KtClass) {
-        if (!annotationExcluder.shouldExclude(klass.annotationEntries)) {
-            report(finding)
+    @Suppress("ComplexMethod")
+    private fun KtClass.check() {
+        val nameIdentifier = this.nameIdentifier ?: return
+        if (annotationExcluder.shouldExclude(annotationEntries) || isInterface() || !isAbstract()) return
+        val members = members()
+        when {
+            members.isNotEmpty() -> {
+                val (abstractMembers, concreteMembers) = members.partition { it.isAbstract() }
+                if (abstractMembers.isEmpty() && !hasInheritedMember(true)) {
+                    report(CodeSmell(issue, Entity.from(nameIdentifier), noAbstractMember))
+                    return
+                }
+                if (abstractMembers.any { it.isInternal() || it.isProtected() } || hasConstructorParameter()) {
+                    return
+                }
+                if (concreteMembers.isEmpty() && !hasInheritedMember(false)) {
+                    report(CodeSmell(issue, Entity.from(nameIdentifier), noConcreteMember))
+                }
+            }
+            !hasConstructorParameter() ->
+                report(CodeSmell(issue, Entity.from(nameIdentifier), noConcreteMember))
+            else ->
+                report(CodeSmell(issue, Entity.from(nameIdentifier), noAbstractMember))
         }
     }
 
+    private fun KtClass.members() = body?.children?.filterIsInstance<KtCallableDeclaration>().orEmpty() +
+        primaryConstructor?.valueParameters?.filter { it.hasValOrVar() }.orEmpty()
+
     private fun KtClass.hasConstructorParameter() = primaryConstructor?.valueParameters?.isNotEmpty() == true
 
-    private inner class NamedClassMembers(val klass: KtClass, val members: List<KtNamedDeclaration>) {
-
-        fun detectAbstractAndConcreteType() {
-            val (abstractMembers, concreteMembers) = members.partition { it.isAbstract() }
-
-            if (abstractMembers.isEmpty() && !hasInheritedMember(true)) {
-                report(CodeSmell(issue, Entity.from(klass), noAbstractMember), klass)
-                return
-            }
-
-            if (abstractMembers.any { it.isInternal() || it.isProtected() } || klass.hasConstructorParameter()) return
-
-            if (concreteMembers.isEmpty() && !hasInheritedMember(false)) {
-                report(CodeSmell(issue, Entity.from(klass), noConcreteMember), klass)
-            }
-        }
-
-        private fun hasInheritedMember(isAbstract: Boolean): Boolean {
-            return when {
-                klass.superTypeListEntries.isEmpty() -> false
-                bindingContext == BindingContext.EMPTY -> true
-                else -> {
-                    val descriptor = bindingContext[BindingContext.CLASS, klass]
-                    descriptor?.unsubstitutedMemberScope?.getContributedDescriptors().orEmpty().any {
-                        (it as? MemberDescriptor)?.modality == Modality.ABSTRACT == isAbstract
-                    }
+    private fun KtClass.hasInheritedMember(isAbstract: Boolean): Boolean {
+        return when {
+            superTypeListEntries.isEmpty() -> false
+            bindingContext == BindingContext.EMPTY -> true
+            else -> {
+                val descriptor = bindingContext[BindingContext.CLASS, this]
+                descriptor?.unsubstitutedMemberScope?.getContributedDescriptors().orEmpty().any {
+                    (it as? MemberDescriptor)?.modality == Modality.ABSTRACT == isAbstract
                 }
             }
         }

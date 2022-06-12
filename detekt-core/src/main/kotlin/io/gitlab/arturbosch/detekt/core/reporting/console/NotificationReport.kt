@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 
 /**
  * Contains notifications reported by the detekt analyzer.
- * See: https://detekt.github.io/detekt/configurations.html#console-reports
+ * See: https://detekt.dev/configurations.html#console-reports
  */
 class NotificationReport : ConsoleReport() {
 

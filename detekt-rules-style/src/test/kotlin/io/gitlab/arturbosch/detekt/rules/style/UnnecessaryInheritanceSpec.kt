@@ -3,26 +3,25 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Test
 
-class UnnecessaryInheritanceSpec : Spek({
-    val subject by memoized { UnnecessaryInheritance(Config.empty) }
+class UnnecessaryInheritanceSpec {
+    val subject = UnnecessaryInheritance(Config.empty)
 
-    describe("check inherit classes") {
-
-        it("has unnecessary super type declarations") {
-            val findings = subject.lint(
-                """
-                class A : Any()
-                class B : Object()"""
-            )
-            assertThat(findings).hasSize(2)
-        }
-
-        it("has no unnecessary super type declarations") {
-            val findings = subject.lint("class C : An()")
-            assertThat(findings).isEmpty()
-        }
+    @Test
+    fun `has unnecessary super type declarations`() {
+        val findings = subject.lint(
+            """
+            class A : Any()
+            class B : Object()
+            """
+        )
+        assertThat(findings).hasSize(2)
     }
-})
+
+    @Test
+    fun `has no unnecessary super type declarations`() {
+        val findings = subject.lint("class C : An()")
+        assertThat(findings).isEmpty()
+    }
+}

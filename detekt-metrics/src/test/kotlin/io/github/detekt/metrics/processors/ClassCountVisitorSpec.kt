@@ -3,37 +3,36 @@ package io.github.detekt.metrics.processors
 import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Test
 
-class ClassCountVisitorSpec : Spek({
-    describe("something") {
-
-        it("twoClassesInSeparateFile") {
-            val files = arrayOf(
-                compileContentForTest(default),
-                compileContentForTest(classWithFields)
-            )
-            val count = getClassCount(files)
-            assertThat(count).isEqualTo(2)
-        }
-
-        it("oneClassWithOneNestedClass") {
-            val file = compileContentForTest(complexClass)
-            val count = getClassCount(arrayOf(file))
-            assertThat(count).isEqualTo(2)
-        }
-
-        it("testEnumAndInterface") {
-            val files = arrayOf(
-                compileContentForTest(emptyEnum),
-                compileContentForTest(emptyInterface)
-            )
-            val count = getClassCount(files)
-            assertThat(count).isEqualTo(2)
-        }
+class ClassCountVisitorSpec {
+    @Test
+    fun `twoClassesInSeparateFile`() {
+        val files = arrayOf(
+            compileContentForTest(default),
+            compileContentForTest(classWithFields)
+        )
+        val count = getClassCount(files)
+        assertThat(count).isEqualTo(2)
     }
-})
+
+    @Test
+    fun `oneClassWithOneNestedClass`() {
+        val file = compileContentForTest(complexClass)
+        val count = getClassCount(arrayOf(file))
+        assertThat(count).isEqualTo(2)
+    }
+
+    @Test
+    fun `testEnumAndInterface`() {
+        val files = arrayOf(
+            compileContentForTest(emptyEnum),
+            compileContentForTest(emptyInterface)
+        )
+        val count = getClassCount(files)
+        assertThat(count).isEqualTo(2)
+    }
+}
 
 private fun getClassCount(files: Array<KtFile>): Int {
     return files.sumOf { getData(it) }

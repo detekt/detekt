@@ -13,93 +13,92 @@ import io.gitlab.arturbosch.detekt.core.createProcessingSettings
 import io.gitlab.arturbosch.detekt.core.tooling.getDefaultConfiguration
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThatCode
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Test
 
-class SupportConfigValidationSpec : Spek({
+class SupportConfigValidationSpec {
 
-    describe("support config validation") {
+    private val testDir = createTempDirectoryForTest("detekt-sample")
+    private val spec = createNullLoggingSpec {}
 
-        val testDir by memoized { createTempDirectoryForTest("detekt-sample") }
-        val spec by memoized { createNullLoggingSpec {} }
-
-        it("fails when unknown properties are found") {
-            val config = yamlConfigFromContent(
-                """
-                # Properties of custom rule sets get excluded by default.
-                sample-rule-set:
-                  TooManyFunctions:
-                    active: true
-
-                # This properties are unknown to detekt and must be excluded.
-                my_additional_properties:
-                  magic_number: 7
-                  magic_string: 'Hello World'
+    @Test
+    fun `fails when unknown properties are found`() {
+        val config = yamlConfigFromContent(
             """
-            )
-            createProcessingSettings(testDir, config).use {
-                assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
-                    .isInstanceOf(InvalidConfig::class.java)
-                    .hasMessageContaining("Run failed with 1 invalid config property.")
-                    .hasMessageContaining("my_additional_properties")
-            }
-        }
+            # Properties of custom rule sets get excluded by default.
+            sample-rule-set:
+              TooManyFunctions:
+                active: true
 
-        it("fails due to custom config validator want active to be booleans") {
-            val config = yamlConfigFromContent(
-                """
-                # Properties of custom rule sets get excluded by default.
-                sample-rule-set:
-                  TooManyFunctions:
-                    # This property is tested via the SampleConfigValidator
-                    active: 1 # should be true
+            # This properties are unknown to detekt and must be excluded.
+            my_additional_properties:
+              magic_number: 7
+              magic_string: 'Hello World'
             """
-            )
-            createProcessingSettings(testDir, config).use {
-                assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
-                    .isInstanceOf(InvalidConfig::class.java)
-                    .hasMessageContaining("Run failed with 1 invalid config property.")
-            }
-        }
-
-        it("passes with excluded new properties") {
-            val config = yamlConfigFromContent(
-                """
-               config:
-                 validation: true
-                 # Additional properties can be useful when writing custom extensions.
-                 # However only properties defined in the default config are known to detekt.
-                 # All unknown properties are treated as errors if not excluded.
-                 excludes: 'my_additional_properties'
-
-               # Properties of custom rule sets get excluded by default.
-               # If you want to validate them further, consider implementing a ConfigValidator.
-               sample-rule-set:
-                 TooManyFunctions:
-                   active: true
-
-               # This properties are unknown to detekt and must be excluded.
-               my_additional_properties:
-                 magic_number: 7
-                 magic_string: 'Hello World'
-            """
-            )
-            createProcessingSettings(testDir, config).use {
-                assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
-                    .doesNotThrowAnyException()
-            }
+        )
+        createProcessingSettings(testDir, config).use {
+            assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
+                .isInstanceOf(InvalidConfig::class.java)
+                .hasMessageContaining("Run failed with 1 invalid config property.")
+                .hasMessageContaining("my_additional_properties")
         }
     }
-})
 
-internal class SampleRuleProvider : RuleSetProvider {
+    @Test
+    fun `fails due to custom config validator want active to be booleans`() {
+        val config = yamlConfigFromContent(
+            """
+            # Properties of custom rule sets get excluded by default.
+            sample-rule-set:
+              TooManyFunctions:
+                # This property is tested via the SampleConfigValidator
+                active: 1 # should be true
+            """
+        )
+        createProcessingSettings(testDir, config).use {
+            assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
+                .isInstanceOf(InvalidConfig::class.java)
+                .hasMessageContaining("Run failed with 1 invalid config property.")
+        }
+    }
+
+    @Test
+    fun `passes with excluded new properties`() {
+        val config = yamlConfigFromContent(
+            """
+           config:
+             validation: true
+             # Additional properties can be useful when writing custom extensions.
+             # However only properties defined in the default config are known to detekt.
+             # All unknown properties are treated as errors if not excluded.
+             excludes: 'my_additional_properties'
+
+           # Properties of custom rule sets get excluded by default.
+           # If you want to validate them further, consider implementing a ConfigValidator.
+           sample-rule-set:
+             TooManyFunctions:
+               active: true
+
+           # This properties are unknown to detekt and must be excluded.
+           my_additional_properties:
+             magic_number: 7
+             magic_string: 'Hello World'
+            """
+        )
+        createProcessingSettings(testDir, config).use {
+            assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
+                .doesNotThrowAnyException()
+        }
+    }
+}
+
+class SampleRuleProvider : RuleSetProvider {
 
     override val ruleSetId: String = "sample-rule-set"
 
     override fun instance(config: Config) = RuleSet(ruleSetId, emptyList())
 }
 
-internal class SampleConfigValidator : ConfigValidator {
+class SampleConfigValidator : ConfigValidator {
 
     override fun validate(config: Config): Collection<Notification> {
         val result = mutableListOf<Notification>()

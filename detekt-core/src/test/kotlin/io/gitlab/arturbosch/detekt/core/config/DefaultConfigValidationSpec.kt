@@ -2,21 +2,19 @@ package io.gitlab.arturbosch.detekt.core.config
 
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.Test
 
-class DefaultConfigValidationSpec : Spek({
+class DefaultConfigValidationSpec {
 
-    describe("default configuration is valid") {
+    private val baseline = yamlConfig("default-detekt-config.yml")
 
-        val baseline by memoized { yamlConfig("default-detekt-config.yml") }
-
-        it("is valid comparing itself") {
-            assertThat(validateConfig(baseline, baseline)).isEmpty()
-        }
-
-        it("does not flag common known config sub sections") {
-            assertThat(validateConfig(yamlConfig("common_known_sections.yml"), baseline)).isEmpty()
-        }
+    @Test
+    fun `is valid comparing itself`() {
+        assertThat(validateConfig(baseline, baseline)).isEmpty()
     }
-})
+
+    @Test
+    fun `does not flag common known config sub sections`() {
+        assertThat(validateConfig(yamlConfig("common_known_sections.yml"), baseline)).isEmpty()
+    }
+}
