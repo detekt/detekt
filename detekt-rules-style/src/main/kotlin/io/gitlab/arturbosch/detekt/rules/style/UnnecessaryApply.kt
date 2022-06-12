@@ -10,7 +10,9 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.receiverIsUsed
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -75,11 +77,20 @@ class UnnecessaryApply(config: Config) : Rule(config) {
     @Suppress("ReturnCount")
     private fun KtCallExpression.hasOnlyOneMemberAccessStatement(): Boolean {
         val lambda = lambdaArguments.firstOrNull()?.getLambdaExpression() ?: return false
-        val singleStatement = lambda.bodyExpression?.statements?.singleOrNull() ?: return false
-        if (singleStatement !is KtThisExpression &&
+        var singleStatement = lambda.bodyExpression?.statements?.singleOrNull() ?: return false
+
+        if (singleStatement is KtBinaryExpression) {
+            if (singleStatement.operationToken !in KtTokens.ALL_ASSIGNMENTS) return false
+
+            // for an assignment expression only consider whether members on the LHS use the apply{} context
+            singleStatement = singleStatement.left ?: return false
+        } else if (singleStatement !is KtThisExpression &&
             singleStatement !is KtReferenceExpression &&
             singleStatement !is KtDotQualifiedExpression
-        ) return false
+        ) {
+            return false
+        }
+
         val lambdaDescriptor = bindingContext[BindingContext.FUNCTION, lambda.functionLiteral] ?: return false
         return singleStatement.collectDescendantsOfType<KtNameReferenceExpression> {
             val resolvedCall = it.getResolvedCall(bindingContext)
