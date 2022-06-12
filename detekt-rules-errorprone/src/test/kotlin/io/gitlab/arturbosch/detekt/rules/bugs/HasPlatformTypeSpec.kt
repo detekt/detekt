@@ -163,7 +163,7 @@ class HasPlatformTypeSpec(private val env: KotlinCoreEnvironment) {
             import java.net.URLEncoder.encode
 
             class Person {
-                val idLength: Int = System.getProperty("id")!!.plus("-PERSON")
+                val idLength: String = System.getProperty("id")!!.plus("-PERSON")
                 val urlLength: Int? = encode("url", "UTF-8")?.length
             }
         """.trimIndent()
