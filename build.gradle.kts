@@ -5,7 +5,6 @@ plugins {
     id("releasing")
     id("io.gitlab.arturbosch.detekt")
     alias(libs.plugins.gradleVersions)
-    alias(libs.plugins.sonarqube)
 }
 
 allprojects {
