@@ -30,31 +30,31 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout Repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
     - name: Setup Java
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@860f60056505705214d223b91ed7a30f173f6142 # tag=v3
       with:
         java-version: ${{ matrix.jdk }}
         distribution: 'temurin'
     - name: Build detekt
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@e88ed3e650b26bd116cfee53cf198c1f6856682d # tag=v2
       with:
         arguments: build -x detekt
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # tag=v3
       with:
         name: heap-dump
         path: '**.hprof'
         if-no-files-found: ignore
     - name: Run detekt-cli --help
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@e88ed3e650b26bd116cfee53cf198c1f6856682d # tag=v2
       with:
         arguments: :detekt-cli:runWithHelpFlag
     - name: Run detekt-cli with argsfile
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@e88ed3e650b26bd116cfee53cf198c1f6856682d # tag=v2
       with:
         arguments: :detekt-cli:runWithArgsFile
     - name: Try to publish to Maven Local
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@e88ed3e650b26bd116cfee53cf198c1f6856682d # tag=v2
       with:
         arguments: publishToMavenLocal
 
@@ -63,14 +63,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
     - name: Setup Java
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@860f60056505705214d223b91ed7a30f173f6142 # tag=v3
       with:
         java-version: 17
         distribution: 'temurin'
     - name: Verify Generated Detekt Config File
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@e88ed3e650b26bd116cfee53cf198c1f6856682d # tag=v2
       with:
         arguments: verifyGeneratorOutput
 
@@ -79,14 +79,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@860f60056505705214d223b91ed7a30f173f6142 # tag=v3
         with:
           java-version: 17
           distribution: 'temurin'
       - name: Build and compile test snippets
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@e88ed3e650b26bd116cfee53cf198c1f6856682d # tag=v2
         with:
           arguments: test -Pcompile-test-snippets=true
 
@@ -95,13 +95,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@860f60056505705214d223b91ed7a30f173f6142 # tag=v3
         with:
           java-version: 17
           distribution: 'temurin'
       - name: Run with allWarningsAsErrors
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@e88ed3e650b26bd116cfee53cf198c1f6856682d # tag=v2
         with:
           arguments: build -x detekt -PwarningsAsErrors=true
