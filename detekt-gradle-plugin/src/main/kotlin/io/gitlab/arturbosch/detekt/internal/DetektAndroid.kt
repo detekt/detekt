@@ -23,23 +23,21 @@ internal class DetektAndroid(private val project: Project) {
     private val mainTaskProvider: TaskProvider<Task> by lazy {
         project.tasks.register("${DetektPlugin.DETEKT_TASK_NAME}Main") {
             it.group = "verification"
-            it.description = "EXPERIMENTAL: Run detekt analysis for production classes across " +
-                "all variants with type resolution"
+            it.description = "Run detekt analysis for production classes across all variants with type resolution"
         }
     }
 
     private val testTaskProvider: TaskProvider<Task> by lazy {
         project.tasks.register("${DetektPlugin.DETEKT_TASK_NAME}Test") {
             it.group = "verification"
-            it.description = "EXPERIMENTAL: Run detekt analysis for test classes across " +
-                "all variants with type resolution"
+            it.description = "Run detekt analysis for test classes across all variants with type resolution"
         }
     }
 
     private val mainBaselineTaskProvider: TaskProvider<Task> by lazy {
         project.tasks.register("${DetektPlugin.BASELINE_TASK_NAME}Main") {
             it.group = "verification"
-            it.description = "EXPERIMENTAL: Creates detekt baseline files for production classes across " +
+            it.description = "Creates detekt baseline files for production classes across " +
                 "all variants with type resolution"
         }
     }
@@ -47,8 +45,7 @@ internal class DetektAndroid(private val project: Project) {
     private val testBaselineTaskProvider: TaskProvider<Task> by lazy {
         project.tasks.register("${DetektPlugin.BASELINE_TASK_NAME}Test") {
             it.group = "verification"
-            it.description = "EXPERIMENTAL: Creates detekt baseline files for test classes across " +
-                "all variants with type resolution"
+            it.description = "Creates detekt baseline files for test classes across all variants with type resolution"
         }
     }
 
@@ -127,7 +124,7 @@ internal fun Project.registerAndroidDetektTask(
             baseline.set(layout.file(project.provider { baselineFile }))
         }
         setReportOutputConventions(reports, extension, variant.name)
-        description = "EXPERIMENTAL: Run detekt analysis for ${variant.name} classes with type resolution"
+        description = "Run detekt analysis for ${variant.name} classes with type resolution"
     }
 
 internal fun Project.registerAndroidCreateBaselineTask(
@@ -147,7 +144,7 @@ internal fun Project.registerAndroidCreateBaselineTask(
         )
         val variantBaselineFile = extension.baseline?.addVariantName(variant.name)
         baseline.set(project.layout.file(project.provider { variantBaselineFile }))
-        description = "EXPERIMENTAL: Creates detekt baseline for ${variant.name} classes with type resolution"
+        description = "Creates detekt baseline for ${variant.name} classes with type resolution"
     }
 
 private fun Project.javaCompileDestination(variant: BaseVariant): DirectoryProperty? {

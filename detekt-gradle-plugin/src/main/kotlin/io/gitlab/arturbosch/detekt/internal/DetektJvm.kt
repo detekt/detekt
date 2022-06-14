@@ -30,7 +30,7 @@ internal class DetektJvm(private val project: Project) {
                 baseline.set(layout.file(project.provider { baselineFile }))
             }
             setReportOutputConventions(reports, extension, sourceSet.name)
-            description = "EXPERIMENTAL: Run detekt analysis for ${sourceSet.name} classes with type resolution"
+            description = "Run detekt analysis for ${sourceSet.name} classes with type resolution"
         }
     }
 
@@ -42,7 +42,7 @@ internal class DetektJvm(private val project: Project) {
             classpath.setFrom(sourceSet.compileClasspath.existingFiles(), sourceSet.output.classesDirs.existingFiles())
             val variantBaselineFile = extension.baseline?.addVariantName(sourceSet.name)
             baseline.set(project.layout.file(project.provider { variantBaselineFile }))
-            description = "EXPERIMENTAL: Creates detekt baseline for ${sourceSet.name} classes with type resolution"
+            description = "Creates detekt baseline for ${sourceSet.name} classes with type resolution"
         }
     }
 

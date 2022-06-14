@@ -173,7 +173,7 @@ class CliArgs {
     */
     @Parameter(
         names = ["--classpath", "-cp"],
-        description = "EXPERIMENTAL: Paths where to find user class files and depending jar files. " +
+        description = "Paths where to find user class files and depending jar files. " +
             "Used for type resolution."
     )
     var classpath: String? = null
@@ -181,14 +181,14 @@ class CliArgs {
     @Parameter(
         names = ["--language-version"],
         converter = LanguageVersionConverter::class,
-        description = "EXPERIMENTAL: Compatibility mode for Kotlin language version X.Y, reports errors for all " +
+        description = "Compatibility mode for Kotlin language version X.Y, reports errors for all " +
             "language features that came out later"
     )
     var languageVersion: LanguageVersion? = null
 
     @Parameter(
         names = ["--jvm-target"],
-        description = "EXPERIMENTAL: Target version of the generated JVM bytecode that was generated during " +
+        description = "Target version of the generated JVM bytecode that was generated during " +
             "compilation and is now being used for type resolution (1.6, 1.8, 9, 10, 11, 12, 13, 14, 15, 16 or 17)"
     )
     var jvmTarget: String = JvmTarget.DEFAULT.description

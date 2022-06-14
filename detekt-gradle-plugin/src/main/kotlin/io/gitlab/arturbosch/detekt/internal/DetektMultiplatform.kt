@@ -111,7 +111,7 @@ internal class DetektMultiplatform(private val project: Project) {
             description =
                 "Run detekt analysis for target ${target.name} and source set ${compilation.name}"
             if (runWithTypeResolution) {
-                description = "EXPERIMENTAL: $description with type resolution."
+                description = "$description with type resolution."
             }
         }
 
@@ -134,7 +134,7 @@ internal class DetektMultiplatform(private val project: Project) {
             description =
                 "Creates detekt baseline for ${target.name} and source set ${compilation.name}"
             if (runWithTypeResolution) {
-                description = "EXPERIMENTAL: $description with type resolution."
+                description = "$description with type resolution."
             }
         }
     }
