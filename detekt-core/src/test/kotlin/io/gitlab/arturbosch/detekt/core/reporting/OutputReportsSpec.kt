@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.reporting
 
 import io.github.detekt.report.html.HtmlOutputReport
+import io.github.detekt.report.md.MdOutputReport
 import io.github.detekt.report.txt.TxtOutputReport
 import io.github.detekt.report.xml.XmlOutputReport
 import io.github.detekt.test.utils.resourceAsPath
@@ -28,11 +29,12 @@ class OutputReportsSpec {
             report { "txt" to Paths.get("/tmp/path2") }
             report { reportUnderTest to Paths.get("/tmp/path3") }
             report { "html" to Paths.get("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html") }
+            report { "md" to Paths.get("/tmp/path4") }
         }.build().reports.toList()
 
         @Test
         fun `should parse multiple report entries`() {
-            assertThat(reports).hasSize(4)
+            assertThat(reports).hasSize(5)
         }
 
         @Test
@@ -64,6 +66,13 @@ class OutputReportsSpec {
             assertThat(htmlReport.path).isEqualTo(
                 Paths.get("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html")
             )
+        }
+
+        @Test
+        fun `it should properly parse MD report entry`() {
+            val mdRepot = reports[4]
+            assertThat(mdRepot.type).isEqualTo(defaultReportMapping(MdOutputReport::class.java.simpleName))
+            assertThat(mdRepot.path).isEqualTo(Paths.get("/tmp/path4"))
         }
 
         @Nested

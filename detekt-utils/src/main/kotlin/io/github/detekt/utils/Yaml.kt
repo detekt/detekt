@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.generator.out
+package io.github.detekt.utils
 
 sealed class YML(open val indent: Int = 0, open var content: String = "") {
     fun append(value: String) {

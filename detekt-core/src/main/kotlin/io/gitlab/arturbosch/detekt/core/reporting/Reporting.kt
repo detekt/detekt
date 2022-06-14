@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.reporting
 
 import io.github.detekt.report.html.HtmlOutputReport
+import io.github.detekt.report.md.MdOutputReport
 import io.github.detekt.report.sarif.SarifOutputReport
 import io.github.detekt.report.txt.TxtOutputReport
 import io.github.detekt.report.xml.XmlOutputReport
@@ -18,6 +19,7 @@ internal fun defaultReportMapping(reportId: String) = when (reportId) {
     XmlOutputReport::class.java.simpleName -> "xml"
     HtmlOutputReport::class.java.simpleName -> "html"
     SarifOutputReport::class.java.simpleName -> "sarif"
+    MdOutputReport::class.java.simpleName -> "md"
     else -> reportId
 }
 
