@@ -12,17 +12,15 @@ import DetektVersionBanner from "./\_detekt-version-banner.mdx";
 
 ### Features
 
-- Code smell analysis for your Kotlin projects
-- Complexity report based on logical lines of code, McCabe complexity and amount of code smells
-- Highly configurable (rule set or rule level)
-- Suppress findings with Kotlin's `@Suppress` and Java's `@SuppressWarnings` annotations
-- Specify code smell thresholds to break your build or print a warning
-- Code Smell baseline and ignore lists for legacy projects
-- [Gradle plugin](/docs/gettingstarted/gradle) for code analysis via Gradle builds
-- [SonarQube integration](https://github.com/detekt/sonar-kotlin)
-- Extensible by own rule sets and `FileProcessListener's`
-- [IntelliJ integration](https://github.com/detekt/detekt-intellij-plugin)
-- Unofficial [Maven plugin](https://github.com/Ozsie/detekt-maven-plugin) by [Ozsie](https://github.com/Ozsie)
+- Code smell analysis for your [Kotlin projects](https://kotlinlang.org/).
+- Highly configurable rule sets.
+- Code Smell baseline and suppression for legacy projects.
+- Suppression of findings with `@Suppress` annotations.
+- Support for different report formats: html, markdown, [SARIF](https://sarifweb.azurewebsites.net/) and xml (checkstyle). Is it not enough? You can extend detekt and create your own reports.
+- Extensibility by enabling incorporation of personal rule sets, `FileProcessListener's` and `OutputReport's`.
+- Complexity reports based on lines of code, cyclomatic complexity and number of code smells.
+- First party integration with Gradle with our [Gradle plugin](#with-gradle).
+- A community of [third party plugins](https://github.com/topics/detekt-plugin) that adds more rules and features to detekt.
 
 ### Quick Start with Gradle
 
@@ -90,7 +88,7 @@ See [reporting](/docs/introduction/reporting) docs for more details on configuri
 
 ### Adding more rule sets
 
-detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as a `formatting` rule set
+detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as the `formatting` rule set
 which can be easily added to the gradle configuration:
 
 ```gradle
