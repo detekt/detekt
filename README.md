@@ -106,7 +106,7 @@ If you want to use a SNAPSHOT version, you can find more info on [this documenta
 
 #### Requirements
 
-Gradle 6.1+ is the minimum requirement. However, the recommended versions together with the other tools recommended versions are:
+Gradle 6.7.1+ is the minimum requirement. However, the recommended versions together with the other tools recommended versions are:
 
 | Detekt Version | Gradle  | Kotlin   | AGP     | Java Target Level | JDK Max Version |
 | -------------- | ------- | -------- | ------- | ----------------- | --------------- |
