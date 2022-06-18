@@ -26,13 +26,13 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * Prefer the usage of the indexed access operator `[]` for map or list element access or insert methods.
  *
  * <noncompliant>
- *  val map = Map<String, String>()
+ *  val map = mutableMapOf<String, String>()
  *  map.put("key", "value")
  *  val value = map.get("key")
  * </noncompliant>
  *
  * <compliant>
- *  val map = Map<String, String>()
+ *  val map = mutableMapOf<String, String>()
  *  map["key"] = "value"
  *  val value = map["key"]
  * </compliant>
