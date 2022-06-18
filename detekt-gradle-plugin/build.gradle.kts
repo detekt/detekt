@@ -6,7 +6,6 @@ plugins {
     `java-gradle-plugin`
     `java-test-fixtures`
     idea
-    signing
     alias(libs.plugins.pluginPublishing)
     // We use this published version of the Detekt plugin to self analyse this project.
     id("io.gitlab.arturbosch.detekt") version "1.20.0"
@@ -164,20 +163,6 @@ with(components["java"] as AdhocComponentWithVariants) {
 
 tasks.withType<Sign>().configureEach {
     notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13470")
-}
-
-val signingKey = "SIGNING_KEY".byProperty
-val signingPwd = "SIGNING_PWD".byProperty
-if (signingKey.isNullOrBlank() || signingPwd.isNullOrBlank()) {
-    logger.info("Signing disabled as the GPG key was not found")
-} else {
-    logger.info("GPG Key found - Signing enabled")
-    afterEvaluate {
-        signing {
-            useInMemoryPgpKeys(signingKey, signingPwd)
-            publishing.publications.forEach(::sign)
-        }
-    }
 }
 
 afterEvaluate {
