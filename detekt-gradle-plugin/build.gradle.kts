@@ -89,9 +89,11 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("detektPlugin") {
+        create("detektPlugin") {
             id = "io.gitlab.arturbosch.detekt"
             implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
+            displayName = "Static code analysis for Kotlin"
+            description = "Static code analysis for Kotlin"
         }
     }
     // Source sets that require the Gradle TestKit dependency
@@ -119,15 +121,7 @@ tasks.validatePlugins {
 pluginBundle {
     website = "https://detekt.dev"
     vcsUrl = "https://github.com/detekt/detekt"
-    description = "Static code analysis for Kotlin"
     tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
-
-    (plugins) {
-        "detektPlugin" {
-            id = "io.gitlab.arturbosch.detekt"
-            displayName = "Static code analysis for Kotlin"
-        }
-    }
 }
 
 tasks {
