@@ -12,7 +12,6 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
-import kotlin.text.Typography.ellipsis
 
 internal fun defaultReportMapping(reportId: String) = when (reportId) {
     TxtOutputReport::class.java.simpleName -> "txt"
@@ -81,7 +80,7 @@ private fun Finding.truncatedMessage(): String {
         .replace(messageReplacementRegex, " ")
         .trim()
     return when {
-        message.length > REPORT_MESSAGE_SIZE_LIMIT -> "${message.take(REPORT_MESSAGE_SIZE_LIMIT)}($ellipsis)"
+        message.length > REPORT_MESSAGE_SIZE_LIMIT -> "${message.take(REPORT_MESSAGE_SIZE_LIMIT)}(...)"
         else -> message
     }
 }
