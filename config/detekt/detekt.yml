@@ -155,6 +155,8 @@ potential-bugs:
 style:
   CanBeNonNullable:
     active: true
+  CascadingCallWrapping:
+    active: true
   ClassOrdering:
     active: true
   CollapsibleIfStatements:

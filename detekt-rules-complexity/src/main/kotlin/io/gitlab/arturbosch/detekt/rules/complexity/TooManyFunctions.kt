@@ -156,7 +156,8 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
             declarations
                 .filterIsInstance<KtNamedFunction>()
                 .count { !isIgnoredFunction(it) }
-        } ?: 0
+        }
+        ?: 0
 
     private fun isIgnoredFunction(function: KtNamedFunction): Boolean = when {
         ignoreDeprecated && function.hasAnnotation(DEPRECATED) -> true
