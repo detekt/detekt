@@ -66,10 +66,12 @@ if (signingKey.isNullOrBlank() || signingPwd.isNullOrBlank()) {
     logger.info("Signing disabled as the GPG key was not found")
 } else {
     logger.info("GPG Key found - Signing enabled")
-    signing {
-        useInMemoryPgpKeys(signingKey, signingPwd)
-        publishing.publications.forEach(::sign)
-    }
+}
+
+signing {
+    useInMemoryPgpKeys(signingKey, signingPwd)
+    sign(publishing.publications)
+    isRequired = !(signingKey.isNullOrBlank() || signingPwd.isNullOrBlank())
 }
 
 val String.byProperty: String? get() = findProperty(this) as? String
