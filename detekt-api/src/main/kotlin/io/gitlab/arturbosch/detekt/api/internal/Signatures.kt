@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
+import org.jetbrains.kotlin.psi.psiUtil.startOffsetSkippingComments
 import java.io.File
 
 private val multipleWhitespaces = Regex("\\s{2,}")
@@ -92,15 +93,15 @@ private fun buildClassSignature(classOrObject: KtClassOrObject): String {
 }
 
 private fun buildFunctionSignature(element: KtNamedFunction): String {
-    val startOffset = element.startOffset
+    val startOffset = element.startOffsetSkippingComments - element.startOffset
     val endOffset = if (element.typeReference != null) {
         element.typeReference?.endOffset ?: 0
     } else {
         element.valueParameterList?.endOffset ?: 0
-    }
+    } - element.startOffset
 
     require(startOffset < endOffset) {
         "Error building function signature with range $startOffset - $endOffset for element: ${element.text}"
     }
-    return element.text.substring(0, endOffset - startOffset)
+    return element.text.substring(startOffset, endOffset)
 }

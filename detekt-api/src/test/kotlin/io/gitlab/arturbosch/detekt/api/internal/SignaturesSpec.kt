@@ -26,6 +26,15 @@ class SignaturesSpec {
     }
 
     @Test
+    fun `function with comments`() {
+        val result = compileContentForTest("/* comments */ fun data() = 0")
+            .findChildByClass(KtNamedFunction::class.java)!!
+            .buildFullSignature()
+
+        assertThat(result).isEqualTo("Test.kt\$fun data()")
+    }
+
+    @Test
     fun `function throws exception`() {
         assertThatThrownBy {
             compileContentForTest("{ fun data() = 0 }")
