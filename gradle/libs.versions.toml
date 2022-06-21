@@ -7,7 +7,7 @@ junit = "5.8.2"
 contester = "0.2.0"
 
 [libraries]
-githubRelease-gradle = "com.github.breadmoirai:github-release:2.3.7"
+githubRelease-gradle = "com.github.breadmoirai:github-release:2.4.1"
 nexusStaging-gradle = "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.30.0"
 semver4j-gradle = "com.vdurmont:semver4j:3.1.0"
 
@@ -42,10 +42,8 @@ contester-breakpoint = { module = "io.github.davidburstrom.contester:contester-b
 contester-driver = { module = "io.github.davidburstrom.contester:contester-driver", version.ref = "contester" }
 
 [plugins]
-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.10.0" }
-dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis", version = "1.4.0" }
+binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.10.1" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 gradleVersions = { id = "com.github.ben-manes.versions", version = "0.42.0" }
-pluginPublishing = { id = "com.gradle.plugin-publish", version = "0.21.0" }
+pluginPublishing = { id = "com.gradle.plugin-publish", version = "1.0.0-rc-3" }
 shadow = { id = "com.github.johnrengelman.shadow", version = "7.1.2" }
-sonarqube = { id = "org.sonarqube", version = "3.3" }

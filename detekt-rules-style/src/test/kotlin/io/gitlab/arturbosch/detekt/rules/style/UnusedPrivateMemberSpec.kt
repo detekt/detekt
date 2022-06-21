@@ -1321,7 +1321,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1).hasSourceLocations(
-                SourceLocation(3, 5)
+                SourceLocation(3, 30)
             )
         }
     }
@@ -1591,6 +1591,50 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     this.firstOrNull { it.s == s }
             """
             assertThat(subject.lintWithContext(env, code)).hasSize(0)
+        }
+    }
+
+    @Nested
+    inner class `highlights declaration name` {
+        @Test
+        fun function() {
+            val code = """
+                class Test {
+                    /**
+                     * kdoc
+                     */
+                    private fun foo() = 1
+                }
+            """
+            assertThat(subject.lint(code)).hasSize(1).hasSourceLocation(5, 17)
+        }
+
+        @Test
+        fun property() {
+            val code = """
+                class Test {
+                    /**
+                     * kdoc
+                     */
+                    private val foo = 1
+                }
+            """
+            assertThat(subject.lint(code)).hasSize(1).hasSourceLocation(5, 17)
+        }
+
+        @Test
+        fun parameter() {
+            val code = """
+                class Test {
+                    fun test(
+                        /**
+                         * kdoc
+                         */
+                        x: Int
+                    ) = 1
+                }
+            """
+            assertThat(subject.lint(code)).hasSize(1).hasSourceLocation(6, 9)
         }
     }
 }

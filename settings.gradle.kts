@@ -17,6 +17,7 @@ include("detekt-metrics")
 include("detekt-parser")
 include("detekt-psi-utils")
 include("detekt-report-html")
+include("detekt-report-md")
 include("detekt-report-sarif")
 include("detekt-report-txt")
 include("detekt-report-xml")
@@ -41,13 +42,13 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 // build scan plugin can only be applied in settings file
 plugins {
     // check https://gradle.com/enterprise/releases with new versions. GE plugin version should not lag behind Gradle version
-    id("com.gradle.enterprise") version "3.10.1"
+    id("com.gradle.enterprise") version "3.10.2"
     id("com.gradle.common-custom-user-data-gradle-plugin") version "1.7.2"
 }
 
-gradleEnterprise {
-    val isCiBuild = System.getenv("CI") != null
+val isCiBuild = System.getenv("CI") != null
 
+gradleEnterprise {
     buildScan {
         publishAlways()
 
@@ -62,6 +63,21 @@ gradleEnterprise {
 
         capture {
             isTaskInputFiles = true
+        }
+    }
+}
+
+buildCache {
+    local {
+        isEnabled = true
+    }
+    remote<HttpBuildCache> {
+        isPush = isCiBuild
+        isEnabled = true
+        url = uri("https://ge.detekt.dev/cache/")
+        credentials {
+            username = System.getenv("GRADLE_CACHE_USERNAME")
+            password = System.getenv("GRADLE_CACHE_PASSWORD")
         }
     }
 }

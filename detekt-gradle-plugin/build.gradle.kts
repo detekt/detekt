@@ -6,7 +6,6 @@ plugins {
     `java-gradle-plugin`
     `java-test-fixtures`
     idea
-    signing
     alias(libs.plugins.pluginPublishing)
     // We use this published version of the Detekt plugin to self analyse this project.
     id("io.gitlab.arturbosch.detekt") version "1.20.0"
@@ -46,20 +45,23 @@ testing {
                     )
                 )
             }
-            targets {
-                all {
-                    testTask.configure {
-                        inputs.property("androidSdkRoot", System.getenv("ANDROID_SDK_ROOT")).optional(true)
-                        inputs.property("androidHome", System.getenv("ANDROID_HOME")).optional(true)
-                    }
-                }
-            }
         }
         register("functionalTest", JvmTestSuite::class) {
             useJUnitJupiter(libs.versions.junit.get())
 
             dependencies {
                 implementation(libs.assertj)
+            }
+
+            targets {
+                all {
+                    testTask.configure {
+                        // If `androidSdkInstalled` is false, skip running DetektAndroidSpec
+                        val isAndroidSdkInstalled = System.getenv("ANDROID_SDK_ROOT") != null ||
+                            System.getenv("ANDROID_HOME") != null
+                        inputs.property("isAndroidSdkInstalled", isAndroidSdkInstalled).optional(true)
+                    }
+                }
             }
         }
     }
@@ -87,9 +89,11 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("detektPlugin") {
+        create("detektPlugin") {
             id = "io.gitlab.arturbosch.detekt"
             implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
+            displayName = "Static code analysis for Kotlin"
+            description = "Static code analysis for Kotlin"
         }
     }
     // Source sets that require the Gradle TestKit dependency
@@ -117,15 +121,7 @@ tasks.validatePlugins {
 pluginBundle {
     website = "https://detekt.dev"
     vcsUrl = "https://github.com/detekt/detekt"
-    description = "Static code analysis for Kotlin"
     tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
-
-    (plugins) {
-        "detektPlugin" {
-            id = "io.gitlab.arturbosch.detekt"
-            displayName = "Static code analysis for Kotlin"
-        }
-    }
 }
 
 tasks {
@@ -161,20 +157,6 @@ with(components["java"] as AdhocComponentWithVariants) {
 
 tasks.withType<Sign>().configureEach {
     notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13470")
-}
-
-val signingKey = "SIGNING_KEY".byProperty
-val signingPwd = "SIGNING_PWD".byProperty
-if (signingKey.isNullOrBlank() || signingPwd.isNullOrBlank()) {
-    logger.info("Signing disabled as the GPG key was not found")
-} else {
-    logger.info("GPG Key found - Signing enabled")
-    afterEvaluate {
-        signing {
-            useInMemoryPgpKeys(signingKey, signingPwd)
-            publishing.publications.forEach(::sign)
-        }
-    }
 }
 
 afterEvaluate {

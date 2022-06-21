@@ -45,11 +45,16 @@ public abstract class io/github/detekt/tooling/api/DetektError : java/lang/Runti
 public abstract interface class io/github/detekt/tooling/api/DetektProvider {
 	public static final field Companion Lio/github/detekt/tooling/api/DetektProvider$Companion;
 	public abstract fun get (Lio/github/detekt/tooling/api/spec/ProcessingSpec;)Lio/github/detekt/tooling/api/Detekt;
+	public abstract fun getPriority ()I
 }
 
 public final class io/github/detekt/tooling/api/DetektProvider$Companion {
 	public final fun load (Ljava/lang/ClassLoader;)Lio/github/detekt/tooling/api/DetektProvider;
 	public static synthetic fun load$default (Lio/github/detekt/tooling/api/DetektProvider$Companion;Ljava/lang/ClassLoader;ILjava/lang/Object;)Lio/github/detekt/tooling/api/DetektProvider;
+}
+
+public final class io/github/detekt/tooling/api/DetektProvider$DefaultImpls {
+	public static fun getPriority (Lio/github/detekt/tooling/api/DetektProvider;)I
 }
 
 public abstract class io/github/detekt/tooling/api/FunctionMatcher {
@@ -100,7 +105,7 @@ public abstract interface class io/github/detekt/tooling/api/spec/ConfigSpec {
 	public abstract fun getConfigPaths ()Ljava/util/Collection;
 	public abstract fun getKnownPatterns ()Ljava/util/Collection;
 	public abstract fun getResources ()Ljava/util/Collection;
-	public abstract fun getShouldValidateBeforeAnalysis ()Z
+	public abstract fun getShouldValidateBeforeAnalysis ()Ljava/lang/Boolean;
 	public abstract fun getUseDefaultConfig ()Z
 }
 
@@ -233,12 +238,12 @@ public final class io/github/detekt/tooling/dsl/ConfigSpecBuilder : io/github/de
 	public final fun getConfigPaths ()Ljava/util/Collection;
 	public final fun getKnownPatterns ()Ljava/util/Collection;
 	public final fun getResources ()Ljava/util/Collection;
-	public final fun getShouldValidateBeforeAnalysis ()Z
+	public final fun getShouldValidateBeforeAnalysis ()Ljava/lang/Boolean;
 	public final fun getUseDefaultConfig ()Z
 	public final fun setConfigPaths (Ljava/util/Collection;)V
 	public final fun setKnownPatterns (Ljava/util/Collection;)V
 	public final fun setResources (Ljava/util/Collection;)V
-	public final fun setShouldValidateBeforeAnalysis (Z)V
+	public final fun setShouldValidateBeforeAnalysis (Ljava/lang/Boolean;)V
 	public final fun setUseDefaultConfig (Z)V
 }
 
