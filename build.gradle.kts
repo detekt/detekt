@@ -5,6 +5,7 @@ plugins {
     id("releasing")
     id("io.gitlab.arturbosch.detekt")
     alias(libs.plugins.gradleVersions)
+    alias(libs.plugins.dependencyAnalysis)
 }
 
 allprojects {
@@ -40,6 +41,16 @@ allprojects {
     }
     tasks.withType<DetektCreateBaselineTask>().configureEach {
         jvmTarget = "1.8"
+    }
+}
+
+dependencyAnalysis {
+    issues {
+        all {
+            onUsedTransitiveDependencies {
+                severity("ignore")
+            }
+        }
     }
 }
 
