@@ -593,6 +593,8 @@ style:
     active: false
   NestedClassesVisibility:
     active: true
+  NestedLambdaOnSameLine:
+    active: false
   NewLineAtEndOfFile:
     active: true
   NoTabs:
