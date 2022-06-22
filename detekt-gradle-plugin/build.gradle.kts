@@ -38,6 +38,7 @@ testing {
 
             dependencies {
                 implementation(libs.assertj)
+                implementation(testFixtures(project(":")))
             }
 
             targets {
@@ -66,10 +67,6 @@ pluginCompileOnly.attributes {
 dependencies {
     compileOnly(libs.kotlin.gradlePluginApi)
     implementation(libs.sarif4k)
-
-    // Migrate to `implementation(testFixtures(project))` in test suite configuration when this issue is fixed:
-    // https://github.com/gradle/gradle/pull/19472
-    functionalTestImplementation(testFixtures(project))
 
     pluginCompileOnly(libs.android.gradle)
     pluginCompileOnly(libs.kotlin.gradle)
