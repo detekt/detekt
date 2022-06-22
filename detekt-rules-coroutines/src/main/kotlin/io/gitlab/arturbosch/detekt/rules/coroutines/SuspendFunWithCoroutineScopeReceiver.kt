@@ -67,7 +67,10 @@ class SuspendFunWithCoroutineScopeReceiver(config: Config) : Rule(config) {
     private fun checkReceiver(function: KtNamedFunction) {
         val suspendModifier = function.modifierList?.getModifier(KtTokens.SUSPEND_KEYWORD) ?: return
         val receiver = bindingContext[BindingContext.FUNCTION, function]
-            ?.extensionReceiverParameter?.value?.type ?: return
+            ?.extensionReceiverParameter
+            ?.value
+            ?.type
+            ?: return
         if (receiver.isCoroutineScope()) {
             report(
                 CodeSmell(

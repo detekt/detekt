@@ -63,7 +63,8 @@ internal class RuleVisitor : DetektVisitor() {
         val isRule = list.entries
             ?.asSequence()
             ?.map { it.typeAsUserType?.referencedName }
-            ?.any { ruleClasses.contains(it) } ?: false
+            ?.any { ruleClasses.contains(it) }
+            ?: false
 
         val containingClass = list.containingClass()
         val className = containingClass?.name
@@ -138,7 +139,8 @@ internal class RuleVisitor : DetektVisitor() {
                 .singleOrNull { it.name == "issue" }
                 ?.initializer as? KtCallExpression
             )
-            ?.valueArguments.orEmpty()
+            ?.valueArguments
+            .orEmpty()
 
         if (arguments.size >= ISSUE_ARGUMENT_SIZE) {
             severity = getArgument(arguments[1], "Severity")

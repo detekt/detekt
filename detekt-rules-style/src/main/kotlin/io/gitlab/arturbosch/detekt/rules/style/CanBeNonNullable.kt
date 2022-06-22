@@ -14,7 +14,6 @@ import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
 import io.gitlab.arturbosch.detekt.rules.isNullCheck
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
-import org.jetbrains.kotlin.com.intellij.codeInsight.NullableNotNullManager.isNullable
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
@@ -137,11 +136,13 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
             function.valueParameters.asSequence()
                 .filter {
                     it.typeReference?.typeElement is KtNullableType
-                }.mapNotNull { parameter ->
+                }
+                .mapNotNull { parameter ->
                     bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, parameter]?.let {
                         it to parameter
                     }
-                }.forEach { (descriptor, param) ->
+                }
+                .forEach { (descriptor, param) ->
                     candidateDescriptors.add(descriptor)
                     nullableParams[descriptor] = NullableParam(param)
                 }
@@ -175,7 +176,8 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                 .filter {
                     val onlyNonNullCheck = validSingleChildExpression && it.isNonNullChecked && !it.isNullChecked
                     it.isNonNullForced || onlyNonNullCheck
-                }.forEach { nullableParam ->
+                }
+                .forEach { nullableParam ->
                     report(
                         CodeSmell(
                             issue,
