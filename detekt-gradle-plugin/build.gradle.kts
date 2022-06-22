@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.pluginPublishing)
     // We use this published version of the Detekt plugin to self analyse this project.
     id("io.gitlab.arturbosch.detekt") version "1.20.0"
+    id("org.gradle.test-retry") version "1.4.0"
 }
 
 repositories {
@@ -189,3 +190,13 @@ afterEvaluate {
 }
 
 val String.byProperty: String? get() = findProperty(this) as? String
+
+tasks.withType<Test>().configureEach {
+    retry {
+        @Suppress("MagicNumber")
+        if (System.getenv().containsKey("CI")) {
+            maxRetries.set(2)
+            maxFailures.set(20)
+        }
+    }
+}
