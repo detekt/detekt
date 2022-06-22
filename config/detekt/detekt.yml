@@ -182,6 +182,8 @@ style:
     active: true
     imports:
       - 'org.assertj.core.api.Assertions'
+      - 'org.junit.jupiter.api.Assertions'
+      - 'org.junit.jupiter.api.Assertions.*'
   ForbiddenMethodCall:
     active: true
     methods:
