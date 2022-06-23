@@ -14,13 +14,13 @@ import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
 import io.gitlab.arturbosch.detekt.rules.isNullCheck
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
-import org.jetbrains.kotlin.com.intellij.codeInsight.NullableNotNullManager.isNullable
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstantExpression
@@ -83,6 +83,11 @@ import org.jetbrains.kotlin.types.isNullable
  *     if (a != null) {
  *         println(a)
  *     }
+ * }
+ *
+ * fun foo(a: Int?) {
+ *     if (a == null) return
+ *     println(a)
  * }
  * </noncompliant>
  *
@@ -174,7 +179,7 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                 //   the param, either via an if/when check or with a safe-qualified expression.
                 .filter {
                     val onlyNonNullCheck = validSingleChildExpression && it.isNonNullChecked && !it.isNullChecked
-                    it.isNonNullForced || onlyNonNullCheck
+                    it.isNonNullForced || it.isNullCheckReturnsUnit || onlyNonNullCheck
                 }.forEach { nullableParam ->
                     report(
                         CodeSmell(
@@ -233,7 +238,20 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
 
         override fun visitIfExpression(expression: KtIfExpression) {
             expression.condition.evaluateCheckStatement(expression.`else`)
+            evaluateNullCheckReturnsUnit(expression.condition, expression.then)
             super.visitIfExpression(expression)
+        }
+
+        private fun evaluateNullCheckReturnsUnit(condition: KtExpression?, then: KtExpression?) {
+            val thenExpression = if (then is KtBlockExpression) then.firstStatement else then
+            if (thenExpression !is KtReturnExpression) return
+            if (thenExpression.returnedExpression != null) return
+
+            if (condition is KtBinaryExpression && condition.isNullCheck()) {
+                getDescriptor(condition.left, condition.right)
+                    ?.let { nullableParams[it] }
+                    ?.let { it.isNullCheckReturnsUnit = true }
+            }
         }
 
         override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
@@ -321,15 +339,6 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
             val rightExpression = right
             val nonNullChecks = mutableListOf<CallableDescriptor>()
 
-            fun getDescriptor(leftExpression: KtExpression?, rightExpression: KtExpression?): CallableDescriptor? {
-                return when {
-                    leftExpression is KtNameReferenceExpression -> leftExpression
-                    rightExpression is KtNameReferenceExpression -> rightExpression
-                    else -> null
-                }?.getResolvedCall(bindingContext)
-                    ?.resultingDescriptor
-            }
-
             if (isNullCheck()) {
                 getDescriptor(leftExpression, rightExpression)
                     ?.let { nullableParams[it] }
@@ -342,6 +351,15 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
             leftExpression.getNonNullChecks()?.let(nonNullChecks::addAll)
             rightExpression.getNonNullChecks()?.let(nonNullChecks::addAll)
             return nonNullChecks
+        }
+
+        private fun getDescriptor(leftExpression: KtExpression?, rightExpression: KtExpression?): CallableDescriptor? {
+            return when {
+                leftExpression is KtNameReferenceExpression -> leftExpression
+                rightExpression is KtNameReferenceExpression -> rightExpression
+                else -> null
+            }?.getResolvedCall(bindingContext)
+                ?.resultingDescriptor
         }
 
         private fun KtIsExpression.evaluateIsExpression(): List<CallableDescriptor> {
@@ -415,6 +433,7 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         var isNullChecked = false
         var isNonNullChecked = false
         var isNonNullForced = false
+        var isNullCheckReturnsUnit = false
     }
 
     private inner class PropertyCheckVisitor : DetektVisitor() {
