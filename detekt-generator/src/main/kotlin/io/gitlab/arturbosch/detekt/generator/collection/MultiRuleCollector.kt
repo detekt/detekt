@@ -64,7 +64,8 @@ class MultiRuleVisitor : DetektVisitor() {
     override fun visitSuperTypeList(list: KtSuperTypeList) {
         val isMultiRule = list.entries
             ?.mapNotNull { it.typeAsUserType?.referencedName }
-            ?.any { it == multiRule } ?: false
+            ?.any { it == multiRule }
+            ?: false
 
         val containingClass = list.containingClass()
         val className = containingClass?.name

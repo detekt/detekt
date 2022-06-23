@@ -142,11 +142,13 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
             function.valueParameters.asSequence()
                 .filter {
                     it.typeReference?.typeElement is KtNullableType
-                }.mapNotNull { parameter ->
+                }
+                .mapNotNull { parameter ->
                     bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, parameter]?.let {
                         it to parameter
                     }
-                }.forEach { (descriptor, param) ->
+                }
+                .forEach { (descriptor, param) ->
                     candidateDescriptors.add(descriptor)
                     nullableParams[descriptor] = NullableParam(param)
                 }
@@ -180,7 +182,8 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                 .filter {
                     val onlyNonNullCheck = validSingleChildExpression && it.isNonNullChecked && !it.isNullChecked
                     it.isNonNullForced || it.isNullCheckReturnsUnit || onlyNonNullCheck
-                }.forEach { nullableParam ->
+                }
+                .forEach { nullableParam ->
                     report(
                         CodeSmell(
                             issue,
