@@ -52,31 +52,40 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
         super.visitDotQualifiedExpression(expression)
         if (bindingContext == BindingContext.EMPTY) return
         val call = expression.selectorExpression as? KtCallExpression ?: return
-        if (isIndexableGetter(call) || (isIndexableSetter(call) && unusedReturnValue(call))) {
+        if (isIndexGetterRecommended(call) || isIndexSetterRecommended(call)) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
     }
 
-    private fun isIndexableGetter(expression: KtCallExpression): Boolean {
-        if (expression.calleeExpression?.text != "get") return false
-        val descriptor = expression.getFunctionDescriptor() ?: return false
-        return descriptor.isOperator && descriptor.typeParameters.isEmpty()
-    }
+    private fun isIndexGetterRecommended(expression: KtCallExpression): Boolean =
+        expression.calleeExpression?.text == "get" && canReplace(expression.getFunctionDescriptor())
 
-    private fun isIndexableSetter(expression: KtCallExpression): Boolean =
+    private fun isIndexSetterRecommended(expression: KtCallExpression): Boolean =
         when (expression.calleeExpression?.text) {
             "set" -> {
-                val function = expression.getFunctionDescriptor()
-                when {
-                    function == null -> false
-                    !function.isOperator -> false
-                    else -> !(function.isFromJava && function.valueParameters.size > 2)
-                }
+                val setter = expression.getFunctionDescriptor()
+                if (setter == null) false
+                else canReplace(setter) && !(setter.isFromJava && setter.valueParameters.size > 2)
             }
             // `put` isn't an operator function, but can be replaced with indexer when the caller is Map.
             "put" -> isCallerMap(expression)
             else -> false
-        }
+        } && unusedReturnValue(expression)
+
+    private fun KtCallExpression.getFunctionDescriptor(): FunctionDescriptor? =
+        getResolvedCall(bindingContext)?.resultingDescriptor as? FunctionDescriptor
+
+    private fun canReplace(function: FunctionDescriptor?): Boolean {
+        if (function == null) return false
+
+        // Can't use index operator when insufficient information is available to infer type variable.
+        // For now, this is an incomplete check and doesn't report edge cases (e.g. inference using return type).
+        val genericParameterTypeNames = function.valueParameters.map { it.original.type.toString() }.toSet()
+        val typeParameterNames = function.typeParameters.map { it.name.asString() }
+        if (!genericParameterTypeNames.containsAll(typeParameterNames)) return false
+
+        return function.isOperator
+    }
 
     private fun isCallerMap(expression: KtCallExpression): Boolean {
         val caller = expression.getQualifiedExpressionForSelector()?.receiverExpression
@@ -90,8 +99,4 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
 
     private fun unusedReturnValue(expression: KtCallExpression): Boolean =
         expression.parent.parent is KtBlockExpression
-
-    private fun KtCallExpression.getFunctionDescriptor(): FunctionDescriptor? {
-        return getResolvedCall(bindingContext)?.resultingDescriptor as? FunctionDescriptor
-    }
 }
