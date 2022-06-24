@@ -79,7 +79,7 @@ class CliArgs {
         names = ["--report", "-r"],
         description = "Generates a report for given 'report-id' and stores it on given 'path'. " +
             "Entry should consist of: [report-id:path]. " +
-            "Available 'report-id' values: 'txt', 'xml', 'html', 'sarif'. " +
+            "Available 'report-id' values: 'txt', 'xml', 'html', 'md', 'sarif'. " +
             "These can also be used in combination with each other " +
             "e.g. '-r txt:reports/detekt.txt -r xml:reports/detekt.xml'"
     )

@@ -145,6 +145,7 @@ internal fun Project.setReportOutputConventions(reports: DetektReports, extensio
     setReportOutputConvention(extension, reports.html, name, "html")
     setReportOutputConvention(extension, reports.txt, name, "txt")
     setReportOutputConvention(extension, reports.sarif, name, "sarif")
+    setReportOutputConvention(extension, reports.md, name, "md")
 }
 
 private fun Project.setReportOutputConvention(
