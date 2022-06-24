@@ -440,26 +440,26 @@ class ExplicitCollectionElementAccessMethodSpec {
     inner class WithAdditionalJavaSources(val env: KotlinCoreEnvironment) {
 
         @Test
-        fun `reports setter from java with 2 or less parameters`() {
-            // this test case ensures that the test environment are set up correctly.
+        fun `does not report getters defined in java which are unlikely to be collection accessors`() {
+            val code = """
+                import com.example.fromjava.ByteBuffer
+
+                fun foo() {
+                    val buffer = ByteBuffer()
+                    buffer.get(byteArrayOf(0x42))
+                }
+            """
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report setters defined in java which are unlikely to be collection accessors`() {
             val code = """
                 import com.example.fromjava.Rect
 
                 fun foo() {
                     val rect = Rect()
                     rect.set(0, 1)
-                }
-            """
-            assertThat(subject.lintWithContext(env, code)).hasSize(1)
-        }
-
-        @Test
-        fun `does not report if the function has 3 or more arguments and it's defined in java - #4288`() {
-            val code = """
-                import com.example.fromjava.Rect
-
-                fun foo() {
-                    val rect = Rect()
                     rect.set(0, 1, 2)
                 }
             """

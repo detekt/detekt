@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
+import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.load.java.isFromJava
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -17,6 +18,7 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.types.ErrorType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
 
@@ -57,15 +59,21 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
         }
     }
 
-    private fun isIndexGetterRecommended(expression: KtCallExpression): Boolean =
-        expression.calleeExpression?.text == "get" && canReplace(expression.getFunctionDescriptor())
+    private fun isIndexGetterRecommended(expression: KtCallExpression): Boolean {
+        val getter =
+            if (expression.calleeExpression?.text == "get") expression.getFunctionDescriptor()
+            else null
+        if (getter == null) return false
+
+        return canReplace(getter) && shouldReplace(getter)
+    }
 
     private fun isIndexSetterRecommended(expression: KtCallExpression): Boolean =
         when (expression.calleeExpression?.text) {
             "set" -> {
                 val setter = expression.getFunctionDescriptor()
                 if (setter == null) false
-                else canReplace(setter) && !(setter.isFromJava && setter.valueParameters.size > 2)
+                else canReplace(setter) && shouldReplace(setter)
             }
             // `put` isn't an operator function, but can be replaced with indexer when the caller is Map.
             "put" -> isCallerMap(expression)
@@ -75,9 +83,7 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
     private fun KtCallExpression.getFunctionDescriptor(): FunctionDescriptor? =
         getResolvedCall(bindingContext)?.resultingDescriptor as? FunctionDescriptor
 
-    private fun canReplace(function: FunctionDescriptor?): Boolean {
-        if (function == null) return false
-
+    private fun canReplace(function: FunctionDescriptor): Boolean {
         // Can't use index operator when insufficient information is available to infer type variable.
         // For now, this is an incomplete check and doesn't report edge cases (e.g. inference using return type).
         val genericParameterTypeNames = function.valueParameters.map { it.original.type.toString() }.toSet()
@@ -85,6 +91,20 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
         if (!genericParameterTypeNames.containsAll(typeParameterNames)) return false
 
         return function.isOperator
+    }
+
+    private fun shouldReplace(function: FunctionDescriptor): Boolean {
+        // The intent of kotlin operation functions is to support indexed accessed, so should always be replaced.
+        if (!function.isFromJava) return true
+
+        // It does not always make sense for all Java get/set functions to be replaced by index accessors.
+        // Only recommend known collection types.
+        val javaClass = function.containingDeclaration as? ClassDescriptor ?: return false
+        return javaClass.fqNameSafe.asString() in setOf(
+            "java.util.ArrayList",
+            "java.util.HashMap",
+            "java.util.LinkedHashMap"
+        )
     }
 
     private fun isCallerMap(expression: KtCallExpression): Boolean {
