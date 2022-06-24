@@ -47,6 +47,7 @@ import org.jetbrains.kotlin.psi.KtWhenConditionWithExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.isFirstStatement
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.getKotlinTypeForComparison
@@ -241,7 +242,9 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
 
         override fun visitIfExpression(expression: KtIfExpression) {
             expression.condition.evaluateCheckStatement(expression.`else`)
-            evaluateNullCheckReturnsUnit(expression.condition, expression.then)
+            if (expression.isFirstStatement()) {
+                evaluateNullCheckReturnsUnit(expression.condition, expression.then)
+            }
             super.visitIfExpression(expression)
         }
 

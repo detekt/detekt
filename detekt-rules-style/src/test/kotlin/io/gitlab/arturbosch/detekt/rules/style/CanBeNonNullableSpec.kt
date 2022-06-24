@@ -920,6 +920,18 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
             }
 
             @Test
+            fun `does not report guard statement with side effect ahead`() {
+                val code = """   
+                    fun foo(a: Int?) {
+                        println("side effect")
+                        if (a == null) return
+                        println(a)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+            }
+
+            @Test
             fun `does not report null-check returning non-unit type`() {
                 val code = """   
                     fun foo(a: Int?): Int {
