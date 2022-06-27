@@ -5,8 +5,6 @@ keywords: [extensions, rulesets]
 sidebar_position: 9
 ---
 
-import DetektVersionBanner from "../\_detekt-version-banner.mdx";
-
 The following page describes how to extend detekt and how to customize it to your domain-specific needs.
 The associated **code samples** to this guide can be found in the package [detekt/detekt-sample-extensions](https://github.com/detekt/detekt/tree/main/detekt-sample-extensions).
 
@@ -221,11 +219,9 @@ To enable it, we add the published dependency to `detekt` via the `detektPlugins
 
 ###### Gradle (Kotlin/Groovy DSL)
 
-<DetektVersionBanner/>
-
 ```kotlin
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:{{ site.detekt_version }}")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:[detekt_version]")
 }
 ```
 
