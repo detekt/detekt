@@ -38,7 +38,8 @@ class Indentation(config: Config) : FormattingRule(config) {
         )
 
     /**
-     * [wrapping] is working with file's [node] and we don't want to highlight the whole file
+     * [IndentationRule] has visitor modifier RunOnRootNodeOnly, so [node] is always the root file.
+     * Override the parent implementation to highlight the entire file.
      */
     override fun getTextLocationForViolation(node: ASTNode, offset: Int): TextLocation {
         val relativeEnd = node.text
