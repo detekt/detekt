@@ -37,7 +37,12 @@ XML is a machine-readable format that can be integrated with CI tools. It is com
 [SARIF](https://sarifweb.azurewebsites.net/) is a standard format for the output of 
 static analysis tools. It is a JSON format with a defined 
 [schema](https://docs.oasis-open.org/sarif/sarif/v2.0/csprd02/schemas/). It is currently supported
-by Github Code Scanning and we expect more consuming tools will be adopt this format in the future.
+by GitHub Code Scanning, and we expect more consuming tools will adopt this format in the future.
+
+### MD
+Markdown is a lightweight markup language for creating formatted text using a plain-text editor.
+The output structure looks similar to HTML format.
+About [markdown](https://github.github.com/gfm/#what-is-markdown-) on GitHub.
 
 ## Severity
 For machine-readable format, it is possible to configure the severity of each finding to fit

@@ -21,7 +21,7 @@ The detekt Gradle plugin will generate multiple tasks:
   - By default, the standard rule set without any ignore list is executed on sources files located
    in `src/main/java`, `src/test/java`, `src/main/kotlin` and `src/test/kotlin`.
   - Reports are automatically generated in xml,
-   html, txt, and sarif format and can be found in `build/reports/detekt/detekt.[xml|html|txt|sarif]` respectively.
+   html, txt, md, and sarif format and can be found in `build/reports/detekt/detekt.[xml|html|txt|md|sarif]` respectively.
   - Please note that the `detekt` task is automatically run when executing `gradle check`.
   - You may specify Gradle task CLI option for auto correction, such as `gradle detekt --auto-correct`.
 - `detektGenerateConfig` - Generates a default detekt configuration file into your project directory.
@@ -48,7 +48,7 @@ the name of the build variant in their name, unless otherwise configured, such a
 `detekt-productionDebug.xml`.
 
 If both, a `detekt-main.xml` and a `detekt.xml` baseline file exists in place, the more specific one - `detekt-main.xml` -
-takes precendence when the `detektMain` task is executed, likewise for Android variant-specific baseline files.
+takes precedence when the `detektMain` task is executed, likewise for Android variant-specific baseline files.
 
 _NOTE:_ When analyzing Android projects that make use of specific code generators, such as Data Binding, Kotlin synthetic
 view accessors or else, you might see warnings output while Detekt runs. This is due to the inability to gather the
@@ -318,6 +318,9 @@ tasks.named("detekt").configure {
         // Enable/Disable SARIF report (default: false)
         sarif.required.set(true)
         sarif.outputLocation.set(file("build/reports/detekt.sarif"))
+        // Enable/Disable MD report (default: false)
+        md.required.set(true)
+        md.outputLocation.set(file("build/reports/detekt.md"))
         custom {
             // The simple class name of your custom report.
             reportId = "CustomJsonReport"
