@@ -71,10 +71,7 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
             typeName == KOTLIN_BOOLEAN_TYPE_NAME || typeName == JAVA_BOOLEAN_TYPE_NAME
         val isNonConstantBooleanType = isBooleanType && !declaration.isConstant()
 
-        if (isNonConstantBooleanType
-            && !name.contains(allowedPattern)
-            && !isIgnoreOverridden(declaration)
-        ) {
+        if (isNonConstantBooleanType && !name.contains(allowedPattern) && !isIgnoreOverridden(declaration)) {
             report(reportCodeSmell(declaration, name))
         }
     }
