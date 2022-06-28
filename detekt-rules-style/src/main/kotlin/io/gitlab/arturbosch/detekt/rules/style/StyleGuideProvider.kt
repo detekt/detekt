@@ -99,6 +99,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseOrEmpty(config),
             UseAnyOrNoneInsteadOfFind(config),
             UnnecessaryBackticks(config),
+            MaxChainedCallsOnSameLine(config),
         )
     )
 }
