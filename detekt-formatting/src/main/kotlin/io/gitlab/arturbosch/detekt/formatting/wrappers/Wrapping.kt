@@ -2,9 +2,11 @@ package io.gitlab.arturbosch.detekt.formatting.wrappers
 
 import com.pinterest.ktlint.ruleset.standard.WrappingRule
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
+import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 
 /**
  * See [ktlint-website](https://ktlint.github.io#rule-indentation) for documentation.
@@ -15,4 +17,6 @@ class Wrapping(config: Config) : FormattingRule(config) {
 
     override val wrapping = WrappingRule()
     override val issue = issueFor("Reports missing newlines (e.g. between parentheses of a multi-line function call")
+
+    override fun getTextLocationForViolation(node: ASTNode, offset: Int) = TextLocation(offset, offset)
 }

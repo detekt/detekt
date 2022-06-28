@@ -16,7 +16,7 @@ class WrappingSpec {
     }
 
     @Test
-    fun `Given a wrong wrapping in the class definition`() {
+    fun `should report a wrong wrapping in the extends clause of the class definition`() {
         val code =
             """
             class A() : B, 
@@ -24,6 +24,8 @@ class WrappingSpec {
             }
             """.trimIndent()
 
-        assertThat(subject.lint(code)).hasSize(1)
+        assertThat(subject.lint(code))
+            .hasSize(1)
+            .hasTextLocations(11 to 11)
     }
 }
