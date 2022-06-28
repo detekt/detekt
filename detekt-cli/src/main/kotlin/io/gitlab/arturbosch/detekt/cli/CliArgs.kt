@@ -217,5 +217,5 @@ class CliArgs {
 }
 
 class my_class {
-    val i = 0
+    val ii = 0
 }
