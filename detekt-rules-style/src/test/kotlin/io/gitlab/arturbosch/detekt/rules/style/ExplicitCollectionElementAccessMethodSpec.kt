@@ -297,6 +297,30 @@ class ExplicitCollectionElementAccessMethodSpec {
         }
 
         @Nested
+        inner class `Java non-collection types` {
+            @Test
+            fun `does not report ByteBuffer get`() {
+                val code = """
+                    fun f() {
+                        val buffer = java.nio.ByteBuffer()
+                        buffer.get(byteArrayOf(0x42))
+                    }
+                """
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report Field get`() {
+                val code = """
+                    fun f(field: java.lang.reflect.Field) {
+                        val value = field.get(null) // access static field
+                    }
+                """
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+        }
+
+        @Nested
         inner class `custom operators` {
 
             @Test
@@ -438,20 +462,6 @@ class ExplicitCollectionElementAccessMethodSpec {
     @Nested
     @KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
     inner class WithAdditionalJavaSources(val env: KotlinCoreEnvironment) {
-
-        @Test
-        fun `does not report getters defined in java which are unlikely to be collection accessors`() {
-            val code = """
-                import com.example.fromjava.ByteBuffer
-
-                fun foo() {
-                    val buffer = ByteBuffer()
-                    buffer.get(byteArrayOf(0x42))
-                }
-            """
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
-        }
-
         @Test
         fun `does not report setters defined in java which are unlikely to be collection accessors`() {
             val code = """
