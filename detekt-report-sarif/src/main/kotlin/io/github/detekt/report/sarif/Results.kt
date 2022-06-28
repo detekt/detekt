@@ -23,26 +23,43 @@ private fun SeverityLevel.toResultLevel() = when (this) {
     SeverityLevel.INFO -> Level.Note
 }
 
-private fun Finding.toResult(ruleSetId: RuleSetId) = io.github.detekt.sarif4k.Result(
-    ruleID = "detekt.$ruleSetId.$id",
-    level = severity.toResultLevel(),
-    locations = (listOf(location) + references.map { it.location }).map(Location::toLocation).toSet().toList(),
-    message = Message(text = messageOrDescription())
-)
+private fun Finding.toResult(ruleSetId: RuleSetId): io.github.detekt.sarif4k.Result {
+    val code = entity.ktElement?.containingFile?.text
 
-private fun Location.toLocation() = io.github.detekt.sarif4k.Location(
-    physicalLocation = PhysicalLocation(
-        region = Region(
-            startLine = source.line.toLong(),
-            startColumn = source.column.toLong(),
-        ),
-        artifactLocation = if (filePath.relativePath != null) {
-            ArtifactLocation(
-                uri = filePath.relativePath?.toUnifiedString(),
-                uriBaseID = SRCROOT
-            )
-        } else {
-            ArtifactLocation(uri = filePath.absolutePath.toUnifiedString())
-        }
+    return io.github.detekt.sarif4k.Result(
+        ruleID = "detekt.$ruleSetId.$id",
+        level = severity.toResultLevel(),
+        locations = (listOf(location) + references.map { it.location }).map { it.toLocation(code) }.toSet().toList(),
+        message = Message(text = messageOrDescription())
     )
-)
+}
+
+private fun Location.toLocation(code: String?): io.github.detekt.sarif4k.Location {
+    var endLine: Long? = null
+    var endColumn: Long? = null
+
+    if (code != null) {
+        val snippet = code.take(text.end).split('\n')
+        endLine = snippet.size.toLong()
+        endColumn = snippet.last().length.toLong() + 1
+    }
+
+    return io.github.detekt.sarif4k.Location(
+        physicalLocation = PhysicalLocation(
+            region = Region(
+                startLine = source.line.toLong(),
+                startColumn = source.column.toLong(),
+                endLine = endLine,
+                endColumn = endColumn
+            ),
+            artifactLocation = if (filePath.relativePath != null) {
+                ArtifactLocation(
+                    uri = filePath.relativePath?.toUnifiedString(),
+                    uriBaseID = SRCROOT
+                )
+            } else {
+                ArtifactLocation(uri = filePath.absolutePath.toUnifiedString())
+            }
+        )
+    )
+}

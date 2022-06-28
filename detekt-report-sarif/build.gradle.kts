@@ -10,4 +10,5 @@ dependencies {
     testImplementation(projects.detektTestUtils)
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.assertj)
+    testImplementation(libs.mockk)
 }

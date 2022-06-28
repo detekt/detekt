@@ -3,6 +3,7 @@ package io.github.detekt.report.sarif
 import io.github.detekt.test.utils.readResourceContent
 import io.github.detekt.tooling.api.VersionProvider
 import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import io.gitlab.arturbosch.detekt.api.UnstableApi
@@ -12,7 +13,11 @@ import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
 import io.gitlab.arturbosch.detekt.test.createIssue
+import io.mockk.every
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.com.intellij.psi.PsiFile
+import org.jetbrains.kotlin.psi.KtElement
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
@@ -66,10 +71,87 @@ class SarifOutputReportSpec {
 
         assertThat(report).isEqualToIgnoringWhitespace(systemAwareExpectedReport)
     }
+
+    @Test
+    fun `snippet region should be bounded with word`() {
+        val entity = createEntity(
+            path = "TestFile.kt",
+            position = 3 to 7,
+            text = 33..41,
+            ktElement = mockKtElement(),
+        )
+
+        val result = TestDetektion(
+            createFinding(ruleName = "TestSmellB", entity = entity, severity = SeverityLevel.WARNING),
+        )
+
+        val report = SarifOutputReport()
+            .apply { init(EmptySetupContext()) }
+            .render(result)
+
+        val boundedRegion = """
+            "region": {
+              "endColumn": 16,
+              "endLine": 3,
+              "startColumn": 7,
+              "startLine": 3
+            }            
+        """
+        assertThat(report).containsIgnoringWhitespaces(boundedRegion)
+    }
+
+    @Test
+    fun `snippet region should be bounded with block`() {
+        val entity = createEntity(
+            path = "TestFile.kt",
+            position = 3 to 7,
+            text = 33..88,
+            ktElement = mockKtElement(),
+        )
+
+        val result = TestDetektion(
+            createFinding(ruleName = "TestSmellB", entity = entity, severity = SeverityLevel.WARNING),
+        )
+
+        val report = SarifOutputReport()
+            .apply { init(EmptySetupContext()) }
+            .render(result)
+
+        val boundedRegion = """
+            "region": {
+              "endColumn": 2,
+              "endLine": 5,
+              "startColumn": 7,
+              "startLine": 3
+            }            
+        """
+        assertThat(report).containsIgnoringWhitespaces(boundedRegion)
+    }
 }
 
-private fun createFinding(ruleName: String, severity: SeverityLevel): Finding {
-    return object : CodeSmell(createIssue(ruleName), createEntity("TestFile.kt"), "TestMessage") {
+private fun mockKtElement(): KtElement {
+    val ktElementMock = mockk<KtElement>()
+    val psiFileMock = mockk<PsiFile>()
+    val code = """
+        package com.example.test
+
+        class testClass {
+            val greeting: String = "Hello, World!"
+        }
+        
+    """.trimIndent()
+
+    every { psiFileMock.text } returns code
+    every { ktElementMock.containingFile } returns psiFileMock
+    return ktElementMock
+}
+
+private fun createFinding(ruleName: String, severity: SeverityLevel, entity: Entity? = null): Finding {
+    return object : CodeSmell(
+        createIssue(ruleName),
+        entity ?: createEntity("TestFile.kt"),
+        "TestMessage"
+    ) {
         override val severity: SeverityLevel
             get() = severity
     }
