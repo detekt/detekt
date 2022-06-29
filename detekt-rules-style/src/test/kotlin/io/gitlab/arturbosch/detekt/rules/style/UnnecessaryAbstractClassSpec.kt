@@ -86,8 +86,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                     }
                     abstract class B : A()
                 """
-                val findings = subject.compileAndLintWithContext(env, code)
-                assertFindingMessage(findings, message)
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
 

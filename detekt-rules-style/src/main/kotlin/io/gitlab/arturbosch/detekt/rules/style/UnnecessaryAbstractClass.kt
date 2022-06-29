@@ -21,6 +21,8 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyClassMemberScope
+import org.jetbrains.kotlin.types.typeUtil.isInterface
 
 /**
  * This rule inspects `abstract` classes. In case an `abstract class` does not have any concrete members it should be
@@ -79,7 +81,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
         super.visitClass(klass)
     }
 
-    @Suppress("ComplexMethod")
+    @Suppress("ComplexMethod", "ReturnCount")
     private fun KtClass.check() {
         val nameIdentifier = this.nameIdentifier ?: return
         if (annotationExcluder.shouldExclude(annotationEntries) || isInterface() || !isAbstract()) return
@@ -98,6 +100,8 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
                     report(CodeSmell(issue, Entity.from(nameIdentifier), noConcreteMember))
                 }
             }
+
+            hasInheritedMember(true) && !isParentInterface() -> return
             !hasConstructorParameter() ->
                 report(CodeSmell(issue, Entity.from(nameIdentifier), noConcreteMember))
             else ->
@@ -122,4 +126,9 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
             }
         }
     }
+    private fun KtClass.isParentInterface() =
+        (bindingContext[BindingContext.CLASS, this]?.unsubstitutedMemberScope as? LazyClassMemberScope)
+            ?.supertypes
+            ?.firstOrNull()
+            ?.isInterface() == true
 }
