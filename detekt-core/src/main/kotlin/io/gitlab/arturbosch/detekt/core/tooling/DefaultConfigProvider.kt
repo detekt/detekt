@@ -32,7 +32,7 @@ class DefaultConfigProvider : DefaultConfigurationProvider {
 private fun configInputStream(extensionsSpec: ExtensionsSpec): InputStream {
     val outputStream = ByteArrayOutputStream()
 
-    requireNotNull(extensionsSpec.javaClass.getSafeResourceAsStream("/default-detekt-config.yml"))
+    requireNotNull(DefaultConfigProvider::class.java.getSafeResourceAsStream("/default-detekt-config.yml"))
         .use { it.copyTo(outputStream) }
 
     ExtensionFacade(extensionsSpec.plugins).pluginLoader
