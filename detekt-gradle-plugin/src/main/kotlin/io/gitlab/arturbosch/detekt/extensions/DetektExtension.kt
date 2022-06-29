@@ -45,7 +45,8 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
             DEFAULT_TEST_SRC_DIR_KOTLIN,
         )
 
-    var baseline: File? = objects.fileProperty()
+    var baseline: File? = objects
+        .fileProperty()
         .fileValue(File("detekt-baseline.xml"))
         .get()
         .asFile

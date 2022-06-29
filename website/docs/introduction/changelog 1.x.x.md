@@ -5,22 +5,44 @@ keywords: [changelog, release-notes, migration]
 sidebar_position: 1
 ---
 
-#### 1.21.0-RC1 - 2022-06-02
+#### 1.21.0-RC2 - 2022-06-29
 
 ##### Notable Changes
 
 - We enabled ~30 new rules by default which we believe are now stable enough. - [#4875](https://github.com/detekt/detekt/pull/4875)
-- We added **3** new Rules to Detekt
+- We added **6** new Rules to Detekt
   - `NullableBooleanCheck` - [#4872](https://github.com/detekt/detekt/pull/4872)
   - `CouldBeSequence` - [#4855](https://github.com/detekt/detekt/pull/4855)
   - `UnnecessaryBackticks` - [#4764](https://github.com/detekt/detekt/pull/4764)
+  - `ForbiddenSuppress` - [#4899](https://github.com/detekt/detekt/pull/4899)
+  - `MaxChainedCallsOnSameLine` - [#4985](https://github.com/detekt/detekt/pull/4985)
+  - `CascadingCallWrapping` - [#4979](https://github.com/detekt/detekt/pull/4979)
+- We added support for Markdown reports - [#4858](https://github.com/detekt/detekt/pull/4858)
 - We now allow users and rule authors to specify a **reason** for every value in the config file - [#4611](https://github.com/detekt/detekt/pull/4611)
-- We now report as warnings the in the config file that should converted to be an array - [#4793](https://github.com/detekt/detekt/pull/4793)
+- We now report as warnings the in the config file that can be converted to be an array - [#4793](https://github.com/detekt/detekt/pull/4793)
 - We added a dependency on **ConTester** to help us verify concurrency scenarios for Detekt - [#4672](https://github.com/detekt/detekt/pull/4672)
 - For contributors: we restructured our build setup to be use **Gradle composite build** - [#4751](https://github.com/detekt/detekt/pull/4751)
 
 ##### Changelog
 
+- Fix Signatures.kt:buildFunctionSignature - [#4961](https://github.com/detekt/detekt/pull/4961)
+- Loading a specific resource from a module must use class from module - [#5008](https://github.com/detekt/detekt/pull/5008)
+- Update github/codeql-action digest to 3f62b75 - [#5007](https://github.com/detekt/detekt/pull/5007)
+- Show finding at declaration name instead of the whole declaration - [#5003](https://github.com/detekt/detekt/pull/5003)
+- NamedArguments: don't count trailing lambda argument - [#5002](https://github.com/detekt/detekt/pull/5002)
+- Address TextLocation for Wrapping - [#4998](https://github.com/detekt/detekt/pull/4998)
+- Support markdown report in Gradle plugin - [#4995](https://github.com/detekt/detekt/pull/4995)
+- Fix false-negative for CanBeNonNullable - [#4993](https://github.com/detekt/detekt/pull/4993)
+- Give a better error message for --jvm-target - [#4978](https://github.com/detekt/detekt/pull/4978)
+- Fix rule code samples to be valid Kotlin code - [#4969](https://github.com/detekt/detekt/pull/4969)
+- Use plain ASCII output in standard reports - [#4968](https://github.com/detekt/detekt/pull/4968)
+- UnnecessaryApply: fix false negative for assignment - [#4948](https://github.com/detekt/detekt/pull/4948)
+- Support disabling config validation via tooling spec - [#4937](https://github.com/detekt/detekt/pull/4937)
+- UnusedPrivateMember: highlight declaration name - [#4928](https://github.com/detekt/detekt/pull/4928)
+- Provide a priority field for DetektProvider - [#4923](https://github.com/detekt/detekt/pull/4923)
+- CastToNullableType: allow casting null keyword - [#4907](https://github.com/detekt/detekt/pull/4907)
+- Update plugin com.gradle.common-custom-user-data-gradle-plugin to v1.7.2 - [#4897](https://github.com/detekt/detekt/pull/4897)
+- Set strict dependency on tested Kotlin compiler version - [#4822](https://github.com/detekt/detekt/pull/4822)
 - Simplify regular expressions - [#4893](https://github.com/detekt/detekt/pull/4893)
 - Remove redundant character escape in RegExp - [#4892](https://github.com/detekt/detekt/pull/4892)
 - Reformat Markdown files to comply with the spec - [#4891](https://github.com/detekt/detekt/pull/4891)
@@ -68,6 +90,9 @@ sidebar_position: 1
 
 ##### Dependency Updates
 
+- Update dependency org.jetbrains.kotlinx:kotlinx-coroutines-core to v1.6.3 - [#4976](https://github.com/detekt/detekt/pull/4976)
+- Update dependency org.jetbrains.dokka to v1.7.0 - [#4974](https://github.com/detekt/detekt/pull/4974)
+- Update plugin binaryCompatibilityValidator to v0.10.1 - [#4954](https://github.com/detekt/detekt/pull/4954)
 - Update dependency org.jetbrains.kotlinx:kotlinx-coroutines-core to v1.6.2 - [#4868](https://github.com/detekt/detekt/pull/4868)
 - Update dependency com.android.tools.build:gradle to v7.2.1 - [#4861](https://github.com/detekt/detekt/pull/4861)
 - Update plugin binaryCompatibilityValidator to v0.10.0 - [#4837](https://github.com/detekt/detekt/pull/4837)
@@ -82,6 +107,7 @@ sidebar_position: 1
 
 ##### Housekeeping & Refactorings
 
+- Measure flakyness on Windows CI - [#4742](https://github.com/detekt/detekt/pull/4742)
 - Declare nested test classes as non-static - [#4894](https://github.com/detekt/detekt/pull/4894)
 - Remove deprecated usages in gradle-plugin test - [#4889](https://github.com/detekt/detekt/pull/4889)
 - Remove reference to contributor list - [#4871](https://github.com/detekt/detekt/pull/4871)
