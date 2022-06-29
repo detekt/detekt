@@ -86,8 +86,22 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                     }
                     abstract class B : A()
                 """
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report abstract class that inherits from an interface and an abstract class in that order`() {
+                val code = """
+                interface I
+
+                @Deprecated("We don't care about this first class")
+                abstract class A {
+                    abstract val i: Int
+                }
+                abstract class B: A(), I
+            """
                 val findings = subject.compileAndLintWithContext(env, code)
-                assertFindingMessage(findings, message)
+                assertThat(findings).isEmpty()
             }
         }
 
