@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.identifierName
+import io.gitlab.arturbosch.detekt.rules.isConstant
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
@@ -68,8 +69,9 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
         val typeName = getTypeName(declaration)
         val isBooleanType =
             typeName == KOTLIN_BOOLEAN_TYPE_NAME || typeName == JAVA_BOOLEAN_TYPE_NAME
+        val isNonConstantBooleanType = isBooleanType && !declaration.isConstant()
 
-        if (isBooleanType && !name.contains(allowedPattern) && !isIgnoreOverridden(declaration)) {
+        if (isNonConstantBooleanType && !name.contains(allowedPattern) && !isIgnoreOverridden(declaration)) {
             report(reportCodeSmell(declaration, name))
         }
     }
