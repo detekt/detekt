@@ -10,6 +10,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtImportDirective
+import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
 
@@ -39,9 +41,12 @@ class MaxChainedCallsOnSameLine(config: Config = Config.empty) : Rule(config) {
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)
 
-        // skip if the parent is also a call on the same line to avoid duplicated warnings
         val parent = expression.parent
+
+        // skip if the parent is also a call on the same line to avoid duplicated warnings
         if (parent is KtQualifiedExpression && !parent.callOnNewLine()) return
+
+        if (parent is KtImportDirective || parent is KtPackageDirective) return
 
         val chainedCalls = expression.countChainedCalls() + 1
         if (chainedCalls > maxChainedCalls) {

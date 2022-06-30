@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class MaxChainedCallsOnSameLineSpec {
@@ -103,5 +104,21 @@ class MaxChainedCallsOnSameLineSpec {
         """
 
         assertThat(rule.compileAndLint(code)).hasSize(1)
+    }
+
+    @Test
+    fun `does not report long imports`() {
+        val rule = MaxChainedCallsOnSameLine(TestConfig(mapOf("maxChainedCalls" to 3)))
+        val code = "import a.b.c.d.e"
+
+        assertThat(rule.lint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report long package declarations`() {
+        val rule = MaxChainedCallsOnSameLine(TestConfig(mapOf("maxChainedCalls" to 3)))
+        val code = "package a.b.c.d.e"
+
+        assertThat(rule.lint(code)).isEmpty()
     }
 }
