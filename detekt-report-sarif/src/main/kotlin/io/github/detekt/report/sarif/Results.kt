@@ -29,7 +29,7 @@ private fun Finding.toResult(ruleSetId: RuleSetId): io.github.detekt.sarif4k.Res
     return io.github.detekt.sarif4k.Result(
         ruleID = "detekt.$ruleSetId.$id",
         level = severity.toResultLevel(),
-        locations = (listOf(location) + references.map { it.location }).map { it.toLocation(code) }.toSet().toList(),
+        locations = (listOf(location) + references.map { it.location }).map { it.toLocation(code) }.distinct().toList(),
         message = Message(text = messageOrDescription())
     )
 }

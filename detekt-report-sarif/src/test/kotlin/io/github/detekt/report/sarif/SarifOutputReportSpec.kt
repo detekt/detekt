@@ -146,12 +146,12 @@ private fun mockKtElement(): KtElement {
     return ktElementMock
 }
 
-private fun createFinding(ruleName: String, severity: SeverityLevel, entity: Entity? = null): Finding {
-    return object : CodeSmell(
-        createIssue(ruleName),
-        entity ?: createEntity("TestFile.kt"),
-        "TestMessage"
-    ) {
+private fun createFinding(
+    ruleName: String,
+    severity: SeverityLevel,
+    entity: Entity = createEntity("TestFile.kt")
+): Finding {
+    return object : CodeSmell(createIssue(ruleName), entity, "TestMessage") {
         override val severity: SeverityLevel
             get() = severity
     }
