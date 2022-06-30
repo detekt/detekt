@@ -127,7 +127,7 @@ const config = {
               },
               {
                 label: 'Getting Started with the CLI',
-                to: '/docs/gettingstarted/gradle',
+                to: '/docs/gettingstarted/cli',
               },
               {
                 label: 'Rules Documentation',
