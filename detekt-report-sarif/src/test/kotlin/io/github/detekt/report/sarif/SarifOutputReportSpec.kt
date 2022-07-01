@@ -85,8 +85,8 @@ class SarifOutputReportSpec {
          */
         val startLine = 3
         val startColumn = 7
-        val endColumn = 15
         val endLine = 3
+        val endColumn = 15
 
         val refEntity = TestRule().compileAndLint(Snippet.code).first().entity
         val location = Location(
@@ -122,8 +122,8 @@ class SarifOutputReportSpec {
          */
         val startLine = 3
         val startColumn = 17
-        val endColumn = 1
         val endLine = 5
+        val endColumn = 1
 
         val refEntity = TestRule().compileAndLint(Snippet.code).first().entity
         val location = Location(
