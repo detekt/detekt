@@ -64,7 +64,7 @@ Rules annotated with `@ActiveByDefault` will be marked as active in the `default
 Generally, this will not be the case for new rules.
 
 A rule that requires type resolution must be marked with `@RequiresTypeResolution`.
-See [the type resolution wiki page](../docs/pages/gettingstarted/type-resolution.md) for
+See [the type resolution wiki page](../website/docs/gettingstarted/type-resolution.md) for
 more detail on this topic.
 
 The rule defined above will translate to a rule entry in the `default-detekt-config.yml`:
