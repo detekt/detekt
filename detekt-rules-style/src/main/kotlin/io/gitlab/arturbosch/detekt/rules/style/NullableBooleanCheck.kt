@@ -46,15 +46,14 @@ class NullableBooleanCheck(config: Config = Config.empty) : Rule(config) {
             expression.right?.isBooleanConstant() == true &&
             expression.left?.getType(bindingContext)?.isBooleanOrNullableBoolean() == true
         ) {
-            val message = if (expression.right?.text == "true")
-                "The nullable boolean check `${expression.text}` should use `!= false` rather than `?: true`"
-            else
-                "The nullable boolean check `${expression.text}` should use `== true` rather than `?: false`"
+            val messageSuffix =
+                if (expression.right?.text == "true") "`!= false` rather than `?: true`"
+                else "`== true` rather than `?: false`"
             report(
                 CodeSmell(
                     issue = issue,
                     entity = Entity.from(expression),
-                    message = message,
+                    message = "The nullable boolean check `${expression.text}` should use $messageSuffix",
                 )
             )
         }
