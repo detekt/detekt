@@ -24,15 +24,17 @@ data class Location @Deprecated("Consider relative path by passing a [FilePath]"
         )
     )
     val file: String,
-    val filePath: FilePath = FilePath.fromAbsolute(Paths.get(file))
+    val filePath: FilePath = FilePath.fromAbsolute(Paths.get(file)),
+    val endSource: SourceLocation = SourceLocation(-1, -1)
 ) : Compactable {
 
     @Suppress("DEPRECATION")
     constructor(
         source: SourceLocation,
         text: TextLocation,
-        filePath: FilePath
-    ) : this(source, text, filePath.absolutePath.toString(), filePath)
+        filePath: FilePath,
+        endSource: SourceLocation = SourceLocation(-1, -1)
+    ) : this(source, text, filePath.absolutePath.toString(), filePath, endSource)
 
     @Suppress("DEPRECATION")
     @Deprecated(
@@ -62,20 +64,33 @@ data class Location @Deprecated("Consider relative path by passing a [FilePath]"
         fun from(element: PsiElement, offset: Int = 0): Location {
             val start = startLineAndColumn(element, offset)
             val sourceLocation = SourceLocation(start.line, start.column)
+            val end = endLineAndColumn(element, offset)
+            val endSourceLocation = SourceLocation(end.line, end.column)
             val textLocation = TextLocation(element.startOffset + offset, element.endOffset + offset)
-            return Location(sourceLocation, textLocation, element.containingFile.toFilePath())
+            return Location(sourceLocation, textLocation, element.containingFile.toFilePath(), endSourceLocation)
         }
 
         /**
-         * Determines the line and column of a [PsiElement] in the source file.
+         * Determines the start line and column of a [PsiElement] in the source file.
          */
-        fun startLineAndColumn(element: PsiElement, offset: Int = 0): PsiDiagnosticUtils.LineAndColumn {
+        fun startLineAndColumn(element: PsiElement, offset: Int = 0): PsiDiagnosticUtils.LineAndColumn =
+            lineAndColumn(
+                element,
+                TextRange(element.textRange.startOffset + offset, element.textRange.endOffset + offset)
+            )
+
+        /**
+         * Determines the end line and column of a [PsiElement] in the source file.
+         */
+        private fun endLineAndColumn(element: PsiElement, offset: Int = 0): PsiDiagnosticUtils.LineAndColumn =
+            lineAndColumn(
+                element,
+                TextRange(element.textRange.endOffset + offset, element.textRange.endOffset + offset)
+            )
+
+        private fun lineAndColumn(element: PsiElement, range: TextRange): PsiDiagnosticUtils.LineAndColumn {
             return try {
-                val range = element.textRange
-                DiagnosticUtils.getLineAndColumnInPsiFile(
-                    element.containingFile,
-                    TextRange(range.startOffset + offset, range.endOffset + offset)
-                )
+                DiagnosticUtils.getLineAndColumnInPsiFile(element.containingFile, range)
             } catch (@Suppress("SwallowedException", "TooGenericExceptionCaught") e: IndexOutOfBoundsException) {
                 // #3317 If any rule mutates the PsiElement, searching the original PsiElement may throw exception.
                 PsiDiagnosticUtils.LineAndColumn(-1, -1, null)
