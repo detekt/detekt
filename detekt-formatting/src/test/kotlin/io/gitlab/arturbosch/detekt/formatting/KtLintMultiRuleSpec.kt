@@ -19,8 +19,12 @@ class KtLintMultiRuleSpec {
         assertThat(sortedRules.indexOfFirst { !it.runOnRootNodeOnly })
             .isGreaterThan(-1)
             .isLessThan(sortedRules.indexOfFirst { it.runOnRootNodeOnly && it.runAsLateAsPossible })
-        assertThat(sortedRules.indexOfFirst { it.runOnRootNodeOnly && it.runAsLateAsPossible })
-            .isGreaterThan(-1)
-            .isLessThan(sortedRules.indexOfFirst { it.runAsLateAsPossible && !it.runOnRootNodeOnly })
+
+        sortedRules.filter { it.runAfterRule != null }
+            .forEach { rule ->
+                assertThat(sortedRules.indexOfFirst { it.wrapping.id.toQualifiedRuleId() == rule.runAfterRule?.ruleId?.toQualifiedRuleId() })
+                    .isGreaterThan(-1)
+                    .isLessThan(sortedRules.indexOfFirst { it.wrapping.id == rule.wrapping.id })
+            }
     }
 }

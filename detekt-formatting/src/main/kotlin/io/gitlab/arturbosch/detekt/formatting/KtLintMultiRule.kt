@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.pinterest.ktlint.ruleset.experimental.ParameterListSpacingRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -101,12 +100,49 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
                 else -> other.add(rule)
             }
         }
-        return LinkedList<FormattingRule>().apply {
+
+        val sortedRules = LinkedList<FormattingRule>().apply {
             addAll(runFirstOnRoot)
             addAll(other)
             addAll(runLastOnRoot)
             addAll(runLast)
         }
+
+        return sortedRules.applyRunAfterRuleToRuleExecutionOrder()
+    }
+
+    private fun List<FormattingRule>.applyRunAfterRuleToRuleExecutionOrder(): List<FormattingRule> {
+        val newRuleReferences = mutableListOf<FormattingRule>()
+        val blockedRuleReferences = mutableListOf<FormattingRule>()
+
+        forEach { rule ->
+            if (rule.runAfterRule != null && newRuleReferences.noRunsAfterRuleInserted(rule)) {
+                check(!noRunsAfterRuleInserted(rule)) { "Expected ktlint rule ${rule.runAfterRule?.ruleId} is not available." }
+                blockedRuleReferences.add(rule)
+                return@forEach
+            } else {
+                newRuleReferences.add(rule)
+            }
+
+            val ruleReferencesToUnblock = blockedRuleReferences.findRulesBlockedBy(rule.wrapping.id)
+            if (ruleReferencesToUnblock.isNotEmpty()) {
+                newRuleReferences.addAll(ruleReferencesToUnblock)
+                blockedRuleReferences.removeAll(ruleReferencesToUnblock.toSet())
+            }
+        }
+
+        return newRuleReferences
+    }
+
+    private fun List<FormattingRule>.noRunsAfterRuleInserted(ruleReference: FormattingRule): Boolean {
+        return this.none { it.wrapping.id.toQualifiedRuleId() == ruleReference.runAfterRule?.ruleId?.toQualifiedRuleId() }
+    }
+
+    private fun List<FormattingRule>.findRulesBlockedBy(ruleId: String): List<FormattingRule> {
+        return this
+            .filter { it.runAfterRule?.ruleId?.toQualifiedRuleId() == ruleId.toQualifiedRuleId() }
+            .map { listOf(it) + this.findRulesBlockedBy(it.wrapping.id.toQualifiedRuleId()) }
+            .flatten()
     }
 
     private fun ASTNode.visitTokens(currentNode: (ASTNode) -> Unit) {

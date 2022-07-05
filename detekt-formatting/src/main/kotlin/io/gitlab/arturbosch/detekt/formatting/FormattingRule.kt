@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.formatting
 
 import com.pinterest.ktlint.core.KtLint
+import com.pinterest.ktlint.core.Rule.VisitorModifier.RunAfterRule
 import com.pinterest.ktlint.core.Rule.VisitorModifier.RunAsLateAsPossible
 import com.pinterest.ktlint.core.Rule.VisitorModifier.RunOnRootNodeOnly
 import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties.codeStyleSetProperty
-import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
 import io.github.detekt.psi.fileName
 import io.github.detekt.psi.toFilePath
@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.lang.FileASTNode
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
+import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
 
 /**
  * Rule to detect formatting violations.
@@ -35,6 +36,9 @@ abstract class FormattingRule(config: Config) : Rule(config) {
     val runAsLateAsPossible
         get() = RunAsLateAsPossible in wrapping.visitorModifiers
 
+    val runAfterRule
+        get() = wrapping.visitorModifiers.firstIsInstanceOrNull<RunAfterRule>()
+
     private var positionByOffset: (offset: Int) -> Pair<Int, Int> by SingleAssign()
     private var root: KtFile by SingleAssign()
 
@@ -49,7 +53,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         val editorConfigProperties = overrideEditorConfigProperties()?.toMutableMap()
             ?: mutableMapOf()
 
-        if(isAndroid) {
+        if (isAndroid) {
             editorConfigProperties[codeStyleSetProperty] = "android"
         }
 
