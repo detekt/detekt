@@ -12,7 +12,7 @@ private const val ALLOW_TRAILING_COMMA_ON_CALL_SITE = "allowTrailingCommaOnCallS
 /**
  * Some test cases were used directly from KtLint to verify the wrapper rule:
  *
- * https://github.com/pinterest/ktlint/blob/master/ktlint-ruleset-experimental/src/test/kotlin/com/pinterest/ktlint/ruleset/experimental/TrailingCommaRuleTest.kt
+ * https://github.com/pinterest/ktlint/blob/dbc7453cd48185772c07b0855c18cb3f5913ed1f/ktlint-ruleset-standard/src/test/kotlin/com/pinterest/ktlint/ruleset/standard/TrailingCommaRuleTest.kt
  */
 class TrailingCommaSpec {
 
