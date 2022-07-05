@@ -99,11 +99,11 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
     ) {
         val (abstractMembers, concreteMembers) = members.partition { it.isAbstract() }
         when {
-            (abstractMembers.isEmpty() && !hasInheritedMember(true)) ->
+            abstractMembers.isEmpty() && !hasInheritedMember(true) ->
                 report(CodeSmell(issue, Entity.from(nameIdentifier), noAbstractMember))
-            (abstractMembers.any { it.isInternal() || it.isProtected() } || hasConstructorParameter()) ->
+            abstractMembers.any { it.isInternal() || it.isProtected() } || hasConstructorParameter() ->
                 Unit
-            (concreteMembers.isEmpty() && !hasInheritedMember(false)) ->
+            concreteMembers.isEmpty() && !hasInheritedMember(false) ->
                 report(CodeSmell(issue, Entity.from(nameIdentifier), noConcreteMember))
         }
     }
