@@ -24,17 +24,27 @@ data class Location @Deprecated("Consider relative path by passing a [FilePath]"
         )
     )
     val file: String,
-    val filePath: FilePath = FilePath.fromAbsolute(Paths.get(file)),
-    val endSource: SourceLocation = SourceLocation(-1, -1)
+    val filePath: FilePath = FilePath.fromAbsolute(Paths.get(file))
 ) : Compactable {
+    var endSource: SourceLocation = source
+        private set
 
     @Suppress("DEPRECATION")
     constructor(
         source: SourceLocation,
         text: TextLocation,
+        filePath: FilePath
+    ) : this(source, text, filePath.absolutePath.toString(), filePath)
+
+    @Suppress("DEPRECATION")
+    constructor(
+        source: SourceLocation,
+        endSource: SourceLocation,
+        text: TextLocation,
         filePath: FilePath,
-        endSource: SourceLocation = SourceLocation(-1, -1)
-    ) : this(source, text, filePath.absolutePath.toString(), filePath, endSource)
+    ) : this(source, text, filePath.absolutePath.toString(), filePath) {
+        this.endSource = endSource
+    }
 
     @Suppress("DEPRECATION")
     @Deprecated(
@@ -67,7 +77,7 @@ data class Location @Deprecated("Consider relative path by passing a [FilePath]"
             val end = endLineAndColumn(element, offset)
             val endSourceLocation = SourceLocation(end.line, end.column)
             val textLocation = TextLocation(element.startOffset + offset, element.endOffset + offset)
-            return Location(sourceLocation, textLocation, element.containingFile.toFilePath(), endSourceLocation)
+            return Location(sourceLocation, endSourceLocation, textLocation, element.containingFile.toFilePath())
         }
 
         /**
