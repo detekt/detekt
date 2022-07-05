@@ -3,8 +3,8 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
-import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
@@ -15,7 +15,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
         val rule = MaxChainedCallsOnSameLine(TestConfig(mapOf("maxChainedCalls" to 3)))
         val code = "val a = 0.plus(0)"
 
-        assertThat(rule.lintWithContext(env, code)).isEmpty()
+        assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -23,7 +23,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
         val rule = MaxChainedCallsOnSameLine(TestConfig(mapOf("maxChainedCalls" to 3)))
         val code = "val a = 0.plus(0).plus(0)"
 
-        assertThat(rule.lintWithContext(env, code)).isEmpty()
+        assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -31,7 +31,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
         val rule = MaxChainedCallsOnSameLine(TestConfig(mapOf("maxChainedCalls" to 3)))
         val code = "val a = 0.plus(0).plus(0).plus(0)"
 
-        assertThat(rule.lintWithContext(env, code)).hasSize(1)
+        assertThat(rule.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -39,7 +39,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
         val rule = MaxChainedCallsOnSameLine(TestConfig(mapOf("maxChainedCalls" to 3)))
         val code = "val a = 0?.plus(0)?.plus(0)?.plus(0)"
 
-        assertThat(rule.lintWithContext(env, code)).hasSize(1)
+        assertThat(rule.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -47,7 +47,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
         val rule = MaxChainedCallsOnSameLine(TestConfig(mapOf("maxChainedCalls" to 3)))
         val code = "val a = 0!!.plus(0)!!.plus(0)!!.plus(0)"
 
-        assertThat(rule.lintWithContext(env, code)).hasSize(1)
+        assertThat(rule.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -55,7 +55,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
         val rule = MaxChainedCallsOnSameLine(TestConfig(mapOf("maxChainedCalls" to 3)))
         val code = "val a = 0.plus(0).plus(0).plus(0).plus(0).plus(0).plus(0)"
 
-        assertThat(rule.lintWithContext(env, code)).hasSize(1)
+        assertThat(rule.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -69,7 +69,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
                 .plus(0)
         """
 
-        assertThat(rule.lintWithContext(env, code)).isEmpty()
+        assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -81,7 +81,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
                 .plus(0).plus(0).plus(0)
         """
 
-        assertThat(rule.lintWithContext(env, code)).isEmpty()
+        assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -93,7 +93,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
                 .plus(0)
         """
 
-        assertThat(rule.lintWithContext(env, code)).hasSize(1)
+        assertThat(rule.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -106,7 +106,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
                 .plus(0)
         """
 
-        assertThat(rule.lintWithContext(env, code)).hasSize(1)
+        assertThat(rule.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -122,32 +122,24 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
         val rule = MaxChainedCallsOnSameLine(TestConfig(mapOf("maxChainedCalls" to 3)))
         val code = "package a.b.c.d.e"
 
-        assertThat(rule.lintWithContext(env, code)).isEmpty()
+        assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
     fun `does not count package references as chained calls`() {
         val rule = MaxChainedCallsOnSameLine(TestConfig(mapOf("maxChainedCalls" to 3)))
         val code = """
-            package a.b.c
-            fun foo() = 1
-            fun test() {
-                a.b.c.foo().plus(0).plus(0)
-            }
+            val x = kotlin.math.floor(1.0).plus(1).plus(1)
         """
-        assertThat(rule.lintWithContext(env, code)).isEmpty()
+        assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
     fun `does not count a package reference as chained calls`() {
         val rule = MaxChainedCallsOnSameLine(TestConfig(mapOf("maxChainedCalls" to 3)))
         val code = """
-            package a
-            fun foo() = 1
-            fun test() {
-                a.foo().plus(0).plus(0)
-            }
+            val x = kotlin.run { 1 }.plus(1).plus(1)
         """
-        assertThat(rule.lintWithContext(env, code)).isEmpty()
+        assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
     }
 }
