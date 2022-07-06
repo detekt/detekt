@@ -27,7 +27,9 @@ class AnnotationExcluderSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
     )
 
-    @ParameterizedTest(name = "Given {0} is excluded when the {1} is found then the excluder returns {2} without type solving")
+    @ParameterizedTest(
+        name = "Given {0} is excluded when the {1} is found then the excluder returns {2} without type solving"
+    )
     @CsvFileSource(resources = ["/annotation_excluder.csv"])
     fun `all cases`(exclusion: String, annotation: String, shouldExclude: Boolean) {
         val (file, ktAnnotation) = createKtFile(annotation)
@@ -36,7 +38,9 @@ class AnnotationExcluderSpec(private val env: KotlinCoreEnvironment) {
         assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isEqualTo(shouldExclude)
     }
 
-    @ParameterizedTest(name = "Given {0} is excluded when the {1} is found then the excluder returns {2} with type solving")
+    @ParameterizedTest(
+        name = "Given {0} is excluded when the {1} is found then the excluder returns {2} with type solving"
+    )
     @CsvFileSource(resources = ["/annotation_excluder.csv"])
     fun `all cases - Type Solving`(exclusion: String, annotation: String, shouldExclude: Boolean) {
         val (file, ktAnnotation) = createKtFile(annotation)

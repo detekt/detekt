@@ -78,13 +78,23 @@ class DetektAndroidSpec {
         @DisplayName("task :app:detektTest")
         fun appDetektTest() {
             gradleRunner.runTasksAndCheckResult(":app:detektTest") { buildResult ->
-                assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-releaseUnitTest.xml """)
-                assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debugUnitTest.xml """)
-                assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debugAndroidTest.xml """)
+                assertThat(buildResult.output).containsPattern(
+                    """--baseline \S*[/\\]detekt-baseline-releaseUnitTest.xml """
+                )
+                assertThat(buildResult.output).containsPattern(
+                    """--baseline \S*[/\\]detekt-baseline-debugUnitTest.xml """
+                )
+                assertThat(buildResult.output).containsPattern(
+                    """--baseline \S*[/\\]detekt-baseline-debugAndroidTest.xml """
+                )
                 assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]test[/\\]java""")
-                assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]androidTest[/\\]java""")
+                assertThat(buildResult.output).containsPattern(
+                    """--input \S*[/\\]app[/\\]src[/\\]androidTest[/\\]java"""
+                )
                 assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]test[/\\]kotlin""")
-                assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]androidTest[/\\]kotlin""")
+                assertThat(buildResult.output).containsPattern(
+                    """--input \S*[/\\]app[/\\]src[/\\]androidTest[/\\]kotlin"""
+                )
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
@@ -190,9 +200,15 @@ class DetektAndroidSpec {
         @DisplayName("task :lib:detektTest")
         fun libDetektTest() {
             gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
-                assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-releaseUnitTest.xml """)
-                assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debugUnitTest.xml """)
-                assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debugAndroidTest.xml """)
+                assertThat(buildResult.output).containsPattern(
+                    """--baseline \S*[/\\]detekt-baseline-releaseUnitTest.xml """
+                )
+                assertThat(buildResult.output).containsPattern(
+                    """--baseline \S*[/\\]detekt-baseline-debugUnitTest.xml """
+                )
+                assertThat(buildResult.output).containsPattern(
+                    """--baseline \S*[/\\]detekt-baseline-debugAndroidTest.xml """
+                )
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")

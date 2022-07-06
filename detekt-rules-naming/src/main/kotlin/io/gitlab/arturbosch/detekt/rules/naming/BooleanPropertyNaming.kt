@@ -41,7 +41,8 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
     private val ignoreOverridden: Boolean by config(true)
 
     override val issue = Issue(
-        javaClass.simpleName, Severity.CodeSmell,
+        javaClass.simpleName,
+        Severity.CodeSmell,
         "Boolean property name should follow the naming convention set in the projects configuration.",
         Debt.FIVE_MINS
     )

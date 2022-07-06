@@ -14,7 +14,10 @@ import java.nio.file.Paths
 /**
  * Specifies a position within a source code fragment.
  */
-data class Location @Deprecated("Consider relative path by passing a [FilePath]") @JvmOverloads constructor(
+data class Location
+@Deprecated("Consider relative path by passing a [FilePath]")
+@JvmOverloads
+constructor(
     val source: SourceLocation,
     val text: TextLocation,
     @Deprecated(
