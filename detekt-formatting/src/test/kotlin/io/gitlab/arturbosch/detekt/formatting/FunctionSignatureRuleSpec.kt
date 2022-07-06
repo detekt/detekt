@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionSignature
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.ListAssert
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -20,7 +20,7 @@ class FunctionSignatureRuleSpec {
         code: String,
         config: Config = Config.empty
     ): ListAssert<Finding> {
-        return Assertions.assertThat(FunctionSignature(config).lint(code))
+        return assertThat(FunctionSignature(config).lint(code))
     }
 
     @Test
@@ -66,7 +66,7 @@ class FunctionSignatureRuleSpec {
     }
 
     @ParameterizedTest(name = "bodyExpressionWrapping: {0}")
-    @ValueSource(strings = ["default", "multiline", "always"])
+    @ValueSource(strings = ["default", "multiline"])
     fun `Given that the function signature and a single line body expression body fit on the same line then do not reformat function signature or body expression`(
         bodyExpressionWrapping: String
     ) {

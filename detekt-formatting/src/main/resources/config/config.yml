@@ -3,13 +3,13 @@ formatting:
   android: false
   autoCorrect: true
   AnnotationOnSeparateLine:
-    active: false
+    active: true
     autoCorrect: true
   AnnotationSpacing:
-    active: false
+    active: true
     autoCorrect: true
   ArgumentListWrapping:
-    active: false
+    active: true
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120
@@ -30,7 +30,7 @@ formatting:
     active: false
     autoCorrect: true
   EnumEntryNameCase:
-    active: false
+    active: true
     autoCorrect: true
   Filename:
     active: true
@@ -39,6 +39,19 @@ formatting:
     autoCorrect: true
     insertFinalNewLine: true
   FunKeywordSpacing:
+    active: false
+    autoCorrect: true
+  FunctionReturnTypeSpacing:
+    active: false
+    autoCorrect: true
+  FunctionSignature:
+    active: false
+    autoCorrect: true
+    indentSize: 4
+    maxLineLength: 120
+    forceMultilineWhenParameterCountGreaterOrEqualThan: 'unset'
+    functionBodyExpressionWrapping: 'default'
+  FunctionStartOfBodySpacing:
     active: false
     autoCorrect: true
   FunctionTypeReferenceSpacing:
@@ -67,7 +80,7 @@ formatting:
     active: true
     autoCorrect: true
   MultiLineIfElse:
-    active: false
+    active: true
     autoCorrect: true
   NoBlankLineBeforeRbrace:
     active: true
@@ -79,7 +92,7 @@ formatting:
     active: true
     autoCorrect: true
   NoEmptyFirstLineInMethodBlock:
-    active: false
+    active: true
     autoCorrect: true
   NoLineBreakAfterElse:
     active: true
@@ -105,7 +118,13 @@ formatting:
   NoWildcardImports:
     active: true
     packagesToUseImportOnDemandProperty: 'java.util.*,kotlinx.android.synthetic.**'
+  NullableTypeSpacing:
+    active: false
+    autoCorrect: true
   PackageName:
+    active: true
+    autoCorrect: true
+  ParameterListSpacing:
     active: false
     autoCorrect: true
   ParameterListWrapping:
@@ -113,7 +132,7 @@ formatting:
     autoCorrect: true
     maxLineLength: 120
   SpacingAroundAngleBrackets:
-    active: false
+    active: true
     autoCorrect: true
   SpacingAroundColon:
     active: true
@@ -128,7 +147,7 @@ formatting:
     active: true
     autoCorrect: true
   SpacingAroundDoubleColon:
-    active: false
+    active: true
     autoCorrect: true
   SpacingAroundKeyword:
     active: true
@@ -143,12 +162,15 @@ formatting:
     active: true
     autoCorrect: true
   SpacingAroundUnaryOperator:
-    active: false
+    active: true
     autoCorrect: true
   SpacingBetweenDeclarationsWithAnnotations:
-    active: false
+    active: true
     autoCorrect: true
   SpacingBetweenDeclarationsWithComments:
+    active: true
+    autoCorrect: true
+  SpacingBetweenFunctionNameAndOpeningParenthesis:
     active: false
     autoCorrect: true
   StringTemplate:
@@ -168,3 +190,4 @@ formatting:
   Wrapping:
     active: true
     autoCorrect: true
+    indentSize: 4

@@ -117,9 +117,15 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
 
         forEach { rule ->
             if (rule.runAfterRule != null && newRuleReferences.noRunsAfterRuleInserted(rule)) {
-                check(!noRunsAfterRuleInserted(rule)) { "Expected ktlint rule ${rule.runAfterRule?.ruleId} is not available." }
-                blockedRuleReferences.add(rule)
-                return@forEach
+                if (this.noRunsAfterRuleInserted(rule)) {
+                    check(rule.runAfterRule?.loadOnlyWhenOtherRuleIsLoaded == false) {
+                        "You have to enable the ktlint rule ${rule.runAfterRule?.ruleId} to run the rule ${rule.ruleId}"
+                    }
+                    newRuleReferences.add(rule)
+                } else {
+                    blockedRuleReferences.add(rule)
+                    return@forEach
+                }
             } else {
                 newRuleReferences.add(rule)
             }
@@ -135,7 +141,7 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
     }
 
     private fun List<FormattingRule>.noRunsAfterRuleInserted(ruleReference: FormattingRule): Boolean {
-        return this.none { it.wrapping.id.toQualifiedRuleId() == ruleReference.runAfterRule?.ruleId?.toQualifiedRuleId() }
+        return none { it.wrapping.id.toQualifiedRuleId() == ruleReference.runAfterRule?.ruleId?.toQualifiedRuleId() }
     }
 
     private fun List<FormattingRule>.findRulesBlockedBy(ruleId: String): List<FormattingRule> {
