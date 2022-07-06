@@ -85,6 +85,9 @@ formatting:
   NoBlankLineBeforeRbrace:
     active: true
     autoCorrect: true
+  NoBlankLinesInChainedMethodCalls:
+    active: true
+    autoCorrect: true
   NoConsecutiveBlankLines:
     active: true
     autoCorrect: true
