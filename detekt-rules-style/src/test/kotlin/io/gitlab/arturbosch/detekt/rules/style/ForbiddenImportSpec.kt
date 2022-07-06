@@ -45,11 +45,12 @@ class ForbiddenImportSpec {
     @DisplayName("should report kotlin.* when imports are kotlin.*")
     fun reportKotlinWildcardImports() {
         val findings = ForbiddenImport(TestConfig(mapOf(IMPORTS to listOf("kotlin.*")))).lint(code)
-        assertThat(findings).hasSize(2)
-        assertThat(findings[0].message)
-            .isEqualTo("The import `kotlin.jvm.JvmField` has been forbidden in the Detekt config.")
-        assertThat(findings[1].message)
-            .isEqualTo("The import `kotlin.SinceKotlin` has been forbidden in the Detekt config.")
+        assertThat(findings)
+            .extracting("message")
+            .containsExactlyInAnyOrder(
+                "The import `kotlin.jvm.JvmField` has been forbidden in the Detekt config.",
+                "The import `kotlin.SinceKotlin` has been forbidden in the Detekt config.",
+            )
     }
 
     @Test
