@@ -9,7 +9,8 @@ import java.nio.file.Files
 import java.util.UUID
 
 @Suppress("TooManyFunctions", "ClassOrdering")
-class DslGradleRunner @Suppress("LongParameterList") constructor(
+class DslGradleRunner @Suppress("LongParameterList")
+constructor(
     val projectLayout: ProjectLayout,
     val buildFileName: String,
     val mainBuildFileContent: String = "",
@@ -18,7 +19,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
     val gradleVersionOrNone: String? = null,
     val dryRun: Boolean = false,
     val jvmArgs: String = "-Xmx2g -XX:MaxMetaspaceSize=1g",
-    val projectScript: Project.() -> Unit = {},
+    val projectScript: Project.() -> Unit = {}
 ) {
 
     private val rootDir: File = Files.createTempDirectory("applyPlugin").toFile().apply { deleteOnExit() }

@@ -51,7 +51,8 @@ tasks.check {
 configurations.allCodeCoverageReportClassDirectories.get().attributes {
     attributes.attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category::class, Category.LIBRARY))
     attributes.attribute(
-        LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements::class, LibraryElements.CLASSES)
+        LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE,
+        objects.named(LibraryElements::class, LibraryElements.CLASSES)
     )
 }
 
