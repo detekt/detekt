@@ -9,8 +9,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 /**
  * See [ktlint-website](https://ktlint.github.io#rule-spacing) for documentation.
  */
-@AutoCorrectable(since = "1.16.0")
 @ActiveByDefault(since = "1.21.0")
+@AutoCorrectable(since = "1.16.0")
 class SpacingAroundAngleBrackets(config: Config) : FormattingRule(config) {
 
     override val wrapping = SpacingAroundAngleBracketsRule()

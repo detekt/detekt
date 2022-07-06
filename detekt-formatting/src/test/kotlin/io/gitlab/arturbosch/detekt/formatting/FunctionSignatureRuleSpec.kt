@@ -45,7 +45,10 @@ class FunctionSignatureRuleSpec {
             }
             """.trimIndent()
 
-        functionSignatureWrappingRuleAssertThat(code, TestConfig("maxLineLength" to "10"))
+        functionSignatureWrappingRuleAssertThat(
+            code,
+            TestConfig("maxLineLength" to "10")
+        )
             .hasSize(4)
     }
 
@@ -75,7 +78,10 @@ class FunctionSignatureRuleSpec {
             fun f(a: Any, b: Any): String = "some-result"
             """.trimIndent()
 
-        functionSignatureWrappingRuleAssertThat(code, TestConfig("functionBodyExpressionWrapping" to bodyExpressionWrapping))
+        functionSignatureWrappingRuleAssertThat(
+            code,
+            TestConfig("functionBodyExpressionWrapping" to bodyExpressionWrapping)
+        )
             .isEmpty()
     }
 
@@ -89,7 +95,10 @@ class FunctionSignatureRuleSpec {
             fun f(a: Any, b: Any): String = "some-result"
             """.trimIndent()
 
-        functionSignatureWrappingRuleAssertThat(code, TestConfig("functionBodyExpressionWrapping" to bodyExpressionWrapping))
+        functionSignatureWrappingRuleAssertThat(
+            code,
+            TestConfig("functionBodyExpressionWrapping" to bodyExpressionWrapping)
+        )
             .hasSize(1)
     }
 }

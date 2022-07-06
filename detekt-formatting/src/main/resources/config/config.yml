@@ -148,7 +148,6 @@ formatting:
     autoCorrect: true
   SpacingAroundDoubleColon:
     active: true
-    autoCorrect: true
   SpacingAroundKeyword:
     active: true
     autoCorrect: true

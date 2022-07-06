@@ -9,8 +9,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 /**
  * See [ktlint-website](https://ktlint.github.io) for documentation.
  */
-@AutoCorrectable(since = "1.4.0")
 @ActiveByDefault(since = "1.21.0")
+@AutoCorrectable(since = "1.4.0")
 class NoEmptyFirstLineInMethodBlock(config: Config) : FormattingRule(config) {
 
     override val wrapping = NoEmptyFirstLineInMethodBlockRule()

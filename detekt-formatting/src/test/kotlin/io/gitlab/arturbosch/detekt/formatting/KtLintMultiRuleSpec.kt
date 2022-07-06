@@ -22,7 +22,11 @@ class KtLintMultiRuleSpec {
 
         sortedRules.filter { it.runAfterRule != null }
             .forEach { rule ->
-                assertThat(sortedRules.indexOfFirst { it.wrapping.id.toQualifiedRuleId() == rule.runAfterRule?.ruleId?.toQualifiedRuleId() })
+                assertThat(
+                    sortedRules.indexOfFirst {
+                        it.wrapping.id.toQualifiedRuleId() == rule.runAfterRule?.ruleId?.toQualifiedRuleId()
+                    }
+                )
                     .isGreaterThan(-1)
                     .isLessThan(sortedRules.indexOfFirst { it.wrapping.id == rule.wrapping.id })
             }
