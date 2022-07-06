@@ -69,4 +69,4 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
         forbiddenPatterns.pattern.isNotEmpty() && forbiddenPatterns.containsMatchIn(import)
 }
 
-private class Forbidden(val import: Regex, val reason: String?)
+private data class Forbidden(val import: Regex, val reason: String?)
