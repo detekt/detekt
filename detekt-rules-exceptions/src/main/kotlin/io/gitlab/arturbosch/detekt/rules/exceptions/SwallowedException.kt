@@ -11,7 +11,9 @@ import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -115,8 +117,15 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
         val catchBody = catchClause.catchBody
         return catchBody?.anyDescendantOfType<KtThrowExpression> { throwExpr ->
             val parameterReferences = throwExpr.parameterReferences(parameterName, catchBody)
-            parameterReferences.isNotEmpty() && parameterReferences.all { it is KtDotQualifiedExpression }
+            parameterReferences.isNotEmpty() && parameterReferences.all {
+                it is KtDotQualifiedExpression && !ordinaryCallExpression(it.lastChild)
+            }
         } == true
+    }
+
+    private fun ordinaryCallExpression(expression: PsiElement): Boolean {
+        val commonFunctions = listOf("toString()")
+        return expression is KtCallExpression && expression.text !in commonFunctions
     }
 
     private fun KtThrowExpression.parameterReferences(

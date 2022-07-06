@@ -271,6 +271,24 @@ class SwallowedExceptionSpec {
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
+    @Test
+    fun `does not report function call on exception object`() {
+        val code = """
+            class MyException(e: Exception) : Exception(e)
+            
+            fun Exception.toMyException() = MyException(this)
+            
+            fun foo() {
+                try {
+                    // ...
+                } catch(e: IOException) {
+                    throw e.toMyException()
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).hasSize(0)
+    }
+
     @ParameterizedTest(name = "ignores {0} in the catch clause by default")
     @MethodSource("io.gitlab.arturbosch.detekt.rules.exceptions.SwallowedException#getEXCEPTIONS_IGNORED_BY_DEFAULT")
     fun `ignores $exceptionName in the catch clause by default`(exceptionName: String) {
