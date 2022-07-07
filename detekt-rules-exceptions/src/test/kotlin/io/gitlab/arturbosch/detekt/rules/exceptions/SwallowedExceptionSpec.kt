@@ -285,7 +285,7 @@ class SwallowedExceptionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(0)
+        assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
     @ParameterizedTest(name = "ignores {0} in the catch clause by default")

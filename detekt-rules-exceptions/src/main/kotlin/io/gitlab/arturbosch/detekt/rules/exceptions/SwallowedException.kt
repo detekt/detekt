@@ -124,7 +124,7 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun ordinaryCallExpression(expression: PsiElement): Boolean {
-        return expression is KtCallExpression && expression.name != "toString"
+        return expression is KtCallExpression && expression.text != "toString()"
     }
 
     private fun KtThrowExpression.parameterReferences(
