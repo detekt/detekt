@@ -280,8 +280,7 @@ class SwallowedExceptionSpec {
             
             fun foo() {
                 try {
-                    // ...
-                } catch(e: IOException) {
+                } catch(e: Exception) {
                     throw e.toMyException()
                 }
             }
