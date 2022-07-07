@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * See [ktlint-website](https://ktlint.github.io) for documentation.
  */
 @AutoCorrectable(since = "1.0.0")
-@ActiveByDefault(since = "1.21.0")
+@ActiveByDefault(since = "1.22.0")
 class PackageName(config: Config) : FormattingRule(config) {
 
     override val wrapping = PackageNameRule()

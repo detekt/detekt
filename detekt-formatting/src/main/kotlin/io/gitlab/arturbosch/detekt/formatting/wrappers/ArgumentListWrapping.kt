@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
 import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties
-import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
 import com.pinterest.ktlint.ruleset.standard.ArgumentListWrappingRule
 import io.gitlab.arturbosch.detekt.api.Config
@@ -16,7 +15,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * See [ktlint-website](https://ktlint.github.io) for documentation.
  */
 @AutoCorrectable(since = "1.0.0")
-@ActiveByDefault(since = "1.21.0")
+@ActiveByDefault(since = "1.22.0")
 class ArgumentListWrapping(config: Config) : FormattingRule(config) {
 
     override val wrapping = ArgumentListWrappingRule()

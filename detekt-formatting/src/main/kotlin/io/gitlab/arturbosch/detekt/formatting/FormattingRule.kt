@@ -4,11 +4,20 @@ import com.pinterest.ktlint.core.KtLint
 import com.pinterest.ktlint.core.Rule.VisitorModifier.RunAsLateAsPossible
 import com.pinterest.ktlint.core.Rule.VisitorModifier.RunOnRootNodeOnly
 import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties.codeStyleSetProperty
-import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
 import io.github.detekt.psi.fileName
 import io.github.detekt.psi.toFilePath
-import io.gitlab.arturbosch.detekt.api.*
+import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
+import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Location
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.SingleAssign
+import io.gitlab.arturbosch.detekt.api.SourceLocation
+import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.ec4j.core.model.Property
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.lang.FileASTNode
@@ -49,7 +58,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         val editorConfigProperties = overrideEditorConfigProperties()?.toMutableMap()
             ?: mutableMapOf()
 
-        if(isAndroid) {
+        if (isAndroid) {
             editorConfigProperties[codeStyleSetProperty] = "android"
         }
 

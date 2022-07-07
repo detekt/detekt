@@ -9,8 +9,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 /**
  * See [ktlint-website](https://ktlint.github.io) for documentation.
  */
-@ActiveByDefault(since = "1.21.0")
-@AutoCorrectable(since = "1.21.0")
+@ActiveByDefault(since = "1.22.0")
+@AutoCorrectable(since = "1.22.0")
 class NoBlankLinesInChainedMethodCalls(config: Config) : FormattingRule(config) {
 
     override val wrapping = NoBlankLinesInChainedMethodCallsRule()

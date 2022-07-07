@@ -34,7 +34,8 @@ class Wrapping(config: Config) : FormattingRule(config) {
         return TextLocation(offset, offset + 1)
     }
 
-    override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> = mapOf(
-        DefaultEditorConfigProperties.indentSizeProperty to indentSize.toString(),
-    )
+    override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
+        mapOf(
+            DefaultEditorConfigProperties.indentSizeProperty to indentSize.toString(),
+        )
 }
