@@ -71,8 +71,7 @@ object XmlReportMerger {
                 files.filter { reportFile -> reportFile.exists() }
                     .flatMap { existingReportFile ->
                         val checkstyleNode = documentBuilder.parse(existingReportFile.inputStream())
-                        val sourceFileNodes = checkstyleNode.documentElement.childNodes.asSequence().filterWhitespace()
-                        sourceFileNodes
+                        checkstyleNode.documentElement.childNodes.asSequence().filterWhitespace()
                     }
             )
     }
