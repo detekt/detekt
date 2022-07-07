@@ -14,6 +14,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isInternal
 import io.gitlab.arturbosch.detekt.rules.isProtected
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.MemberDescriptor
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
@@ -79,29 +80,31 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
         super.visitClass(klass)
     }
 
-    @Suppress("ComplexMethod")
     private fun KtClass.check() {
         val nameIdentifier = this.nameIdentifier ?: return
         if (annotationExcluder.shouldExclude(annotationEntries) || isInterface() || !isAbstract()) return
         val members = members()
         when {
-            members.isNotEmpty() -> {
-                val (abstractMembers, concreteMembers) = members.partition { it.isAbstract() }
-                if (abstractMembers.isEmpty() && !hasInheritedMember(true)) {
-                    report(CodeSmell(issue, Entity.from(nameIdentifier), noAbstractMember))
-                    return
-                }
-                if (abstractMembers.any { it.isInternal() || it.isProtected() } || hasConstructorParameter()) {
-                    return
-                }
-                if (concreteMembers.isEmpty() && !hasInheritedMember(false)) {
-                    report(CodeSmell(issue, Entity.from(nameIdentifier), noConcreteMember))
-                }
-            }
+            members.isNotEmpty() -> checkMembers(members, nameIdentifier)
             !hasConstructorParameter() ->
                 report(CodeSmell(issue, Entity.from(nameIdentifier), noConcreteMember))
             else ->
                 report(CodeSmell(issue, Entity.from(nameIdentifier), noAbstractMember))
+        }
+    }
+
+    private fun KtClass.checkMembers(
+        members: List<KtCallableDeclaration>,
+        nameIdentifier: PsiElement
+    ) {
+        val (abstractMembers, concreteMembers) = members.partition { it.isAbstract() }
+        when {
+            abstractMembers.isEmpty() && !hasInheritedMember(true) ->
+                report(CodeSmell(issue, Entity.from(nameIdentifier), noAbstractMember))
+            abstractMembers.any { it.isInternal() || it.isProtected() } || hasConstructorParameter() ->
+                Unit
+            concreteMembers.isEmpty() && !hasInheritedMember(false) ->
+                report(CodeSmell(issue, Entity.from(nameIdentifier), noConcreteMember))
         }
     }
 

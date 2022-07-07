@@ -14,17 +14,43 @@ import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createFinding
 import io.gitlab.arturbosch.detekt.test.createIssue
+import io.mockk.clearStaticMockk
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtElement
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 
 class MdOutputReportSpec {
     private val mdReport = MdOutputReport()
     private val detektion = createTestDetektionWithMultipleSmells()
     private val result = mdReport.render(detektion)
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(OffsetDateTime::class)
+        every { OffsetDateTime.now(ZoneOffset.UTC) } returns OffsetDateTime.of(
+            2000, // year
+            1, // month
+            1, // dayOfMonth
+            0, // hour
+            0, // minute
+            0, // second
+            0, // nanoOfSecond
+            ZoneOffset.UTC // offset
+        )
+    }
+
+    @AfterEach
+    fun teardown() {
+        clearStaticMockk(OffsetDateTime::class)
+    }
 
     @Test
     fun `renders Markdown structure correctly`() {
