@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.junit.jupiter.api.Test
 
 class LocationSpec {
+
     @Test
     fun `start and end positions of block`() {
         val code = """
