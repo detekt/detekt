@@ -48,7 +48,7 @@ class TrimMultilineRawString(val config: Config) : Rule(config) {
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
         super.visitStringTemplateExpression(expression)
 
-        if (expression.text.lines().count() == 1) return
+        if (expression.text.lines().count() <= 1) return
 
         val nextCall = expression.getQualifiedExpressionForSelectorOrThis()
             .getQualifiedExpressionForReceiver()
