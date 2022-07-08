@@ -642,6 +642,8 @@ style:
     excludeGuardClauses: false
   TrailingWhitespace:
     active: false
+  TrimMultilineRawString:
+    active: false
   UnderscoresInNumericLiterals:
     active: false
     acceptableLength: 4
