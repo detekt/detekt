@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.github.detekt.psi.FilePath
+import io.github.detekt.psi.getLineAndColumnInPsiFile
 import io.github.detekt.psi.toFilePath
 import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
@@ -102,12 +102,8 @@ constructor(
             )
 
         private fun lineAndColumn(element: PsiElement, range: TextRange): PsiDiagnosticUtils.LineAndColumn {
-            return try {
-                DiagnosticUtils.getLineAndColumnInPsiFile(element.containingFile, range)
-            } catch (@Suppress("SwallowedException", "TooGenericExceptionCaught") e: IndexOutOfBoundsException) {
-                // #3317 If any rule mutates the PsiElement, searching the original PsiElement may throw exception.
-                PsiDiagnosticUtils.LineAndColumn(-1, -1, null)
-            }
+            return getLineAndColumnInPsiFile(element.containingFile, range)
+                ?: PsiDiagnosticUtils.LineAndColumn(-1, -1, null)
         }
     }
 }

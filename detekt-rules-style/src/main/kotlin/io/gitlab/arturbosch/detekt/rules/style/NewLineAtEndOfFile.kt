@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.psi.getLineAndColumnInPsiFile
 import io.github.detekt.psi.toFilePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
@@ -13,7 +14,6 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
-import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 
@@ -33,11 +33,11 @@ class NewLineAtEndOfFile(config: Config = Config.empty) : Rule(config) {
     override fun visitKtFile(file: KtFile) {
         val text = file.text
         if (text.isNotEmpty() && !text.endsWith('\n')) {
-            val coords = DiagnosticUtils.getLineAndColumnInPsiFile(
+            val coords = getLineAndColumnInPsiFile(
                 file,
                 TextRange(file.endOffset, file.endOffset)
             )
-            val sourceLocation = SourceLocation(coords.line, coords.column)
+            val sourceLocation = SourceLocation(coords?.line ?: 0, coords?.column ?: 0)
             val textLocation = TextLocation(file.endOffset, file.endOffset)
             val location = Location(sourceLocation, textLocation, file.containingFile.toFilePath())
             report(
