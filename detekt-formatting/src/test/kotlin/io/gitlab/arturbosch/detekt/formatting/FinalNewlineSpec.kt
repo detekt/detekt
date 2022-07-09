@@ -33,7 +33,7 @@ class FinalNewlineSpec {
         val findings = FinalNewline(TestConfig(INSERT_FINAL_NEWLINE_KEY to "false"))
             .lint(
                 """
-            fun main() = Unit
+                    fun main() = Unit
 
                 """
             )

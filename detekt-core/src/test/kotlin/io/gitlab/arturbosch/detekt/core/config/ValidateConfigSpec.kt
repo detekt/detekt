@@ -205,11 +205,11 @@ class ValidateConfigSpec {
         fun `reports a deprecated property as a warning`(warningsAsErrors: Boolean) {
             val config = yamlConfigFromContent(
                 """
-                config:
-                  warningsAsErrors: $warningsAsErrors
-                naming:
-                  FunctionParameterNaming:
-                    ignoreOverriddenFunctions: ''
+                    config:
+                      warningsAsErrors: $warningsAsErrors
+                    naming:
+                      FunctionParameterNaming:
+                        ignoreOverriddenFunctions: ''
                 """.trimIndent()
             )
 
