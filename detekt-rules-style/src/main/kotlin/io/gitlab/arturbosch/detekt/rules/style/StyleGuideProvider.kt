@@ -96,6 +96,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             RedundantHigherOrderMapUsage(config),
             UseIfEmptyOrIfBlank(config),
             MultilineLambdaItParameter(config),
+            MultilineRawStringIndentation(config),
             UseIsNullOrEmpty(config),
             UseOrEmpty(config),
             UseAnyOrNoneInsteadOfFind(config),

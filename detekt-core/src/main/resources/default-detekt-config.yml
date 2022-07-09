@@ -602,6 +602,9 @@ style:
     active: true
   MultilineLambdaItParameter:
     active: false
+  MultilineRawStringIndentation:
+    active: false
+    indentSize: 4
   NestedClassesVisibility:
     active: true
   NewLineAtEndOfFile:
