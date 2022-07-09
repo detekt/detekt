@@ -88,7 +88,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
         val members = members()
         when {
             members.isNotEmpty() -> checkMembers(members, nameIdentifier)
-            hasInheritedMember(true) && !isParentInterface() -> return
+            hasInheritedMember(true) && isAnyParentAbstract() -> return
             !hasConstructorParameter() ->
                 report(CodeSmell(issue, Entity.from(nameIdentifier), noConcreteMember))
             else ->
@@ -129,9 +129,8 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun KtClass.isParentInterface() =
+    private fun KtClass.isAnyParentAbstract() =
         (bindingContext[BindingContext.CLASS, this]?.unsubstitutedMemberScope as? LazyClassMemberScope)
             ?.supertypes
-            ?.firstOrNull()
-            ?.isInterface() == true
+            ?.all { it.isInterface() } == false
 }
