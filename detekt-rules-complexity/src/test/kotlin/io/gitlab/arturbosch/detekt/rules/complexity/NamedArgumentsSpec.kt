@@ -196,6 +196,18 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
+
+        @Test
+        fun `does not count lambda argument`() {
+            val code = """
+            fun test(n: Int) {
+                require(n == 2) { "N is not 2" }
+            }
+        """
+            val subject = NamedArguments(TestConfig(mapOf("threshold" to 1)))
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(0)
+        }
     }
 
     @Nested

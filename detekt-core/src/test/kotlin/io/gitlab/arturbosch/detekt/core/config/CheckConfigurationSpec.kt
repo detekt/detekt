@@ -21,6 +21,28 @@ class SupportConfigValidationSpec {
     private val spec = createNullLoggingSpec {}
 
     @Test
+    fun `passes because config validation is disabled by tooling spec`() {
+        val config = yamlConfigFromContent(
+            """
+            unknown_property:
+              unknown_var: ""
+            """
+        )
+        createProcessingSettings(
+            testDir,
+            config,
+            spec = createNullLoggingSpec {
+                config {
+                    shouldValidateBeforeAnalysis = false
+                }
+            }
+        ).use {
+            assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
+                .doesNotThrowAnyException()
+        }
+    }
+
+    @Test
     fun `fails when unknown properties are found`() {
         val config = yamlConfigFromContent(
             """

@@ -8,12 +8,8 @@ summary:
 sidebar_position: 4
 ---
 
-import DetektVersionBanner from "../\_detekt-version-banner.mdx";
-
 1. Add following lines to your pom.xml.
 2. Run `mvn verify` (when using the verify phase as we are doing here)
-
-<DetektVersionBanner/>
 
 ```xml
 <build>

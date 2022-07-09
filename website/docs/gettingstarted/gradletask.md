@@ -8,12 +8,8 @@ summary:
 sidebar_position: 3
 ---
 
-import DetektVersionBanner from "../\_detekt-version-banner.mdx";
-
 1. Add following lines to your build.gradle file.
 2. Run `gradle detekt`
-
-<DetektVersionBanner/>
 
 ###### Groovy DSL
 ```groovy

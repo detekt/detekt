@@ -5,8 +5,6 @@ plugins {
     id("releasing")
     id("io.gitlab.arturbosch.detekt")
     alias(libs.plugins.gradleVersions)
-    alias(libs.plugins.sonarqube)
-    alias(libs.plugins.dependencyAnalysis)
 }
 
 allprojects {
@@ -38,20 +36,11 @@ allprojects {
             html.required.set(true)
             txt.required.set(true)
             sarif.required.set(true)
+            md.required.set(true)
         }
     }
     tasks.withType<DetektCreateBaselineTask>().configureEach {
         jvmTarget = "1.8"
-    }
-}
-
-dependencyAnalysis {
-    issues {
-        all {
-            onUsedTransitiveDependencies {
-                severity("ignore")
-            }
-        }
     }
 }
 
@@ -82,6 +71,7 @@ val detektFormat by tasks.registering(Detekt::class) {
         xml.required.set(false)
         html.required.set(false)
         txt.required.set(false)
+        md.required.set(false)
     }
 }
 
@@ -100,6 +90,7 @@ val detektAll by tasks.registering(Detekt::class) {
         xml.required.set(false)
         html.required.set(false)
         txt.required.set(false)
+        md.required.set(false)
     }
 }
 

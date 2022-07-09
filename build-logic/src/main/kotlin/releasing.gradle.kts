@@ -66,9 +66,9 @@ tasks {
     register("incrementMajor") { doLast { updateVersion { it.nextMajor() } } }
 
     register<UpdateVersionInFileTask>("applyDocVersion") {
-        fileToUpdate.set(file("${rootProject.rootDir}/website/docusaurus.config.js"))
-        linePartToFind.set("    detektVersion:")
-        lineTransformation.set("    detektVersion: '${Versions.DETEKT}'")
+        fileToUpdate.set(file("${rootProject.rootDir}/website/src/remark/detektVersionReplace.js"))
+        linePartToFind.set("const detektVersion = ")
+        lineTransformation.set("const detektVersion = \"${Versions.DETEKT}\";")
     }
 }
 

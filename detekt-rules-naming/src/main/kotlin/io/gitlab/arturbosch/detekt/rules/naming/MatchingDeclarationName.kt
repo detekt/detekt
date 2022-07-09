@@ -79,7 +79,7 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
             val declarationName = declaration.name
             val filename = file.fileNameWithoutSuffix()
             if (declarationName != filename && hasNoMatchingTypeAlias(filename)) {
-                val entity = Entity.from(declaration).copy(ktElement = file)
+                val entity = Entity.atName(declaration).copy(ktElement = file)
                 report(
                     CodeSmell(
                         issue,

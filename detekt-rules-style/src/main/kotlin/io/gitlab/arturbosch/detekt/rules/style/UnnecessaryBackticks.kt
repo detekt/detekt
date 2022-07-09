@@ -42,16 +42,16 @@ class UnnecessaryBackticks(config: Config = Config.empty) : Rule(config) {
         super.visitKtElement(element)
     }
 
-    @Suppress("ReturnCount")
     private fun PsiElement.hasUnnecessaryBackticks(): Boolean {
-        val text = this.text
-        if (!text.startsWith("`") || !text.endsWith("`")) return false
-
         val unquoted = text.drop(1).dropLast(1)
-        if (!unquoted.isIdentifier() || unquoted.isKeyword()) return false
 
-        val stringTemplateEntry = getStrictParentOfType<KtSimpleNameStringTemplateEntry>()
-        return stringTemplateEntry == null || canPlaceAfterSimpleNameEntry(stringTemplateEntry.nextSibling)
+        return when {
+            (!text.startsWith("`") || !text.endsWith("`")) -> false
+            (!unquoted.isIdentifier() || unquoted.isKeyword()) -> false
+            else -> canPlaceAfterSimpleNameEntry(
+                getStrictParentOfType<KtSimpleNameStringTemplateEntry>()?.nextSibling
+            )
+        }
     }
 
     private fun String.isKeyword() = this in KEYWORDS || this.all { it == '_' }

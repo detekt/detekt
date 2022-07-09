@@ -102,7 +102,8 @@ class ObjectLiteralToLambda(config: Config = Config.empty) : Rule(config) {
         if (
             declaration.name == null &&
             bindingContext.getType(expression)
-                ?.singleSuperTypeOrNull()?.couldBeSamInterface == true &&
+                ?.singleSuperTypeOrNull()
+                ?.couldBeSamInterface == true &&
             declaration.hasConvertibleMethod()
         ) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))

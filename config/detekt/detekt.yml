@@ -155,6 +155,8 @@ potential-bugs:
 style:
   CanBeNonNullable:
     active: true
+  CascadingCallWrapping:
+    active: true
   ClassOrdering:
     active: true
   CollapsibleIfStatements:
@@ -180,6 +182,7 @@ style:
     active: true
     imports:
       - 'org.assertj.core.api.Assertions'
+      - 'org.junit.jupiter.api.Assertions*'
   ForbiddenMethodCall:
     active: true
     methods:

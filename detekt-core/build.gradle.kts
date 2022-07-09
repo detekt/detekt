@@ -10,6 +10,7 @@ dependencies {
     implementation(projects.detektMetrics)
     implementation(projects.detektPsiUtils)
     implementation(projects.detektReportHtml)
+    implementation(projects.detektReportMd)
     implementation(projects.detektReportTxt)
     implementation(projects.detektReportXml)
     implementation(projects.detektReportSarif)

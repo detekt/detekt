@@ -51,7 +51,11 @@ All the rules that require type resolution are annotated with [`@RequiresTypeRes
 
 Moreover, their official documentation in the Detekt website will mention _Requires Type Resolution_ ([like here](/docs/rules/potential-bugs#unnecessarysafecall)).
 
-{% include note.html content="Please note that we do have some rules that have mixed behavior whether type resolution is enabled or not. Those rules are listed here: [#2994](https://github.com/detekt/detekt/issues/2994)" %}
+:::caution
+
+Please note that we do have some rules that have mixed behavior whether type resolution is enabled or not. Those rules are listed here: [#2994](https://github.com/detekt/detekt/issues/2994)
+
+:::
 
 Before opening an issue that you're rule is not working, please verify, whether your rule requires type resolution and check if you have type resolution enabled.
 

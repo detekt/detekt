@@ -80,7 +80,8 @@ class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
     private fun KtTypeReference.isPartOfReturnTypeOfFunction() =
         getStrictParentOfType<KtNamedFunction>()
             ?.typeReference
-            ?.anyDescendantOfType<KtTypeReference> { it == this } ?: false
+            ?.anyDescendantOfType<KtTypeReference> { it == this }
+            ?: false
 
     private fun KtTypeReference.isParameterTypeOfFunction() =
         getStrictParentOfType<KtParameter>() != null

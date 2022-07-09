@@ -42,7 +42,7 @@ class NamedArguments(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Configuration("number of parameters that triggers this inspection")
+    @Configuration("number of arguments that triggers this inspection")
     private val threshold: Int by config(defaultValue = 3)
 
     @Configuration("ignores when argument values are the same as the parameter names")
@@ -50,7 +50,7 @@ class NamedArguments(config: Config = Config.empty) : Rule(config) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         if (bindingContext == BindingContext.EMPTY) return
-        val valueArguments = expression.valueArguments
+        val valueArguments = expression.valueArguments.filterNot { it is KtLambdaArgument }
         if (valueArguments.size > threshold && expression.canNameArguments()) {
             val message = "This function call has ${valueArguments.size} arguments. To call a function with more " +
                 "than $threshold arguments you should set the name of each argument."

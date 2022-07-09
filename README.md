@@ -1,37 +1,32 @@
-# __detekt__
+# detekt
 
 [![Join the chat at #detekt on KotlinLang](https://img.shields.io/badge/%23detekt-on_slack-red.svg?logo=slack)](https://kotlinlang.slack.com/archives/C88E12QH4)
 [![Visit the website at detekt.dev/](https://img.shields.io/badge/visit-website-red.svg?logo=firefox)](https://detekt.dev/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.gitlab.arturbosch.detekt/detekt-cli?label=MavenCentral&logo=apache-maven)](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli)
 [![Gradle Plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/io/gitlab/arturbosch/detekt/io.gitlab.arturbosch.detekt.gradle.plugin/maven-metadata.xml.svg?label=Gradle&logo=gradle)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
+[![Revved up by Gradle Enterprise](https://img.shields.io/badge/Revved%20up%20by-Gradle%20Enterprise-06A0CE?logo=Gradle&labelColor=02303A)](https://ge.detekt.dev/scans)
 
 ![Pre Merge Checks](https://github.com/detekt/detekt/workflows/Pre%20Merge%20Checks/badge.svg?branch=main)
 [![Codecov](https://codecov.io/gh/detekt/detekt/branch/main/graph/badge.svg)](https://codecov.io/gh/detekt/detekt)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B25591%2Fgithub.com%2Fdetekt%2Fdetekt.svg?type=small)](https://app.fossa.com/projects/custom%2B25591%2Fgithub.com%2Fdetekt%2Fdetekt?ref=badge_small)
 
-Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
-It operates on the abstract syntax tree provided by the Kotlin compiler.
+Meet _detekt_, a static code analysis tool for the [_Kotlin_ programming language](https://kotlinlang.org/).
+Visit [the project website](https://detekt.dev/) for installation guides, rule descriptions, configuration options and more.
 
 ![detekt in action](website/static/img/tutorial/detekt_in_action.png "detekt in action")
 
 ### Features
 
-- Code smell analysis for your Kotlin projects
-- Complexity reports based on lines of code, cyclomatic complexity and amount of code smells
-- Highly configurable rule sets
-- Suppression of findings with Kotlin's `@Suppress` and Java's `@SuppressWarnings` annotations
-- Specification of quality gates which will break your build
-- Code Smell baseline and suppression for legacy projects
-- [Gradle plugin](#with-gradle) for code analysis via Gradle builds
-- [SonarQube integration](https://github.com/detekt/sonar-kotlin)
-- Extensibility by enabling incorporation of personal rule sets, `FileProcessListener's` and `OutputReport's`
-- [IntelliJ integration](https://github.com/detekt/detekt-intellij-plugin)
-- Third party integrations for [Maven](https://github.com/Ozsie/detekt-maven-plugin), [Bazel](https://github.com/buildfoundation/bazel_rules_detekt/) and Github Actions ([Docker based](https://github.com/marketplace/actions/detekt-all) and [Javascript based](https://github.com/marketplace/actions/setup-detekt))
-
-### Project Website
-
-Visit [the project website](https://detekt.dev/) for installation guides, release notes, migration guides, rule descriptions and configuration options.
+- Code smell analysis for your [Kotlin projects](https://kotlinlang.org/).
+- Highly configurable rule sets.
+- Code Smell baseline and suppression for legacy projects.
+- Suppression of findings with `@Suppress` annotations.
+- Support for different report formats: html, markdown, [SARIF](https://sarifweb.azurewebsites.net/) and xml (checkstyle). Is it not enough? You can extend detekt and create your own reports. 
+- Extensibility by enabling incorporation of personal rule sets, `FileProcessListener's` and `OutputReport's`.
+- Complexity reports based on lines of code, cyclomatic complexity and number of code smells.
+- First party integration with Gradle with our [Gradle plugin](#with-gradle).
+- A community of [third party plugins](https://github.com/topics/detekt-plugin) that adds more rules and features to detekt.
 
 #### Quick-Links
 
@@ -82,6 +77,7 @@ tasks.withType<Detekt>().configureEach {
         xml.required.set(true) // checkstyle like format mainly for integrations like Jenkins
         txt.required.set(true) // similar to the console output, contains issue signature to manually edit baseline files
         sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with Github Code Scanning
+        md.required.set(true) // simple Markdown format
     }
 }
 
@@ -120,7 +116,7 @@ The list of [recommended versions for previous detekt version is listed here](ht
 
 ### Adding more rule sets
 
-detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as a `formatting` rule set
+detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as the `formatting` rule set
 which can be easily added to the Gradle configuration:
 
 ```kotlin
@@ -160,17 +156,19 @@ As mentioned in...
 
 Integrations:
 
+- [IntelliJ integration](https://github.com/detekt/detekt-intellij-plugin)
+- [SonarQube integration](https://github.com/detekt/sonar-kotlin)
 - [Codacy](https://www.codacy.com)
 - [Gradle plugin that configures Error Prone, Checkstyle, PMD, CPD, Lint, Detekt & Ktlint](https://github.com/vanniktech/gradle-code-quality-tools-plugin)
 - [Violations Lib](https://github.com/tomasbjerre/violations-lib) is a Java library for parsing report files like static code analysis.
 - [sputnik](https://github.com/TouK/sputnik) is a free tool for static code review and provides support for detekt
-- [Novoda Gradle Static Analysis plugin](https://github.com/novoda/gradle-static-analysis-plugin)
+- [Gradle Static Analysis plugin](https://github.com/GradleUp/static-analysis-plugin)
 - [Detekt Maven plugin](https://github.com/Ozsie/detekt-maven-plugin) that wraps the Detekt CLI
 - [Detekt Bazel plugin](https://github.com/buildfoundation/bazel_rules_detekt) that wraps the Detekt CLI
 - [Gradle plugin that helps facilitate GitHub PR checking and automatic commenting of violations](https://github.com/btkelly/gnag)
 - [Codefactor](http://codefactor.io/)
 - [GitHub Action: Detekt All](https://github.com/marketplace/actions/detekt-all)
-- [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
+- [GitHub Action: Setup detekt](https://github.com/marketplace/actions/setup-detekt)
 - [Sonatype Lift](https://github.com/marketplace/muse-dev)
 
 Custom rules and reports from 3rd parties:
@@ -178,6 +176,7 @@ Custom rules and reports from 3rd parties:
 - [detekt-verify-implementation](https://github.com/cph-cachet/detekt-verify-implementation) by cph-cachet
 - [detekt-hint](https://github.com/mkohm/detekt-hint) by mkohm is a plugin to detekt that provides detection of design principle violations through integration with Danger
 - [GitLab report format](https://gitlab.com/cromefire_/detekt-gitlab-report)
+- There are more third-party plugins out there. You can find some of them [in this list](https://github.com/topics/detekt-plugin).
 
 #### Credits
 

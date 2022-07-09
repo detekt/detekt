@@ -353,6 +353,7 @@ public final class io/gitlab/arturbosch/detekt/api/LazyRegex : kotlin/properties
 
 public final class io/gitlab/arturbosch/detekt/api/Location : io/gitlab/arturbosch/detekt/api/Compactable {
 	public static final field Companion Lio/gitlab/arturbosch/detekt/api/Location$Companion;
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Lio/github/detekt/psi/FilePath;)V
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Lio/github/detekt/psi/FilePath;)V
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Ljava/lang/String;)V
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Ljava/lang/String;Lio/github/detekt/psi/FilePath;)V
@@ -367,6 +368,7 @@ public final class io/gitlab/arturbosch/detekt/api/Location : io/gitlab/arturbos
 	public final fun copy (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Ljava/lang/String;Lio/github/detekt/psi/FilePath;)Lio/gitlab/arturbosch/detekt/api/Location;
 	public static synthetic fun copy$default (Lio/gitlab/arturbosch/detekt/api/Location;Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Ljava/lang/String;Lio/github/detekt/psi/FilePath;ILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/Location;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEndSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
 	public final fun getFile ()Ljava/lang/String;
 	public final fun getFilePath ()Lio/github/detekt/psi/FilePath;
 	public final fun getSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;

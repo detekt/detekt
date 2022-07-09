@@ -271,6 +271,18 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
+        fun `should not warn about Kotlin Boolean if it is a constant val`() {
+            val code = """
+                object Test {
+                    const val CONSTANT_VAL_BOOLEAN = true
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+
+            assertThat(findings).hasSize(0)
+        }
+
+        @Test
         fun `should warn about Kotlin Boolean override if isIgnoreOverridden is false`() {
             val code = """
                 interface Test {

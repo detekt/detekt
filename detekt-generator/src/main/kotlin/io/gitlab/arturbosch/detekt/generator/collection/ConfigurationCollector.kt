@@ -171,7 +171,9 @@ class ConfigurationCollector {
 
         private fun KtValueArgument.getReferenceIdentifierOrNull(): String? =
             (getArgumentExpression() as? KtCallableReferenceExpression)
-                ?.callableReference?.getIdentifier()?.text
+                ?.callableReference
+                ?.getIdentifier()
+                ?.text
     }
 
     private object ConfigWithAndroidVariantsSupport {

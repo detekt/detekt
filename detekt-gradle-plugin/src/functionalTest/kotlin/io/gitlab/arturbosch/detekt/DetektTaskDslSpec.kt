@@ -321,6 +321,9 @@ class DetektTaskDslSpec {
                     |        sarif {
                     |            enabled = false
                     |        }
+                    |        md {
+                    |            enabled = false
+                    |        }
                     |    }
                     |}
             """

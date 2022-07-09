@@ -14,7 +14,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 
 /**
- * See [ktlint-website](https://ktlint.github.io#rule-indentation) for documentation.
+ * See [ktlint-readme](https://github.com/pinterest/ktlint#standard-rules) for documentation.
  */
 @ActiveByDefault(since = "1.19.0")
 @AutoCorrectable(since = "1.0.0")
@@ -38,7 +38,8 @@ class Indentation(config: Config) : FormattingRule(config) {
         )
 
     /**
-     * [wrapping] is working with file's [node] and we don't want to highlight the whole file
+     * [IndentationRule] has visitor modifier RunOnRootNodeOnly, so [node] is always the root file.
+     * Override the parent implementation to highlight the entire file.
      */
     override fun getTextLocationForViolation(node: ASTNode, offset: Int): TextLocation {
         val relativeEnd = node.text

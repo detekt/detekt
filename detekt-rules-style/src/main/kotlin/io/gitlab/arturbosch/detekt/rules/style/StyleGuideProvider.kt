@@ -24,6 +24,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
         ruleSetId,
         listOf(
             CanBeNonNullable(config),
+            CascadingCallWrapping(config),
             ClassOrdering(config),
             CollapsibleIfStatements(config),
             DestructuringDeclarationWithTooManyEntries(config),
@@ -98,6 +99,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseOrEmpty(config),
             UseAnyOrNoneInsteadOfFind(config),
             UnnecessaryBackticks(config),
+            MaxChainedCallsOnSameLine(config),
         )
     )
 }
