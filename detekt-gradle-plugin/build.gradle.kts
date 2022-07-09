@@ -1,6 +1,3 @@
-import org.gradle.api.internal.classpath.ModuleRegistry
-import org.gradle.kotlin.dsl.support.serviceOf
-
 plugins {
     id("module")
     `java-gradle-plugin`
@@ -34,17 +31,6 @@ testing {
                 implementation(libs.assertj)
                 implementation(libs.kotlin.gradle)
                 implementation(gradleKotlinDsl())
-
-                // See https://github.com/gradle/gradle/issues/16774#issuecomment-853407822
-                runtimeOnly(
-                    files(
-                        serviceOf<ModuleRegistry>()
-                            .getModule("gradle-tooling-api-builders")
-                            .classpath
-                            .asFiles
-                            .first()
-                    )
-                )
             }
         }
         register("functionalTest", JvmTestSuite::class) {
