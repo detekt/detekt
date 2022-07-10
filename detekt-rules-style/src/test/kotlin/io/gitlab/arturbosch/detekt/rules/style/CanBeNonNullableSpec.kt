@@ -898,6 +898,52 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
             }
 
             @Test
+            fun `does report null-check returning unit type`() {
+                val code = """   
+                    fun foo(a: Int?) {
+                        if (a == null) return
+                        println(a)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `does report null-check returning unit type in block`() {
+                val code = """   
+                    fun foo(a: Int?) {
+                        if (a == null) { return }
+                        println(a)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `does not report guard statement with side effect ahead`() {
+                val code = """   
+                    fun foo(a: Int?) {
+                        println("side effect")
+                        if (a == null) return
+                        println(a)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+            }
+
+            @Test
+            fun `does not report null-check returning non-unit type`() {
+                val code = """   
+                    fun foo(a: Int?): Int {
+                        if (a == null) return 0
+                        println(a)
+                        return a
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+            }
+
+            @Test
             fun `does not report when the parameter is checked on non-nullity with an else statement`() {
                 val code = """
                     fun foo(a: Int?) {

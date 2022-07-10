@@ -41,7 +41,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
 
         config {
             useDefaultConfig = args.buildUponDefaultConfig
-            shouldValidateBeforeAnalysis = false
+            shouldValidateBeforeAnalysis = null
             knownPatterns = emptyList()
             // ^^ cli does not have these properties yet; specified in yaml config for now
             configPaths = config?.let { MultipleExistingPathConverter().convert(it) }.orEmpty()

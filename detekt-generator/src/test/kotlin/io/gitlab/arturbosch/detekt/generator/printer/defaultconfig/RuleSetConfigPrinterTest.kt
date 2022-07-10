@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.printer.defaultconfig
 
+import io.github.detekt.utils.yaml
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.valuesWithReason
 import io.gitlab.arturbosch.detekt.generator.collection.Active
@@ -8,7 +9,6 @@ import io.gitlab.arturbosch.detekt.generator.collection.DefaultValue
 import io.gitlab.arturbosch.detekt.generator.collection.Inactive
 import io.gitlab.arturbosch.detekt.generator.collection.Rule
 import io.gitlab.arturbosch.detekt.generator.collection.RuleSetProvider
-import io.gitlab.arturbosch.detekt.generator.out.yaml
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

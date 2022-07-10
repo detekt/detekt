@@ -1,15 +1,12 @@
-import org.gradle.api.internal.classpath.ModuleRegistry
-import org.gradle.kotlin.dsl.support.serviceOf
-
 plugins {
     id("module")
     `java-gradle-plugin`
     `java-test-fixtures`
     idea
-    signing
     alias(libs.plugins.pluginPublishing)
     // We use this published version of the Detekt plugin to self analyse this project.
     id("io.gitlab.arturbosch.detekt") version "1.20.0"
+    id("org.gradle.test-retry") version "1.4.0"
 }
 
 repositories {
@@ -34,25 +31,6 @@ testing {
                 implementation(libs.assertj)
                 implementation(libs.kotlin.gradle)
                 implementation(gradleKotlinDsl())
-
-                // See https://github.com/gradle/gradle/issues/16774#issuecomment-853407822
-                runtimeOnly(
-                    files(
-                        serviceOf<ModuleRegistry>()
-                            .getModule("gradle-tooling-api-builders")
-                            .classpath
-                            .asFiles
-                            .first()
-                    )
-                )
-            }
-            targets {
-                all {
-                    testTask.configure {
-                        inputs.property("androidSdkRoot", System.getenv("ANDROID_SDK_ROOT")).optional(true)
-                        inputs.property("androidHome", System.getenv("ANDROID_HOME")).optional(true)
-                    }
-                }
             }
         }
         register("functionalTest", JvmTestSuite::class) {
@@ -60,6 +38,17 @@ testing {
 
             dependencies {
                 implementation(libs.assertj)
+            }
+
+            targets {
+                all {
+                    testTask.configure {
+                        // If `androidSdkInstalled` is false, skip running DetektAndroidSpec
+                        val isAndroidSdkInstalled = System.getenv("ANDROID_SDK_ROOT") != null ||
+                            System.getenv("ANDROID_HOME") != null
+                        inputs.property("isAndroidSdkInstalled", isAndroidSdkInstalled).optional(true)
+                    }
+                }
             }
         }
     }
@@ -87,9 +76,11 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("detektPlugin") {
+        create("detektPlugin") {
             id = "io.gitlab.arturbosch.detekt"
             implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
+            displayName = "Static code analysis for Kotlin"
+            description = "Static code analysis for Kotlin"
         }
     }
     // Source sets that require the Gradle TestKit dependency
@@ -117,15 +108,7 @@ tasks.validatePlugins {
 pluginBundle {
     website = "https://detekt.dev"
     vcsUrl = "https://github.com/detekt/detekt"
-    description = "Static code analysis for Kotlin"
     tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
-
-    (plugins) {
-        "detektPlugin" {
-            id = "io.gitlab.arturbosch.detekt"
-            displayName = "Static code analysis for Kotlin"
-        }
-    }
 }
 
 tasks {
@@ -163,20 +146,6 @@ tasks.withType<Sign>().configureEach {
     notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13470")
 }
 
-val signingKey = "SIGNING_KEY".byProperty
-val signingPwd = "SIGNING_PWD".byProperty
-if (signingKey.isNullOrBlank() || signingPwd.isNullOrBlank()) {
-    logger.info("Signing disabled as the GPG key was not found")
-} else {
-    logger.info("GPG Key found - Signing enabled")
-    afterEvaluate {
-        signing {
-            useInMemoryPgpKeys(signingKey, signingPwd)
-            publishing.publications.forEach(::sign)
-        }
-    }
-}
-
 afterEvaluate {
     publishing {
         publications.filterIsInstance<MavenPublication>().forEach {
@@ -207,3 +176,13 @@ afterEvaluate {
 }
 
 val String.byProperty: String? get() = findProperty(this) as? String
+
+tasks.withType<Test>().configureEach {
+    retry {
+        @Suppress("MagicNumber")
+        if (System.getenv().containsKey("CI")) {
+            maxRetries.set(2)
+            maxFailures.set(20)
+        }
+    }
+}

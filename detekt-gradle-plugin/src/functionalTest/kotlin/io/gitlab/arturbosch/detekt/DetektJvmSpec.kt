@@ -18,18 +18,15 @@ class DetektJvmSpec {
                     kotlin("jvm")
                     id("io.gitlab.arturbosch.detekt")
                 }
-
                 repositories {
                     mavenCentral()
                     mavenLocal()
                 }
-
                 detekt {
                     reports {
                         txt.destination = file("output-path.txt")
                     }
                 }
-
                 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                     reports {
                         txt.destination = file("output-path2.txt")
@@ -58,12 +55,10 @@ class DetektJvmSpec {
                     kotlin("jvm")
                     id("io.gitlab.arturbosch.detekt")
                 }
-
                 repositories {
                     mavenCentral()
                     mavenLocal()
                 }
-
                 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                     reports {
                         txt.destination = file("output-path2.txt")

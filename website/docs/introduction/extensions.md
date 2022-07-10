@@ -5,8 +5,6 @@ keywords: [extensions, rulesets]
 sidebar_position: 9
 ---
 
-import DetektVersionBanner from "../\_detekt-version-banner.mdx";
-
 The following page describes how to extend detekt and how to customize it to your domain-specific needs.
 The associated **code samples** to this guide can be found in the package [detekt/detekt-sample-extensions](https://github.com/detekt/detekt/tree/main/detekt-sample-extensions).
 
@@ -15,8 +13,12 @@ The associated **code samples** to this guide can be found in the package [detek
 _detekt_ uses the `ServiceLoader` pattern to collect all instances of `RuleSetProvider` interfaces. 
 So it is possible to define rules/rule sets and enhance _detekt_ with your own flavor. 
 
-Attention: You need a `resources/META-INF/services/io.gitlab.arturbosch.detekt.api.RuleSetProvider` file which 
+:::caution Attention
+
+You need a `resources/META-INF/services/io.gitlab.arturbosch.detekt.api.RuleSetProvider` file which 
 has as content the fully qualified name of your `RuleSetProvider` e.g. `io.gitlab.arturbosch.detekt.sample.extensions.SampleProvider`.
+
+:::
 
 You can use our [GitHub template](https://github.com/detekt/detekt-custom-rule-template) to have a basic scaffolding to
 develop your own custom rules. Another option is to clone the provided [detekt/detekt-sample-extensions](https://github.com/detekt/detekt/tree/main/detekt-sample-extensions) project.
@@ -106,9 +108,13 @@ By specifying the rule set and rule ids, _detekt_ will use the sub configuration
 
 ```val threshold = valueOrDefault("threshold", THRESHOLD)```
 
-Note: As of version 1.2.0 detekt now verifies if all configured properties actually exist in a configuration created by `--generate-config`.
+:::note
+
+As of version 1.2.0 detekt now verifies if all configured properties actually exist in a configuration created by `--generate-config`.
 This means that by default detekt does not know about your new properties.
-Therefore we need to mention them in the configuration under `config>excludes`:
+Therefore we need to mention them in the configuration under `config>excludes`.
+
+:::
 
 ```yaml
 config:
@@ -158,6 +164,7 @@ class NumberOfLoopsProcessor : FileProcessListener {
 	}
 }
 ```
+
 To let detekt know about the new processor, we specify a `resources/META-INF/services/io.gitlab.arturbosch.detekt.api.FileProcessListener` file 
 with the full qualify name of our processor as the content: `io.gitlab.arturbosch.detekt.sample.extensions.processors.NumberOfLoopsProcessor`.
 
@@ -221,11 +228,9 @@ To enable it, we add the published dependency to `detekt` via the `detektPlugins
 
 ###### Gradle (Kotlin/Groovy DSL)
 
-<DetektVersionBanner/>
-
 ```kotlin
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:{{ site.detekt_version }}")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:[detekt_version]")
 }
 ```
 

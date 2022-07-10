@@ -8,7 +8,6 @@ summary:
 sidebar_position: 1
 ---
 
-import DetektVersionBanner from "../_detekt-version-banner.mdx";
 import CliOptions from "./_cli-options.md";
 
 ## Install the cli
@@ -22,9 +21,14 @@ brew install detekt
 detekt [options]
 ```
 
-### Any OS:
+### Windows, with [Scoop](https://scoop.sh/)
 
-<DetektVersionBanner />
+```powershell
+scoop install detekt
+detekt [options]
+```
+
+### Any OS:
 
 ```sh
 curl -sSLO https://github.com/detekt/detekt/releases/download/v[detekt_version]/detekt-cli-[detekt_version].zip

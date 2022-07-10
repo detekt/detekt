@@ -117,12 +117,12 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                 class C {
                     var prop = 0
                 }
-                    
+
                 fun main() {
                     val list = ArrayList<C>()
                     list.add(
                         if (true) {
-                            C().apply { 
+                            C().apply {
                                 prop = 1
                             }
                         } else {
@@ -232,6 +232,50 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                 """
             )
             assertThat(findings).hasSize(1)
+        }
+    }
+
+    @Nested
+    inner class `unnecessary apply expressions that can be changed to assignment` {
+        @Test
+        fun `reports apply with a single assignment whose result is unused`() {
+            assertThat(
+                subject.compileAndLintWithContext(
+                    env,
+                    """
+                class C {
+                    var prop = 0
+                }
+
+                fun main() {
+                    val c = C()
+                    c.apply {
+                        prop = 1
+                    }
+                }
+                    """
+                )
+            ).hasSize(1)
+        }
+
+        @Test
+        fun `does not report apply with a single assignment whose result is used`() {
+            assertThat(
+                subject.compileAndLintWithContext(
+                    env,
+                    """
+                class C {
+                    var prop = 0
+                }
+
+                fun main() {
+                    val c = C().apply {
+                        prop = 1
+                    }
+                }
+                    """
+                )
+            ).isEmpty()
         }
     }
 

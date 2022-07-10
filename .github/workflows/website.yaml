@@ -8,6 +8,9 @@ on:
     branches:
       - '**'
 
+env:
+  GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
+
 permissions:
   contents: write  # for JamesIves/github-pages-deploy-action to push changes in repo
 
@@ -17,23 +20,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
 
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@16cca5479d7c6b6843f6a6515640ba33c6501543 # tag=v3
         with:
           java-version: 17
           distribution: 'temurin'
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@eeb10cff27034e7acf239c5d29f62154018672fd # tag=v3
         with:
           node-version: '16'
           cache: 'yarn'
           cache-dependency-path: 'website/yarn.lock'
 
       - name: Build Detekt Documentation
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1 # tag=v2
         with:
           arguments: :detekt-generator:generateDocumentation
 
@@ -46,7 +49,7 @@ jobs:
         run: yarn build
 
       - name: Deploy Github Pages (only on main)
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: JamesIves/github-pages-deploy-action@e6d003d0839927f5a4b998bfd92ed8e448fde37a # tag=v4
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         with:
           branch: gh-pages

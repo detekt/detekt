@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.extensions
 
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.HTML
+import io.gitlab.arturbosch.detekt.extensions.DetektReportType.MD
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.SARIF
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.TXT
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.XML
@@ -19,6 +20,8 @@ open class DetektReports @Inject constructor(val objects: ObjectFactory) {
 
     val sarif: DetektReport = objects.newInstance(DetektReport::class.java, SARIF)
 
+    val md: DetektReport = objects.newInstance(DetektReport::class.java, MD)
+
     val custom = mutableListOf<CustomDetektReport>()
 
     fun xml(action: Action<in DetektReport>): Unit = action.execute(xml)
@@ -28,6 +31,8 @@ open class DetektReports @Inject constructor(val objects: ObjectFactory) {
     fun txt(action: Action<in DetektReport>): Unit = action.execute(txt)
 
     fun sarif(action: Action<in DetektReport>): Unit = action.execute(sarif)
+
+    fun md(action: Action<in DetektReport>): Unit = action.execute(md)
 
     fun custom(action: Action<in CustomDetektReport>): Unit = action.execute(createAndAddCustomReport())
 

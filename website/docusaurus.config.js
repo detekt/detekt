@@ -3,6 +3,7 @@
 
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const detektVersionReplace = require('./src/remark/detektVersionReplace');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -25,6 +26,7 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: 'https://github.com/detekt/detekt/edit/main/website/',
+          remarkPlugins: [detektVersionReplace],
         },
         blog: {
           showReadingTime: true,
@@ -125,7 +127,7 @@ const config = {
               },
               {
                 label: 'Getting Started with the CLI',
-                to: '/docs/gettingstarted/gradle',
+                to: '/docs/gettingstarted/cli',
               },
               {
                 label: 'Rules Documentation',
@@ -179,9 +181,6 @@ const config = {
       },
     }),
 
-  customFields: {
-    detektVersion: '1.21.0-RC1'
-  },
 };
 
 module.exports = config;

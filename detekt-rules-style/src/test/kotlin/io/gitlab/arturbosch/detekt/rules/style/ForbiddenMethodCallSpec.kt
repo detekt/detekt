@@ -442,4 +442,44 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                 .hasSourceLocation(6, 9)
         }
     }
+
+    @Nested
+    inner class `Java getter calls` {
+
+        @Test
+        fun `should report Java getter call`() {
+            val code = """
+                import java.util.Calendar
+                
+                fun main() {
+                    val calendar = Calendar.getInstance()
+                    val day = calendar.getFirstDayOfWeek()
+                }
+            """
+            val findings =
+                ForbiddenMethodCall(TestConfig(mapOf(METHODS to "java.util.Calendar.getFirstDayOfWeek"))).compileAndLintWithContext(
+                    env,
+                    code
+                )
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should not report property call`() {
+            val code = """
+                import java.util.Calendar
+                
+                fun main() {
+                    val calendar = Calendar.getInstance()
+                    val day = calendar.firstDayOfWeek
+                }
+            """
+            val findings =
+                ForbiddenMethodCall(TestConfig(mapOf(METHODS to "java.util.Calendar.firstDayOfWeek"))).compileAndLintWithContext(
+                    env,
+                    code
+                )
+            assertThat(findings).isEmpty()
+        }
+    }
 }

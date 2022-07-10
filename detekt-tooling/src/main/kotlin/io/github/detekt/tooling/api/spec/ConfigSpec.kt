@@ -10,7 +10,7 @@ interface ConfigSpec {
      *
      * Unknown properties to detekt will get reported as errors.
      */
-    val shouldValidateBeforeAnalysis: Boolean
+    val shouldValidateBeforeAnalysis: Boolean?
 
     /**
      * Property patterns which should be excluded from validation.

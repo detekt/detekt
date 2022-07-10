@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.reporting
 
 import io.github.detekt.report.html.HtmlOutputReport
+import io.github.detekt.report.md.MdOutputReport
 import io.github.detekt.report.txt.TxtOutputReport
 import io.github.detekt.report.xml.XmlOutputReport
 import io.github.detekt.test.utils.StringPrintStream
@@ -24,6 +25,7 @@ class OutputFacadeSpec {
         val plainOutputPath = createTempFileForTest("detekt", ".txt")
         val htmlOutputPath = createTempFileForTest("detekt", ".html")
         val xmlOutputPath = createTempFileForTest("detekt", ".xml")
+        val mdOutputPath = createTempFileForTest("detekt", ".md")
 
         val spec = createNullLoggingSpec {
             project {
@@ -33,6 +35,7 @@ class OutputFacadeSpec {
                 report { "html" to htmlOutputPath }
                 report { "txt" to plainOutputPath }
                 report { "xml" to xmlOutputPath }
+                report { "md" to mdOutputPath }
             }
             logging {
                 outputChannel = printStream
@@ -44,7 +47,8 @@ class OutputFacadeSpec {
         assertThat(printStream.toString()).contains(
             "Successfully generated ${TxtOutputReport().name} at $plainOutputPath",
             "Successfully generated ${XmlOutputReport().name} at $xmlOutputPath",
-            "Successfully generated ${HtmlOutputReport().name} at $htmlOutputPath"
+            "Successfully generated ${HtmlOutputReport().name} at $htmlOutputPath",
+            "Successfully generated ${MdOutputReport().name} at $mdOutputPath"
         )
     }
 }

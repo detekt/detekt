@@ -17,7 +17,8 @@ open class SplitPattern(
         .mapIf(removeTrailingAsterisks) { seq ->
             seq.map { it.removePrefix("*") }
                 .map { it.removeSuffix("*") }
-        }.toList()
+        }
+        .toList()
 
     private fun <T> Sequence<T>.mapIf(
         condition: Boolean,
