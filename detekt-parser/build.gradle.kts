@@ -14,7 +14,7 @@ dependencies {
 }
 
 tasks.withType<Test> {
-    systemProperty("kotlinVersion", getKotlinPluginVersion() ?: embeddedKotlinVersion)
+    systemProperty("kotlinVersion", getKotlinPluginVersion())
 
     doFirst {
         systemProperty("testClasspath", classpath.joinToString(";"))
