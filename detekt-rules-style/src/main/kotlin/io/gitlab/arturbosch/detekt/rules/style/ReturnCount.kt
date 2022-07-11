@@ -59,7 +59,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
     @Configuration("define the maximum number of return statements allowed per function")
     private val max: Int by config(2)
 
-    @Configuration("define functions to be ignored by this check")
+    @Configuration("define a free-form comma separated list of function names to be ignored by this check")
     private val excludedFunctions: SplitPattern by config("equals") { SplitPattern(it) }
 
     @Configuration("if labeled return statements should be ignored")
