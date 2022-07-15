@@ -500,4 +500,22 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             )
         assertThat(findings).hasSize(1)
     }
+
+    @Test
+    fun `should report reference call`() {
+        val code = """
+                import java.util.Calendar
+                
+                fun main() {
+                    val calendar = Calendar.getInstance()
+                    calendar.let(calendar::getFirstDayOfWeek)
+                }
+            """
+        val findings =
+            ForbiddenMethodCall(TestConfig(mapOf(METHODS to "java.util.Calendar.getFirstDayOfWeek"))).compileAndLintWithContext(
+                env,
+                code
+            )
+        assertThat(findings).hasSize(1)
+    }
 }

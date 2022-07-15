@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
@@ -35,6 +36,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * import java.lang.System
  * fun main() {
  *    System.gc()
+ *    System::gc
  * }
  * </noncompliant>
  *
@@ -91,6 +93,11 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
     override fun visitPostfixExpression(expression: KtPostfixExpression) {
         super.visitPostfixExpression(expression)
         check(expression.operationReference)
+    }
+
+    override fun visitCallableReferenceExpression(expression: KtCallableReferenceExpression) {
+        super.visitCallableReferenceExpression(expression)
+        check(expression.callableReference)
     }
 
     private fun check(expression: KtExpression) {
