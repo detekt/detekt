@@ -261,4 +261,63 @@ class MaxLineLengthSpec {
             assertThat(rule.findings).hasSourceLocations(SourceLocation(6, 5))
         }
     }
+
+    @Nested
+    inner class `a kt file with raw string with max line length` {
+        val code = """
+            class Test {
+             private fun defaultConfigConfiguration(): String = ""${'"'}
+          config:
+          validation: true
+          warningsAsErrors: false
+          # when writing own rules with new properties, exclude the property path e.g.: 'my_rule_set,.*>.*>[my_property]' perties, exclude the property path e.g.: 'my_rule_set,.*>.*>[my_property]'
+          excludes: ''
+    ""${'"'}.trimIndent()
+        }
+        """.trimIndent()
+        val file = compileContentForTest(code)
+        val lines = file.text.splitToSequence("\n")
+        val fileContent = KtFileContent(file, lines)
+
+        @Test
+        fun `should not report max line length in raw string`() {
+            val rule = MaxLineLength(
+                TestConfig(
+                    mapOf(
+                        MAX_LINE_LENGTH to "60"
+                    )
+                )
+            )
+            rule.visit(fileContent)
+            assertThat(rule.findings).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `a kt file with raw string with max line and leading quotes` {
+        val code = """
+            class Test {
+             private fun longMultiLineFieldWithLeadingQuote(): String = ""${'"'}
+            "This is yet another very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very"
+            "very long multiline String with Line Break that will break the MaxLineLength"
+    ""${'"'}.trimIndent()
+            }
+        """.trimIndent()
+        val file = compileContentForTest(code)
+        val lines = file.text.splitToSequence("\n")
+        val fileContent = KtFileContent(file, lines)
+
+        @Test
+        fun `should not report max line length in raw string`() {
+            val rule = MaxLineLength(
+                TestConfig(
+                    mapOf(
+                        MAX_LINE_LENGTH to "60"
+                    )
+                )
+            )
+            rule.visit(fileContent)
+            assertThat(rule.findings).isEmpty()
+        }
+    }
 }

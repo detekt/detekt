@@ -43,25 +43,36 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
     @Configuration("if comment statements should be ignored")
     private val excludeCommentStatements: Boolean by config(false)
 
+    @Suppress("UnconditionalJumpStatementInLoop")
     fun visit(element: KtFileContent) {
         var offset = 0
-        val lines = element.content
+        val lines = element.content.toMutableList()
         val file = element.file
 
-        for (line in lines) {
+        lines.forEachIndexed { index, line ->
             offset += line.length
             if (!isValidLine(line)) {
-                val ktElement = findFirstMeaningfulKtElementInParents(file, offset, line)
-                if (ktElement != null) {
-                    report(CodeSmell(issue, Entity.from(ktElement), issue.description))
+                if (containsRawString(line)) {
+                    var pointer = index + 1
+                    while (!containsRawString(lines[pointer])) {
+                        lines.removeAt(pointer)
+                        pointer += 1
+                        return
+                    }
                 } else {
-                    report(CodeSmell(issue, Entity.from(file, offset), issue.description))
+                    val ktElement = findFirstMeaningfulKtElementInParents(file, offset, line)
+                    if (ktElement != null) {
+                        report(CodeSmell(issue, Entity.from(ktElement), issue.description))
+                    } else {
+                        report(CodeSmell(issue, Entity.from(file, offset), issue.description))
+                    }
                 }
             }
 
             offset += 1 /* '\n' */
         }
     }
+    private fun containsRawString(line: String): Boolean = line.contains(TQ)
 
     private fun isValidLine(line: String): Boolean {
         val isUrl = line.lastArgumentMatchesUrl()
@@ -97,6 +108,7 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
     companion object {
         private const val DEFAULT_IDEA_LINE_LENGTH = 120
         private val BLANK_OR_QUOTES = """[\s"]*""".toRegex()
+        private const val TQ = "\"\"\""
 
         private fun findFirstMeaningfulKtElementInParents(file: KtFile, offset: Int, line: String): PsiElement? {
             return findKtElementInParents(file, offset, line)
