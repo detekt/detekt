@@ -11,12 +11,19 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
+import org.jetbrains.kotlin.psi.psiUtil.isDotSelector
+import org.jetbrains.kotlin.psi2ir.unwrappedGetMethod
+import org.jetbrains.kotlin.psi2ir.unwrappedSetMethod
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
 /**
@@ -69,6 +76,13 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
         check(expression.operationReference)
     }
 
+    override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
+        super.visitDotQualifiedExpression(expression)
+        if (expression.getCalleeExpressionIfAny()?.isDotSelector() == true) {
+            check(expression)
+        }
+    }
+
     override fun visitPrefixExpression(expression: KtPrefixExpression) {
         super.visitPrefixExpression(expression)
         check(expression.operationReference)
@@ -83,7 +97,12 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
         if (bindingContext == BindingContext.EMPTY) return
 
         val descriptors = expression.getResolvedCall(bindingContext)?.resultingDescriptor?.let {
-            listOf(it) + it.overriddenDescriptors
+            val foundDescriptors = if (it is PropertyDescriptor) {
+                listOfNotNull(it.unwrappedGetMethod, it.unwrappedSetMethod)
+            } else {
+                listOf(it)
+            }
+            foundDescriptors + foundDescriptors.flatMap(CallableDescriptor::getOverriddenDescriptors)
         } ?: return
 
         for (descriptor in descriptors) {

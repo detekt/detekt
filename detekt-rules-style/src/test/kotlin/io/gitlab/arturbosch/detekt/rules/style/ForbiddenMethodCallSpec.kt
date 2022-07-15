@@ -465,7 +465,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `should not report property call`() {
+        fun `should report property getters call`() {
             val code = """
                 import java.util.Calendar
                 
@@ -475,11 +475,29 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                 }
             """
             val findings =
-                ForbiddenMethodCall(TestConfig(mapOf(METHODS to "java.util.Calendar.firstDayOfWeek"))).compileAndLintWithContext(
+                ForbiddenMethodCall(TestConfig(mapOf(METHODS to "java.util.Calendar.getFirstDayOfWeek"))).compileAndLintWithContext(
                     env,
                     code
                 )
-            assertThat(findings).isEmpty()
+            assertThat(findings).hasSize(1)
         }
+    }
+
+    @Test
+    fun `should report property setters call`() {
+        val code = """
+                import java.util.Calendar
+                
+                fun main() {
+                    val calendar = Calendar.getInstance()
+                    calendar.firstDayOfWeek = 1
+                }
+            """
+        val findings =
+            ForbiddenMethodCall(TestConfig(mapOf(METHODS to "java.util.Calendar.setFirstDayOfWeek"))).compileAndLintWithContext(
+                env,
+                code
+            )
+        assertThat(findings).hasSize(1)
     }
 }
