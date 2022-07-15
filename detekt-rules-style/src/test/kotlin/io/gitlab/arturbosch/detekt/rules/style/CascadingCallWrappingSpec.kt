@@ -32,6 +32,39 @@ class CascadingCallWrappingSpec {
 
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
+    @Test
+    fun `does report if it does not chain follow correctly`() {
+        val code = """
+            fun foo(): String = ""
+            fun bar(value: String): String = value
+            fun bar2(): String = ""
+            fun bar3(): String = ""
+            fun zoo() {
+            foo.bar(
+                ""
+            ).bar2()
+        }
+        """
+
+        assertThat(subject.compileAndLint(code)).isNotEmpty
+    }
+    @Test
+    fun `does  report if it does  chain follow correctly2`() {
+        val code = """
+            fun foo(): String = ""
+            fun bar(value: String): String = value
+            fun bar2(): String = ""
+            fun bar3(): String = ""
+            fun zoo() {
+            foo
+             .bar(
+              ""
+             ).bar2()
+        }
+        """
+
+        assertThat(subject.compileAndLint(code)).isNotEmpty
+    }
 
     @Test
     fun `does not report wrapped calls`() {
