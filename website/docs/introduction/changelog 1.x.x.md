@@ -5,7 +5,17 @@ keywords: [changelog, release-notes, migration]
 sidebar_position: 1
 ---
 
-#### 1.21.0-RC2 - 2022-06-29
+#### 1.21.0 - 2022-07-16
+
+We're delighted to announce the next upcoming stable release of Detekt: `1.21.0` 🎉
+This release is coming with 6 new rules, new API and functionalities and several stability improvements.
+
+We want to thank you very much [our Sponsors](https://github.com/sponsors/detekt) for the support in those last months. The work behind Detekt is all happening on a voluntary basis, and we're more than grateful for all the support we get from the Open Source Ecosystem.
+
+We're also excited to announce that we're now having an [Open Source Github Enterprise](https://ge.detekt.dev) instance. When building the Detekt projects, you'll benefit from the Gradle Remote Cache that this instance is providing! 
+
+Finally, we want to take the opportunity to thank our contributors for testing, bug reporting and helping
+us release this new version of Detekt. You're more than welcome to join our community on the [#detekt](https://kotlinlang.slack.com/archives/C88E12QH4) channel on KotlinLang's Slack (you can [get an invite here](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up)).
 
 ##### Notable Changes
 
@@ -19,12 +29,34 @@ sidebar_position: 1
   - `CascadingCallWrapping` - [#4979](https://github.com/detekt/detekt/pull/4979)
 - We added support for Markdown reports - [#4858](https://github.com/detekt/detekt/pull/4858)
 - We now allow users and rule authors to specify a **reason** for every value in the config file - [#4611](https://github.com/detekt/detekt/pull/4611)
-- We now report as warnings the in the config file that can be converted to be an array - [#4793](https://github.com/detekt/detekt/pull/4793)
+- We now report as warnings the Strings in the config file that can be converted to be an array - [#4793](https://github.com/detekt/detekt/pull/4793)
 - We added a dependency on **ConTester** to help us verify concurrency scenarios for Detekt - [#4672](https://github.com/detekt/detekt/pull/4672)
 - For contributors: we restructured our build setup to be use **Gradle composite build** - [#4751](https://github.com/detekt/detekt/pull/4751)
 
+##### Migration
+
+We fixed a bug related to function with KDocs and how their location in the source code was calculated (see [#4961](https://github.com/detekt/detekt/pull/4961) and [#4887](https://github.com/detekt/detekt/issues/4887)). 
+
+Because of this, some users might have to **recreate their baseline** as the location of such functions are not matched anymore against the baseline. You can do so by deleting your old baseline and invoking the `detektBaseline` task (or the corresponding task, based on your configuration).
+
 ##### Changelog
 
+- ReturnCount: Make configuration parameter more explicit - [#5062](https://github.com/detekt/detekt/pull/5062)
+- Remove redundant null check - [#5061](https://github.com/detekt/detekt/pull/5061)
+- Drop redundant Gradle workaround - [#5057](https://github.com/detekt/detekt/pull/5057)
+- Update ktlint links from website to readme - [#5056](https://github.com/detekt/detekt/pull/5056)
+- Improve extensions.doc format with admonitions - [#5055](https://github.com/detekt/detekt/pull/5055)
+- Update docusaurus monorepo to v2.0.0-beta.22 - [#5050](https://github.com/detekt/detekt/pull/5050)
+- Enable strict Kotlin DSL precompiled script plugins accessors generation - [#5048](https://github.com/detekt/detekt/pull/5048)
+- MaxChainedCallsOnSameLine: don't count package references as chained calls - [#5036](https://github.com/detekt/detekt/pull/5036)
+- Xml Report Merger now merges duplicate smells across input report files - [#5033](https://github.com/detekt/detekt/pull/5033)
+- Add ending line and column to Location.kt - [#5032](https://github.com/detekt/detekt/pull/5032)
+- Fix type resolution link in Contributing.md - [#5027](https://github.com/detekt/detekt/pull/5027)
+- #5014 Fix MaxChainedCallsOnSameLine false positives - [#5020](https://github.com/detekt/detekt/pull/5020)
+- Add endColumn/endLine to SARIF region - [#5011](https://github.com/detekt/detekt/pull/5011)
+- Removed UnnecessaryAbstractClass if it inherits from a abstract class - [#5009](https://github.com/detekt/detekt/pull/5009)
+- Only recommend using index accessors for Java classes that are known collections - [#4994](https://github.com/detekt/detekt/pull/4994)
+- UnusedImports: fix false positive for unresolved imports - [#4882](https://github.com/detekt/detekt/pull/4882)
 - Fix Signatures.kt:buildFunctionSignature - [#4961](https://github.com/detekt/detekt/pull/4961)
 - Loading a specific resource from a module must use class from module - [#5008](https://github.com/detekt/detekt/pull/5008)
 - Update github/codeql-action digest to 3f62b75 - [#5007](https://github.com/detekt/detekt/pull/5007)
@@ -90,6 +122,8 @@ sidebar_position: 1
 
 ##### Dependency Updates
 
+- Update dependency gradle to v7.5 - [#5074](https://github.com/detekt/detekt/pull/5074)
+- Update plugin binaryCompatibilityValidator to v0.11.0 - [#5069](https://github.com/detekt/detekt/pull/5069)
 - Update dependency org.jetbrains.kotlinx:kotlinx-coroutines-core to v1.6.3 - [#4976](https://github.com/detekt/detekt/pull/4976)
 - Update dependency org.jetbrains.dokka to v1.7.0 - [#4974](https://github.com/detekt/detekt/pull/4974)
 - Update plugin binaryCompatibilityValidator to v0.10.1 - [#4954](https://github.com/detekt/detekt/pull/4954)
@@ -107,6 +141,9 @@ sidebar_position: 1
 
 ##### Housekeeping & Refactorings
 
+- Fix `ComplexMethod` debt and refactor code - [#5029](https://github.com/detekt/detekt/pull/5029)
+- Fix ReturnCount debt and refactor code - [#5026](https://github.com/detekt/detekt/pull/5026)
+- Add test for ForbiddenMethodCall with getters - [#5018](https://github.com/detekt/detekt/pull/5018)
 - Measure flakyness on Windows CI - [#4742](https://github.com/detekt/detekt/pull/4742)
 - Declare nested test classes as non-static - [#4894](https://github.com/detekt/detekt/pull/4894)
 - Remove deprecated usages in gradle-plugin test - [#4889](https://github.com/detekt/detekt/pull/4889)
