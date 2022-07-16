@@ -78,7 +78,7 @@ comments:
     searchInInnerClass: true
     searchInInnerObject: true
     searchInInnerInterface: true
-    searchProtectedClass: false
+    searchInProtectedClass: false
   UndocumentedPublicFunction:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
