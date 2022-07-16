@@ -5,7 +5,7 @@ plugins {
     idea
     alias(libs.plugins.pluginPublishing)
     // We use this published version of the Detekt plugin to self analyse this project.
-    id("io.gitlab.arturbosch.detekt") version "1.20.0"
+    id("io.gitlab.arturbosch.detekt") version "1.21.0"
     id("org.gradle.test-retry") version "1.4.0"
 }
 
