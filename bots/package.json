@@ -1,0 +1,11 @@
+{
+  "name": "@detekt/bots",
+  "version": "1.0.0",
+  "description": "Bots and automation for Detekt",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "danger": "^11.1.1"
+  }
+}
