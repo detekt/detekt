@@ -1,9 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+
+private const val SEARCH_PROTECTED_FUN = "searchProtectedFunction"
 
 class UndocumentedPublicFunctionSpec {
     val subject = UndocumentedPublicFunction()
@@ -139,6 +142,27 @@ class UndocumentedPublicFunctionSpec {
             }
         """
         assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report protected functions by default`() {
+        val code = """
+            object Test {
+                protected fun noComment1() {}
+            }
+        """
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `reports protected functions if configured`() {
+        val code = """
+            object Test {
+                protected fun noComment1() {}
+            }
+        """
+        val subject = UndocumentedPublicFunction(TestConfig(mapOf(SEARCH_PROTECTED_FUN to "true")))
+        assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
     @Nested
