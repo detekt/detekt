@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.*
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.isProtected
 import io.gitlab.arturbosch.detekt.rules.isPublicNotOverridden
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -43,8 +42,8 @@ class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
 
     private fun KtNamedFunction.shouldBeDocumented() =
         if (searchProtectedFunction) {
-            parents.filterIsInstance<KtClassOrObject>().all { it.isPublic || it.isProtected() } && (isPublic || isProtected()) && !isOverride()
+            parents.filterIsInstance<KtClassOrObject>().all { it.isPublic || it.isProtected() }
         } else {
-            parents.filterIsInstance<KtClassOrObject>().all { it.isPublic } && isPublicNotOverridden()
-        }
+            parents.filterIsInstance<KtClassOrObject>().all { it.isPublic }
+        } && isPublicNotOverridden(searchProtectedFunction)
 }
