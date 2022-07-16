@@ -9,6 +9,7 @@ private const val SEARCH_IN_NESTED_CLASS = "searchInNestedClass"
 private const val SEARCH_IN_INNER_CLASS = "searchInInnerClass"
 private const val SEARCH_IN_INNER_OBJECT = "searchInInnerObject"
 private const val SEARCH_IN_INNER_INTERFACE = "searchInInnerInterface"
+private const val SEARCH_PROTECTED_CLASS = "searchProtectedClass"
 
 class UndocumentedPublicClassSpec {
     val subject = UndocumentedPublicClass()
@@ -232,5 +233,23 @@ class UndocumentedPublicClassSpec {
         }
         """
         assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report protected class by default`() {
+        val code = """
+        protected class Test {
+        }
+        """
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+    @Test
+    fun `reports protected class if configured`() {
+        val code = """
+        protected class Test {
+        }
+        """
+        val subject = UndocumentedPublicClass(TestConfig(mapOf(SEARCH_PROTECTED_CLASS to "true")))
+        assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 }
