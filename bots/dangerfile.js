@@ -1,5 +1,4 @@
-import { danger, fail, markdown, warn, message } from "danger"
-import * as path from "path"
+import { danger, fail, markdown, warn, message } from "danger";
 
 // API reference: https://danger.systems/js/reference.html
 
