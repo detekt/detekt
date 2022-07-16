@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
       - name: Danger
-        uses: danger/danger-js@10.1.1
+        uses: danger/danger-js@9.1.6
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
