@@ -5,6 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "private": true,
+  "type": "module",
   "devDependencies": {
     "danger": "^11.1.1"
   }
