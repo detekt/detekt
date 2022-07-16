@@ -243,6 +243,7 @@ class UndocumentedPublicClassSpec {
         """
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
+
     @Test
     fun `reports protected class if configured`() {
         val code = """
