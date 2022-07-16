@@ -54,26 +54,44 @@ class UnusedImports(config: Config) : Rule(config) {
         private val staticReferences = mutableSetOf<KtReferenceExpression>()
         private val namedReferencesInKDoc = mutableSetOf<String>()
 
+        private val namedReferencesAsString: Set<String> by lazy {
+            namedReferences.mapTo(mutableSetOf()) { it.text.trim('`') }
+        }
+        private val staticReferencesAsString: Set<String> by lazy {
+            staticReferences.mapTo(mutableSetOf()) { it.text.trim('`') }
+        }
+        private val fqNames: Set<FqName> by lazy {
+            namedReferences.mapNotNullTo(mutableSetOf()) { it.fqNameOrNull() }
+        }
+
+        /**
+         * All [namedReferences] whose [KtReferenceExpression.fqNameOrNull] cannot be resolved
+         * mapped to their text. String matches to such references shouldn't be marked as unused
+         * imports since they could match the unknown value being imported.
+         */
+        @Suppress("CommentOverPrivateProperty")
+        private val unresolvedNamedReferencesAsString: Set<String> by lazy {
+            namedReferences.mapNotNullTo(mutableSetOf()) {
+                if (it.fqNameOrNull() == null) it.text.trim('`') else null
+            }
+        }
+
         fun unusedImports(): List<KtImportDirective> {
             fun KtImportDirective.isFromSamePackage() =
                 importedFqName?.parent() == currentPackage && alias == null
 
             @Suppress("ReturnCount")
             fun KtImportDirective.isNotUsed(): Boolean {
-                val namedReferencesAsString = namedReferences.map { it.text.trim('`') }
-                val staticReferencesAsString = staticReferences.map { it.text.trim('`') }
                 if (aliasName in (namedReferencesInKDoc + namedReferencesAsString)) return false
                 val identifier = identifier()
                 if (identifier in namedReferencesInKDoc || identifier in staticReferencesAsString) return false
                 return if (bindingContext == BindingContext.EMPTY) {
                     identifier !in namedReferencesAsString
                 } else {
-                    val fqNames = namedReferences.mapNotNull {
-                        val descriptor = bindingContext[BindingContext.SHORT_REFERENCE_TO_COMPANION_OBJECT, it]
-                            ?: bindingContext[BindingContext.REFERENCE_TARGET, it]
-                        descriptor?.getImportableDescriptor()?.fqNameOrNull()
-                    }
-                    importPath?.fqName?.let { it !in fqNames } == true
+                    val fqNameUsed = importPath?.fqName?.let { it in fqNames } == true
+                    val unresolvedNameUsed = identifier in unresolvedNamedReferencesAsString
+
+                    !fqNameUsed && !unresolvedNameUsed
                 }
             }
 
@@ -134,6 +152,12 @@ class UnusedImports(config: Config) : Rule(config) {
                 val str = it.groupValues[2].split(whiteSpaceRegex)[0]
                 namedReferencesInKDoc.add(str.split(".")[0])
             }
+        }
+
+        private fun KtReferenceExpression.fqNameOrNull(): FqName? {
+            val descriptor = bindingContext[BindingContext.SHORT_REFERENCE_TO_COMPANION_OBJECT, this]
+                ?: bindingContext[BindingContext.REFERENCE_TARGET, this]
+            return descriptor?.getImportableDescriptor()?.fqNameOrNull()
         }
     }
 
