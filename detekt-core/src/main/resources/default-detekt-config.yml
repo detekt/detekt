@@ -78,12 +78,15 @@ comments:
     searchInInnerClass: true
     searchInInnerObject: true
     searchInInnerInterface: true
+    searchProtectedClass: false
   UndocumentedPublicFunction:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    searchProtectedFunction: false
   UndocumentedPublicProperty:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    searchProtectedProperty: false
 
 complexity:
   active: true
