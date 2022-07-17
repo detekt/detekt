@@ -1,0 +1,6 @@
+config:
+  checkExhaustiveness: false
+
+complexity:
+style:
+comments:

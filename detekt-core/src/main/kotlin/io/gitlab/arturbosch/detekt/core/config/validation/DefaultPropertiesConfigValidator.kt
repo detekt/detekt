@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.core.config
+package io.gitlab.arturbosch.detekt.core.config.validation
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConfigValidator
@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.rules.RuleSetLocator
 
-class DefaultPropertiesConfigValidator(
+internal class DefaultPropertiesConfigValidator(
     private val settings: ProcessingSettings,
     private val baseline: Config,
 ) : ConfigValidator {

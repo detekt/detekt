@@ -11,7 +11,7 @@ import io.gitlab.arturbosch.detekt.core.Analyzer
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.FileProcessorLocator
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
-import io.gitlab.arturbosch.detekt.core.config.checkConfiguration
+import io.gitlab.arturbosch.detekt.core.config.validation.checkConfiguration
 import io.gitlab.arturbosch.detekt.core.extensions.handleReportingExtensions
 import io.gitlab.arturbosch.detekt.core.generateBindingContext
 import io.gitlab.arturbosch.detekt.core.reporting.OutputFacade

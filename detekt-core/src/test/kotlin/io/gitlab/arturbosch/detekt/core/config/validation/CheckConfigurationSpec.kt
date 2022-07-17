@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.core.config
+package io.gitlab.arturbosch.detekt.core.config.validation
 
 import io.github.detekt.test.utils.createTempDirectoryForTest
 import io.github.detekt.tooling.api.InvalidConfig
@@ -15,7 +15,7 @@ import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Test
 
-class SupportConfigValidationSpec {
+class CheckConfigurationSpec {
 
     private val testDir = createTempDirectoryForTest("detekt-sample")
     private val spec = createNullLoggingSpec {}

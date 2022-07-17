@@ -5,6 +5,8 @@ package io.gitlab.arturbosch.detekt.core.config
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Config.Companion.CONFIG_SEPARATOR
 import io.gitlab.arturbosch.detekt.api.Notification
+import io.gitlab.arturbosch.detekt.core.config.validation.ValidatableConfiguration
+import io.gitlab.arturbosch.detekt.core.config.validation.validateConfig
 import org.yaml.snakeyaml.Yaml
 import java.io.Reader
 import java.nio.file.Path

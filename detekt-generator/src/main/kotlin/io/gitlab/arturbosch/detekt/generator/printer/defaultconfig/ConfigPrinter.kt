@@ -39,6 +39,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
       config:
         validation: true
         warningsAsErrors: false
+        checkExhaustiveness: false
         # when writing own rules with new properties, exclude the property path e.g.: 'my_rule_set,.*>.*>[my_property]'
         excludes: ''
     """.trimIndent()
