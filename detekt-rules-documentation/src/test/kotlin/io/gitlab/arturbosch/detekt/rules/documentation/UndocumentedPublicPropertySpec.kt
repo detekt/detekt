@@ -219,7 +219,7 @@ class UndocumentedPublicPropertySpec {
     @Test
     fun `does not report undocumented protected properties by default`() {
         val code = """
-            object Test {
+            open class Test {
                 protected val a = 1
             }
         """
@@ -229,7 +229,7 @@ class UndocumentedPublicPropertySpec {
     @Test
     fun `reports undocumented protected properties if configured`() {
         val code = """
-            object Test {
+            open class Test {
                 protected val a = 1
             }
         """

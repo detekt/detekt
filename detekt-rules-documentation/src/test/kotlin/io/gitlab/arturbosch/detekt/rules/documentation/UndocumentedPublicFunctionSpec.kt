@@ -147,7 +147,7 @@ class UndocumentedPublicFunctionSpec {
     @Test
     fun `does not report protected functions by default`() {
         val code = """
-            object Test {
+            open class Test {
                 protected fun noComment1() {}
             }
         """
@@ -157,7 +157,7 @@ class UndocumentedPublicFunctionSpec {
     @Test
     fun `reports protected functions if configured`() {
         val code = """
-            object Test {
+            open class Test {
                 protected fun noComment1() {}
             }
         """
