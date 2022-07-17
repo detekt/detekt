@@ -1,12 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.*
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isCalling
@@ -18,6 +12,8 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.util.getType
+import org.jetbrains.kotlin.types.isNullable
 
 /**
  * Turn on this rule to flag `find` calls for null check that can be replaced with a `any` or `none` call.
@@ -48,7 +44,11 @@ class UseAnyOrNoneInsteadOfFind(config: Config = Config.empty) : Rule(config) {
         if (bindingContext == BindingContext.EMPTY) return
 
         val functionName = expression.calleeExpression?.text ?: return
-        val qualifiedOrThis = expression.getStrictParentOfType<KtQualifiedExpression>() ?: expression
+        val qualifiedExpression = expression.getStrictParentOfType<KtQualifiedExpression>()
+        if (qualifiedExpression?.receiverExpression?.getType(bindingContext)?.isNullable() == true) {
+            return
+        }
+        val qualifiedOrThis = qualifiedExpression ?: expression
         val binary = qualifiedOrThis.getStrictParentOfType<KtBinaryExpression>()?.takeIf {
             it.left == qualifiedOrThis || it.right == qualifiedOrThis
         } ?: return

@@ -103,4 +103,15 @@ class UseAnyOrNoneInsteadOfFindSpec(val env: KotlinCoreEnvironment) {
         val actual = subject.compileAndLintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
+
+    @Test
+    @DisplayName("Does not report collections?.find != null")
+    fun noReportNullableCollectionsFind() {
+        val code = """
+            fun findFour(list: List<Any>?): Boolean =
+                list.find { it == 4 } != null
+        """
+        val actual = subject.compileAndLintWithContext(env, code)
+        assertThat(actual).isEmpty()
+    }
 }
