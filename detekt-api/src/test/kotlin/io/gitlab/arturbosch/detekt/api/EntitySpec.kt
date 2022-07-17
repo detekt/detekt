@@ -20,6 +20,9 @@ class EntitySpec {
         class C : Any() {
 
             private fun memberFun(): Int = 5
+    
+            @CheckReturnValue
+            private fun annotatedFun(): Int = 6
         }
 
         fun topLevelFun(number: Int) = Unit
@@ -38,6 +41,14 @@ class EntitySpec {
 
             assertThat(Entity.atName(memberFunction).signature)
                 .isEqualTo("Test.kt\$C\$private fun memberFun(): Int")
+        }
+
+        @Test
+        fun `includes annotation, full function header, class name and filename`() {
+            val annotatedFunction = functions.first { it.name == "annotatedFun" }
+
+            assertThat(Entity.atName(annotatedFunction).signature)
+                .isEqualTo("Test.kt\$C\$@CheckReturnValue private fun annotatedFun(): Int")
         }
 
         @Test
