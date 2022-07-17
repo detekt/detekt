@@ -12,7 +12,7 @@ This release is coming with 6 new rules, new API and functionalities and several
 
 We want to thank you very much [our Sponsors](https://github.com/sponsors/detekt) for the support in those last months. The work behind Detekt is all happening on a voluntary basis, and we're more than grateful for all the support we get from the Open Source Ecosystem.
 
-We're also excited to announce that we're now having an [Open Source Github Enterprise](https://ge.detekt.dev) instance. When building the Detekt projects, you'll benefit from the Gradle Remote Cache that this instance is providing! 
+We're also excited to announce that we're now having an [Open Source Gradle Enterprise](https://ge.detekt.dev) instance. When building the Detekt projects, you'll benefit from the Gradle Remote Cache that this instance is providing! 
 
 Finally, we want to take the opportunity to thank our contributors for testing, bug reporting and helping
 us release this new version of Detekt. You're more than welcome to join our community on the [#detekt](https://kotlinlang.slack.com/archives/C88E12QH4) channel on KotlinLang's Slack (you can [get an invite here](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up)).
