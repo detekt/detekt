@@ -6,7 +6,10 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
 
-fun KtModifierListOwner.isPublicNotOverridden(considerProtectedAsPublic: Boolean = false) =
+fun KtModifierListOwner.isPublicNotOverridden() =
+    isPublicNotOverridden(false)
+
+fun KtModifierListOwner.isPublicNotOverridden(considerProtectedAsPublic: Boolean) =
     if (considerProtectedAsPublic) {
         isPublic || isProtected()
     } else {
