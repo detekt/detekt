@@ -30,6 +30,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             DestructuringDeclarationWithTooManyEntries(config),
             ReturnCount(config),
             ThrowsCount(config),
+            TrimMultilineRawString(config),
             NewLineAtEndOfFile(config),
             WildcardImport(config),
             FileParsingRule(config),

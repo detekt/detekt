@@ -40,7 +40,9 @@ class DetektJvmSpec {
         @Test
         fun `logs a warning`() {
             gradleRunner.runTasksAndCheckResult(":detektMain") { buildResult ->
-                assertThat(buildResult.output).contains("TXT report location set on detekt {} extension will be ignored for detektMain task.")
+                assertThat(buildResult.output).contains(
+                    "TXT report location set on detekt {} extension will be ignored for detektMain task."
+                )
             }
         }
     }
@@ -72,7 +74,9 @@ class DetektJvmSpec {
         @Test
         fun `logs a warning`() {
             gradleRunner.runTasksAndCheckResult(":detektMain") { buildResult ->
-                assertThat(buildResult.output).doesNotContain("report location set on detekt {} extension will be ignored")
+                assertThat(buildResult.output).doesNotContain(
+                    "report location set on detekt {} extension will be ignored"
+                )
             }
         }
     }

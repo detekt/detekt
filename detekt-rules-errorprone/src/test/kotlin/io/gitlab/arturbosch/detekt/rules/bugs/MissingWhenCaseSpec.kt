@@ -37,7 +37,9 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                 val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
-                assertThat(actual.first().message).isEqualTo("When expression is missing cases: RED. Either add missing cases or a default `else` case.")
+                assertThat(actual.first().message).isEqualTo(
+                    "When expression is missing cases: RED. Either add missing cases or a default `else` case."
+                )
             }
 
             @Test
@@ -59,7 +61,9 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                 val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
-                assertThat(actual.first().message).isEqualTo("When expression is missing cases: RED, null. Either add missing cases or a default `else` case.")
+                assertThat(actual.first().message).isEqualTo(
+                    "When expression is missing cases: RED, null. Either add missing cases or a default `else` case."
+                )
             }
 
             @Test
@@ -82,7 +86,9 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                 val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
-                assertThat(actual.first().message).isEqualTo("When expression is missing cases: null. Either add missing cases or a default `else` case.")
+                assertThat(actual.first().message).isEqualTo(
+                    "When expression is missing cases: null. Either add missing cases or a default `else` case."
+                )
             }
 
             @Test
@@ -155,7 +161,9 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                 val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
-                assertThat(actual.first().message).isEqualTo("When expression is missing cases: VariantC. Either add missing cases or a default `else` case.")
+                assertThat(actual.first().message).isEqualTo(
+                    "When expression is missing cases: VariantC. Either add missing cases or a default `else` case."
+                )
             }
 
             @Test
@@ -178,7 +186,9 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                 val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
-                assertThat(actual.first().message).isEqualTo("When expression is missing cases: null. Either add missing cases or a default `else` case.")
+                assertThat(actual.first().message).isEqualTo(
+                    "When expression is missing cases: null. Either add missing cases or a default `else` case."
+                )
             }
 
             @Test
@@ -200,7 +210,9 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                 val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
-                assertThat(actual.first().message).isEqualTo("When expression is missing cases: VariantC, null. Either add missing cases or a default `else` case.")
+                assertThat(actual.first().message).isEqualTo(
+                    "When expression is missing cases: VariantC, null. Either add missing cases or a default `else` case."
+                )
             }
 
             @Test

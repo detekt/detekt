@@ -257,7 +257,10 @@ class DetektMultiplatformSpec {
 
     @Nested
     @EnabledOnOs(MAC)
-    @EnabledIf("io.gitlab.arturbosch.detekt.DetektMultiplatformSpecKt#isXCodeInstalled", disabledReason = "XCode is not installed.")
+    @EnabledIf(
+        "io.gitlab.arturbosch.detekt.DetektMultiplatformSpecKt#isXCodeInstalled",
+        disabledReason = "XCode is not installed."
+    )
     inner class `multiplatform projects - iOS target` {
         val gradleRunner =
             setupProject {

@@ -1,21 +1,21 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
 import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties
-import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
-import com.pinterest.ktlint.ruleset.experimental.ArgumentListWrappingRule
+import com.pinterest.ktlint.ruleset.standard.ArgumentListWrappingRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.configWithAndroidVariants
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint-website](https://ktlint.github.io) for documentation.
+ * See [ktlint-readme](https://github.com/pinterest/ktlint#standard-rules) for documentation.
  */
-@OptIn(FeatureInAlphaState::class)
 @AutoCorrectable(since = "1.0.0")
+@ActiveByDefault(since = "1.22.0")
 class ArgumentListWrapping(config: Config) : FormattingRule(config) {
 
     override val wrapping = ArgumentListWrappingRule()

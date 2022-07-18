@@ -46,7 +46,9 @@ class ThrowingNewInstanceOfSameExceptionSpec {
     }
 
     @Nested
-    @DisplayName("a catch block which throws a new instance of the same exception type without wrapping the caught exception")
+    @DisplayName(
+        "a catch block which throws a new instance of the same exception type without wrapping the caught exception"
+    )
     inner class CatchBlockThrowingSameExceptionWithoutWrapping {
         val code = """
         fun x() {

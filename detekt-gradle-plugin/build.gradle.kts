@@ -1,6 +1,3 @@
-import org.gradle.api.internal.classpath.ModuleRegistry
-import org.gradle.kotlin.dsl.support.serviceOf
-
 plugins {
     id("module")
     `java-gradle-plugin`
@@ -8,7 +5,7 @@ plugins {
     idea
     alias(libs.plugins.pluginPublishing)
     // We use this published version of the Detekt plugin to self analyse this project.
-    id("io.gitlab.arturbosch.detekt") version "1.20.0"
+    id("io.gitlab.arturbosch.detekt") version "1.21.0"
     id("org.gradle.test-retry") version "1.4.0"
 }
 
@@ -34,17 +31,6 @@ testing {
                 implementation(libs.assertj)
                 implementation(libs.kotlin.gradle)
                 implementation(gradleKotlinDsl())
-
-                // See https://github.com/gradle/gradle/issues/16774#issuecomment-853407822
-                runtimeOnly(
-                    files(
-                        serviceOf<ModuleRegistry>()
-                            .getModule("gradle-tooling-api-builders")
-                            .classpath
-                            .asFiles
-                            .first()
-                    )
-                )
             }
         }
         register("functionalTest", JvmTestSuite::class) {
@@ -89,7 +75,7 @@ dependencies {
     pluginCompileOnly(libs.kotlin.gradle)
 
     // We use this published version of the detekt-formatting to self analyse this project.
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.21.0")
 }
 
 gradlePlugin {

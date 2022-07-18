@@ -2,7 +2,7 @@
 dokka = "1.7.0"
 jacoco = "0.8.8"
 kotlin = "1.7.10"
-ktlint = "0.45.2"
+ktlint = "0.46.1"
 junit = "5.8.2"
 contester = "0.2.0"
 
@@ -18,8 +18,8 @@ kotlin-scriptUtil = { module = "org.jetbrains.kotlin:kotlin-script-util", versio
 kotlin-scriptingCompilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable", version.ref = "kotlin" }
 kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 
-kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.5"
-kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3"
+kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.8.0"
+kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
 
 android-gradle = "com.android.tools.build:gradle:7.2.1"
 
@@ -42,7 +42,7 @@ contester-breakpoint = { module = "io.github.davidburstrom.contester:contester-b
 contester-driver = { module = "io.github.davidburstrom.contester:contester-driver", version.ref = "contester" }
 
 [plugins]
-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.10.1" }
+binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.11.0" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 gradleVersions = { id = "com.github.ben-manes.versions", version = "0.42.0" }
 pluginPublishing = { id = "com.gradle.plugin-publish", version = "1.0.0" }

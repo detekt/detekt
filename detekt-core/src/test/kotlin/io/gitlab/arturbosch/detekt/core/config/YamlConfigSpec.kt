@@ -57,7 +57,9 @@ class YamlConfigSpec {
                 @Suppress("UNUSED_VARIABLE")
                 val ignored = config.valueOrDefault("style", "")
             }
-                .withMessage("Value \"{WildcardImport={active=true}, NoElseInWhenExpression={active=true}, MagicNumber={active=true, ignoreNumbers=[-1, 0, 1, 2]}}\" set for config parameter \"style\" is not of required type String.")
+                .withMessage(
+                    "Value \"{WildcardImport={active=true}, NoElseInWhenExpression={active=true}, MagicNumber={active=true, ignoreNumbers=[-1, 0, 1, 2]}}\" set for config parameter \"style\" is not of required type String."
+                )
         }
     }
 
@@ -94,7 +96,9 @@ class YamlConfigSpec {
                     .subConfig("Rule")
                     .valueOrDefault("threshold", 6)
             }
-                .withMessage("Value \"v5.7\" set for config parameter \"RuleSet > Rule > threshold\" is not of required type Int.")
+                .withMessage(
+                    "Value \"v5.7\" set for config parameter \"RuleSet > Rule > threshold\" is not of required type Int."
+                )
         }
 
         @Test
@@ -105,7 +109,9 @@ class YamlConfigSpec {
                     .subConfig("Rule")
                     .valueOrDefault("active", 1)
             }
-                .withMessage("Value \"[]\" set for config parameter \"RuleSet > Rule > active\" is not of required type Int.")
+                .withMessage(
+                    "Value \"[]\" set for config parameter \"RuleSet > Rule > active\" is not of required type Int."
+                )
         }
     }
 

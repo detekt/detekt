@@ -634,4 +634,36 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
 
         assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
     }
+
+    @Test
+    fun `does not report imports which detekt cannot resolve but have string matches`() {
+        val mainFile = """
+        import x.y.z.foo
+        import x.y.z.Bar
+
+        fun test() {
+            foo()
+            foo("", 123)
+            foo
+
+            Bar().baz()
+        }
+        """
+
+        assertThat(subject.lintWithContext(env, mainFile)).isEmpty()
+    }
+
+    @Test
+    fun `reports imports which detekt cannot resolve and do not have string matches`() {
+        val mainFile = """
+        import x.y.z.foo
+        import x.y.z.Bar
+
+        fun test() {
+            2 + 3
+        }
+        """
+
+        assertThat(subject.lintWithContext(env, mainFile)).hasSize(2)
+    }
 }

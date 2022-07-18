@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.formatting
 import com.pinterest.ktlint.core.KtLint
 import com.pinterest.ktlint.core.Rule.VisitorModifier.RunAsLateAsPossible
 import com.pinterest.ktlint.core.Rule.VisitorModifier.RunOnRootNodeOnly
-import com.pinterest.ktlint.core.api.FeatureInAlphaState
+import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties.codeStyleSetProperty
 import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
 import io.github.detekt.psi.fileName
 import io.github.detekt.psi.toFilePath
@@ -27,7 +27,6 @@ import org.jetbrains.kotlin.psi.psiUtil.endOffset
 /**
  * Rule to detect formatting violations.
  */
-@OptIn(FeatureInAlphaState::class)
 abstract class FormattingRule(config: Config) : Rule(config) {
 
     abstract val wrapping: com.pinterest.ktlint.core.Rule
@@ -53,15 +52,20 @@ abstract class FormattingRule(config: Config) : Rule(config) {
 
     override fun visit(root: KtFile) {
         this.root = root
-        root.node.putUserData(KtLint.ANDROID_USER_DATA_KEY, isAndroid)
         positionByOffset = KtLintLineColCalculator
             .calculateLineColByOffset(KtLintLineColCalculator.normalizeText(root.text))
 
-        val editorConfigProperties = overrideEditorConfigProperties()
+        val editorConfigProperties = overrideEditorConfigProperties()?.toMutableMap()
+            ?: mutableMapOf()
 
-        if (!editorConfigProperties.isNullOrEmpty()) {
+        if (isAndroid) {
+            editorConfigProperties[codeStyleSetProperty] = "android"
+        }
+
+        if (editorConfigProperties.isNotEmpty()) {
             val userData = (root.node.getUserData(KtLint.EDITOR_CONFIG_PROPERTIES_USER_DATA_KEY).orEmpty())
                 .toMutableMap()
+
             editorConfigProperties.forEach { (editorConfigProperty, defaultValue) ->
                 userData[editorConfigProperty.type.name] = Property.builder()
                     .name(editorConfigProperty.type.name)
@@ -79,18 +83,6 @@ abstract class FormattingRule(config: Config) : Rule(config) {
     fun apply(node: ASTNode) {
         if (ruleShouldOnlyRunOnFileNode(node)) {
             return
-        }
-
-        // KtLint 0.44.0 is assuming that KtLint.EDITOR_CONFIG_USER_DATA_KEY is available on all the nodes.
-        // If not, it crashes with a NPE. Here we're patching their behavior.
-        // This block is deprecated and will be removed in KtLint 0.46. But we have to suppress the
-        // deprecation warning because the ci runs with -Werror.
-        @Suppress("DEPRECATION")
-        if (node.getUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY) == null) {
-            node.putUserData(
-                KtLint.EDITOR_CONFIG_USER_DATA_KEY,
-                com.pinterest.ktlint.core.EditorConfig.Companion.fromMap(emptyMap())
-            )
         }
 
         wrapping.visit(node, autoCorrect) { offset, message, _ ->

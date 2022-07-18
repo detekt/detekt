@@ -1,33 +1,39 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
 class UnnecessaryParenthesesSpec {
-    val subject = UnnecessaryParentheses(Config.empty)
-
-    @Test
-    fun `with unnecessary parentheses on val assignment`() {
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `with unnecessary parentheses on val assignment`(testCase: RuleTestCase) {
         val code = "val local = (5)"
-        assertThat(subject.lint(code)).hasSize(1)
+
+        assertThat(testCase.rule.lint(code)).hasSize(1)
     }
 
-    @Test
-    fun `with unnecessary parentheses on val assignment operation`() {
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `with unnecessary parentheses on val assignment operation`(testCase: RuleTestCase) {
         val code = "val local = (5 + 3)"
-        assertThat(subject.lint(code)).hasSize(1)
+
+        assertThat(testCase.rule.lint(code)).hasSize(1)
     }
 
-    @Test
-    fun `with unnecessary parentheses on function call`() {
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `with unnecessary parentheses on function call`(testCase: RuleTestCase) {
         val code = "val local = 3.plus((5))"
-        assertThat(subject.lint(code)).hasSize(1)
+
+        assertThat(testCase.rule.lint(code)).hasSize(1)
     }
 
-    @Test
-    fun `unnecessary parentheses in other parentheses`() {
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `unnecessary parentheses in other parentheses`(testCase: RuleTestCase) {
         val code = """
             fun x(a: String, b: String) {
                 if ((a equals b)) {
@@ -35,11 +41,13 @@ class UnnecessaryParenthesesSpec {
                 }
             }
         """
-        assertThat(subject.lint(code)).hasSize(1)
+
+        assertThat(testCase.rule.lint(code)).hasSize(1)
     }
 
-    @Test
-    fun `does not report unnecessary parentheses around lambdas`() {
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `does not report unnecessary parentheses around lambdas`(testCase: RuleTestCase) {
         val code = """
             fun function (a: (input: String) -> Unit) {
                 a.invoke("TEST")
@@ -49,11 +57,13 @@ class UnnecessaryParenthesesSpec {
                 function({ input -> println(input) })
             }
         """
-        assertThat(subject.lint(code)).isEmpty()
+
+        assertThat(testCase.rule.lint(code)).isEmpty()
     }
 
-    @Test
-    fun `doesn't report function calls containing lambdas and other parameters`() {
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `doesn't report function calls containing lambdas and other parameters`(testCase: RuleTestCase) {
         val code = """
             fun function (integer: Int, a: (input: String) -> Unit) {
                 a.invoke("TEST")
@@ -63,21 +73,25 @@ class UnnecessaryParenthesesSpec {
                 function(1, { input -> println(input) })
             }
         """
-        assertThat(subject.lint(code)).isEmpty()
+
+        assertThat(testCase.rule.lint(code)).isEmpty()
     }
 
-    @Test
-    fun `does not report unnecessary parentheses when assigning a lambda to a val`() {
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `does not report unnecessary parentheses when assigning a lambda to a val`(testCase: RuleTestCase) {
         val code = """
             fun f() {
                 instance.copy(value = { false })
             }
         """
-        assertThat(subject.lint(code)).isEmpty()
+
+        assertThat(testCase.rule.lint(code)).isEmpty()
     }
 
-    @Test
-    fun `does not report well behaved parentheses`() {
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `does not report well behaved parentheses`(testCase: RuleTestCase) {
         val code = """
             fun x(a: String, b: String) {
                 if (a equals b) {
@@ -85,11 +99,13 @@ class UnnecessaryParenthesesSpec {
                 }
             }
         """
-        assertThat(subject.lint(code)).isEmpty()
+
+        assertThat(testCase.rule.lint(code)).isEmpty()
     }
 
-    @Test
-    fun `does not report well behaved parentheses in super constructors`() {
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `does not report well behaved parentheses in super constructors`(testCase: RuleTestCase) {
         val code = """
             class TestSpek : SubjectSpek({
                 describe("a simple test") {
@@ -98,11 +114,13 @@ class UnnecessaryParenthesesSpec {
                 }
             })
         """
-        assertThat(subject.lint(code)).isEmpty()
+
+        assertThat(testCase.rule.lint(code)).isEmpty()
     }
 
-    @Test
-    fun `does not report well behaved parentheses in constructors`() {
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `does not report well behaved parentheses in constructors`(testCase: RuleTestCase) {
         val code = """
             class TestSpek({
                 describe("a simple test") {
@@ -111,11 +129,13 @@ class UnnecessaryParenthesesSpec {
                 }
             })
         """
-        assertThat(subject.lint(code)).isEmpty()
+
+        assertThat(testCase.rule.lint(code)).isEmpty()
     }
 
-    @Test
-    fun `should not report lambdas within super constructor calls`() {
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `should not report lambdas within super constructor calls`(testCase: RuleTestCase) {
         val code = """
             class Clazz(
                 private val func: (X, Y) -> Z
@@ -123,11 +143,13 @@ class UnnecessaryParenthesesSpec {
                 constructor() : this({ first, second -> true })
             }
         """
-        assertThat(subject.lint(code)).isEmpty()
+
+        assertThat(testCase.rule.lint(code)).isEmpty()
     }
 
-    @Test
-    fun `should not report call to function with two lambda parameters with one as block body`() {
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `should not report call to function with two lambda parameters with one as block body`(testCase: RuleTestCase) {
         val code = """
             class Clazz {
                 fun test(first: (Int) -> Unit, second: (Int) -> Unit) {
@@ -140,11 +162,13 @@ class UnnecessaryParenthesesSpec {
                 }
             }
         """
-        assertThat(subject.lint(code)).isEmpty()
+
+        assertThat(testCase.rule.lint(code)).isEmpty()
     }
 
-    @Test
-    fun `should not report call to function with two lambda parameters`() {
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `should not report call to function with two lambda parameters`(testCase: RuleTestCase) {
         val code = """
             class Clazz {
                 fun test(first: (Int) -> Unit, second: (Int) -> Unit) {
@@ -157,11 +181,15 @@ class UnnecessaryParenthesesSpec {
                 }
             }
         """
-        assertThat(subject.lint(code)).isEmpty()
+
+        assertThat(testCase.rule.lint(code)).isEmpty()
     }
 
-    @Test
-    fun `should not report call to function with multiple lambdas as parameters but also other parameters`() {
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `should not report call to function with multiple lambdas as parameters but also other parameters`(
+        testCase: RuleTestCase,
+    ) {
         val code = """
             class Clazz {
                 fun test(text: String, first: () -> Unit, second: () -> Unit) {
@@ -174,14 +202,133 @@ class UnnecessaryParenthesesSpec {
                 }
             }
         """
-        assertThat(subject.lint(code)).isEmpty()
+
+        assertThat(testCase.rule.lint(code)).isEmpty()
     }
 
-    @Test
-    fun `should not report interface delegation with parenthesis - #3851`() {
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `should not report interface delegation with parenthesis - #3851`(testCase: RuleTestCase) {
         val code = """
             class Clazz: Comparable<String> by ("hello".filter { it != 'l' })
         """
-        assertThat(subject.lint(code)).isEmpty()
+
+        assertThat(testCase.rule.lint(code)).isEmpty()
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `numeric expressions when precedence is unclear`(testCase: RuleTestCase) {
+        val code = """
+            val a1 = (1 * 2) + 3
+            val a2 = (1 / 2) + 3
+            val a3 = (1 % 2) + 3
+
+            val b1 = 3 + (1 * 2)
+            val b2 = 3 + (1 / 2)
+            val b3 = 3 + (1 % 2)
+
+            val c = (4 + 5) * 3 // parens required
+        """
+
+        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 6)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `numeric expressions when precedence is clear`(testCase: RuleTestCase) {
+        val code = """
+            val a1 = (1 + 2)
+            val a2 = (1 * 2)
+            val a3 = (1 + 2 * 3)
+            val b1 = (1 + 2) + 3
+            val b2 = (1 * 2) * 3
+        """
+
+        assertThat(testCase.rule.lint(code)).hasSize(5)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `boolean expressions when precedence is unclear`(testCase: RuleTestCase) {
+        val code = """
+            val a1 = (true && false) || false
+            val a2 = (true && false) || (false && true) // 2 warnings when disallowed
+            val b = false || (true && false)
+            val c = (true || false) && false // parens required
+        """
+
+        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 4)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `boolean expressions when precedence is clear`(testCase: RuleTestCase) {
+        val code = """
+            val a1 = (true && false)
+            val a2 = (true || false)
+            val a3 = (true && false || false)
+            val b1 = (true && false) && false
+            val b2 = (true || false) || false
+        """
+
+        assertThat(testCase.rule.lint(code)).hasSize(5)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `infix operators when precedence is unclear`(testCase: RuleTestCase) {
+        val code = """
+            val d = (true and false) or false
+            val e = false or (true and false) // parens required
+        """
+
+        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 1)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `elvis operators when precedence is unclear`(testCase: RuleTestCase) {
+        val code = """
+            val a1 = null ?: (1 to 2) // parens required
+            val a2 = (null ?: 1) to 2
+
+            val b1 = null ?: (1 == 2) // parens required
+            val b2 = (null ?: 1) == 2
+
+            val c1 = null ?: (1 > 2) // parens required
+            val c2 = (null ?: 1) > 2
+
+            val d1 = null ?: (1 in 2) // parens required
+            val d2 = (null ?: 1) in 2
+        """
+
+        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 4)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `multiple wrapping parentheses`(testCase: RuleTestCase) {
+        val code = """
+            val a = ((false || (((true && false)))))
+        """
+
+        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 4 else 5)
+    }
+
+    companion object {
+        class RuleTestCase(val allowForUnclearPrecedence: Boolean) {
+            val rule = UnnecessaryParentheses(
+                TestConfig(mapOf("allowForUnclearPrecedence" to allowForUnclearPrecedence))
+            )
+        }
+
+        @JvmStatic
+        fun cases(): List<RuleTestCase> {
+            return listOf(
+                RuleTestCase(allowForUnclearPrecedence = false),
+                RuleTestCase(allowForUnclearPrecedence = true),
+            )
+        }
     }
 }

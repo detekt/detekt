@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
 
       - name: Setup Java
-        uses: actions/setup-java@16cca5479d7c6b6843f6a6515640ba33c6501543 # tag=v3
+        uses: actions/setup-java@2c7a4878f5d120bd643426d54ae1209b29cc01a3 # tag=v3
         with:
           java-version: 17
           distribution: 'temurin'
@@ -39,7 +39,7 @@ jobs:
           arguments: :detekt-cli:runWithArgsFile
 
       - name: Upload SARIF to Github using the upload-sarif action
-        uses: github/codeql-action/upload-sarif@3f62b754e23e0dd60f91b744033e1dc1654c0ec6 # tag=v2
+        uses: github/codeql-action/upload-sarif@3e7e3b32d0fb8283594bb0a76cc60a00918b0969 # tag=v2
         if: ${{ always() }}
         with:
           sarif_file: build/detekt-report.sarif
@@ -53,7 +53,7 @@ jobs:
       uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
 
     - name: Setup Java
-      uses: actions/setup-java@16cca5479d7c6b6843f6a6515640ba33c6501543 # tag=v3
+      uses: actions/setup-java@2c7a4878f5d120bd643426d54ae1209b29cc01a3 # tag=v3
       with:
         java-version: 17
         distribution: 'temurin'

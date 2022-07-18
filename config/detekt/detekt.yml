@@ -73,6 +73,8 @@ formatting:
     active: true
   EnumEntryNameCase:
     active: true
+  Filename:
+    active: false
   MaximumLineLength:
     active: false
   MultiLineIfElse:
