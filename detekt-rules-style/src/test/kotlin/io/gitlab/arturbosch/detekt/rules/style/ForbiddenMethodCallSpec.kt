@@ -508,11 +508,11 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                 
                 fun main() {
                     val calendar = Calendar.getInstance()
-                    calendar.let(calendar::getFirstDayOfWeek)
+                    calendar.let(calendar::compareTo)
                 }
             """
         val findings =
-            ForbiddenMethodCall(TestConfig(mapOf(METHODS to "java.util.Calendar.getFirstDayOfWeek"))).compileAndLintWithContext(
+            ForbiddenMethodCall(TestConfig(mapOf(METHODS to "java.util.Calendar.compareTo"))).compileAndLintWithContext(
                 env,
                 code
             )
