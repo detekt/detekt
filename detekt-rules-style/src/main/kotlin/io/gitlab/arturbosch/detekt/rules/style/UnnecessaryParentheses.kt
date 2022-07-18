@@ -7,7 +7,17 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.com.intellij.psi.tree.IElementType
+import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.parsing.KotlinExpressionParsing.Precedence
+import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtDelegatedSuperTypeEntry
+import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
 
@@ -46,17 +56,97 @@ class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    @Configuration(
+        "allow parentheses when not strictly required but precedence may be unclear, such as `(a && b) || c`"
+    )
+    private val allowForUnclearPrecedence: Boolean by config(defaultValue = false)
+
+    @Suppress("ReturnCount")
     override fun visitParenthesizedExpression(expression: KtParenthesizedExpression) {
         super.visitParenthesizedExpression(expression)
 
-        if (expression.expression == null) return
+        val inner = expression.expression ?: return
+        val outer = expression.parent
 
-        if (expression.parent is KtDelegatedSuperTypeEntry) return
+        if (outer is KtDelegatedSuperTypeEntry) return
 
-        if (KtPsiUtil.areParenthesesUseless(expression)) {
-            val message = "Parentheses in ${expression.text} are unnecessary and can be replaced with: " +
-                "${KtPsiUtil.deparenthesize(expression)?.text}"
-            report(CodeSmell(issue, Entity.from(expression), message))
+        if (!KtPsiUtil.areParenthesesUseless(expression)) return
+
+        if (allowForUnclearPrecedence && inner.isBinaryOperationPrecedenceUnclearWithParent()) return
+
+        val message = "Parentheses in ${expression.text} are unnecessary and can be replaced with: " +
+            KtPsiUtil.deparenthesize(expression)?.text
+        report(CodeSmell(issue, Entity.from(expression), message))
+    }
+
+    companion object {
+        /**
+         * Map from operators to a set of other operators between which precedence can be unclear.
+         *
+         * This is built from a mapping of [Precedence] to other, greater, [Precedence](s) which should be considered
+         * unclear when mixed as child binary expressions.
+         */
+        @Suppress("CommentOverPrivateProperty")
+        private val childToUnclearPrecedenceParentsMapping: Map<IElementType, Set<IElementType>> = arrayOf(
+            Precedence.ELVIS to arrayOf(
+                Precedence.EQUALITY, // (a ?: b) == c
+                Precedence.COMPARISON, // (a ?: b) > c
+                Precedence.IN_OR_IS, // (a ?: b) in c
+            ),
+
+            Precedence.SIMPLE_NAME to arrayOf(
+                Precedence.ELVIS, // a ?: (b to c)
+                Precedence.SIMPLE_NAME, // (a to b) to c
+            ),
+
+            // (a * b) + c
+            Precedence.MULTIPLICATIVE to arrayOf(Precedence.ADDITIVE),
+
+            // (a && b) || c
+            Precedence.CONJUNCTION to arrayOf(Precedence.DISJUNCTION),
+        )
+            .onEach { (child, parents) ->
+                parents.forEach { check(child <= it) }
+            }
+            .flatMap { (child, parents) ->
+                child.operations.types.map { childOp ->
+                    childOp to parents.flatMapTo(mutableSetOf()) { parentOp -> parentOp.operations.types.toList() }
+                }
+            }
+            .toMap()
+
+        /**
+         * Retrieves the [IElementType] of the binary operation from this element if it is a non-assignment binary
+         * expression, or null otherwise.
+         */
+        private fun PsiElement.binaryOp(): IElementType? {
+            return when (this) {
+                is KtBinaryExpression ->
+                    operationReference.takeUnless { operationToken in KtTokens.ALL_ASSIGNMENTS }
+                is KtBinaryExpressionWithTypeRHS -> operationReference
+                is KtIsExpression -> operationReference
+                else -> null
+            }?.getReferencedNameElementType()
+        }
+
+        /**
+         * Returns either the parent of this [KtExpression] or its first parent expression which is not a
+         * [KtParenthesizedExpression].
+         */
+        private fun KtExpression.firstNonParenParent(): PsiElement? {
+            return generateSequence(parent) { (it as? KtParenthesizedExpression)?.parent }
+                .firstOrNull { it !is KtParenthesizedExpression }
+        }
+
+        /**
+         * Determines whether this is a binary expression whose operation precedence is unclear with the parent binary
+         * operation per [childToUnclearPrecedenceParentsMapping].
+         */
+        private fun KtExpression.isBinaryOperationPrecedenceUnclearWithParent(): Boolean {
+            val innerOp = binaryOp() ?: return false
+            val outerOp = firstNonParenParent()?.binaryOp() ?: return false
+
+            return childToUnclearPrecedenceParentsMapping[innerOp]?.contains(outerOp) == true
         }
     }
 }
