@@ -50,8 +50,8 @@ class UnnecessarySafeCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             """
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(2)
-            assertThat(findings).hasTextLocations(48 to 59, 48 to 70)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasTextLocations(48 to 59)
         }
     }
 

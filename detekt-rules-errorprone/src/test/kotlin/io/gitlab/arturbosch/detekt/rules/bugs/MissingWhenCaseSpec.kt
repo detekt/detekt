@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
@@ -33,7 +34,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                     }
                 }
                 """
-                val actual = subject.compileAndLintWithContext(env, code)
+                val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
                 assertThat(actual.first().message).isEqualTo(
@@ -57,7 +58,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                     }
                 }
                 """
-                val actual = subject.compileAndLintWithContext(env, code)
+                val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
                 assertThat(actual.first().message).isEqualTo(
@@ -82,7 +83,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                     }
                 }
                 """
-                val actual = subject.compileAndLintWithContext(env, code)
+                val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
                 assertThat(actual.first().message).isEqualTo(
@@ -157,7 +158,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                         }
                     }
                 """
-                val actual = subject.compileAndLintWithContext(env, code)
+                val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
                 assertThat(actual.first().message).isEqualTo(
@@ -182,7 +183,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                         }
                     }
                 """
-                val actual = subject.compileAndLintWithContext(env, code)
+                val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
                 assertThat(actual.first().message).isEqualTo(
@@ -206,7 +207,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                         }
                     }
                 """
-                val actual = subject.compileAndLintWithContext(env, code)
+                val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
                 assertThat(actual.first().message).isEqualTo(
