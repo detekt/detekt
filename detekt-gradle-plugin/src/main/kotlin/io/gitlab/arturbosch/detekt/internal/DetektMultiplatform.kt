@@ -116,7 +116,8 @@ internal class DetektMultiplatform(private val project: Project) {
         }
 
         registerCreateBaselineTask(
-            DetektPlugin.BASELINE_TASK_NAME + taskSuffix, extension
+            DetektPlugin.BASELINE_TASK_NAME + taskSuffix,
+            extension
         ) {
             setSource(inputSource)
             if (runWithTypeResolution) {

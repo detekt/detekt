@@ -83,7 +83,9 @@ class ForbiddenImportSpec {
     }
 
     @Test
-    @DisplayName("should report kotlin.SinceKotlin and kotlin.jvm.JvmField when specified via fully qualified names list")
+    @DisplayName(
+        "should report kotlin.SinceKotlin and kotlin.jvm.JvmField when specified via fully qualified names list"
+    )
     fun reportMultipleConfiguredImportsInList() {
         val findings =
             ForbiddenImport(

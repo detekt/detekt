@@ -71,7 +71,9 @@ class FunctionOnlyReturningConstantSpec {
         }
 
         @Test
-        @DisplayName("does not report excluded annotated function which returns a constant when given \"kotlin.SinceKotlin\"")
+        @DisplayName(
+            "does not report excluded annotated function which returns a constant when given \"kotlin.SinceKotlin\""
+        )
         fun ignoreAnnotatedFunctionWhichReturnsConstantWhenGivenKotlinSinceKotlin() {
             val config = TestConfig(mapOf(EXCLUDE_ANNOTATED_FUNCTION to "kotlin.SinceKotlin"))
             val rule = FunctionOnlyReturningConstant(config)
@@ -79,7 +81,9 @@ class FunctionOnlyReturningConstantSpec {
         }
 
         @Test
-        @DisplayName("does not report excluded annotated function which returns a constant when given listOf(\"kotlin.SinceKotlin\")")
+        @DisplayName(
+            "does not report excluded annotated function which returns a constant when given listOf(\"kotlin.SinceKotlin\")"
+        )
         fun ignoreAnnotatedFunctionWhichReturnsConstantWhenGivenListOfKotlinSinceKotlin() {
             val config = TestConfig(mapOf(EXCLUDE_ANNOTATED_FUNCTION to listOf("kotlin.SinceKotlin")))
             val rule = FunctionOnlyReturningConstant(config)
