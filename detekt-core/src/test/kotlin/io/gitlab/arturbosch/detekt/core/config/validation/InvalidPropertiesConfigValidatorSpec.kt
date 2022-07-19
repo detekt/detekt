@@ -126,9 +126,7 @@ internal class InvalidPropertiesConfigValidatorSpec {
             val result = CompositeConfig(
                 yamlConfig("config_validation/other-nested-property-names.yml"),
                 yamlConfig("config_validation/no-nested-config.yml")
-            ).validate(
-                baseline, emptySet()
-            )
+            ).validate(baseline, emptySet())
 
             assertThat(result).contains(
                 nestedConfigurationExpected("complexity"),
