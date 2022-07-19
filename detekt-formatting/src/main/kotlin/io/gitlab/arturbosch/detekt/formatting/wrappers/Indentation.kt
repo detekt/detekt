@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
 import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties
-import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
 import com.pinterest.ktlint.ruleset.standard.IndentationRule
 import io.gitlab.arturbosch.detekt.api.Config
@@ -31,7 +30,6 @@ class Indentation(config: Config) : FormattingRule(config) {
     @Suppress("UnusedPrivateMember")
     private val continuationIndentSize by config(4)
 
-    @OptIn(FeatureInAlphaState::class)
     override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
         mapOf(
             DefaultEditorConfigProperties.indentSizeProperty to indentSize.toString(),
