@@ -1,5 +1,3 @@
-import java.io.ByteArrayOutputStream
-
 plugins {
     id("module")
 }
@@ -68,16 +66,13 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
 }
 
 val verifyGeneratorOutput by tasks.registering(Exec::class) {
-    notCompatibleWithConfigurationCache("cannot serialize object of type java.io.ByteArrayOutputStream")
     dependsOn(generateDocumentation)
     description = "Verifies that the default-detekt-config.yml is up-to-date"
-    val configDiff = ByteArrayOutputStream()
-
-    commandLine = listOf("git", "diff", defaultConfigFile, deprecationFile)
-    standardOutput = configDiff
+    commandLine = listOf("git", "diff", "--quiet", defaultConfigFile, deprecationFile)
+    isIgnoreExitValue = true
 
     doLast {
-        if (configDiff.toString().isNotEmpty()) {
+        if (executionResult.get().exitValue == 1) {
             throw GradleException(
                 "The default-detekt-config.yml is not up-to-date. " +
                     "You can execute the generateDocumentation Gradle task " +
