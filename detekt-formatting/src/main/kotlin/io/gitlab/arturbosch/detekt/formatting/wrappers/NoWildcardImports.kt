@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
-import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
 import com.pinterest.ktlint.ruleset.standard.NoWildcardImportsRule
 import io.gitlab.arturbosch.detekt.api.Config
@@ -21,7 +20,6 @@ class NoWildcardImports(config: Config) : FormattingRule(config) {
     @Configuration("Defines allowed wildcard imports")
     private val packagesToUseImportOnDemandProperty by config(ALLOWED_WILDCARD_IMPORTS)
 
-    @OptIn(FeatureInAlphaState::class)
     override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
         mapOf(
             NoWildcardImportsRule.packagesToUseImportOnDemandProperty to packagesToUseImportOnDemandProperty
