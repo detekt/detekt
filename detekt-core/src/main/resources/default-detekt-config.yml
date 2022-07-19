@@ -643,6 +643,8 @@ style:
     excludeGuardClauses: false
   TrailingWhitespace:
     active: false
+  TrimMultilineRawString:
+    active: false
   UnderscoresInNumericLiterals:
     active: false
     acceptableLength: 4
@@ -665,6 +667,7 @@ style:
     active: false
   UnnecessaryParentheses:
     active: false
+    allowForUnclearPrecedence: false
   UntilInsteadOfRangeTo:
     active: false
   UnusedImports:

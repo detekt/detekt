@@ -86,7 +86,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                 }
             }
             """
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -148,7 +148,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     }
                 }
             """
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 

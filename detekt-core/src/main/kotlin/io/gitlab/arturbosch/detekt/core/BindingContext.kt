@@ -33,6 +33,7 @@ internal fun generateBindingContext(
     val analyzer = AnalyzerWithCompilerReport(
         messageCollector,
         environment.configuration.languageVersionSettings,
+        false,
     )
     analyzer.analyzeAndReport(files) {
         TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(

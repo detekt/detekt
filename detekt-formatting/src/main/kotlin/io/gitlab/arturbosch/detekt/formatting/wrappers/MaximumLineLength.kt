@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
 import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties
-import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
 import com.pinterest.ktlint.ruleset.standard.MaxLineLengthRule
 import io.gitlab.arturbosch.detekt.api.Config
@@ -19,7 +18,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * auto-correct the issue.
  */
 @ActiveByDefault(since = "1.0.0")
-@OptIn(FeatureInAlphaState::class)
 class MaximumLineLength(config: Config) : FormattingRule(config) {
 
     override val wrapping = MaxLineLengthRule()

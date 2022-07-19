@@ -41,7 +41,9 @@ class PathMatchersSpec {
         fun `should work as a regex path matcher when syntax not specified`() {
             assertThatThrownBy { pathMatcher("regex:.*/detekt/api/.*") }
                 .isInstanceOf(IllegalArgumentException::class.java)
-                .hasMessage("Only globbing patterns are supported as they are treated os-independently by the PathMatcher api.")
+                .hasMessage(
+                    "Only globbing patterns are supported as they are treated os-independently by the PathMatcher api."
+                )
         }
     }
 }

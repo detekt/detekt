@@ -24,6 +24,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.ModifierListSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ModifierOrdering
 import io.gitlab.arturbosch.detekt.formatting.wrappers.MultiLineIfElse
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoBlankLineBeforeRbrace
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoBlankLinesInChainedMethodCalls
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoConsecutiveBlankLines
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyClassBody
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyFirstLineInMethodBlock
@@ -77,6 +78,7 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         MaximumLineLength(config),
         ModifierOrdering(config),
         NoBlankLineBeforeRbrace(config),
+        NoBlankLinesInChainedMethodCalls(config),
         NoConsecutiveBlankLines(config),
         NoEmptyClassBody(config),
         NoLineBreakAfterElse(config),

@@ -59,6 +59,10 @@ val functionalTestImplementation: Configuration by configurations.getting
 
 configurations.compileOnly { extendsFrom(pluginCompileOnly) }
 
+pluginCompileOnly.attributes {
+    attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category::class.java, "library"))
+}
+
 dependencies {
     compileOnly(libs.kotlin.gradlePluginApi)
     implementation(libs.sarif4k)

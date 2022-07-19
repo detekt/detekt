@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
-import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
 import com.pinterest.ktlint.ruleset.standard.ImportOrderingRule
 import io.gitlab.arturbosch.detekt.api.Config
@@ -25,7 +24,6 @@ class ImportOrdering(config: Config) : FormattingRule(config) {
     @Configuration("the import ordering layout")
     private val layout: String by configWithAndroidVariants(IDEA_PATTERN, ASCII_PATTERN)
 
-    @OptIn(FeatureInAlphaState::class)
     override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
         mapOf(ImportOrderingRule.ideaImportsLayoutProperty to layout)
 
