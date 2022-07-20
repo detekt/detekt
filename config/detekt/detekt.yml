@@ -183,8 +183,10 @@ style:
   ForbiddenImport:
     active: true
     imports:
-      - 'org.assertj.core.api.Assertions'
-      - 'org.junit.jupiter.api.Assertions*'
+      - value: 'org.assertj.core.api.Assertions'
+        reason: 'Import Assertions.assertThat instead.'
+      - value: 'org.junit.jupiter.api.Assertions*'
+        reason: 'Use AssertJ assertions instead.'
   ForbiddenMethodCall:
     active: true
     methods:
@@ -193,6 +195,7 @@ style:
       - 'java.net.URL.openStream'
       - 'java.lang.Class.getResourceAsStream'
       - 'java.lang.ClassLoader.getResourceAsStream'
+      - 'org.jetbrains.kotlin.diagnostics.DiagnosticUtils.getLineAndColumnInPsiFile'
   ForbiddenVoid:
     active: true
   LibraryCodeMustSpecifyReturnType:

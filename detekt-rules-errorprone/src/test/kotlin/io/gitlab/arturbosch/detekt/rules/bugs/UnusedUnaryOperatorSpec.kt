@@ -122,4 +122,20 @@ class UnusedUnaryOperatorSpec(private val env: KotlinCoreEnvironment) {
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
+
+    @Test
+    fun `var assignment by if expression`() {
+        val code = """
+            fun test(b: Boolean) {
+                var x = 0
+                x = if (b) {
+                    -1
+                } else {
+                    1
+                }
+            }
+        """
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
 }

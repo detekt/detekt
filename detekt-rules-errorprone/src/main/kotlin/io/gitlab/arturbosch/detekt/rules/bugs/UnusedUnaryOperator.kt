@@ -17,8 +17,8 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
-import org.jetbrains.kotlin.psi.psiUtil.getTopmostParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.leaves
+import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
@@ -62,7 +62,7 @@ class UnusedUnaryOperator(config: Config = Config.empty) : Rule(config) {
             .none { it is PsiWhiteSpace && it.textContains('\n') }
         ) return
 
-        val parentOrSelf = (expression.getTopmostParentOfType<KtBinaryExpression>() ?: expression) as KtExpression
+        val parentOrSelf = expression.parentBinaryExpressionOrThis()
         if (parentOrSelf.isUsedAsExpression(bindingContext)) return
 
         val operatorDescriptor = expression.operationReference.getResolvedCall(bindingContext)
@@ -71,5 +71,9 @@ class UnusedUnaryOperator(config: Config = Config.empty) : Rule(config) {
 
         val message = "This '${parentOrSelf.text}' is not used"
         report(CodeSmell(issue, Entity.from(expression), message))
+    }
+
+    private fun KtExpression.parentBinaryExpressionOrThis(): KtExpression {
+        return parents.takeWhile { it is KtBinaryExpression }.lastOrNull() as? KtBinaryExpression ?: this
     }
 }
