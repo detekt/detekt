@@ -121,7 +121,7 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
                 val message = if (forbidden.reason != null) {
                     "The method `${forbidden.value}` has been forbidden: ${forbidden.reason}"
                 } else {
-                    "The method `${forbidden.value}` has been forbidden in the Detekt config."
+                    "The method `${forbidden.value}` has been forbidden in the detekt config."
                 }
                 report(CodeSmell(issue, Entity.from(expression), message))
             }

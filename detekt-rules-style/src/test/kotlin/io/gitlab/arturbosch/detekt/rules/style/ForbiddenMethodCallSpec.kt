@@ -192,7 +192,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         assertThat(findings).hasSize(1)
         assertThat(findings).hasSourceLocation(5, 26)
         assertThat(findings[0])
-            .hasMessage("The method `java.time.LocalDate.now()` has been forbidden in the Detekt config.")
+            .hasMessage("The method `java.time.LocalDate.now()` has been forbidden in the detekt config.")
     }
 
     @Test
