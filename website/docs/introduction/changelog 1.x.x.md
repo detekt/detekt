@@ -28,7 +28,7 @@ us release this new version of Detekt. You're more than welcome to join our comm
   - `MaxChainedCallsOnSameLine` - [#4985](https://github.com/detekt/detekt/pull/4985)
   - `CascadingCallWrapping` - [#4979](https://github.com/detekt/detekt/pull/4979)
 - We added support for Markdown reports - [#4858](https://github.com/detekt/detekt/pull/4858)
-- We now allow users and rule authors to specify a **reason** for every value in the config file - [#4611](https://github.com/detekt/detekt/pull/4611)
+- We now allow users and rule authors to specify a **reason** for every value in the config file - [#4611](https://github.com/detekt/detekt/pull/4611) Please note that this feature requires a rule to be extended to support it. If you're a rule author you can start using it right away in your rule. We're looking into using this feature in some first party rule starting from Detekt `1.22.0`.
 - We now report as warnings the Strings in the config file that can be converted to be an array - [#4793](https://github.com/detekt/detekt/pull/4793)
 - We added a dependency on **ConTester** to help us verify concurrency scenarios for Detekt - [#4672](https://github.com/detekt/detekt/pull/4672)
 - For contributors: we restructured our build setup to be use **Gradle composite build** - [#4751](https://github.com/detekt/detekt/pull/4751)
