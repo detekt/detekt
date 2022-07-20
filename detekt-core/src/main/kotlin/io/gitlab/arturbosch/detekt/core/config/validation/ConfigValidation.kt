@@ -82,9 +82,10 @@ private fun validateYamlConfig(
     baseline: YamlConfig,
     excludePatterns: Set<Regex>
 ): List<Notification> {
+    val deprecatedProperties = loadDeprecations()
     val validators: List<ConfigValidator> = listOf(
-        InvalidPropertiesConfigValidator(baseline, excludePatterns),
-        DeprecatedPropertiesConfigValidator(),
+        InvalidPropertiesConfigValidator(baseline, deprecatedProperties.keys, excludePatterns),
+        DeprecatedPropertiesConfigValidator(deprecatedProperties),
         MissingRulesConfigValidator(baseline, excludePatterns)
     )
 

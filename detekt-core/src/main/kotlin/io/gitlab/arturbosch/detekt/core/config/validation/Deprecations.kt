@@ -3,9 +3,7 @@ package io.gitlab.arturbosch.detekt.core.config.validation
 import io.github.detekt.utils.openSafeStream
 import java.util.Properties
 
-internal val deprecatedProperties: Map<String, String> by lazy(::loadDeprecations)
-
-private fun loadDeprecations(): Map<String, String> {
+internal fun loadDeprecations(): Map<String, String> {
     return ValidationSettings::class.java.classLoader
         .getResource("deprecation.properties")!!
         .openSafeStream()

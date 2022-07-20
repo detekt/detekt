@@ -4,7 +4,9 @@ import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 
-internal class DeprecatedPropertiesConfigValidator : AbstractYamlConfigValidator() {
+internal class DeprecatedPropertiesConfigValidator(
+    private val deprecatedProperties: Map<String, String>,
+) : AbstractYamlConfigValidator() {
     override fun validate(
         configToValidate: YamlConfig,
         settings: ValidationSettings

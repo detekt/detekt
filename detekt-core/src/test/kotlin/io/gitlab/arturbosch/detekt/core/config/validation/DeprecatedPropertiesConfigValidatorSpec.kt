@@ -7,8 +7,10 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
 internal class DeprecatedPropertiesConfigValidatorSpec {
+    private val deprecatedProperties =
+        mapOf("naming>FunctionParameterNaming>ignoreOverriddenFunctions" to "Use `ignoreOverridden` instead")
 
-    private val subject = DeprecatedPropertiesConfigValidator()
+    private val subject = DeprecatedPropertiesConfigValidator(deprecatedProperties)
 
     @ParameterizedTest
     @ValueSource(booleans = [true, false])
