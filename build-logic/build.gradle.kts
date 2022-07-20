@@ -1,5 +1,6 @@
 plugins {
     `kotlin-dsl`
+    `java-gradle-plugin`
 }
 
 repositories {
@@ -12,4 +13,13 @@ dependencies {
     implementation(libs.githubRelease.gradle)
     implementation(libs.semver4j.gradle)
     implementation(libs.nexusStaging.gradle)
+}
+
+gradlePlugin {
+    plugins {
+        create("injectedPlugin") {
+            id = "io.github.com.detekt.injected"
+            implementationClass = "InstrumentedJarsPlugin"
+        }
+    }
 }

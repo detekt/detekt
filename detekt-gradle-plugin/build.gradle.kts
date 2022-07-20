@@ -1,5 +1,6 @@
 plugins {
     id("module")
+    id("io.github.com.detekt.injected")
     `java-gradle-plugin`
     `java-test-fixtures`
     idea
@@ -195,10 +196,14 @@ tasks.withType<Test>().configureEach {
     }
 }
 
-val smokeTest by configurations.creating
+val smokeTest by configurations.creating {
+    attributes {
+        attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category::class.java, "library"))
+    }
+}
 
 dependencies {
-    smokeTest("io.gitlab.arturbosch.detekt:detekt-cli")
+    smokeTest("io.gitlab.arturbosch.detekt:detekt-cli:1.21.0")
 }
 
 tasks.register<Copy>("special") {
@@ -211,5 +216,33 @@ tasks.register<Copy>("special") {
 
     doLast {
         logger.error(smokeTest.files.joinToString("\n") { it.absolutePath })
+    }
+}
+
+val javaComponent = components.findByName("myAdhocComponent") as AdhocComponentWithVariants
+javaComponent.addVariantsFromConfiguration(smokeTest) {
+    // dependencies for this variant are considered runtime dependencies
+    mapToMavenScope("runtime")
+    // and also optional dependencies, because we don't want them to leak
+    mapToOptional()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("local") {
+            from(javaComponent)
+            versionMapping {
+                usage("java-runtime") {
+                    fromResolutionResult()
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "installLocally"
+            url = uri("${rootProject.buildDir}/localMaven")
+        }
     }
 }
