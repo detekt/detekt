@@ -194,3 +194,22 @@ tasks.withType<Test>().configureEach {
         }
     }
 }
+
+val smokeTest by configurations.creating
+
+dependencies {
+    smokeTest("io.gitlab.arturbosch.detekt:detekt-cli")
+}
+
+tasks.register<Copy>("special") {
+    notCompatibleWithConfigurationCache("")
+    from(smokeTest)
+    into(layout.buildDirectory.dir("repo/implementation"))
+    doFirst {
+        delete(layout.buildDirectory.dir("repo/implementation"))
+    }
+
+    doLast {
+        logger.error(smokeTest.files.joinToString("\n") { it.absolutePath })
+    }
+}

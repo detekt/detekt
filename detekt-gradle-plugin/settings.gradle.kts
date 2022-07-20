@@ -2,6 +2,8 @@ pluginManagement {
     includeBuild("../build-logic")
 }
 
+includeBuild("..")
+
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {

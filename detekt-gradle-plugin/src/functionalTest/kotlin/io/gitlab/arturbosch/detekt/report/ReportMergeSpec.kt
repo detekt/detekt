@@ -134,9 +134,14 @@ class ReportMergeSpec {
             |
             |allprojects {
             |    repositories {
-            |        mavenCentral()
-            |        google()
-            |        mavenLocal()
+            |        mavenCentral {
+            |            content {
+            |                excludeGroup("io.gitlab.arturbosch.detekt")
+            |            }
+            |        }
+            |        flatDir {
+            |            dirs("C:\\Users\\snafu\\IdeaProjects\\detekt\\detekt-gradle-plugin\\build\\repo\\implementation")
+            |        }
             |    }
             |}
             |

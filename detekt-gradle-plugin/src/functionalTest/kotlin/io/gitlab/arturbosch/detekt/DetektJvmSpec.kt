@@ -19,8 +19,14 @@ class DetektJvmSpec {
                     id("io.gitlab.arturbosch.detekt")
                 }
                 repositories {
-                    mavenCentral()
-                    mavenLocal()
+                    mavenCentral {
+                        content {
+                            excludeGroup("io.gitlab.arturbosch.detekt")
+                        }
+                    }
+                    flatDir {
+                        dirs("C:\\Users\\snafu\\IdeaProjects\\detekt\\detekt-gradle-plugin\\build\\repo\\implementation")
+                    }
                 }
                 detekt {
                     reports {
@@ -58,8 +64,14 @@ class DetektJvmSpec {
                     id("io.gitlab.arturbosch.detekt")
                 }
                 repositories {
-                    mavenCentral()
-                    mavenLocal()
+                    mavenCentral {
+                        content {
+                            excludeGroup("io.gitlab.arturbosch.detekt")
+                        }
+                    }
+                    flatDir {
+                        dirs("C:\\Users\\snafu\\IdeaProjects\\detekt\\detekt-gradle-plugin\\build\\repo\\implementation")
+                    }
                 }
                 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                     reports {
