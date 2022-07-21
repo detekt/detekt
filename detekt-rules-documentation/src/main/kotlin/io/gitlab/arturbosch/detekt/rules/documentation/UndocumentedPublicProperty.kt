@@ -33,7 +33,7 @@ class UndocumentedPublicProperty(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    @Configuration("if protected function should be searched")
+    @Configuration("if protected functions should be searched")
     private val searchProtectedProperty: Boolean by config(false)
 
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
