@@ -44,7 +44,7 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
     @Configuration("if inner interfaces should be searched")
     private val searchInInnerInterface: Boolean by config(true)
 
-    @Configuration("if protected class should be searched")
+    @Configuration("if protected classes should be searched")
     private val searchInProtectedClass: Boolean by config(false)
 
     override fun visitClass(klass: KtClass) {
