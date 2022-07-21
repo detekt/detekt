@@ -18,29 +18,8 @@ internal class AbstractYamlConfigValidatorSpec {
 
         validator.validate(config)
 
-        val expectedDefaultSettings = ValidationSettings(
-            warningsAsErrors = false,
-            checkExhaustiveness = false,
-            excludePatterns
-        )
-        assertThat(validator.validationSettings).isEqualTo(expectedDefaultSettings)
-    }
-
-    @ParameterizedTest
-    @ValueSource(booleans = [true, false])
-    fun `extract warningsAsErrors settings from config`(configValue: Boolean) {
-        val excludePatterns = emptySet<Regex>()
-        val config = yamlConfigFromContent(
-            """
-                config:
-                  warningsAsErrors: $configValue
-            """.trimIndent()
-        )
-        val validator = SettingsCapturingValidatorAbstract(excludePatterns)
-
-        validator.validate(config)
-
-        assertThat(validator.validationSettings.warningsAsErrors).isEqualTo(configValue)
+        assertThat(validator.validationSettings.checkExhaustiveness).isFalse()
+        assertThat(validator.excludePatterns).isEqualTo(excludePatterns)
     }
 
     @ParameterizedTest

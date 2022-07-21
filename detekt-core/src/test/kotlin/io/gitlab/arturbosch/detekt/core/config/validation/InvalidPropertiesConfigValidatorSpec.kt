@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.core.config.validation
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.internal.CommaSeparatedPattern
 import io.gitlab.arturbosch.detekt.core.config.CompositeConfig
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import io.gitlab.arturbosch.detekt.core.config.validation.InvalidPropertiesConfigValidator.Companion.nestedConfigurationExpected
 import io.gitlab.arturbosch.detekt.core.config.validation.InvalidPropertiesConfigValidator.Companion.propertyDoesNotExists
-import io.gitlab.arturbosch.detekt.core.config.validation.InvalidPropertiesConfigValidator.Companion.propertyShouldBeAnArray
 import io.gitlab.arturbosch.detekt.core.config.validation.InvalidPropertiesConfigValidator.Companion.unexpectedNestedConfiguration
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
@@ -14,8 +14,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
 
 internal class InvalidPropertiesConfigValidatorSpec {
     private val deprecatedProperties = setOf<String>("complexity>LongParameterList>threshold")
@@ -85,13 +83,10 @@ internal class InvalidPropertiesConfigValidatorSpec {
         assertThat(result).isEmpty()
     }
 
-    @ParameterizedTest
-    @ValueSource(booleans = [true, false])
-    fun `reports a string that should be an array as a warning`(warningsAsErrors: Boolean) {
+    @Test
+    fun `reports a string that should be an array as a warning`() {
         val config = yamlConfigFromContent(
             """
-                config:
-                  warningsAsErrors: $warningsAsErrors
                 style:
                   MagicNumber:
                     ignoreNumbers: '-1,0,1,2'
@@ -100,12 +95,12 @@ internal class InvalidPropertiesConfigValidatorSpec {
 
         val result = subject.validate(config)
 
-        assertThat(result).contains(
-            propertyShouldBeAnArray(
-                "style>MagicNumber>ignoreNumbers",
-                reportAsError = warningsAsErrors
-            )
-        )
+        assertThat(result).anySatisfy { notification ->
+            assertThat(notification.message)
+                .contains("style>MagicNumber>ignoreNumbers")
+                .contains("should be a YAML array instead of a comma-separated String")
+            assertThat(notification.level).isEqualTo(Notification.Level.Warning)
+        }
     }
 
     @Nested

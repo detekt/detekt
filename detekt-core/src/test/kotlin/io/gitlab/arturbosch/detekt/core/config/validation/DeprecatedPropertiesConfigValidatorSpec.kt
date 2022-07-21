@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.core.config.validation
 
+import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
+import org.junit.jupiter.api.Test
 
 internal class DeprecatedPropertiesConfigValidatorSpec {
     private val deprecatedProperties =
@@ -12,10 +12,9 @@ internal class DeprecatedPropertiesConfigValidatorSpec {
 
     private val subject = DeprecatedPropertiesConfigValidator(deprecatedProperties)
 
-    @ParameterizedTest
-    @ValueSource(booleans = [true, false])
-    fun `reports a deprecated property as a warning or error`(warningsAsErrors: Boolean) {
-        val settings = ValidationSettings(warningsAsErrors = warningsAsErrors)
+    @Test
+    fun `reports a deprecated property as a warning`() {
+        val settings = ValidationSettings()
         val config = yamlConfigFromContent(
             """
                 naming:
@@ -26,10 +25,12 @@ internal class DeprecatedPropertiesConfigValidatorSpec {
 
         val result = subject.validate(config, settings)
 
-        assertThat(result).hasSize(1)
-        val notification = result.first()
-        assertThat(notification.isError).isEqualTo(warningsAsErrors)
-        assertThat(notification.message).contains("naming>FunctionParameterNaming>ignoreOverriddenFunctions")
-        assertThat(notification.message).contains("Use `ignoreOverridden` instead")
+        assertThat(result).anySatisfy { notification ->
+            assertThat(notification.level)
+                .isEqualTo(Notification.Level.Warning)
+            assertThat(notification.message)
+                .contains("naming>FunctionParameterNaming>ignoreOverriddenFunctions")
+                .contains("Use `ignoreOverridden` instead")
+        }
     }
 }

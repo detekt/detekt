@@ -15,7 +15,7 @@ internal class DeprecatedPropertiesConfigValidator(
         return deprecatedProperties
             .map { (path, description) -> path.split(">") to description }
             .filter { (path, _) -> configAsMap.hasValue(path) }
-            .map { (path, description) -> createNotification(path, description, settings.warningsAsErrors) }
+            .map { (path, description) -> createNotification(path, description) }
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -34,12 +34,11 @@ internal class DeprecatedPropertiesConfigValidator(
     private fun createNotification(
         propertyPath: List<String>,
         deprecationDescription: String,
-        reportAsError: Boolean,
     ): Notification {
         val prop = propertyPath.joinToString(">")
         return SimpleNotification(
             "Property '$prop' is deprecated. $deprecationDescription.",
-            if (reportAsError) Notification.Level.Error else Notification.Level.Warning,
+            Notification.Level.Warning,
         )
     }
 }

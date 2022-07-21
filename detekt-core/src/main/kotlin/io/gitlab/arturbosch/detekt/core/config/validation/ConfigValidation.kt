@@ -4,6 +4,8 @@ import io.github.detekt.tooling.api.InvalidConfig
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConfigValidator
 import io.gitlab.arturbosch.detekt.api.Notification
+import io.gitlab.arturbosch.detekt.api.Notification.Level
+import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.core.NL
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
@@ -83,18 +85,34 @@ private fun validateYamlConfig(
     excludePatterns: Set<Regex>
 ): List<Notification> {
     val deprecatedProperties = loadDeprecations()
+    val warningsAsErrors = configToValidate
+        .subConfig("config")
+        .valueOrDefault("warningsAsErrors", false)
+
     val validators: List<ConfigValidator> = listOf(
         InvalidPropertiesConfigValidator(baseline, deprecatedProperties.keys, excludePatterns),
         DeprecatedPropertiesConfigValidator(deprecatedProperties),
         MissingRulesConfigValidator(baseline, excludePatterns)
     )
 
-    return validators.flatMap { it.validate(configToValidate) }
+    return validators
+        .flatMap { it.validate(configToValidate) }
+        .map { notification ->
+            notification.transformIf(warningsAsErrors && notification.level == Level.Warning) {
+                SimpleNotification(
+                    message = notification.message,
+                    level = Level.Error
+                )
+            }
+        }
 }
+
+private fun <T> T.transformIf(condition: Boolean, transform: () -> T): T =
+    if (condition) transform() else this
 
 internal fun Notification.renderMessage(): String =
     when (level) {
-        Notification.Level.Error -> message.red()
-        Notification.Level.Warning -> message.yellow()
-        Notification.Level.Info -> message
+        Level.Error -> message.red()
+        Level.Warning -> message.yellow()
+        Level.Info -> message
     }

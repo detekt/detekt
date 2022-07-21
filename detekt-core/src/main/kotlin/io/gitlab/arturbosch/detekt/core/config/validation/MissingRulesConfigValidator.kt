@@ -20,68 +20,55 @@ internal class MissingRulesConfigValidator(
         if (!settings.checkExhaustiveness) {
             return emptyList()
         }
-        return defaultRuleSetNames.flatMap { ruleSet -> validateRuleSet(ruleSet, configToValidate, settings) }
+        return defaultRuleSetNames.flatMap { ruleSet -> validateRuleSet(ruleSet, configToValidate) }
     }
 
-    @Suppress("UNCHECKED_CAST")
     private fun validateRuleSet(
         ruleSet: String,
         configToValidate: YamlConfig,
-        settings: ValidationSettings
     ): List<Notification> {
-        val configPropertiesToValidate = configToValidate.properties
-        val ruleSetConfigToValidate = configPropertiesToValidate[ruleSet] as? Map<String, Any>
-        val ruleSetConfigFromBaseline = baseline.properties[ruleSet] as? Map<String, Any>
+        val ruleSetConfigToValidate = configToValidate.getSubMapOrNull(ruleSet)
+        val ruleSetConfigFromBaseline = baseline.getSubMapOrNull(ruleSet)
         return when {
             ruleSetConfigFromBaseline == null -> emptyList()
-            ruleSetConfigToValidate == null -> listOf(ruleSetMissing(ruleSet, settings))
-            else -> checkForMissingRules(ruleSet, ruleSetConfigToValidate, ruleSetConfigFromBaseline, settings)
+            ruleSetConfigToValidate == null -> listOf(ruleSetMissing(ruleSet))
+            else -> checkForMissingRules(ruleSet, ruleSetConfigToValidate, ruleSetConfigFromBaseline)
         }
     }
 
     private fun checkForMissingRules(
         ruleSetName: String,
         ruleSetConfigToValidate: Map<String, Any>,
-        ruleSetConfigFromBaseline: Map<String, Any>?,
-        settings: ValidationSettings
+        ruleSetConfigFromBaseline: Map<String, Any>,
     ): List<Notification> {
-        if (ruleSetConfigFromBaseline == null) {
-            return emptyList()
-        }
         if (ruleSetConfigToValidate[Config.ACTIVE_KEY] == false) {
             return emptyList()
         }
 
         return ruleSetConfigFromBaseline.keys
-            .filter { ruleNameCandidate ->
-                settings.excludePatterns.none { it.matches("$ruleSetName>$ruleNameCandidate") }
-            }
+            .filter { ruleNameCandidate -> excludePatterns.none { it.matches("$ruleSetName>$ruleNameCandidate") } }
             .filter { ruleName -> !ruleSetConfigToValidate.containsKey(ruleName) }
-            .map { ruleName -> ruleMissing(ruleName, ruleSetName, settings) }
+            .map { ruleName -> ruleMissing(ruleName, ruleSetName) }
     }
 
-    private fun ruleMissing(
-        ruleName: String,
-        ruleSetName: String,
-        settings: ValidationSettings,
-    ): Notification =
+    private fun ruleMissing(ruleName: String, ruleSetName: String): Notification =
         SimpleNotification(
             "Rule '$ruleName' from the '$ruleSetName' rule set is missing in the configuration.",
-            if (settings.warningsAsErrors) Notification.Level.Error else Notification.Level.Warning,
+            Notification.Level.Warning,
         )
 
-    private fun ruleSetMissing(
-        ruleSetName: String,
-        settings: ValidationSettings,
-    ): Notification =
+    private fun ruleSetMissing(ruleSetName: String): Notification =
         SimpleNotification(
             "Rule set '$ruleSetName' is missing in the configuration.",
-            if (settings.warningsAsErrors) Notification.Level.Error else Notification.Level.Warning,
+            Notification.Level.Warning,
         )
 
-    companion object {
-        private val defaultRuleSetNames: List<String> by lazy(Companion::loadDefaultRuleSets)
+    @Suppress("UNCHECKED_CAST")
+    private fun YamlConfig.getSubMapOrNull(propertyName: String) = properties[propertyName] as? Map<String, Any>
 
+    companion object {
+
+        private val defaultRuleSetNames: List<String> by lazy(Companion::loadDefaultRuleSets)
         private fun loadDefaultRuleSets(): List<String> {
             return ServiceLoader.load(
                 RuleSetProvider::class.java,

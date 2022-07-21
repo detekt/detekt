@@ -14,19 +14,18 @@ internal class InvalidPropertiesConfigValidator(
         configToValidate: YamlConfig,
         settings: ValidationSettings
     ): Collection<Notification> {
-        return testKeys(configToValidate.properties, baseline.properties, null, settings)
+        return testKeys(configToValidate.properties, baseline.properties)
     }
 
     private fun testKeys(
         configToValidate: Map<String, Any>,
         baseline: Map<String, Any>,
-        parentPath: String?,
-        settings: ValidationSettings
+        parentPath: String? = null
     ): List<Notification> {
         val notifications = mutableListOf<Notification>()
         for (prop in configToValidate.keys) {
             val propertyPath = "${if (parentPath == null) "" else "$parentPath>"}$prop"
-            val isExcluded = settings.excludePatterns.any { it.matches(propertyPath) }
+            val isExcluded = excludePatterns.any { it.matches(propertyPath) }
             val isDeprecated = deprecatedProperties.contains(propertyPath)
             if (isExcluded || isDeprecated) {
                 continue
@@ -36,8 +35,7 @@ internal class InvalidPropertiesConfigValidator(
                     propertyName = prop,
                     propertyPath = propertyPath,
                     configToValidate = configToValidate,
-                    baseline = baseline,
-                    settings = settings
+                    baseline = baseline
                 )
             )
         }
@@ -49,14 +47,13 @@ internal class InvalidPropertiesConfigValidator(
         propertyName: String,
         propertyPath: String,
         configToValidate: Map<String, Any>,
-        baseline: Map<String, Any>,
-        settings: ValidationSettings
+        baseline: Map<String, Any>
     ): List<Notification> {
         if (!baseline.contains(propertyName)) {
             return listOf(propertyDoesNotExists(propertyPath))
         }
         if (configToValidate[propertyName] is String && baseline[propertyName] is List<*>) {
-            return listOf(propertyShouldBeAnArray(propertyPath, settings.warningsAsErrors))
+            return listOf(propertyShouldBeAnArray(propertyPath))
         }
 
         val next = configToValidate[propertyName] as? Map<String, Any>
@@ -67,7 +64,7 @@ internal class InvalidPropertiesConfigValidator(
             baseline.contains(propertyName) && next != null && nextBase == null ->
                 listOf(unexpectedNestedConfiguration(propertyPath))
             next != null && nextBase != null ->
-                testKeys(next, nextBase, propertyPath, settings)
+                testKeys(next, nextBase, propertyPath)
             else -> emptyList()
         }
     }
@@ -83,13 +80,10 @@ internal class InvalidPropertiesConfigValidator(
         internal fun unexpectedNestedConfiguration(prop: String): Notification =
             SimpleNotification("Unexpected nested config for '$prop'.")
 
-        internal fun propertyShouldBeAnArray(
-            prop: String,
-            reportAsError: Boolean,
-        ): Notification =
+        internal fun propertyShouldBeAnArray(prop: String): Notification =
             SimpleNotification(
                 "Property '$prop' should be a YAML array instead of a comma-separated String.",
-                if (reportAsError) Notification.Level.Error else Notification.Level.Warning,
+                Notification.Level.Warning,
             )
     }
 }

@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 
 internal abstract class AbstractYamlConfigValidator(
-    private val excludePatterns: Set<Regex> = emptySet(),
+    val excludePatterns: Set<Regex> = emptySet(),
 ) : ConfigValidator {
 
     override fun validate(config: Config): Collection<Notification> {
@@ -17,9 +17,7 @@ internal abstract class AbstractYamlConfigValidator(
             "Only supported config is the $yamlConfigClass. Actual type is $actualClass"
         }
         val settings = ValidationSettings(
-            warningsAsErrors = config.subConfig("config").valueOrDefault("warningsAsErrors", false),
-            checkExhaustiveness = config.subConfig("config").valueOrDefault("checkExhaustiveness", false),
-            excludePatterns = excludePatterns,
+            config.subConfig("config").valueOrDefault("checkExhaustiveness", false),
         )
 
         return validate(config, settings)
