@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("module")
     id("io.github.com.detekt.injected")
@@ -202,6 +204,18 @@ val smokeTest by configurations.creating {
     }
 }
 
+fun readClasspaths(name: String): FileCollection {
+    val x = File("C:\\Users\\snafu\\IdeaProjects\\detekt\\detekt-gradle-plugin\\build\\detektClasspath.properties").reader()
+    val myprop = Properties()
+
+    myprop.load(x)
+    val classpath = myprop.getProperty("$name-classpath")
+    logger.error(classpath.split(File.pathSeparatorChar).joinToString("\n"))
+    return files(classpath.split(File.pathSeparatorChar))
+}
+
+readClasspaths("implementation")
+
 dependencies {
     smokeTest("io.gitlab.arturbosch.detekt:detekt-cli:1.21.0")
 }
@@ -244,5 +258,11 @@ publishing {
             name = "installLocally"
             url = uri("${rootProject.buildDir}/localMaven")
         }
+    }
+}
+
+injected {
+    classpaths.create("implementation") {
+        classpath.from(smokeTest)
     }
 }

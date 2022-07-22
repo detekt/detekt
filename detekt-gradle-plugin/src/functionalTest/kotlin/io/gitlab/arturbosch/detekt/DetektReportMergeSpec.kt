@@ -13,8 +13,18 @@ class DetektReportMergeSpec {
         val builder = DslTestBuilder.kotlin()
         val buildFileContent =
             """
-            |${builder.gradlePlugins}
+            |import java.util.Properties
             |
+            |${builder.gradlePlugins}
+            |  fun readClasspaths(name: String): FileCollection {
+            |    val x = File("C:\\Users\\snafu\\IdeaProjects\\detekt\\detekt-gradle-plugin\\build\\detektClasspath.properties").reader()
+            |    val myprop = Properties()
+            |
+            |    myprop.load(x)
+            |    val classpath = myprop.getProperty("${'$'}name-classpath")
+            |    logger.error(classpath.split(File.pathSeparatorChar).joinToString("\n"))
+            |    return files(classpath.split(File.pathSeparatorChar))
+            |  }
             |allprojects {
             |  ${builder.gradleRepositories}
             |}
@@ -25,7 +35,9 @@ class DetektReportMergeSpec {
             |
             |subprojects {
             |  ${builder.gradleSubprojectsApplyPlugins}
-            |  
+            |  dependencies {
+            |    detekt(readClasspaths("implementation"))
+            |  }
             |  detekt {
             |    reports.sarif.enabled = true
             |  }

@@ -13,9 +13,6 @@ abstract class DslTestBuilder {
                     excludeGroup("io.gitlab.arturbosch.detekt")
                 }
             }
-            flatDir {
-                dirs("C:\\Users\\snafu\\IdeaProjects\\detekt\\detekt-gradle-plugin\\build\\repo\\implementation")
-            }
         }
     """.trimIndent()
 
