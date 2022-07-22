@@ -25,7 +25,6 @@ class DetektPlainSpec {
 
                 repositories {
                     mavenCentral()
-                    mavenLocal()
                 }
 
                 configure<DetektExtension> {
@@ -53,7 +52,6 @@ class DetektPlainSpec {
 
                 repositories {
                     mavenCentral()
-                    mavenLocal()
                 }
 
                 tasks.withType(Detekt::class.java).configureEach {

@@ -19,7 +19,6 @@ class DetektJvmSpec {
             apply<DetektPlugin>()
             repositories {
                 mavenCentral()
-                mavenLocal()
             }
             tasks.withType(Detekt::class.java).configureEach {
                 it.reports { reports ->
