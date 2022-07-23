@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isOverride
@@ -38,7 +37,7 @@ class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("allowed conversion function names")
-    private val conversionFunctionPrefix: SplitPattern by config("to") { SplitPattern(it) }
+    private val conversionFunctionPrefix: List<String> by config(listOf("to"))
 
     override fun visitClass(klass: KtClass) {
         if (klass.isData()) {
@@ -50,15 +49,18 @@ class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun checkFunction(klass: KtClass, function: KtNamedFunction) {
-        if (!function.isOverride() && !conversionFunctionPrefix.startWith(function.name)) {
-            report(
-                CodeSmell(
-                    issue,
-                    Entity.atName(function),
-                    "The data class ${klass.name} contains functions which are not registered " +
-                        "conversion functions. The offending method is called ${function.name}"
-                )
+        if (function.isOverride()) return
+
+        val functionName = function.name
+        if (functionName != null && conversionFunctionPrefix.any { functionName.startsWith(it) }) return
+
+        report(
+            CodeSmell(
+                issue,
+                Entity.atName(function),
+                "The data class ${klass.name} contains functions which are not registered " +
+                    "conversion functions. The offending method is called $functionName"
             )
-        }
+        )
     }
 }
