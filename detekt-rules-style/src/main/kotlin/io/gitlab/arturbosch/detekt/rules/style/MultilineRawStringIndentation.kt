@@ -48,7 +48,7 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * """.trimMargin()
  * </compliant>
  */
-class MultilineRawStringIndentation(val config: Config) : Rule(config) {
+class MultilineRawStringIndentation(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
