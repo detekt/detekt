@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.github.detekt.tooling.api.FunctionMatcher
+import io.github.detekt.tooling.api.FunctionMatcher.Companion.fromFunctionSignature
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -11,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.valuesWithReason
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -61,12 +63,14 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
             "`fun String.hello(a: Int)` you should add the receiver parameter as the first parameter like this: " +
             "`hello(kotlin.String, kotlin.Int)`"
     )
-    private val methods: List<FunctionMatcher> by config(
-        listOf(
-            "kotlin.io.print",
-            "kotlin.io.println",
+    private val methods: List<Forbidden> by config(
+        valuesWithReason(
+            "kotlin.io.print" to "print does not allow you to configure the output stream. Use a logger instead.",
+            "kotlin.io.println" to "println does not allow you to configure the output stream. Use a logger instead.",
         )
-    ) { it.map(FunctionMatcher::fromFunctionSignature) }
+    ) { list ->
+        list.map { Forbidden(fromFunctionSignature(it.value), it.reason) }
+    }
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -113,10 +117,16 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
         } ?: return
 
         for (descriptor in descriptors) {
-            methods.find { it.match(descriptor) }?.let { functionMatcher ->
-                val message = "The method $functionMatcher has been forbidden in the Detekt config."
+            methods.find { it.value.match(descriptor) }?.let { forbidden ->
+                val message = if (forbidden.reason != null) {
+                    "The method `${forbidden.value}` has been forbidden: ${forbidden.reason}"
+                } else {
+                    "The method `${forbidden.value}` has been forbidden in the detekt config."
+                }
                 report(CodeSmell(issue, Entity.from(expression), message))
             }
         }
     }
+
+    private data class Forbidden(val value: FunctionMatcher, val reason: String?)
 }
