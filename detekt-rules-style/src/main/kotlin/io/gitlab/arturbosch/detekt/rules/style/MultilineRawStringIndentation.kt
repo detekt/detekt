@@ -91,10 +91,12 @@ class MultilineRawStringIndentation(config: Config) : Rule(config) {
         desiredIndent: Int,
         lineNumberRange: IntRange,
     ) {
+        data class LineInformation(val lineNumber: Int, val line: String, val currentIndent: Int)
+
         val indentation = lineNumberRange
             .map { lineNumber ->
                 val line = containingFile.getLine(lineNumber)
-                Triple(lineNumber, line, line.countIndent())
+                LineInformation(lineNumber, line, line.countIndent())
             }
 
         if (indentation.isNotEmpty()) {
@@ -112,7 +114,7 @@ class MultilineRawStringIndentation(config: Config) : Rule(config) {
                     if (indentation.none { (_, _, currentIndent) -> currentIndent == desiredIndent }) {
                         val location = containingFile.getLocation(
                             SourceLocation(lineNumberRange.first, desiredIndent + 1),
-                            SourceLocation(lineNumberRange.last, indentation.last().second.length + 1),
+                            SourceLocation(lineNumberRange.last, indentation.last().line.length + 1),
                         )
 
                         report(
