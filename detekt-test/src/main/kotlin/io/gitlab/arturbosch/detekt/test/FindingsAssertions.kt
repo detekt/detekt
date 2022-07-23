@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.assertj.core.api.AbstractAssert
 import org.assertj.core.api.AbstractListAssert
 import org.assertj.core.util.CheckReturnValue
-import java.util.*
+import java.util.Objects
 
 @CheckReturnValue
 fun assertThat(findings: List<Finding>) = FindingsAssert(findings)

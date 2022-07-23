@@ -24,7 +24,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(4, 10)
+            assertThat(findings).hasStartSourceLocation(4, 10)
             assertThat(findings[0]).hasMessage("This 'map' call can be removed.")
         }
 
@@ -44,7 +44,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(5, 10)
+            assertThat(findings).hasStartSourceLocation(5, 10)
             assertThat(findings[0]).hasMessage("This 'map' call can be replaced with 'onEach' or 'forEach'.")
         }
 

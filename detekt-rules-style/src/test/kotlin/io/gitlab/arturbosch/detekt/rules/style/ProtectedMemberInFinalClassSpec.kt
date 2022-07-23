@@ -22,7 +22,7 @@ class ProtectedMemberInFinalClassSpec {
             """
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(2, 5)
+            assertThat(findings).hasStartSourceLocation(2, 5)
         }
 
         @Test
@@ -37,7 +37,7 @@ class ProtectedMemberInFinalClassSpec {
             """
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(3, 5)
+            assertThat(findings).hasStartSourceLocation(3, 5)
         }
 
         @Test
@@ -49,7 +49,7 @@ class ProtectedMemberInFinalClassSpec {
             """
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(2, 5)
+            assertThat(findings).hasStartSourceLocation(2, 5)
         }
 
         @Test
@@ -63,7 +63,7 @@ class ProtectedMemberInFinalClassSpec {
             """
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(3, 9)
+            assertThat(findings).hasStartSourceLocation(3, 9)
         }
 
         @Test
@@ -116,7 +116,7 @@ class ProtectedMemberInFinalClassSpec {
             """
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(4, 13)
+            assertThat(findings).hasStartSourceLocation(4, 13)
         }
 
         @Test
@@ -130,7 +130,7 @@ class ProtectedMemberInFinalClassSpec {
             """
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(3, 9)
+            assertThat(findings).hasStartSourceLocation(3, 9)
         }
 
         @Test
@@ -140,7 +140,7 @@ class ProtectedMemberInFinalClassSpec {
             """
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(1, 42)
+            assertThat(findings).hasStartSourceLocation(1, 42)
         }
     }
 

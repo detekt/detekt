@@ -24,7 +24,7 @@ internal class ForbiddenSuppressSpec {
             """
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(3, 1)
+            assertThat(findings).hasStartSourceLocation(3, 1)
             assertThat(findings.first()).hasMessage(
                 "Cannot @Suppress rule \"ARule\" due to the current configuration."
             )
@@ -38,7 +38,7 @@ internal class ForbiddenSuppressSpec {
             """
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(1, 1)
+            assertThat(findings).hasStartSourceLocation(1, 1)
             assertThat(findings.first()).hasMessage(
                 "Cannot @Suppress rule \"ARule\" due to the current configuration."
             )
@@ -54,7 +54,7 @@ internal class ForbiddenSuppressSpec {
             """
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(3, 1)
+            assertThat(findings).hasStartSourceLocation(3, 1)
             assertThat(findings.first()).hasMessage(
                 "Cannot @Suppress rule \"ARule\" due to the current configuration."
             )
@@ -72,7 +72,7 @@ internal class ForbiddenSuppressSpec {
             """
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(4, 5)
+            assertThat(findings).hasStartSourceLocation(4, 5)
             assertThat(findings.first()).hasMessage(
                 "Cannot @Suppress rule \"ARule\" due to the current configuration."
             )
@@ -133,7 +133,7 @@ internal class ForbiddenSuppressSpec {
             """
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(1, 1)
+            assertThat(findings).hasStartSourceLocation(1, 1)
             assertThat(findings.first()).hasMessage(
                 "Cannot @Suppress rules \"ARule\", \"BRule\" " +
                     "due to the current configuration."
@@ -150,7 +150,7 @@ internal class ForbiddenSuppressSpec {
             """
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(3, 1)
+            assertThat(findings).hasStartSourceLocation(3, 1)
             assertThat(findings.first()).hasMessage(
                 "Cannot @Suppress rule \"BRule\" due to the current configuration."
             )

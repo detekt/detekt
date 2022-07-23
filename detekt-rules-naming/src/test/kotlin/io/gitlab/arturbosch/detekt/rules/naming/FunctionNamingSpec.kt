@@ -48,7 +48,7 @@ class FunctionNamingSpec {
         }
         interface I { fun shouldNotBeFlagged() }
         """
-        assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocation(3, 13)
+        assertThat(FunctionNaming().compileAndLint(code)).hasStartSourceLocation(3, 13)
     }
 
     @Test
@@ -84,7 +84,7 @@ class FunctionNamingSpec {
         }
         interface I { @Suppress("FunctionNaming") fun SHOULD_BE_FLAGGED() }
         """
-        assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocation(3, 13)
+        assertThat(FunctionNaming().compileAndLint(code)).hasStartSourceLocation(3, 13)
     }
 
     @Test

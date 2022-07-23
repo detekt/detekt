@@ -116,7 +116,7 @@ class NestedScopeFunctionsSpec(private val env: KotlinCoreEnvironment) {
     }
 
     private fun expectSourceLocation(location: Pair<Int, Int>) {
-        assertThat(actual).hasSourceLocation(location.first, location.second)
+        assertThat(actual).hasStartSourceLocation(location.first, location.second)
     }
 
     private fun expectFunctionInMsg(scopeFunction: String) {
