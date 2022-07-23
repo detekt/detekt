@@ -156,7 +156,7 @@ private fun message(desiredIntent: Int, currentIndent: Int): String {
     return "The indentation should be $desiredIntent but it is $currentIndent."
 }
 
-private val rawStringRegex = "\"\"\"\n(.|\n)*\n *\"\"\"".toRegex()
+private val rawStringRegex = "\"{3}\n.*\n *\"{3}".toRegex(RegexOption.DOT_MATCHES_ALL)
 
 private fun String.countIndent() = this.takeWhile { it == ' ' }.count()
 
