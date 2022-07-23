@@ -274,3 +274,6 @@ style:
   VarCouldBeVal:
     active: true
     ignoreAnnotated: ['Parameter']
+  WildcardImport:
+    active: true
+    excludeImports: []
