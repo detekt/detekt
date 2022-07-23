@@ -1320,7 +1320,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 }
             """
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1).hasSourceLocations(
+            assertThat(findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(3, 30)
             )
         }

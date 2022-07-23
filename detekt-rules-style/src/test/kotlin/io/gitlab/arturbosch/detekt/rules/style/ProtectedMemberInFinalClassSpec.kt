@@ -77,7 +77,7 @@ class ProtectedMemberInFinalClassSpec {
             """
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(2)
-            assertThat(findings).hasSourceLocations(
+            assertThat(findings).hasStartSourceLocations(
                 SourceLocation(2, 5),
                 SourceLocation(3, 9)
             )
@@ -96,7 +96,7 @@ class ProtectedMemberInFinalClassSpec {
             """
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(3)
-            assertThat(findings).hasSourceLocations(
+            assertThat(findings).hasStartSourceLocations(
                 SourceLocation(2, 5),
                 SourceLocation(2, 5),
                 SourceLocation(4, 13)

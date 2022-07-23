@@ -26,7 +26,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
 
         assertThat(findings)
             .hasSize(2)
-            .hasSourceLocations(
+            .hasStartSourceLocations(
                 SourceLocation(2, 5),
                 SourceLocation(3, 5),
             )

@@ -66,7 +66,7 @@ class OptionalWhenBracesSpec {
         """
         assertThat(subject.compileAndLint(code))
             .hasSize(2)
-            .hasSourceLocations(SourceLocation(7, 17), SourceLocation(10, 17))
+            .hasStartSourceLocations(SourceLocation(7, 17), SourceLocation(10, 17))
     }
 
     @Test
@@ -87,7 +87,7 @@ class OptionalWhenBracesSpec {
         """
         assertThat(subject.compileAndLint(code))
             .hasSize(1)
-            .hasSourceLocations(SourceLocation(3, 9))
+            .hasStartSourceLocations(SourceLocation(3, 9))
     }
 
     @Nested
