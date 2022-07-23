@@ -107,6 +107,7 @@ public final class io/gitlab/arturbosch/detekt/rules/KtModifierListKt {
 	public static final fun isOverride (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;)Z
 	public static final fun isProtected (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;)Z
 	public static final fun isPublicNotOverridden (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;)Z
+	public static final fun isPublicNotOverridden (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;Z)Z
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/KtValueArgumentKt {
@@ -135,6 +136,7 @@ public final class io/gitlab/arturbosch/detekt/rules/ThrowExtensionsKt {
 
 public final class io/gitlab/arturbosch/detekt/rules/TraversingKt {
 	public static final fun isPublicInherited (Lorg/jetbrains/kotlin/psi/KtNamedDeclaration;)Z
+	public static final fun isPublicInherited (Lorg/jetbrains/kotlin/psi/KtNamedDeclaration;Z)Z
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/TypeUtilsKt {

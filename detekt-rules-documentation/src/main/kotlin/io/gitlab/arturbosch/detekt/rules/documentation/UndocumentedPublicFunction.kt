@@ -7,6 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.rules.isProtected
 import io.gitlab.arturbosch.detekt.rules.isPublicNotOverridden
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -27,6 +30,9 @@ class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
+    @Configuration("if protected functions should be searched")
+    private val searchProtectedFunction: Boolean by config(false)
+
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.funKeyword == null && function.isLocal) return
 
@@ -42,5 +48,9 @@ class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtNamedFunction.shouldBeDocumented() =
-        parents.filterIsInstance<KtClassOrObject>().all { it.isPublic } && isPublicNotOverridden()
+        if (searchProtectedFunction) {
+            parents.filterIsInstance<KtClassOrObject>().all { it.isPublic || it.isProtected() }
+        } else {
+            parents.filterIsInstance<KtClassOrObject>().all { it.isPublic }
+        } && isPublicNotOverridden(searchProtectedFunction)
 }
