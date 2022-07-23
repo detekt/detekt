@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
 /**
- * This rule ensure that the raw strings have a consistent indentation.
+ * This rule ensures that raw strings have a consistent indentation.
  *
  * The baseIndentation is the indentation that has the line where the raw string started. The content of the
  * raw string should have baseIndent plus one identation extra. And the closing raw string (`"""`) should have
