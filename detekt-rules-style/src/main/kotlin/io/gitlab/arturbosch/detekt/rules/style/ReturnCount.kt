@@ -7,10 +7,10 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
 import io.gitlab.arturbosch.detekt.rules.parentsOfTypeUntil
 import io.gitlab.arturbosch.detekt.rules.yieldStatementsSkippingGuardClauses
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -60,7 +60,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
     private val max: Int by config(2)
 
     @Configuration("define a list of function names to be ignored by this check")
-    private val excludedFunctions: SplitPattern by config(listOf("equals")) { SplitPattern(it.joinToString(",")) }
+    private val excludedFunctions: List<Regex> by config(listOf("equals")) { it.map(String::simplePatternToRegex) }
 
     @Configuration("if labeled return statements should be ignored")
     private val excludeLabeled: Boolean by config(false)
@@ -90,7 +90,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun shouldBeIgnored(function: KtNamedFunction) = excludedFunctions.contains(function.name)
+    private fun shouldBeIgnored(function: KtNamedFunction) = function.name in excludedFunctions
 
     private fun countReturnStatements(function: KtNamedFunction): Int {
         fun KtReturnExpression.isExcluded(): Boolean = when {
@@ -121,4 +121,9 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
         }
         return false
     }
+}
+
+private operator fun Iterable<Regex>.contains(input: String?): Boolean {
+    input ?: return false
+    return any { it.matches(input) }
 }

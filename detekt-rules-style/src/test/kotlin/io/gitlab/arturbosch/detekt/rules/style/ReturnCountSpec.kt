@@ -331,7 +331,7 @@ class ReturnCountSpec {
             return 6
         }
 
-        fun test3(x: Int): Int {
+        fun te_st1(x: Int): Int {
             when (x) {
                 5 -> println("x=5")
                 4 -> return 4
@@ -348,6 +348,19 @@ class ReturnCountSpec {
                     mapOf(
                         MAX to "2",
                         EXCLUDED_FUNCTIONS to listOf("test1", "test2")
+                    )
+                )
+            ).compileAndLint(code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should flag none of the ignored functions using globbing`() {
+            val findings = ReturnCount(
+                TestConfig(
+                    mapOf(
+                        MAX to "2",
+                        EXCLUDED_FUNCTIONS to listOf("t*1")
                     )
                 )
             ).compileAndLint(code)
