@@ -23,7 +23,7 @@ class UnusedPrivateClassSpec {
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(1, 1)
+            assertThat(findings).hasStartSourceLocation(1, 1)
         }
 
         @Nested
@@ -39,7 +39,7 @@ class UnusedPrivateClassSpec {
                 val findings = subject.compileAndLint(code)
 
                 assertThat(findings).hasSize(1)
-                assertThat(findings).hasSourceLocation(1, 1)
+                assertThat(findings).hasStartSourceLocation(1, 1)
             }
 
             @Test
@@ -52,7 +52,7 @@ class UnusedPrivateClassSpec {
                 val findings = subject.compileAndLint(code)
 
                 assertThat(findings).hasSize(1)
-                assertThat(findings).hasSourceLocation(2, 1)
+                assertThat(findings).hasStartSourceLocation(2, 1)
             }
 
             @Test
@@ -435,7 +435,7 @@ class UnusedPrivateClassSpec {
             """
             val findings = UnusedPrivateClass().lint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(10, 5)
+            assertThat(findings).hasStartSourceLocation(10, 5)
         }
     }
 }

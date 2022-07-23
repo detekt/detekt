@@ -87,7 +87,7 @@ class MayBeConstSpec {
             val x = 1
             """
             subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasSourceLocations(
+            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(1, 5)
             )
         }
@@ -98,7 +98,7 @@ class MayBeConstSpec {
             @JvmField val x = 1
             """
             subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasSourceLocations(
+            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(1, 15)
             )
         }
@@ -111,7 +111,7 @@ class MayBeConstSpec {
             }
             """
             subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasSourceLocations(
+            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(2, 19)
             )
         }
@@ -126,7 +126,7 @@ class MayBeConstSpec {
             }
             """
             subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasSourceLocations(
+            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(3, 13)
             )
         }
@@ -143,7 +143,7 @@ class MayBeConstSpec {
             }
             """
             subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasSourceLocations(
+            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(3, 9)
             )
         }
@@ -159,7 +159,7 @@ class MayBeConstSpec {
             }
             """
             subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasSourceLocations(
+            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(4, 13)
             )
         }
@@ -173,7 +173,7 @@ class MayBeConstSpec {
             }
             """
             subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasSourceLocations(
+            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(3, 9)
             )
         }
@@ -187,7 +187,7 @@ class MayBeConstSpec {
             }
             """
             subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasSourceLocations(
+            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(3, 9)
             )
         }
@@ -203,7 +203,7 @@ class MayBeConstSpec {
             }
             """
             subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasSourceLocations(
+            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(5, 9)
             )
         }
@@ -217,7 +217,7 @@ class MayBeConstSpec {
             }
             """
             subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasSourceLocations(
+            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(3, 17)
             )
         }
@@ -363,7 +363,7 @@ class MayBeConstSpec {
                 }
             """
             subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(3).hasSourceLocations(
+            assertThat(subject.findings).hasSize(3).hasStartSourceLocations(
                 SourceLocation(4, 13),
                 SourceLocation(7, 17),
                 SourceLocation(11, 13)

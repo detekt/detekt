@@ -16,7 +16,7 @@ class CastToNullableTypeSpec {
         """
         val findings = subject.compileAndLint(code)
         assertThat(findings).hasSize(1)
-        assertThat(findings).hasSourceLocation(2, 22)
+        assertThat(findings).hasStartSourceLocation(2, 22)
         assertThat(findings[0]).hasMessage("Use the safe cast ('as? String') instead of 'as String?'.")
     }
 

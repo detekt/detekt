@@ -20,7 +20,7 @@ class UnusedUnaryOperatorSpec(private val env: KotlinCoreEnvironment) {
         """
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-        assertThat(findings).hasSourceLocation(3, 9)
+        assertThat(findings).hasStartSourceLocation(3, 9)
         assertThat(findings[0]).hasMessage("This '+ 3' is not used")
     }
 
@@ -34,7 +34,7 @@ class UnusedUnaryOperatorSpec(private val env: KotlinCoreEnvironment) {
         """
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-        assertThat(findings).hasSourceLocation(3, 9)
+        assertThat(findings).hasStartSourceLocation(3, 9)
         assertThat(findings[0]).hasMessage("This '- 3' is not used")
     }
 

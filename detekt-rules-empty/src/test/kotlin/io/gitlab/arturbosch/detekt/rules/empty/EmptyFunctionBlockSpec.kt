@@ -21,7 +21,7 @@ class EmptyFunctionBlockSpec {
                 protected fun stuff() {}
             }
         """
-        assertThat(subject.compileAndLint(code)).hasSourceLocation(2, 27)
+        assertThat(subject.compileAndLint(code)).hasStartSourceLocation(2, 27)
     }
 
     @Test
@@ -51,7 +51,7 @@ class EmptyFunctionBlockSpec {
                 fun b() {}
             }
         """
-        assertThat(subject.compileAndLint(code)).hasSourceLocation(2, 13)
+        assertThat(subject.compileAndLint(code)).hasStartSourceLocation(2, 13)
     }
 
     @Nested
@@ -89,7 +89,7 @@ class EmptyFunctionBlockSpec {
         @Test
         fun `should not flag overridden functions`() {
             val config = TestConfig(mapOf(IGNORE_OVERRIDDEN_FUNCTIONS to "true"))
-            assertThat(EmptyFunctionBlock(config).compileAndLint(code)).hasSourceLocation(1, 13)
+            assertThat(EmptyFunctionBlock(config).compileAndLint(code)).hasStartSourceLocation(1, 13)
         }
     }
 
@@ -115,7 +115,7 @@ class EmptyFunctionBlockSpec {
 
         @Test
         fun `should not flag overridden functions with commented body`() {
-            assertThat(subject.compileAndLint(code)).hasSourceLocation(12, 31)
+            assertThat(subject.compileAndLint(code)).hasStartSourceLocation(12, 31)
         }
 
         @Test

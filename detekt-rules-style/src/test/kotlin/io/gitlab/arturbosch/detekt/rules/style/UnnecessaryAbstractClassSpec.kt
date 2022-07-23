@@ -31,7 +31,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertFindingMessage(findings, message)
-            assertThat(findings).hasSourceLocation(1, 16)
+            assertThat(findings).hasStartSourceLocation(1, 16)
         }
 
         @Nested
@@ -41,7 +41,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 val code = "abstract class A"
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertFindingMessage(findings, message)
-                assertThat(findings).hasSourceLocation(1, 16)
+                assertThat(findings).hasStartSourceLocation(1, 16)
             }
 
             @Test
@@ -204,7 +204,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
             val code = "abstract class A(val i: Int)"
             val findings = subject.compileAndLintWithContext(env, code)
             assertFindingMessage(findings, message)
-            assertThat(findings).hasSourceLocation(1, 16)
+            assertThat(findings).hasStartSourceLocation(1, 16)
         }
 
         @Test
@@ -219,7 +219,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
             val code = "abstract class A(i: Int)"
             val findings = subject.compileAndLintWithContext(env, code)
             assertFindingMessage(findings, message)
-            assertThat(findings).hasSourceLocation(1, 16)
+            assertThat(findings).hasStartSourceLocation(1, 16)
         }
 
         @Test

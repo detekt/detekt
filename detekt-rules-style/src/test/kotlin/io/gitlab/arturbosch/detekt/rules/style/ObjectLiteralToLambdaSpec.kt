@@ -33,7 +33,7 @@ class ObjectLiteralToLambdaSpec {
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
-                    .hasSourceLocations(SourceLocation(4, 9))
+                    .hasStartSourceLocations(SourceLocation(4, 9))
             }
 
             @Test
@@ -52,7 +52,7 @@ class ObjectLiteralToLambdaSpec {
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
-                    .hasSourceLocations(SourceLocation(5, 5))
+                    .hasStartSourceLocations(SourceLocation(5, 5))
             }
 
             @Test
@@ -73,7 +73,7 @@ class ObjectLiteralToLambdaSpec {
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
-                    .hasSourceLocations(SourceLocation(6, 9))
+                    .hasStartSourceLocations(SourceLocation(6, 9))
             }
 
             @Test
@@ -91,7 +91,7 @@ class ObjectLiteralToLambdaSpec {
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
-                    .hasSourceLocations(SourceLocation(4, 9))
+                    .hasStartSourceLocations(SourceLocation(4, 9))
             }
 
             @Test
@@ -109,7 +109,7 @@ class ObjectLiteralToLambdaSpec {
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
-                    .hasSourceLocations(SourceLocation(5, 9))
+                    .hasStartSourceLocations(SourceLocation(5, 9))
             }
 
             @Test
@@ -130,7 +130,7 @@ class ObjectLiteralToLambdaSpec {
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
-                    .hasSourceLocations(SourceLocation(7, 5))
+                    .hasStartSourceLocations(SourceLocation(7, 5))
             }
 
             @Test
@@ -146,7 +146,7 @@ class ObjectLiteralToLambdaSpec {
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
-                    .hasSourceLocations(SourceLocation(4, 9))
+                    .hasStartSourceLocations(SourceLocation(4, 9))
             }
         }
 
@@ -337,7 +337,7 @@ class ObjectLiteralToLambdaSpec {
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
-                    .hasSourceLocations(SourceLocation(1, 9))
+                    .hasStartSourceLocations(SourceLocation(1, 9))
             }
 
             @Test
@@ -353,7 +353,7 @@ class ObjectLiteralToLambdaSpec {
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
-                    .hasSourceLocations(SourceLocation(2, 9))
+                    .hasStartSourceLocations(SourceLocation(2, 9))
             }
 
             @Test
@@ -466,7 +466,7 @@ class ObjectLiteralToLambdaSpec {
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
-                    .hasSourceLocations(SourceLocation(6, 5))
+                    .hasStartSourceLocations(SourceLocation(6, 5))
             }
 
             @Test
@@ -489,7 +489,7 @@ class ObjectLiteralToLambdaSpec {
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
-                    .hasSourceLocations(SourceLocation(7, 9))
+                    .hasStartSourceLocations(SourceLocation(7, 9))
             }
 
             @Test
@@ -534,7 +534,7 @@ class ObjectLiteralToLambdaSpec {
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
-                    .hasSourceLocations(SourceLocation(5, 19))
+                    .hasStartSourceLocations(SourceLocation(5, 19))
             }
         }
     }

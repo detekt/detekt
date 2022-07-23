@@ -129,7 +129,7 @@ class ComplexMethodSpec {
             )
             val subject = ComplexMethod(config)
 
-            assertThat(subject.lint(path)).hasSourceLocations(SourceLocation(43, 5))
+            assertThat(subject.lint(path)).hasStartSourceLocations(SourceLocation(43, 5))
         }
 
         @Test
@@ -137,7 +137,7 @@ class ComplexMethodSpec {
             val config = TestConfig(mapOf("threshold" to "4"))
             val subject = ComplexMethod(config)
 
-            assertThat(subject.lint(path)).hasSourceLocations(
+            assertThat(subject.lint(path)).hasStartSourceLocations(
                 SourceLocation(6, 5),
                 SourceLocation(15, 5),
                 SourceLocation(25, 5),
@@ -235,7 +235,7 @@ class ComplexMethodSpec {
 private fun assertExpectedComplexityValue(code: String, config: TestConfig, expectedValue: Int) {
     val findings = ComplexMethod(config).lint(code)
 
-    assertThat(findings).hasSourceLocations(SourceLocation(1, 5))
+    assertThat(findings).hasStartSourceLocations(SourceLocation(1, 5))
 
     assertThat(findings.first())
         .isThresholded()

@@ -26,7 +26,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
 
         assertThat(findings)
             .hasSize(2)
-            .hasSourceLocations(
+            .hasStartSourceLocations(
                 SourceLocation(2, 5),
                 SourceLocation(3, 5),
             )
@@ -189,8 +189,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         val findings = ForbiddenMethodCall(
             TestConfig(mapOf(METHODS to listOf("java.time.LocalDate.now()")))
         ).compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasSourceLocation(5, 26)
+        assertThat(findings).hasStartSourceLocation(5, 26)
         assertThat(findings[0])
             .hasMessage("The method `java.time.LocalDate.now()` has been forbidden in the detekt config.")
     }
@@ -210,7 +209,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             TestConfig(mapOf(METHODS to listOf("java.time.LocalDate.now(java.time.Clock)")))
         ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-        assertThat(findings).hasSourceLocation(6, 27)
+        assertThat(findings).hasStartSourceLocation(6, 27)
     }
 
     @Test
@@ -225,7 +224,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             TestConfig(mapOf(METHODS to listOf("java.time.LocalDate.of(kotlin.Int, kotlin.Int, kotlin.Int)")))
         ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-        assertThat(findings).hasSourceLocation(3, 26)
+        assertThat(findings).hasStartSourceLocation(3, 26)
     }
 
     @Test
@@ -240,7 +239,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             TestConfig(mapOf(METHODS to listOf("java.time.LocalDate.of(kotlin.Int,kotlin.Int,kotlin.Int)")))
         ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-        assertThat(findings).hasSourceLocation(3, 26)
+        assertThat(findings).hasStartSourceLocation(3, 26)
     }
 
     @Test
@@ -258,7 +257,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             TestConfig(mapOf(METHODS to listOf("io.gitlab.arturbosch.detekt.rules.style.`some, test`()")))
         ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-        assertThat(findings).hasSourceLocation(6, 13)
+        assertThat(findings).hasStartSourceLocation(6, 13)
     }
 
     @Test
@@ -281,7 +280,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             )
         ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-        assertThat(findings).hasSourceLocation(6, 13)
+        assertThat(findings).hasStartSourceLocation(6, 13)
     }
 
     @Test
@@ -420,7 +419,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             ).compileAndLintWithContext(env, code)
             assertThat(findings)
                 .hasSize(1)
-                .hasSourceLocation(5, 16)
+                .hasStartSourceLocation(5, 16)
         }
 
         @Test
@@ -430,7 +429,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             ).compileAndLintWithContext(env, code)
             assertThat(findings)
                 .hasSize(1)
-                .hasSourceLocation(6, 9)
+                .hasStartSourceLocation(6, 9)
         }
     }
 

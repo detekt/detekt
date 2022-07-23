@@ -64,7 +64,7 @@ class ObjectPropertyNamingSpec {
                     ${PublicConst.positive}
                 }
             """
-            assertThat(subject.compileAndLint(code)).hasSourceLocation(2, 15)
+            assertThat(subject.compileAndLint(code)).hasStartSourceLocation(2, 15)
         }
     }
 
@@ -130,7 +130,7 @@ class ObjectPropertyNamingSpec {
                     }
                 }
             """
-            assertThat(subject.compileAndLint(code)).hasSourceLocation(3, 19)
+            assertThat(subject.compileAndLint(code)).hasStartSourceLocation(3, 19)
         }
     }
 

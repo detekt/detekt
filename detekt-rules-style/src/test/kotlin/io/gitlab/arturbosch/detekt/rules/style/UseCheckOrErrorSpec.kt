@@ -22,7 +22,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 if (a < 0) throw IllegalStateException()
             }
         """
-        assertThat(subject.lint(code)).hasSourceLocation(3, 16)
+        assertThat(subject.lint(code)).hasStartSourceLocation(3, 16)
     }
 
     @Test
@@ -33,7 +33,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 if (a < 0) throw IllegalStateException("More details")
             }
         """
-        assertThat(subject.lint(code)).hasSourceLocation(3, 16)
+        assertThat(subject.lint(code)).hasStartSourceLocation(3, 16)
     }
 
     @Test
@@ -45,7 +45,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                     else -> throw IllegalStateException()
                 }
         """
-        assertThat(subject.lint(code)).hasSourceLocation(4, 17)
+        assertThat(subject.lint(code)).hasStartSourceLocation(4, 17)
     }
 
     @Test
@@ -56,7 +56,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 if (a < 0) throw java.lang.IllegalStateException()
             }
         """
-        assertThat(subject.lint(code)).hasSourceLocation(3, 16)
+        assertThat(subject.lint(code)).hasStartSourceLocation(3, 16)
     }
 
     @Test
@@ -67,7 +67,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 if (a < 0) throw kotlin.IllegalStateException()
             }
         """
-        assertThat(subject.lint(code)).hasSourceLocation(3, 16)
+        assertThat(subject.lint(code)).hasStartSourceLocation(3, 16)
     }
 
     @Test
@@ -106,13 +106,13 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `reports an issue if the exception thrown as the only action in a function`() {
         val code = """fun doThrow() = throw IllegalStateException("message")"""
-        assertThat(subject.lint(code)).hasSourceLocation(1, 17)
+        assertThat(subject.lint(code)).hasStartSourceLocation(1, 17)
     }
 
     @Test
     fun `reports an issue if the exception thrown as the only action in a function block`() {
         val code = """fun doThrow() { throw IllegalStateException("message") }"""
-        assertThat(subject.lint(code)).hasSourceLocation(1, 17)
+        assertThat(subject.lint(code)).hasStartSourceLocation(1, 17)
     }
 
     @Test

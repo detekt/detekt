@@ -22,7 +22,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
             """
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(2, 13)
+            assertThat(findings).hasStartSourceLocation(2, 13)
             assertThat(findings[0]).hasMessage("This '?: emptyList()' can be replaced with 'orEmpty()' call")
         }
 

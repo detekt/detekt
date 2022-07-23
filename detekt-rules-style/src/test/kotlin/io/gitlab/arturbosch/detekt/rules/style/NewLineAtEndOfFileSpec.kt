@@ -18,7 +18,7 @@ class NewLineAtEndOfFileSpec {
     fun `should flag a kt file not containing new line at the end`() {
         val code = "class Test"
         assertThat(subject.compileAndLint(code)).hasSize(1)
-            .hasSourceLocation(1, 11)
+            .hasStartSourceLocation(1, 11)
     }
 
     @Test
