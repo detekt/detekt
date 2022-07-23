@@ -8,10 +8,10 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
 import io.gitlab.arturbosch.detekt.rules.isActual
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
@@ -52,7 +52,7 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
     private val ignoreActualFunction: Boolean by config(true)
 
     @Configuration("excluded functions")
-    private val excludedFunctions: SplitPattern by config("") { SplitPattern(it) }
+    private val excludedFunctions: List<Regex> by config(emptyList<String>()) { it.map(String::simplePatternToRegex) }
 
     @Configuration("allows to provide a list of annotations that disable this check")
     @Deprecated("Use `ignoreAnnotated` instead")
@@ -110,7 +110,7 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
         }
 
     private fun isNotExcluded(function: KtNamedFunction) =
-        !excludedFunctions.contains(function.name) && !annotationExcluder.shouldExclude(function.annotationEntries)
+        function.name !in excludedFunctions && !annotationExcluder.shouldExclude(function.annotationEntries)
 
     private fun isReturningAConstant(function: KtNamedFunction) =
         isConstantExpression(function.bodyExpression) || returnsConstant(function)
@@ -126,4 +126,9 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
         val returnExpression = function.bodyExpression?.children?.singleOrNull() as? KtReturnExpression
         return isConstantExpression(returnExpression?.returnedExpression)
     }
+}
+
+private operator fun Iterable<Regex>.contains(input: String?): Boolean {
+    input ?: return false
+    return any { it.matches(input) }
 }
