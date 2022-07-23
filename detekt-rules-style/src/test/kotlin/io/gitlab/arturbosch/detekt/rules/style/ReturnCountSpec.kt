@@ -347,7 +347,7 @@ class ReturnCountSpec {
                 TestConfig(
                     mapOf(
                         MAX to "2",
-                        EXCLUDED_FUNCTIONS to "test1,test2"
+                        EXCLUDED_FUNCTIONS to listOf("test1", "test2")
                     )
                 )
             ).compileAndLint(code)
