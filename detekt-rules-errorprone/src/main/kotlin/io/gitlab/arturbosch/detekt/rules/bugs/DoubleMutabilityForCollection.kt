@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -62,10 +63,10 @@ class DoubleMutabilityForCollection(config: Config = Config.empty) : Rule(config
         types.map { FqName(it) }.toSet()
     }
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)
-
-        if (bindingContext == BindingContext.EMPTY) return
 
         val type = (bindingContext[BindingContext.VARIABLE, property])?.type ?: return
         val standardType = type.fqNameOrNull()

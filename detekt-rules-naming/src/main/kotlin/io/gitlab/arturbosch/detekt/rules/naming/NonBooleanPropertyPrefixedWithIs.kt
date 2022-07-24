@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.builtins.isFunctionOrKFunctionTypeWithAnySuspendability
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -44,6 +45,8 @@ class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(con
         debt = Debt.FIVE_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitParameter(parameter: KtParameter) {
         super.visitParameter(parameter)
 
@@ -59,10 +62,6 @@ class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(con
     }
 
     private fun validateDeclaration(declaration: KtCallableDeclaration) {
-        if (bindingContext == BindingContext.EMPTY) {
-            return
-        }
-
         val name = declaration.identifierName()
 
         if (name.startsWith("is") && name.length > 2 && !name[2].isLowerCase()) {

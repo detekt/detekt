@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
@@ -45,9 +46,9 @@ class UnsafeCast(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
-        if (bindingContext == BindingContext.EMPTY) return
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
 
+    override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
         if (bindingContext.diagnostics.forElement(expression.operationReference)
             .any { it.factory == Errors.CAST_NEVER_SUCCEEDS }
         ) {

@@ -15,6 +15,7 @@ import io.gitlab.arturbosch.detekt.rules.isNullCheck
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -42,10 +43,11 @@ class UseAnyOrNoneInsteadOfFind(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
 
         val functionName = expression.calleeExpression?.text ?: return
         val qualifiedOrThis = expression.getStrictParentOfType<KtQualifiedExpression>() ?: expression

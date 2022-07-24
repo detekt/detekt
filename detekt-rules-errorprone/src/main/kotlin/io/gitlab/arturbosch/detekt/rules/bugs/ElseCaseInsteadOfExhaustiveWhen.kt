@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.cfg.WhenChecker
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getType
@@ -60,10 +61,11 @@ class ElseCaseInsteadOfExhaustiveWhen(config: Config = Config.empty) : Rule(conf
         Debt.FIVE_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitWhenExpression(whenExpression: KtWhenExpression) {
         super.visitWhenExpression(whenExpression)
 
-        if (bindingContext == BindingContext.EMPTY) return
         checkForElseCaseInsteadOfExhaustiveWhenExpression(whenExpression)
     }
 

@@ -15,6 +15,7 @@ import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isConstant
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -47,6 +48,8 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitParameter(parameter: KtParameter) {
         super.visitParameter(parameter)
 
@@ -62,10 +65,6 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun validateDeclaration(declaration: KtCallableDeclaration) {
-        if (bindingContext == BindingContext.EMPTY) {
-            return
-        }
-
         val name = declaration.identifierName()
         val typeName = getTypeName(declaration)
         val isBooleanType =

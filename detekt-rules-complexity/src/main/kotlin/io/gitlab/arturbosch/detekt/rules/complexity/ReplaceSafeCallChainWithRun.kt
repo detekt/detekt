@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
@@ -49,10 +50,10 @@ class ReplaceSafeCallChainWithRun(config: Config = Config.empty) : Rule(config) 
         Debt.TEN_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
         super.visitSafeQualifiedExpression(expression)
-
-        if (bindingContext == BindingContext.EMPTY) return
 
         /* We want the last safe qualified expression in the chain, so if there are more in this chain then there's no
         need to run checks on this one */

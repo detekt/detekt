@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
@@ -53,10 +54,10 @@ class UnnecessaryApply(config: Config) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-
-        if (bindingContext == BindingContext.EMPTY) return
 
         if (expression.isApplyExpr() &&
             expression.hasOnlyOneMemberAccessStatement() &&

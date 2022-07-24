@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -84,9 +85,10 @@ class RedundantHigherOrderMapUsage(config: Config = Config.empty) : Rule(config)
         Debt.FIVE_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
 
         val calleeExpression = expression.calleeExpression
         if (calleeExpression?.text != "map") return

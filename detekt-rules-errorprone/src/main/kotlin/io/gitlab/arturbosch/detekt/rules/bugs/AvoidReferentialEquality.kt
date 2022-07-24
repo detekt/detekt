@@ -16,6 +16,7 @@ import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.lexer.KtTokens.EQEQEQ
 import org.jetbrains.kotlin.lexer.KtTokens.EXCLEQEQEQ
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getType
 
@@ -56,13 +57,14 @@ class AvoidReferentialEquality(config: Config) : Rule(config) {
         )
     ) { it.map(SimpleGlob::of) }
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)
         checkBinaryExpression(expression)
     }
 
     private fun checkBinaryExpression(expression: KtBinaryExpression) {
-        if (bindingContext == BindingContext.EMPTY) return
         if (expression.operationToken != EQEQEQ && expression.operationToken != EXCLEQEQEQ) return
 
         val checkedType = expression.left?.getType(bindingContext)?.fqNameOrNull() ?: return

@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -29,8 +30,9 @@ class Deprecation(config: Config) : Rule(config) {
 
     override val defaultRuleIdAliases = setOf("DEPRECATION")
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitElement(element: PsiElement) {
-        if (bindingContext == BindingContext.EMPTY) return
         if (hasDeprecationCompilerWarnings(element)) {
             val entity = if (element is KtNamedDeclaration) Entity.atName(element) else Entity.from(element)
             report(CodeSmell(issue, entity, "${element.text} is deprecated."))

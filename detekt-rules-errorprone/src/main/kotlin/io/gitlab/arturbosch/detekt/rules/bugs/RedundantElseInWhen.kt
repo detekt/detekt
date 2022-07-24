@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -69,10 +70,11 @@ class RedundantElseInWhen(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitWhenExpression(whenExpression: KtWhenExpression) {
         super.visitWhenExpression(whenExpression)
 
-        if (bindingContext == BindingContext.EMPTY) return
         val elseEntry = whenExpression.entries.lastOrNull { it.isElse } ?: return
         val compilerReports = bindingContext.diagnostics.forElement(elseEntry)
         if (compilerReports.any { it.factory == Errors.REDUNDANT_ELSE_IN_WHEN }) {

@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
@@ -59,9 +60,10 @@ class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
         super.visitSimpleNameExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
 
         val simpleOrCallExpression = expression.parent.safeAs<KtCallExpression>() ?: expression
         val targetExpression = simpleOrCallExpression.targetExpression() ?: return

@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.cfg.WhenChecker
 import org.jetbrains.kotlin.diagnostics.WhenMissingCase
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
@@ -81,9 +82,10 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
     @Configuration("whether `else` can be treated as a valid case for enums and sealed classes")
     private val allowElseExpression: Boolean by config(true)
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitWhenExpression(expression: KtWhenExpression) {
         super.visitWhenExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
         if (allowElseExpression && expression.elseExpression != null) return
         checkMissingWhenExpression(expression)
     }

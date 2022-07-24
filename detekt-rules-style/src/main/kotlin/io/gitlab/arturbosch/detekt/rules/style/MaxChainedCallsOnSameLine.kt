@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.descriptors.PackageViewDescriptor
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
@@ -43,11 +44,10 @@ class MaxChainedCallsOnSameLine(config: Config = Config.empty) : Rule(config) {
     @Configuration("maximum chained calls allowed on a single line")
     private val maxChainedCalls: Int by config(defaultValue = 5)
 
-    @Suppress("ReturnCount")
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)
-
-        if (bindingContext == BindingContext.EMPTY) return
 
         val parent = expression.parent
 

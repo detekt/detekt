@@ -15,6 +15,7 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
@@ -72,10 +73,11 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         it.map(FunctionMatcher::fromFunctionSignature)
     }
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
 
         if (expression.isUsedAsExpression(bindingContext)) return
 

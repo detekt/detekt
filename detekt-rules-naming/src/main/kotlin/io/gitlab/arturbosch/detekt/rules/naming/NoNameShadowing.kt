@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.rules.hasImplicitParameterReference
 import io.gitlab.arturbosch.detekt.rules.implicitParameter
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtDestructuringDeclarationEntry
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
@@ -59,6 +60,8 @@ class NoNameShadowing(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)
         checkNameShadowing(property)
@@ -76,16 +79,13 @@ class NoNameShadowing(config: Config = Config.empty) : Rule(config) {
 
     private fun checkNameShadowing(declaration: KtNamedDeclaration) {
         val nameIdentifier = declaration.nameIdentifier ?: return
-        if (bindingContext != BindingContext.EMPTY &&
-            bindingContext.diagnostics.forElement(declaration).any { it.factory == Errors.NAME_SHADOWING }
-        ) {
+        if (bindingContext.diagnostics.forElement(declaration).any { it.factory == Errors.NAME_SHADOWING }) {
             report(CodeSmell(issue, Entity.from(nameIdentifier), "Name shadowed: ${nameIdentifier.text}"))
         }
     }
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
-        if (bindingContext == BindingContext.EMPTY) return
         val implicitParameter = lambdaExpression.implicitParameter(bindingContext) ?: return
         if (lambdaExpression.hasImplicitParameterReference(implicitParameter, bindingContext) &&
             lambdaExpression.hasParentImplicitParameterLambda()

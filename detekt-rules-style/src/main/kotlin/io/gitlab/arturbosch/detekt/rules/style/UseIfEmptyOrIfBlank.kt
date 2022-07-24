@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
@@ -57,9 +58,10 @@ class UseIfEmptyOrIfBlank(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitIfExpression(expression: KtIfExpression) {
         super.visitIfExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
 
         if (expression.isElseIf()) return
         val thenExpression = expression.then ?: return

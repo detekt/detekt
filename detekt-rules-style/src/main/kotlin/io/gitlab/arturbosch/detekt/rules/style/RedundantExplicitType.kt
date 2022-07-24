@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -52,9 +53,10 @@ class RedundantExplicitType(config: Config) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     @Suppress("ReturnCount", "ComplexMethod")
     override fun visitProperty(property: KtProperty) {
-        if (bindingContext == BindingContext.EMPTY) return
         if (!property.isLocal) return
         val typeReference = property.typeReference ?: return
         val type =

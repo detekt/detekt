@@ -61,8 +61,9 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
         Debt.TEN_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitKtFile(file: KtFile) {
-        if (bindingContext == BindingContext.EMPTY) return
         super.visitKtFile(file)
         NullCheckVisitor().visitKtFile(file)
     }

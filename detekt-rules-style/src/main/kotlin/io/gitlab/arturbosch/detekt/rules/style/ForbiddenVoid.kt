@@ -14,6 +14,7 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtTypeArgumentList
@@ -55,9 +56,10 @@ class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
     @Configuration("ignore void types as generic arguments")
     private val ignoreUsageInGenerics: Boolean by config(false)
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     @Suppress("ReturnCount")
     override fun visitTypeReference(typeReference: KtTypeReference) {
-        if (bindingContext == BindingContext.EMPTY) return
         val kotlinType = typeReference.getAbbreviatedTypeOrType(bindingContext) ?: return
 
         if (kotlinType.fqNameOrNull() == VOID_FQ_NAME) {

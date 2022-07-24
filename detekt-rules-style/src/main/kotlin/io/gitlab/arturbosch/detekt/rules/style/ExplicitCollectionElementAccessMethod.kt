@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.load.java.isFromJava
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
@@ -50,9 +51,10 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
             Debt.FIVE_MINS
         )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
         super.visitDotQualifiedExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
         val call = expression.selectorExpression as? KtCallExpression ?: return
         if (isIndexGetterRecommended(call) || isIndexSetterRecommended(call)) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))

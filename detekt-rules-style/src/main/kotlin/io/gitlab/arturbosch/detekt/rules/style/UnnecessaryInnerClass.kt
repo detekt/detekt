@@ -54,10 +54,7 @@ class UnnecessaryInnerClass(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    override fun visit(root: KtFile) {
-        if (bindingContext == BindingContext.EMPTY) return
-        super.visit(root)
-    }
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
 
     override fun visitClass(klass: KtClass) {
         classChain.add(klass)

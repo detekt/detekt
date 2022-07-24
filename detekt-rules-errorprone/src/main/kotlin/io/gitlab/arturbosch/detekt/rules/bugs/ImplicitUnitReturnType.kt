@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.builtins.StandardNames
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
@@ -55,12 +56,10 @@ class ImplicitUnitReturnType(config: Config) : Rule(config) {
     @Configuration("if functions with explicit 'Unit' return type should be allowed")
     private val allowExplicitReturnType: Boolean by config(true)
 
-    @Suppress("ReturnCount")
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
-        if (BindingContext.EMPTY == bindingContext) {
-            return
-        }
 
         if (allowExplicitReturnType && function.hasDeclaredReturnType()) {
             return

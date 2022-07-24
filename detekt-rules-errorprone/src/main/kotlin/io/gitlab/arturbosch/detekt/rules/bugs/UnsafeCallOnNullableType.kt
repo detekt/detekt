@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getType
@@ -44,9 +45,10 @@ class UnsafeCallOnNullableType(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitPostfixExpression(expression: KtPostfixExpression) {
         super.visitPostfixExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
         if (expression.operationToken == KtTokens.EXCLEXCL &&
             expression.baseExpression?.getType(bindingContext)?.nullability() == TypeNullability.NULLABLE
         ) {

@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.load.java.sam.JavaSingleAbstractMethodUtils
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
@@ -94,9 +95,10 @@ class ObjectLiteralToLambda(config: Config = Config.empty) : Rule(config) {
             !functionBody.containsMethodOf(this)
     }
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitObjectLiteralExpression(expression: KtObjectLiteralExpression) {
         super.visitObjectLiteralExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
         val declaration = expression.objectDeclaration
 
         if (

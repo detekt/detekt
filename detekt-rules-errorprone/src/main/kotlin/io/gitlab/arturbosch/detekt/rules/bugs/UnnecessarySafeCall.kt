@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -40,11 +41,10 @@ class UnnecessarySafeCall(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Suppress("ReturnCount")
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
         super.visitSafeQualifiedExpression(expression)
-
-        if (bindingContext == BindingContext.EMPTY) return
 
         val safeAccessElement = expression.getChildOfType<LeafPsiElement>()
         if (safeAccessElement == null || safeAccessElement.elementType != KtTokens.SAFE_ACCESS) {

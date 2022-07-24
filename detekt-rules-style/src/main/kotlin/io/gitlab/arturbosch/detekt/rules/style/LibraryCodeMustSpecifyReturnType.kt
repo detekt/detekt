@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -53,10 +54,9 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
         Debt.FIVE_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitProperty(property: KtProperty) {
-        if (bindingContext == BindingContext.EMPTY) {
-            return
-        }
         if (property.explicitReturnTypeRequired()) {
             report(
                 CodeSmell(
@@ -70,9 +70,6 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (bindingContext == BindingContext.EMPTY) {
-            return
-        }
         if (function.explicitReturnTypeRequired()) {
             report(
                 CodeSmell(

@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.psi.KtCatchClause
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -57,10 +58,11 @@ class UnreachableCatchBlock(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     @Suppress("ReturnCount")
     override fun visitCatchSection(catchClause: KtCatchClause) {
         super.visitCatchSection(catchClause)
-        if (bindingContext == BindingContext.EMPTY) return
 
         val tryExpression = catchClause.getStrictParentOfType<KtTryExpression>() ?: return
         val prevCatchClauses = tryExpression.catchClauses.takeWhile { it != catchClause }

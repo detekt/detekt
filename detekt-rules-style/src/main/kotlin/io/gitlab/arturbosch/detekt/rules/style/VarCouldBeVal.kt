@@ -74,9 +74,10 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
     @Configuration("Whether to ignore uninitialized lateinit vars")
     private val ignoreLateinitVar: Boolean by config(defaultValue = false)
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
-        if (bindingContext == BindingContext.EMPTY) return
         val assignmentVisitor = AssignmentVisitor(bindingContext, ignoreLateinitVar)
         file.accept(assignmentVisitor)
 

@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.ValueArgument
@@ -58,10 +59,11 @@ class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     @Suppress("ReturnCount")
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
 
         val safeExpression = expression as? KtSafeQualifiedExpression
         val notNullType = expression.receiverExpression.getType(bindingContext)?.isNullable() == false

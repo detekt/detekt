@@ -12,6 +12,8 @@ import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
 
@@ -40,6 +42,8 @@ class NullableBooleanCheck(config: Config = Config.empty) : Rule(config) {
         "Nullable boolean check should use `==` rather than `?:`",
         Debt.FIVE_MINS,
     )
+
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         if (expression.operationToken == KtTokens.ELVIS &&

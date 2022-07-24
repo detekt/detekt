@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiver
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -47,11 +48,10 @@ class CouldBeSequence(config: Config = Config.empty) : Rule(config) {
 
     private var visitedCallExpressions = mutableListOf<KtExpression>()
 
-    @Suppress("ReturnCount")
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-
-        if (bindingContext == BindingContext.EMPTY) return
 
         if (visitedCallExpressions.contains(expression)) return
 

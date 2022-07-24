@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.psiUtil.isDotSelector
@@ -72,6 +73,8 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
         list.map { Forbidden(fromFunctionSignature(it.value), it.reason) }
     }
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         check(expression)
@@ -105,8 +108,6 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun check(expression: KtExpression) {
-        if (bindingContext == BindingContext.EMPTY) return
-
         val descriptors = expression.getResolvedCall(bindingContext)?.resultingDescriptor?.let {
             val foundDescriptors = if (it is PropertyDescriptor) {
                 listOfNotNull(it.unwrappedGetMethod, it.unwrappedSetMethod)

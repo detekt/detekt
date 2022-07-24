@@ -124,6 +124,8 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         Debt.TEN_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
         PropertyCheckVisitor().visitKtFile(file)

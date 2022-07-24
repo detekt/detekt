@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
@@ -49,9 +50,10 @@ class HasPlatformType(config: Config) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitKtElement(element: KtElement) {
         super.visitKtElement(element)
-        if (bindingContext == BindingContext.EMPTY) return
 
         if (element is KtCallableDeclaration && element.hasImplicitPlatformType()) {
             report(

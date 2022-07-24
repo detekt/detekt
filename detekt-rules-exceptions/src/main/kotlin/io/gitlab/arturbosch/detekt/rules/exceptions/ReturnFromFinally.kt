@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFinallySection
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtTryExpression
@@ -55,9 +56,10 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
     @Configuration("ignores labeled return statements")
     private val ignoreLabeled: Boolean by config(false)
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitTryExpression(expression: KtTryExpression) {
         super.visitTryExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
 
         val finallyBlock = expression.finallyBlock ?: return
 

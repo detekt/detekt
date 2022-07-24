@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtUserType
@@ -48,17 +49,16 @@ class DontDowncastCollectionTypes(config: Config) : Rule(config) {
         Debt.TEN_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitIsExpression(expression: KtIsExpression) {
         super.visitIsExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
 
         checkForDowncast(expression, expression.leftHandSide, expression.typeReference)
     }
 
     override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
         super.visitBinaryWithTypeRHSExpression(expression)
-
-        if (bindingContext == BindingContext.EMPTY) return
 
         checkForDowncast(expression, expression.left, expression.right)
     }

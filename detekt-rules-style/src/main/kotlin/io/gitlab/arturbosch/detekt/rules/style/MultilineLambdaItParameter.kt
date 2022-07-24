@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import io.gitlab.arturbosch.detekt.rules.hasImplicitParameterReference
 import io.gitlab.arturbosch.detekt.rules.implicitParameter
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -73,9 +74,10 @@ class MultilineLambdaItParameter(val config: Config) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
-        if (bindingContext == BindingContext.EMPTY) return
         val size = lambdaExpression.bodyExpression?.statements?.size
         if (size == null || size <= 1) return
 

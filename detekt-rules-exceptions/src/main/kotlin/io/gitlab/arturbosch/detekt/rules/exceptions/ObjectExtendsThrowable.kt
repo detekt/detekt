@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.typeUtil.isNotNullThrowable
@@ -53,9 +54,10 @@ class ObjectExtendsThrowable(config: Config = Config.empty) : Rule(config) {
         debt = Debt.TEN_MINS
     )
 
+    override fun visitCondition(root: KtFile) = bindingContext != BindingContext.EMPTY && super.visitCondition(root)
+
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
         super.visitObjectDeclaration(declaration)
-        if (bindingContext == BindingContext.EMPTY) return
         if (!declaration.isObjectLiteral() && declaration.isSubtypeOfThrowable()) {
             report(
                 CodeSmell(
