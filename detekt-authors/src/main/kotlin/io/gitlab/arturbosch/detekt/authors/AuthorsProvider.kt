@@ -13,6 +13,10 @@ class AuthorsProvider : RuleSetProvider {
 
     override val ruleSetId: String = "detekt"
 
-    @Suppress("UseEmptyCounterpart")
-    override fun instance(config: Config) = RuleSet(ruleSetId, listOf())
+    override fun instance(config: Config) = RuleSet(
+        ruleSetId,
+        listOf(
+            RequiresTypeResolutionRulesDoesNotRunWithoutAContext(config),
+        )
+    )
 }

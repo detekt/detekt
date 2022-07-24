@@ -1,2 +1,4 @@
 detekt:
   active: true
+  RequiresTypeResolutionRulesDoesNotRunWithoutAContext:
+    active: true
