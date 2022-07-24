@@ -27,6 +27,7 @@ allprojects {
     dependencies {
         detekt(project(":detekt-cli"))
         detektPlugins(project(":detekt-formatting"))
+        detektPlugins(project(":detekt-rules-ruleauthors"))
     }
 
     tasks.withType<Detekt>().configureEach {
