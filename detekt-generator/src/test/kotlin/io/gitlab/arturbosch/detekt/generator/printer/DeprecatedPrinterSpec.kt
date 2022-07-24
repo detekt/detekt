@@ -10,8 +10,8 @@ class DeprecatedPrinterSpec {
     fun `prints the correct properties`() {
         val markdownString = DeprecatedPrinter.print(listOf(createRuleSetPage()))
         val expectedMarkdownString = """
-            style>WildcardImport>conf2=use conf1 instead
-            style>WildcardImport>conf4=use conf3 instead
+            style>MagicNumber>conf2=use conf1 instead
+            style>MagicNumber>conf4=use conf3 instead
             
         """.trimIndent()
         assertThat(markdownString).isEqualTo(expectedMarkdownString)

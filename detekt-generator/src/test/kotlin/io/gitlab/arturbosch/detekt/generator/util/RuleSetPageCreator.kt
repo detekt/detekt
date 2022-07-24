@@ -59,7 +59,7 @@ internal fun createRuleSetPage(): RuleSetPage {
 
 internal fun createRules(): List<Rule> {
     val rule1 = Rule(
-        name = "WildcardImport",
+        name = "MagicNumber",
         description = "a wildcard import",
         nonCompliantCodeExample = "import foo.*",
         compliantCodeExample = "import foo.bar",

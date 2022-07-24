@@ -1,6 +1,6 @@
 style rule set
 
-### WildcardImport
+### MagicNumber
 
 a wildcard import
 
