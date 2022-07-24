@@ -9,6 +9,7 @@ pluginManagement {
 
 include("code-coverage-report")
 include("detekt-api")
+include("detekt-authors")
 include("detekt-cli")
 include("detekt-core")
 include("detekt-formatting")
