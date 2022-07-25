@@ -10,6 +10,10 @@ dependencies {
     testImplementation(projects.detektTest)
 }
 
+tasks.apiDump {
+    notCompatibleWithConfigurationCache("https://github.com/Kotlin/binary-compatibility-validator/issues/95")
+}
+
 apiValidation {
     ignoredPackages.add("io.github.detekt.psi.internal")
 }
