@@ -27,7 +27,6 @@ private object TestExclusions : Exclusions() {
     override val ruleSets = emptySet<String>()
     override val rules = setOf(
         "FunctionNaming",
-        "WildcardImport",
         "LateinitUsage",
         "StringLiteralDuplication",
         "SpreadOperator",
