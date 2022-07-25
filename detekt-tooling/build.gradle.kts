@@ -10,6 +10,10 @@ dependencies {
     testImplementation(libs.assertj)
 }
 
+tasks.apiDump {
+    notCompatibleWithConfigurationCache("https://github.com/Kotlin/binary-compatibility-validator/issues/95")
+}
+
 apiValidation {
     ignoredPackages.add("io.github.detekt.tooling.internal")
 }
