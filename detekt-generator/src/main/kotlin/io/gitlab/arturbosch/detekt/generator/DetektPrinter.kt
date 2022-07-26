@@ -38,6 +38,13 @@ class DetektPrinter(private val arguments: GeneratorArgs) {
         }
     }
 
+    fun printCustomRuleConfig(pages: List<RuleSetPage>) {
+        yamlWriter.write(
+            arguments.configPath.parent,
+            arguments.configPath.fileName.toString().split(".").first()
+        ) { ConfigPrinter.printCustomRuleConfig(pages) }
+    }
+
     private fun markdownHeader(ruleSet: String): String {
         check(ruleSet.length > 1) { "Rule set name must be not empty or less than two symbols." }
         return """

@@ -48,6 +48,13 @@ class CliArgs {
     var generateConfig: Boolean = false
 
     @Parameter(
+        names = ["--generate-custom-rule-config", "-gcrc"],
+        description = "Generate config for user-defined rules. " +
+            "Path to user rules can be specified with --input option"
+    )
+    var generateCustomRuleConfig: Boolean = false
+
+    @Parameter(
         names = ["--plugins", "-p"],
         description = "Extra paths to plugin jars separated by ',' or ';'."
     )

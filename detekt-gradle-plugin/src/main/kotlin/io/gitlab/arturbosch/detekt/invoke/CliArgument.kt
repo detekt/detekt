@@ -17,6 +17,7 @@ private const val FAIL_FAST_PARAMETER = "--fail-fast"
 private const val ALL_RULES_PARAMETER = "--all-rules"
 private const val REPORT_PARAMETER = "--report"
 private const val GENERATE_CONFIG_PARAMETER = "--generate-config"
+private const val GENERATE_CUSTOM_RULE_CONFIG_PARAMETER = "--generate-custom-rule-config"
 private const val CREATE_BASELINE_PARAMETER = "--create-baseline"
 private const val CLASSPATH_PARAMETER = "--classpath"
 private const val LANGUAGE_VERSION_PARAMETER = "--language-version"
@@ -33,6 +34,10 @@ internal object CreateBaselineArgument : CliArgument() {
 
 internal object GenerateConfigArgument : CliArgument() {
     override fun toArgument() = listOf(GENERATE_CONFIG_PARAMETER)
+}
+
+internal object GenerateCustomRuleConfigArgument : CliArgument() {
+    override fun toArgument() = listOf(GENERATE_CUSTOM_RULE_CONFIG_PARAMETER)
 }
 
 internal data class InputArgument(val fileCollection: FileCollection) : CliArgument() {

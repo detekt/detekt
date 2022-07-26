@@ -4,6 +4,8 @@ import io.github.detekt.tooling.api.DefaultConfigurationProvider
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.MultipleExistingPathConverter
+import java.io.File
+import java.net.URLClassLoader
 import java.nio.file.Paths
 
 class ConfigExporter(
@@ -12,6 +14,14 @@ class ConfigExporter(
 ) : Executable {
 
     override fun execute() {
+        if (arguments.generateCustomRuleConfig) {
+            generateCustomRuleConfig()
+        } else {
+            generateConfig()
+        }
+    }
+
+    private fun generateConfig() {
         val configPath = Paths.get(arguments.config ?: "detekt.yml")
         val spec = ProcessingSpec {
             extensions {
@@ -22,4 +32,35 @@ class ConfigExporter(
         DefaultConfigurationProvider.load(spec.extensionsSpec).copy(configPath)
         outputPrinter.appendLine("Successfully copied default config to ${configPath.toAbsolutePath()}")
     }
+
+    private fun generateCustomRuleConfig() {
+        val configPath = Paths.get(arguments.config ?: "config.yml")
+
+        val rootDir = File("/Users/vvp/IdeaProjects/detekt/") // TODO
+        val urls = rootDir.walkTopDown()
+            .filter { it.name.endsWith(".jar") }
+            .map { it.toURI().toURL() }
+            .toList()
+            .toTypedArray()
+        val classLoader = URLClassLoader(urls, null)
+
+        val clazz = classLoader.loadClass("io.gitlab.arturbosch.detekt.generator.Main")
+        val methodMain = clazz.getMethod("main", Array<String>::class.java)
+
+        val args = arrayOf(
+            arguments::generateCustomRuleConfig.name.toParam(),
+            arguments::input.name.toParam(),
+            arguments.input,
+            arguments::config.name.toParam(),
+            arguments.config,
+        )
+        methodMain.invoke(null, args)
+        outputPrinter.appendLine("Successfully generated custom rules config to ${configPath.toAbsolutePath()}")
+    }
+
+    private fun String.toParam() =
+        arguments.javaClass.declaredFields.find { it.name == this }!!
+            .getAnnotation(com.beust.jcommander.Parameter::class.java)
+            .names
+            .first()
 }
