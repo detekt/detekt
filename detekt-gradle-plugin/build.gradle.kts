@@ -183,8 +183,6 @@ afterEvaluate {
     }
 }
 
-val String.byProperty: String? get() = findProperty(this) as? String
-
 tasks.withType<Test>().configureEach {
     retry {
         @Suppress("MagicNumber")
