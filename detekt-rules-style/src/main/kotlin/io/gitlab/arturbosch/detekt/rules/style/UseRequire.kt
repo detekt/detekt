@@ -10,10 +10,9 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.arguments
 import io.gitlab.arturbosch.detekt.rules.isEmptyOrSingleStringArgument
-import io.gitlab.arturbosch.detekt.rules.isEnclosedByConditionalStatement
 import io.gitlab.arturbosch.detekt.rules.isIllegalArgumentException
 import org.jetbrains.kotlin.psi.KtBlockExpression
-import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
 /**
@@ -42,8 +41,7 @@ class UseRequire(config: Config = Config.empty) : Rule(config) {
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
         if (!expression.isIllegalArgumentException()) return
-
-        if (expression.isOnlyExpressionInBlock()) return
+        if (expression.hasMoreExpressionsInBlock()) return
 
         if (expression.isEnclosedByConditionalStatement() &&
             expression.arguments.isEmptyOrSingleStringArgument(bindingContext)
@@ -52,11 +50,14 @@ class UseRequire(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun KtThrowExpression.isOnlyExpressionInBlock(): Boolean {
-        return when (val p = parent) {
-            is KtBlockExpression -> p.statements.size == 1
-            is KtNamedFunction -> true
+    private fun KtThrowExpression.isEnclosedByConditionalStatement(): Boolean {
+        return when (parent) {
+            is KtContainerNodeForControlStructureBody -> true
+            is KtBlockExpression -> parent.parent is KtContainerNodeForControlStructureBody
             else -> false
         }
     }
+
+    private fun KtThrowExpression.hasMoreExpressionsInBlock(): Boolean =
+        (parent as? KtBlockExpression)?.run { statements.size > 1 } ?: false
 }
