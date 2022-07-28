@@ -5,7 +5,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
-import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -122,7 +121,10 @@ internal class ThrowExtensionsSpec {
         throwingAssertions: KtThrowExpression.() -> Unit
     ) {
         val ktFile = compileContentForTest(code)
-        val ktThrowExpression = ktFile.findDescendantOfType<KtThrowExpression>() ?: fail("no throw expression found")
-        return throwingAssertions(ktThrowExpression)
+        val ktThrowExpression = ktFile.findDescendantOfType<KtThrowExpression>()
+        assertThat(ktThrowExpression)
+            .withFailMessage("no throw expression found")
+            .isNotNull
+        return throwingAssertions(ktThrowExpression!!)
     }
 }
