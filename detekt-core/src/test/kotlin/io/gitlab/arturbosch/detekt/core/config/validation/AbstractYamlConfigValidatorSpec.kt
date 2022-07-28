@@ -36,7 +36,7 @@ internal class AbstractYamlConfigValidatorSpec {
         assertThat(validator.validationSettings.checkExhaustiveness).isEqualTo(configValue)
     }
 
-    private class SettingsCapturingValidatorAbstract() : AbstractYamlConfigValidator() {
+    private class SettingsCapturingValidatorAbstract : AbstractYamlConfigValidator() {
         lateinit var validationSettings: ValidationSettings
         override fun validate(
             configToValidate: YamlConfig,
