@@ -7,9 +7,9 @@ style:
   rulesetconfig3:
     - 'first'
     - 'se*cond'
-  WildcardImport:
+  MagicNumber:
     active: true
-    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**', '**/*.kts']
     conf1: 'foo'
     conf3:
       - 'a'

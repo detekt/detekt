@@ -30,7 +30,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(2, 5)
+                assertThat(result).hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -42,7 +42,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(2, 5)
+                assertThat(result).hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -54,7 +54,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(2, 5)
+                assertThat(result).hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -66,7 +66,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(2, 5)
+                assertThat(result).hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -78,7 +78,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(2, 5)
+                assertThat(result).hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -90,7 +90,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(2, 5)
+                assertThat(result).hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -102,7 +102,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(2, 5)
+                assertThat(result).hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -114,7 +114,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(2, 5)
+                assertThat(result).hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -135,7 +135,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = rule.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(3, 5)
+                assertThat(result).hasStartSourceLocation(3, 5)
             }
 
             @Test
@@ -157,7 +157,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = rule.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(4, 5)
+                assertThat(result).hasStartSourceLocation(4, 5)
             }
 
             @Test
@@ -180,7 +180,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = rule.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(5, 5)
+                assertThat(result).hasStartSourceLocation(5, 5)
             }
         }
 
@@ -357,7 +357,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(1, 1)
+                assertThat(result).hasStartSourceLocation(1, 1)
             }
 
             @Test
@@ -367,7 +367,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(1, 1)
+                assertThat(result).hasStartSourceLocation(1, 1)
             }
 
             @Test
@@ -377,7 +377,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(1, 1)
+                assertThat(result).hasStartSourceLocation(1, 1)
             }
 
             @Test
@@ -387,7 +387,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(1, 1)
+                assertThat(result).hasStartSourceLocation(1, 1)
             }
 
             @Test
@@ -397,7 +397,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(1, 1)
+                assertThat(result).hasStartSourceLocation(1, 1)
             }
 
             @Test
@@ -407,7 +407,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(1, 1)
+                assertThat(result).hasStartSourceLocation(1, 1)
             }
 
             @Test
@@ -417,7 +417,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(1, 1)
+                assertThat(result).hasStartSourceLocation(1, 1)
             }
 
             @Test
@@ -427,7 +427,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(1, 1)
+                assertThat(result).hasStartSourceLocation(1, 1)
             }
 
             @Test
@@ -446,7 +446,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = rule.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(2, 1)
+                assertThat(result).hasStartSourceLocation(2, 1)
             }
 
             @Test
@@ -466,7 +466,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = rule.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(3, 1)
+                assertThat(result).hasStartSourceLocation(3, 1)
             }
 
             @Test
@@ -487,7 +487,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = rule.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(4, 1)
+                assertThat(result).hasStartSourceLocation(4, 1)
             }
         }
 
@@ -642,7 +642,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(2, 5)
+                assertThat(result).hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -654,7 +654,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(2, 5)
+                assertThat(result).hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -666,7 +666,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(2, 5)
+                assertThat(result).hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -678,7 +678,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(2, 5)
+                assertThat(result).hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -690,7 +690,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(2, 5)
+                assertThat(result).hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -702,7 +702,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(2, 5)
+                assertThat(result).hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -714,7 +714,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(2, 5)
+                assertThat(result).hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -726,7 +726,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = subject.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(2, 5)
+                assertThat(result).hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -747,7 +747,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = rule.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(3, 5)
+                assertThat(result).hasStartSourceLocation(3, 5)
             }
 
             @Test
@@ -769,7 +769,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = rule.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(4, 5)
+                assertThat(result).hasStartSourceLocation(4, 5)
             }
 
             @Test
@@ -792,7 +792,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
                 """
                 val result = rule.compileAndLintWithContext(env, code)
                 assertThat(result).hasSize(1)
-                assertThat(result).hasSourceLocation(5, 5)
+                assertThat(result).hasStartSourceLocation(5, 5)
             }
         }
 

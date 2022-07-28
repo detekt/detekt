@@ -1,9 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+
+private const val SEARCH_PROTECTED_PROPERTY = "searchProtectedProperty"
 
 class UndocumentedPublicPropertySpec {
     val subject = UndocumentedPublicProperty()
@@ -211,6 +214,27 @@ class UndocumentedPublicPropertySpec {
             }
         """
         assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report undocumented protected properties by default`() {
+        val code = """
+            open class Test {
+                protected val a = 1
+            }
+        """
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `reports undocumented protected properties if configured`() {
+        val code = """
+            open class Test {
+                protected val a = 1
+            }
+        """
+        val subject = UndocumentedPublicProperty(TestConfig(mapOf(SEARCH_PROTECTED_PROPERTY to "true")))
+        assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
     @Nested

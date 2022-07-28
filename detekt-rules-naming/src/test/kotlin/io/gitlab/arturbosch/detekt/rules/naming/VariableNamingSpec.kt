@@ -18,7 +18,7 @@ class VariableNamingSpec {
             }
         """
         assertThat(VariableNaming().compileAndLint(code))
-            .hasSourceLocations(
+            .hasStartSourceLocations(
                 SourceLocation(2, 17),
                 SourceLocation(3, 9),
                 SourceLocation(4, 9)
@@ -68,7 +68,7 @@ class VariableNamingSpec {
         """
         val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
         assertThat(VariableNaming(config).compileAndLint(code))
-            .hasSourceLocations(
+            .hasStartSourceLocations(
                 SourceLocation(2, 18),
                 SourceLocation(5, 18)
             )

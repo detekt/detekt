@@ -44,6 +44,9 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
     @Configuration("if inner interfaces should be searched")
     private val searchInInnerInterface: Boolean by config(true)
 
+    @Configuration("if protected classes should be searched")
+    private val searchInProtectedClass: Boolean by config(false)
+
     override fun visitClass(klass: KtClass) {
         if (requiresDocumentation(klass)) {
             reportIfUndocumented(klass)
@@ -81,7 +84,7 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun isPublicAndPublicInherited(element: KtClassOrObject) =
-        element.isPublicInherited() && element.isPublicNotOverridden()
+        element.isPublicInherited(searchInProtectedClass) && element.isPublicNotOverridden(searchInProtectedClass)
 
     private fun KtObjectDeclaration.isCompanionWithoutName() =
         isCompanion() && nameAsSafeName.asString() == "Companion"

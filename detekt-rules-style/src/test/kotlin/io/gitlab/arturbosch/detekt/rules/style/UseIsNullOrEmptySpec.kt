@@ -24,7 +24,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                 """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
-                assertThat(findings).hasSourceLocation(2, 9)
+                assertThat(findings).hasStartSourceLocation(2, 9)
                 assertThat(findings[0]).hasMessage(
                     "This 'x == null || x.isEmpty()' can be replaced with 'isNullOrEmpty()' call"
                 )

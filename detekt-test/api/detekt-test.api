@@ -6,8 +6,12 @@ public final class io/gitlab/arturbosch/detekt/test/FindingAssert : org/assertj/
 
 public final class io/gitlab/arturbosch/detekt/test/FindingsAssert : org/assertj/core/api/AbstractListAssert {
 	public fun <init> (Ljava/util/List;)V
+	public final fun hasEndSourceLocation (II)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
+	public final fun hasEndSourceLocations ([Lio/gitlab/arturbosch/detekt/api/SourceLocation;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
 	public final fun hasSourceLocation (II)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
 	public final fun hasSourceLocations ([Lio/gitlab/arturbosch/detekt/api/SourceLocation;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
+	public final fun hasStartSourceLocation (II)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
+	public final fun hasStartSourceLocations ([Lio/gitlab/arturbosch/detekt/api/SourceLocation;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
 	public final fun hasTextLocations ([Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
 	public final fun hasTextLocations ([Lkotlin/Pair;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
 	public synthetic fun newAbstractIterableAssert (Ljava/lang/Iterable;)Lorg/assertj/core/api/AbstractIterableAssert;

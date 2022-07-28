@@ -27,7 +27,10 @@ class FindingsAssert(actual: List<Finding>) :
     override fun toAssert(value: Finding?, description: String?): FindingAssert =
         FindingAssert(value).`as`(description)
 
-    fun hasSourceLocations(vararg expected: SourceLocation) = apply {
+    @Deprecated("Use hasStartSourceLocations instead", ReplaceWith("hasStartSourceLocations(*expected)"))
+    fun hasSourceLocations(vararg expected: SourceLocation) = hasStartSourceLocations(*expected)
+
+    fun hasStartSourceLocations(vararg expected: SourceLocation) = apply {
         val actualSources = actual.asSequence()
             .map { it.location.source }
             .sortedWith(compareBy({ it.line }, { it.column }))
@@ -37,13 +40,35 @@ class FindingsAssert(actual: List<Finding>) :
 
         if (!Objects.deepEquals(actualSources.toList(), expectedSources.toList())) {
             failWithMessage(
-                "Expected source locations to be ${expectedSources.toList()} but was ${actualSources.toList()}"
+                "Expected start source locations to be ${expectedSources.toList()} but was ${actualSources.toList()}"
             )
         }
     }
 
-    fun hasSourceLocation(line: Int, column: Int) = apply {
-        hasSourceLocations(SourceLocation(line, column))
+    fun hasEndSourceLocations(vararg expected: SourceLocation) = apply {
+        val actualSources = actual.asSequence()
+            .map { it.location.endSource }
+            .sortedWith(compareBy({ it.line }, { it.column }))
+
+        val expectedSources = expected.asSequence()
+            .sortedWith(compareBy({ it.line }, { it.column }))
+
+        if (!Objects.deepEquals(actualSources.toList(), expectedSources.toList())) {
+            failWithMessage(
+                "Expected end source locations to be ${expectedSources.toList()} but was ${actualSources.toList()}"
+            )
+        }
+    }
+
+    @Deprecated("Use hasStartSourceLocation instead", ReplaceWith("hasStartSourceLocation(line, column)"))
+    fun hasSourceLocation(line: Int, column: Int) = hasStartSourceLocation(line, column)
+
+    fun hasStartSourceLocation(line: Int, column: Int) = apply {
+        hasStartSourceLocations(SourceLocation(line, column))
+    }
+
+    fun hasEndSourceLocation(line: Int, column: Int) = apply {
+        hasEndSourceLocations(SourceLocation(line, column))
     }
 
     fun hasTextLocations(vararg expected: Pair<Int, Int>) = apply {

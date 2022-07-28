@@ -39,7 +39,7 @@ class MagicNumberSpec {
         @Test
         fun `should be reported when ignoredNumbers is empty`() {
             val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to emptyList<String>()))).lint(code)
-            assertThat(findings).hasSourceLocation(1, 15)
+            assertThat(findings).hasStartSourceLocation(1, 15)
         }
     }
 
@@ -73,7 +73,7 @@ class MagicNumberSpec {
         @Test
         fun `should be reported when ignoredNumbers is empty`() {
             val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to emptyList<String>()))).lint(code)
-            assertThat(findings).hasSourceLocation(1, 13)
+            assertThat(findings).hasStartSourceLocation(1, 13)
         }
     }
 
@@ -107,7 +107,7 @@ class MagicNumberSpec {
         @Test
         fun `should be reported when ignoredNumbers is empty`() {
             val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to emptyList<String>()))).lint(code)
-            assertThat(findings).hasSourceLocation(1, 14)
+            assertThat(findings).hasStartSourceLocation(1, 14)
         }
     }
 
@@ -124,7 +124,7 @@ class MagicNumberSpec {
         @Test
         fun `should be reported when ignoredNumbers is empty`() {
             val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to emptyList<String>()))).lint(code)
-            assertThat(findings).hasSourceLocation(1, 15)
+            assertThat(findings).hasStartSourceLocation(1, 15)
         }
     }
 
@@ -135,7 +135,7 @@ class MagicNumberSpec {
         @Test
         fun `should be reported by default`() {
             val findings = MagicNumber().lint(code)
-            assertThat(findings).hasSourceLocation(1, 15)
+            assertThat(findings).hasStartSourceLocation(1, 15)
         }
 
         @Test
@@ -154,14 +154,14 @@ class MagicNumberSpec {
         fun `should not be ignored when ignoredNumbers contains 2 but not -2`() {
             val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to listOf("1", "2", "3", "-1", "0"))))
                 .lint(code)
-            assertThat(findings).hasSourceLocation(1, 15)
+            assertThat(findings).hasStartSourceLocation(1, 15)
         }
 
         @Test
         fun `should not be ignored when ignoredNumbers contains 2 but not -2 config with string`() {
             val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to "1,2,3,-1,0")))
                 .lint(code)
-            assertThat(findings).hasSourceLocation(1, 15)
+            assertThat(findings).hasStartSourceLocation(1, 15)
         }
     }
 
@@ -195,7 +195,7 @@ class MagicNumberSpec {
         @Test
         fun `should be reported when ignoredNumbers is empty`() {
             val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to emptyList<String>()))).lint(code)
-            assertThat(findings).hasSourceLocation(1, 16)
+            assertThat(findings).hasStartSourceLocation(1, 16)
         }
     }
 
@@ -229,7 +229,7 @@ class MagicNumberSpec {
         @Test
         fun `should be reported when ignoredNumbers is empty`() {
             val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to emptyList<String>()))).lint(code)
-            assertThat(findings).hasSourceLocation(1, 13)
+            assertThat(findings).hasStartSourceLocation(1, 13)
         }
     }
 
@@ -291,7 +291,7 @@ class MagicNumberSpec {
         @Test
         fun `should be reported by default`() {
             val findings = MagicNumber().lint(code)
-            assertThat(findings).hasSourceLocation(1, 13)
+            assertThat(findings).hasStartSourceLocation(1, 13)
         }
 
         @Test
@@ -321,7 +321,7 @@ class MagicNumberSpec {
         fun `should be reported`() {
             val findings = MagicNumber().lint(code)
             assertThat(findings)
-                .hasSourceLocations(
+                .hasStartSourceLocations(
                     SourceLocation(1, 17),
                     SourceLocation(1, 21),
                     SourceLocation(1, 24),
@@ -345,7 +345,7 @@ class MagicNumberSpec {
         @Test
         fun `should be reported`() {
             val findings = MagicNumber().lint(code)
-            assertThat(findings).hasSourceLocations(
+            assertThat(findings).hasStartSourceLocations(
                 SourceLocation(3, 9),
                 SourceLocation(3, 21),
                 SourceLocation(4, 9),
@@ -405,7 +405,7 @@ class MagicNumberSpec {
         @Test
         fun `should be reported by default`() {
             val findings = MagicNumber().lint(code)
-            assertThat(findings).hasSourceLocation(1, 12)
+            assertThat(findings).hasStartSourceLocation(1, 12)
         }
 
         @Test
@@ -486,7 +486,7 @@ class MagicNumberSpec {
 
             val findings = MagicNumber(config).lint(code)
             assertThat(findings)
-                .hasSourceLocations(
+                .hasStartSourceLocations(
                     SourceLocation(1, 17),
                     SourceLocation(3, 24),
                     SourceLocation(4, 33),
@@ -601,7 +601,7 @@ class MagicNumberSpec {
             )
 
             val findings = MagicNumber(config).lint(code)
-            assertThat(findings).hasSourceLocation(4, 35)
+            assertThat(findings).hasStartSourceLocation(4, 35)
         }
 
         @Test
@@ -616,7 +616,7 @@ class MagicNumberSpec {
 
             val findings = MagicNumber(config).lint(code)
             assertThat(findings)
-                .hasSourceLocations(
+                .hasStartSourceLocations(
                     SourceLocation(4, 35),
                     SourceLocation(5, 43)
                 )

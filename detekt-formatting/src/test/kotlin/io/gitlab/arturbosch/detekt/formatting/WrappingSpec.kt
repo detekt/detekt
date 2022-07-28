@@ -31,7 +31,7 @@ class WrappingSpec {
 
         subject.lint(code).assert()
             .hasSize(1)
-            .hasSourceLocation(1, 12)
+            .hasStartSourceLocation(1, 12)
             .hasTextLocations(11 to 12)
     }
 }

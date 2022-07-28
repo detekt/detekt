@@ -16,7 +16,7 @@ class LargeClassSpec {
     fun `should detect only the nested large class which exceeds threshold 70`() {
         val findings = subject(threshold = 70).lint(resourceAsPath("NestedClasses.kt"))
         assertThat(findings).hasSize(1)
-        assertThat(findings).hasSourceLocations(SourceLocation(12, 15))
+        assertThat(findings).hasStartSourceLocations(SourceLocation(12, 15))
     }
 
     @Test

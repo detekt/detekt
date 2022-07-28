@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isPublicInherited
 import io.gitlab.arturbosch.detekt.rules.isPublicNotOverridden
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
@@ -31,6 +33,9 @@ class UndocumentedPublicProperty(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
+    @Configuration("if protected functions should be searched")
+    private val searchProtectedProperty: Boolean by config(false)
+
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
         if (constructor.isPublicInherited()) {
             val comment = constructor.containingClassOrObject?.docComment?.text
@@ -43,7 +48,7 @@ class UndocumentedPublicProperty(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitProperty(property: KtProperty) {
-        if (property.isPublicInherited() && !property.isLocal && property.shouldBeDocumented()) {
+        if (property.isPublicInherited(searchProtectedProperty) && !property.isLocal && property.shouldBeDocumented()) {
             report(property)
         }
         super.visitProperty(property)
@@ -58,7 +63,7 @@ class UndocumentedPublicProperty(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtProperty.shouldBeDocumented() =
-        docComment == null && isTopLevelOrInPublicClass() && isPublicNotOverridden()
+        docComment == null && isTopLevelOrInPublicClass() && isPublicNotOverridden(searchProtectedProperty)
 
     private fun KtProperty.isTopLevelOrInPublicClass() = isTopLevel || containingClassOrObject?.isPublic == true
 

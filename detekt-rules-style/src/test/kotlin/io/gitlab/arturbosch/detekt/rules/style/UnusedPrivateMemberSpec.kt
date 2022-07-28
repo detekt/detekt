@@ -1320,7 +1320,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 }
             """
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1).hasSourceLocations(
+            assertThat(findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(3, 30)
             )
         }
@@ -1606,7 +1606,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     private fun foo() = 1
                 }
             """
-            assertThat(subject.lint(code)).hasSize(1).hasSourceLocation(5, 17)
+            assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(5, 17)
         }
 
         @Test
@@ -1619,7 +1619,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     private val foo = 1
                 }
             """
-            assertThat(subject.lint(code)).hasSize(1).hasSourceLocation(5, 17)
+            assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(5, 17)
         }
 
         @Test
@@ -1634,7 +1634,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     ) = 1
                 }
             """
-            assertThat(subject.lint(code)).hasSize(1).hasSourceLocation(6, 9)
+            assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(6, 9)
         }
     }
 }

@@ -48,7 +48,7 @@ class FunctionNamingSpec {
         }
         interface I { fun shouldNotBeFlagged() }
         """
-        assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocation(3, 13)
+        assertThat(FunctionNaming().compileAndLint(code)).hasStartSourceLocation(3, 13)
     }
 
     @Test
@@ -84,7 +84,7 @@ class FunctionNamingSpec {
         }
         interface I { @Suppress("FunctionNaming") fun SHOULD_BE_FLAGGED() }
         """
-        assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocation(3, 13)
+        assertThat(FunctionNaming().compileAndLint(code)).hasStartSourceLocation(3, 13)
     }
 
     @Test
@@ -96,7 +96,7 @@ class FunctionNamingSpec {
         interface I { fun SHOULD_BE_FLAGGED() }
         """
         val config = TestConfig(mapOf(FunctionNaming.IGNORE_OVERRIDDEN to "false"))
-        assertThat(FunctionNaming(config).compileAndLint(code)).hasSourceLocations(
+        assertThat(FunctionNaming(config).compileAndLint(code)).hasStartSourceLocations(
             SourceLocation(2, 18),
             SourceLocation(4, 19)
         )
@@ -107,6 +107,6 @@ class FunctionNamingSpec {
         val code = """
             fun `7his is a function name _`() = Unit
         """
-        assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocations(SourceLocation(1, 5))
+        assertThat(FunctionNaming().compileAndLint(code)).hasStartSourceLocations(SourceLocation(1, 5))
     }
 }

@@ -58,7 +58,7 @@ class ExitOutsideMain(config: Config = Config.empty) : Rule(config) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        if (context == BindingContext.EMPTY) return
+        if (bindingContext == BindingContext.EMPTY) return
 
         if (expression.getStrictParentOfType<KtNamedFunction>()?.isMainFunction() == true) return
         val fqName = expression.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() ?: return

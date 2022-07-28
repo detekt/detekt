@@ -20,10 +20,12 @@ inline fun <reified T : KtElement, reified S : KtElement> KtElement.parentsOfTyp
         }
     }
 
-fun KtNamedDeclaration.isPublicInherited(): Boolean {
+fun KtNamedDeclaration.isPublicInherited(): Boolean = isPublicInherited(false)
+
+fun KtNamedDeclaration.isPublicInherited(considerProtectedAsPublic: Boolean): Boolean {
     var classOrObject = containingClassOrObject
     while (classOrObject != null) {
-        if (!classOrObject.isPublic) {
+        if (!classOrObject.isPublic && !(considerProtectedAsPublic && classOrObject.isProtected())) {
             return false
         }
         classOrObject = classOrObject.containingClassOrObject

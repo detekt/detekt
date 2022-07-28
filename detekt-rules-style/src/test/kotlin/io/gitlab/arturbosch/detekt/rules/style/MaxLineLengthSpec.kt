@@ -258,7 +258,7 @@ class MaxLineLengthSpec {
 
             rule.visit(fileContent)
             assertThat(rule.findings).hasSize(1)
-            assertThat(rule.findings).hasSourceLocations(SourceLocation(6, 5))
+            assertThat(rule.findings).hasStartSourceLocations(SourceLocation(6, 5))
         }
     }
 }

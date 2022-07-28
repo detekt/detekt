@@ -22,7 +22,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 doSomething()
             }
         """
-        assertThat(subject.lint(code)).hasSourceLocation(2, 16)
+        assertThat(subject.lint(code)).hasStartSourceLocation(2, 16)
     }
 
     @Test
@@ -33,7 +33,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 doSomething()
             }
         """
-        assertThat(subject.lint(code)).hasSourceLocation(2, 16)
+        assertThat(subject.lint(code)).hasStartSourceLocation(2, 16)
     }
 
     @Test
@@ -44,7 +44,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 doSomething()
             }
         """
-        assertThat(subject.lint(code)).hasSourceLocation(2, 16)
+        assertThat(subject.lint(code)).hasStartSourceLocation(2, 16)
     }
 
     @Test
@@ -55,7 +55,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 doSomething()
             }
         """
-        assertThat(subject.lint(code)).hasSourceLocation(2, 16)
+        assertThat(subject.lint(code)).hasStartSourceLocation(2, 16)
     }
 
     @Test

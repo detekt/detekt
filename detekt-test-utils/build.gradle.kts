@@ -13,3 +13,7 @@ dependencies {
     testImplementation(libs.assertj)
     runtimeOnly(libs.kotlin.scriptingCompilerEmbeddable)
 }
+
+tasks.apiDump {
+    notCompatibleWithConfigurationCache("https://github.com/Kotlin/binary-compatibility-validator/issues/95")
+}
