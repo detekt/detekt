@@ -11,7 +11,7 @@ import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-import io.gitlab.arturbosch.detekt.api.internal.SimpleGlob
+import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.lexer.KtTokens.EQEQEQ
 import org.jetbrains.kotlin.lexer.KtTokens.EXCLEQEQEQ
@@ -50,11 +50,11 @@ class AvoidReferentialEquality(config: Config) : Rule(config) {
             "The types are defined by a list of simple glob patterns (supporting `*` and `?` wildcards) " +
             "that match the fully qualified type name."
     )
-    private val forbiddenTypePatterns: List<SimpleGlob> by config(
+    private val forbiddenTypePatterns: List<Regex> by config(
         listOf(
             "kotlin.String"
         )
-    ) { it.map(SimpleGlob::of) }
+    ) { it.map(String::simplePatternToRegex) }
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)

@@ -1,14 +1,14 @@
-package io.gitlab.arturbosch.detekt.api.internal
+package io.gitlab.arturbosch.detekt.api
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class SimpleGlobSpec {
+internal class SimplePatternToRegexSpec {
     @Nested
     inner class `empty pattern` {
-        private val subject = SimpleGlob.of("")
+        private val subject = "".simplePatternToRegex()
 
         @Test
         fun `matches an empty string`() {
@@ -25,7 +25,7 @@ class SimpleGlobSpec {
 
     @Nested
     inner class `blank pattern` {
-        private val subject = SimpleGlob.of(" \t")
+        private val subject = " \t".simplePatternToRegex()
 
         @Test
         fun `matches an empty string`() {
@@ -42,7 +42,7 @@ class SimpleGlobSpec {
 
     @Nested
     inner class `Static pattern` {
-        private val subject = SimpleGlob.of("abc")
+        private val subject = "abc".simplePatternToRegex()
 
         @Test
         fun `matches the same string`() {
@@ -63,7 +63,7 @@ class SimpleGlobSpec {
         inner class `single wildcard` {
             @Nested
             inner class `pattern with wildcard at the beginning` {
-                private val subject = SimpleGlob.of("*xyz")
+                private val subject = "*xyz".simplePatternToRegex()
 
                 @Test
                 fun `matches pattern exactly`() {
@@ -86,7 +86,7 @@ class SimpleGlobSpec {
 
             @Nested
             inner class `Pattern with wildcard at the end` {
-                private val subject = SimpleGlob.of("xyz*")
+                private val subject = "xyz*".simplePatternToRegex()
 
                 @Test
                 fun `matches pattern exactly`() {
@@ -109,7 +109,7 @@ class SimpleGlobSpec {
 
             @Nested
             inner class `Pattern with wildcard at the middle` {
-                private val subject = SimpleGlob.of("x*yz")
+                private val subject = "x*yz".simplePatternToRegex()
 
                 @Test
                 fun `matches pattern exactly`() {
@@ -139,7 +139,7 @@ class SimpleGlobSpec {
 
         @Nested
         inner class `multiple wildcards` {
-            private val subject = SimpleGlob.of("x*yz*")
+            private val subject = "x*yz*".simplePatternToRegex()
 
             @Test
             fun `matches pattern`() {
@@ -155,7 +155,7 @@ class SimpleGlobSpec {
         inner class `single wildcard` {
             @Nested
             inner class `pattern with wildcard at the beginning` {
-                private val subject = SimpleGlob.of("?xyz")
+                private val subject = "?xyz".simplePatternToRegex()
 
                 @Test
                 fun `matches with any character before`() {
@@ -164,7 +164,7 @@ class SimpleGlobSpec {
                 }
 
                 @Test
-                fun `does not match with anything before`() {
+                fun `does not match with no character before`() {
                     val actual = subject.matches("xyz")
                     assertThat(actual).isFalse()
                 }
@@ -178,7 +178,7 @@ class SimpleGlobSpec {
 
             @Nested
             inner class `pattern with wildcard at the end` {
-                private val subject = SimpleGlob.of("xyz?")
+                private val subject = "xyz?".simplePatternToRegex()
 
                 @Test
                 fun `matches with any character after`() {
@@ -187,7 +187,7 @@ class SimpleGlobSpec {
                 }
 
                 @Test
-                fun `does not match with anything after`() {
+                fun `does not match with no character after`() {
                     val actual = subject.matches("xyz")
                     assertThat(actual).isFalse()
                 }
@@ -201,7 +201,7 @@ class SimpleGlobSpec {
 
             @Nested
             inner class `pattern with wildcard at the middle` {
-                private val subject = SimpleGlob.of("x?yz")
+                private val subject = "x?yz".simplePatternToRegex()
 
                 @Test
                 fun `matches with any single character`() {
@@ -219,11 +219,11 @@ class SimpleGlobSpec {
 
         @Nested
         inner class `multiple wildcards` {
-            private val subject = SimpleGlob.of("x?y?z")
+            private val subject = "x?y?z".simplePatternToRegex()
 
             @Test
             fun `matches pattern`() {
-                val actual = subject.matches("x.y.z")
+                val actual = subject.matches("x.y_z")
                 assertThat(actual).isTrue()
             }
         }
@@ -233,7 +233,7 @@ class SimpleGlobSpec {
     inner class `characters that have a special meaning in regular expression must be escaped` {
         @Nested
         inner class `Period` {
-            private val subject = SimpleGlob.of("a.b.c")
+            private val subject = "a.b.c".simplePatternToRegex()
 
             @Test
             fun `matches the same string`() {
@@ -249,19 +249,13 @@ class SimpleGlobSpec {
         }
 
         @Nested
-        inner class `Backslash` {
-            private val subject = SimpleGlob.of("""ab\d""")
+        inner class `character classes and quantifiers` {
+            private val subject = """ab\d{2,5}\s\wc""".simplePatternToRegex()
 
             @Test
-            fun `matches the same string`() {
-                val actual = subject.matches("""ab\d""")
+            fun `can be used`() {
+                val actual = subject.matches("""ab123 Xc""")
                 assertThat(actual).isTrue()
-            }
-
-            @Test
-            fun `does not match a other string`() {
-                val actual = subject.matches("ab5")
-                assertThat(actual).isFalse()
             }
         }
     }
@@ -270,7 +264,7 @@ class SimpleGlobSpec {
     inner class `invalid pattern` {
         @Test
         fun `fails during creation`() {
-            assertThatThrownBy { SimpleGlob.of("""a[b""") }
+            assertThatThrownBy { """a[b""".simplePatternToRegex() }
                 .isInstanceOf(IllegalArgumentException::class.java)
         }
     }
