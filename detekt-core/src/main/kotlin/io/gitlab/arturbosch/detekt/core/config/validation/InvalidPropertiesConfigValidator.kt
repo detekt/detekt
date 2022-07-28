@@ -7,8 +7,8 @@ import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 internal class InvalidPropertiesConfigValidator(
     private val baseline: YamlConfig,
     private val deprecatedProperties: Set<String>,
-    excludePatterns: Set<Regex>,
-) : AbstractYamlConfigValidator(excludePatterns) {
+    private val excludePatterns: Set<Regex>,
+) : AbstractYamlConfigValidator() {
 
     override fun validate(
         configToValidate: YamlConfig,

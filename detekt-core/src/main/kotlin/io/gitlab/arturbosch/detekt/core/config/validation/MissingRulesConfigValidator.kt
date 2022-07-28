@@ -10,8 +10,8 @@ import java.util.ServiceLoader
 
 internal class MissingRulesConfigValidator(
     private val baseline: YamlConfig,
-    excludePatterns: Set<Regex>,
-) : AbstractYamlConfigValidator(excludePatterns) {
+    private val excludePatterns: Set<Regex>,
+) : AbstractYamlConfigValidator() {
 
     override fun validate(
         configToValidate: YamlConfig,

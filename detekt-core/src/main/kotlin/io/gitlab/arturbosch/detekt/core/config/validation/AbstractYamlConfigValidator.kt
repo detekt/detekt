@@ -5,9 +5,7 @@ import io.gitlab.arturbosch.detekt.api.ConfigValidator
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 
-internal abstract class AbstractYamlConfigValidator(
-    val excludePatterns: Set<Regex> = emptySet(),
-) : ConfigValidator {
+internal abstract class AbstractYamlConfigValidator : ConfigValidator {
 
     override fun validate(config: Config): Collection<Notification> {
         require(config is YamlConfig) {

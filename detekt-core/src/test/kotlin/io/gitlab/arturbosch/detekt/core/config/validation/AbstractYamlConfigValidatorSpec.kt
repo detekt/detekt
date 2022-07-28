@@ -11,37 +11,32 @@ import org.junit.jupiter.params.provider.ValueSource
 internal class AbstractYamlConfigValidatorSpec {
 
     @Test
-    fun `use default validation settings and given exclude patterns`() {
-        val excludePatterns = setOf(".*".toRegex())
-        val validator = SettingsCapturingValidatorAbstract(excludePatterns)
+    fun `use default validation settings`() {
+        val validator = SettingsCapturingValidatorAbstract()
         val config = yamlConfigFromContent("")
 
         validator.validate(config)
 
         assertThat(validator.validationSettings.checkExhaustiveness).isFalse()
-        assertThat(validator.excludePatterns).isEqualTo(excludePatterns)
     }
 
     @ParameterizedTest
     @ValueSource(booleans = [true, false])
     fun `extract checkExhaustiveness settings from config`(configValue: Boolean) {
-        val excludePatterns = emptySet<Regex>()
         val config = yamlConfigFromContent(
             """
                 config:
                   checkExhaustiveness: $configValue
             """.trimIndent()
         )
-        val validator = SettingsCapturingValidatorAbstract(excludePatterns)
+        val validator = SettingsCapturingValidatorAbstract()
 
         validator.validate(config)
 
         assertThat(validator.validationSettings.checkExhaustiveness).isEqualTo(configValue)
     }
 
-    private class SettingsCapturingValidatorAbstract(
-        excludePatterns: Set<Regex>,
-    ) : AbstractYamlConfigValidator(excludePatterns) {
+    private class SettingsCapturingValidatorAbstract() : AbstractYamlConfigValidator() {
         lateinit var validationSettings: ValidationSettings
         override fun validate(
             configToValidate: YamlConfig,
