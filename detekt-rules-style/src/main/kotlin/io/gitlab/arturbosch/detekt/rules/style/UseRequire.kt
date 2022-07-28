@@ -10,9 +10,9 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.arguments
 import io.gitlab.arturbosch.detekt.rules.isEmptyOrSingleStringArgument
+import io.gitlab.arturbosch.detekt.rules.isEnclosedByConditionalStatement
 import io.gitlab.arturbosch.detekt.rules.isIllegalArgumentException
 import org.jetbrains.kotlin.psi.KtBlockExpression
-import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
 /**
@@ -47,14 +47,6 @@ class UseRequire(config: Config = Config.empty) : Rule(config) {
             expression.arguments.isEmptyOrSingleStringArgument(bindingContext)
         ) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
-        }
-    }
-
-    private fun KtThrowExpression.isEnclosedByConditionalStatement(): Boolean {
-        return when (parent) {
-            is KtContainerNodeForControlStructureBody -> true
-            is KtBlockExpression -> parent.parent is KtContainerNodeForControlStructureBody
-            else -> false
         }
     }
 
