@@ -39,10 +39,6 @@ $dokka.location:io.gitlab.arturbosch.detekt.api.internal/RuleSetConfigProperty/R
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/RuleSetConfigProperty/defaultValue/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-rule-set-config-property/default-value.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/RuleSetConfigProperty/key/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-rule-set-config-property/key.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/RuleSetConfigProperty/value/#io.gitlab.arturbosch.detekt.api.Config/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-rule-set-config-property/value.html
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleGlob.Companion///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-glob/-companion/index.html
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleGlob.Companion/of/#kotlin.String/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-glob/-companion/of.html
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleGlob///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-glob/index.html
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleGlob/matches/#kotlin.String/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-glob/matches.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleNotification///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleNotification/SimpleNotification/#kotlin.String#io.gitlab.arturbosch.detekt.api.Notification.Level/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/-simple-notification.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleNotification/level/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/level.html
