@@ -596,15 +596,9 @@ private fun createGradleRunnerAndSetupProject(
     mainBuildFileContent = """
         subprojects {
             repositories {
-                mavenCentral {
-                    content {
-                        excludeGroup("io.gitlab.arturbosch.detekt")
-                    }
-                }
+                mavenCentral()
                 google()
-                flatDir {
-                    dirs("C:\\Users\\snafu\\IdeaProjects\\detekt\\detekt-gradle-plugin\\build\\repo\\implementation")
-                }
+                mavenLocal()
             }
         }
     """.trimIndent(),

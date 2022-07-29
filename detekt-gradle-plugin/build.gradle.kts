@@ -1,5 +1,3 @@
-import java.util.Properties
-
 plugins {
     id("module")
     id("io.github.com.detekt.injected")
@@ -59,6 +57,12 @@ testing {
 
 val pluginCompileOnly: Configuration by configurations.creating
 val functionalTestImplementation: Configuration by configurations.getting
+val functionalTestRuntimeOnly: Configuration by configurations.getting
+val smokeTest: Configuration by configurations.creating
+
+configurations.detektPlugins {
+    resolutionStrategy.useGlobalDependencySubstitutionRules.set(false)
+}
 
 configurations.compileOnly { extendsFrom(pluginCompileOnly) }
 
@@ -73,6 +77,10 @@ dependencies {
     // Migrate to `implementation(testFixtures(project))` in test suite configuration when this issue is fixed:
     // https://github.com/gradle/gradle/pull/19472
     functionalTestImplementation(testFixtures(project))
+
+    functionalTestRuntimeOnly(layout.files(tasks.generateClasspaths))
+
+    smokeTest("io.gitlab.arturbosch.detekt:detekt-cli")
 
     pluginCompileOnly(libs.android.gradle)
     pluginCompileOnly(libs.kotlin.gradle)
@@ -145,6 +153,10 @@ tasks {
     publishPlugins {
         notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/21283")
     }
+
+    withType<Test>().configureEach {
+        inputs.files(generateClasspaths.get().targetDir)
+    }
 }
 
 // Skip publishing of test fixture API & runtime variants
@@ -198,71 +210,10 @@ tasks.withType<Test>().configureEach {
     }
 }
 
-val smokeTest by configurations.creating {
-    attributes {
-        attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category::class.java, "library"))
-    }
-}
-
-fun readClasspaths(name: String): FileCollection {
-    val x = File("C:\\Users\\snafu\\IdeaProjects\\detekt\\detekt-gradle-plugin\\build\\detektClasspath.properties").reader()
-    val myprop = Properties()
-
-    myprop.load(x)
-    val classpath = myprop.getProperty("$name-classpath")
-    logger.error(classpath.split(File.pathSeparatorChar).joinToString("\n"))
-    return files(classpath.split(File.pathSeparatorChar))
-}
-
-readClasspaths("implementation")
-
-dependencies {
-    smokeTest("io.gitlab.arturbosch.detekt:detekt-cli:1.21.0")
-}
-
-tasks.register<Copy>("special") {
-    notCompatibleWithConfigurationCache("")
-    from(smokeTest)
-    into(layout.buildDirectory.dir("repo/implementation"))
-    doFirst {
-        delete(layout.buildDirectory.dir("repo/implementation"))
-    }
-
-    doLast {
-        logger.error(smokeTest.files.joinToString("\n") { it.absolutePath })
-    }
-}
-
-val javaComponent = components.findByName("myAdhocComponent") as AdhocComponentWithVariants
-javaComponent.addVariantsFromConfiguration(smokeTest) {
-    // dependencies for this variant are considered runtime dependencies
-    mapToMavenScope("runtime")
-    // and also optional dependencies, because we don't want them to leak
-    mapToOptional()
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("local") {
-            from(javaComponent)
-            versionMapping {
-                usage("java-runtime") {
-                    fromResolutionResult()
-                }
-            }
+injectedDependencies {
+    classpaths {
+        register("implementation") {
+            injectedClasspath.from(smokeTest)
         }
-    }
-
-    repositories {
-        maven {
-            name = "installLocally"
-            url = uri("${rootProject.buildDir}/localMaven")
-        }
-    }
-}
-
-injected {
-    classpaths.create("implementation") {
-        classpath.from(smokeTest)
     }
 }

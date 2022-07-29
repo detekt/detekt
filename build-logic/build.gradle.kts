@@ -19,7 +19,7 @@ gradlePlugin {
     plugins {
         create("injectedPlugin") {
             id = "io.github.com.detekt.injected"
-            implementationClass = "InstrumentedJarsPlugin"
+            implementationClass = "InjectedDependenciesPlugin"
         }
     }
 }

@@ -8,11 +8,8 @@ abstract class DslTestBuilder {
     abstract val gradleSubprojectsApplyPlugins: String
     val gradleRepositories = """
         repositories {
-            mavenCentral {
-                content {
-                    excludeGroup("io.gitlab.arturbosch.detekt")
-                }
-            }
+            mavenLocal()
+            mavenCentral()
         }
     """.trimIndent()
 

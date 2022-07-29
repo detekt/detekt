@@ -5,29 +5,27 @@ import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.io.File
+import java.util.Properties
 
 class DetektReportMergeSpec {
     @Test
     @Suppress("LongMethod")
     fun `Sarif merge is configured correctly for multi module project`() {
+        val propertiesUrl = Thread.currentThread().contextClassLoader.getResource("detekt-classpath.properties")
+        checkNotNull(propertiesUrl) { "Injected classpath file detekt-classpath.properties cannot be read" }
+        val properties = Properties()
+        propertiesUrl.openStream().use(properties::load)
+
+        val injectedDependencies = properties
+            .getProperty("implementation-classpath")
+            .split(File.pathSeparatorChar)
+            .joinToString(separator = "\", \"", prefix = "\"", postfix = "\"")
+
         val builder = DslTestBuilder.kotlin()
         val buildFileContent =
             """
-            |import java.util.Properties
-            |
             |${builder.gradlePlugins}
-            |  fun readClasspaths(name: String): FileCollection {
-            |    val x = File("C:\\Users\\snafu\\IdeaProjects\\detekt\\detekt-gradle-plugin\\build\\detektClasspath.properties").reader()
-            |    val myprop = Properties()
-            |
-            |    myprop.load(x)
-            |    val classpath = myprop.getProperty("${'$'}name-classpath")
-            |    logger.error(classpath.split(File.pathSeparatorChar).joinToString("\n"))
-            |    return files(classpath.split(File.pathSeparatorChar))
-            |  }
-            |allprojects {
-            |  ${builder.gradleRepositories}
-            |}
             |
             |val sarifReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
             |  output.set(project.layout.buildDirectory.file("reports/detekt/merge.sarif"))
@@ -36,7 +34,7 @@ class DetektReportMergeSpec {
             |subprojects {
             |  ${builder.gradleSubprojectsApplyPlugins}
             |  dependencies {
-            |    detekt(readClasspaths("implementation"))
+            |    detekt(files($injectedDependencies))
             |  }
             |  detekt {
             |    reports.sarif.enabled = true
