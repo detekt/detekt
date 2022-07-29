@@ -125,6 +125,6 @@ internal class ThrowExtensionsSpec {
         assertThat(ktThrowExpression)
             .withFailMessage("no throw expression found")
             .isNotNull
-        return throwingAssertions(ktThrowExpression!!)
+        throwingAssertions(ktThrowExpression!!)
     }
 }
