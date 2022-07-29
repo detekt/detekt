@@ -275,9 +275,7 @@ class DetektAndroidSpec {
                 )
             }
         }
-
     }
-
 
     @Nested
     inner class `configures android tasks for different build variants` {
