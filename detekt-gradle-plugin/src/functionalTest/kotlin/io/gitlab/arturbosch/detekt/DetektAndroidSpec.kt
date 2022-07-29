@@ -207,6 +207,79 @@ class DetektAndroidSpec {
     }
 
     @Nested
+    inner class `android library depends on kotlin only library with configuration cache turned on` {
+        val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
+            addSubmodule(
+                name = "kotlin_only_lib",
+                numberOfSourceFilesPerSourceDir = 1,
+                numberOfCodeSmells = 1,
+                buildFileContent = """
+                    $KOTLIN_ONLY_LIB_PLUGIN_BLOCK
+                    $DETEKT_REPORTS_BLOCK
+                """.trimIndent(),
+                srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
+                baselineFiles = listOf(
+                    "detekt-baseline.xml",
+                    "detekt-baseline-release.xml",
+                    "detekt-baseline-debug.xml",
+                    "detekt-baseline-releaseUnitTest.xml",
+                    "detekt-baseline-debugUnitTest.xml",
+                    "detekt-baseline-debugAndroidTest.xml"
+                )
+            )
+            addSubmodule(
+                name = "android_lib",
+                numberOfSourceFilesPerSourceDir = 1,
+                numberOfCodeSmells = 1,
+                buildFileContent = """
+                    $LIB_PLUGIN_BLOCK
+                    $ANDROID_BLOCK
+                    $DETEKT_REPORTS_BLOCK
+                    
+                    dependencies {
+                        implementation(project(":kotlin_only_lib"))
+                    }
+                """.trimIndent(),
+                srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
+                baselineFiles = listOf(
+                    "detekt-baseline.xml",
+                    "detekt-baseline-release.xml",
+                    "detekt-baseline-debug.xml",
+                    "detekt-baseline-releaseUnitTest.xml",
+                    "detekt-baseline-debugUnitTest.xml",
+                    "detekt-baseline-debugAndroidTest.xml"
+                )
+            )
+        }
+        val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
+            it.writeProjectFile("android_lib/src/main/AndroidManifest.xml", manifestContent())
+        }
+
+        @Test
+        @DisplayName("task :android_lib:detektMain")
+        fun libDetektMain() {
+            gradleRunner.runTasksAndCheckResult(
+                "--configuration-cache",
+                ":android_lib:detektMain",
+            ) { buildResult ->
+                assertThat(buildResult.output).contains("Configuration cache")
+                assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-release.xml """)
+                assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debug.xml """)
+                assertThat(buildResult.output).contains("--report xml:")
+                assertThat(buildResult.output).contains("--report sarif:")
+                assertThat(buildResult.output).doesNotContain("--report txt:")
+                assertThat(buildResult.tasks.map { it.path }).containsAll(
+                    listOf(
+                        ":android_lib:detektMain",
+                    )
+                )
+            }
+        }
+
+    }
+
+
+    @Nested
     inner class `configures android tasks for different build variants` {
 
         val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
@@ -494,6 +567,13 @@ private val LIB_PLUGIN_BLOCK = """
     plugins {
         id("com.android.library")
         kotlin("android")
+        id("io.gitlab.arturbosch.detekt")
+    }
+""".trimIndent()
+
+private val KOTLIN_ONLY_LIB_PLUGIN_BLOCK = """
+    plugins {
+        kotlin("jvm")
         id("io.gitlab.arturbosch.detekt")
     }
 """.trimIndent()
