@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -216,6 +217,78 @@ class DetektAndroidSpec {
                     listOf(
                         ":lib:detektDebugUnitTest",
                         ":lib:detektDebugAndroidTest"
+                    )
+                )
+            }
+        }
+    }
+
+    @Nested
+    inner class `android library depends on kotlin only library with configuration cache turned on` {
+        val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
+            addSubmodule(
+                name = "kotlin_only_lib",
+                numberOfSourceFilesPerSourceDir = 1,
+                numberOfCodeSmells = 1,
+                buildFileContent = """
+                    $KOTLIN_ONLY_LIB_PLUGIN_BLOCK
+                    $DETEKT_REPORTS_BLOCK
+                """.trimIndent(),
+                srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
+                baselineFiles = listOf(
+                    "detekt-baseline.xml",
+                    "detekt-baseline-release.xml",
+                    "detekt-baseline-debug.xml",
+                    "detekt-baseline-releaseUnitTest.xml",
+                    "detekt-baseline-debugUnitTest.xml",
+                    "detekt-baseline-debugAndroidTest.xml"
+                )
+            )
+            addSubmodule(
+                name = "android_lib",
+                numberOfSourceFilesPerSourceDir = 1,
+                numberOfCodeSmells = 1,
+                buildFileContent = """
+                    $LIB_PLUGIN_BLOCK
+                    $ANDROID_BLOCK
+                    $DETEKT_REPORTS_BLOCK
+                    
+                    dependencies {
+                        implementation(project(":kotlin_only_lib"))
+                    }
+                """.trimIndent(),
+                srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
+                baselineFiles = listOf(
+                    "detekt-baseline.xml",
+                    "detekt-baseline-release.xml",
+                    "detekt-baseline-debug.xml",
+                    "detekt-baseline-releaseUnitTest.xml",
+                    "detekt-baseline-debugUnitTest.xml",
+                    "detekt-baseline-debugAndroidTest.xml"
+                )
+            )
+        }
+        val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
+            it.writeProjectFile("android_lib/src/main/AndroidManifest.xml", manifestContent())
+        }
+
+        @Test
+        @DisplayName("task :android_lib:detektMain")
+        @Disabled("https://github.com/detekt/detekt/issues/5150")
+        fun libDetektMain() {
+            gradleRunner.runTasksAndCheckResult(
+                "--configuration-cache",
+                ":android_lib:detektMain",
+            ) { buildResult ->
+                assertThat(buildResult.output).contains("Configuration cache")
+                assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-release.xml """)
+                assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debug.xml """)
+                assertThat(buildResult.output).contains("--report xml:")
+                assertThat(buildResult.output).contains("--report sarif:")
+                assertThat(buildResult.output).doesNotContain("--report txt:")
+                assertThat(buildResult.tasks.map { it.path }).containsAll(
+                    listOf(
+                        ":android_lib:detektMain",
                     )
                 )
             }
@@ -510,6 +583,13 @@ private val LIB_PLUGIN_BLOCK = """
     plugins {
         id("com.android.library")
         kotlin("android")
+        id("io.gitlab.arturbosch.detekt")
+    }
+""".trimIndent()
+
+private val KOTLIN_ONLY_LIB_PLUGIN_BLOCK = """
+    plugins {
+        kotlin("jvm")
         id("io.gitlab.arturbosch.detekt")
     }
 """.trimIndent()
