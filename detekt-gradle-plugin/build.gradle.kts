@@ -60,6 +60,10 @@ val functionalTestImplementation: Configuration by configurations.getting
 val functionalTestRuntimeOnly: Configuration by configurations.getting
 val smokeTest: Configuration by configurations.creating
 
+configurations.detekt {
+    resolutionStrategy.useGlobalDependencySubstitutionRules.set(false)
+}
+
 configurations.detektPlugins {
     resolutionStrategy.useGlobalDependencySubstitutionRules.set(false)
 }
