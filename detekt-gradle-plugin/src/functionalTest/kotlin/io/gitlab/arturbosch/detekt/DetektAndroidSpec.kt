@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -274,7 +273,6 @@ class DetektAndroidSpec {
 
         @Test
         @DisplayName("task :android_lib:detektMain")
-        @Disabled("https://github.com/detekt/detekt/issues/5150")
         fun libDetektMain() {
             gradleRunner.runTasksAndCheckResult(
                 "--configuration-cache",
