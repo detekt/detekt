@@ -291,6 +291,31 @@ class DetektAndroidSpec {
                 )
             }
         }
+
+        @Test
+        @DisplayName("task :android_lib:detektTest")
+        fun libDetektTest() {
+            gradleRunner.runTasksAndCheckResult(
+                "--configuration-cache",
+                ":android_lib:detektTest",
+            ) { buildResult ->
+                assertThat(buildResult.output).contains("Configuration cache")
+                assertThat(buildResult.output).containsPattern(
+                    """--baseline \S*[/\\]detekt-baseline-debugUnitTest.xml """
+                )
+                assertThat(buildResult.output).containsPattern(
+                    """--baseline \S*[/\\]detekt-baseline-debugAndroidTest.xml """
+                )
+                assertThat(buildResult.output).contains("--report xml:")
+                assertThat(buildResult.output).contains("--report sarif:")
+                assertThat(buildResult.output).doesNotContain("--report txt:")
+                assertThat(buildResult.tasks.map { it.path }).containsAll(
+                    listOf(
+                        ":android_lib:detektTest",
+                    )
+                )
+            }
+        }
     }
 
     @Nested
