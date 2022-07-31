@@ -154,6 +154,14 @@ tasks {
         notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/21283")
     }
 
+    generateClasspaths {
+        injectedDependencies {
+            create("implementation") {
+                injectedClasspath.from(smokeTest)
+            }
+        }
+    }
+
     withType<Test>().configureEach {
         inputs.files(generateClasspaths.get().targetDir)
     }
@@ -206,14 +214,6 @@ tasks.withType<Test>().configureEach {
         if (System.getenv().containsKey("CI")) {
             maxRetries.set(2)
             maxFailures.set(20)
-        }
-    }
-}
-
-injectedDependencies {
-    classpaths {
-        register("implementation") {
-            injectedClasspath.from(smokeTest)
         }
     }
 }
