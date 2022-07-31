@@ -21,7 +21,7 @@ data class MultiRule(
     operator fun contains(ruleName: String) = ruleName in this.rules
 }
 
-private val multiRule = io.gitlab.arturbosch.detekt.api.MultiRule::class.simpleName.orEmpty()
+private val multiRule = @Suppress("DEPRECATION") io.gitlab.arturbosch.detekt.api.MultiRule::class.simpleName.orEmpty()
 
 class MultiRuleCollector : Collector<MultiRule> {
     override val items = mutableListOf<MultiRule>()

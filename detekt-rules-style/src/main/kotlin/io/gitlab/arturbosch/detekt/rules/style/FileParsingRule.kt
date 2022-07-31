@@ -1,10 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.MultiRule
 import org.jetbrains.kotlin.psi.KtFile
 
-class FileParsingRule(val config: Config = Config.empty) : MultiRule() {
+class FileParsingRule(val config: Config = Config.empty) :
+    @Suppress("DEPRECATION")
+    io.gitlab.arturbosch.detekt.api.MultiRule() {
 
     private val maxLineLength = MaxLineLength(config)
     private val trailingWhitespace = TrailingWhitespace(config)

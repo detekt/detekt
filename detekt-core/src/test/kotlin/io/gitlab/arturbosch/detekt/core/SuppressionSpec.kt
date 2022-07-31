@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
-import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.Severity
@@ -320,7 +319,9 @@ private fun isSuppressedBy(annotation: String, argument: String): Boolean {
     return annotatedClass.isSuppressedBy("Test", setOf("alias"))
 }
 
-private class AMultiRule(config: Config) : MultiRule() {
+private class AMultiRule(config: Config) :
+    @Suppress("DEPRECATION")
+    io.gitlab.arturbosch.detekt.api.MultiRule() {
     override val rules: List<Rule> = listOf(TestLPL(config))
 }
 
