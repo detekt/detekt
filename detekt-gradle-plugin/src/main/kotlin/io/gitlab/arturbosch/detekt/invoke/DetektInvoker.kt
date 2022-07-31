@@ -21,7 +21,7 @@ internal interface DetektInvoker {
 
     companion object {
 
-        fun create(task: Task, isDryRun: Boolean): DetektInvoker =
+        fun create(task: Task, isDryRun: Boolean = false): DetektInvoker =
             if (isDryRun) {
                 DryRunInvoker(task.logger)
             } else {

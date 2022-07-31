@@ -16,7 +16,6 @@ import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
-import io.gitlab.arturbosch.detekt.invoke.isDryRunEnabled
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.FileTree
 import org.gradle.api.file.RegularFileProperty
@@ -114,8 +113,6 @@ open class DetektCreateBaselineTask : SourceTask() {
         get() = jvmTargetProp.get()
         set(value) = jvmTargetProp.set(value)
 
-    private val isDryRun: Boolean = project.isDryRunEnabled()
-
     @get:Internal
     internal val arguments: Provider<List<String>> = project.provider {
         listOf(
@@ -148,7 +145,7 @@ open class DetektCreateBaselineTask : SourceTask() {
             logger.warn("'failFast' is deprecated. Please use 'buildUponDefaultConfig' together with 'allRules'.")
         }
 
-        DetektInvoker.create(task = this, isDryRun = isDryRun).invokeCli(
+        DetektInvoker.create(task = this).invokeCli(
             arguments = arguments.get(),
             ignoreFailures = ignoreFailures.getOrElse(false),
             classpath = detektClasspath.plus(pluginClasspath),
