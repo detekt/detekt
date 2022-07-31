@@ -45,11 +45,12 @@ open class DetektGenerateConfigTask @Inject constructor(
 
     private val defaultConfigPath = project.rootDir.toPath().resolve(CONFIG_DIR_NAME).resolve(CONFIG_FILE)
 
-    private val configurationToUse = if (config.isEmpty) {
-        objects.fileCollection().from(defaultConfigPath)
-    } else {
-        config
-    }
+    private val configurationToUse: ConfigurableFileCollection
+        get() = if (config.isEmpty) {
+            objects.fileCollection().from(defaultConfigPath)
+        } else {
+            config
+        }
 
     @get:Internal
     internal val arguments: Provider<List<String>> = project.provider {
