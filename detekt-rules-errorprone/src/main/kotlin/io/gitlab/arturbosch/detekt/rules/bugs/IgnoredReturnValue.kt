@@ -8,7 +8,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
@@ -52,7 +54,13 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("if the rule should check only annotated methods")
+    @Deprecated("Use `restrictToConfig` instead")
     private val restrictToAnnotatedMethods: Boolean by config(defaultValue = true)
+
+    @Suppress("DEPRECATION")
+    @OptIn(UnstableApi::class)
+    @Configuration("If the rule should check only methods matching to configuration, or all methods")
+    private val restrictToConfig: Boolean by configWithFallback(::restrictToAnnotatedMethods, defaultValue = true)
 
     @Configuration("List of glob patterns to be used as inspection annotation")
     private val returnValueAnnotations: List<Regex> by config(listOf("*.CheckResult", "*.CheckReturnValue")) {
@@ -98,7 +106,7 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
 
         val annotations = resultingDescriptor.annotations
         if (annotations.any { it in ignoreReturnValueAnnotations }) return
-        if (restrictToAnnotatedMethods &&
+        if (restrictToConfig &&
             resultingDescriptor.returnType !in returnValueTypes &&
             (annotations + resultingDescriptor.containingDeclaration.annotations).none { it in returnValueAnnotations }
         ) return

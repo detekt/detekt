@@ -771,8 +771,8 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    inner class `restrict to annotated methods config` {
-        val subject = IgnoredReturnValue(TestConfig(mapOf("restrictToAnnotatedMethods" to false)))
+    inner class `restrict to config` {
+        val subject = IgnoredReturnValue(TestConfig(mapOf("restrictToConfig" to false)))
 
         @Test
         fun `reports when a function is annotated with a custom annotation`() {
@@ -809,6 +809,25 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(4, 5)
             assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
+        }
+
+        @Test
+        fun `reports when a function returns type that should not be ignored`() {
+            val code = """
+                import kotlinx.coroutines.flow.MutableStateFlow
+
+                fun flowOfChecked(value: String) = MutableStateFlow(value)
+
+                fun foo() : Int {
+                    flowOfChecked("hello")
+                    return 42
+                }
+            """
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings)
+                .singleElement()
+                .hasSourceLocation(6, 5)
+                .hasMessage("The call flowOfChecked is returning a value that is ignored.")
         }
 
         @Test
@@ -849,7 +868,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 TestConfig(
                     mapOf(
                         "ignoreReturnValueAnnotations" to listOf("*.CustomIgnoreReturn"),
-                        "restrictToAnnotatedMethods" to false
+                        "restrictToConfig" to false
                     )
                 )
             )
@@ -873,7 +892,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 TestConfig(
                     mapOf(
                         "ignoreFunctionCall" to listOf("foo.listOfChecked"),
-                        "restrictToAnnotatedMethods" to false
+                        "restrictToConfig" to false
                     )
                 )
             )
