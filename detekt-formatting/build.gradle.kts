@@ -2,6 +2,8 @@ plugins {
     id("module")
 }
 
+val extraDepsToPackage: Configuration by configurations.creating
+
 dependencies {
     compileOnly(projects.detektApi)
     implementation(libs.ktlint.rulesetStandard) {
@@ -13,10 +15,11 @@ dependencies {
     implementation(libs.ktlint.rulesetExperimental) {
         exclude(group = "org.jetbrains.kotlin")
     }
-    runtimeOnly(libs.slf4j.nop)
 
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
+
+    extraDepsToPackage(libs.slf4j.nop)
 }
 
 tasks.build { finalizedBy(":detekt-generator:generateDocumentation") }
@@ -25,15 +28,15 @@ val depsToPackage = setOf(
     "org.ec4j.core",
     "com.pinterest.ktlint",
     "io.github.microutils",
-    "org.slf4j",
 )
 
 tasks.jar {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
-    dependsOn(configurations.runtimeClasspath)
-    from({
+    dependsOn(configurations.runtimeClasspath, extraDepsToPackage)
+    from(
         configurations.runtimeClasspath.get()
             .filter { dependency -> depsToPackage.any { it in dependency.toString() } }
-            .map { if (it.isDirectory) it else zipTree(it) }
-    })
+            .map { if (it.isDirectory) it else zipTree(it) },
+        extraDepsToPackage.map { zipTree(it) },
+    )
 }
