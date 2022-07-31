@@ -56,12 +56,7 @@ tasks.withType<KotlinCompile>().configureEach {
             "-progressive",
             "-Xsuppress-version-warnings",
         )
-        // Note: Currently there are warnings for detekt-gradle-plugin that seemingly can't be fixed
-        //       until Gradle releases an update (https://github.com/gradle/gradle/issues/16345)
-        allWarningsAsErrors = when (project.name) {
-            "detekt-gradle-plugin" -> false
-            else -> project.findProperty("warningsAsErrors") == "true"
-        }
+        allWarningsAsErrors = project.findProperty("warningsAsErrors") == "true"
     }
 }
 
