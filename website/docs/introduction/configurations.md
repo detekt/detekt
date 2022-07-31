@@ -27,11 +27,17 @@ If config validation is enabled, _detekt_ will verify that your configuration fi
 config:
   validation: true
   warningsAsErrors: false
+  checkExhaustiveness: false
   excludes: ''
 ```
 
 Invalid or deprecated rules and configuration options are by default printed as warnings unless `warningsAsErrors` is set to `true`.
 
+### Checking for exhaustiveness
+If you want to make a conscious decision about activation of every available first party rule, you can set `checkExhaustiveness` to `true`. This will typically happen when new rules become available after updating _detekt_.
+You can deactivate all rules from a specific rule set and the exhaustiveness check for this rule set by marking it with `active: false`.
+
+### Excluding custom properties
 _Note:_ Custom rules sets are excluded from config validation by default.
 
 If you have extended _detekt_ and rely on a custom properties, you will need to exclude those from config validation by adding their paths to the `excludes` attribute. Multiple values are separated by comma and `.*` can be used as a wildcard (e.g. `propA,build>.*>propB`).
