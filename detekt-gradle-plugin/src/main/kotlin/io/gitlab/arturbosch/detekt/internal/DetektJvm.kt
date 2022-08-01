@@ -20,9 +20,8 @@ internal class DetektJvm(private val project: Project) {
     }
 
     private fun Project.registerJvmDetektTask(extension: DetektExtension, sourceSet: SourceSet) {
-        val kotlinSourceSet = sourceSet.kotlin ?: project.objects.sourceDirectorySet("empty", "Empty kotlin source set")
         registerDetektTask(DetektPlugin.DETEKT_TASK_NAME + sourceSet.name.capitalize(), extension) {
-            source = kotlinSourceSet
+            source = sourceSet.kotlinSourceSet
             classpath.setFrom(sourceSet.compileClasspath.existingFiles(), sourceSet.output.classesDirs.existingFiles())
             // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
             // We try to find the configured baseline or alternatively a specific variant matching this task.
@@ -35,9 +34,8 @@ internal class DetektJvm(private val project: Project) {
     }
 
     private fun Project.registerJvmCreateBaselineTask(extension: DetektExtension, sourceSet: SourceSet) {
-        val kotlinSourceSet = sourceSet.kotlin ?: project.objects.sourceDirectorySet("empty", "Empty kotlin source set")
         registerCreateBaselineTask(DetektPlugin.BASELINE_TASK_NAME + sourceSet.name.capitalize(), extension) {
-            source = kotlinSourceSet
+            source = sourceSet.kotlinSourceSet
             classpath.setFrom(sourceSet.compileClasspath.existingFiles(), sourceSet.output.classesDirs.existingFiles())
             val variantBaselineFile = extension.baseline?.addVariantName(sourceSet.name)
             baseline.set(project.layout.file(project.provider { variantBaselineFile }))
@@ -47,6 +45,7 @@ internal class DetektJvm(private val project: Project) {
 
     private fun FileCollection.existingFiles() = filter { it.exists() }
 
-    private val SourceSet.kotlin: SourceDirectorySet?
+    private val SourceSet.kotlinSourceSet: SourceDirectorySet
         get() = ((this as HasConvention).convention.plugins["kotlin"] as? KotlinSourceSet)?.kotlin
+            ?: project.objects.sourceDirectorySet("empty", "Empty kotlin source set")
 }
