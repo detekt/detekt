@@ -20,8 +20,7 @@ internal class DetektJvm(private val project: Project) {
     }
 
     private fun Project.registerJvmDetektTask(extension: DetektExtension, sourceSet: SourceSet) {
-        val kotlinSourceSet = sourceSet.kotlin
-            ?: throw GradleException("Kotlin source set not found. Please report on detekt's issue tracker")
+        val kotlinSourceSet = sourceSet.kotlin ?: project.objects.sourceDirectorySet("empty", "Empty kotlin source set")
         registerDetektTask(DetektPlugin.DETEKT_TASK_NAME + sourceSet.name.capitalize(), extension) {
             source = kotlinSourceSet
             classpath.setFrom(sourceSet.compileClasspath.existingFiles(), sourceSet.output.classesDirs.existingFiles())
@@ -36,8 +35,7 @@ internal class DetektJvm(private val project: Project) {
     }
 
     private fun Project.registerJvmCreateBaselineTask(extension: DetektExtension, sourceSet: SourceSet) {
-        val kotlinSourceSet = sourceSet.kotlin
-            ?: throw GradleException("Kotlin source set not found. Please report on detekt's issue tracker")
+        val kotlinSourceSet = sourceSet.kotlin ?: project.objects.sourceDirectorySet("empty", "Empty kotlin source set")
         registerCreateBaselineTask(DetektPlugin.BASELINE_TASK_NAME + sourceSet.name.capitalize(), extension) {
             source = kotlinSourceSet
             classpath.setFrom(sourceSet.compileClasspath.existingFiles(), sourceSet.output.classesDirs.existingFiles())
