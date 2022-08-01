@@ -19,6 +19,7 @@ dependencies {
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
 
+    testRuntimeOnly(libs.slf4j.nop)
     extraDepsToPackage(libs.slf4j.nop)
 }
 
