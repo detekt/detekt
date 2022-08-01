@@ -188,7 +188,7 @@ class XmlOutputFormatSpec {
         @ParameterizedTest
         @EnumSource(SeverityLevel::class)
         fun `renders detektion with severity as XML with severity`(severity: SeverityLevel) {
-            val xmlSeverity = severity.name.toLowerCase(Locale.US)
+            val xmlSeverity = severity.name.lowercase(Locale.US)
             val finding = object : CodeSmell(
                 issue = Issue("issue_id", Severity.CodeSmell, "issue description", Debt.FIVE_MINS),
                 entity = entity1,
