@@ -308,6 +308,19 @@ class UnnecessaryParenthesesSpec {
 
     @ParameterizedTest
     @MethodSource("cases")
+    fun `range operator when precedence is unclear`(testCase: RuleTestCase) {
+        val code = """
+            val a = (1 - 2)..(3 + 4)
+            val b = (1 / 2)..(3 * 4)
+            val c = (1 ?: 2)..(3 ?: 4) // parens required
+            val d = (1 to 2)..(3 to 4) // parens required
+        """
+
+        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 4)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
     fun `multiple wrapping parentheses`(testCase: RuleTestCase) {
         val code = """
             val a = ((false || (((true && false)))))
