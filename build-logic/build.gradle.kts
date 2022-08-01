@@ -13,3 +13,10 @@ dependencies {
     implementation(libs.semver4j.gradle)
     implementation(libs.nexusStaging.gradle)
 }
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    val isCiBuild = System.getenv("CI") != null
+    if (isCiBuild) {
+        compilerExecutionStrategy.set(org.jetbrains.kotlin.gradle.tasks.KotlinCompilerExecutionStrategy.OUT_OF_PROCESS)
+    }
+}
