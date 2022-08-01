@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
+import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.HasConvention
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.SourceSet
@@ -19,10 +20,10 @@ internal class DetektJvm(private val project: Project) {
     }
 
     private fun Project.registerJvmDetektTask(extension: DetektExtension, sourceSet: SourceSet) {
-        val kotlinSourceSet = (sourceSet as HasConvention).convention.plugins["kotlin"] as? KotlinSourceSet
+        val kotlinSourceSet = sourceSet.kotlin
             ?: throw GradleException("Kotlin source set not found. Please report on detekt's issue tracker")
         registerDetektTask(DetektPlugin.DETEKT_TASK_NAME + sourceSet.name.capitalize(), extension) {
-            source = kotlinSourceSet.kotlin
+            source = kotlinSourceSet
             classpath.setFrom(sourceSet.compileClasspath.existingFiles(), sourceSet.output.classesDirs.existingFiles())
             // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
             // We try to find the configured baseline or alternatively a specific variant matching this task.
@@ -35,10 +36,10 @@ internal class DetektJvm(private val project: Project) {
     }
 
     private fun Project.registerJvmCreateBaselineTask(extension: DetektExtension, sourceSet: SourceSet) {
-        val kotlinSourceSet = (sourceSet as HasConvention).convention.plugins["kotlin"] as? KotlinSourceSet
+        val kotlinSourceSet = sourceSet.kotlin
             ?: throw GradleException("Kotlin source set not found. Please report on detekt's issue tracker")
         registerCreateBaselineTask(DetektPlugin.BASELINE_TASK_NAME + sourceSet.name.capitalize(), extension) {
-            source = kotlinSourceSet.kotlin
+            source = kotlinSourceSet
             classpath.setFrom(sourceSet.compileClasspath.existingFiles(), sourceSet.output.classesDirs.existingFiles())
             val variantBaselineFile = extension.baseline?.addVariantName(sourceSet.name)
             baseline.set(project.layout.file(project.provider { variantBaselineFile }))
@@ -47,4 +48,7 @@ internal class DetektJvm(private val project: Project) {
     }
 
     private fun FileCollection.existingFiles() = filter { it.exists() }
+
+    private val SourceSet.kotlin: SourceDirectorySet?
+        get() = ((this as HasConvention).convention.plugins["kotlin"] as? KotlinSourceSet)?.kotlin
 }
