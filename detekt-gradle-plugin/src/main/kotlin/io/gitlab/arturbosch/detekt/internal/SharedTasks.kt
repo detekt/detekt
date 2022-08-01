@@ -12,6 +12,7 @@ internal fun Project.registerDetektTask(
     configuration: Detekt.() -> Unit
 ): TaskProvider<Detekt> =
     tasks.register(name, Detekt::class.java) {
+        @Suppress("DEPRECATION")
         with(extension.reports) {
             if (xml.outputLocation.isPresent) {
                 logger.warn(
