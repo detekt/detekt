@@ -313,7 +313,7 @@ class ReturnCountSpec {
     @Nested
     inner class `a subset of functions are ignored` {
         val code = """
-        fun test1(x: Int): Int {
+        fun factorial(x: Int): Int {
             when (x) {
                 5 -> println("x=5")
                 4 -> return 4
@@ -322,7 +322,7 @@ class ReturnCountSpec {
             return 6
         }
 
-        fun test2(x: Int): Int {
+        fun fac(x: Int): Int {
             when (x) {
                 5 -> println("x=5")
                 4 -> return 4
@@ -331,7 +331,7 @@ class ReturnCountSpec {
             return 6
         }
 
-        fun te_st1(x: Int): Int {
+        fun fansOfFactorial(x: Int): Int {
             when (x) {
                 5 -> println("x=5")
                 4 -> return 4
@@ -347,7 +347,7 @@ class ReturnCountSpec {
                 TestConfig(
                     mapOf(
                         MAX to "2",
-                        EXCLUDED_FUNCTIONS to listOf("test1", "test2")
+                        EXCLUDED_FUNCTIONS to listOf("factorial", "fac"),
                     )
                 )
             ).compileAndLint(code)
@@ -360,7 +360,7 @@ class ReturnCountSpec {
                 TestConfig(
                     mapOf(
                         MAX to "2",
-                        EXCLUDED_FUNCTIONS to listOf("t*1")
+                        EXCLUDED_FUNCTIONS to listOf("fa*ctorial"),
                     )
                 )
             ).compileAndLint(code)
