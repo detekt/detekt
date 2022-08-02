@@ -44,6 +44,14 @@ allprojects {
     }
 }
 
+subprojects {
+    tasks.withType<Test> {
+        predictiveSelection {
+            enabled.set(System.getenv("CI") == null)
+        }
+    }
+}
+
 val analysisDir = file(projectDir)
 val baselineFile = file("$rootDir/config/detekt/baseline.xml")
 val configFile = file("$rootDir/config/detekt/detekt.yml")
