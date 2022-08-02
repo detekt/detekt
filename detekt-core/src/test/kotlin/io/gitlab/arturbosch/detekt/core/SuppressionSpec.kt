@@ -282,6 +282,7 @@ class SuppressionSpec {
         @Nested
         inner class `MultiRule` {
 
+            @Suppress("DEPRECATION")
             private lateinit var subject: io.gitlab.arturbosch.detekt.api.MultiRule
 
             @BeforeEach
