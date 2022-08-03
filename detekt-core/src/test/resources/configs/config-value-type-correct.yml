@@ -2,6 +2,9 @@ style:
   MaxLineLength:
     active: true
     maxLineLength: 120
+  RequiresTypeResolutionMaxLineLength:
+    active: true
+    maxLineLength: 120
   FaultyRule:
     active: true
   FaultyRuleNoStackTrace:

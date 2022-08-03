@@ -10,15 +10,20 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import io.gitlab.arturbosch.detekt.test.getContextForPaths
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.concurrent.CompletionException
 
-class AnalyzerSpec {
+@KotlinCoreEnvironmentTest
+class AnalyzerSpec(val env: KotlinCoreEnvironment) {
 
     @Nested
     inner class `exceptions during analyze()` {
@@ -76,6 +81,17 @@ class AnalyzerSpec {
         }
 
         @Test
+        fun `with findings and context binding`() {
+            val testFile = path.resolve("Test.kt")
+            val settings = createProcessingSettings(testFile, yamlConfig("configs/config-value-type-correct.yml"))
+            val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider(30)), emptyList())
+            val ktFile = compileForTest(testFile)
+            val bindingContext = env.getContextForPaths(listOf(ktFile))
+
+            assertThat(settings.use { analyzer.run(listOf(ktFile), bindingContext) }.values.flatten()).hasSize(2)
+        }
+
+        @Test
         fun `with findings but ignored`() {
             val testFile = path.resolve("Test.kt")
             val settings = createProcessingSettings(
@@ -119,10 +135,30 @@ class AnalyzerSpec {
 
 private class StyleRuleSetProvider(private val threshold: Int? = null) : RuleSetProvider {
     override val ruleSetId: String = "style"
-    override fun instance(config: Config) = RuleSet(ruleSetId, listOf(MaxLineLength(config, threshold)))
+    override fun instance(config: Config) = RuleSet(
+        ruleSetId,
+        listOf(
+            MaxLineLength(config, threshold),
+            RequiresTypeResolutionMaxLineLength(config, threshold),
+        )
+    )
 }
 
 private class MaxLineLength(config: Config, threshold: Int?) : Rule(config) {
+    override val issue = Issue(this::class.java.simpleName, Severity.Style, "", Debt.FIVE_MINS)
+    private val lengthThreshold: Int = threshold ?: valueOrDefault("maxLineLength", 100)
+    override fun visitKtFile(file: KtFile) {
+        super.visitKtFile(file)
+        for (line in file.text.lineSequence()) {
+            if (line.length > lengthThreshold) {
+                report(CodeSmell(issue, Entity.atPackageOrFirstDecl(file), issue.description))
+            }
+        }
+    }
+}
+
+@RequiresTypeResolution
+private class RequiresTypeResolutionMaxLineLength(config: Config, threshold: Int?) : Rule(config) {
     override val issue = Issue(this::class.java.simpleName, Severity.Style, "", Debt.FIVE_MINS)
     private val lengthThreshold: Int = threshold ?: valueOrDefault("maxLineLength", 100)
     override fun visitKtFile(file: KtFile) {
@@ -156,7 +192,9 @@ private class FaultyRuleNoStackTrace(config: Config) : Rule(config) {
     override val issue = Issue(this::class.java.simpleName, Severity.Style, "", Debt.FIVE_MINS)
     override fun visitKtFile(file: KtFile) {
         throw object : IllegalStateException("Deliberately triggered error without stack trace.") {
-            init { stackTrace = emptyArray() }
+            init {
+                stackTrace = emptyArray()
+            }
         }
     }
 }
