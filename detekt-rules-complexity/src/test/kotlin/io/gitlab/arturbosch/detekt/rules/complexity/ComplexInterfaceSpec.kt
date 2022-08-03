@@ -169,7 +169,7 @@ class ComplexInterfaceSpec {
 
             @Test
             fun `reports complex interface with extension methods with a different receiver`() {
-                val code = """
+                val interfaceWithExtension = """
                     interface I {
                         fun f1()
                         fun String.f1(i: Int)
@@ -178,12 +178,12 @@ class ComplexInterfaceSpec {
                     }
                 """
                 val rule = ComplexInterface(ignoreOverloadedConfig)
-                assertThat(rule.compileAndLint(code)).hasSize(1)
+                assertThat(rule.compileAndLint(interfaceWithExtension)).hasSize(1)
             }
 
             @Test
             fun `does not report simple interface with extension methods with the same receiver`() {
-                val code = """
+                val interfaceWithOverloadedExtensions = """
                     interface I {
                         fun String.f1()
                         fun String.f1(i: Int)
@@ -192,7 +192,7 @@ class ComplexInterfaceSpec {
                     }
                 """
                 val rule = ComplexInterface(ignoreOverloadedConfig)
-                assertThat(rule.compileAndLint(code)).isEmpty()
+                assertThat(rule.compileAndLint(interfaceWithOverloadedExtensions)).isEmpty()
             }
         }
     }
