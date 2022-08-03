@@ -148,10 +148,10 @@ private fun mockKtElement(): KtElement {
         package com.example.test
         
         import io.github.*
-       
+        
         class Test() {
             val greeting: String = "Hello, World!"
-        
+
             init {
                 println(greetings)
             }

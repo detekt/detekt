@@ -13,23 +13,21 @@ import org.junit.jupiter.api.Test
 class KdocWrappingSpec {
     @Test
     fun `Given a single line KDoc comment that start starts and end on a separate line then do not reformat`() {
-        val code =
-            """
+        val code = """
             /** Some KDoc comment */
-            """.trimIndent()
+        """.trimIndent()
 
         assertThat(KdocWrapping(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
     fun `Given a KDoc comment followed by a code element on the same line as the block comment ended then report four errors`() {
-        val code =
-            """
+        val code = """
             /** Some comment 1 */ val foo1 = "foo1"
             /** Some comment 2 */val foo2 = "foo2"
             /** Some comment 3 */ fun foo3() = "foo3"
             /** Some comment 4 */fun foo4() = "foo4"
-            """.trimIndent()
+        """.trimIndent()
 
         assertThat(KdocWrapping(Config.empty).lint(code)).hasSize(4)
     }

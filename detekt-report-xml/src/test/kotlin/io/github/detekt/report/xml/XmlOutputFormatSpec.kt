@@ -52,9 +52,9 @@ class XmlOutputFormatSpec {
 
         assertThat(result).isEqualTo(
             """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <checkstyle version="4.3">
-            </checkstyle>
+                <?xml version="1.0" encoding="UTF-8"?>
+                <checkstyle version="4.3">
+                </checkstyle>
             """.trimIndent()
         )
     }
@@ -67,12 +67,12 @@ class XmlOutputFormatSpec {
 
         assertThat(result).isEqualTo(
             """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <checkstyle version="4.3">
-            <file name="src/main/com/sample/Sample1.kt">
-            $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_a" />
-            </file>
-            </checkstyle>
+                <?xml version="1.0" encoding="UTF-8"?>
+                <checkstyle version="4.3">
+                <file name="src/main/com/sample/Sample1.kt">
+                $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_a" />
+                </file>
+                </checkstyle>
             """.trimIndent()
         )
     }
@@ -86,13 +86,13 @@ class XmlOutputFormatSpec {
 
         assertThat(result).isEqualTo(
             """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <checkstyle version="4.3">
-            <file name="src/main/com/sample/Sample1.kt">
-            $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_a" />
-            $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_b" />
-            </file>
-            </checkstyle>
+                <?xml version="1.0" encoding="UTF-8"?>
+                <checkstyle version="4.3">
+                <file name="src/main/com/sample/Sample1.kt">
+                $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_a" />
+                $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_b" />
+                </file>
+                </checkstyle>
             """.trimIndent()
         )
     }
@@ -106,15 +106,15 @@ class XmlOutputFormatSpec {
 
         assertThat(result).isEqualTo(
             """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <checkstyle version="4.3">
-            <file name="src/main/com/sample/Sample1.kt">
-            $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_a" />
-            </file>
-            <file name="src/main/com/sample/Sample2.kt">
-            $TAB<error line="22" column="2" severity="warning" message="" source="detekt.id_a" />
-            </file>
-            </checkstyle>
+                <?xml version="1.0" encoding="UTF-8"?>
+                <checkstyle version="4.3">
+                <file name="src/main/com/sample/Sample1.kt">
+                $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_a" />
+                </file>
+                <file name="src/main/com/sample/Sample2.kt">
+                $TAB<error line="22" column="2" severity="warning" message="" source="detekt.id_a" />
+                </file>
+                </checkstyle>
             """.trimIndent()
         )
     }
@@ -136,15 +136,15 @@ class XmlOutputFormatSpec {
 
         assertThat(result).isEqualTo(
             """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <checkstyle version="4.3">
-            <file name="Sample1.kt">
-            $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_a" />
-            </file>
-            <file name="Sample2.kt">
-            $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_b" />
-            </file>
-            </checkstyle>
+                <?xml version="1.0" encoding="UTF-8"?>
+                <checkstyle version="4.3">
+                <file name="Sample1.kt">
+                $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_a" />
+                </file>
+                <file name="Sample2.kt">
+                $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_b" />
+                </file>
+                </checkstyle>
             """.trimIndent()
         )
     }
@@ -167,17 +167,17 @@ class XmlOutputFormatSpec {
 
         assertThat(result).isEqualTo(
             """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <checkstyle version="4.3">
-            <file name="src/main/com/sample/Sample1.kt">
-            $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_a" />
-            $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_b" />
-            </file>
-            <file name="src/main/com/sample/Sample2.kt">
-            $TAB<error line="22" column="2" severity="warning" message="" source="detekt.id_a" />
-            $TAB<error line="22" column="2" severity="warning" message="" source="detekt.id_b" />
-            </file>
-            </checkstyle>
+                <?xml version="1.0" encoding="UTF-8"?>
+                <checkstyle version="4.3">
+                <file name="src/main/com/sample/Sample1.kt">
+                $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_a" />
+                $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_b" />
+                </file>
+                <file name="src/main/com/sample/Sample2.kt">
+                $TAB<error line="22" column="2" severity="warning" message="" source="detekt.id_a" />
+                $TAB<error line="22" column="2" severity="warning" message="" source="detekt.id_b" />
+                </file>
+                </checkstyle>
             """.trimIndent()
         )
     }
@@ -205,11 +205,11 @@ class XmlOutputFormatSpec {
                 $TAB<error line="${finding.location.source.line}" column="${finding.location.source.column}" severity="$xmlSeverity" message="${finding.messageOrDescription()}" source="detekt.${finding.id}" />
                 </file>
                 </checkstyle>
-            """
+            """.trimIndent()
 
             val actual = outputFormat.render(TestDetektion(finding))
 
-            assertThat(actual).isEqualTo(expected.trimIndent())
+            assertThat(actual).isEqualTo(expected)
         }
     }
 }
