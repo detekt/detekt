@@ -129,6 +129,5 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 }
 
 private operator fun Iterable<Regex>.contains(input: String?): Boolean {
-    input ?: return false
-    return any { it.matches(input) }
+    return input != null && any { it.matches(input) }
 }
