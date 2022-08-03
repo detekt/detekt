@@ -98,6 +98,7 @@ complexity:
     threshold: 10
     includeStaticDeclarations: false
     includePrivateDeclarations: false
+    ignoreOverloaded: false
   ComplexMethod:
     active: true
     threshold: 15
