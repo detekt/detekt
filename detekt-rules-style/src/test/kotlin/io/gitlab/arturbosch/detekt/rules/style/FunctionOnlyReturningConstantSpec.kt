@@ -63,9 +63,25 @@ class FunctionOnlyReturningConstantSpec {
         }
 
         @Test
-        fun `does not report excluded function which returns a constant`() {
+        fun `does not report excluded function which returns a constant (with string configuration)`() {
             val code = "fun f() = 1"
             val config = TestConfig(mapOf(EXCLUDED_FUNCTIONS to "f"))
+            val rule = FunctionOnlyReturningConstant(config)
+            assertThat(rule.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report excluded function which returns a constant`() {
+            val code = "fun f() = 1"
+            val config = TestConfig(mapOf(EXCLUDED_FUNCTIONS to listOf("f")))
+            val rule = FunctionOnlyReturningConstant(config)
+            assertThat(rule.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report wildcard excluded function which returns a constant`() {
+            val code = "fun function() = 1"
+            val config = TestConfig(mapOf(EXCLUDED_FUNCTIONS to listOf("f*ion")))
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
