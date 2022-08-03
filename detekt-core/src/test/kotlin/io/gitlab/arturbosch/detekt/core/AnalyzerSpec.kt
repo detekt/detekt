@@ -63,16 +63,16 @@ class AnalyzerSpec {
             val settings = createProcessingSettings(testFile, yamlConfig("configs/config-value-type-correct.yml"))
             val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider()), emptyList())
 
-            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).isEmpty()
+            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }.values.flatten()).isEmpty()
         }
 
         @Test
         fun `with findings`() {
             val testFile = path.resolve("Test.kt")
             val settings = createProcessingSettings(testFile, yamlConfig("configs/config-value-type-correct.yml"))
-            val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider(18)), emptyList())
+            val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider(30)), emptyList())
 
-            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).hasSize(1)
+            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }.values.flatten()).hasSize(1)
         }
 
         @Test
@@ -84,7 +84,7 @@ class AnalyzerSpec {
             )
             val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider(18)), emptyList())
 
-            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).isEmpty()
+            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }.values.flatten()).isEmpty()
         }
 
         @Test

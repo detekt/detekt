@@ -5,5 +5,5 @@ package cases
 @Suppress("Unused")
 class Test
 
-@Target(AnnotationTarget.FILE)
+@Target(AnnotationTarget.FILE, AnnotationTarget.FUNCTION)
 annotation class AnAnnotation
