@@ -13,6 +13,10 @@ class RuleAuthorsProvider : RuleSetProvider {
 
     override val ruleSetId: String = "ruleauthors"
 
-    @Suppress("UseEmptyCounterpart")
-    override fun instance(config: Config) = RuleSet(ruleSetId, listOf())
+    override fun instance(config: Config) = RuleSet(
+        ruleSetId,
+        listOf(
+            RequiresTypeResolution(config),
+        )
+    )
 }

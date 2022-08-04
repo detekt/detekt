@@ -8,6 +8,7 @@ import org.jetbrains.kotlin.psi.KtFile
  * scanning the source code line by line to increase performance.
  */
 @Deprecated("multi rules are much more difficult to maintain and support will be removed in the future")
+@Suppress("RequiresTypeResolution")
 abstract class MultiRule : BaseRule() {
 
     abstract val rules: List<Rule>

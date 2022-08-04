@@ -2,5 +2,20 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
+    <ID>RequiresTypeResolution:FunctionOnlyReturningConstant.kt$FunctionOnlyReturningConstant : Rule</ID>
+    <ID>RequiresTypeResolution:ImplicitDefaultLocale.kt$ImplicitDefaultLocale : Rule</ID>
+    <ID>RequiresTypeResolution:InstanceOfCheckForException.kt$InstanceOfCheckForException : Rule</ID>
+    <ID>RequiresTypeResolution:LateinitUsage.kt$LateinitUsage : Rule</ID>
+    <ID>RequiresTypeResolution:LongParameterList.kt$LongParameterList : Rule</ID>
+    <ID>RequiresTypeResolution:MapGetWithNotNullAssertionOperator.kt$MapGetWithNotNullAssertionOperator : Rule</ID>
+    <ID>RequiresTypeResolution:MemberNameEqualsClassName.kt$MemberNameEqualsClassName : Rule</ID>
+    <ID>RequiresTypeResolution:OptionalUnit.kt$OptionalUnit : Rule</ID>
+    <ID>RequiresTypeResolution:SpreadOperator.kt$SpreadOperator : Rule</ID>
+    <ID>RequiresTypeResolution:UnnecessaryAbstractClass.kt$UnnecessaryAbstractClass : Rule</ID>
+    <ID>RequiresTypeResolution:UnusedImports.kt$UnusedImports : Rule</ID>
+    <ID>RequiresTypeResolution:UnusedPrivateMember.kt$UnusedPrivateMember : Rule</ID>
+    <ID>RequiresTypeResolution:UseCheckOrError.kt$UseCheckOrError : Rule</ID>
+    <ID>RequiresTypeResolution:UseDataClass.kt$UseDataClass : Rule</ID>
+    <ID>RequiresTypeResolution:UseRequire.kt$UseRequire : Rule</ID>
   </CurrentIssues>
 </SmellBaseline>

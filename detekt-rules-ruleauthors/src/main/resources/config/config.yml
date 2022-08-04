@@ -1,2 +1,4 @@
 ruleauthors:
   active: true
+  RequiresTypeResolution:
+    active: true
