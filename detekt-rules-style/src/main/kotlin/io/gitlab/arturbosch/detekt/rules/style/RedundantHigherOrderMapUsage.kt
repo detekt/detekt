@@ -86,7 +86,6 @@ class RedundantHigherOrderMapUsage(config: Config = Config.empty) : Rule(config)
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
 
         val calleeExpression = expression.calleeExpression
         if (calleeExpression?.text != "map") return

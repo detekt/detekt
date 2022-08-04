@@ -96,7 +96,6 @@ class ObjectLiteralToLambda(config: Config = Config.empty) : Rule(config) {
 
     override fun visitObjectLiteralExpression(expression: KtObjectLiteralExpression) {
         super.visitObjectLiteralExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
         val declaration = expression.objectDeclaration
 
         if (

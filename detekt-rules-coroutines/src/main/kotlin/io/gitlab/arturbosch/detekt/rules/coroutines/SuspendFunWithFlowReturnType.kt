@@ -73,7 +73,6 @@ class SuspendFunWithFlowReturnType(config: Config) : Rule(config) {
     )
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (bindingContext == BindingContext.EMPTY) return
         val suspendModifier = function.modifierList?.getModifier(KtTokens.SUSPEND_KEYWORD) ?: return
         bindingContext[BindingContext.FUNCTION, function]
             ?.returnType

@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.cfg.WhenChecker
 import org.jetbrains.kotlin.psi.KtWhenExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
@@ -63,7 +62,6 @@ class ElseCaseInsteadOfExhaustiveWhen(config: Config = Config.empty) : Rule(conf
     override fun visitWhenExpression(whenExpression: KtWhenExpression) {
         super.visitWhenExpression(whenExpression)
 
-        if (bindingContext == BindingContext.EMPTY) return
         checkForElseCaseInsteadOfExhaustiveWhenExpression(whenExpression)
     }
 

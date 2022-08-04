@@ -25,7 +25,6 @@ import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.psiUtil.isDotSelector
 import org.jetbrains.kotlin.psi2ir.unwrappedGetMethod
 import org.jetbrains.kotlin.psi2ir.unwrappedSetMethod
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
@@ -106,8 +105,6 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun check(expression: KtExpression) {
-        if (bindingContext == BindingContext.EMPTY) return
-
         val descriptors = expression.getResolvedCall(bindingContext)?.resultingDescriptor?.let {
             val foundDescriptors = if (it is PropertyDescriptor) {
                 listOfNotNull(it.unwrappedGetMethod, it.unwrappedSetMethod)

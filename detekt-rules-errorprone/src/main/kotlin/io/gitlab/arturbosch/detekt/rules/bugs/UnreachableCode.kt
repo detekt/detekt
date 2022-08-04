@@ -11,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Reports unreachable code.
@@ -46,9 +45,7 @@ class UnreachableCode(config: Config = Config.empty) : Rule(config) {
 
     override fun visitExpression(expression: KtExpression) {
         super.visitExpression(expression)
-        if (bindingContext != BindingContext.EMPTY &&
-            bindingContext.diagnostics.forElement(expression).any { it.factory == Errors.UNREACHABLE_CODE }
-        ) {
+        if (bindingContext.diagnostics.forElement(expression).any { it.factory == Errors.UNREACHABLE_CODE }) {
             report(
                 CodeSmell(
                     issue,

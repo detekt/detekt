@@ -12,7 +12,6 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isCallingWithNonNullCheckArgument
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Turn on this rule to flag `check` calls for not-null check that can be replaced with a `checkNotNull` call.
@@ -37,7 +36,6 @@ class UseCheckNotNull(config: Config = Config.empty) : Rule(config) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
         if (expression.isCallingWithNonNullCheckArgument(checkFunctionFqName, bindingContext)) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }

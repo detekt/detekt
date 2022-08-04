@@ -14,7 +14,6 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.ValueArgument
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
@@ -61,7 +60,6 @@ class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
     @Suppress("ReturnCount")
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
 
         val safeExpression = expression as? KtSafeQualifiedExpression
         val notNullType = expression.receiverExpression.getType(bindingContext)?.isNullable() == false

@@ -51,7 +51,6 @@ class HasPlatformType(config: Config) : Rule(config) {
 
     override fun visitKtElement(element: KtElement) {
         super.visitKtElement(element)
-        if (bindingContext == BindingContext.EMPTY) return
 
         if (element is KtCallableDeclaration && element.hasImplicitPlatformType()) {
             report(

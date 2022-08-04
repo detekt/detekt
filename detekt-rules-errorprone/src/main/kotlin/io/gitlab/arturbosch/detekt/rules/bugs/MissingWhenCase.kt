@@ -14,7 +14,6 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.cfg.WhenChecker
 import org.jetbrains.kotlin.diagnostics.WhenMissingCase
 import org.jetbrains.kotlin.psi.KtWhenExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.util.getType
 
@@ -83,7 +82,6 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
 
     override fun visitWhenExpression(expression: KtWhenExpression) {
         super.visitWhenExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
         if (allowElseExpression && expression.elseExpression != null) return
         checkMissingWhenExpression(expression)
     }

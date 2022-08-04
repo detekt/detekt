@@ -56,7 +56,6 @@ class RedundantExplicitType(config: Config) : Rule(config) {
 
     @Suppress("ReturnCount", "ComplexMethod")
     override fun visitProperty(property: KtProperty) {
-        if (bindingContext == BindingContext.EMPTY) return
         if (!property.isLocal) return
         val typeReference = property.typeReference ?: return
         val type =

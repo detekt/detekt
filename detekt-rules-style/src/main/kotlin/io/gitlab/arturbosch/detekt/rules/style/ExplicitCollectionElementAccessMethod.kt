@@ -16,7 +16,6 @@ import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.types.error.ErrorType
@@ -52,7 +51,6 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
 
     override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
         super.visitDotQualifiedExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
         val call = expression.selectorExpression as? KtCallExpression ?: return
         if (isIndexGetterRecommended(call) || isIndexSetterRecommended(call)) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))

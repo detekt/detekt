@@ -60,7 +60,6 @@ class UnreachableCatchBlock(config: Config = Config.empty) : Rule(config) {
     @Suppress("ReturnCount")
     override fun visitCatchSection(catchClause: KtCatchClause) {
         super.visitCatchSection(catchClause)
-        if (bindingContext == BindingContext.EMPTY) return
 
         val tryExpression = catchClause.getStrictParentOfType<KtTryExpression>() ?: return
         val prevCatchClauses = tryExpression.catchClauses.takeWhile { it != catchClause }

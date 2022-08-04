@@ -76,7 +76,6 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
-        if (bindingContext == BindingContext.EMPTY) return
         val assignmentVisitor = AssignmentVisitor(bindingContext, ignoreLateinitVar)
         file.accept(assignmentVisitor)
 

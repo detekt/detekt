@@ -13,7 +13,6 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.builtins.StandardNames
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 
@@ -58,9 +57,6 @@ class ImplicitUnitReturnType(config: Config) : Rule(config) {
     @Suppress("ReturnCount")
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
-        if (BindingContext.EMPTY == bindingContext) {
-            return
-        }
 
         if (allowExplicitReturnType && function.hasDeclaredReturnType()) {
             return

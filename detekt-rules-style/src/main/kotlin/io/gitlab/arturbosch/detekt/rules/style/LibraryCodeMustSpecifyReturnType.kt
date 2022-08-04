@@ -54,9 +54,6 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
     )
 
     override fun visitProperty(property: KtProperty) {
-        if (bindingContext == BindingContext.EMPTY) {
-            return
-        }
         if (property.explicitReturnTypeRequired()) {
             report(
                 CodeSmell(

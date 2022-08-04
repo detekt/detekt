@@ -55,7 +55,6 @@ class ObjectExtendsThrowable(config: Config = Config.empty) : Rule(config) {
 
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
         super.visitObjectDeclaration(declaration)
-        if (bindingContext == BindingContext.EMPTY) return
         if (!declaration.isObjectLiteral() && declaration.isSubtypeOfThrowable()) {
             report(
                 CodeSmell(

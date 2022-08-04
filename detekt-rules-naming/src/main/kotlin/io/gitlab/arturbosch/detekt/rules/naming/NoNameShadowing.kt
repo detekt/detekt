@@ -18,7 +18,6 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Disallows shadowing variable declarations.
@@ -76,16 +75,13 @@ class NoNameShadowing(config: Config = Config.empty) : Rule(config) {
 
     private fun checkNameShadowing(declaration: KtNamedDeclaration) {
         val nameIdentifier = declaration.nameIdentifier ?: return
-        if (bindingContext != BindingContext.EMPTY &&
-            bindingContext.diagnostics.forElement(declaration).any { it.factory == Errors.NAME_SHADOWING }
-        ) {
+        if (bindingContext.diagnostics.forElement(declaration).any { it.factory == Errors.NAME_SHADOWING }) {
             report(CodeSmell(issue, Entity.from(nameIdentifier), "Name shadowed: ${nameIdentifier.text}"))
         }
     }
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
-        if (bindingContext == BindingContext.EMPTY) return
         val implicitParameter = lambdaExpression.implicitParameter(bindingContext) ?: return
         if (lambdaExpression.hasImplicitParameterReference(implicitParameter, bindingContext) &&
             lambdaExpression.hasParentImplicitParameterLambda()

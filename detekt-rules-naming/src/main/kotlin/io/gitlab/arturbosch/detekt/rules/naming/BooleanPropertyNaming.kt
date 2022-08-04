@@ -17,7 +17,6 @@ import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 
 /**
@@ -62,10 +61,6 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun validateDeclaration(declaration: KtCallableDeclaration) {
-        if (bindingContext == BindingContext.EMPTY) {
-            return
-        }
-
         val name = declaration.identifierName()
         val typeName = getTypeName(declaration)
         val isBooleanType =

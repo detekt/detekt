@@ -65,8 +65,6 @@ class DoubleMutabilityForCollection(config: Config = Config.empty) : Rule(config
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)
 
-        if (bindingContext == BindingContext.EMPTY) return
-
         val type = (bindingContext[BindingContext.VARIABLE, property])?.type ?: return
         val standardType = type.fqNameOrNull()
         if (property.isVar && standardType in mutableTypes) {

@@ -16,7 +16,6 @@ import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.lexer.KtTokens.EQEQEQ
 import org.jetbrains.kotlin.lexer.KtTokens.EXCLEQEQEQ
 import org.jetbrains.kotlin.psi.KtBinaryExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getType
 
 /**
@@ -62,7 +61,6 @@ class AvoidReferentialEquality(config: Config) : Rule(config) {
     }
 
     private fun checkBinaryExpression(expression: KtBinaryExpression) {
-        if (bindingContext == BindingContext.EMPTY) return
         if (expression.operationToken != EQEQEQ && expression.operationToken != EXCLEQEQEQ) return
 
         val checkedType = expression.left?.getType(bindingContext)?.fqNameOrNull() ?: return

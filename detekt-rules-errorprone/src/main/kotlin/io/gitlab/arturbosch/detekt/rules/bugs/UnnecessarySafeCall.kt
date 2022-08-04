@@ -14,7 +14,6 @@ import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Reports unnecessary safe call operators (`?.`) that can be removed by the user.
@@ -43,8 +42,6 @@ class UnnecessarySafeCall(config: Config = Config.empty) : Rule(config) {
     @Suppress("ReturnCount")
     override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
         super.visitSafeQualifiedExpression(expression)
-
-        if (bindingContext == BindingContext.EMPTY) return
 
         val safeAccessElement = expression.getChildOfType<LeafPsiElement>()
         if (safeAccessElement == null || safeAccessElement.elementType != KtTokens.SAFE_ACCESS) {

@@ -15,7 +15,6 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtUserType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getType
 
 /**
@@ -50,15 +49,12 @@ class DontDowncastCollectionTypes(config: Config) : Rule(config) {
 
     override fun visitIsExpression(expression: KtIsExpression) {
         super.visitIsExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
 
         checkForDowncast(expression, expression.leftHandSide, expression.typeReference)
     }
 
     override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
         super.visitBinaryWithTypeRHSExpression(expression)
-
-        if (bindingContext == BindingContext.EMPTY) return
 
         checkForDowncast(expression, expression.left, expression.right)
     }
