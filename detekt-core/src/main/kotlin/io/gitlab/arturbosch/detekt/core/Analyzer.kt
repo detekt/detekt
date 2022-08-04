@@ -115,12 +115,8 @@ internal class Analyzer(
 
         val (correctableRules, otherRules) = activeRuleSetsToRuleSetConfigs
             .flatMap { (ruleSet, _) -> ruleSet.rules.asSequence() }
-            .let { sequence ->
-                if (bindingContext == BindingContext.EMPTY) {
-                    sequence.filterNot { rule -> rule::class.hasAnnotation<RequiresTypeResolution>() }
-                } else {
-                    sequence
-                }
+            .filter { rule ->
+                bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
             }
             .partition { isCorrectable(it) }
 
