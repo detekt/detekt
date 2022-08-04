@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
