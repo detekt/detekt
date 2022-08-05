@@ -12,6 +12,7 @@ import org.spekframework.spek2.dsl.Root
 import org.spekframework.spek2.lifecycle.CachingMode
 import java.io.File
 import java.nio.file.Path
+import kotlin.reflect.KClass
 
 @Deprecated(
     "This is specific to Spek and will be removed in a future release. Documentation has been updated to " +
@@ -33,6 +34,7 @@ fun Root.setupKotlinEnvironment(additionalJavaSourceRootPath: Path? = null) {
 @Target(AnnotationTarget.CLASS)
 @ExtendWith(KotlinEnvironmentResolver::class)
 annotation class KotlinCoreEnvironmentTest(
+    val additionalTypes: Array<KClass<out Any>> = [],
     val additionalJavaSourcePaths: Array<String> = []
 )
 
@@ -48,7 +50,10 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
     override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any {
         val closeableWrapper = extensionContext.wrapper
             ?: CloseableWrapper(
-                createEnvironment(additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths())
+                createEnvironment(
+                    additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths(),
+                    additionalRootPaths = extensionContext.additionalRootPaths().toList()
+                )
             ).also { extensionContext.wrapper = it }
         return closeableWrapper.wrapper.env
     }
@@ -60,6 +65,12 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
             val annotation = requiredTestClass.annotations
                 .find { it is KotlinCoreEnvironmentTest } as? KotlinCoreEnvironmentTest ?: return emptyList()
             return annotation.additionalJavaSourcePaths.map { resourceAsPath(it).toFile() }
+        }
+
+        private fun ExtensionContext.additionalRootPaths(): Set<File> {
+            val annotation = requiredTestClass.annotations
+                .find { it is KotlinCoreEnvironmentTest } as? KotlinCoreEnvironmentTest ?: return emptySet()
+            return annotation.additionalTypes.map { File(it.java.protectionDomain.codeSource.location.path) }.toSet()
         }
     }
 

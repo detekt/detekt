@@ -48,6 +48,7 @@ public final class io/github/detekt/test/utils/StringPrintStream : java/io/Print
 
 public abstract interface annotation class io/gitlab/arturbosch/detekt/rules/KotlinCoreEnvironmentTest : java/lang/annotation/Annotation {
 	public abstract fun additionalJavaSourcePaths ()[Ljava/lang/String;
+	public abstract fun additionalTypes ()[Ljava/lang/Class;
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/KotlinEnvironmentTestSetupKt {

@@ -9,6 +9,8 @@ dependencies {
     implementation(projects.detektUtils)
     compileOnly(libs.assertj)
     implementation(projects.detektCore)
+
+    testImplementation(libs.assertj)
 }
 
 tasks.apiDump {
