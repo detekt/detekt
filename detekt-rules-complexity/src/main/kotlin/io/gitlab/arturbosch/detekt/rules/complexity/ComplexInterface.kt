@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtTypeParameterListOwner
+import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
@@ -51,6 +52,9 @@ class ComplexInterface(
     @Configuration("whether private declarations should be included")
     private val includePrivateDeclarations: Boolean by config(defaultValue = false)
 
+    @Configuration("ignore overloaded methods - only count once")
+    private val ignoreOverloaded: Boolean by config(defaultValue = false)
+
     override fun visitClass(klass: KtClass) {
         if (klass.isInterface()) {
             val body = klass.body ?: return
@@ -81,10 +85,26 @@ class ComplexInterface(
         fun PsiElement.considerPrivate() = includePrivateDeclarations ||
             this is KtTypeParameterListOwner && !this.isPrivate()
 
-        fun PsiElement.isMember() = this is KtNamedFunction || this is KtProperty
+        fun countFunctions(psiElements: List<PsiElement>): Int {
+            val functions = psiElements.filterIsInstance<KtNamedFunction>()
+            return if (ignoreOverloaded) {
+                functions.distinctBy { function ->
+                    val receiver = function.receiverTypeReference
+                    if (function.isExtensionDeclaration() && receiver != null) {
+                        "${receiver.text}.${function.name}"
+                    } else {
+                        function.name
+                    }
+                }.size
+            } else {
+                functions.size
+            }
+        }
 
-        return body.children
+        val psiElements = body.children
             .filter(PsiElement::considerPrivate)
-            .count(PsiElement::isMember)
+        val propertyCount = psiElements.count { it is KtProperty }
+        val functionCount = countFunctions(psiElements)
+        return propertyCount + functionCount
     }
 }
