@@ -37,9 +37,9 @@ class SingleRuleProviderSpec {
     fun `the right sub config is passed to the rule configures rule with active=$value`(value: Boolean) {
         val config = yamlConfigFromContent(
             """
-            style:
-              MagicNumber:
-                active: $value
+                style:
+                  MagicNumber:
+                    active: $value
             """.trimIndent()
         )
 

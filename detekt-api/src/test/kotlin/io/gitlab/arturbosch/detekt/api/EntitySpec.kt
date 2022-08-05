@@ -15,14 +15,14 @@ class EntitySpec {
     private val path = Paths.get("/full/path/to/Test.kt")
     private val code = compileContentForTest(
         """
-        package test
+            package test
 
-        class C : Any() {
+            class C : Any() {
 
-            private fun memberFun(): Int = 5
-        }
+                private fun memberFun(): Int = 5
+            }
 
-        fun topLevelFun(number: Int) = Unit
+            fun topLevelFun(number: Int) = Unit
         """.trimIndent(),
         path.toString()
     )

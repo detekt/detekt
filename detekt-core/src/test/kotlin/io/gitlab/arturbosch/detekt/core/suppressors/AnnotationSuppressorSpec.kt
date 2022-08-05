@@ -405,10 +405,10 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
         fun `Doesn't mix annotations`() {
             val root = compileContentForTest(
                 """
-                package foo.bar
+                    package foo.bar
 
-                @Composable
-                fun function() = Unit
+                    @Composable
+                    fun function() = Unit
                 """.trimIndent()
             )
 
@@ -426,10 +426,10 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
         fun `Works when no using imports`() {
             val root = compileContentForTest(
                 """
-                package foo.bar
+                    package foo.bar
 
-                @androidx.compose.runtime.Composable
-                fun function() = Unit
+                    @androidx.compose.runtime.Composable
+                    fun function() = Unit
                 """.trimIndent()
             )
 
@@ -447,12 +447,12 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
         fun `Works when using import alias`() {
             val root = compileContentForTest(
                 """
-                package foo.bar
+                    package foo.bar
 
-                import androidx.compose.runtime.Composable as Bar
+                    import androidx.compose.runtime.Composable as Bar
 
-                @Bar
-                fun function() = Unit
+                    @Bar
+                    fun function() = Unit
                 """.trimIndent()
             )
 

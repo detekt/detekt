@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.invoke.CliArgument
 import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
-import io.gitlab.arturbosch.detekt.invoke.isDryRunEnabled
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.model.ObjectFactory
@@ -24,7 +23,7 @@ import java.nio.file.Files
 import javax.inject.Inject
 
 @CacheableTask
-open class DetektGenerateConfigTask @Inject constructor(
+abstract class DetektGenerateConfigTask @Inject constructor(
     private val objects: ObjectFactory
 ) : DefaultTask() {
 
@@ -34,25 +33,24 @@ open class DetektGenerateConfigTask @Inject constructor(
     }
 
     @get:Classpath
-    val detektClasspath: ConfigurableFileCollection = project.objects.fileCollection()
+    abstract val detektClasspath: ConfigurableFileCollection
 
     @get:Classpath
-    val pluginClasspath: ConfigurableFileCollection = objects.fileCollection()
+    abstract val pluginClasspath: ConfigurableFileCollection
 
     @get:InputFiles
     @get:Optional
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    val config: ConfigurableFileCollection = project.objects.fileCollection()
-
-    private val isDryRun: Boolean = project.isDryRunEnabled()
+    abstract val config: ConfigurableFileCollection
 
     private val defaultConfigPath = project.rootDir.toPath().resolve(CONFIG_DIR_NAME).resolve(CONFIG_FILE)
 
-    private val configurationToUse = if (config.isEmpty) {
-        objects.fileCollection().from(defaultConfigPath)
-    } else {
-        config
-    }
+    private val configurationToUse: ConfigurableFileCollection
+        get() = if (config.isEmpty) {
+            objects.fileCollection().from(defaultConfigPath)
+        } else {
+            config
+        }
 
     @get:Internal
     internal val arguments: Provider<List<String>> = project.provider {
@@ -71,7 +69,7 @@ open class DetektGenerateConfigTask @Inject constructor(
 
         Files.createDirectories(configurationToUse.last().parentFile.toPath())
 
-        DetektInvoker.create(task = this, isDryRun = isDryRun).invokeCli(
+        DetektInvoker.create(task = this).invokeCli(
             arguments = arguments.get(),
             classpath = detektClasspath.plus(pluginClasspath),
             taskName = name,

@@ -21,52 +21,47 @@ class TrailingCommaSpec {
 
         @Test
         fun `reports unnecessary comma on function call`() {
-            val code =
-                """
+            val code = """
                 val foo1 = listOf("a", "b",)
-                """.trimIndent()
+            """.trimIndent()
             val findings = TrailingComma(TestConfig(mapOf(ALLOW_TRAILING_COMMA to false))).lint(code)
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `reports unnecessary comma on constructor call`() {
-            val code =
-                """
+            val code = """
                 val foo2 = Pair(1, 2,)
-                """.trimIndent()
+            """.trimIndent()
             val findings = TrailingComma(TestConfig(mapOf(ALLOW_TRAILING_COMMA to false))).lint(code)
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `reports unnecessary comma on generic type definition`() {
-            val code =
-                """
+            val code = """
                 val foo3: List<String,> = emptyList()
-                """.trimIndent()
+            """.trimIndent()
             val findings = TrailingComma(TestConfig(mapOf(ALLOW_TRAILING_COMMA to false))).lint(code)
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `reports unnecessary comma on array get`() {
-            val code =
-                """
+            val code = """
                 val foo4 = Array(2) { 42 }
                 val bar4 = foo4[1,]
-                """.trimIndent()
+            """.trimIndent()
             val findings = TrailingComma(TestConfig(mapOf(ALLOW_TRAILING_COMMA to false))).lint(code)
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `reports unnecessary comma on annotation`() {
-            val code =
-                """
+            val code = """
                 @Foo5([1, 2,])
                 val foo5: Int = 0
-                """.trimIndent()
+            """.trimIndent()
             val findings = TrailingComma(TestConfig(mapOf(ALLOW_TRAILING_COMMA to false))).lint(code)
             assertThat(findings).hasSize(1)
         }
@@ -77,41 +72,38 @@ class TrailingCommaSpec {
 
         @Test
         fun `reports missing comma on field definition`() {
-            val code =
-                """
+            val code = """
                 data class Foo1(val bar: Int)
                 data class Foo2(
                    val bar: Int
                 )
-                """.trimIndent()
+            """.trimIndent()
             val findings = TrailingComma(TestConfig(mapOf(ALLOW_TRAILING_COMMA to true))).lint(code)
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `reports missing comma on function call`() {
-            val code =
-                """
+            val code = """
                 val foo1 = listOf("a", "b")
                 val foo2 = listOf(
                     "a", 
                     "b"
                 )
-                """.trimIndent()
+            """.trimIndent()
             val findings = TrailingComma(TestConfig(mapOf(ALLOW_TRAILING_COMMA_ON_CALL_SITE to true))).lint(code)
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `reports missing comma on constructor call`() {
-            val code =
-                """
+            val code = """
                 val foo2 = Pair(1, 2)
                 val foo2 = Pair(
                     1, 
                     2
                 )
-                """.trimIndent()
+            """.trimIndent()
             val findings = TrailingComma(TestConfig(mapOf(ALLOW_TRAILING_COMMA_ON_CALL_SITE to true))).lint(code)
             assertThat(findings).hasSize(1)
         }

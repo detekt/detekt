@@ -17,17 +17,16 @@ class WrappingSpec {
 
     @Test
     fun `Given a wrong wrapping in the class definition`() {
-        val code =
-            """
+        val code = """
             class A() : B, 
                 C {
             }
-            
+
             interface B
 
             interface C
 
-            """.trimIndent()
+        """.trimIndent()
 
         subject.lint(code).assert()
             .hasSize(1)

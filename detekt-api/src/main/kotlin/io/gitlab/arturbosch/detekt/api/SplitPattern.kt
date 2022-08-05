@@ -82,6 +82,6 @@ fun String.simplePatternToRegex(): Regex {
     return this
         .replace(".", "\\.")
         .replace("*", ".*")
-        .replace("?", ".?")
+        .replace("?", ".")
         .toRegex()
 }

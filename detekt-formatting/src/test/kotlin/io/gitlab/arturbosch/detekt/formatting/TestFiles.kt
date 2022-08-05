@@ -23,75 +23,75 @@ fun loadFileContent(resourceName: String) =
     StringUtilRt.convertLineSeparators(File(resource(resourceName)).readText())
 
 val contentAfterChainWrapping = """
-fun main() {
-    val anchor = owner.firstChild!!
-        .siblings(forward = true)
-        .dropWhile { it is PsiComment || it is PsiWhiteSpace }
-    val s = foo()
-        ?: bar
-    val s = foo()
-        ?.bar
-    val s = 1
-        + 2
-    val s = true &&
-        false
-    val s = b.equals(o.b) &&
-        g == o.g
-    val d = 1 +
-        -1
-    val d = 1
-        + -1
-    when (foo){
-        0 -> {
+    fun main() {
+        val anchor = owner.firstChild!!
+            .siblings(forward = true)
+            .dropWhile { it is PsiComment || it is PsiWhiteSpace }
+        val s = foo()
+            ?: bar
+        val s = foo()
+            ?.bar
+        val s = 1
+            + 2
+        val s = true &&
+            false
+        val s = b.equals(o.b) &&
+            g == o.g
+        val d = 1 +
+            -1
+        val d = 1
+            + -1
+        when (foo){
+            0 -> {
+            }
+            1 -> {
+            }
+            -2 -> {
+            }
         }
-        1 -> {
+        if (
+          -3 == a()
+        ) {}
+        if (
+          // comment
+          -3 == a()
+        ) {}
+        if (
+          /* comment */
+          -3 == a()
+        ) {}
+        if (c)
+          -7
+        else
+          -8
+        try {
+          fn()
+        } catch(e: Exception) {
+          -9
         }
-        -2 -> {
-        }
+        var x =
+            -2 >
+            (2 + 2)
+        -3
     }
-    if (
-      -3 == a()
-    ) {}
-    if (
-      // comment
-      -3 == a()
-    ) {}
-    if (
-      /* comment */
-      -3 == a()
-    ) {}
-    if (c)
-      -7
-    else
-      -8
-    try {
-      fn()
-    } catch(e: Exception) {
-      -9
-    }
-    var x =
-        -2 >
-        (2 + 2)
-    -3
-}
 
 """.trimIndent()
 
 val longLines = """
-/**
- * These are class docs.
- */
-class C {
     /**
-     * These are function docs.
+     * These are class docs.
      */
-    fun getLoremIpsum() = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
-
-    companion object {
+    class C {
         /**
-         * This is a constant for "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+         * These are function docs.
          */
-        val LOREM_IPSUM = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+        fun getLoremIpsum() = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+
+        companion object {
+            /**
+             * This is a constant for "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+             */
+            val LOREM_IPSUM = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+        }
     }
-}
 """.trimIndent()

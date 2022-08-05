@@ -50,14 +50,7 @@ class TrimMultilineRawString(val config: Config) : Rule(config) {
 
         if (expression.text.lines().count() <= 1) return
 
-        val nextCall = expression.getQualifiedExpressionForSelectorOrThis()
-            .getQualifiedExpressionForReceiver()
-            ?.selectorExpression
-            ?.asKtCallExpression()
-            ?.calleeExpression
-            ?.text
-
-        if (nextCall !in trimFunctions) {
+        if (!expression.isTrimmed()) {
             report(
                 CodeSmell(
                     issue,
@@ -69,6 +62,17 @@ class TrimMultilineRawString(val config: Config) : Rule(config) {
     }
 }
 
-private fun KtExpression.asKtCallExpression(): KtCallExpression? = this as? KtCallExpression
+fun KtStringTemplateExpression.isTrimmed(): Boolean {
+    fun KtExpression.asKtCallExpression(): KtCallExpression? = this as? KtCallExpression
+
+    val nextCall = getQualifiedExpressionForSelectorOrThis()
+        .getQualifiedExpressionForReceiver()
+        ?.selectorExpression
+        ?.asKtCallExpression()
+        ?.calleeExpression
+        ?.text
+
+    return nextCall in trimFunctions
+}
 
 private val trimFunctions = listOf("trimIndent", "trimMargin")

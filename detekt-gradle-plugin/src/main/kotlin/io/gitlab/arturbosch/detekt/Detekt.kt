@@ -56,33 +56,33 @@ import java.io.File
 import javax.inject.Inject
 
 @CacheableTask
-open class Detekt @Inject constructor(
+abstract class Detekt @Inject constructor(
     private val objects: ObjectFactory
 ) : SourceTask(), VerificationTask {
 
     @get:Classpath
-    val detektClasspath: ConfigurableFileCollection = objects.fileCollection()
+    abstract val detektClasspath: ConfigurableFileCollection
 
     @get:Classpath
-    val pluginClasspath: ConfigurableFileCollection = objects.fileCollection()
+    abstract val pluginClasspath: ConfigurableFileCollection
 
     @get:InputFile
     @get:Optional
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    val baseline: RegularFileProperty = project.objects.fileProperty()
+    abstract val baseline: RegularFileProperty
 
     @get:InputFiles
     @get:Optional
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    val config: ConfigurableFileCollection = objects.fileCollection()
+    abstract val config: ConfigurableFileCollection
 
     @get:Classpath
     @get:Optional
-    val classpath: ConfigurableFileCollection = objects.fileCollection()
+    abstract val classpath: ConfigurableFileCollection
 
     @get:Input
     @get:Optional
-    internal val languageVersionProp: Property<String> = project.objects.property(String::class.javaObjectType)
+    internal abstract val languageVersionProp: Property<String>
     var languageVersion: String
         @Internal
         get() = languageVersionProp.get()
@@ -90,42 +90,42 @@ open class Detekt @Inject constructor(
 
     @get:Input
     @get:Optional
-    internal val jvmTargetProp: Property<String> = project.objects.property(String::class.javaObjectType)
+    internal abstract val jvmTargetProp: Property<String>
     var jvmTarget: String
         @Internal
         get() = jvmTargetProp.get()
         set(value) = jvmTargetProp.set(value)
 
     @get:Internal
-    internal val debugProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    internal abstract val debugProp: Property<Boolean>
     var debug: Boolean
         @Console
         get() = debugProp.getOrElse(false)
         set(value) = debugProp.set(value)
 
     @get:Internal
-    internal val parallelProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    internal abstract val parallelProp: Property<Boolean>
     var parallel: Boolean
         @Internal
         get() = parallelProp.getOrElse(false)
         set(value) = parallelProp.set(value)
 
     @get:Internal
-    internal val disableDefaultRuleSetsProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    internal abstract val disableDefaultRuleSetsProp: Property<Boolean>
     var disableDefaultRuleSets: Boolean
         @Input
         get() = disableDefaultRuleSetsProp.getOrElse(false)
         set(value) = disableDefaultRuleSetsProp.set(value)
 
     @get:Internal
-    internal val buildUponDefaultConfigProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    internal abstract val buildUponDefaultConfigProp: Property<Boolean>
     var buildUponDefaultConfig: Boolean
         @Input
         get() = buildUponDefaultConfigProp.getOrElse(false)
         set(value) = buildUponDefaultConfigProp.set(value)
 
     @get:Internal
-    internal val failFastProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    internal abstract val failFastProp: Property<Boolean>
 
     @Deprecated("Please use the buildUponDefaultConfig and allRules flags instead.", ReplaceWith("allRules"))
     var failFast: Boolean
@@ -134,17 +134,17 @@ open class Detekt @Inject constructor(
         set(value) = failFastProp.set(value)
 
     @get:Internal
-    internal val allRulesProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    internal abstract val allRulesProp: Property<Boolean>
     var allRules: Boolean
         @Input
         get() = allRulesProp.getOrElse(false)
         set(value) = allRulesProp.set(value)
 
     @get:Internal
-    internal val ignoreFailuresProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    internal abstract val ignoreFailuresProp: Property<Boolean>
 
     @get:Internal
-    internal val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    internal abstract val autoCorrectProp: Property<Boolean>
 
     @set:Option(option = "auto-correct", description = "Allow rules to auto correct code if they support it")
     var autoCorrect: Boolean
@@ -157,7 +157,7 @@ open class Detekt @Inject constructor(
      */
     @get:Input
     @get:Optional
-    internal val basePathProp: Property<String> = project.objects.property(String::class.java)
+    internal abstract val basePathProp: Property<String>
     var basePath: String
         @Internal
         get() = basePathProp.getOrElse("")
@@ -167,7 +167,7 @@ open class Detekt @Inject constructor(
     var reports: DetektReports = objects.newInstance(DetektReports::class.java)
 
     @get:Internal
-    val reportsDir: Property<File> = project.objects.property(File::class.java)
+    abstract val reportsDir: Property<File>
 
     val xmlReportFile: Provider<RegularFile>
         @OutputFile

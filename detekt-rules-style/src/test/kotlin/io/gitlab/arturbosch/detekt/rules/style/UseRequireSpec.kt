@@ -26,6 +26,20 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `reports if a precondition throws an IllegalArgumentException as the only statement in block expression`() {
+        val code = """
+            fun x(a: Int) {
+                if (a < 0) {
+                    throw IllegalArgumentException()
+                }
+                doSomething()
+            }
+        """
+
+        assertThat(subject.lint(code)).hasStartSourceLocation(3, 9)
+    }
+
+    @Test
     fun `reports if a precondition throws an IllegalArgumentException with more details`() {
         val code = """
             fun x(a: Int) {
@@ -77,6 +91,21 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 throw IllegalArgumentException("message", cause)
             }
         """
+        assertThat(subject.lint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report an issue if the exceptions in thrown with more than one statement in block expression`() {
+        val code = """
+            fun x(a: Int) {
+                if (a < 0) {
+                    println("bang!")
+                    throw IllegalArgumentException()
+                }
+                doSomething()
+            }
+        """
+
         assertThat(subject.lint(code)).isEmpty()
     }
 

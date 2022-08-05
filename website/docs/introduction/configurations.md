@@ -19,6 +19,23 @@ file for all defined configuration options and their default values.
 
 _Note:_ When using a custom config file, the default values are ignored unless you also set the `--build-upon-default-config` flag.
 
+## Config validation
+
+If config validation is enabled, _detekt_ will verify that your configuration file is structured correctly and all first party rule sets, rules and configuration options are valid and not marked as deprecated.
+
+```yaml
+config:
+  validation: true
+  warningsAsErrors: false
+  excludes: ''
+```
+
+Invalid or deprecated rules and configuration options are by default printed as warnings unless `warningsAsErrors` is set to `true`.
+
+_Note:_ Custom rules sets are excluded from config validation by default.
+
+If you have extended _detekt_ and rely on a custom properties, you will need to exclude those from config validation by adding their paths to the `excludes` attribute. Multiple values are separated by comma and `.*` can be used as a wildcard (e.g. `propA,build>.*>propB`).
+
 ## Rule sets and rules
 
 _detekt_ allows easily to just pick the rules you want and configure them the way you like.

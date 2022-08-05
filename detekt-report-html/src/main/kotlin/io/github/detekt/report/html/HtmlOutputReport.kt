@@ -123,7 +123,7 @@ class HtmlOutputReport : OutputReport() {
                 span("description") { text(findings.first().issue.description) }
             }
 
-            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.toLowerCase(Locale.US)}#${rule.toLowerCase(Locale.US)}") {
+            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.lowercase(Locale.US)}#${rule.lowercase(Locale.US)}") {
                 +"Documentation"
             }
 

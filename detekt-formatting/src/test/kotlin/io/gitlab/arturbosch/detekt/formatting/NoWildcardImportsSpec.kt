@@ -21,24 +21,22 @@ class NoWildcardImportsSpec {
 
         @Test
         fun `Wildcard imports are detected`() {
-            val code =
-                """
+            val code = """
                 import a.*
                 import a.b.c.*
                 import a.b
                 import foo.bar.`**`
-                """.trimIndent()
+            """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(2)
         }
 
         @Test
         fun `Wildcard imports on packages which are accepted by IntelliJ Default are not detected`() {
-            val code =
-                """
+            val code = """
                 import a.b
                 import kotlinx.android.synthetic.main.layout_name.*
-                """.trimIndent()
+            """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -47,13 +45,12 @@ class NoWildcardImportsSpec {
     inner class PackagesToUseImportOnDemandPropertySet {
         @Test
         fun `Given that the property is set with value 'unset' then packages which are accepted by IntelliJ Default are not detected`() {
-            val code =
-                """
+            val code = """
                 import a.b
                 import kotlinx.android.synthetic.main.layout_name.*
                 import react.*
                 import react.dom.*
-                """.trimIndent()
+            """.trimIndent()
 
             assertThat(
                 NoWildcardImports(TestConfig("packagesToUseImportOnDemandProperty" to "unset")).lint(
@@ -64,13 +61,12 @@ class NoWildcardImportsSpec {
 
         @Test
         fun `Given that the property is set to some packages exclusive subpackages then wildcard imports for those directories are not detected`() {
-            val code =
-                """
+            val code = """
                 import a.b
                 import kotlinx.android.synthetic.main.layout_name.*
                 import react.*
                 import react.dom.*
-                """.trimIndent()
+            """.trimIndent()
             assertThat(
                 NoWildcardImports(TestConfig("packagesToUseImportOnDemandProperty" to "react.*,react.dom.*")).lint(
                     code
@@ -80,13 +76,12 @@ class NoWildcardImportsSpec {
 
         @Test
         fun `Given that the property is set to some packages inclusive subpackages then wildcard imports for those directories are not detected`() {
-            val code =
-                """
+            val code = """
                 import a.b
                 import kotlinx.android.synthetic.main.layout_name.*
                 import react.*
                 import react.dom.*
-                """.trimIndent()
+            """.trimIndent()
 
             assertThat(
                 NoWildcardImports(TestConfig("packagesToUseImportOnDemandProperty" to "react.**")).lint(
@@ -97,11 +92,10 @@ class NoWildcardImportsSpec {
 
         @Test
         fun `Given that property is set without a value then the packages which otherwise would be accepted by IntelliJ Default are detected`() {
-            val code =
-                """
+            val code = """
                 import a.b
                 import kotlinx.android.synthetic.main.layout_name.*
-                """.trimIndent()
+            """.trimIndent()
 
             assertThat(
                 NoWildcardImports(TestConfig("packagesToUseImportOnDemandProperty" to "")).lint(
