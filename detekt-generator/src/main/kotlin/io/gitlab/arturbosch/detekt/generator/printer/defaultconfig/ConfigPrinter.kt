@@ -25,62 +25,62 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
     }
 
     private fun defaultBuildConfiguration(): String = """
-      build:
-        maxIssues: 0
-        excludeCorrectable: false
-        weights:
-          # complexity: 2
-          # LongParameterList: 1
-          # style: 1
-          # comments: 1
+        build:
+          maxIssues: 0
+          excludeCorrectable: false
+          weights:
+            # complexity: 2
+            # LongParameterList: 1
+            # style: 1
+            # comments: 1
     """.trimIndent()
 
     private fun defaultConfigConfiguration(): String = """
-      config:
-        validation: true
-        warningsAsErrors: false
-        # when writing own rules with new properties, exclude the property path e.g.: 'my_rule_set,.*>.*>[my_property]'
-        excludes: ''
+        config:
+          validation: true
+          warningsAsErrors: false
+          # when writing own rules with new properties, exclude the property path e.g.: 'my_rule_set,.*>.*>[my_property]'
+          excludes: ''
     """.trimIndent()
 
     private fun defaultProcessorsConfiguration(): String = """
-      processors:
-        active: true
-        exclude:
-          - 'DetektProgressListener'
-        # - 'KtFileCountProcessor'
-        # - 'PackageCountProcessor'
-        # - 'ClassCountProcessor'
-        # - 'FunctionCountProcessor'
-        # - 'PropertyCountProcessor'
-        # - 'ProjectComplexityProcessor'
-        # - 'ProjectCognitiveComplexityProcessor'
-        # - 'ProjectLLOCProcessor'
-        # - 'ProjectCLOCProcessor'
-        # - 'ProjectLOCProcessor'
-        # - 'ProjectSLOCProcessor'
-        # - 'LicenseHeaderLoaderExtension'
+        processors:
+          active: true
+          exclude:
+            - 'DetektProgressListener'
+          # - 'KtFileCountProcessor'
+          # - 'PackageCountProcessor'
+          # - 'ClassCountProcessor'
+          # - 'FunctionCountProcessor'
+          # - 'PropertyCountProcessor'
+          # - 'ProjectComplexityProcessor'
+          # - 'ProjectCognitiveComplexityProcessor'
+          # - 'ProjectLLOCProcessor'
+          # - 'ProjectCLOCProcessor'
+          # - 'ProjectLOCProcessor'
+          # - 'ProjectSLOCProcessor'
+          # - 'LicenseHeaderLoaderExtension'
     """.trimIndent()
 
     private fun defaultConsoleReportsConfiguration(): String = """
-      console-reports:
-        active: true
-        exclude:
-           - 'ProjectStatisticsReport'
-           - 'ComplexityReport'
-           - 'NotificationReport'
-           - 'FindingsReport'
-           - 'FileBasedFindingsReport'
-        #  - 'LiteFindingsReport'
+        console-reports:
+          active: true
+          exclude:
+             - 'ProjectStatisticsReport'
+             - 'ComplexityReport'
+             - 'NotificationReport'
+             - 'FindingsReport'
+             - 'FileBasedFindingsReport'
+          #  - 'LiteFindingsReport'
     """.trimIndent()
 
     private fun defaultOutputReportsConfiguration(): String = """
-      output-reports:
-        active: true
-        exclude:
-        # - 'TxtOutputReport'
-        # - 'XmlOutputReport'
-        # - 'HtmlOutputReport'
-        # - 'MdOutputReport'
+        output-reports:
+          active: true
+          exclude:
+          # - 'TxtOutputReport'
+          # - 'XmlOutputReport'
+          # - 'HtmlOutputReport'
+          # - 'MdOutputReport'
     """.trimIndent()
 }

@@ -97,7 +97,7 @@ private fun MarkdownContent.renderRule(rule: String, group: String, findings: Li
     paragraph {
         link(
             "Documentation",
-            "$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.toLowerCase(Locale.US)}#${rule.toLowerCase(Locale.US)}"
+            "$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.lowercase(Locale.US)}#${rule.lowercase(Locale.US)}"
         )
     }
 

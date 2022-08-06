@@ -23,7 +23,7 @@ import java.nio.file.Files
 import javax.inject.Inject
 
 @CacheableTask
-open class DetektGenerateConfigTask @Inject constructor(
+abstract class DetektGenerateConfigTask @Inject constructor(
     private val objects: ObjectFactory
 ) : DefaultTask() {
 
@@ -33,15 +33,15 @@ open class DetektGenerateConfigTask @Inject constructor(
     }
 
     @get:Classpath
-    val detektClasspath: ConfigurableFileCollection = project.objects.fileCollection()
+    abstract val detektClasspath: ConfigurableFileCollection
 
     @get:Classpath
-    val pluginClasspath: ConfigurableFileCollection = objects.fileCollection()
+    abstract val pluginClasspath: ConfigurableFileCollection
 
     @get:InputFiles
     @get:Optional
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    val config: ConfigurableFileCollection = project.objects.fileCollection()
+    abstract val config: ConfigurableFileCollection
 
     private val defaultConfigPath = project.rootDir.toPath().resolve(CONFIG_DIR_NAME).resolve(CONFIG_FILE)
 

@@ -83,15 +83,15 @@ private fun createReportUrl(ruleName: String, throwable: Throwable): String {
         .take(STACK_TRACE_LINES_TO_SHOW)
         .joinToString("\n")
     val bodyMessage = """
-            |I found an error in the html report:
-            |- Rule: $ruleName
-            |- Detekt version: ${whichDetekt() ?: "<WRITE HERE THE VERSION OF DETEKT THAT YOU ARE USING>"}
-            |- Stacktrace:
-            |```
-            |$stackTrace
-            |```
-            |- How to reproduce it: <WRITE HERE HOW TO REPRODUCE THIS ISSUE. A CODE SNIPPET IS THE BEST WAY.>
-            |
+        |I found an error in the html report:
+        |- Rule: $ruleName
+        |- Detekt version: ${whichDetekt() ?: "<WRITE HERE THE VERSION OF DETEKT THAT YOU ARE USING>"}
+        |- Stacktrace:
+        |```
+        |$stackTrace
+        |```
+        |- How to reproduce it: <WRITE HERE HOW TO REPRODUCE THIS ISSUE. A CODE SNIPPET IS THE BEST WAY.>
+        |
     """.trimMargin()
     val body = URLEncoder.encode(bodyMessage, "UTF8")
 

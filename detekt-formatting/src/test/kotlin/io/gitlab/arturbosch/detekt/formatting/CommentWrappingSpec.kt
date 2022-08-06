@@ -13,22 +13,20 @@ import org.junit.jupiter.api.Test
 class CommentWrappingSpec {
     @Test
     fun `Given a single line block comment that start starts and end on a separate line then report no error`() {
-        val code =
-            """
+        val code = """
             /* Some comment */
-            """.trimIndent()
+        """.trimIndent()
         assertThat(CommentWrapping(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
     fun `Given a block comment followed by a code element on the same line as the block comment ended then report four errors`() {
-        val code =
-            """
+        val code = """
             /* Some comment 1 */ val foo1 = "foo1"
             /* Some comment 2 */val foo2 = "foo2"
             /* Some comment 3 */ fun foo3() = "foo3"
             /* Some comment 4 */fun foo4() = "foo4"
-            """.trimIndent()
+        """.trimIndent()
 
         assertThat(CommentWrapping(Config.empty).lint(code)).hasSize(4)
     }

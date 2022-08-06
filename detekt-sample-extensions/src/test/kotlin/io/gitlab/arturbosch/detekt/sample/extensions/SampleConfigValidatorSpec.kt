@@ -10,9 +10,9 @@ class SampleConfigValidatorSpec {
     fun `it warns if active property is not a boolean`() {
         val config = yamlConfigFromContent(
             """
-            sample:
-              TooManyFunctions:
-                active: 1
+                sample:
+                  TooManyFunctions:
+                    active: 1
             """.trimIndent()
         )
 

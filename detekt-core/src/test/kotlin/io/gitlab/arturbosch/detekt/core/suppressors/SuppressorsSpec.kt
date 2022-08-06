@@ -27,11 +27,11 @@ class SuppressorsSpec {
         entity = Entity.from(
             compileContentForTest(
                 """
-                @file:Composable
+                    @file:Composable
 
-                import androidx.compose.runtime.Composable
+                    import androidx.compose.runtime.Composable
 
-                fun foo() = Unit
+                    fun foo() = Unit
                 """.trimIndent()
             )
         ),

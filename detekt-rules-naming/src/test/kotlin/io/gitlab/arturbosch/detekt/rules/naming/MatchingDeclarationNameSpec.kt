@@ -156,9 +156,9 @@ class MatchingDeclarationNameSpec {
         fun `should not pass for class declaration as first declaration with utility functions`() {
             val ktFile = compileContentForTest(
                 """
-                class C
-                fun a() = 5
-                fun C.b() = 5
+                    class C
+                    fun a() = 5
+                    fun C.b() = 5
                 """.trimIndent(),
                 filename = "ClassUtils.kt"
             )
@@ -177,9 +177,9 @@ class MatchingDeclarationNameSpec {
         fun `should not pass for enum declaration`() {
             val ktFile = compileContentForTest(
                 """
-                enum class NOT_E {
-                    ONE, TWO, THREE
-                }
+                    enum class NOT_E {
+                        ONE, TWO, THREE
+                    }
                 """.trimIndent(),
                 filename = "E.kt"
             )
@@ -202,9 +202,9 @@ class MatchingDeclarationNameSpec {
         fun `should not pass for class declaration not as first declaration with utility functions when mustBeFirst is false`() {
             val ktFile = compileContentForTest(
                 """
-                fun a() = 5
-                fun C.b() = 5
-                class C
+                    fun a() = 5
+                    fun C.b() = 5
+                    class C
                 """.trimIndent(),
                 filename = "Classes.kt"
             )

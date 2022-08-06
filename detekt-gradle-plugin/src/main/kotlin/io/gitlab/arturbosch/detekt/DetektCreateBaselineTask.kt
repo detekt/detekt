@@ -38,7 +38,7 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
 @CacheableTask
-open class DetektCreateBaselineTask : SourceTask() {
+abstract class DetektCreateBaselineTask : SourceTask() {
 
     init {
         description = "Creates a detekt baseline on the given --baseline path."
@@ -46,60 +46,60 @@ open class DetektCreateBaselineTask : SourceTask() {
     }
 
     @get:OutputFile
-    val baseline: RegularFileProperty = project.objects.fileProperty()
+    abstract val baseline: RegularFileProperty
 
     @get:InputFiles
     @get:Optional
-    @PathSensitive(PathSensitivity.RELATIVE)
-    val config: ConfigurableFileCollection = project.objects.fileCollection()
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val config: ConfigurableFileCollection
 
     @get:Classpath
-    val detektClasspath: ConfigurableFileCollection = project.objects.fileCollection()
+    abstract val detektClasspath: ConfigurableFileCollection
 
     @get:Classpath
-    val pluginClasspath: ConfigurableFileCollection = project.objects.fileCollection()
+    abstract val pluginClasspath: ConfigurableFileCollection
 
     @get:Classpath
     @get:Optional
-    val classpath: ConfigurableFileCollection = project.objects.fileCollection()
+    abstract val classpath: ConfigurableFileCollection
 
     @get:Console
-    val debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    abstract val debug: Property<Boolean>
 
     @get:Internal
-    val parallel: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    abstract val parallel: Property<Boolean>
 
     @get:Input
     @get:Optional
-    val disableDefaultRuleSets: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    abstract val disableDefaultRuleSets: Property<Boolean>
 
     @get:Input
     @get:Optional
-    val buildUponDefaultConfig: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    abstract val buildUponDefaultConfig: Property<Boolean>
 
     @get:Input
     @get:Optional
     @Deprecated("Please use the buildUponDefaultConfig and allRules flags instead.", ReplaceWith("allRules"))
-    val failFast: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    abstract val failFast: Property<Boolean>
 
     @get:Input
     @get:Optional
-    val ignoreFailures: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    abstract val ignoreFailures: Property<Boolean>
 
     @get:Input
     @get:Optional
-    val allRules: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    abstract val allRules: Property<Boolean>
 
     @get:Input
     @get:Optional
-    val autoCorrect: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    abstract val autoCorrect: Property<Boolean>
 
     /**
      * Respect only the file path for incremental build. Using @InputFile respects both file path and content.
      */
     @get:Input
     @get:Optional
-    internal val basePathProp: Property<String> = project.objects.property(String::class.java)
+    internal abstract val basePathProp: Property<String>
     var basePath: String
         @Internal
         get() = basePathProp.get()
@@ -107,7 +107,7 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @get:Input
     @get:Optional
-    internal val jvmTargetProp: Property<String> = project.objects.property(String::class.javaObjectType)
+    internal abstract val jvmTargetProp: Property<String>
     var jvmTarget: String
         @Internal
         get() = jvmTargetProp.get()

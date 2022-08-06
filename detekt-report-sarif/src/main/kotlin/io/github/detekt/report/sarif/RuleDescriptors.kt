@@ -41,8 +41,8 @@ private fun io.gitlab.arturbosch.detekt.api.MultiRule.toDescriptors(ruleSetId: R
     this.rules.map { it.toDescriptor(ruleSetId) }
 
 private fun Rule.toDescriptor(ruleSetId: RuleSetId): ReportingDescriptor {
-    val formattedRuleSetId = ruleSetId.toLowerCase(Locale.US)
-    val formattedRuleId = ruleId.toLowerCase(Locale.US)
+    val formattedRuleSetId = ruleSetId.lowercase(Locale.US)
+    val formattedRuleId = ruleId.lowercase(Locale.US)
 
     return ReportingDescriptor(
         id = "detekt.$ruleSetId.$ruleId",

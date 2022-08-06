@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package io.gitlab.arturbosch.detekt.internal
 
 import com.android.build.gradle.AppExtension

@@ -49,14 +49,14 @@ class BaselineFacadeSpec {
 
         assertThat(baselineFile).hasContent(
             """
-            <?xml version="1.0" ?>
-            <SmellBaseline>
-              <ManuallySuppressedIssues>
-                <ID>LongParameterList:Signature</ID>
-                <ID>LongMethod:Signature</ID>
-              </ManuallySuppressedIssues>
-              <CurrentIssues></CurrentIssues>
-            </SmellBaseline>
+                <?xml version="1.0" ?>
+                <SmellBaseline>
+                  <ManuallySuppressedIssues>
+                    <ID>LongParameterList:Signature</ID>
+                    <ID>LongMethod:Signature</ID>
+                  </ManuallySuppressedIssues>
+                  <CurrentIssues></CurrentIssues>
+                </SmellBaseline>
             """.trimIndent()
         )
     }
@@ -69,16 +69,16 @@ class BaselineFacadeSpec {
 
         assertThat(baselineFile).hasContent(
             """
-            <?xml version="1.0" ?>
-            <SmellBaseline>
-              <ManuallySuppressedIssues>
-                <ID>LongParameterList:Signature</ID>
-                <ID>LongMethod:Signature</ID>
-              </ManuallySuppressedIssues>
-              <CurrentIssues>
-                <ID>TestSmell:TestEntitySignature</ID>
-              </CurrentIssues>
-            </SmellBaseline>
+                <?xml version="1.0" ?>
+                <SmellBaseline>
+                  <ManuallySuppressedIssues>
+                    <ID>LongParameterList:Signature</ID>
+                    <ID>LongMethod:Signature</ID>
+                  </ManuallySuppressedIssues>
+                  <CurrentIssues>
+                    <ID>TestSmell:TestEntitySignature</ID>
+                  </CurrentIssues>
+                </SmellBaseline>
             """.trimIndent()
         )
     }
