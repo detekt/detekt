@@ -6,20 +6,19 @@ import io.gitlab.arturbosch.detekt.test.assertThat
 import org.junit.jupiter.api.Test
 
 class NoTabsSpec {
+    private val subject = NoTabs()
 
     @Test
     fun `should flag a line that contains a tab`() {
-        val subject = NoTabs()
         val file = compileForTest(Case.NoTabsPositive.path())
-        subject.findTabs(file)
+        subject.visitFile(file)
         assertThat(subject.findings).hasSize(5)
     }
 
     @Test
     fun `should not flag a line that does not contain a tab`() {
-        val subject = NoTabs()
         val file = compileForTest(Case.NoTabsNegative.path())
-        subject.findTabs(file)
+        subject.visitFile(file)
         assertThat(subject.findings).isEmpty()
     }
 }
