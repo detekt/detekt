@@ -107,6 +107,17 @@ const config = {
             label: 'API',
           },
           {
+            type: "docsVersionDropdown",
+            position: "right",
+            dropdownActiveClassDisabled: true,
+            dropdownItemsAfter: [
+              {
+                to: "/docs/introduction/changelog",
+                label: "All changelogs",
+              },
+            ],
+          },
+          {
             href: 'https://github.com/detekt/detekt',
             label: 'GitHub',
             position: 'right',
