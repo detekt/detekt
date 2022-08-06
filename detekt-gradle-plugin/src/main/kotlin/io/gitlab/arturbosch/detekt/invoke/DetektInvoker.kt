@@ -54,6 +54,7 @@ abstract class DetektWorkAction : WorkAction<DetektWorkParameters> {
         }
 
         try {
+            @Suppress("DEPRECATION")
             val runner = io.gitlab.arturbosch.detekt.cli.buildRunner(
                 parameters.arguments.get().toTypedArray(),
                 System.out,
