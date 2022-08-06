@@ -80,6 +80,7 @@ abstract class DetektGenerateConfigTask @Inject constructor(
             logger.info("Executing $name using Worker API")
             val workQueue = workerExecutor.processIsolation { workerSpec ->
                 workerSpec.classpath.from(detektClasspath)
+                workerSpec.classpath.from(pluginClasspath)
             }
 
             workQueue.submit(DetektWorkAction::class.java) { workParameters ->
