@@ -321,13 +321,13 @@ class RuleSetProviderCollectorSpec {
     @Nested
     inner class `a RuleSetProvider with configurations in kdoc` {
         val code = """
-        package foo
+            package foo
 
-        /**
-         * description
-         * @configuration android - if android style guides should be preferred (default: `false`)
-         */
-        class TestProvider: RuleSetProvider {
+            /**
+             * description
+             * @configuration android - if android style guides should be preferred (default: `false`)
+             */
+            class TestProvider: RuleSetProvider {
         """.trimIndent()
 
         @Test

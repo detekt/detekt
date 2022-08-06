@@ -98,6 +98,7 @@ complexity:
     threshold: 10
     includeStaticDeclarations: false
     includePrivateDeclarations: false
+    ignoreOverloaded: false
   ComplexMethod:
     active: true
     threshold: 15
@@ -502,7 +503,8 @@ style:
     active: false
   DataClassContainsFunctions:
     active: false
-    conversionFunctionPrefix: 'to'
+    conversionFunctionPrefix:
+      - 'to'
   DataClassShouldBeImmutable:
     active: false
   DestructuringDeclarationWithTooManyEntries:
@@ -555,7 +557,7 @@ style:
     active: true
     ignoreOverridableFunction: true
     ignoreActualFunction: true
-    excludedFunctions: ''
+    excludedFunctions: []
   LibraryCodeMustSpecifyReturnType:
     active: true
     excludes: ['**']
@@ -596,12 +598,16 @@ style:
     excludePackageStatements: true
     excludeImportStatements: true
     excludeCommentStatements: false
+    excludeRawStrings: true
   MayBeConst:
     active: true
   ModifierOrder:
     active: true
   MultilineLambdaItParameter:
     active: false
+  MultilineRawStringIndentation:
+    active: false
+    indentSize: 4
   NestedClassesVisibility:
     active: true
   NewLineAtEndOfFile:

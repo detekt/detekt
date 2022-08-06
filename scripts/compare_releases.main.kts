@@ -16,7 +16,7 @@
  */
 
 @file:Suppress("detekt.CommentSpacing") // for the exec line
-@file:DependsOn("com.github.ajalt:clikt:2.7.1")
+@file:DependsOn("com.github.ajalt:clikt:2.8.0")
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.default

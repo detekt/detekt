@@ -25,9 +25,9 @@ class FormattingRuleSpec {
         fun `does support suppression only on file level`() {
             val findings = subject.lint(
                 """
-                @file:Suppress("NoLineBreakBeforeAssignment")
-                fun main() 
-                = Unit
+                    @file:Suppress("NoLineBreakBeforeAssignment")
+                    fun main()
+                    = Unit
                 """.trimIndent()
             )
 
@@ -38,9 +38,9 @@ class FormattingRuleSpec {
         fun `does not support suppression on node level`() {
             val findings = subject.lint(
                 """
-                @Suppress("NoLineBreakBeforeAssignment")
-                fun main() 
-                = Unit
+                    @Suppress("NoLineBreakBeforeAssignment")
+                    fun main()
+                    = Unit
                 """.trimIndent()
             )
 
@@ -55,8 +55,8 @@ class FormattingRuleSpec {
         fun `has no package name`() {
             val findings = subject.lint(
                 """
-                fun main() 
-                = Unit
+                    fun main()
+                    = Unit
                 """.trimIndent()
             )
 
@@ -67,9 +67,9 @@ class FormattingRuleSpec {
         fun `has a package name`() {
             val findings = subject.lint(
                 """
-                package test.test.test
-                fun main() 
-                = Unit
+                    package test.test.test
+                    fun main()
+                    = Unit
                 """.trimIndent()
             )
 

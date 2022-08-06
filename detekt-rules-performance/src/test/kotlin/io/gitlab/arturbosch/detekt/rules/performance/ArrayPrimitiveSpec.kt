@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -19,49 +18,49 @@ class ArrayPrimitiveSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `is an array of primitive type`() {
             val code = "fun function(array: Array<Int>) {}"
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         @Test
         fun `is not an array`() {
             val code = "fun function(i: Int) {}"
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
         fun `is a specialized array`() {
             val code = "fun function(array: ByteArray) {}"
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
         fun `is a star-projected array`() {
             val code = "fun function(array: Array<*>) {}"
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
         fun `is not present`() {
             val code = "fun function() {}"
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
         fun `is an array of a non-primitive type`() {
             val code = "fun function(array: Array<String>) {}"
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
         fun `is an array of an array of a primitive type`() {
             val code = "fun function(array: Array<Array<Int>>) {}"
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         @Test
         fun `is a dictionary with an array of a primitive type as key`() {
             val code = "fun function(dict: java.util.Dictionary<Int, Array<Int>>) {}"
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }
 
@@ -71,13 +70,13 @@ class ArrayPrimitiveSpec(val env: KotlinCoreEnvironment) {
         @DisplayName("one is Array<Primitive> and the other is not")
         fun oneArrayPrimitive() {
             val code = "fun function(array: Array<Int>, array2: IntArray) {}"
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         @Test
         fun `both are arrays of primitive types`() {
             val code = "fun function(array: Array<Int>, array2: Array<Double>) {}"
-            assertThat(subject.compileAndLint(code)).hasSize(2)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
     }
 
@@ -87,31 +86,31 @@ class ArrayPrimitiveSpec(val env: KotlinCoreEnvironment) {
         @DisplayName("is Array<Primitive>")
         fun isArrayPrimitive() {
             val code = "fun returningFunction(): Array<Float> { return emptyArray() }"
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
 
         @Test
         fun `is not an array`() {
             val code = "fun returningFunction(): Int { return 1 }"
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
         fun `is a specialized array`() {
             val code = "fun returningFunction(): CharArray { return CharArray(0) }"
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
         fun `is a star-projected array`() {
             val code = "fun returningFunction(): Array<*> { return emptyArray<Any>() }"
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
         fun `is not explicitly set`() {
             val code = "fun returningFunction() {}"
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 

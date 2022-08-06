@@ -3,7 +3,7 @@ dokka = "1.7.10"
 jacoco = "0.8.8"
 kotlin = "1.7.10"
 ktlint = "0.46.1"
-junit = "5.8.2"
+junit = "5.9.0"
 contester = "0.2.0"
 
 [libraries]
@@ -21,7 +21,7 @@ kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", versio
 kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.8.0"
 kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
 
-android-gradle = "com.android.tools.build:gradle:7.2.1"
+android-gradle = "com.android.tools.build:gradle:7.2.2"
 
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktlint" }
 ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint" }
@@ -35,7 +35,7 @@ junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "jun
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.0.1"
 assertj = "org.assertj:assertj-core:3.23.1"
 reflections = "org.reflections:reflections:0.10.2"
-mockk = "io.mockk:mockk:1.12.4"
+mockk = "io.mockk:mockk:1.12.5"
 snakeyaml = "org.yaml:snakeyaml:1.30"
 jcommander = "com.beust:jcommander:1.82"
 contester-breakpoint = { module = "io.github.davidburstrom.contester:contester-breakpoint", version.ref = "contester" }

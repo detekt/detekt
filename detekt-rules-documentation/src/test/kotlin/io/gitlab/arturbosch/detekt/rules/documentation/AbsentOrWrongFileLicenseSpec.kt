@@ -60,13 +60,13 @@ class AbsentOrWrongFileLicenseSpec {
         fun `reports nothing for 2016`() {
             val findings = checkLicence(
                 """
-                //
-                // Copyright 2016 Artur Bosch & Contributors
-                //     http://www.apache.org/licenses/LICENSE-2.0
-                // See the License for the specific language governing permissions and
-                // limitations under the License.
-                //
-                package cases
+                    //
+                    // Copyright 2016 Artur Bosch & Contributors
+                    //     http://www.apache.org/licenses/LICENSE-2.0
+                    // See the License for the specific language governing permissions and
+                    // limitations under the License.
+                    //
+                    package cases
                 """.trimIndent(),
                 isRegexLicense = true
             )
@@ -78,13 +78,13 @@ class AbsentOrWrongFileLicenseSpec {
         fun `reports nothing for 2021`() {
             val findings = checkLicence(
                 """
-                //
-                // Copyright 2021 Artur Bosch & Contributors
-                //     http://www.apache.org/licenses/LICENSE-2.0
-                // See the License for the specific language governing permissions and
-                // limitations under the License.
-                //
-                package cases
+                    //
+                    // Copyright 2021 Artur Bosch & Contributors
+                    //     http://www.apache.org/licenses/LICENSE-2.0
+                    // See the License for the specific language governing permissions and
+                    // limitations under the License.
+                    //
+                    package cases
                 """.trimIndent(),
                 isRegexLicense = true
             )
@@ -100,7 +100,7 @@ class AbsentOrWrongFileLicenseSpec {
         fun `file with missing license header`() {
             val findings = checkLicence(
                 """
-                package cases
+                    package cases
                 """.trimIndent(),
                 isRegexLicense = true
             )
@@ -112,13 +112,13 @@ class AbsentOrWrongFileLicenseSpec {
         fun `file with license header not on the first line`() {
             val findings = checkLicence(
                 """
-                package cases
-                //
-                // Copyright 2021 Artur Bosch & Contributors
-                //     http://www.apache.org/licenses/LICENSE-2.0
-                // See the License for the specific language governing permissions and
-                // limitations under the License.
-                //
+                    package cases
+                    //
+                    // Copyright 2021 Artur Bosch & Contributors
+                    //     http://www.apache.org/licenses/LICENSE-2.0
+                    // See the License for the specific language governing permissions and
+                    // limitations under the License.
+                    //
                 """.trimIndent(),
                 isRegexLicense = true
             )
@@ -130,10 +130,10 @@ class AbsentOrWrongFileLicenseSpec {
         fun `file with incomplete license header`() {
             val findings = checkLicence(
                 """
-                //
-                // Copyright 2021 Artur Bosch & Contributors
-                //
-                package cases
+                    //
+                    // Copyright 2021 Artur Bosch & Contributors
+                    //
+                    package cases
                 """.trimIndent(),
                 isRegexLicense = true
             )
@@ -145,14 +145,14 @@ class AbsentOrWrongFileLicenseSpec {
         fun `file with too many empty likes in license header`() {
             val findings = checkLicence(
                 """
-                //
-                //
-                // Copyright 2021 Artur Bosch & Contributors
-                //     http://www.apache.org/licenses/LICENSE-2.0
-                // See the License for the specific language governing permissions and
-                // limitations under the License.
-                //
-                package cases
+                    //
+                    //
+                    // Copyright 2021 Artur Bosch & Contributors
+                    //     http://www.apache.org/licenses/LICENSE-2.0
+                    // See the License for the specific language governing permissions and
+                    // limitations under the License.
+                    //
+                    package cases
                 """.trimIndent(),
                 isRegexLicense = true
             )
@@ -164,13 +164,13 @@ class AbsentOrWrongFileLicenseSpec {
         fun `file with incorrect year in license header`() {
             val findings = checkLicence(
                 """
-                //
-                // Copyright 202 Artur Bosch & Contributors
-                //     http://www.apache.org/licenses/LICENSE-2.0
-                // See the License for the specific language governing permissions and
-                // limitations under the License.
-                //
-                package cases
+                    //
+                    // Copyright 202 Artur Bosch & Contributors
+                    //     http://www.apache.org/licenses/LICENSE-2.0
+                    // See the License for the specific language governing permissions and
+                    // limitations under the License.
+                    //
+                    package cases
                 """.trimIndent(),
                 isRegexLicense = true
             )

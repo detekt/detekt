@@ -12,11 +12,11 @@ class FullQualifiedNameGuesserSpec {
         private val sut = FullQualifiedNameGuesser(
             compileContentForTest(
                 """
-                package foo
+                    package foo
 
-                import kotlin.jvm.JvmField
-                import kotlin.jvm.JvmStatic as Static
-                import java.io.*
+                    import kotlin.jvm.JvmField
+                    import kotlin.jvm.JvmStatic as Static
+                    import java.io.*
                 """.trimIndent()
             )
         )

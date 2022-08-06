@@ -26,6 +26,19 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `reports if a an IllegalStateException is thrown conditionally in a block`() {
+        val code = """
+            fun x() {
+                doSomething()
+                if (a < 0) {
+                    throw IllegalStateException()
+                }
+            }
+        """
+        assertThat(subject.lint(code)).hasStartSourceLocation(4, 9)
+    }
+
+    @Test
     fun `reports if a an IllegalStateException is thrown with an error message`() {
         val code = """
             fun x() {
