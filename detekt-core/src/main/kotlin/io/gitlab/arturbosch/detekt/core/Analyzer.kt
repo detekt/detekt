@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
@@ -95,9 +94,10 @@ internal class Analyzer(
         bindingContext: BindingContext,
         compilerResources: CompilerResources
     ): Map<RuleSetId, List<Finding>> {
+        @Suppress("DEPRECATION")
         fun isCorrectable(rule: BaseRule): Boolean = when (rule) {
             is Rule -> rule.autoCorrect
-            is MultiRule -> rule.rules.any { it.autoCorrect }
+            is io.gitlab.arturbosch.detekt.api.MultiRule -> rule.rules.any { it.autoCorrect }
             else -> error("No other rule type expected.")
         }
 

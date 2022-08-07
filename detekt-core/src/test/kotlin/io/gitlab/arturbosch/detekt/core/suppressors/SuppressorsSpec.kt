@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.TestConfig
@@ -79,7 +78,9 @@ class SuppressorsSpec {
     }
 }
 
-private class AMultiRule(config: Config) : MultiRule() {
+private class AMultiRule(config: Config) :
+    @Suppress("DEPRECATION")
+    io.gitlab.arturbosch.detekt.api.MultiRule() {
     override val rules: List<Rule> = listOf(ARule(config))
 }
 

@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
@@ -70,7 +69,9 @@ private class MultiRuleProvider : RuleSetProvider {
     override fun instance(config: Config): RuleSet = RuleSet(ruleSetId, listOf(TestMultiRule(config)))
 }
 
-private class TestMultiRule(config: Config) : MultiRule() {
+private class TestMultiRule(config: Config) :
+    @Suppress("DEPRECATION")
+    io.gitlab.arturbosch.detekt.api.MultiRule() {
 
     private val one = TestRuleOne(config)
     private val two = TestRuleTwo(config)

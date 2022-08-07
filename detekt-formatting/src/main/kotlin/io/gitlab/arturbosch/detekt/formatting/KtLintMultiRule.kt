@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationOnSeparateLine
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationSpacing
@@ -65,7 +64,9 @@ import java.util.LinkedList
 /**
  * Runs all KtLint rules.
  */
-class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
+class KtLintMultiRule(config: Config = Config.empty) :
+    @Suppress("DEPRECATION")
+    io.gitlab.arturbosch.detekt.api.MultiRule() {
 
     override val rules: List<Rule> = listOf(
         // Wrappers for ktlint-ruleset-standard rules. Enabled by default.
