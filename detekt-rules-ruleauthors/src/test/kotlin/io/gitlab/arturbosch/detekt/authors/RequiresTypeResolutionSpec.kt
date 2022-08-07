@@ -89,4 +89,27 @@ internal class RequiresTypeResolutionSpec(private val env: KotlinCoreEnvironment
         val findings = rule.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
+
+    @Test
+    fun `should report Rules that use bindingContext outside class and are not annotated`() {
+        val code = """
+            import io.gitlab.arturbosch.detekt.api.Config
+            import io.gitlab.arturbosch.detekt.api.Rule
+
+            class A(config: Config) : Rule(config) {
+                override val issue = error("I don't care")
+
+                private fun asdf() {
+                    extension()
+                }
+            }
+
+            inline fun Rule.extension(): Boolean {
+                bindingContext
+                return true
+            }
+        """.trimIndent()
+        val findings = rule.compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+    }
 }

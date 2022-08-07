@@ -14,7 +14,9 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.typeUtil.supertypes
 import kotlin.reflect.KClass
@@ -33,11 +35,12 @@ class RequiresTypeResolution(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    override fun visitClass(klass: KtClass) {
-        super.visitClass(klass)
+    private val klasses: MutableList<KtClass> = mutableListOf()
+    private var usesBindingContext: Boolean = false
 
-        if (klass.extendsFrom(BaseRule::class)) {
-            val usesBindingContext = usesBindingContext(klass)
+    override fun visitKtFile(file: KtFile) {
+        super.visitKtFile(file)
+        klasses.forEach { klass ->
             val isAnnotatedWithRequiresTypeResolution = klass.isAnnotatedWith(RequiresTypeResolution::class)
             if (usesBindingContext && !isAnnotatedWithRequiresTypeResolution) {
                 report(
@@ -58,10 +61,20 @@ class RequiresTypeResolution(config: Config = Config.empty) : Rule(config) {
             }
         }
     }
-}
 
-private fun usesBindingContext(element: KtElement): Boolean {
-    return element.containingKtFile.text.contains("bindingContext", ignoreCase = false)
+    override fun visitClass(klass: KtClass) {
+        super.visitClass(klass)
+
+        if (klass.extendsFrom(BaseRule::class)) {
+            klasses.add(klass)
+        }
+    }
+
+    override fun visitReferenceExpression(expression: KtReferenceExpression) {
+        super.visitReferenceExpression(expression)
+        usesBindingContext = usesBindingContext ||
+            (expression is KtNameReferenceExpression && expression.text == "bindingContext")
+    }
 }
 
 context(BaseRule) private inline fun <reified T : Any> KtClass.extendsFrom(kClass: KClass<T>): Boolean {
