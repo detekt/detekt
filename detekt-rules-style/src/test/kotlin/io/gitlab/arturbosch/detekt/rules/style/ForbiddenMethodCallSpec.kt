@@ -508,4 +508,72 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             )
         assertThat(findings).hasSize(1)
     }
+
+    @Nested
+    inner class `Forbid constructors` {
+        @Nested
+        inner class NameOnly {
+            @Test
+            fun `empty constructor`() {
+                val code = """
+                    import java.util.Date
+
+                    val a = Date()
+                """.trimIndent()
+                val findings =
+                    ForbiddenMethodCall(TestConfig(METHODS to listOf("java.util.Date.<init>"))).compileAndLintWithContext(
+                        env,
+                        code
+                    )
+                assertThat(findings).hasSize(1)
+            }
+
+            @Test
+            fun `no-empty constructor`() {
+                val code = """
+                    import java.util.Date
+
+                    val a = Date(2022, 8 ,7)
+                """.trimIndent()
+                val findings =
+                    ForbiddenMethodCall(TestConfig(METHODS to listOf("java.util.Date.<init>"))).compileAndLintWithContext(
+                        env,
+                        code
+                    )
+                assertThat(findings).hasSize(1)
+            }
+        }
+
+        @Nested
+        inner class WithParameters {
+            @Test
+            fun `empty constructor`() {
+                val code = """
+                    import java.util.Date
+
+                    val a = Date()
+                """.trimIndent()
+                val findings =
+                    ForbiddenMethodCall(TestConfig(METHODS to listOf("java.util.Date.<init>()"))).compileAndLintWithContext(
+                        env,
+                        code
+                    )
+                assertThat(findings).hasSize(1)
+            }
+
+            @Test
+            fun `no-empty constructor`() {
+                val code = """
+                    import java.util.Date
+
+                    val a = Date(2022, 8 ,7)
+                """.trimIndent()
+                val findings =
+                    ForbiddenMethodCall(
+                        TestConfig(METHODS to listOf("java.util.Date.<init>(kotlin.Int, kotlin.Int, kotlin.Int)"))
+                    ).compileAndLintWithContext(env, code)
+                assertThat(findings).hasSize(1)
+            }
+        }
+    }
 }
