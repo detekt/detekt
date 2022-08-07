@@ -9,6 +9,8 @@ import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.provider.Provider
+import org.gradle.api.services.BuildService
+import org.gradle.api.services.BuildServiceParameters
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.InputFiles
@@ -72,4 +74,7 @@ abstract class DetektGenerateConfigTask : DefaultTask() {
             taskName = name,
         )
     }
+
+    @Suppress("UnnecessaryAbstractClass")
+    abstract class SingleExecutionBuildService : BuildService<BuildServiceParameters.None>
 }

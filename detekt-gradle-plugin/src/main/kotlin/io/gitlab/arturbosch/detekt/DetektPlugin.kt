@@ -60,8 +60,16 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun Project.registerGenerateConfigTask(extension: DetektExtension) {
+        val detektGenerateConfigSingleExecution = project.gradle.sharedServices.registerIfAbsent(
+            "DetektGenerateConfigSingleExecution",
+            DetektGenerateConfigTask.SingleExecutionBuildService::class.java
+        ) { spec ->
+            spec.maxParallelUsages.set(1)
+        }
+
         tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
             it.config.setFrom(project.provider { extension.config })
+            it.usesService(detektGenerateConfigSingleExecution)
         }
     }
 
