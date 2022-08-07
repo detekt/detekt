@@ -23,7 +23,12 @@ class TrailingWhitespace(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    fun visit(fileContent: KtFileContent) {
+    override fun visitKtFile(file: KtFile) {
+        super.visitKtFile(file)
+        visit(file.toFileContent())
+    }
+
+    private fun visit(fileContent: KtFileContent) {
         var offset = 0
         fileContent.content.forEachIndexed { index, line ->
             offset += line.length

@@ -17,6 +17,7 @@ permissions:
 
 jobs:
   danger:
+    if: ${{ github.event.sender != 'codecov' }}
     name: Danger JS
     runs-on: ubuntu-latest
     steps:
