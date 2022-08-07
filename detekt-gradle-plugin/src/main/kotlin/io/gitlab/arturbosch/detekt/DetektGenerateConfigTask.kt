@@ -19,6 +19,7 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
+import java.io.File
 import java.nio.file.Files
 import javax.inject.Inject
 
@@ -45,29 +46,29 @@ abstract class DetektGenerateConfigTask @Inject constructor(
 
     private val defaultConfigPath = project.rootDir.toPath().resolve(CONFIG_DIR_NAME).resolve(CONFIG_FILE)
 
-    private val configurationToUse: ConfigurableFileCollection
+    private val configurationToUse: File
         get() = if (config.isEmpty) {
             objects.fileCollection().from(defaultConfigPath)
         } else {
             config
-        }
+        }.last()
 
     @get:Internal
     internal val arguments: Provider<List<String>> = project.provider {
         listOf(
             GenerateConfigArgument,
-            ConfigArgument(configurationToUse.last())
+            ConfigArgument(configurationToUse)
         ).flatMap(CliArgument::toArgument)
     }
 
     @TaskAction
     fun generateConfig() {
-        if (configurationToUse.last().exists()) {
-            logger.warn("Skipping config file generation; file already exists at ${configurationToUse.last()}")
+        if (configurationToUse.exists()) {
+            logger.warn("Skipping config file generation; file already exists at $configurationToUse")
             return
         }
 
-        Files.createDirectories(configurationToUse.last().parentFile.toPath())
+        Files.createDirectories(configurationToUse.parentFile.toPath())
 
         DetektInvoker.create(task = this).invokeCli(
             arguments = arguments.get(),
