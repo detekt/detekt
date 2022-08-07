@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
@@ -21,12 +20,9 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.io.File
 import java.nio.file.Files
-import javax.inject.Inject
 
 @CacheableTask
-abstract class DetektGenerateConfigTask @Inject constructor(
-    private val objects: ObjectFactory
-) : DefaultTask() {
+abstract class DetektGenerateConfigTask : DefaultTask() {
 
     init {
         description = "Generate a detekt configuration file inside your project."
@@ -48,10 +44,10 @@ abstract class DetektGenerateConfigTask @Inject constructor(
 
     private val configurationToUse: File
         get() = if (config.isEmpty) {
-            objects.fileCollection().from(defaultConfigPath)
+            defaultConfigPath.toFile()
         } else {
-            config
-        }.last()
+            config.last()
+        }
 
     @get:Internal
     internal val arguments: Provider<List<String>> = project.provider {
