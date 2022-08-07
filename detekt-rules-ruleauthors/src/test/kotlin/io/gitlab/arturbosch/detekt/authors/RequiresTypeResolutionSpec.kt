@@ -12,7 +12,7 @@ internal class RequiresTypeResolutionSpec(private val env: KotlinCoreEnvironment
     private val rule = RequiresTypeResolution()
 
     @Test
-    fun `should not report classes that doesn't extend from BaseRule`() {
+    fun `should not report classes that don't extend from BaseRule`() {
         val code = """
             class A {
                 val issue: Int = error("bindingContext")
@@ -75,7 +75,7 @@ internal class RequiresTypeResolutionSpec(private val env: KotlinCoreEnvironment
     }
 
     @Test
-    fun `should not report Rules that doesn't use bindingContext and are annotated`() {
+    fun `should report Rules that don't use bindingContext and are annotated`() {
         val code = """
             import io.gitlab.arturbosch.detekt.api.Config
             import io.gitlab.arturbosch.detekt.api.Rule
