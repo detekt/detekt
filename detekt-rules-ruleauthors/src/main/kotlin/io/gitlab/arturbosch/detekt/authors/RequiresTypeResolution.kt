@@ -18,7 +18,8 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.types.typeUtil.supertypes
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
+import org.jetbrains.kotlin.resolve.descriptorUtil.getAllSuperclassesWithoutAny
 import kotlin.reflect.KClass
 
 /**
@@ -79,8 +80,7 @@ class RequiresTypeResolution(config: Config = Config.empty) : Rule(config) {
 
 context(BaseRule) private inline fun <reified T : Any> KtClass.extendsFrom(kClass: KClass<T>): Boolean {
     return bindingContext[BindingContext.CLASS, this]
-        ?.defaultType
-        ?.supertypes()
+        ?.getAllSuperclassesWithoutAny()
         .orEmpty()
         .any { it.fqNameOrNull()?.toString() == checkNotNull(kClass.qualifiedName) }
 }
