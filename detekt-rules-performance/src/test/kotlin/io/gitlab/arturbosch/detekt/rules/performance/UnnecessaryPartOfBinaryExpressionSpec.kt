@@ -23,9 +23,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
     @Test
     fun `verify object-foo or object-foo detected`() {
         val code = """
-            class Bar(
-                val bar: Boolean,
-            )
+            class Bar(val bar: Boolean)
             fun bar() {
                 val bar = Bar(true)
                 
@@ -44,8 +42,8 @@ class UnnecessaryPartOfBinaryExpressionSpec {
     fun `verify foo more 5 and foo more 5 detected`() {
         val code = """
             fun bar() {
-                val foo = 10
-                if (foo > 5 && foo > 5) {
+                val foo = 1
+                if (foo > 1 && foo > 1) {
                     //TODO    
                 }
             }
@@ -58,8 +56,8 @@ class UnnecessaryPartOfBinaryExpressionSpec {
     fun `verify foo more 5 && foo more 5 detected un trim`() {
         val code = """
             fun bar() {
-                val foo = 10
-                if (foo> 5 && foo >5) {
+                val foo = 1
+                if (foo> 1 && foo >1) {
                     //TODO    
                 }
             }
@@ -71,6 +69,8 @@ class UnnecessaryPartOfBinaryExpressionSpec {
     @Test
     fun `verify object-foo && object-foo detected`() {
         val code = """
+            class Bar(val bar: Boolean)
+            
             fun bar() {
                 val bar = Bar(true)
                 
@@ -103,9 +103,9 @@ class UnnecessaryPartOfBinaryExpressionSpec {
     fun `verify more and less if works as expected`() {
         val code = """
             fun bar() {
-                val foo = 10
-                val bar = 50
-                if (foo > bar || foo > 150) {
+                val foo = 0
+                val bar = 1
+                if (foo > bar || foo > 1) {
                     //TODO    
                 }
             }
@@ -120,9 +120,9 @@ class UnnecessaryPartOfBinaryExpressionSpec {
     fun `verify into filter function`() {
         val code = """
             fun bar() {
-                val list = listOf()
+                val list = listOf<Int>()
 
-                list.filter { it > 10 || it > 10 }
+                list.filter { it > 1 || it > 1 }
             }
         """
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
