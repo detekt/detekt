@@ -38,11 +38,10 @@ class DetektPrinter(private val arguments: GeneratorArgs) {
         }
     }
 
-    fun printCustomRuleConfig(pages: List<RuleSetPage>) {
-        yamlWriter.write(
-            arguments.configPath.parent,
-            arguments.configPath.fileName.toString().split(".").first()
-        ) { ConfigPrinter.printCustomRuleConfig(pages) }
+    fun printCustomRuleConfig(pages: List<RuleSetPage>, folder: String) {
+        yamlWriter.write(Paths.get(folder), "config") {
+            ConfigPrinter.printCustomRuleConfig(pages)
+        }
     }
 
     private fun markdownHeader(ruleSet: String): String {

@@ -18,7 +18,6 @@ fun main(args: Array<String>) {
     }
 
     if (options.generateCustomRuleConfig) {
-        require(Files.isRegularFile(options.configPath)) { "Config path must be a file." }
         Generator(options).executeCustomRuleConfig()
         return
     }

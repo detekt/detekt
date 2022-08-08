@@ -34,9 +34,8 @@ class ConfigExporter(
     }
 
     private fun generateCustomRuleConfig() {
-        val configPath = Paths.get(arguments.config ?: "config.yml")
-
-        val rootDir = File("/Users/vvp/IdeaProjects/detekt/") // TODO
+        @Suppress("UnsafeCallOnNullableType")
+        val rootDir = File(arguments.classpath!!)
         val urls = rootDir.walkTopDown()
             .filter { it.name.endsWith(".jar") }
             .map { it.toURI().toURL() }
@@ -51,14 +50,13 @@ class ConfigExporter(
             arguments::generateCustomRuleConfig.name.toParam(),
             arguments::input.name.toParam(),
             arguments.input,
-            arguments::config.name.toParam(),
-            arguments.config,
         )
         methodMain.invoke(null, args)
-        outputPrinter.appendLine("Successfully generated custom rules config to ${configPath.toAbsolutePath()}")
+        outputPrinter.appendLine("Successfully generated custom rules config to /resources/config/")
     }
 
     private fun String.toParam() =
+        @Suppress("UnsafeCallOnNullableType")
         arguments.javaClass.declaredFields.find { it.name == this }!!
             .getAnnotation(com.beust.jcommander.Parameter::class.java)
             .names

@@ -23,7 +23,7 @@ class GeneratorArgs {
 
     @Parameter(
         names = ["--config", "-c"],
-        required = true,
+        required = false,
         description = "Output path for generated detekt config."
     )
     private var config: String? = null
@@ -43,7 +43,7 @@ class GeneratorArgs {
     var help: Boolean = false
 
     @Parameter(
-        names = ["--generate-custom-rule-config", "-gcc"],
+        names = ["--generate-custom-rule-config", "-gcrc"],
         required = false,
         description = "Generate config for user-defined rules. " +
             "Path to user rules can be specified with --input option"

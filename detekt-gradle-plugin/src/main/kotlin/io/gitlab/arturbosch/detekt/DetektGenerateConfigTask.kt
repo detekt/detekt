@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.CONFIG_DIR_NAME
 import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.CONFIG_FILE
+import io.gitlab.arturbosch.detekt.invoke.ClasspathArgument
 import io.gitlab.arturbosch.detekt.invoke.CliArgument
 import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
@@ -73,12 +74,15 @@ abstract class DetektGenerateConfigTask @Inject constructor(
         source
     }
 
+    private val projectRoot = objects.fileCollection().from(project.rootDir)
+
     @get:Internal
     internal val arguments: Provider<List<String>> = project.provider {
         if (generateOnlyFromCustomRules.get()) {
             listOf(
                 GenerateCustomRuleConfigArgument,
                 InputArgument(sourceToUse),
+                ClasspathArgument(projectRoot),
                 ConfigArgument(configurationToUse.last())
             )
         } else {

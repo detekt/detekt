@@ -46,9 +46,24 @@ class Generator(
             val ktFiles = arguments.inputPath
                 .flatMap { parseAll(parser, it) }
 
-            ktFiles.forEach(collector::visit)
+            val folderMap = mutableMapOf<KtFile, String>()
+            ktFiles.forEach { ktFile ->
+                val pathParts = ktFile.name.split("/src/main/kotlin")
+                if (pathParts.count() > 1) {
+                    folderMap[ktFile] = "${pathParts.first()}/src/main/resources/config/"
+                }
+            }
 
-            printer.printCustomRuleConfig(collector.items)
+            folderMap
+                .toList()
+                .groupBy { (_, folder) -> folder }
+                .toList()
+                .forEach { (folder, list) ->
+                    list.forEach { (file, _) ->
+                        collector.visit(file)
+                    }
+                    printer.printCustomRuleConfig(collector.items, folder)
+                }
         }
 
         outPrinter.println("\nGenerated custom rules config in $time ms.")
