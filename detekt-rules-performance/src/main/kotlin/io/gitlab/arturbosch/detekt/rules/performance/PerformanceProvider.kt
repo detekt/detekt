@@ -20,7 +20,8 @@ class PerformanceProvider : DefaultRuleSetProvider {
             SpreadOperator(config),
             UnnecessaryTemporaryInstantiation(config),
             ArrayPrimitive(config),
-            CouldBeSequence(config)
+            CouldBeSequence(config),
+            UnnecessaryPartOfBinaryExpression(config),
         )
     )
 }
