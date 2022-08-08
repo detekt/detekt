@@ -17,7 +17,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             }
         """
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
-        Assertions.assertThat(findings).hasSize(1)
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -37,7 +37,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             
         """
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
-        Assertions.assertThat(findings).hasSize(1)
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -51,7 +51,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             }
         """
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
-        Assertions.assertThat(findings).hasSize(1)
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -65,7 +65,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             }
         """
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
-        Assertions.assertThat(findings).hasSize(1)
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -80,7 +80,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             }
         """
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
-        Assertions.assertThat(findings).hasSize(1)
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -96,7 +96,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             
         """
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
-        Assertions.assertThat(findings).hasSize(0)
+        assertThat(findings).hasSize(0)
     }
 
     @Test
@@ -113,7 +113,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             
         """
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
-        Assertions.assertThat(findings).hasSize(0)
+        assertThat(findings).hasSize(0)
     }
 
     @Test
@@ -126,7 +126,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             }
         """
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
-        Assertions.assertThat(findings).hasSize(1)
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -142,6 +142,6 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             }
         """
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
-        Assertions.assertThat(findings).hasSize(1)
+        assertThat(findings).hasSize(1)
     }
 }
