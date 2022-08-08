@@ -61,7 +61,7 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
             "(i.e. `java.time.LocalDate(java.time.Clock)`) which would report only call " +
             "with this concrete signature. If you want to forbid an extension function like" +
             "`fun String.hello(a: Int)` you should add the receiver parameter as the first parameter like this: " +
-            "`hello(kotlin.String, kotlin.Int)`. To forbid constructor calls you need to define them with `<init>` " +
+            "`hello(kotlin.String, kotlin.Int)`. To forbid constructor calls you need to define them with `<init>`, " +
             " for example `java.util.Date.<init>`."
     )
     private val methods: List<Forbidden> by config(
