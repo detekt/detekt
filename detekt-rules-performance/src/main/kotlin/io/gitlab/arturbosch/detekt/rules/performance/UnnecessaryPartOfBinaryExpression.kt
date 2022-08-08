@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 
 /**
  * Unnecessary binary expression add complexity to the code and accomplish nothing. They should be removed.
- * The rule works with all binary expression include if and when condition. The rule also works with all predicates.
+ * The rule works with all binary expression included if and when condition. The rule also works with all predicates.
  *
  * <noncompliant>
  * val foo = true
