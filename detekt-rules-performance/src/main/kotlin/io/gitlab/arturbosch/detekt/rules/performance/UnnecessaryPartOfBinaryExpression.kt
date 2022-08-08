@@ -30,9 +30,10 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 class UnnecessaryPartOfBinaryExpression(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
-            "UnnecessaryPartOfBinaryExpression", Severity.Performance,
-            "Detects duplicate condition into binary expression and recommends to remove unnecessary checks",
-            Debt.FIVE_MINS
+        "UnnecessaryPartOfBinaryExpression",
+        Severity.Performance,
+        "Detects duplicate condition into binary expression and recommends to remove unnecessary checks",
+        Debt.FIVE_MINS
     )
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {

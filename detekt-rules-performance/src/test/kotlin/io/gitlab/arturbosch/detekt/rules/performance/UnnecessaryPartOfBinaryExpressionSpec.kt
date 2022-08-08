@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class UnnecessaryPartOfBinaryExpressionSpec {
@@ -144,5 +144,4 @@ class UnnecessaryPartOfBinaryExpressionSpec {
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         Assertions.assertThat(findings).hasSize(1)
     }
-
 }
