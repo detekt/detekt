@@ -166,4 +166,4 @@ jobs:
         if: success() || failure()
         with:
           sarif_file: build/detekt.sarif
-``` 
+```
