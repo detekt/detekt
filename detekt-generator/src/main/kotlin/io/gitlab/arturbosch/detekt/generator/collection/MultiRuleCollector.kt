@@ -21,6 +21,7 @@ data class MultiRule(
     operator fun contains(ruleName: String) = ruleName in this.rules
 }
 
+@Suppress("DEPRECATION")
 private val multiRule = io.gitlab.arturbosch.detekt.api.MultiRule::class.simpleName.orEmpty()
 
 class MultiRuleCollector : Collector<MultiRule> {

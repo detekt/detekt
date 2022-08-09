@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.core.suppressors
 import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.ConfigAware
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -22,8 +21,9 @@ private fun buildSuppressors(rule: ConfigAware, bindingContext: BindingContext):
 }
 
 internal fun getSuppressors(rule: BaseRule, bindingContext: BindingContext): List<Suppressor> {
+    @Suppress("DEPRECATION")
     return when (rule) {
-        is MultiRule -> rule.rules.flatMap { innerRule ->
+        is io.gitlab.arturbosch.detekt.api.MultiRule -> rule.rules.flatMap { innerRule ->
             buildSuppressors(innerRule, bindingContext).map { suppressor -> InnerSuppressor(innerRule, suppressor) }
         }
         is ConfigAware -> buildSuppressors(rule, bindingContext)

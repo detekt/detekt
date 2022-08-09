@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
 
@@ -18,7 +19,7 @@ sealed class FunctionMatcher {
         private val fullyQualifiedName: String
     ) : FunctionMatcher() {
         override fun match(callableDescriptor: CallableDescriptor): Boolean {
-            return callableDescriptor.fqNameOrNull()?.asString() == fullyQualifiedName
+            return callableDescriptor.fqNameSafe.asString() == fullyQualifiedName
         }
 
         override fun match(function: KtNamedFunction, bindingContext: BindingContext): Boolean {
@@ -36,7 +37,7 @@ sealed class FunctionMatcher {
     ) : FunctionMatcher() {
         override fun match(callableDescriptor: CallableDescriptor): Boolean {
             val descriptor = callableDescriptor.original
-            if (descriptor.fqNameOrNull()?.asString() != fullyQualifiedName) return false
+            if (descriptor.fqNameSafe.asString() != fullyQualifiedName) return false
 
             val encounteredParamTypes =
                 (listOfNotNull(descriptor.extensionReceiverParameter) + descriptor.valueParameters)

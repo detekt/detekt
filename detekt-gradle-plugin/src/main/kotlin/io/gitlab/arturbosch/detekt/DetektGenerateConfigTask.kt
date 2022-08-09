@@ -14,6 +14,8 @@ import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
+import org.gradle.api.services.BuildService
+import org.gradle.api.services.BuildServiceParameters
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
@@ -24,13 +26,11 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
+import java.io.File
 import java.nio.file.Files
-import javax.inject.Inject
 
 @CacheableTask
-abstract class DetektGenerateConfigTask @Inject constructor(
-    private val objects: ObjectFactory
-) : DefaultTask() {
+abstract class DetektGenerateConfigTask : DefaultTask() {
 
     init {
         description = "Generate a detekt configuration file inside your project."
@@ -50,11 +50,11 @@ abstract class DetektGenerateConfigTask @Inject constructor(
 
     private val defaultConfigPath = project.rootDir.toPath().resolve(CONFIG_DIR_NAME).resolve(CONFIG_FILE)
 
-    private val configurationToUse: ConfigurableFileCollection
+    private val configurationToUse: File
         get() = if (config.isEmpty) {
-            objects.fileCollection().from(defaultConfigPath)
+            defaultConfigPath.toFile()
         } else {
-            config
+            config.last()
         }
 
     @get:Input
@@ -65,16 +65,18 @@ abstract class DetektGenerateConfigTask @Inject constructor(
     @get:InputFiles
     @get:Optional
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    val source: ConfigurableFileCollection = project.objects.fileCollection()
+    abstract val source: ConfigurableFileCollection
 
-    private val defaultSourcePath = project.rootDir.toPath().resolve(DetektPlugin.SOURCE_DIR_NAME)
-    private val sourceToUse = if (source.isEmpty) {
-        objects.fileCollection().from(defaultSourcePath)
-    } else {
-        source
-    }
+    private val defaultSourcePath = project.rootDir.toPath().resolve(SOURCE_DIR_NAME)
 
-    private val projectRoot = objects.fileCollection().from(project.rootDir)
+    private val sourceToUse: File
+        get() = if (source.isEmpty) {
+            defaultSourcePath.toFile()
+        } else {
+            source.last()
+        }
+
+    private val projectRoot = project.rootDir
 
     @get:Internal
     internal val arguments: Provider<List<String>> = project.provider {
@@ -83,24 +85,24 @@ abstract class DetektGenerateConfigTask @Inject constructor(
                 GenerateCustomRuleConfigArgument,
                 InputArgument(sourceToUse),
                 ClasspathArgument(projectRoot),
-                ConfigArgument(configurationToUse.last())
+                ConfigArgument(configurationToUse)
             )
         } else {
             listOf(
                 GenerateConfigArgument,
-                ConfigArgument(configurationToUse.last())
+                ConfigArgument(configurationToUse)
             )
         }.flatMap(CliArgument::toArgument)
     }
 
     @TaskAction
     fun generateConfig() {
-        if (configurationToUse.last().exists() && !generateOnlyFromCustomRules.get()) {
-            logger.warn("Skipping config file generation; file already exists at ${configurationToUse.last()}")
+        if (configurationToUse.exists() && !generateOnlyFromCustomRules.get()) {
+            logger.warn("Skipping config file generation; file already exists at $configurationToUse")
             return
         }
 
-        Files.createDirectories(configurationToUse.last().parentFile.toPath())
+        Files.createDirectories(configurationToUse.parentFile.toPath())
 
         DetektInvoker.create(task = this).invokeCli(
             arguments = arguments.get(),
@@ -108,4 +110,7 @@ abstract class DetektGenerateConfigTask @Inject constructor(
             taskName = name,
         )
     }
+
+    @Suppress("UnnecessaryAbstractClass")
+    abstract class SingleExecutionBuildService : BuildService<BuildServiceParameters.None>
 }

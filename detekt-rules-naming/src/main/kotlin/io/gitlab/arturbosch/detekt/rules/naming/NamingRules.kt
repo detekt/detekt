@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtConstructor
@@ -16,7 +15,9 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 
-class NamingRules(config: Config = Config.empty) : MultiRule() {
+class NamingRules(config: Config = Config.empty) :
+    @Suppress("DEPRECATION")
+    io.gitlab.arturbosch.detekt.api.MultiRule() {
 
     private val variableNamingRule = VariableNaming(config)
     private val variableMinNameLengthRule = VariableMinLength(config)

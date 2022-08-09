@@ -3,8 +3,11 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Named
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import java.util.stream.Stream
 
 class UnnecessaryParenthesesSpec {
     @ParameterizedTest
@@ -332,15 +335,19 @@ class UnnecessaryParenthesesSpec {
     companion object {
         class RuleTestCase(val allowForUnclearPrecedence: Boolean) {
             val rule = UnnecessaryParentheses(
-                TestConfig(mapOf("allowForUnclearPrecedence" to allowForUnclearPrecedence))
+                TestConfig("allowForUnclearPrecedence" to allowForUnclearPrecedence)
             )
         }
 
         @JvmStatic
-        fun cases(): List<RuleTestCase> {
-            return listOf(
-                RuleTestCase(allowForUnclearPrecedence = false),
-                RuleTestCase(allowForUnclearPrecedence = true),
+        fun cases(): Stream<Arguments> {
+            return Stream.of(
+                Arguments.of(
+                    Named.of("Without allow for unclear precedence", RuleTestCase(allowForUnclearPrecedence = false))
+                ),
+                Arguments.of(
+                    Named.of("With allow for unclear precedence", RuleTestCase(allowForUnclearPrecedence = true))
+                ),
             )
         }
     }

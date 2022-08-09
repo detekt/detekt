@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtCatchClause
@@ -29,7 +28,9 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
  */
 @Suppress("TooManyFunctions")
 @ActiveByDefault(since = "1.0.0")
-class EmptyBlocks(val config: Config = Config.empty) : MultiRule() {
+class EmptyBlocks(val config: Config = Config.empty) :
+    @Suppress("DEPRECATION")
+    io.gitlab.arturbosch.detekt.api.MultiRule() {
 
     private val emptyCatchBlock = EmptyCatchBlock(config)
     private val emptyClassBlock = EmptyClassBlock(config)

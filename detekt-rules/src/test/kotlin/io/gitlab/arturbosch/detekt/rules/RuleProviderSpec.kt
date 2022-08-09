@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules
 
 import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
@@ -63,7 +62,9 @@ private fun getRulesPackageNameForProvider(providerType: Class<out RuleSetProvid
 
 private fun getRules(provider: RuleSetProvider): List<BaseRule> {
     val ruleSet = provider.instance(Config.empty)
-    val rules = ruleSet.rules.flatMap { (it as? MultiRule)?.rules ?: listOf(it) }
+
+    @Suppress("DEPRECATION")
+    val rules = ruleSet.rules.flatMap { (it as? io.gitlab.arturbosch.detekt.api.MultiRule)?.rules ?: listOf(it) }
     assertThat(rules).isNotEmpty
     return rules
 }
