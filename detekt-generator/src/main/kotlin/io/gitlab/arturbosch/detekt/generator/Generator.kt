@@ -59,6 +59,7 @@ class Generator(
                 .groupBy { (_, folder) -> folder }
                 .toList()
                 .forEach { (folder, list) ->
+                    val collector = DetektCollector()
                     list.forEach { (file, _) ->
                         collector.visit(file)
                     }

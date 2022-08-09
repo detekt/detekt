@@ -117,7 +117,6 @@ class DetektPlugin : Plugin<Project> {
         internal val defaultExcludes = listOf("build/")
         internal val defaultIncludes = listOf("**/*.kt", "**/*.kts")
         internal const val CONFIG_DIR_NAME = "config/detekt"
-        internal const val SOURCE_DIR_NAME = "detekt-rules-complexity"
         internal const val CONFIG_FILE = "detekt.yml"
 
         internal const val DETEKT_ANDROID_DISABLED_PROPERTY = "detekt.android.disabled"
