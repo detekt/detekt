@@ -14,7 +14,7 @@ class TopLevelPropertyNamingSpec {
     @Test
     fun `should use custom name top level propeties`() {
         assertThat(
-            NamingRules(TestConfig(mapOf(TopLevelPropertyNaming.CONSTANT_PATTERN to "^lowerCaseConst$"))).compileAndLint(
+            TopLevelPropertyNaming(TestConfig(mapOf(TopLevelPropertyNaming.CONSTANT_PATTERN to "^lowerCaseConst$"))).compileAndLint(
                 """
         class Foo{
             companion object {

@@ -9,7 +9,7 @@ class PackageNamingSpec {
 
     @Test
     fun `should use custom name for package`() {
-        val rule = NamingRules(TestConfig(PackageNaming.PACKAGE_PATTERN to "^(package_1)$"))
+        val rule = PackageNaming(TestConfig(PackageNaming.PACKAGE_PATTERN to "^(package_1)$"))
         assertThat(rule.compileAndLint("package package_1")).isEmpty()
     }
 

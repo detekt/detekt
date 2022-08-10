@@ -46,6 +46,9 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
     private val ignoreOverridden: Boolean by configWithFallback(::ignoreOverriddenFunctions, true)
 
     override fun visitParameter(parameter: KtParameter) {
+        if (parameter.nameAsSafeName.isSpecial || parameter.nameIdentifier?.parent?.javaClass == null) {
+            return
+        }
         if (parameter.isContainingExcludedClass(excludeClassPattern)) {
             return
         }
