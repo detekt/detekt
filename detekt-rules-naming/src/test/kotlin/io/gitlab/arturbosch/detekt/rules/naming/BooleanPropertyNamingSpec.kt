@@ -201,7 +201,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 }
 
                 class TestImpl : Test {
-                    override var default: java.lang.Boolean = java.lang.Boolean(true)
+                    override val default: java.lang.Boolean = java.lang.Boolean(true)
                 }
             """
             val findings = subject.compileAndLintWithContext(env, code)

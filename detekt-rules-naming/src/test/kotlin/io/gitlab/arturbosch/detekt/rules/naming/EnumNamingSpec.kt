@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class EnumNamingSpec {
@@ -11,7 +10,7 @@ class EnumNamingSpec {
     @Test
     fun `should use custom name for enum`() {
         val rule = EnumNaming(TestConfig(mapOf(EnumNaming.ENUM_PATTERN to "^(enum1)|(enum2)$")))
-        Assertions.assertThat(
+        assertThat(
             rule.compileAndLint(
                 """
         enum class aBbD {
