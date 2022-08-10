@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtConstructor
 
 /**
  * Reports class or object names that do not follow the specified naming convention.
@@ -32,6 +33,9 @@ class ClassNaming(config: Config = Config.empty) : Rule(config) {
     private val classPattern: Regex by config("[A-Z][a-zA-Z0-9]*") { it.toRegex() }
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+        if (classOrObject.nameAsSafeName.isSpecial || classOrObject.nameIdentifier?.parent?.javaClass == null) {
+            return
+        }
         if (!classOrObject.identifierName().removeSurrounding("`").matches(classPattern)) {
             report(
                 CodeSmell(

@@ -28,5 +28,4 @@ class VariableMaxLengthSpec {
         val code = "private val thisVariableIsDefinitelyWayTooLongLongerThanEverythingAndShouldBeMuchShorter = 3"
         assertThat(VariableMaxLength().compileAndLint(code)).hasSize(1)
     }
-
 }

@@ -204,7 +204,6 @@ class VariableNamingSpec {
         assertThat(VariableNaming().compileAndLint(code)).isEmpty()
     }
 
-
     @Test
     fun `doesn't ignore overridden member properties if ignoreOverridden is false`() {
         val code = """

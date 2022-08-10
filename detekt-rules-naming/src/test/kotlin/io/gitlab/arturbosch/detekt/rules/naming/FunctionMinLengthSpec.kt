@@ -30,5 +30,4 @@ class FunctionMinLengthSpec {
         subject.compileAndLint(code)
         Assertions.assertThat(subject.findings).isEmpty()
     }
-
 }

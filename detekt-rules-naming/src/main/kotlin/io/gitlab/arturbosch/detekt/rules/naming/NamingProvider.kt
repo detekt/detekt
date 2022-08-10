@@ -36,6 +36,7 @@ class NamingProvider : DefaultRuleSetProvider {
             FunctionMaxLength(config),
             VariableMaxLength(config),
             VariableMaxLength(config),
+            NonBooleanPropertyPrefixedWithIs(config)
         )
     )
 }

@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
+import org.jetbrains.kotlin.psi.KtConstructor
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
@@ -42,7 +43,7 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
     private val ignoreOverridden: Boolean by config(true)
 
     override fun visitParameter(parameter: KtParameter) {
-        if (parameter.nameAsSafeName.isSpecial || parameter.nameIdentifier?.parent?.javaClass == null) {
+        if (parameter.nameAsSafeName.isSpecial || parameter.nameIdentifier?.parent?.javaClass == null || parameter.ownerFunction !is KtConstructor<*>) {
             return
         }
         if (parameter.isContainingExcludedClassOrObject(excludeClassPattern) || isIgnoreOverridden(parameter)) {

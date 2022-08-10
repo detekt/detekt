@@ -69,7 +69,10 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtProperty.isPropertyTopLevelOrInCompanion(): Boolean {
-        return this.nameAsSafeName.isSpecial || this.getNonStrictParentOfType<KtObjectDeclaration>() != null || this.isTopLevel || this.nameIdentifier?.parent?.javaClass == null
+        return this.nameAsSafeName.isSpecial ||
+            this.getNonStrictParentOfType<KtObjectDeclaration>() != null ||
+            this.isTopLevel ||
+            this.nameIdentifier?.parent?.javaClass == null
     }
 
     private fun report(property: KtProperty, message: String) {
