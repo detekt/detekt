@@ -20,7 +20,19 @@ class NamingProvider : DefaultRuleSetProvider {
             MemberNameEqualsClassName(config),
             NamingRules(config),
             InvalidPackageDeclaration(config),
-            NoNameShadowing(config)
+            NoNameShadowing(config),
+            VariableNaming(config),
+            TopLevelPropertyNaming(config),
+            BooleanPropertyNaming(config),
+            LambdaParameterNaming(config),
+            FunctionParameterNaming(config),
+            ConstructorParameterNaming(config),
+            ForbiddenClassName(config),
+            ClassNaming(config),
+            PackageNaming(config),
+            FunctionNaming(config),
+            EnumNaming(config),
+            ObjectPropertyNaming(config),
         )
     )
 }
