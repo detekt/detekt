@@ -2,13 +2,9 @@
 id: changelog-rc
 title: Changelog and Migration Guide - Pre 1.0.0
 keywords: [changelog, release-notes, migration]
-sidebar_position: 2
 ---
 
-<!--
-#### Coming up
-
--->
+# Changelog and Migration Guide - Pre 1.0.0
 
 #### RC16
 
