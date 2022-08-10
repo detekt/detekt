@@ -472,6 +472,8 @@ potential-bugs:
     active: false
   UnnecessaryNotNullOperator:
     active: true
+  UnnecessaryNotNullCheck:
+    active: true
   UnnecessarySafeCall:
     active: true
   UnreachableCatchBlock:
