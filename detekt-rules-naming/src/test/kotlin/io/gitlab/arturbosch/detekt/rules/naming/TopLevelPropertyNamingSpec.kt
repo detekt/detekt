@@ -26,7 +26,6 @@ class TopLevelPropertyNamingSpec {
         ).isEmpty()
     }
 
-
     @Nested
     inner class `constants on top level` {
 

@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.regex.PatternSyntaxException
@@ -12,7 +12,7 @@ import java.util.regex.PatternSyntaxException
 class VariableNamingSpec {
 
     @Nested
-    inner class `Exclude class pattern cases`() {
+    inner class `Exclude class pattern cases` {
 
         private val excludeClassPatternVariableRegexCode = """
             class Bar {
@@ -31,13 +31,13 @@ class VariableNamingSpec {
                 VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo"
             )
             val config = TestConfig(configValues)
-            Assertions.assertThat(VariableNaming(config).compileAndLint(excludeClassPatternVariableRegexCode)).isEmpty()
+            assertThat(VariableNaming(config).compileAndLint(excludeClassPatternVariableRegexCode)).isEmpty()
         }
 
         @Test
         fun shouldFailWithInvalidRegexVariableNaming() {
             val config = TestConfig(mapOf(VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo"))
-            Assertions.assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
+            assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
                 VariableNaming(config).compileAndLint(excludeClassPatternVariableRegexCode)
             }
         }
@@ -55,7 +55,7 @@ class VariableNamingSpec {
         }
         """
         val config = TestConfig(mapOf(VariableNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar"))
-        Assertions.assertThat(VariableNaming(config).compileAndLint(code)).isEmpty()
+        assertThat(VariableNaming(config).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -102,6 +102,74 @@ class VariableNamingSpec {
         """
         assertThat(VariableNaming().compileAndLint(code)).isEmpty()
     }
+
+    @Test
+    fun `should not flag global member properties`() {
+        val code = """
+            const val DEFAULT_FLOAT_CONVERSION_FACTOR: Int = 100
+            private const val QUOTES = "\""
+        """
+        assertThat(VariableNaming().compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `should not flag lambda fun arguments`() {
+        val code = """
+            fun foo() {
+                listOf<Pair<Int, Int>>().flatMap { (test, left) -> print("H") }
+            }
+            fun bar() {
+                listOf<Pair<Int, Int>>().flatMap { (right, _) -> print("H") }
+            }
+        """
+        assertThat(VariableNaming().compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `should not flag member properties into companion object`() {
+        val code = """
+            class Foo {
+                companion object {
+        val TWENTY_MINS: Debt =
+            Debt(0, 0, 20)
+        val TEN_MINS: Debt =
+            Debt(0, 0, 10)
+        val FIVE_MINS: Debt =
+            Debt(0, 0, 5)
+        private const val HOURS_PER_DAY = 24
+        private const val MINUTES_PER_HOUR = 60
+
+        const val ACTIVE_KEY: String = "active"
+    }
+            }
+        """
+        assertThat(VariableNaming().compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `should not try catch member properties into companion object`() {
+        val code = """
+            fun Config.valueOrDefaultCommaSeparated(
+                key: String,
+                default: List<String>
+            ): List<String> {
+                fun fallBack() = valueOrDefault(key, default.joinToString(","))
+                    .trim()
+                    .commaSeparatedPattern(",", ";")
+                    .toList()
+            
+                return try {
+                    valueOrDefault(key, default)
+                } catch (_: IllegalStateException) {
+                    fallBack()
+                } catch (_: ClassCastException) {
+                    fallBack()
+                }
+            } 
+        """
+        assertThat(VariableNaming().compileAndLint(code)).isEmpty()
+    }
+
 
     @Test
     fun `doesn't ignore overridden member properties if ignoreOverridden is false`() {

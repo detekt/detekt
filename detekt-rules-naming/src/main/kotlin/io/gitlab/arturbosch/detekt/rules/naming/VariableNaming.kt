@@ -13,7 +13,9 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
+import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 
@@ -43,6 +45,9 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
     private val ignoreOverridden: Boolean by config(true)
 
     override fun visitProperty(property: KtProperty) {
+        if (property.isPropertyTopLeveleOrInCompanion()) {
+            return
+        }
         if (property.isSingleUnderscore || property.isContainingExcludedClassOrObject(excludeClassPattern)) {
             return
         }
@@ -61,6 +66,10 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
                 report(property, "Variable names should match the pattern: $variablePattern")
             }
         }
+    }
+
+    private fun KtProperty.isPropertyTopLeveleOrInCompanion(): Boolean {
+        return this.nameAsSafeName.isSpecial || this.getNonStrictParentOfType<KtObjectDeclaration>() == null || this.isTopLevel || this.nameIdentifier?.parent?.javaClass == null
     }
 
     private fun report(property: KtProperty, message: String) {
