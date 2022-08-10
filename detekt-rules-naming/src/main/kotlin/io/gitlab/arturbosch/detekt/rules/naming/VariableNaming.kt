@@ -45,7 +45,7 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
     private val ignoreOverridden: Boolean by config(true)
 
     override fun visitProperty(property: KtProperty) {
-        if (property.isPropertyTopLeveleOrInCompanion()) {
+        if (property.isPropertyTopLevelOrInCompanion()) {
             return
         }
         if (property.isSingleUnderscore || property.isContainingExcludedClassOrObject(excludeClassPattern)) {
@@ -68,8 +68,8 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun KtProperty.isPropertyTopLeveleOrInCompanion(): Boolean {
-        return this.nameAsSafeName.isSpecial || this.getNonStrictParentOfType<KtObjectDeclaration>() == null || this.isTopLevel || this.nameIdentifier?.parent?.javaClass == null
+    private fun KtProperty.isPropertyTopLevelOrInCompanion(): Boolean {
+        return this.nameAsSafeName.isSpecial || this.getNonStrictParentOfType<KtObjectDeclaration>() != null || this.isTopLevel || this.nameIdentifier?.parent?.javaClass == null
     }
 
     private fun report(property: KtProperty, message: String) {
@@ -83,7 +83,6 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
     }
 
     companion object {
-        const val VARIABLE_PATTERN = "variablePattern"
         const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
     }
 }

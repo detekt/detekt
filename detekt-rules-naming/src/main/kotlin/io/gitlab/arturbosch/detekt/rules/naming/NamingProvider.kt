@@ -18,7 +18,6 @@ class NamingProvider : DefaultRuleSetProvider {
         listOf(
             MatchingDeclarationName(config),
             MemberNameEqualsClassName(config),
-            NamingRules(config),
             InvalidPackageDeclaration(config),
             NoNameShadowing(config),
             VariableNaming(config),
