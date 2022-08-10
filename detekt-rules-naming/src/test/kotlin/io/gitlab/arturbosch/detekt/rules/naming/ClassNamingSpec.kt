@@ -1,10 +1,23 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.Test
 
 class ClassNamingSpec {
+
+    @Test
+    fun `should use custom name for method and class`() {
+        val config = TestConfig(mapOf(ClassNaming.CLASS_PATTERN to "^aBbD$"))
+        assertThat(
+            ClassNaming(config).compileAndLint(
+                """
+        class aBbD{}
+                """
+            )
+        ).isEmpty()
+    }
 
     @Test
     fun `should detect no violations class with numbers`() {

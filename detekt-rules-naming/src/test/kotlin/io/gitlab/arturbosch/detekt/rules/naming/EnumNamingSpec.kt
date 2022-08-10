@@ -1,10 +1,26 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 
 class EnumNamingSpec {
+
+    @Test
+    fun `should use custom name for enum`() {
+        val rule = EnumNaming(TestConfig(mapOf(EnumNaming.ENUM_PATTERN to "^(enum1)|(enum2)$")))
+        Assertions.assertThat(
+            rule.compileAndLint(
+                """
+        enum class aBbD {
+            enum1, enum2
+        }
+                """
+            )
+        ).isEmpty()
+    }
 
     @Test
     fun `should detect no violation`() {
@@ -25,7 +41,7 @@ class EnumNamingSpec {
                 default
             }
         """
-        assertThat(NamingRules().compileAndLint(code)).hasSize(1)
+        assertThat(EnumNaming().compileAndLint(code)).hasSize(1)
     }
 
     @Test

@@ -99,12 +99,4 @@ class NamingConventionLengthSpec {
         subject.compileAndLint(code)
         assertThat(subject.findings).isEmpty()
     }
-
-    @Test
-    fun `should report a function name that begins with a backtick, capitals, and spaces`() {
-        val subject = NamingRules()
-        val code = "fun `Hi bye`() = 3"
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(1)
-    }
 }

@@ -4,9 +4,59 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.util.regex.PatternSyntaxException
 
 class VariableNamingSpec {
+
+    @Nested
+    inner class `Exclude class pattern cases`() {
+
+        private val excludeClassPatternVariableRegexCode = """
+            class Bar {
+                val MYVar = 3
+            }
+
+            object Foo {
+                val MYVar = 3
+            }
+    """
+
+        @Test
+        fun shouldNotFailWithInvalidRegexWhenDisabledVariableNaming() {
+            val configValues = mapOf(
+                "active" to "false",
+                VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo"
+            )
+            val config = TestConfig(configValues)
+            Assertions.assertThat(VariableNaming(config).compileAndLint(excludeClassPatternVariableRegexCode)).isEmpty()
+        }
+
+        @Test
+        fun shouldFailWithInvalidRegexVariableNaming() {
+            val config = TestConfig(mapOf(VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo"))
+            Assertions.assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
+                VariableNaming(config).compileAndLint(excludeClassPatternVariableRegexCode)
+            }
+        }
+    }
+
+    @Test
+    fun shouldExcludeClassesFromVariableNaming() {
+        val code = """
+        class Bar {
+            val MYVar = 3
+        }
+
+        object Foo {
+            val MYVar = 3
+        }
+        """
+        val config = TestConfig(mapOf(VariableNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar"))
+        Assertions.assertThat(VariableNaming(config).compileAndLint(code)).isEmpty()
+    }
 
     @Test
     fun `should detect all positive cases`() {
