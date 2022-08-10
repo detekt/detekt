@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -32,7 +33,7 @@ import org.jetbrains.kotlin.types.typeUtil.nullability
 class UnnecessaryNotNullCheck(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "UnnecessaryNotNullOperator",
+        "UnnecessaryNotNullCheck",
         Severity.Defect,
         "Unnecessary not-null check detected.",
         Debt.FIVE_MINS,
