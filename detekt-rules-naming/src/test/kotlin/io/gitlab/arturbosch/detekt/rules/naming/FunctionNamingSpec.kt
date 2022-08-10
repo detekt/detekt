@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.regex.PatternSyntaxException
@@ -141,7 +141,7 @@ class FunctionNamingSpec {
         }
         """
         val config = TestConfig(mapOf(FunctionNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar"))
-        Assertions.assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
+        assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -149,7 +149,7 @@ class FunctionNamingSpec {
         val subject = FunctionNaming()
         val code = "fun `Hi bye`() = 3"
         subject.compileAndLint(code)
-        Assertions.assertThat(subject.findings).hasSize(1)
+        assertThat(subject.findings).hasSize(1)
     }
 
     @Nested
@@ -171,13 +171,13 @@ class FunctionNamingSpec {
                 FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo"
             )
             val config = TestConfig(configRules)
-            Assertions.assertThat(FunctionNaming(config).compileAndLint(excludeClassPatternFunctionRegexCode)).isEmpty()
+            assertThat(FunctionNaming(config).compileAndLint(excludeClassPatternFunctionRegexCode)).isEmpty()
         }
 
         @Test
         fun shouldFailWithInvalidRegexFunctionNaming() {
             val config = TestConfig(mapOf(FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo"))
-            Assertions.assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
+            assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
                 FunctionNaming(config).compileAndLint(excludeClassPatternFunctionRegexCode)
             }
         }
