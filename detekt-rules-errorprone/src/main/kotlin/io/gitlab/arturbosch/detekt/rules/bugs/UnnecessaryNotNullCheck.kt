@@ -58,5 +58,4 @@ class UnnecessaryNotNullCheck(config: Config = Config.empty) : Rule(config) {
             }
         }
     }
-
 }

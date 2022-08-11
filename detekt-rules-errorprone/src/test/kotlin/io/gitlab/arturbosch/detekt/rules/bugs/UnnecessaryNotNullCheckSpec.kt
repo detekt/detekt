@@ -62,7 +62,6 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(16 to 58)
         }
-
     }
 
     @Nested
@@ -126,6 +125,5 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
-
     }
 }
