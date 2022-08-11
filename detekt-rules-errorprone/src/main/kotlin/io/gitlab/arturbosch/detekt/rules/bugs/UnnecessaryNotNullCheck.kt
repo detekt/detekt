@@ -52,7 +52,7 @@ class UnnecessaryNotNullCheck(config: Config = Config.empty) : Rule(config) {
                     CodeSmell(
                         issue = issue,
                         entity = Entity.from(expression),
-                        message = "${expression.text} contains an unnecessary `$callName`",
+                        message = "`${expression.text}` contains an unnecessary `$callName`",
                     )
                 )
             }
