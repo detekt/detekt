@@ -137,7 +137,7 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
                     return x
                 }
                 fun bar() {
-                    requireNotNull(foo<Int?>(null))
+                    requireNotNull(foo<Int?>(5))
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
