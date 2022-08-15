@@ -46,8 +46,9 @@ class UnnecessaryNotNullCheck(config: Config = Config.empty) : Rule(config) {
 
         if (bindingContext == BindingContext.EMPTY) return
 
-        if (expression.isCalling(requireNotNullFunctionFqName, bindingContext) || expression.isCalling(
-                checkNotNullFunctionFqName, bindingContext)) {
+        if (expression.isCalling(requireNotNullFunctionFqName, bindingContext) ||
+            expression.isCalling(checkNotNullFunctionFqName, bindingContext)
+        ) {
             val argument = expression.valueArguments[0].lastChild as KtExpression
             if (argument.getType(bindingContext)?.nullability() == TypeNullability.NOT_NULL) {
                 val callName = expression.getCallNameExpression()?.text
