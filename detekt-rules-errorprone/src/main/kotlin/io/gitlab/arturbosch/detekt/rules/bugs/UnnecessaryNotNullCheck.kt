@@ -8,6 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.isCalling
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
@@ -44,18 +46,23 @@ class UnnecessaryNotNullCheck(config: Config = Config.empty) : Rule(config) {
 
         if (bindingContext == BindingContext.EMPTY) return
 
-        val callName = expression.getCallNameExpression()?.text
-        if (callName == "requireNotNull" || callName == "checkNotNull") {
+        if (expression.isCalling(requireNotNullFunctionFqName, bindingContext) || expression.isCalling(
+                checkNotNullFunctionFqName, bindingContext)) {
             val type = (expression.valueArguments[0].lastChild as KtExpression).getType(bindingContext)
             if (type?.nullability() == TypeNullability.NOT_NULL) {
                 report(
                     CodeSmell(
                         issue = issue,
                         entity = Entity.from(expression),
-                        message = "`${expression.text}` contains an unnecessary `$callName`",
+                        message = "`${expression.text}` contains an unnecessary `${expression.getCallNameExpression()?.text}`",
                     )
                 )
             }
         }
+    }
+
+    companion object {
+        private val requireNotNullFunctionFqName = FqName("kotlin.requireNotNull")
+        private val checkNotNullFunctionFqName = FqName("kotlin.checkNotNull")
     }
 }
