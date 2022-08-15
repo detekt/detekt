@@ -37,7 +37,7 @@ class UnnecessaryNotNullCheck(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "UnnecessaryNotNullCheck",
         Severity.Defect,
-        "Unnecessary not-null check detected.",
+        "Remove unnecessary not-null checks on non-null types.",
         Debt.FIVE_MINS,
     )
 
