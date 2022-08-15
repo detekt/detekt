@@ -52,6 +52,22 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
         }
 
         @Test
+        fun shouldDetectWhenCallingDefinitelyNonNullableGenericFunction() {
+            val code = """
+                fun <T> foo(x: T & Any): T & Any {
+                    return x
+                }
+                fun bar() {
+                    requireNotNull(foo(5))
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            println(findings)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasTextLocations(66 to 88)
+        }
+
+        @Test
         fun shouldDetectWhenCallingPrimitiveJavaMethod() {
             val code = """
                 fun foo() {
@@ -109,6 +125,20 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
                 }
                 fun bar() {
                     requireNotNull(foo())
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun shouldIgnoreWhenCallingNullableGenericFunction() {
+            val code = """
+                fun <T> foo(x: T): T {
+                    return x
+                }
+                fun bar() {
+                    requireNotNull(foo<Int?>(null))
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
