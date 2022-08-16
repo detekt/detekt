@@ -59,40 +59,6 @@ class VariableNamingSpec {
     }
 
     @Test
-    fun test() {
-        val code = """
-        data class ReportPath(val kind: String, val path: Path) {
-
-            companion object {
-                private const val NUM_OF_PARTS_UNIX = 2
-                private const val NUM_OF_PARTS_WINDOWS = 3
-                private const val REPORT_PATH_SEPARATOR = ":"
-        
-                fun from(input: String): ReportPath {
-                    val parts = input.split(REPORT_PATH_SEPARATOR)
-        
-                    val path = when (val partsSize = parts.size) {
-                        NUM_OF_PARTS_UNIX -> parts[1]
-                        NUM_OF_PARTS_WINDOWS -> parts.slice(1 until partsSize).joinToString(REPORT_PATH_SEPARATOR)
-                        else -> error(
-                            "Input must consist of two parts for Unix OSs or three for Windows (report-id:path)."
-                        )
-                    }
-        
-                    val kind = parts[0]
-                    require(kind.isNotEmpty()) { "The kind of report must not be empty (path)" }
-                    require(path.isNotEmpty()) { "The path of the report must not be empty (kind)" }
-                    return ReportPath(kind, Paths.get(path))
-                }
-            }
-        }
-
-        """
-
-        assertThat(VariableNaming().compileAndLint(code)).isEmpty()
-    }
-
-    @Test
     fun `should detect all positive cases`() {
         val code = """
             class C {
@@ -138,68 +104,14 @@ class VariableNamingSpec {
     }
 
     @Test
-    fun `should not flag global member properties`() {
-        val code = """
-            const val DEFAULT_FLOAT_CONVERSION_FACTOR: Int = 100
-            private const val QUOTES = "\""
-        """
-        assertThat(VariableNaming().compileAndLint(code)).isEmpty()
-    }
-
-    @Test
     fun `should not flag lambda fun arguments`() {
         val code = """
             fun foo() {
-                listOf<Pair<Int, Int>>().flatMap { (test, left) -> print("H") }
+                listOf<Pair<Int, Int>>().flatMap { (left, right) -> listOf(left, right) }
             }
             fun bar() {
-                listOf<Pair<Int, Int>>().flatMap { (right, _) -> print("H") }
+                listOf<Pair<Int, Int>>().flatMap { (right, _) -> listOf(right) }
             }
-        """
-        assertThat(VariableNaming().compileAndLint(code)).isEmpty()
-    }
-
-    @Test
-    fun `should not flag member properties into companion object`() {
-        val code = """
-            class Foo {
-                companion object {
-        val TWENTY_MINS: Debt =
-            Debt(0, 0, 20)
-        val TEN_MINS: Debt =
-            Debt(0, 0, 10)
-        val FIVE_MINS: Debt =
-            Debt(0, 0, 5)
-        private const val HOURS_PER_DAY = 24
-        private const val MINUTES_PER_HOUR = 60
-
-        const val ACTIVE_KEY: String = "active"
-    }
-            }
-        """
-        assertThat(VariableNaming().compileAndLint(code)).isEmpty()
-    }
-
-    @Test
-    fun `should not try catch member properties into companion object`() {
-        val code = """
-            fun Config.valueOrDefaultCommaSeparated(
-                key: String,
-                default: List<String>
-            ): List<String> {
-                fun fallBack() = valueOrDefault(key, default.joinToString(","))
-                    .trim()
-                    .commaSeparatedPattern(",", ";")
-                    .toList()
-            
-                return try {
-                    valueOrDefault(key, default)
-                } catch (_: IllegalStateException) {
-                    fallBack()
-                } catch (_: ClassCastException) {
-                    fallBack()
-                }
-            } 
         """
         assertThat(VariableNaming().compileAndLint(code)).isEmpty()
     }
