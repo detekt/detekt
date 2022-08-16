@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class VariableMinLengthSpec {
         @Test
         fun `reports a very short variable name`() {
             val code = "private val a = 3"
-            Assertions.assertThat(variableMinLength.compileAndLint(code)).hasSize(1)
+            assertThat(variableMinLength.compileAndLint(code)).hasSize(1)
         }
 
         @Test
@@ -27,36 +27,30 @@ class VariableMinLengthSpec {
                     val prop: (Int) -> Unit = { _ -> Unit }
             }
             """
-            Assertions.assertThat(variableMinLength.compileAndLint(code)).isEmpty()
+            assertThat(variableMinLength.compileAndLint(code)).isEmpty()
         }
     }
 
     @Test
     fun `should not report a variable name that is okay`() {
-        val subject = VariableMinLength()
         val code = "private val thisOneIsCool = 3"
-        subject.compileAndLint(code)
-        Assertions.assertThat(subject.findings).isEmpty()
+        assertThat(VariableMinLength().compileAndLint(code)).isEmpty()
     }
 
     @Test
     fun `should not report a variable with single letter name`() {
-        val subject = VariableMinLength()
         val code = "private val a = 3"
-        subject.compileAndLint(code)
-        Assertions.assertThat(subject.findings).isEmpty()
+        assertThat(VariableMinLength().compileAndLint(code)).isEmpty()
     }
 
     @Test
     fun `should not report underscore variable names`() {
-        val subject = VariableMinLength()
         val code = """
             fun getResult(): Pair<String, String> = TODO()
             fun function() {
                 val (_, status) = getResult()
             }
         """
-        subject.compileAndLint(code)
-        Assertions.assertThat(subject.findings).isEmpty()
+        assertThat(VariableMinLength().compileAndLint(code)).isEmpty()
     }
 }

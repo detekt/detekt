@@ -47,10 +47,7 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
     private val ignoreOverridden: Boolean by configWithFallback(::ignoreOverriddenFunctions, true)
 
     override fun visitParameter(parameter: KtParameter) {
-        if (parameter.nameAsSafeName.isSpecial || parameter.nameIdentifier?.parent?.javaClass == null || parameter.ownerFunction !is KtNamedFunction) {
-            return
-        }
-        if (parameter.isContainingExcludedClass(excludeClassPattern)) {
+        if (parameter.isParameterInFunction()) {
             return
         }
 
@@ -68,5 +65,12 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
                 )
             )
         }
+    }
+
+    private fun KtParameter.isParameterInFunction(): Boolean {
+        return this.nameAsSafeName.isSpecial ||
+            (this.nameIdentifier?.parent?.javaClass == null) ||
+            (this.ownerFunction !is KtNamedFunction) ||
+            this.isContainingExcludedClass(excludeClassPattern)
     }
 }
