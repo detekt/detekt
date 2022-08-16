@@ -52,6 +52,9 @@ internal class Analyzer(
             } else {
                 runSync(ktFiles, bindingContext, compilerResources)
             }
+        if (bindingContext == BindingContext.EMPTY) {
+            warnAboutEnabledRequiresTypeResolutionRules(settings::info)
+        }
 
         val findingsPerRuleSet = HashMap<RuleSetId, List<Finding>>()
         for (findings in findingsPerFile) {
@@ -139,6 +142,19 @@ internal class Analyzer(
         executeRules(otherRules)
 
         return result
+    }
+
+    private fun warnAboutEnabledRequiresTypeResolutionRules(log: (String) -> Unit) {
+        providers.asSequence()
+            .map { it to config.subConfig(it.ruleSetId) }
+            .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
+            .map { (provider, ruleSetConfig) -> provider.instance(ruleSetConfig) to ruleSetConfig }
+            .flatMap { (ruleSet, _) -> ruleSet.rules.asSequence() }
+            .filter { rule -> (rule as? Rule)?.active == true }
+            .filter { rule -> rule::class.hasAnnotation<RequiresTypeResolution>() }
+            .forEach { rule ->
+                log("The rule '${rule.ruleId}' requires type resolution but it was run without it.")
+            }
     }
 }
 

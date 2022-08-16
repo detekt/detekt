@@ -74,7 +74,9 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider()), emptyList())
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }.values.flatten()).isEmpty()
-            assertThat(output.toString()).isEmpty()
+            assertThat(output.toString()).isEqualTo(
+                "The rule 'RequiresTypeResolutionMaxLineLength' requires type resolution but it was run without it.\n"
+            )
         }
 
         @Test
@@ -89,7 +91,9 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider(30)), emptyList())
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }.values.flatten()).hasSize(1)
-            assertThat(output.toString()).isEmpty()
+            assertThat(output.toString()).isEqualTo(
+                "The rule 'RequiresTypeResolutionMaxLineLength' requires type resolution but it was run without it.\n"
+            )
         }
 
         @Test
