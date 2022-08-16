@@ -196,7 +196,7 @@ core-js@^3.8.2:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.24.1.tgz#cf7724d41724154010a6576b7b57d94c5d66e64f"
   integrity sha512-0QTBSYSUZ6Gq21utGzkfITDylE8jWC9Ne1D2MrhvlsZBI1x39OdDIVbzSqtgMndIy6BlHxBXpMGqzZmnztg2rg==
 
-danger@^11.1.1:
+danger@11.1.1:
   version "11.1.1"
   resolved "https://registry.yarnpkg.com/danger/-/danger-11.1.1.tgz#b745f6191c1478dd4ef81596ac96be8f8e2d0634"
   integrity sha512-kQX1/Rggut/KFgArOloAdw6paB7hkoznRaUhpPFKVHKRgc6FtlhC8zpb480jVE71Z6eI7rrHVDGEYLv8x96yyA==

@@ -2,8 +2,9 @@
 id: changelog
 title: Changelog and Migration Guide
 keywords: [changelog, release-notes, migration]
-sidebar_position: 1
 ---
+
+# Changelog and Migration Guide
 
 #### 1.21.0 - 2022-07-16
 
@@ -20,15 +21,16 @@ us release this new version of Detekt. You're more than welcome to join our comm
 ##### Notable Changes
 
 - We enabled ~30 new rules by default which we believe are now stable enough. - [#4875](https://github.com/detekt/detekt/pull/4875)
-- We added **6** new Rules to Detekt
+- We added **7** new Rules to Detekt
   - `NullableBooleanCheck` - [#4872](https://github.com/detekt/detekt/pull/4872)
   - `CouldBeSequence` - [#4855](https://github.com/detekt/detekt/pull/4855)
   - `UnnecessaryBackticks` - [#4764](https://github.com/detekt/detekt/pull/4764)
   - `ForbiddenSuppress` - [#4899](https://github.com/detekt/detekt/pull/4899)
   - `MaxChainedCallsOnSameLine` - [#4985](https://github.com/detekt/detekt/pull/4985)
   - `CascadingCallWrapping` - [#4979](https://github.com/detekt/detekt/pull/4979)
+  - `NestedScopeFunctions` - [#4788](https://github.com/detekt/detekt/pull/4788)
 - We added support for Markdown reports - [#4858](https://github.com/detekt/detekt/pull/4858)
-- We now allow users and rule authors to specify a **reason** for every value in the config file - [#4611](https://github.com/detekt/detekt/pull/4611)
+- We now allow users and rule authors to specify a **reason** for every value in the config file - [#4611](https://github.com/detekt/detekt/pull/4611) Please note that this feature requires a rule to be extended to support it. If you're a rule author you can start using it right away in your rule. We're looking into using this feature in some first party rule starting from Detekt `1.22.0`.
 - We now report as warnings the Strings in the config file that can be converted to be an array - [#4793](https://github.com/detekt/detekt/pull/4793)
 - We added a dependency on **ConTester** to help us verify concurrency scenarios for Detekt - [#4672](https://github.com/detekt/detekt/pull/4672)
 - For contributors: we restructured our build setup to be use **Gradle composite build** - [#4751](https://github.com/detekt/detekt/pull/4751)

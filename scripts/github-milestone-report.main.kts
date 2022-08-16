@@ -51,7 +51,7 @@ class GithubMilestoneReport : CliktCommand() {
         var ghIssues: List<GHIssue> = ghRepository.getIssues(GHIssueState.CLOSED, ghMilestone)
 
         if (filterExisting) {
-            val changeLogContent = File("./website/docs/introduction/changelog 1.x.x.md").readText()
+            val changeLogContent = File("./website/docs/introduction/changelog.md").readText()
             ghIssues = ghIssues.filter { "[#${it.number}]" !in changeLogContent }
         }
 
