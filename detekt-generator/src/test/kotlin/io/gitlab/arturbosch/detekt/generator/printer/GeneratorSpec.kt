@@ -11,17 +11,17 @@ import java.nio.file.Paths
 class GeneratorSpec {
     @Test
     fun `config files generated successfully`() {
-        assertThat(File("$folder1$configPath")).exists()
-        assertThat(File("$folder2$configPath")).exists()
+        assertThat(File("$folder1$configPath").canonicalFile).exists()
+        assertThat(File("$folder2$configPath").canonicalFile).exists()
     }
 
     @Test
     fun `config files have proper content`() {
-        assertThat(File("$folder1$configPath").readText())
+        assertThat(File("$folder1$configPath").canonicalFile.readText())
             .contains("complexity:")
             .doesNotContain("coroutines:")
 
-        assertThat(File("$folder2$configPath").readText())
+        assertThat(File("$folder2$configPath").canonicalFile.readText())
             .contains("coroutines:")
             .doesNotContain("complexity:")
     }
