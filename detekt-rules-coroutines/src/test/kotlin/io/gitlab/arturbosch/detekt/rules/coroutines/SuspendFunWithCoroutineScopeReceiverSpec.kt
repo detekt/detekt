@@ -115,6 +115,8 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
         fun `no reports when suspend function has Long as receiver`() {
             val code = """
                 import kotlinx.coroutines.delay
+                import kotlinx.coroutines.launch
+                import kotlinx.coroutines.CoroutineScope
 
                 suspend fun Long.foo() = coroutineScope {
                     launch {
