@@ -26,12 +26,12 @@ jobs:
         distribution: 'temurin'
 
     - name: Build detekt
-      uses: gradle/gradle-build-action@bf2a15ee94874758c21b91220b4d0ab84f762423 # tag=v2
+      uses: gradle/gradle-build-action@cd579d970f8aec1cf0cae5f62a8e418768970015 # tag=v2
       with:
         arguments: build
 
     - name: Deploy Snapshot
-      uses: gradle/gradle-build-action@bf2a15ee94874758c21b91220b4d0ab84f762423 # tag=v2
+      uses: gradle/gradle-build-action@cd579d970f8aec1cf0cae5f62a8e418768970015 # tag=v2
       env:
         ORG_GRADLE_PROJECT_SIGNING_KEY: ${{ secrets.ORG_GRADLE_PROJECT_SIGNING_KEY }}
         ORG_GRADLE_PROJECT_SIGNING_PWD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNING_PWD }}
