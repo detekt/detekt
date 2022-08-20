@@ -22,12 +22,14 @@ fun createProcessingSettings(
         project {
             inputPaths = inputPath?.let(::listOf).orEmpty()
         }
-    }
+    },
 ) = ProcessingSettings(spec, config).apply {
     register(DETEKT_OUTPUT_REPORT_PATHS_KEY, reportPaths)
 }
 
-fun createNullLoggingSpec(init: (ProcessingSpecBuilder.() -> Unit)? = null): ProcessingSpec =
+fun createNullLoggingSpec(
+    init: ProcessingSpecBuilder.() -> Unit = { /* no-op */ },
+): ProcessingSpec =
     ProcessingSpec {
         logging {
             outputChannel = NullPrintStream()
@@ -42,7 +44,7 @@ fun createNullLoggingSpec(init: (ProcessingSpecBuilder.() -> Unit)? = null): Pro
         execution {
             executorService = DirectExecutor() // run in the same thread
         }
-        init?.invoke(this)
+        init.invoke(this)
     }
 
 class DirectExecutor : AbstractExecutorService() {
