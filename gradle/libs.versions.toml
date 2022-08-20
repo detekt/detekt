@@ -28,7 +28,7 @@ ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standar
 ktlint-rulesetExperimental = { module = "com.pinterest.ktlint:ktlint-ruleset-experimental", version.ref = "ktlint" }
 slf4j-nop = { module = "org.slf4j:slf4j-nop", version = "1.7.36"  }
 
-spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version = "2.0.18" }
+spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version = "2.0.19" }
 
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 
