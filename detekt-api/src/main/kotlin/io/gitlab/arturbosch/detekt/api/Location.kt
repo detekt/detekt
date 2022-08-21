@@ -51,10 +51,7 @@ constructor(
 
     @Suppress("DEPRECATION")
     @Deprecated(
-        """
-        locationString was removed and won't get passed to the main constructor.
-        Use queries on 'ktElement' instead.
-        """,
+        "locationString was removed and won't get passed to the main constructor. Use queries on 'ktElement' instead.",
         ReplaceWith(
             "Location(source, text, file)",
             "io.gitlab.arturbosch.detekt.api.Location"
