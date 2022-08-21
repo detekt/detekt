@@ -43,28 +43,17 @@ class Generator(
     fun executeCustomRuleConfig() {
         val parser = KtCompiler()
         val time = measureTimeMillis {
-            val ktFiles = arguments.inputPath
-                .flatMap { parseAll(parser, it) }
-
-            val folderMap = mutableMapOf<KtFile, String>()
-            ktFiles.forEach { ktFile ->
-                println(ktFile.name)
-                val pathParts = ktFile.name.split("/src/main/kotlin")
-                if (pathParts.count() > 1) {
-                    folderMap[ktFile] = "${pathParts.first()}/src/main/resources/config/"
-                }
-            }
-
-            folderMap
-                .toList()
-                .groupBy { (_, folder) -> folder }
-                .toList()
-                .forEach { (folder, list) ->
+            arguments.inputPath
+                .map { parseAll(parser, it.resolve("src/main/kotlin/")) to it }
+                .forEach { (list: Collection<KtFile>, folder: Path) ->
                     val collector = DetektCollector()
-                    list.forEach { (file, _) ->
+                    list.forEach { file ->
                         collector.visit(file)
                     }
-                    printer.printCustomRuleConfig(collector.items, folder)
+                    printer.printCustomRuleConfig(
+                        collector.items,
+                        folder.resolve("src/main/resources/config/").toString()
+                    )
                 }
         }
 
