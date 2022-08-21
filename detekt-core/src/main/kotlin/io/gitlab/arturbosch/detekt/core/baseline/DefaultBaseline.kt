@@ -1,19 +1,19 @@
 package io.gitlab.arturbosch.detekt.core.baseline
 
+import io.github.detekt.tooling.api.Baseline
+import io.github.detekt.tooling.api.FindingId
+import io.github.detekt.tooling.api.FindingsIdList
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.core.exists
 import io.gitlab.arturbosch.detekt.core.isFile
 import java.nio.file.Path
 
-internal typealias FindingsIdList = Set<String>
-internal typealias FindingId = String
+internal data class DefaultBaseline(
+    override val manuallySuppressedIssues: FindingsIdList,
+    override val currentIssues: FindingsIdList,
+) : Baseline {
 
-internal data class Baseline(
-    val manuallySuppressedIssues: FindingsIdList,
-    val currentIssues: FindingsIdList
-) {
-
-    fun contains(id: FindingId): Boolean =
+    override fun contains(id: FindingId): Boolean =
         currentIssues.contains(id) || manuallySuppressedIssues.contains(id)
 
     companion object {

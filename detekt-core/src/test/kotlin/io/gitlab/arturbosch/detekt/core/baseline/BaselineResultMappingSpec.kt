@@ -55,7 +55,7 @@ class BaselineResultMappingSpec {
 
     @Test
     fun `should not update an existing baseline file if option configured as false`() {
-        val existing = Baseline.load(existingBaselineFile)
+        val existing = DefaultBaseline.load(existingBaselineFile)
         val mapping = resultMapping(
             baselineFile = existingBaselineFile,
             createBaseline = false,
@@ -63,13 +63,13 @@ class BaselineResultMappingSpec {
 
         mapping.transformFindings(findings)
 
-        val changed = Baseline.load(existingBaselineFile)
+        val changed = DefaultBaseline.load(existingBaselineFile)
         assertThat(existing).isEqualTo(changed)
     }
 
     @Test
     fun `should not update an existing baseline file if option is not configured`() {
-        val existing = Baseline.load(existingBaselineFile)
+        val existing = DefaultBaseline.load(existingBaselineFile)
         val mapping = resultMapping(
             baselineFile = existingBaselineFile,
             createBaseline = null,
@@ -77,7 +77,7 @@ class BaselineResultMappingSpec {
 
         mapping.transformFindings(findings)
 
-        val changed = Baseline.load(existingBaselineFile)
+        val changed = DefaultBaseline.load(existingBaselineFile)
         assertThat(existing).isEqualTo(changed)
     }
 
@@ -108,7 +108,7 @@ class BaselineResultMappingSpec {
     @Test
     fun `should update an existing baseline file if a file is configured`() {
         Files.copy(existingBaselineFile, baselineFile)
-        val existing = Baseline.load(baselineFile)
+        val existing = DefaultBaseline.load(baselineFile)
         val mapping = resultMapping(
             baselineFile = baselineFile,
             createBaseline = true,
@@ -116,7 +116,7 @@ class BaselineResultMappingSpec {
 
         mapping.transformFindings(findings)
 
-        val changed = Baseline.load(baselineFile)
+        val changed = DefaultBaseline.load(baselineFile)
         assertThat(existing).isNotEqualTo(changed)
     }
 }
