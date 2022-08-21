@@ -349,7 +349,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                             override var optionEnabled: Boolean = false
                         }
                     }
-                """
+            """
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 

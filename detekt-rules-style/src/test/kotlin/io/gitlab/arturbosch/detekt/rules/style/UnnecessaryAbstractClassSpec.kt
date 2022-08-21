@@ -99,7 +99,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                     abstract val i: Int
                 }
                 abstract class B: A(), I
-            """
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
@@ -114,7 +114,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                     abstract val i: Int
                 }
                 abstract class B: I, A()
-            """
+                """
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }

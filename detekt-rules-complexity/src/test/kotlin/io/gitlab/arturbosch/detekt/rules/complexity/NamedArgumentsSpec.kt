@@ -203,7 +203,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             fun test(n: Int) {
                 require(n == 2) { "N is not 2" }
             }
-        """
+            """
             val subject = NamedArguments(TestConfig(mapOf("threshold" to 1)))
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
