@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.core.settings
 
-import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.createProcessingSettings
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.konan.file.File
@@ -22,10 +21,8 @@ class EnvironmentFacadeSpec {
     }
 }
 
-private fun testSettings(classpath: String) = createProcessingSettings(
-    spec = createNullLoggingSpec {
-        compiler {
-            this.classpath = classpath
-        }
+private fun testSettings(classpath: String) = createProcessingSettings {
+    compiler {
+        this.classpath = classpath
     }
-)
+}

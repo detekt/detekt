@@ -18,13 +18,30 @@ fun createProcessingSettings(
     inputPath: Path? = null,
     config: Config = Config.empty,
     reportPaths: Collection<ReportsSpec.Report> = emptyList(),
-    spec: ProcessingSpec = createNullLoggingSpec {
+    init: ProcessingSpecBuilder.() -> Unit = { /* no-op */ },
+): ProcessingSettings {
+    val spec = ProcessingSpec {
         project {
             inputPaths = listOfNotNull(inputPath)
         }
-    },
-) = ProcessingSettings(spec, config).apply {
-    register(DETEKT_OUTPUT_REPORT_PATHS_KEY, reportPaths)
+        logging {
+            outputChannel = NullPrintStream()
+            errorChannel = NullPrintStream()
+        }
+        config {
+            // Use an empty config in tests to be compatible with old ProcessingSettings config default.
+            // This was in particular done due to all console reports being active with an empty config.
+            // These outputs are used to assert test conditions.
+            configPaths = listOf(resourceAsPath("configs/empty.yml"))
+        }
+        execution {
+            executorService = DirectExecutor() // run in the same thread
+        }
+        init.invoke(this)
+    }
+    return ProcessingSettings(spec, config).apply {
+        register(DETEKT_OUTPUT_REPORT_PATHS_KEY, reportPaths)
+    }
 }
 
 fun createNullLoggingSpec(

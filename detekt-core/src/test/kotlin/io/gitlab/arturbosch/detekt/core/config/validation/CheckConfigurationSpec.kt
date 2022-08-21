@@ -31,12 +31,11 @@ class CheckConfigurationSpec {
         createProcessingSettings(
             testDir,
             config,
-            spec = createNullLoggingSpec {
-                config {
-                    shouldValidateBeforeAnalysis = false
-                }
+        ) {
+            config {
+                shouldValidateBeforeAnalysis = false
             }
-        ).use {
+        }.use {
             assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
                 .doesNotThrowAnyException()
         }

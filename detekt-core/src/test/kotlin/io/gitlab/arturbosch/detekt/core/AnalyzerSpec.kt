@@ -44,13 +44,12 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val settings = createProcessingSettings(
                 inputPath = testFile,
                 config = yamlConfig("configs/config-value-type-wrong.yml"),
-                spec = createNullLoggingSpec {
-                    execution {
-                        parallelParsing = true
-                        parallelAnalysis = true
-                    }
+            ) {
+                execution {
+                    parallelParsing = true
+                    parallelAnalysis = true
                 }
-            )
+            }
             val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider()), emptyList())
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
