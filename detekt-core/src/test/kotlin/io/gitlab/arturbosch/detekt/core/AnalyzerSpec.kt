@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
+import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
@@ -64,70 +65,97 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `no findings`() {
             val testFile = path.resolve("Test.kt")
-            val settings = createProcessingSettings(testFile, yamlConfig("configs/config-value-type-correct.yml"))
+            val output = StringPrintStream()
+            val settings = createProcessingSettings(
+                testFile,
+                yamlConfig("configs/config-value-type-correct.yml"),
+                outputChannel = output,
+            )
             val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider()), emptyList())
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }.values.flatten()).isEmpty()
+            assertThat(output.toString()).isEmpty()
         }
 
         @Test
         fun `with findings`() {
             val testFile = path.resolve("Test.kt")
-            val settings = createProcessingSettings(testFile, yamlConfig("configs/config-value-type-correct.yml"))
+            val output = StringPrintStream()
+            val settings = createProcessingSettings(
+                testFile,
+                yamlConfig("configs/config-value-type-correct.yml"),
+                outputChannel = output,
+            )
             val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider(30)), emptyList())
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }.values.flatten()).hasSize(1)
+            assertThat(output.toString()).isEmpty()
         }
 
         @Test
         fun `with findings and context binding`() {
             val testFile = path.resolve("Test.kt")
-            val settings = createProcessingSettings(testFile, yamlConfig("configs/config-value-type-correct.yml"))
+            val output = StringPrintStream()
+            val settings = createProcessingSettings(
+                testFile,
+                yamlConfig("configs/config-value-type-correct.yml"),
+                outputChannel = output,
+            )
             val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider(30)), emptyList())
             val ktFile = compileForTest(testFile)
             val bindingContext = env.getContextForPaths(listOf(ktFile))
 
             assertThat(settings.use { analyzer.run(listOf(ktFile), bindingContext) }.values.flatten()).hasSize(2)
+            assertThat(output.toString()).isEmpty()
         }
 
         @Test
         fun `with findings but ignored`() {
             val testFile = path.resolve("Test.kt")
+            val output = StringPrintStream()
             val settings = createProcessingSettings(
                 testFile,
-                yamlConfig("configs/config-value-type-correct-ignore-annotated.yml")
+                yamlConfig("configs/config-value-type-correct-ignore-annotated.yml"),
+                outputChannel = output,
             )
             val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider(18)), emptyList())
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }.values.flatten()).isEmpty()
+            assertThat(output.toString()).isEmpty()
         }
 
         @Test
         fun `with faulty rule`() {
             val testFile = path.resolve("Test.kt")
+            val output = StringPrintStream()
             val settings = createProcessingSettings(
                 testFile,
-                yamlConfig("configs/config-value-type-correct.yml")
+                yamlConfig("configs/config-value-type-correct.yml"),
+                outputChannel = output,
             )
             val analyzer = Analyzer(settings, listOf(FaultyRuleSetProvider()), emptyList())
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
                 .hasCauseInstanceOf(IllegalStateException::class.java)
                 .hasMessageContaining("Location: ${FaultyRule::class.java.name}")
+            assertThat(output.toString()).isEmpty()
         }
 
         @Test
         fun `with faulty rule without stack trace`() {
             val testFile = path.resolve("Test.kt")
+            val output = StringPrintStream()
             val settings = createProcessingSettings(
                 testFile,
-                yamlConfig("configs/config-value-type-correct.yml")
+                yamlConfig("configs/config-value-type-correct.yml"),
+                outputChannel = output,
             )
             val analyzer = Analyzer(settings, listOf(FaultyRuleNoStackTraceSetProvider()), emptyList())
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
                 .hasCauseInstanceOf(IllegalStateException::class.java)
                 .hasMessageContaining("Location: ${null}")
+            assertThat(output.toString()).isEmpty()
         }
     }
 }

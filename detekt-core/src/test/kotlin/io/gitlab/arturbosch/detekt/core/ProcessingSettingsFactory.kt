@@ -7,6 +7,7 @@ import io.github.detekt.tooling.api.spec.ReportsSpec
 import io.github.detekt.tooling.dsl.ProcessingSpecBuilder
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.reporting.DETEKT_OUTPUT_REPORT_PATHS_KEY
+import java.io.PrintStream
 import java.nio.file.Path
 import java.util.concurrent.AbstractExecutorService
 import java.util.concurrent.TimeUnit
@@ -18,6 +19,7 @@ fun createProcessingSettings(
     inputPath: Path? = null,
     config: Config = Config.empty,
     reportPaths: Collection<ReportsSpec.Report> = emptyList(),
+    outputChannel: PrintStream = NullPrintStream(),
     init: ProcessingSpecBuilder.() -> Unit = { /* no-op */ },
 ): ProcessingSettings {
     val spec = ProcessingSpec {
@@ -25,7 +27,7 @@ fun createProcessingSettings(
             inputPaths = listOfNotNull(inputPath)
         }
         logging {
-            outputChannel = NullPrintStream()
+            this.outputChannel = outputChannel
             errorChannel = NullPrintStream()
         }
         config {
