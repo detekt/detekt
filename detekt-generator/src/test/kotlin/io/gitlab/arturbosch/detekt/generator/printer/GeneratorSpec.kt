@@ -7,37 +7,44 @@ import org.junit.jupiter.api.Test
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
+import kotlin.io.path.readText
 
 class GeneratorSpec {
     @Test
     fun `config files generated successfully`() {
-        assertThat(File("$folder1$configPath").canonicalFile).exists()
-        assertThat(File("$folder2$configPath").canonicalFile).exists()
+        assertThat(Paths.get(tempDir1.toString(), configPath)).exists()
+        assertThat(Paths.get(tempDir2.toString(), configPath)).exists()
     }
 
     @Test
-    fun `config files have proper content`() {
-        assertThat(File("$folder1$configPath").canonicalFile.readText())
+    fun `config files have their own content`() {
+        assertThat(Paths.get(tempDir1.toString(), configPath).readText())
             .contains("complexity:")
             .doesNotContain("coroutines:")
 
-        assertThat(File("$folder2$configPath").canonicalFile.readText())
+        assertThat(Paths.get(tempDir2.toString(), configPath).readText())
             .contains("coroutines:")
             .doesNotContain("complexity:")
     }
 
     companion object {
-        private const val folder1 = "../detekt-rules-complexity"
-        private const val folder2 = "../detekt-rules-coroutines"
+        private const val sourceDir1 = "../detekt-rules-complexity"
+        private const val sourceDir2 = "../detekt-rules-coroutines"
         private const val configPath = "/src/main/resources/config/config.yml"
+
+        private val tempDir1: File = Files.createTempDirectory(null).toFile()
+        private val tempDir2: File = Files.createTempDirectory(null).toFile()
 
         @JvmStatic
         @BeforeAll
         fun init() {
+            File(Paths.get(sourceDir1).toString()).copyRecursively(tempDir1)
+            File(Paths.get(sourceDir2).toString()).copyRecursively(tempDir2)
+
             val args = arrayOf(
                 "--generate-custom-rule-config",
                 "--input",
-                "$folder1, $folder2",
+                "$tempDir1, $tempDir2",
             )
             io.gitlab.arturbosch.detekt.generator.main(args)
         }
@@ -45,8 +52,8 @@ class GeneratorSpec {
         @JvmStatic
         @AfterAll
         fun tearDown() {
-            Files.deleteIfExists(Paths.get(folder1, configPath))
-            Files.deleteIfExists(Paths.get(folder2, configPath))
+            tempDir1.deleteRecursively()
+            tempDir2.deleteRecursively()
         }
     }
 }
