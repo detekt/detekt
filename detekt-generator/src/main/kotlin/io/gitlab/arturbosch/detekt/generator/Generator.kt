@@ -48,6 +48,7 @@ class Generator(
 
             val folderMap = mutableMapOf<KtFile, String>()
             ktFiles.forEach { ktFile ->
+                println(ktFile.name)
                 val pathParts = ktFile.name.split("/src/main/kotlin")
                 if (pathParts.count() > 1) {
                     folderMap[ktFile] = "${pathParts.first()}/src/main/resources/config/"
