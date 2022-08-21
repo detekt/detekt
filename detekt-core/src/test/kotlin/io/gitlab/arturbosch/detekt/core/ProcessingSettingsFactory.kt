@@ -20,7 +20,7 @@ fun createProcessingSettings(
     reportPaths: Collection<ReportsSpec.Report> = emptyList(),
     spec: ProcessingSpec = createNullLoggingSpec {
         project {
-            inputPaths = inputPath?.let(::listOf).orEmpty()
+            inputPaths = listOfNotNull(inputPath)
         }
     },
 ) = ProcessingSettings(spec, config).apply {
