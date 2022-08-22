@@ -301,30 +301,6 @@ class MultilineRawStringIndentationSpec {
         }
 
         @Test
-        fun `don't raise if it contains content after the opening triple quote`() {
-            val code = """
-                val a = ${TQ}Hello world!
-                    How are you?
-                $TQ.trimIndent()
-            """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings)
-                .isEmpty()
-        }
-
-        @Test
-        fun `don't raise if it contains content before the closing triple quote`() {
-            val code = """
-                val a = $TQ
-                    Hello world!
-                    How are you?$TQ.trimIndent()
-            """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings)
-                .isEmpty()
-        }
-
-        @Test
         fun `don't raise if it isEmpty`() {
             val code = """
                 val a = $TQ
@@ -333,6 +309,58 @@ class MultilineRawStringIndentationSpec {
             subject.compileAndLint(code)
             assertThat(subject.findings)
                 .isEmpty()
+        }
+    }
+
+    @Nested
+    inner class MissingBreakingLine {
+
+        @Test
+        fun `raise missing break line start`() {
+            val code = """
+                val a = ${TQ}Hello world!
+                    Hola mundo!
+                $TQ.trimIndent()
+            """.trimIndent()
+            subject.compileAndLint(code)
+            assertThat(subject.findings)
+                .hasSize(1)
+        }
+
+        @Test
+        fun `raise missing break line end`() {
+            val code = """
+                val a = $TQ
+                    Hello world!
+                    Hola mundo!$TQ.trimIndent()
+            """.trimIndent()
+            subject.compileAndLint(code)
+            assertThat(subject.findings)
+                .hasSize(1)
+        }
+
+        @Test
+        fun `raise missing break line both`() {
+            val code = """
+                val a = ${TQ}Hello world!
+                    Hola mundo!$TQ.trimIndent()
+            """.trimIndent()
+            subject.compileAndLint(code)
+            assertThat(subject.findings)
+                .hasSize(1)
+        }
+
+        @Test
+        fun `don't raise multiline raw string when correct`() {
+            val code = """
+                val a = $TQ
+                    Hello world!
+                    Hola mundo!
+                $TQ.trimIndent()
+            """.trimIndent()
+            subject.compileAndLint(code)
+            assertThat(subject.findings)
+                .hasSize(0)
         }
     }
 }

@@ -67,7 +67,16 @@ class MultilineRawStringIndentation(config: Config) : Rule(config) {
         val lineCount = text.lines().count()
         if (lineCount <= 1) return
         if (!expression.isTrimmed()) return
-        if (!text.matches(rawStringRegex)) return
+        if (!text.matches(rawStringRegex)) {
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(expression),
+                    "A multiline raw string should start with a break line and should end with another",
+                )
+            )
+            return
+        }
 
         val lineAndColumn = getLineAndColumnInPsiFile(expression.containingFile, expression.textRange) ?: return
 
@@ -158,7 +167,7 @@ private fun message(desiredIntent: Int, currentIndent: Int): String {
     return "The indentation should be $desiredIntent but it is $currentIndent."
 }
 
-private val rawStringRegex = "\"{3}\n.*\n *\"{3}".toRegex(RegexOption.DOT_MATCHES_ALL)
+private val rawStringRegex = "\"{3}\n(.*\n)? *\"{3}".toRegex(RegexOption.DOT_MATCHES_ALL)
 
 private fun String.countIndent() = this.takeWhile { it == ' ' }.count()
 
