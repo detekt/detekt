@@ -78,7 +78,7 @@ class TrailingWhitespaceSpec {
                     
                     Should ignore indent on the previous line
                 ""${'"'}
-            """.trim()
+            """.trimIndent()
             val findings = compileAndLintWithoutTrim(code)
             assertThat(findings).isEmpty()
         }

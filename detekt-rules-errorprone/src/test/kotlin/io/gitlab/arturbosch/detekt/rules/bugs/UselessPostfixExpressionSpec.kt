@@ -20,7 +20,7 @@ class UselessPostfixExpressionSpec {
                     i = 1 + i++ // invalid
                     i = i++ + 1 // invalid
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(3)
         }
 
@@ -32,7 +32,7 @@ class UselessPostfixExpressionSpec {
                     var j = 0
                     j = i++
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -45,7 +45,7 @@ class UselessPostfixExpressionSpec {
                     if (i == 0) return 1 + j++
                     return i++
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
@@ -69,7 +69,7 @@ class UselessPostfixExpressionSpec {
                         return i++
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -91,7 +91,7 @@ class UselessPostfixExpressionSpec {
                         return i++
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
     }
@@ -111,7 +111,7 @@ class UselessPostfixExpressionSpec {
                 fun f2(): Int {
                     return str!!.count()
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -122,7 +122,7 @@ class UselessPostfixExpressionSpec {
                     val str: String? = ""
                     str!!
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

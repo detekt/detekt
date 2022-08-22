@@ -23,7 +23,7 @@ class ObjectPropertyNamingSpec {
                 object O {
                     ${PublicConst.negative}
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -33,7 +33,7 @@ class ObjectPropertyNamingSpec {
                 object O {
                     ${PublicConst.positive}
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -43,7 +43,7 @@ class ObjectPropertyNamingSpec {
                 object O {
                     ${PrivateConst.negative}
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -53,7 +53,7 @@ class ObjectPropertyNamingSpec {
                 object O {
                     ${PrivateConst.positive}
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -63,7 +63,7 @@ class ObjectPropertyNamingSpec {
                 object O {
                     ${PublicConst.positive}
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasStartSourceLocation(2, 15)
         }
     }
@@ -81,7 +81,7 @@ class ObjectPropertyNamingSpec {
                         ${PublicConst.negative}
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -93,7 +93,7 @@ class ObjectPropertyNamingSpec {
                         ${PublicConst.positive}
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -105,7 +105,7 @@ class ObjectPropertyNamingSpec {
                         ${PrivateConst.negative}
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -117,7 +117,7 @@ class ObjectPropertyNamingSpec {
                         ${PrivateConst.positive}
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -129,7 +129,7 @@ class ObjectPropertyNamingSpec {
                         ${PublicConst.positive}
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasStartSourceLocation(3, 19)
         }
     }
@@ -145,7 +145,7 @@ class ObjectPropertyNamingSpec {
                 object O {
                     ${PublicVal.negative}
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -155,7 +155,7 @@ class ObjectPropertyNamingSpec {
                 object O {
                     ${PublicVal.positive}
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -165,7 +165,7 @@ class ObjectPropertyNamingSpec {
                 object O {
                     ${PrivateVal.negative}
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -175,7 +175,7 @@ class ObjectPropertyNamingSpec {
                 object O {
                     private val __NAME = "Artur"
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
     }
@@ -199,7 +199,7 @@ class ObjectPropertyNamingSpec {
                     const val _NAME = "Artur"
                     const val _name = "Artur"
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -210,7 +210,7 @@ class ObjectPropertyNamingSpec {
                     private val __NAME = "Artur"
                     private val _1234 = "Artur"
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
@@ -232,7 +232,7 @@ class ObjectPropertyNamingSpec {
                         val somethingElse = 1
                     }
                 }
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -249,7 +249,7 @@ abstract class NamingSnippet(private val isPrivate: Boolean, private val isConst
                     ${visibility()}${const()}val name = "Artur"
                     ${visibility()}${const()}val nAme = "Artur"
                     ${visibility()}${const()}val serialVersionUID = 42L
-    """
+    """.trimIndent()
     val positive = """${visibility()}${const()}val _nAme = "Artur""""
 
     private fun visibility() = if (isPrivate) "private " else ""

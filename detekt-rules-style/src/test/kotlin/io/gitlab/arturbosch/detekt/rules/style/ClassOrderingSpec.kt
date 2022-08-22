@@ -26,7 +26,7 @@ class ClassOrderingSpec {
                     const val IMPORTANT_VALUE = 3
                 }
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -49,7 +49,7 @@ class ClassOrderingSpec {
                     const val IMPORTANT_VALUE = 3
                 }
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -72,7 +72,7 @@ class ClassOrderingSpec {
                     const val IMPORTANT_VALUE = 3
                 }
             }
-        """
+        """.trimIndent()
 
         val findings = subject.compileAndLint(code)
         assertThat(findings).hasSize(1)
@@ -99,7 +99,7 @@ class ClassOrderingSpec {
                     const val IMPORTANT_VALUE = 3
                 }
             }
-        """
+        """.trimIndent()
 
         val findings = subject.compileAndLint(code)
         assertThat(findings).hasSize(2)
@@ -129,7 +129,7 @@ class ClassOrderingSpec {
                     const val IMPORTANT_VALUE = 3
                 }
             }
-        """
+        """.trimIndent()
 
         val findings = subject.compileAndLint(code)
         assertThat(findings).hasSize(3)
@@ -159,7 +159,7 @@ class ClassOrderingSpec {
 
                 fun returnX() = x
             }
-        """
+        """.trimIndent()
 
         val findings = subject.compileAndLint(code)
         assertThat(findings).hasSize(1)
@@ -184,7 +184,7 @@ class ClassOrderingSpec {
 
                 fun returnX() = x
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).hasSize(0)
     }
@@ -207,7 +207,7 @@ class ClassOrderingSpec {
 
                 fun returnX() = x
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).hasSize(0)
     }
@@ -232,7 +232,7 @@ class ClassOrderingSpec {
                 
                 val y = x
             }
-        """
+        """.trimIndent()
 
         val findings = subject.compileAndLint(code)
         assertThat(findings).hasSize(3)
@@ -258,7 +258,7 @@ class ClassOrderingSpec {
                 
                 val y = x
             }
-        """
+        """.trimIndent()
 
         val findings = subject.compileAndLint(code)
         assertThat(findings).hasSize(3)

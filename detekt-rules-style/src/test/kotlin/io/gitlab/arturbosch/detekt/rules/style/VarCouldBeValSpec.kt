@@ -47,7 +47,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                 fun foo() {
                     a = 2
                 }
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
@@ -62,7 +62,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                     a = 2
                 }
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
@@ -80,7 +80,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                     a = 2
                 }
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
@@ -167,7 +167,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                 var a = 1
                 a = 2
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -178,7 +178,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                 var a = 1
                 a += 2
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -189,7 +189,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                 var a = 1
                 a++
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -200,7 +200,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                 var a = 1
                 --a
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -213,7 +213,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                     a = 2
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -224,7 +224,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                 var a = 1
                 val b = a + 2
             }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
@@ -238,7 +238,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                 var a = 1
                 println(a)
             }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
@@ -255,7 +255,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                     shadowed = 3
                 }
             }
-            """
+            """.trimIndent()
             val lint = subject.compileAndLintWithContext(env, code)
 
             assertThat(lint).hasSize(1)
@@ -277,7 +277,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                         var myVar = value
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
 
@@ -290,7 +290,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                         this.myVar = value
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -304,7 +304,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                         this.myVar = value
                     }
                 }
-            """
+            """.trimIndent()
             with(subject.compileAndLintWithContext(env, code)[0]) {
                 assertThat(entity.ktElement?.text).isEqualTo("var myVar = value")
             }
@@ -321,7 +321,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                         var test: Boolean = true
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -334,7 +334,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                     }
                     wrapper.test = false
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -349,7 +349,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                             override var optionEnabled: Boolean = false
                         }
                     }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -367,7 +367,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                     }
                     o.optionEnabled = false
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -385,7 +385,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                         }
                         return o
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -405,7 +405,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                         }
                         return o
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -422,7 +422,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                         }
                         return o
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -443,7 +443,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                         }
                         return o
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -458,7 +458,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                             override var optionEnabled: Boolean = false
                         }
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -477,7 +477,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                             null
                         }
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -490,7 +490,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                     fun test() = object: I {
                         override var optionEnabled: Boolean = false
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -505,7 +505,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                             override var optionEnabled: Boolean = false
                         }
                     } else null
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 

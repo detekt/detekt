@@ -49,7 +49,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
         val code = """
             val testList: List<String>? = listOf("string")
             val nonNullableTestList = testList.orEmpty()
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -66,7 +66,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
         val code = """
             val testString: String? = ""
             val nonNullableTestString = testString.isNullOrBlank()
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -89,7 +89,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
         val code = """
             val testString: String? = ""
             val nonNullableTestString = testString.isNullOrEmpty()
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -106,7 +106,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
         val code = """
             val testString: String? = ""
             val nonNullableTestString = testString.orEmpty()
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -123,7 +123,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
         val code = """
             val testSequence: Sequence<Int>? = listOf(1).asSequence()
             val nonNullableTestSequence = testSequence.orEmpty()
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -134,7 +134,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
 
             val noList = "str".orEmpty()
             val list = listOf(1, 2, 3).orEmpty()
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].message).isEqualTo("Remove redundant call to orEmpty")
@@ -144,7 +144,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
     fun `reports when calling listOfNotNull on all non-nullable arguments`() {
         val code = """
             val strings = listOfNotNull("string")
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].message).isEqualTo("Replace listOfNotNull with listOf")
@@ -154,7 +154,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
     fun `reports when calling listOfNotNull with no arguments`() {
         val code = """
             val strings = listOfNotNull<String>()
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].message).isEqualTo("Replace listOfNotNull with listOf")
@@ -164,7 +164,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
     fun `does not report when calling listOfNotNull on at least one nullable argument`() {
         val code = """
             val strings = listOfNotNull("string", null)
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
@@ -174,7 +174,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
         val code = """
             val nullableArray = arrayOf("string", null)
             val strings = listOfNotNull(*nullableArray)
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
@@ -184,7 +184,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
         val code = """
             val nonNullableArray = arrayOf("string", "bar")
             val strings = listOfNotNull(*nonNullableArray)
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].message).isEqualTo("Replace listOfNotNull with listOf")
@@ -196,7 +196,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
             val nullableArray = arrayOf("string", null)
             val nonNullableArray = arrayOf("string", "bar")
             val strings = listOfNotNull("string", *nonNullableArray, "foo", *nullableArray)
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
@@ -206,7 +206,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
         val code = """
             val nonNullableArray = arrayOf("string", "bar")
             val strings = listOfNotNull("string", *nonNullableArray, null)
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
@@ -217,7 +217,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
             val nonNullableArray = arrayOf("string", "bar")
             val otherNonNullableArray = arrayOf("foobar")
             val strings = listOfNotNull("string", *nonNullableArray, "foo", *otherNonNullableArray)
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].message).isEqualTo("Replace listOfNotNull with listOf")
@@ -229,7 +229,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
             fun <T : Any> listOfNotNull(vararg elements: T?): List<T> = TODO()
 
             val strings = listOfNotNull("string", null)                
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
@@ -266,7 +266,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
             fun test(list: List<Int>) {
                 list.isNullOrEmpty()
             }                
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].message).isEqualTo("Replace isNullOrEmpty with isEmpty")

@@ -29,7 +29,7 @@ class RuleSetProviderCollectorSpec {
                 println(message)
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `collects no rulesets`() {
@@ -48,7 +48,7 @@ class RuleSetProviderCollectorSpec {
                 println(message)
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `collects no rulesets`() {
@@ -67,7 +67,7 @@ class RuleSetProviderCollectorSpec {
                 println(message)
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `throws an exception`() {
@@ -86,7 +86,7 @@ class RuleSetProviderCollectorSpec {
                 println(message)
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `throws an exception`() {
@@ -118,7 +118,7 @@ class RuleSetProviderCollectorSpec {
                 ))
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `collects a RuleSetProvider`() {
@@ -176,7 +176,7 @@ class RuleSetProviderCollectorSpec {
                 ))
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `is not active`() {
@@ -203,7 +203,7 @@ class RuleSetProviderCollectorSpec {
                 ))
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `throws an exception`() {
@@ -228,7 +228,7 @@ class RuleSetProviderCollectorSpec {
                 ))
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `throws an exception`() {
@@ -255,7 +255,7 @@ class RuleSetProviderCollectorSpec {
                 ))
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `throws an exception`() {
@@ -277,7 +277,7 @@ class RuleSetProviderCollectorSpec {
                 return RuleSet(ruleSetId, emptyListOf())
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `throws an exception`() {
@@ -309,7 +309,7 @@ class RuleSetProviderCollectorSpec {
                 ))
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `collects multiple rules`() {
@@ -364,7 +364,7 @@ class RuleSetProviderCollectorSpec {
                 val aString by ruleSetConfig("a")
             }
         }
-        """
+        """.trimIndent()
         private val items = subject.run(code)
 
         @Test
@@ -414,7 +414,7 @@ class RuleSetProviderCollectorSpec {
                 val aConfig by ruleSetConfig(listOf("a"))
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `fails`() {

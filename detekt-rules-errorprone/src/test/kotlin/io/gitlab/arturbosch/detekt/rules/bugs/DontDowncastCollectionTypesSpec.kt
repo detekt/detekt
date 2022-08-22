@@ -22,7 +22,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val myList = listOf(1,2,3)
                 val mutList = myList as MutableList<Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -37,7 +37,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val myList : List<Int>? = null
                 val mutList = myList as? MutableList<Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -54,7 +54,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     myList.add(4)
                 }
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -69,7 +69,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val mySet = setOf(1,2,3)
                 val mutSet = mySet as MutableSet<Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -84,7 +84,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val mySet : Set<Int>? = null
                 val mutSet = mySet as? MutableSet<Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -101,7 +101,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     mySet.add(4)
                 }
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -116,7 +116,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val myMap = mapOf(1 to 2)
                 val mutMap = myMap as MutableMap<Int, Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -131,7 +131,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val myMap : Map<Int, Int>? = null
                 val mutMap = myMap as? MutableMap<Int, Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -148,7 +148,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     myMap[3] = 4
                 }
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -167,7 +167,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val myList = mutableListOf(1,2,3)
                 val mutList = myList as MutableList<Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).isEmpty()
         }
@@ -179,7 +179,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val mySet = mutableSetOf(1,2,3)
                 val mutSet = mySet as MutableSet<Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).isEmpty()
         }
@@ -191,7 +191,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val myMap = mutableMapOf(1 to 2)
                 val mutMap = myMap as MutableMap<Int, Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).isEmpty()
         }
@@ -203,7 +203,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
             fun main() {
                 val params = tooltip_guide.layoutParams as LayoutParams
             }
-            """
+            """.trimIndent()
             val result = subject.lintWithContext(env, code)
             assertThat(result).isEmpty()
         }
@@ -219,7 +219,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val myList = listOf(1,2,3)
                 val mutList = myList as ArrayList<Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -234,7 +234,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val myList : List<Int>? = null
                 val mutList = myList as? ArrayList<Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -251,7 +251,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     myList.add(4)
                 }
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -266,7 +266,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val mySet = setOf(1,2,3)
                 val mutSet = mySet as LinkedHashSet<Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -281,7 +281,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val mySet : Set<Int>? = null
                 val mutSet = mySet as? LinkedHashSet<Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -298,7 +298,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     mySet.add(4)
                 }
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -313,7 +313,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val mySet = setOf(1,2,3)
                 val mutSet = mySet as HashSet<Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -328,7 +328,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val mySet : Set<Int>? = null
                 val mutSet = mySet as? HashSet<Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -345,7 +345,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     mySet.add(4)
                 }
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -360,7 +360,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val myMap = mapOf(1 to 2)
                 val mutMap = myMap as HashMap<Int, Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -375,7 +375,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val myMap : Map<Int, Int>? = null
                 val mutMap = myMap as? HashMap<Int, Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -392,7 +392,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     myMap[3] = 4
                 }
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -407,7 +407,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val myMap = mapOf(1 to 2)
                 val mutMap = myMap as LinkedHashMap<Int, Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -422,7 +422,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                 val myMap : Map<Int, Int>? = null
                 val mutMap = myMap as? LinkedHashMap<Int, Int>
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
@@ -439,7 +439,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     myMap[3] = 4
                 }
             }
-            """
+            """.trimIndent()
             val result = subject.compileAndLintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(

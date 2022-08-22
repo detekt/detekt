@@ -18,7 +18,7 @@ class UseIfInsteadOfWhenSpec {
                     else -> return false
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -31,7 +31,7 @@ class UseIfInsteadOfWhenSpec {
                     else -> return false
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -46,7 +46,7 @@ class UseIfInsteadOfWhenSpec {
                     else -> return false
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -61,7 +61,7 @@ class UseIfInsteadOfWhenSpec {
                 }
                 return false
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

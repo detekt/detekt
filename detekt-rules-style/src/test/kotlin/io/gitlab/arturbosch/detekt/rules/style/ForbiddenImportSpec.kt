@@ -21,7 +21,7 @@ class ForbiddenImportSpec {
         import com.example.R.string
         import net.example.R.dimen
         import net.example.R.dimension
-    """
+    """.trimIndent()
 
     @Test
     fun `should report nothing by default`() {

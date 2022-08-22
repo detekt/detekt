@@ -22,7 +22,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     } 
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -36,7 +36,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     } 
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -50,7 +50,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     } 
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -64,7 +64,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     } 
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -81,7 +81,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     } 
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -95,7 +95,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     } 
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -110,7 +110,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     } 
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -124,7 +124,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     } 
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -139,7 +139,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     } 
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -154,7 +154,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     } 
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -176,7 +176,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     return if (randInt % 2 == 0) randInt else null
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -192,7 +192,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     }
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -214,7 +214,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     } 
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -230,7 +230,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     } 
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -246,7 +246,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     } 
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -260,7 +260,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     } 
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -274,7 +274,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     } 
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -289,7 +289,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     } 
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -306,7 +306,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     } 
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 }

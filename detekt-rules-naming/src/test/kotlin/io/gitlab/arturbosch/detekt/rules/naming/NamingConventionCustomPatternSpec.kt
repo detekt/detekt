@@ -52,7 +52,7 @@ class NamingConventionCustomPatternSpec {
             object Foo {
                 val MYVar = 3
             }
-    """
+    """.trimIndent()
 
     val excludeClassPatternFunctionRegexCode = """
             class Bar {
@@ -62,7 +62,7 @@ class NamingConventionCustomPatternSpec {
             object Foo {
                 fun MYFun() {}
             }
-    """
+    """.trimIndent()
 
     @Test
     fun `should use custom name for method and class`() {
@@ -79,7 +79,7 @@ class NamingConventionCustomPatternSpec {
               const val lowerCaseConst = ""
             }
         }
-                """
+                """.trimIndent()
             )
         ).isEmpty()
     }
@@ -95,7 +95,7 @@ class NamingConventionCustomPatternSpec {
               const val lowerCaseConst = ""
             }
         }
-                """
+                """.trimIndent()
             )
         ).isEmpty()
     }
@@ -111,7 +111,7 @@ class NamingConventionCustomPatternSpec {
                 enum1, enum2
             }
         }
-                """
+                """.trimIndent()
             )
         ).isEmpty()
     }
@@ -132,7 +132,7 @@ class NamingConventionCustomPatternSpec {
         object Foo {
             val MYVar = 3
         }
-        """
+        """.trimIndent()
         val config = TestConfig(mapOf(VariableNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar"))
         assertThat(VariableNaming(config).compileAndLint(code)).isEmpty()
     }
@@ -165,7 +165,7 @@ class NamingConventionCustomPatternSpec {
         object Foo {
             fun MYFun() {}
         }
-        """
+        """.trimIndent()
         val config = TestConfig(mapOf(FunctionNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar"))
         assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
     }

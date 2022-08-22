@@ -16,7 +16,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
             subject.compileAndLint(
                 """
                 class A 
-                """
+                """.trimIndent()
             )
         ).isEmpty()
     }
@@ -31,7 +31,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
                 subject.compileAndLint(
                     """
                 class A
-                    """
+                    """.trimIndent()
                 )
             ).hasSize(1)
         }
@@ -46,7 +46,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
                         return 1
                     }
                 }
-                    """
+                    """.trimIndent()
                 )
             ).hasSize(1)
         }
@@ -57,7 +57,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
                 subject.compileAndLint(
                     """
                 typealias A = List<String>
-                    """
+                    """.trimIndent()
                 )
             ).hasSize(1)
         }
@@ -69,7 +69,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
                     """
                 typealias A = List<String>
                 fun foo() = Unit
-                    """
+                    """.trimIndent()
                 )
             ).hasSize(2)
         }
@@ -80,7 +80,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
                 subject.compileAndLint(
                     """
                 fun foo() = Unit
-                    """
+                    """.trimIndent()
                 )
             ).hasSize(1)
         }
@@ -100,7 +100,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
                         return 1
                     }
                 }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -111,7 +111,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
                 subject.compileAndLint(
                     """
                 internal class A
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -122,7 +122,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
                 subject.compileAndLint(
                     """
                 internal typealias A = List<String>
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }

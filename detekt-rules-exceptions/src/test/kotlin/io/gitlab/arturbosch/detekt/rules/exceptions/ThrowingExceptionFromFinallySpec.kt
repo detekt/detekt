@@ -18,7 +18,7 @@ class ThrowingExceptionFromFinallySpec {
                     }
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -31,7 +31,7 @@ class ThrowingExceptionFromFinallySpec {
                     throw IllegalArgumentException()
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -44,7 +44,7 @@ class ThrowingExceptionFromFinallySpec {
                     println()
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

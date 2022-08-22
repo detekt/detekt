@@ -16,7 +16,7 @@ class VariableNamingSpec {
                 val FIELD get() = _FIELD
                 val camel_Case_Property = 5
             }
-        """
+        """.trimIndent()
         assertThat(VariableNaming().compileAndLint(code))
             .hasStartSourceLocations(
                 SourceLocation(2, 17),
@@ -33,7 +33,7 @@ class VariableNamingSpec {
                 val field get() = _field
                 val camelCaseProperty = 5
             }
-        """
+        """.trimIndent()
         assertThat(VariableNaming().compileAndLint(code)).isEmpty()
     }
 
@@ -49,7 +49,7 @@ class VariableNamingSpec {
             interface I2 {
                 @Suppress("VariableNaming") val SHOULD_NOT_BE_FLAGGED: String
             }
-        """
+        """.trimIndent()
         assertThat(VariableNaming().compileAndLint(code)).isEmpty()
     }
 
@@ -65,7 +65,7 @@ class VariableNamingSpec {
             interface I2 {
                 @Suppress("VariableNaming") val SHOULD_BE_FLAGGED: String
             }
-        """
+        """.trimIndent()
         val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
         assertThat(VariableNaming(config).compileAndLint(code))
             .hasStartSourceLocations(

@@ -26,7 +26,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                 val a: Void? = null
                 val b: Void = null!!
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(4)
     }
@@ -36,7 +36,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
         val code = """
             val clazz = java.lang.Void::class
             val klass = Void::class
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -55,7 +55,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                 fun myFun2(): E = E.Void
                 abstract fun myFun(): Void
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
@@ -78,7 +78,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                         throw IllegalStateException()
                     }
                 }
-            """
+            """.trimIndent()
 
             val findings = ForbiddenVoid(config).compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
@@ -99,7 +99,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                         throw IllegalStateException()
                     }
                 }
-            """
+            """.trimIndent()
 
             val findings = ForbiddenVoid(config).compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
@@ -117,7 +117,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                         val a: Void? = null
                     }
                 }
-            """
+            """.trimIndent()
 
             val findings = ForbiddenVoid(config).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
@@ -129,7 +129,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                 fun method(param: Void) : Void {
                     return param
                 }
-            """
+            """.trimIndent()
 
             val findings = ForbiddenVoid(config).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(2)
@@ -157,7 +157,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                 }
 
                 class D : A<Void>
-            """
+            """.trimIndent()
 
             val findings = ForbiddenVoid(config).compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
@@ -169,7 +169,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                 interface A<T>
                 interface B<T>
                 class C : A<B<Void>>
-            """
+            """.trimIndent()
 
             val findings = ForbiddenVoid(config).compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
@@ -179,7 +179,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
         fun `should not report Void in definition with multiple generic parameters`() {
             val code = """
                 val foo = mutableMapOf<Int, Void>()
-            """
+            """.trimIndent()
 
             val findings = ForbiddenVoid(config).compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
@@ -194,7 +194,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                     val a: Void? = null
                     val b: Void = null!!
                 }
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(4)
         }

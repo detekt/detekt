@@ -18,7 +18,7 @@ class ImplicitUnitReturnTypeSpec(private val env: KotlinCoreEnvironment) {
             fun errorProneUnit() = println("Hello Unit")
             fun errorProneUnitWithParam(param: String) = param.run { println(this) }
             fun String.errorProneUnitWithReceiver() = run { println(this) }
-        """
+        """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
 
@@ -50,7 +50,7 @@ class ImplicitUnitReturnTypeSpec(private val env: KotlinCoreEnvironment) {
             fun blockUnitReturn() { 
                 println("Hello Unit")
             }
-        """
+        """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
 
@@ -61,7 +61,7 @@ class ImplicitUnitReturnTypeSpec(private val env: KotlinCoreEnvironment) {
     fun `does not report for Unit expression`() {
         val code = """
             fun foo() = Unit
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }

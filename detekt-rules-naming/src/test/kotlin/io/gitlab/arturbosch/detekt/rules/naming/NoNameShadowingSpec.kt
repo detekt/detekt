@@ -16,7 +16,7 @@ class NoNameShadowingSpec(val env: KotlinCoreEnvironment) {
             fun test(i: Int) {
                 val i = 1
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocation(2, 9)
@@ -29,7 +29,7 @@ class NoNameShadowingSpec(val env: KotlinCoreEnvironment) {
             fun test(j: Int) {
                 val (j, _) = 1 to 2
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0]).hasMessage("Name shadowed: j")
@@ -42,7 +42,7 @@ class NoNameShadowingSpec(val env: KotlinCoreEnvironment) {
                 listOf(1).map { k ->
                 }
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0]).hasMessage("Name shadowed: k")
@@ -57,7 +57,7 @@ class NoNameShadowingSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0]).hasMessage("Name shadowed: it")
@@ -72,7 +72,7 @@ class NoNameShadowingSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
@@ -83,7 +83,7 @@ class NoNameShadowingSpec(val env: KotlinCoreEnvironment) {
             fun test(i: Int) {
                 val j = i
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
@@ -106,7 +106,7 @@ class NoNameShadowingSpec(val env: KotlinCoreEnvironment) {
                     list.map { it + "x" }
                 }
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }

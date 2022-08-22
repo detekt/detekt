@@ -40,7 +40,7 @@ class TooGenericExceptionCaughtSpec {
                     throw Error()
                 }
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not report an ignored catch blocks because of its exception name`() {

@@ -20,7 +20,7 @@ class GlobalCoroutineUsageSpec {
             fun foo() {
                 GlobalScope.launch { delay(1_000L) }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -35,7 +35,7 @@ class GlobalCoroutineUsageSpec {
             fun foo() {
                 GlobalScope.async { delay(1_000L) }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -50,7 +50,7 @@ class GlobalCoroutineUsageSpec {
             fun foo() {
                 bar(GlobalScope)
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -66,7 +66,7 @@ class GlobalCoroutineUsageSpec {
                 val scope = GlobalScope
                 bar(scope)
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

@@ -10,7 +10,7 @@ class ClassNamingSpec {
     fun `should detect no violations class with numbers`() {
         val code = """
             class MyClassWithNumbers5
-        """
+        """.trimIndent()
 
         assertThat(ClassNaming().compileAndLint(code)).isEmpty()
     }
@@ -20,7 +20,7 @@ class ClassNamingSpec {
         val code = """
             class NamingConventions {
             }
-        """
+        """.trimIndent()
 
         assertThat(ClassNaming().compileAndLint(code)).isEmpty()
     }
@@ -29,7 +29,7 @@ class ClassNamingSpec {
     fun `should detect no violations with class using backticks`() {
         val code = """
             class `NamingConventions`
-        """
+        """.trimIndent()
 
         assertThat(ClassNaming().compileAndLint(code)).isEmpty()
     }
@@ -38,7 +38,7 @@ class ClassNamingSpec {
     fun `should detect because it have a _`() {
         val code = """
             class _NamingConventions
-        """
+        """.trimIndent()
 
         assertThat(ClassNaming().compileAndLint(code))
             .hasSize(1)
@@ -49,7 +49,7 @@ class ClassNamingSpec {
     fun `should detect because it have starts with lowercase`() {
         val code = """
             class namingConventions {}
-        """
+        """.trimIndent()
 
         assertThat(ClassNaming().compileAndLint(code))
             .hasSize(1)
@@ -61,7 +61,7 @@ class ClassNamingSpec {
         val code = """
             @Suppress("ClassName")
             class namingConventions {}
-        """
+        """.trimIndent()
         assertThat(ClassNaming().compileAndLint(code)).isEmpty()
     }
 }

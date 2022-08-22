@@ -18,7 +18,7 @@ class UnusedPrivateClassSpec {
             val code = """
                 private interface Foo
                 class Bar
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -34,7 +34,7 @@ class UnusedPrivateClassSpec {
                 val code = """
                 private class Foo
                 class Bar
-                """
+                """.trimIndent()
 
                 val findings = subject.compileAndLint(code)
 
@@ -47,7 +47,7 @@ class UnusedPrivateClassSpec {
                 val code = """
                 private open class Foo
                 private class Bar : Foo()
-                """
+                """.trimIndent()
 
                 val findings = subject.compileAndLint(code)
 
@@ -66,7 +66,7 @@ class UnusedPrivateClassSpec {
                 data class FooOne(val b: Bar) : Foo<Bar> {
                     override fun invoke(b: Bar): Unit = Unit
                 }
-                """
+                """.trimIndent()
 
                 val findings = subject.compileAndLint(code)
 
@@ -81,7 +81,7 @@ class UnusedPrivateClassSpec {
                 fun something() {
                     val foo: Foo = Foo()
                 }
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -95,7 +95,7 @@ class UnusedPrivateClassSpec {
                 private object Bar {
                   fun bar(foo: Foo) = Unit
                 }
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -107,7 +107,7 @@ class UnusedPrivateClassSpec {
             val code = """
                 private class Foo
                 private val a: Foo? = null
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -119,7 +119,7 @@ class UnusedPrivateClassSpec {
             val code = """
                 private class Foo
                 private lateinit var a: Foo
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -131,7 +131,7 @@ class UnusedPrivateClassSpec {
             val code = """
                 private class Foo
                 private lateinit var foos: List<Foo>
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -143,7 +143,7 @@ class UnusedPrivateClassSpec {
             val code = """
                 private val elements = listOf(42).filterIsInstance<Set<Item>>()
                 private class Item
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -155,7 +155,7 @@ class UnusedPrivateClassSpec {
             val code = """
                 private val elements = listOf(42).filterIsInstance<Something<Int>>()
                 private abstract class Something<E>: Collection<E>
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -171,7 +171,7 @@ class UnusedPrivateClassSpec {
                 fun <T> bar(): T {
                     throw Exception()
                 }
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -183,7 +183,7 @@ class UnusedPrivateClassSpec {
             val code = """
                 private class Foo
                 private lateinit var foos: List<List<Foo>>
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -195,7 +195,7 @@ class UnusedPrivateClassSpec {
             val code = """
                 private class Foo<T>
                 private lateinit var foos: Foo<String>
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -207,7 +207,7 @@ class UnusedPrivateClassSpec {
             val code = """
                 private class Foo<T>
                 private var foos: Foo<String>? = Foo()
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -219,7 +219,7 @@ class UnusedPrivateClassSpec {
             val code = """
                 private class Foo
                 private val a = Foo()
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -231,7 +231,7 @@ class UnusedPrivateClassSpec {
             val code = """
                 private class Foo(val a: String)
                 private val a = Foo("test")
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -245,7 +245,7 @@ class UnusedPrivateClassSpec {
                 private object Bar {
                   fun foo(): Foo? = null
                 }
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -257,7 +257,7 @@ class UnusedPrivateClassSpec {
             val code = """
                 private class Foo
                 private val lambda: ((Foo) -> Unit)? = null
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -269,7 +269,7 @@ class UnusedPrivateClassSpec {
             val code = """
                 private class Foo
                 private val lambda: (() -> Foo)? = null
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -281,7 +281,7 @@ class UnusedPrivateClassSpec {
             val code = """
                 private class Foo
                 private val lambda: (() -> List<Foo>)? = null
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -300,7 +300,7 @@ class UnusedPrivateClassSpec {
                         override fun bar() = Unit
                     }
                 }
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -318,7 +318,7 @@ class UnusedPrivateClassSpec {
                 
                 private class Foo
                 fun bar(clazz: KClass<*>) = Unit
-            """
+            """.trimIndent()
 
             val findings = UnusedPrivateClass().compileAndLint(code)
 
@@ -338,7 +338,7 @@ class UnusedPrivateClassSpec {
                         B("B"),
                         C("C")
                     }
-            """
+            """.trimIndent()
 
             val findings = UnusedPrivateClass().compileAndLint(code)
 
@@ -363,7 +363,7 @@ class UnusedPrivateClassSpec {
                         fun getSomeObject(): ((String) -> Any) = ::InternalClass
                         private class InternalClass(val param: String)
                     }
-            """
+            """.trimIndent()
 
             val findings = UnusedPrivateClass().compileAndLint(code)
 
@@ -382,7 +382,7 @@ class UnusedPrivateClassSpec {
                     @Test3 val property = ""
                     @Test4 fun function() {}
                 }
-            """
+            """.trimIndent()
 
             val findings = UnusedPrivateClass().compileAndLint(code)
 
@@ -407,7 +407,7 @@ class UnusedPrivateClassSpec {
                         E3
                     }
                 }
-            """
+            """.trimIndent()
             val findings = UnusedPrivateClass().lint(code)
             assertThat(findings).isEmpty()
         }
@@ -432,7 +432,7 @@ class UnusedPrivateClassSpec {
                         EFG1
                     }
                 }
-            """
+            """.trimIndent()
             val findings = UnusedPrivateClass().lint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(10, 5)

@@ -13,7 +13,7 @@ class ComplexConditionSpec {
             while (5 > 4 && 4 < 6 || (3 < 5 || 2 < 5)) {}
             do { } while (5 > 4 && 4 < 6 || (3 < 5 || 2 < 5))
         }
-    """
+    """.trimIndent()
 
     @Test
     fun `reports some complex conditions`() {

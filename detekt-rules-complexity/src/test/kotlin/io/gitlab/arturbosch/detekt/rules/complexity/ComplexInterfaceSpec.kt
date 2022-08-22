@@ -34,7 +34,7 @@ class ComplexInterfaceSpec {
                     val i1: Int
                     fun fImpl() {}
                 }
-            """
+            """.trimIndent()
 
             @Test
             fun `reports complex interface`() {
@@ -59,7 +59,7 @@ class ComplexInterfaceSpec {
                         fun fImpl() {}
                     }
                 }
-            """
+            """.trimIndent()
 
             @Test
             fun `reports complex interface`() {
@@ -84,7 +84,7 @@ class ComplexInterfaceSpec {
                         val v = 0
                     }
                 }
-            """
+            """.trimIndent()
 
             @Test
             fun `does not report static declarations per default`() {
@@ -107,7 +107,7 @@ class ComplexInterfaceSpec {
                     val i1: Int
                     private fun fImpl() {}
                 }
-            """
+            """.trimIndent()
 
             @Test
             fun `does not report complex interface`() {
@@ -131,7 +131,7 @@ class ComplexInterfaceSpec {
                         get() = 42
                     fun fImpl() {}
                 }
-            """
+            """.trimIndent()
 
             @Test
             fun `does not report complex interface`() {
@@ -154,7 +154,7 @@ class ComplexInterfaceSpec {
                     val i1: Int
                     fun fImpl() {}
                 }
-            """
+            """.trimIndent()
 
             @Test
             fun `reports complex interface with overloaded methods`() {
@@ -176,7 +176,7 @@ class ComplexInterfaceSpec {
                         val i1: Int
                         fun fImpl() {}
                     }
-                """
+                """.trimIndent()
                 val rule = ComplexInterface(ignoreOverloadedConfig)
                 assertThat(rule.compileAndLint(interfaceWithExtension)).hasSize(1)
             }
@@ -190,7 +190,7 @@ class ComplexInterfaceSpec {
                         val i1: Int
                         fun fImpl() {}
                     }
-                """
+                """.trimIndent()
                 val rule = ComplexInterface(ignoreOverloadedConfig)
                 assertThat(rule.compileAndLint(interfaceWithOverloadedExtensions)).isEmpty()
             }
@@ -212,7 +212,7 @@ class ComplexInterfaceSpec {
                     val i: Int
                     // a comment shouldn't be detected
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -227,7 +227,7 @@ class ComplexInterfaceSpec {
                         const val c = 0
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 

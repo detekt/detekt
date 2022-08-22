@@ -45,7 +45,7 @@ class TooGenericExceptionThrownSpec {
                     throw Error()
                 }
             }
-        """
+        """.trimIndent()
         val findings = rule.compileAndLint(code)
 
         assertThat(findings).isEmpty()

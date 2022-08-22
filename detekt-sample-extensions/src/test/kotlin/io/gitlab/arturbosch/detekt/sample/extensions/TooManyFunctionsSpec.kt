@@ -17,7 +17,7 @@ class TooManyFunctionsSpec {
     }
 }
 
-private const val code: String = """
+private val code: String = """
     class TooManyFunctions : Rule("TooManyFunctions") {
 
         override fun visitUserType(type: KtUserType) {
@@ -85,4 +85,4 @@ private const val code: String = """
         }
 
     }
-"""
+""".trimIndent()

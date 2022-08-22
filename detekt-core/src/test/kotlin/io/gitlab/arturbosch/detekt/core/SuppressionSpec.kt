@@ -169,7 +169,7 @@ class SuppressionSpec {
                     println("FAILED TEST")
                 }
             }
-                """
+                """.trimIndent()
             )
             val rule = TestRule()
             rule.visitFile(ktFile)
@@ -187,7 +187,7 @@ class SuppressionSpec {
                     println("FAILED TEST")
                 }
             }
-                """
+                """.trimIndent()
             )
             val rule = TestRule()
             rule.visitFile(ktFile)
@@ -205,7 +205,7 @@ class SuppressionSpec {
                     println("FAILED TEST")
                 }
             }
-                """
+                """.trimIndent()
             )
             val rule = TestRule()
             rule.visitFile(ktFile)
@@ -227,7 +227,7 @@ class SuppressionSpec {
                     println("FAILED TEST")
                 }
             }
-                """
+                """.trimIndent()
             )
             val rule = TestRule(TestConfig(mutableMapOf("aliases" to "[MyTest]")))
             rule.visitFile(ktFile)
@@ -314,7 +314,7 @@ private fun isSuppressedBy(annotation: String, argument: String): Boolean {
     val annotated = """
             @$annotation("$argument")
             class Test
-    """
+    """.trimIndent()
     val file = compileContentForTest(annotated)
     val annotatedClass = file.children.first { it is KtClass } as KtAnnotated
     return annotatedClass.isSuppressedBy("Test", setOf("alias"))

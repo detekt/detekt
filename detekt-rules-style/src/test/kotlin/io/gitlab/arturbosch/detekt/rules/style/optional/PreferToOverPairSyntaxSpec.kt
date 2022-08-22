@@ -17,7 +17,7 @@ class PreferToOverPairSyntaxSpec(val env: KotlinCoreEnvironment) {
             val pair1 = Pair(1, 2)
             val pair2: Pair<Int, Int> = Pair(1, 2)
             val pair3 = Pair(Pair(1, 2), Pair(3, 4))
-        """
+        """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(5)
@@ -29,7 +29,7 @@ class PreferToOverPairSyntaxSpec(val env: KotlinCoreEnvironment) {
         val code = """
             val pair = createPair()
             fun createPair() = Pair(1, 2)
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].message).endsWith("`1 to 2`.")
@@ -49,7 +49,7 @@ class PreferToOverPairSyntaxSpec(val env: KotlinCoreEnvironment) {
             val pair3 = Pair(Pair(1, 2), Pair(3, 4))
 
             data class Pair<T, Z>(val int1: T, val int2: Z)
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -58,7 +58,7 @@ class PreferToOverPairSyntaxSpec(val env: KotlinCoreEnvironment) {
         val code = """
             val pair = createPair()
             fun createPair() = 1 to 2
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 }

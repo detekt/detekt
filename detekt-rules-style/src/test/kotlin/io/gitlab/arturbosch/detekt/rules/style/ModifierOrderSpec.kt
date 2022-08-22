@@ -68,7 +68,7 @@ class ModifierOrderSpec {
                 abstract class Test : A() {
                     override open fun test() {}
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -81,7 +81,7 @@ class ModifierOrderSpec {
                 abstract class Test : A() {
                     override fun test() {}
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
@@ -95,7 +95,7 @@ class ModifierOrderSpec {
                 public class A {
                     tailrec private fun foo(x: Double = 1.0): Double = 1.0
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -105,7 +105,7 @@ class ModifierOrderSpec {
                 public class A {
                     private tailrec fun foo(x: Double = 1.0): Double = 1.0
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
@@ -135,7 +135,7 @@ class ModifierOrderSpec {
                 private fun interface LoadMoreCallback {
                     fun loadMore(): Boolean
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
@@ -148,7 +148,7 @@ class ModifierOrderSpec {
             val code = """
                 @JvmInline
                 private value class Foo(val bar: Int)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

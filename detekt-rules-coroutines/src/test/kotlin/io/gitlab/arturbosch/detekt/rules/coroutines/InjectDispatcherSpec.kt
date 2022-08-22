@@ -29,7 +29,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
                         launch(Dispatchers.IO) { }
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -46,7 +46,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
                         launch(dispatcher) { }
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -57,7 +57,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
                 import kotlinx.coroutines.Dispatchers
 
                 class MyRepository(dispatcher: CoroutineDispatcher = Dispatchers.IO)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -70,7 +70,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
                 class MyRepository(dispatcher: CoroutineDispatcher) {
                     constructor() : this(Dispatchers.IO)
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -81,7 +81,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
                 import kotlinx.coroutines.Dispatchers
 
                 class MyRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -97,7 +97,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
                         launch(Dispatchers.Main) { }
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
@@ -119,7 +119,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
                         launch(Dispatchers.Main) { }
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }

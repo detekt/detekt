@@ -14,7 +14,7 @@ class NotImplementedDeclarationSpec {
             if (1 == 1) throw NotImplementedError()
             throw NotImplementedError()
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(2)
     }
 
@@ -25,7 +25,7 @@ class NotImplementedDeclarationSpec {
             TODO("not implemented")
             TODO()
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(2)
     }
 
@@ -35,7 +35,7 @@ class NotImplementedDeclarationSpec {
         fun f() {
             // TODO
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

@@ -14,7 +14,7 @@ class SerialVersionUIDInSerializableClassSpec {
             import java.io.Serializable
 
             class C : Serializable
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -28,7 +28,7 @@ class SerialVersionUIDInSerializableClassSpec {
                     const val serialVersionUID = 1
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -42,7 +42,7 @@ class SerialVersionUIDInSerializableClassSpec {
                     const val serialVersionUID: Int = 1
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -60,7 +60,7 @@ class SerialVersionUIDInSerializableClassSpec {
                     val serialVersionUUID = 1L
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(2)
     }
 
@@ -76,7 +76,7 @@ class SerialVersionUIDInSerializableClassSpec {
             import java.io.Serializable
 
             interface I : Serializable
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -90,7 +90,7 @@ class SerialVersionUIDInSerializableClassSpec {
                     const val serialVersionUID = 1L
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -104,7 +104,7 @@ class SerialVersionUIDInSerializableClassSpec {
                     const val serialVersionUID = -1L
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -118,7 +118,7 @@ class SerialVersionUIDInSerializableClassSpec {
                     const val serialVersionUID: Long = 1
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

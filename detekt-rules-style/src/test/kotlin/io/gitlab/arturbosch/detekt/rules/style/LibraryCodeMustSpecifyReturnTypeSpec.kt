@@ -26,7 +26,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                 fun b() = 2
                 val c = 2
             }
-                """
+                """.trimIndent()
             )
         ).isEmpty()
     }
@@ -42,7 +42,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     env,
                     """
                 fun foo() = 5
-                    """
+                    """.trimIndent()
                 )
             ).hasSize(1)
         }
@@ -54,7 +54,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     env,
                     """
                 val foo = 5
-                    """
+                    """.trimIndent()
                 )
             ).hasSize(1)
         }
@@ -69,7 +69,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     val foo = 5
                     fun bar() = 5
                 }
-                    """
+                    """.trimIndent()
                 )
             ).hasSize(2)
         }
@@ -84,7 +84,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     protected val foo = 5
                     protected fun bar() = 5
                 }
-                    """
+                    """.trimIndent()
                 )
             ).hasSize(2)
         }
@@ -101,7 +101,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     env,
                     """
                 fun foo(): Int = 5
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -113,7 +113,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     env,
                     """
                 fun foo() {}
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -125,7 +125,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     env,
                     """
                 val foo: Int = 5
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -140,7 +140,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     val foo: Int = 5
                     fun bar(): Int = 5
                 }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -158,7 +158,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     """
                 internal fun bar() = 5
                 private fun foo() = 5
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -170,7 +170,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     env,
                     """
                 internal val foo = 5
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -188,7 +188,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                         val a = 5
                     }
                 }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -203,7 +203,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     fun baz() = 5
                     val qux = 5
                 }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }

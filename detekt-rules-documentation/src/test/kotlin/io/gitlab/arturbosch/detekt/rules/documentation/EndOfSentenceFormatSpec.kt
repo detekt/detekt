@@ -13,7 +13,7 @@ class EndOfSentenceFormatSpec {
         /** Some doc */
         class Test {
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -23,7 +23,7 @@ class EndOfSentenceFormatSpec {
             /** Some doc */
             fun f(x: Int, y: Int, z: Int) = 
                 if (x == 0) y + z else x + y
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -34,7 +34,7 @@ class EndOfSentenceFormatSpec {
             /** Some doc */
             val test = 3
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -43,7 +43,7 @@ class EndOfSentenceFormatSpec {
         val code = """
         /** Some doc */
         fun test() = 3
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -54,7 +54,7 @@ class EndOfSentenceFormatSpec {
             /** Some doc */
             fun test() = 3
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -65,7 +65,7 @@ class EndOfSentenceFormatSpec {
             /** Some doc-- */
             fun test() = 3
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -77,7 +77,7 @@ class EndOfSentenceFormatSpec {
          */
         class Test {
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -91,7 +91,7 @@ class EndOfSentenceFormatSpec {
          */
         class Test {
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -102,7 +102,7 @@ class EndOfSentenceFormatSpec {
          */
         class Test {
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -116,7 +116,7 @@ class EndOfSentenceFormatSpec {
          */
         class Test {
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -136,7 +136,7 @@ class EndOfSentenceFormatSpec {
          */
         class Test {
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -148,7 +148,7 @@ class EndOfSentenceFormatSpec {
          */
         class Test {
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -160,7 +160,7 @@ class EndOfSentenceFormatSpec {
          */
         class Test {
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -172,7 +172,7 @@ class EndOfSentenceFormatSpec {
          */
         class Test {
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -184,7 +184,7 @@ class EndOfSentenceFormatSpec {
          */
         class Test {
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -199,7 +199,7 @@ class EndOfSentenceFormatSpec {
         http://google.com */
         class Test2 {
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

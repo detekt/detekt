@@ -18,7 +18,7 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
                     val map = emptyMap<Any, Any>()
                     val value = map["key"]!!
                 }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -29,7 +29,7 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
                     val map = emptyMap<Any, Any>()
                     val value = map.get("key")!!
                 }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -40,7 +40,7 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
                     val map = emptyMap<String, String>()
                     map["key"]
                 }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -51,7 +51,7 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
                     val map = emptyMap<String, String>()
                     map.getValue("key")
                 }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -62,7 +62,7 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
                     val map = emptyMap<String, String>()
                     map.getOrDefault("key", "")
                 }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -73,7 +73,7 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
                     val map = emptyMap<String, String>()
                     map.getOrElse("key", { "" })
                 }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 }

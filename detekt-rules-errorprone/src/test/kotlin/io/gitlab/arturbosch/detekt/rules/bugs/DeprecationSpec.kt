@@ -26,7 +26,7 @@ class DeprecationSpec(private val env: KotlinCoreEnvironment) {
                 fun spam() {
                 }
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings.first().message).isEqualTo("Foo is deprecated.")
@@ -45,7 +45,7 @@ class DeprecationSpec(private val env: KotlinCoreEnvironment) {
                 fun baz() {
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 }

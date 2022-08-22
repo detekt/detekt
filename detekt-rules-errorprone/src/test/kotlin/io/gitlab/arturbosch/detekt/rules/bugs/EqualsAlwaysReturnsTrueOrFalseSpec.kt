@@ -29,7 +29,7 @@ class EqualsAlwaysReturnsTrueOrFalseSpec {
                     return true
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -42,7 +42,7 @@ class EqualsAlwaysReturnsTrueOrFalseSpec {
                 override fun equals(other: Any?): Boolean = (other as? Item)?.text == this.text
                 override fun hashCode(): Int = text.hashCode()
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

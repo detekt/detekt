@@ -30,7 +30,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
                 val xsArray = intArrayOf(1)
                 fun foo(vararg xs: Int) {}
                 val testVal = foo(xs = *xsArray)
-            """
+            """.trimIndent()
             val actual = subject.compileAndLintWithContext(env, code)
             assertThat(actual).hasSize(1)
             assertThat(actual.first().message).isEqualTo(typeResolutionEnabledMessage)
@@ -42,7 +42,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
                 val xsArray = intArrayOf(1)
                 fun foo(vararg xs: Int) {}
                 val testVal = foo(*xsArray)
-            """
+            """.trimIndent()
             val actual = subject.compileAndLintWithContext(env, code)
             assertThat(actual).hasSize(1)
             assertThat(actual.first().message).isEqualTo(typeResolutionEnabledMessage)
@@ -53,7 +53,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun foo(vararg xs: Int) {}
                 val testVal = foo(xs = *intArrayOf(1))
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -62,7 +62,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun <T> asList(vararg ts: T, stringValue: String): List<Int> = listOf(1,2,3)
                 val list = asList(-1, 0, *arrayOf(1, 2, 3), 4, stringValue = "5")
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -71,7 +71,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun <T> asList(vararg ts: T, stringValue: String): List<Int> = listOf(1,2,3)
                 val list = asList(-1, 0, 1, 2, 3, 4, stringValue = "5")
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -85,7 +85,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
             fun test(strs: Array<String>) {
                 strs.forEach { println(it) }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -99,7 +99,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
             fun test(test : Int) {
                 println(test)
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -110,7 +110,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
                 fun a(vararg bla: Int) { 
                     b(*bla) 
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -123,7 +123,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
                     val bla = arrayOf("")
                     b(*bla)
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }
@@ -140,7 +140,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
                 val xsArray = intArrayOf(1)
                 fun foo(vararg xs: Int) {}
                 val testVal = foo(xs = *xsArray)
-            """
+            """.trimIndent()
             val actual = subject.compileAndLint(code)
             assertThat(actual).hasSize(1)
             assertThat(actual.first().message).isEqualTo(typeResolutionDisabledMessage)
@@ -152,7 +152,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
                 val xsArray = intArrayOf(1)
                 fun foo(vararg xs: Int) {}
                 val testVal = foo(*xsArray)
-            """
+            """.trimIndent()
             val actual = subject.compileAndLint(code)
             assertThat(actual).hasSize(1)
             assertThat(actual.first().message).isEqualTo(typeResolutionDisabledMessage)
@@ -163,7 +163,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun foo(vararg xs: Int) {}
                 val testVal = foo(xs = *intArrayOf(1))
-            """
+            """.trimIndent()
             val actual = subject.compileAndLint(code)
             assertThat(actual).hasSize(1)
             assertThat(actual.first().message).isEqualTo(typeResolutionDisabledMessage)
@@ -174,7 +174,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun <T> asList(vararg ts: T, stringValue: String): List<Int> = listOf(1,2,3)
                 val list = asList(-1, 0, *arrayOf(1, 2, 3), 4, stringValue = "5")
-            """
+            """.trimIndent()
             val actual = subject.compileAndLint(code)
             assertThat(actual).hasSize(1)
             assertThat(actual.first().message).isEqualTo(typeResolutionDisabledMessage)
@@ -185,7 +185,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun <T> asList(vararg ts: T, stringValue: String): List<Int> = listOf(1,2,3)
                 val list = asList(-1, 0, 1, 2, 3, 4, stringValue = "5")
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -199,7 +199,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
             fun test(strs: Array<String>) {
                 strs.forEach { println(it) }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -213,7 +213,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
             fun test(test : Int) {
                 println(test)
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -224,7 +224,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
                 fun a(vararg bla: Int) { 
                     b(*bla)
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -237,7 +237,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
                     val bla = arrayOf("")
                     b(*bla)
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

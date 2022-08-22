@@ -21,7 +21,7 @@ class ThrowingExceptionsWithoutMessageOrCauseSpec {
                 IllegalArgumentException("foo")
                 throw IllegalArgumentException()
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `reports calls to the default constructor`() {
@@ -45,7 +45,7 @@ class ThrowingExceptionsWithoutMessageOrCauseSpec {
             fun test() {
                 org.assertj.core.api.Assertions.assertThatIllegalArgumentException().isThrownBy { println() }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

@@ -13,7 +13,7 @@ class UnconditionalJumpStatementInLoopSpec {
             fun f() {
                 for (i in 1..2) return
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -23,7 +23,7 @@ class UnconditionalJumpStatementInLoopSpec {
             fun f() {
                 while (true) { return } 
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -33,7 +33,7 @@ class UnconditionalJumpStatementInLoopSpec {
             fun f() {
                 do { return } while(true) 
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -43,7 +43,7 @@ class UnconditionalJumpStatementInLoopSpec {
             fun f() {
                 for (i in 1..2) continue
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -53,7 +53,7 @@ class UnconditionalJumpStatementInLoopSpec {
             fun f() {
                 while (true) { continue } 
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -63,7 +63,7 @@ class UnconditionalJumpStatementInLoopSpec {
             fun f() {
                 do { continue } while(true) 
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -73,7 +73,7 @@ class UnconditionalJumpStatementInLoopSpec {
             fun f() {
                 for (i in 1..2) break
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -83,7 +83,7 @@ class UnconditionalJumpStatementInLoopSpec {
             fun f() {
                 while (true) { break } 
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -93,7 +93,7 @@ class UnconditionalJumpStatementInLoopSpec {
             fun f() {
                 do { break } while(true) 
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -107,7 +107,7 @@ class UnconditionalJumpStatementInLoopSpec {
                     }
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -121,7 +121,7 @@ class UnconditionalJumpStatementInLoopSpec {
                     }
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -135,7 +135,7 @@ class UnconditionalJumpStatementInLoopSpec {
                     }
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -150,7 +150,7 @@ class UnconditionalJumpStatementInLoopSpec {
                     if (i > 1) println() else return
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -165,7 +165,7 @@ class UnconditionalJumpStatementInLoopSpec {
                     if (i > 1) println() else continue
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -180,7 +180,7 @@ class UnconditionalJumpStatementInLoopSpec {
                     if (i > 1) println() else break
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -192,7 +192,7 @@ class UnconditionalJumpStatementInLoopSpec {
                 for (i in 1..5)
                     return compute(i) ?: return
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
@@ -207,7 +207,7 @@ class UnconditionalJumpStatementInLoopSpec {
                 }
                 return 0
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -221,7 +221,7 @@ class UnconditionalJumpStatementInLoopSpec {
                 }
                 return 0
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -236,7 +236,7 @@ class UnconditionalJumpStatementInLoopSpec {
                 }
                 return 0
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -251,7 +251,7 @@ class UnconditionalJumpStatementInLoopSpec {
                 }
                 return 0
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -266,7 +266,7 @@ class UnconditionalJumpStatementInLoopSpec {
                 }
                 return 0
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -279,7 +279,7 @@ class UnconditionalJumpStatementInLoopSpec {
                     compute(i) ?: return
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -292,7 +292,7 @@ class UnconditionalJumpStatementInLoopSpec {
                     compute(i) ?: continue
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -305,7 +305,7 @@ class UnconditionalJumpStatementInLoopSpec {
                     compute(i) ?: break
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -320,7 +320,7 @@ class UnconditionalJumpStatementInLoopSpec {
                     }
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -347,7 +347,7 @@ class UnconditionalJumpStatementInLoopSpec {
                 }
                 return 0
             }
-            """
+            """.trimIndent()
         )
 
         assertThat(findings).isEmpty()

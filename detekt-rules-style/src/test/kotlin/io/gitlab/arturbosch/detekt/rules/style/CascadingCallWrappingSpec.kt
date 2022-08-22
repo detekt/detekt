@@ -15,7 +15,7 @@ class CascadingCallWrappingSpec {
         val code = """
             val a = 0
                 .plus(0).plus(0).plus(0)
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code))
             .hasSize(1)
@@ -28,7 +28,7 @@ class CascadingCallWrappingSpec {
     fun `does not report when chained calls are on a single line`() {
         val code = """
             val a = 0.plus(0).plus(0)
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -39,7 +39,7 @@ class CascadingCallWrappingSpec {
             val a = 0
                 .plus(0)
                 .plus(0)
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -50,7 +50,7 @@ class CascadingCallWrappingSpec {
             val a = 0.plus(0).plus(0)
                 .plus(0)
                 .plus(0)
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -60,7 +60,7 @@ class CascadingCallWrappingSpec {
         val code = """
             val a = 0
                 ?.plus(0)?.plus(0)
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
@@ -70,7 +70,7 @@ class CascadingCallWrappingSpec {
         val code = """
             val a = 0!!
                 .plus(0)!!.plus(0)
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
@@ -83,7 +83,7 @@ class CascadingCallWrappingSpec {
 
             val b = ""
                 .length.plus(0)
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).hasSize(2)
     }
@@ -100,7 +100,7 @@ class CascadingCallWrappingSpec {
                     .let { 
                         0
                     }
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -117,7 +117,7 @@ class CascadingCallWrappingSpec {
                     }.plus(
                         0
                     )
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
@@ -130,7 +130,7 @@ class CascadingCallWrappingSpec {
                 ).let {
                     0
                 }
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -141,7 +141,7 @@ class CascadingCallWrappingSpec {
                 val a = 0.plus(
                     0
                 )
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -158,7 +158,7 @@ class CascadingCallWrappingSpec {
                 val a = 0
                     .plus(0)
                     ?: 0
-            """
+            """.trimIndent()
 
             assertThat(subjectIncludingElvis.compileAndLint(code)).isEmpty()
             assertThat(subjectExcludingElvis.compileAndLint(code)).isEmpty()
@@ -169,7 +169,7 @@ class CascadingCallWrappingSpec {
             val code = """
                 val a = 0
                     .plus(0) ?: 0
-            """
+            """.trimIndent()
 
             assertThat(subjectIncludingElvis.compileAndLint(code)).hasSize(1)
             assertThat(subjectExcludingElvis.compileAndLint(code)).isEmpty()

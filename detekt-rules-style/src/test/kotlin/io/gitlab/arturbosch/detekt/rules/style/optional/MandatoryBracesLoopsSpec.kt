@@ -20,7 +20,7 @@ class MandatoryBracesLoopsSpec {
                     println(i)
                 }
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -31,7 +31,7 @@ class MandatoryBracesLoopsSpec {
             fun test() {
                 for (i in 0..10) println(i)
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -42,7 +42,7 @@ class MandatoryBracesLoopsSpec {
             fun test() {
                 for (i in 0..10) println(i); print(' ')
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -54,7 +54,7 @@ class MandatoryBracesLoopsSpec {
                 for (i in 0..10)
                     println(i)
             }
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -71,7 +71,7 @@ class MandatoryBracesLoopsSpec {
                 for (i in 0..10)
                     println(i)
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -86,7 +86,7 @@ class MandatoryBracesLoopsSpec {
                     }
                 }
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -97,7 +97,7 @@ class MandatoryBracesLoopsSpec {
             fun test() {
                 for (i in 0..10) for (j in 0..10) println()
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -111,7 +111,7 @@ class MandatoryBracesLoopsSpec {
                         println()
                     }
             }
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -129,7 +129,7 @@ class MandatoryBracesLoopsSpec {
                         println()
                 }
             }
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -145,7 +145,7 @@ class MandatoryBracesLoopsSpec {
                     for (j in 0..10)
                         println()
             }
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -169,7 +169,7 @@ class MandatoryBracesLoopsSpec {
                         println("Odd")
                     }
             }
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -191,7 +191,7 @@ class MandatoryBracesLoopsSpec {
                     println("Odd")
                 }
             }
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -212,7 +212,7 @@ class MandatoryBracesLoopsSpec {
                     println()
                 }
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -223,7 +223,7 @@ class MandatoryBracesLoopsSpec {
             fun test() {
                 while(true) println()
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -235,7 +235,7 @@ class MandatoryBracesLoopsSpec {
                 while (true)
                     println()
             }
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -252,7 +252,7 @@ class MandatoryBracesLoopsSpec {
                 while(true)
                     println()
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -266,7 +266,7 @@ class MandatoryBracesLoopsSpec {
                         println()
                 }
             }
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -286,7 +286,7 @@ class MandatoryBracesLoopsSpec {
                     println()
                 } while(true)
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -297,7 +297,7 @@ class MandatoryBracesLoopsSpec {
             fun test() {
                 do println() while(true)
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -310,7 +310,7 @@ class MandatoryBracesLoopsSpec {
                     println()
                 while (true)
             }
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -328,7 +328,7 @@ class MandatoryBracesLoopsSpec {
                     println()
                 while(true)
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -343,7 +343,7 @@ class MandatoryBracesLoopsSpec {
                     }		
                 } while (true)	
             }		
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -355,7 +355,7 @@ class MandatoryBracesLoopsSpec {
                 var i = 0
                 do do i += 1 while(i < 5) while (i < 5)	
             }		
-            """
+            """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -370,7 +370,7 @@ class MandatoryBracesLoopsSpec {
                     } while (true)
                 while (true)
             }
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 
@@ -389,7 +389,7 @@ class MandatoryBracesLoopsSpec {
                     while(true)
                 } while (true)
             }
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
 

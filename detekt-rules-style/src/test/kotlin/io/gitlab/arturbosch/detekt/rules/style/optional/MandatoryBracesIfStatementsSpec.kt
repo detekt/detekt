@@ -20,7 +20,7 @@ class MandatoryBracesIfStatementsSpec {
                 if (true)
                     println()
             }
-                """
+                """.trimIndent()
             )
 
             assertThat(findings).hasSize(1)
@@ -35,7 +35,7 @@ class MandatoryBracesIfStatementsSpec {
                 	if (true) 50
                         .toString()
                 }
-                """
+                """.trimIndent()
             )
 
             assertThat(findings).hasSize(1)
@@ -50,7 +50,7 @@ class MandatoryBracesIfStatementsSpec {
                         .toString() else 50
                         .toString()
                 }
-                """
+                """.trimIndent()
             )
 
             assertThat(findings).hasSize(2)
@@ -66,7 +66,7 @@ class MandatoryBracesIfStatementsSpec {
                 else
                     println()
             }
-                """
+                """.trimIndent()
             )
 
             assertThat(findings).hasSize(2)
@@ -85,7 +85,7 @@ class MandatoryBracesIfStatementsSpec {
                 else
                     println()
             }
-                """
+                """.trimIndent()
             )
 
             assertThat(findings).hasSize(3)
@@ -102,7 +102,7 @@ class MandatoryBracesIfStatementsSpec {
                 } else
                     println()
             }
-                """
+                """.trimIndent()
             )
 
             assertThat(findings).hasSize(1)
@@ -120,7 +120,7 @@ class MandatoryBracesIfStatementsSpec {
                     println()
                 }
             }
-                """
+                """.trimIndent()
             )
 
             assertThat(findings).hasSize(1)
@@ -135,7 +135,7 @@ class MandatoryBracesIfStatementsSpec {
                 if (true) println()
                 else println()
             }
-                """
+                """.trimIndent()
             )
 
             assertThat(findings).hasSize(1)
@@ -150,7 +150,7 @@ class MandatoryBracesIfStatementsSpec {
                 if (true) println() else
                     println()
             }
-                """
+                """.trimIndent()
             )
 
             assertThat(findings).hasSize(1)
@@ -174,7 +174,7 @@ class MandatoryBracesIfStatementsSpec {
                 	}
                 	if (true) { println() }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
@@ -190,7 +190,7 @@ class MandatoryBracesIfStatementsSpec {
                 	if (true) println() else println()
                 	if (true) println() else if (false) println() else println()
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
@@ -209,7 +209,7 @@ class MandatoryBracesIfStatementsSpec {
                         else -> println()
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

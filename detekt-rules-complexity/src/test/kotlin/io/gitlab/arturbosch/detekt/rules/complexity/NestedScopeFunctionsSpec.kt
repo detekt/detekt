@@ -31,7 +31,7 @@ class NestedScopeFunctionsSpec(private val env: KotlinCoreEnvironment) {
                     1.run { }
                 }
             }
-        """
+        """.trimIndent()
         whenLintRuns()
         expectSourceLocation(3 to 11)
         expectFunctionInMsg("run")
@@ -45,7 +45,7 @@ class NestedScopeFunctionsSpec(private val env: KotlinCoreEnvironment) {
                     with(1) { }
                 }
             }
-        """
+        """.trimIndent()
         whenLintRuns()
         expectSourceLocation(3 to 9)
         expectFunctionInMsg("with")
@@ -61,7 +61,7 @@ class NestedScopeFunctionsSpec(private val env: KotlinCoreEnvironment) {
                     }
                 }
             }
-        """
+        """.trimIndent()
         whenLintRuns()
         expectSourceLocation(4 to 13)
     }
@@ -75,7 +75,7 @@ class NestedScopeFunctionsSpec(private val env: KotlinCoreEnvironment) {
                     with(1) { }
                 }
             }
-        """
+        """.trimIndent()
         whenLintRuns()
         expectNoFindings()
     }
@@ -89,7 +89,7 @@ class NestedScopeFunctionsSpec(private val env: KotlinCoreEnvironment) {
                 with(1) {}
                 with(1) {}
             }
-        """
+        """.trimIndent()
         whenLintRuns()
         expectNoFindings()
     }
@@ -102,7 +102,7 @@ class NestedScopeFunctionsSpec(private val env: KotlinCoreEnvironment) {
                     1.run { }
                 }
             }
-        """
+        """.trimIndent()
         whenLintRunsWithoutContext()
         expectNoFindings()
     }

@@ -32,7 +32,7 @@ class NullableBooleanCheckSpec(val env: KotlinCoreEnvironment) {
             fun foo(): Boolean {
                 return nullableBoolean() ?: $bool
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -48,7 +48,7 @@ class NullableBooleanCheckSpec(val env: KotlinCoreEnvironment) {
             fun foo(): Boolean {
                 return nullableBoolean() ?: $bool
             }
-        """
+        """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
@@ -69,7 +69,7 @@ class NullableBooleanCheckSpec(val env: KotlinCoreEnvironment) {
             fun foo() {
                 if (nullableBoolean() ?: $bool) println("foo")
             }
-        """
+        """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
@@ -89,7 +89,7 @@ class NullableBooleanCheckSpec(val env: KotlinCoreEnvironment) {
             fun foo(): Boolean {
                 return nullableBoolean() ?: Random.nextBoolean()
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
@@ -105,7 +105,7 @@ class NullableBooleanCheckSpec(val env: KotlinCoreEnvironment) {
             fun foo(): Any {
                 return nullableAny() ?: $bool
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
@@ -120,7 +120,7 @@ class NullableBooleanCheckSpec(val env: KotlinCoreEnvironment) {
             fun foo(): Int {
                 return nullableInt() ?: 0
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
@@ -133,7 +133,7 @@ class NullableBooleanCheckSpec(val env: KotlinCoreEnvironment) {
             fun foo(): Boolean {
                 return Random.nextBoolean() || false
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
