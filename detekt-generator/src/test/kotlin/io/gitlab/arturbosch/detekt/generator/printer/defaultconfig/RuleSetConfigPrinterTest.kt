@@ -194,7 +194,8 @@ internal class RuleSetConfigPrinterTest {
             fun `string list default value`() {
                 val given = configurationTemplate.copy(defaultValue = DefaultValue.of(listOf("a", "b", "c")))
                 val actual = yaml { printConfiguration(given) }
-                val expected = """name:
+                val expected = """
+                    |name:
                     |  - 'a'
                     |  - 'b'
                     |  - 'c'
@@ -221,7 +222,8 @@ internal class RuleSetConfigPrinterTest {
                     )
                 )
                 val actual = yaml { printConfiguration(given) }
-                val expected = """name:
+                val expected = """
+                    |name:
                     |  - reason: 'reason a'
                     |    value: 'a'
                     |  - value: 'b'

@@ -9,7 +9,7 @@ class KDocReferencesNonPublicPropertySpec {
 
     @Test
     fun `reports referenced non-public properties`() {
-        val code = """ 
+        val code = """
             /**
              * Comment
              * [prop1] - non-public property
@@ -26,7 +26,7 @@ class KDocReferencesNonPublicPropertySpec {
 
     @Test
     fun `reports referenced non-public properties in private class`() {
-        val code = """ 
+        val code = """
             /**
              * Comment
              * [prop1] - non-public property
@@ -43,7 +43,7 @@ class KDocReferencesNonPublicPropertySpec {
 
     @Test
     fun `reports referenced non-public properties in nested objects`() {
-        val code = """ 
+        val code = """
         /**
              * Comment
              * [prop1] - non-public property
@@ -72,7 +72,7 @@ class KDocReferencesNonPublicPropertySpec {
 
     @Test
     fun `does not report properties with no KDoc`() {
-        val code = """ 
+        val code = """
             class Test {
                 private val prop1 = 0
                 val prop2 = 0
@@ -109,7 +109,7 @@ class KDocReferencesNonPublicPropertySpec {
 
     @Test
     fun `does not report referenced public properties in nested objects`() {
-        val code = """ 
+        val code = """
             /**
              * Comment
              * [prop1] - public property

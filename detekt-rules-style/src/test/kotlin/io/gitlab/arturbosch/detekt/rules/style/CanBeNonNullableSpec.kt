@@ -579,7 +579,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
             inner class `in a non-return statement` {
                 @Test
                 fun `does report when the safe-qualified expression is the only expression of the function`() {
-                    val code = """   
+                    val code = """
                         class A(val foo: String)
 
                         fun foo(a: A?) {
@@ -899,7 +899,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
 
             @Test
             fun `does report null-check returning unit type`() {
-                val code = """   
+                val code = """
                     fun foo(a: Int?) {
                         if (a == null) return
                         println(a)
@@ -910,7 +910,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
 
             @Test
             fun `does report null-check returning unit type in block`() {
-                val code = """   
+                val code = """
                     fun foo(a: Int?) {
                         if (a == null) { return }
                         println(a)
@@ -921,7 +921,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
 
             @Test
             fun `does not report guard statement with side effect ahead`() {
-                val code = """   
+                val code = """
                     fun foo(a: Int?) {
                         println("side effect")
                         if (a == null) return
@@ -933,7 +933,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
 
             @Test
             fun `does not report null-check returning non-unit type`() {
-                val code = """   
+                val code = """
                     fun foo(a: Int?): Int {
                         if (a == null) return 0
                         println(a)
