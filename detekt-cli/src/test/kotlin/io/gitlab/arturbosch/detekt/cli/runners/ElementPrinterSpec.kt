@@ -18,7 +18,8 @@ class ElementPrinterSpec {
     }
 }
 
-private val expected = """0: KtFile
+private val expected = """
+0: KtFile
   1: KtPackageDirective
     1: KtNameReferenceExpression
     1: KtImportList
