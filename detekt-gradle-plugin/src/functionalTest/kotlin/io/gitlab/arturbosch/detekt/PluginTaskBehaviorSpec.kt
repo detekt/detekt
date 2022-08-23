@@ -16,6 +16,7 @@ class PluginTaskBehaviorSpec {
     val configFileName = "config.yml"
     val baselineFileName = "baseline.xml"
 
+    @Suppress("TrimMultilineRawString")
     val detektConfig = """
         |detekt {
         |    config = files("$configFileName")

@@ -76,6 +76,7 @@ class DetektTaskDslSpec {
 
         @BeforeAll
         fun beforeGroup() {
+            @Suppress("TrimMultilineRawString")
             val config = """
                 |detekt {
                 |    config.setFrom(files("firstConfig.yml", "secondConfig.yml"))
@@ -103,6 +104,7 @@ class DetektTaskDslSpec {
 
         @BeforeAll
         fun beforeGroup() {
+            @Suppress("TrimMultilineRawString")
             val config = """
                 |detekt {
                 |   baseline = file("$baselineFilename")
@@ -130,6 +132,7 @@ class DetektTaskDslSpec {
 
         @BeforeAll
         fun beforeGroup() {
+            @Suppress("TrimMultilineRawString")
             val config = """
                 |detekt {
                 |   baseline = file("$baselineFilename")
@@ -156,6 +159,7 @@ class DetektTaskDslSpec {
 
         @BeforeAll
         fun beforeGroup() {
+            @Suppress("TrimMultilineRawString")
             val config = """
                 |detekt {
                 |    input = files("$customSrc1", "$customSrc2", "folder_that_does_not_exist")
@@ -191,6 +195,7 @@ class DetektTaskDslSpec {
 
         @BeforeAll
         fun beforeGroup() {
+            @Suppress("TrimMultilineRawString")
             val config = """
                 |detekt {
                 |    source = files("$customSrc1", "$customSrc2", "folder_that_does_not_exist")
@@ -224,6 +229,7 @@ class DetektTaskDslSpec {
 
         @BeforeAll
         fun beforeGroup() {
+            @Suppress("TrimMultilineRawString")
             val config = """
                 |detekt {
                 |    reportsDir = file("build/detekt-reports")
@@ -266,6 +272,7 @@ class DetektTaskDslSpec {
 
         @BeforeAll
         fun beforeGroup() {
+            @Suppress("TrimMultilineRawString")
             val config = """
                 |detekt {
                 |    reportsDir = file("build/detekt-reports")
@@ -308,6 +315,7 @@ class DetektTaskDslSpec {
 
         @BeforeAll
         fun beforeGroup() {
+            @Suppress("TrimMultilineRawString")
             val config = """
                 |tasks.detekt {
                 |    reports {
@@ -346,6 +354,7 @@ class DetektTaskDslSpec {
         inner class `configured correctly` {
             @BeforeAll
             fun beforeGroup() {
+                @Suppress("TrimMultilineRawString")
                 val config = """
                     |tasks.detekt {
                     |    reports {
@@ -382,6 +391,7 @@ class DetektTaskDslSpec {
         inner class `report id is missing` {
             @BeforeAll
             fun beforeGroup() {
+                @Suppress("TrimMultilineRawString")
                 val config = """
                     |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                     |    reports {
@@ -408,6 +418,7 @@ class DetektTaskDslSpec {
         inner class `report filename is missing` {
             @BeforeAll
             fun beforeGroup() {
+                @Suppress("TrimMultilineRawString")
                 val config = """
                     |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                     |    reports {
@@ -436,6 +447,7 @@ class DetektTaskDslSpec {
             fun beforeGroup() {
                 val aDirectory = "\${rootDir}/src"
 
+                @Suppress("TrimMultilineRawString")
                 val config = """
                     |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                     |    reports {
@@ -463,6 +475,7 @@ class DetektTaskDslSpec {
             @ParameterizedTest
             @EnumSource(DetektReportType::class)
             fun `fails the build`(wellKnownType: DetektReportType) {
+                @Suppress("TrimMultilineRawString")
                 val config = """
                     |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                     |    reports {
@@ -488,6 +501,7 @@ class DetektTaskDslSpec {
 
         @BeforeAll
         fun beforeGroup() {
+            @Suppress("TrimMultilineRawString")
             val config = """
                 |detekt {
                 |    debug = true
@@ -567,6 +581,7 @@ class DetektTaskDslSpec {
     inner class `with an additional plugin` {
         @BeforeAll
         fun beforeGroup() {
+            @Suppress("TrimMultilineRawString")
             val config = """
                 |dependencies {
                 |   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$defaultDetektVersion")
@@ -596,6 +611,7 @@ class DetektTaskDslSpec {
 
         @BeforeAll
         fun beforeGroup() {
+            @Suppress("TrimMultilineRawString")
             val config = """
                 |detekt {
                 |    toolVersion = "$customVersion"
@@ -623,6 +639,7 @@ class DetektTaskDslSpec {
     inner class `and creating a custom task` {
         @BeforeAll
         fun beforeGroup() {
+            @Suppress("TrimMultilineRawString")
             val config = """
                 |task<io.gitlab.arturbosch.detekt.Detekt>("myDetekt") {
                 |    description = "Runs a custom detekt build."
