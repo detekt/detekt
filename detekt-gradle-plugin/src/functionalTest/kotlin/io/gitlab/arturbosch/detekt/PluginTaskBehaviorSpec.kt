@@ -17,10 +17,10 @@ class PluginTaskBehaviorSpec {
     val baselineFileName = "baseline.xml"
 
     val detektConfig = """
-                    |detekt {
-                    |    config = files("$configFileName")
-                    |    baseline = file("$baselineFileName")
-                    |}
+        |detekt {
+        |    config = files("$configFileName")
+        |    baseline = file("$baselineFileName")
+        |}
     """
 
     lateinit var gradleRunner: DslGradleRunner

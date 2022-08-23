@@ -24,9 +24,9 @@ class ConfigurationCacheSpec {
         @Test
         fun `can be loaded from the configuration cache`() {
             val detektConfig = """
-                        |detekt {
-                        |   baseline = file("build/baseline.xml")
-                        |}
+                |detekt {
+                |   baseline = file("build/baseline.xml")
+                |}
             """
             val gradleRunner = DslTestBuilder.kotlin()
                 .withDetektConfig(detektConfig)

@@ -77,9 +77,9 @@ class DetektTaskDslSpec {
         @BeforeAll
         fun beforeGroup() {
             val config = """
-                    |detekt {
-                    |    config.setFrom(files("firstConfig.yml", "secondConfig.yml"))
-                    |}
+                |detekt {
+                |    config.setFrom(files("firstConfig.yml", "secondConfig.yml"))
+                |}
             """
 
             gradleRunner = builder.withDetektConfig(config).build()
@@ -104,9 +104,9 @@ class DetektTaskDslSpec {
         @BeforeAll
         fun beforeGroup() {
             val config = """
-                    |detekt {
-                    |   baseline = file("$baselineFilename")
-                    |}
+                |detekt {
+                |   baseline = file("$baselineFilename")
+                |}
             """
 
             gradleRunner = builder
@@ -131,9 +131,9 @@ class DetektTaskDslSpec {
         @BeforeAll
         fun beforeGroup() {
             val config = """
-                    |detekt {
-                    |   baseline = file("$baselineFilename")
-                    |}
+                |detekt {
+                |   baseline = file("$baselineFilename")
+                |}
             """
 
             gradleRunner = builder
@@ -157,9 +157,9 @@ class DetektTaskDslSpec {
         @BeforeAll
         fun beforeGroup() {
             val config = """
-                    |detekt {
-                    |    input = files("$customSrc1", "$customSrc2", "folder_that_does_not_exist")
-                    |}
+                |detekt {
+                |    input = files("$customSrc1", "$customSrc2", "folder_that_does_not_exist")
+                |}
             """
 
             val projectLayout = ProjectLayout(1, srcDirs = listOf(customSrc1, customSrc2))
@@ -192,9 +192,9 @@ class DetektTaskDslSpec {
         @BeforeAll
         fun beforeGroup() {
             val config = """
-                    |detekt {
-                    |    source = files("$customSrc1", "$customSrc2", "folder_that_does_not_exist")
-                    |}
+                |detekt {
+                |    source = files("$customSrc1", "$customSrc2", "folder_that_does_not_exist")
+                |}
             """
 
             val projectLayout = ProjectLayout(1, srcDirs = listOf(customSrc1, customSrc2))
@@ -225,9 +225,9 @@ class DetektTaskDslSpec {
         @BeforeAll
         fun beforeGroup() {
             val config = """
-                    |detekt {
-                    |    reportsDir = file("build/detekt-reports")
-                    |}
+                |detekt {
+                |    reportsDir = file("build/detekt-reports")
+                |}
             """
 
             gradleRunner = builder
@@ -267,15 +267,15 @@ class DetektTaskDslSpec {
         @BeforeAll
         fun beforeGroup() {
             val config = """
-                    |detekt {
-                    |    reportsDir = file("build/detekt-reports")
-                    |}
-                    |
-                    |tasks.detekt {
-                    |    reports {
-                    |        xml.destination = file("build/xml-reports/custom-detekt.xml")
-                    |    }
-                    |}
+                |detekt {
+                |    reportsDir = file("build/detekt-reports")
+                |}
+                |
+                |tasks.detekt {
+                |    reports {
+                |        xml.destination = file("build/xml-reports/custom-detekt.xml")
+                |    }
+                |}
             """
 
             gradleRunner = builder
@@ -309,23 +309,23 @@ class DetektTaskDslSpec {
         @BeforeAll
         fun beforeGroup() {
             val config = """
-                    |tasks.detekt {
-                    |    reports {
-                    |        xml.enabled = false
-                    |        html {
-                    |            enabled = false
-                    |        }
-                    |        txt {
-                    |            enabled = false
-                    |        }
-                    |        sarif {
-                    |            enabled = false
-                    |        }
-                    |        md {
-                    |            enabled = false
-                    |        }
-                    |    }
-                    |}
+                |tasks.detekt {
+                |    reports {
+                |        xml.enabled = false
+                |        html {
+                |            enabled = false
+                |        }
+                |        txt {
+                |            enabled = false
+                |        }
+                |        sarif {
+                |            enabled = false
+                |        }
+                |        md {
+                |            enabled = false
+                |        }
+                |    }
+                |}
             """
 
             gradleRunner = builder
@@ -347,18 +347,18 @@ class DetektTaskDslSpec {
             @BeforeAll
             fun beforeGroup() {
                 val config = """
-                            |tasks.detekt {
-                            |    reports {
-                            |        custom {
-                            |           reportId = "customXml"
-                            |           destination = file("build/reports/custom.xml")
-                            |       }
-                            |        custom {
-                            |           reportId = "customJson"
-                            |           destination = file("build/reports/custom.json")
-                            |       }
-                            |    }
-                            |}
+                    |tasks.detekt {
+                    |    reports {
+                    |        custom {
+                    |           reportId = "customXml"
+                    |           destination = file("build/reports/custom.xml")
+                    |       }
+                    |        custom {
+                    |           reportId = "customJson"
+                    |           destination = file("build/reports/custom.json")
+                    |       }
+                    |    }
+                    |}
                 """
 
                 gradleRunner = builder.withDetektConfig(config).build()
@@ -383,13 +383,13 @@ class DetektTaskDslSpec {
             @BeforeAll
             fun beforeGroup() {
                 val config = """
-                            |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-                            |    reports {
-                            |        custom {
-                            |           destination = file("build/reports/custom.xml")
-                            |       }
-                            |    }
-                            |}
+                    |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+                    |    reports {
+                    |        custom {
+                    |           destination = file("build/reports/custom.xml")
+                    |       }
+                    |    }
+                    |}
                 """
 
                 gradleRunner = builder.withDetektConfig(config).build()
@@ -409,13 +409,13 @@ class DetektTaskDslSpec {
             @BeforeAll
             fun beforeGroup() {
                 val config = """
-                            |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-                            |    reports {
-                            |        custom {
-                            |           reportId = "customJson"
-                            |       }
-                            |    }
-                            |}
+                    |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+                    |    reports {
+                    |        custom {
+                    |           reportId = "customJson"
+                    |       }
+                    |    }
+                    |}
                 """
 
                 gradleRunner = builder.withDetektConfig(config).build()
@@ -437,14 +437,14 @@ class DetektTaskDslSpec {
                 val aDirectory = "\${rootDir}/src"
 
                 val config = """
-                            |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-                            |    reports {
-                            |        custom {
-                            |           reportId = "foo"
-                            |           destination = file("$aDirectory")
-                            |       }
-                            |    }
-                            |}
+                    |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+                    |    reports {
+                    |        custom {
+                    |           reportId = "foo"
+                    |           destination = file("$aDirectory")
+                    |       }
+                    |    }
+                    |}
                 """
 
                 gradleRunner = builder.withDetektConfig(config).build()
@@ -464,14 +464,14 @@ class DetektTaskDslSpec {
             @EnumSource(DetektReportType::class)
             fun `fails the build`(wellKnownType: DetektReportType) {
                 val config = """
-                                    |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-                                    |    reports {
-                                    |        custom {
-                                    |            reportId = "${wellKnownType.reportId}"
-                                    |            destination = file("build/reports/custom.xml")
-                                    |        }
-                                    |    }
-                                    |}
+                    |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+                    |    reports {
+                    |        custom {
+                    |            reportId = "${wellKnownType.reportId}"
+                    |            destination = file("build/reports/custom.xml")
+                    |        }
+                    |    }
+                    |}
                 """
 
                 gradleRunner = builder.withDetektConfig(config).build()
@@ -489,16 +489,16 @@ class DetektTaskDslSpec {
         @BeforeAll
         fun beforeGroup() {
             val config = """
-                    |detekt {
-                    |    debug = true
-                    |    parallel = true
-                    |    disableDefaultRuleSets = true
-                    |    failFast = true
-                    |    allRules = true
-                    |    autoCorrect = true
-                    |    buildUponDefaultConfig = true
-                    |    ignoreFailures = true
-                    |}
+                |detekt {
+                |    debug = true
+                |    parallel = true
+                |    disableDefaultRuleSets = true
+                |    failFast = true
+                |    allRules = true
+                |    autoCorrect = true
+                |    buildUponDefaultConfig = true
+                |    ignoreFailures = true
+                |}
             """
 
             gradleRunner = builder
@@ -568,9 +568,9 @@ class DetektTaskDslSpec {
         @BeforeAll
         fun beforeGroup() {
             val config = """
-                        |dependencies {
-                        |   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$defaultDetektVersion")
-                        |}
+                |dependencies {
+                |   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$defaultDetektVersion")
+                |}
             """
 
             gradleRunner = builder
@@ -597,9 +597,9 @@ class DetektTaskDslSpec {
         @BeforeAll
         fun beforeGroup() {
             val config = """
-                        |detekt {
-                        |    toolVersion = "$customVersion"
-                        |}
+                |detekt {
+                |    toolVersion = "$customVersion"
+                |}
             """
 
             gradleRunner = builder
