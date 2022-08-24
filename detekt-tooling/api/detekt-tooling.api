@@ -7,6 +7,25 @@ public final class io/github/detekt/tooling/api/AnalysisResultKt {
 	public static final fun exitCode (Lio/github/detekt/tooling/api/AnalysisResult;)I
 }
 
+public abstract interface class io/github/detekt/tooling/api/Baseline {
+	public abstract fun contains (Ljava/lang/String;)Z
+	public abstract fun getCurrentIssues ()Ljava/util/Set;
+	public abstract fun getManuallySuppressedIssues ()Ljava/util/Set;
+}
+
+public abstract interface class io/github/detekt/tooling/api/BaselineProvider {
+	public static final field Companion Lio/github/detekt/tooling/api/BaselineProvider$Companion;
+	public abstract fun id (Lio/gitlab/arturbosch/detekt/api/Finding;)Ljava/lang/String;
+	public abstract fun of (Ljava/util/Set;Ljava/util/Set;)Lio/github/detekt/tooling/api/Baseline;
+	public abstract fun read (Ljava/nio/file/Path;)Lio/github/detekt/tooling/api/Baseline;
+	public abstract fun write (Ljava/nio/file/Path;Lio/github/detekt/tooling/api/Baseline;)V
+}
+
+public final class io/github/detekt/tooling/api/BaselineProvider$Companion {
+	public final fun load (Ljava/lang/ClassLoader;)Lio/github/detekt/tooling/api/BaselineProvider;
+	public static synthetic fun load$default (Lio/github/detekt/tooling/api/BaselineProvider$Companion;Ljava/lang/ClassLoader;ILjava/lang/Object;)Lio/github/detekt/tooling/api/BaselineProvider;
+}
+
 public abstract interface class io/github/detekt/tooling/api/DefaultConfigurationProvider {
 	public static final field Companion Lio/github/detekt/tooling/api/DefaultConfigurationProvider$Companion;
 	public abstract fun copy (Ljava/nio/file/Path;)V

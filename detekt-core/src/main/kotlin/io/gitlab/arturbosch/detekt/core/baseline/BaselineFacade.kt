@@ -11,7 +11,7 @@ class BaselineFacade {
 
     fun transformResult(baselineFile: Path, result: Detektion): Detektion {
         return if (baselineExists(baselineFile)) {
-            BaselineFilteredResult(result, Baseline.load(baselineFile))
+            BaselineFilteredResult(result, DefaultBaseline.load(baselineFile))
         } else {
             result
         }
@@ -20,14 +20,15 @@ class BaselineFacade {
     fun createOrUpdate(baselineFile: Path, findings: List<Finding>) {
         val ids = findings.map { it.baselineId }.toSortedSet()
         val oldBaseline = if (baselineExists(baselineFile)) {
-            Baseline.load(baselineFile)
+            DefaultBaseline.load(baselineFile)
         } else {
-            Baseline(emptySet(), emptySet())
+            DefaultBaseline(emptySet(), emptySet())
         }
-        val baseline = oldBaseline.copy(currentIssues = ids)
+        val baselineFormat = BaselineFormat()
+        val baseline = baselineFormat.of(oldBaseline.manuallySuppressedIssues, ids)
         if (oldBaseline != baseline) {
             baselineFile.parent?.let { Files.createDirectories(it) }
-            BaselineFormat().write(baseline, baselineFile)
+            baselineFormat.write(baselineFile, baseline)
         }
     }
 
