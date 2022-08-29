@@ -258,7 +258,7 @@ private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(
             }
 
             override fun visitReferenceExpression(expression: KtReferenceExpression) {
-                parameters.remove(expression.text)
+                parameters.remove(expression.text.removeSurrounding("`"))
                 super.visitReferenceExpression(expression)
             }
         })
