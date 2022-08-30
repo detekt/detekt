@@ -73,6 +73,8 @@ formatting:
     active: false
   FunctionReturnTypeSpacing:
     active: true
+  FunctionStartOfBodySpacing:
+    active: true
   MaximumLineLength:
     active: false
 

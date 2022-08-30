@@ -51,6 +51,9 @@ formatting:
     functionBodyExpressionWrapping: 'default'
     maxLineLength: 120
     indentSize: 4
+  FunctionStartOfBodySpacing:
+    active: false
+    autoCorrect: true
   FunctionTypeReferenceSpacing:
     active: false
     autoCorrect: true
