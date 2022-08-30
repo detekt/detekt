@@ -69,30 +69,10 @@ formatting:
   active: true
   android: false
   autoCorrect: true
-  AnnotationSpacing:
-    active: true
-  EnumEntryNameCase:
-    active: true
   Filename:
     active: false
   MaximumLineLength:
     active: false
-  MultiLineIfElse:
-    active: true
-  NoEmptyFirstLineInMethodBlock:
-    active: true
-  PackageName:
-    active: true
-  SpacingAroundAngleBrackets:
-    active: true
-  SpacingAroundDoubleColon:
-    active: true
-  SpacingAroundUnaryOperator:
-    active: true
-  SpacingBetweenDeclarationsWithAnnotations:
-    active: true
-  SpacingBetweenDeclarationsWithComments:
-    active: true
 
 naming:
   ClassNaming:
