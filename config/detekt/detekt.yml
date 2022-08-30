@@ -71,6 +71,8 @@ formatting:
   autoCorrect: true
   Filename:
     active: false
+  FunctionReturnTypeSpacing:
+    active: true
   MaximumLineLength:
     active: false
 

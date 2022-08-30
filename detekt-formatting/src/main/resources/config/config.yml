@@ -41,6 +41,9 @@ formatting:
   FunKeywordSpacing:
     active: false
     autoCorrect: true
+  FunctionReturnTypeSpacing:
+    active: false
+    autoCorrect: true
   FunctionTypeReferenceSpacing:
     active: false
     autoCorrect: true
