@@ -55,6 +55,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundRangeOperato
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundUnaryOperator
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithAnnotations
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithComments
+import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenFunctionNameAndOpeningParenthesis
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplate
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TrailingComma
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TypeArgumentListSpacing
@@ -133,6 +134,7 @@ class KtLintMultiRule(config: Config = Config.empty) :
         ModifierListSpacing(config),
         NullableTypeSpacing(config),
         ParameterListSpacing(config),
+        SpacingBetweenFunctionNameAndOpeningParenthesis(config),
         TypeArgumentListSpacing(config),
         UnnecessaryParenthesesBeforeTrailingLambda(config),
     )

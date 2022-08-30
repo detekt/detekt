@@ -173,6 +173,9 @@ formatting:
   SpacingBetweenDeclarationsWithComments:
     active: true
     autoCorrect: true
+  SpacingBetweenFunctionNameAndOpeningParenthesis:
+    active: false
+    autoCorrect: true
   StringTemplate:
     active: true
     autoCorrect: true

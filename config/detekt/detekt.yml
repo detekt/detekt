@@ -81,6 +81,8 @@ formatting:
     active: true
   ParameterListSpacing:
     active: true
+  SpacingBetweenFunctionNameAndOpeningParenthesis:
+    active: true
 
 naming:
   ClassNaming:
