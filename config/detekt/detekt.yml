@@ -77,6 +77,8 @@ formatting:
     active: true
   MaximumLineLength:
     active: false
+  NullableTypeSpacing:
+    active: true
 
 naming:
   ClassNaming:

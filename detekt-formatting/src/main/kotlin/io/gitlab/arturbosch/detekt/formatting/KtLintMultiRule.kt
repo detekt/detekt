@@ -38,6 +38,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.NoTrailingSpaces
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoUnitReturn
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoUnusedImports
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoWildcardImports
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NullableTypeSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.PackageName
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ParameterListWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundAngleBrackets
@@ -129,6 +130,7 @@ class KtLintMultiRule(config: Config = Config.empty) :
         FunctionTypeReferenceSpacing(config),
         KdocWrapping(config),
         ModifierListSpacing(config),
+        NullableTypeSpacing(config),
         TypeArgumentListSpacing(config),
         UnnecessaryParenthesesBeforeTrailingLambda(config),
     )
