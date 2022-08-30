@@ -1469,6 +1469,17 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
+    inner class `backtick identifiers - #5251` {
+        @Test
+        fun `does not report used backtick parameters`() {
+            val code = """
+                fun test(`foo bar`: Int) = `foo bar`
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+    }
+
+    @Nested
     inner class `list get overloaded operator function - #3640` {
         @Test
         fun `report used private list get operator function - declared in a class - called by operator`() {

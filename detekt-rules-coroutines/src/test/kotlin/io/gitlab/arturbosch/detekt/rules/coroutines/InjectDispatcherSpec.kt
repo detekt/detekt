@@ -62,6 +62,19 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
+        fun `does not report when dispatcher is used as a secondary constructor parameter`() {
+            val code = """
+                import kotlinx.coroutines.CoroutineDispatcher
+                import kotlinx.coroutines.Dispatchers
+
+                class MyRepository(dispatcher: CoroutineDispatcher) {
+                    constructor() : this(Dispatchers.IO)
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
         fun `does not report when dispatcher is used as a property`() {
             val code = """
                 import kotlinx.coroutines.CoroutineDispatcher

@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package io.gitlab.arturbosch.detekt.internal
 
 import io.gitlab.arturbosch.detekt.DetektPlugin

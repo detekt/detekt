@@ -413,6 +413,21 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
         val findings = subject.compileAndLintWithContext(env, content)
         assertThat(findings).isEmpty()
     }
+
+    @Test
+    fun `does not report lets with invoke operator calls`() {
+        val findings = subject.compileAndLintWithContext(
+            env,
+            """
+            fun f(callback: ((Int) -> Int)?) {
+                callback?.let { that ->
+                    that(42)
+                }
+            }
+            """
+        )
+        assertThat(findings).isEmpty()
+    }
 }
 
 private const val MESSAGE_OMIT_LET = "let expression can be omitted"

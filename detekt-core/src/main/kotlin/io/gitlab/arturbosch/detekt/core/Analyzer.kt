@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
@@ -95,9 +94,10 @@ internal class Analyzer(
         bindingContext: BindingContext,
         compilerResources: CompilerResources
     ): Map<RuleSetId, List<Finding>> {
+        @Suppress("DEPRECATION")
         fun isCorrectable(rule: BaseRule): Boolean = when (rule) {
             is Rule -> rule.autoCorrect
-            is MultiRule -> rule.rules.any { it.autoCorrect }
+            is io.gitlab.arturbosch.detekt.api.MultiRule -> rule.rules.any { it.autoCorrect }
             else -> error("No other rule type expected.")
         }
 
@@ -154,11 +154,11 @@ private fun MutableMap<String, List<Finding>>.mergeSmells(other: Map<String, Lis
 
 private fun throwIllegalStateException(file: KtFile, error: Throwable): Nothing {
     val message = """
-    Analyzing ${file.absolutePath()} led to an exception. 
-    Location: ${error.stackTrace.firstOrNull()?.toString()}
-    The original exception message was: ${error.localizedMessage}
-    Running detekt '${whichDetekt() ?: "unknown"}' on Java '${whichJava()}' on OS '${whichOS()}'
-    If the exception message does not help, please feel free to create an issue on our GitHub page.
+        Analyzing ${file.absolutePath()} led to an exception.
+        Location: ${error.stackTrace.firstOrNull()?.toString()}
+        The original exception message was: ${error.localizedMessage}
+        Running detekt '${whichDetekt() ?: "unknown"}' on Java '${whichJava()}' on OS '${whichOS()}'
+        If the exception message does not help, please feel free to create an issue on our GitHub page.
     """.trimIndent()
     throw IllegalStateException(message, error)
 }

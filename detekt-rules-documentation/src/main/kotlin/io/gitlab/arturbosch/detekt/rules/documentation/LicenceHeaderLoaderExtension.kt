@@ -52,8 +52,8 @@ class LicenceHeaderLoaderExtension : FileProcessListener {
 
             require(Files.exists(templateFile)) {
                 """
-                Rule '$RULE_NAME': License template file not found at `${templateFile.toAbsolutePath()}`.
-                Create file license header file or check your running path.
+                    Rule '$RULE_NAME': License template file not found at `${templateFile.toAbsolutePath()}`.
+                    Create file license header file or check your running path.
                 """.trimIndent()
             }
 

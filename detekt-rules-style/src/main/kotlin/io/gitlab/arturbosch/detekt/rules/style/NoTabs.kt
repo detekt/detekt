@@ -10,9 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isPartOf
 import io.gitlab.arturbosch.detekt.rules.isPartOfString
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtStringTemplateEntryWithExpression
-import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 
 /**
  * This rule reports if tabs are used in Kotlin files.
@@ -30,9 +28,10 @@ class NoTabs(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    fun findTabs(file: KtFile) {
-        file.forEachDescendantOfType<PsiWhiteSpace> {
-            if (it.isTab()) report(CodeSmell(issue, Entity.from(it), "Tab character is in use."))
+    override fun visitWhiteSpace(space: PsiWhiteSpace) {
+        super.visitWhiteSpace(space)
+        if (space.isTab()) {
+            report(CodeSmell(issue, Entity.from(space), "Tab character is in use."))
         }
     }
 

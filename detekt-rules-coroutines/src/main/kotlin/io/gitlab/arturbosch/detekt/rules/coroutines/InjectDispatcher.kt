@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.psi.KtConstructorDelegationCall
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
@@ -60,7 +61,8 @@ class InjectDispatcher(config: Config) : Rule(config) {
         val type = expression.getType(bindingContext) ?: return
         val isCoroutineDispatcher = type.fqNameOrNull() == COROUTINE_DISPATCHER_FQCN ||
             type.supertypes().any { it.fqNameOrNull() == COROUTINE_DISPATCHER_FQCN }
-        val isUsedAsParameter = expression.getStrictParentOfType<KtParameter>() != null
+        val isUsedAsParameter = expression.getStrictParentOfType<KtParameter>() != null ||
+            expression.getStrictParentOfType<KtConstructorDelegationCall>() != null
         if (isCoroutineDispatcher && !isUsedAsParameter) {
             report(
                 CodeSmell(

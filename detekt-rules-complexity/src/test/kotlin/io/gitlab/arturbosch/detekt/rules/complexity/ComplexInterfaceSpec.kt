@@ -14,6 +14,9 @@ private val staticDeclarationsConfig = TestConfig(
 private val privateDeclarationsConfig = TestConfig(
     defaultConfigMap + ("includePrivateDeclarations" to true)
 )
+private val ignoreOverloadedConfig = TestConfig(
+    defaultConfigMap + ("ignoreOverloaded" to true)
+)
 
 class ComplexInterfaceSpec {
 
@@ -139,6 +142,57 @@ class ComplexInterfaceSpec {
             fun `does report complex interface with includePrivateDeclarations config`() {
                 val rule = ComplexInterface(privateDeclarationsConfig)
                 assertThat(rule.compileAndLint(code)).hasSize(1)
+            }
+        }
+
+        @Nested
+        inner class `overloaded methods` {
+            val code = """
+                interface I {
+                    fun f1()
+                    fun f1(i: Int)
+                    val i1: Int
+                    fun fImpl() {}
+                }
+            """
+
+            @Test
+            fun `reports complex interface with overloaded methods`() {
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
+            @Test
+            fun `does not report simple interface with ignoreOverloaded`() {
+                val rule = ComplexInterface(ignoreOverloadedConfig)
+                assertThat(rule.compileAndLint(code)).isEmpty()
+            }
+
+            @Test
+            fun `reports complex interface with extension methods with a different receiver`() {
+                val interfaceWithExtension = """
+                    interface I {
+                        fun f1()
+                        fun String.f1(i: Int)
+                        val i1: Int
+                        fun fImpl() {}
+                    }
+                """
+                val rule = ComplexInterface(ignoreOverloadedConfig)
+                assertThat(rule.compileAndLint(interfaceWithExtension)).hasSize(1)
+            }
+
+            @Test
+            fun `does not report simple interface with extension methods with the same receiver`() {
+                val interfaceWithOverloadedExtensions = """
+                    interface I {
+                        fun String.f1()
+                        fun String.f1(i: Int)
+                        val i1: Int
+                        fun fImpl() {}
+                    }
+                """
+                val rule = ComplexInterface(ignoreOverloadedConfig)
+                assertThat(rule.compileAndLint(interfaceWithOverloadedExtensions)).isEmpty()
             }
         }
     }

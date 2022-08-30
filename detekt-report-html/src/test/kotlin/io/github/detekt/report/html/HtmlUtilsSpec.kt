@@ -35,16 +35,16 @@ class HtmlUtilsSpec {
 
         assertThat(snippet).isEqualTo(
             """
-            <div>
-              <pre><code><span class="lineno">   4 </span>// reports 1 - a comment with trailing space
-            <span class="lineno">   5 </span>// A comment
-            <span class="lineno">   6 </span>// reports 1
-            <span class="lineno">   7 </span><span class="error">class TrailingWhitespacePositive {</span>
-            <span class="lineno">   8 </span>    // reports 1 - line with just one tab
-            <span class="lineno">   9 </span>
-            <span class="lineno">  10 </span>    // reports 1
-            </code></pre>
-            </div>
+                <div>
+                  <pre><code><span class="lineno">   4 </span>// reports 1 - a comment with trailing space
+                <span class="lineno">   5 </span>// A comment
+                <span class="lineno">   6 </span>// reports 1
+                <span class="lineno">   7 </span><span class="error">class TrailingWhitespacePositive {</span>
+                <span class="lineno">   8 </span>    // reports 1 - line with just one tab
+                <span class="lineno">   9 </span>
+                <span class="lineno">  10 </span>    // reports 1
+                </code></pre>
+                </div>
 
             """.trimIndent()
         )
@@ -58,16 +58,16 @@ class HtmlUtilsSpec {
 
         assertThat(snippet).isEqualTo(
             """
-            <div>
-              <pre><code><span class="lineno">   4 </span>// reports 1 - a comment with trailing space
-            <span class="lineno">   5 </span>// A comment
-            <span class="lineno">   6 </span>// reports 1
-            <span class="lineno">   7 </span>class <span class="error">TrailingWhitespacePositive</span> {
-            <span class="lineno">   8 </span>    // reports 1 - line with just one tab
-            <span class="lineno">   9 </span>
-            <span class="lineno">  10 </span>    // reports 1
-            </code></pre>
-            </div>
+                <div>
+                  <pre><code><span class="lineno">   4 </span>// reports 1 - a comment with trailing space
+                <span class="lineno">   5 </span>// A comment
+                <span class="lineno">   6 </span>// reports 1
+                <span class="lineno">   7 </span>class <span class="error">TrailingWhitespacePositive</span> {
+                <span class="lineno">   8 </span>    // reports 1 - line with just one tab
+                <span class="lineno">   9 </span>
+                <span class="lineno">  10 </span>    // reports 1
+                </code></pre>
+                </div>
 
             """.trimIndent()
         )
@@ -81,16 +81,16 @@ class HtmlUtilsSpec {
 
         assertThat(snippet).isEqualTo(
             """
-            <div>
-              <pre><code><span class="lineno">   4 </span>// reports 1 - a comment with trailing space
-            <span class="lineno">   5 </span>// A comment
-            <span class="lineno">   6 </span>// reports 1
-            <span class="lineno">   7 </span>class <span class="error">TrailingWhitespacePositive {</span>
-            <span class="lineno">   8 </span><span class="error">    // reports 1 - line with just one</span> tab
-            <span class="lineno">   9 </span>
-            <span class="lineno">  10 </span>    // reports 1
-            </code></pre>
-            </div>
+                <div>
+                  <pre><code><span class="lineno">   4 </span>// reports 1 - a comment with trailing space
+                <span class="lineno">   5 </span>// A comment
+                <span class="lineno">   6 </span>// reports 1
+                <span class="lineno">   7 </span>class <span class="error">TrailingWhitespacePositive {</span>
+                <span class="lineno">   8 </span><span class="error">    // reports 1 - line with just one</span> tab
+                <span class="lineno">   9 </span>
+                <span class="lineno">  10 </span>    // reports 1
+                </code></pre>
+                </div>
 
             """.trimIndent()
         )

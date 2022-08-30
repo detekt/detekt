@@ -45,8 +45,10 @@ const config = {
       '@docusaurus/plugin-client-redirects',
       {
         redirects: [
-          { to: '/docs/introduction/changelog', from: '/changelog.html' },
-          { to: '/docs/introduction/changelog-rc', from: '/changelog-rc.html' },
+          { to: '/changelog', from: '/docs/introduction/changelog' },
+          { to: '/changelog-rc', from: '/docs/introduction/changelog-rc' },
+          { to: '/changelog', from: '/changelog.html' },
+          { to: '/changelog-rc', from: '/changelog-rc.html' },
           { to: '/docs/introduction/configurations', from: '/configurations.html' },
           { to: '/docs/introduction/reporting', from: '/reporting.html' },
           { to: '/docs/introduction/suppressing-rules', from: '/suppressing-rules.html' },
@@ -105,6 +107,17 @@ const config = {
             href: 'https://detekt.dev/kdoc/',
             position: 'left',
             label: 'API',
+          },
+          {
+            type: "docsVersionDropdown",
+            position: "right",
+            dropdownActiveClassDisabled: true,
+            dropdownItemsAfter: [
+              {
+                to: "/changelog",
+                label: "All changelogs",
+              },
+            ],
           },
           {
             href: 'https://github.com/detekt/detekt',

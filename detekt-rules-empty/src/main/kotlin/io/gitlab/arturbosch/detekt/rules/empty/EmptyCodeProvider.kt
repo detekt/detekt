@@ -17,7 +17,21 @@ class EmptyCodeProvider : DefaultRuleSetProvider {
     override fun instance(config: Config): RuleSet = RuleSet(
         ruleSetId,
         listOf(
-            EmptyBlocks(config)
+            EmptyCatchBlock(config),
+            EmptyClassBlock(config),
+            EmptyDefaultConstructor(config),
+            EmptyDoWhileBlock(config),
+            EmptyElseBlock(config),
+            EmptyFinallyBlock(config),
+            EmptyForBlock(config),
+            EmptyFunctionBlock(config),
+            EmptyIfBlock(config),
+            EmptyInitBlock(config),
+            EmptyKtFile(config),
+            EmptySecondaryConstructor(config),
+            EmptyTryBlock(config),
+            EmptyWhenBlock(config),
+            EmptyWhileBlock(config),
         )
     )
 }

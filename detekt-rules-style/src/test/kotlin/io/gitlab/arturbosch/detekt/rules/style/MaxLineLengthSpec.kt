@@ -19,16 +19,13 @@ class MaxLineLengthSpec {
 
     @Nested
     inner class `a kt file with some long lines` {
-
-        val file = compileForTest(Case.MaxLineLength.path())
-        val lines = file.text.splitToSequence("\n")
-        val fileContent = KtFileContent(file, lines)
+        private val file = compileForTest(Case.MaxLineLength.path())
 
         @Test
         fun `should report no errors when maxLineLength is set to 200`() {
             val rule = MaxLineLength(TestConfig(mapOf(MAX_LINE_LENGTH to "200")))
 
-            rule.visit(fileContent)
+            rule.visitKtFile(file)
             assertThat(rule.findings).isEmpty()
         }
 
@@ -36,7 +33,15 @@ class MaxLineLengthSpec {
         fun `should report all errors with default maxLineLength`() {
             val rule = MaxLineLength()
 
-            rule.visit(fileContent)
+            rule.visitKtFile(file)
+            assertThat(rule.findings).hasSize(3)
+        }
+
+        @Test
+        fun `should report all errors with default maxLineLength including raw strings`() {
+            val rule = MaxLineLength(TestConfig("excludeRawStrings" to false))
+
+            rule.visitKtFile(file)
             assertThat(rule.findings).hasSize(7)
         }
 
@@ -44,7 +49,7 @@ class MaxLineLengthSpec {
         fun `should report meaningful signature for all violations`() {
             val rule = MaxLineLength()
 
-            rule.visit(fileContent)
+            rule.visitKtFile(file)
             val locations = rule.findings.map { it.signature.substringAfterLast('$') }
             doAssert(locations).allSatisfy { doAssert(it).isNotBlank() }
         }
@@ -52,16 +57,13 @@ class MaxLineLengthSpec {
 
     @Nested
     inner class `a kt file with long but suppressed lines` {
-
-        val file = compileForTest(Case.MaxLineLengthSuppressed.path())
-        val lines = file.text.splitToSequence("\n")
-        val fileContent = KtFileContent(file, lines)
+        private val file = compileForTest(Case.MaxLineLengthSuppressed.path())
 
         @Test
         fun `should not report as lines are suppressed`() {
             val rule = MaxLineLength()
 
-            rule.visit(fileContent)
+            rule.visitKtFile(file)
             assertThat(rule.findings).isEmpty()
         }
     }
@@ -69,17 +71,15 @@ class MaxLineLengthSpec {
     @Nested
     inner class `a kt file with a long package name and long import statements` {
         val code = """
-        package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
+            package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
 
-        import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
+            import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
 
-        class Test {
-        }
+            class Test {
+            }
         """
 
-        val file = compileContentForTest(code)
-        val lines = file.text.splitToSequence("\n")
-        val fileContent = KtFileContent(file, lines)
+        private val file = compileContentForTest(code)
 
         @Test
         fun `should not report the package statement and import statements by default`() {
@@ -91,7 +91,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            rule.visit(fileContent)
+            rule.visitKtFile(file)
             assertThat(rule.findings).isEmpty()
         }
 
@@ -107,7 +107,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            rule.visit(fileContent)
+            rule.visitKtFile(file)
             assertThat(rule.findings).hasSize(2)
         }
 
@@ -115,37 +115,28 @@ class MaxLineLengthSpec {
         fun `should not report anything if both package and import statements are disabled`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    mapOf(
-                        MAX_LINE_LENGTH to "60",
-                        EXCLUDE_PACKAGE_STATEMENTS to "true",
-                        EXCLUDE_IMPORT_STATEMENTS to "true"
-                    )
+                    MAX_LINE_LENGTH to "60",
+                    EXCLUDE_PACKAGE_STATEMENTS to "true",
+                    EXCLUDE_IMPORT_STATEMENTS to "true",
                 )
             )
 
-            rule.visit(fileContent)
+            rule.visitKtFile(file)
             assertThat(rule.findings).isEmpty()
         }
     }
 
     @Nested
     inner class `a kt file with a long package name, long import statements, a long line and long comments` {
-
-        val file = compileForTest(Case.MaxLineLengthWithLongComments.path())
-        val lines = file.text.splitToSequence("\n")
-        val fileContent = KtFileContent(file, lines)
+        private val file = compileForTest(Case.MaxLineLengthWithLongComments.path())
 
         @Test
         fun `should report the package statement, import statements, line and comments by default`() {
             val rule = MaxLineLength(
-                TestConfig(
-                    mapOf(
-                        MAX_LINE_LENGTH to "60"
-                    )
-                )
+                TestConfig(MAX_LINE_LENGTH to "60")
             )
 
-            rule.visit(fileContent)
+            rule.visitKtFile(file)
             assertThat(rule.findings).hasSize(8)
         }
 
@@ -153,16 +144,14 @@ class MaxLineLengthSpec {
         fun `should report the package statement, import statements, line and comments if they're enabled`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    mapOf(
-                        MAX_LINE_LENGTH to "60",
-                        EXCLUDE_PACKAGE_STATEMENTS to "false",
-                        EXCLUDE_IMPORT_STATEMENTS to "false",
-                        EXCLUDE_COMMENT_STATEMENTS to "false"
-                    )
+                    MAX_LINE_LENGTH to "60",
+                    EXCLUDE_PACKAGE_STATEMENTS to "false",
+                    EXCLUDE_IMPORT_STATEMENTS to "false",
+                    EXCLUDE_COMMENT_STATEMENTS to "false",
                 )
             )
 
-            rule.visit(fileContent)
+            rule.visitKtFile(file)
             assertThat(rule.findings).hasSize(8)
         }
 
@@ -177,7 +166,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            rule.visit(fileContent)
+            rule.visitKtFile(file)
             assertThat(rule.findings).hasSize(5)
         }
     }
@@ -185,30 +174,24 @@ class MaxLineLengthSpec {
     @Nested
     inner class `a kt file with a long package name, long import statements and a long line` {
         val code = """
-        package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
+            package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
 
-        import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
+            import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
 
-        class Test {
-            fun anIncrediblyLongAndComplexMethodNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot() {}
-        }
+            class Test {
+                fun anIncrediblyLongAndComplexMethodNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot() {}
+            }
         """.trimIndent()
 
-        val file = compileContentForTest(code)
-        val lines = file.text.splitToSequence("\n")
-        val fileContent = KtFileContent(file, lines)
+        private val file = compileContentForTest(code)
 
         @Test
         fun `should only the function line by default`() {
             val rule = MaxLineLength(
-                TestConfig(
-                    mapOf(
-                        MAX_LINE_LENGTH to "60"
-                    )
-                )
+                TestConfig(MAX_LINE_LENGTH to "60")
             )
 
-            rule.visit(fileContent)
+            rule.visitKtFile(file)
             assertThat(rule.findings).hasSize(1)
         }
 
@@ -216,15 +199,13 @@ class MaxLineLengthSpec {
         fun `should report the package statement, import statements and line if they're not excluded`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    mapOf(
-                        MAX_LINE_LENGTH to "60",
-                        EXCLUDE_PACKAGE_STATEMENTS to "false",
-                        EXCLUDE_IMPORT_STATEMENTS to "false"
-                    )
+                    MAX_LINE_LENGTH to "60",
+                    EXCLUDE_PACKAGE_STATEMENTS to "false",
+                    EXCLUDE_IMPORT_STATEMENTS to "false",
                 )
             )
 
-            rule.visit(fileContent)
+            rule.visitKtFile(file)
             assertThat(rule.findings).hasSize(3)
         }
 
@@ -232,15 +213,13 @@ class MaxLineLengthSpec {
         fun `should report only method if both package and import statements are disabled`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    mapOf(
-                        MAX_LINE_LENGTH to "60",
-                        EXCLUDE_PACKAGE_STATEMENTS to "true",
-                        EXCLUDE_IMPORT_STATEMENTS to "true"
-                    )
+                    MAX_LINE_LENGTH to "60",
+                    EXCLUDE_PACKAGE_STATEMENTS to "true",
+                    EXCLUDE_IMPORT_STATEMENTS to "true",
                 )
             )
 
-            rule.visit(fileContent)
+            rule.visitKtFile(file)
             assertThat(rule.findings).hasSize(1)
         }
 
@@ -248,15 +227,13 @@ class MaxLineLengthSpec {
         fun `should report correct line and column for function with excessive length`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    mapOf(
-                        MAX_LINE_LENGTH to "60",
-                        EXCLUDE_PACKAGE_STATEMENTS to "true",
-                        EXCLUDE_IMPORT_STATEMENTS to "true"
-                    )
+                    MAX_LINE_LENGTH to "60",
+                    EXCLUDE_PACKAGE_STATEMENTS to "true",
+                    EXCLUDE_IMPORT_STATEMENTS to "true",
                 )
             )
 
-            rule.visit(fileContent)
+            rule.visitKtFile(file)
             assertThat(rule.findings).hasSize(1)
             assertThat(rule.findings).hasStartSourceLocations(SourceLocation(6, 5))
         }

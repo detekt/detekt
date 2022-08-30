@@ -99,8 +99,13 @@ class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
                 Precedence.SIMPLE_NAME, // (a to b) to c
             ),
 
-            // (a * b) + c
-            Precedence.MULTIPLICATIVE to arrayOf(Precedence.ADDITIVE),
+            Precedence.MULTIPLICATIVE to arrayOf(
+                Precedence.ADDITIVE, // (a * b) + c
+                Precedence.RANGE, // (a / b)..(c * d)
+            ),
+
+            // (a + b)..(c + d)
+            Precedence.ADDITIVE to arrayOf(Precedence.RANGE),
 
             // (a && b) || c
             Precedence.CONJUNCTION to arrayOf(Precedence.DISJUNCTION),

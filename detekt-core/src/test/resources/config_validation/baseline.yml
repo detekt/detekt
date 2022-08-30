@@ -1,5 +1,15 @@
+build:
+  maxIssues: 1
 config:
   warningsAsErrors: true
+  checkExhaustiveness: false
+processors:
+  active: true
+console-reports:
+  active: true
+output-reports:
+  active: true
+
 complexity:
   LongMethod:
     active: true
@@ -17,6 +27,7 @@ complexity:
       active: true
 
 style:
+  active: true
   WildcardImport:
     active: true
   NoElseInWhenExpression:
@@ -26,4 +37,5 @@ style:
     ignoreNumbers: ['-1', '0', '1', '2']
 
 comments:
-  active: false
+  CommentOverPrivateProperty:
+    active: false

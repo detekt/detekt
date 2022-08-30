@@ -8,8 +8,9 @@ import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Provider
+import org.gradle.api.services.BuildService
+import org.gradle.api.services.BuildServiceParameters
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.InputFiles
@@ -19,13 +20,11 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
+import java.io.File
 import java.nio.file.Files
-import javax.inject.Inject
 
 @CacheableTask
-open class DetektGenerateConfigTask @Inject constructor(
-    private val objects: ObjectFactory
-) : DefaultTask() {
+abstract class DetektGenerateConfigTask : DefaultTask() {
 
     init {
         description = "Generate a detekt configuration file inside your project."
@@ -33,41 +32,41 @@ open class DetektGenerateConfigTask @Inject constructor(
     }
 
     @get:Classpath
-    val detektClasspath: ConfigurableFileCollection = project.objects.fileCollection()
+    abstract val detektClasspath: ConfigurableFileCollection
 
     @get:Classpath
-    val pluginClasspath: ConfigurableFileCollection = objects.fileCollection()
+    abstract val pluginClasspath: ConfigurableFileCollection
 
     @get:InputFiles
     @get:Optional
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    val config: ConfigurableFileCollection = project.objects.fileCollection()
+    abstract val config: ConfigurableFileCollection
 
     private val defaultConfigPath = project.rootDir.toPath().resolve(CONFIG_DIR_NAME).resolve(CONFIG_FILE)
 
-    private val configurationToUse: ConfigurableFileCollection
+    private val configurationToUse: File
         get() = if (config.isEmpty) {
-            objects.fileCollection().from(defaultConfigPath)
+            defaultConfigPath.toFile()
         } else {
-            config
+            config.last()
         }
 
     @get:Internal
     internal val arguments: Provider<List<String>> = project.provider {
         listOf(
             GenerateConfigArgument,
-            ConfigArgument(configurationToUse.last())
+            ConfigArgument(configurationToUse)
         ).flatMap(CliArgument::toArgument)
     }
 
     @TaskAction
     fun generateConfig() {
-        if (configurationToUse.last().exists()) {
-            logger.warn("Skipping config file generation; file already exists at ${configurationToUse.last()}")
+        if (configurationToUse.exists()) {
+            logger.warn("Skipping config file generation; file already exists at $configurationToUse")
             return
         }
 
-        Files.createDirectories(configurationToUse.last().parentFile.toPath())
+        Files.createDirectories(configurationToUse.parentFile.toPath())
 
         DetektInvoker.create(task = this).invokeCli(
             arguments = arguments.get(),
@@ -75,4 +74,7 @@ open class DetektGenerateConfigTask @Inject constructor(
             taskName = name,
         )
     }
+
+    @Suppress("UnnecessaryAbstractClass")
+    abstract class SingleExecutionBuildService : BuildService<BuildServiceParameters.None>
 }

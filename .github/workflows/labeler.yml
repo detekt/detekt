@@ -4,6 +4,7 @@ on:
 
 jobs:
   label-pr:
+    if: ${{ github.event.sender != 'codecov' }}
     permissions:
       contents: read
       pull-requests: write

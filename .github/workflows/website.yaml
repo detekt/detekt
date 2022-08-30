@@ -36,7 +36,7 @@ jobs:
           cache-dependency-path: 'website/yarn.lock'
 
       - name: Build Detekt Documentation
-        uses: gradle/gradle-build-action@cd3cedc781988c804f626f4cd2dc51d0bdf02a12 # tag=v2
+        uses: gradle/gradle-build-action@356abb47e7664b5505e25d7997a5a522a17c62d9 # tag=v2
         with:
           arguments: :detekt-generator:generateDocumentation
 

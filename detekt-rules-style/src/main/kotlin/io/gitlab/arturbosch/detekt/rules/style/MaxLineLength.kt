@@ -13,6 +13,8 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 
 /**
  * This rule reports lines of code which exceed a defined maximum line length.
@@ -43,14 +45,22 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
     @Configuration("if comment statements should be ignored")
     private val excludeCommentStatements: Boolean by config(false)
 
-    fun visit(element: KtFileContent) {
+    @Configuration("if comment statements should be ignored")
+    private val excludeRawStrings: Boolean by config(true)
+
+    override fun visitKtFile(file: KtFile) {
+        super.visitKtFile(file)
+        visit(file.toFileContent())
+    }
+
+    private fun visit(element: KtFileContent) {
         var offset = 0
         val lines = element.content
         val file = element.file
 
         for (line in lines) {
             offset += line.length
-            if (!isValidLine(line)) {
+            if (!isValidLine(file, offset, line)) {
                 val ktElement = findFirstMeaningfulKtElementInParents(file, offset, line)
                 if (ktElement != null) {
                     report(CodeSmell(issue, Entity.from(ktElement), issue.description))
@@ -63,15 +73,22 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun isValidLine(line: String): Boolean {
+    private fun isValidLine(file: KtFile, offset: Int, line: String): Boolean {
         val isUrl = line.lastArgumentMatchesUrl()
-        return line.length <= maxLineLength || isIgnoredStatement(line) || isUrl
+        return line.length <= maxLineLength || isIgnoredStatement(file, offset, line) || isUrl
     }
 
-    private fun isIgnoredStatement(line: String): Boolean {
+    private fun isIgnoredStatement(file: KtFile, offset: Int, line: String): Boolean {
         return containsIgnoredPackageStatement(line) ||
             containsIgnoredImportStatement(line) ||
-            containsIgnoredCommentStatement(line)
+            containsIgnoredCommentStatement(line) ||
+            containsIgnoredRawString(file, offset, line)
+    }
+
+    private fun containsIgnoredRawString(file: KtFile, offset: Int, line: String): Boolean {
+        if (!excludeRawStrings) return false
+
+        return findKtElementInParents(file, offset, line).lastOrNull()?.isInsideRawString() == true
     }
 
     private fun containsIgnoredPackageStatement(line: String): Boolean {
@@ -103,4 +120,8 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
                 .firstOrNull { !BLANK_OR_QUOTES.matches(it.text) }
         }
     }
+}
+
+private fun PsiElement.isInsideRawString(): Boolean {
+    return this is KtStringTemplateExpression || getParentOfType<KtStringTemplateExpression>(false) != null
 }
