@@ -127,6 +127,9 @@ formatting:
   PackageName:
     active: true
     autoCorrect: true
+  ParameterListSpacing:
+    active: false
+    autoCorrect: true
   ParameterListWrapping:
     active: true
     autoCorrect: true

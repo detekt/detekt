@@ -79,6 +79,8 @@ formatting:
     active: false
   NullableTypeSpacing:
     active: true
+  ParameterListSpacing:
+    active: true
 
 naming:
   ClassNaming:
