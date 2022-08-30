@@ -15,6 +15,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.Filename
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FinalNewline
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunKeywordSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionReturnTypeSpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionSignature
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionTypeReferenceSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ImportOrdering
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Indentation
@@ -122,6 +123,7 @@ class KtLintMultiRule(config: Config = Config.empty) :
         DiscouragedCommentLocation(config),
         FunctionReturnTypeSpacing(config),
         FunKeywordSpacing(config),
+        FunctionSignature(config),
         FunctionTypeReferenceSpacing(config),
         KdocWrapping(config),
         ModifierListSpacing(config),

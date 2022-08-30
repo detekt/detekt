@@ -44,6 +44,13 @@ formatting:
   FunctionReturnTypeSpacing:
     active: false
     autoCorrect: true
+  FunctionSignature:
+    active: false
+    autoCorrect: true
+    forceMultilineWhenParameterCountGreaterOrEqualThan: 2147483647
+    functionBodyExpressionWrapping: 'default'
+    maxLineLength: 120
+    indentSize: 4
   FunctionTypeReferenceSpacing:
     active: false
     autoCorrect: true
