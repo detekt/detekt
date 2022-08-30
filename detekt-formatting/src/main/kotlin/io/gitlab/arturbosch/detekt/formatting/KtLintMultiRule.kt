@@ -59,6 +59,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenFunctionNam
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplate
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TrailingComma
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TypeArgumentListSpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.TypeParameterListSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.UnnecessaryParenthesesBeforeTrailingLambda
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Wrapping
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
@@ -136,6 +137,7 @@ class KtLintMultiRule(config: Config = Config.empty) :
         ParameterListSpacing(config),
         SpacingBetweenFunctionNameAndOpeningParenthesis(config),
         TypeArgumentListSpacing(config),
+        TypeParameterListSpacing(config),
         UnnecessaryParenthesesBeforeTrailingLambda(config),
     )
 

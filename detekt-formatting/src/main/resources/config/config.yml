@@ -187,6 +187,9 @@ formatting:
   TypeArgumentListSpacing:
     active: false
     autoCorrect: true
+  TypeParameterListSpacing:
+    active: false
+    autoCorrect: true
   UnnecessaryParenthesesBeforeTrailingLambda:
     active: false
     autoCorrect: true
