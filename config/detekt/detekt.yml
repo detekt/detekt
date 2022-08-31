@@ -31,6 +31,10 @@ complexity:
     excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
   MethodOverloading:
     active: true
+  NestedScopeFunctions:
+    active: true
+    threshold: 1
+    functions: ['kotlin.apply', 'kotlin.run', 'kotlin.with']
   TooManyFunctions:
     excludes: ['**/test/**', '**/functionalTest/**']
 
