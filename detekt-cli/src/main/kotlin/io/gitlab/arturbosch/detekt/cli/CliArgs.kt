@@ -194,6 +194,13 @@ class CliArgs {
     var jvmTarget: String = JvmTarget.DEFAULT.description
 
     @Parameter(
+        names = ["--jdk-home"],
+        description = "EXPERIMENTAL: Use a custom JDK home directory to include into the classpath",
+        converter = PathConverter::class
+    )
+    var jdkHome: Path? = null
+
+    @Parameter(
         names = ["--version"],
         description = "Prints the detekt CLI version."
     )
