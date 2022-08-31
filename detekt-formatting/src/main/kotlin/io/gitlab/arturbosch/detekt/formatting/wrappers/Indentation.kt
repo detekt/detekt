@@ -13,7 +13,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 
 /**
- * See [ktlint-readme](https://github.com/pinterest/ktlint#standard-rules) for documentation.
+ * See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#indentation) for documentation.
  */
 @ActiveByDefault(since = "1.19.0")
 @AutoCorrectable(since = "1.0.0")
