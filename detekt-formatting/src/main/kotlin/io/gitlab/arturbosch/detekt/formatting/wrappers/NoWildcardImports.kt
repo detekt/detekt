@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint-readme](https://github.com/pinterest/ktlint#standard-rules) for documentation.
+ * See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#no-wildcard-imports) for documentation.
  */
 @ActiveByDefault(since = "1.0.0")
 class NoWildcardImports(config: Config) : FormattingRule(config) {

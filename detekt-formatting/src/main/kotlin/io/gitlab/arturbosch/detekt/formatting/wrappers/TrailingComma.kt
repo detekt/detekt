@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint-readme](https://github.com/pinterest/ktlint#standard-rules) for documentation.
+ * See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/) for documentation.
  */
 @AutoCorrectable(since = "1.20.0")
 class TrailingComma(config: Config) : FormattingRule(config) {

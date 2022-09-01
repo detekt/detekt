@@ -11,7 +11,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint-readme](https://github.com/pinterest/ktlint#standard-rules) for documentation.
+ * See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#max-line-length) for documentation.
  *
  * This rules overlaps with [style>MaxLineLength](https://detekt.dev/style.html#maxlinelength)
  * from the standard rules, make sure to enable just one or keep them aligned. The pro of this rule is that it can
