@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.invoke
 
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFile
 import java.io.File
@@ -21,6 +22,7 @@ private const val CREATE_BASELINE_PARAMETER = "--create-baseline"
 private const val CLASSPATH_PARAMETER = "--classpath"
 private const val LANGUAGE_VERSION_PARAMETER = "--language-version"
 private const val JVM_TARGET_PARAMETER = "--jvm-target"
+private const val JDK_HOME_PARAMETER = "--jdk-home"
 private const val BASE_PATH_PARAMETER = "--base-path"
 
 internal sealed class CliArgument {
@@ -56,6 +58,10 @@ internal data class LanguageVersionArgument(val languageVersion: String?) : CliA
 
 internal data class JvmTargetArgument(val jvmTarget: String?) : CliArgument() {
     override fun toArgument() = jvmTarget?.let { listOf(JVM_TARGET_PARAMETER, it) }.orEmpty()
+}
+
+internal data class JdkHomeArgument(val jdkHome: DirectoryProperty) : CliArgument() {
+    override fun toArgument() = jdkHome.orNull?.let { listOf(JDK_HOME_PARAMETER, it.toString()) }.orEmpty()
 }
 
 internal data class BaselineArgument(val baseline: RegularFile?) : CliArgument() {
