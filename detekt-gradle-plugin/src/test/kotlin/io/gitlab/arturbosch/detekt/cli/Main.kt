@@ -1,5 +1,5 @@
 @file:JvmName("Main")
-@file:Suppress("unused", "UNUSED_PARAMETER")
+@file:Suppress("unused", "UNUSED_PARAMETER", "Filename")
 
 package io.gitlab.arturbosch.detekt.cli
 
