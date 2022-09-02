@@ -14,6 +14,9 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumEntryNameCase
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Filename
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FinalNewline
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunKeywordSpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionReturnTypeSpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionSignature
+import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionStartOfBodySpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionTypeReferenceSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ImportOrdering
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Indentation
@@ -35,7 +38,9 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.NoTrailingSpaces
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoUnitReturn
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoUnusedImports
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoWildcardImports
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NullableTypeSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.PackageName
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ParameterListSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ParameterListWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundAngleBrackets
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundColon
@@ -50,9 +55,11 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundRangeOperato
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundUnaryOperator
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithAnnotations
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithComments
+import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenFunctionNameAndOpeningParenthesis
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplate
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TrailingComma
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TypeArgumentListSpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.TypeParameterListSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.UnnecessaryParenthesesBeforeTrailingLambda
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Wrapping
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
@@ -70,18 +77,24 @@ class KtLintMultiRule(config: Config = Config.empty) :
 
     override val rules: List<Rule> = listOf(
         // Wrappers for ktlint-ruleset-standard rules. Enabled by default.
+        AnnotationOnSeparateLine(config),
+        AnnotationSpacing(config),
+        ArgumentListWrapping(config),
         ChainWrapping(config),
         CommentSpacing(config),
+        EnumEntryNameCase(config),
         Filename(config),
         FinalNewline(config),
         ImportOrdering(config),
         Indentation(config),
         MaximumLineLength(config),
         ModifierOrdering(config),
+        MultiLineIfElse(config),
         NoBlankLineBeforeRbrace(config),
         NoBlankLinesInChainedMethodCalls(config),
         NoConsecutiveBlankLines(config),
         NoEmptyClassBody(config),
+        NoEmptyFirstLineInMethodBlock(config),
         NoLineBreakAfterElse(config),
         NoLineBreakBeforeAssignment(config),
         NoMultipleSpaces(config),
@@ -90,40 +103,41 @@ class KtLintMultiRule(config: Config = Config.empty) :
         NoUnitReturn(config),
         NoUnusedImports(config),
         NoWildcardImports(config),
+        PackageName(config),
         ParameterListWrapping(config),
+        SpacingAroundAngleBrackets(config),
         SpacingAroundColon(config),
         SpacingAroundComma(config),
         SpacingAroundCurly(config),
         SpacingAroundDot(config),
+        SpacingAroundDoubleColon(config),
         SpacingAroundKeyword(config),
         SpacingAroundOperators(config),
         SpacingAroundParens(config),
         SpacingAroundRangeOperator(config),
-        StringTemplate(config),
-        Wrapping(config),
-
-        // Wrappers for ktlint-ruleset-experimental rules. Disabled by default.
-        AnnotationOnSeparateLine(config),
-        AnnotationSpacing(config),
-        ArgumentListWrapping(config),
-        BlockCommentInitialStarAlignment(config),
-        CommentWrapping(config),
-        DiscouragedCommentLocation(config),
-        EnumEntryNameCase(config),
-        FunctionTypeReferenceSpacing(config),
-        FunKeywordSpacing(config),
-        KdocWrapping(config),
-        ModifierListSpacing(config),
-        MultiLineIfElse(config),
-        NoEmptyFirstLineInMethodBlock(config),
-        PackageName(config),
-        SpacingAroundAngleBrackets(config),
-        SpacingAroundDoubleColon(config),
         SpacingAroundUnaryOperator(config),
         SpacingBetweenDeclarationsWithAnnotations(config),
         SpacingBetweenDeclarationsWithComments(config),
-        TrailingComma(config),
+        StringTemplate(config),
+        TrailingComma(config), // in standard ruleset but not enabled by default
+        Wrapping(config),
+
+        // Wrappers for ktlint-ruleset-experimental rules. Disabled by default.
+        BlockCommentInitialStarAlignment(config),
+        CommentWrapping(config),
+        DiscouragedCommentLocation(config),
+        FunctionReturnTypeSpacing(config),
+        FunKeywordSpacing(config),
+        FunctionSignature(config),
+        FunctionStartOfBodySpacing(config),
+        FunctionTypeReferenceSpacing(config),
+        KdocWrapping(config),
+        ModifierListSpacing(config),
+        NullableTypeSpacing(config),
+        ParameterListSpacing(config),
+        SpacingBetweenFunctionNameAndOpeningParenthesis(config),
         TypeArgumentListSpacing(config),
+        TypeParameterListSpacing(config),
         UnnecessaryParenthesesBeforeTrailingLambda(config),
     )
 

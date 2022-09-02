@@ -71,8 +71,20 @@ formatting:
   autoCorrect: true
   Filename:
     active: false
+  FunctionReturnTypeSpacing:
+    active: true
+  FunctionStartOfBodySpacing:
+    active: true
   MaximumLineLength:
     active: false
+  NullableTypeSpacing:
+    active: true
+  ParameterListSpacing:
+    active: true
+  SpacingBetweenFunctionNameAndOpeningParenthesis:
+    active: true
+  TypeParameterListSpacing:
+    active: true
 
 naming:
   ClassNaming:

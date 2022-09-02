@@ -41,6 +41,19 @@ formatting:
   FunKeywordSpacing:
     active: false
     autoCorrect: true
+  FunctionReturnTypeSpacing:
+    active: false
+    autoCorrect: true
+  FunctionSignature:
+    active: false
+    autoCorrect: true
+    forceMultilineWhenParameterCountGreaterOrEqualThan: 2147483647
+    functionBodyExpressionWrapping: 'default'
+    maxLineLength: 120
+    indentSize: 4
+  FunctionStartOfBodySpacing:
+    active: false
+    autoCorrect: true
   FunctionTypeReferenceSpacing:
     active: false
     autoCorrect: true
@@ -108,8 +121,14 @@ formatting:
   NoWildcardImports:
     active: true
     packagesToUseImportOnDemandProperty: 'java.util.*,kotlinx.android.synthetic.**'
+  NullableTypeSpacing:
+    active: false
+    autoCorrect: true
   PackageName:
     active: true
+    autoCorrect: true
+  ParameterListSpacing:
+    active: false
     autoCorrect: true
   ParameterListWrapping:
     active: true
@@ -154,6 +173,9 @@ formatting:
   SpacingBetweenDeclarationsWithComments:
     active: true
     autoCorrect: true
+  SpacingBetweenFunctionNameAndOpeningParenthesis:
+    active: false
+    autoCorrect: true
   StringTemplate:
     active: true
     autoCorrect: true
@@ -163,6 +185,9 @@ formatting:
     allowTrailingComma: false
     allowTrailingCommaOnCallSite: false
   TypeArgumentListSpacing:
+    active: false
+    autoCorrect: true
+  TypeParameterListSpacing:
     active: false
     autoCorrect: true
   UnnecessaryParenthesesBeforeTrailingLambda:
