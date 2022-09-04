@@ -40,16 +40,16 @@ internal fun Project.registerDetektTask(
             }
         }
 
-        it.debugProp.set(provider { extension.debug })
-        it.parallelProp.set(provider { extension.parallel })
-        it.disableDefaultRuleSetsProp.set(provider { extension.disableDefaultRuleSets })
-        it.buildUponDefaultConfigProp.set(provider { extension.buildUponDefaultConfig })
-        it.failFastProp.set(provider { @Suppress("DEPRECATION") extension.failFast })
-        it.autoCorrectProp.set(provider { extension.autoCorrect })
+        it.debugProp.convention(provider { extension.debug })
+        it.parallelProp.convention(provider { extension.parallel })
+        it.disableDefaultRuleSetsProp.convention(provider { extension.disableDefaultRuleSets })
+        it.buildUponDefaultConfigProp.convention(provider { extension.buildUponDefaultConfig })
+        it.failFastProp.convention(provider { @Suppress("DEPRECATION") extension.failFast })
+        it.autoCorrectProp.convention(provider { extension.autoCorrect })
         it.config.setFrom(provider { extension.config })
-        it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
-        it.basePathProp.set(extension.basePath)
-        it.allRulesProp.set(provider { extension.allRules })
+        it.ignoreFailuresProp.convention(project.provider { extension.ignoreFailures })
+        it.basePathProp.convention(extension.basePath)
+        it.allRulesProp.convention(provider { extension.allRules })
         configuration(it)
     }
 
@@ -60,13 +60,13 @@ internal fun Project.registerCreateBaselineTask(
 ): TaskProvider<DetektCreateBaselineTask> =
     tasks.register(name, DetektCreateBaselineTask::class.java) {
         it.config.setFrom(project.provider { extension.config })
-        it.debug.set(project.provider { extension.debug })
-        it.parallel.set(project.provider { extension.parallel })
-        it.disableDefaultRuleSets.set(project.provider { extension.disableDefaultRuleSets })
-        it.buildUponDefaultConfig.set(project.provider { extension.buildUponDefaultConfig })
-        @Suppress("DEPRECATION") it.failFast.set(project.provider { extension.failFast })
-        it.autoCorrect.set(project.provider { extension.autoCorrect })
-        it.basePathProp.set(extension.basePath)
-        it.allRules.set(provider { extension.allRules })
+        it.debug.convention(project.provider { extension.debug })
+        it.parallel.convention(project.provider { extension.parallel })
+        it.disableDefaultRuleSets.convention(project.provider { extension.disableDefaultRuleSets })
+        it.buildUponDefaultConfig.convention(project.provider { extension.buildUponDefaultConfig })
+        @Suppress("DEPRECATION") it.failFast.convention(project.provider { extension.failFast })
+        it.autoCorrect.convention(project.provider { extension.autoCorrect })
+        it.basePathProp.convention(extension.basePath)
+        it.allRules.convention(provider { extension.allRules })
         configuration(it)
     }
