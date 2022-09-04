@@ -9,7 +9,7 @@ const plugin = (options) => {
   const transformer = async (ast) => {
     visit(ast, "code", (node) => {
       if (node.value.includes("[detekt_version]")) {
-        node.value = node.value.replace("[detekt_version]", detektVersion);
+        node.value = node.value.replaceAll("[detekt_version]", detektVersion);
       }
     });
   };
