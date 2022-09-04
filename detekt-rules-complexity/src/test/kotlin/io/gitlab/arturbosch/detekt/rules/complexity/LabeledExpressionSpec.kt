@@ -20,7 +20,7 @@ class LabeledExpressionSpec {
                     }
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(3)
     }
 
@@ -33,7 +33,7 @@ class LabeledExpressionSpec {
                     println(it)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -46,7 +46,7 @@ class LabeledExpressionSpec {
                     println(it)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(2)
     }
 
@@ -65,7 +65,7 @@ class LabeledExpressionSpec {
                     }
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(3)
     }
 
@@ -79,7 +79,7 @@ class LabeledExpressionSpec {
                 }
             }
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -94,7 +94,7 @@ class LabeledExpressionSpec {
                 }
             }
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -108,7 +108,7 @@ class LabeledExpressionSpec {
                 }
             }
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -129,7 +129,7 @@ class LabeledExpressionSpec {
                 }
             }
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -139,7 +139,7 @@ class LabeledExpressionSpec {
             fun f() {
                 loop@ for (i in 1..5) {}
             }
-        """
+        """.trimIndent()
         val config = TestConfig(mapOf("ignoredLabels" to listOf("loop")))
         val findings = LabeledExpression(config).compileAndLint(code)
         assertThat(findings).isEmpty()
@@ -151,7 +151,7 @@ class LabeledExpressionSpec {
             fun f() {
                 loop@ for (i in 1..5) {}
             }
-        """
+        """.trimIndent()
         val config = TestConfig(mapOf("ignoredLabels" to "loop"))
         val findings = LabeledExpression(config).compileAndLint(code)
         assertThat(findings).isEmpty()
@@ -163,7 +163,7 @@ class LabeledExpressionSpec {
             fun f() {
                 loop@ for (i in 1..5) {}
             }
-        """
+        """.trimIndent()
         val config = TestConfig(mapOf("ignoredLabels" to "*loop*,other"))
         val findings = LabeledExpression(config).compileAndLint(code)
         assertThat(findings).isEmpty()

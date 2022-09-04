@@ -16,7 +16,7 @@ class WrongEqualsTypeParameterSpec {
                     return super.equals(other)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -28,7 +28,7 @@ class WrongEqualsTypeParameterSpec {
                     return super.equals(other)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -40,7 +40,7 @@ class WrongEqualsTypeParameterSpec {
                     return super.equals(other)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -59,7 +59,7 @@ class WrongEqualsTypeParameterSpec {
                 
                 override fun equals() = true
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -69,7 +69,7 @@ class WrongEqualsTypeParameterSpec {
             interface I {
                 fun equals(other: String)
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -78,7 +78,7 @@ class WrongEqualsTypeParameterSpec {
         val code = """
             fun equals(other: String) {}
             fun equals(other: Any?) {}
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

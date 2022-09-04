@@ -23,10 +23,11 @@ class ConfigurationCacheSpec {
     inner class `Create baseline task` {
         @Test
         fun `can be loaded from the configuration cache`() {
+            @Suppress("TrimMultilineRawString")
             val detektConfig = """
-                        |detekt {
-                        |   baseline = file("build/baseline.xml")
-                        |}
+                |detekt {
+                |   baseline = file("build/baseline.xml")
+                |}
             """
             val gradleRunner = DslTestBuilder.kotlin()
                 .withDetektConfig(detektConfig)

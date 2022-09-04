@@ -29,7 +29,7 @@ class ComplexMethodSpec {
                     do {} while(true)
                     (1..10).forEach {}
                 }
-                """
+                """.trimIndent()
             )
 
             assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 4)
@@ -42,7 +42,7 @@ class ComplexMethodSpec {
                 fun test() {
                     try {} catch(e: IllegalArgumentException) {} catch(e: Exception) {} finally {}
                 }
-                """
+                """.trimIndent()
             )
 
             assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 2)
@@ -66,7 +66,7 @@ class ComplexMethodSpec {
                         // only catches count
                     }
                 }
-                """
+                """.trimIndent()
             )
 
             assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 4)
@@ -81,7 +81,7 @@ class ComplexMethodSpec {
                     for (i in 1..10) {}
                     (1..10).forEach {}
                 }
-        """
+        """.trimIndent()
 
         @Test
         fun `counts three with nesting function 'forEach'`() {
@@ -167,7 +167,7 @@ class ComplexMethodSpec {
                         }
                     }
                 }
-            """
+            """.trimIndent()
 
             val findings = subject.compileAndLint(code)
             assertThat(findings).isEmpty()
@@ -223,7 +223,7 @@ class ComplexMethodSpec {
                 }
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not count these overridden functions to base functions complexity`() {

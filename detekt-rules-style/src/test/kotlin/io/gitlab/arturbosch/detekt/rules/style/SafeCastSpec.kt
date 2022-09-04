@@ -17,7 +17,7 @@ class SafeCastSpec {
                     element
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -31,7 +31,7 @@ class SafeCastSpec {
                     null
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -46,7 +46,7 @@ class SafeCastSpec {
                     null
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -60,7 +60,7 @@ class SafeCastSpec {
                     String()
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

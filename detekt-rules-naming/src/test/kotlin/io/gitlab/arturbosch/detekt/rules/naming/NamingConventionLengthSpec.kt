@@ -16,7 +16,7 @@ class NamingConventionLengthSpec {
             fun function() {
                 val (_, status) = getResult()
             }
-        """
+        """.trimIndent()
         subject.compileAndLint(code)
         assertThat(subject.findings).isEmpty()
     }
@@ -47,7 +47,7 @@ class NamingConventionLengthSpec {
                 class C {
                     val prop: (Int) -> Unit = { _ -> Unit }
             }
-            """
+            """.trimIndent()
             assertThat(variableMinLength.compileAndLint(code)).isEmpty()
         }
     }

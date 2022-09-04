@@ -21,7 +21,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 if (a < 0) throw IllegalArgumentException()
                 doSomething()
             }
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).hasStartSourceLocation(2, 16)
     }
 
@@ -34,7 +34,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 }
                 doSomething()
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.lint(code)).hasStartSourceLocation(3, 9)
     }
@@ -46,7 +46,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 if (a < 0) throw IllegalArgumentException("More details")
                 doSomething()
             }
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).hasStartSourceLocation(2, 16)
     }
 
@@ -57,7 +57,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 if (a < 0) throw java.lang.IllegalArgumentException()
                 doSomething()
             }
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).hasStartSourceLocation(2, 16)
     }
 
@@ -68,7 +68,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 if (a < 0) throw kotlin.IllegalArgumentException()
                 doSomething()
             }
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).hasStartSourceLocation(2, 16)
     }
 
@@ -79,7 +79,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 if (a < 0) throw SomeBusinessException()
                 doSomething()
             }
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).isEmpty()
     }
 
@@ -90,7 +90,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 doSomething()
                 throw IllegalArgumentException("message", cause)
             }
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).isEmpty()
     }
 
@@ -104,7 +104,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 }
                 doSomething()
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.lint(code)).isEmpty()
     }
@@ -114,7 +114,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
         val code = """
             fun unsafeRunSync(): A =
                 foo.fold({ throw IllegalArgumentException("message") }, ::identity)
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).isEmpty()
     }
 
@@ -136,7 +136,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
             fun test(throwable: Throwable) {
                 if (throwable !is NumberFormatException) throw IllegalArgumentException(throwable)
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -146,7 +146,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
             fun test(throwable: Throwable) {
                 if (throwable !is NumberFormatException) throw IllegalArgumentException("a", throwable)
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -157,7 +157,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 val s = ""
                 if (throwable !is NumberFormatException) throw IllegalArgumentException(s)
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -170,7 +170,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 fun test(throwable: Throwable) {
                     if (throwable !is NumberFormatException) throw IllegalArgumentException(throwable)
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -180,7 +180,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 fun test(throwable: Throwable) {
                     if (throwable !is NumberFormatException) throw IllegalArgumentException("a", throwable)
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -191,7 +191,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                     val s = ""
                     if (throwable !is NumberFormatException) throw IllegalArgumentException(s)
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -201,7 +201,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 fun test(throwable: Throwable) {
                     if (throwable !is NumberFormatException) throw IllegalArgumentException("a")
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }
@@ -217,7 +217,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                     is LinkedList<*> -> 2
                     else -> throw IllegalArgumentException("Not supported List type")
                 }
-            """
+            """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -233,7 +233,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                     }
                     throw IllegalArgumentException("Test was too big")
                 }
-            """
+            """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -245,7 +245,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                         ?: throw IllegalArgumentException("List is not a LinkedList")
                     return subclass
                 }
-            """
+            """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
         }
     }

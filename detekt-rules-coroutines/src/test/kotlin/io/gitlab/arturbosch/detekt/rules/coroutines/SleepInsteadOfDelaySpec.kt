@@ -22,7 +22,7 @@ class SleepInsteadOfDelaySpec(val env: KotlinCoreEnvironment) {
             suspend fun foo() {
                 delay(1000L)
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
     }
 
@@ -33,7 +33,7 @@ class SleepInsteadOfDelaySpec(val env: KotlinCoreEnvironment) {
             suspend fun foo() {
                 Thread.sleep(1000L)
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -50,7 +50,7 @@ class SleepInsteadOfDelaySpec(val env: KotlinCoreEnvironment) {
                     Thread.sleep(1000L)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -68,7 +68,7 @@ class SleepInsteadOfDelaySpec(val env: KotlinCoreEnvironment) {
                     Thread.sleep(1000L)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 }

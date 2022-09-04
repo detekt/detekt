@@ -11,6 +11,7 @@ class CreateBaselineTaskDslSpec {
     fun `detektBaseline task can be executed when baseline file is specified`() {
         val baselineFilename = "baseline.xml"
 
+        @Suppress("TrimMultilineRawString")
         val detektConfig = """
             |detekt {
             |   baseline = file("$baselineFilename")
@@ -35,6 +36,7 @@ class CreateBaselineTaskDslSpec {
 
     @Test
     fun `detektBaseline task can be executed when baseline file is not specified`() {
+        @Suppress("TrimMultilineRawString")
         val detektConfig = """
             |detekt {
             |}
@@ -57,6 +59,7 @@ class CreateBaselineTaskDslSpec {
 
     @Test
     fun `detektBaseline task can not be executed when baseline file is specified null`() {
+        @Suppress("TrimMultilineRawString")
         val detektConfig = """
             |detekt {
             |   baseline = null

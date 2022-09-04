@@ -15,7 +15,7 @@ class OutdatedDocumentationSpec {
         fun `should not report when doc is missing`() {
             val withoutDoc = """
             class MyClass(someParam: String, val someProp: String)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(withoutDoc)).isEmpty()
         }
 
@@ -26,7 +26,7 @@ class OutdatedDocumentationSpec {
              * Some class description without referring to tags or properties
              */
             class MyClass(someParam: String, val someProp: String)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(docWithoutParamAndPropertyTags)).isEmpty()
         }
     }
@@ -40,7 +40,7 @@ class OutdatedDocumentationSpec {
              * @param someParam Description of param
              */
             class MyClass(someParam: String)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(correctParam)).isEmpty()
         }
 
@@ -51,7 +51,7 @@ class OutdatedDocumentationSpec {
              * @param someParam Description of param
              */
             class MyClass(otherParam: String)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(incorrectParamName)).hasSize(1)
         }
 
@@ -63,7 +63,7 @@ class OutdatedDocumentationSpec {
              * @param someSecondParam Description of param
              */
             class MyClass(someParam: String)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(incorrectListOfParams)).hasSize(1)
         }
 
@@ -75,7 +75,7 @@ class OutdatedDocumentationSpec {
              * @param otherParam Description of param
              */
             class MyClass(otherParam: String, someParam: String)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(incorrectParamOrder)).hasSize(1)
         }
 
@@ -87,7 +87,7 @@ class OutdatedDocumentationSpec {
              * @property someProp Description of property
              */
             class MyClass(someParam: String, val someProp: String)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(correctParamAndProp)).isEmpty()
         }
 
@@ -99,7 +99,7 @@ class OutdatedDocumentationSpec {
              * @property someProp Description of property
              */
             class MyClass(someParam: String, val otherProp: String)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(correctParamIncorrectProp)).hasSize(1)
         }
 
@@ -111,7 +111,7 @@ class OutdatedDocumentationSpec {
              * @property someProp Description of property
              */
             class MyClass(otherParam: String, val someProp: String)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(incorrectParamCorrectProp)).hasSize(1)
         }
 
@@ -124,7 +124,7 @@ class OutdatedDocumentationSpec {
                  */
                 constructor(otherParam: String)
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(incorrectConstructorDoc)).hasSize(1)
         }
 
@@ -136,7 +136,7 @@ class OutdatedDocumentationSpec {
                  * @param someProp Description of property
                  */
                 class MyClass(someParam: String, val someProp: String)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(propertyAsParam)).hasSize(1)
         }
 
@@ -148,7 +148,7 @@ class OutdatedDocumentationSpec {
              * @param someParam Description of param
              */
             class MyClass(someParam: String, val someProp: String)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).hasSize(1)
         }
     }
@@ -164,7 +164,7 @@ class OutdatedDocumentationSpec {
              * @param someParam Description of param
              */
             class MyClass<T>(someParam: String)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(correctTypeParam)).isEmpty()
         }
 
@@ -176,7 +176,7 @@ class OutdatedDocumentationSpec {
              * @param T Description of type param
              */
             class MyClass<T>
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(correctTypeParam)).isEmpty()
         }
 
@@ -187,7 +187,7 @@ class OutdatedDocumentationSpec {
              * @param someParam Description of param
              */
             class MyClass<T>(someParam: String)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(missingTypeParam)).hasSize(1)
         }
 
@@ -199,7 +199,7 @@ class OutdatedDocumentationSpec {
              * @param someParam Description of param
              */
             class MyClass<T>(someParam: String)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(incorrectTypeParamName)).hasSize(1)
         }
 
@@ -211,7 +211,7 @@ class OutdatedDocumentationSpec {
              * @param someParam Description of param
              */
             class MyClass<T, S>(someParam: String)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(incorrectTypeParamList)).hasSize(1)
         }
     }
@@ -226,7 +226,7 @@ class OutdatedDocumentationSpec {
              * @param someParam Description of param
              */
             fun myFun(someParam: String) {}
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(correctDoc)).isEmpty()
         }
 
@@ -237,7 +237,7 @@ class OutdatedDocumentationSpec {
              * @param someParam Description of param
              */
             fun myFun(otherParam: String) {}
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(incorrectParamName)).hasSize(1)
         }
     }
@@ -253,7 +253,7 @@ class OutdatedDocumentationSpec {
              * @param someParam Description of param
              */
             fun <T> myFun(someParam: String) {}
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(correctTypeParam)).isEmpty()
         }
 
@@ -264,7 +264,7 @@ class OutdatedDocumentationSpec {
              * @param someParam Description of param
              */
             fun <T> myFun(someParam: String) {}
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(missingTypeParam)).hasSize(1)
         }
 
@@ -276,7 +276,7 @@ class OutdatedDocumentationSpec {
              * @param someParam Description of param
              */
             fun <T> myFun(someParam: String) {}
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(incorrectTypeParamName)).hasSize(1)
         }
 
@@ -288,7 +288,7 @@ class OutdatedDocumentationSpec {
              * @param someParam Description of param
              */
             fun <T, S> myFun(someParam: String) {}
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(incorrectTypeParamList)).hasSize(1)
         }
 
@@ -301,7 +301,7 @@ class OutdatedDocumentationSpec {
                  * @param S Description of type param
                  */
                 fun <T, S> myFun(someParam: String) {}
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(incorrectTypeParamsOrder)).hasSize(1)
         }
     }
@@ -321,7 +321,7 @@ class OutdatedDocumentationSpec {
                 */
                 fun myFun(someParam: String) {}
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(correctClassWithFunction)).isEmpty()
         }
 
@@ -345,7 +345,7 @@ class OutdatedDocumentationSpec {
                 */
                 class MyNestedClass(otherParam: String)
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(incorrectClassWithTwoIncorrectFunctions)).hasSize(4)
         }
     }
@@ -362,7 +362,7 @@ class OutdatedDocumentationSpec {
              * @param someParam Description of param
              */
             class MyClass<T, S>(someParam: String)
-            """
+            """.trimIndent()
             assertThat(configuredSubject.compileAndLint(incorrectClassTypeParams)).isEmpty()
         }
 
@@ -373,7 +373,7 @@ class OutdatedDocumentationSpec {
              * @param someParam Description of param
              */
             fun <T, S> myFun(someParam: String) {}
-            """
+            """.trimIndent()
             assertThat(configuredSubject.compileAndLint(incorrectFunctionTypeParams)).isEmpty()
         }
     }
@@ -391,7 +391,7 @@ class OutdatedDocumentationSpec {
              * @param otherParam Description of param
              */
             class MyClass(otherParam: String, someParam: String)
-            """
+            """.trimIndent()
             assertThat(configuredSubject.compileAndLint(incorrectDeclarationsOrder)).isEmpty()
         }
 
@@ -405,7 +405,7 @@ class OutdatedDocumentationSpec {
              * @param T Description of param
              */
             fun <T, S> myFun(otherParam: String, someParam: String) {}
-            """
+            """.trimIndent()
             assertThat(configuredSubject.compileAndLint(incorrectDeclarationsOrderWithType)).isEmpty()
         }
     }
@@ -423,7 +423,7 @@ class OutdatedDocumentationSpec {
                  * @param someProp Description of property
                  */
                 class MyClass(someParam: String, val someProp: String)
-            """
+            """.trimIndent()
             assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
         }
 
@@ -435,7 +435,7 @@ class OutdatedDocumentationSpec {
                  * @property someProp Description of property
                  */
                 class MyClass(someParam: String, val someProp: String)
-            """
+            """.trimIndent()
             assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
         }
     }
@@ -460,7 +460,7 @@ class OutdatedDocumentationSpec {
                  * @param someProp Description of property
                  */
                 class MyClass(someParam: String, val someProp: String)
-            """
+            """.trimIndent()
             assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
         }
 
@@ -472,7 +472,7 @@ class OutdatedDocumentationSpec {
                  * @property someProp Description of property
                  */
                 class MyClass(someParam: String, val someProp: String)
-            """
+            """.trimIndent()
             assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
         }
     }

@@ -23,12 +23,12 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
                 } success {
                 }
             }
-        """
+        """.trimIndent()
         val additional = """
             package tasks
 
             infix fun Int.success(f: () -> Unit) {}
-        """
+        """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
@@ -52,14 +52,14 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             }
-        """
+        """.trimIndent()
         val additional = """
             package tasks
 
             infix fun Int.success(f: () -> Unit) {}
             infix fun Int.failure(f: () -> Unit) {}
             infix fun Int.undefined(f: () -> Unit) {}
-        """
+        """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
@@ -80,14 +80,14 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
                 } success {
                 }
             }                
-        """
+        """.trimIndent()
         val additional = """
             package tasks
             
             infix fun Int.success(f: () -> Unit) {}
             infix fun Int.failure(f: () -> Unit) {}
             infix fun Int.undefined(f: () -> Unit) {}
-        """
+        """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional)
         with(lint) {
             assertThat(this).hasSize(1)
@@ -102,12 +102,12 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             import test.SomeClass
 
             val a: SomeClass? = null
-        """
+        """.trimIndent()
         val additional = """
             package test
 
             class SomeClass
-        """
+        """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional)
         with(lint) {
             assertThat(this).hasSize(1)
@@ -130,14 +130,14 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
                     TODO()
                 }
             }
-        """
+        """.trimIndent()
         val additional = """
             package android.text
 
             class TextWatcher {
                 fun beforeTextChanged() {}
             }                
-        """
+        """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
@@ -162,7 +162,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             }
 
             fun fn(s: String) {}
-        """
+        """.trimIndent()
         val p = """
             package p
 
@@ -173,20 +173,20 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
                 fun call() {}
             }
             class D
-        """
+        """.trimIndent()
         val p2 = """
             package p2
 
             object B {
                 const val NAME = ""
             }
-        """
+        """.trimIndent()
         val escaped = """
             package escaped
 
             fun `when`() {}
             fun `foo`() {}
-        """
+        """.trimIndent()
         val lint = subject.lintWithContext(env, main, p, p2, escaped)
         with(lint) {
             assertThat(this).hasSize(3)
@@ -206,14 +206,14 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             open class Something<T>
             
             class Foo : Something<Inner>()                
-        """
+        """.trimIndent()
         val additional = """
             package test
             
             class Outer {
                 class Inner
             }
-        """
+        """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional)
         with(lint) {
             assertThat(this).isEmpty()
@@ -230,12 +230,12 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
              * @see success
              */
             fun doSomething()
-        """
+        """.trimIndent()
         val additional = """
             package tasks
 
             fun success() {}
-        """
+        """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
@@ -249,12 +249,12 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
              * @see success something
              */
             fun doSomething() {}
-        """
+        """.trimIndent()
         val additional = """
             package tasks
 
             fun success() {}
-        """
+        """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
@@ -268,12 +268,12 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
              * @see something
              */
             fun doSomething() {}
-        """
+        """.trimIndent()
         val additional = """
             package tasks
 
             fun success() {}
-        """
+        """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).hasSize(1)
     }
 
@@ -287,12 +287,12 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
              * @see something success
              */
             fun doSomething() {}
-        """
+        """.trimIndent()
         val additional = """
             package tasks
 
             fun success() {}
-        """
+        """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).hasSize(1)
     }
 
@@ -310,13 +310,13 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
              * @sample success when ...
              */
             fun doSomething() {}
-        """
+        """.trimIndent()
         val additional = """
             package tasks
 
             fun success() {}
             fun undefined() {}
-        """
+        """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
@@ -325,11 +325,11 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         val main = """
             import test.forEach as foreach
             fun foo() = listOf().iterator().foreach {}
-        """
+        """.trimIndent()
         val additional = """
             package test
             fun Iterator<Int>.forEach(f: () -> Unit) {}
-        """
+        """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
@@ -344,15 +344,15 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             fun f(): Boolean {
                 return myFoo() == otherFoo()
             }
-        """
+        """.trimIndent()
         val additional1 = """
             package com.example
             fun foo() = 1                
-        """
+        """.trimIndent()
         val additional2 = """
             package com.example.other
             fun foo() = 1                
-        """
+        """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional1, additional2)).isEmpty()
     }
 
@@ -365,7 +365,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             class DumpVersionProperties {
                 private val dumpVersionProperties by Foo()
             }                
-        """
+        """.trimIndent()
         val additional = """
             package org.gradle.kotlin.dsl
             
@@ -377,7 +377,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
                 thisRef: T,
                 prop: KProperty<*>
             ) = lazy { "" }                
-        """
+        """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
@@ -391,11 +391,11 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             fun test() {
                 val (a, b) = MyClass(1, 2)
             }
-        """
+        """.trimIndent()
         val additional = """
             package com.example
             data class MyClass(val a: Int, val b: Int)                
-        """
+        """.trimIndent()
 
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
@@ -411,17 +411,17 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             fun test() {
                 println("Testing")
             }
-        """
+        """.trimIndent()
         val additional1 = """
             package com.example
             class TestComponent
             fun components() {}
             fun component1AndSomethingElse() {}
-        """
+        """.trimIndent()
         val additional2 = """
             package com.example.component1
             class Unused
-        """
+        """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional1, additional2)
 
         with(lint) {
@@ -441,15 +441,15 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             fun main() {
                 test(1)
             }      
-        """
+        """.trimIndent()
         val additionalFile1 = """
             package foo
             fun test(i: Int) {}
-        """
+        """.trimIndent()
         val additionalFile2 = """
             package bar
             fun test(s: String) {}
-        """
+        """.trimIndent()
         val findings = subject.lintWithContext(env, mainFile, additionalFile1, additionalFile2)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].entity.signature).endsWith("import bar.test")
@@ -462,7 +462,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             
             fun doesNothing(thing: HashMap<String, String>) {
             }
-        """
+        """.trimIndent()
         val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
@@ -477,7 +477,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             
             @Ann(HashMap::class)
             fun foo() {}
-        """
+        """.trimIndent()
         val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
@@ -488,12 +488,12 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             import x.y.z.Foo
             
             val foo = Foo()
-        """
+        """.trimIndent()
         val additionalFile = """
             package x.y.z
             
             class Foo
-        """
+        """.trimIndent()
         val findings = subject.lintWithContext(env, mainFile, additionalFile)
         assertThat(findings).isEmpty()
     }
@@ -505,12 +505,12 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
 
             @Ann
             fun foo() {}
-        """
+        """.trimIndent()
         val additionalFile = """
             package x.y.z
             
             annotation class Ann
-        """
+        """.trimIndent()
         val findings = subject.lintWithContext(env, mainFile, additionalFile)
         assertThat(findings).isEmpty()
     }
@@ -521,14 +521,14 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             import x.y.z.Foo
             
             val x = Foo
-        """
+        """.trimIndent()
         val additionalFile = """
             package x.y.z
             
             class Foo {
                 companion object
             }
-        """
+        """.trimIndent()
         val findings = subject.lintWithContext(env, mainFile, additionalFile)
         assertThat(findings).isEmpty()
     }
@@ -539,7 +539,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             import x.y.z.Foo
             
             val x = Foo.create()
-        """
+        """.trimIndent()
         val additionalFile = """
             package x.y.z
             
@@ -548,7 +548,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
                     fun create(): Foo = Foo()
                 }
             }
-        """
+        """.trimIndent()
         val findings = subject.lintWithContext(env, mainFile, additionalFile)
         assertThat(findings).isEmpty()
     }
@@ -559,7 +559,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             import x.y.z.Foo
             
             val x = Foo.BAR
-        """
+        """.trimIndent()
         val additionalFile = """
             package x.y.z
             
@@ -568,7 +568,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
                     const val BAR = 1
                 }
             }
-        """
+        """.trimIndent()
         val findings = subject.lintWithContext(env, mainFile, additionalFile)
         assertThat(findings).isEmpty()
     }
@@ -579,14 +579,14 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             import x.y.z.FetchType
             
             val x = FetchType.LAZY
-        """
+        """.trimIndent()
         val additionalFile = """
             package x.y.z
             
             enum class FetchType {
                 LAZY
             }
-        """
+        """.trimIndent()
         assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
     }
 
@@ -600,13 +600,13 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
                 @AnnotationB(attribute = AnnotationA())
                 val someProp: Int = 42
             }
-        """
+        """.trimIndent()
         val additionalFile = """
             package x.y.z
             
             annotation class AnnotationA
             annotation class AnnotationB(val attribute: AnnotationA)
-        """
+        """.trimIndent()
         assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
     }
 
@@ -624,13 +624,13 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
          * @property someVal Someval for [SomeClass]
          */
          data class StyleClass(val someVal: String)
-        """
+        """.trimIndent()
 
         val additionalFile = """
         package x.y.z
 
         class SomeClass
-        """
+        """.trimIndent()
 
         assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
     }
@@ -648,7 +648,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
 
             Bar().baz()
         }
-        """
+        """.trimIndent()
 
         assertThat(subject.lintWithContext(env, mainFile)).isEmpty()
     }
@@ -662,7 +662,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         fun test() {
             2 + 3
         }
-        """
+        """.trimIndent()
 
         assertThat(subject.lintWithContext(env, mainFile)).hasSize(2)
     }

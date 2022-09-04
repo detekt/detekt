@@ -26,7 +26,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = mapOf<String, String>() 
                         val value = map.get("key") 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
@@ -37,7 +37,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = mapOf<String, String>() 
                         val value = map?.get("key") 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -48,7 +48,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = mutableMapOf<String, String>() 
                         map.set("key", "value") 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
@@ -59,7 +59,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = mutableMapOf<String, String>()
                         map.put("key", "val") 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
@@ -70,7 +70,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = mutableMapOf<String, String>() 
                         val oldValue = map.put("key", "val") 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -81,7 +81,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = mutableMapOf<String, String>()
                         return map.put("key", "val") == null
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -92,7 +92,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = hashMapOf<String, String>() 
                         val value = map.get("key") 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
@@ -103,7 +103,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = hashMapOf<String, String>() 
                         map.put("key", "value") 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
@@ -115,7 +115,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = mapOf<String, String>()
                         val value = map["key"] 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -127,7 +127,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = mutableMapOf<String, String>()
                         map["key"] = "value" 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -138,7 +138,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = mapOf<String, String>()
                         val value = listOf("1", "2").associateBy { it }.get("1")
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
@@ -149,7 +149,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = linkedMapOf<String, String>()
                         val value = map.get("key") 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
@@ -160,7 +160,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = mapOf<String, Int>()
                         with(map) { get("a") }
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
             }
         }
@@ -174,7 +174,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val list = listOf<String>() 
                         val value = list.get(0) 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
@@ -185,7 +185,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val list = mutableListOf<String>()
                         val value = list.get(0) 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
@@ -197,7 +197,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val list = listOf<String>() 
                         val value = list[0] 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -208,7 +208,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val list = arrayListOf<String>() 
                         val value = list.get(0) 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
@@ -219,7 +219,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val list = listOf<String>()
                         val value = with(list) { get(0) }
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
             }
         }
@@ -234,7 +234,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = java.util.HashMap<String, String>() 
                         val value = map.get("key") 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
@@ -245,7 +245,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = java.util.HashMap<String, String>() 
                         map.set("key", "val") 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
@@ -256,7 +256,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = java.util.HashMap<String, String>() 
                         map.put("key", "val") 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
@@ -268,7 +268,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = java.util.HashMap<String, String>() 
                         val value = map["key"] 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -280,7 +280,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = java.util.HashMap<String, String>() 
                         map["key"] = "value" 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -291,7 +291,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val map = java.util.HashMap<String, String>() 
                         val value = listOf("1", "2").associateBy { it }.get("1") 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
         }
@@ -305,7 +305,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val buffer = java.nio.ByteBuffer()
                         buffer.get(byteArrayOf(0x42))
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
@@ -315,7 +315,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                     fun f(field: java.lang.reflect.Field) {
                         val value = field.get(null) // access static field
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
         }
@@ -331,7 +331,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val custom = Custom()
                         val value = custom.get(0)
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
@@ -343,7 +343,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val custom = Custom()
                         val value = custom.get(0)
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -355,7 +355,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val custom = Custom()
                         custom.set("key", "value")
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
@@ -367,7 +367,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val custom = Custom()
                         custom.set("key", "value")
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -380,7 +380,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                     fun test(c: C) {
                         c.get<Int>("key")
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
@@ -395,7 +395,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val list = java.util.ArrayList<String>() 
                         val value = list.get(0) 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
             }
 
@@ -407,7 +407,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val list = java.util.ArrayList<String>() 
                         val value = list[0] 
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
@@ -422,7 +422,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val i: Int get() = 1 + 2
                         val c: Char? get() = "".first() ?: throw IllegalArgumentException("getter")
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -431,7 +431,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                 val code = """
                     val string = ""
                         .toString()
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -442,7 +442,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val unknownType = UnknownType()
                         val value = unknownType.put("answer", 42)
                      }
-                """
+                """.trimIndent()
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
@@ -453,7 +453,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                     fun f() {
                         put()
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
@@ -472,7 +472,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                     rect.set(0, 1)
                     rect.set(0, 1, 2)
                 }
-            """
+            """.trimIndent()
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }

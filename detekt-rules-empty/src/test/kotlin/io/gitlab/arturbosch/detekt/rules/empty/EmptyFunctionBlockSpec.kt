@@ -20,7 +20,7 @@ class EmptyFunctionBlockSpec {
             class A {
                 protected fun stuff() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasStartSourceLocation(2, 27)
     }
 
@@ -30,7 +30,7 @@ class EmptyFunctionBlockSpec {
             open class A {
                 open fun stuff() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -40,7 +40,7 @@ class EmptyFunctionBlockSpec {
             interface I {
                 fun stuff() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -50,7 +50,7 @@ class EmptyFunctionBlockSpec {
             fun a() {
                 fun b() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasStartSourceLocation(2, 13)
     }
 
@@ -79,7 +79,7 @@ class EmptyFunctionBlockSpec {
                     // this is necessary...
                 }
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should flag empty block in overridden function`() {
@@ -111,7 +111,7 @@ class EmptyFunctionBlockSpec {
 
                 }
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not flag overridden functions with commented body`() {

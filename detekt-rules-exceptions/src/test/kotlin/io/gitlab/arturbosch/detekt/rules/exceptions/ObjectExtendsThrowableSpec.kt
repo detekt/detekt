@@ -18,7 +18,7 @@ class ObjectExtendsThrowableSpec(val env: KotlinCoreEnvironment) {
         object AuthException : RuntimeException()
         object ReportedException : Exception()
         object FatalException : Error()
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(4)
     }
 
@@ -30,7 +30,7 @@ class ObjectExtendsThrowableSpec(val env: KotlinCoreEnvironment) {
             class Exception2 : DomainException()
             object Exception3 : DomainException()
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -40,7 +40,7 @@ class ObjectExtendsThrowableSpec(val env: KotlinCoreEnvironment) {
         object ObjectCustomException : CustomException("singleton custom exception")
 
         open class CustomException(message: String) : RuntimeException(message)
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -70,7 +70,7 @@ class ObjectExtendsThrowableSpec(val env: KotlinCoreEnvironment) {
                 const val NAME = "Test 4"
             }
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(4)
     }
 
@@ -87,7 +87,7 @@ class ObjectExtendsThrowableSpec(val env: KotlinCoreEnvironment) {
         }
 
         open class CustomException(message: String) 
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -105,7 +105,7 @@ class ObjectExtendsThrowableSpec(val env: KotlinCoreEnvironment) {
                 const val NAME = "Test 3"
             }
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -125,7 +125,7 @@ class ObjectExtendsThrowableSpec(val env: KotlinCoreEnvironment) {
         }
 
         open class CustomException(message: String) 
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -135,7 +135,7 @@ class ObjectExtendsThrowableSpec(val env: KotlinCoreEnvironment) {
         val exception = object : AbstractCustomException() {}
 
         abstract class AbstractCustomException : RuntimeException()
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 }

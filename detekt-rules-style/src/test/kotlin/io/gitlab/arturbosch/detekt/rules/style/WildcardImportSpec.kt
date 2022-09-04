@@ -20,7 +20,7 @@ class WildcardImportSpec {
 
             class Test {
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not report anything when the rule is turned off`() {
@@ -84,7 +84,7 @@ class WildcardImportSpec {
         fun `ignores the default values`() {
             val code2 = """
                 import java.util.*
-            """
+            """.trimIndent()
 
             val findings = WildcardImport().lint(code2)
             assertThat(findings).isEmpty()
@@ -100,7 +100,7 @@ class WildcardImportSpec {
 
         class Test {
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not report any issues`() {

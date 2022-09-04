@@ -17,7 +17,7 @@ class UnusedUnaryOperatorSpec(private val env: KotlinCoreEnvironment) {
                 val x = 1 + 2
                     + 3
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocation(3, 9)
@@ -31,7 +31,7 @@ class UnusedUnaryOperatorSpec(private val env: KotlinCoreEnvironment) {
                 val x = 1 + 2
                     - 3
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocation(3, 9)
@@ -45,7 +45,7 @@ class UnusedUnaryOperatorSpec(private val env: KotlinCoreEnvironment) {
                 val x = 1 + 2
                     + 3 + 4 + 5
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0]).hasMessage("This '+ 3 + 4 + 5' is not used")
@@ -58,7 +58,7 @@ class UnusedUnaryOperatorSpec(private val env: KotlinCoreEnvironment) {
                 val x = (1 + 2
                     + 3 + 4 + 5)
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
@@ -69,7 +69,7 @@ class UnusedUnaryOperatorSpec(private val env: KotlinCoreEnvironment) {
             fun test() {
                 val x = -1
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
@@ -80,7 +80,7 @@ class UnusedUnaryOperatorSpec(private val env: KotlinCoreEnvironment) {
             fun test(): Int {
                 return -1
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
@@ -92,7 +92,7 @@ class UnusedUnaryOperatorSpec(private val env: KotlinCoreEnvironment) {
             fun test() {
                 foo(x = -1)
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
@@ -103,7 +103,7 @@ class UnusedUnaryOperatorSpec(private val env: KotlinCoreEnvironment) {
             annotation class Ann(val x: Int)
             @Ann(x = -1)
             val y = 2
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
@@ -118,7 +118,7 @@ class UnusedUnaryOperatorSpec(private val env: KotlinCoreEnvironment) {
                 val p = Foo(1) + Foo(2)
                     - Foo(3)
             } 
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
@@ -134,7 +134,7 @@ class UnusedUnaryOperatorSpec(private val env: KotlinCoreEnvironment) {
                     1
                 }
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }

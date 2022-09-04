@@ -20,7 +20,7 @@ class TooGenericExceptionSpec {
     }
 }
 
-const val tooGenericExceptionCode = """
+val tooGenericExceptionCode = """
     fun main() {
         try {
             throw Throwable()
@@ -39,4 +39,4 @@ const val tooGenericExceptionCode = """
 
         }
     }
-"""
+""".trimIndent()

@@ -20,7 +20,7 @@ class UseEmptyCounterpartSpec(val env: KotlinCoreEnvironment) {
             val map = mapOf<Any, Any>()
             val sequence = sequenceOf<Any>()
             val set = setOf<Any>()
-        """
+        """.trimIndent()
         assertThat(rule.compileAndLintWithContext(env, code)).hasSize(6)
     }
 
@@ -33,7 +33,7 @@ class UseEmptyCounterpartSpec(val env: KotlinCoreEnvironment) {
             val map: Map<Any, Any> = mapOf()
             val sequence: Sequence<Any> = sequenceOf()
             val set: Set<Any> = setOf()
-        """
+        """.trimIndent()
         assertThat(rule.compileAndLintWithContext(env, code)).hasSize(6)
     }
 
@@ -45,7 +45,7 @@ class UseEmptyCounterpartSpec(val env: KotlinCoreEnvironment) {
             val map = emptyMap<Any, Any>()
             val sequence = emptySequence<Any>()
             val set = emptySet<Any>()
-        """
+        """.trimIndent()
         assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -58,7 +58,7 @@ class UseEmptyCounterpartSpec(val env: KotlinCoreEnvironment) {
             val map = mapOf(0 to 0)
             val sequence = sequenceOf(0)
             val set = setOf(0)
-        """
+        """.trimIndent()
         assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -78,7 +78,7 @@ class UseEmptyCounterpartSpec(val env: KotlinCoreEnvironment) {
             val map = mapOf<Any, Any>()
             val sequence = sequenceOf<Any>()
             val set = setOf<Any>()
-        """
+        """.trimIndent()
         assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
     }
 }

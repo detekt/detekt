@@ -19,7 +19,7 @@ class DataClassShouldBeImmutableSpec {
             data class C(val i: Int) {
                 var s: String? = null
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -30,7 +30,7 @@ class DataClassShouldBeImmutableSpec {
                 var s: String = ""
                     private set
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -40,7 +40,7 @@ class DataClassShouldBeImmutableSpec {
             data class C(val i: Int) {
                 lateinit var s: String
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -56,7 +56,7 @@ class DataClassShouldBeImmutableSpec {
             data class C(val i: Int) {
                 val s: String? = null
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -66,7 +66,7 @@ class DataClassShouldBeImmutableSpec {
             data class C(val i: Int) {
                 val s: String by lazy { "" }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -76,7 +76,7 @@ class DataClassShouldBeImmutableSpec {
             class C(var i: Int) {
                 val s: String by lazy { "" }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

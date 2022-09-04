@@ -20,7 +20,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
             fun function(unusedParameter: Int): Int {
                 return 5
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(1)
         }
@@ -31,7 +31,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
             fun function(used: Int): Int {
                 return used
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
         }
@@ -42,7 +42,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
             fun function(used: Int) {
                 println(used)
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
         }
@@ -53,7 +53,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
             fun function(unusedParameter: Int, usedParameter: Int): Int {
                 return usedParameter
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(1)
         }
@@ -64,7 +64,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
             fun function(unusedParameter: Int, usedParameter: Int) {
                 println(usedParameter)
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(1)
         }
@@ -79,7 +79,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
                     return 5
                 }
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(1)
         }
@@ -99,7 +99,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
                     return 5
                 }
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(2)
         }
@@ -114,7 +114,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
                     return used
                 }
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
         }
@@ -129,7 +129,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
                     println(used)
                 }
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
         }
@@ -144,7 +144,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
                     return usedParameter
                 }
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(1)
         }
@@ -159,7 +159,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
                     println(usedParameter)
                 }
             }
-            """
+            """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(1)
         }
@@ -171,7 +171,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
         fun `reports unused parameter`() {
             val code = """
                 class Test(unused: Any)
-            """
+            """.trimIndent()
             assertThat(subject.lint(code)).hasSize(1)
         }
 
@@ -180,7 +180,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Parent(val ignored: Any)
                 class Test(used: Any) : Parent(used)
-            """
+            """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -192,7 +192,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
                         used.toString()
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -202,7 +202,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
                 class Test(used: Any) {
                     val usedString = used.toString()
                 }
-            """
+            """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -220,7 +220,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
                     // this is actually unused, but clashes with the other constructor
                     constructor(used: Any)
                 }
-            """
+            """.trimIndent()
             assertThat(subject.lint(code)).hasSize(1)
         }
     }
@@ -231,7 +231,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
         fun `does not report annotated parameters`() {
             val code = """
                 fun foo(@Suppress("UNUSED_PARAMETER") unused: String){}
-            """
+            """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
         }
@@ -240,7 +240,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
         fun `reports parameters without annotation`() {
             val code = """
                 fun foo(@Suppress("UNUSED_PARAMETER") unused: String, unusedWithoutAnnotation: String){}
-            """
+            """.trimIndent()
 
             val lint = subject.lint(code)
 
@@ -253,7 +253,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 @Suppress("UNUSED_PARAMETER")
                 fun foo(unused: String, otherUnused: String){}
-            """
+            """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
         }
@@ -266,7 +266,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
                     fun foo(unused: String, otherUnused: String){}
                     fun bar(unused: String){}
                 }
-            """
+            """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
         }
@@ -278,7 +278,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
                 object Test {
                     fun foo(unused: String){}
                 }
-            """
+            """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
         }
@@ -294,7 +294,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
                         fun bar(unused: String){}
                     }
                 }
-            """
+            """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
         }
@@ -311,7 +311,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
                         fun bar(unused: String){}
                     }
                 }
-            """
+            """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
         }

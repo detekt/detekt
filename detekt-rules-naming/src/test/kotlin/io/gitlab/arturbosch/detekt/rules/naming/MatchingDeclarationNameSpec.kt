@@ -50,7 +50,7 @@ class MatchingDeclarationNameSpec {
                 enum class E {
                     ONE, TWO, THREE
                 }
-                """,
+                """.trimIndent(),
                 filename = "E.kt"
             )
             val findings = MatchingDeclarationName().lint(ktFile)
@@ -64,7 +64,7 @@ class MatchingDeclarationNameSpec {
                 class C
                 object O
                 fun a() = 5
-                """,
+                """.trimIndent(),
                 filename = "MultiDeclarations.kt"
             )
             val findings = MatchingDeclarationName().lint(ktFile)
@@ -78,7 +78,7 @@ class MatchingDeclarationNameSpec {
                 class C
                 fun a() = 5
                 fun C.b() = 5
-                """,
+                """.trimIndent(),
                 filename = "C.kt"
             )
             val findings = MatchingDeclarationName().lint(ktFile)
@@ -92,7 +92,7 @@ class MatchingDeclarationNameSpec {
                 fun a() = 5
                 fun C.b() = 5
                 class C
-                """,
+                """.trimIndent(),
                 filename = "Classes.kt"
             )
             val findings = MatchingDeclarationName().lint(ktFile)
@@ -105,7 +105,7 @@ class MatchingDeclarationNameSpec {
                 """
             private class C
             fun a() = 5
-                """,
+                """.trimIndent(),
                 filename = "b.kt"
             )
             val findings = MatchingDeclarationName().lint(ktFile)
@@ -118,7 +118,7 @@ class MatchingDeclarationNameSpec {
             typealias Foo = FooImpl
 
             class FooImpl {}
-            """
+            """.trimIndent()
             val ktFile = compileContentForTest(code, filename = "Foo.kt")
             val findings = MatchingDeclarationName().lint(ktFile)
             assertThat(findings).isEmpty()
@@ -192,7 +192,7 @@ class MatchingDeclarationNameSpec {
             val code = """
                 class FooImpl {}
                 typealias Bar = FooImpl
-            """
+            """.trimIndent()
             val ktFile = compileContentForTest(code, filename = "Foo.kt")
             val findings = MatchingDeclarationName().lint(ktFile)
             assertThat(findings).hasSize(1)

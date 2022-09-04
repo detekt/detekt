@@ -12,7 +12,7 @@ internal class MissingPackageDeclarationSpec {
             package foo.bar
 
             class C
-        """
+        """.trimIndent()
         val findings = MissingPackageDeclaration().compileAndLint(code)
 
         assertThat(findings).isEmpty()

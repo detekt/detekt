@@ -14,7 +14,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
             class C(@param:Asdf private val foo: String)
 
             annotation class Asdf
-        """
+        """.trimIndent()
         assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("param:")
     }
 
@@ -25,7 +25,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
             class C(@param:Asdf foo: String)
 
             annotation class Asdf
-        """
+        """.trimIndent()
         assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("param:")
     }
 
@@ -36,7 +36,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
             class C(@get:Asdf private val foo: String)
 
             annotation class Asdf
-        """
+        """.trimIndent()
         assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).isEmpty()
     }
 
@@ -47,7 +47,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
             class C(@property:Asdf private val foo: String)
 
             annotation class Asdf
-        """
+        """.trimIndent()
         assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).isEmpty()
     }
 
@@ -60,7 +60,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
             }
 
             annotation class Asdf
-        """
+        """.trimIndent()
         assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("property:")
     }
 
@@ -71,7 +71,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
             @property:Asdf private val foo: String = "bar"
 
             annotation class Asdf
-        """
+        """.trimIndent()
         assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("property:")
     }
 }

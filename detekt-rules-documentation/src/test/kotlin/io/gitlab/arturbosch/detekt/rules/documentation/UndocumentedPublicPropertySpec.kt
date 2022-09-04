@@ -23,7 +23,7 @@ class UndocumentedPublicPropertySpec {
             object Test {
                 val a = 1
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -35,7 +35,7 @@ class UndocumentedPublicPropertySpec {
                     val a = 1 
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -48,7 +48,7 @@ class UndocumentedPublicPropertySpec {
                     public val b = 1
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(2)
     }
 
@@ -58,7 +58,7 @@ class UndocumentedPublicPropertySpec {
             interface Test {
                 val a: Int
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -81,7 +81,7 @@ class UndocumentedPublicPropertySpec {
              * Comment
              */
             val a = 1
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -94,7 +94,7 @@ class UndocumentedPublicPropertySpec {
                 */
                 val a = 1
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -111,7 +111,7 @@ class UndocumentedPublicPropertySpec {
             class Test : I {
                 override val a = 1
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -122,7 +122,7 @@ class UndocumentedPublicPropertySpec {
                 internal val a = 1
                 private val b = 1
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -132,7 +132,7 @@ class UndocumentedPublicPropertySpec {
             fun commented(x: Int) {
                 var a = x
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -143,7 +143,7 @@ class UndocumentedPublicPropertySpec {
                 public val a = 1
                 val b = 1
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -154,7 +154,7 @@ class UndocumentedPublicPropertySpec {
                 public val a = 1
                 val b = 1
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -164,7 +164,7 @@ class UndocumentedPublicPropertySpec {
             class Test() {
                 constructor(a: Int) : this()
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -173,7 +173,7 @@ class UndocumentedPublicPropertySpec {
         val code = """
             class Test1(internal val a: Int)
             class Test2(b: Int)
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -202,7 +202,7 @@ class UndocumentedPublicPropertySpec {
                  */
                 val e: Int                    
             )
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -212,7 +212,7 @@ class UndocumentedPublicPropertySpec {
             private object Test {
                 val a = 1
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -222,7 +222,7 @@ class UndocumentedPublicPropertySpec {
             open class Test {
                 protected val a = 1
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -232,7 +232,7 @@ class UndocumentedPublicPropertySpec {
             open class Test {
                 protected val a = 1
             }
-        """
+        """.trimIndent()
         val subject = UndocumentedPublicProperty(TestConfig(mapOf(SEARCH_PROTECTED_PROPERTY to "true")))
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
@@ -252,7 +252,7 @@ class UndocumentedPublicPropertySpec {
                     }
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
@@ -264,7 +264,7 @@ class UndocumentedPublicPropertySpec {
                     val i = 0
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -276,7 +276,7 @@ class UndocumentedPublicPropertySpec {
                     val i = 0
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -288,7 +288,7 @@ class UndocumentedPublicPropertySpec {
                     val i = 0
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -300,7 +300,7 @@ class UndocumentedPublicPropertySpec {
                     val i = 0
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
@@ -316,7 +316,7 @@ class UndocumentedPublicPropertySpec {
                     class InnerInner(val c: Int)
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(3)
         }
 
@@ -326,7 +326,7 @@ class UndocumentedPublicPropertySpec {
             class Outer(val a: Int) {
                 inner class Inner(val b: Int)
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
@@ -336,7 +336,7 @@ class UndocumentedPublicPropertySpec {
             object Outer {
                 class Inner(val a: Int)
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -346,7 +346,7 @@ class UndocumentedPublicPropertySpec {
             internal class Outer(val a: Int) {
                 class Inner(val b: Int)
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -356,7 +356,7 @@ class UndocumentedPublicPropertySpec {
             internal class Outer(val a: Int) {
                 inner class Inner(val b: Int)
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

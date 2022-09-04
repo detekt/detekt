@@ -16,7 +16,7 @@ class UntilInsteadOfRangeToSpec {
             fun f() {
                 for (i in 0 .. 10 - 1) {}
             }
-        """
+        """.trimIndent()
         val findings = subject.lint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0]).hasMessage("'..' call can be replaced with 'until'")
@@ -29,7 +29,7 @@ class UntilInsteadOfRangeToSpec {
                 for (i in 0 until 10 - 1) {}
                 for (i in 10 downTo 2 - 1) {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).isEmpty()
     }
 
@@ -39,7 +39,7 @@ class UntilInsteadOfRangeToSpec {
             fun f() {
                 for (i in 0 .. 10) {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).isEmpty()
     }
 
@@ -50,7 +50,7 @@ class UntilInsteadOfRangeToSpec {
                 for (i in 0 .. 10 + 1) {}
                 for (i in 0 .. 10 - 2) {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).isEmpty()
     }
 

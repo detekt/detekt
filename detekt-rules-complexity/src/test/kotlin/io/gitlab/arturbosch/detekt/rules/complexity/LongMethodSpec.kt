@@ -24,7 +24,7 @@ class LongMethodSpec {
                     println()
                 }
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLint(code)
 
         assertThat(findings).hasSize(2)
@@ -41,7 +41,7 @@ class LongMethodSpec {
                     println()
                 }
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -55,7 +55,7 @@ class LongMethodSpec {
                 println()
                 println()
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -70,7 +70,7 @@ class LongMethodSpec {
                 println()
                 println()
             }
-        """
+        """.trimIndent()
 
         val findings = subject.compileAndLint(code)
 
@@ -94,7 +94,7 @@ class LongMethodSpec {
                     y2
                 )
             }
-        """
+        """.trimIndent()
 
         val findings = subject.compileAndLint(code)
 
@@ -120,7 +120,7 @@ class LongMethodSpec {
                     println()
                 }
             }
-        """
+        """.trimIndent()
 
         val findings = subject.compileAndLint(code)
 
@@ -145,7 +145,7 @@ class LongMethodSpec {
                     println()
                 }
             }
-        """
+        """.trimIndent()
 
         val findings = subject.compileAndLint(code)
 

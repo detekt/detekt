@@ -21,7 +21,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 doSomething()
                 if (a < 0) throw IllegalStateException()
             }
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).hasStartSourceLocation(3, 16)
     }
 
@@ -34,7 +34,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                     throw IllegalStateException()
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).hasStartSourceLocation(4, 9)
     }
 
@@ -45,7 +45,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 doSomething()
                 if (a < 0) throw IllegalStateException("More details")
             }
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).hasStartSourceLocation(3, 16)
     }
 
@@ -57,7 +57,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                     1 -> doSomething()
                     else -> throw IllegalStateException()
                 }
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).hasStartSourceLocation(4, 17)
     }
 
@@ -68,7 +68,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 doSomething()
                 if (a < 0) throw java.lang.IllegalStateException()
             }
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).hasStartSourceLocation(3, 16)
     }
 
@@ -79,7 +79,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 doSomething()
                 if (a < 0) throw kotlin.IllegalStateException()
             }
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).hasStartSourceLocation(3, 16)
     }
 
@@ -90,7 +90,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 doSomething()
                 if (a < 0) throw SomeBusinessException()
             }
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).isEmpty()
     }
 
@@ -102,7 +102,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                     throw IllegalStateException("message", cause)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).isEmpty()
     }
 
@@ -112,7 +112,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
             fun unsafeRunSync(): A =
                 unsafeRunTimed(Duration.INFINITE)
                     .fold({ throw IllegalStateException("message") }, ::identity)
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).isEmpty()
     }
 
@@ -137,7 +137,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                     else -> throw IllegalStateException(throwable)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -150,7 +150,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                     else -> throw IllegalStateException("b", throwable)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -163,7 +163,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                     else -> throw IllegalStateException(throwable.toString())
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -179,7 +179,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                         else -> throw IllegalStateException(throwable)
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -192,7 +192,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                         else -> throw IllegalStateException("b", throwable)
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -205,7 +205,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                         else -> throw IllegalStateException(throwable.toString())
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -218,7 +218,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                         else -> throw IllegalStateException("b")
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }

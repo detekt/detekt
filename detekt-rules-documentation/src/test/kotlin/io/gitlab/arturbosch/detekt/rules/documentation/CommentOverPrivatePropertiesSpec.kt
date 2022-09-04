@@ -14,7 +14,7 @@ class CommentOverPrivatePropertiesSpec {
              * asdf
              */
             private val v = 1
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -25,7 +25,7 @@ class CommentOverPrivatePropertiesSpec {
              * asdf
              */
             val v = 1
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -38,7 +38,7 @@ class CommentOverPrivatePropertiesSpec {
                  */
                 private val v = 1
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -51,7 +51,7 @@ class CommentOverPrivatePropertiesSpec {
                  */
                 val v = 1
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

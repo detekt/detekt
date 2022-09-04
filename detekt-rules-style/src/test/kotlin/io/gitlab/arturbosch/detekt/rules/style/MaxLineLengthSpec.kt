@@ -77,7 +77,7 @@ class MaxLineLengthSpec {
 
             class Test {
             }
-        """
+        """.trimIndent()
 
         private val file = compileContentForTest(code)
 

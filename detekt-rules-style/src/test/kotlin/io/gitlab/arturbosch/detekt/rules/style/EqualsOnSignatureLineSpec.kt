@@ -17,7 +17,7 @@ class EqualsOnSignatureLineSpec {
                 """
                 fun foo()
                     = 1
-                """
+                """.trimIndent()
             )
             assertThat(findings).hasSize(1)
         }
@@ -30,7 +30,7 @@ class EqualsOnSignatureLineSpec {
 
             fun bar() =
                 2
-                """
+                """.trimIndent()
             )
             assertThat(findings).isEmpty()
         }
@@ -54,7 +54,7 @@ class EqualsOnSignatureLineSpec {
                 foo: String
             ): Int
                 = 3
-                """
+                """.trimIndent()
             )
             assertThat(findings).hasSize(3)
         }
@@ -91,7 +91,7 @@ class EqualsOnSignatureLineSpec {
             :
             Int =
                 6
-                """
+                """.trimIndent()
             )
             assertThat(findings).isEmpty()
         }
@@ -116,7 +116,7 @@ class EqualsOnSignatureLineSpec {
             ): Int
                 where V : Number
                 = 3
-                """
+                """.trimIndent()
             )
             assertThat(findings).hasSize(3)
         }
@@ -132,7 +132,7 @@ class EqualsOnSignatureLineSpec {
                 where V : Number =
                 2
 
-                """
+                """.trimIndent()
             )
             assertThat(findings).isEmpty()
         }
@@ -154,7 +154,7 @@ class EqualsOnSignatureLineSpec {
         Unit
         {
         }
-            """
+            """.trimIndent()
         )
         assertThat(findings).isEmpty()
     }

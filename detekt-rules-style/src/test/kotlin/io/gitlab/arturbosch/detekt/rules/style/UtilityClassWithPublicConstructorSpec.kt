@@ -63,7 +63,7 @@ class UtilityClassWithPublicConstructorSpec {
                     const val FEMALE = "female"
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
         }
     }

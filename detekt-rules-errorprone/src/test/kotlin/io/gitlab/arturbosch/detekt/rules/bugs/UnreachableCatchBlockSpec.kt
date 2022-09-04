@@ -20,7 +20,7 @@ class UnreachableCatchBlockSpec(private val env: KotlinCoreEnvironment) {
                 } catch (e: Exception) {
                 }
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocation(4, 7)
@@ -35,7 +35,7 @@ class UnreachableCatchBlockSpec(private val env: KotlinCoreEnvironment) {
                 } catch (e: Exception) {
                 }
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocation(4, 7)
@@ -51,7 +51,7 @@ class UnreachableCatchBlockSpec(private val env: KotlinCoreEnvironment) {
                 } catch (e: IllegalStateException) {
                 }
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(2)
         assertThat(findings).hasStartSourceLocations(
@@ -70,7 +70,7 @@ class UnreachableCatchBlockSpec(private val env: KotlinCoreEnvironment) {
                 } catch (e: RuntimeException) {
                 }
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }

@@ -16,7 +16,7 @@ class CommentOverPrivateMethodSpec {
                  */
                 private fun f() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -27,7 +27,7 @@ class CommentOverPrivateMethodSpec {
              * asdf
              */
             fun f() {}
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -40,7 +40,7 @@ class CommentOverPrivateMethodSpec {
                  */
                 fun f() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

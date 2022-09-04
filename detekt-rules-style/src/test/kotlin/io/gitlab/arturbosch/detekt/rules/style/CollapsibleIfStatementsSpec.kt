@@ -17,7 +17,7 @@ class CollapsibleIfStatementsSpec {
                     // a comment
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -32,7 +32,7 @@ class CollapsibleIfStatementsSpec {
                     println()
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -45,7 +45,7 @@ class CollapsibleIfStatementsSpec {
                     if (true) {}
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -57,7 +57,7 @@ class CollapsibleIfStatementsSpec {
                     if (1 == 1) {}
                 } else {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -70,7 +70,7 @@ class CollapsibleIfStatementsSpec {
                 } else if (false) {}
                 else {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -83,7 +83,7 @@ class CollapsibleIfStatementsSpec {
                     println()
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -96,7 +96,7 @@ class CollapsibleIfStatementsSpec {
                     } else {}
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -109,7 +109,7 @@ class CollapsibleIfStatementsSpec {
                     } else if (2 == 2) {}
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

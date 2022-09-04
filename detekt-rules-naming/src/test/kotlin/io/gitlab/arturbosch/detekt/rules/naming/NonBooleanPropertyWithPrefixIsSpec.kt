@@ -60,7 +60,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
                 data class O (var isDefault: Inner) {
                     class Inner
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
@@ -91,7 +91,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
                 class O {
                     var isDefault = false
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).isEmpty()
@@ -107,7 +107,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
                         isDefault = true
                     }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).isEmpty()
@@ -119,7 +119,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
                 class O {
                     var isDefault: Boolean? = null
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).isEmpty()
@@ -131,7 +131,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
                 class O {
                     var isDefault: java.lang.Boolean = java.lang.Boolean(false)
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).isEmpty()
@@ -147,7 +147,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
                         isDefault = java.lang.Boolean(false)
                     }
                }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).isEmpty()
@@ -159,7 +159,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
                 class O {
                     var isDefault: java.lang.Boolean? = null
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).isEmpty()
@@ -171,7 +171,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
                 class O {
                     var isDefault: Int = 0
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
@@ -183,7 +183,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
                 class O {
                     var isDefault = 0
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
@@ -195,7 +195,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
                 class O {
                     var isDefault = listOf(1, 2, 3)
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
@@ -209,7 +209,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
                     
                     class Inner
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
@@ -221,7 +221,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
                 class O {
                     var `is`: Int = 0
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).isEmpty()
@@ -233,7 +233,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
                 class O {
                     var isengardTowerHeightInFeet: Int = 500
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).isEmpty()
@@ -245,7 +245,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
                 fun f() {
                     var isDefault: Int = 0
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
@@ -260,7 +260,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
             class Test {
                 val isDebuggable get() = BuildConfig.DEBUG
             }
-            """
+            """.trimIndent()
 
             // BuildConfig is missing in this test so we can't compile it
             val findings = subject.lintWithContext(env, code)
@@ -275,7 +275,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
 
                 fun trueFun() = true
                 val isReferenceBoolean = ::trueFun
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).isEmpty()

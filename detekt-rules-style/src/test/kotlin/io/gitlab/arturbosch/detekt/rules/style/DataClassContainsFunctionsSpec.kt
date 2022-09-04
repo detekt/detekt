@@ -21,7 +21,7 @@ class DataClassContainsFunctionsSpec {
                     fun toConversion() = C(i.toString())
                 }
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `reports valid data class with conversion function`() {
@@ -55,7 +55,7 @@ class DataClassContainsFunctionsSpec {
             class C {
                 fun f() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -76,7 +76,7 @@ class DataClassContainsFunctionsSpec {
                     return super.toString()
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

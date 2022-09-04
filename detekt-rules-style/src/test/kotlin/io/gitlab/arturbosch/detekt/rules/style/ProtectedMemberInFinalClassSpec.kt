@@ -19,7 +19,7 @@ class ProtectedMemberInFinalClassSpec {
                 class Foo {
                     protected var i1 = 0
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(2, 5)
@@ -34,7 +34,7 @@ class ProtectedMemberInFinalClassSpec {
                         this.i1 = i1
                     }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(3, 5)
@@ -46,7 +46,7 @@ class ProtectedMemberInFinalClassSpec {
                 class Foo {
                     protected fun function() {}
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(2, 5)
@@ -60,7 +60,7 @@ class ProtectedMemberInFinalClassSpec {
                         protected val i = 0
                     }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(3, 9)
@@ -74,7 +74,7 @@ class ProtectedMemberInFinalClassSpec {
                         protected val i = 0
                     }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(2)
             assertThat(findings).hasStartSourceLocations(
@@ -93,7 +93,7 @@ class ProtectedMemberInFinalClassSpec {
                         }
                     }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(3)
             assertThat(findings).hasStartSourceLocations(
@@ -113,7 +113,7 @@ class ProtectedMemberInFinalClassSpec {
                         }
                     }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(4, 13)
@@ -127,7 +127,7 @@ class ProtectedMemberInFinalClassSpec {
                         protected val i = 0
                     }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(3, 9)
@@ -137,7 +137,7 @@ class ProtectedMemberInFinalClassSpec {
         fun `reports a protected primary constructor in a final class`() {
             val code = """
                 class FinalClassWithProtectedConstructor protected constructor()
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(1, 42)
@@ -154,7 +154,7 @@ class ProtectedMemberInFinalClassSpec {
                 class Foo : BaseClass() {
                     private val i = 0
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -168,7 +168,7 @@ class ProtectedMemberInFinalClassSpec {
                     // should not report protected = private visibility
                     protected override val abstractProp = 0
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -183,7 +183,7 @@ class ProtectedMemberInFinalClassSpec {
                     protected override fun abstractFunction() {
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -196,7 +196,7 @@ class ProtectedMemberInFinalClassSpec {
                 
                     protected object InnerObject
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -206,7 +206,7 @@ class ProtectedMemberInFinalClassSpec {
                 sealed class SealedClass {
                     protected fun a() {}
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -217,7 +217,7 @@ class ProtectedMemberInFinalClassSpec {
                     ;   
                     protected fun foo() {}
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

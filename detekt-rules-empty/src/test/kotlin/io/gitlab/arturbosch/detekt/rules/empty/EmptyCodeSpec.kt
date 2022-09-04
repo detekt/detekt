@@ -22,7 +22,7 @@ class EmptyCodeSpec {
                 } catch (foo: Exception) {
                 }
             }
-    """
+    """.trimIndent()
 
     @Test
     fun `findsEmptyCatch`() {
@@ -40,7 +40,7 @@ class EmptyCodeSpec {
                 }
             }
         }
-        """
+        """.trimIndent()
         assertThat(EmptyCatchBlock(Config.empty).compileAndLint(code)).hasSize(1)
     }
 
@@ -53,7 +53,7 @@ class EmptyCodeSpec {
             } catch (expected: Exception) {
             }
         }
-        """
+        """.trimIndent()
         assertThat(EmptyCatchBlock(Config.empty).compileAndLint(code)).isEmpty()
     }
 
@@ -65,7 +65,7 @@ class EmptyCodeSpec {
             } catch (foo: Exception) {
             }
         }
-        """
+        """.trimIndent()
         val config = TestConfig(mapOf(ALLOWED_EXCEPTION_NAME_REGEX to "foo"))
         assertThat(EmptyCatchBlock(config).compileAndLint(code)).isEmpty()
     }

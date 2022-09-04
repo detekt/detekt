@@ -16,7 +16,7 @@ class ExplicitGarbageCollectionCallSpec {
                 Runtime.getRuntime().gc()
                 System.runFinalization()
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(3)
     }
 }

@@ -51,10 +51,10 @@ private val result = object : Detektion {
     }
 }
 
-private const val code = """
+private val code = """
     package io.gitlab.arturbosch.detekt.sample
 
     class Foo {}
     object Bar {}
     interface Bla {}
-"""
+""".trimIndent()

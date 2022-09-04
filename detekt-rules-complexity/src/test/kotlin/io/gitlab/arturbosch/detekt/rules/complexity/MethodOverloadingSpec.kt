@@ -23,7 +23,7 @@ class MethodOverloadingSpec {
                     fun x(i: Int) {}
                     fun x(i: Int, j: Int) {}
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings[0].message).isEqualTo("The method 'x' is overloaded 3 times.")
@@ -35,7 +35,7 @@ class MethodOverloadingSpec {
                 fun x() {}
                 fun x(i: Int) {}
                 fun x(i: Int, j: Int) {}
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -47,7 +47,7 @@ class MethodOverloadingSpec {
                 fun x() { }
                 fun x(i: Int) { }
             }
-                """
+                """.trimIndent()
             )
             assertThat(subject.findings.size).isZero()
         }
@@ -63,7 +63,7 @@ class MethodOverloadingSpec {
             fun Boolean.foo() {}
             fun Int.foo() {}
             fun Long.foo() {}
-                """
+                """.trimIndent()
             )
             assertThat(subject.findings.size).isZero()
         }
@@ -75,7 +75,7 @@ class MethodOverloadingSpec {
             fun Int.foo() {}
             fun Int.foo(i: Int) {}
             fun Int.foo(i: String) {}
-                """
+                """.trimIndent()
             )
             assertThat(subject.findings.size).isEqualTo(1)
         }
@@ -94,7 +94,7 @@ class MethodOverloadingSpec {
                         fun f(i: Int, j: Int) {}
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -110,7 +110,7 @@ class MethodOverloadingSpec {
                         fun f(i: Int, j: Int) {}
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
@@ -126,7 +126,7 @@ class MethodOverloadingSpec {
                     fun f(i: Int) {}
                     fun f(i: Int, j: Int) {}
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -137,7 +137,7 @@ class MethodOverloadingSpec {
                     fun f() {}
                     fun f(i: Int) {}
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -151,7 +151,7 @@ class MethodOverloadingSpec {
                         fun f(i: Int, j: Int) {}
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -164,7 +164,7 @@ class MethodOverloadingSpec {
                         fun f(i: Int) {}
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -180,7 +180,7 @@ class MethodOverloadingSpec {
                         fun f(i: Int) {}
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -197,7 +197,7 @@ class MethodOverloadingSpec {
                         }
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
     }
@@ -221,7 +221,7 @@ class MethodOverloadingSpec {
 
                     abstract fun f()
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -235,7 +235,7 @@ class MethodOverloadingSpec {
                     };
                     fun f() {}
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -249,7 +249,7 @@ class MethodOverloadingSpec {
                     fun f(i: Int) {}
                     fun f(i: Int, j: Int) {}
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
     }
@@ -268,7 +268,7 @@ class MethodOverloadingSpec {
                 fun f(i: Int) {}
                 fun f(i: Int, j: Int) {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

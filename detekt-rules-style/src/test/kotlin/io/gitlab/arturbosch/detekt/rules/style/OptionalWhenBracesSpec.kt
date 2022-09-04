@@ -25,7 +25,7 @@ class OptionalWhenBracesSpec {
                     }
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -38,7 +38,7 @@ class OptionalWhenBracesSpec {
                     else -> println()
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -63,7 +63,7 @@ class OptionalWhenBracesSpec {
                     false -> println("false")
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code))
             .hasSize(2)
             .hasStartSourceLocations(SourceLocation(7, 17), SourceLocation(10, 17))
@@ -84,7 +84,7 @@ class OptionalWhenBracesSpec {
                     }
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code))
             .hasSize(1)
             .hasStartSourceLocations(SourceLocation(3, 9))
@@ -101,7 +101,7 @@ class OptionalWhenBracesSpec {
                         false -> { { it + 200  } }
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -114,7 +114,7 @@ class OptionalWhenBracesSpec {
                         false -> { { i -> i + 200  } }
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
     }

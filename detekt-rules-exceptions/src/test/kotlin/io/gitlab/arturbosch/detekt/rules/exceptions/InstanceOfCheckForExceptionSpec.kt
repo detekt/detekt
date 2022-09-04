@@ -21,7 +21,7 @@ class InstanceOfCheckForExceptionSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
     }
 
@@ -36,7 +36,7 @@ class InstanceOfCheckForExceptionSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
     }
 
@@ -53,7 +53,7 @@ class InstanceOfCheckForExceptionSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -69,7 +69,7 @@ class InstanceOfCheckForExceptionSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 }

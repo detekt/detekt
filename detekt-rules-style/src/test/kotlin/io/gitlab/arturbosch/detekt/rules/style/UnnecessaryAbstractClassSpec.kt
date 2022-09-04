@@ -28,7 +28,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                     abstract fun f()
                     public abstract fun f2()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertFindingMessage(findings, message)
             assertThat(findings).hasStartSourceLocation(1, 16)
@@ -72,7 +72,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                         val i: Int
                     }
                     abstract class B : A
-                """
+                """.trimIndent()
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertFindingMessage(findings, message)
             }
@@ -85,7 +85,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                         abstract val i: Int
                     }
                     abstract class B : A()
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -99,7 +99,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                     abstract val i: Int
                 }
                 abstract class B: A(), I
-            """
+                """.trimIndent()
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
@@ -114,7 +114,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                     abstract val i: Int
                 }
                 abstract class B: I, A()
-            """
+                """.trimIndent()
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
@@ -131,7 +131,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 abstract class B : A() {
                     abstract fun g()
                 } 
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -141,7 +141,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 abstract class A {
                     internal abstract fun f()
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -151,7 +151,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 abstract class A {
                     protected abstract fun f()
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
@@ -168,7 +168,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                     val i: Int = 0
                     fun f() {}
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertFindingMessage(findings, message)
         }
@@ -181,7 +181,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                         fun f() {}
                     }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertFindingMessage(findings, message)
         }
@@ -194,7 +194,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                         fun f() {}
                     }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertFindingMessage(findings, message)
         }
@@ -239,7 +239,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 
                     fun g() {}
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertFindingMessage(findings, message)
         }
@@ -259,7 +259,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 abstract class B : A() {
                     fun g() {}
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -273,7 +273,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 abstract class B : A(0) {
                     fun g() {}
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -287,7 +287,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 interface Interface {
                     fun f()
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -303,7 +303,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 abstract class B {
                     abstract fun f()
                 } 
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -314,7 +314,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                     fun test(): Int
                 }
                 abstract class Test(val x: Int) : I
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }

@@ -21,7 +21,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                     return
                 }
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should report`() {
@@ -38,7 +38,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                 } finally {
                 }
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not report`() {
@@ -58,7 +58,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should report`() {
@@ -79,7 +79,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                     y()
                 }
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not report`() {
@@ -99,7 +99,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should report when ignoreLabeled is false`() {
@@ -127,7 +127,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                 } finally {
                     "finally"
                 }
-            """
+            """.trimIndent()
 
             val finding = subject.compileAndLintWithContext(env, code)
 
@@ -147,7 +147,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                 } finally {
                     "finally"
                 }
-            """
+            """.trimIndent()
 
             val finding = subject.compileAndLintWithContext(env, code)
 
@@ -169,7 +169,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                 }
                 
                 fun compute(): String = "value"
-            """
+            """.trimIndent()
 
             val finding = subject.compileAndLintWithContext(env, code)
 
@@ -187,7 +187,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                 } catch (e: Exception) {
                     "exception"
                 } 
-            """
+            """.trimIndent()
 
             val finding = subject.compileAndLintWithContext(env, code)
 
@@ -206,7 +206,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                 } catch (e: Exception) {
                     "exception"
                 }
-            """
+            """.trimIndent()
 
             val finding = subject.compileAndLintWithContext(env, code)
 
@@ -228,7 +228,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                        "finally"
                    }
                }
-            """
+            """.trimIndent()
 
             val finding = subject.compileAndLintWithContext(env, code)
 
@@ -248,7 +248,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                 } finally {
                     println("finally")
                 }
-            """
+            """.trimIndent()
 
             val finding = subject.compileAndLintWithContext(env, code)
 
@@ -270,7 +270,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                     println("finally")
                     property
                 }
-            """
+            """.trimIndent()
 
             val finding = subject.compileAndLintWithContext(env, code)
 

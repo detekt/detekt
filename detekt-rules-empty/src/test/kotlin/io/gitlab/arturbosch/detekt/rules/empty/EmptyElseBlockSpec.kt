@@ -20,7 +20,7 @@ class EmptyElseBlockSpec {
                     
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -33,7 +33,7 @@ class EmptyElseBlockSpec {
                     println(i)
                 } else ;
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -48,7 +48,7 @@ class EmptyElseBlockSpec {
                 ;
                 i++
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -63,7 +63,7 @@ class EmptyElseBlockSpec {
                 }
                 i++
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -78,7 +78,7 @@ class EmptyElseBlockSpec {
                     i++
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -91,7 +91,7 @@ class EmptyElseBlockSpec {
                     println(i)
                 } else i++
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -104,7 +104,7 @@ class EmptyElseBlockSpec {
                     println(i)
                 } else i++;
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }
