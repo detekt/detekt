@@ -105,7 +105,7 @@ internal class DetektMultiplatform(private val project: Project) {
             } else {
                 extension.baseline?.takeIf { it.exists() }
             }?.let { baselineFile ->
-                baseline.set(layout.file(provider { baselineFile }))
+                baseline.convention(layout.file(provider { baselineFile }))
             }
             setReportOutputConventions(reports, extension, compilation.name)
             description =
@@ -128,7 +128,7 @@ internal class DetektMultiplatform(private val project: Project) {
             } else {
                 extension.baseline
             }
-            baseline.set(
+            baseline.convention(
                 layout.file(provider { variantBaselineFile })
             )
 

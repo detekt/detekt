@@ -17,12 +17,12 @@ internal class DetektPlain(private val project: Project) {
     private fun Project.registerDetektTask(extension: DetektExtension) {
         val detektTaskProvider = registerDetektTask(DetektPlugin.DETEKT_TASK_NAME, extension) {
             extension.baseline?.takeIf { it.exists() }?.let { baselineFile ->
-                baseline.set(project.layout.file(project.provider { baselineFile }))
+                baseline.convention(project.layout.file(project.provider { baselineFile }))
             }
             setSource(existingInputDirectoriesProvider(project, extension))
             setIncludes(DetektPlugin.defaultIncludes)
             setExcludes(DetektPlugin.defaultExcludes)
-            reportsDir.set(project.provider { extension.reportsDir })
+            reportsDir.convention(project.provider { extension.reportsDir })
         }
 
         tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {
@@ -32,7 +32,7 @@ internal class DetektPlain(private val project: Project) {
 
     private fun Project.registerCreateBaselineTask(extension: DetektExtension) {
         registerCreateBaselineTask(DetektPlugin.BASELINE_TASK_NAME, extension) {
-            baseline.set(project.layout.file(project.provider { extension.baseline }))
+            baseline.convention(project.layout.file(project.provider { extension.baseline }))
             setSource(existingInputDirectoriesProvider(project, extension))
         }
     }

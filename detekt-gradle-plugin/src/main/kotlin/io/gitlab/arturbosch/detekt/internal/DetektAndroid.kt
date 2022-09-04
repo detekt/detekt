@@ -126,7 +126,7 @@ internal fun Project.registerAndroidDetektTask(
         // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
         // We try to find the configured baseline or alternatively a specific variant matching this task.
         extension.baseline?.existingVariantOrBaseFile(variant.name)?.let { baselineFile ->
-            baseline.set(layout.file(project.provider { baselineFile }))
+            baseline.convention(layout.file(project.provider { baselineFile }))
         }
         setReportOutputConventions(reports, extension, variant.name)
         description = "EXPERIMENTAL: Run detekt analysis for ${variant.name} classes with type resolution"
@@ -148,7 +148,7 @@ internal fun Project.registerAndroidCreateBaselineTask(
             javaCompileDestination(variant),
         )
         val variantBaselineFile = extension.baseline?.addVariantName(variant.name)
-        baseline.set(project.layout.file(project.provider { variantBaselineFile }))
+        baseline.convention(project.layout.file(project.provider { variantBaselineFile }))
         description = "EXPERIMENTAL: Creates detekt baseline for ${variant.name} classes with type resolution"
     }
 
