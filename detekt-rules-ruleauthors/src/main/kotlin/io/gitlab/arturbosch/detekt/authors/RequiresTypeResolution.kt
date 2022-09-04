@@ -61,6 +61,8 @@ class RequiresTypeResolution(config: Config = Config.empty) : Rule(config) {
                 )
             }
         }
+        klasses.clear()
+        usesBindingContext = false
     }
 
     override fun visitClass(klass: KtClass) {
