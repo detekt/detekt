@@ -12,6 +12,7 @@ import org.spekframework.spek2.dsl.Root
 import org.spekframework.spek2.lifecycle.CachingMode
 import java.io.File
 import java.nio.file.Path
+import kotlin.script.experimental.jvm.util.classpathFromClassloader
 
 @Deprecated(
     "This is specific to Spek and will be removed in a future release. Documentation has been updated to " +
@@ -48,7 +49,12 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
     override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any {
         val closeableWrapper = extensionContext.wrapper
             ?: CloseableWrapper(
-                createEnvironment(additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths())
+                createEnvironment(
+                    additionalRootPaths = checkNotNull(
+                        classpathFromClassloader(Thread.currentThread().contextClassLoader)
+                    ) { "We should always have a classpath" },
+                    additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths(),
+                )
             ).also { extensionContext.wrapper = it }
         return closeableWrapper.wrapper.env
     }
