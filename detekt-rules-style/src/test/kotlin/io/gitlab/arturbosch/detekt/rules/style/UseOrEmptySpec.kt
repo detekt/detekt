@@ -19,7 +19,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(x: List<Int>?) {
                     val a = x ?: emptyList()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(2, 13)
@@ -32,7 +32,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(x: Set<Int>?) {
                     val a = x ?: emptySet()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -43,7 +43,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(x: Map<Int, String>?) {
                     val a = x ?: emptyMap()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -54,7 +54,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(x: Sequence<Int>?) {
                     val a = x ?: emptySequence()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -65,7 +65,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(x: Array<Int>?) {
                     val a = x ?: emptyArray()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -76,7 +76,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(x: List<Int>?) {
                     val a = x ?: listOf()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -87,7 +87,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(x: Set<Int>?) {
                     val a = x ?: setOf()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -98,7 +98,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(x: Map<Int, String>?) {
                     val a = x ?: mapOf()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -109,7 +109,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(x: Sequence<Int>?) {
                     val a = x ?: sequenceOf()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -120,7 +120,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(x: Array<Int>?) {
                     val a = x ?: arrayOf()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -131,7 +131,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(x: String?) {
                     val a = x ?: ""
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -142,7 +142,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(x: MutableList<Int>?) {
                     val a = x ?: emptyList()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -156,7 +156,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(c: C) {
                     c["key"] ?: emptyList()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -170,7 +170,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(x: List<Int>) {
                     val a = x ?: emptyList()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -181,7 +181,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(x: List<Int>?) {
                     val a = x ?: listOf(1)
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -195,7 +195,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(c: Any?) {
                     val x = c ?: emptyList<Int>()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -206,7 +206,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(x: MutableList<Int>?) {
                     val a = x ?: mutableListOf()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -217,7 +217,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                 fun test(x: IntArray?) {
                     val a = x ?: intArrayOf()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -233,7 +233,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
                     val y: List<Int> = c["key"] ?: emptyList()
                     val z = (c["key"]) ?: emptyList<Int>()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }

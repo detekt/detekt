@@ -18,7 +18,7 @@ class ExplicitItLambdaParameterSpec {
             fun f() {
                 val digits = 1234.let { it -> listOf(it) }
             }
-                """
+                """.trimIndent()
             )
             assertThat(findings).hasSize(1)
         }
@@ -30,7 +30,7 @@ class ExplicitItLambdaParameterSpec {
             fun f() {
                 val lambda = { it: Int -> it.toString() }
             }
-                """
+                """.trimIndent()
             )
             assertThat(findings).hasSize(1)
         }
@@ -47,7 +47,7 @@ class ExplicitItLambdaParameterSpec {
                 val digits = 1234.let { lambda(it) }.toList()
                 val flat = listOf(listOf(1), listOf(2)).flatMap { it }
             }
-                """
+                """.trimIndent()
             )
             assertThat(findings).isEmpty()
         }
@@ -62,7 +62,7 @@ class ExplicitItLambdaParameterSpec {
             fun f() {
                 val flat = listOf(listOf(1), listOf(2)).mapIndexed { index, it -> it + index }
             }
-                """
+                """.trimIndent()
             )
             assertThat(findings).hasSize(1)
         }
@@ -74,7 +74,7 @@ class ExplicitItLambdaParameterSpec {
             fun f() {
                 val lambda = { it: Int, that: String -> it.toString() + that }
             }
-                """
+                """.trimIndent()
             )
             assertThat(findings).hasSize(1)
         }

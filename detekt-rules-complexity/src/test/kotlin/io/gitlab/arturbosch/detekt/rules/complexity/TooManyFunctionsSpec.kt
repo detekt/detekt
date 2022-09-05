@@ -35,7 +35,7 @@ class TooManyFunctionsSpec {
             class A {
                 fun a() = Unit
             }
-        """
+        """.trimIndent()
 
         val findings = rule.compileAndLint(code)
         assertThat(findings).hasSize(1)
@@ -48,7 +48,7 @@ class TooManyFunctionsSpec {
             object O {
                 fun o() = Unit
             }
-        """
+        """.trimIndent()
 
         val findings = rule.compileAndLint(code)
         assertThat(findings).hasSize(1)
@@ -61,7 +61,7 @@ class TooManyFunctionsSpec {
             interface I {
                 fun i()
             }
-        """
+        """.trimIndent()
 
         val findings = rule.compileAndLint(code)
         assertThat(findings).hasSize(1)
@@ -75,7 +75,7 @@ class TooManyFunctionsSpec {
                 A;
                 fun e() {}
             }
-        """
+        """.trimIndent()
 
         val findings = rule.compileAndLint(code)
         assertThat(findings).hasSize(1)
@@ -99,7 +99,7 @@ class TooManyFunctionsSpec {
             interface I
             enum class E
             fun f3() = Unit
-        """
+        """.trimIndent()
 
         assertThat(rule.compileAndLint(code)).hasSize(1)
     }
@@ -112,7 +112,7 @@ class TooManyFunctionsSpec {
                     fun a() = Unit
                 }
             }
-        """
+        """.trimIndent()
 
         val findings = rule.compileAndLint(code)
         assertThat(findings).hasSize(1)
@@ -131,7 +131,7 @@ class TooManyFunctionsSpec {
                 fun f() {
                 }
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `finds all deprecated functions per default`() {
@@ -160,7 +160,7 @@ class TooManyFunctionsSpec {
             class A {
                 private fun f() {}
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `finds the private function per default`() {
@@ -204,7 +204,7 @@ class TooManyFunctionsSpec {
                     override fun a() = Unit
                     override fun b() = Unit
                 }
-            """
+            """.trimIndent()
             val configuredRule = TooManyFunctions(
                 TestConfig(
                     mapOf(
@@ -233,7 +233,7 @@ class TooManyFunctionsSpec {
                     override fun func1() = Unit
                     override fun func2() = Unit
                 }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not report class with overridden functions, if ignoreOverridden is enabled`() {

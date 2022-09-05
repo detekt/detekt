@@ -18,7 +18,7 @@ class ThrowingNewInstanceOfSameExceptionSpec {
                 throw IllegalStateException(e)
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should report`() {
@@ -36,7 +36,7 @@ class ThrowingNewInstanceOfSameExceptionSpec {
                 throw IllegalArgumentException(e)
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not report`() {
@@ -57,7 +57,7 @@ class ThrowingNewInstanceOfSameExceptionSpec {
                 throw IllegalStateException()
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not report`() {

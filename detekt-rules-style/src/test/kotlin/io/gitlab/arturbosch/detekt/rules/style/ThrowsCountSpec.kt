@@ -16,7 +16,7 @@ class ThrowsCountSpec {
     inner class `a function with an empty body` {
         val code = """
             fun func() {}
-        """
+        """.trimIndent()
 
         @Test
         fun `does not report violation by default`() {
@@ -28,7 +28,7 @@ class ThrowsCountSpec {
     inner class `a function without a body` {
         val code = """
             fun func() = Unit
-        """
+        """.trimIndent()
 
         @Test
         fun `does not report violation by default`() {
@@ -45,7 +45,7 @@ class ThrowsCountSpec {
                     2 -> throw IOException()
                 }
             }
-        """
+        """.trimIndent()
         val subject = ThrowsCount(Config.empty)
 
         @Test
@@ -64,7 +64,7 @@ class ThrowsCountSpec {
                     3 -> throw IOException()
                 }
             }
-        """
+        """.trimIndent()
         val subject = ThrowsCount(Config.empty)
 
         @Test
@@ -83,7 +83,7 @@ class ThrowsCountSpec {
                     3 -> throw IOException()
                 }
             }
-        """
+        """.trimIndent()
         val subject = ThrowsCount(Config.empty)
 
         @Test
@@ -107,7 +107,7 @@ class ThrowsCountSpec {
                 }
                 return bar(x)
             }
-        """
+        """.trimIndent()
         val subject = ThrowsCount(Config.empty)
 
         @Test
@@ -126,7 +126,7 @@ class ThrowsCountSpec {
                 val int = x?.toInt() ?: throw IOException()
                 val double = x?.toDouble() ?: throw IOException()
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `does not report when max parameter is 3`() {
@@ -154,7 +154,7 @@ class ThrowsCountSpec {
                 }
                 throw Exception()
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not report violation with EXCLUDE_GUARD_CLAUSES as true`() {
@@ -182,7 +182,7 @@ class ThrowsCountSpec {
                 }
                 throw Exception()
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not report violation with EXCLUDE_GUARD_CLAUSES as true`() {
@@ -217,7 +217,7 @@ class ThrowsCountSpec {
                 }
                 throw Exception()
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should report violation even with EXCLUDE_GUARD_CLAUSES as true`() {
@@ -238,7 +238,7 @@ class ThrowsCountSpec {
                 if (x < 4) throw Exception()
                 throw Exception()
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should report the violation even with EXCLUDE_GUARD_CLAUSES as true`() {
@@ -259,7 +259,7 @@ class ThrowsCountSpec {
                 val y = x ?: throw Exception()
                 throw Exception()
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should report the violation even with EXCLUDE_GUARD_CLAUSES as true`() {
@@ -283,7 +283,7 @@ class ThrowsCountSpec {
 
                 throw Exception()
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not report violation with EXCLUDE_GUARD_CLAUSES as true`() {

@@ -28,7 +28,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                         plus(1)
                     }
                 }
-                """
+                """.trimIndent()
             )
             assertThat(findings).hasSize(1)
             assertThat(findings.first().message).isEqualTo("apply expression can be omitted")
@@ -47,7 +47,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                         plus(1)
                     }
                 }
-                """
+                """.trimIndent()
             )
             assertThat(findings).hasSize(1)
             assertThat(findings.first().message).isEqualTo("apply can be replaced with let or an if")
@@ -67,7 +67,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                         b()
                     }
                 }
-                    """
+                    """.trimIndent()
                 )
             ).hasSize(1)
         }
@@ -84,7 +84,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                         plus(1)
                     })
                 }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -103,7 +103,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                         toString()
                     })
                 }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -130,7 +130,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                         }
                     )
                 }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -144,7 +144,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                     val a = listOf(mutableListOf(""))
                                 .map { it.apply { add("") } }
                 }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -172,7 +172,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                         plus(2)
                     })
                 }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -193,7 +193,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                 class Bar {
                     fun bar() {}
                 }
-                """
+                """.trimIndent()
             )
             assertThat(findings).hasSize(1)
         }
@@ -214,7 +214,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                 class Bar {
                     fun bar() {}
                 }
-                """
+                """.trimIndent()
             )
             assertThat(findings).hasSize(1)
         }
@@ -229,7 +229,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                         this
                     }
                 }
-                """
+                """.trimIndent()
             )
             assertThat(findings).hasSize(1)
         }
@@ -253,7 +253,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                         prop = 1
                     }
                 }
-                    """
+                    """.trimIndent()
                 )
             ).hasSize(1)
         }
@@ -273,7 +273,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                         prop = 1
                     }
                 }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -293,7 +293,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                 }
                 
                 val a = C().apply { f() }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -307,7 +307,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                 class C(var prop: Int)
                 
                 fun Int.f() = C(5).apply { prop = 10 }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -323,7 +323,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                         C(1).apply { prop = 3 }
                     }
                 }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -337,7 +337,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                 class C(var prop: Int)
                 
                 fun f() = (C(5)).apply { prop = 10 }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -354,7 +354,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                         ?.apply { if (true) 4 }
                         ?: listOf(0)
                 }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -380,7 +380,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                         }
                     }
                 }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -404,7 +404,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                         this.prop
                     }
                 }
-                    """
+                    """.trimIndent()
                 )
             ).hasSize(2)
         }
@@ -430,7 +430,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                         C()
                     }
                 }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -455,7 +455,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                         C().apply { f() }
                     }
                 }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -484,7 +484,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                         var baz = 1
                     }
 
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }

@@ -10,7 +10,7 @@ class YamlSpec {
     inner class KeyValue {
         @Test
         fun `renders key and value as provided`() {
-            val result = yaml { keyValue() { "key" to "value" } }
+            val result = yaml { keyValue { "key" to "value" } }
             assertThat(result).isEqualTo("key: value")
         }
     }
@@ -30,7 +30,8 @@ class YamlSpec {
         fun `renders single element`() {
             val given = listOf("value")
             val result = yaml { list("key", given) }
-            val expected = """key:
+            val expected = """
+                |key:
                 |  - 'value'
             """.trimMargin()
             assertThat(result).isEqualTo(expected)
@@ -40,7 +41,8 @@ class YamlSpec {
         fun `renders multiple elements`() {
             val given = listOf("value 1", "value 2")
             val result = yaml { list("key", given) }
-            val expected = """key:
+            val expected = """
+                |key:
                 |  - 'value 1'
                 |  - 'value 2'
             """.trimMargin()
@@ -51,7 +53,8 @@ class YamlSpec {
         fun `quotes a value containing special characters`() {
             val given = listOf("val*ue1", "val|ue2", "val\$ue3")
             val result = yaml { list("key", given) }
-            val expected = """key:
+            val expected = """
+                |key:
                 |  - 'val*ue1'
                 |  - 'val|ue2'
                 |  - 'val${"$"}ue3'
@@ -63,7 +66,8 @@ class YamlSpec {
         fun `quotes a blank value`() {
             val given = listOf("   ")
             val result = yaml { list("key", given) }
-            val expected = """key:
+            val expected = """
+                |key:
                 |  - '   '
             """.trimMargin()
             assertThat(result).isEqualTo(expected)
@@ -73,7 +77,8 @@ class YamlSpec {
         fun `does not add quotes when value is already enclosed in quotes`() {
             val given = listOf("'val*ue1'", "\"val|ue2\"", "\"\"", "''")
             val result = yaml { list("key", given) }
-            val expected = """key:
+            val expected = """
+                |key:
                 |  - 'val*ue1'
                 |  - "val|ue2"
                 |  - ""
@@ -106,7 +111,8 @@ class YamlSpec {
         fun `renders single map with single element`() {
             val given = listOf(mapOf("name" to "value"))
             val result = yaml { listOfMaps("key", given) }
-            val expected = """key:
+            val expected = """
+                |key:
                 |  - name: 'value'
             """.trimMargin()
             assertThat(result).isEqualTo(expected)
@@ -122,7 +128,8 @@ class YamlSpec {
                 )
             )
             val result = yaml { listOfMaps("key", given) }
-            val expected = """key:
+            val expected = """
+                |key:
                 |  - name1: 'value 1'
                 |    name2: 'value 2'
                 |    name3: 'value 3'
@@ -147,7 +154,8 @@ class YamlSpec {
                 )
             )
             val result = yaml { listOfMaps("key", given) }
-            val expected = """key:
+            val expected = """
+                |key:
                 |  - name1: 'value 1'
                 |    name2: 'value 2'
                 |  - name3: 'value 3'
@@ -168,7 +176,8 @@ class YamlSpec {
                 ),
             )
             val result = yaml { listOfMaps("key", given) }
-            val expected = """key:
+            val expected = """
+                |key:
                 |  - a: 'value'
                 |    b: 'value'
                 |    x: 'value'
@@ -187,7 +196,8 @@ class YamlSpec {
                 ),
             )
             val result = yaml { listOfMaps("key", given) }
-            val expected = """key:
+            val expected = """
+                |key:
                 |  - a: 'value'
                 |    c: 'value'
             """.trimMargin()
@@ -204,7 +214,8 @@ class YamlSpec {
                 )
             )
             val result = yaml { listOfMaps("key", given) }
-            val expected = """key:
+            val expected = """
+                |key:
                 |  - name1: 'already quoted'
                 |    name2: "also quoted"
                 |    name3: 'should be quoted'

@@ -22,7 +22,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     a = 6
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -46,7 +46,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     return b
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
 
@@ -77,7 +77,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         }
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
 
@@ -90,7 +90,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
             fun fileFoo() {
                 fileB = 6
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
         }
 
@@ -123,7 +123,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     return if (bizz % 2 == 0) null else bizz
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -133,7 +133,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 class A(private var aDelegate: Int?) {
                     private var a: Int? by this::aDelegate
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -155,7 +155,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     fileA = null
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -169,7 +169,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     a = 6
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -183,7 +183,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     a = null
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -196,7 +196,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     a = 6
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -210,7 +210,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         a = 6
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -222,7 +222,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     a = 6
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
@@ -242,7 +242,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     c = cVal
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
         }
 
@@ -254,7 +254,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     5
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -262,7 +262,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
         fun `reports when file-level vals are set to non-nullable values`() {
             val code = """
             val fileA: Int? = 5
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -281,7 +281,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     c = cVal
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -296,7 +296,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     if (randVal % 2 == 0) randVal else null
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -304,7 +304,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
         fun `does not report when file-level vals are assigned a nullable value`() {
             val code = """
             val fileA: Int? = null
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -314,7 +314,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
             class A {
                 val a: Int = 5
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -322,7 +322,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
         fun `does not report when vals are declared in the constructor`() {
             val code = """
             class A(private val a: Int?)
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -343,7 +343,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     return 5
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
         }
 
@@ -367,7 +367,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         return if (randInt % 2 == 0) randInt else null
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -452,7 +452,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 open val a: Int? = 5
                 open var b: Int? = 5
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -463,7 +463,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 abstract val a: Int?
                 abstract var b: Int?
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -477,7 +477,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 // as non-null in Kotlin code.
                 private var a: String? = e.localizedMessage
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -488,7 +488,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 val a: Int?
                 var b: Int?
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -579,7 +579,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
             inner class `in a non-return statement` {
                 @Test
                 fun `does report when the safe-qualified expression is the only expression of the function`() {
-                    val code = """   
+                    val code = """
                         class A(val foo: String)
 
                         fun foo(a: A?) {
@@ -899,7 +899,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
 
             @Test
             fun `does report null-check returning unit type`() {
-                val code = """   
+                val code = """
                     fun foo(a: Int?) {
                         if (a == null) return
                         println(a)
@@ -910,7 +910,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
 
             @Test
             fun `does report null-check returning unit type in block`() {
-                val code = """   
+                val code = """
                     fun foo(a: Int?) {
                         if (a == null) { return }
                         println(a)
@@ -921,7 +921,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
 
             @Test
             fun `does not report guard statement with side effect ahead`() {
-                val code = """   
+                val code = """
                     fun foo(a: Int?) {
                         println("side effect")
                         if (a == null) return
@@ -933,7 +933,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
 
             @Test
             fun `does not report null-check returning non-unit type`() {
-                val code = """   
+                val code = """
                     fun foo(a: Int?): Int {
                         if (a == null) return 0
                         println(a)

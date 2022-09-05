@@ -13,7 +13,7 @@ class VariableMaxLengthSpec {
             fun function() {
                 val (_, status) = getResult()
             }
-        """
+        """.trimIndent()
         assertThat(VariableMaxLength().compileAndLint(code)).isEmpty()
     }
 

@@ -13,7 +13,7 @@ class ForbiddenPublicDataClassSpec {
     fun `public data class should pass without explicit filters set`() {
         val code = """
             data class C(val a: String)                
-        """
+        """.trimIndent()
 
         assertThat(ForbiddenPublicDataClass(TestConfig(Config.EXCLUDES_KEY to "**")).compileAndLint(code)).isEmpty()
     }
@@ -22,7 +22,7 @@ class ForbiddenPublicDataClassSpec {
     fun `public data class should fail`() {
         val code = """
             data class C(val a: String)                
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
@@ -31,7 +31,7 @@ class ForbiddenPublicDataClassSpec {
     fun `private data class should pass`() {
         val code = """
             private data class C(val a: String)                
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -40,7 +40,7 @@ class ForbiddenPublicDataClassSpec {
     fun `internal data class should pass`() {
         val code = """
             internal data class C(val a: String)                
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -49,7 +49,7 @@ class ForbiddenPublicDataClassSpec {
     fun `public class should pass`() {
         val code = """
             class C(val a: String) 
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -60,7 +60,7 @@ class ForbiddenPublicDataClassSpec {
             class C {
                 private data class D(val a: String)   
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -71,7 +71,7 @@ class ForbiddenPublicDataClassSpec {
             class C {
                 data class D(val a: String)   
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
@@ -82,7 +82,7 @@ class ForbiddenPublicDataClassSpec {
             open class C {
                 protected data class D(val a: String)   
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
@@ -93,7 +93,7 @@ class ForbiddenPublicDataClassSpec {
             internal class C {
                 data class D(val a: String)   
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -104,7 +104,7 @@ class ForbiddenPublicDataClassSpec {
             package com.example.internal
 
             data class C(val a: String)                
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -115,7 +115,7 @@ class ForbiddenPublicDataClassSpec {
             package com.example.internal.other
 
             data class C(val a: String)                
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -126,7 +126,7 @@ class ForbiddenPublicDataClassSpec {
             package com.example.internalise
 
             data class C(val a: String)                
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
@@ -137,7 +137,7 @@ class ForbiddenPublicDataClassSpec {
             package com.random
 
             data class C(val a: String)                
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
@@ -148,7 +148,7 @@ class ForbiddenPublicDataClassSpec {
             package com.example
 
             data class C(val a: String)                
-        """
+        """.trimIndent()
 
         val config = TestConfig("ignorePackages" to listOf("*.hello", "com.example"))
         assertThat(ForbiddenPublicDataClass(config).compileAndLint(code)).isEmpty()
@@ -160,7 +160,7 @@ class ForbiddenPublicDataClassSpec {
             package org.example
 
             data class C(val a: String)                
-        """
+        """.trimIndent()
 
         val config = TestConfig("ignorePackages" to "*.hello,org.example")
         assertThat(ForbiddenPublicDataClass(config).compileAndLint(code)).isEmpty()

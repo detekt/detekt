@@ -7,7 +7,8 @@ import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint-website](https://ktlint.github.io) for documentation.
+ * See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#no-blank-lines-in-chained-method-calls) for
+ * documentation.
  */
 @ActiveByDefault(since = "1.22.0")
 @AutoCorrectable(since = "1.22.0")

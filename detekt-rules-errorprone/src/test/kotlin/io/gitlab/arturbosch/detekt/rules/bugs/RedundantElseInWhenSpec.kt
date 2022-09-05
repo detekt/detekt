@@ -31,7 +31,7 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                     else -> {}
                 }
             }
-            """
+            """.trimIndent()
             val actual = subject.compileAndLintWithContext(env, code)
             assertThat(actual).hasSize(1)
         }
@@ -53,7 +53,7 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                     else -> 100
                 }
             }
-            """
+            """.trimIndent()
             val actual = subject.compileAndLintWithContext(env, code)
             assertThat(actual).hasSize(1)
         }
@@ -80,7 +80,7 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                     else -> 100
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -113,7 +113,7 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                     Color.GREEN -> {}
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
@@ -137,7 +137,7 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                         else -> {}
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -158,7 +158,7 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                         else -> "other"
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -184,7 +184,7 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                         else -> "other"
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -203,7 +203,7 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                         is Variant.VariantB -> {}
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
@@ -244,7 +244,7 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                         else -> print("x is funny")
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }

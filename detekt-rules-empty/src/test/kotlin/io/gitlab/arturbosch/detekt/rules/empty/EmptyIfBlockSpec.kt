@@ -17,7 +17,7 @@ class EmptyIfBlockSpec {
                 if (i == 0);
                 i++
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -30,7 +30,7 @@ class EmptyIfBlockSpec {
                 ;
                 i++
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -43,7 +43,7 @@ class EmptyIfBlockSpec {
                 }
                 i++
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -56,7 +56,7 @@ class EmptyIfBlockSpec {
                     i++
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -67,7 +67,7 @@ class EmptyIfBlockSpec {
                 var i = 0
                 if (i == 0) i++
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -78,7 +78,7 @@ class EmptyIfBlockSpec {
                 var i = 0
                 if (i == 0) i++;
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -90,7 +90,7 @@ class EmptyIfBlockSpec {
                 if (i == 0) ;
                 else i++
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -103,7 +103,7 @@ class EmptyIfBlockSpec {
                 else if (i == 1) ;
                 else i++
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

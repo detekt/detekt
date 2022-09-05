@@ -43,7 +43,7 @@ class UnnecessaryParenthesesSpec {
                     println("Test")
                 }
             }
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).hasSize(1)
     }
@@ -59,7 +59,7 @@ class UnnecessaryParenthesesSpec {
             fun test() {
                 function({ input -> println(input) })
             }
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).isEmpty()
     }
@@ -75,7 +75,7 @@ class UnnecessaryParenthesesSpec {
             fun test() {
                 function(1, { input -> println(input) })
             }
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).isEmpty()
     }
@@ -87,7 +87,7 @@ class UnnecessaryParenthesesSpec {
             fun f() {
                 instance.copy(value = { false })
             }
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).isEmpty()
     }
@@ -101,7 +101,7 @@ class UnnecessaryParenthesesSpec {
                     println("Test")
                 }
             }
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).isEmpty()
     }
@@ -116,7 +116,7 @@ class UnnecessaryParenthesesSpec {
                     }
                 }
             })
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).isEmpty()
     }
@@ -131,7 +131,7 @@ class UnnecessaryParenthesesSpec {
                     }
                 }
             })
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).isEmpty()
     }
@@ -145,7 +145,7 @@ class UnnecessaryParenthesesSpec {
             ) {
                 constructor() : this({ first, second -> true })
             }
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).isEmpty()
     }
@@ -164,7 +164,7 @@ class UnnecessaryParenthesesSpec {
                     test({ println(it) }) { println(it) }
                 }
             }
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).isEmpty()
     }
@@ -183,7 +183,7 @@ class UnnecessaryParenthesesSpec {
                     test({ println(it) }, { println(it) })
                 }
             }
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).isEmpty()
     }
@@ -204,7 +204,7 @@ class UnnecessaryParenthesesSpec {
                     test("hello", { println(it) }) { println(it) }
                 }
             }
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).isEmpty()
     }
@@ -214,7 +214,7 @@ class UnnecessaryParenthesesSpec {
     fun `should not report interface delegation with parenthesis - #3851`(testCase: RuleTestCase) {
         val code = """
             class Clazz: Comparable<String> by ("hello".filter { it != 'l' })
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).isEmpty()
     }
@@ -232,7 +232,7 @@ class UnnecessaryParenthesesSpec {
             val b3 = 3 + (1 % 2)
 
             val c = (4 + 5) * 3 // parens required
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 6)
     }
@@ -246,7 +246,7 @@ class UnnecessaryParenthesesSpec {
             val a3 = (1 + 2 * 3)
             val b1 = (1 + 2) + 3
             val b2 = (1 * 2) * 3
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).hasSize(5)
     }
@@ -259,7 +259,7 @@ class UnnecessaryParenthesesSpec {
             val a2 = (true && false) || (false && true) // 2 warnings when disallowed
             val b = false || (true && false)
             val c = (true || false) && false // parens required
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 4)
     }
@@ -273,7 +273,7 @@ class UnnecessaryParenthesesSpec {
             val a3 = (true && false || false)
             val b1 = (true && false) && false
             val b2 = (true || false) || false
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).hasSize(5)
     }
@@ -284,7 +284,7 @@ class UnnecessaryParenthesesSpec {
         val code = """
             val d = (true and false) or false
             val e = false or (true and false) // parens required
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 1)
     }
@@ -304,7 +304,7 @@ class UnnecessaryParenthesesSpec {
 
             val d1 = null ?: (1 in 2) // parens required
             val d2 = (null ?: 1) in 2
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 4)
     }
@@ -317,7 +317,7 @@ class UnnecessaryParenthesesSpec {
             val b = (1 / 2)..(3 * 4)
             val c = (1 ?: 2)..(3 ?: 4) // parens required
             val d = (1 to 2)..(3 to 4) // parens required
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 4)
     }
@@ -327,7 +327,7 @@ class UnnecessaryParenthesesSpec {
     fun `multiple wrapping parentheses`(testCase: RuleTestCase) {
         val code = """
             val a = ((false || (((true && false)))))
-        """
+        """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 4 else 5)
     }

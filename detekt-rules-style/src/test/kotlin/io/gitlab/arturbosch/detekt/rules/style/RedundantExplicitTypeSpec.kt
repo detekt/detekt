@@ -17,7 +17,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
             fun function() {
                 val x: Boolean = true
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -27,7 +27,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
             fun function() {
                 val x: Int = 3
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -37,7 +37,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
             fun function() {
                 val x: Long = 3L
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -47,7 +47,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
             fun function() {
                 val x: Float = 3.0f
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -57,7 +57,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
             fun function() {
                 val x: Double = 3.0
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -67,7 +67,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
             fun function() {
                 val x: Char = 'f'
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -79,7 +79,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
                 val x = 3
                 val y: String = "$substitute"
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -91,7 +91,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
             fun foo() {
                 val o: Test = Test
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -107,7 +107,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
             fun tallPerson() {
                 val t: TallPerson = TallPerson("first", 3)
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -123,7 +123,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
             fun tallPerson() {
                 val t: Person = TallPerson("first", 3)
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 }

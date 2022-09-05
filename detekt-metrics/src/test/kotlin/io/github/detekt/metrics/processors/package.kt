@@ -8,21 +8,21 @@ package cases
  */
 @Suppress("Unused")
 class Default
-""".trimStart()
+""".trimIndent()
 
 val emptyEnum = """
 package empty
 
 @Suppress("Unused")
 enum class EmptyEnum
-""".trimStart()
+""".trimIndent()
 
 val emptyInterface = """
 package empty
 
 @Suppress("Unused")
 interface EmptyInterface
-""".trimStart()
+""".trimIndent()
 
 val classWithFields = """
 package fields
@@ -33,7 +33,7 @@ class ClassWithFields {
     private var x = 0
     val y = 0
 }
-""".trimStart()
+""".trimIndent()
 
 val commentsClass = """
 package comments
@@ -58,7 +58,7 @@ class CommentsClass {
         println("// no comment //")
     }
 }
-""".trimStart()
+""".trimIndent()
 
 val complexClass = """
 package cases
@@ -206,4 +206,4 @@ class ComplexClass {// McCabe: 44, LLOC: 20 + 20 + 4x4
         }
     }
 }
-""".trimStart()
+""".trimIndent()

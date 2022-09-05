@@ -6,7 +6,8 @@ import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint-readme](https://github.com/pinterest/ktlint#experimental-rules) for documentation.
+ * See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#function-type-reference-spacing) for
+ * documentation.
  */
 @AutoCorrectable(since = "1.20.0")
 class FunctionTypeReferenceSpacing(config: Config) : FormattingRule(config) {

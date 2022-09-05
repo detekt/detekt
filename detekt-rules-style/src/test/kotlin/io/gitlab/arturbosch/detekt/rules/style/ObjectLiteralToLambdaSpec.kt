@@ -29,7 +29,7 @@ class ObjectLiteralToLambdaSpec {
                         override fun foo() {
                         }
                     }   
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
@@ -48,7 +48,7 @@ class ObjectLiteralToLambdaSpec {
                             }
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
@@ -69,7 +69,7 @@ class ObjectLiteralToLambdaSpec {
                             }
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
@@ -87,7 +87,7 @@ class ObjectLiteralToLambdaSpec {
                             return 1
                         }
                     }   
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
@@ -105,7 +105,7 @@ class ObjectLiteralToLambdaSpec {
                         override fun foo() {
                         }
                     }   
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
@@ -126,7 +126,7 @@ class ObjectLiteralToLambdaSpec {
                             }
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
@@ -142,7 +142,7 @@ class ObjectLiteralToLambdaSpec {
                     val a = object : Sam {
                         override fun foo() = 3
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
@@ -162,7 +162,7 @@ class ObjectLiteralToLambdaSpec {
                         override fun foo() {
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLint(code).assert().isEmpty()
             }
 
@@ -171,7 +171,7 @@ class ObjectLiteralToLambdaSpec {
                 val code = """
                     interface Sam
                     val a = object : Sam {}
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
@@ -183,7 +183,7 @@ class ObjectLiteralToLambdaSpec {
                         fun foo() {
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
@@ -196,7 +196,7 @@ class ObjectLiteralToLambdaSpec {
                     val a = object : Sam {
                         override val foo = 1
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
@@ -207,7 +207,7 @@ class ObjectLiteralToLambdaSpec {
                     val a = object : Sam {
                         val b = 1
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
@@ -221,7 +221,7 @@ class ObjectLiteralToLambdaSpec {
                         override fun foo() {
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
@@ -235,7 +235,7 @@ class ObjectLiteralToLambdaSpec {
                         override fun foo() {
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
@@ -251,7 +251,7 @@ class ObjectLiteralToLambdaSpec {
                         override fun foo() {
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
@@ -269,7 +269,7 @@ class ObjectLiteralToLambdaSpec {
                         override fun foo() {
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
         }
@@ -288,7 +288,7 @@ class ObjectLiteralToLambdaSpec {
                         fun bar() {
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
@@ -303,7 +303,7 @@ class ObjectLiteralToLambdaSpec {
                         override fun foo() {
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
@@ -319,7 +319,7 @@ class ObjectLiteralToLambdaSpec {
                         override fun foo() {
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
         }
@@ -333,7 +333,7 @@ class ObjectLiteralToLambdaSpec {
                         override fun run(){
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
@@ -349,7 +349,7 @@ class ObjectLiteralToLambdaSpec {
                             return 1
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
@@ -364,7 +364,7 @@ class ObjectLiteralToLambdaSpec {
                         fun foo() {
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
@@ -381,7 +381,7 @@ class ObjectLiteralToLambdaSpec {
                             return 1
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
         }
@@ -402,7 +402,7 @@ class ObjectLiteralToLambdaSpec {
                             }
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
@@ -422,7 +422,7 @@ class ObjectLiteralToLambdaSpec {
                             }
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
@@ -440,7 +440,7 @@ class ObjectLiteralToLambdaSpec {
                             }
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
 
@@ -462,7 +462,7 @@ class ObjectLiteralToLambdaSpec {
                             }
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
@@ -485,7 +485,7 @@ class ObjectLiteralToLambdaSpec {
                             }
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
@@ -506,7 +506,7 @@ class ObjectLiteralToLambdaSpec {
                             }
                         }
                     }
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code).assert().isEmpty()
             }
         }
@@ -530,7 +530,7 @@ class ObjectLiteralToLambdaSpec {
         
                     val a = newObject() === newObject() // false
                     val b = lambda() === lambda() // true
-                """
+                """.trimIndent()
                 subject.compileAndLintWithContext(env, code)
                     .assert()
                     .hasSize(1)
@@ -555,7 +555,7 @@ class ObjectLiteralToLambdaSpec {
                         }
                     }
                 } 
-            """
+            """.trimIndent()
 
             subject.lintWithContext(env, code).assert().hasSize(1)
         }
@@ -569,7 +569,7 @@ class ObjectLiteralToLambdaSpec {
                     val x = object : OnlyDefaultMethods {
                     }
                 } 
-            """
+            """.trimIndent()
             subject.lintWithContext(env, code).assert().isEmpty()
         }
 
@@ -585,7 +585,7 @@ class ObjectLiteralToLambdaSpec {
                         }
                     }
                 } 
-            """
+            """.trimIndent()
             subject.lintWithContext(env, code).assert().isEmpty()
         }
     }

@@ -171,7 +171,7 @@ private fun constrainRegion(startLine: Int, startColumn: Int, endLine: Int, endC
       "startColumn": $startColumn,
       "startLine": $startLine
     }            
-"""
+""".trimIndent()
 
 class TestRule : Rule() {
     override val issue = Issue(javaClass.simpleName, Severity.Warning, "", Debt.FIVE_MINS)

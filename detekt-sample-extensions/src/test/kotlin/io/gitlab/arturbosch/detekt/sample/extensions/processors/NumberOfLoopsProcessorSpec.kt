@@ -18,7 +18,7 @@ class NumberOfLoopsProcessorSpec {
                 }
             }
         }
-        """
+        """.trimIndent()
 
         val ktFile = compileContentForTest(code)
         ktFile.accept(DetektVisitor())

@@ -110,7 +110,7 @@ class SpacingBetweenPackageAndImportsSpec {
             import kotlin.collections.Set
 
             class A { }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -121,7 +121,7 @@ class SpacingBetweenPackageAndImportsSpec {
 
             import kotlin.collections.List
             import kotlin.collections.Set
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

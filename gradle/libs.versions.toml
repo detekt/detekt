@@ -28,7 +28,7 @@ ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standar
 ktlint-rulesetExperimental = { module = "com.pinterest.ktlint:ktlint-ruleset-experimental", version.ref = "ktlint" }
 slf4j-nop = { module = "org.slf4j:slf4j-nop", version = "1.7.36"  }
 
-spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version = "2.0.18" }
+spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version = "2.0.19" }
 
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 
@@ -36,7 +36,7 @@ sarif4k = "io.github.detekt.sarif4k:sarif4k:0.0.1"
 assertj = "org.assertj:assertj-core:3.23.1"
 reflections = "org.reflections:reflections:0.10.2"
 mockk = "io.mockk:mockk:1.12.5"
-snakeyaml = "org.yaml:snakeyaml:1.30"
+snakeyaml = "org.yaml:snakeyaml:1.31"
 jcommander = "com.beust:jcommander:1.82"
 contester-breakpoint = { module = "io.github.davidburstrom.contester:contester-breakpoint", version.ref = "contester" }
 contester-driver = { module = "io.github.davidburstrom.contester:contester-driver", version.ref = "contester" }

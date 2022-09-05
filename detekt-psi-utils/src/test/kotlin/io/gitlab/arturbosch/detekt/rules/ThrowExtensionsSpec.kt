@@ -18,7 +18,7 @@ internal class ThrowExtensionsSpec {
                 fun test() {
                     if (i == 1) throw IllegalArgumentException()
                 }
-            """
+            """.trimIndent()
 
             verifyThrowExpression(code) {
                 assertThat(isEnclosedByConditionalStatement()).isTrue()
@@ -32,7 +32,7 @@ internal class ThrowExtensionsSpec {
                     if (i == 1) 
                         throw IllegalArgumentException()
                 }
-            """
+            """.trimIndent()
 
             verifyThrowExpression(code) {
                 assertThat(isEnclosedByConditionalStatement()).isTrue()
@@ -48,7 +48,7 @@ internal class ThrowExtensionsSpec {
                         throw IllegalArgumentException()
                     }
                 }
-            """
+            """.trimIndent()
 
             verifyThrowExpression(code) {
                 assertThat(isEnclosedByConditionalStatement()).isTrue()
@@ -61,7 +61,7 @@ internal class ThrowExtensionsSpec {
                 fun test() {
                     throw IllegalArgumentException()
                 }
-            """
+            """.trimIndent()
 
             verifyThrowExpression(code) {
                 assertThat(isEnclosedByConditionalStatement()).isFalse()
@@ -78,7 +78,7 @@ internal class ThrowExtensionsSpec {
                         else -> println("other")
                     }
                 }
-            """
+            """.trimIndent()
 
             verifyThrowExpression(code) {
                 assertThat(isEnclosedByConditionalStatement()).isFalse()
@@ -91,7 +91,7 @@ internal class ThrowExtensionsSpec {
                 fun test(a: Int) {
                     if (a == 2) println("2") else throw IllegalArgumentException()
                 }
-            """
+            """.trimIndent()
 
             verifyThrowExpression(code) {
                 assertThat(isEnclosedByConditionalStatement()).isTrue()
@@ -108,7 +108,7 @@ internal class ThrowExtensionsSpec {
                         throw IllegalArgumentException()
                     }
                 }
-            """
+            """.trimIndent()
 
             verifyThrowExpression(code) {
                 assertThat(isEnclosedByConditionalStatement()).isTrue()

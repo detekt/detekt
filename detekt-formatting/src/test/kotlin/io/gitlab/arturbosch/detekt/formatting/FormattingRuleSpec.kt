@@ -85,7 +85,7 @@ class FormattingRuleSpec {
             """
                 fun main()
                 = Unit
-            """,
+            """.trimIndent(),
             expectedPath
         )
 

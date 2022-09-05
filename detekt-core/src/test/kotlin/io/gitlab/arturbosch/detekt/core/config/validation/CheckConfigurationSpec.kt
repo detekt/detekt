@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.core.config
+package io.gitlab.arturbosch.detekt.core.config.validation
 
 import io.github.detekt.test.utils.createTempDirectoryForTest
 import io.github.detekt.tooling.api.InvalidConfig
@@ -15,7 +15,7 @@ import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Test
 
-class SupportConfigValidationSpec {
+class CheckConfigurationSpec {
 
     private val testDir = createTempDirectoryForTest("detekt-sample")
     private val spec = createNullLoggingSpec {}
@@ -26,7 +26,7 @@ class SupportConfigValidationSpec {
             """
             unknown_property:
               unknown_var: ""
-            """
+            """.trimIndent()
         )
         createProcessingSettings(
             testDir,
@@ -55,7 +55,7 @@ class SupportConfigValidationSpec {
             my_additional_properties:
               magic_number: 7
               magic_string: 'Hello World'
-            """
+            """.trimIndent()
         )
         createProcessingSettings(testDir, config).use {
             assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
@@ -74,7 +74,7 @@ class SupportConfigValidationSpec {
               TooManyFunctions:
                 # This property is tested via the SampleConfigValidator
                 active: 1 # should be true
-            """
+            """.trimIndent()
         )
         createProcessingSettings(testDir, config).use {
             assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
@@ -104,7 +104,7 @@ class SupportConfigValidationSpec {
            my_additional_properties:
              magic_number: 7
              magic_string: 'Hello World'
-            """
+            """.trimIndent()
         )
         createProcessingSettings(testDir, config).use {
             assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }

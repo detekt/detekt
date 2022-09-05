@@ -22,7 +22,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                 a.let { it.plus(1) }
                 a.let { that -> that.plus(1) }
             }
-            """
+            """.trimIndent()
         )
         assertThat(findings).hasSize(2)
         assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -38,7 +38,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                 a?.let { it.plus(1) }
                 a?.let { that -> that.plus(1) }
             }
-            """
+            """.trimIndent()
         )
         assertThat(findings).hasSize(2)
         assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -54,7 +54,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                 a?.let { it?.plus(1) }
                 a?.let { that -> that?.plus(1) }
             }
-            """
+            """.trimIndent()
         )
         assertThat(findings).hasSize(2)
         assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -69,7 +69,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                 val a: Int? = null
                 a?.let { that -> that.plus(1) }?.let { it.plus(1) }
             }
-            """
+            """.trimIndent()
         )
         assertThat(findings).hasSize(2)
         assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -85,7 +85,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                 a.let { 1.plus(1) }
                 a.let { that -> 1.plus(1) }
             }
-            """
+            """.trimIndent()
         )
         assertThat(findings).hasSize(2)
         assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -101,7 +101,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                 val x = a.let { 1.plus(1) }
                 val y = a.let { that -> 1.plus(1) }
             }
-            """
+            """.trimIndent()
         )
         assertThat(findings).hasSize(2)
         assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -117,7 +117,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                 a?.let { 1.plus(1) }
                 a?.let { that -> 1.plus(1) }
             }
-            """
+            """.trimIndent()
         )
         assertThat(findings).hasSize(2)
         assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }
@@ -133,7 +133,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                 a.let { print(it) }
                 a.let { that -> print(that) }
             }
-            """
+            """.trimIndent()
         )
         assertThat(findings).hasSize(2)
         assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -149,7 +149,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                 val a: Int? = null
                 a.let(f)
             }
-            """
+            """.trimIndent()
         )
         assertThat(findings).hasSize(1)
         assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -165,7 +165,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                 a?.let { print(it) }
                 a?.let { that -> 1.plus(that) }
             }
-            """
+            """.trimIndent()
         )
         assertThat(findings).isEmpty()
     }
@@ -179,7 +179,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                 val a: Int? = null
                 a?.let { that -> 1.plus(that) }?.let { print(it) }
             }
-            """
+            """.trimIndent()
         )
         assertThat(findings).isEmpty()
     }
@@ -194,7 +194,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                 val x = a?.let { 1.plus(1) }
                 val y = a?.let { that -> 1.plus(1) }
             }
-            """
+            """.trimIndent()
         )
         assertThat(findings).isEmpty()
     }
@@ -208,7 +208,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                 val a = listOf<List<String>?>(listOf(""))
                     .map { list -> list?.let { it + it } }
             }
-            """
+            """.trimIndent()
         )
         assertThat(findings).isEmpty()
     }
@@ -223,7 +223,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                 val a: Int? = null
                 a?.let(f)
             }
-            """
+            """.trimIndent()
         )
         assertThat(findings).hasSize(0)
     }
@@ -260,7 +260,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                     it.plus(2)
                 }
             }
-            """
+            """.trimIndent()
         )
         assertThat(findings).isEmpty()
     }
@@ -278,7 +278,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                 a?.let { foo -> foo.plus(foo) }
                 b.let { foo -> foo.plus(foo) }
             }
-            """
+            """.trimIndent()
         )
         assertThat(findings).isEmpty()
     }
@@ -293,7 +293,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
             fun test(foo: Foo) {
                 foo.let { (a, b) -> a + b }
             }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, content)
             assertThat(findings).isEmpty()
         }
@@ -306,7 +306,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
             fun test(foo: Foo) {
                 foo.let { (a, _) -> a + a }
             }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, content)
             assertThat(findings).isEmpty()
         }
@@ -319,7 +319,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
             fun test(foo: Foo) {
                 foo.let { (a: Int, b: Int) -> a + b }
             }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, content)
             assertThat(findings).isEmpty()
         }
@@ -332,7 +332,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
             fun test(foo: Foo) {
                 foo.let { (a, _) -> a }
             }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, content)
             assertThat(findings).hasSize(1)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -346,7 +346,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
             fun test(foo: Foo?) {
                 foo?.let { (_, b) -> b.plus(1) }
             }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, content)
             assertThat(findings).hasSize(1)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -360,7 +360,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
             fun test(foo: Foo) {
                 foo.let { (_, _) -> 0 }
             }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, content)
             assertThat(findings).hasSize(1)
             assertThat(findings).allMatch { it.message == MESSAGE_OMIT_LET }
@@ -374,7 +374,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
             fun test(foo: Foo?) {
                 foo?.let { (_, _) -> 0 }
             }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, content)
             assertThat(findings).hasSize(1)
             assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }
@@ -389,7 +389,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                     listOf(1).map { it }
                 }
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, content)
         assertThat(findings).hasSize(1)
         assertThat(findings).allMatch { it.message == MESSAGE_USE_IF }
@@ -409,8 +409,23 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, content)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report lets with invoke operator calls`() {
+        val findings = subject.compileAndLintWithContext(
+            env,
+            """
+            fun f(callback: ((Int) -> Int)?) {
+                callback?.let { that ->
+                    that(42)
+                }
+            }
+            """.trimIndent()
+        )
         assertThat(findings).isEmpty()
     }
 }

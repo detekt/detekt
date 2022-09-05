@@ -127,7 +127,7 @@ class LongParameterListSpec {
                 annotation class CustomAnnotation
 
                 class Data constructor(@CustomAnnotation val a: Int)
-            """
+            """.trimIndent()
             assertThat(rule.compileAndLint(code)).hasSize(1)
         }
 
@@ -138,7 +138,7 @@ class LongParameterListSpec {
                 annotation class CustomAnnotation
 
                 class Data { fun foo(@CustomAnnotation a: Int) {} }
-            """
+            """.trimIndent()
             assertThat(rule.compileAndLint(code)).hasSize(1)
         }
 
@@ -150,9 +150,11 @@ class LongParameterListSpec {
 
         @Test
         fun `does not report long parameter list for functions if enough function parameters are annotated with ignored annotation`() {
-            val code = """class Data {
-                fun foo(@kotlin.Suppress("") a: Int) {} }
-            """
+            val code = """
+                class Data {
+                    fun foo(@kotlin.Suppress("") a: Int) {}
+                }
+            """.trimIndent()
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
     }

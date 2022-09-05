@@ -33,7 +33,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                         Color.GREEN -> {}
                     }
                 }
-                """
+                """.trimIndent()
                 val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
@@ -57,7 +57,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                         Color.GREEN -> {}
                     }
                 }
-                """
+                """.trimIndent()
                 val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
@@ -82,7 +82,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                         Color.RED -> {}
                     }
                 }
-                """
+                """.trimIndent()
                 val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
@@ -108,7 +108,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                         Color.RED -> {}
                     }
                 }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -135,7 +135,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                         else -> {}
                     }
                 }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
@@ -157,7 +157,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                             is Variant.VariantB -> {}
                         }
                     }
-                """
+                """.trimIndent()
                 val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
@@ -182,7 +182,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                             is Variant.VariantC -> {}
                         }
                     }
-                """
+                """.trimIndent()
                 val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
@@ -206,7 +206,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                             is Variant.VariantB -> {}
                         }
                     }
-                """
+                """.trimIndent()
                 val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
@@ -232,7 +232,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                             is Variant.VariantC -> {}
                         }
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
@@ -260,7 +260,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                             is Variant.VariantC -> {}
                         }
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
@@ -301,7 +301,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                             else -> print("x is funny")
                         }
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
@@ -331,7 +331,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                         else -> {}
                     }
                 }
-                """
+                """.trimIndent()
                 val actual = subject.compileAndLintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
@@ -355,7 +355,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                         else -> {}
                     }
                 }
-                """
+                """.trimIndent()
                 val actual = subject.compileAndLintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
@@ -378,7 +378,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                         Color.RED -> {}
                     }
                 }
-                """
+                """.trimIndent()
                 val actual = subject.compileAndLintWithContext(env, code)
                 assertThat(actual).isEmpty()
             }
@@ -402,7 +402,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                             else -> {}
                         }
                     }
-                """
+                """.trimIndent()
                 val actual = subject.compileAndLintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
@@ -425,7 +425,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                             is Variant.VariantC -> {}
                         }
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
@@ -443,7 +443,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                             else -> print("otherwise")
                         }
                     }
-                """
+                """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }

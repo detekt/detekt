@@ -20,7 +20,7 @@ class InvalidPackageDeclarationSpec {
             package foo.bar
 
             class C
-        """
+        """.trimIndent()
 
         val ktFile = compileContentForTest(source, createPath("project/src/foo/bar/File.kt"))
         val findings = InvalidPackageDeclaration().lint(ktFile)
@@ -50,7 +50,7 @@ class InvalidPackageDeclarationSpec {
                 package com.example
 
                 class C
-            """
+            """.trimIndent()
 
             val ktFile = compileContentForTest(source, createPath("src/File.kt"))
             val findings = InvalidPackageDeclaration(config).lint(ktFile)
@@ -64,7 +64,7 @@ class InvalidPackageDeclarationSpec {
                 package com.example.foo.bar
 
                 class C
-            """
+            """.trimIndent()
 
             val ktFile = compileContentForTest(source, createPath("src/foo/bar/File.kt"))
             val findings = InvalidPackageDeclaration(config).lint(ktFile)
@@ -78,7 +78,7 @@ class InvalidPackageDeclarationSpec {
                 package com.example.foo.bar
 
                 class C
-            """
+            """.trimIndent()
 
             val ktFile = compileContentForTest(source, createPath("src/com/example/foo/bar/File.kt"))
             val findings = InvalidPackageDeclaration(config).lint(ktFile)
@@ -92,7 +92,7 @@ class InvalidPackageDeclarationSpec {
                 package com.example.foo.baz
 
                 class C
-            """
+            """.trimIndent()
 
             val ktFile = compileContentForTest(source, createPath("src/foo/bar/File.kt"))
             val findings = InvalidPackageDeclaration(config).lint(ktFile)
@@ -106,7 +106,7 @@ class InvalidPackageDeclarationSpec {
                 package io.foo.bar
 
                 class C
-            """
+            """.trimIndent()
 
             val ktFile = compileContentForTest(source, createPath("src/com/example/File.kt"))
             val findings = InvalidPackageDeclaration(config).lint(ktFile)
@@ -126,7 +126,7 @@ class InvalidPackageDeclarationSpec {
                 package com.example.foo.bar
 
                 class C
-            """
+            """.trimIndent()
 
             val ktFileWithRelativePath = compileContentForTest(source, createPath("src/foo/bar/File.kt"))
             val findingsForRelativePath = InvalidPackageDeclaration(config).lint(ktFileWithRelativePath)
@@ -145,7 +145,7 @@ class InvalidPackageDeclarationSpec {
                 package foo.bar
 
                 class C
-            """
+            """.trimIndent()
 
             val ktFile = compileContentForTest(source, createPath("src/foo/bar/File.kt"))
             val findings = InvalidPackageDeclaration(config).lint(ktFile)

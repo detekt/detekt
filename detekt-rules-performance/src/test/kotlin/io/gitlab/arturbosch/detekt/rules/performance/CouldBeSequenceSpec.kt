@@ -22,7 +22,7 @@ class CouldBeSequenceSpec(val env: KotlinCoreEnvironment) {
         }.filter {
             it > 5
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -33,7 +33,7 @@ class CouldBeSequenceSpec(val env: KotlinCoreEnvironment) {
         val processed = myCollection.filter {
             it % 2 == 0
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -48,7 +48,7 @@ class CouldBeSequenceSpec(val env: KotlinCoreEnvironment) {
         }.filter {
             it > 5
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -63,7 +63,7 @@ class CouldBeSequenceSpec(val env: KotlinCoreEnvironment) {
         }.filter {
             it > 5
         }.toList()
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 }

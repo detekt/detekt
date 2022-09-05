@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint-readme](https://github.com/pinterest/ktlint#standard-rules) for documentation.
+ * See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#modifier-order) for documentation.
  *
  * This rules overlaps with [style>ModifierOrder](https://detekt.dev/style.html#modifierorder)
  * from the standard rules, make sure to enable just one. The pro of this rule is that it can auto-correct the issue.

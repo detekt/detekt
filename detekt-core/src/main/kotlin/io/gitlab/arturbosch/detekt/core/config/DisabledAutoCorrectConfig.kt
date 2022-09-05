@@ -2,6 +2,8 @@ package io.gitlab.arturbosch.detekt.core.config
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Notification
+import io.gitlab.arturbosch.detekt.core.config.validation.ValidatableConfiguration
+import io.gitlab.arturbosch.detekt.core.config.validation.validateConfig
 
 @Suppress("UNCHECKED_CAST")
 class DisabledAutoCorrectConfig(private val wrapped: Config) : Config, ValidatableConfiguration {

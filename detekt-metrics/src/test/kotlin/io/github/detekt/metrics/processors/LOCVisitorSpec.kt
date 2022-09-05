@@ -13,6 +13,6 @@ class LOCVisitorSpec {
             accept(LOCVisitor())
             getUserData(linesKey)
         }
-        assertThat(loc).isEqualTo(8)
+        assertThat(loc).isEqualTo(7)
     }
 }

@@ -9,6 +9,7 @@ class DetektTaskGroovyDslSpec {
 
     @Test
     fun `detekt extension can be configured without errors`() {
+        @Suppress("TrimMultilineRawString")
         val config = """
             |detekt {
             |    toolVersion = "1.0.0.RC8"
@@ -36,6 +37,7 @@ class DetektTaskGroovyDslSpec {
 
     @Test
     fun `detekt task can be fully configured without errors`() {
+        @Suppress("TrimMultilineRawString")
         val config = """
             |tasks.create("customDetektTask", io.gitlab.arturbosch.detekt.Detekt) {
             |    source = files("${"$"}projectDir")
@@ -81,6 +83,7 @@ class DetektTaskGroovyDslSpec {
 
     @Test
     fun `detekt create baseline task can be configured without errors`() {
+        @Suppress("TrimMultilineRawString")
         val config = """
             |tasks.create("customDetektCreateBaselineTask", io.gitlab.arturbosch.detekt.DetektCreateBaselineTask) {
             |    source = files("${"$"}projectDir")
@@ -110,6 +113,7 @@ class DetektTaskGroovyDslSpec {
 
     @Test
     fun `detekt generate config task can be configured without errors`() {
+        @Suppress("TrimMultilineRawString")
         val config = """
             |tasks.create("customDetektGenerateConfigTask", io.gitlab.arturbosch.detekt.DetektGenerateConfigTask) {
             |    detektClasspath.setFrom(files("config.yml"))

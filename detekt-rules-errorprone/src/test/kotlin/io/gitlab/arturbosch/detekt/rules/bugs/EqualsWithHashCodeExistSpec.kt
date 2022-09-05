@@ -18,7 +18,7 @@ class EqualsWithHashCodeExistSpec {
             class A {
                 override fun hashCode(): Int { return super.hashCode() }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -28,7 +28,7 @@ class EqualsWithHashCodeExistSpec {
             class A {
                 override fun equals(other: Any?): Boolean { return super.equals(other) }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -39,7 +39,7 @@ class EqualsWithHashCodeExistSpec {
                 fun equals(other: Any?, i: Int): Boolean { return super.equals(other) }
                 override fun hashCode(): Int { return super.hashCode() }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -50,7 +50,7 @@ class EqualsWithHashCodeExistSpec {
                 override fun equals(other: Any?): Boolean { return super.equals(other) }
                 fun hashCode(i: Int): Int { return super.hashCode() }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -65,7 +65,7 @@ class EqualsWithHashCodeExistSpec {
                 override fun equals(other: Any?, i: Int): Boolean { return super.equals(other) }
                 override fun hashCode(): Int { return super.hashCode() }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -80,7 +80,7 @@ class EqualsWithHashCodeExistSpec {
                 override fun equals(other: Any?): Boolean { return super.equals(other) }
                 override fun hashCode(i: Int): Int { return super.hashCode() }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -91,7 +91,7 @@ class EqualsWithHashCodeExistSpec {
                 override fun equals(other: Any?): Boolean { return super.equals(other) }
                 override fun hashCode(): Int { return super.hashCode() }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -102,7 +102,7 @@ class EqualsWithHashCodeExistSpec {
                 override fun equals(other: kotlin.Any?): Boolean { return super.equals(other) }
                 override fun hashCode(): Int { return super.hashCode() }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
@@ -118,7 +118,7 @@ class EqualsWithHashCodeExistSpec {
                     return super.equals(other)
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

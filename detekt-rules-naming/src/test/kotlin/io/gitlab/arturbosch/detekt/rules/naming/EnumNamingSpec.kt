@@ -16,7 +16,7 @@ class EnumNamingSpec {
         enum class aBbD {
             enum1, enum2
         }
-                """
+                """.trimIndent()
             )
         ).isEmpty()
     }
@@ -28,7 +28,7 @@ class EnumNamingSpec {
             enum class WorkFlow {
                 ACTIVE, NOT_ACTIVE, Unknown, Number1
             }
-            """
+            """.trimIndent()
         )
         assertThat(findings).isEmpty()
     }
@@ -39,7 +39,7 @@ class EnumNamingSpec {
             enum class WorkFlow {
                 default
             }
-        """
+        """.trimIndent()
         assertThat(EnumNaming().compileAndLint(code)).hasSize(1)
     }
 
@@ -49,7 +49,7 @@ class EnumNamingSpec {
             enum class WorkFlow {
                 _Default
             }
-        """
+        """.trimIndent()
         assertThat(EnumNaming().compileAndLint(code)).hasSize(1)
     }
 
@@ -59,7 +59,7 @@ class EnumNamingSpec {
             enum class WorkFlow {
                 @Suppress("EnumNaming") _Default
             }
-        """
+        """.trimIndent()
         assertThat(EnumNaming().compileAndLint(code)).isEmpty()
     }
 
@@ -69,7 +69,7 @@ class EnumNamingSpec {
             enum class WorkFlow {
                 _Default,
             }
-        """
+        """.trimIndent()
         val findings = EnumNaming().compileAndLint(code)
         assertThat(findings).hasTextLocations(26 to 34)
     }

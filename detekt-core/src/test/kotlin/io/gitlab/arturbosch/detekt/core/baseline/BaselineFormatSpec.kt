@@ -2,6 +2,8 @@ package io.gitlab.arturbosch.detekt.core.baseline
 
 import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.resourceAsPath
+import io.github.detekt.tooling.api.BaselineProvider
+import io.gitlab.arturbosch.detekt.test.createFinding
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -10,6 +12,34 @@ import org.junit.jupiter.api.Test
 import java.nio.file.Files
 
 class BaselineFormatSpec {
+
+    @Nested
+    inner class `implements tooling api` {
+
+        @Test
+        fun `core implements provider`() {
+            assertThat(BaselineProvider.load()).isInstanceOf(BaselineFormat::class.java)
+        }
+
+        @Test
+        fun `provider allows to query finding baseline ids`() {
+            assertThat(BaselineProvider.load().id(createFinding())).isEqualTo("TestSmell:TestEntitySignature")
+        }
+
+        @Test
+        fun `reads and writes baselines`() {
+            val provider = BaselineProvider.load()
+            val path = resourceAsPath("/baseline_feature/valid-baseline.xml")
+
+            val referenceBaseline = provider.read(path)
+            val tempFile = createTempFileForTest("baseline1", ".xml")
+            provider.write(tempFile, referenceBaseline)
+            val actualBaseline = provider.read(path)
+
+            assertThat(actualBaseline.currentIssues).containsAll(referenceBaseline.currentIssues)
+            assertThat(actualBaseline.manuallySuppressedIssues).containsAll(referenceBaseline.manuallySuppressedIssues)
+        }
+    }
 
     @Nested
     inner class `read a baseline file` {
@@ -57,14 +87,14 @@ class BaselineFormatSpec {
     @Nested
     inner class `writes a baseline file` {
 
-        private val savedBaseline = Baseline(setOf("4", "2", "2"), setOf("1", "2", "3"))
+        private val savedBaseline = DefaultBaseline(setOf("4", "2", "2"), setOf("1", "2", "3"))
 
         @Test
         fun `has a new line at the end of the written baseline file`() {
             val tempFile = createTempFileForTest("baseline1", ".xml")
 
             val format = BaselineFormat()
-            format.write(savedBaseline, tempFile)
+            format.write(tempFile, savedBaseline)
             val bytes = Files.readAllBytes(tempFile)
             val content = String(bytes, Charsets.UTF_8)
 
@@ -76,7 +106,7 @@ class BaselineFormatSpec {
             val tempFile = createTempFileForTest("baseline-saved", ".xml")
 
             val format = BaselineFormat()
-            format.write(savedBaseline, tempFile)
+            format.write(tempFile, savedBaseline)
             val loadedBaseline = format.read(tempFile)
 
             assertThat(loadedBaseline).isEqualTo(savedBaseline)

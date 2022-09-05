@@ -340,7 +340,7 @@ class MagicNumberSpec {
                 3 -> return 3
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should be reported`() {
@@ -362,7 +362,7 @@ class MagicNumberSpec {
         fun test(x: Int) {
             val i = 5
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should be reported`() {
@@ -377,7 +377,7 @@ class MagicNumberSpec {
         fun test() : Boolean {
             return true;
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not be reported`() {
@@ -469,7 +469,7 @@ class MagicNumberSpec {
         }
 
         data class Color(val color: Int)
-        """
+        """.trimIndent()
 
         @Test
         fun `should report all without ignore flags`() {
@@ -526,7 +526,7 @@ class MagicNumberSpec {
                 const val anotherBoringConstant = 93872
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not report any issues by default`() {
@@ -645,7 +645,7 @@ class MagicNumberSpec {
             )
 
             var model = Model(someVal = $numberString)
-            """
+            """.trimIndent()
 
             @Test
             fun `should not ignore int`() {
@@ -687,7 +687,7 @@ class MagicNumberSpec {
                 abstract class A(n: Int)
 
                 object B : A(n = 5)
-                """
+                """.trimIndent()
                 assertThat(MagicNumber().compileAndLint(code)).isEmpty()
             }
 
@@ -709,7 +709,7 @@ class MagicNumberSpec {
             )
 
             var model = Model($numberString)
-            """
+            """.trimIndent()
 
             @Test
             fun `should detect the argument by default`() {
@@ -723,7 +723,7 @@ class MagicNumberSpec {
             fun tested(someVal: Int, other: String = "default")
 
             val t = tested(someVal = $number)
-            """
+            """.trimIndent()
 
             @Test
             fun `should ignore int by default`() {
@@ -753,7 +753,7 @@ class MagicNumberSpec {
                 SMALL(1),
                 EXTRA_LARGE(5)
             }
-            """
+            """.trimIndent()
 
             @Test
             fun `should be reported by default`() {
@@ -774,7 +774,7 @@ class MagicNumberSpec {
                 SMALL(id = 1),
                 EXTRA_LARGE(id = 5)
             }
-            """
+            """.trimIndent()
 
             @Test
             fun `should be reported`() {
@@ -805,7 +805,7 @@ class MagicNumberSpec {
             val code = """
             fun x() = 9
             fun y(): Int { return 9 }
-            """
+            """.trimIndent()
             assertThat(MagicNumber().compileAndLint(code)).isEmpty()
         }
 
@@ -814,7 +814,7 @@ class MagicNumberSpec {
             val code = """
             fun x() = 9 + 1
             fun y(): Int { return 9 + 1 }
-            """
+            """.trimIndent()
             assertThat(MagicNumber().compileAndLint(code)).hasSize(2)
         }
     }
@@ -851,7 +851,7 @@ class MagicNumberSpec {
             class SomeClassWithDefault {
                 constructor(val defaultValue: Int = 10) { }
             }
-            """
+            """.trimIndent()
             assertThat(MagicNumber().lint(code)).isEmpty()
         }
 
@@ -861,7 +861,7 @@ class MagicNumberSpec {
             class SomeClassWithDefault {
                 constructor(val defaultValue: Duration = 10.toDuration(DurationUnit.MILLISECONDS)) { }
             }
-            """
+            """.trimIndent()
             assertThat(MagicNumber().lint(code)).isEmpty()
         }
     }
@@ -994,7 +994,7 @@ class MagicNumberSpec {
                 fun Int.dp() = this + 1
 
                 val a = 500.dp()
-            """
+            """.trimIndent()
 
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
@@ -1006,7 +1006,7 @@ class MagicNumberSpec {
                   get() = this + 1
 
                 val a = 500.dp
-            """
+            """.trimIndent()
 
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
@@ -1017,7 +1017,7 @@ class MagicNumberSpec {
                 fun Int.dp(a: Int) = this + a
 
                 val a = 500.dp(400)
-            """
+            """.trimIndent()
 
             assertThat(rule.compileAndLint(code)).hasSize(1)
         }

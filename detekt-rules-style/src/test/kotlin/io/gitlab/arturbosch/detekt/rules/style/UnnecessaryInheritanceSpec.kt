@@ -14,7 +14,7 @@ class UnnecessaryInheritanceSpec {
             """
             class A : Any()
             class B : Object()
-            """
+            """.trimIndent()
         )
         assertThat(findings).hasSize(2)
     }

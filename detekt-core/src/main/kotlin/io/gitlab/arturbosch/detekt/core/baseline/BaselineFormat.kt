@@ -1,5 +1,10 @@
 package io.gitlab.arturbosch.detekt.core.baseline
 
+import io.github.detekt.tooling.api.Baseline
+import io.github.detekt.tooling.api.BaselineProvider
+import io.github.detekt.tooling.api.FindingId
+import io.github.detekt.tooling.api.FindingsIdList
+import io.gitlab.arturbosch.detekt.api.Finding
 import org.xml.sax.SAXParseException
 import java.nio.file.Files
 import java.nio.file.Path
@@ -8,16 +13,21 @@ import javax.xml.parsers.SAXParserFactory
 import javax.xml.stream.XMLStreamException
 import javax.xml.stream.XMLStreamWriter
 
-internal class BaselineFormat {
+internal class BaselineFormat : BaselineProvider {
 
     private val XMLStreamException.positions
         get() = location.lineNumber to location.columnNumber
 
     class InvalidState(msg: String, error: Throwable) : IllegalStateException(msg, error)
 
-    fun read(path: Path): Baseline {
+    override fun id(finding: Finding): FindingId = finding.baselineId
+
+    override fun of(manuallySuppressedIssues: FindingsIdList, currentIssues: FindingsIdList): DefaultBaseline =
+        DefaultBaseline(manuallySuppressedIssues, currentIssues)
+
+    override fun read(sourcePath: Path): DefaultBaseline {
         try {
-            Files.newInputStream(path).use {
+            Files.newInputStream(sourcePath).use {
                 val reader = SAXParserFactory.newInstance()
                     .apply {
                         setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true)
@@ -33,9 +43,9 @@ internal class BaselineFormat {
         }
     }
 
-    fun write(baseline: Baseline, path: Path) {
+    override fun write(targetPath: Path, baseline: Baseline) {
         try {
-            Files.newBufferedWriter(path).addFinalNewLine().use {
+            Files.newBufferedWriter(targetPath).addFinalNewLine().use {
                 it.streamXml().prettyPrinter().save(baseline)
             }
         } catch (error: XMLStreamException) {

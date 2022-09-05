@@ -28,7 +28,7 @@ class StringLiteralDuplicationSpec {
                     s1.equals("lorem")
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -49,7 +49,7 @@ class StringLiteralDuplicationSpec {
             class B
             @Suppress("unused")
             class C
-        """
+        """.trimIndent()
 
         @Test
         fun `does not report strings in annotations`() {
@@ -86,14 +86,14 @@ class StringLiteralDuplicationSpec {
         val regexTestingCode = """
             val str1 = "lorem" + "lorem" + "lorem"
             val str2 = "ipsum" + "ipsum" + "ipsum"
-        """
+        """.trimIndent()
 
         @Test
         fun `does not report lorem or ipsum according to config in regex`() {
             val code = """
                 val str1 = "lorem" + "lorem" + "lorem"
                 val str2 = "ipsum" + "ipsum" + "ipsum"
-            """
+            """.trimIndent()
             val config = TestConfig(mapOf(IGNORE_STRINGS_REGEX to "(lorem|ipsum)"))
             assertFindingWithConfig(code, config, 0)
         }
@@ -129,7 +129,7 @@ class StringLiteralDuplicationSpec {
                     s1.equals("lorem")
                 }
             }
-            """
+            """.trimIndent()
             val finding = subject.compileAndLint(code)[0]
             val locations = finding.references.map { it.location } + finding.entity.location
             assertThat(locations).hasSize(3)
@@ -148,7 +148,7 @@ class StringLiteralDuplicationSpec {
                     |
                     |
                     ""${'"'}
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

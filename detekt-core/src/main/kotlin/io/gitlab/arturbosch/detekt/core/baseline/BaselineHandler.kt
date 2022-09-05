@@ -11,7 +11,7 @@ internal class BaselineHandler : DefaultHandler() {
     private val currentIssues = mutableSetOf<String>()
     private val manuallySuppressedIssues = mutableSetOf<String>()
 
-    internal fun createBaseline() = Baseline(manuallySuppressedIssues, currentIssues)
+    internal fun createBaseline() = DefaultBaseline(manuallySuppressedIssues, currentIssues)
 
     override fun startElement(uri: String, localName: String, qName: String, attributes: Attributes) {
         when (qName) {

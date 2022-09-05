@@ -20,7 +20,7 @@ class ReturnCountSpec {
     inner class `a function without a body` {
         val code = """
             fun func() = Unit
-        """
+        """.trimIndent()
 
         @Test
         fun `does not report violation by default`() {
@@ -32,7 +32,7 @@ class ReturnCountSpec {
     inner class `a function with an empty body` {
         val code = """
             fun func() {}
-        """
+        """.trimIndent()
 
         @Test
         fun `does not report violation by default`() {
@@ -51,7 +51,7 @@ class ReturnCountSpec {
             }
             return 6
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not get flagged for if condition guard clauses`() {
@@ -75,7 +75,7 @@ class ReturnCountSpec {
             }
             return 6
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not get flagged for if condition guard clauses`() {
@@ -110,7 +110,7 @@ class ReturnCountSpec {
             }
             return 6
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should report a too-complicated if statement for being a guard clause, with EXCLUDE_GUARD_CLAUSES on`() {
@@ -131,7 +131,7 @@ class ReturnCountSpec {
             }
             return 6
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not get flagged for ELVIS operator guard clauses`() {
@@ -152,7 +152,7 @@ class ReturnCountSpec {
             if (x < 4) return 0
             return 6
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should get flagged for an if condition guard clause which is not the first statement`() {
@@ -173,7 +173,7 @@ class ReturnCountSpec {
             val y = x ?: return 0
             return 6
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should get flagged for an ELVIS guard clause which is not the first statement`() {
@@ -197,7 +197,7 @@ class ReturnCountSpec {
 
                 return
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not count all four guard clauses`() {
@@ -231,7 +231,7 @@ class ReturnCountSpec {
             }
             return 6
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should get flagged by default`() {
@@ -262,7 +262,7 @@ class ReturnCountSpec {
             }
             return 6
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not get flagged by default`() {
@@ -294,7 +294,7 @@ class ReturnCountSpec {
             }
             return 6
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not get flagged`() {
@@ -339,7 +339,7 @@ class ReturnCountSpec {
             }
             return 6
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should flag none of the ignored functions`() {
@@ -387,7 +387,7 @@ class ReturnCountSpec {
             }
             return 6
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not get flag when returns is in inner object`() {
@@ -424,7 +424,7 @@ class ReturnCountSpec {
             }
             return 6
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not get flag when returns is in inner object`() {
@@ -463,7 +463,7 @@ class ReturnCountSpec {
             }
             return 6
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should get flagged when returns is in inner object`() {
@@ -483,7 +483,7 @@ class ReturnCountSpec {
                 return@flatMap Flowable.just(it[0])
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not count labeled returns from lambda by default`() {

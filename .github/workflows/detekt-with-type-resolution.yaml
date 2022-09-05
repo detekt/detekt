@@ -34,12 +34,12 @@ jobs:
           distribution: 'temurin'
 
       - name: Run detekt-cli with argsfile
-        uses: gradle/gradle-build-action@cd3cedc781988c804f626f4cd2dc51d0bdf02a12 # tag=v2
+        uses: gradle/gradle-build-action@356abb47e7664b5505e25d7997a5a522a17c62d9 # tag=v2
         with:
           arguments: :detekt-cli:runWithArgsFile
 
       - name: Upload SARIF to Github using the upload-sarif action
-        uses: github/codeql-action/upload-sarif@2ca79b6fa8d3ec278944088b4aa5f46912db5d63 # tag=v2
+        uses: github/codeql-action/upload-sarif@b398f525a5587552e573b247ac661067fafa920b # tag=v2
         if: ${{ always() }}
         with:
           sarif_file: build/detekt-report.sarif
@@ -58,6 +58,6 @@ jobs:
         java-version: 17
         distribution: 'temurin'
     - name: Run analysis
-      uses: gradle/gradle-build-action@cd3cedc781988c804f626f4cd2dc51d0bdf02a12 # tag=v2
+      uses: gradle/gradle-build-action@356abb47e7664b5505e25d7997a5a522a17c62d9 # tag=v2
       with:
         arguments: detektMain detektTest

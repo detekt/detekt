@@ -20,7 +20,7 @@ class PrintStackTraceSpec {
                     e.printStackTrace()
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -36,7 +36,7 @@ class PrintStackTraceSpec {
                     printStackTrace()
                 }
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
@@ -53,7 +53,7 @@ class PrintStackTraceSpec {
                 fun dumpStack() {}
                 dumpStack()
             }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
     }

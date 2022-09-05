@@ -15,7 +15,7 @@ class NestedClassesVisibilitySpec {
                 public object B
                 public class C
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(3)
     }
 
@@ -26,7 +26,7 @@ class NestedClassesVisibilitySpec {
                 A;
                 public class C
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -39,7 +39,7 @@ class NestedClassesVisibilitySpec {
                  enum class E { One }
                  internal interface I
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -49,7 +49,7 @@ class NestedClassesVisibilitySpec {
             internal class Outer {
                 private class A
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -59,7 +59,7 @@ class NestedClassesVisibilitySpec {
             internal class Outer {
                 public enum class E { E1; }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -69,7 +69,7 @@ class NestedClassesVisibilitySpec {
             internal class Outer {
                 public companion object C
             } 
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -79,7 +79,7 @@ class NestedClassesVisibilitySpec {
             internal class Outer {
                 companion object C
             } 
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -89,7 +89,7 @@ class NestedClassesVisibilitySpec {
             private class Outer {
                  class A
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -99,7 +99,7 @@ class NestedClassesVisibilitySpec {
             internal interface Outer {
                  class A
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -111,7 +111,7 @@ class NestedClassesVisibilitySpec {
                     public class C2
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

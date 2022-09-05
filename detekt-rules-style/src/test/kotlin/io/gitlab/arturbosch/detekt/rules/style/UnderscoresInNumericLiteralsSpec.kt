@@ -260,7 +260,7 @@ class UnderscoresInNumericLiteralsSpec {
             object TestSerializable : Serializable {
                 private val serialVersionUID = 314159L
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not be reported`() {
@@ -275,7 +275,7 @@ class UnderscoresInNumericLiteralsSpec {
             object TestSerializable {
                 private val serialVersionUID = 314159L
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should be reported by default`() {
@@ -290,7 +290,7 @@ class UnderscoresInNumericLiteralsSpec {
             object TestSerializable {
                 private val serialVersionUID = 314_159L
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not be reported`() {
@@ -312,7 +312,7 @@ class UnderscoresInNumericLiteralsSpec {
                         private const val serialVersionUID = -43857148126114372L
                     }
                 }
-            """
+            """.trimIndent()
             val findings = UnderscoresInNumericLiterals().compileAndLint(code)
             assertThat(findings).hasSize(0)
         }
@@ -327,7 +327,7 @@ class UnderscoresInNumericLiteralsSpec {
                         private const val serialVersionUID = 43857148126114372L
                     }
                 }
-            """
+            """.trimIndent()
             val findings = UnderscoresInNumericLiterals().compileAndLint(code)
             assertThat(findings).hasSize(0)
         }
@@ -344,7 +344,7 @@ class UnderscoresInNumericLiteralsSpec {
                 class Test : Serializable {
                     private val serialVersionUID = -43857148126114372L
                 }
-            """
+            """.trimIndent()
             val findings = UnderscoresInNumericLiterals().compileAndLint(code)
             assertThat(findings).hasSize(0)
         }
@@ -357,7 +357,7 @@ class UnderscoresInNumericLiteralsSpec {
                 class Test : Serializable {
                     private val serialVersionUID = 43857148126114372L
                 }
-            """
+            """.trimIndent()
             val findings = UnderscoresInNumericLiterals().compileAndLint(code)
             assertThat(findings).hasSize(0)
         }

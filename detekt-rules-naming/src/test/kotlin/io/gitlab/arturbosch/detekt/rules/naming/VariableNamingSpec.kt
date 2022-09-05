@@ -22,7 +22,7 @@ class VariableNamingSpec {
             object Foo {
                 val MYVar = 3
             }
-    """
+        """.trimIndent()
 
         @Test
         fun shouldNotFailWithInvalidRegexWhenDisabledVariableNaming() {
@@ -53,7 +53,7 @@ class VariableNamingSpec {
         object Foo {
             val MYVar = 3
         }
-        """
+        """.trimIndent()
         val config = TestConfig(mapOf(VariableNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar"))
         assertThat(VariableNaming(config).compileAndLint(code)).isEmpty()
     }
@@ -66,7 +66,7 @@ class VariableNamingSpec {
                 val FIELD get() = _FIELD
                 val camel_Case_Property = 5
             }
-        """
+        """.trimIndent()
         assertThat(VariableNaming().compileAndLint(code))
             .hasStartSourceLocations(
                 SourceLocation(2, 17),
@@ -83,7 +83,7 @@ class VariableNamingSpec {
                 val field get() = _field
                 val camelCaseProperty = 5
             }
-        """
+        """.trimIndent()
         assertThat(VariableNaming().compileAndLint(code)).isEmpty()
     }
 
@@ -99,7 +99,7 @@ class VariableNamingSpec {
             interface I2 {
                 @Suppress("VariableNaming") val SHOULD_NOT_BE_FLAGGED: String
             }
-        """
+        """.trimIndent()
         assertThat(VariableNaming().compileAndLint(code)).isEmpty()
     }
 
@@ -112,7 +112,7 @@ class VariableNamingSpec {
             fun bar() {
                 listOf<Pair<Int, Int>>().flatMap { (right, _) -> listOf(right) }
             }
-        """
+        """.trimIndent()
         assertThat(VariableNaming().compileAndLint(code)).isEmpty()
     }
 
@@ -128,13 +128,24 @@ class VariableNamingSpec {
             interface I2 {
                 @Suppress("VariableNaming") val SHOULD_BE_FLAGGED: String
             }
-        """
+        """.trimIndent()
         val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
         assertThat(VariableNaming(config).compileAndLint(code))
             .hasStartSourceLocations(
                 SourceLocation(2, 18),
                 SourceLocation(5, 18)
             )
+    }
+
+    @Test
+    fun `should not detect any`() {
+        val code = """
+            data class D(val i: Int, val j: Int)
+            fun doStuff() {
+                val (_, HOLY_GRAIL) = D(5, 4)
+            }
+        """.trimIndent()
+        assertThat(VariableNaming().compileAndLint(code)).isEmpty()
     }
 }
 

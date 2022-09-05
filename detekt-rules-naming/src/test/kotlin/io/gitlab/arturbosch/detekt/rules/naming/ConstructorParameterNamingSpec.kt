@@ -16,7 +16,7 @@ class ConstructorParameterNamingSpec {
                 constructor(param: String) {}
                 constructor(param: String, privateParam: String) {}
             }
-        """
+        """.trimIndent()
         assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
     }
 
@@ -29,7 +29,7 @@ class ConstructorParameterNamingSpec {
                 constructor(PARAM: String) {}
                 constructor(PARAM: String, PRIVATE_PARAM: String) {}
             }
-        """
+        """.trimIndent()
         assertThat(ConstructorParameterNaming().compileAndLint(code)).hasSize(5)
     }
 
@@ -37,7 +37,7 @@ class ConstructorParameterNamingSpec {
     fun `should find a violation in the correct text location`() {
         val code = """
             class C(val PARAM: String)
-        """
+        """.trimIndent()
         assertThat(ConstructorParameterNaming().compileAndLint(code)).hasTextLocations(8 to 25)
     }
 
@@ -47,7 +47,7 @@ class ConstructorParameterNamingSpec {
             class C(override val PARAM: String) : I
 
             interface I { val PARAM: String }
-        """
+        """.trimIndent()
         assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
     }
 
@@ -57,7 +57,7 @@ class ConstructorParameterNamingSpec {
             class C(override val PARAM: String) : I
 
             interface I { val PARAM: String }
-        """
+        """.trimIndent()
         val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
         assertThat(ConstructorParameterNaming(config).compileAndLint(code)).hasTextLocations(8 to 34)
     }

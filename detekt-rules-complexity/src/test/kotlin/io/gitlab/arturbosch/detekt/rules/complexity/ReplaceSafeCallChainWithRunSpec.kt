@@ -22,7 +22,7 @@ class ReplaceSafeCallChainWithRunSpec(val env: KotlinCoreEnvironment) {
                 ?.distinctBy { it }
                 ?.iterator()
                 ?.forEach(::println)
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
@@ -35,7 +35,7 @@ class ReplaceSafeCallChainWithRunSpec(val env: KotlinCoreEnvironment) {
             val y = x
                 ?.asSequence()
                 ?.map { it }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
@@ -47,7 +47,7 @@ class ReplaceSafeCallChainWithRunSpec(val env: KotlinCoreEnvironment) {
 
             val y = x
                 ?.asSequence()
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
@@ -66,7 +66,7 @@ class ReplaceSafeCallChainWithRunSpec(val env: KotlinCoreEnvironment) {
             fun modifyList() {
                 z?.element?.list = listOf("strings")
             }
-        """
+        """.trimIndent()
 
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }

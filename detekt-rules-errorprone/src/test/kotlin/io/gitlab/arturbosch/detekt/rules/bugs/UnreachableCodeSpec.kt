@@ -20,7 +20,7 @@ class UnreachableCodeSpec(private val env: KotlinCoreEnvironment) {
                     println()
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -34,7 +34,7 @@ class UnreachableCodeSpec(private val env: KotlinCoreEnvironment) {
                 }
                 return false
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
     }
 
@@ -50,7 +50,7 @@ class UnreachableCodeSpec(private val env: KotlinCoreEnvironment) {
                     return@f 1
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -63,7 +63,7 @@ class UnreachableCodeSpec(private val env: KotlinCoreEnvironment) {
                     println()
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -80,7 +80,7 @@ class UnreachableCodeSpec(private val env: KotlinCoreEnvironment) {
                     println()
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
     }
 
@@ -93,7 +93,7 @@ class UnreachableCodeSpec(private val env: KotlinCoreEnvironment) {
                     println()
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -106,7 +106,7 @@ class UnreachableCodeSpec(private val env: KotlinCoreEnvironment) {
                 }
                 throw IllegalArgumentException()
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -120,7 +120,7 @@ class UnreachableCodeSpec(private val env: KotlinCoreEnvironment) {
                 }
                 println()
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -135,7 +135,7 @@ class UnreachableCodeSpec(private val env: KotlinCoreEnvironment) {
                 }
                 return 0
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -151,7 +151,7 @@ class UnreachableCodeSpec(private val env: KotlinCoreEnvironment) {
                 }
                 return 0
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -166,7 +166,7 @@ class UnreachableCodeSpec(private val env: KotlinCoreEnvironment) {
                 }
                 return 0
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 }

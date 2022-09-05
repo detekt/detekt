@@ -67,7 +67,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
                 .plus(0)
                 .plus(0)
                 .plus(0)
-        """
+        """.trimIndent()
 
         assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
     }
@@ -79,7 +79,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
             val a = 0.plus(0).plus(0)
                 .plus(0).plus(0).plus(0)
                 .plus(0).plus(0).plus(0)
-        """
+        """.trimIndent()
 
         assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
     }
@@ -91,7 +91,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
             val a = 0.plus(0).plus(0).plus(0)
                 .plus(0)
                 .plus(0)
-        """
+        """.trimIndent()
 
         assertThat(rule.compileAndLintWithContext(env, code)).hasSize(1)
     }
@@ -104,7 +104,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
                 .plus(0)
                 .plus(0).plus(0).plus(0).plus(0)
                 .plus(0)
-        """
+        """.trimIndent()
 
         assertThat(rule.compileAndLintWithContext(env, code)).hasSize(1)
     }
@@ -130,7 +130,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
         val rule = MaxChainedCallsOnSameLine(TestConfig(mapOf("maxChainedCalls" to 3)))
         val code = """
             val x = kotlin.math.floor(1.0).plus(1).plus(1)
-        """
+        """.trimIndent()
         assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -139,7 +139,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
         val rule = MaxChainedCallsOnSameLine(TestConfig(mapOf("maxChainedCalls" to 3)))
         val code = """
             val x = kotlin.run { 1 }.plus(1).plus(1)
-        """
+        """.trimIndent()
         assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
     }
 }

@@ -15,7 +15,7 @@ class UndocumentedPublicFunctionSpec {
     fun `reports undocumented public functions`() {
         val code = """
             fun noComment1() {}
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -25,7 +25,7 @@ class UndocumentedPublicFunctionSpec {
             object Test {
                 fun noComment1() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -37,7 +37,7 @@ class UndocumentedPublicFunctionSpec {
                     fun noComment1() {}
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -50,7 +50,7 @@ class UndocumentedPublicFunctionSpec {
                     public fun noComment2() {}
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(2)
     }
 
@@ -60,7 +60,7 @@ class UndocumentedPublicFunctionSpec {
             interface Test {
                 fun noComment1()
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -71,7 +71,7 @@ class UndocumentedPublicFunctionSpec {
              * Comment
              */
             fun commented1() {}
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -84,7 +84,7 @@ class UndocumentedPublicFunctionSpec {
             */
             fun commented() {}
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -95,7 +95,7 @@ class UndocumentedPublicFunctionSpec {
                 internal fun no1(){}
                 private fun no2(){}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -108,7 +108,7 @@ class UndocumentedPublicFunctionSpec {
             fun commented() {
                 fun iDontNeedDoc() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -119,7 +119,7 @@ class UndocumentedPublicFunctionSpec {
                 fun nope1() {}
                 public fun nope2() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -130,7 +130,7 @@ class UndocumentedPublicFunctionSpec {
                 fun nope1() {}
                 public fun nope2() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -140,7 +140,7 @@ class UndocumentedPublicFunctionSpec {
             private object Test {
                 fun noComment1() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -150,7 +150,7 @@ class UndocumentedPublicFunctionSpec {
             open class Test {
                 protected fun noComment1() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -160,7 +160,7 @@ class UndocumentedPublicFunctionSpec {
             open class Test {
                 protected fun noComment1() {}
             }
-        """
+        """.trimIndent()
         val subject = UndocumentedPublicFunction(TestConfig(mapOf(SEARCH_PROTECTED_FUN to "true")))
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
@@ -176,7 +176,7 @@ class UndocumentedPublicFunctionSpec {
                         }
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -191,7 +191,7 @@ class UndocumentedPublicFunctionSpec {
                         }
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -204,7 +204,7 @@ class UndocumentedPublicFunctionSpec {
                         }
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

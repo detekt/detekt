@@ -21,7 +21,7 @@ class TopLevelPropertyNamingSpec {
               const val lowerCaseConst = ""
             }
         }
-                """
+                """.trimIndent()
             )
         ).isEmpty()
     }
@@ -34,7 +34,7 @@ class TopLevelPropertyNamingSpec {
             val code = """
                 const val MY_NAME_8 = "Artur"
                 const val MYNAME = "Artur"
-            """
+            """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -46,7 +46,7 @@ class TopLevelPropertyNamingSpec {
                 const val nAme = "Artur"
                 private const val _nAme = "Artur"
                 const val serialVersionUID = 42L
-            """
+            """.trimIndent()
             assertThat(subject.lint(code)).hasSize(5)
         }
     }
@@ -67,7 +67,7 @@ class TopLevelPropertyNamingSpec {
                 private val NAME = "Artur"
                 val s_d_d_1 = listOf("")
                 private val INTERNAL_VERSION = "1.0.0"
-            """
+            """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -75,7 +75,7 @@ class TopLevelPropertyNamingSpec {
         fun `should report non private top level property using underscore`() {
             val code = """
                 val _nAme = "Artur"
-            """
+            """.trimIndent()
             assertThat(subject.lint(code)).hasSize(1)
         }
 
@@ -83,7 +83,7 @@ class TopLevelPropertyNamingSpec {
         fun `should report private top level property using two underscores`() {
             val code = """
                 private val __NAME = "Artur"
-            """
+            """.trimIndent()
             io.gitlab.arturbosch.detekt.test.assertThat(subject.lint(code)).hasSize(1)
         }
     }

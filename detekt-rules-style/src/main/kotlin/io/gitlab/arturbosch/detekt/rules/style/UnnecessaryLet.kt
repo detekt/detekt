@@ -23,7 +23,6 @@ import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
 /**
  * `let` expressions are used extensively in our code for null-checking and chaining functions,
@@ -124,7 +123,7 @@ private fun KtBlockExpression.hasOnlyOneStatement() = this.children.size == 1
 
 private fun PsiElement.countVarRefs(parameter: CallableDescriptor, context: BindingContext): Int =
     collectDescendantsOfType<KtSimpleNameExpression> {
-        it.getResolvedCall(context)?.resultingDescriptor == parameter
+        context[BindingContext.REFERENCE_TARGET, it] == parameter
     }.count()
 
 private fun KtLambdaExpression.countReferences(context: BindingContext): Int {

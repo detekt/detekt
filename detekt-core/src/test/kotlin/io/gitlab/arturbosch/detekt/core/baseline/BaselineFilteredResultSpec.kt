@@ -28,13 +28,13 @@ class BaselineFilteredResultSpec {
 
     @Test
     fun `does return the same finding on empty baseline`() {
-        val actual = BaselineFilteredResult(result, Baseline(emptySet(), emptySet()))
+        val actual = BaselineFilteredResult(result, DefaultBaseline(emptySet(), emptySet()))
         assertThat(actual.findings).hasSize(3)
     }
 
     @Test
     fun `filters with an existing baseline file`() {
-        val baseline = Baseline.load(baselineFile)
+        val baseline = DefaultBaseline.load(baselineFile)
         val actual = BaselineFilteredResult(result, baseline)
         // Note: Detektion works with Map<RuleSetId, List<Finding>
         // but the TestDetektion maps the RuleId as RuleSetId

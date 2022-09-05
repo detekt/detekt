@@ -26,7 +26,7 @@ class VariableMinLengthSpec {
                 class C {
                     val prop: (Int) -> Unit = { _ -> Unit }
             }
-            """
+            """.trimIndent()
             assertThat(variableMinLength.compileAndLint(code)).isEmpty()
         }
     }
@@ -50,7 +50,7 @@ class VariableMinLengthSpec {
             fun function() {
                 val (_, status) = getResult()
             }
-        """
+        """.trimIndent()
         assertThat(VariableMinLength().compileAndLint(code)).isEmpty()
     }
 }

@@ -28,7 +28,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
                         delay(timeMillis = 1000)
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -42,7 +42,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
                         delay(timeMillis = 1000)
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -57,7 +57,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
                         delay(timeMillis = 1000)
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -75,7 +75,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
                         delay(timeMillis = 1000)
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -91,7 +91,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
                         delay(timeMillis = 1000)
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -107,7 +107,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
                         delay(timeMillis = 1000)
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -123,7 +123,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
                         delay(timeMillis = this@foo)
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
@@ -142,7 +142,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
                 suspend fun CoroutineScope.foo(action: suspend CoroutineScope.() -> Unit) {
                     action()
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
     }
