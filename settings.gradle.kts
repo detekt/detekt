@@ -42,7 +42,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 // build scan plugin can only be applied in settings file
 plugins {
     id("com.gradle.enterprise") version "3.11.1"
-    id("com.gradle.common-custom-user-data-gradle-plugin") version "1.8"
+    id("com.gradle.common-custom-user-data-gradle-plugin") version "1.8.1"
 }
 
 val isCiBuild = System.getenv("CI") != null
