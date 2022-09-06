@@ -35,7 +35,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                         fun MethodNameNotEqualsClassName() {}
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -47,7 +47,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                         fun MethodNameNotEqualsClassName() {}
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -59,7 +59,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                         fun A() {}
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
@@ -73,7 +73,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                 class MethodNameEqualsClassName {
                     fun methodNameEqualsClassName() {}
                 }
-            """
+            """.trimIndent()
             assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
         }
 
@@ -83,7 +83,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                 object MethodNameEqualsObjectName {
                     fun MethodNameEqualsObjectName() {}
                 }
-            """
+            """.trimIndent()
             assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
         }
 
@@ -93,7 +93,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                 class PropertyNameEqualsClassName {
                     val propertyNameEqualsClassName = 0
                 }
-            """
+            """.trimIndent()
             assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
         }
 
@@ -103,7 +103,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                 object PropertyNameEqualsObjectName {
                     val propertyNameEqualsObjectName = 0
                 }
-            """
+            """.trimIndent()
             assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
         }
 
@@ -115,7 +115,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                         fun StaticMethodNameEqualsClassName() {}
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
         }
 
@@ -127,7 +127,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                         fun MethodNameEqualsNestedClassName() {}
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
         }
 
@@ -140,7 +140,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                 abstract class BaseClassForMethodNameEqualsClassName {
                     abstract fun AbstractMethodNameEqualsClassName()
                 }
-            """
+            """.trimIndent()
             assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
         }
 
@@ -150,7 +150,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                 interface MethodNameEqualsInterfaceName {
                     fun MethodNameEqualsInterfaceName() {}
                 }
-            """
+            """.trimIndent()
             assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
         }
 
@@ -163,7 +163,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                 abstract class BaseClassForMethodNameEqualsClassName {
                     abstract fun AbstractMethodNameEqualsClassName()
                 }
-            """
+            """.trimIndent()
             assertThat(MemberNameEqualsClassName(noIgnoreOverridden).compileAndLint(code)).hasSize(1)
         }
 
@@ -176,7 +176,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                 abstract class BaseClassForMethodNameEqualsClassName {
                     abstract val AbstractMethodNameEqualsClassName: String
                 }
-            """
+            """.trimIndent()
             assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
         }
 
@@ -189,7 +189,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                 abstract class BaseClassForMethodNameEqualsClassName {
                     abstract val AbstractMethodNameEqualsClassName: String
                 }
-            """
+            """.trimIndent()
             assertThat(MemberNameEqualsClassName(noIgnoreOverridden).compileAndLint(code)).hasSize(1)
         }
     }
@@ -206,7 +206,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                         fun wrongFactoryClass1() {}
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
         }
 
@@ -221,7 +221,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                         }
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
         }
 
@@ -234,7 +234,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                         fun wrongFactoryClass3() = 0
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).hasSize(1)
         }
 
@@ -252,7 +252,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                 class B: A()
                 
                 class C: A()
-            """
+            """.trimIndent()
             assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -269,7 +269,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                         }
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
         }
 
@@ -286,7 +286,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                 class B: A()
 
                 class C: A()
-            """
+            """.trimIndent()
 
             @Test
             fun `with type solving`() {

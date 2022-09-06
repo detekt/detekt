@@ -70,7 +70,7 @@ class ForbiddenCommentSpec {
                /*
                 TODO: I need to fix this.
                 */
-            """
+            """.trimIndent()
             val findings = ForbiddenComment().compileAndLint(code)
             assertThat(findings).hasSize(1)
         }
@@ -86,7 +86,7 @@ class ForbiddenCommentSpec {
                      * TODO: I need to fix this.
                      */
                 }
-            """
+            """.trimIndent()
             val findings = ForbiddenComment().compileAndLint(code)
             assertThat(findings).hasSize(2)
         }

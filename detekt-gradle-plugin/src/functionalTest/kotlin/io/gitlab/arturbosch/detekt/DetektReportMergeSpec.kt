@@ -13,33 +13,33 @@ class DetektReportMergeSpec {
         val builder = DslTestBuilder.kotlin()
         val buildFileContent =
             """
-            |${builder.gradlePlugins}
-            |
-            |allprojects {
-            |  ${builder.gradleRepositories}
-            |}
-            |
-            |val sarifReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
-            |  output.set(project.layout.buildDirectory.file("reports/detekt/merge.sarif"))
-            |}
-            |
-            |subprojects {
-            |  ${builder.gradleSubprojectsApplyPlugins}
-            |  
-            |  detekt {
-            |    reports.sarif.enabled = true
-            |  }
-            |  
-            |  plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin::class) {
-            |    tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class) detekt@{
-            |       sarifReportMerge.configure {
-            |         this.mustRunAfter(this@detekt)
-            |         input.from(this@detekt.sarifReportFile)
-            |       }
-            |    }
-            |  }
-            |}
-            |
+                |${builder.gradlePlugins}
+                |
+                |allprojects {
+                |  ${builder.gradleRepositories}
+                |}
+                |
+                |val sarifReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
+                |  output.set(project.layout.buildDirectory.file("reports/detekt/merge.sarif"))
+                |}
+                |
+                |subprojects {
+                |  ${builder.gradleSubprojectsApplyPlugins}
+                |  
+                |  detekt {
+                |    reports.sarif.enabled = true
+                |  }
+                |  
+                |  plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin::class) {
+                |    tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class) detekt@{
+                |       sarifReportMerge.configure {
+                |         this.mustRunAfter(this@detekt)
+                |         input.from(this@detekt.sarifReportFile)
+                |       }
+                |    }
+                |  }
+                |}
+                |
             """.trimMargin()
 
         val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
@@ -61,15 +61,15 @@ class DetektReportMergeSpec {
             assertThat(result.output).contains("FAILURE: Build completed with 2 failures.")
             assertThat(result.output).containsIgnoringWhitespaces(
                 """
-                Execution failed for task ':child1:detekt'.
-                > Analysis failed with 2 weighted issues.
-                """
+                    Execution failed for task ':child1:detekt'.
+                    > Analysis failed with 2 weighted issues.
+                """.trimIndent()
             )
             assertThat(result.output).containsIgnoringWhitespaces(
                 """
-                Execution failed for task ':child2:detekt'.
-                > Analysis failed with 4 weighted issues.
-                """
+                    Execution failed for task ':child2:detekt'.
+                    > Analysis failed with 4 weighted issues.
+                """.trimIndent()
             )
             assertThat(projectFile("build/reports/detekt/detekt.sarif")).doesNotExist()
             assertThat(projectFile("build/reports/detekt/merge.sarif")).exists()
@@ -98,11 +98,11 @@ class DetektReportMergeSpec {
             |
             |subprojects {
             |  ${builder.gradleSubprojectsApplyPlugins}
-            |  
+            |
             |  detekt {
             |    reports.xml.enabled = true
             |  }
-            |  
+            |
             |  plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin::class) {
             |    tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class) detekt@{
             |       xmlReportMerge.configure {
@@ -134,15 +134,15 @@ class DetektReportMergeSpec {
             assertThat(result.output).contains("FAILURE: Build completed with 2 failures.")
             assertThat(result.output).containsIgnoringWhitespaces(
                 """
-                Execution failed for task ':child1:detekt'.
-                > Analysis failed with 2 weighted issues.
-                """
+                    Execution failed for task ':child1:detekt'.
+                    > Analysis failed with 2 weighted issues.
+                """.trimIndent()
             )
             assertThat(result.output).containsIgnoringWhitespaces(
                 """
-                Execution failed for task ':child2:detekt'.
-                > Analysis failed with 4 weighted issues.
-                """
+                    Execution failed for task ':child2:detekt'.
+                    > Analysis failed with 4 weighted issues.
+                """.trimIndent()
             )
             assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
             assertThat(projectFile("build/reports/detekt/merge.xml")).exists()

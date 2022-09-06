@@ -21,7 +21,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
                         .filter { it > 1 }
                         .map { it }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(4, 10)
@@ -41,7 +41,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
                         }
                         .filter { it > 1 }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(5, 10)
@@ -54,7 +54,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
                 fun test() {
                     listOf(1, 2, 3).map { foo -> foo }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -65,7 +65,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
                 fun test() {
                     listOf(1).map({ it })
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -80,7 +80,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
                         it
                     }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -97,7 +97,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
                         it
                     }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -113,7 +113,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
                         }.joinToString("") + s
                     }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -124,7 +124,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
                 fun List<Int>.test() {
                     map { it }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -135,7 +135,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
                 fun List<Int>.test() {
                     this.map { it }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -146,7 +146,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
                 fun test() {
                     mutableListOf(1).map { it }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -157,7 +157,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
                 fun test() {
                     val x:Sequence<Int> = sequenceOf(1).map { it }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -168,7 +168,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
                 fun test() {
                     setOf(1).map { it }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings[0]).hasMessage("This 'map' call can be replaced with 'toList'.")
@@ -185,7 +185,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
                         .filter { it > 1 }
                         .map { it + 1 }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -199,7 +199,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
                         it
                     }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -210,7 +210,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
                 fun test() {
                     listOf(1 to 2).map { (a, b) -> a }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -221,7 +221,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
                 fun test() {
                     val x: List<Map.Entry<Int, String>> = mapOf(1 to "a").map { it }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }

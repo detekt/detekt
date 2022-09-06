@@ -16,11 +16,12 @@ class PluginTaskBehaviorSpec {
     val configFileName = "config.yml"
     val baselineFileName = "baseline.xml"
 
+    @Suppress("TrimMultilineRawString")
     val detektConfig = """
-                    |detekt {
-                    |    config = files("$configFileName")
-                    |    baseline = file("$baselineFileName")
-                    |}
+        |detekt {
+        |    config = files("$configFileName")
+        |    baseline = file("$baselineFileName")
+        |}
     """
 
     lateinit var gradleRunner: DslGradleRunner

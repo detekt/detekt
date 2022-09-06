@@ -30,7 +30,7 @@ class ExceptionRaisedInUnexpectedLocationSpec {
         fun toDo() {
             throw IllegalStateException()
         }
-            """
+            """.trimIndent()
         )
         assertThat(findings).hasSize(1)
     }
@@ -43,7 +43,7 @@ class ExceptionRaisedInUnexpectedLocationSpec {
         fun toDo() {
             throw IllegalStateException()
         }
-            """
+            """.trimIndent()
         )
         assertThat(findings).hasSize(1)
     }

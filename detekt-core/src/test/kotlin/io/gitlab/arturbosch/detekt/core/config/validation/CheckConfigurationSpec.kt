@@ -26,7 +26,7 @@ class CheckConfigurationSpec {
             """
             unknown_property:
               unknown_var: ""
-            """
+            """.trimIndent()
         )
         createProcessingSettings(
             testDir,
@@ -55,7 +55,7 @@ class CheckConfigurationSpec {
             my_additional_properties:
               magic_number: 7
               magic_string: 'Hello World'
-            """
+            """.trimIndent()
         )
         createProcessingSettings(testDir, config).use {
             assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
@@ -74,7 +74,7 @@ class CheckConfigurationSpec {
               TooManyFunctions:
                 # This property is tested via the SampleConfigValidator
                 active: 1 # should be true
-            """
+            """.trimIndent()
         )
         createProcessingSettings(testDir, config).use {
             assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }
@@ -104,7 +104,7 @@ class CheckConfigurationSpec {
            my_additional_properties:
              magic_number: 7
              magic_string: 'Hello World'
-            """
+            """.trimIndent()
         )
         createProcessingSettings(testDir, config).use {
             assertThatCode { checkConfiguration(it, spec.getDefaultConfiguration()) }

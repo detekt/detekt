@@ -23,7 +23,7 @@ class ExpressionBodySyntaxSpec {
                 fun stuff(): Int {
                     return 5
                 }
-                    """
+                    """.trimIndent()
                 )
             ).hasSize(1)
         }
@@ -36,7 +36,7 @@ class ExpressionBodySyntaxSpec {
                 fun stuff(): String {
                     return StringBuilder().append(0).toString()
                 }
-                    """
+                    """.trimIndent()
                 )
             ).hasSize(1)
         }
@@ -52,7 +52,7 @@ class ExpressionBodySyntaxSpec {
                 fun stuff(): Int {
                     return try { return 5 } catch (e: Exception) { return 3 }
                 }
-                    """
+                    """.trimIndent()
                 )
             ).hasSize(2)
         }
@@ -66,7 +66,7 @@ class ExpressionBodySyntaxSpec {
                     if (true) return true
                     return false
                 }
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -81,7 +81,7 @@ class ExpressionBodySyntaxSpec {
                 }
 
                 fun callee(a: String): String = ""
-                    """
+                    """.trimIndent()
                 )
             ).isEmpty()
         }
@@ -96,7 +96,7 @@ class ExpressionBodySyntaxSpec {
                     .append(1)
                     .toString()
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `does not report with the default configuration`() {
@@ -120,7 +120,7 @@ class ExpressionBodySyntaxSpec {
                     else -> 1
                 }
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `does not report with the default configuration`() {
@@ -142,7 +142,7 @@ class ExpressionBodySyntaxSpec {
                 return if (arg == 0) 0
                 else 1
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `does not report with the default configuration`() {

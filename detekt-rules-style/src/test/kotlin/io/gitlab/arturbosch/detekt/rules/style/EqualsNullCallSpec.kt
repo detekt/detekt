@@ -14,7 +14,7 @@ class EqualsNullCallSpec {
             fun x(a: String) {
                 a.equals(null)
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code).size).isEqualTo(1)
     }
 
@@ -24,7 +24,7 @@ class EqualsNullCallSpec {
             fun x(a: String, b: String) {
                 a.equals(b.equals(null))
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code).size).isEqualTo(1)
     }
 
@@ -34,7 +34,7 @@ class EqualsNullCallSpec {
             fun x(a: String, b: String) {
                 a.equals(b)
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code).size).isEqualTo(0)
     }
 }

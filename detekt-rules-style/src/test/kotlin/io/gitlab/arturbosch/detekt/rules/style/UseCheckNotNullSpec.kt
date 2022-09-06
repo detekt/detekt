@@ -16,7 +16,7 @@ class UseCheckNotNullSpec(val env: KotlinCoreEnvironment) {
             fun test(i: Int?) {
                 check(i != null)
             }
-        """
+        """.trimIndent()
         val actual = subject.compileAndLintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
@@ -27,7 +27,7 @@ class UseCheckNotNullSpec(val env: KotlinCoreEnvironment) {
             fun test(i: Int?) {
                 check(null != i)
             }
-        """
+        """.trimIndent()
         val actual = subject.compileAndLintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
@@ -38,7 +38,7 @@ class UseCheckNotNullSpec(val env: KotlinCoreEnvironment) {
             fun test(i: Int) {
                 check(i > 0)
             }
-        """
+        """.trimIndent()
         val actual = subject.compileAndLintWithContext(env, code)
         assertThat(actual).isEmpty()
     }

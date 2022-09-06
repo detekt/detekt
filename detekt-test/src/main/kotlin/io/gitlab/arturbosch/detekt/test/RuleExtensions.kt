@@ -25,7 +25,7 @@ fun BaseRule.compileAndLint(@Language("kotlin") content: String): List<Finding> 
 }
 
 fun BaseRule.lint(@Language("kotlin") content: String): List<Finding> {
-    val ktFile = compileContentForTest(content.trimIndent())
+    val ktFile = compileContentForTest(content)
     return findingsAfterVisit(ktFile)
 }
 
@@ -39,9 +39,9 @@ fun BaseRule.lintWithContext(
     @Language("kotlin") content: String,
     @Language("kotlin") vararg additionalContents: String,
 ): List<Finding> {
-    val ktFile = compileContentForTest(content.trimIndent())
+    val ktFile = compileContentForTest(content)
     val additionalKtFiles = additionalContents.mapIndexed { index, additionalContent ->
-        compileContentForTest(additionalContent.trimIndent(), "AdditionalTest$index.kt")
+        compileContentForTest(additionalContent, "AdditionalTest$index.kt")
     }
     val bindingContext = environment.getContextForPaths(listOf(ktFile) + additionalKtFiles)
     val languageVersionSettings = environment.configuration.languageVersionSettings

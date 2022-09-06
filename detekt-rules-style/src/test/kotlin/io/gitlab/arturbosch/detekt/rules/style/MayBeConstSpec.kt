@@ -19,7 +19,7 @@ class MayBeConstSpec {
                 object Something {
                     const val X = 42
                 }
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
         }
@@ -30,7 +30,7 @@ class MayBeConstSpec {
             object Test {
                 const val TEST = "Test"
             }
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
         }
@@ -43,7 +43,7 @@ class MayBeConstSpec {
                     const val B = 1
                 }
             }
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
         }
@@ -60,7 +60,7 @@ class MayBeConstSpec {
                     const val B = Something.A + 1
                 }
             }
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
         }
@@ -73,7 +73,7 @@ class MayBeConstSpec {
             }
             val p = Pair(Something.a, Something.a + Something.a)
             val p2 = emptyList<Int>().plus(Something.a)
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
         }
@@ -85,7 +85,7 @@ class MayBeConstSpec {
         fun `is a simple val`() {
             val code = """
             val x = 1
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(1, 5)
@@ -96,7 +96,7 @@ class MayBeConstSpec {
         fun `is a simple JvmField val`() {
             val code = """
             @JvmField val x = 1
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(1, 15)
@@ -109,7 +109,7 @@ class MayBeConstSpec {
             object Test {
                 @JvmField val test = "Test"
             }
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(2, 19)
@@ -124,7 +124,7 @@ class MayBeConstSpec {
                     val b = 1
                 }
             }
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(3, 13)
@@ -141,7 +141,7 @@ class MayBeConstSpec {
                 const val one = 1
                 val two = one * 2
             }
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(3, 9)
@@ -157,7 +157,7 @@ class MayBeConstSpec {
                     val two = one * 2
                 }
             }
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(4, 13)
@@ -171,7 +171,7 @@ class MayBeConstSpec {
                 const val one = 1
                 val two = one * 2 + 1
             }
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(3, 9)
@@ -185,7 +185,7 @@ class MayBeConstSpec {
                 const val one = 1
                 val two = one * (2 + 1)
             }
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(3, 9)
@@ -201,7 +201,7 @@ class MayBeConstSpec {
                 @JvmField
                 val b = a + 1
             }
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(5, 9)
@@ -215,7 +215,7 @@ class MayBeConstSpec {
                 private const val A = "a"
                 private val B = A + "b"
             }
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(3, 17)
@@ -259,7 +259,7 @@ class MayBeConstSpec {
             class Test {
                 @JvmField val a = 3
             }
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
         }
@@ -270,7 +270,7 @@ class MayBeConstSpec {
             annotation class A
 
             @A val a = 55
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
         }
@@ -285,7 +285,7 @@ class MayBeConstSpec {
             object Derived : Base {
                 override val property = 1
             }
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
         }
@@ -314,7 +314,7 @@ class MayBeConstSpec {
                 }
                 var test_var = "test"
                 var code = $innerCode
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
         }
@@ -328,7 +328,7 @@ class MayBeConstSpec {
                         val prop = ""
                     }
                 }
-                """
+                """.trimIndent()
             )
 
             assertThat(subject.findings).isEmpty()
@@ -361,7 +361,7 @@ class MayBeConstSpec {
                         val ACONST = ROOT_CONST + 1
                     }
                 }
-            """
+            """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(3).hasStartSourceLocations(
                 SourceLocation(4, 13),

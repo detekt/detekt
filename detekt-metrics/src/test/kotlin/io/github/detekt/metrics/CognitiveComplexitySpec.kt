@@ -24,7 +24,7 @@ class CognitiveComplexitySpec {
                 }
                 return total
             }
-            """
+            """.trimIndent()
         )
 
         assertThat(CognitiveComplexity.calculate(code)).isEqualTo(7)
@@ -40,7 +40,7 @@ class CognitiveComplexitySpec {
                  3 -> "a few"
                  else -> "lots"
              }
-            """
+            """.trimIndent()
         )
 
         assertThat(CognitiveComplexity.calculate(code)).isEqualTo(1)
@@ -57,7 +57,7 @@ class CognitiveComplexitySpec {
                     fun factorial(n: Int): Int =
                         if (n >= 1) n * this.factorial(n - 1) else 1
                 }
-                """
+                """.trimIndent()
             )
 
             assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
@@ -69,7 +69,7 @@ class CognitiveComplexitySpec {
                 """
                 fun factorial(n: Int): Int =
                     if (n >= 1) n * factorial(n - 1) else 1
-                """
+                """.trimIndent()
             )
 
             assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
@@ -82,7 +82,7 @@ class CognitiveComplexitySpec {
                 object O { fun factorial(i: Int): Int = i - 1 }
                 fun factorial(n: Int): Int =
                     if (n >= 1) n * O.factorial(n - 1) else 1
-                """
+                """.trimIndent()
             )
 
             assertThat(CognitiveComplexity.calculate(code)).isEqualTo(1)
@@ -97,7 +97,7 @@ class CognitiveComplexitySpec {
             fun main(args: Array<String>) {
                args.takeIf { it.size > 3 }?.let(::parse) ?: error("not enough arguments")
             }
-            """
+            """.trimIndent()
         )
 
         assertThat(CognitiveComplexity.calculate(code)).isEqualTo(0)
@@ -113,7 +113,7 @@ class CognitiveComplexitySpec {
                 } catch (e: IllegalStateException) {
                 } catch (e: Throwable) {}
             }
-            """
+            """.trimIndent()
         )
 
         assertThat(CognitiveComplexity.calculate(code)).isEqualTo(3)
@@ -136,7 +136,7 @@ class CognitiveComplexitySpec {
                     do {} while(true) // +2
                 }
             }
-            """
+            """.trimIndent()
         )
 
         assertThat(CognitiveComplexity.calculate(code)).isEqualTo(9)
@@ -147,7 +147,7 @@ class CognitiveComplexitySpec {
         val code = compileContentForTest(
             """
             fun main() { run { if (true) {} } }
-            """
+            """.trimIndent()
         )
 
         assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
@@ -158,7 +158,7 @@ class CognitiveComplexitySpec {
         val code = compileContentForTest(
             """
             fun main() { fun run() { if (true) {} } }
-            """
+            """.trimIndent()
         )
 
         assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
@@ -172,7 +172,7 @@ class CognitiveComplexitySpec {
             val code = compileContentForTest(
                 """
                 fun test(cond_ Boolean) = !cond
-                """
+                """.trimIndent()
             )
 
             assertThat(CognitiveComplexity.calculate(code)).isEqualTo(0)
@@ -186,7 +186,7 @@ class CognitiveComplexitySpec {
                 val code = compileContentForTest(
                     """
                     fun test(cond_ Boolean) = !cond && !cond
-                    """
+                    """.trimIndent()
                 )
 
                 assertThat(CognitiveComplexity.calculate(code)).isEqualTo(1)
@@ -197,7 +197,7 @@ class CognitiveComplexitySpec {
                 val code = compileContentForTest(
                     """
                     fun test(cond_ Boolean) = !cond && !cond && !cond
-                    """
+                    """.trimIndent()
                 )
 
                 assertThat(CognitiveComplexity.calculate(code)).isEqualTo(1)
@@ -208,7 +208,7 @@ class CognitiveComplexitySpec {
                 val code = compileContentForTest(
                     """
                     fun test(cond_ Boolean) = !cond && !cond || cond
-                    """
+                    """.trimIndent()
                 )
 
                 assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
@@ -226,7 +226,7 @@ class CognitiveComplexitySpec {
                             && cond             // +1
                         ) {}
                     }
-                    """
+                    """.trimIndent()
                 )
 
                 assertThat(CognitiveComplexity.calculate(code)).isEqualTo(4)
@@ -242,7 +242,7 @@ class CognitiveComplexitySpec {
                             && !(cond && cond)  // +2
                         ) {}
                     }
-                    """
+                    """.trimIndent()
                 )
 
                 assertThat(CognitiveComplexity.calculate(code)).isEqualTo(3)
@@ -258,7 +258,7 @@ class CognitiveComplexitySpec {
                             && !(cond && cond && cond)  // +2
                         ) {}
                     }
-                    """
+                    """.trimIndent()
                 )
 
                 assertThat(CognitiveComplexity.calculate(code)).isEqualTo(3)
@@ -275,7 +275,7 @@ class CognitiveComplexitySpec {
                             || !(cond || cond)          // +2
                         ) {}
                     }
-                    """
+                    """.trimIndent()
                 )
 
                 assertThat(CognitiveComplexity.calculate(code)).isEqualTo(5)

@@ -16,7 +16,7 @@ class RethrowCaughtExceptionSpec {
                     throw e
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -32,7 +32,7 @@ class RethrowCaughtExceptionSpec {
                     }
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -46,7 +46,7 @@ class RethrowCaughtExceptionSpec {
                     print("log")
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -62,7 +62,7 @@ class RethrowCaughtExceptionSpec {
                     }
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -75,7 +75,7 @@ class RethrowCaughtExceptionSpec {
                     throw IllegalArgumentException(e)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -90,7 +90,7 @@ class RethrowCaughtExceptionSpec {
                     throw IllegalArgumentException("msg", f)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -106,7 +106,7 @@ class RethrowCaughtExceptionSpec {
                     throw IllegalArgumentException("msg", f)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -125,7 +125,7 @@ class RethrowCaughtExceptionSpec {
                     throw e
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -140,7 +140,7 @@ class RethrowCaughtExceptionSpec {
                     print(e)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -156,7 +156,7 @@ class RethrowCaughtExceptionSpec {
                     throw e
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -168,7 +168,7 @@ class RethrowCaughtExceptionSpec {
                 } finally {
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -183,7 +183,7 @@ class RethrowCaughtExceptionSpec {
                     throw e
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -199,7 +199,7 @@ class RethrowCaughtExceptionSpec {
                     throw e
                 }
             }
-        """
+        """.trimIndent()
         val result = subject.compileAndLint(code)
         assertThat(result).hasSize(2)
         // ensure correct violation order

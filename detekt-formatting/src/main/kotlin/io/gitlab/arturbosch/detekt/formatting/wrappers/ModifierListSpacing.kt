@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint-readme](https://github.com/pinterest/ktlint#experimental-rules) for documentation.
+ * See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#modifier-list-spacing) for documentation.
  */
 @AutoCorrectable(since = "1.20.0")
 class ModifierListSpacing(config: Config) : FormattingRule(config) {

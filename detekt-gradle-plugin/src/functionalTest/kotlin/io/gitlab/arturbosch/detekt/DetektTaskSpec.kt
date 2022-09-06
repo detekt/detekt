@@ -15,6 +15,7 @@ class DetektTaskSpec {
 
     @Test
     fun `build succeeds with more issues than threshold if ignoreFailures = true`() {
+        @Suppress("TrimMultilineRawString")
         val config = """
             |detekt {
             |   ignoreFailures = true
@@ -33,6 +34,7 @@ class DetektTaskSpec {
 
     @Test
     fun `build fails with more issues than threshold successfully if ignoreFailures = false`() {
+        @Suppress("TrimMultilineRawString")
         val config = """
             |detekt {
             |   ignoreFailures = false

@@ -26,7 +26,7 @@ class ForEachOnRangeSpec {
                 println(it)
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should report the forEach usage`() {
@@ -41,7 +41,7 @@ class ForEachOnRangeSpec {
         fun test() {
             (1..10).isEmpty()
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not report any issues`() {
@@ -58,7 +58,7 @@ class ForEachOnRangeSpec {
                 println(it)
             }
         }
-        """
+        """.trimIndent()
 
         @Test
         fun `should not report any issues`() {

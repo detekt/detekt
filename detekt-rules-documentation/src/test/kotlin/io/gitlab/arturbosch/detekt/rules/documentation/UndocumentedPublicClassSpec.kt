@@ -19,42 +19,42 @@ class UndocumentedPublicClassSpec {
         class TestInner {
             inner class Inner
         }
-    """
+    """.trimIndent()
 
     val innerObject = """
         /** Some doc */
         class TestInner {
             object Inner
         }
-    """
+    """.trimIndent()
 
     val innerInterface = """
         /** Some doc */
         class TestInner {
             interface Something
         }
-    """
+    """.trimIndent()
 
     val nested = """
         /** Some doc */
         class TestNested {
             class Nested
         }
-    """
+    """.trimIndent()
 
     val nestedPublic = """
         /** Some doc */
         class TestNested {
             public class Nested
         }
-    """
+    """.trimIndent()
 
     val nestedPrivate = """
         /** Some doc */
         class TestNested {
             private class Nested
         }
-    """
+    """.trimIndent()
 
     val privateClass = "private class TestNested {}"
     val internalClass = "internal class TestNested {}"
@@ -141,7 +141,7 @@ class UndocumentedPublicClassSpec {
             class Nested
             inner class Inner
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -151,7 +151,7 @@ class UndocumentedPublicClassSpec {
         internal class Outer {
             interface Inner
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -161,7 +161,7 @@ class UndocumentedPublicClassSpec {
         internal class Outer {
             object Inner
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -181,7 +181,7 @@ class UndocumentedPublicClassSpec {
             fun main(args: Array<String>) {
             }
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -194,7 +194,7 @@ class UndocumentedPublicClassSpec {
                 override fun next() = 1
             }
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -204,7 +204,7 @@ class UndocumentedPublicClassSpec {
         enum class Enum {
             CONSTANT
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -215,7 +215,7 @@ class UndocumentedPublicClassSpec {
         enum class Enum {
             CONSTANT
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -231,7 +231,7 @@ class UndocumentedPublicClassSpec {
              */
             fun onComplete()
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -240,7 +240,7 @@ class UndocumentedPublicClassSpec {
         val code = """
         protected class Test {
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -249,7 +249,7 @@ class UndocumentedPublicClassSpec {
         val code = """
         protected class Test {
         }
-        """
+        """.trimIndent()
         val subject = UndocumentedPublicClass(TestConfig(mapOf(SEARCH_IN_PROTECTED_CLASS to "true")))
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }

@@ -26,7 +26,7 @@ class RedundantVisibilityModifierRuleSpec {
             class Test : A() {
                 override public fun f() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -40,7 +40,7 @@ class RedundantVisibilityModifierRuleSpec {
             class Test : A() {
                 override fun f() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -54,7 +54,7 @@ class RedundantVisibilityModifierRuleSpec {
             class Test : A {
                 override public fun f() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -65,7 +65,7 @@ class RedundantVisibilityModifierRuleSpec {
                 @Suppress("RedundantVisibilityModifier")
                 public fun f() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -75,7 +75,7 @@ class RedundantVisibilityModifierRuleSpec {
             class Test {
                 public fun f() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -85,7 +85,7 @@ class RedundantVisibilityModifierRuleSpec {
             class Test {
                 fun f() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -95,7 +95,7 @@ class RedundantVisibilityModifierRuleSpec {
             public class Test {
                 fun f() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -105,7 +105,7 @@ class RedundantVisibilityModifierRuleSpec {
             public interface Test {
                 public fun f()
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(2)
     }
 
@@ -115,7 +115,7 @@ class RedundantVisibilityModifierRuleSpec {
             class Test {
                 public val str : String = "test"
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -125,7 +125,7 @@ class RedundantVisibilityModifierRuleSpec {
             class Test {
                 val str : String = "test"
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -139,7 +139,7 @@ class RedundantVisibilityModifierRuleSpec {
             class B : A() {
                 override val test: String = "valid"
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -153,7 +153,7 @@ class RedundantVisibilityModifierRuleSpec {
             class B : A() {
                 override public val test: String = "valid"
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -163,7 +163,7 @@ class RedundantVisibilityModifierRuleSpec {
             private object A {
                 internal class InternalClass
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -173,7 +173,7 @@ class RedundantVisibilityModifierRuleSpec {
             private object A {
                 internal fun internalFunction() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -186,7 +186,7 @@ class RedundantVisibilityModifierRuleSpec {
                 public class A() {
                     fun f()
                 }
-                """
+                """.trimIndent()
             )
 
         val rule = RedundantVisibilityModifierRule()

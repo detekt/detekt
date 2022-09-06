@@ -17,7 +17,7 @@ class LateinitUsageSpec {
             lateinit var v1: String
             @SinceKotlin("1.0.0") lateinit var v2: String
         }
-    """
+    """.trimIndent()
 
     @Test
     fun `should report lateinit usages`() {

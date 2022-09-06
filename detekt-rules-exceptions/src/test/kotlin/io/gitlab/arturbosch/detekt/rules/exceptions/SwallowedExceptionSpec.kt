@@ -20,7 +20,7 @@ class SwallowedExceptionSpec {
                     throw IllegalArgumentException()
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -35,7 +35,7 @@ class SwallowedExceptionSpec {
                     throw Exception(IllegalArgumentException(f.toString()))
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(2)
     }
 
@@ -52,7 +52,7 @@ class SwallowedExceptionSpec {
                     throw Exception(IllegalArgumentException(message))
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(2)
     }
 
@@ -73,7 +73,7 @@ class SwallowedExceptionSpec {
                     }
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(2)
     }
 
@@ -90,7 +90,7 @@ class SwallowedExceptionSpec {
                     throw IllegalArgumentException(e)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -107,7 +107,7 @@ class SwallowedExceptionSpec {
                     throw IllegalArgumentException(e.message)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -125,7 +125,7 @@ class SwallowedExceptionSpec {
                     throw IllegalArgumentException(e)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -138,7 +138,7 @@ class SwallowedExceptionSpec {
                     println()
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -159,7 +159,7 @@ class SwallowedExceptionSpec {
                 } catch (e: IllegalArgumentException) {
                 }
             }
-            """
+            """.trimIndent()
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
 
@@ -171,7 +171,7 @@ class SwallowedExceptionSpec {
                 } catch (e: Exception) {
                 }
             }
-            """
+            """.trimIndent()
             assertThat(rule.compileAndLint(code)).hasSize(1)
         }
     }
@@ -193,7 +193,7 @@ class SwallowedExceptionSpec {
                 } catch (e: IllegalArgumentException) {
                 }
             }
-            """
+            """.trimIndent()
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
 
@@ -205,7 +205,7 @@ class SwallowedExceptionSpec {
                 } catch (e: Exception) {
                 }
             }
-            """
+            """.trimIndent()
             assertThat(rule.compileAndLint(code)).hasSize(1)
         }
     }
@@ -224,7 +224,7 @@ class SwallowedExceptionSpec {
                     } catch (myIgnore: IllegalArgumentException) {
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
 
@@ -236,7 +236,7 @@ class SwallowedExceptionSpec {
                     } catch (e: IllegalArgumentException) {
                     }
                 }
-            """
+            """.trimIndent()
             assertThat(rule.compileAndLint(code)).hasSize(1)
         }
     }
@@ -252,7 +252,7 @@ class SwallowedExceptionSpec {
                     throw IllegalArgumentException(e)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -267,7 +267,7 @@ class SwallowedExceptionSpec {
                     print(e.message)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -284,7 +284,7 @@ class SwallowedExceptionSpec {
                     throw Exception()
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -307,7 +307,7 @@ class SwallowedExceptionSpec {
                     throw $exceptionInstantiation
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

@@ -21,7 +21,7 @@ class EmptyClassBlockSpec {
             class SomeClass {
                 // Some comment to explain what this class is supposed to do
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -33,7 +33,7 @@ class EmptyClassBlockSpec {
                 Some comment to explain what this class is supposed to do
                 */
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -43,7 +43,7 @@ class EmptyClassBlockSpec {
             class SomeClass {
                 class EmptyClass {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -63,7 +63,7 @@ class EmptyClassBlockSpec {
             fun f() {
                  object : Open() {}
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

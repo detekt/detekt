@@ -26,7 +26,7 @@ class FunctionOnlyReturningConstantSpec {
             actual class ActualFunctionReturningConstant {
                 actual fun f() = 1
             }
-        """
+        """.trimIndent()
 
         val code = """
             import kotlin.SinceKotlin
@@ -36,7 +36,7 @@ class FunctionOnlyReturningConstantSpec {
                     return "I am a constant"
                 }
             }
-        """
+        """.trimIndent()
 
         @Test
         fun `reports functions which return constants`() {

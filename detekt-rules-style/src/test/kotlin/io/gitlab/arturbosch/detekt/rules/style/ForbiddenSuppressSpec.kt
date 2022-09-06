@@ -21,7 +21,7 @@ internal class ForbiddenSuppressSpec {
                 
                 @SuppressWarnings("ARule")
                 class Foo
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(3, 1)
@@ -35,7 +35,7 @@ internal class ForbiddenSuppressSpec {
             val code = """
                 @file:Suppress("ARule")
                 package config
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(1, 1)
@@ -51,7 +51,7 @@ internal class ForbiddenSuppressSpec {
                 
                 @Suppress("ARule")
                 fun foo() { }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(3, 1)
@@ -69,7 +69,7 @@ internal class ForbiddenSuppressSpec {
                     @Suppress("ARule")
                     println("bar")
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(4, 5)
@@ -85,7 +85,7 @@ internal class ForbiddenSuppressSpec {
                 
                 @Suppress("UNCHECKED_CAST")
                 fun foo() { }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).isEmpty()
         }
@@ -97,7 +97,7 @@ internal class ForbiddenSuppressSpec {
                 
                 @Suppress("UNCHECKED_CAST", "ARule")
                 fun foo() { }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings.first()).hasMessage(
@@ -113,7 +113,7 @@ internal class ForbiddenSuppressSpec {
                 
                 @Suppress
                 fun foo() { }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(0)
         }
@@ -130,7 +130,7 @@ internal class ForbiddenSuppressSpec {
             val code = """
                 @file:Suppress("ARule", "BRule")
                 package config
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(1, 1)
@@ -147,7 +147,7 @@ internal class ForbiddenSuppressSpec {
                 
                 @Suppress("BRule")
                 fun foo() { }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(3, 1)
@@ -168,7 +168,7 @@ internal class ForbiddenSuppressSpec {
             val code = """
                 @file:Suppress("ForbiddenSuppress")
                 package config
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(0)
         }
@@ -178,7 +178,7 @@ internal class ForbiddenSuppressSpec {
             val code = """
                 @file:Suppress("ForbiddenSuppress", "ARule")
                 package config
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(0)
         }
@@ -193,7 +193,7 @@ internal class ForbiddenSuppressSpec {
             val code = """
                 @file:Suppress("ARule")
                 package config
-            """
+            """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(0)
         }

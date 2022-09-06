@@ -69,29 +69,21 @@ formatting:
   active: true
   android: false
   autoCorrect: true
-  AnnotationSpacing:
-    active: true
-  EnumEntryNameCase:
-    active: true
   Filename:
     active: false
+  FunctionReturnTypeSpacing:
+    active: true
+  FunctionStartOfBodySpacing:
+    active: true
   MaximumLineLength:
     active: false
-  MultiLineIfElse:
+  NullableTypeSpacing:
     active: true
-  NoEmptyFirstLineInMethodBlock:
+  ParameterListSpacing:
     active: true
-  PackageName:
+  SpacingBetweenFunctionNameAndOpeningParenthesis:
     active: true
-  SpacingAroundAngleBrackets:
-    active: true
-  SpacingAroundDoubleColon:
-    active: true
-  SpacingAroundUnaryOperator:
-    active: true
-  SpacingBetweenDeclarationsWithAnnotations:
-    active: true
-  SpacingBetweenDeclarationsWithComments:
+  TypeParameterListSpacing:
     active: true
 
 naming:
@@ -236,6 +228,8 @@ style:
     active: true
     excludeGuardClauses: true
   SpacingBetweenPackageAndImports:
+    active: true
+  TrimMultilineRawString:
     active: true
   UnderscoresInNumericLiterals:
     active: true

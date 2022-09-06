@@ -23,7 +23,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             fun call() {
                 sum(1, 2, 3)
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
@@ -37,7 +37,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             fun call() {
                 sum(a = 1, b = 2, c = 3)
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(0)
     }
@@ -51,7 +51,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             fun call() {
                 sum(1, b = 2, c = 3)
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
@@ -65,7 +65,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             fun call() {
                 sum(1, 2)
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(0)
     }
@@ -79,7 +79,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             fun call() {
                 sum(a = 1, b = 2)
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(0)
     }
@@ -90,7 +90,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             class C(val a: Int, val b:Int, val c:Int)
             
             val obj = C(1, 2, 3)
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
@@ -101,7 +101,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             class C(val a: Int, val b:Int, val c:Int)
             
             val obj = C(a = 1, b = 2, c= 3)
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(0)
     }
@@ -112,7 +112,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             class C(val a: Int, val b:Int)
             
             val obj = C(1, 2)
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(0)
     }
@@ -125,7 +125,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             fun test() {
                 LocalDateTime.of(2020, 3, 13, 14, 0, 0)
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(0)
     }
@@ -139,7 +139,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 foo(1, 2, 3, 4, 5)
                 bar(1, 2, 3, "a")
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(0)
     }
@@ -151,7 +151,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             fun test() {
                 bar(1, 2, 3, *arrayOf("a"))
             }
-        """
+        """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
@@ -166,7 +166,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             fun test() {
                 foo(a = 1, b = 2, c = 3, { it })
             }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -179,7 +179,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             fun test() {
                 foo(a = 1, b = 2, c = 3) { it }
             }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
@@ -192,7 +192,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             fun test() {
                 foo(a = 1, b = 2, 3) { it }
             }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -203,7 +203,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             fun test(n: Int) {
                 require(n == 2) { "N is not 2" }
             }
-        """
+            """.trimIndent()
             val subject = NamedArguments(TestConfig(mapOf("threshold" to 1)))
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
@@ -224,7 +224,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                     fun bar(a: Int, b: Int, c: Int) {
                         foo(a, b, c)
                     }
-                """
+                """.trimIndent()
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(0)
             }
@@ -236,7 +236,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                     fun bar(a: Int, b: Int, c: Int) {
                         foo(a, c, b)
                     }
-                """
+                """.trimIndent()
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
@@ -251,7 +251,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                             foo(a, this.b, c)
                         }
                     }
-                """
+                """.trimIndent()
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
@@ -264,7 +264,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                     fun bar(a: Int, c: Int, baz: Baz?) {
                         baz?.let { foo(a, it.b, c) }
                     }
-                """
+                """.trimIndent()
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
@@ -279,7 +279,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                     fun bar(a: Int, b: Int, c: Int) {
                         foo(a, b, c)
                     }
-                """
+                """.trimIndent()
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }

@@ -20,7 +20,7 @@ class FunctionParameterNamingSpec {
                 class C {
                     fun someStuff(param: String) {}
                 }
-            """
+            """.trimIndent()
             assertThat(FunctionParameterNaming().compileAndLint(code)).isEmpty()
         }
 
@@ -31,7 +31,7 @@ class FunctionParameterNamingSpec {
                     override fun someStuff(`object`: String) {}
                 }
                 interface I { fun someStuff(@Suppress("FunctionParameterNaming") `object`: String) }
-            """
+            """.trimIndent()
             assertThat(FunctionParameterNaming().compileAndLint(code)).isEmpty()
         }
 
@@ -42,7 +42,7 @@ class FunctionParameterNamingSpec {
                     override fun someStuff(`object`: String) {}
                 }
                 interface I { fun someStuff(`object`: String) }
-            """
+            """.trimIndent()
             val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
             assertThat(FunctionParameterNaming(config).compileAndLint(code)).hasSize(2)
         }
@@ -53,7 +53,7 @@ class FunctionParameterNamingSpec {
                 class C {
                     fun someStuff(PARAM: String) {}
                 }
-            """
+            """.trimIndent()
             assertThat(FunctionParameterNaming().compileAndLint(code)).hasSize(1)
         }
     }
@@ -69,7 +69,7 @@ class FunctionParameterNamingSpec {
                 class Excluded {
                     fun f(PARAM: Int) {}
                 }
-            """
+            """.trimIndent()
             assertThat(FunctionParameterNaming(config).compileAndLint(code)).isEmpty()
         }
 

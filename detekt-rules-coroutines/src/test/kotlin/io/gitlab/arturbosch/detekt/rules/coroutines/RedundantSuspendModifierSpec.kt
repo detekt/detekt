@@ -28,7 +28,7 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
                     println("hello world")
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
@@ -46,7 +46,7 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
             suspend fun doesSuspend() {
                 suspendCoroutine()
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -58,7 +58,7 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
                     println("hello world")
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -68,7 +68,7 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
             interface SuspendInterface {
                 suspend fun empty()
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -84,7 +84,7 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
                     println("hello world")
                 }
             }                                
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -100,7 +100,7 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
                     println(x)
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
@@ -121,7 +121,7 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
                     "Hello"
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 }

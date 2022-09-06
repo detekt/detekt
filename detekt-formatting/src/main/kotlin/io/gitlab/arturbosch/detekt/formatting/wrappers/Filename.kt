@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint-readme](https://github.com/pinterest/ktlint#standard-rules) for documentation.
+ * See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#file-name) for documentation.
  *
  * This rules overlaps with [naming>MatchingDeclarationName](https://detekt.dev/naming.html#matchingdeclarationname)
  * from the standard rules, make sure to enable just one.

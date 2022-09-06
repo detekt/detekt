@@ -16,7 +16,7 @@ class UseArrayLiteralsInAnnotationsSpec {
         annotation class Test(val values: Array<String>)
         @Test(arrayOf("value"))
         fun test() = Unit
-            """
+            """.trimIndent()
         )
 
         assertThat(findings).hasSize(1)
@@ -30,7 +30,7 @@ class UseArrayLiteralsInAnnotationsSpec {
         annotation class Test(val values: Array<String>)
         @Test(["value"])
         fun test() = Unit
-            """
+            """.trimIndent()
         )
 
         assertThat(findings).isEmpty()

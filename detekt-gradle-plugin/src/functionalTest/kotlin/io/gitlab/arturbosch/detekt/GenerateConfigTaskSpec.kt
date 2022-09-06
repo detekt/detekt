@@ -22,10 +22,11 @@ class GenerateConfigTaskSpec {
     fun `chooses the last config file when configured`() {
         val builder = DslTestBuilder.kotlin()
         val gradleRunner = builder.withDetektConfig(
+            @Suppress("TrimMultilineRawString")
             """
-                    |detekt {
-                    |   config = files("config/detekt/detekt.yml", "config/other/detekt.yml")
-                    |}
+                |detekt {
+                |   config = files("config/detekt/detekt.yml", "config/other/detekt.yml")
+                |}
             """
         ).withConfigFile("config/detekt/detekt.yml").build()
         gradleRunner.writeProjectFile("config/other/detekt.yml", content = "")

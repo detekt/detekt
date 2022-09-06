@@ -35,10 +35,6 @@ tasks.dokkaHtml {
     notCompatibleWithConfigurationCache("https://github.com/Kotlin/dokka/issues/1217")
 }
 
-tasks.apiDump {
-    notCompatibleWithConfigurationCache("https://github.com/Kotlin/binary-compatibility-validator/issues/95")
-}
-
 apiValidation {
     ignoredPackages.add("io.gitlab.arturbosch.detekt.api.internal")
 }

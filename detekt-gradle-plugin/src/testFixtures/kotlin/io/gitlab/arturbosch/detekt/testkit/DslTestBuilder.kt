@@ -76,6 +76,8 @@ abstract class DslTestBuilder {
 
 private class GroovyBuilder : DslTestBuilder() {
     override val gradleBuildName: String = "build.gradle"
+
+    @Suppress("TrimMultilineRawString")
     override val gradlePlugins = """
         |plugins {
         |  id 'java-library'
@@ -94,6 +96,7 @@ private class GroovyBuilder : DslTestBuilder() {
         |}
     """.trimMargin()
 
+    @Suppress("TrimMultilineRawString")
     override val gradleSubprojectsApplyPlugins = """
         |apply plugin: "io.gitlab.arturbosch.detekt"
         |
@@ -105,6 +108,7 @@ private class GroovyBuilder : DslTestBuilder() {
 private class KotlinBuilder : DslTestBuilder() {
     override val gradleBuildName: String = "build.gradle.kts"
 
+    @Suppress("TrimMultilineRawString")
     override val gradlePlugins = """
         |plugins {
         |   `java-library`
@@ -123,6 +127,7 @@ private class KotlinBuilder : DslTestBuilder() {
         |}
     """.trimMargin()
 
+    @Suppress("TrimMultilineRawString")
     override val gradleSubprojectsApplyPlugins = """
         |plugins.apply("io.gitlab.arturbosch.detekt")
         |

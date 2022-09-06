@@ -50,7 +50,7 @@ class MultiRuleCollectorSpec {
                     p2
                 )
             }
-        """
+        """.trimIndent()
         val items = subject.run(code)
         assertThat(items[0].rules).hasSize(4)
         assertThat(items[0].rules).contains("Rule1", "Rule2", "Rule3", "Rule4")

@@ -22,7 +22,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     listOf("hello")
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -34,7 +34,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     listOf("hello")
                     return 42
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -45,7 +45,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     listOf("hello").isEmpty().not()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -56,7 +56,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     listOf("hello");println("foo")
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -67,7 +67,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     println("foo");listOf("hello")
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -78,7 +78,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     listOf("hello")//foo
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -90,7 +90,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun foo(input: Int) {
                     input.isTheAnswer()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -110,7 +110,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     var x: List<String>
                     x = listA()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -123,7 +123,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     noReturnValue()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -136,7 +136,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun f() {
                     if (returnsBoolean()) {}
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -149,7 +149,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun f() {
                     if (42 == returnsInt()) {}
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -162,7 +162,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun f() {
                     println(returnsInt())
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -175,7 +175,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun f() {
                     println(message = returnsInt())
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -197,12 +197,12 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     listOfChecked("hello")
                     println("foo")
                 }
-            """
+            """.trimIndent()
             val annotationClass = """
                 package annotation
 
                 annotation class CheckReturnValue
-            """
+            """.trimIndent()
 
             val findings = subject.lintWithContext(env, code, annotationClass)
             assertThat(findings).hasSize(1)
@@ -224,7 +224,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     listOfChecked("hello")
                     return 42
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(9, 5)
@@ -245,7 +245,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     listOfChecked("hello").isEmpty().not()
                     return 42
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -269,7 +269,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                         .not()
                     return 42
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -291,7 +291,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                         .listOfChecked()
                     return 42
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(12, 10)
@@ -311,7 +311,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     listOfChecked("hello");println("foo")
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(9, 5)
@@ -332,7 +332,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     println("foo");listOfChecked("hello")
                     return 42
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(9, 20)
@@ -353,7 +353,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     /* foo */listOfChecked("hello")//foo
                     return 42
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(9, 14)
@@ -373,7 +373,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     input.isTheAnswer()
                     return 42
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(8, 11)
@@ -395,7 +395,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     x = listOfChecked("hello")
                     return 42
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -414,7 +414,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     noReturnValue()
                     return 42
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -432,7 +432,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun f() {
                     if (returnsBoolean()) {}
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -450,7 +450,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun f() {
                     if (42 == returnsInt()) {}
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -468,7 +468,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun f() {
                     println(returnsInt())
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -486,7 +486,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun f() {
                     println(message = returnsInt())
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -506,7 +506,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 } else {
                     returnsInt()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -527,7 +527,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     returnsInt()
                     2
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -549,7 +549,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                         returnsInt()
                     }.plus(1)
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -572,7 +572,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                         2
                     }.plus(1)
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -594,7 +594,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                         returnsInt()
                     }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -618,7 +618,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                         .print()
                     return 42
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -638,7 +638,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun main() {
                     Assertions().listOfChecked("hello")
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -658,7 +658,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun main() {
                     Assertions.listOfChecked("hello")
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
@@ -680,7 +680,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun main() {
                     Assertions().listOfChecked("hello")
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -702,7 +702,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun main() {
                     Parent.Child().listOfChecked("hello")
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -727,7 +727,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     listOfChecked("hello")
                     return 42
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(8, 5)
@@ -748,7 +748,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     listOfChecked("hello")
                     return 42
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -764,7 +764,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     listOfChecked("hello")
                     return 42
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -788,7 +788,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     listOfChecked("hello")
                     return 42
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(9, 5)
@@ -804,7 +804,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     listOfChecked("hello")
                     return 42
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(4, 5)
@@ -825,7 +825,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     listOfChecked("hello")
                     return 42
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -844,7 +844,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     listOfChecked("hello")
                     return 42
                 }
-            """
+            """.trimIndent()
             val rule = IgnoredReturnValue(
                 TestConfig(
                     mapOf(
@@ -868,7 +868,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     listOfChecked("hello")
                     return 42
                 }
-            """
+            """.trimIndent()
             val rule = IgnoredReturnValue(
                 TestConfig(
                     mapOf(

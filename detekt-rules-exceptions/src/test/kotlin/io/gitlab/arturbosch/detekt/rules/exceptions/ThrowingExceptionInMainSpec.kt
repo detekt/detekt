@@ -14,7 +14,7 @@ class ThrowingExceptionInMainSpec {
             fun main(args: Array<String>) { throw IllegalArgumentException() }
             fun main(vararg args: String) { throw IllegalArgumentException() }
             fun main() { throw IllegalArgumentException() }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(3)
     }
 
@@ -39,7 +39,7 @@ class ThrowingExceptionInMainSpec {
                 @JvmStatic
                 fun main(args: Array<String>) { throw IllegalArgumentException() }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(3)
     }
 
@@ -51,7 +51,7 @@ class ThrowingExceptionInMainSpec {
             fun mai() { throw IllegalArgumentException() }
             fun main(args: String) { throw IllegalArgumentException() }
             fun main(args: Array<String>, i: Int) { throw IllegalArgumentException() }
-        """
+        """.trimIndent()
         assertThat(subject.lint(code)).isEmpty()
     }
 
@@ -62,7 +62,7 @@ class ThrowingExceptionInMainSpec {
             fun main() { }
             fun mai() { }
             fun main(args: String) { }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -71,7 +71,7 @@ class ThrowingExceptionInMainSpec {
         val code = """
             fun main(args: Array<String>) = ""
             fun main() = Unit
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -85,7 +85,7 @@ class ThrowingExceptionInMainSpec {
                 fun main(args: Array<String>) { throw IllegalArgumentException() }
             }
         }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }

@@ -13,7 +13,7 @@ class NamingRulesSpec {
             fun doStuff() {
                 val (_, HOLY_GRAIL) = D(5, 4)
             }
-        """
+        """.trimIndent()
         assertThat(NamingRules().compileAndLint(code)).isEmpty()
     }
 }

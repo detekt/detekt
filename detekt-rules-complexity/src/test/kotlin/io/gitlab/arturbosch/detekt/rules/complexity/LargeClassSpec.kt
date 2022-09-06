@@ -28,7 +28,7 @@ class LargeClassSpec {
                 println()
                 println()
             }
-        """
+        """.trimIndent()
         val rule = subject(threshold = 2)
         assertThat(rule.compileAndLint(code)).isEmpty()
     }

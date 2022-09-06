@@ -16,7 +16,7 @@ class TrimMultilineRawStringSpec {
                 val a = ${TQ}
                 Hello world!
                 ${TQ}
-            """
+        """.trimIndent()
         subject.compileAndLint(code)
         assertThat(subject.findings).hasSize(1)
     }
@@ -27,7 +27,7 @@ class TrimMultilineRawStringSpec {
                 val a = ${TQ}
                 Hello world!
                 ${TQ}.length
-            """
+        """.trimIndent()
         subject.compileAndLint(code)
         assertThat(subject.findings).hasSize(1)
     }
@@ -38,7 +38,7 @@ class TrimMultilineRawStringSpec {
                 val a = ${TQ}
                 Hello world!
                 ${TQ}.trimIndent()
-            """
+        """.trimIndent()
         subject.compileAndLint(code)
         assertThat(subject.findings).isEmpty()
     }
@@ -49,7 +49,7 @@ class TrimMultilineRawStringSpec {
                 val a = ${TQ}
                 |Hello world!
                 ${TQ}.trimMargin()
-            """
+        """.trimIndent()
         subject.compileAndLint(code)
         assertThat(subject.findings).isEmpty()
     }
@@ -60,7 +60,7 @@ class TrimMultilineRawStringSpec {
                 val a = ${TQ}
                 >Hello world!
                 ${TQ}.trimMargin(">")
-            """
+        """.trimIndent()
         subject.compileAndLint(code)
         assertThat(subject.findings).isEmpty()
     }
@@ -69,7 +69,7 @@ class TrimMultilineRawStringSpec {
     fun `don't raise one line raw strings`() {
         val code = """
                 val a = ${TQ}Hello world!${TQ}
-            """
+        """.trimIndent()
         subject.compileAndLint(code)
         assertThat(subject.findings).isEmpty()
     }
@@ -78,7 +78,7 @@ class TrimMultilineRawStringSpec {
     fun `doesn't raise if it is not a raw string`() {
         val code = """
                 val a = "Hello world!"
-            """
+        """.trimIndent()
         subject.compileAndLint(code)
         assertThat(subject.findings).isEmpty()
     }

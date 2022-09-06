@@ -36,7 +36,7 @@ class OptionalAbstractKeywordSpec {
                     abstract fun x()
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(2)
     }
 
@@ -54,7 +54,7 @@ class OptionalAbstractKeywordSpec {
                     abstract fun dependency()
                 }
             }
-        """
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }
