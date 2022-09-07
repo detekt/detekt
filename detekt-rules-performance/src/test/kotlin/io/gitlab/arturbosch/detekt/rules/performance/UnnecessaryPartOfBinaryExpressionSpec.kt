@@ -16,7 +16,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                     //TODO    
                 }
             }
-        """
+        """.trimIndent()
 
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         assertThat(findings).hasSize(1)
@@ -35,7 +35,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                     //TODO    
                 }
             }
-        """
+        """.trimIndent()
 
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         assertThat(findings).hasSize(0)
@@ -54,7 +54,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                     //TODO    
                 }
             }
-        """
+        """.trimIndent()
 
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         assertThat(findings).hasSize(1)
@@ -70,7 +70,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                     //TODO    
                 }
             }
-        """
+        """.trimIndent()
 
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         assertThat(findings).hasSize(0)
@@ -86,7 +86,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                     //TODO    
                 }
             }
-        """
+        """.trimIndent()
 
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         assertThat(findings).hasSize(0)
@@ -101,7 +101,8 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                     //TODO    
                 }
             }
-        """
+        """.trimIndent()
+
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         assertThat(findings).hasSize(1)
     }
@@ -117,9 +118,8 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                     //TODO    
                 }
             }
-            
-            
-        """
+        """.trimIndent()
+
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         assertThat(findings).hasSize(1)
     }
@@ -135,9 +135,8 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                     //TODO    
                 }
             }
-            
-            
-        """
+        """.trimIndent()
+
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         assertThat(findings).hasSize(1)
     }
@@ -151,7 +150,8 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                     //TODO    
                 }
             }
-        """
+        """.trimIndent()
+
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         assertThat(findings).hasSize(1)
     }
@@ -165,7 +165,8 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                     //TODO    
                 }
             }
-        """
+        """.trimIndent()
+
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         assertThat(findings).hasSize(1)
     }
@@ -182,7 +183,8 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                     //TODO    
                 }
             }
-        """
+        """.trimIndent()
+
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         assertThat(findings).hasSize(1)
     }
@@ -196,9 +198,8 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                     //TODO    
                 }
             }
-            
-            
-        """
+        """.trimIndent()
+
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         assertThat(findings).hasSize(0)
     }
@@ -213,9 +214,8 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                     //TODO    
                 }
             }
-            
-            
-        """
+        """.trimIndent()
+
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         assertThat(findings).hasSize(0)
     }
@@ -228,7 +228,8 @@ class UnnecessaryPartOfBinaryExpressionSpec {
 
                 list.filter { it > 1 || it > 1 }
             }
-        """
+        """.trimIndent()
+
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         assertThat(findings).hasSize(1)
     }
@@ -244,7 +245,8 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                     }
                 }
             }
-        """
+        """.trimIndent()
+
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         assertThat(findings).hasSize(1)
     }
@@ -261,7 +263,8 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                     }
                 }
             }
-        """
+        """.trimIndent()
+
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         assertThat(findings).hasSize(1)
     }
