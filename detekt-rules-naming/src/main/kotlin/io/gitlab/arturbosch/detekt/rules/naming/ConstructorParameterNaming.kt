@@ -43,13 +43,10 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
     private val ignoreOverridden: Boolean by config(true)
 
     override fun visitParameter(parameter: KtParameter) {
-        if (parameter.nameAsSafeName.isSpecial ||
-            parameter.nameIdentifier?.parent?.javaClass == null ||
-            parameter.ownerFunction !is KtConstructor<*>
+        if (!parameter.isConstructor() ||
+            parameter.isContainingExcludedClassOrObject(excludeClassPattern) ||
+            isIgnoreOverridden(parameter)
         ) {
-            return
-        }
-        if (parameter.isContainingExcludedClassOrObject(excludeClassPattern) || isIgnoreOverridden(parameter)) {
             return
         }
 
@@ -61,7 +58,7 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
                         issue,
                         Entity.from(parameter),
                         message = "Constructor private parameter names should " +
-                            "match the pattern: $privateParameterPattern"
+                                "match the pattern: $privateParameterPattern"
                     )
                 )
             }
@@ -79,4 +76,8 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun isIgnoreOverridden(parameter: KtParameter) = ignoreOverridden && parameter.isOverride()
+
+    private fun KtParameter.isConstructor(): Boolean {
+        return this.ownerFunction is KtConstructor<*>
+    }
 }
