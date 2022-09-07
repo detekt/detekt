@@ -10,7 +10,3 @@ dependencies {
     compileOnly(libs.assertj)
     implementation(projects.detektCore)
 }
-
-tasks.apiDump {
-    notCompatibleWithConfigurationCache("https://github.com/Kotlin/binary-compatibility-validator/issues/95")
-}
