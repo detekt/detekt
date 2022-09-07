@@ -52,16 +52,7 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
 
         val identifier = parameter.identifierName()
         if (parameter.isPrivate()) {
-            if (!identifier.matches(privateParameterPattern)) {
-                report(
-                    CodeSmell(
-                        issue,
-                        Entity.from(parameter),
-                        message = "Constructor private parameter names should " +
-                                "match the pattern: $privateParameterPattern"
-                    )
-                )
-            }
+            visitPrivateParameter(parameter)
         } else {
             if (!identifier.matches(parameterPattern)) {
                 report(
@@ -72,6 +63,19 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
                     )
                 )
             }
+        }
+    }
+
+    private fun visitPrivateParameter(parameter: KtParameter) {
+        val identifier = parameter.identifierName()
+        if (!identifier.matches(privateParameterPattern)) {
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(parameter),
+                    message = "Constructor private parameter names should match the pattern: $privateParameterPattern"
+                )
+            )
         }
     }
 
