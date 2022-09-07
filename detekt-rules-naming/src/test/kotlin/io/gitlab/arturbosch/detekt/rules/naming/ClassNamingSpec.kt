@@ -8,6 +8,20 @@ import org.junit.jupiter.api.Test
 class ClassNamingSpec {
 
     @Test
+    fun `should detekt no violations for abstract class implementation`() {
+        val code = """
+            abstract class AbstractClass {
+                abstract fun foo()
+            }
+            val foo = object : AbstractClass() {
+                override fun foo() {}
+            }
+        """.trimIndent()
+
+        assertThat(ClassNaming().compileAndLint(code)).isEmpty()
+    }
+
+    @Test
     fun `should use custom name for method and class`() {
         val config = TestConfig(mapOf(ClassNaming.CLASS_PATTERN to "^aBbD$"))
         assertThat(
