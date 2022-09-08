@@ -250,6 +250,30 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
 
             assertThat(findings).hasSize(1)
         }
+
+        @Test
+        fun `should not detect boolean function`() {
+            val code = """
+                class O {
+                    val isEnabled: () -> Boolean = { true }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should not detect boolean function with parameter`() {
+            val code = """
+                class O {
+                    val isEnabled: (String) -> Boolean = { true }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+
+            assertThat(findings).isEmpty()
+        }
     }
 
     @Nested
