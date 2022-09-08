@@ -596,13 +596,13 @@ private val KOTLIN_ONLY_LIB_PLUGIN_BLOCK = """
 
 private val ANDROID_BLOCK = """
     android {
-       compileSdkVersion(30)
+       compileSdk = 30
     }
 """.trimIndent()
 
 private val ANDROID_BLOCK_WITH_FLAVOR = """
     android {
-        compileSdkVersion(30)
+        compileSdk = 30
         flavorDimensions("age", "name")
         productFlavors {
            create("harry") {
@@ -620,10 +620,10 @@ private val ANDROID_BLOCK_WITH_FLAVOR = """
 
 private val ANDROID_BLOCK_WITH_VIEW_BINDING = """
     android {
-        compileSdkVersion(30)
+        compileSdk = 30
         defaultConfig {
             applicationId = "io.gitlab.arturbosch.detekt.app"
-            minSdkVersion(24)
+            minSdk = 24
         }
         buildFeatures {
             viewBinding = true
