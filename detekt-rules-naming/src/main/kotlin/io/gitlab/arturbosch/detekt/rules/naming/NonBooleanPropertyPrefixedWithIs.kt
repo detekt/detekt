@@ -67,7 +67,7 @@ class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(con
 
             if (!typeName.isNullOrEmpty() &&
                 isNotBooleanType &&
-                !type.isBooleanFunctionReference()
+                !type.isBooleanFunction()
             ) {
                 report(
                     reportCodeSmell(declaration, name, typeName)
@@ -96,9 +96,9 @@ class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(con
         fqNameOrNull()
             ?.asString()
 
-    private fun KotlinType.isBooleanFunctionReference(): Boolean {
+    private fun KotlinType.isBooleanFunction(): Boolean {
         if (!isFunctionOrKFunctionTypeWithAnySuspendability) return false
 
-        return arguments.count() == 1 && arguments[0].type.isBoolean()
+        return arguments.isNotEmpty() && arguments.last().type.isBoolean()
     }
 }
