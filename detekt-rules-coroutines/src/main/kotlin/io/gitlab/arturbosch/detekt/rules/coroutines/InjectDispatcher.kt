@@ -17,7 +17,6 @@ import org.jetbrains.kotlin.psi.KtConstructorDelegationCall
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
-import org.jetbrains.kotlin.resolve.BindingContext.EMPTY
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
 
@@ -57,7 +56,7 @@ class InjectDispatcher(config: Config) : Rule(config) {
 
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
         super.visitSimpleNameExpression(expression)
-        if (bindingContext == EMPTY || expression.getReferencedName() !in dispatcherNames) return
+        if (expression.getReferencedName() !in dispatcherNames) return
         val type = expression.getType(bindingContext) ?: return
         val isCoroutineDispatcher = type.fqNameOrNull() == COROUTINE_DISPATCHER_FQCN ||
             type.supertypes().any { it.fqNameOrNull() == COROUTINE_DISPATCHER_FQCN }

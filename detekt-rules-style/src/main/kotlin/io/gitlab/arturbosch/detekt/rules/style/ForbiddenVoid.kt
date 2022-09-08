@@ -20,7 +20,6 @@ import org.jetbrains.kotlin.psi.KtTypeArgumentList
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getAbbreviatedTypeOrType
 
 /**
@@ -57,7 +56,6 @@ class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
 
     @Suppress("ReturnCount")
     override fun visitTypeReference(typeReference: KtTypeReference) {
-        if (bindingContext == BindingContext.EMPTY) return
         val kotlinType = typeReference.getAbbreviatedTypeOrType(bindingContext) ?: return
 
         if (kotlinType.fqNameOrNull() == VOID_FQ_NAME) {

@@ -20,7 +20,6 @@ import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.psiUtil.blockExpressionsOrSingle
 import org.jetbrains.kotlin.psi.psiUtil.getPossiblyQualifiedCallExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
@@ -59,7 +58,6 @@ class UseIfEmptyOrIfBlank(config: Config = Config.empty) : Rule(config) {
 
     override fun visitIfExpression(expression: KtIfExpression) {
         super.visitIfExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
 
         if (expression.isElseIf()) return
         val thenExpression = expression.then ?: return

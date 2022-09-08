@@ -100,19 +100,9 @@ Rules that are using type resolution, access the [bindingContext](https://github
 
 By default, the `bindingContext` is initialized as `BindingContext.EMPTY`. This is the **default value** that the rule receives if type resolution is **not enabled**.
 
-Therefore, is generally advised to wrap your rules with a check for an empty binding context ([source](https://github.com/detekt/detekt/blob/cd659ce8737fb177caf140f46f73a1a86b22be56/detekt-rules-style/src/main/kotlin/io/gitlab/arturbosch/detekt/rules/style/UseCheckNotNull.kt#L37-L39)):
+Therefore, is generally advised to annotate your `Rule` with `@RequiresTypeResolution` to ensure that your rule doesn't run if you don't have a proper `BindingContext`.
 
-```kotlin
-    override fun visitCallExpression(expression: KtCallExpression) {
-        super.visitCallExpression(expression)
-    
-        if (bindingContext == BindingContext.EMPTY) return
-    
-        // Rest of the rule that will run only with type resolution enabled.
-    }
-```
-
-If the `bindingContext` is not `EMPTY`, you are free to use it to resolve types and get access to all the information needed for your rules. As a rule of thumb, we recommend to get inspiration from other rules on how they're using the `bindingContext`.
+If your rule is annotated with `@RequiresTypeResolution` you are free to use it to resolve types and get access to all the information needed for your rules. As a rule of thumb, we recommend to get inspiration from other rules on how they're using the `bindingContext`.
 
 ## Testing a rule that uses type resolution
 

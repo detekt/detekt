@@ -11,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Reports casts that will never succeed.
@@ -46,8 +45,6 @@ class UnsafeCast(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
-        if (bindingContext == BindingContext.EMPTY) return
-
         if (bindingContext.diagnostics.forElement(expression.operationReference)
             .any { it.factory == Errors.CAST_NEVER_SUCCEEDS }
         ) {

@@ -47,8 +47,6 @@ class MaxChainedCallsOnSameLine(config: Config = Config.empty) : Rule(config) {
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)
 
-        if (bindingContext == BindingContext.EMPTY) return
-
         val parent = expression.parent
 
         // skip if the parent is also a call on the same line to avoid duplicated warnings

@@ -11,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtPostfixExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.types.typeUtil.TypeNullability
 import org.jetbrains.kotlin.types.typeUtil.nullability
@@ -46,7 +45,6 @@ class UnsafeCallOnNullableType(config: Config = Config.empty) : Rule(config) {
 
     override fun visitPostfixExpression(expression: KtPostfixExpression) {
         super.visitPostfixExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
         if (expression.operationToken == KtTokens.EXCLEXCL &&
             expression.baseExpression?.getType(bindingContext)?.nullability() == TypeNullability.NULLABLE
         ) {

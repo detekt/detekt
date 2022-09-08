@@ -16,7 +16,6 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
 /**
@@ -66,7 +65,6 @@ class NestedScopeFunctions(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (bindingContext == BindingContext.EMPTY) return
         function.accept(FunctionDepthVisitor())
     }
 

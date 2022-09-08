@@ -13,7 +13,6 @@ import org.jetbrains.kotlin.backend.common.pop
 import org.jetbrains.kotlin.descriptors.ClassifierDescriptor
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
@@ -53,11 +52,6 @@ class UnnecessaryInnerClass(config: Config = Config.empty) : Rule(config) {
         "The 'inner' qualifier is unnecessary.",
         Debt.FIVE_MINS
     )
-
-    override fun visit(root: KtFile) {
-        if (bindingContext == BindingContext.EMPTY) return
-        super.visit(root)
-    }
 
     override fun visitClass(klass: KtClass) {
         classChain.add(klass)

@@ -12,7 +12,6 @@ import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
@@ -42,7 +41,6 @@ class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        if (bindingContext == BindingContext.EMPTY) return
         if (expression.isPairConstructor()) {
             val arg = expression.valueArguments.joinToString(" to ") { it.text }
             report(

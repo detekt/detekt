@@ -61,7 +61,6 @@ class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
 
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
         super.visitSimpleNameExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
 
         val simpleOrCallExpression = expression.parent.safeAs<KtCallExpression>() ?: expression
         val targetExpression = simpleOrCallExpression.targetExpression() ?: return

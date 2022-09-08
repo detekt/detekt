@@ -12,7 +12,6 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtLambdaArgument
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getParameterForArgument
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
@@ -49,7 +48,6 @@ class NamedArguments(config: Config = Config.empty) : Rule(config) {
     private val ignoreArgumentsMatchingNames: Boolean by config(defaultValue = false)
 
     override fun visitCallExpression(expression: KtCallExpression) {
-        if (bindingContext == BindingContext.EMPTY) return
         val valueArguments = expression.valueArguments.filterNot { it is KtLambdaArgument }
         if (valueArguments.size > threshold && expression.canNameArguments()) {
             val message = "This function call has ${valueArguments.size} arguments. To call a function with more " +

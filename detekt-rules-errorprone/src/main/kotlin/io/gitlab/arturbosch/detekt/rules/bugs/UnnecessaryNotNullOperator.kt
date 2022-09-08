@@ -11,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtUnaryExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Reports unnecessary not-null operator usage (!!) that can be removed by the user.
@@ -39,7 +38,6 @@ class UnnecessaryNotNullOperator(config: Config = Config.empty) : Rule(config) {
 
     override fun visitUnaryExpression(expression: KtUnaryExpression) {
         super.visitUnaryExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
 
         val compilerReports = bindingContext.diagnostics.forElement(expression.operationReference)
         if (compilerReports.any { it.factory == Errors.UNNECESSARY_NOT_NULL_ASSERTION }) {

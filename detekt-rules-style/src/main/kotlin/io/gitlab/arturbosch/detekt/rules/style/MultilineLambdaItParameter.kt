@@ -12,7 +12,6 @@ import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import io.gitlab.arturbosch.detekt.rules.hasImplicitParameterReference
 import io.gitlab.arturbosch.detekt.rules.implicitParameter
 import org.jetbrains.kotlin.psi.KtLambdaExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Lambda expressions are very useful in a lot of cases, and they often include very small chunks of
@@ -75,7 +74,6 @@ class MultilineLambdaItParameter(val config: Config) : Rule(config) {
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
-        if (bindingContext == BindingContext.EMPTY) return
         val size = lambdaExpression.bodyExpression?.statements?.size
         if (size == null || size <= 1) return
 

@@ -18,7 +18,6 @@ import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.psiUtil.blockExpressionsOrSingle
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.isInsideOf
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getTargetFunction
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.util.getType
@@ -57,7 +56,6 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
     override fun visitTryExpression(expression: KtTryExpression) {
         super.visitTryExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
 
         val finallyBlock = expression.finallyBlock ?: return
 

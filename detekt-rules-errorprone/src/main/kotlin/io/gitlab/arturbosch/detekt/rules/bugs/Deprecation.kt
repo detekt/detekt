@@ -11,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Deprecated elements are expected to be removed in the future. Alternatives should be found if possible.
@@ -30,7 +29,6 @@ class Deprecation(config: Config) : Rule(config) {
     override val defaultRuleIdAliases = setOf("DEPRECATION")
 
     override fun visitElement(element: PsiElement) {
-        if (bindingContext == BindingContext.EMPTY) return
         if (hasDeprecationCompilerWarnings(element)) {
             val entity = if (element is KtNamedDeclaration) Entity.atName(element) else Entity.from(element)
             report(CodeSmell(issue, entity, "${element.text} is deprecated."))

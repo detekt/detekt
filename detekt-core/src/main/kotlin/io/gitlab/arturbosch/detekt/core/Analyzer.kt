@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
@@ -24,6 +25,7 @@ import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
+import kotlin.reflect.full.hasAnnotation
 
 private typealias FindingsResult = List<Map<RuleSetId, List<Finding>>>
 
@@ -113,6 +115,9 @@ internal class Analyzer(
 
         val (correctableRules, otherRules) = activeRuleSetsToRuleSetConfigs
             .flatMap { (ruleSet, _) -> ruleSet.rules.asSequence() }
+            .filter { rule ->
+                bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
+            }
             .partition { isCorrectable(it) }
 
         val result = HashMap<RuleSetId, MutableList<Finding>>()

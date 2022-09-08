@@ -19,7 +19,6 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.psiUtil.leaves
 import org.jetbrains.kotlin.psi.psiUtil.parents
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
@@ -51,7 +50,6 @@ class UnusedUnaryOperator(config: Config = Config.empty) : Rule(config) {
     @Suppress("ReturnCount")
     override fun visitPrefixExpression(expression: KtPrefixExpression) {
         super.visitPrefixExpression(expression)
-        if (bindingContext == BindingContext.EMPTY) return
 
         if (expression.baseExpression == null) return
         val operationToken = expression.operationToken

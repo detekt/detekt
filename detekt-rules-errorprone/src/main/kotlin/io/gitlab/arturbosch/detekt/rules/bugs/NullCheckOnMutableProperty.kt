@@ -22,7 +22,6 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
@@ -62,7 +61,6 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
     )
 
     override fun visitKtFile(file: KtFile) {
-        if (bindingContext == BindingContext.EMPTY) return
         super.visitKtFile(file)
         NullCheckVisitor().visitKtFile(file)
     }

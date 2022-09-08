@@ -12,7 +12,6 @@ import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
@@ -57,8 +56,6 @@ class ExitOutsideMain(config: Config = Config.empty) : Rule(config) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-
-        if (bindingContext == BindingContext.EMPTY) return
 
         if (expression.getStrictParentOfType<KtNamedFunction>()?.isMainFunction() == true) return
         val fqName = expression.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() ?: return

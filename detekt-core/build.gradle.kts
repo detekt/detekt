@@ -7,6 +7,7 @@ dependencies {
     api(projects.detektParser)
     api(projects.detektTooling)
     implementation(libs.snakeyaml)
+    implementation(libs.kotlin.reflection)
     implementation(projects.detektMetrics)
     implementation(projects.detektPsiUtils)
     implementation(projects.detektReportHtml)

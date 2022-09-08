@@ -60,7 +60,6 @@ class SuspendFunWithCoroutineScopeReceiver(config: Config) : Rule(config) {
     )
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (bindingContext == BindingContext.EMPTY) return
         checkReceiver(function)
     }
 
