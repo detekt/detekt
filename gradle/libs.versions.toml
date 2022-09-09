@@ -27,7 +27,7 @@ android-gradle = "com.android.tools.build:gradle:7.2.2"
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktlint" }
 ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint" }
 ktlint-rulesetExperimental = { module = "com.pinterest.ktlint:ktlint-ruleset-experimental", version.ref = "ktlint" }
-slf4j-nop = { module = "org.slf4j:slf4j-nop", version = "1.7.36" }
+slf4j-nop = { module = "org.slf4j:slf4j-nop", version = "2.0.0" }
 
 spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version = "2.0.19" }
 
