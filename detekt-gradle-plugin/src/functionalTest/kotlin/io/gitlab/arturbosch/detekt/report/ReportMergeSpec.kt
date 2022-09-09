@@ -104,7 +104,7 @@ class ReportMergeSpec {
                         id("io.gitlab.arturbosch.detekt")
                     }
                     android {
-                       compileSdkVersion(30)
+                       compileSdk = 30
                     }
                     dependencies {
                         implementation(project(":lib"))
@@ -121,7 +121,7 @@ class ReportMergeSpec {
                         kotlin("android")
                     }
                     android {
-                       compileSdkVersion(30)
+                       compileSdk = 30
                     }
                 """.trimIndent(),
                 srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")

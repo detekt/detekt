@@ -153,7 +153,7 @@ class DetektMultiplatformSpec {
                             id("io.gitlab.arturbosch.detekt")
                         }
                         android {
-                            compileSdkVersion(30)
+                            compileSdk = 30
                             sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
                             buildTypes {
                                 release {
