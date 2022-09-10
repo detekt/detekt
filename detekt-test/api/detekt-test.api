@@ -2,6 +2,7 @@ public final class io/gitlab/arturbosch/detekt/test/FindingAssert : org/assertj/
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Finding;)V
 	public final fun getActual ()Lio/gitlab/arturbosch/detekt/api/Finding;
 	public final fun hasMessage (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/test/FindingAssert;
+	public final fun hasSourceLocation (II)Lio/gitlab/arturbosch/detekt/test/FindingAssert;
 }
 
 public final class io/gitlab/arturbosch/detekt/test/FindingsAssert : org/assertj/core/api/AbstractListAssert {

@@ -8,15 +8,20 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
+import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
+import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 
 /**
@@ -48,7 +53,13 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("if the rule should check only annotated methods")
+    @Deprecated("Use `restrictToConfig` instead")
     private val restrictToAnnotatedMethods: Boolean by config(defaultValue = true)
+
+    @Suppress("DEPRECATION")
+    @OptIn(UnstableApi::class)
+    @Configuration("If the rule should check only methods matching to configuration, or all methods")
+    private val restrictToConfig: Boolean by configWithFallback(::restrictToAnnotatedMethods, defaultValue = true)
 
     @Configuration("List of glob patterns to be used as inspection annotation")
     private val returnValueAnnotations: List<Regex> by config(listOf("*.CheckResult", "*.CheckReturnValue")) {
@@ -59,6 +70,15 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
     private val ignoreReturnValueAnnotations: List<Regex> by config(listOf("*.CanIgnoreReturnValue")) {
         it.map(String::simplePatternToRegex)
     }
+
+    @Configuration("List of return types that should not be ignored")
+    private val returnValueTypes: List<Regex> by config(
+        listOf(
+            "kotlin.sequences.Sequence",
+            "kotlinx.coroutines.flow.*Flow",
+            "java.util.stream.*Stream",
+        ),
+    ) { it.map(String::simplePatternToRegex) }
 
     @Configuration(
         "List of function signatures which should be ignored by this rule. " +
@@ -84,7 +104,8 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
 
         val annotations = resultingDescriptor.annotations
         if (annotations.any { it in ignoreReturnValueAnnotations }) return
-        if (restrictToAnnotatedMethods &&
+        if (restrictToConfig &&
+            resultingDescriptor.returnType !in returnValueTypes &&
             (annotations + resultingDescriptor.containingDeclaration.annotations).none { it in returnValueAnnotations }
         ) return
 
@@ -98,9 +119,11 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         )
     }
 
-    @Suppress("UnusedPrivateMember")
-    private operator fun List<Regex>.contains(annotation: AnnotationDescriptor): Boolean {
-        val fqName = annotation.fqName?.asString() ?: return false
-        return any { it.matches(fqName) }
+    private operator fun List<Regex>.contains(type: KotlinType?) = contains(type?.fqNameOrNull())
+    private operator fun List<Regex>.contains(annotation: AnnotationDescriptor) = contains(annotation.fqName)
+
+    private operator fun List<Regex>.contains(fqName: FqName?): Boolean {
+        val name = fqName?.asString() ?: return false
+        return any { it.matches(name) }
     }
 }
