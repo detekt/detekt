@@ -67,7 +67,8 @@ fun createCompilerConfiguration(
     pathsToAnalyze: List<Path>,
     classpath: List<String>,
     languageVersion: LanguageVersion?,
-    jvmTarget: JvmTarget
+    jvmTarget: JvmTarget,
+    jdkHome: Path?,
 ): CompilerConfiguration {
     val javaFiles = pathsToAnalyze.flatMap { path ->
         path.toFile().walk()
@@ -99,6 +100,8 @@ fun createCompilerConfiguration(
         addJavaSourceRoots(javaFiles)
         addKotlinSourceRoots(kotlinFiles)
         addJvmClasspathRoots(classpathFiles)
+
+        jdkHome?.let { put(JVMConfigurationKeys.JDK_HOME, it.toFile()) }
         configureJdkClasspathRoots()
     }
 }

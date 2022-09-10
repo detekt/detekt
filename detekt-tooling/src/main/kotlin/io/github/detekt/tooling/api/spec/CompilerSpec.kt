@@ -1,5 +1,7 @@
 package io.github.detekt.tooling.api.spec
 
+import java.nio.file.Path
+
 /**
  * All these properties are based down to the Kotlin compiler for type- and symbol resolution.
  */
@@ -19,4 +21,10 @@ interface CompilerSpec {
      * Paths to class files and jars separated by a path separator.
      */
     val classpath: String?
+
+    /**
+     * Path to custom JDK home. Includes the custom JDK from the specified location into the classpath instead of using
+     * the JRE from the runtime environment.
+     */
+    val jdkHome: Path?
 }

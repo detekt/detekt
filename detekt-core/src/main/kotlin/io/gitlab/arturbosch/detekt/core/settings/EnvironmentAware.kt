@@ -33,7 +33,8 @@ internal class EnvironmentFacade(
             projectSpec.inputPaths.toList(),
             classpath,
             compilerSpec.parseLanguageVersion(),
-            compilerSpec.parseJvmTarget()
+            compilerSpec.parseJvmTarget(),
+            compilerSpec.jdkHome,
         )
         createKotlinCoreEnvironment(compilerConfiguration, disposable)
     }
