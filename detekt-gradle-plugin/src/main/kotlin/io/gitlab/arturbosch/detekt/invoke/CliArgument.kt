@@ -14,7 +14,6 @@ private const val PARALLEL_PARAMETER = "--parallel"
 private const val DISABLE_DEFAULT_RULESETS_PARAMETER = "--disable-default-rulesets"
 private const val BUILD_UPON_DEFAULT_CONFIG_PARAMETER = "--build-upon-default-config"
 private const val AUTO_CORRECT_PARAMETER = "--auto-correct"
-private const val FAIL_FAST_PARAMETER = "--fail-fast"
 private const val ALL_RULES_PARAMETER = "--all-rules"
 private const val REPORT_PARAMETER = "--report"
 private const val GENERATE_CONFIG_PARAMETER = "--generate-config"
@@ -108,8 +107,6 @@ internal data class DisableDefaultRuleSetArgument(
 internal data class BuildUponDefaultConfigArgument(
     override val value: Boolean
 ) : BoolCliArgument(value, BUILD_UPON_DEFAULT_CONFIG_PARAMETER)
-
-internal data class FailFastArgument(override val value: Boolean) : BoolCliArgument(value, FAIL_FAST_PARAMETER)
 
 internal data class AllRulesArgument(override val value: Boolean) : BoolCliArgument(value, ALL_RULES_PARAMETER)
 

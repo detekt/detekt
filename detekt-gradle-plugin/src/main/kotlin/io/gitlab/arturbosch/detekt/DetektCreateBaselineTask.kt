@@ -12,7 +12,6 @@ import io.gitlab.arturbosch.detekt.invoke.CreateBaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.DebugArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
-import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
@@ -81,11 +80,6 @@ abstract class DetektCreateBaselineTask : SourceTask() {
 
     @get:Input
     @get:Optional
-    @Deprecated("Please use the buildUponDefaultConfig and allRules flags instead.", ReplaceWith("allRules"))
-    abstract val failFast: Property<Boolean>
-
-    @get:Input
-    @get:Optional
     abstract val ignoreFailures: Property<Boolean>
 
     @get:Input
@@ -132,7 +126,6 @@ abstract class DetektCreateBaselineTask : SourceTask() {
             DebugArgument(debug.getOrElse(false)),
             ParallelArgument(parallel.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
-            FailFastArgument(@Suppress("DEPRECATION") failFast.getOrElse(false)),
             AutoCorrectArgument(autoCorrect.getOrElse(false)),
             AllRulesArgument(allRules.getOrElse(false)),
             BasePathArgument(basePathProp.orNull),
@@ -148,10 +141,6 @@ abstract class DetektCreateBaselineTask : SourceTask() {
 
     @TaskAction
     fun baseline() {
-        if (@Suppress("DEPRECATION") failFast.getOrElse(false)) {
-            logger.warn("'failFast' is deprecated. Please use 'buildUponDefaultConfig' together with 'allRules'.")
-        }
-
         DetektInvoker.create(task = this).invokeCli(
             arguments = arguments.get(),
             ignoreFailures = ignoreFailures.getOrElse(false),

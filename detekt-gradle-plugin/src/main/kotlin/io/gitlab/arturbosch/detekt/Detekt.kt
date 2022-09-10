@@ -17,7 +17,6 @@ import io.gitlab.arturbosch.detekt.invoke.DebugArgument
 import io.gitlab.arturbosch.detekt.invoke.DefaultReportArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
-import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JdkHomeArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
@@ -133,15 +132,6 @@ abstract class Detekt @Inject constructor(
         set(value) = buildUponDefaultConfigProp.set(value)
 
     @get:Internal
-    internal abstract val failFastProp: Property<Boolean>
-
-    @Deprecated("Please use the buildUponDefaultConfig and allRules flags instead.", ReplaceWith("allRules"))
-    var failFast: Boolean
-        @Input
-        get() = failFastProp.getOrElse(false)
-        set(value) = failFastProp.set(value)
-
-    @get:Internal
     internal abstract val allRulesProp: Property<Boolean>
     var allRules: Boolean
         @Input
@@ -235,7 +225,6 @@ abstract class Detekt @Inject constructor(
             DebugArgument(debugProp.getOrElse(false)),
             ParallelArgument(parallelProp.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
-            FailFastArgument(failFastProp.getOrElse(false)),
             AllRulesArgument(allRulesProp.getOrElse(false)),
             AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
             BasePathArgument(basePathProp.orNull),
@@ -262,10 +251,6 @@ abstract class Detekt @Inject constructor(
 
     @TaskAction
     fun check() {
-        if (failFastProp.getOrElse(false)) {
-            logger.warn("'failFast' is deprecated. Please use 'buildUponDefaultConfig' together with 'allRules'.")
-        }
-
         DetektInvoker.create(task = this, isDryRun = isDryRun).invokeCli(
             arguments = arguments.get(),
             ignoreFailures = ignoreFailures,
