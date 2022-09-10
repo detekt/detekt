@@ -38,6 +38,8 @@ class TopLevelPropertyNaming(config: Config = Config.empty) : Rule(config) {
     private val privatePropertyPattern: Regex by config("_?[A-Za-z][_A-Za-z0-9]*") { it.toRegex() }
 
     override fun visitProperty(property: KtProperty) {
+        super.visitProperty(property)
+        if (!property.isTopLevel) return
         if (property.isConstant()) {
             handleConstant(property)
         } else {
