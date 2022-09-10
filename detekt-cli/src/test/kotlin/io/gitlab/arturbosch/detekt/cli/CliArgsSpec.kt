@@ -111,15 +111,11 @@ internal class CliArgsSpec {
         }
     }
 
-    @Nested
-    inner class `--all-rules and --fail-fast lead to all rules being activated` {
-
-        @ParameterizedTest
-        @ValueSource(strings = ["--all-rules", "--fail-fast"])
-        fun `all rules active`(flag: String) {
-            val spec = parseArguments(arrayOf(flag)).toSpec()
-            assertThat(spec.rulesSpec.activateAllRules).isTrue()
-        }
+    @ParameterizedTest
+    @ValueSource(strings = ["--all-rules", "--fail-fast"])
+    fun `--all-rules and --fail-fast lead to all rules being activated`(flag: String) {
+        val spec = parseArguments(arrayOf(flag)).toSpec()
+        assertThat(spec.rulesSpec.activateAllRules).isTrue()
     }
 
     @Nested
