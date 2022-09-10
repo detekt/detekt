@@ -7,6 +7,7 @@ import io.github.detekt.tooling.api.spec.ReportsSpec
 import io.github.detekt.tooling.dsl.ProcessingSpecBuilder
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.reporting.DETEKT_OUTPUT_REPORT_PATHS_KEY
+import java.io.PrintStream
 import java.nio.file.Path
 import java.util.concurrent.AbstractExecutorService
 import java.util.concurrent.TimeUnit
@@ -18,16 +19,36 @@ fun createProcessingSettings(
     inputPath: Path? = null,
     config: Config = Config.empty,
     reportPaths: Collection<ReportsSpec.Report> = emptyList(),
-    spec: ProcessingSpec = createNullLoggingSpec {
+    outputChannel: PrintStream = NullPrintStream(),
+    init: ProcessingSpecBuilder.() -> Unit = { /* no-op */ },
+): ProcessingSettings {
+    val spec = ProcessingSpec {
         project {
-            inputPaths = inputPath?.let(::listOf).orEmpty()
+            inputPaths = listOfNotNull(inputPath)
         }
+        logging {
+            this.outputChannel = outputChannel
+            errorChannel = NullPrintStream()
+        }
+        config {
+            // Use an empty config in tests to be compatible with old ProcessingSettings config default.
+            // This was in particular done due to all console reports being active with an empty config.
+            // These outputs are used to assert test conditions.
+            configPaths = listOf(resourceAsPath("configs/empty.yml"))
+        }
+        execution {
+            executorService = DirectExecutor() // run in the same thread
+        }
+        init.invoke(this)
     }
-) = ProcessingSettings(spec, config).apply {
-    register(DETEKT_OUTPUT_REPORT_PATHS_KEY, reportPaths)
+    return ProcessingSettings(spec, config).apply {
+        register(DETEKT_OUTPUT_REPORT_PATHS_KEY, reportPaths)
+    }
 }
 
-fun createNullLoggingSpec(init: (ProcessingSpecBuilder.() -> Unit)? = null): ProcessingSpec =
+fun createNullLoggingSpec(
+    init: ProcessingSpecBuilder.() -> Unit = { /* no-op */ },
+): ProcessingSpec =
     ProcessingSpec {
         logging {
             outputChannel = NullPrintStream()
@@ -42,7 +63,7 @@ fun createNullLoggingSpec(init: (ProcessingSpecBuilder.() -> Unit)? = null): Pro
         execution {
             executorService = DirectExecutor() // run in the same thread
         }
-        init?.invoke(this)
+        init.invoke(this)
     }
 
 class DirectExecutor : AbstractExecutorService() {
