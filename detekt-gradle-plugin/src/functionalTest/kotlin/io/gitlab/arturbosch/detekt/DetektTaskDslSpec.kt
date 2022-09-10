@@ -507,7 +507,6 @@ class DetektTaskDslSpec {
                 |    debug = true
                 |    parallel = true
                 |    disableDefaultRuleSets = true
-                |    failFast = true
                 |    allRules = true
                 |    autoCorrect = true
                 |    buildUponDefaultConfig = true
@@ -544,11 +543,6 @@ class DetektTaskDslSpec {
         @Test
         fun `enables all rules`() {
             assertThat(result.output).contains("--all-rules")
-        }
-
-        @Test
-        fun `enables fail fast`() {
-            assertThat(result.output).contains("--fail-fast")
         }
 
         @Test
@@ -652,7 +646,6 @@ class DetektTaskDslSpec {
                 |    parallel = true
                 |    disableDefaultRuleSets = true
                 |    buildUponDefaultConfig = true
-                |    failFast = false
                 |    allRules = false
                 |    ignoreFailures = false
                 |    autoCorrect = false

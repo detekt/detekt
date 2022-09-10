@@ -8,8 +8,6 @@ import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -111,15 +109,10 @@ internal class CliArgsSpec {
         }
     }
 
-    @Nested
-    inner class `--all-rules and --fail-fast lead to all rules being activated` {
-
-        @ParameterizedTest
-        @ValueSource(strings = ["--all-rules", "--fail-fast"])
-        fun `all rules active`(flag: String) {
-            val spec = parseArguments(arrayOf(flag)).toSpec()
-            assertThat(spec.rulesSpec.activateAllRules).isTrue()
-        }
+    @Test
+    fun `--all-rules lead to all rules being activated`() {
+        val spec = parseArguments(arrayOf("--all-rules")).toSpec()
+        assertThat(spec.rulesSpec.activateAllRules).isTrue()
     }
 
     @Nested

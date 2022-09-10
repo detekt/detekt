@@ -75,7 +75,6 @@ class CompareReleases : CliktCommand() {
             "--input",
             analysisPath,
             "--build-upon-default-config",
-            "--fail-fast",
             "--config",
             configPath,
             "--excludes",

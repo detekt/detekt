@@ -108,16 +108,6 @@ class CliArgs {
     var buildUponDefaultConfig: Boolean = false
 
     @Parameter(
-        names = ["--fail-fast"],
-        description = "DEPRECATED: please use '--build-upon-default-config' together with '--all-rules'. " +
-            "Same as 'build-upon-default-config' but explicitly running all available rules. " +
-            "With this setting only exit code 0 is returned when the analysis does not find a single code smell. " +
-            "Additional configuration files can override rule properties which includes turning off specific rules."
-    )
-    @Deprecated("Please use the buildUponDefaultConfig and allRules flags instead.", ReplaceWith("allRules"))
-    var failFast: Boolean = false
-
-    @Parameter(
         names = ["--all-rules"],
         description = "Activates all available (even unstable) rules."
     )

@@ -42,10 +42,10 @@ class WorkaroundConfigurationKtSpec {
     }
 
     @Nested
-    inner class `fail fast override` {
+    inner class `activate all rules override` {
 
         private val config = ProcessingSpec {
-            config { resources = listOf(resourceUrl("/configs/fail-fast-will-override-here.yml")) }
+            config { resources = listOf(resourceUrl("/configs/activate-all-rules-will-override-here.yml")) }
             rules { activateAllRules = true }
         }.let { spec ->
             spec.workaroundConfiguration(spec.loadConfiguration())

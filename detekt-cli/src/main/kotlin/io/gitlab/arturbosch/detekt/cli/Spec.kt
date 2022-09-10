@@ -22,8 +22,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
 
         rules {
             autoCorrect = args.autoCorrect
-            @Suppress("DEPRECATION")
-            activateAllRules = args.failFast || args.allRules
+            activateAllRules = args.allRules
             maxIssuePolicy = when (val count = args.maxIssues) {
                 null -> RulesSpec.MaxIssuePolicy.NonSpecified // prefer to read from config
                 0 -> RulesSpec.MaxIssuePolicy.NoneAllowed
