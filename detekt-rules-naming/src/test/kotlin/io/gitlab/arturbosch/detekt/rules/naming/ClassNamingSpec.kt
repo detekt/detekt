@@ -1,10 +1,37 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.Test
 
 class ClassNamingSpec {
+
+    @Test
+    fun `should detekt no violations for abstract class implementation`() {
+        val code = """
+            abstract class AbstractClass {
+                abstract fun foo()
+            }
+            val foo = object : AbstractClass() {
+                override fun foo() {}
+            }
+        """.trimIndent()
+
+        assertThat(ClassNaming().compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `should use custom name for method and class`() {
+        val config = TestConfig(mapOf(ClassNaming.CLASS_PATTERN to "^aBbD$"))
+        assertThat(
+            ClassNaming(config).compileAndLint(
+                """
+        class aBbD{}
+                """.trimIndent()
+            )
+        ).isEmpty()
+    }
 
     @Test
     fun `should detect no violations class with numbers`() {
@@ -62,6 +89,18 @@ class ClassNamingSpec {
             @Suppress("ClassName")
             class namingConventions {}
         """.trimIndent()
+        assertThat(ClassNaming().compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `should not detect any`() {
+        val code = """
+            data class D(val i: Int, val j: Int)
+            fun doStuff() {
+                val (_, HOLY_GRAIL) = D(5, 4)
+            }
+        """.trimIndent()
+
         assertThat(ClassNaming().compileAndLint(code)).isEmpty()
     }
 }

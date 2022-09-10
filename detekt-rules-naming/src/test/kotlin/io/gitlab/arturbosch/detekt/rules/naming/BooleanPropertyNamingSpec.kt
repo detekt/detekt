@@ -180,13 +180,29 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `should not warn about Java Boolean override by default`() {
+        fun `should not warn about Java Boolean override in data class by default`() {
             val code = """
                 interface Test {
                     val default: java.lang.Boolean
                 }
 
                 data class TestImpl (override var default: java.lang.Boolean) : Test
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should not warn about Java Boolean override by default`() {
+            val code = """
+                interface Test {
+                    val default: java.lang.Boolean
+                }
+
+                class TestImpl : Test {
+                    override val default: java.lang.Boolean = java.lang.Boolean(true)
+                }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 

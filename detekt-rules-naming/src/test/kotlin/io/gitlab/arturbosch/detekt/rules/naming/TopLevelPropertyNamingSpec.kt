@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -8,6 +10,21 @@ import org.junit.jupiter.api.Test
 class TopLevelPropertyNamingSpec {
 
     val subject = TopLevelPropertyNaming()
+
+    @Test
+    fun `should use custom name top level propeties`() {
+        assertThat(
+            TopLevelPropertyNaming(TestConfig(mapOf(TopLevelPropertyNaming.CONSTANT_PATTERN to "^lowerCaseConst$"))).compileAndLint(
+                """
+        class Foo{
+            companion object {
+              const val lowerCaseConst = ""
+            }
+        }
+                """.trimIndent()
+            )
+        ).isEmpty()
+    }
 
     @Nested
     inner class `constants on top level` {

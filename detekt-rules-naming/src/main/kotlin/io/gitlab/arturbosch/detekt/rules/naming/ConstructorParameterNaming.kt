@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
+import org.jetbrains.kotlin.psi.KtConstructor
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
@@ -42,22 +43,16 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
     private val ignoreOverridden: Boolean by config(true)
 
     override fun visitParameter(parameter: KtParameter) {
-        if (parameter.isContainingExcludedClassOrObject(excludeClassPattern) || isIgnoreOverridden(parameter)) {
+        if (!parameter.isConstructor() ||
+            parameter.isContainingExcludedClassOrObject(excludeClassPattern) ||
+            isIgnoreOverridden(parameter)
+        ) {
             return
         }
 
         val identifier = parameter.identifierName()
         if (parameter.isPrivate()) {
-            if (!identifier.matches(privateParameterPattern)) {
-                report(
-                    CodeSmell(
-                        issue,
-                        Entity.from(parameter),
-                        message = "Constructor private parameter names should " +
-                            "match the pattern: $privateParameterPattern"
-                    )
-                )
-            }
+            visitPrivateParameter(parameter)
         } else {
             if (!identifier.matches(parameterPattern)) {
                 report(
@@ -71,5 +66,22 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
         }
     }
 
+    private fun visitPrivateParameter(parameter: KtParameter) {
+        val identifier = parameter.identifierName()
+        if (!identifier.matches(privateParameterPattern)) {
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(parameter),
+                    message = "Constructor private parameter names should match the pattern: $privateParameterPattern"
+                )
+            )
+        }
+    }
+
     private fun isIgnoreOverridden(parameter: KtParameter) = ignoreOverridden && parameter.isOverride()
+
+    private fun KtParameter.isConstructor(): Boolean {
+        return this.ownerFunction is KtConstructor<*>
+    }
 }

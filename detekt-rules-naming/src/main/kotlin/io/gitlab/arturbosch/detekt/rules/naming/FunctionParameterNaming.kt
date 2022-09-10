@@ -15,6 +15,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClass
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 
 /**
@@ -46,7 +47,7 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
     private val ignoreOverridden: Boolean by configWithFallback(::ignoreOverriddenFunctions, true)
 
     override fun visitParameter(parameter: KtParameter) {
-        if (parameter.isContainingExcludedClass(excludeClassPattern)) {
+        if (parameter.isParameterInFunction()) {
             return
         }
 
@@ -64,5 +65,12 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
                 )
             )
         }
+    }
+
+    private fun KtParameter.isParameterInFunction(): Boolean {
+        return this.nameAsSafeName.isSpecial ||
+            (this.nameIdentifier?.parent?.javaClass == null) ||
+            (this.ownerFunction !is KtNamedFunction) ||
+            this.isContainingExcludedClass(excludeClassPattern)
     }
 }

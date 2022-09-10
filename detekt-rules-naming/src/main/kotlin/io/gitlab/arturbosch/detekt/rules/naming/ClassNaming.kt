@@ -32,6 +32,9 @@ class ClassNaming(config: Config = Config.empty) : Rule(config) {
     private val classPattern: Regex by config("[A-Z][a-zA-Z0-9]*") { it.toRegex() }
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+        if (classOrObject.nameAsSafeName.isSpecial || classOrObject.nameIdentifier?.parent?.javaClass == null) {
+            return
+        }
         if (!classOrObject.identifierName().removeSurrounding("`").matches(classPattern)) {
             report(
                 CodeSmell(

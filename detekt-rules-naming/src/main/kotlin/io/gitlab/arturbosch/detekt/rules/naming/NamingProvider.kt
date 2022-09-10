@@ -18,9 +18,25 @@ class NamingProvider : DefaultRuleSetProvider {
         listOf(
             MatchingDeclarationName(config),
             MemberNameEqualsClassName(config),
-            NamingRules(config),
             InvalidPackageDeclaration(config),
-            NoNameShadowing(config)
+            NoNameShadowing(config),
+            TopLevelPropertyNaming(config),
+            BooleanPropertyNaming(config),
+            LambdaParameterNaming(config),
+            ConstructorParameterNaming(config),
+            ForbiddenClassName(config),
+            ClassNaming(config),
+            PackageNaming(config),
+            EnumNaming(config),
+            ObjectPropertyNaming(config),
+            FunctionParameterNaming(config),
+            FunctionNaming(config),
+            FunctionMinLength(config),
+            FunctionMaxLength(config),
+            VariableMaxLength(config),
+            VariableMinLength(config),
+            VariableNaming(config),
+            NonBooleanPropertyPrefixedWithIs(config)
         )
     )
 }
