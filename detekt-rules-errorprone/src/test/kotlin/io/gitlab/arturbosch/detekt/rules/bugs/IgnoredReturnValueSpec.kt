@@ -822,7 +822,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     flowOfChecked("hello")
                     return 42
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings)
                 .singleElement()
@@ -913,7 +913,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     flowOf(1, 2, 3)
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings)
@@ -931,7 +931,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                     flowOf(1, 2, 3)
                         .onEach { println(it) }
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings)
@@ -946,7 +946,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                 import kotlinx.coroutines.flow.flowOf
                 
                 fun foo() = flowOf(1, 2, 3)
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -961,7 +961,7 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
                         .onEach { println(it) }
                         .collect()
                 }
-            """
+            """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
