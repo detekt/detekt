@@ -12,18 +12,12 @@ class TopLevelPropertyNamingSpec {
     val subject = TopLevelPropertyNaming()
 
     @Test
-    fun `should use custom name top level propeties`() {
-        assertThat(
-            TopLevelPropertyNaming(TestConfig(mapOf(TopLevelPropertyNaming.CONSTANT_PATTERN to "^lowerCaseConst$"))).compileAndLint(
-                """
-        class Foo{
-            companion object {
-              const val lowerCaseConst = ""
-            }
-        }
-                """.trimIndent()
-            )
-        ).isEmpty()
+    fun `should use custom name top level properties`() {
+        val code = """
+            const val lowerCaseConst = ""
+        """.trimIndent()
+        val subject = TopLevelPropertyNaming(TestConfig(TopLevelPropertyNaming.CONSTANT_PATTERN to "^lowerCaseConst$"))
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Nested
@@ -86,5 +80,20 @@ class TopLevelPropertyNamingSpec {
             """.trimIndent()
             io.gitlab.arturbosch.detekt.test.assertThat(subject.lint(code)).hasSize(1)
         }
+    }
+
+    @Test
+    fun `should not care about no top level properties`() {
+        val code = """
+            class Foo{
+                val __baz = ""
+                companion object {
+                  const val __bar = ""
+                  val __foo = ""
+                }
+            }
+        """.trimIndent()
+
+        assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }
