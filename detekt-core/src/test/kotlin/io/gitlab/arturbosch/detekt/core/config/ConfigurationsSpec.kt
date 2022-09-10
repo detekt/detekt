@@ -81,7 +81,7 @@ class ConfigurationsSpec {
 
         private val config = ProcessingSpec {
             config {
-                resources = listOf(resourceUrl("/configs/fail-fast-wont-override-here.yml"))
+                resources = listOf(resourceUrl("/configs/activate-all-rules-wont-override-here.yml"))
                 useDefaultConfig = true
             }
             rules { activateAllRules = true }
