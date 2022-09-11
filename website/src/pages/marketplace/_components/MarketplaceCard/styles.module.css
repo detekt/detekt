@@ -1,10 +1,16 @@
 .marketplaceCardHeader {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     margin-bottom: 12px;
 }
 
 .marketplaceCardTitle {
+    margin-bottom: 0;
+    flex: 1 1 auto;
+}
+
+.marketplaceCardButton {
     margin-bottom: 0;
     flex: 1 1 auto;
 }
@@ -23,4 +29,10 @@
 .marketplaceCardBody {
     font-size: smaller;
     line-height: 1.66;
+}
+
+.tagContainer {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
 }

@@ -171,12 +171,7 @@ Integrations:
 - [GitHub Action: Setup detekt](https://github.com/marketplace/actions/setup-detekt)
 - [Sonatype Lift](https://github.com/marketplace/muse-dev)
 
-Custom rules and reports from 3rd parties:
-
-- [detekt-verify-implementation](https://github.com/cph-cachet/detekt-verify-implementation) by cph-cachet
-- [detekt-hint](https://github.com/mkohm/detekt-hint) by mkohm is a plugin to detekt that provides detection of design principle violations through integration with Danger
-- [GitLab report format](https://gitlab.com/cromefire_/detekt-gitlab-report)
-- There are more third-party plugins out there. You can find some of them [in this list](https://github.com/topics/detekt-plugin).
+Custom rules and reports from 3rd parties can be found on our [**Detekt Marketplace**](https://detekt.dev/marketplace).
 
 #### Credits
 

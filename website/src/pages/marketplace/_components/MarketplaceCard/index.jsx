@@ -1,40 +1,61 @@
 import React from "react";
+import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import styles from "./styles.module.css";
+import MarketplaceCardTag from "../MarketplaceCardTag";
 
 function MarketplaceCard(input) {
-  const ruleset = input.ruleset;
+  const extension = input.extension;
   return (
-    <li key={ruleset.title} className="card shadow--md">
+    <li key={extension.title} className="card shadow--md">
       <div className="card__body">
         <div className={styles.marketplaceCardHeader}>
           <h3 className={styles.marketplaceCardTitle}>
-            <Link href={ruleset.repo} className={styles.marketplaceCardLink}>
-              {ruleset.title}
-            </Link>
+            <Link href={extension.repo}>{extension.title}</Link>
           </h3>
+          <ul className={styles.tagContainer}>
+            {extension.tags.map((tag) => (
+              <li>
+                <MarketplaceCardTag tag={tag} />
+              </li>
+            ))}
+          </ul>
+          {/* {extension.tags.map((tag) => (
+            // <MarketplaceCardTag tag={tag} />
+            <p>{tag}</p>
+          ))} */}
+          <Link
+            href={extension.repo}
+            className={clsx(
+              "button",
+              "button--secondary",
+              "button--sm",
+              styles.marketplaceHeaderButton
+            )}
+          >
+            Source
+          </Link>
         </div>
         <div className={styles.marketplaceCardBody}>
-          <p>{ruleset.description}</p>
-          <h5>Coordinates</h5>
-          <p>
-            <code>detektPlugins("{ruleset.mavenCoordinates}")</code> on{" "}
-            <strong>{ruleset.mavenRepo}</strong>
-          </p>
-          <h5>Rules</h5>
-          <p>
-            Uses type resolution:{" "}
-            <strong>{ruleset.usesTypeResolution.toString()}</strong>
-          </p>
-          <p>
-            <ul>
-              {ruleset.rules.map((rule) => (
-                <li>
-                  <code>{rule}</code>
-                </li>
-              ))}
-            </ul>
-          </p>
+          <p>{extension.description}</p>
+          {extension.rules && (
+            <p>
+              <h5>Rules</h5>
+              <p>
+                Uses type resolution:{" "}
+                <strong>{extension.usesTypeResolution.toString()}</strong>
+              </p>
+              <p>
+                <ul>
+                  {extension.rules.map((rule) => (
+                    <li>
+                      <code>{rule}</code>
+                    </li>
+                  ))}
+                </ul>
+              </p>
+            </p>
+          )}
         </div>
       </div>
     </li>

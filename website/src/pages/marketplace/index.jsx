@@ -1,11 +1,11 @@
 import React from "react";
 import clsx from "clsx";
 import Layout from "@theme/Layout";
-import { rulesets } from "@site/src/data/rulesmarketplace";
+import { extensions } from "@site/src/data/rulesmarketplace";
 import MarketplaceCard from "./_components/MarketplaceCard";
 import styles from "./styles.module.css";
 
-const TITLE = "Detekt 3rd Party Rules Marketplace";
+const TITLE = "Detekt 3rd-party Marketplace";
 const DESCRIPTION =
   "List of Detekt Rules that have been built by the community 🎉";
 const SUBMIT_URL =
@@ -15,8 +15,10 @@ const SEARCH_RULES_URL = "https://github.com/topics/detekt-rules";
 function MarketplaceHeader() {
   return (
     <section className="margin-top--lg margin-bottom--lg text--center">
-      <h1>Detekt 3rd Party Rules Marketplace</h1>
-      <p>List of Detekt Rules that have been built by the community.</p>
+      <h1>{TITLE}</h1>
+      <p>
+        List of Detekt Rules, Extensions & Plugins that have been built by the community.
+      </p>
       <a
         className={clsx(
           "button",
@@ -47,7 +49,7 @@ function MarketplaceHeader() {
 
 function MarketplaceCards() {
   // No Results scenario
-  if (rulesets.length === 0) {
+  if (extensions.length === 0) {
     return (
       <section className="margin-top--lg margin-bottom--xl">
         <div className="container padding-vert--md text--center">
@@ -61,10 +63,10 @@ function MarketplaceCards() {
     <section className="margin-top--lg margin-bottom--xl">
       <>
         <div className="container margin-top--lg">
-          <h2 className={styles.marketplaceHeader}>All rulesets</h2>
+          <h2 className={styles.marketplaceHeader}>All extensions</h2>
           <ul className={clsx("clean-list", styles.marketplaceList)}>
-            {rulesets.map((ruleset) => (
-              <MarketplaceCard key={ruleset.title} ruleset={ruleset} />
+            {extensions.map((extension) => (
+              <MarketplaceCard key={extension.title} extension={extension} />
             ))}
           </ul>
         </div>
