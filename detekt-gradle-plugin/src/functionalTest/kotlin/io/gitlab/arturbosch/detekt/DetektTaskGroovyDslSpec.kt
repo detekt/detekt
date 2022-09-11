@@ -51,6 +51,7 @@ class DetektTaskGroovyDslSpec {
             |    classpath.setFrom(files("config.yml"))
             |    languageVersion = "1.6"
             |    jvmTarget = "1.8"
+            |    jdkHome = file("path/to/jdk")
             |    debug = true
             |    parallel = true
             |    disableDefaultRuleSets = true
@@ -96,6 +97,7 @@ class DetektTaskGroovyDslSpec {
             |    config.setFrom(files("config.yml"))
             |    classpath.setFrom(files("config.yml"))
             |    jvmTarget = "1.8"
+            |    jdkHome = file("path/to/jdk")
             |    debug = true
             |    parallel = true
             |    disableDefaultRuleSets = true
