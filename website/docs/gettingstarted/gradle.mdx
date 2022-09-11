@@ -328,8 +328,17 @@ tasks.named("detekt").configure {
 
 ### Using Type Resolution
 
-Type resolution is experimental and works only for [predefined tasks listed above](#a-nametasksavailable-plugin-tasksa)
+Type resolution is experimental and works only for [predefined tasks listed above](#available-plugin-tasks)
 or when implementing a custom detekt task with the `classpath` and `jvmTarget` properties present.
+
+`jdkHome` is also available as an input. When this is unset, analysis is performed using the JDK classes of the JDK that
+Gradle is running with (shown by the `./gradlew --version` command). This can be an issue if the Gradle JDK and the
+project JDK doesn't match e.g. if Gradle runs under Java 8 but the project uses classes only available in Java 9 or
+higher. Setting `jdkHome` to the Java 9 JDK path will allow for more correct analysis.
+
+`jdkHome` and `jvmTarget` are set automatically when applying a toolchain using either
+[`java`](https://docs.gradle.org/current/userguide/toolchains.html) or
+[`kotlin`](https://kotlinlang.org/docs/gradle.html#gradle-java-toolchains-support).
 
 More information on type resolution are available on the [type resolution](type-resolution.md) page.
 
@@ -337,10 +346,12 @@ More information on type resolution are available on the [type resolution](type-
 
 ```groovy
 tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
-    jvmTarget = "1.8"
+    jvmTarget = '1.8'
+    jdkHome.set(file('path/to/jdkHome'))
 }
 tasks.withType(io.gitlab.arturbosch.detekt.DetektCreateBaselineTask).configureEach {
-    jvmTarget = "1.8"
+    jvmTarget = '1.8'
+    jdkHome.set(file('path/to/jdkHome'))
 }
 ```
 
@@ -349,9 +360,11 @@ tasks.withType(io.gitlab.arturbosch.detekt.DetektCreateBaselineTask).configureEa
 ```kotlin
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
     this.jvmTarget = "1.8"
+    jdkHome.set(file("path/to/jdkHome"))
 }
 tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
     this.jvmTarget = "1.8"
+    jdkHome.set(file("path/to/jdkHome"))
 }
 ```
 
