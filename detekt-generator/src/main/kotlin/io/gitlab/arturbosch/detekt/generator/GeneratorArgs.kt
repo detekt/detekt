@@ -16,21 +16,21 @@ class GeneratorArgs {
 
     @Parameter(
         names = ["--documentation", "-d"],
-        required = true,
+        required = false,
         description = "Output path for generated documentation."
     )
     private var documentation: String? = null
 
     @Parameter(
         names = ["--config", "-c"],
-        required = true,
+        required = false,
         description = "Output path for generated detekt config."
     )
     private var config: String? = null
 
     @Parameter(
         names = ["--cli-options"],
-        required = true,
+        required = false,
         description = "Output path for generated cli options page."
     )
     private var cliOptions: String? = null
@@ -41,6 +41,14 @@ class GeneratorArgs {
         description = "Shows the usage."
     )
     var help: Boolean = false
+
+    @Parameter(
+        names = ["--generate-custom-rule-config", "-gcrc"],
+        required = false,
+        description = "Generate config for user-defined rules. " +
+            "Path to user rules can be specified with --input option"
+    )
+    var generateCustomRuleConfig: Boolean = false
 
     val inputPath: List<Path> by lazy {
         checkNotNull(input) { "Input parameter was not initialized by jcommander!" }

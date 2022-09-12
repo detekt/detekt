@@ -24,6 +24,13 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
         }
     }
 
+    fun printCustomRuleConfig(item: List<RuleSetPage>): String {
+        return yaml {
+            item.sortedBy { it.ruleSet.name }
+                .forEach { printRuleSetPage(it) }
+        }
+    }
+
     private fun defaultBuildConfiguration(): String = """
         build:
           maxIssues: 0
