@@ -20,10 +20,6 @@ function MarketplaceCard(input) {
               </li>
             ))}
           </ul>
-          {/* {extension.tags.map((tag) => (
-            // <MarketplaceCardTag tag={tag} />
-            <p>{tag}</p>
-          ))} */}
           <Link
             href={extension.repo}
             className={clsx(
