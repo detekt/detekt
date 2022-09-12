@@ -11,7 +11,7 @@ function MarketplaceCard(input) {
       <div className="card__body">
         <div className={styles.marketplaceCardHeader}>
           <h3 className={styles.marketplaceCardTitle}>
-            <Link href={extension.repo}>{extension.title}</Link>
+            {extension.title}
           </h3>
           <ul className={styles.tagContainer}>
             {extension.tags.map((tag) => (
@@ -33,6 +33,7 @@ function MarketplaceCard(input) {
           </Link>
         </div>
         <div className={styles.marketplaceCardBody}>
+          <Link href={extension.repo}>{extension.repo}</Link>
           <p>{extension.description}</p>
           {extension.rules && (
             <p>
