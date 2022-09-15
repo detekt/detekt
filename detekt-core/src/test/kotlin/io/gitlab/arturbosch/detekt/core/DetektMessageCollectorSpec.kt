@@ -49,7 +49,7 @@ class DetektMessageCollectorSpec {
             verify {
                 warningPrinter(
                     "The BindingContext was created with 1 issues. " +
-                        "Run detekt with --debug to see the error messages."
+                        "Run detekt CLI with --debug or set `detekt { debug = true }` in Gradle to see the error messages."
                 )
             }
         }
@@ -76,7 +76,7 @@ class DetektMessageCollectorSpec {
             verify {
                 warningPrinter(
                     "The BindingContext was created with 1 issues. " +
-                        "Run detekt with --debug to see the error messages."
+                        "Run detekt CLI with --debug or set `detekt { debug = true }` in Gradle to see the error messages."
                 )
             }
         }

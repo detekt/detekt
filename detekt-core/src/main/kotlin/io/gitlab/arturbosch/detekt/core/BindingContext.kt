@@ -69,7 +69,7 @@ internal class DetektMessageCollector(
         if (messages > 0) {
             warningPrinter(
                 "The BindingContext was created with $messages issues. " +
-                    "Run detekt with --debug to see the error messages."
+                    "Run detekt CLI with --debug or set `detekt { debug = true }` in Gradle to see the error messages."
             )
         }
     }
