@@ -9,6 +9,7 @@ sidebar_position: 1
 ---
 
 import CliOptions from "./_cli-options.md";
+import CliGeneratorOptions from "./_cli-generator-options.md";
 
 ## Install the cli
 
@@ -50,3 +51,11 @@ detekt will exit with one of the following exit codes:
 The following parameters are shown when `--help` is entered.
 
 <CliOptions />
+
+## Use the cli to generate configuration for custom rules
+
+<CliGeneratorOptions />
+
+```sh
+java -jar detekt-generator-[detekt_version]-all.jar -gcrc -i /path/to/rule1, /path/to/rule2
+```

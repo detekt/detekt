@@ -1,6 +1,9 @@
 plugins {
+    alias(libs.plugins.shadow)
     id("module")
 }
+
+tasks.build { finalizedBy(tasks.shadowJar) }
 
 dependencies {
     implementation(projects.detektParser)

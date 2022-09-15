@@ -39,6 +39,7 @@ project.afterEvaluate {
                 cliBuildDir.resolve("libs/detekt-cli-${project.version}-all.jar"),
                 cliBuildDir.resolve("distributions/detekt-cli-${project.version}.zip"),
                 project(":detekt-formatting").buildDir.resolve("libs/detekt-formatting-${project.version}.jar"),
+                project(":detekt-generator").buildDir.resolve("libs/detekt-generator-${project.version}-all.jar"),
                 project(":detekt-rules-ruleauthors").buildDir
                     .resolve("libs/detekt-rules-ruleauthors-${project.version}.jar")
             )
