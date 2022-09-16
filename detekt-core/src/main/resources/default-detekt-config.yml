@@ -419,10 +419,6 @@ potential-bugs:
       - 'java.util.HashSet'
       - 'java.util.LinkedHashMap'
       - 'java.util.HashMap'
-  DuplicateCaseInWhenExpression:
-    active: true
-  ElseCaseInsteadOfExhaustiveWhen:
-    active: false
   EqualsAlwaysReturnsTrueOrFalse:
     active: true
   EqualsWithHashCodeExist:
@@ -466,15 +462,10 @@ potential-bugs:
   MissingPackageDeclaration:
     active: false
     excludes: ['**/*.kts']
-  MissingWhenCase:
-    active: true
-    allowElseExpression: true
   NullCheckOnMutableProperty:
     active: false
   NullableToStringCall:
     active: false
-  RedundantElseInWhen:
-    active: true
   UnconditionalJumpStatementInLoop:
     active: false
   UnnecessaryNotNullOperator:

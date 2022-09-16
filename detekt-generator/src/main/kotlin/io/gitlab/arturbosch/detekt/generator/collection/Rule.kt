@@ -13,5 +13,8 @@ data class Rule(
     val configuration: List<Configuration> = emptyList(),
     val autoCorrect: Boolean = false,
     var inMultiRule: String? = null,
-    val requiresTypeResolution: Boolean = false
-)
+    val requiresTypeResolution: Boolean = false,
+    val deprecated: String? = null
+) {
+    fun isDeprecated() = deprecated != null
+}

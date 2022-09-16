@@ -75,3 +75,23 @@ fun stuff(): Unit {}
 ```kotlin
 fun stuff() {}
 ```
+
+### DuplicateCaseInWhenExpression
+
+Duplicated `case` statements in a `when` expression detected.
+
+**Active by default**: Yes - Since v1.16.0
+
+**Debt**: 5m
+
+#### Noncompliant Code:
+
+```kotlin
+fun stuff(): Unit {}
+```
+
+#### Compliant Code:
+
+```kotlin
+fun stuff() {}
+```

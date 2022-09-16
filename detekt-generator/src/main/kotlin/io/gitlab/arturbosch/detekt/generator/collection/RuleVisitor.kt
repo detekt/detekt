@@ -35,6 +35,7 @@ internal class RuleVisitor : DetektVisitor() {
     private var parent = ""
     private val configurationCollector = ConfigurationCollector()
     private val classesMap = mutableMapOf<String, Boolean>()
+    private var deprecationMessage: String? = null
 
     fun getRule(): Rule {
         if (documentationCollector.description.isEmpty()) {
@@ -55,6 +56,7 @@ internal class RuleVisitor : DetektVisitor() {
             parent = parent,
             configuration = configurationByAnnotation,
             autoCorrect = autoCorrect,
+            deprecated = deprecationMessage,
             requiresTypeResolution = requiresTypeResolution
         )
     }
@@ -105,6 +107,7 @@ internal class RuleVisitor : DetektVisitor() {
 
         autoCorrect = classOrObject.isAnnotatedWith(AutoCorrectable::class)
         requiresTypeResolution = classOrObject.isAnnotatedWith(RequiresTypeResolution::class)
+        deprecationMessage = classOrObject.firstAnnotationParameterOrNull(Deprecated::class)
 
         documentationCollector.setClass(classOrObject)
     }

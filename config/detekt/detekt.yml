@@ -124,8 +124,6 @@ potential-bugs:
     active: true
   DoubleMutabilityForCollection:
     active: false
-  ElseCaseInsteadOfExhaustiveWhen:
-    active: true
   ExitOutsideMain:
     active: false
   HasPlatformType:

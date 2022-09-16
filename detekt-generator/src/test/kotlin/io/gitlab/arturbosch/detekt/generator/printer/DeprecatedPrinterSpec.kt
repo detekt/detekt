@@ -12,7 +12,8 @@ class DeprecatedPrinterSpec {
         val expectedMarkdownString = """
             style>MagicNumber>conf2=use conf1 instead
             style>MagicNumber>conf4=use conf3 instead
-            
+            style>DuplicateCaseInWhenExpression=is deprecated
+
         """.trimIndent()
         assertThat(markdownString).isEqualTo(expectedMarkdownString)
     }

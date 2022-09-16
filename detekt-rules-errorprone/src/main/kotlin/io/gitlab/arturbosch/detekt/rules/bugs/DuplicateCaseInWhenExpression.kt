@@ -32,6 +32,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
+@Deprecated("Compiler performs this check by default")
 class DuplicateCaseInWhenExpression(config: Config) : Rule(config) {
 
     override val issue = Issue(
