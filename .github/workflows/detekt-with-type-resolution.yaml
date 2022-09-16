@@ -39,7 +39,7 @@ jobs:
           arguments: :detekt-cli:runWithArgsFile
 
       - name: Upload SARIF to Github using the upload-sarif action
-        uses: github/codeql-action/upload-sarif@b398f525a5587552e573b247ac661067fafa920b # tag=v2
+        uses: github/codeql-action/upload-sarif@904260d7d935dff982205cbdb42025ce30b7a34f # tag=v2
         if: ${{ always() }}
         with:
           sarif_file: build/detekt-report.sarif
