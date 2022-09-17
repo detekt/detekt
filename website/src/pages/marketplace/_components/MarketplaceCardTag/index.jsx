@@ -1,5 +1,5 @@
 import React from "react";
-import { tagTypes } from "../../../../data/rulesmarketplace";
+import { tagTypes } from "@site/src/data/marketplace";
 import styles from "./styles.module.css";
 
 function MarketplaceCardTag(input) {

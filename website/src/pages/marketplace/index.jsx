@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import Layout from "@theme/Layout";
-import { extensions } from "@site/src/data/rulesmarketplace";
+import { extensions } from "@site/src/data/marketplace";
 import MarketplaceCard from "./_components/MarketplaceCard";
 import styles from "./styles.module.css";
 
@@ -9,7 +9,7 @@ const TITLE = "Detekt 3rd-party Marketplace";
 const DESCRIPTION =
   "List of Detekt Rules that have been built by the community 🎉";
 const SUBMIT_URL =
-  "https://github.com/detekt/detekt/blob/main/website/src/data/rulesmarketplace.js";
+  "https://github.com/detekt/detekt/blob/main/website/src/data/marketplace.js";
 const SEARCH_RULES_URL = "https://github.com/topics/detekt-rules";
 
 function MarketplaceHeader() {
