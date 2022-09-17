@@ -82,7 +82,7 @@ internal data class BasePathArgument(val basePath: String?) : CliArgument() {
 
 internal data class ConfigArgument(val files: Collection<File>) : CliArgument() {
 
-    constructor(configFile: File) : this(listOf(configFile))
+    constructor(configFile: RegularFile) : this(listOf(configFile.asFile))
     constructor(config: FileCollection) : this(config.files)
 
     override fun toArgument() = if (files.isEmpty()) {

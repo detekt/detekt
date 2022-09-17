@@ -8,23 +8,25 @@ import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Provider
 import org.gradle.api.services.BuildService
 import org.gradle.api.services.BuildServiceParameters
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
-import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
-import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.PathSensitive
-import org.gradle.api.tasks.PathSensitivity
+import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.io.File
 import java.nio.file.Files
+import javax.inject.Inject
 
 @CacheableTask
-abstract class DetektGenerateConfigTask : DefaultTask() {
+abstract class DetektGenerateConfigTask @Inject constructor(
+    objects: ObjectFactory
+) : DefaultTask() {
 
     init {
         description = "Generate a detekt configuration file inside your project."
@@ -37,13 +39,16 @@ abstract class DetektGenerateConfigTask : DefaultTask() {
     @get:Classpath
     abstract val pluginClasspath: ConfigurableFileCollection
 
-    @get:InputFiles
-    @get:Optional
-    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:OutputFile
+    val configFile: RegularFileProperty = objects.fileProperty().convention { configurationToUse }
+
+    @get:Internal
+    @get:Deprecated("Replaced with configFile property")
     abstract val config: ConfigurableFileCollection
 
     private val defaultConfigPath = project.rootDir.toPath().resolve(CONFIG_DIR_NAME).resolve(CONFIG_FILE)
 
+    @Suppress("DEPRECATION")
     private val configurationToUse: File
         get() = if (config.isEmpty) {
             defaultConfigPath.toFile()
@@ -55,18 +60,18 @@ abstract class DetektGenerateConfigTask : DefaultTask() {
     internal val arguments: Provider<List<String>> = project.provider {
         listOf(
             GenerateConfigArgument,
-            ConfigArgument(configurationToUse)
+            ConfigArgument(configFile.get())
         ).flatMap(CliArgument::toArgument)
     }
 
     @TaskAction
     fun generateConfig() {
-        if (configurationToUse.exists()) {
-            logger.warn("Skipping config file generation; file already exists at $configurationToUse")
+        if (configFile.get().asFile.exists()) {
+            logger.warn("Skipping config file generation; file already exists at ${configFile.get().asFile}")
             return
         }
 
-        Files.createDirectories(configurationToUse.parentFile.toPath())
+        Files.createDirectories(configFile.get().asFile.parentFile.toPath())
 
         DetektInvoker.create(task = this).invokeCli(
             arguments = arguments.get(),

@@ -36,4 +36,28 @@ class GenerateConfigTaskSpec {
             assertThat(projectFile("config/other/detekt.yml")).exists()
         }
     }
+
+    @Test
+    fun `setting configFile property overrides extension & task configs`() {
+        val builder = DslTestBuilder.kotlin()
+        val gradleRunner = builder.withDetektConfig(
+            @Suppress("TrimMultilineRawString")
+            """
+                |detekt {
+                |   config = files("config/wrongpath1/detekt.yml", "config/wrongpath2/detekt.yml")
+                |}
+                |
+                |tasks.detektGenerateConfig {
+                |   config.setFrom("config/wrongpath3/detekt.yml")
+                |   configFile.set(file("config/correctpath/detekt.yml"))
+                |}
+            """
+        ).withConfigFile("config/detekt/detekt.yml").build()
+        gradleRunner.writeProjectFile("config/other/detekt.yml", content = "")
+
+        gradleRunner.runTasksAndCheckResult("detektGenerateConfig") { result ->
+            assertThat(result.task(":detektGenerateConfig")?.outcome).isIn(TaskOutcome.SUCCESS, TaskOutcome.FROM_CACHE)
+            assertThat(projectFile("config/correctpath/detekt.yml")).exists()
+        }
+    }
 }
