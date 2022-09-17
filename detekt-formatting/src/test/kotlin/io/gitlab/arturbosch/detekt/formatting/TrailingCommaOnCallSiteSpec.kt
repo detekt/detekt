@@ -1,30 +1,27 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import io.gitlab.arturbosch.detekt.formatting.wrappers.TrailingComma
+import io.gitlab.arturbosch.detekt.formatting.wrappers.TrailingCommaOnCallSite
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-private const val ALLOW_TRAILING_COMMA = "allowTrailingComma"
-private const val ALLOW_TRAILING_COMMA_ON_CALL_SITE = "allowTrailingCommaOnCallSite"
-
 /**
  * Some test cases were used directly from KtLint to verify the wrapper rule:
  *
- * https://github.com/pinterest/ktlint/blob/master/ktlint-ruleset-experimental/src/test/kotlin/com/pinterest/ktlint/ruleset/experimental/TrailingCommaRuleTest.kt
+ * https://github.com/pinterest/ktlint/blob/master/ktlint-ruleset-standard/src/test/kotlin/com/pinterest/ktlint/ruleset/standard/TrailingCommaOnCallSiteRuleTest.kt
  */
-class TrailingCommaSpec {
+class TrailingCommaOnCallSiteSpec {
 
     @Nested
-    inner class `unnecessary comma` {
+    inner class Unnecessary {
 
         @Test
         fun `reports unnecessary comma on function call`() {
             val code = """
                 val foo1 = listOf("a", "b",)
             """.trimIndent()
-            val findings = TrailingComma(TestConfig(mapOf(ALLOW_TRAILING_COMMA to false))).lint(code)
+            val findings = TrailingCommaOnCallSite(TestConfig(mapOf(ALLOW_TRAILING_COMMA to false))).lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -33,7 +30,7 @@ class TrailingCommaSpec {
             val code = """
                 val foo2 = Pair(1, 2,)
             """.trimIndent()
-            val findings = TrailingComma(TestConfig(mapOf(ALLOW_TRAILING_COMMA to false))).lint(code)
+            val findings = TrailingCommaOnCallSite(TestConfig(mapOf(ALLOW_TRAILING_COMMA to false))).lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -42,7 +39,7 @@ class TrailingCommaSpec {
             val code = """
                 val foo3: List<String,> = emptyList()
             """.trimIndent()
-            val findings = TrailingComma(TestConfig(mapOf(ALLOW_TRAILING_COMMA to false))).lint(code)
+            val findings = TrailingCommaOnCallSite(TestConfig(mapOf(ALLOW_TRAILING_COMMA to false))).lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -52,7 +49,7 @@ class TrailingCommaSpec {
                 val foo4 = Array(2) { 42 }
                 val bar4 = foo4[1,]
             """.trimIndent()
-            val findings = TrailingComma(TestConfig(mapOf(ALLOW_TRAILING_COMMA to false))).lint(code)
+            val findings = TrailingCommaOnCallSite(TestConfig(mapOf(ALLOW_TRAILING_COMMA to false))).lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -62,25 +59,13 @@ class TrailingCommaSpec {
                 @Foo5([1, 2,])
                 val foo5: Int = 0
             """.trimIndent()
-            val findings = TrailingComma(TestConfig(mapOf(ALLOW_TRAILING_COMMA to false))).lint(code)
+            val findings = TrailingCommaOnCallSite(TestConfig(mapOf(ALLOW_TRAILING_COMMA to false))).lint(code)
             assertThat(findings).hasSize(1)
         }
     }
 
     @Nested
-    inner class `missing comma` {
-
-        @Test
-        fun `reports missing comma on field definition`() {
-            val code = """
-                data class Foo1(val bar: Int)
-                data class Foo2(
-                   val bar: Int
-                )
-            """.trimIndent()
-            val findings = TrailingComma(TestConfig(mapOf(ALLOW_TRAILING_COMMA to true))).lint(code)
-            assertThat(findings).hasSize(1)
-        }
+    inner class MissingComma {
 
         @Test
         fun `reports missing comma on function call`() {
@@ -91,7 +76,7 @@ class TrailingCommaSpec {
                     "b"
                 )
             """.trimIndent()
-            val findings = TrailingComma(TestConfig(mapOf(ALLOW_TRAILING_COMMA_ON_CALL_SITE to true))).lint(code)
+            val findings = TrailingCommaOnCallSite(TestConfig(mapOf(ALLOW_TRAILING_COMMA to true))).lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -104,8 +89,12 @@ class TrailingCommaSpec {
                     2
                 )
             """.trimIndent()
-            val findings = TrailingComma(TestConfig(mapOf(ALLOW_TRAILING_COMMA_ON_CALL_SITE to true))).lint(code)
+            val findings = TrailingCommaOnCallSite(TestConfig(mapOf(ALLOW_TRAILING_COMMA to true))).lint(code)
             assertThat(findings).hasSize(1)
         }
+    }
+
+    private companion object {
+        private const val ALLOW_TRAILING_COMMA = "allowTrailingComma"
     }
 }

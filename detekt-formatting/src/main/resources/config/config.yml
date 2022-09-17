@@ -179,11 +179,14 @@ formatting:
   StringTemplate:
     active: true
     autoCorrect: true
-  TrailingComma:
+  TrailingCommaOnCallSite:
     active: false
     autoCorrect: true
     allowTrailingComma: false
-    allowTrailingCommaOnCallSite: false
+  TrailingCommaOnDeclarationSite:
+    active: false
+    autoCorrect: true
+    allowTrailingComma: false
   TypeArgumentListSpacing:
     active: false
     autoCorrect: true

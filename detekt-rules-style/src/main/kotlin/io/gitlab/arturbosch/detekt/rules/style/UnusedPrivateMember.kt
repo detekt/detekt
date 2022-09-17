@@ -130,7 +130,9 @@ private class UnusedFunctionVisitor(
                                 listOf(KtTokens.IN_KEYWORD, KtTokens.NOT_IN).flatMap {
                                     functionReferences[it.value].orEmpty()
                                 }
-                            } else emptyList()
+                            } else {
+                                emptyList()
+                            }
                             directReferences + assignmentReferences + containingReferences
                         } else {
                             emptyList()

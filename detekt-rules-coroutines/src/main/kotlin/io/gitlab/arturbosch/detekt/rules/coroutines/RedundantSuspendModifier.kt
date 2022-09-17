@@ -83,8 +83,11 @@ class RedundantSuspendModifier(config: Config) : Rule(config) {
             is KtOperationReferenceExpression, is KtForExpression, is KtProperty, is KtNameReferenceExpression -> true
             else -> {
                 val parent = parent
-                if (parent is KtCallExpression && parent.calleeExpression == this) true
-                else this is KtCallExpression && this.calleeExpression is KtCallExpression
+                if (parent is KtCallExpression && parent.calleeExpression == this) {
+                    true
+                } else {
+                    this is KtCallExpression && this.calleeExpression is KtCallExpression
+                }
             }
         }
     }
@@ -117,8 +120,9 @@ class RedundantSuspendModifier(config: Config) : Rule(config) {
             }
             else -> {
                 val resolvedCall = getResolvedCall(bindingContext)
-                if ((resolvedCall?.resultingDescriptor as? FunctionDescriptor)?.isSuspend == true) true
-                else {
+                if ((resolvedCall?.resultingDescriptor as? FunctionDescriptor)?.isSuspend == true) {
+                    true
+                } else {
                     val propertyDescriptor = resolvedCall?.resultingDescriptor as? PropertyDescriptor
                     val s = propertyDescriptor?.fqNameSafe?.asString()
                     s?.startsWith("kotlin.coroutines.") == true && s.endsWith(".coroutineContext")

@@ -58,7 +58,9 @@ class UnusedUnaryOperator(config: Config = Config.empty) : Rule(config) {
         if (expression.node.leaves(forward = false)
             .takeWhile { it is PsiWhiteSpace || it is PsiComment }
             .none { it is PsiWhiteSpace && it.textContains('\n') }
-        ) return
+        ) {
+            return
+        }
 
         val parentOrSelf = expression.parentBinaryExpressionOrThis()
         if (parentOrSelf.isUsedAsExpression(bindingContext)) return

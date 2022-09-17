@@ -96,7 +96,11 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 
     private fun KtExpression.asPostFixExpression() = if (this is KtPostfixExpression &&
         (operationToken === PLUSPLUS || operationToken === MINUSMINUS)
-    ) this else null
+    ) {
+        this
+    } else {
+        null
+    }
 
     private fun checkPostfixExpression(postfixExpression: KtPostfixExpression, leftIdentifierText: String?) {
         if (leftIdentifierText == postfixExpression.firstChild?.text) {
