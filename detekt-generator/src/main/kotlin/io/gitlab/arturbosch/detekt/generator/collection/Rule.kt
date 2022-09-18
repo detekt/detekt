@@ -14,7 +14,7 @@ data class Rule(
     val autoCorrect: Boolean = false,
     var inMultiRule: String? = null,
     val requiresTypeResolution: Boolean = false,
-    val deprecated: String? = null
+    val deprecationMessage: String? = null
 ) {
     fun isDeprecated() = deprecated != null
 }
