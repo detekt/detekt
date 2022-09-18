@@ -14,6 +14,7 @@ private const val MAX_LINE_LENGTH = "maxLineLength"
 private const val EXCLUDE_PACKAGE_STATEMENTS = "excludePackageStatements"
 private const val EXCLUDE_IMPORT_STATEMENTS = "excludeImportStatements"
 private const val EXCLUDE_COMMENT_STATEMENTS = "excludeCommentStatements"
+private const val EXCLUDE_RAW_STRINGS = "excludeRawStrings"
 
 class MaxLineLengthSpec {
 
@@ -23,7 +24,11 @@ class MaxLineLengthSpec {
 
         @Test
         fun `should report no errors when maxLineLength is set to 200`() {
-            val rule = MaxLineLength(TestConfig(mapOf(MAX_LINE_LENGTH to "200")))
+            val rule = MaxLineLength(
+                TestConfig(
+                    MAX_LINE_LENGTH to "200",
+                )
+            )
 
             rule.visitKtFile(file)
             assertThat(rule.findings).isEmpty()
@@ -39,7 +44,11 @@ class MaxLineLengthSpec {
 
         @Test
         fun `should report all errors with default maxLineLength including raw strings`() {
-            val rule = MaxLineLength(TestConfig("excludeRawStrings" to false))
+            val rule = MaxLineLength(
+                TestConfig(
+                    EXCLUDE_RAW_STRINGS to false,
+                )
+            )
 
             rule.visitKtFile(file)
             assertThat(rule.findings).hasSize(7)
@@ -85,9 +94,7 @@ class MaxLineLengthSpec {
         fun `should not report the package statement and import statements by default`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    mapOf(
-                        MAX_LINE_LENGTH to "60"
-                    )
+                    MAX_LINE_LENGTH to "60",
                 )
             )
 
@@ -99,11 +106,9 @@ class MaxLineLengthSpec {
         fun `should report the package statement and import statements if they're enabled`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    mapOf(
-                        MAX_LINE_LENGTH to "60",
-                        EXCLUDE_PACKAGE_STATEMENTS to "false",
-                        EXCLUDE_IMPORT_STATEMENTS to "false"
-                    )
+                    MAX_LINE_LENGTH to "60",
+                    EXCLUDE_PACKAGE_STATEMENTS to "false",
+                    EXCLUDE_IMPORT_STATEMENTS to "false",
                 )
             )
 
@@ -133,7 +138,9 @@ class MaxLineLengthSpec {
         @Test
         fun `should report the package statement, import statements, line and comments by default`() {
             val rule = MaxLineLength(
-                TestConfig(MAX_LINE_LENGTH to "60")
+                TestConfig(
+                    MAX_LINE_LENGTH to "60",
+                )
             )
 
             rule.visitKtFile(file)
@@ -159,10 +166,8 @@ class MaxLineLengthSpec {
         fun `should not report comments if they're disabled`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    mapOf(
-                        MAX_LINE_LENGTH to "60",
-                        EXCLUDE_COMMENT_STATEMENTS to "true"
-                    )
+                    MAX_LINE_LENGTH to "60",
+                    EXCLUDE_COMMENT_STATEMENTS to "true",
                 )
             )
 
@@ -188,7 +193,9 @@ class MaxLineLengthSpec {
         @Test
         fun `should only the function line by default`() {
             val rule = MaxLineLength(
-                TestConfig(MAX_LINE_LENGTH to "60")
+                TestConfig(
+                    MAX_LINE_LENGTH to "60",
+                )
             )
 
             rule.visitKtFile(file)
