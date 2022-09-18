@@ -143,6 +143,21 @@ class EndOfSentenceFormatSpec {
     }
 
     @Test
+    fun `reports invalid KDoc even when it looks like it contains html tags`() {
+        val code = """
+        /**
+         * < is the less-than sign --
+         * ```
+         * <code>this contains HTML, but doesn't start with a tag</code>
+         * ```
+         */
+        class Test {
+        }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
+
+    @Test
     fun `does not report KDoc ending with periods`() {
         val code = """
         /**
