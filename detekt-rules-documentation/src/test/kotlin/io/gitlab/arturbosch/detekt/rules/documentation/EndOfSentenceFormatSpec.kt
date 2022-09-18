@@ -1,10 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class EndOfSentenceFormatSpec {
+
     val subject = EndOfSentenceFormat()
 
     @Test
@@ -201,5 +203,52 @@ class EndOfSentenceFormatSpec {
         }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Nested
+    inner class `highlights whole element` {
+
+        @Test
+        fun function() {
+            val code = """
+                /**
+                 * This sentence is correct invalid
+                 *
+                 * This sentence doesn't matter */
+                fun test() = 3
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+                .hasStartSourceLocation(1, 1)
+                .hasEndSourceLocation(5, 15)
+        }
+
+        @Test
+        fun property() {
+            val code = """
+                class Test {
+                    /** This sentence is correct invalid
+                        This sentence doesn't matter */
+                    val test = 3
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+                .hasStartSourceLocation(2, 5)
+                .hasEndSourceLocation(4, 17)
+        }
+
+        @Test
+        fun `class`() {
+            val code = """
+                /**
+                 * This sentence is correct invalid
+                 *
+                 * This sentence doesn't matter
+                 */
+                class Test
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+                .hasStartSourceLocation(1, 1)
+                .hasEndSourceLocation(6, 11)
+        }
     }
 }
