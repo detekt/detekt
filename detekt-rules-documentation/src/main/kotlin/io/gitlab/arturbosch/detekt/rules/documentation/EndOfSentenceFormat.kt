@@ -29,7 +29,7 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
     @Configuration("regular expression which should match the end of the first sentence in the KDoc")
     private val endOfSentenceFormat: Regex by config("""([.?!][ \t\n\r\f<])|([.?!:]$)""") { it.toRegex() }
 
-    private val htmlTag = Regex("<.+>")
+    private val htmlTag = Regex("^<.+>")
 
     override fun visitDeclaration(dcl: KtDeclaration) {
         super.visitDeclaration(dcl)
