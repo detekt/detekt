@@ -1,10 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class EndOfSentenceFormatSpec {
+
     val subject = EndOfSentenceFormat()
 
     @Test
@@ -201,5 +203,52 @@ class EndOfSentenceFormatSpec {
         }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Nested
+    inner class `highlights only the relevant part of the comment - #5310` {
+
+        @Test
+        fun function() {
+            val code = """
+                /**
+                 * This sentence is correct invalid
+                 *
+                 * This sentence counts too, because it doesn't know where the other ends */
+                fun test() = 3
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+                .hasStartSourceLocation(2, 2)
+                .hasEndSourceLocation(4, 75)
+        }
+
+        @Test
+        fun property() {
+            val code = """
+                class Test {
+                    /** This sentence is correct invalid
+                        This sentence counts too, because it doesn't know where the other ends */
+                    val test = 3
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+                .hasStartSourceLocation(2, 8)
+                .hasEndSourceLocation(3, 80)
+        }
+
+        @Test
+        fun `class`() {
+            val code = """
+                /**
+                 * This sentence is correct invalid
+                 *
+                 * This sentence counts too, because it doesn't know where the other ends
+                 */
+                class Test
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+                .hasStartSourceLocation(2, 2)
+                .hasEndSourceLocation(4, 74)
+        }
     }
 }

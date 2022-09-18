@@ -42,7 +42,7 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
                 report(
                     CodeSmell(
                         issue,
-                        Entity.from(dcl),
+                        Entity.from(it.getDefaultSection()),
                         "The first sentence of this KDoc does not end with the correct punctuation."
                     )
                 )
