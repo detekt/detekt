@@ -112,7 +112,7 @@ internal fun createRules(): List<Rule> {
         debt = "5m",
         aliases = null,
         parent = "",
-        deprecated = "is deprecated"
+        deprecationMessage = "is deprecated"
     )
     return listOf(rule1, rule2, rule3, rule4)
 }

@@ -68,7 +68,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
  */
 @ActiveByDefault(since = "1.2.0")
 @RequiresTypeResolution
-@Deprecated("Compiler performs this check by default")
+@Deprecated("Rule deprecated as compiler performs this check by default")
 class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(

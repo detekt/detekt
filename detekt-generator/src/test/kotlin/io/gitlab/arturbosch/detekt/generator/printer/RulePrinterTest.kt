@@ -18,7 +18,6 @@ internal class RulePrinterTest {
         debt = "10min",
         aliases = "alias1, alias2",
         parent = "",
-        deprecated = "deprecated",
     )
 
     @Test

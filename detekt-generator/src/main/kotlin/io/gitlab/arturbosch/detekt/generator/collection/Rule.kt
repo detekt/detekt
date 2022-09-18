@@ -16,5 +16,5 @@ data class Rule(
     val requiresTypeResolution: Boolean = false,
     val deprecationMessage: String? = null
 ) {
-    fun isDeprecated() = deprecated != null
+    fun isDeprecated() = deprecationMessage != null
 }

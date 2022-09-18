@@ -31,5 +31,5 @@ private fun writeProperty(ruleSet: RuleSetPage, rule: Rule, configuration: Confi
 
 private fun writeRuleProperty(ruleSet: RuleSetPage, rule: Rule): String {
     @Suppress("UnsafeCallOnNullableType")
-    return "${ruleSet.ruleSet.name}>${rule.name}=${rule.deprecated!!}"
+    return "${ruleSet.ruleSet.name}>${rule.name}=${rule.deprecationMessage!!}"
 }

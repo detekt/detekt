@@ -56,7 +56,7 @@ internal class RuleVisitor : DetektVisitor() {
             parent = parent,
             configuration = configurationByAnnotation,
             autoCorrect = autoCorrect,
-            deprecated = deprecationMessage,
+            deprecationMessage = deprecationMessage,
             requiresTypeResolution = requiresTypeResolution
         )
     }
