@@ -206,7 +206,7 @@ class EndOfSentenceFormatSpec {
     }
 
     @Nested
-    inner class `highlights whole element` {
+    inner class `highlights only the relevant part of the comment - #5310` {
 
         @Test
         fun function() {
@@ -214,12 +214,12 @@ class EndOfSentenceFormatSpec {
                 /**
                  * This sentence is correct invalid
                  *
-                 * This sentence doesn't matter */
+                 * This sentence counts too, because it doesn't know where the other ends */
                 fun test() = 3
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
-                .hasStartSourceLocation(1, 1)
-                .hasEndSourceLocation(5, 15)
+                .hasStartSourceLocation(2, 2)
+                .hasEndSourceLocation(4, 75)
         }
 
         @Test
@@ -227,13 +227,13 @@ class EndOfSentenceFormatSpec {
             val code = """
                 class Test {
                     /** This sentence is correct invalid
-                        This sentence doesn't matter */
+                        This sentence counts too, because it doesn't know where the other ends */
                     val test = 3
                 }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
-                .hasStartSourceLocation(2, 5)
-                .hasEndSourceLocation(4, 17)
+                .hasStartSourceLocation(2, 8)
+                .hasEndSourceLocation(3, 80)
         }
 
         @Test
@@ -242,13 +242,13 @@ class EndOfSentenceFormatSpec {
                 /**
                  * This sentence is correct invalid
                  *
-                 * This sentence doesn't matter
+                 * This sentence counts too, because it doesn't know where the other ends
                  */
                 class Test
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
-                .hasStartSourceLocation(1, 1)
-                .hasEndSourceLocation(6, 11)
+                .hasStartSourceLocation(2, 2)
+                .hasEndSourceLocation(4, 74)
         }
     }
 }
