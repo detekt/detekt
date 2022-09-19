@@ -103,7 +103,7 @@ keywords: [changelog, release-notes, migration]
 - Remove explicit RequiresOptIn compiler flag - [#5098](https://github.com/detekt/detekt/pull/5098)
 - Use Gradle's configuration cache by default - [#5095](https://github.com/detekt/detekt/pull/5095)
 - Detect undocumented protected classes, properties, and functions - [#5083](https://github.com/detekt/detekt/pull/5083)
-- ReturnCount.excludedFunctions should be a List<String> - [#5081](https://github.com/detekt/detekt/pull/5081)
+- ReturnCount.excludedFunctions should be a List&lt;String&gt; - [#5081](https://github.com/detekt/detekt/pull/5081)
 - Make ForbiddenMethodCall to support property getters/setters and method references - [#5078](https://github.com/detekt/detekt/pull/5078)
 - Refactor Gradle tasks to use Gradle's managed properties - [#4966](https://github.com/detekt/detekt/pull/4966)
 - `IgnoredReturnValue`: add option `returnValueTypes` to enable rule for particular types - [#4922](https://github.com/detekt/detekt/pull/4922)
