@@ -13,6 +13,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "potential-bugs"
 
+    @Suppress("DEPRECATION")
     override fun instance(config: Config): RuleSet = RuleSet(
         ruleSetId,
         listOf(
