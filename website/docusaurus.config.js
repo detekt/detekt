@@ -109,6 +109,11 @@ const config = {
             label: 'API',
           },
           {
+            to: "/marketplace",
+            label: "Marketplace",
+            position: "left",
+          },
+          {
             type: "docsVersionDropdown",
             position: "right",
             dropdownActiveClassDisabled: true,
