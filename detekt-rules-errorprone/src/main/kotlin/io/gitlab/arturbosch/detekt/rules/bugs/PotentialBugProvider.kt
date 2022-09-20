@@ -20,7 +20,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             Deprecation(config),
             DontDowncastCollectionTypes(config),
             DoubleMutabilityForCollection(config),
-            DuplicateCaseInWhenExpression(config),
+            @Suppress("DEPRECATION") DuplicateCaseInWhenExpression(config),
             @Suppress("DEPRECATION") ElseCaseInsteadOfExhaustiveWhen(config),
             EqualsAlwaysReturnsTrueOrFalse(config),
             EqualsWithHashCodeExist(config),
