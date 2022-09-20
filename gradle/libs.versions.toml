@@ -3,7 +3,7 @@ dokka = "1.7.10"
 jacoco = "0.8.8"
 kotlin = "1.7.10"
 ktlint = "0.46.1"
-junit = "5.9.0"
+junit = "5.9.1"
 contester = "0.2.0"
 
 [libraries]
