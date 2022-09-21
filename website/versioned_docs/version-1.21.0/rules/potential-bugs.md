@@ -156,8 +156,6 @@ var myMap = mapOf("answer" to 42)
 
 ### DuplicateCaseInWhenExpression
 
-**Deprecated**: The rule is deprecated as compiler performs this check by default.
-
 Flags duplicate `case` statements in `when` expressions.
 
 If a `when` expression contains the same `case` statement multiple times they should be merged. Otherwise, it might be
@@ -187,8 +185,6 @@ when (i) {
 ```
 
 ### ElseCaseInsteadOfExhaustiveWhen
-
-**Deprecated**: The rule is deprecated as compiler performs this check by default.
 
 This rule reports `when` expressions that contain an `else` case even though they have an exhaustive set of cases.
 
@@ -667,8 +663,6 @@ Reports when the package declaration is missing.
 
 ### MissingWhenCase
 
-**Deprecated**: The rule is deprecated as compiler performs this check by default.
-
 Turn on this rule to flag `when` expressions that do not check that all cases are covered when the subject is an enum
 or sealed class and the `when` expression is used as a statement.
 
@@ -800,8 +794,6 @@ fun bar(a: Any?): String {
 ```
 
 ### RedundantElseInWhen
-
-**Deprecated**: The rule is deprecated as compiler performs this check by default.
 
 Turn on this rule to flag `when` expressions that contain a redundant `else` case. This occurs when it can be
 verified that all cases are already covered when checking cases on an enum or sealed class.

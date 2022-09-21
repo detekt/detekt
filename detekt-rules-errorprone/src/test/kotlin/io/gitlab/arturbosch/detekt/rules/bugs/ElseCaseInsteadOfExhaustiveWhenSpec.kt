@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment) {
-    private val subject = @Suppress("DEPRECATION") ElseCaseInsteadOfExhaustiveWhen()
+    private val subject = ElseCaseInsteadOfExhaustiveWhen()
 
     @Nested
     inner class Enum {

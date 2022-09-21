@@ -50,7 +50,6 @@ import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
  * </compliant>
  */
 @RequiresTypeResolution
-@Deprecated("Rule deprecated as compiler performs this check by default")
 class ElseCaseInsteadOfExhaustiveWhen(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(

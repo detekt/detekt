@@ -76,7 +76,9 @@ fun stuff(): Unit {}
 fun stuff() {}
 ```
 
-### DuplicateCaseInWhenExpression
+### ~~DuplicateCaseInWhenExpression~~
+
+is deprecated
 
 Duplicated `case` statements in a `when` expression detected.
 
