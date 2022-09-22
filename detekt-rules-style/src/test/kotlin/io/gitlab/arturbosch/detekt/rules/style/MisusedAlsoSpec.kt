@@ -11,7 +11,12 @@ class MisusedAlsoSpec {
     @Test
     fun `does not report when no also is used`() {
         val code = """
-            inline fun foo(block: Buzz.() -> Unit): Buzz =
+            class Buzz {
+                fun init() {}
+                fun block() {}
+            }
+            
+            fun foo(block: Buzz.() -> Unit): Buzz =
                 Buzz().let {
                   init()
                   block()
