@@ -26,7 +26,7 @@ project.afterEvaluate {
         draft.set(true)
         targetCommitish.set("main")
         body {
-            var changelog = project.file("website/docs/introduction/changelog.md").readText()
+            var changelog = project.file("website/src/pages/changelog.md").readText()
             val nextNonBetaVersion = project.version.toString()
             val sectionStart = "#### $nextNonBetaVersion"
             changelog = changelog.substring(changelog.indexOf(sectionStart))
