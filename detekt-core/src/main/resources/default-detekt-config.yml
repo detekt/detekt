@@ -608,6 +608,8 @@ style:
     excludeRawStrings: true
   MayBeConst:
     active: true
+  MisusedAlso:
+    active: false
   ModifierOrder:
     active: true
   MultilineLambdaItParameter:
