@@ -34,7 +34,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Run detekt-cli with argsfile
-        uses: gradle/gradle-build-action@356abb47e7664b5505e25d7997a5a522a17c62d9 # tag=v2
+        uses: gradle/gradle-build-action@c295a4096e1d2c453eaf1f65c6f96686e26bd8be # tag=v2
         with:
           arguments: :detekt-cli:runWithArgsFile
 
@@ -58,6 +58,6 @@ jobs:
         java-version: 17
         distribution: 'temurin'
     - name: Run analysis
-      uses: gradle/gradle-build-action@356abb47e7664b5505e25d7997a5a522a17c62d9 # tag=v2
+      uses: gradle/gradle-build-action@c295a4096e1d2c453eaf1f65c6f96686e26bd8be # tag=v2
       with:
         arguments: detektMain detektTest
