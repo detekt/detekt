@@ -11,16 +11,16 @@ class MisusedAlsoSpec {
     @Test
     fun `does not report when no also is used`() {
         val code = """
-            class Buzz {
-                fun init() {}
-                fun block() {}
-            }
-            
-            fun foo(block: Buzz.() -> Unit): Buzz =
-                Buzz().let {
-                  init()
-                  block()
+            class Test {
+                private var a = 5
+                
+                init {
+                    a.let { 
+                        it.plus(5)
+                        it.minus(10)
+                    }
                 }
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
