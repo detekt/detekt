@@ -37,6 +37,7 @@ keywords: [changelog, release-notes, migration]
   - `ArrayPrimitive` is now working only with Type Resolution - [#5175](https://github.com/detekt/detekt/pull/5175)
   - `WildcardImport` is now running also on tests by default - [#5121](https://github.com/detekt/detekt/pull/5121)
   - `ForbiddenImport` allows now to specify a reason for every forbidden import - [#4909](https://github.com/detekt/detekt/pull/4909)
+  - `IgnoredReturnValue`: option `restrictToAnnotatedMethods` is now deprecated in favor of `restrictToConfig` - [#4922](https://github.com/detekt/detekt/pull/4922)
 - This version of Detekt is built with Gradle `v7.5.1`, AGP `7.3.0` and Kotlin `1.7.10` (see [#4821](https://github.com/detekt/detekt/pull/4821) [#5189](https://github.com/detekt/detekt/pull/5189) [#5306](https://github.com/detekt/detekt/pull/5306))
 - The minimum supported Gradle version is now `v6.7.1` - [#4964](https://github.com/detekt/detekt/pull/4964)
 
@@ -106,7 +107,6 @@ keywords: [changelog, release-notes, migration]
 - ReturnCount.excludedFunctions should be a List&lt;String&gt; - [#5081](https://github.com/detekt/detekt/pull/5081)
 - Make ForbiddenMethodCall to support property getters/setters and method references - [#5078](https://github.com/detekt/detekt/pull/5078)
 - Refactor Gradle tasks to use Gradle's managed properties - [#4966](https://github.com/detekt/detekt/pull/4966)
-- `IgnoredReturnValue`: add option `returnValueTypes` to enable rule for particular types - [#4922](https://github.com/detekt/detekt/pull/4922)
 - Add option to add a reason to `ForbiddenMethodCall` - [#4910](https://github.com/detekt/detekt/pull/4910)
 - UnnecessaryParentheses: add options to allow in ambiguous cases - [#4881](https://github.com/detekt/detekt/pull/4881)
 
