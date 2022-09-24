@@ -26,6 +26,7 @@ val cliOptionsFile = "${rootProject.rootDir}/website/docs/gettingstarted/_cli-op
 val defaultConfigFile = "$configDir/default-detekt-config.yml"
 val deprecationFile = "$configDir/deprecation.properties"
 val formattingConfigFile = "${rootProject.rootDir}/detekt-formatting/src/main/resources/config/config.yml"
+val librariesConfigFile = "${rootProject.rootDir}/detekt-rules-libraries/src/main/resources/config/config.yml"
 val ruleauthorsConfigFile = "${rootProject.rootDir}/detekt-rules-ruleauthors/src/main/resources/config/config.yml"
 
 val ruleModules = rootProject.subprojects
@@ -41,6 +42,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
 
     inputs.files(
         ruleModules.map { fileTree(it) },
+        fileTree("${rootProject.rootDir}/detekt-rules-libraries/src/main/kotlin"),
         fileTree("${rootProject.rootDir}/detekt-rules-ruleauthors/src/main/kotlin"),
         fileTree("${rootProject.rootDir}/detekt-formatting/src/main/kotlin"),
         file("${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-${Versions.DETEKT}-all.jar"),
@@ -50,6 +52,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         fileTree(documentationDir),
         file(defaultConfigFile),
         file(formattingConfigFile),
+        file(librariesConfigFile),
         file(ruleauthorsConfigFile),
         file(deprecationFile),
         file(cliOptionsFile),
@@ -64,6 +67,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     args = listOf(
         "--input",
         ruleModules
+            .plus("${rootProject.rootDir}/detekt-rules-libraries/src/main/kotlin")
             .plus("${rootProject.rootDir}/detekt-rules-ruleauthors/src/main/kotlin")
             .plus("${rootProject.rootDir}/detekt-formatting/src/main/kotlin")
             .joinToString(","),

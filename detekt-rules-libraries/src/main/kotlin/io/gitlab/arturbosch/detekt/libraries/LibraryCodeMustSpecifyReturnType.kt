@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules.style
+package io.gitlab.arturbosch.detekt.libraries
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config

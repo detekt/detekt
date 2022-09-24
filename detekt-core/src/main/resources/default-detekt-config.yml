@@ -547,12 +547,6 @@ style:
         value: 'kotlin.io.print'
       - reason: 'println does not allow you to configure the output stream. Use a logger instead.'
         value: 'kotlin.io.println'
-  ForbiddenPublicDataClass:
-    active: true
-    excludes: ['**']
-    ignorePackages:
-      - '*.internal'
-      - '*.internal.*'
   ForbiddenSuppress:
     active: false
     rules: []
@@ -565,12 +559,6 @@ style:
     ignoreOverridableFunction: true
     ignoreActualFunction: true
     excludedFunctions: []
-  LibraryCodeMustSpecifyReturnType:
-    active: true
-    excludes: ['**']
-  LibraryEntitiesShouldNotBePublic:
-    active: true
-    excludes: ['**']
   LoopWithTooManyJumpStatements:
     active: true
     maxJumpCount: 1
