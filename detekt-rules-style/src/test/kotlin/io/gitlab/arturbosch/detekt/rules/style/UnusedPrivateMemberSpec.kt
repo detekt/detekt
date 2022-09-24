@@ -1606,7 +1606,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    inner class `highlights declaration name` {
+    inner class `highlights declaration name - #4916` {
         @Test
         fun function() {
             val code = """

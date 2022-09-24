@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -274,7 +273,6 @@ class DetektAndroidSpec {
 
         @Test
         @DisplayName("task :android_lib:detektMain")
-        @Disabled("https://github.com/detekt/detekt/issues/5150")
         fun libDetektMain() {
             gradleRunner.runTasksAndCheckResult(
                 "--configuration-cache",
@@ -289,6 +287,31 @@ class DetektAndroidSpec {
                 assertThat(buildResult.tasks.map { it.path }).containsAll(
                     listOf(
                         ":android_lib:detektMain",
+                    )
+                )
+            }
+        }
+
+        @Test
+        @DisplayName("task :android_lib:detektTest")
+        fun libDetektTest() {
+            gradleRunner.runTasksAndCheckResult(
+                "--configuration-cache",
+                ":android_lib:detektTest",
+            ) { buildResult ->
+                assertThat(buildResult.output).contains("Configuration cache")
+                assertThat(buildResult.output).containsPattern(
+                    """--baseline \S*[/\\]detekt-baseline-debugUnitTest.xml """
+                )
+                assertThat(buildResult.output).containsPattern(
+                    """--baseline \S*[/\\]detekt-baseline-debugAndroidTest.xml """
+                )
+                assertThat(buildResult.output).contains("--report xml:")
+                assertThat(buildResult.output).contains("--report sarif:")
+                assertThat(buildResult.output).doesNotContain("--report txt:")
+                assertThat(buildResult.tasks.map { it.path }).containsAll(
+                    listOf(
+                        ":android_lib:detektTest",
                     )
                 )
             }

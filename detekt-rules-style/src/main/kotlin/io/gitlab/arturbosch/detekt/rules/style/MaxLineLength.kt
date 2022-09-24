@@ -45,7 +45,7 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
     @Configuration("if comment statements should be ignored")
     private val excludeCommentStatements: Boolean by config(false)
 
-    @Configuration("if comment statements should be ignored")
+    @Configuration("if raw strings should be ignored")
     private val excludeRawStrings: Boolean by config(true)
 
     override fun visitKtFile(file: KtFile) {

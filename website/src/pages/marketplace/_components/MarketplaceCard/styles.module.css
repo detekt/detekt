@@ -1,0 +1,38 @@
+.marketplaceCardHeader {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.marketplaceCardTitle {
+    margin-bottom: 0;
+    flex: 1 1 auto;
+}
+
+.marketplaceCardButton {
+    margin-bottom: 0;
+    flex: 1 1 auto;
+}
+
+.marketplaceCardTitle a {
+    text-decoration: none;
+    background: linear-gradient(var(--ifm-color-primary),
+            var(--ifm-color-primary)) 0% 100% / 0% 1px no-repeat;
+    transition: background-size ease-out 200ms;
+}
+
+.marketplaceCardTitle a:not(:focus):hover {
+    background-size: 100% 1px;
+}
+
+.marketplaceCardBody {
+    font-size: smaller;
+    line-height: 1.66;
+}
+
+.tagContainer {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+}
