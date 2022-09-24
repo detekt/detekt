@@ -9,11 +9,16 @@ folder: documentation
 This rule set provides wrappers for rules implemented by ktlint - https://ktlint.github.io/.
 
 Note: Issues reported by this rule set can only be suppressed on file level (`@file:Suppress("detekt.rule")`).
-Note: The formatting rule set is not included in the detekt-cli or gradle plugin.
+Note: The formatting rule set is not included by default in the detekt-cli or gradle plugin.
 
 To enable this rule set, add `detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$version"`
 to your gradle dependencies or reference the `detekt-formatting`-jar with the `--plugins` option
 in the command line interface.
+
+See the [config.yml](https://github.com/detekt/detekt/blob/main/detekt-formatting/src/main/resources/config/config.yml)
+file for all `detekt-formatting` configuration options and their default values.
+
+To enable\disable rule add `formatting:` section (from the above config file) to your custom detekt config file.
 
 ### AnnotationOnSeparateLine
 
