@@ -13,6 +13,7 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -297,6 +298,21 @@ class RunnerSpec {
         @Test
         fun `does not fail when cli flag is positive`() {
             executeDetekt("--input", inputPath.toString(), "--max-issues", "2")
+        }
+    }
+
+    @Test
+    fun `regression - rule property, changed from comma separated string to list, throws on wrapped configs`() {
+        assertDoesNotThrow {
+            executeDetekt(
+                "--all-rules", // wrapped config
+                "--input",
+                inputPath.toString(),
+                "--config-resource",
+                "configs/return-count-with-string-property.yml",
+                "--max-issues",
+                "-1"
+            )
         }
     }
 }

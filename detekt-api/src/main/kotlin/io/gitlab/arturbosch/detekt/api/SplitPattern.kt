@@ -57,7 +57,7 @@ open class SplitPattern(
 }
 
 /**
- * Splits given String into a sequence of strings splited by the provided delimiters ("," by default).
+ * Splits given String into a sequence of strings split by the provided delimiters ("," by default).
  *
  * It also trims the strings and removes the empty ones
  */
