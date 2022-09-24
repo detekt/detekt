@@ -10,47 +10,76 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.MaximumLineLength
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoWildcardImports
 import io.gitlab.arturbosch.detekt.formatting.wrappers.PackageName
 import io.gitlab.arturbosch.detekt.test.assertThat
-import org.junit.jupiter.api.DynamicTest
-import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.api.Test
 
 class RulesWhichCantBeCorrectedSpec {
 
-    @TestFactory
-    fun `verify findings of these rules are not correctable`(): Iterable<DynamicTest> {
-        val commonCode = """
-            package under_score
-            import xyz.wrong_order
-            /*comment in between*/
-            import java.io.*
-            class NotTheFilename
-            class MaximumLeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeth
-            enum class Enum {
-                violation_triggering_name
-            } 
-        """.trimIndent()
+    @Test
+    fun `Filename findings can't be corrected`() {
+        assertThat(Filename(Config.empty).lint("class NotTheFilename"))
+            .isNotEmpty
+            .hasExactlyElementsOfTypes(CodeSmell::class.java)
+    }
 
+    @Test
+    fun `PackageName findings can't be corrected`() {
+        assertThat(PackageName(Config.empty).lint("package under_score"))
+            .isNotEmpty
+            .hasExactlyElementsOfTypes(CodeSmell::class.java)
+    }
+
+    @Test
+    fun `ImportOrdering has a case with comments which is not correctable`() {
+        assertThat(
+            ImportOrdering(Config.empty).lint(
+                """
+                    import xyz.wrong_order
+                    /*comment in between*/
+                    import java.io.*
+                """.trimIndent()
+            )
+        ).isNotEmpty
+            .hasExactlyElementsOfTypes(CodeSmell::class.java)
+    }
+
+    @Test
+    fun `NoWildcardImports can't be corrected`() {
+        assertThat(NoWildcardImports(Config.empty).lint("import java.io.*"))
+            .isNotEmpty
+            .hasExactlyElementsOfTypes(CodeSmell::class.java)
+    }
+
+    @Test
+    fun `MaximumLineLength can't be corrected`() {
+        assertThat(
+            MaximumLineLength(Config.empty).lint(
+                """
+                    class MaximumLeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeth
+                """.trimIndent()
+            )
+        ).isNotEmpty
+            .hasExactlyElementsOfTypes(CodeSmell::class.java)
+    }
+
+    @Test
+    fun `EnumEntryNameCase can't be corrected`() {
+        assertThat(EnumEntryNameCase(Config.empty).lint("enum class Enum { violation_triggering_name }"))
+            .isNotEmpty
+            .hasExactlyElementsOfTypes(CodeSmell::class.java)
+    }
+
+    @Test
+    fun `Indentation finding inside string templates can't be corrected`() {
         val multilineQuote = "${'"'}${'"'}${'"'}"
-        val indentationCode = """
-                val foo = $multilineQuote
-                      line1
-                ${'\t'}line2
-                    $multilineQuote.trimIndent()
+        val code = """
+            val foo = $multilineQuote
+                  line1
+            ${'\t'}line2
+                $multilineQuote.trimIndent()
         """.trimIndent()
 
-        return listOf(
-            Filename(Config.empty) to commonCode,
-            PackageName(Config.empty) to commonCode,
-            NoWildcardImports(Config.empty) to commonCode,
-            MaximumLineLength(Config.empty) to commonCode,
-            EnumEntryNameCase(Config.empty) to commonCode,
-            ImportOrdering(Config.empty) to commonCode,
-            Indentation(Config.empty) to indentationCode,
-        ).map { (rule, code) ->
-            DynamicTest.dynamicTest("${rule.ruleId} should not return correctable code smell") {
-                assertThat(rule.lint(code, "non_pascal_case.kt"))
-                    .isNotEmpty
-                    .hasExactlyElementsOfTypes(CodeSmell::class.java)
-            }
-        }
+        assertThat(Indentation(Config.empty).lint(code))
+            .isNotEmpty
+            .hasExactlyElementsOfTypes(CodeSmell::class.java)
     }
 }
