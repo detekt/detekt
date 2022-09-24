@@ -17,7 +17,7 @@ class TrailingCommaOnDeclarationSite(config: Config) : FormattingRule(config) {
     override val wrapping = TrailingCommaOnDeclarationSiteRule()
     override val issue = issueFor("Rule to mandate/forbid trailing commas")
 
-    @Configuration("Defines whether a trailing comma (or no trailing comma) should be enforced on the declaration side")
+    @Configuration("Defines whether a trailing comma (or no trailing comma) should be enforced at declaration sites")
     private val allowTrailingComma by config(false)
 
     override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
