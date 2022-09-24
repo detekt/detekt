@@ -11,17 +11,18 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/) for documentation.
  */
-@AutoCorrectable(since = "1.23.0")
+@AutoCorrectable(since = "1.22.0")
 class TrailingCommaOnDeclarationSite(config: Config) : FormattingRule(config) {
 
     override val wrapping = TrailingCommaOnDeclarationSiteRule()
     override val issue = issueFor("Rule to mandate/forbid trailing commas at declaration sites")
 
     @Configuration("Defines whether a trailing comma (or no trailing comma) should be enforced at declaration sites")
-    private val allowTrailingComma by config(false)
+    private val useTrailingCommaOnDeclarationSite by config(false)
 
     override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
         mapOf(
-            TrailingCommaOnDeclarationSiteRule.allowTrailingCommaProperty to allowTrailingComma.toString(),
+            TrailingCommaOnDeclarationSiteRule.allowTrailingCommaProperty to
+                useTrailingCommaOnDeclarationSite.toString(),
         )
 }

@@ -182,11 +182,11 @@ formatting:
   TrailingCommaOnCallSite:
     active: false
     autoCorrect: true
-    allowTrailingComma: false
+    useTrailingCommaOnCallSite: false
   TrailingCommaOnDeclarationSite:
     active: false
     autoCorrect: true
-    allowTrailingComma: false
+    useTrailingCommaOnDeclarationSite: false
   TypeArgumentListSpacing:
     active: false
     autoCorrect: true
