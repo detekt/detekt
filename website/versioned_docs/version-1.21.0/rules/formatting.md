@@ -18,7 +18,7 @@ in the command line interface.
 See the [config.yml](https://github.com/detekt/detekt/blob/main/detekt-formatting/src/main/resources/config/config.yml)
 file for all `detekt-formatting` configuration options and their default values.
 
-To enable\disable rule add `formatting:` section (from the above config file) to your custom detekt config file.
+To enable\disable a rule add the `formatting:` section (from the above config file) to your custom detekt config file.
 
 ### AnnotationOnSeparateLine
 
