@@ -28,6 +28,8 @@ class Indentation(config: Config) : FormattingRule(config) {
     @Suppress("UnusedPrivateMember")
     private val continuationIndentSize by config(4)
 
+    override fun canBeCorrectedByKtLint(message: String): Boolean = "not contain both tab(s) and space(s)" !in message
+
     override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
         mapOf(
             DefaultEditorConfigProperties.indentSizeProperty to indentSize.toString(),
