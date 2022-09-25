@@ -1,0 +1,4 @@
+style:
+  ReturnCount:
+    active: true
+    excludedFunctions: 'test'
