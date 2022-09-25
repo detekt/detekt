@@ -102,7 +102,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
                 report(
                     CodeSmell(
                         issue,
-                        Entity.from(klass),
+                        Entity.from(klass.nameIdentifier ?: klass),
                         "The class ${klass.nameAsSafeName} defines no " +
                             "functionality and only holds data. Consider converting it to a data class."
                     )
