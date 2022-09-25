@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class LabeledExpressionSpec {
@@ -34,7 +34,11 @@ class LabeledExpressionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+
+        val findings = subject.compileAndLint(code)
+
+        assertThat(findings).hasSize(1)
+        assertThat(findings).hasStartSourceLocation(3, 28)
     }
 
     @Test
