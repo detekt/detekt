@@ -302,10 +302,10 @@ class RunnerSpec {
     }
 
     @Test
-    fun `regression - rule property, changed from comma separated string to list, throws on wrapped configs`() {
+    fun `does not fail on rule property type change from comma separated string to list when YamlConfig is wrapped`() {
         assertDoesNotThrow {
             executeDetekt(
-                "--all-rules", // wrapped config
+                "--all-rules", // wrapping config
                 "--input",
                 inputPath.toString(),
                 "--config-resource",
