@@ -1,12 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.descriptors.impl.referencedProperty
 import org.jetbrains.kotlin.name.FqName
@@ -42,8 +45,45 @@ class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
     // Does not work with functions without block body
 
     override val issue = Issue(
-        "FeatureEnvy", Severity.Maintainability, "Feature Envy Description.", Debt(hours = 1)
+        id = "FeatureEnvy",
+        severity = Severity.Maintainability,
+        description = "Feature Envy Description.",
+        debt = Debt.TWENTY_MINS
     )
+
+    /*
+    TODO: Offenen Fragen:
+
+    RuleVisitor.kt getArgument
+    Macht faxen, wenn man eigene Debts definiert:
+    if (text.startsWith(name, true) && type.size == 2) {
+    type.size ist nicht == 2, weil
+    val type = text.split('.')
+    Hier gibts aber nichts zu splitten -> type.size ist immer 1
+
+     Float Configuration Values scheinen nicht möglich zu sein, wieso?
+
+Exception in thread "main" java.lang.IllegalStateException: 0.33f is neither a literal nor a constant
+	at io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector$DefaultValueSupport.toDefaultValue(ConfigurationCollector.kt:144)
+	at io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector$DefaultValueSupport.getDefaultValue(ConfigurationCollector.kt:123)
+	at io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.toConfiguration(ConfigurationCollector.kt:99)
+	at io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.parseConfigurationAnnotation(ConfigurationCollector.kt:80)
+	at io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.getConfiguration(ConfigurationCollector.kt:41)
+	at io.gitlab.arturbosch.detekt.generator.collection.RuleVisitor.getRule(RuleVisitor.kt:44)
+	at io.gitlab.arturbosch.detekt.generator.collection.RuleCollector.visit(RuleCollector.kt:13)
+	at io.gitlab.arturbosch.detekt.generator.collection.DetektCollector.visit(DetektCollector.kt:60)
+	at io.gitlab.arturbosch.detekt.generator.Generator.execute(Generator.kt:33)
+	at io.gitlab.arturbosch.detekt.generator.Main.main(Main.kt:28)
+
+     */
+
+
+    @Configuration("LAA")
+    private val localityOfDataAccessThreshold: Float by config(defaultValue = 0.33f)
+    @Configuration("ATFD")
+    private val atfdThreshold: Int by config(defaultValue = 2)
+    @Configuration("FDP")
+    private val fdpThreshold: Int by config(defaultValue = 2)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (bindingContext == BindingContext.EMPTY) {
@@ -67,18 +107,27 @@ class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
             }.eachCount().values.sum()
 
         // if there is not ATFD, there can't be feature envy
-        if(numOfForeignDataAccesses == 0) return
+        if (numOfForeignDataAccesses == 0) return
 
         val numOfLocalDataAccesses = getFqNameToNumOfUsagesOfLocalDataInFunction(function).values.sum()
 
         val localityOfAttributeAccess = numOfLocalDataAccesses / numOfForeignDataAccesses.toFloat()
 
-        if (numOfForeignDataAccesses > 2 &&
-            localityOfAttributeAccess < 1f / 3f &&
-            foreignDataProviderCount <= 2
+        if (numOfForeignDataAccesses > atfdThreshold &&
+            localityOfAttributeAccess < localityOfDataAccessThreshold &&
+            foreignDataProviderCount <= fdpThreshold
         ) {
             report(
-                CodeSmell(issue, Entity.from(function), issue.description)
+                ThresholdedCodeSmell(
+                    issue,
+                    Entity.from(function),
+                    Metric(
+                        "Locality of Data access",
+                        localityOfDataAccessThreshold.toDouble(),
+                        localityOfDataAccessThreshold.toDouble()
+                    ),
+                    issue.description
+                )
             )
         }
     }
@@ -145,3 +194,85 @@ class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
         } ?: emptyMap()
     }
 }
+
+/*
+@file:Suppress
+package io.gitlab.arturbosch.detekt.rules.complexity
+
+const val BLA = "lala"
+
+data class B(val b: Int = 18, val bb: Int = 100) {
+
+    val test: Int? = null
+
+    fun lala() {}
+}
+
+object LSÖFDK {
+    val test = 10
+    fun lalalalala(){}
+}
+
+class Test(
+    val param: Int,
+    param2: Int
+) {
+    val a = 5
+
+    fun test(b: B) {
+        val temp = 5
+
+        b.lala()
+
+        b.apply {
+            this.b.plus(bb)
+            bb.plus(a)
+        }
+
+        println(b.b)
+        println(BLA)
+    }
+}
+
+data class ContactInfo(
+    val city: String,
+    val postalCode: String,
+    val street: String,
+    val number: String
+)
+
+class User(val contactInfo: ContactInfo) {
+
+    fun prettyPrintAddress() {
+        val prettyAddress = buildString {
+            append(contactInfo.postalCode)
+            append(" ")
+            append(contactInfo.city)
+            append("\n")
+            append(contactInfo.street)
+            append(" ")
+            append(contactInfo.number)
+        }
+        println(prettyAddress)
+    }
+
+}
+
+data class Rectangle(val width: Int, val height: Int)
+
+class RectangleUsageSite(val rectangle: Rectangle) {
+    fun printArea() {
+        val area = rectangle.width * rectangle.height
+        println("The area is: \${'$'}{area}")
+    }
+}
+
+data class Cube(val width: Int, val length: Int, val height: Int)
+
+class CubeUsageSite(val cube: Cube) {
+    fun printVolume() {
+        val volume = cube.width * cube.length * cube.height
+        println("The volume is: \${volume}")
+    }
+}
+ */

@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.assertj.core.api.Assertions
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
@@ -39,7 +39,7 @@ class FeatureEnvySpec(private val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
 
-        Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -55,7 +55,7 @@ class FeatureEnvySpec(private val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
 
-        Assertions.assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -71,6 +71,6 @@ class FeatureEnvySpec(private val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
 
-        Assertions.assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 }
