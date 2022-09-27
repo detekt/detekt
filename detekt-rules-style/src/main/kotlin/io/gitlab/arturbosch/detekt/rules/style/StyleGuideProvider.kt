@@ -104,7 +104,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseAnyOrNoneInsteadOfFind(config),
             UnnecessaryBackticks(config),
             MaxChainedCallsOnSameLine(config),
-            MisusedAlso(config)
+            AlsoCouldBeApply(config),
         )
     )
 }

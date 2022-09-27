@@ -31,12 +31,17 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  *   init()
  *   block()
  * }
+ *
+ * // Also compliant
+ * fun foo(a: Int): Int {
+ *   return a.also { println(it) }
+ * }
  * </compliant>
  */
-class MisusedAlso(config: Config = Config.empty) : Rule(config) {
+class AlsoCouldBeApply(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "MisusedAlso",
+        "AlsoCouldBeApply",
         Severity.Style,
         "When an `also` block contains only `it`-started expressions, simplify it to the `apply` block.",
         Debt.FIVE_MINS
