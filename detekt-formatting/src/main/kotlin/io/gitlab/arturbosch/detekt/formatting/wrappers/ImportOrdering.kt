@@ -24,6 +24,8 @@ class ImportOrdering(config: Config) : FormattingRule(config) {
     @Configuration("the import ordering layout")
     private val layout: String by configWithAndroidVariants(IDEA_PATTERN, ASCII_PATTERN)
 
+    override fun canBeCorrectedByKtLint(message: String): Boolean = "no autocorrection" !in message
+
     override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
         mapOf(ImportOrderingRule.ideaImportsLayoutProperty to layout)
 

@@ -47,6 +47,6 @@ class CastToNullableType(config: Config = Config.empty) : Rule(config) {
 
         val message = "Use the safe cast ('as? ${nullableTypeElement.innerType?.text}')" +
             " instead of 'as ${nullableTypeElement.text}'."
-        report(CodeSmell(issue, Entity.from(expression), message))
+        report(CodeSmell(issue, Entity.from(operationReference), message))
     }
 }
