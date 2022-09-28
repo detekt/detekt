@@ -22,7 +22,7 @@ class AlsoCouldBeApplySpec {
     }
 
     @Test
-    fun `reports an also in init of class`() {
+    fun `reports an also where only it is used in block`() {
         val code = """
             fun f(a: Int) {
                 a.also { 
@@ -31,6 +31,23 @@ class AlsoCouldBeApplySpec {
             }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
+
+    @Test
+    fun `report is focused on also keyword`() {
+        val code = """
+            fun f(a: Int) {
+                a.also { 
+                    it.plus(5)
+                }
+            }
+        """.trimIndent()
+
+        val findings = subject.compileAndLint(code)
+
+        assertThat(findings).hasSize(1)
+        assertThat(findings).hasStartSourceLocation(2, 7)
+        assertThat(findings).hasEndSourceLocation(2, 11)
     }
 
     @Test
