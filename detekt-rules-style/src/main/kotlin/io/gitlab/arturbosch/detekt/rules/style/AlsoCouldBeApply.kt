@@ -58,8 +58,10 @@ class AlsoCouldBeApply(config: Config = Config.empty) : Rule(config) {
                 dotQualifiedsInLambda.isNotEmpty() &&
                 dotQualifiedsInLambda.all { it.receiverExpression.textMatches(IT_LITERAL) }
             ) {
-                report(CodeSmell(issue, Entity.from(expression), issue.description))
+                report(CodeSmell(issue, Entity.from(expression.calleeExpression!!), issue.description))
             }
+
+            super.visitCallExpression(expression)
         } else {
             super.visitCallExpression(expression)
         }

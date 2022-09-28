@@ -81,4 +81,24 @@ class AlsoCouldBeApplySpec {
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
+
+    @Test
+    fun `does report if it is on one line separated by semicolon`() {
+        val code = """
+            fun f(a: Int) {
+                a.also { it.plus(5); it.minus(10) }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
+
+    @Test
+    fun `detect violation in also nested in also`() {
+        val code = """
+            fun f(a: Int) {
+                a.also { x -> x.also { it.foo() } }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
 }
