@@ -1,7 +1,7 @@
 [versions]
 dokka = "1.7.10"
 jacoco = "0.8.8"
-kotlin = "1.7.10"
+kotlin = "1.7.20"
 ktlint = "0.47.1"
 junit = "5.9.1"
 contester = "0.2.0"
@@ -36,8 +36,8 @@ junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "jun
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.0.1"
 assertj = "org.assertj:assertj-core:3.23.1"
 reflections = "org.reflections:reflections:0.10.2"
-mockk = "io.mockk:mockk:1.13.1"
-snakeyaml = "org.yaml:snakeyaml:1.32"
+mockk = "io.mockk:mockk:1.13.2"
+snakeyaml = "org.yaml:snakeyaml:1.33"
 jcommander = "com.beust:jcommander:1.82"
 contester-breakpoint = { module = "io.github.davidburstrom.contester:contester-breakpoint", version.ref = "contester" }
 contester-driver = { module = "io.github.davidburstrom.contester:contester-driver", version.ref = "contester" }
