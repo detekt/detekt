@@ -113,7 +113,7 @@ class AlsoCouldBeApplySpec {
     fun `detect violation in also nested in also`() {
         val code = """
             fun f(a: Int) {
-                a.also { x -> x.also { it.foo() } }
+                a.also { x -> x.also { it.plus(10) } }
             }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)

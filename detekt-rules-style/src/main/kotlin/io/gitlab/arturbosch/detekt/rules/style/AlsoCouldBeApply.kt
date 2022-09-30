@@ -49,6 +49,8 @@ class AlsoCouldBeApply(config: Config = Config.empty) : Rule(config) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         if (expression.calleeExpression?.text == "also") {
+            val alsoExpression = expression.calleeExpression ?: return
+
             val lambda = expression.lambdaArguments.singleOrNull() ?: expression.valueArguments.single()
                 .collectDescendantsOfType<KtLambdaExpression>()
                 .single()
@@ -58,7 +60,7 @@ class AlsoCouldBeApply(config: Config = Config.empty) : Rule(config) {
                 dotQualifiedsInLambda.isNotEmpty() &&
                 dotQualifiedsInLambda.all { it.receiverExpression.textMatches(IT_LITERAL) }
             ) {
-                report(CodeSmell(issue, Entity.from(expression.calleeExpression!!), issue.description))
+                report(CodeSmell(issue, Entity.from(alsoExpression), issue.description))
             }
 
             super.visitCallExpression(expression)
