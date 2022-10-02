@@ -10,7 +10,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/stale@99b6c709598e2b0d0841cd037aaf1ba07a4410bd # tag=v5
+      - uses: actions/stale@3de2653986ebd134983c79fe2be5d45cc3d9f4e1 # tag=v6
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           days-before-stale: 90
