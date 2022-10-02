@@ -1,8 +1,9 @@
 #!/usr/bin/env sh
-gradle publishToMavenLocal || exit
-gradle build || exit
-gradle publishAllToMavenCentral --max-workers 1 || exit
-gradle :detekt-gradle-plugin:publishPlugins || exit
-gradle githubRelease || exit
-gradle applyDocVersion || exit
-gradle closeAndReleaseRepository || exit
+set -e
+gradle publishToMavenLocal
+gradle build
+gradle publishAllToMavenCentral --max-workers 1
+gradle :detekt-gradle-plugin:publishPlugins
+gradle githubRelease
+gradle applyDocVersion
+gradle closeAndReleaseRepository
