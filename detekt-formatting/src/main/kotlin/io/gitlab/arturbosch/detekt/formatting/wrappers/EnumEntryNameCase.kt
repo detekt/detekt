@@ -15,4 +15,6 @@ class EnumEntryNameCase(config: Config) : FormattingRule(config) {
 
     override val wrapping = EnumEntryNameCaseRule()
     override val issue = issueFor("Reports enum entries with names that don't meet standard conventions.")
+
+    override fun canBeCorrectedByKtLint(message: String): Boolean = false
 }

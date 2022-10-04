@@ -153,11 +153,16 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
     inner class `does report data class candidates` {
 
         @Test
-        fun `does report a data class candidate`() {
+        fun `does report a data class candidate on the class name`() {
             val code = """
                 class DataClassCandidate1(val i: Int)
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+
+            val findings = subject.compileAndLint(code)
+
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasStartSourceLocation(1, 7)
+            assertThat(findings).hasEndSourceLocation(1, 26)
         }
 
         @Test

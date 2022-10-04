@@ -27,6 +27,7 @@ fun createProcessingSettings(
             inputPaths = listOfNotNull(inputPath)
         }
         logging {
+            debug = true
             this.outputChannel = outputChannel
             errorChannel = NullPrintStream()
         }
