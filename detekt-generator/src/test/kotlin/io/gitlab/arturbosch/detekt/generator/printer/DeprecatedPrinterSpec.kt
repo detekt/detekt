@@ -13,8 +13,7 @@ class DeprecatedPrinterSpec {
             style>MagicNumber>conf2=use conf1 instead
             style>MagicNumber>conf4=use conf3 instead
             style>DuplicateCaseInWhenExpression=is deprecated
-
-        """.trimIndent()
+        """.trimIndent() + "\n${writeMigratedRules()}\n"
         assertThat(markdownString).isEqualTo(expectedMarkdownString)
     }
 }
