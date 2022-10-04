@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.generator.printer
 import io.github.detekt.utils.MarkdownContent
 import io.github.detekt.utils.bold
 import io.github.detekt.utils.codeBlock
+import io.github.detekt.utils.crossOut
 import io.github.detekt.utils.h3
 import io.github.detekt.utils.h4
 import io.github.detekt.utils.markdown
@@ -14,7 +15,12 @@ internal object RulePrinter : DocumentationPrinter<Rule> {
 
     override fun print(item: Rule): String {
         return markdown {
-            h3 { item.name }
+            if (item.isDeprecated()) {
+                h3 { crossOut { item.name } }
+                paragraph { escapeHtml(item.deprecationMessage.orEmpty()) }
+            } else {
+                h3 { item.name }
+            }
 
             if (item.description.isNotEmpty()) {
                 paragraph { escapeHtml(item.description) }
