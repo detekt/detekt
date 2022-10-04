@@ -39,6 +39,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             @Suppress("DEPRECATION") RedundantElseInWhen(config),
             UnconditionalJumpStatementInLoop(config),
             UnnecessaryNotNullOperator(config),
+            UnnecessaryNotNullCheck(config),
             UnnecessarySafeCall(config),
             UnreachableCode(config),
             UnsafeCallOnNullableType(config),
