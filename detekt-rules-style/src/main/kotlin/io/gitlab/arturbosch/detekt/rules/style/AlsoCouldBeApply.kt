@@ -48,6 +48,8 @@ class AlsoCouldBeApply(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitCallExpression(expression: KtCallExpression) {
+        super.visitCallExpression(expression)
+
         if (expression.calleeExpression?.text == "also") {
             val alsoExpression = expression.calleeExpression ?: return
 
@@ -62,10 +64,6 @@ class AlsoCouldBeApply(config: Config = Config.empty) : Rule(config) {
             ) {
                 report(CodeSmell(issue, Entity.from(alsoExpression), issue.description))
             }
-
-            super.visitCallExpression(expression)
-        } else {
-            super.visitCallExpression(expression)
         }
     }
 }
