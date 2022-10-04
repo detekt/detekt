@@ -10,6 +10,9 @@ object DeprecatedPrinter : DocumentationPrinter<List<RuleSetPage>> {
         val builder = StringBuilder()
         item.forEach { ruleSet ->
             ruleSet.rules.forEach { rule ->
+                if (rule.isDeprecated()) {
+                    builder.appendLine(writeRuleProperty(ruleSet, rule))
+                }
                 rule.configuration.forEach { configuration ->
                     if (configuration.isDeprecated()) {
                         builder.appendLine(writeProperty(ruleSet, rule, configuration))
@@ -24,4 +27,9 @@ object DeprecatedPrinter : DocumentationPrinter<List<RuleSetPage>> {
 private fun writeProperty(ruleSet: RuleSetPage, rule: Rule, configuration: Configuration): String {
     @Suppress("UnsafeCallOnNullableType")
     return "${ruleSet.ruleSet.name}>${rule.name}>${configuration.name}=${configuration.deprecated!!}"
+}
+
+private fun writeRuleProperty(ruleSet: RuleSetPage, rule: Rule): String {
+    @Suppress("UnsafeCallOnNullableType")
+    return "${ruleSet.ruleSet.name}>${rule.name}=${rule.deprecationMessage!!}"
 }

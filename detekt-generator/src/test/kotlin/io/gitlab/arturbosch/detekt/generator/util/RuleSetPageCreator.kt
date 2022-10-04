@@ -102,5 +102,17 @@ internal fun createRules(): List<Rule> {
         autoCorrect = true,
         requiresTypeResolution = true
     )
-    return listOf(rule1, rule2, rule3)
+    val rule4 = Rule(
+        name = "DuplicateCaseInWhenExpression",
+        description = "Duplicated `case` statements in a `when` expression detected.",
+        nonCompliantCodeExample = "fun stuff(): Unit {}",
+        compliantCodeExample = "fun stuff() {}",
+        defaultActivationStatus = Active(since = "1.16.0"),
+        severity = "",
+        debt = "5m",
+        aliases = null,
+        parent = "",
+        deprecationMessage = "is deprecated"
+    )
+    return listOf(rule1, rule2, rule3, rule4)
 }

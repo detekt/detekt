@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class DuplicateCaseInWhenExpressionSpec {
-    private val subject = DuplicateCaseInWhenExpression(Config.empty)
+    private val subject = @Suppress("DEPRECATION") DuplicateCaseInWhenExpression(Config.empty)
 
     @Test
     fun `reports duplicated label in when`() {
