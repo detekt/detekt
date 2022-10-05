@@ -8,10 +8,9 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
+import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
-import org.jetbrains.kotlin.psi.KtLambdaExpression
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
 
 /**
  * Detects when an `also` block contains only `it`-started expressions.
@@ -47,23 +46,17 @@ class AlsoCouldBeApply(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        if (expression.calleeExpression?.text == "also") {
-            val alsoExpression = expression.calleeExpression ?: return
-
-            val lambda = expression.lambdaArguments.singleOrNull() ?: expression.valueArguments.single()
-                .collectDescendantsOfType<KtLambdaExpression>()
-                .single()
-            val dotQualifiedsInLambda = lambda.collectDescendantsOfType<KtDotQualifiedExpression>()
-
-            if (
-                dotQualifiedsInLambda.isNotEmpty() &&
-                dotQualifiedsInLambda.all { it.receiverExpression.textMatches(IT_LITERAL) }
-            ) {
-                report(CodeSmell(issue, Entity.from(alsoExpression), issue.description))
-            }
+        val callee = expression.calleeExpression?.takeIf { it.text == "also" } ?: return
+        val lambda = expression.lambdaArguments.singleOrNull()?.getLambdaExpression()
+            ?: expression.valueArguments.singleOrNull()?.getArgumentExpression()?.safeAs()
+            ?: return
+        val statements = lambda.bodyExpression?.statements.orEmpty().ifEmpty { return }
+        if (statements.all { it.safeAs<KtQualifiedExpression>()?.receiverExpression?.text == IT_LITERAL }) {
+            report(CodeSmell(issue, Entity.from(callee), issue.description))
         }
     }
 }
