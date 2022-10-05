@@ -118,4 +118,36 @@ class AlsoCouldBeApplySpec {
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
+
+    @Test
+    fun `does not report when all statements are not 'it'-started expressions`() {
+        val code = """
+            fun test(foo: Foo) {
+                foo.also {
+                    it.bar()
+                    println(it)
+                    it.baz()
+                }
+            }
+
+            class Foo {
+                fun bar() {}
+                fun baz() {}
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report when no statements`() {
+        val code = """
+            fun test(foo: Foo) {
+                foo.also {
+                }
+            }
+
+            class Foo
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
 }
