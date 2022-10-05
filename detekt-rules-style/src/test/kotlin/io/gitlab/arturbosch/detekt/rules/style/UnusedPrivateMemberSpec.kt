@@ -1648,4 +1648,35 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(6, 9)
         }
     }
+
+    @Nested
+    inner class `parameter with the same name as a named argument #5373` {
+        @Test
+        fun `unused parameter`() {
+            val code = """
+                fun foo(modifier: Int) {
+                    bar(modifier = 1)
+                }
+                
+                fun bar(modifier: Int) {
+                    println(modifier)
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1).hasStartSourceLocation(1, 9)
+        }
+
+        @Test
+        fun `used parameter`() {
+            val code = """
+                fun foo(modifier: Int) {
+                    bar(modifier = modifier)
+                }
+                
+                fun bar(modifier: Int) {
+                    println(modifier)
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+    }
 }
