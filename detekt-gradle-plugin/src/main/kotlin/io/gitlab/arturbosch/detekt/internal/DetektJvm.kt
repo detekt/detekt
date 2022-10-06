@@ -9,18 +9,15 @@ import org.gradle.api.file.FileCollection
 import org.jetbrains.kotlin.gradle.dsl.KotlinCommonOptions
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.targets
 
 internal class DetektJvm(private val project: Project) {
     fun registerTasks(extension: DetektExtension) {
-        project.extensions.getByType(KotlinJvmProjectExtension::class.java).targets.forEach { target ->
-            target.compilations.all { compilation ->
-                val inputSource = compilation.kotlinSourceSets
-                    .map { it.kotlin.sourceDirectories }
-                    .fold(project.files() as FileCollection) { collection, next -> collection.plus(next) }
-                project.registerJvmDetektTask(compilation, extension, inputSource)
-                project.registerJvmCreateBaselineTask(compilation, extension, inputSource)
-            }
+        project.extensions.getByType(KotlinJvmProjectExtension::class.java).target.compilations.all { compilation ->
+            val inputSource = compilation.kotlinSourceSets
+                .map { it.kotlin.sourceDirectories }
+                .fold(project.files() as FileCollection) { collection, next -> collection.plus(next) }
+            project.registerJvmDetektTask(compilation, extension, inputSource)
+            project.registerJvmCreateBaselineTask(compilation, extension, inputSource)
         }
     }
 
