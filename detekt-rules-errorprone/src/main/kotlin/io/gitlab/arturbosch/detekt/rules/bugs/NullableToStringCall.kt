@@ -21,7 +21,6 @@ import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.types.isFlexible
@@ -87,7 +86,6 @@ class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtExpression.isNullable(): Boolean {
-        if (bindingContext == BindingContext.EMPTY) return false
         val compilerResources = compilerResources ?: return false
 
         val safeAccessOperation = safeAs<KtSafeQualifiedExpression>()?.operationTokenNode?.safeAs<PsiElement>()

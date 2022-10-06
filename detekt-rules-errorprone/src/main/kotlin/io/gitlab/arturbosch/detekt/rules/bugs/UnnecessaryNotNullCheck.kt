@@ -12,7 +12,6 @@ import io.gitlab.arturbosch.detekt.rules.getDataFlowAwareTypes
 import io.gitlab.arturbosch.detekt.rules.isCalling
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.isNullable
 
 /**
@@ -42,7 +41,6 @@ class UnnecessaryNotNullCheck(config: Config = Config.empty) : Rule(config) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        if (bindingContext == BindingContext.EMPTY) return
         val compilerResources = compilerResources ?: return
 
         val callee = expression.calleeExpression ?: return
