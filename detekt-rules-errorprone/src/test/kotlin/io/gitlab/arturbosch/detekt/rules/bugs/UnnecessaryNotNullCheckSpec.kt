@@ -77,6 +77,32 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(16 to 58)
         }
+
+        @Test
+        fun shouldDetectAfterNullCheck() {
+            val code = """
+                fun foo(x: Int?) {
+                    if (x != null) {
+                        requireNotNull(x)
+                    }
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun shouldDetectAfterTypeCheck() {
+            val code = """
+                fun bar(x: Any?) {
+                    if (x is String) {
+                        requireNotNull(x)
+                    }
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
     }
 
     @Nested

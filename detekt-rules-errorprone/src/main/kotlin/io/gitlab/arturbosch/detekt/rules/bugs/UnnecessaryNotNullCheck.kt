@@ -8,15 +8,12 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.getDataFlowAwareTypes
 import io.gitlab.arturbosch.detekt.rules.isCalling
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getType
-import org.jetbrains.kotlin.types.typeUtil.TypeNullability
-import org.jetbrains.kotlin.types.typeUtil.nullability
+import org.jetbrains.kotlin.types.isNullable
 
 /**
  * Reports unnecessary not-null checks with `requireNotNull` or `checkNotNull` that can be removed by the user.
@@ -41,30 +38,38 @@ class UnnecessaryNotNullCheck(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS,
     )
 
+    @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
         if (bindingContext == BindingContext.EMPTY) return
+        val compilerResources = compilerResources ?: return
 
-        if (expression.isCalling(requireNotNullFunctionFqName, bindingContext) ||
-            expression.isCalling(checkNotNullFunctionFqName, bindingContext)
-        ) {
-            val argument = expression.valueArguments[0].lastChild as KtExpression
-            if (argument.getType(bindingContext)?.nullability() == TypeNullability.NOT_NULL) {
-                val callName = expression.getCallNameExpression()?.text
-                report(
-                    CodeSmell(
-                        issue = issue,
-                        entity = Entity.from(expression),
-                        message = "Using `$callName` on non-null `${argument.text}` is unnecessary",
-                    )
-                )
-            }
-        }
+        val callee = expression.calleeExpression ?: return
+        val argument = expression.valueArguments.firstOrNull()?.getArgumentExpression() ?: return
+
+        if (!expression.isCalling(notNullCheckFunctionFqNames, bindingContext)) return
+
+        val dataFlowAwareTypes = argument.getDataFlowAwareTypes(
+            bindingContext,
+            compilerResources.languageVersionSettings,
+            compilerResources.dataFlowValueFactory
+        )
+        if (dataFlowAwareTypes.all { it.isNullable() }) return
+
+        report(
+            CodeSmell(
+                issue = issue,
+                entity = Entity.from(expression),
+                message = "Using `${callee.text}` on non-null `${argument.text}` is unnecessary",
+            )
+        )
     }
 
     companion object {
-        private val requireNotNullFunctionFqName = FqName("kotlin.requireNotNull")
-        private val checkNotNullFunctionFqName = FqName("kotlin.checkNotNull")
+        private val notNullCheckFunctionFqNames = listOf(
+            FqName("kotlin.requireNotNull"),
+            FqName("kotlin.checkNotNull"),
+        )
     }
 }
