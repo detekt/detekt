@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 
 class DuplicateCaseInWhenExpressionSpec {
 
+    @Suppress("DEPRECATION")
     private val subject = DuplicateCaseInWhenExpression(Config.empty)
 
     @Test

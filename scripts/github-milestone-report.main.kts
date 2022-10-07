@@ -9,7 +9,7 @@
 
 // for the exec line
 @file:Suppress("detekt.CommentSpacing")
-@file:DependsOn("org.kohsuke:github-api:1.308")
+@file:DependsOn("org.kohsuke:github-api:1.313")
 @file:DependsOn("com.github.ajalt:clikt:2.8.0")
 
 import com.github.ajalt.clikt.core.CliktCommand

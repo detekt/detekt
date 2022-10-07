@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
 
+    @Suppress("DEPRECATION")
     private val subject = RedundantElseInWhen()
 
     @Nested

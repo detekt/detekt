@@ -7,6 +7,6 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "danger": "11.1.2"
+    "danger": "11.1.4"
   }
 }

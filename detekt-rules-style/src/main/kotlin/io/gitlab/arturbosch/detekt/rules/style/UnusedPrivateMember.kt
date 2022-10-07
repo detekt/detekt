@@ -39,6 +39,7 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPropertyDelegate
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
+import org.jetbrains.kotlin.psi.KtValueArgumentName
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
@@ -260,7 +261,9 @@ private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(
             }
 
             override fun visitReferenceExpression(expression: KtReferenceExpression) {
-                parameters.remove(expression.text.removeSurrounding("`"))
+                if (expression.parent !is KtValueArgumentName) {
+                    parameters.remove(expression.text.removeSurrounding("`"))
+                }
                 super.visitReferenceExpression(expression)
             }
         })

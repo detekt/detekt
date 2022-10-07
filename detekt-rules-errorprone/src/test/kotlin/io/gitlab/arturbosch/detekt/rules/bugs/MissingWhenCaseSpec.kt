@@ -15,6 +15,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
     @Nested
     inner class `MissingWhenCase rule` {
 
+        @Suppress("DEPRECATION")
         private val subject = MissingWhenCase()
 
         @Nested
@@ -311,6 +312,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
     @Nested
     inner class `MissingWhenCase rule when else expression is not considered` {
 
+        @Suppress("DEPRECATION")
         private val subject = MissingWhenCase(
             TestConfig(mapOf("allowElseExpression" to false))
         )
