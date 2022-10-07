@@ -23,8 +23,8 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.getAllSuperclassesWithoutAny
 import kotlin.reflect.KClass
 
 /**
- * If a rule uses `bindingContext` should be annotated with `@RequiresTypeResolution`. And if it doesn't it shouldn't
- * be annotated with it.
+ * If a rule uses the property [BaseRule.bindingContext] should be annotated with `@RequiresTypeResolution`.
+ * And if the rule doesn't use that property it shouldn't be annotated with it.
  */
 @ActiveByDefault("1.22.0")
 @RequiresTypeResolution
@@ -32,7 +32,7 @@ class ViolateTypeResolutionRequirements(config: Config = Config.empty) : Rule(co
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Defect,
-        "`@RequiresTypeResolution` should be used if and only if `bindingContext` is used.",
+        "`@RequiresTypeResolution` should be used if and only if the property `bindingContext` is used.",
         Debt.FIVE_MINS
     )
 
