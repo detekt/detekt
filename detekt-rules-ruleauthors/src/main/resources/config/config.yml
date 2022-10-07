@@ -1,4 +1,4 @@
 ruleauthors:
   active: true
-  RequiresTypeResolution:
+  ViolateTypeResolutionRequirements:
     active: true

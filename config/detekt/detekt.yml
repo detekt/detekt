@@ -279,6 +279,6 @@ libraries:
     includes: ['**/detekt-api/src/main/**/api/*.kt']
 
 ruleauthors:
-  RequiresTypeResolution:
+  ViolateTypeResolutionRequirements:
     active: true
     excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']

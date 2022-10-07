@@ -28,7 +28,7 @@ import kotlin.reflect.KClass
  */
 @ActiveByDefault("1.22.0")
 @RequiresTypeResolution
-class RequiresTypeResolution(config: Config = Config.empty) : Rule(config) {
+class ViolateTypeResolutionRequirements(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Defect,
