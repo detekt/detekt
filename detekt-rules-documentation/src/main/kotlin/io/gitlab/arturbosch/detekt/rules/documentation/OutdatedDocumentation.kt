@@ -99,14 +99,18 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
         val constructorDeclarations = if (ctor != null) getPrimaryConstructorDeclarations(ctor) else emptyList()
         val typeParams = if (matchTypeParameters) {
             klass.typeParameters.mapNotNull { it.name.toParamOrNull() }
-        } else emptyList()
+        } else {
+            emptyList()
+        }
         return typeParams + constructorDeclarations
     }
 
     private fun getFunctionDeclarations(function: KtNamedFunction): List<Declaration> {
         val typeParams = if (matchTypeParameters) {
             function.typeParameters.mapNotNull { it.name.toParamOrNull() }
-        } else emptyList()
+        } else {
+            emptyList()
+        }
         val valueParams = function.valueParameters.mapNotNull { it.name.toParamOrNull() }
         return typeParams + valueParams
     }

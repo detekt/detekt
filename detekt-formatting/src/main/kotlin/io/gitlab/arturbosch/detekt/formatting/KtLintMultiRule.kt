@@ -57,14 +57,12 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclaration
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithComments
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenFunctionNameAndOpeningParenthesis
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplate
-import io.gitlab.arturbosch.detekt.formatting.wrappers.TrailingComma
+import io.gitlab.arturbosch.detekt.formatting.wrappers.TrailingCommaOnCallSite
+import io.gitlab.arturbosch.detekt.formatting.wrappers.TrailingCommaOnDeclarationSite
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TypeArgumentListSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TypeParameterListSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.UnnecessaryParenthesesBeforeTrailingLambda
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Wrapping
-import org.jetbrains.kotlin.com.intellij.lang.ASTNode
-import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyElement
-import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyHolder
 import org.jetbrains.kotlin.psi.KtFile
 import java.util.LinkedList
 
@@ -119,7 +117,8 @@ class KtLintMultiRule(config: Config = Config.empty) :
         SpacingBetweenDeclarationsWithAnnotations(config),
         SpacingBetweenDeclarationsWithComments(config),
         StringTemplate(config),
-        TrailingComma(config), // in standard ruleset but not enabled by default
+        TrailingCommaOnCallSite(config), // in standard ruleset but not enabled by default
+        TrailingCommaOnDeclarationSite(config), // in standard ruleset but not enabled by default
         Wrapping(config),
 
         // Wrappers for ktlint-ruleset-experimental rules. Disabled by default.
@@ -142,43 +141,23 @@ class KtLintMultiRule(config: Config = Config.empty) :
     )
 
     override fun visit(root: KtFile) {
-        val sortedRules = getSortedRules()
-        sortedRules.forEach { it.visit(root) }
-        root.node.visitTokens { node ->
-            sortedRules.forEach { it.apply(node) }
+        getSortedRules().forEach { rule ->
+            rule.visit(root)
         }
     }
 
     internal fun getSortedRules(): List<FormattingRule> {
-        val runFirstOnRoot = mutableListOf<FormattingRule>()
         val other = mutableListOf<FormattingRule>()
-        val runLastOnRoot = mutableListOf<FormattingRule>()
         val runLast = mutableListOf<FormattingRule>()
         for (rule in activeRules.filterIsInstance<FormattingRule>()) {
             when {
-                rule.runOnRootNodeOnly && rule.runAsLateAsPossible -> runLastOnRoot.add(rule)
-                rule.runOnRootNodeOnly -> runFirstOnRoot.add(rule)
                 rule.runAsLateAsPossible -> runLast.add(rule)
                 else -> other.add(rule)
             }
         }
         return LinkedList<FormattingRule>().apply {
-            addAll(runFirstOnRoot)
             addAll(other)
-            addAll(runLastOnRoot)
             addAll(runLast)
         }
-    }
-
-    private fun ASTNode.visitTokens(currentNode: (ASTNode) -> Unit) {
-        if (this.isNoFakeElement()) {
-            currentNode(this)
-        }
-        getChildren(null).forEach { it.visitTokens(currentNode) }
-    }
-
-    private fun ASTNode.isNoFakeElement(): Boolean {
-        val parent = this.psi?.parent
-        return parent !is JavaDummyHolder && parent !is JavaDummyElement
     }
 }
