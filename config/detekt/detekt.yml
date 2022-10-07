@@ -267,3 +267,13 @@ style:
   WildcardImport:
     active: true
     excludeImports: []
+
+libraries:
+  ForbiddenPublicDataClass:
+    active: false
+  LibraryEntitiesShouldNotBePublic:
+    active: false
+  LibraryCodeMustSpecifyReturnType:
+    active: true
+    excludes: ['**/*.kt']
+    includes: ['**/detekt-api/src/main/**/api/*.kt']
