@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
  * Exempt from this rule are imports resulting from references to elements within KDoc and
  * from destructuring declarations (componentN imports).
  */
+@Suppress("ViolateTypeResolutionRequirements")
 class UnusedImports(config: Config) : Rule(config) {
 
     override val issue = Issue(

@@ -44,6 +44,7 @@ import org.jetbrains.kotlin.types.typeUtil.isInterface
  * }
  * </noncompliant>
  */
+@Suppress("ViolateTypeResolutionRequirements")
 @ActiveByDefault(since = "1.2.0")
 class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 

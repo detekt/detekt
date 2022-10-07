@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 /**
  * Reports functions and constructors which have more parameters than a certain threshold.
  */
+@Suppress("ViolateTypeResolutionRequirements")
 @ActiveByDefault(since = "1.0.0")
 class LongParameterList(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(

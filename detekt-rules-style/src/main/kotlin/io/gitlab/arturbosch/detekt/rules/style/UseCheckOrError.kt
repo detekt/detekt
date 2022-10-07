@@ -37,6 +37,7 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * }
  * </compliant>
  */
+@Suppress("ViolateTypeResolutionRequirements")
 @ActiveByDefault(since = "1.21.0")
 class UseCheckOrError(config: Config = Config.empty) : Rule(config) {
 
