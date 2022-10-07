@@ -52,7 +52,7 @@ tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = Versions.JVM_TARGET
         freeCompilerArgs += listOf(
-            "-progressive",
+            "-progressive"
         )
         allWarningsAsErrors = project.findProperty("warningsAsErrors") == "true"
     }

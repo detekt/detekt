@@ -44,7 +44,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val testFile = path.resolve("Test.kt")
             val settings = createProcessingSettings(
                 inputPath = testFile,
-                config = yamlConfig("configs/config-value-type-wrong.yml"),
+                config = yamlConfig("configs/config-value-type-wrong.yml")
             ) {
                 execution {
                     parallelParsing = true
@@ -69,7 +69,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val settings = createProcessingSettings(
                 testFile,
                 yamlConfig("configs/config-value-type-correct.yml"),
-                outputChannel = output,
+                outputChannel = output
             )
             val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider()), emptyList())
 
@@ -86,7 +86,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val settings = createProcessingSettings(
                 testFile,
                 yamlConfig("configs/config-value-type-correct.yml"),
-                outputChannel = output,
+                outputChannel = output
             )
             val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider(30)), emptyList())
 
@@ -103,7 +103,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val settings = createProcessingSettings(
                 testFile,
                 yamlConfig("configs/config-value-type-correct.yml"),
-                outputChannel = output,
+                outputChannel = output
             )
             val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider(30)), emptyList())
             val ktFile = compileForTest(testFile)
@@ -120,7 +120,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val settings = createProcessingSettings(
                 testFile,
                 yamlConfig("configs/config-value-type-correct-ignore-annotated.yml"),
-                outputChannel = output,
+                outputChannel = output
             )
             val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider(18)), emptyList())
 
@@ -135,7 +135,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val settings = createProcessingSettings(
                 testFile,
                 yamlConfig("configs/config-value-type-correct.yml"),
-                outputChannel = output,
+                outputChannel = output
             )
             val analyzer = Analyzer(settings, listOf(FaultyRuleSetProvider()), emptyList())
 
@@ -152,7 +152,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val settings = createProcessingSettings(
                 testFile,
                 yamlConfig("configs/config-value-type-correct.yml"),
-                outputChannel = output,
+                outputChannel = output
             )
             val analyzer = Analyzer(settings, listOf(FaultyRuleNoStackTraceSetProvider()), emptyList())
 
@@ -170,7 +170,7 @@ private class StyleRuleSetProvider(private val threshold: Int? = null) : RuleSet
         ruleSetId,
         listOf(
             MaxLineLength(config, threshold),
-            RequiresTypeResolutionMaxLineLength(config, threshold),
+            RequiresTypeResolutionMaxLineLength(config, threshold)
         )
     )
 }

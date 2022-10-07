@@ -55,7 +55,7 @@ class TrimMultilineRawString(val config: Config) : Rule(config) {
                 CodeSmell(
                     issue,
                     Entity.from(expression),
-                    "Multiline raw strings should be followed by `trimMargin()` or `trimIndent()`",
+                    "Multiline raw strings should be followed by `trimMargin()` or `trimIndent()`"
                 )
             )
         }

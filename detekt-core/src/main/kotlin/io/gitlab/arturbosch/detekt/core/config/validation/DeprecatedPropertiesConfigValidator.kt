@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 
 internal class DeprecatedPropertiesConfigValidator(
-    private val deprecatedProperties: Map<String, String>,
+    private val deprecatedProperties: Map<String, String>
 ) : AbstractYamlConfigValidator() {
     override fun validate(
         configToValidate: YamlConfig,
@@ -33,12 +33,12 @@ internal class DeprecatedPropertiesConfigValidator(
 
     private fun createNotification(
         propertyPath: List<String>,
-        deprecationDescription: String,
+        deprecationDescription: String
     ): Notification {
         val prop = propertyPath.joinToString(">")
         return SimpleNotification(
             "Property '$prop' is deprecated. $deprecationDescription.",
-            Notification.Level.Warning,
+            Notification.Level.Warning
         )
     }
 }

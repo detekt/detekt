@@ -69,7 +69,7 @@ class FullQualifiedNameGuesserSpec {
                 .containsExactlyInAnyOrder(
                     "kotlin.jvm.JvmField",
                     "foo.kotlin.jvm.JvmField",
-                    "java.io.kotlin.jvm.JvmField",
+                    "java.io.kotlin.jvm.JvmField"
                 )
         }
     }

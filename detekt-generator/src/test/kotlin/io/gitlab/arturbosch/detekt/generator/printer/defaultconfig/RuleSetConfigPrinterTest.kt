@@ -38,7 +38,7 @@ internal class RuleSetConfigPrinterTest {
         description = "description",
         defaultValue = DefaultValue.of(1),
         defaultAndroidValue = null,
-        deprecated = null,
+        deprecated = null
     )
 
     @Nested
@@ -217,7 +217,7 @@ internal class RuleSetConfigPrinterTest {
                         valuesWithReason(
                             "a" to "reason a",
                             "b" to null,
-                            "c" to "reason c",
+                            "c" to "reason c"
                         )
                     )
                 )

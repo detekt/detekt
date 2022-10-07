@@ -23,6 +23,6 @@ class KdocWrapping(config: Config) : FormattingRule(config) {
 
     override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
         mapOf(
-            DefaultEditorConfigProperties.indentSizeProperty to indentSize.toString(),
+            DefaultEditorConfigProperties.indentSizeProperty to indentSize.toString()
         )
 }

@@ -17,7 +17,7 @@ interface DefaultConfigurationProvider {
 
         fun load(
             extensionsSpec: ExtensionsSpec,
-            classLoader: ClassLoader = DefaultConfigurationProvider::class.java.classLoader,
+            classLoader: ClassLoader = DefaultConfigurationProvider::class.java.classLoader
         ): DefaultConfigurationProvider {
             return ServiceLoader.load(DefaultConfigurationProvider::class.java, classLoader)
                 .first()

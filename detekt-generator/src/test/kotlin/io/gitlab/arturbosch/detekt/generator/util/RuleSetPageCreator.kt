@@ -73,7 +73,7 @@ internal fun createRules(): List<Rule> {
             Configuration("conf2", "deprecated config", of(false), null, "use conf1 instead"),
             Configuration("conf3", "list config", of(listOf("a", "b")), null, null),
             Configuration("conf4", "deprecated list config", of(listOf("a", "b")), null, "use conf3 instead"),
-            Configuration("conf5", "rule with android variants", of(120), of(100), null),
+            Configuration("conf5", "rule with android variants", of(120), of(100), null)
         )
     )
     val rule2 = Rule(

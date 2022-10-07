@@ -172,8 +172,8 @@ class YamlSpec {
                     "z" to "value",
                     "a" to "value",
                     "x" to "value",
-                    "b" to "value",
-                ),
+                    "b" to "value"
+                )
             )
             val result = yaml { listOfMaps("key", given) }
             val expected = """
@@ -192,8 +192,8 @@ class YamlSpec {
                 mapOf(
                     "a" to "value",
                     "b" to null,
-                    "c" to "value",
-                ),
+                    "c" to "value"
+                )
             )
             val result = yaml { listOfMaps("key", given) }
             val expected = """

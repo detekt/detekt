@@ -85,7 +85,7 @@ class NestedScopeFunctions(config: Config = Config.empty) : Rule(config) {
             "kotlin.run",
             "kotlin.with",
             "kotlin.let",
-            "kotlin.also",
+            "kotlin.also"
         )
     }
 

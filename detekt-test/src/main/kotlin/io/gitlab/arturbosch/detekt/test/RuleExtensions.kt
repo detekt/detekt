@@ -37,7 +37,7 @@ fun BaseRule.lint(path: Path): List<Finding> {
 fun BaseRule.lintWithContext(
     environment: KotlinCoreEnvironment,
     @Language("kotlin") content: String,
-    @Language("kotlin") vararg additionalContents: String,
+    @Language("kotlin") vararg additionalContents: String
 ): List<Finding> {
     val ktFile = compileContentForTest(content)
     val additionalKtFiles = additionalContents.mapIndexed { index, additionalContent ->

@@ -36,7 +36,7 @@ class CascadingCallWrapping(config: Config = Config.empty) : Rule(config) {
         id = javaClass.simpleName,
         severity = Severity.Style,
         description = "If a chained call is wrapped to a new line, subsequent chained calls should be as well.",
-        debt = Debt.FIVE_MINS,
+        debt = Debt.FIVE_MINS
     )
 
     @Configuration("require trailing elvis expressions to be wrapped on a new line")

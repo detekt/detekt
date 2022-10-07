@@ -62,7 +62,7 @@ abstract class DslTestBuilder {
             configFileOrNone = configFile,
             baselineFiles = baselineFile?.let { listOf(it) }.orEmpty(),
             gradleVersionOrNone = gradleVersion,
-            dryRun = dryRun,
+            dryRun = dryRun
         )
         runner.setupProject()
         return runner

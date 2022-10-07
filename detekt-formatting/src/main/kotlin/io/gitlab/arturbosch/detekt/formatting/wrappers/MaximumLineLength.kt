@@ -37,6 +37,6 @@ class MaximumLineLength(config: Config) : FormattingRule(config) {
     override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
         mapOf(
             MaxLineLengthRule.ignoreBackTickedIdentifierProperty to ignoreBackTickedIdentifier.toString(),
-            DefaultEditorConfigProperties.maxLineLengthProperty to maxLineLength.toString(),
+            DefaultEditorConfigProperties.maxLineLengthProperty to maxLineLength.toString()
         )
 }

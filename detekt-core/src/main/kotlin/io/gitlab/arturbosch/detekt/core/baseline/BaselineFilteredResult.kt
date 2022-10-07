@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSetId
 
 internal class BaselineFilteredResult(
     result: Detektion,
-    private val baseline: Baseline,
+    private val baseline: Baseline
 ) : Detektion by result {
 
     override val findings: Map<RuleSetId, List<Finding>> = result.findings

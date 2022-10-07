@@ -36,14 +36,14 @@ internal fun functionSuppressorFactory(rule: ConfigAware, bindingContext: Bindin
 private fun functionSuppressor(
     element: KtElement,
     bindingContext: BindingContext,
-    functionMatchers: List<FunctionMatcher>,
+    functionMatchers: List<FunctionMatcher>
 ): Boolean {
     return element.isInFunctionNamed(bindingContext, functionMatchers)
 }
 
 private fun KtElement.isInFunctionNamed(
     bindingContext: BindingContext,
-    functionMatchers: List<FunctionMatcher>,
+    functionMatchers: List<FunctionMatcher>
 ): Boolean {
     return if (this is KtNamedFunction && functionMatchers.any { it.match(this, bindingContext) }) {
         true

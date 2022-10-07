@@ -111,7 +111,7 @@ class RuleSetProviderVisitor : DetektVisitor() {
                     description = property.firstAnnotationParameter(ConfigAnnotation::class),
                     defaultValue = defaultValue,
                     defaultAndroidValue = defaultValue,
-                    deprecated = property.firstAnnotationParameterOrNull(Deprecated::class),
+                    deprecated = property.firstAnnotationParameterOrNull(Deprecated::class)
                 )
             )
         }

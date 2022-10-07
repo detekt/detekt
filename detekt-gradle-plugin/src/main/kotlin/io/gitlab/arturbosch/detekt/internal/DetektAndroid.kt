@@ -129,7 +129,7 @@ internal fun Project.registerAndroidDetektTask(
                 }
             }.files,
             bootClasspath,
-            javaCompileDestination(variant),
+            javaCompileDestination(variant)
         )
         // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
         // We try to find the configured baseline or alternatively a specific variant matching this task.
@@ -157,7 +157,7 @@ internal fun Project.registerAndroidCreateBaselineTask(
                 }
             }.files,
             bootClasspath,
-            javaCompileDestination(variant),
+            javaCompileDestination(variant)
         )
         val variantBaselineFile = extension.baseline?.addVariantName(variant.name)
         baseline.convention(project.layout.file(project.provider { variantBaselineFile }))
@@ -169,7 +169,7 @@ private fun Project.javaCompileDestination(variant: BaseVariant): DirectoryPrope
     if (javaCompile == null) {
         logger.warn(
             "Unable to find Java compiler on variant '{}'. Detekt analysis can show false negatives.",
-            variant.name,
+            variant.name
         )
     }
     return javaCompile?.destinationDirectory

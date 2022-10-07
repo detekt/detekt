@@ -17,7 +17,7 @@ class DetektAndroidSpec {
     @Nested
     inner class `configures android tasks for android application` {
         val projectLayout = ProjectLayout(
-            numberOfSourceFilesInRootPerSourceDir = 0,
+            numberOfSourceFilesInRootPerSourceDir = 0
         ).apply {
             addSubmodule(
                 name = "app",
@@ -36,7 +36,7 @@ class DetektAndroidSpec {
                     "src/main/kotlin",
                     "src/debug/kotlin",
                     "src/test/kotlin",
-                    "src/androidTest/kotlin",
+                    "src/androidTest/kotlin"
                 ),
                 baselineFiles = listOf(
                     "detekt-baseline.xml",
@@ -276,7 +276,7 @@ class DetektAndroidSpec {
         fun libDetektMain() {
             gradleRunner.runTasksAndCheckResult(
                 "--configuration-cache",
-                ":android_lib:detektMain",
+                ":android_lib:detektMain"
             ) { buildResult ->
                 assertThat(buildResult.output).contains("Configuration cache")
                 assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-release.xml """)
@@ -286,7 +286,7 @@ class DetektAndroidSpec {
                 assertThat(buildResult.output).doesNotContain("--report txt:")
                 assertThat(buildResult.tasks.map { it.path }).containsAll(
                     listOf(
-                        ":android_lib:detektMain",
+                        ":android_lib:detektMain"
                     )
                 )
             }
@@ -297,7 +297,7 @@ class DetektAndroidSpec {
         fun libDetektTest() {
             gradleRunner.runTasksAndCheckResult(
                 "--configuration-cache",
-                ":android_lib:detektTest",
+                ":android_lib:detektTest"
             ) { buildResult ->
                 assertThat(buildResult.output).contains("Configuration cache")
                 assertThat(buildResult.output).containsPattern(
@@ -311,7 +311,7 @@ class DetektAndroidSpec {
                 assertThat(buildResult.output).doesNotContain("--report txt:")
                 assertThat(buildResult.tasks.map { it.path }).containsAll(
                     listOf(
-                        ":android_lib:detektTest",
+                        ":android_lib:detektTest"
                     )
                 )
             }
@@ -536,7 +536,7 @@ class DetektAndroidSpec {
         @Nested
         inner class `configures android tasks android tasks have javac intermediates on classpath` {
             val projectLayout = ProjectLayout(
-                numberOfSourceFilesInRootPerSourceDir = 0,
+                numberOfSourceFilesInRootPerSourceDir = 0
             ).apply {
                 addSubmodule(
                     name = "app",
@@ -546,7 +546,7 @@ class DetektAndroidSpec {
                         $APP_PLUGIN_BLOCK
                         $ANDROID_BLOCK_WITH_VIEW_BINDING
                     """.trimIndent(),
-                    srcDirs = listOf("src/main/java"),
+                    srcDirs = listOf("src/main/java")
                 )
             }
             val gradleRunner = createGradleRunnerAndSetupProject(projectLayout, dryRun = false).also {
@@ -692,7 +692,7 @@ private val SAMPLE_ACTIVITY_USING_VIEW_BINDING = """
 
 private fun createGradleRunnerAndSetupProject(
     projectLayout: ProjectLayout,
-    dryRun: Boolean = true,
+    dryRun: Boolean = true
 ) = DslGradleRunner(
     projectLayout = projectLayout,
     buildFileName = "build.gradle.kts",
@@ -705,5 +705,5 @@ private fun createGradleRunnerAndSetupProject(
             }
         }
     """.trimIndent(),
-    dryRun = dryRun,
+    dryRun = dryRun
 ).also { it.setupProject() }

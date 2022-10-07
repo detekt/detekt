@@ -46,7 +46,7 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
             "equals",
             "finalize",
             "hashCode",
-            "toString",
+            "toString"
         )
     )
 

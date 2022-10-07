@@ -66,7 +66,7 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
         annotationExcluder = AnnotationExcluder(
             root,
             @Suppress("DEPRECATION") excludeAnnotatedFunction,
-            bindingContext,
+            bindingContext
         )
         super.visit(root)
     }

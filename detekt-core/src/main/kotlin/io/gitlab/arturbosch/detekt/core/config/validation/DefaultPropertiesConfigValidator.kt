@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.core.rules.RuleSetLocator
 
 internal class DefaultPropertiesConfigValidator(
     private val settings: ProcessingSettings,
-    private val baseline: Config,
+    private val baseline: Config
 ) : ConfigValidator {
 
     override fun validate(config: Config): Collection<Notification> {

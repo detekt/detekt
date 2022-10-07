@@ -29,7 +29,7 @@ class DetektJvmSpec {
                 it.jvmTarget = "1.8"
                 it.languageVersion = "1.6"
             }
-        },
+        }
     ).also(DslGradleRunner::setupProject)
 
     @Test

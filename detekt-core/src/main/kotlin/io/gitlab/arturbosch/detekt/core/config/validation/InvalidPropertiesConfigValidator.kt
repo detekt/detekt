@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 internal class InvalidPropertiesConfigValidator(
     private val baseline: YamlConfig,
     private val deprecatedProperties: Set<String>,
-    private val excludePatterns: Set<Regex>,
+    private val excludePatterns: Set<Regex>
 ) : AbstractYamlConfigValidator() {
 
     override fun validate(
@@ -83,7 +83,7 @@ internal class InvalidPropertiesConfigValidator(
         internal fun propertyShouldBeAnArray(prop: String): Notification =
             SimpleNotification(
                 "Property '$prop' should be a YAML array instead of a comma-separated String.",
-                Notification.Level.Warning,
+                Notification.Level.Warning
             )
     }
 }

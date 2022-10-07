@@ -110,7 +110,7 @@ class ReportMergeSpec {
                         implementation(project(":lib"))
                     }
                 """.trimIndent(),
-                srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
+                srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
             )
             addSubmodule(
                 name = "lib",

@@ -117,8 +117,8 @@ class KtLintMultiRule(config: Config = Config.empty) :
         SpacingBetweenDeclarationsWithAnnotations(config),
         SpacingBetweenDeclarationsWithComments(config),
         StringTemplate(config),
-        TrailingCommaOnCallSite(config), // in standard ruleset but not enabled by default
-        TrailingCommaOnDeclarationSite(config), // in standard ruleset but not enabled by default
+        TrailingCommaOnCallSite(config),
+        TrailingCommaOnDeclarationSite(config),
         Wrapping(config),
 
         // Wrappers for ktlint-ruleset-experimental rules. Disabled by default.
@@ -137,7 +137,7 @@ class KtLintMultiRule(config: Config = Config.empty) :
         SpacingBetweenFunctionNameAndOpeningParenthesis(config),
         TypeArgumentListSpacing(config),
         TypeParameterListSpacing(config),
-        UnnecessaryParenthesesBeforeTrailingLambda(config),
+        UnnecessaryParenthesesBeforeTrailingLambda(config)
     )
 
     override fun visit(root: KtFile) {

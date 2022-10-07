@@ -14,7 +14,7 @@ interface BaselineProvider {
     companion object {
 
         fun load(
-            classLoader: ClassLoader = BaselineProvider::class.java.classLoader,
+            classLoader: ClassLoader = BaselineProvider::class.java.classLoader
         ): BaselineProvider = ServiceLoader.load(BaselineProvider::class.java, classLoader).first()
     }
 }

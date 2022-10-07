@@ -76,8 +76,8 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         listOf(
             "kotlin.sequences.Sequence",
             "kotlinx.coroutines.flow.*Flow",
-            "java.util.stream.*Stream",
-        ),
+            "java.util.stream.*Stream"
+        )
     ) { it.map(String::simplePatternToRegex) }
 
     @Configuration(

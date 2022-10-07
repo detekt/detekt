@@ -43,7 +43,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         ruleModules.map { fileTree(it) },
         fileTree("${rootProject.rootDir}/detekt-rules-ruleauthors/src/main/kotlin"),
         fileTree("${rootProject.rootDir}/detekt-formatting/src/main/kotlin"),
-        file("${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-${Versions.DETEKT}-all.jar"),
+        file("${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-${Versions.DETEKT}-all.jar")
     )
 
     outputs.files(
@@ -52,13 +52,13 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         file(formattingConfigFile),
         file(ruleauthorsConfigFile),
         file(deprecationFile),
-        file(cliOptionsFile),
+        file(cliOptionsFile)
     )
 
     classpath(
         configurations.runtimeClasspath.get(),
         configurations.compileClasspath.get(),
-        sourceSets.main.get().output,
+        sourceSets.main.get().output
     )
     mainClass.set("io.gitlab.arturbosch.detekt.generator.Main")
     args = listOf(
@@ -72,7 +72,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         "--config",
         configDir,
         "--cli-options",
-        cliOptionsFile,
+        cliOptionsFile
     )
 }
 

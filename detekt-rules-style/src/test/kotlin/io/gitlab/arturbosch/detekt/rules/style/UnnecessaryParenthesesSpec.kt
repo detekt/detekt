@@ -191,7 +191,7 @@ class UnnecessaryParenthesesSpec {
     @ParameterizedTest
     @MethodSource("cases")
     fun `should not report call to function with multiple lambdas as parameters but also other parameters`(
-        testCase: RuleTestCase,
+        testCase: RuleTestCase
     ) {
         val code = """
             class Clazz {
@@ -347,7 +347,7 @@ class UnnecessaryParenthesesSpec {
                 ),
                 Arguments.of(
                     Named.of("With allow for unclear precedence", RuleTestCase(allowForUnclearPrecedence = true))
-                ),
+                )
             )
         }
     }

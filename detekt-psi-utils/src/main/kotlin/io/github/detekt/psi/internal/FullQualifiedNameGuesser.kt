@@ -7,12 +7,12 @@ import kotlin.LazyThreadSafetyMode.NONE
 
 class FullQualifiedNameGuesser internal constructor(
     private val packageName: String?,
-    imports: List<KtImportDirective>,
+    imports: List<KtImportDirective>
 ) {
 
     constructor(root: KtFile) : this(
         packageName = root.packageDirective?.qualifiedName?.ifBlank { null },
-        imports = root.importList?.imports.orEmpty(),
+        imports = root.importList?.imports.orEmpty()
     )
 
     @Suppress("ClassOrdering")

@@ -10,7 +10,7 @@ import java.util.ServiceLoader
 
 internal class MissingRulesConfigValidator(
     private val baseline: YamlConfig,
-    private val excludePatterns: Set<Regex>,
+    private val excludePatterns: Set<Regex>
 ) : AbstractYamlConfigValidator() {
 
     override fun validate(
@@ -25,7 +25,7 @@ internal class MissingRulesConfigValidator(
 
     private fun validateRuleSet(
         ruleSet: String,
-        configToValidate: YamlConfig,
+        configToValidate: YamlConfig
     ): List<Notification> {
         val ruleSetConfigToValidate = configToValidate.getSubMapOrNull(ruleSet)
         val ruleSetConfigFromBaseline = baseline.getSubMapOrNull(ruleSet)
@@ -39,7 +39,7 @@ internal class MissingRulesConfigValidator(
     private fun checkForMissingRules(
         ruleSetName: String,
         ruleSetConfigToValidate: Map<String, Any>,
-        ruleSetConfigFromBaseline: Map<String, Any>,
+        ruleSetConfigFromBaseline: Map<String, Any>
     ): List<Notification> {
         if (ruleSetConfigToValidate[Config.ACTIVE_KEY] == false) {
             return emptyList()
@@ -54,13 +54,13 @@ internal class MissingRulesConfigValidator(
     private fun ruleMissing(ruleName: String, ruleSetName: String): Notification =
         SimpleNotification(
             "Rule '$ruleName' from the '$ruleSetName' rule set is missing in the configuration.",
-            Notification.Level.Warning,
+            Notification.Level.Warning
         )
 
     private fun ruleSetMissing(ruleSetName: String): Notification =
         SimpleNotification(
             "Rule set '$ruleSetName' is missing in the configuration.",
-            Notification.Level.Warning,
+            Notification.Level.Warning
         )
 
     @Suppress("UNCHECKED_CAST")

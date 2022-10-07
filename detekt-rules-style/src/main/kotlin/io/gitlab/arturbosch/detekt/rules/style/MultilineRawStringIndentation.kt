@@ -72,7 +72,7 @@ class MultilineRawStringIndentation(config: Config) : Rule(config) {
                 CodeSmell(
                     issue,
                     Entity.from(expression),
-                    "A multiline raw string should start with a break line and should end with another",
+                    "A multiline raw string should start with a break line and should end with another"
                 )
             )
             return
@@ -90,7 +90,7 @@ class MultilineRawStringIndentation(config: Config) : Rule(config) {
     private fun KtStringTemplateExpression.checkIndentation(
         baseIndent: Int,
         firstLineNumber: Int,
-        lastLineNumber: Int,
+        lastLineNumber: Int
     ) {
         checkContent(desiredIndent = baseIndent + indentSize, (firstLineNumber + 1)..(lastLineNumber - 1))
         checkClosing(baseIndent, lastLineNumber)
@@ -98,7 +98,7 @@ class MultilineRawStringIndentation(config: Config) : Rule(config) {
 
     private fun KtStringTemplateExpression.checkContent(
         desiredIndent: Int,
-        lineNumberRange: IntRange,
+        lineNumberRange: IntRange
     ) {
         data class LineInformation(val lineNumber: Int, val line: String, val currentIndent: Int)
 
@@ -123,13 +123,13 @@ class MultilineRawStringIndentation(config: Config) : Rule(config) {
                     if (indentation.none { (_, _, currentIndent) -> currentIndent == desiredIndent }) {
                         val location = containingFile.getLocation(
                             SourceLocation(lineNumberRange.first, desiredIndent + 1),
-                            SourceLocation(lineNumberRange.last, indentation.last().line.length + 1),
+                            SourceLocation(lineNumberRange.last, indentation.last().line.length + 1)
                         )
 
                         report(
                             this,
                             location,
-                            message(desiredIndent, indentation.minOf { (_, _, indent) -> indent }),
+                            message(desiredIndent, indentation.minOf { (_, _, indent) -> indent })
                         )
                     }
                 }
@@ -138,19 +138,19 @@ class MultilineRawStringIndentation(config: Config) : Rule(config) {
 
     private fun KtStringTemplateExpression.checkClosing(
         desiredIndent: Int,
-        lineNumber: Int,
+        lineNumber: Int
     ) {
         val currentIndent = containingFile.getLine(lineNumber).countIndent()
         if (currentIndent != desiredIndent) {
             val location = if (currentIndent < desiredIndent) {
                 containingFile.getLocation(
                     SourceLocation(lineNumber, currentIndent + 1),
-                    SourceLocation(lineNumber, currentIndent + "\"\"\"".length + 1),
+                    SourceLocation(lineNumber, currentIndent + "\"\"\"".length + 1)
                 )
             } else {
                 containingFile.getLocation(
                     SourceLocation(lineNumber, desiredIndent + 1),
-                    SourceLocation(lineNumber, currentIndent + 1),
+                    SourceLocation(lineNumber, currentIndent + 1)
                 )
             }
 

@@ -38,7 +38,7 @@ class NullableBooleanCheck(config: Config = Config.empty) : Rule(config) {
         javaClass.simpleName,
         Severity.Style,
         "Nullable boolean check should use `==` rather than `?:`",
-        Debt.FIVE_MINS,
+        Debt.FIVE_MINS
     )
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
@@ -56,7 +56,7 @@ class NullableBooleanCheck(config: Config = Config.empty) : Rule(config) {
                 CodeSmell(
                     issue = issue,
                     entity = Entity.from(expression),
-                    message = "The nullable boolean check `${expression.text}` should use $messageSuffix",
+                    message = "The nullable boolean check `${expression.text}` should use $messageSuffix"
                 )
             )
         }

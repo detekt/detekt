@@ -26,7 +26,7 @@ class MaxLineLengthSpec {
         fun `should report no errors when maxLineLength is set to 200`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    MAX_LINE_LENGTH to "200",
+                    MAX_LINE_LENGTH to "200"
                 )
             )
 
@@ -46,7 +46,7 @@ class MaxLineLengthSpec {
         fun `should report all errors with default maxLineLength including raw strings`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    EXCLUDE_RAW_STRINGS to false,
+                    EXCLUDE_RAW_STRINGS to false
                 )
             )
 
@@ -94,7 +94,7 @@ class MaxLineLengthSpec {
         fun `should not report the package statement and import statements by default`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    MAX_LINE_LENGTH to "60",
+                    MAX_LINE_LENGTH to "60"
                 )
             )
 
@@ -108,7 +108,7 @@ class MaxLineLengthSpec {
                 TestConfig(
                     MAX_LINE_LENGTH to "60",
                     EXCLUDE_PACKAGE_STATEMENTS to "false",
-                    EXCLUDE_IMPORT_STATEMENTS to "false",
+                    EXCLUDE_IMPORT_STATEMENTS to "false"
                 )
             )
 
@@ -122,7 +122,7 @@ class MaxLineLengthSpec {
                 TestConfig(
                     MAX_LINE_LENGTH to "60",
                     EXCLUDE_PACKAGE_STATEMENTS to "true",
-                    EXCLUDE_IMPORT_STATEMENTS to "true",
+                    EXCLUDE_IMPORT_STATEMENTS to "true"
                 )
             )
 
@@ -139,7 +139,7 @@ class MaxLineLengthSpec {
         fun `should report the package statement, import statements, line and comments by default`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    MAX_LINE_LENGTH to "60",
+                    MAX_LINE_LENGTH to "60"
                 )
             )
 
@@ -154,7 +154,7 @@ class MaxLineLengthSpec {
                     MAX_LINE_LENGTH to "60",
                     EXCLUDE_PACKAGE_STATEMENTS to "false",
                     EXCLUDE_IMPORT_STATEMENTS to "false",
-                    EXCLUDE_COMMENT_STATEMENTS to "false",
+                    EXCLUDE_COMMENT_STATEMENTS to "false"
                 )
             )
 
@@ -167,7 +167,7 @@ class MaxLineLengthSpec {
             val rule = MaxLineLength(
                 TestConfig(
                     MAX_LINE_LENGTH to "60",
-                    EXCLUDE_COMMENT_STATEMENTS to "true",
+                    EXCLUDE_COMMENT_STATEMENTS to "true"
                 )
             )
 
@@ -194,7 +194,7 @@ class MaxLineLengthSpec {
         fun `should only the function line by default`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    MAX_LINE_LENGTH to "60",
+                    MAX_LINE_LENGTH to "60"
                 )
             )
 
@@ -208,7 +208,7 @@ class MaxLineLengthSpec {
                 TestConfig(
                     MAX_LINE_LENGTH to "60",
                     EXCLUDE_PACKAGE_STATEMENTS to "false",
-                    EXCLUDE_IMPORT_STATEMENTS to "false",
+                    EXCLUDE_IMPORT_STATEMENTS to "false"
                 )
             )
 
@@ -222,7 +222,7 @@ class MaxLineLengthSpec {
                 TestConfig(
                     MAX_LINE_LENGTH to "60",
                     EXCLUDE_PACKAGE_STATEMENTS to "true",
-                    EXCLUDE_IMPORT_STATEMENTS to "true",
+                    EXCLUDE_IMPORT_STATEMENTS to "true"
                 )
             )
 
@@ -236,7 +236,7 @@ class MaxLineLengthSpec {
                 TestConfig(
                     MAX_LINE_LENGTH to "60",
                     EXCLUDE_PACKAGE_STATEMENTS to "true",
-                    EXCLUDE_IMPORT_STATEMENTS to "true",
+                    EXCLUDE_IMPORT_STATEMENTS to "true"
                 )
             )
 

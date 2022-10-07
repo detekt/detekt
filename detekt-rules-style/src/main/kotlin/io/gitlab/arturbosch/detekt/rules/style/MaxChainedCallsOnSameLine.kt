@@ -37,7 +37,7 @@ class MaxChainedCallsOnSameLine(config: Config = Config.empty) : Rule(config) {
         id = javaClass.simpleName,
         severity = Severity.Style,
         description = "Chained calls beyond the maximum should be wrapped to a new line.",
-        debt = Debt.FIVE_MINS,
+        debt = Debt.FIVE_MINS
     )
 
     @Configuration("maximum chained calls allowed on a single line")

@@ -10,7 +10,7 @@ import java.nio.file.Path
 
 internal data class DefaultBaseline(
     override val manuallySuppressedIssues: FindingsIdList,
-    override val currentIssues: FindingsIdList,
+    override val currentIssues: FindingsIdList
 ) : Baseline {
 
     override fun contains(id: FindingId): Boolean =

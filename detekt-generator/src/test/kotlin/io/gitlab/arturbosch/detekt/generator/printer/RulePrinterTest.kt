@@ -17,7 +17,7 @@ internal class RulePrinterTest {
         severity = "Defect",
         debt = "10min",
         aliases = "alias1, alias2",
-        parent = "",
+        parent = ""
     )
 
     @Test

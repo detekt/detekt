@@ -20,7 +20,7 @@ class MaxLineLengthSuppressed {
             This is anotehr very very very very very very very very
             very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very
             very long multiline String that will break the MaxLineLength
-        """.trimIndent()
+    """.trimIndent()
 
     @Suppress("MaxLineLength")
     val longMultiLineFieldWithLineBreaks =
@@ -42,7 +42,6 @@ class MaxLineLengthSuppressed {
 
         println(hello)
         println(loremIpsum)
-
     }
 
     fun anIncrediblyLongAndComplexMethodNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot(): String {

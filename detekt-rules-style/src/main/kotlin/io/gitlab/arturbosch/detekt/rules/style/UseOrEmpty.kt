@@ -102,7 +102,7 @@ class UseOrEmpty(config: Config = Config.empty) : Rule(config) {
             "kotlin.collections.emptySet",
             "kotlin.collections.emptyMap",
             "kotlin.sequences.emptySequence",
-            "kotlin.emptyArray",
+            "kotlin.emptyArray"
         ).associate {
             val fqName = FqName(it)
             fqName.shortName().asString() to fqName
@@ -113,7 +113,7 @@ class UseOrEmpty(config: Config = Config.empty) : Rule(config) {
             "kotlin.collections.setOf",
             "kotlin.collections.mapOf",
             "kotlin.sequences.sequenceOf",
-            "kotlin.arrayOf",
+            "kotlin.arrayOf"
         ).associate {
             val fqName = FqName(it)
             fqName.shortName().asString() to fqName

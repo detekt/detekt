@@ -34,7 +34,7 @@ internal class EnvironmentFacade(
             classpath,
             compilerSpec.parseLanguageVersion(),
             compilerSpec.parseJvmTarget(),
-            compilerSpec.jdkHome,
+            compilerSpec.jdkHome
         )
         createKotlinCoreEnvironment(compilerConfiguration, disposable)
     }

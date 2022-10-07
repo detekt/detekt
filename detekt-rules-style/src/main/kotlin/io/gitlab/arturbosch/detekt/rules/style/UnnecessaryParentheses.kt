@@ -91,24 +91,24 @@ class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
             Precedence.ELVIS to arrayOf(
                 Precedence.EQUALITY, // (a ?: b) == c
                 Precedence.COMPARISON, // (a ?: b) > c
-                Precedence.IN_OR_IS, // (a ?: b) in c
+                Precedence.IN_OR_IS // (a ?: b) in c
             ),
 
             Precedence.SIMPLE_NAME to arrayOf(
                 Precedence.ELVIS, // a ?: (b to c)
-                Precedence.SIMPLE_NAME, // (a to b) to c
+                Precedence.SIMPLE_NAME // (a to b) to c
             ),
 
             Precedence.MULTIPLICATIVE to arrayOf(
                 Precedence.ADDITIVE, // (a * b) + c
-                Precedence.RANGE, // (a / b)..(c * d)
+                Precedence.RANGE // (a / b)..(c * d)
             ),
 
             // (a + b)..(c + d)
             Precedence.ADDITIVE to arrayOf(Precedence.RANGE),
 
             // (a && b) || c
-            Precedence.CONJUNCTION to arrayOf(Precedence.DISJUNCTION),
+            Precedence.CONJUNCTION to arrayOf(Precedence.DISJUNCTION)
         )
             .onEach { (child, parents) ->
                 parents.forEach { check(child <= it) }

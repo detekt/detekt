@@ -18,7 +18,7 @@ internal fun generateBindingContext(
     classpath: List<String>,
     files: List<KtFile>,
     debugPrinter: (() -> String) -> Unit,
-    warningPrinter: (String) -> Unit,
+    warningPrinter: (String) -> Unit
 ): BindingContext {
     if (classpath.isEmpty()) {
         return BindingContext.EMPTY
@@ -27,13 +27,13 @@ internal fun generateBindingContext(
     val messageCollector = DetektMessageCollector(
         minSeverity = CompilerMessageSeverity.ERROR,
         debugPrinter = debugPrinter,
-        warningPrinter = warningPrinter,
+        warningPrinter = warningPrinter
     )
 
     val analyzer = AnalyzerWithCompilerReport(
         messageCollector,
         environment.configuration.languageVersionSettings,
-        false,
+        false
     )
     analyzer.analyzeAndReport(files) {
         TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
@@ -54,7 +54,7 @@ internal fun generateBindingContext(
 internal class DetektMessageCollector(
     private val minSeverity: CompilerMessageSeverity,
     private val debugPrinter: (() -> String) -> Unit,
-    private val warningPrinter: (String) -> Unit,
+    private val warningPrinter: (String) -> Unit
 ) : MessageCollector by MessageCollector.NONE {
     private var messages = 0
 

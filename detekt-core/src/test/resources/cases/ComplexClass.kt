@@ -3,11 +3,11 @@ package cases
 import org.jetbrains.kotlin.utils.sure
 
 @Suppress("unused")
-class ComplexClass {// McCabe: 44, LLOC: 20 + 20 + 4x4
+class ComplexClass { // McCabe: 44, LLOC: 20 + 20 + 4x4
 
-    class NestedClass { //14
-        fun complex() { //1 +
-            try {//4
+    class NestedClass { // 14
+        fun complex() { // 1 +
+            try { // 4
                 while (true) {
                     if (true) {
                         when ("string") {
@@ -16,7 +16,7 @@ class ComplexClass {// McCabe: 44, LLOC: 20 + 20 + 4x4
                         }
                     }
                 }
-            } catch (ex: Exception) { //1 + 3
+            } catch (ex: Exception) { // 1 + 3
                 try {
                     println()
                 } catch (ex: Exception) {
@@ -42,17 +42,17 @@ class ComplexClass {// McCabe: 44, LLOC: 20 + 20 + 4x4
                 }
             }
             (1..10).forEach {
-                //1
+                // 1
                 println()
             }
-            for (i in 1..10) { //1
+            for (i in 1..10) { // 1
                 println()
             }
         }
     }
 
-    fun complex() { //1 +
-        try {//4
+    fun complex() { // 1 +
+        try { // 4
             while (true) {
                 if (true) {
                     when ("string") {
@@ -61,7 +61,7 @@ class ComplexClass {// McCabe: 44, LLOC: 20 + 20 + 4x4
                     }
                 }
             }
-        } catch (ex: Exception) { //1 + 3
+        } catch (ex: Exception) { // 1 + 3
             try {
                 println()
             } catch (ex: Exception) {
@@ -87,15 +87,15 @@ class ComplexClass {// McCabe: 44, LLOC: 20 + 20 + 4x4
             }
         }
         (1..10).forEach {
-            //1
+            // 1
             println()
         }
-        for (i in 1..10) { //1
+        for (i in 1..10) { // 1
             println()
         }
     }
 
-    fun manyClosures() {//4
+    fun manyClosures() { // 4
         true.let {
             true.apply {
                 true.run {
@@ -107,7 +107,7 @@ class ComplexClass {// McCabe: 44, LLOC: 20 + 20 + 4x4
         }
     }
 
-    fun manyClosures2() {//4
+    fun manyClosures2() { // 4
         true.let {
             true.apply {
                 true.run {
@@ -119,7 +119,7 @@ class ComplexClass {// McCabe: 44, LLOC: 20 + 20 + 4x4
         }
     }
 
-    fun manyClosures3() {//4
+    fun manyClosures3() { // 4
         true.let {
             true.apply {
                 true.run {
@@ -131,7 +131,7 @@ class ComplexClass {// McCabe: 44, LLOC: 20 + 20 + 4x4
         }
     }
 
-    fun manyClosures4() {//4
+    fun manyClosures4() { // 4
         true.let {
             true.apply {
                 true.run {

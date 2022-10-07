@@ -1,5 +1,5 @@
 #!/bin/sh
-//bin/true; exec kotlinc -script "$0" -- "$@"
+// bin/true; exec kotlinc -script "$0" -- "$@"
 
 /**
  * Script to compare two detekt releases by running both versions and diffing the txt results.

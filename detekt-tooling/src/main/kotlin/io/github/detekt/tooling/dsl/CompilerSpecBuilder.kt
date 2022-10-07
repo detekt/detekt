@@ -18,5 +18,5 @@ private data class CompilerModel(
     override val jvmTarget: String,
     override val languageVersion: String?,
     override val classpath: String?,
-    override val jdkHome: Path?,
+    override val jdkHome: Path?
 ) : CompilerSpec

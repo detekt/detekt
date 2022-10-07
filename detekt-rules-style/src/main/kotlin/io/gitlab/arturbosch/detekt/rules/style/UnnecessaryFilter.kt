@@ -90,7 +90,7 @@ class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
     companion object {
         private val filterFqNames = listOf(
             FqName("kotlin.collections.filter"),
-            FqName("kotlin.sequences.filter"),
+            FqName("kotlin.sequences.filter")
         )
 
         private val secondCalls = listOf(
@@ -98,7 +98,7 @@ class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
             SecondCall(FqName("kotlin.collections.List.isEmpty"), "any"),
             SecondCall(FqName("kotlin.collections.isNotEmpty"), "none"),
             SecondCall(FqName("kotlin.collections.count")),
-            SecondCall(FqName("kotlin.sequences.count")),
+            SecondCall(FqName("kotlin.sequences.count"))
         )
     }
 }

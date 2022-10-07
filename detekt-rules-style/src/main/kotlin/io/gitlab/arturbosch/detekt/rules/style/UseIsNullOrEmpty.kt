@@ -161,7 +161,7 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
             StandardNames.FqNames.mutableList,
             StandardNames.FqNames.mutableSet,
             StandardNames.FqNames.mutableCollection,
-            StandardNames.FqNames.mutableMap,
+            StandardNames.FqNames.mutableMap
         )
 
         private val arrayClass = StandardNames.FqNames.array.toSafe()

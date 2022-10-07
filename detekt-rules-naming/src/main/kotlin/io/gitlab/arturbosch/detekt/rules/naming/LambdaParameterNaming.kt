@@ -38,7 +38,7 @@ class LambdaParameterNaming(config: Config = Config.empty) : Rule(config) {
                         CodeSmell(
                             issue,
                             Entity.from(it),
-                            message = "Lambda parameter names should match the pattern: $parameterPattern",
+                            message = "Lambda parameter names should match the pattern: $parameterPattern"
                         )
                     )
                 }

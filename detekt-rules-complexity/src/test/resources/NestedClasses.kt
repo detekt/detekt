@@ -32,7 +32,6 @@ class NestedClasses {
                         }
                     }
                 } finally {
-
                 }
 
                 fun nestedLocalMethod() {
@@ -97,11 +96,10 @@ class NestedClasses {
             }
         }
     }
-
 }
 
+/**
+ * Top level members must be skipped for LargeClass rule
+ */
 @Suppress("unused")
-    /**
-     * Top level members must be skipped for LargeClass rule
-     */
 val aTopLevelPropertyOfNestedClasses = 0

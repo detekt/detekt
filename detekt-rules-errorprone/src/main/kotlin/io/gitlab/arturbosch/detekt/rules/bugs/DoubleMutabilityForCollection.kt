@@ -88,7 +88,7 @@ class DoubleMutabilityForCollection(config: Config = Config.empty) : Rule(config
             "java.util.LinkedHashSet",
             "java.util.HashSet",
             "java.util.LinkedHashMap",
-            "java.util.HashMap",
+            "java.util.HashMap"
         )
     }
 }

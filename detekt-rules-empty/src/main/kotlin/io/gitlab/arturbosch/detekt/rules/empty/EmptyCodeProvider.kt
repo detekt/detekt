@@ -31,7 +31,7 @@ class EmptyCodeProvider : DefaultRuleSetProvider {
             EmptySecondaryConstructor(config),
             EmptyTryBlock(config),
             EmptyWhenBlock(config),
-            EmptyWhileBlock(config),
+            EmptyWhileBlock(config)
         )
     )
 }

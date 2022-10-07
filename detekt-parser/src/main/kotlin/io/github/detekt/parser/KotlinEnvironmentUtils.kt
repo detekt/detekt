@@ -68,7 +68,7 @@ fun createCompilerConfiguration(
     classpath: List<String>,
     languageVersion: LanguageVersion?,
     jvmTarget: JvmTarget,
-    jdkHome: Path?,
+    jdkHome: Path?
 ): CompilerConfiguration {
     val javaFiles = pathsToAnalyze.flatMap { path ->
         path.toFile().walk()

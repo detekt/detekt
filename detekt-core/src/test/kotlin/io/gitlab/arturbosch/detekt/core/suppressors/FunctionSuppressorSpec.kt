@@ -19,7 +19,7 @@ class FunctionSuppressorSpec {
         fun `Factory returns null if ignoreFunction is not set`() {
             val suppressor = functionSuppressorFactory(
                 buildConfigAware(/* empty */),
-                BindingContext.EMPTY,
+                BindingContext.EMPTY
             )
 
             assertThat(suppressor).isNull()
@@ -29,7 +29,7 @@ class FunctionSuppressorSpec {
         fun `Factory returns null if ignoreFunction is set to empty`() {
             val suppressor = functionSuppressorFactory(
                 buildConfigAware("ignoreFunction" to emptyList<String>()),
-                BindingContext.EMPTY,
+                BindingContext.EMPTY
             )
 
             assertThat(suppressor).isNull()
@@ -39,7 +39,7 @@ class FunctionSuppressorSpec {
         fun `Factory returns not null if ignoreFunction is set to a not empty list`() {
             val suppressor = functionSuppressorFactory(
                 buildConfigAware("ignoreFunction" to listOf("toString")),
-                BindingContext.EMPTY,
+                BindingContext.EMPTY
             )
 
             assertThat(suppressor).isNotNull()

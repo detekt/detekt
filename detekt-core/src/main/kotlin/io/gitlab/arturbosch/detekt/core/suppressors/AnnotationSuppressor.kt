@@ -22,7 +22,7 @@ internal fun annotationSuppressorFactory(rule: ConfigAware, bindingContext: Bind
         Suppressor { finding ->
             val element = finding.entity.ktElement
             element != null && element.isAnnotatedWith(
-                AnnotationExcluder(element.containingKtFile, annotations, bindingContext),
+                AnnotationExcluder(element.containingKtFile, annotations, bindingContext)
             )
         }
     } else {

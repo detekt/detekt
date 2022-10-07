@@ -90,7 +90,7 @@ gradlePlugin {
     // Source sets that require the Gradle TestKit dependency
     testSourceSets(
         sourceSets["testFixtures"],
-        sourceSets["functionalTest"],
+        sourceSets["functionalTest"]
     )
 }
 
@@ -158,7 +158,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
     kotlinOptions {
         apiVersion = "1.4"
         freeCompilerArgs += listOf(
-            "-Xsuppress-version-warnings",
+            "-Xsuppress-version-warnings"
         )
         // Note: Currently there are warnings for detekt-gradle-plugin that seemingly can't be fixed
         //       until Gradle releases an update (https://github.com/gradle/gradle/issues/16345)

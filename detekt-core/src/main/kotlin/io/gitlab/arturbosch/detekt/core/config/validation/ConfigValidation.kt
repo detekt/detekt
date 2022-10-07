@@ -31,7 +31,7 @@ internal val DEFAULT_PROPERTY_EXCLUDES = setOf(
     ".*>.*>severity",
     "build>weights.*",
     ".*>.*>ignoreAnnotated",
-    ".*>.*>ignoreFunction",
+    ".*>.*>ignoreFunction"
 ).joinToString(",")
 
 internal fun checkConfiguration(settings: ProcessingSettings, baseline: Config) {

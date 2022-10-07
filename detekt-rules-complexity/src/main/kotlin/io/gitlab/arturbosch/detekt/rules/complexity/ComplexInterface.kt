@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * to understand and implement.
  */
 class ComplexInterface(
-    config: Config = Config.empty,
+    config: Config = Config.empty
 ) : Rule(config) {
 
     override val issue = Issue(

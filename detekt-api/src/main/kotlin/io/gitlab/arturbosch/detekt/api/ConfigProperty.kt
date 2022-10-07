@@ -86,7 +86,7 @@ fun <T : Any, U : Any> configWithFallback(
  */
 fun <T : Any> configWithAndroidVariants(
     defaultValue: T,
-    defaultAndroidValue: T,
+    defaultAndroidValue: T
 ): ReadOnlyProperty<ConfigAware, T> = configWithAndroidVariants(defaultValue, defaultAndroidValue) { it }
 
 /**

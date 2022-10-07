@@ -44,7 +44,7 @@ class GeneratorSpec {
             val args = arrayOf(
                 "--generate-custom-rule-config",
                 "--input",
-                "$tempDir1, $tempDir2",
+                "$tempDir1, $tempDir2"
             )
             io.gitlab.arturbosch.detekt.generator.main(args)
         }

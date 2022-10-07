@@ -68,7 +68,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
         val annotationExcluder = AnnotationExcluder(
             root,
             @Suppress("DEPRECATION") excludeAnnotatedClasses,
-            bindingContext,
+            bindingContext
         )
         root.forEachDescendantOfType<KtClass> { visitKlass(it, annotationExcluder) }
     }

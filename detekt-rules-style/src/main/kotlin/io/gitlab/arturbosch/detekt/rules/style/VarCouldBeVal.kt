@@ -162,7 +162,7 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
 
         private fun evaluateAssignmentExpression(
             descriptor: DeclarationDescriptor,
-            rightExpression: KtExpression,
+            rightExpression: KtExpression
         ) {
             when (rightExpression) {
                 is KtObjectLiteralExpression -> {

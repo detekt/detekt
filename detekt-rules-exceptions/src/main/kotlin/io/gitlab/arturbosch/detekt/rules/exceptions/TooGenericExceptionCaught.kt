@@ -76,7 +76,7 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
             "IndexOutOfBoundsException",
             "NullPointerException",
             "RuntimeException",
-            "Throwable",
+            "Throwable"
         )
     }
 }

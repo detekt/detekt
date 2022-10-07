@@ -53,7 +53,7 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
                     additionalRootPaths = checkNotNull(
                         classpathFromClassloader(Thread.currentThread().contextClassLoader)
                     ) { "We should always have a classpath" },
-                    additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths(),
+                    additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths()
                 )
             ).also { extensionContext.wrapper = it }
         return closeableWrapper.wrapper.env

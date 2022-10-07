@@ -40,5 +40,4 @@ class SuppressedElements2 {
         lpl(1, 2, 3, 4, 5, 6)
         assert(false) { "FAILED TEST" }
     }
-
 }

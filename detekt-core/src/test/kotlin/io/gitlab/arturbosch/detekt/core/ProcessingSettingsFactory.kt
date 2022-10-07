@@ -20,7 +20,7 @@ fun createProcessingSettings(
     config: Config = Config.empty,
     reportPaths: Collection<ReportsSpec.Report> = emptyList(),
     outputChannel: PrintStream = NullPrintStream(),
-    init: ProcessingSpecBuilder.() -> Unit = { /* no-op */ },
+    init: ProcessingSpecBuilder.() -> Unit = { /* no-op */ }
 ): ProcessingSettings {
     val spec = ProcessingSpec {
         project {
@@ -48,7 +48,7 @@ fun createProcessingSettings(
 }
 
 fun createNullLoggingSpec(
-    init: ProcessingSpecBuilder.() -> Unit = { /* no-op */ },
+    init: ProcessingSpecBuilder.() -> Unit = { /* no-op */ }
 ): ProcessingSpec =
     ProcessingSpec {
         logging {

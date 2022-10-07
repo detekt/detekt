@@ -30,7 +30,7 @@ class CheckConfigurationSpec {
         )
         createProcessingSettings(
             testDir,
-            config,
+            config
         ) {
             config {
                 shouldValidateBeforeAnalysis = false

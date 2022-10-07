@@ -21,7 +21,7 @@ class PerformanceProvider : DefaultRuleSetProvider {
             UnnecessaryTemporaryInstantiation(config),
             ArrayPrimitive(config),
             CouldBeSequence(config),
-            UnnecessaryPartOfBinaryExpression(config),
+            UnnecessaryPartOfBinaryExpression(config)
         )
     )
 }

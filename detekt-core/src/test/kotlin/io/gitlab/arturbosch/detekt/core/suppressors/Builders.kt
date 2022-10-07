@@ -20,14 +20,14 @@ import java.nio.file.Paths
 internal fun buildFinding(element: KtElement?): Finding = CodeSmell(
     issue = Issue("RuleName", Severity.CodeSmell, "", Debt.FIVE_MINS),
     entity = element?.let { Entity.from(element) } ?: buildEmptyEntity(),
-    message = "",
+    message = ""
 )
 
 private fun buildEmptyEntity(): Entity = Entity(
     name = "",
     signature = "",
     location = Location(SourceLocation(0, 0), TextLocation(0, 0), FilePath.fromAbsolute(Paths.get("/"))),
-    ktElement = null,
+    ktElement = null
 )
 
 internal fun buildConfigAware(

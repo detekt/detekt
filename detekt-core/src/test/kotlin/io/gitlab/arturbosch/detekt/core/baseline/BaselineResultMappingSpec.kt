@@ -45,7 +45,7 @@ class BaselineResultMappingSpec {
     fun `should not create a new baseline file when no findings occurred`() {
         val mapping = resultMapping(
             baselineFile = baselineFile,
-            createBaseline = true,
+            createBaseline = true
         )
 
         mapping.transformFindings(emptyMap())
@@ -58,7 +58,7 @@ class BaselineResultMappingSpec {
         val existing = DefaultBaseline.load(existingBaselineFile)
         val mapping = resultMapping(
             baselineFile = existingBaselineFile,
-            createBaseline = false,
+            createBaseline = false
         )
 
         mapping.transformFindings(findings)
@@ -72,7 +72,7 @@ class BaselineResultMappingSpec {
         val existing = DefaultBaseline.load(existingBaselineFile)
         val mapping = resultMapping(
             baselineFile = existingBaselineFile,
-            createBaseline = null,
+            createBaseline = null
         )
 
         mapping.transformFindings(findings)
@@ -85,7 +85,7 @@ class BaselineResultMappingSpec {
     fun `should not create a new baseline file if no file is configured`() {
         val mapping = resultMapping(
             baselineFile = null,
-            createBaseline = false,
+            createBaseline = false
         )
 
         mapping.transformFindings(findings)
@@ -97,7 +97,7 @@ class BaselineResultMappingSpec {
     fun `should create a new baseline file if a file is configured`() {
         val mapping = resultMapping(
             baselineFile = baselineFile,
-            createBaseline = true,
+            createBaseline = true
         )
 
         mapping.transformFindings(findings)
@@ -111,7 +111,7 @@ class BaselineResultMappingSpec {
         val existing = DefaultBaseline.load(baselineFile)
         val mapping = resultMapping(
             baselineFile = baselineFile,
-            createBaseline = true,
+            createBaseline = true
         )
 
         mapping.transformFindings(findings)

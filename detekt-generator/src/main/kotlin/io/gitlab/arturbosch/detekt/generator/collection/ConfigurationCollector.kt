@@ -104,7 +104,7 @@ class ConfigurationCollector {
             description = description,
             defaultValue = defaultValue,
             defaultAndroidValue = defaultAndroidValue,
-            deprecated = deprecationMessage,
+            deprecated = deprecationMessage
         )
     }
 

@@ -195,5 +195,5 @@ internal val defaultImportClasses = mapOf(
     "Unit" to "kotlin.Unit",
     "UnsafeVariance" to "kotlin.UnsafeVariance",
     "UnsupportedOperationException" to "kotlin.UnsupportedOperationException",
-    "UseExperimental" to "kotlin.UseExperimental",
+    "UseExperimental" to "kotlin.UseExperimental"
 )

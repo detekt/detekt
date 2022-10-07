@@ -29,7 +29,7 @@ class DetektPlainSpec {
 
                 configure<DetektExtension> {
                 }
-            },
+            }
         ).also { it.setupProject() }
 
         @Test
@@ -60,7 +60,7 @@ class DetektPlainSpec {
                         reports.txt.required.set(false)
                     }
                 }
-            },
+            }
         ).also { it.setupProject() }
 
         @Test

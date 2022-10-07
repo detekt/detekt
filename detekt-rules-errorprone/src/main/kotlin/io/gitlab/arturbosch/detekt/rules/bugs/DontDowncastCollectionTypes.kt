@@ -93,7 +93,7 @@ class DontDowncastCollectionTypes(config: Config) : Rule(config) {
             "LinkedHashSet",
             "HashSet",
             "LinkedHashMap",
-            "HashMap",
+            "HashMap"
         )
     }
 }

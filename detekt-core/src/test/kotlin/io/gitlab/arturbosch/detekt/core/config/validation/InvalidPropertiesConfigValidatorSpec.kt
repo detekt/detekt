@@ -147,7 +147,7 @@ internal class InvalidPropertiesConfigValidatorSpec {
             val subject = InvalidPropertiesConfigValidator(baseline, deprecatedProperties, patterns("complexity"))
 
             val result = subject.validate(
-                yamlConfig("config_validation/other-nested-property-names.yml") as YamlConfig,
+                yamlConfig("config_validation/other-nested-property-names.yml") as YamlConfig
             )
             assertThat(result).isEmpty()
         }

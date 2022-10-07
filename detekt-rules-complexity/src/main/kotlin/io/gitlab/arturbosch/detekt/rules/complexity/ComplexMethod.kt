@@ -109,7 +109,7 @@ class ComplexMethod(config: Config = Config.empty) : Rule(config) {
             "let",
             "run",
             "use",
-            "with",
+            "with"
         )
     }
 }

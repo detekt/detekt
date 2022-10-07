@@ -70,7 +70,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
         annotationExcluder = AnnotationExcluder(
             file,
             @Suppress("DEPRECATION") excludeAnnotatedClasses,
-            bindingContext,
+            bindingContext
         )
         super.visitKtFile(file)
     }

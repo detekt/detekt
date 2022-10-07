@@ -38,6 +38,6 @@ class FunctionSignature(config: Config) : FormattingRule(config) {
                 forceMultilineWhenParameterCountGreaterOrEqualThan.toString(),
             FunctionSignatureRule.functionBodyExpressionWrappingProperty to functionBodyExpressionWrapping,
             DefaultEditorConfigProperties.maxLineLengthProperty to maxLineLength.toString(),
-            DefaultEditorConfigProperties.indentSizeProperty to indentSize.toString(),
+            DefaultEditorConfigProperties.indentSizeProperty to indentSize.toString()
         )
 }

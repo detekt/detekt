@@ -28,7 +28,7 @@ tasks.build { finalizedBy(":detekt-generator:generateDocumentation") }
 val depsToPackage = setOf(
     "org.ec4j.core",
     "com.pinterest.ktlint",
-    "io.github.microutils",
+    "io.github.microutils"
 )
 
 tasks.jar {
@@ -38,6 +38,6 @@ tasks.jar {
         configurations.runtimeClasspath.get()
             .filter { dependency -> depsToPackage.any { it in dependency.toString() } }
             .map { if (it.isDirectory) it else zipTree(it) },
-        extraDepsToPackage.map { zipTree(it) },
+        extraDepsToPackage.map { zipTree(it) }
     )
 }

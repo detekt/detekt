@@ -172,7 +172,7 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
             "InterruptedException",
             "MalformedURLException",
             "NumberFormatException",
-            "ParseException",
+            "ParseException"
         )
     }
 }

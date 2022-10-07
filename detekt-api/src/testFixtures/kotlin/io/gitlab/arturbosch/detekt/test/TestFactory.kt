@@ -22,7 +22,7 @@ fun createCorrectableFinding(ruleName: String = "TestSmell", fileName: String = 
 fun createFinding(
     issue: Issue,
     entity: Entity,
-    message: String = entity.signature,
+    message: String = entity.signature
 ) = CodeSmell(
     issue = issue,
     entity = entity,

@@ -16,7 +16,7 @@ val githubProjects = listOf(
     "Kotlin/kotlinx-datetime",
     "Kotlin/dokka",
     "kotest/kotest",
-    "tipsy/javalin",
+    "tipsy/javalin"
 )
 
 class Downloader(private val basePath: Path, private val project: String) {

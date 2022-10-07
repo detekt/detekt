@@ -66,7 +66,7 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
     private val methods: List<Forbidden> by config(
         valuesWithReason(
             "kotlin.io.print" to "print does not allow you to configure the output stream. Use a logger instead.",
-            "kotlin.io.println" to "println does not allow you to configure the output stream. Use a logger instead.",
+            "kotlin.io.println" to "println does not allow you to configure the output stream. Use a logger instead."
         )
     ) { list ->
         list.map { Forbidden(fromFunctionSignature(it.value), it.reason) }

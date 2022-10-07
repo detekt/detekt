@@ -105,7 +105,7 @@ class DetektMultiplatformSpec {
                         "src/commonMain/kotlin",
                         "src/commonTest/kotlin",
                         "src/jvmBackendMain/kotlin",
-                        "src/jvmEmbeddedMain/kotlin",
+                        "src/jvmEmbeddedMain/kotlin"
                     ),
                     baselineFiles = listOf("detekt-baseline.xml", "detekt-baseline-main.xml")
                 )
@@ -230,7 +230,7 @@ class DetektMultiplatformSpec {
                         "src/commonMain/kotlin",
                         "src/commonTest/kotlin",
                         "src/jsMain/kotlin",
-                        "src/jsTest/kotlin",
+                        "src/jsTest/kotlin"
                     ),
                     baselineFiles = listOf("detekt-baseline.xml")
                 )
@@ -282,7 +282,7 @@ class DetektMultiplatformSpec {
                         "src/iosArm64Test/kotlin",
                         "src/iosX64Main/kotlin",
                         "src/iosX64Test/kotlin",
-                        "src/iosMain/kotlin",
+                        "src/iosMain/kotlin"
                     ),
                     baselineFiles = listOf("detekt-baseline.xml")
                 )

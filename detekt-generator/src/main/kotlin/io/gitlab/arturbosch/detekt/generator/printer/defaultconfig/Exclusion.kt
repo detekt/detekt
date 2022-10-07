@@ -39,7 +39,7 @@ private object TestExclusions : Exclusions() {
         "UndocumentedPublicFunction",
         "UndocumentedPublicProperty",
         "UnsafeCallOnNullableType",
-        "KDocReferencesNonPublicProperty",
+        "KDocReferencesNonPublicProperty"
     )
 }
 
@@ -63,6 +63,6 @@ private object LibraryExclusions : Exclusions() {
     override val rules = setOf(
         "ForbiddenPublicDataClass",
         "LibraryCodeMustSpecifyReturnType",
-        "LibraryEntitiesShouldNotBePublic",
+        "LibraryEntitiesShouldNotBePublic"
     )
 }

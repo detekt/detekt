@@ -24,7 +24,7 @@ class DetektMessageCollectorSpec {
         subject = DetektMessageCollector(
             minSeverity = CompilerMessageSeverity.INFO,
             debugPrinter = debugPrinter,
-            warningPrinter = warningPrinter,
+            warningPrinter = warningPrinter
         )
     }
 

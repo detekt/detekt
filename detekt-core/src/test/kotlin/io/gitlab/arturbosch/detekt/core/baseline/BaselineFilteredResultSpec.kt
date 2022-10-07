@@ -23,7 +23,7 @@ class BaselineFilteredResultSpec {
         mockk {
             every { id }.returns("FeatureEnvy")
             every { signature }.returns("Signature")
-        },
+        }
     )
 
     @Test

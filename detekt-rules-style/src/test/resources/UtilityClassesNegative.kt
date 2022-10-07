@@ -48,7 +48,7 @@ class NoUtilityClasses {
 
     private val i = 0
 
-    class EmptyClass1 {}
+    class EmptyClass1
     class EmptyClass2
 
     class ClassWithSecondaryConstructor {

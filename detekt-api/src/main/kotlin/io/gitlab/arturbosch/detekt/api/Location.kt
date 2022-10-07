@@ -44,7 +44,7 @@ constructor(
         source: SourceLocation,
         endSource: SourceLocation,
         text: TextLocation,
-        filePath: FilePath,
+        filePath: FilePath
     ) : this(source, text, filePath.absolutePath.toString(), filePath) {
         this.endSource = endSource
     }

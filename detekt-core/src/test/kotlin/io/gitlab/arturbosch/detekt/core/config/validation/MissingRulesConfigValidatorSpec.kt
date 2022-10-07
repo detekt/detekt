@@ -42,7 +42,7 @@ internal class MissingRulesConfigValidatorSpec {
             .containsExactlyInAnyOrder(
                 "Rule set 'comments' is missing in the configuration.",
                 "Rule 'LongMethod' from the 'complexity' rule set is missing in the configuration.",
-                "Rule 'WildcardImport' from the 'style' rule set is missing in the configuration.",
+                "Rule 'WildcardImport' from the 'style' rule set is missing in the configuration."
             )
     }
 }

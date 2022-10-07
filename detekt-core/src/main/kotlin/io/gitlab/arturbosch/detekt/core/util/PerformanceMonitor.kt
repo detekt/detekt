@@ -17,7 +17,7 @@ class PerformanceMonitor {
         Binding,
         LoadingExtensions,
         Analyzer,
-        Reporting,
+        Reporting
     }
 
     data class Entry(val phase: Phase, val duration: Duration)

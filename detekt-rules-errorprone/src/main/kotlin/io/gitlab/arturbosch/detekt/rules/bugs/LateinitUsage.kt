@@ -63,7 +63,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
         val annotationExcluder = AnnotationExcluder(
             root,
             @Suppress("DEPRECATION") excludeAnnotatedProperties,
-            bindingContext,
+            bindingContext
         )
 
         properties.filterNot { annotationExcluder.shouldExclude(it.annotationEntries) }

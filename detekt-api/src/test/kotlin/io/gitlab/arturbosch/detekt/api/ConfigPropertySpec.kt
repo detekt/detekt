@@ -97,7 +97,7 @@ class ConfigPropertySpec {
                         "present" to listOf(
                             mapOf("value" to "a", "reason" to "reasonA"),
                             mapOf("value" to "b", "reason" to null),
-                            mapOf("value" to "c"),
+                            mapOf("value" to "c")
                         )
                     ) {
                         val present: ValuesWithReason by config(defaultValue)

@@ -17,7 +17,7 @@ class ProjectLayout(
         numberOfCodeSmells: Int = 0,
         buildFileContent: String? = null,
         srcDirs: List<String> = this.srcDirs,
-        baselineFiles: List<String> = emptyList(),
+        baselineFiles: List<String> = emptyList()
     ) {
         val submodule = Submodule(
             name = name,
@@ -25,7 +25,7 @@ class ProjectLayout(
             numberOfCodeSmells = numberOfCodeSmells,
             buildFileContent = buildFileContent,
             srcDirs = srcDirs,
-            baselineFiles = baselineFiles,
+            baselineFiles = baselineFiles
         )
         mutableSubmodules.add(submodule)
     }
@@ -37,5 +37,5 @@ data class Submodule(
     val numberOfCodeSmells: Int,
     val buildFileContent: String?,
     val srcDirs: List<String>,
-    val baselineFiles: List<String>,
+    val baselineFiles: List<String>
 )

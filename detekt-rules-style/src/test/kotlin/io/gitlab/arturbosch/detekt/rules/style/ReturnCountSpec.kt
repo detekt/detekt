@@ -347,7 +347,7 @@ class ReturnCountSpec {
                 TestConfig(
                     mapOf(
                         MAX to "2",
-                        EXCLUDED_FUNCTIONS to listOf("factorial", "fac"),
+                        EXCLUDED_FUNCTIONS to listOf("factorial", "fac")
                     )
                 )
             ).compileAndLint(code)
@@ -360,7 +360,7 @@ class ReturnCountSpec {
                 TestConfig(
                     mapOf(
                         MAX to "2",
-                        EXCLUDED_FUNCTIONS to listOf("fa*ctorial"),
+                        EXCLUDED_FUNCTIONS to listOf("fa*ctorial")
                     )
                 )
             ).compileAndLint(code)

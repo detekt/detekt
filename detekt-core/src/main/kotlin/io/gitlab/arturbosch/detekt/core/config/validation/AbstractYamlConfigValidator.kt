@@ -15,7 +15,7 @@ internal abstract class AbstractYamlConfigValidator : ConfigValidator {
             "Only supported config is the $yamlConfigClass. Actual type is $actualClass"
         }
         val settings = ValidationSettings(
-            config.subConfig("config").valueOrDefault("checkExhaustiveness", false),
+            config.subConfig("config").valueOrDefault("checkExhaustiveness", false)
         )
 
         return validate(config, settings)

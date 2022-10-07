@@ -33,7 +33,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
         fun `Factory returns null if ignoreAnnotated is set to empty`() {
             val suppressor = annotationSuppressorFactory(
                 buildConfigAware("ignoreAnnotated" to emptyList<String>()),
-                BindingContext.EMPTY,
+                BindingContext.EMPTY
             )
 
             assertThat(suppressor).isNull()
@@ -43,7 +43,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
         fun `Factory returns not null if ignoreAnnotated is set to a not empty list`() {
             val suppressor = annotationSuppressorFactory(
                 buildConfigAware("ignoreAnnotated" to listOf("Composable")),
-                BindingContext.EMPTY,
+                BindingContext.EMPTY
             )
 
             assertThat(suppressor).isNotNull()
@@ -54,7 +54,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
     inner class AnnotationSuppressor {
         val suppressor = annotationSuppressorFactory(
             buildConfigAware("ignoreAnnotated" to listOf("Composable")),
-            BindingContext.EMPTY,
+            BindingContext.EMPTY
         )!!
 
         @Test
@@ -300,7 +300,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
 
                     annotation class Composable
                 """.trimIndent()
-            ),
+            )
         )
 
         @Nested
@@ -318,7 +318,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
 
             val bindings = listOf(
                 env.getContextForPaths(listOf(root, *composableFiles)),
-                BindingContext.EMPTY,
+                BindingContext.EMPTY
             )
 
             @ParameterizedTest
@@ -326,7 +326,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             fun `Just name`(binding: BindingContext) {
                 val suppressor = annotationSuppressorFactory(
                     buildConfigAware("ignoreAnnotated" to listOf("Composable")),
-                    binding,
+                    binding
                 )!!
 
                 val ktFunction = root.findChildByClass(KtFunction::class.java)!!
@@ -339,7 +339,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             fun `Full qualified name name`(binding: BindingContext) {
                 val suppressor = annotationSuppressorFactory(
                     buildConfigAware("ignoreAnnotated" to listOf("androidx.compose.runtime.Composable")),
-                    binding,
+                    binding
                 )!!
 
                 val ktFunction = root.findChildByClass(KtFunction::class.java)!!
@@ -353,7 +353,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             fun withGlobDoesntMatch(binding: BindingContext) {
                 val suppressor = annotationSuppressorFactory(
                     buildConfigAware("ignoreAnnotated" to listOf("*.Composable")),
-                    binding,
+                    binding
                 )!!
 
                 val ktFunction = root.findChildByClass(KtFunction::class.java)!!
@@ -366,7 +366,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             fun `With glob2`(binding: BindingContext) {
                 val suppressor = annotationSuppressorFactory(
                     buildConfigAware("ignoreAnnotated" to listOf("**.Composable")),
-                    binding,
+                    binding
                 )!!
 
                 val ktFunction = root.findChildByClass(KtFunction::class.java)!!
@@ -379,7 +379,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             fun `With glob3`(binding: BindingContext) {
                 val suppressor = annotationSuppressorFactory(
                     buildConfigAware("ignoreAnnotated" to listOf("Compo*")),
-                    binding,
+                    binding
                 )!!
 
                 val ktFunction = root.findChildByClass(KtFunction::class.java)!!
@@ -392,7 +392,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             fun `With glob4`(binding: BindingContext) {
                 val suppressor = annotationSuppressorFactory(
                     buildConfigAware("ignoreAnnotated" to listOf("*")),
-                    binding,
+                    binding
                 )!!
 
                 val ktFunction = root.findChildByClass(KtFunction::class.java)!!
@@ -414,7 +414,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
 
             val suppressor = annotationSuppressorFactory(
                 buildConfigAware("ignoreAnnotated" to listOf("androidx.compose.runtime.Composable")),
-                env.getContextForPaths(listOf(root, *composableFiles)),
+                env.getContextForPaths(listOf(root, *composableFiles))
             )!!
 
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!
@@ -435,7 +435,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
 
             val suppressor = annotationSuppressorFactory(
                 buildConfigAware("ignoreAnnotated" to listOf("androidx.compose.runtime.Composable")),
-                env.getContextForPaths(listOf(root, *composableFiles)),
+                env.getContextForPaths(listOf(root, *composableFiles))
             )!!
 
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!
@@ -458,7 +458,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
 
             val suppressor = annotationSuppressorFactory(
                 buildConfigAware("ignoreAnnotated" to listOf("androidx.compose.runtime.Composable")),
-                env.getContextForPaths(listOf(root, *composableFiles)),
+                env.getContextForPaths(listOf(root, *composableFiles))
             )!!
 
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!
@@ -483,7 +483,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
 
                     annotation class Preview(showBackground: Boolean = true)
                 """.trimIndent()
-            ),
+            )
         )
 
         val root = compileContentForTest(
@@ -501,7 +501,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
         fun `suppress if it has parameters with type solving`() {
             val suppressor = annotationSuppressorFactory(
                 buildConfigAware("ignoreAnnotated" to listOf("Preview")),
-                env.getContextForPaths(listOf(root, *composableFiles)),
+                env.getContextForPaths(listOf(root, *composableFiles))
             )!!
 
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!
@@ -513,7 +513,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
         fun `suppress if it has parameters without type solving`() {
             val suppressor = annotationSuppressorFactory(
                 buildConfigAware("ignoreAnnotated" to listOf("Preview")),
-                BindingContext.EMPTY,
+                BindingContext.EMPTY
             )!!
 
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!

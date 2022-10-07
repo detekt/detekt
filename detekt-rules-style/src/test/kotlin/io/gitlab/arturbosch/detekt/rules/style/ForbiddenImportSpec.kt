@@ -49,7 +49,7 @@ class ForbiddenImportSpec {
             .extracting("message")
             .containsExactlyInAnyOrder(
                 "The import `kotlin.jvm.JvmField` has been forbidden in the detekt config.",
-                "The import `kotlin.SinceKotlin` has been forbidden in the detekt config.",
+                "The import `kotlin.SinceKotlin` has been forbidden in the detekt config."
             )
     }
 

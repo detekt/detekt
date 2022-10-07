@@ -38,7 +38,7 @@ class UnnecessaryNotNullCheck(config: Config = Config.empty) : Rule(config) {
         "UnnecessaryNotNullCheck",
         Severity.Defect,
         "Remove unnecessary not-null checks on non-null types.",
-        Debt.FIVE_MINS,
+        Debt.FIVE_MINS
     )
 
     override fun visitCallExpression(expression: KtCallExpression) {
@@ -56,7 +56,7 @@ class UnnecessaryNotNullCheck(config: Config = Config.empty) : Rule(config) {
                     CodeSmell(
                         issue = issue,
                         entity = Entity.from(expression),
-                        message = "Using `$callName` on non-null `${argument.text}` is unnecessary",
+                        message = "Using `$callName` on non-null `${argument.text}` is unnecessary"
                     )
                 )
             }

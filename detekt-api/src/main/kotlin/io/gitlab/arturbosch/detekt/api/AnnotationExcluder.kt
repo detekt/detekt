@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 class AnnotationExcluder(
     root: KtFile,
     private val excludes: List<Regex>,
-    private val context: BindingContext,
+    private val context: BindingContext
 ) {
 
     private val fullQualifiedNameGuesser = FullQualifiedNameGuesser(root)
@@ -26,19 +26,19 @@ class AnnotationExcluder(
         root,
         excludes.mapAll { it }
             .map { it.replace(".", "\\.").replace("*", ".*").toRegex() },
-        BindingContext.EMPTY,
+        BindingContext.EMPTY
     )
 
     @Deprecated("Use AnnotationExcluder(List<Regex>, KtFile) instead")
     constructor(
         root: KtFile,
-        excludes: List<String>,
+        excludes: List<String>
     ) : this(
         root,
         excludes.map {
             it.replace(".", "\\.").replace("*", ".*").toRegex()
         },
-        BindingContext.EMPTY,
+        BindingContext.EMPTY
     )
 
     /**

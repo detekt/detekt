@@ -25,28 +25,28 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
             TestCase(
                 testDescription = "should return method name and null params list in case of simplifies signature",
                 functionSignature = "java.time.LocalDate.now",
-                expectedFunctionMatcher = FunctionMatcher.NameOnly("java.time.LocalDate.now"),
+                expectedFunctionMatcher = FunctionMatcher.NameOnly("java.time.LocalDate.now")
             ),
             TestCase(
                 testDescription = "should return method name and empty params list for full signature parameterless method",
                 functionSignature = "java.time.LocalDate.now()",
-                expectedFunctionMatcher = FunctionMatcher.WithParameters("java.time.LocalDate.now", emptyList()),
+                expectedFunctionMatcher = FunctionMatcher.WithParameters("java.time.LocalDate.now", emptyList())
             ),
             TestCase(
                 testDescription = "should return method name and params list for full signature method with single param",
                 functionSignature = "java.time.LocalDate.now(java.time.Clock)",
                 expectedFunctionMatcher = FunctionMatcher.WithParameters(
                     "java.time.LocalDate.now",
-                    listOf("java.time.Clock"),
-                ),
+                    listOf("java.time.Clock")
+                )
             ),
             TestCase(
                 testDescription = "should return method name and params list for full signature method with multiple params",
                 functionSignature = "java.time.LocalDate.of(kotlin.Int, kotlin.Int, kotlin.Int)",
                 expectedFunctionMatcher = FunctionMatcher.WithParameters(
                     "java.time.LocalDate.of",
-                    listOf("kotlin.Int", "kotlin.Int", "kotlin.Int"),
-                ),
+                    listOf("kotlin.Int", "kotlin.Int", "kotlin.Int")
+                )
             ),
             TestCase(
                 testDescription = "should return method name and params list for full signature method with multiple params " +
@@ -54,8 +54,8 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
                 functionSignature = "io.gitlab.arturbosch.detekt.SomeClass.`some , method`(kotlin.String)",
                 expectedFunctionMatcher = FunctionMatcher.WithParameters(
                     "io.gitlab.arturbosch.detekt.SomeClass.some , method",
-                    listOf("kotlin.String"),
-                ),
+                    listOf("kotlin.String")
+                )
             ),
             TestCase(
                 testDescription = "should return method name and param list when it has lambdas",
@@ -66,9 +66,9 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
                         "kotlin.Function2",
                         "kotlin.Function1",
                         "Foo",
-                        "kotlin.Function0",
-                    ),
-                ),
+                        "kotlin.Function0"
+                    )
+                )
             ),
             TestCase(
                 testDescription = "should return method name and param list when it has complex lambdas",
@@ -77,10 +77,10 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
                     "hello",
                     listOf(
                         "kotlin.Function2",
-                        "kotlin.Function0",
-                    ),
-                ),
-            ),
+                        "kotlin.Function0"
+                    )
+                )
+            )
         ).map { testCase ->
             dynamicTest(testCase.testDescription) {
                 val functionMatcher = FunctionMatcher.fromFunctionSignature(testCase.functionSignature)
@@ -194,7 +194,7 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
             "fun foo(a: () -> Unit),            true",
             "fun foo(a: (String) -> String),    false",
             "fun foo(a: (String) -> Unit),      false",
-            "fun foo(a: (Int) -> Unit),         false",
+            "fun foo(a: (Int) -> Unit),         false"
         )
         fun `When foo(() - kotlin#String)`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code)
@@ -209,7 +209,7 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
             "fun foo(a: () -> Unit),            false",
             "fun foo(a: (String) -> String),    true",
             "fun foo(a: (String) -> Unit),      true",
-            "fun foo(a: (Int) -> Unit),         true",
+            "fun foo(a: (Int) -> Unit),         true"
         )
         fun `When foo((kotlin#String) - Unit)`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code)
@@ -224,7 +224,7 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
             "fun foo(a: String),            true",
             "fun Int.foo(),                 false",
             "fun String.foo(a: Int),        false",
-            "'fun foo(a: String, ba: Int)', false",
+            "'fun foo(a: String, ba: Int)', false"
         )
         fun `When foo(kotlin#String)`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code)
@@ -239,7 +239,7 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
             "fun foo(a: String),            false",
             "fun Int.foo(),                 false",
             "fun String.foo(a: Int),        true",
-            "'fun foo(a: String, ba: Int)', true",
+            "'fun foo(a: String, ba: Int)', true"
         )
         fun `When foo(kotlin#String, kotlin#Int)`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code)
@@ -254,7 +254,7 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
             "'fun <T, U> foo(a: U, b: T)',      false",
             "'fun <T, U> foo(a: String, b: U)', false",
             "'fun <T, U> T.foo(a: U)',          true",
-            "'fun <T, U> U.foo(a: T)',          false",
+            "'fun <T, U> U.foo(a: T)',          false"
         )
         fun `When foo(T, U)`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code)
@@ -267,7 +267,7 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
 private class TestCase(
     val testDescription: String,
     val functionSignature: String,
-    val expectedFunctionMatcher: FunctionMatcher,
+    val expectedFunctionMatcher: FunctionMatcher
 )
 
 private fun buildKtFunction(environment: KotlinCoreEnvironment, code: String): Pair<KtNamedFunction, BindingContext> {

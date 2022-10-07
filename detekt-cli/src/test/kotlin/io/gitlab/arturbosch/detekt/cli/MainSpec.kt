@@ -30,7 +30,7 @@ class MainSpec {
                 arguments(arrayOf("--run-rule", "RuleSet:Rule"), Runner::class),
                 arguments(arrayOf("--print-ast"), AstPrinter::class),
                 arguments(arrayOf("--version"), VersionPrinter::class),
-                arguments(emptyArray<String>(), Runner::class),
+                arguments(emptyArray<String>(), Runner::class)
             )
         }
 

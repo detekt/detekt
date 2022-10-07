@@ -59,7 +59,7 @@ class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : R
             "IndexOutOfBoundsException",
             "NullPointerException",
             "RuntimeException",
-            "Throwable",
+            "Throwable"
         )
     )
 

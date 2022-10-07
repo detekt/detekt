@@ -5,7 +5,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 internal abstract class AbstractWriter(
-    private val outputPrinter: PrintStream,
+    private val outputPrinter: PrintStream
 ) {
 
     protected abstract val ending: String

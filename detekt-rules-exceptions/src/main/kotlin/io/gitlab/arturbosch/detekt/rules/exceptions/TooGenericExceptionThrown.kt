@@ -51,7 +51,7 @@ class TooGenericExceptionThrown(config: Config) : Rule(config) {
             "Error",
             "Exception",
             "RuntimeException",
-            "Throwable",
+            "Throwable"
         )
     ) { it.toSet() }
 

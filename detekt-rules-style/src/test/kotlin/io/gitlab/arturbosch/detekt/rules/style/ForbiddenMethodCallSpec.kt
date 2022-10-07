@@ -28,12 +28,12 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             .hasSize(2)
             .hasStartSourceLocations(
                 SourceLocation(2, 5),
-                SourceLocation(3, 5),
+                SourceLocation(3, 5)
             )
             .extracting("message")
             .containsExactly(
                 "The method `kotlin.io.print` has been forbidden: print does not allow you to configure the output stream. Use a logger instead.",
-                "The method `kotlin.io.println` has been forbidden: println does not allow you to configure the output stream. Use a logger instead.",
+                "The method `kotlin.io.println` has been forbidden: println does not allow you to configure the output stream. Use a logger instead."
             )
     }
 
