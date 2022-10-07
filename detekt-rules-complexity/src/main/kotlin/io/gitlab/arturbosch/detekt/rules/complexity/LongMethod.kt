@@ -52,8 +52,11 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
         val functionToLines = HashMap<KtNamedFunction, Int>()
         functionToLinesCache.map { (function, lines) ->
             val isNested = function.getStrictParentOfType<KtNamedFunction>() != null
-            if (isNested) functionToLines[function] = functionToBodyLinesCache[function] ?: 0
-            else functionToLines[function] = lines
+            if (isNested) {
+                functionToLines[function] = functionToBodyLinesCache[function] ?: 0
+            } else {
+                functionToLines[function] = lines
+            }
         }
         for ((function, lines) in functionToLines) {
             if (lines >= threshold) {

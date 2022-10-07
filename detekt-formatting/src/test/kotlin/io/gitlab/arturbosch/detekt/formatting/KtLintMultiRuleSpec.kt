@@ -13,14 +13,8 @@ class KtLintMultiRuleSpec {
         ktlintRule.visitFile(compileContentForTest(""))
         val sortedRules = ktlintRule.getSortedRules()
         assertThat(sortedRules).isNotEmpty
-        assertThat(sortedRules.indexOfFirst { it.runOnRootNodeOnly })
+        assertThat(sortedRules.indexOfFirst { !it.runAsLateAsPossible })
             .isGreaterThan(-1)
-            .isLessThan(sortedRules.indexOfFirst { !it.runOnRootNodeOnly })
-        assertThat(sortedRules.indexOfFirst { !it.runOnRootNodeOnly })
-            .isGreaterThan(-1)
-            .isLessThan(sortedRules.indexOfFirst { it.runOnRootNodeOnly && it.runAsLateAsPossible })
-        assertThat(sortedRules.indexOfFirst { it.runOnRootNodeOnly && it.runAsLateAsPossible })
-            .isGreaterThan(-1)
-            .isLessThan(sortedRules.indexOfFirst { it.runAsLateAsPossible && !it.runOnRootNodeOnly })
+            .isLessThan(sortedRules.indexOfFirst { it.runAsLateAsPossible })
     }
 }

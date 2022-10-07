@@ -13,7 +13,6 @@ import java.nio.file.Paths
 fun FormattingRule.lint(@Language("kotlin") content: String, fileName: String = "Test.kt"): List<Finding> {
     val root = compileContentForTest(content, fileName)
     this.visit(root)
-    root.node.visit { node -> this.apply(node) }
     return this.findings
 }
 

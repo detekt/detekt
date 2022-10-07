@@ -107,7 +107,9 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         if (restrictToConfig &&
             resultingDescriptor.returnType !in returnValueTypes &&
             (annotations + resultingDescriptor.containingDeclaration.annotations).none { it in returnValueAnnotations }
-        ) return
+        ) {
+            return
+        }
 
         val messageText = expression.calleeExpression?.text ?: expression.text
         report(
