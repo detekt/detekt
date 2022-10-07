@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
+
     private val subject = RedundantElseInWhen()
 
     @Nested

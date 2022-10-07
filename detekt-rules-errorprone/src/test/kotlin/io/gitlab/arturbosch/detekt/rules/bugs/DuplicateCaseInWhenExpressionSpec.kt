@@ -6,6 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class DuplicateCaseInWhenExpressionSpec {
+
     private val subject = DuplicateCaseInWhenExpression(Config.empty)
 
     @Test
