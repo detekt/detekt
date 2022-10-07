@@ -180,11 +180,11 @@ formatting:
     active: true
     autoCorrect: true
   TrailingCommaOnCallSite:
-    active: false
+    active: true
     autoCorrect: true
     useTrailingCommaOnCallSite: false
   TrailingCommaOnDeclarationSite:
-    active: false
+    active: true
     autoCorrect: true
     useTrailingCommaOnDeclarationSite: false
   TypeArgumentListSpacing:
