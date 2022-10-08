@@ -237,6 +237,20 @@ class ObjectPropertyNamingSpec {
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
+
+    @Nested
+    inner class `top level properties` {
+        @Test
+        fun `should not detect top level properties`() {
+            val subject = ObjectPropertyNaming()
+
+            val code = """
+                val _invalidNaming = 1
+            """.trimIndent()
+
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+    }
 }
 
 @Suppress("UnnecessaryAbstractClass")

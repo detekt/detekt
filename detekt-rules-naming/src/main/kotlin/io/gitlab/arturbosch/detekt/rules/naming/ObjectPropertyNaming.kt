@@ -38,7 +38,7 @@ class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
     private val privatePropertyPattern: Regex by config("(_)?[A-Za-z][_A-Za-z0-9]*") { it.toRegex() }
 
     override fun visitProperty(property: KtProperty) {
-        if (property.isLocal) {
+        if (property.isLocal || property.isTopLevel) {
             return
         }
 
