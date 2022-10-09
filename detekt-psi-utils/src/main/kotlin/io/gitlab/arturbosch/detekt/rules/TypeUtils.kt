@@ -14,6 +14,19 @@ fun KotlinType.fqNameOrNull(): FqName? {
     return TypeUtils.getClassDescriptor(this)?.fqNameOrNull()
 }
 
+/**
+ * Returns types considering data flow.
+ *
+ * For Example, for `s` in `print(s)` below, [BindingContext.getType] returns String?, but this function returns String.
+ *
+ * ```kotlin
+ * fun foo(s: String?) {
+ *     if (s != null) {
+ *         println(s) // s is String (smart cast from String?)
+ *     }
+ * }
+ * ```
+ */
 @Suppress("ReturnCount")
 fun KtExpression.getDataFlowAwareTypes(
     bindingContext: BindingContext,
