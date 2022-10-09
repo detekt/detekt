@@ -114,6 +114,21 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
+
+        @Test
+        fun `reports when statement is spanning multiple lines`() {
+            val code = """
+            fun f() {
+                val digits = 1234.let {
+                    check(it > 0) {
+                        println(it)
+                    }
+                }
+            }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
     }
 
     @Nested
