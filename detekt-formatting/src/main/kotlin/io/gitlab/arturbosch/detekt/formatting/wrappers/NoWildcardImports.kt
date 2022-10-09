@@ -20,8 +20,6 @@ class NoWildcardImports(config: Config) : FormattingRule(config) {
     @Configuration("Defines allowed wildcard imports")
     private val packagesToUseImportOnDemandProperty by config(ALLOWED_WILDCARD_IMPORTS)
 
-    override fun canBeCorrectedByKtLint(message: String): Boolean = false
-
     override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
         mapOf(
             NoWildcardImportsRule.packagesToUseImportOnDemandProperty to packagesToUseImportOnDemandProperty

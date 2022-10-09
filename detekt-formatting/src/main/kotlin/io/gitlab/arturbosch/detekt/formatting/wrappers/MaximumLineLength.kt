@@ -32,8 +32,6 @@ class MaximumLineLength(config: Config) : FormattingRule(config) {
     @Configuration("ignore back ticked identifier")
     private val ignoreBackTickedIdentifier by config(false)
 
-    override fun canBeCorrectedByKtLint(message: String): Boolean = false
-
     override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
         mapOf(
             MaxLineLengthRule.ignoreBackTickedIdentifierProperty to ignoreBackTickedIdentifier.toString(),
