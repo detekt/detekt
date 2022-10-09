@@ -11,7 +11,9 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import io.gitlab.arturbosch.detekt.rules.hasImplicitParameterReference
 import io.gitlab.arturbosch.detekt.rules.implicitParameter
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 /**
  * Lambda expressions are very useful in a lot of cases, and they often include very small chunks of
@@ -74,8 +76,8 @@ class MultilineLambdaItParameter(val config: Config) : Rule(config) {
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
-        val size = lambdaExpression.bodyExpression?.statements?.size
-        if (size == null || size <= 1) return
+        val size = lambdaExpression.collectDescendantsOfType<KtBlockExpression>().flatMap { it.statements }.size
+        if (size <= 1) return
 
         val parameterNames = lambdaExpression.valueParameters.map { it.name }
         // Explicit `it`
