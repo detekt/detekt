@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationOnSeparateLine
 import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumEntryNameCase
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Filename
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ImportOrdering
@@ -79,6 +80,13 @@ class RulesWhichCantBeCorrectedSpec {
         """.trimIndent()
 
         assertThat(Indentation(Config.empty).lint(code))
+            .isNotEmpty
+            .hasExactlyElementsOfTypes(CodeSmell::class.java)
+    }
+
+    @Test
+    fun `Annotation contains a parameter on single line can't be corrected`() {
+        assertThat(AnnotationOnSeparateLine(Config.empty).lint("fun foo1() = @Suppress(\"DEPRECATION\") bar()"))
             .isNotEmpty
             .hasExactlyElementsOfTypes(CodeSmell::class.java)
     }
