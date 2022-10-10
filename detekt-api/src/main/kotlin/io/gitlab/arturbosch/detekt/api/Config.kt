@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.api.internal.EmptyConfig
