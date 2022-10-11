@@ -76,7 +76,7 @@ class MultilineLambdaItParameter(val config: Config) : Rule(config) {
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
-        val size = lambdaExpression.collectDescendantsOfType<KtBlockExpression>().flatMap { it.statements }.size
+        val size = lambdaExpression.collectDescendantsOfType<KtBlockExpression>().sumOf { it.statements.size }
         if (size <= 1) return
 
         val parameterNames = lambdaExpression.valueParameters.map { it.name }
