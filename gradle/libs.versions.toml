@@ -1,5 +1,5 @@
 [versions]
-dokka = "1.7.10"
+dokka = "1.7.20"
 jacoco = "0.8.8"
 kotlin = "1.7.20"
 ktlint = "0.47.1"
