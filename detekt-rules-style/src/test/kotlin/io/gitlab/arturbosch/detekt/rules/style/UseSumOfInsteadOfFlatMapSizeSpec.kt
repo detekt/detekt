@@ -106,4 +106,56 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
         val actual = subject.compileAndLintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
+
+    @Test
+    @DisplayName("Does not report flatMap")
+    fun noReportFlatMap() {
+        val code = """
+            fun test(list: List<Foo>) {
+                list.flatMap { it.foo }
+            }
+            class Foo(val foo: List<Int>)
+        """.trimIndent()
+        val actual = subject.compileAndLintWithContext(env, code)
+        assertThat(actual).isEmpty()
+    }
+
+    @Test
+    @DisplayName("Does not report flatMap and first")
+    fun noReportFlatMapAndFirst() {
+        val code = """
+            fun test(list: List<Foo>) {
+                list.flatMap { it.foo }.first()
+            }
+            class Foo(val foo: List<Int>)
+        """.trimIndent()
+        val actual = subject.compileAndLintWithContext(env, code)
+        assertThat(actual).isEmpty()
+    }
+
+    @Test
+    @DisplayName("Does not report flatten")
+    fun noReportFlatten() {
+        val code = """
+            fun test(list: List<List<Int>>) {
+                list.flatten()
+            }
+            class Foo(val foo: List<Int>)
+        """.trimIndent()
+        val actual = subject.compileAndLintWithContext(env, code)
+        assertThat(actual).isEmpty()
+    }
+
+    @Test
+    @DisplayName("Does not report flatten and last")
+    fun noReportFlattenAndLast() {
+        val code = """
+            fun test(list: List<List<Int>>) {
+                list.flatten().last()
+            }
+            class Foo(val foo: List<Int>)
+        """.trimIndent()
+        val actual = subject.compileAndLintWithContext(env, code)
+        assertThat(actual).isEmpty()
+    }
 }
