@@ -24,7 +24,7 @@ class MandatoryBracesIfStatementsSpec {
             )
 
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(32 to 41)
+            assertThat(findings).hasTextLocations(14 to 16)
         }
 
         @Test
@@ -54,6 +54,7 @@ class MandatoryBracesIfStatementsSpec {
             )
 
             assertThat(findings).hasSize(2)
+            assertThat(findings).hasTextLocations(11 to 13, 44 to 48)
         }
 
         @Test
@@ -70,7 +71,7 @@ class MandatoryBracesIfStatementsSpec {
             )
 
             assertThat(findings).hasSize(2)
-            assertThat(findings).hasTextLocations(32 to 41, 59 to 68)
+            assertThat(findings).hasTextLocations(14 to 16, 46 to 50)
         }
 
         @Test
@@ -89,7 +90,7 @@ class MandatoryBracesIfStatementsSpec {
             )
 
             assertThat(findings).hasSize(3)
-            assertThat(findings).hasTextLocations(32 to 41, 70 to 79, 97 to 106)
+            assertThat(findings).hasTextLocations(14 to 16, 51 to 53, 84 to 88)
         }
 
         @Test
@@ -106,7 +107,7 @@ class MandatoryBracesIfStatementsSpec {
             )
 
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(63 to 72)
+            assertThat(findings).hasTextLocations(50 to 54)
         }
 
         @Test
@@ -124,7 +125,7 @@ class MandatoryBracesIfStatementsSpec {
             )
 
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(32 to 41)
+            assertThat(findings).hasTextLocations(14 to 16)
         }
 
         @Test
@@ -139,7 +140,7 @@ class MandatoryBracesIfStatementsSpec {
             )
 
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(24 to 33)
+            assertThat(findings).hasTextLocations(14 to 16)
         }
 
         @Test
@@ -154,7 +155,7 @@ class MandatoryBracesIfStatementsSpec {
             )
 
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(47 to 56)
+            assertThat(findings).hasTextLocations(34 to 38)
         }
     }
 

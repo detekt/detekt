@@ -43,12 +43,12 @@ class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) 
 
         val thenExpression = expression.then ?: return
         if (thenExpression !is KtBlockExpression && hasNewLineAfter(expression.rightParenthesis)) {
-            report(CodeSmell(issue, Entity.from(thenExpression), issue.description))
+            report(CodeSmell(issue, Entity.from(expression.ifKeyword), issue.description))
         }
 
         val elseExpression = expression.`else` ?: return
         if (mustBeOnSameLine(elseExpression) && hasNewLineAfter(expression.elseKeyword)) {
-            report(CodeSmell(issue, Entity.from(elseExpression), issue.description))
+            report(CodeSmell(issue, Entity.from(expression.elseKeyword ?: elseExpression), issue.description))
         }
     }
 
