@@ -105,6 +105,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UnnecessaryBackticks(config),
             MaxChainedCallsOnSameLine(config),
             AlsoCouldBeApply(config),
+            UseSumOfInsteadOfFlatMapSize(config),
         )
     )
 }

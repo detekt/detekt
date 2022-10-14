@@ -717,6 +717,8 @@ style:
     active: true
   UseRequireNotNull:
     active: true
+  UseSumOfInsteadOfFlatMapSize:
+    active: false
   UselessCallOnNotNull:
     active: true
   UtilityClassWithPublicConstructor:
