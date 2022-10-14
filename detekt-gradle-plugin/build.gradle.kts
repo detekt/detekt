@@ -91,6 +91,15 @@ gradlePlugin {
     )
 }
 
+gradlePlugin {
+    plugins {
+        create("detektCompilerPlugin") {
+            id = "io.github.detekt.gradle.compiler-plugin"
+            implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
+        }
+    }
+}
+
 // Some functional tests reference internal functions in the Gradle plugin. This should become unnecessary as further
 // updates are made to the functional test suite.
 kotlin.target.compilations.getByName("functionalTest") {
