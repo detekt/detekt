@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
@@ -12,8 +11,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
     val subject = UseSumOfInsteadOfFlatMapSize()
 
     @Test
-    @DisplayName("Reports flatMap and size")
-    fun reportFlatMapAndSize() {
+    fun `reports flatMap and size`() {
         val code = """
             fun test(list: List<Foo>) {
                 list.flatMap { it.foo }.size
@@ -26,8 +24,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    @DisplayName("Reports flatMap and count")
-    fun reportFlatMapAndCount() {
+    fun `reports flatMap and count`() {
         val code = """
             fun test(list: List<Foo>) {
                 list.flatMap { it.foo }.count()
@@ -40,8 +37,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    @DisplayName("Reports flatMap and count with a argument")
-    fun reportFlatMapAndCountWithArgument() {
+    fun `reports flatMap and count with a argument`() {
         val code = """
             fun test(list: List<Foo>) {
                 list.flatMap { it.foo }.count { it > 2 }
@@ -54,8 +50,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    @DisplayName("Reports flatten and size")
-    fun reportFlattenAndSize() {
+    fun `reports flatten and size`() {
         val code = """
             fun test(list: List<List<Int>>) {
                 list.flatten().size
@@ -68,8 +63,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    @DisplayName("Reports flatMap and size on nullable list")
-    fun reportFlatMapAndSizeOnNullableList() {
+    fun `reports flatMap and size on nullable list`() {
         val code = """
             fun test(list: List<Foo>?) {
                 list?.flatMap { it.foo }?.size
@@ -81,8 +75,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    @DisplayName("Reports flatMap and size on implicit list receiver")
-    fun reportFlatMapAndSizeOnImplicitListReceiver() {
+    fun `reports flatMap and size on implicit list receiver`() {
         val code = """
             fun List<Foo>.test() {
                 flatMap { it.foo }.size
@@ -95,8 +88,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    @DisplayName("Reports flatMap and count on Set")
-    fun reportFlatMapAndCountOnSet() {
+    fun `reports flatMap and count on Set`() {
         val code = """
             fun test(set: Set<Bar>) {
                 set.flatMap { it.bar }.count()
@@ -108,8 +100,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    @DisplayName("Does not report flatMap")
-    fun noReportFlatMap() {
+    fun `does not report flatMap`() {
         val code = """
             fun test(list: List<Foo>) {
                 list.flatMap { it.foo }
@@ -121,8 +112,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    @DisplayName("Does not report flatMap and first")
-    fun noReportFlatMapAndFirst() {
+    fun `does not report flatMap and first`() {
         val code = """
             fun test(list: List<Foo>) {
                 list.flatMap { it.foo }.first()
@@ -134,8 +124,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    @DisplayName("Does not report flatten")
-    fun noReportFlatten() {
+    fun `does not report flatten`() {
         val code = """
             fun test(list: List<List<Int>>) {
                 list.flatten()
@@ -147,8 +136,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    @DisplayName("Does not report flatten and last")
-    fun noReportFlattenAndLast() {
+    fun `does not report flatten and last`() {
         val code = """
             fun test(list: List<List<Int>>) {
                 list.flatten().last()
