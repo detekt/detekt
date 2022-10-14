@@ -42,7 +42,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
     val runAsLateAsPossible
         get() = RunAsLateAsPossible in wrapping.visitorModifiers
 
-    private val emit = { offset: Int, message: String, _: Boolean ->
+    private val emit = { offset: Int, message: String, canBeAutoCorrected: Boolean ->
         val (line, column) = positionByOffset(offset)
         val location = Location(
             SourceLocation(line, column),
@@ -61,7 +61,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
             .orEmpty()
         val entity = Entity("", "$packageName${root.fileName}:$line", location, root)
 
-        if (canBeCorrectedByKtLint(message)) {
+        if (canBeAutoCorrected) {
             report(CorrectableCodeSmell(issue, entity, message, autoCorrectEnabled = autoCorrect))
         } else {
             report(CodeSmell(issue, entity, message))
@@ -70,9 +70,6 @@ abstract class FormattingRule(config: Config) : Rule(config) {
 
     private var positionByOffset: (offset: Int) -> Pair<Int, Int> by SingleAssign()
     private var root: KtFile by SingleAssign()
-
-    // KtLint has rules which prompts the user to manually correct issues e.g. Filename and PackageName.
-    protected open fun canBeCorrectedByKtLint(message: String): Boolean = true
 
     protected fun issueFor(description: String) =
         Issue(javaClass.simpleName, Severity.Style, description, Debt.FIVE_MINS)
