@@ -5,7 +5,6 @@ import io.github.detekt.tooling.api.DetektCli
 import io.github.detekt.tooling.api.UnexpectedError
 import io.github.detekt.tooling.internal.DefaultAnalysisResult
 import io.github.detekt.tooling.internal.EmptyContainer
-import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.cli.runners.VersionPrinter
@@ -21,7 +20,6 @@ class CliRunner : DetektCli {
         val specialRunner = when {
             arguments.showVersion -> VersionPrinter(outputChannel)
             arguments.generateConfig -> ConfigExporter(arguments, outputChannel)
-            arguments.printAst -> AstPrinter(arguments, outputChannel)
             else -> null
         }
 
