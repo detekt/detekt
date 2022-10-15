@@ -11,7 +11,7 @@ object DeprecatedPrinter : DocumentationPrinter<List<RuleSetPage>> {
         item.forEach { ruleSet ->
             ruleSet.rules.forEach { rule ->
                 if (rule.isDeprecated()) {
-                    builder.appendLine(writeRuleProperty(ruleSet, rule))
+                    builder.appendLine(writeRule(ruleSet, rule))
                 }
                 rule.configuration.forEach { configuration ->
                     if (configuration.isDeprecated()) {
@@ -20,8 +20,14 @@ object DeprecatedPrinter : DocumentationPrinter<List<RuleSetPage>> {
                 }
             }
         }
+        builder.appendLine(writeMigratedRules())
         return builder.toString()
     }
+}
+
+private fun writeRule(ruleSet: RuleSetPage, rule: Rule): String {
+    @Suppress("UnsafeCallOnNullableType")
+    return "${ruleSet.ruleSet.name}>${rule.name}=${rule.deprecationMessage!!}"
 }
 
 private fun writeProperty(ruleSet: RuleSetPage, rule: Rule, configuration: Configuration): String {
@@ -29,7 +35,10 @@ private fun writeProperty(ruleSet: RuleSetPage, rule: Rule, configuration: Confi
     return "${ruleSet.ruleSet.name}>${rule.name}>${configuration.name}=${configuration.deprecated!!}"
 }
 
-private fun writeRuleProperty(ruleSet: RuleSetPage, rule: Rule): String {
-    @Suppress("UnsafeCallOnNullableType")
-    return "${ruleSet.ruleSet.name}>${rule.name}=${rule.deprecationMessage!!}"
+internal fun writeMigratedRules(): String {
+    return """
+        style>ForbiddenPublicDataClass=Rule migrated to `libraries` ruleset plugin
+        style>LibraryCodeMustSpecifyReturnType=Rule migrated to `libraries` ruleset plugin
+        style>LibraryEntitiesShouldNotBePublic=Rule migrated to `libraries` ruleset plugin
+    """.trimIndent()
 }

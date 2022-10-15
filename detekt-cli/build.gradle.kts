@@ -8,7 +8,7 @@ application {
     mainClass.set("io.gitlab.arturbosch.detekt.cli.Main")
 }
 
-val formattingJar by configurations.creating {
+val pluginsJar: Configuration by configurations.creating {
     isTransitive = false
 }
 
@@ -27,7 +27,9 @@ dependencies {
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj)
 
-    formattingJar(projects.detektFormatting)
+    pluginsJar(projects.detektFormatting)
+    pluginsJar(projects.detektRulesLibraries)
+    pluginsJar(projects.detektRulesRuleauthors)
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants
@@ -54,11 +56,11 @@ tasks {
 
     val runWithArgsFile by registering(JavaExec::class) {
         // The task generating these jar files run first.
-        inputs.files(formattingJar)
+        inputs.files(pluginsJar)
         doNotTrackState("The entire root directory is read as the input source.")
         classpath = files(shadowJar)
         workingDir = rootDir
-        args = listOf("@./config/detekt/argsfile", "-p", formattingJar.singleFile.path)
+        args = listOf("@./config/detekt/argsfile", "-p", pluginsJar.files.joinToString(",") { it.path })
     }
 
     check {
