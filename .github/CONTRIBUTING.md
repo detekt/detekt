@@ -299,7 +299,7 @@ Check the [README.md inside website/](https://github.com/detekt/detekt/blob/main
 
 ## Gradle Enterprise Access
 
-We do have access to a managed [Gradle Enterprise instance](6) that is publishing
+We do have access to a managed [Gradle Enterprise instance][6] that is publishing
 build scans for all the builds executed on CI (not from forks).
 
 This is extremely helpful to debug build failures and have access to remote build cache.
