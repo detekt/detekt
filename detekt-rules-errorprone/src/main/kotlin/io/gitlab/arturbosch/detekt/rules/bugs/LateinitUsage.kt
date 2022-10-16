@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * }
  * </noncompliant>
  */
+@Suppress("ViolatesTypeResolutionRequirements")
 class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(

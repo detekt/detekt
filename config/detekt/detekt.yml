@@ -277,3 +277,8 @@ libraries:
     active: true
     excludes: ['**/*.kt']
     includes: ['**/detekt-api/src/main/**/api/*.kt']
+
+ruleauthors:
+  ViolatesTypeResolutionRequirements:
+    active: true
+    excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']

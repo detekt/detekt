@@ -45,6 +45,7 @@ import org.jetbrains.kotlin.types.KotlinType
  * class A(val b: B) : I by b
  * </compliant>
  */
+@Suppress("ViolatesTypeResolutionRequirements")
 class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(

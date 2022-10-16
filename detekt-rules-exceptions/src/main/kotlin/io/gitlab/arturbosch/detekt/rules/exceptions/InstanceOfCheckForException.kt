@@ -44,6 +44,7 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
  * }
  * </compliant>
  */
+@Suppress("ViolatesTypeResolutionRequirements")
 @ActiveByDefault(since = "1.21.0")
 class InstanceOfCheckForException(config: Config = Config.empty) : Rule(config) {
 
