@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * const val constantString = "1"
  * </compliant>
  */
-@Suppress("ViolateTypeResolutionRequirements")
+@Suppress("ViolatesTypeResolutionRequirements")
 @ActiveByDefault(since = "1.2.0")
 class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config) {
 

@@ -16,7 +16,7 @@ class RuleAuthorsProvider : RuleSetProvider {
     override fun instance(config: Config) = RuleSet(
         ruleSetId,
         listOf(
-            ViolateTypeResolutionRequirements(config),
+            ViolatesTypeResolutionRequirements(config),
         )
     )
 }

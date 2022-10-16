@@ -7,9 +7,9 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-internal class ViolateTypeResolutionRequirementsSpec(private val env: KotlinCoreEnvironment) {
+internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCoreEnvironment) {
 
-    private val rule = ViolateTypeResolutionRequirements()
+    private val rule = ViolatesTypeResolutionRequirements()
 
     @Test
     fun `should not report classes that don't extend from BaseRule`() {

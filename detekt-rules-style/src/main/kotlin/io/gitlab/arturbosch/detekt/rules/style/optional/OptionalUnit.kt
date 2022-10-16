@@ -50,7 +50,7 @@ import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
  * override fun foo() = Unit
  * </compliant>
  */
-@Suppress("ViolateTypeResolutionRequirements")
+@Suppress("ViolatesTypeResolutionRequirements")
 class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(

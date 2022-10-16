@@ -42,7 +42,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
  * str.toLowerCase(Locale.US)
  * </compliant>
  */
-@Suppress("ViolateTypeResolutionRequirements")
+@Suppress("ViolatesTypeResolutionRequirements")
 @ActiveByDefault(since = "1.16.0")
 class ImplicitDefaultLocale(config: Config = Config.empty) : Rule(config) {
 

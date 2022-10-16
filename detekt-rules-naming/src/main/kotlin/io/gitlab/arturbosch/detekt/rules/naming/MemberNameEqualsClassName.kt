@@ -52,7 +52,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * }
  * </compliant>
  */
-@Suppress("ViolateTypeResolutionRequirements")
+@Suppress("ViolatesTypeResolutionRequirements")
 @ActiveByDefault(since = "1.2.0")
 class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 

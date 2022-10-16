@@ -56,7 +56,7 @@ private const val ARRAY_GET_METHOD_NAME = "get"
  * If these private elements are unused they should be removed. Otherwise, this dead code
  * can lead to confusion and potential bugs.
  */
-@Suppress("ViolateTypeResolutionRequirements")
+@Suppress("ViolatesTypeResolutionRequirements")
 @ActiveByDefault(since = "1.16.0")
 class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 

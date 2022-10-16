@@ -50,7 +50,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * }
  * </compliant>
  */
-@Suppress("ViolateTypeResolutionRequirements")
+@Suppress("ViolatesTypeResolutionRequirements")
 @ActiveByDefault(since = "1.0.0")
 class SpreadOperator(config: Config = Config.empty) : Rule(config) {
 
