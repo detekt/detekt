@@ -100,7 +100,6 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
         const val DEFAULT_AUTO_CORRECT_VALUE = false
         const val DEFAULT_DISABLE_RULESETS_VALUE = false
         const val DEFAULT_REPORT_ENABLED_VALUE = true
-        const val DEFAULT_FAIL_FAST_VALUE = false
         const val DEFAULT_ALL_RULES_VALUE = false
         const val DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE = false
     }
