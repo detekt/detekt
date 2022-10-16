@@ -38,7 +38,7 @@ private fun configInputStream(extensionsSpec: ExtensionsSpec): InputStream {
     ExtensionFacade(extensionsSpec.plugins).pluginLoader
         .getResourcesAsStream("config/config.yml")
         .forEach { inputStream ->
-            outputStream.bufferedWriter().append('\n').flush()
+            outputStream.write('\n'.code)
             inputStream.use { it.copyTo(outputStream) }
         }
 
