@@ -4,6 +4,7 @@ import org.gradle.api.Action
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.quality.CodeQualityExtension
+import org.gradle.api.provider.Property
 import java.io.File
 import java.io.InputStream
 import java.net.URL
@@ -55,6 +56,9 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
 
     var basePath: String? = null
 
+    val enableCompilerPlugin: Property<Boolean> =
+        objects.property(Boolean::class.java).convention(DEFAULT_COMPILER_PLUGIN_ENABLED)
+
     var config: ConfigurableFileCollection = objects.fileCollection()
 
     var debug: Boolean = DEFAULT_DEBUG_VALUE
@@ -104,6 +108,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
         const val DEFAULT_REPORT_ENABLED_VALUE = true
         const val DEFAULT_ALL_RULES_VALUE = false
         const val DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE = false
+        const val DEFAULT_COMPILER_PLUGIN_ENABLED = false
     }
 }
 

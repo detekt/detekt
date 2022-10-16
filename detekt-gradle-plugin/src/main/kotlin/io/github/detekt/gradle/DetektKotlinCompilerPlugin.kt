@@ -45,6 +45,7 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
 
         target.tasks.withType(KotlinCompile::class.java).configureEach { task ->
             task.extensions.create(DETEKT_NAME, KotlinCompileTaskDetektExtension::class.java, target).apply {
+                isEnabled.convention(extension.enableCompilerPlugin)
                 baseline.convention(target.layout.file(target.provider { extension.baseline }))
                 debug.convention(target.provider { extension.debug })
                 buildUponDefaultConfig.convention(target.provider { extension.buildUponDefaultConfig })
