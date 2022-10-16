@@ -36,7 +36,7 @@ private fun configInputStream(extensionsSpec: ExtensionsSpec): InputStream {
         .use { it.copyTo(outputStream) }
 
     ExtensionFacade(extensionsSpec.plugins).pluginLoader
-        .getResourcesAsStream("config/config.yml")
+        .getSafeResourcesAsStreams("config/config.yml")
         .forEach { inputStream ->
             outputStream.write('\n'.code)
             inputStream.use { it.copyTo(outputStream) }
@@ -45,7 +45,7 @@ private fun configInputStream(extensionsSpec: ExtensionsSpec): InputStream {
     return ByteArrayInputStream(outputStream.toByteArray())
 }
 
-private fun ClassLoader.getResourcesAsStream(name: String): Sequence<InputStream> {
+private fun ClassLoader.getSafeResourcesAsStreams(name: String): Sequence<InputStream> {
     return getResources(name)
         .asSequence()
         .map { it.openSafeStream() }
