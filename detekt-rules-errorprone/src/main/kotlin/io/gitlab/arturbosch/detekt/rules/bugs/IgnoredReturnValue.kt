@@ -91,7 +91,7 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         it.map(FunctionMatcher::fromFunctionSignature)
     }
 
-    @Suppress("ReturnCount")
+    @Suppress("ReturnCount", "ComplexCondition")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
@@ -106,7 +106,8 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         if (annotations.any { it in ignoreReturnValueAnnotations }) return
         if (restrictToConfig &&
             resultingDescriptor.returnType !in returnValueTypes &&
-            (annotations + resultingDescriptor.containingDeclaration.annotations).none { it in returnValueAnnotations }
+            annotations.none { it in returnValueAnnotations } &&
+            resultingDescriptor.containingDeclaration.annotations.none { it in returnValueAnnotations }
         ) {
             return
         }
