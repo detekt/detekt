@@ -12,7 +12,7 @@ Detekt is developed by open-source contributors as a volunteer effort.
 Due to our limited resources, we commit to support only the **latest stable versions** and related RC versions.
 
 When opening Issues and Discussions, consider first updating to the latest version and align your tool versions
-with the one listed below. This allow us to offer you better support.
+with the one listed below. This allows us to offer you better support.
 
 ## Tool Versions
 
@@ -28,7 +28,7 @@ Consider **aligning** your Gradle plugin versions with the one listed below, as 
 
 | Detekt Version | Gradle Version | Kotlin Version | AGP Version | Java Target Level | JDK Version |
 |----------------|----------------|----------------|-------------|-------------------|-------------|
-| `1.22.0`       | `7.5.1`        | `1.7.10`       | `7.3.0`     | `1.8`             | `17`        |
+| `1.22.0`       | `7.5.1`        | `1.7.20`       | `7.3.1`     | `1.8`             | `17`        |
 | `1.21.0`       | `7.5`          | `1.6.21`       | `7.2.1`     | `1.8`             | `17`        |
 | `1.20.0`       | `7.4.2`        | `1.6.20`       | `7.1.3`     | `1.8`             | `17`        |
 | `1.19.0`       | `7.3.0`        | `1.5.31`       | `4.2.2`     | `1.8`             | `17`        |
