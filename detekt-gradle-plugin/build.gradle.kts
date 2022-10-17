@@ -123,11 +123,7 @@ tasks {
         property("detektVersion", project.version)
     }
 
-    processResources {
-        from(writeDetektVersionProperties)
-    }
-
-    processTestResources {
+    jar {
         from(writeDetektVersionProperties)
     }
 
