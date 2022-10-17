@@ -40,16 +40,16 @@ class RuleProviderSpec {
     }
 }
 
-private val ruleMap = mapOf<Class<*>, String>(
-    CommentSmellProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.documentation",
-    ComplexityProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.complexity",
-    EmptyCodeProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.empty",
-    ExceptionsProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.exceptions",
-    NamingProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.naming",
-    PerformanceProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.performance",
-    PotentialBugProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.bugs",
-    StyleGuideProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.style",
-    CoroutinesProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.coroutines"
+private val ruleMap: Map<Class<out DefaultRuleSetProvider>, String> = mapOf(
+    CommentSmellProvider::class.java to "io.gitlab.arturbosch.detekt.rules.documentation",
+    ComplexityProvider::class.java to "io.gitlab.arturbosch.detekt.rules.complexity",
+    EmptyCodeProvider::class.java to "io.gitlab.arturbosch.detekt.rules.empty",
+    ExceptionsProvider::class.java to "io.gitlab.arturbosch.detekt.rules.exceptions",
+    NamingProvider::class.java to "io.gitlab.arturbosch.detekt.rules.naming",
+    PerformanceProvider::class.java to "io.gitlab.arturbosch.detekt.rules.performance",
+    PotentialBugProvider::class.java to "io.gitlab.arturbosch.detekt.rules.bugs",
+    StyleGuideProvider::class.java to "io.gitlab.arturbosch.detekt.rules.style",
+    CoroutinesProvider::class.java to "io.gitlab.arturbosch.detekt.rules.coroutines"
 )
 
 private fun getRulesPackageNameForProvider(providerType: Class<out RuleSetProvider>): String {
