@@ -79,7 +79,7 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
         val description = "Boolean property name should match a $allowedPattern pattern."
         return CodeSmell(
             issue,
-            Entity.from(declaration),
+            Entity.from(declaration.nameIdentifier ?: declaration),
             message = "$description Actual name is $name"
         )
     }
