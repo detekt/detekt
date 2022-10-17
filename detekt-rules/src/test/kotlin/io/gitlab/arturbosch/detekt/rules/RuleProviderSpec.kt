@@ -32,9 +32,9 @@ class RuleProviderSpec {
             val classes = getClasses(packageName)
             classes.forEach { clazz ->
                 val rule = rules.singleOrNull { it.javaClass.simpleName == clazz.simpleName }
-                assertThat(rule).withFailMessage(
-                    "Rule $clazz is not called in the corresponding RuleSetProvider $providerType"
-                ).isNotNull()
+                assertThat(rule)
+                    .withFailMessage("Rule $clazz is not called in the corresponding RuleSetProvider $providerType")
+                    .isNotNull()
             }
         }
     }
