@@ -82,6 +82,17 @@ class TrimMultilineRawStringSpec {
         subject.compileAndLint(code)
         assertThat(subject.findings).isEmpty()
     }
+
+    @Test
+    fun `doesn't raise if it is not a raw string - multiline`() {
+        val code = """
+            val a = "Hello ${'$'}{
+                "cruel"
+            } world!"
+        """.trimIndent()
+        subject.compileAndLint(code)
+        assertThat(subject.findings).isEmpty()
+    }
 }
 
 private const val TQ = "\"\"\""
