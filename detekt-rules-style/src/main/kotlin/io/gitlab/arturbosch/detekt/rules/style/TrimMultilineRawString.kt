@@ -7,11 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiver
-import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
 
 /**
  * All the Raw strings that have more than one line should be followed by `trimMargin()` or `trimIndent()`.
@@ -48,9 +48,7 @@ class TrimMultilineRawString(val config: Config) : Rule(config) {
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
         super.visitStringTemplateExpression(expression)
 
-        if (expression.text.lines().count() <= 1) return
-
-        if (!expression.isTrimmed()) {
+        if (expression.isRawStringWithLineBreak() && !expression.isTrimmed()) {
             report(
                 CodeSmell(
                     issue,
@@ -62,13 +60,16 @@ class TrimMultilineRawString(val config: Config) : Rule(config) {
     }
 }
 
-fun KtStringTemplateExpression.isTrimmed(): Boolean {
-    fun KtExpression.asKtCallExpression(): KtCallExpression? = this as? KtCallExpression
+fun KtStringTemplateExpression.isRawStringWithLineBreak(): Boolean =
+    text.startsWith("\"\"\"") && entries.any {
+        val literalText = it.safeAs<KtLiteralStringTemplateEntry>()?.text
+        literalText != null && "\n" in literalText
+    }
 
-    val nextCall = getQualifiedExpressionForSelectorOrThis()
-        .getQualifiedExpressionForReceiver()
+fun KtStringTemplateExpression.isTrimmed(): Boolean {
+    val nextCall = getQualifiedExpressionForReceiver()
         ?.selectorExpression
-        ?.asKtCallExpression()
+        ?.safeAs<KtCallExpression>()
         ?.calleeExpression
         ?.text
 
