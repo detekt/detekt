@@ -54,7 +54,7 @@ class RedundantExplicitType(config: Config) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Suppress("ReturnCount", "ComplexMethod")
+    @Suppress("ReturnCount", "CyclomaticComplexMethod")
     override fun visitProperty(property: KtProperty) {
         if (!property.isLocal) return
         val typeReference = property.typeReference ?: return
