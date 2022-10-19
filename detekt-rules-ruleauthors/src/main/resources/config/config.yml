@@ -2,3 +2,5 @@ ruleauthors:
   active: true
   ViolatesTypeResolutionRequirements:
     active: true
+  UseNamedLocation:
+    active: true
