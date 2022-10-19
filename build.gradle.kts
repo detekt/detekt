@@ -36,7 +36,7 @@ allprojects {
         detektPlugins(project(":detekt-rules-ruleauthors"))
     }
 
-    tasks.withType<Detekt>().configureEach detekt@{
+    tasks.withType<Detekt> detekt@{
         jvmTarget = "1.8"
         reports {
             xml.required.set(true)

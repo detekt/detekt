@@ -98,7 +98,7 @@ subprojects {
   }
 
   plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin) {
-    tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach { detektTask ->
+    tasks.withType(io.gitlab.arturbosch.detekt.Detekt) { detektTask -> // Sadly it has to be eager.
       finalizedBy(reportMerge)
 
       reportMerge.configure { mergeTask ->
@@ -121,9 +121,9 @@ subprojects {
     reports.xml.required.set(true)
     // reports.sarif.required.set(true)
   }
-  
+
   plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
-    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach detekt@{
+    tasks.withType<io.gitlab.arturbosch.detekt.Detekt> detekt@{ // Sadly it has to be eager.
       finalizedBy(reportMerge)
 
       reportMerge.configure {
