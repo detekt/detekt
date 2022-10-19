@@ -61,7 +61,7 @@ jobs:
       - name: Run analysis
         uses: gradle/gradle-build-action@fd32ae908111fe31afa48827bd1ee909540aa971 # tag=v2
         with:
-          arguments: detektMain detektTest :detektReportMergeSarif
+          arguments: detektMain detektTest :detektReportMergeSarif --continue
 
       - name: Upload SARIF to Github using the upload-sarif action
         uses: github/codeql-action/upload-sarif@cc7986c02bac29104a72998e67239bb5ee2ee110 # tag=v2
