@@ -26,7 +26,7 @@ class CognitiveComplexMethodSpec {
                fun simpleTest(): Boolean {
                    return true
                }
-               """.trimIndent()
+    """.trimIndent()
 
     @Test
     fun `should report complex function`() {

@@ -14,7 +14,6 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-
 /**
  * Complex methods are hard to understand and read. It might not be obvious what side-effects a complex method has.
  * Prefer splitting up complex methods into smaller methods that are in turn easier to understand.
@@ -53,7 +52,8 @@ class CognitiveComplexMethod(config: Config = Config.empty) : Rule(config) {
                     issue,
                     Entity.atName(function),
                     Metric("CC", complexity, threshold),
-                    "The function ${function.nameAsSafeName} appears to be too complex based on Cognitive Complexity (complexity: $complexity). " +
+                    "The function ${function.nameAsSafeName} appears to be too complex " +
+                        "based on Cognitive Complexity (complexity: $complexity). " +
                         "Defined complexity threshold for methods is set to '$threshold'"
                 )
             )
