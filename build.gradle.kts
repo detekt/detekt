@@ -56,7 +56,7 @@ allprojects {
 }
 
 subprojects {
-    tasks.withType<Test> {
+    tasks.withType<Test>().configureEach {
         predictiveSelection {
             enabled.set(System.getenv("CI") == null)
         }
