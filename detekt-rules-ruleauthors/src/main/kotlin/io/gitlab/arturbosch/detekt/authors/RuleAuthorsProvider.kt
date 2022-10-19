@@ -17,7 +17,7 @@ class RuleAuthorsProvider : RuleSetProvider {
         ruleSetId,
         listOf(
             ViolatesTypeResolutionRequirements(config),
-            UseNamedLocation(config),
+            UseEntityAtName(config),
         )
     )
 }

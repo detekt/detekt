@@ -19,14 +19,14 @@ import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
 
 /**
- * If a rule reports issues using [Entity.from] with [KtNamedDeclaration.getNameIdentifier],
+ * If a rule [report]s issues using [Entity.from] with [KtNamedDeclaration.getNameIdentifier],
  * then it can be replaced with [Entity.atName] for more semantic code and better baseline support.
  */
 @ActiveByDefault("1.22.0")
-class UseNamedLocation(config: Config = Config.empty) : Rule(config) {
+class UseEntityAtName(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "UseNamedLocation",
+        "UseEntityAtName",
         Severity.Defect,
         "Prefer Entity.atName to Entity.from(....nameIdentifier).",
         Debt.FIVE_MINS

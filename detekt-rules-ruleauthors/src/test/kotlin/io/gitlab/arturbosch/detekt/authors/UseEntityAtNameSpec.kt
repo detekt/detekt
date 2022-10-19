@@ -4,9 +4,9 @@ import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.Test
 
-internal class UseNamedLocationSpec {
+internal class UseEntityAtNameSpec {
 
-    private val rule = UseNamedLocation()
+    private val rule = UseEntityAtName()
 
     @Test
     fun `should not report calls when there's no name involved`() {
