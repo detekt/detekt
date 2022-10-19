@@ -36,13 +36,13 @@ class UseEntityAtName(config: Config = Config.empty) : Rule(config) {
         super.visitCallExpression(expression)
 
         if (isEntityFromCall(expression) && expression.valueArguments.size == 1) {
-            val arg = expression.valueArguments.single().getArgumentExpression()!!
-            val target = findNameIdentifierReceiver(arg)
+            val arg = expression.valueArguments.single()
+            val target = findNameIdentifierReceiver(arg.getArgumentExpression())
             if (target != null) {
                 report(
                     CodeSmell(
                         issue,
-                        Entity.from(expression.getCallNameExpression()!!),
+                        Entity.from(expression.getCallNameExpression() ?: expression),
                         "Recommended to use Entity.atName(${target.text}) instead."
                     )
                 )
@@ -50,7 +50,13 @@ class UseEntityAtName(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun findNameIdentifierReceiver(expression: KtExpression): KtExpression? =
+    /**
+     * @param expression Ideally this method will never get a `null`,
+     * because a value argument without a value, or a postfix without a receiver,
+     * or a binary expression without a left side, should never really happen.
+     * Making [expression] nullable is just a safety measure to be more lenient on code in the wild.
+     */
+    private fun findNameIdentifierReceiver(expression: KtExpression?): KtExpression? =
         when {
             expression is KtQualifiedExpression ->
                 if (expression.selectorExpression?.text == "nameIdentifier") {
@@ -60,10 +66,10 @@ class UseEntityAtName(config: Config = Config.empty) : Rule(config) {
                 }
 
             expression is KtPostfixExpression && expression.operationToken == KtTokens.EXCLEXCL ->
-                findNameIdentifierReceiver(expression.baseExpression!!)
+                findNameIdentifierReceiver(expression.baseExpression)
 
             expression is KtBinaryExpression && expression.operationToken == KtTokens.ELVIS ->
-                findNameIdentifierReceiver(expression.left!!)
+                findNameIdentifierReceiver(expression.left)
 
             else ->
                 null
