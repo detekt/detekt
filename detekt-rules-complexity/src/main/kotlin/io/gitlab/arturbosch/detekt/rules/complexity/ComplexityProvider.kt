@@ -21,6 +21,7 @@ class ComplexityProvider : DefaultRuleSetProvider {
             LargeClass(config),
             ComplexInterface(config),
             ComplexMethod(config),
+            CognitiveComplexMethod(config),
             StringLiteralDuplication(config),
             MethodOverloading(config),
             NestedBlockDepth(config),
