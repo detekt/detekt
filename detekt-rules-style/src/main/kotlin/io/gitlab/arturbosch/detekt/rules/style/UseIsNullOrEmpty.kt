@@ -45,7 +45,6 @@ import org.jetbrains.kotlin.types.isNullable
  *
  */
 @Suppress("TooManyFunctions")
-@RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
 class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(

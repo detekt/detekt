@@ -76,7 +76,7 @@ private fun asPatterns(rawValue: String?): List<String> =
     rawValue?.trim()
         ?.commaSeparatedPattern(",", ";")
         ?.toList()
-        .orEmpty()
+        ?: emptyList()
 
 private fun CliArgs.toRunPolicy(): RulesSpec.RunPolicy {
     val parts = runRule?.split(":") ?: return RulesSpec.RunPolicy.NoRestrictions
