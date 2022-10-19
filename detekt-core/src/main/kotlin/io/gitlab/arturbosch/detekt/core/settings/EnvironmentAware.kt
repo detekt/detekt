@@ -36,7 +36,7 @@ internal class EnvironmentFacade(
             compilerSpec.parseJvmTarget(),
             compilerSpec.jdkHome,
         )
-        createKotlinCoreEnvironment(compilerConfiguration, disposable)
+        createKotlinCoreEnvironment(compilerConfiguration, disposable, System.err)
     }
 
     override fun close() {
