@@ -57,6 +57,7 @@ internal class UseNamedLocationSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = rule.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1).hasTextLocations("from")
+        assertThat(findings.single()).hasMessage("Recommended to use Entity.atName(element) instead.")
     }
 
     @Test
@@ -73,6 +74,7 @@ internal class UseNamedLocationSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = rule.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1).hasTextLocations("from")
+        assertThat(findings.single()).hasMessage("Recommended to use Entity.atName(element) instead.")
     }
 
     @Test
@@ -89,6 +91,7 @@ internal class UseNamedLocationSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = rule.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1).hasTextLocations("from")
+        assertThat(findings.single()).hasMessage("Recommended to use Entity.atName(element) instead.")
     }
 
     @Test
@@ -106,6 +109,7 @@ internal class UseNamedLocationSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = rule.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1).hasTextLocations("from")
+        assertThat(findings.single()).hasMessage("Recommended to use Entity.atName(element) instead.")
     }
 
     @Test

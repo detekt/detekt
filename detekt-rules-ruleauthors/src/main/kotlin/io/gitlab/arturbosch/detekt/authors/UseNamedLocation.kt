@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
+import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
 /**
  * If a rule reports issues using [Entity.from] with [KtNamedDeclaration.getNameIdentifier],
@@ -35,30 +36,45 @@ class UseNamedLocation(config: Config = Config.empty) : Rule(config) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        if (isEntityFromCall(expression) &&
-            expression.valueArguments.size == 1 &&
-            isNameIdentifier(expression.valueArguments.single().getArgumentExpression()!!)
-        ) {
-            report(CodeSmell(issue, Entity.from(expression.getCallNameExpression()!!), "Use Entity.atName($expression) instead."))
+        if (isEntityFromCall(expression) && expression.valueArguments.size == 1) {
+            val arg = expression.valueArguments.single().getArgumentExpression()!!
+            val target = findNameIdentifierReceiver(arg)
+            if (target != null) {
+                report(
+                    CodeSmell(
+                        issue,
+                        Entity.from(expression.getCallNameExpression()!!),
+                        "Recommended to use Entity.atName(${target.text}) instead."
+                    )
+                )
+            }
         }
     }
 
-    private fun isNameIdentifier(expression: KtExpression): Boolean =
+    private fun findNameIdentifierReceiver(expression: KtExpression): KtExpression? =
         when {
             expression is KtDotQualifiedExpression ->
-                expression.selectorExpression?.text == "nameIdentifier"
+                if (expression.selectorExpression?.text == "nameIdentifier") {
+                    expression.receiverExpression
+                } else {
+                    null
+                }
 
             expression is KtCallExpression ->
-                expression.getCallNameExpression()?.text == "nameIdentifier"
+                if (expression.getCallNameExpression()?.text == "nameIdentifier") {
+                    expression.referenceExpression()
+                } else {
+                    null
+                }
 
             expression is KtPostfixExpression && expression.operationToken == KtTokens.EXCLEXCL ->
-                isNameIdentifier(expression.baseExpression!!)
+                findNameIdentifierReceiver(expression.baseExpression!!)
 
             expression is KtBinaryExpression && expression.operationToken == KtTokens.ELVIS ->
-                isNameIdentifier(expression.left!!)
+                findNameIdentifierReceiver(expression.left!!)
 
             else ->
-                false
+                null
         }
 
     private fun isEntityFromCall(expression: KtCallExpression): Boolean {
