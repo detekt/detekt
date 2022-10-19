@@ -87,7 +87,7 @@ run `./gradlew detekt reportMerge --continue` to execute detekt tasks and merge 
 
 ### Groovy DSL
 ```groovy
-task reportMerge(type: io.gitlab.arturbosch.detekt.report.ReportMergeTask) {
+tasks.register("reportMerge", io.gitlab.arturbosch.detekt.report.ReportMergeTask) {
   output = project.layout.buildDirectory.file("reports/detekt/merge.xml") // or "reports/detekt/merge.sarif"
 }
 
@@ -98,7 +98,7 @@ subprojects {
   }
 
   plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin) {
-    tasks.withType(io.gitlab.arturbosch.detekt.Detekt) { detektTask ->
+    tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach { detektTask ->
       finalizedBy(reportMerge)
 
       reportMerge.configure { mergeTask ->
@@ -113,7 +113,7 @@ subprojects {
 
 ```kotlin
 val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) { 
-  output.set(rootProject.buildDir.resolve("reports/detekt/merge.xml")) // or "reports/detekt/merge.sarif"
+  output.set(rootProject.layout.buildDirectory.file("reports/detekt/merge.xml")) // or "reports/detekt/merge.sarif"
 }
 
 subprojects {
@@ -122,8 +122,8 @@ subprojects {
     // reports.sarif.required.set(true)
   }
   
-  plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin::class) {
-    tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class) detekt@{
+  plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
+    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach detekt@{
       finalizedBy(reportMerge)
 
       reportMerge.configure {
@@ -162,8 +162,8 @@ jobs:
       # Make sure we always run this upload task,
       # because the previous step may fail if there are findings.
       - name: Upload SARIF to Github using the upload-sarif action
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         if: success() || failure()
         with:
-          sarif_file: build/detekt.sarif
+          sarif_file: build/reports/detekt/detekt.sarif
 ```
