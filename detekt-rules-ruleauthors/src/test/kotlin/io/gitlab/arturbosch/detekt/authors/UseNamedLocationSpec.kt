@@ -92,6 +92,27 @@ internal class UseNamedLocationSpec {
     }
 
     @Test
+    fun `should report calls where nameIdentifier is used with elvis with complex fallback`() {
+        val code = """
+            import io.gitlab.arturbosch.detekt.api.CodeSmell
+            import io.gitlab.arturbosch.detekt.api.Entity
+            import io.gitlab.arturbosch.detekt.api.Rule
+            import org.jetbrains.kotlin.com.intellij.psi.PsiExpression
+            import org.jetbrains.kotlin.com.intellij.psi.PsiNameIdentifierOwner
+            import org.jetbrains.kotlin.psi.KtClass
+            import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
+            
+            fun Rule.f(element: PsiExpression) {
+                report(CodeSmell(issue, Entity.from(element.getStrictParentOfType<KtClass>()?.nameIdentifier ?: element), "message"))
+            }
+        """.trimIndent()
+        val findings = rule.compileAndLint(code)
+        assertThat(findings).hasSize(1).hasTextLocations("from")
+        assertThat(findings.single())
+            .hasMessage("Recommended to use Entity.atName(element.getStrictParentOfType<KtClass>()) instead.")
+    }
+
+    @Test
     fun `should report calls where nameIdentifier is used with elvis with other fallback`() {
         val code = """
             import io.gitlab.arturbosch.detekt.api.CodeSmell

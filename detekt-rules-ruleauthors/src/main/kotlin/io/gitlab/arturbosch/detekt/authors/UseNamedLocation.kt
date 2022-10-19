@@ -11,13 +11,12 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtPostfixExpression
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
-import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
 /**
  * If a rule reports issues using [Entity.from] with [KtNamedDeclaration.getNameIdentifier],
@@ -53,16 +52,9 @@ class UseNamedLocation(config: Config = Config.empty) : Rule(config) {
 
     private fun findNameIdentifierReceiver(expression: KtExpression): KtExpression? =
         when {
-            expression is KtDotQualifiedExpression ->
+            expression is KtQualifiedExpression ->
                 if (expression.selectorExpression?.text == "nameIdentifier") {
                     expression.receiverExpression
-                } else {
-                    null
-                }
-
-            expression is KtCallExpression ->
-                if (expression.getCallNameExpression()?.text == "nameIdentifier") {
-                    expression.referenceExpression()
                 } else {
                     null
                 }
