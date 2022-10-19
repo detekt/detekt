@@ -38,10 +38,10 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  *  [Reference](https://kotlinlang.org/docs/scope-functions.html)
  */
 @ActiveByDefault(since = "1.0.0")
-class ComplexMethod(config: Config = Config.empty) : Rule(config) {
+class CyclomaticComplexMethod(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "ComplexMethod",
+        "CyclomaticComplexMethod",
         Severity.Maintainability,
         "Prefer splitting up complex methods into smaller, easier to understand methods.",
         Debt.TWENTY_MINS
@@ -68,9 +68,9 @@ class ComplexMethod(config: Config = Config.empty) : Rule(config) {
         }
 
         val complexity = CyclomaticComplexity.calculate(function) {
-            this.ignoreSimpleWhenEntries = this@ComplexMethod.ignoreSimpleWhenEntries
-            this.ignoreNestingFunctions = this@ComplexMethod.ignoreNestingFunctions
-            this.nestingFunctions = this@ComplexMethod.nestingFunctions
+            this.ignoreSimpleWhenEntries = this@CyclomaticComplexMethod.ignoreSimpleWhenEntries
+            this.ignoreNestingFunctions = this@CyclomaticComplexMethod.ignoreNestingFunctions
+            this.nestingFunctions = this@CyclomaticComplexMethod.nestingFunctions
         }
 
         if (complexity >= threshold) {
@@ -79,7 +79,7 @@ class ComplexMethod(config: Config = Config.empty) : Rule(config) {
                     issue,
                     Entity.atName(function),
                     Metric("MCC", complexity, threshold),
-                    "The function ${function.nameAsSafeName} appears to be too complex ($complexity). " +
+                    "The function ${function.nameAsSafeName} appears to be too complex based on Cyclomatic Complexity (complexity: $complexity). " +
                         "Defined complexity threshold for methods is set to '$threshold'"
                 )
             )
