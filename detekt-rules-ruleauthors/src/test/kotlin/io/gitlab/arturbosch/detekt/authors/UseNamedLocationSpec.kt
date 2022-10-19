@@ -107,4 +107,21 @@ internal class UseNamedLocationSpec(private val env: KotlinCoreEnvironment) {
         val findings = rule.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
+
+    @Test
+    fun `should not report calls where from is used with multiple parameters`() {
+        val code = """
+            import io.gitlab.arturbosch.detekt.api.CodeSmell
+            import io.gitlab.arturbosch.detekt.api.Entity
+            import io.gitlab.arturbosch.detekt.api.Rule
+            import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+            import org.jetbrains.kotlin.com.intellij.psi.PsiNameIdentifierOwner
+            
+            fun Rule.f(element: PsiNameIdentifierOwner, element2: PsiElement) {
+                report(CodeSmell(issue, Entity.from(element.nameIdentifier ?: element2, 0), "message"))
+            }
+        """.trimIndent()
+        val findings = rule.compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
 }

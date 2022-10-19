@@ -35,8 +35,9 @@ class UseNamedLocation(config: Config = Config.empty) : Rule(config) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        if (isEntityFromCall(expression)
-            && isNameIdentifier(expression.valueArguments.single().getArgumentExpression()!!)
+        if (isEntityFromCall(expression) &&
+            expression.valueArguments.size == 1 &&
+            isNameIdentifier(expression.valueArguments.single().getArgumentExpression()!!)
         ) {
             report(CodeSmell(issue, Entity.from(expression), "Use Entity.atName($expression) instead."))
         }
