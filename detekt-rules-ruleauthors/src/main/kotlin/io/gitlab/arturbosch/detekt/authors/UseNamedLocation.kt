@@ -39,7 +39,7 @@ class UseNamedLocation(config: Config = Config.empty) : Rule(config) {
             expression.valueArguments.size == 1 &&
             isNameIdentifier(expression.valueArguments.single().getArgumentExpression()!!)
         ) {
-            report(CodeSmell(issue, Entity.from(expression), "Use Entity.atName($expression) instead."))
+            report(CodeSmell(issue, Entity.from(expression.getCallNameExpression()!!), "Use Entity.atName($expression) instead."))
         }
     }
 
