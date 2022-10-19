@@ -45,6 +45,7 @@ allprojects {
             sarif.required.set(true)
             md.required.set(true)
         }
+        basePath = rootProject.projectDir.absolutePath
         finalizedBy(detektReportMergeSarif)
         detektReportMergeSarif.configure {
             input.from(this@detekt.sarifReportFile)
