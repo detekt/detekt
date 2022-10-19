@@ -171,7 +171,7 @@ class CognitiveComplexitySpec {
         fun `does not increment on just a condition`() {
             val code = compileContentForTest(
                 """
-                fun test(cond_ Boolean) = !cond
+                fun test(cond: Boolean) = !cond
                 """.trimIndent()
             )
 
@@ -185,7 +185,7 @@ class CognitiveComplexitySpec {
             fun `adds one for just a &&`() {
                 val code = compileContentForTest(
                     """
-                    fun test(cond_ Boolean) = !cond && !cond
+                    fun test(cond: Boolean) = !cond && !cond
                     """.trimIndent()
                 )
 
@@ -196,7 +196,7 @@ class CognitiveComplexitySpec {
             fun `adds only one for repeated &&`() {
                 val code = compileContentForTest(
                     """
-                    fun test(cond_ Boolean) = !cond && !cond && !cond
+                    fun test(cond: Boolean) = !cond && !cond && !cond
                     """.trimIndent()
                 )
 
@@ -207,7 +207,7 @@ class CognitiveComplexitySpec {
             fun `adds one per logical alternate operator`() {
                 val code = compileContentForTest(
                     """
-                    fun test(cond_ Boolean) = !cond && !cond || cond
+                    fun test(cond: Boolean) = !cond && !cond || cond
                     """.trimIndent()
                 )
 
@@ -218,7 +218,7 @@ class CognitiveComplexitySpec {
             fun `adds one per logical alternate operator with like operators in between`() {
                 val code = compileContentForTest(
                     """
-                    fun test(cond_ Boolean) {
+                    fun test(cond: Boolean) {
                         if (                    // +1
                             !cond 
                             && !cond && !cond   // +1
@@ -236,7 +236,7 @@ class CognitiveComplexitySpec {
             fun `adds one for negated but similar operators`() {
                 val code = compileContentForTest(
                     """
-                    fun test(cond_ Boolean) {
+                    fun test(cond: Boolean) {
                         if (                    // +1
                             !cond 
                             && !(cond && cond)  // +2
@@ -252,7 +252,7 @@ class CognitiveComplexitySpec {
             fun `adds only one for a negated chain of similar operators`() {
                 val code = compileContentForTest(
                     """
-                    fun test(cond_ Boolean) {
+                    fun test(cond: Boolean) {
                         if (                    // +1
                             !cond 
                             && !(cond && cond && cond)  // +2
@@ -268,7 +268,7 @@ class CognitiveComplexitySpec {
             fun `adds one for every negated similar operator chain`() {
                 val code = compileContentForTest(
                     """
-                    fun test(cond_ Boolean) {
+                    fun test(cond: Boolean) {
                         if (                            // +1
                             !cond 
                             && !(cond && cond && cond)  // +2
