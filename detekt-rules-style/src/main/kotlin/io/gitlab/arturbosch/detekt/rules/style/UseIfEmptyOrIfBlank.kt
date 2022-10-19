@@ -47,7 +47,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *
  */
 @RequiresTypeResolution
-@Suppress("ReturnCount", "CyclomaticComplexMethod")
+@Suppress("ReturnCount", "ComplexMethod")
 class UseIfEmptyOrIfBlank(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UseIfEmptyOrIfBlank",

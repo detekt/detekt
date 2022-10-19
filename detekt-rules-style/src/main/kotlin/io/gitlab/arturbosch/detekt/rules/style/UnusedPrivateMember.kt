@@ -99,7 +99,7 @@ private class UnusedFunctionVisitor(
     private val functionReferences = mutableMapOf<String, MutableList<KtReferenceExpression>>()
     private val propertyDelegates = mutableListOf<KtPropertyDelegate>()
 
-    @Suppress("CyclomaticComplexMethod")
+    @Suppress("ComplexMethod")
     override fun getUnusedReports(issue: Issue): List<CodeSmell> {
         val propertyDelegateResultingDescriptors by lazy(LazyThreadSafetyMode.NONE) {
             propertyDelegates.flatMap { it.resultingDescriptors() }
