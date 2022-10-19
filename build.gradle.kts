@@ -1,10 +1,15 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
 plugins {
     id("releasing")
     id("io.gitlab.arturbosch.detekt")
     alias(libs.plugins.gradleVersions)
+}
+
+val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {
+    output.set(rootProject.layout.buildDirectory.file("reports/detekt/merge.sarif"))
 }
 
 allprojects {
@@ -31,7 +36,7 @@ allprojects {
         detektPlugins(project(":detekt-rules-ruleauthors"))
     }
 
-    tasks.withType<Detekt>().configureEach {
+    tasks.withType<Detekt>().configureEach detekt@{
         jvmTarget = "1.8"
         reports {
             xml.required.set(true)
@@ -39,6 +44,10 @@ allprojects {
             txt.required.set(true)
             sarif.required.set(true)
             md.required.set(true)
+        }
+        finalizedBy(detektReportMergeSarif)
+        detektReportMergeSarif.configure {
+            input.from(this@detekt.sarifReportFile)
         }
     }
     tasks.withType<DetektCreateBaselineTask>().configureEach {
