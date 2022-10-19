@@ -1,13 +1,10 @@
 package io.gitlab.arturbosch.detekt.authors
 
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.Test
 
-@KotlinCoreEnvironmentTest
-internal class UseNamedLocationSpec(private val env: KotlinCoreEnvironment) {
+internal class UseNamedLocationSpec {
 
     private val rule = UseNamedLocation()
 
@@ -23,7 +20,7 @@ internal class UseNamedLocationSpec(private val env: KotlinCoreEnvironment) {
                 report(CodeSmell(issue, Entity.from(element), "message"))
             }
         """.trimIndent()
-        val findings = rule.compileAndLintWithContext(env, code)
+        val findings = rule.compileAndLint(code)
         assertThat(findings).isEmpty()
     }
 
@@ -39,7 +36,7 @@ internal class UseNamedLocationSpec(private val env: KotlinCoreEnvironment) {
                 report(CodeSmell(issue, Entity.atName(element), "message"))
             }
         """.trimIndent()
-        val findings = rule.compileAndLintWithContext(env, code)
+        val findings = rule.compileAndLint(code)
         assertThat(findings).isEmpty()
     }
 
@@ -55,7 +52,7 @@ internal class UseNamedLocationSpec(private val env: KotlinCoreEnvironment) {
                 report(CodeSmell(issue, Entity.from(element.nameIdentifier!!), "message"))
             }
         """.trimIndent()
-        val findings = rule.compileAndLintWithContext(env, code)
+        val findings = rule.compileAndLint(code)
         assertThat(findings).hasSize(1).hasTextLocations("from")
         assertThat(findings.single()).hasMessage("Recommended to use Entity.atName(element) instead.")
     }
@@ -72,7 +69,7 @@ internal class UseNamedLocationSpec(private val env: KotlinCoreEnvironment) {
                 report(CodeSmell(issue, Entity.from(element.nameIdentifier!!!!), "message"))
             }
         """.trimIndent()
-        val findings = rule.compileAndLintWithContext(env, code)
+        val findings = rule.compileAndLint(code)
         assertThat(findings).hasSize(1).hasTextLocations("from")
         assertThat(findings.single()).hasMessage("Recommended to use Entity.atName(element) instead.")
     }
@@ -89,7 +86,7 @@ internal class UseNamedLocationSpec(private val env: KotlinCoreEnvironment) {
                 report(CodeSmell(issue, Entity.from(element.nameIdentifier ?: element), "message"))
             }
         """.trimIndent()
-        val findings = rule.compileAndLintWithContext(env, code)
+        val findings = rule.compileAndLint(code)
         assertThat(findings).hasSize(1).hasTextLocations("from")
         assertThat(findings.single()).hasMessage("Recommended to use Entity.atName(element) instead.")
     }
@@ -107,7 +104,7 @@ internal class UseNamedLocationSpec(private val env: KotlinCoreEnvironment) {
                 report(CodeSmell(issue, Entity.from(element.nameIdentifier ?: element2), "message"))
             }
         """.trimIndent()
-        val findings = rule.compileAndLintWithContext(env, code)
+        val findings = rule.compileAndLint(code)
         assertThat(findings).hasSize(1).hasTextLocations("from")
         assertThat(findings.single()).hasMessage("Recommended to use Entity.atName(element) instead.")
     }
@@ -125,7 +122,7 @@ internal class UseNamedLocationSpec(private val env: KotlinCoreEnvironment) {
                 report(CodeSmell(issue, Entity.from(element.nameIdentifier ?: element2, 0), "message"))
             }
         """.trimIndent()
-        val findings = rule.compileAndLintWithContext(env, code)
+        val findings = rule.compileAndLint(code)
         assertThat(findings).isEmpty()
     }
 }
