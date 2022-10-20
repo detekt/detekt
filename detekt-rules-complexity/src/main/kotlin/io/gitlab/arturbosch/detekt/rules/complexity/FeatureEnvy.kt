@@ -175,23 +175,22 @@ Exception in thread "main" java.lang.IllegalStateException: 0.33f is neither a l
 
     private fun getFqNameToNumOfUsagesOfLocalDataInFunction(function: KtNamedFunction): Map<FqName, Int> {
         val localProperties = getFqNamesOfLocalPropertiesOfClassFunIsIn(function)
-        return function.findDescendantOfType<KtBlockExpression>()?.let { block ->
-            block.collectDescendantsOfType<KtNameReferenceExpression>().filter {
+        return function.findDescendantOfType<KtBlockExpression>()?.collectDescendantsOfType<KtNameReferenceExpression>()
+            ?.filter {
                 it.parent !is KtDotQualifiedExpression
-            }.mapNotNull { reference ->
-                // This removes all ReferenceExpressions to functions etc.
-                reference.getResolvedCall(bindingContext)?.resultingDescriptor?.referencedProperty
-            }.filter {
-                // Constants not considered ATFD
-                !it.isConst
-            }.map {
-                it.fqNameSafe
-            }.filter {
-                localProperties.contains(it)
-            }.groupingBy {
-                it
-            }.eachCount()
-        } ?: emptyMap()
+            }?.mapNotNull { reference ->
+            // This removes all ReferenceExpressions to functions etc.
+            reference.getResolvedCall(bindingContext)?.resultingDescriptor?.referencedProperty
+        }?.filter {
+            // Constants not considered ATFD
+            !it.isConst
+        }?.map {
+            it.fqNameSafe
+        }?.filter {
+            localProperties.contains(it)
+        }?.groupingBy {
+            it
+        }?.eachCount() ?: emptyMap()
     }
 }
 
