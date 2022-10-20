@@ -43,7 +43,7 @@ class CyclomaticComplexMethod(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "CyclomaticComplexMethod",
         Severity.Maintainability,
-        "Prefer splitting up complex methods into smaller, easier to understand methods.",
+        "Prefer splitting up complex methods into smaller, easier to test methods.",
         Debt.TWENTY_MINS
     )
 
