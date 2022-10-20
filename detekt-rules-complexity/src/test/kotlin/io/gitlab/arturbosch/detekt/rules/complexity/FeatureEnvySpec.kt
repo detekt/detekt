@@ -22,17 +22,22 @@ class FeatureEnvySpec(private val env: KotlinCoreEnvironment) {
             )
             
             class User(val contactInfo: ContactInfo) {
+
+                val test = "TestString"
             
                 fun prettyPrintAddress() {
-                    val prettyAddress = buildString { 
-                        append(contactInfo.postalCode)
+                    val prettyAddress = buildString {
+                        append(this@User.contactInfo.postalCode)
                         append(" ")
-                        append(contactInfo.city)
+                        append(this@User.contactInfo.city)
                         append("\n")
-                        append(contactInfo.street)
+                        append(this@User.contactInfo.street)
                         append(" ")
-                        append(contactInfo.number)
+                        append(this@User.contactInfo.number)
+                        append(" " + this@User.test)
                     }
+                    println(this.test)
+                    println(test)
                     println(prettyAddress)
                 }
             
@@ -74,3 +79,4 @@ class FeatureEnvySpec(private val env: KotlinCoreEnvironment) {
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 }
+

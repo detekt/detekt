@@ -79,7 +79,7 @@ Exception in thread "main" java.lang.IllegalStateException: 0.33f is neither a l
 
 
     @Configuration("LAA")
-    private val localityOfDataAccessThreshold: Float by config(defaultValue = 0.33f)
+    private val localityOfDataAccessThreshold = 0.3f
     @Configuration("ATFD")
     private val atfdThreshold: Int by config(defaultValue = 2)
     @Configuration("FDP")
