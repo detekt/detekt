@@ -14,8 +14,11 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
+import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
 /**
@@ -63,11 +66,9 @@ class MultilineRawStringIndentation(config: Config) : Rule(config) {
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
         super.visitStringTemplateExpression(expression)
 
-        val text = expression.text
-        val lineCount = text.lines().count()
-        if (lineCount <= 1) return
-        if (!expression.isTrimmed()) return
-        if (!text.matches(rawStringRegex)) {
+        if (!expression.isRawStringWithLineBreak() || !expression.isTrimmed()) return
+
+        if (!expression.isSurroundedByLineBreaks()) {
             report(
                 CodeSmell(
                     issue,
@@ -79,6 +80,7 @@ class MultilineRawStringIndentation(config: Config) : Rule(config) {
         }
 
         val lineAndColumn = getLineAndColumnInPsiFile(expression.containingFile, expression.textRange) ?: return
+        val lineCount = expression.text.lines().count()
 
         expression.checkIndentation(
             baseIndent = lineAndColumn.lineContent?.countIndent() ?: return,
@@ -167,9 +169,20 @@ private fun message(desiredIntent: Int, currentIndent: Int): String {
     return "The indentation should be $desiredIntent but it is $currentIndent."
 }
 
-private val rawStringRegex = "\"{3}\n(.*\n)? *\"{3}".toRegex(RegexOption.DOT_MATCHES_ALL)
+private fun KtStringTemplateExpression.isSurroundedByLineBreaks(): Boolean {
+    val entries = this.entries
+    return entries.takeWhile { it.isBlankOrLineBreak() }.any { it.text == "\n" } &&
+        entries.takeLastWhile { it.isBlankOrLineBreak() }.any { it.text == "\n" }
+}
 
-private fun String.countIndent() = this.takeWhile { it == ' ' }.count()
+private fun KtStringTemplateEntry.isBlankOrLineBreak(): Boolean {
+    val text = safeAs<KtLiteralStringTemplateEntry>()?.text ?: return false
+    return text.all { it.isTabChar() } || text == "\n"
+}
+
+private fun Char.isTabChar() = this == ' ' || this == '\t'
+
+private fun String.countIndent() = this.takeWhile { it.isTabChar() }.count()
 
 private fun PsiFile.getLine(line: Int): String {
     return text.lineSequence().drop(line - 1).first()

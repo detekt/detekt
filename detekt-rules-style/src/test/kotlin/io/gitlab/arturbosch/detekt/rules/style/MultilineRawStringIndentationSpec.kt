@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.Nested
@@ -310,6 +311,39 @@ class MultilineRawStringIndentationSpec {
             assertThat(subject.findings)
                 .isEmpty()
         }
+
+        @Test
+        fun `don't raise if it has no line breaks`() {
+            val code = """
+                val a = ${TQ}Hello world!$TQ.trimIndent()
+            """.trimIndent()
+            subject.compileAndLint(code)
+            assertThat(subject.findings)
+                .isEmpty()
+        }
+
+        @Test
+        fun `don't raise multiline raw strings if all have the correct indentation - tabs`() {
+            val code = """
+                fun respond(content: String, status: Int) {}
+                fun redirect(accessToken: String, refreshToken: String) {
+                ${TAB}respond(
+                $TAB${TAB}content = $TQ
+                $TAB$TAB$TAB{
+                $TAB$TAB$TAB    "access_token": "${'$'}{accessToken}",
+                $TAB$TAB$TAB    "token_type": "fake_token_type",
+                $TAB$TAB$TAB    "expires_in": 3600,
+                $TAB$TAB$TAB    "refresh_token": "${'$'}{refreshToken}"
+                $TAB$TAB$TAB}
+                $TAB$TAB$TQ.trimIndent(),
+                $TAB${TAB}status = 302
+                $TAB)
+                }
+            """.trimIndent()
+            val subject = MultilineRawStringIndentation(TestConfig(mapOf("indentSize" to 1)))
+            subject.compileAndLint(code)
+            assertThat(subject.findings).isEmpty()
+        }
     }
 
     @Nested
@@ -366,3 +400,4 @@ class MultilineRawStringIndentationSpec {
 }
 
 private const val TQ = "\"\"\""
+private const val TAB = "\t"
