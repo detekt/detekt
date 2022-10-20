@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -30,7 +29,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * - __Nesting Level Increments__ - `if`, `when`, `for`, `while`, `do while`, `catch`, `nested function`
  * - __Additional Complexity Increments by Nesting Level__ - `if`, `when`, `for`, `while`, `do while`, `catch`
  */
-@ActiveByDefault(since = "1.22.0")
 class CognitiveComplexMethod(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
