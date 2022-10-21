@@ -87,6 +87,10 @@ public final class io/gitlab/arturbosch/detekt/rules/KtCallExpressionKt {
 	public static final fun isCallingWithNonNullCheckArgument (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/name/FqName;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 }
 
+public final class io/gitlab/arturbosch/detekt/rules/KtIfExpressionKt {
+	public static final fun isElseIf (Lorg/jetbrains/kotlin/psi/KtIfExpression;)Z
+}
+
 public final class io/gitlab/arturbosch/detekt/rules/KtLambdaExpressionKt {
 	public static final fun firstParameter (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;)Lorg/jetbrains/kotlin/descriptors/ValueParameterDescriptor;
 	public static final fun hasImplicitParameterReference (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;Lorg/jetbrains/kotlin/descriptors/ValueParameterDescriptor;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z

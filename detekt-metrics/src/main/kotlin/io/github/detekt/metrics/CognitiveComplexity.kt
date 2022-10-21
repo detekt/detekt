@@ -1,6 +1,7 @@
 package io.github.detekt.metrics
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
+import io.gitlab.arturbosch.detekt.rules.isElseIf
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.psi.tree.IElementType
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -89,8 +90,18 @@ class CognitiveComplexity private constructor() : DetektVisitor() {
         }
 
         override fun visitIfExpression(expression: KtIfExpression) {
+            val isElseIf = expression.isElseIf()
+
+            if (isElseIf) nesting--
+
             addComplexity()
+            val elseBranch = expression.`else`
+            if (elseBranch != null && elseBranch !is KtIfExpression) {
+                addComplexity()
+            }
             nestAround { super.visitIfExpression(expression) }
+
+            if (isElseIf) nesting++
         }
 
         override fun visitBreakExpression(expression: KtBreakExpression) {
