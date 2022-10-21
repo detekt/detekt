@@ -64,7 +64,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
     @Configuration("if labeled return statements should be ignored")
     private val excludeLabeled: Boolean by config(false)
 
-    @Configuration("if labeled return from a lambda should be ignored (takes precedence over excludeLabeled.)")
+    @Configuration("if labeled return from a lambda should be ignored")
     private val excludeReturnFromLambda: Boolean by config(true)
 
     @Configuration("if true guard clauses at the beginning of a method should be ignored")
@@ -92,11 +92,9 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
     private fun shouldBeIgnored(function: KtNamedFunction) = function.name in excludedFunctions
 
     private fun countReturnStatements(function: KtNamedFunction): Int {
-        fun KtReturnExpression.isExcluded(): Boolean = when {
-            excludeReturnFromLambda && isNamedReturnFromLambda() -> true
-            excludeLabeled && labeledExpression != null -> true
-            else -> false
-        }
+        fun KtReturnExpression.isExcluded(): Boolean =
+            (excludeReturnFromLambda && isNamedReturnFromLambda()) ||
+                (excludeLabeled && labeledExpression != null)
 
         val statements = if (excludeGuardClauses) {
             function.yieldStatementsSkippingGuardClauses<KtReturnExpression>()
