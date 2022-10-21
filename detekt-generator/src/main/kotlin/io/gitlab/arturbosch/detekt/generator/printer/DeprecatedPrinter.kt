@@ -37,6 +37,7 @@ private fun writeProperty(ruleSet: RuleSetPage, rule: Rule, configuration: Confi
 
 internal fun writeMigratedRules(): String {
     return """
+        formatting>TrailingComma=Rule is split between `TrailingCommaOnCallSite` and `TrailingCommaOnDeclarationSite` now.
         style>ForbiddenPublicDataClass=Rule migrated to `libraries` ruleset plugin
         style>LibraryCodeMustSpecifyReturnType=Rule migrated to `libraries` ruleset plugin
         style>LibraryEntitiesShouldNotBePublic=Rule migrated to `libraries` ruleset plugin
