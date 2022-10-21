@@ -64,7 +64,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
     @Configuration("if labeled return statements should be ignored")
     private val excludeLabeled: Boolean by config(false)
 
-    @Configuration("if labeled return from a lambda should be ignored (takes precedence over excludeLabeled.")
+    @Configuration("if labeled return from a lambda should be ignored (takes precedence over excludeLabeled.)")
     private val excludeReturnFromLambda: Boolean by config(true)
 
     @Configuration("if true guard clauses at the beginning of a method should be ignored")
