@@ -13,8 +13,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
 import io.gitlab.arturbosch.detekt.rules.parentsOfTypeUntil
 import io.gitlab.arturbosch.detekt.rules.yieldStatementsSkippingGuardClauses
-import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
@@ -65,7 +64,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
     @Configuration("if labeled return statements should be ignored")
     private val excludeLabeled: Boolean by config(false)
 
-    @Configuration("if labeled return from a lambda should be ignored")
+    @Configuration("if labeled return from a lambda should be ignored (takes precedence over excludeLabeled.")
     private val excludeReturnFromLambda: Boolean by config(true)
 
     @Configuration("if true guard clauses at the beginning of a method should be ignored")
@@ -94,8 +93,8 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
 
     private fun countReturnStatements(function: KtNamedFunction): Int {
         fun KtReturnExpression.isExcluded(): Boolean = when {
-            excludeLabeled && labeledExpression != null -> true
             excludeReturnFromLambda && isNamedReturnFromLambda() -> true
+            excludeLabeled && labeledExpression != null -> true
             else -> false
         }
 
@@ -113,11 +112,9 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
     private fun KtReturnExpression.isNamedReturnFromLambda(): Boolean {
         val label = this.labeledExpression
         if (label != null) {
-            return this.parentsOfTypeUntil<KtCallExpression, KtNamedFunction>()
-                .map { it.calleeExpression }
-                .filterIsInstance<KtNameReferenceExpression>()
-                .map { it.text }
-                .any { it in label.text }
+            return this.parentsOfTypeUntil<KtLambdaExpression, KtNamedFunction>()
+                .none()
+                .not()
         }
         return false
     }

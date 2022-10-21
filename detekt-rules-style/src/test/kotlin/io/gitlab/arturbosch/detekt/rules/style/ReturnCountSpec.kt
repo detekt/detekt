@@ -512,4 +512,42 @@ class ReturnCountSpec {
             assertThat(findings).isEmpty()
         }
     }
+
+    @Nested
+    inner class `function with lambda which has explicit label` {
+        val code = """
+        fun test() {
+            list(1, 2, 3, 4, 5).flatMap lit@{ list ->
+                if (it == 3) return@lit
+                if (it == 4) return@lit
+            }
+            return
+        }
+        """.trimIndent()
+
+        @Test
+        fun `should count labeled return of lambda with explicit label`() {
+            val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_RETURN_FROM_LAMBDA to "false"))).compileAndLint(code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should not count labeled return of lambda with explicit label when deactivated by default`() {
+            val findings = ReturnCount().compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `excludeReturnFromLambda should take precedence over excludeLabeled`() {
+            val findings = ReturnCount(
+                TestConfig(
+                    mapOf(
+                        EXCLUDE_RETURN_FROM_LAMBDA to "true",
+                        EXCLUDE_LABELED to "false"
+                    )
+                )
+            ).compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
+    }
 }
