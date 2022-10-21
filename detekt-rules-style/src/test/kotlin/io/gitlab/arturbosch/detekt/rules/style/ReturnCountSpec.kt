@@ -517,7 +517,7 @@ class ReturnCountSpec {
     inner class `function with lambda which has explicit label` {
         val code = """
         fun test() {
-            list(1, 2, 3, 4, 5).flatMap lit@{ list ->
+            list(1, 2, 3, 4, 5).flatMap lit@{
                 if (it == 3) return@lit
                 if (it == 4) return@lit
             }
