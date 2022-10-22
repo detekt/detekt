@@ -1,7 +1,7 @@
 /*
  * ADD YOUR REPOSITORY TO THE DETEKT MARKETPLACE
  *
- * We're allowing third-party repositories that contains rulesets,
+ * We're allowing third-party repositories that contain rulesets,
  * custom processors, custom reporters and external plugins that work with Detekt.
  *
  * You can read more about how to extend Detekt here:
@@ -10,12 +10,12 @@
  * Instructions for adding your repository:
  *
  * - Add your third-party repository in the json array below
- * - `title` is the repository name
+ * - `title` is the repository name.
  * - `description` is a short (≤120 characters) description of the repository.
- * - `repo` is the repository URL
- * - `ruleset` (Optional) is the ID of the ruleset
- * - `rules` (Optional) is an array of rules your ruleset is offering
- * - `usesTypeResolution` (Optional) a boolean weather or not your ruleset uses type resolution.
+ * - `repo` is the repository URL.
+ * - `ruleset` (Optional) is the ID of the ruleset.
+ * - `rules` (Optional) is an array of rules your ruleset is offering.
+ * - `usesTypeResolution` (Optional) a boolean whether or not your ruleset uses type resolution.
  * - Open a PR and check for reported CI errors
  */
 
