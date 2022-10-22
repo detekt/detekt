@@ -122,6 +122,7 @@ class LambdaParameterNamingSpec {
         assertThat(LambdaParameterNaming().compileAndLint(code))
             .isEmpty()
     }
+
     @Test
     fun `Doesn't report invalid class constructor parameters`() {
         val code = """
