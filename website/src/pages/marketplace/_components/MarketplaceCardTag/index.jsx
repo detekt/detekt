@@ -3,7 +3,6 @@ import { tagTypes } from "@site/src/data/marketplace";
 import styles from "./styles.module.css";
 
 function MarketplaceCardTag(input) {
-
   const tag = input.tag;
 
   function getColorForTag(tag) {
@@ -23,7 +22,7 @@ function MarketplaceCardTag(input) {
   }
 
   return (
-    <li title={getDescriptionForTag(tag)} className={styles.tag}>
+    <li key={tag} title={getDescriptionForTag(tag)} className={styles.tag}>
       <span className={styles.textLabel}>{input.tag.toLowerCase()}</span>
       <span
         className={styles.colorLabel}
