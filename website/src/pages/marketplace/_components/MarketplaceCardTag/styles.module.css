@@ -3,7 +3,6 @@
     border: 1px solid var(--ifm-color-secondary-darkest);
     cursor: default;
     margin-right: 6px;
-    margin-bottom: 6px !important;
     border-radius: 12px;
     display: inline-flex;
     align-items: center;
