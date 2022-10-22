@@ -135,7 +135,7 @@ class LambdaParameterNamingSpec {
     @Test
     fun `Doesn't report invalid function parameters`() {
         val code = """
-            fun f(val _invalid: String) = Unit
+            fun f(_invalid: String) = Unit
         """.trimIndent()
         assertThat(LambdaParameterNaming().compileAndLint(code))
             .isEmpty()
