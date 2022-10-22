@@ -2,6 +2,7 @@ package io.github.detekt.metrics
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.rules.isElseIf
+import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.psi.tree.IElementType
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -9,6 +10,7 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBreakExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
+import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 import org.jetbrains.kotlin.psi.KtContinueExpression
 import org.jetbrains.kotlin.psi.KtDoWhileExpression
 import org.jetbrains.kotlin.psi.KtElement
@@ -89,19 +91,32 @@ class CognitiveComplexity private constructor() : DetektVisitor() {
             nestAround { super.visitForExpression(expression) }
         }
 
-        override fun visitIfExpression(expression: KtIfExpression) {
-            val isElseIf = expression.isElseIf()
+        override fun visitKtElement(element: KtElement) {
+            val parent = element.parent
+            if (element is KtContainerNodeForControlStructureBody && parent is KtIfExpression) {
+                when (element.node.elementType) {
+                    KtNodeTypes.THEN -> {
+                        addComplexity()
+                        if (parent.isElseIf()) {
+                            super.visitKtElement(element)
+                        } else {
+                            nestAround { super.visitKtElement(element) }
+                        }
+                    }
 
-            if (isElseIf) nesting--
+                    KtNodeTypes.ELSE -> {
+                        if (element.expression !is KtIfExpression) {
+                            addComplexity()
+                        }
+                        super.visitKtElement(element)
+                    }
 
-            addComplexity()
-            val elseBranch = expression.`else`
-            if (elseBranch != null && elseBranch !is KtIfExpression) {
-                addComplexity()
+                    else ->
+                        super.visitKtElement(element)
+                }
+            } else {
+                super.visitKtElement(element)
             }
-            nestAround { super.visitIfExpression(expression) }
-
-            if (isElseIf) nesting++
         }
 
         override fun visitBreakExpression(expression: KtBreakExpression) {

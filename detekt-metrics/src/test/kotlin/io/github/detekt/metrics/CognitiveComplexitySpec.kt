@@ -334,46 +334,45 @@ class CognitiveComplexitySpec {
             val code = compileContentForTest(
                 """
                 fun test(condition: Boolean) {
+                    // 18
                     if (condition) { // +1
                         if (condition) { // +2
                             while(true) { // +3
                             }
                         } else if (condition) { // +2
-                            while(true) { // +3
+                            while(true) { // +2
+                            }
+                        } else if (condition) { // +2
+                            while(true) { // +2
                             }
                         } else { // +2
-                            while(true) { // +3
+                            while(true) { // +2
                             }
                         }
+                    // 6
                     } else if (condition) { // +1
-                        if (condition) { // +2
-                            while(true) { // +3
+                        if (condition) { // +1
+                            while(true) { // +2
                             }
-                        } else if (condition) { // +2
-                            while(true) { // +3
+                        } else if (condition) // +1
+                            while(true) { // +1
                             }
-                        } else { // +2
-                            while(true) { // +3
-                            }
-                        }
+                    // 6
                     } else { // + 1
-                        if (condition) { // +2
-                            while(true) { // +3
+                        if (condition) { // +1
+                            while(true) { // +2
                             }
-                        } else if (condition) { // +2
-                            while(true) { // +3
+                        } else // +1
+                            while(true) { // +1
                             }
-                        } else { // +2
-                            while(true) { // +3
-                            }
-                        }
                     }
+                    // 1
                     if (condition) { // +1
                     }
                 }
                 """.trimIndent()
             )
-            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(49)
+            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(31)
         }
     }
 }
