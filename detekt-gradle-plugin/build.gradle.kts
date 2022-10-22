@@ -127,6 +127,7 @@ tasks {
         encoding = "UTF-8"
         outputFile = file("$buildDir/versions.properties")
         property("detektVersion", project.version)
+        property("detektCompilerPluginVersion", project.version)
     }
 
     processResources {

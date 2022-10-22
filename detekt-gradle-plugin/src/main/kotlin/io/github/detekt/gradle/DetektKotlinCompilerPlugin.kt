@@ -112,11 +112,27 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
     override fun getCompilerPluginId(): String = DETEKT_COMPILER_PLUGIN
 
     override fun getPluginArtifact(): SubpluginArtifact {
-        val props = Properties()
-        val inputStream = javaClass.classLoader.getResourceAsStream("versions.properties")
-
-        inputStream.use { props.load(it) }
-        val version = props.getProperty("detektCompilerPluginVersion")
+        // Other Gradle plugins can also have a versions.properties.
+        val distinctVersions = this::class.java.classLoader.getResources("versions.properties").toList().mapNotNull { versions ->
+            Properties().run {
+                val inputStream = versions.openConnection()
+                    /*
+                     * Due to https://bugs.openjdk.java.net/browse/JDK-6947916 and https://bugs.openjdk.java.net/browse/JDK-8155607,
+                     * it is necessary to disallow caches to maintain stability on JDK 8 and 11 (and possibly more).
+                     * Otherwise, simultaneous invocations of Detekt in the same VM can fail spuriously. A similar bug is referenced in
+                     * https://github.com/detekt/detekt/issues/3396. The performance regression is likely unnoticeable.
+                     * Due to https://github.com/detekt/detekt/issues/4332 it is included for all JDKs.
+                     */
+                    .apply { useCaches = false }
+                    .getInputStream()
+                load(inputStream)
+                getProperty("detektCompilerPluginVersion")
+            }
+        }.distinct()
+        val version = distinctVersions.singleOrNull() ?: error(
+            "You're importing two Detekt compiler plugins which have different versions. " +
+                "(${distinctVersions.joinToString()}) Make sure to align the versions."
+        )
 
         return SubpluginArtifact("io.github.detekt", "detekt-compiler-plugin", version)
     }
