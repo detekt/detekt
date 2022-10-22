@@ -259,7 +259,7 @@ class ObjectPropertyNamingSpec {
                 class O {
                     val _invalidNaming = 1
                 }
-            """.trimIndent()
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
@@ -272,7 +272,7 @@ class ObjectPropertyNamingSpec {
                         val _invalidNaming = 1
                     }
                 }
-            """.trimIndent()
+        """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }
