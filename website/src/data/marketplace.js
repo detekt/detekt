@@ -115,7 +115,7 @@ export const extensions = [
     description:
       "The purpose of this ruleset for functional programming is to report the potential use of impure language elements in kotlin code.",
     repo: "https://github.com/neeffect/kure-potlin",
-    tags: ["plugin", "ruleset"],
+    tags: ["ruleset"],
     ruleset: "kure-potlin",
     rules: [
       "LoopDefinition",
