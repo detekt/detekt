@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 
 private val defaultConfigMap: Map<String, Any> = mapOf("threshold" to "1")
 
-class ComplexMethodSpec {
+class CyclomaticComplexMethodSpec {
 
     val defaultComplexity = 1
 
@@ -21,7 +21,7 @@ class ComplexMethodSpec {
 
         @Test
         fun `counts different loops`() {
-            val findings = ComplexMethod(TestConfig(defaultConfigMap)).compileAndLint(
+            val findings = CyclomaticComplexMethod(TestConfig(defaultConfigMap)).compileAndLint(
                 """
                 fun test() {
                     for (i in 1..10) {}
@@ -37,7 +37,7 @@ class ComplexMethodSpec {
 
         @Test
         fun `counts catch blocks`() {
-            val findings = ComplexMethod(TestConfig(defaultConfigMap)).compileAndLint(
+            val findings = CyclomaticComplexMethod(TestConfig(defaultConfigMap)).compileAndLint(
                 """
                 fun test() {
                     try {} catch(e: IllegalArgumentException) {} catch(e: Exception) {} finally {}
@@ -50,7 +50,7 @@ class ComplexMethodSpec {
 
         @Test
         fun `counts nested conditional statements`() {
-            val findings = ComplexMethod(TestConfig(defaultConfigMap)).compileAndLint(
+            val findings = CyclomaticComplexMethod(TestConfig(defaultConfigMap)).compileAndLint(
                 """
                 fun test() {
                     try {
@@ -127,7 +127,7 @@ class ComplexMethodSpec {
                     "ignoreSingleWhenExpression" to "true"
                 )
             )
-            val subject = ComplexMethod(config)
+            val subject = CyclomaticComplexMethod(config)
 
             assertThat(subject.lint(path)).hasStartSourceLocations(SourceLocation(43, 5))
         }
@@ -135,7 +135,7 @@ class ComplexMethodSpec {
         @Test
         fun `reports all complex methods`() {
             val config = TestConfig(mapOf("threshold" to "4"))
-            val subject = ComplexMethod(config)
+            val subject = CyclomaticComplexMethod(config)
 
             assertThat(subject.lint(path)).hasStartSourceLocations(
                 SourceLocation(6, 5),
@@ -149,7 +149,7 @@ class ComplexMethodSpec {
         @Test
         fun `does not trip for a reasonable amount of simple when entries when ignoreSimpleWhenEntries is true`() {
             val config = TestConfig(mapOf("ignoreSimpleWhenEntries" to "true"))
-            val subject = ComplexMethod(config)
+            val subject = CyclomaticComplexMethod(config)
             val code = """
                  fun f() {
                     val map = HashMap<Any, String>()
@@ -227,13 +227,13 @@ class ComplexMethodSpec {
 
         @Test
         fun `should not count these overridden functions to base functions complexity`() {
-            assertThat(ComplexMethod().compileAndLint(code)).isEmpty()
+            assertThat(CyclomaticComplexMethod().compileAndLint(code)).isEmpty()
         }
     }
 }
 
 private fun assertExpectedComplexityValue(code: String, config: TestConfig, expectedValue: Int) {
-    val findings = ComplexMethod(config).lint(code)
+    val findings = CyclomaticComplexMethod(config).lint(code)
 
     assertThat(findings).hasStartSourceLocations(SourceLocation(1, 5))
 
