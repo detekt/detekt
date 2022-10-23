@@ -86,7 +86,7 @@ class ComplexClass {// McCabe: 44, LLOC: 20 + 20 + 4x4
                     while (true) {
                         if (false) {
                             println()
-                        } else { // 4
+                        } else { // +1
                             println()
                         }
                     }
@@ -98,7 +98,7 @@ class ComplexClass {// McCabe: 44, LLOC: 20 + 20 + 4x4
                     while (true) {
                         if (false) {
                             println()
-                        } else { // 3
+                        } else { // +1
                             println()
                         }
                     }
@@ -131,7 +131,7 @@ class ComplexClass {// McCabe: 44, LLOC: 20 + 20 + 4x4
                 while (true) {
                     if (false) {
                         println()
-                    } else { // 4
+                    } else { // +1
                         println()
                     }
                 }
@@ -143,7 +143,7 @@ class ComplexClass {// McCabe: 44, LLOC: 20 + 20 + 4x4
                 while (true) {
                     if (false) {
                         println()
-                    } else { // 3
+                    } else { // +1
                         println()
                     }
                 }

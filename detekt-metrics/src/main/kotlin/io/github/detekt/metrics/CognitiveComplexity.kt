@@ -96,19 +96,21 @@ class CognitiveComplexity private constructor() : DetektVisitor() {
             if (element is KtContainerNodeForControlStructureBody && parent is KtIfExpression) {
                 when (element.node.elementType) {
                     KtNodeTypes.THEN -> {
-                        addComplexity()
                         if (parent.isElseIf()) {
-                            super.visitKtElement(element)
+                            complexity++
                         } else {
-                            nestAround { super.visitKtElement(element) }
+                            addComplexity()
                         }
+                        nestAround { super.visitKtElement(element) }
                     }
 
                     KtNodeTypes.ELSE -> {
-                        if (element.expression !is KtIfExpression) {
-                            addComplexity()
+                        if (element.expression is KtIfExpression) {
+                            super.visitKtElement(element)
+                        } else {
+                            complexity++
+                            nestAround { super.visitKtElement(element) }
                         }
-                        super.visitKtElement(element)
                     }
 
                     else ->

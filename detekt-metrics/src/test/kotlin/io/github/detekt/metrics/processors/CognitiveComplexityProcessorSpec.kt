@@ -14,6 +14,6 @@ class CognitiveComplexityProcessorSpec {
         val value = MetricProcessorTester(file)
             .test(ProjectCognitiveComplexityProcessor(), CognitiveComplexity.KEY)
 
-        assertThat(value).isEqualTo(60)
+        assertThat(value).isEqualTo(50)
     }
 }

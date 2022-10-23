@@ -339,31 +339,31 @@ class CognitiveComplexitySpec {
                         if (condition) { // +2
                             while(true) { // +3
                             }
-                        } else if (condition) { // +2
-                            while(true) { // +2
+                        } else if (condition) { // +1
+                            while(true) { // +3
                             }
-                        } else if (condition) { // +2
-                            while(true) { // +2
+                        } else if (condition) { // +1
+                            while(true) { // +3
                             }
-                        } else { // +2
-                            while(true) { // +2
+                        } else { // +1
+                            while(true) { // +3
                             }
                         }
-                    // 6
+                    // 10
                     } else if (condition) { // +1
-                        if (condition) { // +1
-                            while(true) { // +2
+                        if (condition) { // +2
+                            while(true) { // +3
                             }
                         } else if (condition) // +1
-                            while(true) { // +1
+                            while(true) { // +3
                             }
-                    // 6
-                    } else { // + 1
-                        if (condition) { // +1
-                            while(true) { // +2
+                    // 10
+                    } else { // +1
+                        if (condition) { // +2
+                            while(true) { // +3
                             }
                         } else // +1
-                            while(true) { // +1
+                            while(true) { // +3
                             }
                     }
                     // 1
@@ -372,7 +372,7 @@ class CognitiveComplexitySpec {
                 }
                 """.trimIndent()
             )
-            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(31)
+            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(39)
         }
     }
 }
