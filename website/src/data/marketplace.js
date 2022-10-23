@@ -111,6 +111,27 @@ export const extensions = [
     tags: ["ruleset"],
   },
   {
+    title: "Kure",
+    description:
+      "The purpose of this ruleset for functional programming is to report the potential use of impure language elements in kotlin code.",
+    repo: "https://github.com/neeffect/kure-potlin",
+    tags: ["ruleset"],
+    ruleset: "kure-potlin",
+    rules: [
+      "LoopDefinition",
+      "ReturnStatement",
+      "VariableDefinition",
+      "ReturnUnit",
+      "ClassDefinition",
+      "AbstractClassDefinition",
+      "ThrowExpression",
+      "MutableCollections",
+      "BranchStatement",
+      "MissingElse"
+    ],
+    usesTypeResolution: true,
+  },
+  {
     title: "Hint",
     description:
       "A ruleset to implement detection of violation of programming principles. detekt-hint offers also instructions on how to integrate with Danger and Github Actions",
