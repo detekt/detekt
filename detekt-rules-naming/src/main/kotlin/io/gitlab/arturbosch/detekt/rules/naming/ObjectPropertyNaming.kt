@@ -12,7 +12,10 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isConstant
+import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
@@ -38,7 +41,7 @@ class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
     private val privatePropertyPattern: Regex by config("(_)?[A-Za-z][_A-Za-z0-9]*") { it.toRegex() }
 
     override fun visitProperty(property: KtProperty) {
-        if (property.isLocal || property.isTopLevel) {
+        if (property.isPropertyOfObjectDeclaration().not()) {
             return
         }
 
@@ -48,6 +51,9 @@ class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
             handleProperty(property)
         }
     }
+
+    private fun KtProperty.isPropertyOfObjectDeclaration(): Boolean =
+        this.isMember && this.getNonStrictParentOfType<KtClassOrObject>() is KtObjectDeclaration
 
     private fun handleConstant(property: KtProperty) {
         if (!property.identifierName().matches(constantPattern)) {

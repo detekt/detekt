@@ -39,28 +39,28 @@ jobs:
           distribution: 'temurin'
 
       - name: Build detekt
-        uses: gradle/gradle-build-action@fd32ae908111fe31afa48827bd1ee909540aa971 # tag=v2
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
         with:
           arguments: build -x detekt
 
-      - uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # tag=v3
+      - uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb # tag=v3
         with:
           name: heap-dump
           path: '**.hprof'
           if-no-files-found: ignore
 
       - name: Run detekt-cli --help
-        uses: gradle/gradle-build-action@fd32ae908111fe31afa48827bd1ee909540aa971 # tag=v2
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
         with:
           arguments: :detekt-cli:runWithHelpFlag
 
       - name: Run detekt-cli with argsfile
-        uses: gradle/gradle-build-action@fd32ae908111fe31afa48827bd1ee909540aa971 # tag=v2
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
         with:
           arguments: :detekt-cli:runWithArgsFile
 
       - name: Try to publish to Maven Local
-        uses: gradle/gradle-build-action@fd32ae908111fe31afa48827bd1ee909540aa971 # tag=v2
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
         with:
           arguments: publishToMavenLocal
 
@@ -78,7 +78,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Verify Generated Detekt Config File
-        uses: gradle/gradle-build-action@fd32ae908111fe31afa48827bd1ee909540aa971 # tag=v2
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
         with:
           arguments: verifyGeneratorOutput
 
@@ -96,7 +96,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build and compile test snippets
-        uses: gradle/gradle-build-action@fd32ae908111fe31afa48827bd1ee909540aa971 # tag=v2
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
         with:
           arguments: test -Pcompile-test-snippets=true
 
@@ -114,6 +114,6 @@ jobs:
           distribution: 'temurin'
 
       - name: Run with allWarningsAsErrors
-        uses: gradle/gradle-build-action@fd32ae908111fe31afa48827bd1ee909540aa971 # tag=v2
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
         with:
           arguments: build -x detekt -PwarningsAsErrors=true

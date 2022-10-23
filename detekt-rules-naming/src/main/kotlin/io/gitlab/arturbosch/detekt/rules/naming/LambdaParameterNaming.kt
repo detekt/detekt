@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 
@@ -27,9 +28,10 @@ class LambdaParameterNaming(config: Config = Config.empty) : Rule(config) {
     @Configuration("naming pattern")
     private val parameterPattern: Regex by config("[a-z][A-Za-z0-9]*|_", String::toRegex)
 
-    override fun visitParameter(parameter: KtParameter) {
-        val parameters: List<KtNamedDeclaration> = parameter.destructuringDeclaration?.entries ?: listOf(parameter)
-        parameters
+    override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
+        super.visitLambdaExpression(lambdaExpression)
+        lambdaExpression.valueParameters
+            .flatMap { it.getNamedDeclarations() }
             .mapNotNull { it.nameIdentifier }
             .forEach {
                 val identifier = it.text
@@ -43,5 +45,9 @@ class LambdaParameterNaming(config: Config = Config.empty) : Rule(config) {
                     )
                 }
             }
+    }
+
+    private fun KtParameter.getNamedDeclarations(): List<KtNamedDeclaration> {
+        return this.destructuringDeclaration?.entries ?: listOf(this)
     }
 }

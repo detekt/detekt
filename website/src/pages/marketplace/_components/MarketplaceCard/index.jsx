@@ -10,14 +10,10 @@ function MarketplaceCard(input) {
     <li key={extension.title} className="card shadow--md">
       <div className="card__body">
         <div className={styles.marketplaceCardHeader}>
-          <h3 className={styles.marketplaceCardTitle}>
-            {extension.title}
-          </h3>
+          <h3 className={styles.marketplaceCardTitle}>{extension.title}</h3>
           <ul className={styles.tagContainer}>
             {extension.tags.map((tag) => (
-              <li>
-                <MarketplaceCardTag tag={tag} />
-              </li>
+              <MarketplaceCardTag tag={tag} />
             ))}
           </ul>
           <Link
