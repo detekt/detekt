@@ -29,50 +29,58 @@ jobs:
             jdk: 8
     runs-on: ${{ matrix.os }}
     steps:
-    - name: Checkout Repo
-      uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3
-    - name: Setup Java
-      uses: actions/setup-java@de1bb2b0c5634f0fc4438d7aa9944e68f9bf86cc # tag=v3
-      with:
-        java-version: ${{ matrix.jdk }}
-        distribution: 'temurin'
-    - name: Build detekt
-      uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
-      with:
-        arguments: build -x detekt
-    - uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb # tag=v3
-      with:
-        name: heap-dump
-        path: '**.hprof'
-        if-no-files-found: ignore
-    - name: Run detekt-cli --help
-      uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
-      with:
-        arguments: :detekt-cli:runWithHelpFlag
-    - name: Run detekt-cli with argsfile
-      uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
-      with:
-        arguments: :detekt-cli:runWithArgsFile
-    - name: Try to publish to Maven Local
-      uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
-      with:
-        arguments: publishToMavenLocal
+      - name: Checkout Repo
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3
+
+      - name: Setup Java
+        uses: actions/setup-java@de1bb2b0c5634f0fc4438d7aa9944e68f9bf86cc # tag=v3
+        with:
+          java-version: ${{ matrix.jdk }}
+          distribution: 'temurin'
+
+      - name: Build detekt
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
+        with:
+          arguments: build -x detekt
+
+      - uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb # tag=v3
+        with:
+          name: heap-dump
+          path: '**.hprof'
+          if-no-files-found: ignore
+
+      - name: Run detekt-cli --help
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
+        with:
+          arguments: :detekt-cli:runWithHelpFlag
+
+      - name: Run detekt-cli with argsfile
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
+        with:
+          arguments: :detekt-cli:runWithArgsFile
+
+      - name: Try to publish to Maven Local
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
+        with:
+          arguments: publishToMavenLocal
 
   verify-generated-config-file:
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Repo
-      uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3
-    - name: Setup Java
-      uses: actions/setup-java@de1bb2b0c5634f0fc4438d7aa9944e68f9bf86cc # tag=v3
-      with:
-        java-version: 17
-        distribution: 'temurin'
-    - name: Verify Generated Detekt Config File
-      uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
-      with:
-        arguments: verifyGeneratorOutput
+      - name: Checkout Repo
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3
+
+      - name: Setup Java
+        uses: actions/setup-java@de1bb2b0c5634f0fc4438d7aa9944e68f9bf86cc # tag=v3
+        with:
+          java-version: 17
+          distribution: 'temurin'
+
+      - name: Verify Generated Detekt Config File
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
+        with:
+          arguments: verifyGeneratorOutput
 
   compile-test-snippets:
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
@@ -80,11 +88,13 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3
+
       - name: Setup Java
         uses: actions/setup-java@de1bb2b0c5634f0fc4438d7aa9944e68f9bf86cc # tag=v3
         with:
           java-version: 17
           distribution: 'temurin'
+
       - name: Build and compile test snippets
         uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
         with:
@@ -96,11 +106,13 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3
+
       - name: Setup Java
         uses: actions/setup-java@de1bb2b0c5634f0fc4438d7aa9944e68f9bf86cc # tag=v3
         with:
           java-version: 17
           distribution: 'temurin'
+
       - name: Run with allWarningsAsErrors
         uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
         with:
