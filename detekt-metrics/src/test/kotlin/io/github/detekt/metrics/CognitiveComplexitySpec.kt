@@ -60,7 +60,7 @@ class CognitiveComplexitySpec {
                 """.trimIndent()
             )
 
-            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
+            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(3)
         }
 
         @Test
@@ -72,7 +72,7 @@ class CognitiveComplexitySpec {
                 """.trimIndent()
             )
 
-            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
+            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(3)
         }
 
         @Test
@@ -85,7 +85,7 @@ class CognitiveComplexitySpec {
                 """.trimIndent()
             )
 
-            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(1)
+            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
         }
     }
 
@@ -171,7 +171,7 @@ class CognitiveComplexitySpec {
         fun `does not increment on just a condition`() {
             val code = compileContentForTest(
                 """
-                fun test(cond_ Boolean) = !cond
+                fun test(cond: Boolean) = !cond
                 """.trimIndent()
             )
 
@@ -185,7 +185,7 @@ class CognitiveComplexitySpec {
             fun `adds one for just a &&`() {
                 val code = compileContentForTest(
                     """
-                    fun test(cond_ Boolean) = !cond && !cond
+                    fun test(cond: Boolean) = !cond && !cond
                     """.trimIndent()
                 )
 
@@ -196,7 +196,7 @@ class CognitiveComplexitySpec {
             fun `adds only one for repeated &&`() {
                 val code = compileContentForTest(
                     """
-                    fun test(cond_ Boolean) = !cond && !cond && !cond
+                    fun test(cond: Boolean) = !cond && !cond && !cond
                     """.trimIndent()
                 )
 
@@ -207,7 +207,7 @@ class CognitiveComplexitySpec {
             fun `adds one per logical alternate operator`() {
                 val code = compileContentForTest(
                     """
-                    fun test(cond_ Boolean) = !cond && !cond || cond
+                    fun test(cond: Boolean) = !cond && !cond || cond
                     """.trimIndent()
                 )
 
@@ -218,7 +218,7 @@ class CognitiveComplexitySpec {
             fun `adds one per logical alternate operator with like operators in between`() {
                 val code = compileContentForTest(
                     """
-                    fun test(cond_ Boolean) {
+                    fun test(cond: Boolean) {
                         if (                    // +1
                             !cond 
                             && !cond && !cond   // +1
@@ -236,7 +236,7 @@ class CognitiveComplexitySpec {
             fun `adds one for negated but similar operators`() {
                 val code = compileContentForTest(
                     """
-                    fun test(cond_ Boolean) {
+                    fun test(cond: Boolean) {
                         if (                    // +1
                             !cond 
                             && !(cond && cond)  // +2
@@ -252,7 +252,7 @@ class CognitiveComplexitySpec {
             fun `adds only one for a negated chain of similar operators`() {
                 val code = compileContentForTest(
                     """
-                    fun test(cond_ Boolean) {
+                    fun test(cond: Boolean) {
                         if (                    // +1
                             !cond 
                             && !(cond && cond && cond)  // +2
@@ -268,7 +268,7 @@ class CognitiveComplexitySpec {
             fun `adds one for every negated similar operator chain`() {
                 val code = compileContentForTest(
                     """
-                    fun test(cond_ Boolean) {
+                    fun test(cond: Boolean) {
                         if (                            // +1
                             !cond 
                             && !(cond && cond && cond)  // +2
@@ -280,6 +280,99 @@ class CognitiveComplexitySpec {
 
                 assertThat(CognitiveComplexity.calculate(code)).isEqualTo(5)
             }
+        }
+    }
+
+    @Nested
+    inner class `if-else expressions` {
+        @Test
+        fun `should count else as complexity`() {
+            val code = compileContentForTest(
+                """
+                fun test(condition: Boolean) {
+                    if (condition) { // +1
+                    } else { // +1
+                    }
+                }
+                """.trimIndent()
+            )
+            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
+        }
+
+        @Test
+        fun `should count else-if as 1 complexity`() {
+            val code = compileContentForTest(
+                """
+                fun test(condition: Boolean) {
+                    if (condition) { // +1
+                    } else if (condition) { // +1
+                    }
+                }
+                """.trimIndent()
+            )
+            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
+        }
+
+        @Test
+        fun `should count else-if and else correctly`() {
+            val code = compileContentForTest(
+                """
+                fun test(condition: Boolean) {
+                    if (condition) { // +1                
+                    } else if (condition) { // +1
+                    } else if (condition) { // +1
+                    } else { // + 1
+                    }
+                }
+                """.trimIndent()
+            )
+            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(4)
+        }
+
+        @Test
+        fun `should count nested else-if correctly`() {
+            val code = compileContentForTest(
+                """
+                fun test(condition: Boolean) {
+                    // 18
+                    if (condition) { // +1
+                        if (condition) { // +2
+                            while(true) { // +3
+                            }
+                        } else if (condition) { // +1
+                            while(true) { // +3
+                            }
+                        } else if (condition) { // +1
+                            while(true) { // +3
+                            }
+                        } else { // +1
+                            while(true) { // +3
+                            }
+                        }
+                    // 10
+                    } else if (condition) { // +1
+                        if (condition) { // +2
+                            while(true) { // +3
+                            }
+                        } else if (condition) // +1
+                            while(true) { // +3
+                            }
+                    // 10
+                    } else { // +1
+                        if (condition) { // +2
+                            while(true) { // +3
+                            }
+                        } else // +1
+                            while(true) { // +3
+                            }
+                    }
+                    // 1
+                    if (condition) { // +1
+                    }
+                }
+                """.trimIndent()
+            )
+            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(39)
         }
     }
 }

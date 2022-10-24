@@ -11,7 +11,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 open class KtCompiler(
-    protected val environment: KotlinCoreEnvironment = createKotlinCoreEnvironment()
+    protected val environment: KotlinCoreEnvironment = createKotlinCoreEnvironment(printStream = System.err)
 ) {
 
     protected val psiFileFactory = KtPsiFactory(environment.project, markGenerated = false)

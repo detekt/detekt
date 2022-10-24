@@ -7,7 +7,6 @@ import io.github.detekt.tooling.api.MaxIssuesReached
 import io.github.detekt.tooling.api.UnexpectedError
 import io.github.detekt.tooling.api.exitCode
 import io.github.detekt.tooling.internal.NotApiButProbablyUsedByUsers
-import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Executable
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
@@ -55,7 +54,6 @@ fun buildRunner(
     return when {
         arguments.showVersion -> VersionPrinter(outputPrinter)
         arguments.generateConfig -> ConfigExporter(arguments, outputPrinter)
-        arguments.printAst -> AstPrinter(arguments, outputPrinter)
         else -> Runner(arguments, outputPrinter, errorPrinter)
     }
 }

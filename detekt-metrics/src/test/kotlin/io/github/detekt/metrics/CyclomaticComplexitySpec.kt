@@ -47,7 +47,7 @@ class CyclomaticComplexitySpec {
         fun `counts while, continue and break`() {
             val code = compileContentForTest(
                 """
-                    fun test(i_ Int) {
+                    fun test(i: Int) {
                         var j = i
                         while(true) { // 1
                             if (j == 5) { // 1

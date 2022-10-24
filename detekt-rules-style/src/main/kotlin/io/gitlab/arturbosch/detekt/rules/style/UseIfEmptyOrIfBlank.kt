@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-import org.jetbrains.kotlin.KtNodeTypes
+import io.gitlab.arturbosch.detekt.rules.isElseIf
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
@@ -83,8 +83,6 @@ class UseIfEmptyOrIfBlank(config: Config = Config.empty) : Rule(config) {
             "This '$conditionCalleeExpressionText' call can be replaced with '${replacement.replacementFunctionName}'"
         report(CodeSmell(issue, Entity.from(conditionCalleeExpression), message))
     }
-
-    private fun KtExpression.isElseIf(): Boolean = parent.node.elementType == KtNodeTypes.ELSE
 
     private fun KtIfExpression.condition(): Pair<KtExpression, Boolean>? {
         val condition = this.condition ?: return null

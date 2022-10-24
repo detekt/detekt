@@ -61,7 +61,7 @@ class TrimMultilineRawString(val config: Config) : Rule(config) {
 }
 
 fun KtStringTemplateExpression.isRawStringWithLineBreak(): Boolean =
-    text.startsWith("\"\"\"") && entries.any {
+    text.startsWith("\"\"\"") && text.endsWith("\"\"\"") && entries.any {
         val literalText = it.safeAs<KtLiteralStringTemplateEntry>()?.text
         literalText != null && "\n" in literalText
     }
