@@ -46,7 +46,10 @@ export const extensions = [
       "A ruleset that wraps the warnings and info messages of the Kotlin compiler as detekt findings..",
     repo: "https://github.com/BraisGabin/detekt-compiler-rules",
     ruleset: "compiler",
-    rules: ["CompilerInfo", "CompilerWarning"],
+    rules: [
+      "CompilerInfo",
+      "CompilerWarning",
+    ],
     usesTypeResolution: true,
     tags: ["ruleset"],
   },
@@ -175,7 +178,10 @@ export const extensions = [
       "A ruleset which enables verifying whether concrete classes are implemented as specified according to annotations applied to base types.",
     repo: "https://github.com/cph-cachet/detekt-verify-implementation",
     ruleset: "verify-implementation",
-    rules: ["DataClass", "Immutable"],
+    rules: [
+      "DataClass",
+      "Immutable",
+    ],
     usesTypeResolution: true,
     tags: ["ruleset"],
   },
