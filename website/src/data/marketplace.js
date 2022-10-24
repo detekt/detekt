@@ -64,7 +64,7 @@ export const extensions = [
       "ModifierParameterPosition",
       "PublicComposablePreview",
       "ReusedModifierInstance",
-      "UnnecessaryEventHandlerParameter"
+      "UnnecessaryEventHandlerParameter",
     ],
     usesTypeResolution: false,
     tags: ["ruleset"],
@@ -105,7 +105,7 @@ export const extensions = [
       "NoBlankNewLineAfterClassHeader",
       "NoNotNullOperator",
       "SingleLineWhenEntryExpressionsAreWrapped",
-      "TodoPattern"
+      "TodoPattern",
     ],
     usesTypeResolution: false,
     tags: ["ruleset"],
@@ -127,7 +127,7 @@ export const extensions = [
       "ReturnStatement",
       "ReturnUnit",
       "ThrowExpression",
-      "VariableDefinition"
+      "VariableDefinition",
     ],
     usesTypeResolution: true,
   },
@@ -164,7 +164,7 @@ export const extensions = [
       "PreferBracketAccessorOverFunctionSyntax",
       "PreferInOverContainsSyntax",
       "PreferUnaryPrefixOverFunctionSyntax",
-      "PreferUnaryPostfixOverFunctionSyntax"
+      "PreferUnaryPostfixOverFunctionSyntax",
     ],
     usesTypeResolution: false,
     tags: ["ruleset"],
