@@ -93,6 +93,88 @@ class TrimMultilineRawStringSpec {
         subject.compileAndLint(code)
         assertThat(subject.findings).isEmpty()
     }
+
+    @Test
+    fun `doesn't raise on constant`() {
+        val code = """
+            object O {
+                const val s =
+                    ${TQ}
+                        Given something
+                        When something
+                        Then something
+                    ${TQ}
+            }
+        """.trimIndent()
+        subject.compileAndLint(code)
+        assertThat(subject.findings).isEmpty()
+    }
+
+    @Test
+    fun `doesn't raise on annotation entry arguments`() {
+        val code = """
+            annotation class DisplayName(val s: String)
+            @DisplayName(
+                ${TQ}
+                    Given something
+                    When something
+                    Then something
+                ${TQ}
+            )
+            class Foo
+        """.trimIndent()
+        subject.compileAndLint(code)
+        assertThat(subject.findings).isEmpty()
+    }
+
+    @Test
+    fun `doesn't raise on annotation constructor parameters`() {
+        val code = """
+            annotation class DisplayName(
+                val s: String =
+                    ${TQ}
+                        Given something
+                        When something
+                        Then something
+                    ${TQ}
+            )
+        """.trimIndent()
+        subject.compileAndLint(code)
+        assertThat(subject.findings).isEmpty()
+    }
+
+    @Test
+    fun `raises on function arguments`() {
+        val code = """
+            fun foo(s: String) {}
+            val bar = foo(
+                ${TQ}
+                    Given something
+                    When something
+                    Then something
+                ${TQ}
+            )
+            class Foo
+        """.trimIndent()
+        subject.compileAndLint(code)
+        assertThat(subject.findings).hasSize(1)
+    }
+
+    @Test
+    fun `raises on class constructor parameters`() {
+        val code = """
+            class Foo(
+                val s: String =
+                    ${TQ}
+                        Given something
+                        When something
+                        Then something
+                    ${TQ}
+            )
+        """.trimIndent()
+        subject.compileAndLint(code)
+        assertThat(subject.findings).hasSize(1)
+    }
 }
 
 private const val TQ = "\"\"\""
