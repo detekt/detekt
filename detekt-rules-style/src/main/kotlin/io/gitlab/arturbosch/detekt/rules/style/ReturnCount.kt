@@ -110,7 +110,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
     private fun KtReturnExpression.isNamedReturnFromLambda(): Boolean {
         val label = this.labeledExpression
         if (label != null) {
-            return this.parentsOfTypeUntil<KtLambdaExpression, KtNamedFunction>().count() >= 1
+            return this.parentsOfTypeUntil<KtLambdaExpression, KtNamedFunction>().any()
         }
         return false
     }
