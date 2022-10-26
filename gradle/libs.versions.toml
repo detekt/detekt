@@ -43,7 +43,7 @@ contester-breakpoint = { module = "io.github.davidburstrom.contester:contester-b
 contester-driver = { module = "io.github.davidburstrom.contester:contester-driver", version.ref = "contester" }
 
 [plugins]
-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.12.0" }
+binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.12.1" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 gradleVersions = { id = "com.github.ben-manes.versions", version = "0.43.0" }
 pluginPublishing = { id = "com.gradle.plugin-publish", version = "1.0.0" }
