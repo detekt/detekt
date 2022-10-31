@@ -14,10 +14,8 @@ version = detektPluginVersion
 val detektPublication = "DetektPublication"
 
 plugins {
-    alias(libs.plugins.kotlin)
-    id("maven-publish")
-    `jvm-test-suite`
-    alias(libs.plugins.gradleVersionz)
+    id("module")
+    alias(libs.plugins.gradleVersions)
     alias(libs.plugins.shadow)
     alias(libs.plugins.download)
 }
@@ -31,12 +29,12 @@ dependencies {
     compileOnly(kotlin("stdlib"))
     compileOnly(kotlin("compiler-embeddable"))
 
-    implementation(libs.detekt.api)
-    implementation(libs.detekt.tooling)
-    runtimeOnly(libs.detekt.core)
-    runtimeOnly(libs.detekt.rules)
+    implementation(projects.detektApi)
+    implementation(projects.detektTooling)
+    runtimeOnly(projects.detektCore)
+    runtimeOnly(projects.detektRules)
 
-    testImplementation(libs.assertj.core)
+    testImplementation(libs.assertj)
     testImplementation(libs.kotlinCompileTesting)
 }
 
@@ -113,61 +111,7 @@ val testPluginKotlinc by tasks.registering(RunTestExecutable::class) {
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions.jvmTarget = "1.8"
     kotlinOptions.freeCompilerArgs = listOf(
         "-opt-in=kotlin.RequiresOptIn"
     )
-}
-
-tasks.withType<Test>().configureEach {
-    testLogging {
-        // set options for log level LIFECYCLE
-        events = setOf(
-            org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
-            org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_ERROR,
-            org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT,
-            org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
-        )
-        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-        showExceptions = true
-        showCauses = true
-        showStackTraces = true
-    }
-}
-
-testing {
-    suites {
-        val test by getting(JvmTestSuite::class) {
-            useJUnitJupiter(libs.versions.junit.get())
-        }
-    }
-}
-
-tasks {
-    val writeDetektVersionProperties by registering(WriteProperties::class) {
-        description = "Write the properties file with the Detekt version to be used by the plugin"
-        encoding = "UTF-8"
-        outputFile = file("$buildDir/versions.properties")
-        property("detektCompilerPluginVersion", project.version)
-    }
-
-    processResources {
-        from(writeDetektVersionProperties)
-    }
-}
-
-val sourcesJar by tasks.registering(Jar::class) {
-    dependsOn(tasks.classes)
-    archiveClassifier.set("sources")
-    from(sourceSets.main.get().allSource)
-}
-
-val javadocJar by tasks.registering(Jar::class) {
-    from(tasks.javadoc)
-    archiveClassifier.set("javadoc")
-}
-
-artifacts {
-    archives(sourcesJar)
-    archives(javadocJar)
 }
