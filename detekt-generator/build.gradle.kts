@@ -88,16 +88,25 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
 
 val verifyGeneratorOutput by tasks.registering(Exec::class) {
     dependsOn(generateDocumentation)
-    description = "Verifies that the default-detekt-config.yml is up-to-date"
-    commandLine = listOf("git", "diff", "--quiet", defaultConfigFile, deprecationFile)
+    description = "Verifies that generated config files are up-to-date"
+    commandLine = listOf(
+        "git",
+        "diff",
+        "--quiet",
+        defaultConfigFile,
+        formattingConfigFile,
+        librariesConfigFile,
+        ruleauthorsConfigFile,
+        deprecationFile,
+    )
     isIgnoreExitValue = true
 
     doLast {
         if (executionResult.get().exitValue == 1) {
             throw GradleException(
-                "The default-detekt-config.yml is not up-to-date. " +
+                "At least one generated configuration file is not up-to-date. " +
                     "You can execute the generateDocumentation Gradle task " +
-                    "to update it and commit the changed files."
+                    "to update generated files then commit the changes."
             )
         }
     }
