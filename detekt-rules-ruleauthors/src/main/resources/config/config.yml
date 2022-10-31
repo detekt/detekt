@@ -1,6 +1,6 @@
 ruleauthors:
   active: true
-  ViolatesTypeResolutionRequirements:
-    active: true
   UseEntityAtName:
+    active: true
+  ViolatesTypeResolutionRequirements:
     active: true
