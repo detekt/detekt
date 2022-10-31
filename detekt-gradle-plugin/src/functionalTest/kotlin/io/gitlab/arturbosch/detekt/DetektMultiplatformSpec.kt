@@ -73,14 +73,14 @@ class DetektMultiplatformSpec {
         @Test
         fun `does not configure baseline task`() {
             gradleRunner.runTasksAndExpectFailure(":shared:detektBaselineMetadataMain") { result ->
-                assertThat(result.output).contains("Task 'detektBaselineMetadataMain' not found in project")
+                assertThat(result.output).containsIgnoringCase("Task 'detektBaselineMetadataMain' not found in project")
             }
         }
 
         @Test
         fun `does not configure detekt task`() {
             gradleRunner.runTasksAndExpectFailure(":shared:detektMetadataMain") { result ->
-                assertThat(result.output).contains("Task 'detektMetadataMain' not found in project")
+                assertThat(result.output).containsIgnoringCase("Task 'detektMetadataMain' not found in project")
             }
         }
     }
