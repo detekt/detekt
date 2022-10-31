@@ -1,7 +1,8 @@
 package io.github.detekt.compiler.plugin.util
 
 import com.tschuchort.compiletesting.KotlinCompilation
-import com.tschuchort.compiletesting.KotlinCompilation.ExitCode.*
+import com.tschuchort.compiletesting.KotlinCompilation.ExitCode.COMPILATION_ERROR
+import com.tschuchort.compiletesting.KotlinCompilation.ExitCode.OK
 import org.assertj.core.api.AbstractObjectAssert
 
 fun assertThat(result: KotlinCompilation.Result) = CompilationAssert(result)
@@ -17,16 +18,18 @@ class CompilationAssert(private val result: KotlinCompilation.Result) :
     private val detektViolations = detektMessages
         .mapNotNull { line -> regex.find(line)?.groupValues?.get(1) }
 
-    fun passCompilation(expectedStatus : Boolean = true) = apply {
+    fun passCompilation(expectedStatus: Boolean = true) = apply {
         val expectedErrorCode = if (expectedStatus) OK else COMPILATION_ERROR
         if (result.exitCode != expectedErrorCode) {
-            failWithActualExpectedAndMessage(result.exitCode, expectedErrorCode,
-                "Expected compilation to finish with " +
-                    "code $expectedErrorCode but was ${result.exitCode}")
+            failWithActualExpectedAndMessage(
+                result.exitCode,
+                expectedErrorCode,
+                "Expected compilation to finish with code $expectedErrorCode but was ${result.exitCode}"
+            )
         }
     }
 
-    fun passDetekt(expectedStatus : Boolean = true) = apply {
+    fun passDetekt(expectedStatus: Boolean = true) = apply {
         // The status message is `i: Success?: false`
         val status = detektMessages
             .first { "Success?" in it }
@@ -36,9 +39,11 @@ class CompilationAssert(private val result: KotlinCompilation.Result) :
             .toBoolean()
 
         if (status != expectedStatus) {
-            failWithActualExpectedAndMessage(status, expectedStatus,
-                "Expected detekt to finish with " +
-                    "success status: $expectedStatus but was $status")
+            failWithActualExpectedAndMessage(
+                status,
+                expectedStatus,
+                "Expected detekt to finish with success status: $expectedStatus but was $status",
+            )
         }
     }
 
@@ -46,16 +51,20 @@ class CompilationAssert(private val result: KotlinCompilation.Result) :
 
     fun withViolations(expectedViolationNumber: Int) = apply {
         if (detektViolations.size != expectedViolationNumber) {
-            failWithActualExpectedAndMessage(detektViolations.size, expectedViolationNumber,
-                "Expected detekt violations to be " +
-                    "$expectedViolationNumber but was ${detektViolations.size}")
+            failWithActualExpectedAndMessage(
+                detektViolations.size,
+                expectedViolationNumber,
+                "Expected detekt violations to be $expectedViolationNumber but was ${detektViolations.size}",
+            )
         }
     }
 
     fun withRuleViolation(vararg expectedRuleName: String) = apply {
         if (expectedRuleName.any { it !in detektViolations }) {
-            failWithMessage("Expected rules ${expectedRuleName.toList()} to raise a violation " +
-                    "but not all were found. Found violations are instead $detektViolations")
+            failWithMessage(
+                "Expected rules ${expectedRuleName.toList()} to raise a violation but not all were found. " +
+                    "Found violations are instead $detektViolations"
+            )
         }
     }
 }

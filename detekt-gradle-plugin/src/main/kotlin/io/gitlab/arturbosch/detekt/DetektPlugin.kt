@@ -15,7 +15,10 @@ class DetektPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.pluginManager.apply(ReportingBasePlugin::class.java)
         val extension =
-            project.extensions.findByType(DetektExtension::class.java) ?: project.extensions.create(DETEKT_EXTENSION, DetektExtension::class.java)
+            project.extensions.findByType(DetektExtension::class.java) ?: project.extensions.create(
+                DETEKT_EXTENSION,
+                DetektExtension::class.java
+            )
 
         extension.reportsDir = project.extensions.getByType(ReportingExtension::class.java).file("detekt")
 

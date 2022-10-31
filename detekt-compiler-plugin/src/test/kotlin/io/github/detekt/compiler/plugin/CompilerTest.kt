@@ -16,7 +16,7 @@ class CompilerTest {
                     println(x)
                 }
             }
-            """
+            """.trimIndent()
         )
 
         assertThat(result)
@@ -38,7 +38,7 @@ class CompilerTest {
                     println(x)
                 }
             }
-            """
+            """.trimIndent()
         )
 
         assertThat(result)
@@ -51,13 +51,14 @@ class CompilerTest {
     fun `with a source file that does not contain violations`() {
         val result = compile(
             """
-            class KClass {
-                fun foo() {
-                    println("Hello world :)")
-                }
-            }
-            
-            """
+            |class KClass {
+            |    fun foo() {
+            |        println("Hello world :)")
+            |    }
+            |}
+            |
+            |
+            """.trimMargin()
         )
 
         assertThat(result)

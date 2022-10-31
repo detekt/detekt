@@ -16,6 +16,7 @@ internal class DetektService(
 ) {
 
     @OptIn(UnstableApi::class)
+    @Suppress("ForbiddenComment")
     fun analyze(files: Collection<KtFile>, context: BindingContext) {
         val detekt = DetektProvider.load().get(spec)
         val result = detekt.run(files, context)

@@ -27,12 +27,15 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
         target.pluginManager.apply(ReportingBasePlugin::class.java)
 
         val extension =
-            target.extensions.findByType(DetektExtension::class.java) ?: target.extensions.create(DETEKT_NAME, DetektExtension::class.java)
+            target.extensions.findByType(DetektExtension::class.java) ?: target.extensions.create(
+                DETEKT_NAME,
+                DetektExtension::class.java
+            )
 
         extension.reportsDir = target.extensions.getByType(ReportingExtension::class.java).file("detekt")
 
         val defaultConfigFile =
-            target.file("${target.rootProject.layout.projectDirectory.dir(DetektPlugin.CONFIG_DIR_NAME)}/${DetektPlugin.CONFIG_FILE}")
+            target.file("${target.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
         if (defaultConfigFile.exists()) {
             extension.config = target.files(defaultConfigFile)
         }
@@ -113,22 +116,28 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
 
     override fun getPluginArtifact(): SubpluginArtifact {
         // Other Gradle plugins can also have a versions.properties.
-        val distinctVersions = this::class.java.classLoader.getResources("versions.properties").toList().mapNotNull { versions ->
-            Properties().run {
-                val inputStream = versions.openConnection()
-                    /*
-                     * Due to https://bugs.openjdk.java.net/browse/JDK-6947916 and https://bugs.openjdk.java.net/browse/JDK-8155607,
-                     * it is necessary to disallow caches to maintain stability on JDK 8 and 11 (and possibly more).
-                     * Otherwise, simultaneous invocations of Detekt in the same VM can fail spuriously. A similar bug is referenced in
-                     * https://github.com/detekt/detekt/issues/3396. The performance regression is likely unnoticeable.
-                     * Due to https://github.com/detekt/detekt/issues/4332 it is included for all JDKs.
-                     */
-                    .apply { useCaches = false }
-                    .getInputStream()
-                load(inputStream)
-                getProperty("detektCompilerPluginVersion")
+        val distinctVersions = this::class
+            .java
+            .classLoader
+            .getResources("versions.properties")
+            .toList()
+            .mapNotNull { versions ->
+                Properties().run {
+                    val inputStream = versions.openConnection()
+                        /*
+                         * Due to https://bugs.openjdk.java.net/browse/JDK-6947916 and https://bugs.openjdk.java.net/browse/JDK-8155607,
+                         * it is necessary to disallow caches to maintain stability on JDK 8 and 11 (and possibly more).
+                         * Otherwise, simultaneous invocations of Detekt in the same VM can fail spuriously. A similar bug is referenced in
+                         * https://github.com/detekt/detekt/issues/3396. The performance regression is likely unnoticeable.
+                         * Due to https://github.com/detekt/detekt/issues/4332 it is included for all JDKs.
+                         */
+                        .apply { useCaches = false }
+                        .getInputStream()
+                    load(inputStream)
+                    getProperty("detektCompilerPluginVersion")
+                }
             }
-        }.distinct()
+            .distinct()
         val version = distinctVersions.singleOrNull() ?: error(
             "You're importing two Detekt compiler plugins which have different versions. " +
                 "(${distinctVersions.joinToString()}) Make sure to align the versions."

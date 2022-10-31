@@ -14,6 +14,7 @@ class DetektCommandLineProcessor : CommandLineProcessor {
 
     override val pluginId: String = "detekt-compiler-plugin"
 
+    @Suppress("StringLiteralDuplication")
     override val pluginOptions: Collection<AbstractCliOption> = listOf(
         CliOption(
             Options.config,
@@ -61,7 +62,7 @@ class DetektCommandLineProcessor : CommandLineProcessor {
             Options.disableDefaultRuleSets,
             "<true|false>",
             "Disables all default detekt rulesets and will only run detekt with custom rules " +
-                    "defined in plugins passed in with `detektPlugins` configuration.",
+                "defined in plugins passed in with `detektPlugins` configuration.",
             false
         ),
         CliOption(
@@ -86,7 +87,7 @@ class DetektCommandLineProcessor : CommandLineProcessor {
             Options.report,
             "<report-id:path>",
             "Generates a report for given 'report-id' and stores it on given 'path'. " +
-                    "Available 'report-id' values: 'txt', 'xml', 'html'.",
+                "Available 'report-id' values: 'txt', 'xml', 'html'.",
             false,
             allowMultipleOccurrences = true
         )
@@ -105,7 +106,11 @@ class DetektCommandLineProcessor : CommandLineProcessor {
             Options.parallel -> configuration.put(Keys.PARALLEL, value.toBoolean())
             Options.rootPath -> configuration.put(Keys.ROOT_PATH, Paths.get(value))
             Options.excludes -> configuration.put(Keys.EXCLUDES, value.decodeToGlobSet())
-            Options.report -> configuration.put(Keys.REPORTS, value.substringBefore(':'), Paths.get(value.substringAfter(':')))
+            Options.report -> configuration.put(
+                Keys.REPORTS,
+                value.substringBefore(':'),
+                Paths.get(value.substringAfter(':')),
+            )
             else -> throw CliOptionProcessingException("Unknown option: ${option.optionName}")
         }
     }

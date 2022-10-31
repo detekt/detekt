@@ -8,12 +8,17 @@ import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSourceLocation
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.common.messages.MessageUtil
 
-fun MessageCollector.info(msg: String) = this.report(CompilerMessageSeverity.INFO, msg)
+fun MessageCollector.info(msg: String) {
+    this.report(CompilerMessageSeverity.INFO, msg)
+}
 
-fun MessageCollector.warn(msg: String, location: CompilerMessageSourceLocation? = null) =
+fun MessageCollector.warn(msg: String, location: CompilerMessageSourceLocation? = null) {
     this.report(CompilerMessageSeverity.WARNING, msg, location)
+}
 
-fun MessageCollector.error(msg: String) = this.report(CompilerMessageSeverity.ERROR, msg)
+fun MessageCollector.error(msg: String) {
+    this.report(CompilerMessageSeverity.ERROR, msg)
+}
 
 fun MessageCollector.reportFindings(result: Detektion) {
     for ((ruleSetId, findings) in result.findings.entries) {

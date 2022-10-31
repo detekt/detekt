@@ -17,11 +17,6 @@ open class KotlinCompileTaskDetektExtension(project: Project) {
         reports.create("sarif")
     }
 
-    fun getXml() = reports.getByName("xml")
-    fun getHtml() = reports.getByName("html")
-    fun getTxt() = reports.getByName("txt")
-    fun getSarif() = reports.getByName("sarif")
-
     private val objects: ObjectFactory = project.objects
 
     val isEnabled: Property<Boolean> = objects.property(Boolean::class.java)
@@ -35,4 +30,8 @@ open class KotlinCompileTaskDetektExtension(project: Project) {
     val config: ConfigurableFileCollection = objects.fileCollection()
     val excludes: SetProperty<String> = objects.setProperty(String::class.java)
 
+    fun getXml() = reports.getByName("xml")
+    fun getHtml() = reports.getByName("html")
+    fun getTxt() = reports.getByName("txt")
+    fun getSarif() = reports.getByName("sarif")
 }

@@ -30,7 +30,7 @@ class DetektAnalysisExtension(
         if (spec.loggingSpec.debug) {
             log.info("$spec")
         }
-        val matchers = excludes.map { FileSystems.getDefault().getPathMatcher("glob:${it}") }
+        val matchers = excludes.map { FileSystems.getDefault().getPathMatcher("glob:$it") }
         val (includedFiles, excludedFiles) = files.partition { file ->
             matchers.none { it.matches(rootPath.relativize(Paths.get(file.virtualFilePath))) }
         }

@@ -20,7 +20,7 @@ internal fun CompilerConfiguration.toSpec(log: MessageCollector) = ProcessingSpe
     }
     reports {
         getMap(Keys.REPORTS).forEach {
-            report { Pair(it.key, it.value) }
+            report { it.key to it.value }
         }
     }
     extensions {

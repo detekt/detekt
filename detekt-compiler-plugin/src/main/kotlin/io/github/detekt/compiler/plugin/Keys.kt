@@ -5,6 +5,7 @@ import java.nio.file.Path
 
 object Options {
 
+    @Suppress("NonBooleanPropertyPrefixedWithIs")
     const val isEnabled: String = "isEnabled"
     const val debug: String = "debug"
     const val config = "config"
