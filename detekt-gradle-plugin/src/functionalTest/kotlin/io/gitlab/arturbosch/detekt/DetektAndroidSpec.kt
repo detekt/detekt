@@ -138,7 +138,7 @@ class DetektAndroidSpec {
         @DisplayName("task :app:detektMain")
         fun appDetektMain() {
             gradleRunner.runTasksAndExpectFailure(":app:detektMain") { result ->
-                assertThat(result.output).contains("Task 'detektMain' not found in project")
+                assertThat(result.output).containsIgnoringCase("Task 'detektMain' not found in project")
             }
         }
 
@@ -146,7 +146,7 @@ class DetektAndroidSpec {
         @DisplayName("task :app:detektTest")
         fun appDetektTest() {
             gradleRunner.runTasksAndExpectFailure(":app:detektTest") { result ->
-                assertThat(result.output).contains("Task 'detektTest' not found in project")
+                assertThat(result.output).containsIgnoringCase("Task 'detektTest' not found in project")
             }
         }
     }
