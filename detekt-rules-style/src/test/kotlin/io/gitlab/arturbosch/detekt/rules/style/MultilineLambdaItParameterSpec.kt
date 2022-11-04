@@ -129,6 +129,24 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
+
+        @Test
+        fun `does not report when statement has no nested statements`() {
+            val code = """
+            data class Foo(val x: Int, val y: Int)
+            
+            fun f(i: Int?) {
+                val foo = i?.let {
+                    Foo(
+                        x = it,
+                        y = 2
+                    )
+                }
+            }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
     }
 
     @Nested
@@ -171,6 +189,19 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
             val code = """
             fun f() {
                 val digits = 1234.let { param -> listOf(param) }
+            }   
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when statement has one-line lambda argument`() {
+            val code = """
+            fun f() {
+                val digits = 1234.let {
+                    check(it > 0) { println(it) }
+                }
             }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
