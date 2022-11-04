@@ -121,7 +121,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
             fun f() {
                 val digits = 1234.let {
                     check(it > 0) {
-                        println(it)
+                        println("error")
                     }
                 }
             }
@@ -200,7 +200,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
             val code = """
             fun f() {
                 val digits = 1234.let {
-                    check(it > 0) { println(it) }
+                    check(it > 0) { println("error") }
                 }
             }
             """.trimIndent()
