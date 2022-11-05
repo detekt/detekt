@@ -37,7 +37,7 @@ class DetektJvmSpec {
         val project = gradleRunner.buildProject()
 
         val detektTask = project.tasks.getByPath("detektMain") as Detekt
-        val argumentString = detektTask.arguments.get().joinToString(" ")
+        val argumentString = detektTask.arguments.joinToString(" ")
 
         assertThat(argumentString).containsPattern("""--baseline \S*[/\\]detekt-baseline-main.xml """)
         assertThat(argumentString).contains("--report xml:")
@@ -53,7 +53,7 @@ class DetektJvmSpec {
         val project = gradleRunner.buildProject()
 
         val detektTask = project.tasks.getByPath("detektTest") as Detekt
-        val argumentString = detektTask.arguments.get().joinToString(" ")
+        val argumentString = detektTask.arguments.joinToString(" ")
 
         assertThat(argumentString).containsPattern("""--baseline \S*[/\\]detekt-baseline-test.xml """)
         assertThat(argumentString).contains("--report xml:")

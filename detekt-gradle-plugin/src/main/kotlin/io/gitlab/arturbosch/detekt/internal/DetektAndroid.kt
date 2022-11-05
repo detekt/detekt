@@ -16,7 +16,6 @@ import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.DomainObjectSet
 import org.gradle.api.Project
 import org.gradle.api.Task
-import org.gradle.api.attributes.Attribute
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.TaskProvider
@@ -123,11 +122,7 @@ internal fun Project.registerAndroidDetektTask(
         setSource(variant.sourceSets.map { it.javaDirectories + it.kotlinDirectories })
         extraInputSource?.let { source(it) }
         classpath.setFrom(
-            variant.compileConfiguration.incoming.artifactView { view ->
-                view.attributes {
-                    it.attribute(Attribute.of("artifactType", String::class.java), "jar")
-                }
-            }.files,
+            variant.getCompileClasspath(null).filter { it.exists() },
             bootClasspath,
             javaCompileDestination(variant),
         )
@@ -151,11 +146,7 @@ internal fun Project.registerAndroidCreateBaselineTask(
         setSource(variant.sourceSets.map { it.javaDirectories + it.kotlinDirectories })
         extraInputSource?.let { source(it) }
         classpath.setFrom(
-            variant.compileConfiguration.incoming.artifactView { view ->
-                view.attributes {
-                    it.attribute(Attribute.of("artifactType", String::class.java), "jar")
-                }
-            }.files,
+            variant.getCompileClasspath(null).filter { it.exists() },
             bootClasspath,
             javaCompileDestination(variant),
         )
