@@ -68,7 +68,7 @@ class DetektPlainSpec {
             val project = gradleRunner.buildProject()
 
             val detektTask = project.tasks.getByPath("detekt") as Detekt
-            val argumentString = detektTask.arguments.get().joinToString(" ")
+            val argumentString = detektTask.arguments.joinToString(" ")
 
             assertThat(argumentString).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
             assertThat(argumentString).contains("--report xml:")

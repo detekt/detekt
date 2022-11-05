@@ -208,8 +208,8 @@ abstract class Detekt @Inject constructor(
     }
 
     @get:Internal
-    internal val arguments: Provider<List<String>> = project.provider {
-        listOf(
+    internal val arguments
+        get() = listOf(
             InputArgument(source),
             ClasspathArgument(classpath),
             LanguageVersionArgument(languageVersionProp.orNull),
@@ -230,7 +230,6 @@ abstract class Detekt @Inject constructor(
             BasePathArgument(basePathProp.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
         ).plus(convertCustomReportsToArguments()).flatMap(CliArgument::toArgument)
-    }
 
     @InputFiles
     @SkipWhenEmpty
@@ -252,7 +251,7 @@ abstract class Detekt @Inject constructor(
     @TaskAction
     fun check() {
         DetektInvoker.create(task = this, isDryRun = isDryRun).invokeCli(
-            arguments = arguments.get(),
+            arguments = arguments,
             ignoreFailures = ignoreFailures,
             classpath = detektClasspath.plus(pluginClasspath),
             taskName = name
