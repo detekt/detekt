@@ -43,3 +43,6 @@ rules:
   - "detekt-rules-naming/src/**/*"
   - "detekt-rules-performance/src/**/*"
   - "detekt-rules-style/src/**/*"
+
+suppressors:
+  - "detekt-core/src/main/kotlin/io/gitlab/arturbosch/detekt/core/suppressors/**/*"
