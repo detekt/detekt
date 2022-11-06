@@ -6,7 +6,7 @@ keywords: [changelog, release-notes, migration]
 
 # Changelog and Migration Guide
 
-#### 1.22.0-RC2 - 2022-10-16
+#### 1.22.0-RC3 - 2022-11-06
 
 ##### Notable Changes
 
@@ -41,6 +41,7 @@ keywords: [changelog, release-notes, migration]
   - We deprecated the MultiRule class as it was overly complicated. The suggested approach is to just provide separated rules. - [#5161](https://github.com/detekt/detekt/pull/5161)
   - The `--fail-fast` CLI flag (and `failFast` Gradle property) has been removed. It was deprecated since 1.16.x - [#5290](https://github.com/detekt/detekt/pull/5290)
   - We **deprecated** the following rules `DuplicateCaseInWhenExpression`, `MissingWhenCase`, `RedundantElseInWhen` as the Kotlin Compiler is already reporting errors for those scenarios - [#5309](https://github.com/detekt/detekt/pull/5309)
+  - We removed the `--print-ast` CLI flag as PsiViewer provides the same features - [#5418](https://github.com/detekt/detekt/pull/5418)
 - Notable changes to existing rules
   - `ArrayPrimitive` is now working only with Type Resolution - [#5175](https://github.com/detekt/detekt/pull/5175)
   - `WildcardImport` is now running also on tests by default - [#5121](https://github.com/detekt/detekt/pull/5121)
@@ -131,6 +132,26 @@ formatting:
 
 ##### Changelog
 
+- Fix issues introduced by #5152 - [#5508](https://github.com/detekt/detekt/pull/5508)
+- MultilineLambdaItParameter: fix false positive for one-line statements with a lambda argument - [#5505](https://github.com/detekt/detekt/pull/5505)
+- UseArrayLiteralsInAnnotations: fix false negative with primitive array factory calls - [#5482](https://github.com/detekt/detekt/pull/5482)
+- TrimMultilineRawString: fix false positive when it's expected as constant - [#5480](https://github.com/detekt/detekt/pull/5480)
+- Fix false negative `SafeCast` with no braces - [#5479](https://github.com/detekt/detekt/pull/5479)
+- Update gradle/wrapper-validation-action digest to 55e685c - [#5472](https://github.com/detekt/detekt/pull/5472)
+- Grant permission for type resolution Gradle job - [#5470](https://github.com/detekt/detekt/pull/5470)
+- Fix ObjectPropertyNaming Rule false positive - [#5466](https://github.com/detekt/detekt/pull/5466)
+- Fix LambdaParameterNaming rule false positive - [#5465](https://github.com/detekt/detekt/pull/5465)
+- Fix ReturnCount false positive when excludeReturnFromLambda is enabled - [#5459](https://github.com/detekt/detekt/pull/5459)
+- CognitiveComplexity: count else/else-if as one complexity - [#5458](https://github.com/detekt/detekt/pull/5458)
+- Fix false positive MultilineRawStringIndentation with tab indentation - [#5453](https://github.com/detekt/detekt/pull/5453)
+- Don't show the number of issues generating the BindingContext - [#5449](https://github.com/detekt/detekt/pull/5449)
+- Make detekt less noisy - [#5448](https://github.com/detekt/detekt/pull/5448)
+- New ruleauthors rule for Entity.from(x.nameIdentifier ?: x) -> Entity.atName(x) - [#5444](https://github.com/detekt/detekt/pull/5444)
+- Separating ComplexMethod rule into CyclomaticComplexMethod and CognitiveComplexMethod - [#5442](https://github.com/detekt/detekt/pull/5442)
+- Improve error reporting for CascadingCallWrapping - [#5439](https://github.com/detekt/detekt/pull/5439)
+- TrimMultilineRawString: fix false positive with not a raw string - [#5438](https://github.com/detekt/detekt/pull/5438)
+- BooleanPropertyNaming highlight only the name of the variable - [#5431](https://github.com/detekt/detekt/pull/5431)
+- Deprecate `TrailingComma` as it's now split in two rules - [#5423](https://github.com/detekt/detekt/pull/5423)
 - Remove unused constant - [#5421](https://github.com/detekt/detekt/pull/5421)
 - Report if/else as issue location instead of block - [#5407](https://github.com/detekt/detekt/pull/5407)
 - Remove some unnecessary suppressions - [#5400](https://github.com/detekt/detekt/pull/5400)
@@ -237,6 +258,8 @@ formatting:
 
 ##### Housekeeping & Refactorings
 
+- Document and test edge cases for ForbiddenMethodCall function signatures - [#5495](https://github.com/detekt/detekt/pull/5495)
+- Fix invalid syntaxes in test code - [#5446](https://github.com/detekt/detekt/pull/5446)
 - Improve raw strings format - [#5244](https://github.com/detekt/detekt/pull/5244)
 - Enable trim multiline raw string - [#5243](https://github.com/detekt/detekt/pull/5243)
 - Remove old configurations - [#5198](https://github.com/detekt/detekt/pull/5198)
