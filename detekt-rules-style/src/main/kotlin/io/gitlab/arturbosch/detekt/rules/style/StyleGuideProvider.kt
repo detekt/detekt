@@ -38,6 +38,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             NoTabs(config),
             EqualsOnSignatureLine(config),
             EqualsNullCall(config),
+            ForbiddenAnnotation(config),
             ForbiddenComment(config),
             ForbiddenImport(config),
             ForbiddenMethodCall(config),
