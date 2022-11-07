@@ -33,18 +33,6 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    fun `should report nothing when annotations are blank`() {
-        val code = """
-        @SuppressWarnings("unused") 
-        fun main() {}
-        """.trimIndent()
-        val findings = ForbiddenAnnotation(
-            TestConfig(mapOf(ANNOTATIONS to listOf("  ")))
-        ).compileAndLintWithContext(env, code)
-        assertThat(findings).isEmpty()
-    }
-
-    @Test
     fun `should report nothing when annotations do not match`() {
         val code = """
         @SuppressWarnings("unused") 
