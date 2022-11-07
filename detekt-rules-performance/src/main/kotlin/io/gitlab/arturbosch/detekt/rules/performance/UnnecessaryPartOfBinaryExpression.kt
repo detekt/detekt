@@ -10,8 +10,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.tree.IElementType
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
-import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.utils.addIfNotNull
 
 /**
  * Unnecessary binary expression add complexity to the code and accomplish nothing. They should be removed.
@@ -45,48 +45,34 @@ class UnnecessaryPartOfBinaryExpression(config: Config = Config.empty) : Rule(co
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)
-        if (expression.parent is KtBinaryExpression) {
-            return
-        }
 
-        val isOrOr = expression.getAllOperations().all { it != KtTokens.OROR }
-        val isAndAnd = expression.getAllOperations().all { it != KtTokens.ANDAND }
+        val operator = expression.operationToken
+        if (operator != KtTokens.OROR && operator != KtTokens.ANDAND) return
 
-        if (isOrOr || isAndAnd) {
-            val allChildren = expression.getAllVariables().map { it.text.replace(Regex("\\s"), "") }
+        val parent = expression.parent
+        if (parent is KtBinaryExpression && parent.operationToken == operator) return
 
-            if (allChildren != allChildren.distinct()) {
-                report(CodeSmell(issue, Entity.from(expression), issue.description))
-            }
+        val expressions = expression.expressions(operator).map { it.text.replace(whiteSpace, "") }
+        if (expressions.size != expressions.distinct().size) {
+            report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
     }
 
-    private fun KtBinaryExpression.getAllVariables(): List<KtElement> {
-        return buildList {
-            addAll(this@getAllVariables.left?.getVariable().orEmpty())
-            addAll(this@getAllVariables.right?.getVariable().orEmpty())
+    private fun KtBinaryExpression.expressions(operator: IElementType): List<KtExpression> {
+        val expressions = mutableListOf<KtExpression>()
+        fun collect(expression: KtExpression?) {
+            if (expression is KtBinaryExpression && expression.operationToken == operator) {
+                collect(expression.left)
+                collect(expression.right)
+            } else {
+                expressions.addIfNotNull(expression)
+            }
         }
+        collect(this)
+        return expressions
     }
 
-    private fun KtExpression.getVariable(): List<KtElement> {
-        return if (this is KtBinaryExpression &&
-            (this.operationToken == KtTokens.OROR || this.operationToken == KtTokens.ANDAND)
-        ) {
-            this.getAllVariables()
-        } else {
-            listOf(this)
-        }
-    }
-
-    private fun KtBinaryExpression.getAllOperations(): List<IElementType> {
-        return buildList {
-            (this@getAllOperations.left as? KtBinaryExpression)?.let {
-                addAll(it.getAllOperations())
-            }
-            (this@getAllOperations.right as? KtBinaryExpression)?.let {
-                addAll(it.getAllOperations())
-            }
-            add(this@getAllOperations.operationToken)
-        }
+    companion object {
+        private val whiteSpace = "\\s".toRegex()
     }
 }
