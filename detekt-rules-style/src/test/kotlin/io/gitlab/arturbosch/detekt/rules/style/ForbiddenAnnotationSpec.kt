@@ -61,21 +61,25 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
     fun `should report multiple different annotations`() {
         val code = """
         @SuppressWarnings("unused")
-        @Transient
-        fun main() {}
+        data class SomeClass(
+            @Transient
+            @Volatile
+            var transient: String? = null
+        )
         """.trimIndent()
         val findings = ForbiddenAnnotation(
             TestConfig(
                 mapOf(
                     ANNOTATIONS to listOf(
                         "java.lang.SuppressWarnings",
-                        "kotlin.jvm.Transient"
+                        "kotlin.jvm.Transient",
+                        "kotlin.jvm.Volatile"
                     )
                 )
             )
         ).compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(2)
-        assertThat(findings).hasTextLocations(0 to 27, 28 to 38)
+        assertThat(findings).hasSize(3)
+        assertThat(findings).hasTextLocations(0 to 27, 54 to 64, 69 to 78)
     }
 
     @Test
@@ -109,7 +113,7 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
         val code = """
         class SomeClass {
             @SuppressWarnings("unused")
-            val someField: String
+            val someField: String = "lalala"
         }
         """.trimIndent()
         val findings = ForbiddenAnnotation(
