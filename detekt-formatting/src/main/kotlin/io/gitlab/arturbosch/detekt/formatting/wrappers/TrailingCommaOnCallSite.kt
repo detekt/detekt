@@ -21,7 +21,7 @@ class TrailingCommaOnCallSite(config: Config) : FormattingRule(config) {
     override val wrapping = TrailingCommaOnCallSiteRule()
     override val issue = issueFor("Rule to mandate/forbid trailing commas at call sites")
 
-    @Configuration("Defines whether a trailing comma (or no trailing comma) should be enforced at call sites")
+    @Configuration("Defines whether trailing commas are required (true) or forbidden (false) at call sites")
     private val useTrailingCommaOnCallSite by configWithAndroidVariants(
         defaultValue = true,
         defaultAndroidValue = false,
