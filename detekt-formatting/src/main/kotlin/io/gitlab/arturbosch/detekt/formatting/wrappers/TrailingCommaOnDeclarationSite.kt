@@ -21,7 +21,7 @@ class TrailingCommaOnDeclarationSite(config: Config) : FormattingRule(config) {
     override val wrapping = TrailingCommaOnDeclarationSiteRule()
     override val issue = issueFor("Rule to mandate/forbid trailing commas at declaration sites")
 
-    @Configuration("Defines whether a trailing comma (or no trailing comma) should be enforced at declaration sites")
+    @Configuration("Defines whether trailing commas are required (true) or forbidden (false) at declaration sites")
     private val useTrailingCommaOnDeclarationSite by configWithAndroidVariants(
         defaultValue = true,
         defaultAndroidValue = false,
