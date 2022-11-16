@@ -39,7 +39,7 @@ jobs:
           arguments: :detekt-cli:runWithArgsFile
 
       - name: Upload SARIF to Github using the upload-sarif action
-        uses: github/codeql-action/upload-sarif@4238421316c33d73aeea2801274dd286f157c2bb # v2
+        uses: github/codeql-action/upload-sarif@678fc3afe258fb2e0cdc165ccf77b85719de7b3c # v2
         if: success() || failure()
         with:
           sarif_file: build/detekt-report.sarif
@@ -67,7 +67,7 @@ jobs:
           arguments: detektMain detektTest :detektReportMergeSarif --continue
 
       - name: Upload SARIF to Github using the upload-sarif action
-        uses: github/codeql-action/upload-sarif@4238421316c33d73aeea2801274dd286f157c2bb # v2
+        uses: github/codeql-action/upload-sarif@678fc3afe258fb2e0cdc165ccf77b85719de7b3c # v2
         if: success() || failure()
         with:
           sarif_file: build/reports/detekt/merge.sarif
