@@ -23,3 +23,16 @@ jobs:
           exempt-issue-labels: help wanted, good first issue, never gets stale, blocked
           exempt-pr-labels: help wanted, good first issue, never gets stale, blocked
           exempt-milestones: Future Breaking Changes in Major Versions
+      - uses: actions/stale@5ebf00ea0e4c1561e9b43a292ed34424fb1d4578 # tag=v6
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          days-before-stale: 30
+          stale-issue-message: 'This issue is waiting for authors feedback since 30 days. Please comment providing the requested feedback or this issue will be closed in 7 days.'
+          stale-pr-message: 'This PR is waiting for authors feedback since 30 days. Please comment providing the requested feedback or this PR will be closed in 7 days.'
+          close-issue-message: 'This issue was closed because its author hasn't followed up after 7 days.'
+          close-pr-message: 'This PR was closed because its author hasn't followed up after 7 days.'
+          stale-issue-label: stale
+          stale-pr-label: stale
+          any-of-labels: waiting for feedback
+          exempt-issue-labels: never gets stale
+          exempt-pr-labels: never gets stale
