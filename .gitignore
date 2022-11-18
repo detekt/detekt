@@ -166,6 +166,3 @@ target/
 /website/docs/rules/*.md
 /website/static/kdoc
 /website/docs/gettingstarted/_cli-options.md
-
-# Jenv
-.java-version
