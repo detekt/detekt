@@ -75,7 +75,7 @@ dependencies {
     pluginCompileOnly(libs.kotlin.gradle)
 
     // We use this published version of the detekt-formatting to self analyse this project.
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.21.0")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
 }
 
 gradlePlugin {
