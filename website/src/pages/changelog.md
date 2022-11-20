@@ -6,7 +6,7 @@ keywords: [changelog, release-notes, migration]
 
 # Changelog and Migration Guide
 
-#### 1.22.0-RC3 - 2022-11-06
+#### 1.22.0 - 2022-11-20
 
 ##### Notable Changes
 
@@ -47,7 +47,7 @@ keywords: [changelog, release-notes, migration]
   - `WildcardImport` is now running also on tests by default - [#5121](https://github.com/detekt/detekt/pull/5121)
   - `ForbiddenImport` allows now to specify a reason for every forbidden import - [#4909](https://github.com/detekt/detekt/pull/4909)
   - `IgnoredReturnValue`: option `restrictToAnnotatedMethods` is now deprecated in favor of `restrictToConfig` - [#4922](https://github.com/detekt/detekt/pull/4922)
-- This version of Detekt is built with Gradle `v7.5.1`, AGP `7.3.1`, Kotlin `1.7.20` and KtLint `0.47.1` (see [#5363](https://github.com/detekt/detekt/pull/5363) [#5189](https://github.com/detekt/detekt/pull/5189) [#5411](https://github.com/detekt/detekt/pull/5411) [#5312](https://github.com/detekt/detekt/pull/5312)
+- This version of Detekt is built with Gradle `v7.5.1`, AGP `7.3.1`, Kotlin `1.7.21` and KtLint `0.47.1` (see [#5363](https://github.com/detekt/detekt/pull/5363) [#5189](https://github.com/detekt/detekt/pull/5189) [#5411](https://github.com/detekt/detekt/pull/5411) [#5312](https://github.com/detekt/detekt/pull/5312) [#5519](https://github.com/detekt/detekt/pull/5519))
 - The minimum supported Gradle version is now `v6.7.1` - [#4964](https://github.com/detekt/detekt/pull/4964)
 
 ##### Migration
@@ -132,6 +132,13 @@ formatting:
 
 ##### Changelog
 
+- ReturnCount: correctly count assignment expressions with elvis return as guard clauses - [#5539](https://github.com/detekt/detekt/pull/5539)
+- UnnecessaryPartOfBinaryExpression: fix false positive with pair creation - [#5516](https://github.com/detekt/detekt/pull/5516)
+- False positive at `UnnecessaryPartOfBinaryExpression` - [#5514](https://github.com/detekt/detekt/issues/5514)
+- Update documentation for TrailingComma rules - [#5513](https://github.com/detekt/detekt/pull/5513)
+- `TrimMultilineRawString` false-positive on annotation parameters - [#5476](https://github.com/detekt/detekt/issues/5476)
+- Detekt 1.22.0-RC1 -> 1.22.0-RC2 breaks UnreachableCode - [#5435](https://github.com/detekt/detekt/issues/5435)
+- Detekt 1.22.0-RC1 -> 1.22.0-RC2 breaks ignoreAnnotated - [#5427](https://github.com/detekt/detekt/issues/5427)
 - Fix issues introduced by #5152 - [#5508](https://github.com/detekt/detekt/pull/5508)
 - MultilineLambdaItParameter: fix false positive for one-line statements with a lambda argument - [#5505](https://github.com/detekt/detekt/pull/5505)
 - UseArrayLiteralsInAnnotations: fix false negative with primitive array factory calls - [#5482](https://github.com/detekt/detekt/pull/5482)
@@ -394,6 +401,7 @@ Because of this, some users might have to **recreate their baseline** as the loc
 
 ##### Dependency Updates
 
+- Update plugin binaryCompatibilityValidator to v0.12.0 - [#5456](https://github.com/detekt/detekt/pull/5456)
 - Update dependency gradle to v7.5 - [#5074](https://github.com/detekt/detekt/pull/5074)
 - Update plugin binaryCompatibilityValidator to v0.11.0 - [#5069](https://github.com/detekt/detekt/pull/5069)
 - Update dependency org.jetbrains.kotlinx:kotlinx-coroutines-core to v1.6.3 - [#4976](https://github.com/detekt/detekt/pull/4976)
