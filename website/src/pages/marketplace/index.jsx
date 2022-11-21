@@ -11,6 +11,7 @@ const DESCRIPTION =
   "List of Detekt Rules that have been built by the community 🎉";
 const SUBMIT_URL =
   "https://github.com/detekt/detekt/blob/main/website/src/data/marketplace.js";
+const DOCS_URL = "https://detekt.dev/extensions.html";
 const SEARCH_RULES_URL = "https://github.com/topics/detekt-rules";
 
 function MarketplaceHeader() {
@@ -18,7 +19,7 @@ function MarketplaceHeader() {
     <section className="margin-top--lg margin-bottom--lg text--center">
       <h1>{TITLE}</h1>
       <p>
-        List of <Link href="https://detekt.dev/extensions.html">Detekt Rules, Extensions</Link> & Plugins that have been built by the community.
+        List of <Link href={DOCS_URL}>Detekt Rules, Extensions</Link> & Plugins that have been built by the community.
       </p>
       <a
         className={clsx(
