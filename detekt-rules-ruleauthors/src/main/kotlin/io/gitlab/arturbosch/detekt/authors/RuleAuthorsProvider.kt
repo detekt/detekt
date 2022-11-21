@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 /**
  * The rule authors ruleset provides rules that ensures good practices when writing detekt rules.
  *
- * Note: The `ruleauthors` rule set is not included in the detekt-cli or Gradle plugin.
+ * **Note: The `ruleauthors` rule set is not included in the detekt-cli or Gradle plugin.**
  *
  * To enable this rule set, add `detektPlugins "io.gitlab.arturbosch.detekt:detekt-rules-ruleauthors:$version"`
  * to your Gradle `dependencies` or reference the `detekt-rules-ruleauthors`-jar with the `--plugins` option
