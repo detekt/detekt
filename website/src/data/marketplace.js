@@ -23,18 +23,39 @@ export const tagTypes = {
   ruleset: {
     color: "#39ca30",
     description: "A collection of custom rules for Detekt",
+    communityUrls: [
+      "https://github.com/topics/detekt-rules",
+      "https://github.com/search?q=%22io.gitlab.arturbosch.detekt.api.RuleSetProvider%22+-org%3Adetekt&type=code",
+    ],
   },
   processor: {
     color: "#e9669e",
     description: "A custom processor for Detekt",
+    communityUrls: [
+      "https://github.com/search?q=%22io.gitlab.arturbosch.detekt.api.FileProcessListener%22+-org%3Adetekt&type=code",
+    ],
   },
   reporter: {
     color: "#fe6829",
     description: "A custom reporter for Detekt",
+    communityUrls: [
+      "https://github.com/search?q=%22io.gitlab.arturbosch.detekt.api.OutputReport%22+-org%3Adetekt&type=code",
+      "https://github.com/search?q=%22io.gitlab.arturbosch.detekt.api.ConsoleReport%22+-org%3Adetekt&type=code",
+    ],
+  },
+  configvalidator: {
+    color: "#53dbb7",
+    description: "A custom config validator for Detekt",
+    communityUrls: [
+      "https://github.com/search?q=%22io.gitlab.arturbosch.detekt.api.ConfigValidator%22+-org%3Adetekt&type=code",
+    ],
   },
   plugin: {
     color: "#a44fb7",
     description: "A plugin or a tool built on top of Detekt",
+    communityUrls: [
+      "https://github.com/topics/detekt-plugin"
+    ],
   },
 };
 
