@@ -29,7 +29,7 @@ function MarketplaceCard(input) {
           </Link>
         </div>
         <div className={styles.marketplaceCardBody}>
-          <Link href={extension.repo}>{extension.repo}</Link>
+          <Link href={extension.docs ?? extension.repo}>{extension.docs ?? extension.repo}</Link>
           <p>{extension.description}</p>
           {extension.rules && (
             <p>
