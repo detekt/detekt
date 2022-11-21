@@ -76,27 +76,28 @@ function MarketplaceCards() {
 function MarketplaceFooter() {
   return (
     <section id="unpublished" className="margin-top--lg margin-bottom--xl">
-      <h2>Unpublished community resources</h2>
-      <p>
-        List of <Link href={DOCS_URL}>Detekt Rules, Extensions</Link> that may be hidden from sight.
-      </p>
-      <ul className={clsx("clean-list")}>
-        {Object.keys(tagTypes).map((tag) => (
-          <>
-            <MarketplaceCardTag tag={tag} />
-            <li>
-              Community resources:
-              <ul>
-                {tagTypes[tag].communityUrls.map((url) => (
-                  <li>
-                    <Link href={url}>{url}</Link>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          </>
-        ))}
-      </ul>
+      <div className="container margin-top--lg">
+        <h2>Unpublished community resources</h2>
+        <p>
+          List of <Link href={DOCS_URL}>Detekt Rules, Extensions</Link> that may be hidden from sight.
+        </p>
+        <ul className={clsx("clean-list")}>
+          {Object.keys(tagTypes).map((tag) => (
+            <>
+              <MarketplaceCardTag tag={tag} />
+              <li>
+                <ul>
+                  {tagTypes[tag].communityUrls.map((url) => (
+                    <li>
+                      <Link href={url}>{url}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            </>
+          ))}
+        </ul>
+      </div>
     </section>
   );
 }
