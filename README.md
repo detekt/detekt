@@ -33,7 +33,7 @@ Visit [the project website](https://detekt.dev/) for installation guides, rule d
 - [Changelog and migration guides](https://detekt.dev/changelog.html)
 - [Available CLI options](https://detekt.dev/cli.html)
 - [Rule set and rule descriptions](https://detekt.dev/complexity.html)
-- [Writing custom rules and extending detekt](https://detekt.dev/extensions.html)
+- [Writing custom rules and extending detekt](https://detekt.dev/docs/introduction/extensions/)
 - [Suppressing issues in code](https://detekt.dev/suppressing-rules.html)
 - [Suppressing issues via baseline file](https://detekt.dev/baseline.html)
 - [Configuring detekt](https://detekt.dev/configurations.html)
@@ -134,7 +134,7 @@ dependencies {
 ```
 For more info visit the [Detekt Marketplace](https://detekt.dev/marketplace).
 
-Likewise custom [extensions](https://detekt.dev/extensions.html) can be added to detekt.
+Likewise custom [extensions](https://detekt.dev/docs/introduction/extensions/) can be added to detekt.
 
 ### Contributing
 

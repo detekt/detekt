@@ -11,7 +11,7 @@ const DESCRIPTION =
   "List of Detekt Rules that have been built by the community 🎉";
 const SUBMIT_URL =
   "https://github.com/detekt/detekt/blob/main/website/src/data/marketplace.js";
-const DOCS_URL = "https://detekt.dev/extensions.html";
+const DOCS_URL = "https://detekt.dev/docs/introduction/extensions/";
 const SEARCH_RULES_URL = "https://github.com/topics/detekt-rules";
 
 function MarketplaceHeader() {
