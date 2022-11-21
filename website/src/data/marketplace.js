@@ -61,12 +61,15 @@ export const extensions = [
     ruleset: "compose",
     rules: [
       "ComposableEventParameterNaming",
+      "ComposableParametersOrdering",
+      "ComposeFunctionName",
       "MissingModifierDefaultValue",
       "ModifierDefaultValue",
       "ModifierHeightWithText",
       "ModifierParameterPosition",
       "PublicComposablePreview",
       "ReusedModifierInstance",
+      "TopLevelComposableFunctions",
       "UnnecessaryEventHandlerParameter",
     ],
     usesTypeResolution: false,
@@ -77,10 +80,13 @@ export const extensions = [
     description:
       "Static checks to aid with a healthy adoption of Jetpack Compose.",
     repo: "https://github.com/twitter/compose-rules/",
+    docs: "https://twitter.github.io/compose-rules/",
     ruleset: "TwitterCompose",
     rules: [
       "ComposableNaming",
       "ComposableParamOrder",
+      "CompositionLocalAllowlist",
+      "CompositionLocalNaming",
       "ContentEmitterReturningValues",
       "ModifierComposable",
       "ModifierMissing",
@@ -88,8 +94,10 @@ export const extensions = [
       "ModifierWithoutDefault",
       "MultipleEmitters",
       "MutableParams",
+      "PreviewNaming",
       "PreviewPublic",
       "RememberMissing",
+      "UnstableCollections",
       "ViewModelForwarding",
       "ViewModelInjection",
     ],
@@ -112,7 +120,7 @@ export const extensions = [
     usesTypeResolution: true,
   },
   {
-    title: "Detekt rules for Rule Authors",
+    title: "Detekt rules for Detekt Rule Authors",
     description:
       "The rule authors ruleset provides rules that ensures good practices when writing detekt rules.",
     repo: "https://github.com/detekt/detekt",
@@ -241,6 +249,7 @@ export const extensions = [
     description:
       "A ruleset to implement detection of violation of programming principles. detekt-hint offers also instructions on how to integrate with Danger and Github Actions",
     repo: "https://github.com/mkohm/detekt-hint",
+    docs: "https://mkohm.github.io/detekt-hint/",
     tags: ["plugin", "ruleset"],
     ruleset: "detekt-hint",
     rules: [
