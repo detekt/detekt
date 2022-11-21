@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import Link from "@docusaurus/Link";
 import Layout from "@theme/Layout";
 import { extensions } from "@site/src/data/marketplace";
 import MarketplaceCard from "./_components/MarketplaceCard";
@@ -17,7 +18,7 @@ function MarketplaceHeader() {
     <section className="margin-top--lg margin-bottom--lg text--center">
       <h1>{TITLE}</h1>
       <p>
-        List of Detekt Rules, Extensions & Plugins that have been built by the community.
+        List of <Link href="https://detekt.dev/extensions.html">Detekt Rules, Extensions</Link> & Plugins that have been built by the community.
       </p>
       <a
         className={clsx(
