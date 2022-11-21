@@ -38,7 +38,7 @@ function MarketplaceCard(input) {
                 Uses type resolution:{" "}
                 <strong>{extension.usesTypeResolution.toString()}</strong>
               </p>
-              <p>
+              <p className={styles.marketplaceCardRules}>
                 <ul>
                   {extension.rules.map((rule) => (
                     <li>
