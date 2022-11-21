@@ -97,6 +97,35 @@ export const extensions = [
     tags: ["ruleset"],
   },
   {
+    title: "Detekt rules for Library Authors",
+    description:
+      "Rules in this rule set report issues related to libraries API exposure.",
+    repo: "https://github.com/detekt/detekt",
+    docs: "https://detekt.dev/docs/next/rules/libraries",
+    tags: ["ruleset"],
+    ruleset: "libraries",
+    rules: [
+      "ForbiddenPublicDataClass",
+      "LibraryCodeMustSpecifyReturnType",
+      "LibraryEntitiesShouldNotBePublic",
+    ],
+    usesTypeResolution: true,
+  },
+  {
+    title: "Detekt rules for Rule Authors",
+    description:
+      "The rule authors ruleset provides rules that ensures good practices when writing detekt rules.",
+    repo: "https://github.com/detekt/detekt",
+    docs: "https://detekt.dev/docs/next/rules/ruleauthors",
+    tags: ["ruleset"],
+    ruleset: "ruleauthors",
+    rules: [
+      "UseEntityAtName",
+      "ViolatesTypeResolutionRequirements",
+    ],
+    usesTypeResolution: true,
+  },
+  {
     title: "Doist detekt-rules",
     description:
       "This repository contains custom detekt rules based on Doist internal coding conventions.",
