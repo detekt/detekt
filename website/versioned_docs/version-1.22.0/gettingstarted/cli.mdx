@@ -1,0 +1,61 @@
+---
+title: "Run detekt using Command Line Interface"
+keywords: [cli]
+sidebar:
+permalink: cli.html
+folder: gettingstarted
+summary:
+sidebar_position: 1
+---
+
+import CliOptions from "./_cli-options.md";
+import CliGeneratorOptions from "./_cli-generator-options.md";
+
+## Install the cli
+
+There are different ways to install the Command Line Interface (CLI):
+
+### MacOS, with [Homebrew](https://brew.sh/):
+
+```sh
+brew install detekt
+detekt [options]
+```
+
+### Windows, with [Scoop](https://scoop.sh/)
+
+```powershell
+scoop install detekt
+detekt [options]
+```
+
+### Any OS:
+
+```sh
+curl -sSLO https://github.com/detekt/detekt/releases/download/v[detekt_version]/detekt-cli-[detekt_version].zip
+unzip detekt-cli-[detekt_version].zip
+./detekt-cli-[detekt_version]/bin/detekt-cli --help
+```
+
+## Use the cli
+
+detekt will exit with one of the following exit codes:
+
+| Exit code | Description                                                                    |
+| --------- | ------------------------------------------------------------------------------ |
+| 0         | detekt ran normally and maxIssues count was not reached in BuildFailureReport. |
+| 1         | An unexpected error occurred                                                   |
+| 2         | MaxIssues count was reached in BuildFailureReport.                             |
+| 3         | Invalid detekt configuration file detected.                                    |
+
+The following parameters are shown when `--help` is entered.
+
+<CliOptions />
+
+## Use the cli to generate configuration for custom rules
+
+<CliGeneratorOptions />
+
+```sh
+java -jar detekt-generator-[detekt_version]-all.jar -gcrc -i /path/to/rule1, /path/to/rule2
+```
