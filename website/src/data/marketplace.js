@@ -126,22 +126,7 @@ export const extensions = [
     tags: ["ruleset"],
   },
   {
-    title: "Detekt rules for Library Authors",
-    description:
-      "Rules in this rule set report issues related to libraries API exposure.",
-    repo: "https://github.com/detekt/detekt",
-    docs: "https://detekt.dev/docs/next/rules/libraries",
-    tags: ["ruleset"],
-    ruleset: "libraries",
-    rules: [
-      "ForbiddenPublicDataClass",
-      "LibraryCodeMustSpecifyReturnType",
-      "LibraryEntitiesShouldNotBePublic",
-    ],
-    usesTypeResolution: true,
-  },
-  {
-    title: "Detekt rules for Detekt Rule Authors",
+    title: "Detekt Rule Authors",
     description:
       "The rule authors ruleset provides rules that ensures good practices when writing detekt rules.",
     repo: "https://github.com/detekt/detekt",
@@ -170,6 +155,29 @@ export const extensions = [
     ],
     usesTypeResolution: false,
     tags: ["ruleset"],
+  },
+  {
+    title: "GitLab Report",
+    description:
+      "A reporter to export Detekt findings to GitLab Code Quality (and other code climate compatible tools).\nThis is designed for use with GitLab, but should also work fine with everything else that accepts the code climate format.",
+    repo: "https://gitlab.com/cromefire/detekt-gitlab-report",
+    tags: ["reporter"],
+  },
+  {
+    title: "Hint",
+    description:
+      "A ruleset to implement detection of violation of programming principles. detekt-hint offers also instructions on how to integrate with Danger and Github Actions",
+    repo: "https://github.com/mkohm/detekt-hint",
+    docs: "https://mkohm.github.io/detekt-hint/",
+    tags: ["plugin", "ruleset"],
+    ruleset: "detekt-hint",
+    rules: [
+      "InterfaceSegregationPrinciple",
+      "LackOfCohesionMethods",
+      "OpenClosedPrinciple",
+      "UseCompositionInsteadOfInheritance",
+    ],
+    usesTypeResolution: true,
   },
   {
     title: "ktlint",
@@ -266,27 +274,19 @@ export const extensions = [
     usesTypeResolution: true,
   },
   {
-    title: "Hint",
+    title: "Library Authors",
     description:
-      "A ruleset to implement detection of violation of programming principles. detekt-hint offers also instructions on how to integrate with Danger and Github Actions",
-    repo: "https://github.com/mkohm/detekt-hint",
-    docs: "https://mkohm.github.io/detekt-hint/",
-    tags: ["plugin", "ruleset"],
-    ruleset: "detekt-hint",
+      "Rules in this rule set report issues related to libraries API exposure.",
+    repo: "https://github.com/detekt/detekt",
+    docs: "https://detekt.dev/docs/next/rules/libraries",
+    tags: ["ruleset"],
+    ruleset: "libraries",
     rules: [
-      "InterfaceSegregationPrinciple",
-      "LackOfCohesionMethods",
-      "OpenClosedPrinciple",
-      "UseCompositionInsteadOfInheritance",
+      "ForbiddenPublicDataClass",
+      "LibraryCodeMustSpecifyReturnType",
+      "LibraryEntitiesShouldNotBePublic",
     ],
     usesTypeResolution: true,
-  },
-  {
-    title: "Gitlab Report",
-    description:
-      "A reporter to export Detekt findings to GitLab Code Quality (and other code climate compatible tools).\nThis is designed for use with GitLab, but should also work fine with everything else that accepts the code climate format.",
-    repo: "https://gitlab.com/cromefire/detekt-gitlab-report",
-    tags: ["reporter"],
   },
   {
     title: "Operator",
