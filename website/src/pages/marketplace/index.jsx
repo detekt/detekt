@@ -21,30 +21,26 @@ function MarketplaceHeader() {
       <p>
         List of <Link href={DOCS_URL}>Detekt Rules, Extensions</Link> & Plugins that have been built by the community.
       </p>
-      <a
+      <Link
         className={clsx(
           "button",
           "button--primary",
           styles.marketplaceHeaderButton
         )}
         href={SUBMIT_URL}
-        target="_blank"
-        rel="noreferrer"
       >
         🙏 Please add your ruleset
-      </a>
-      <a
+      </Link>
+      <Link
         className={clsx(
           "button",
           "button--secondary",
           styles.marketplaceHeaderButton
         )}
         href={SEARCH_RULES_URL}
-        target="_blank"
-        rel="noreferrer"
       >
         Find more rules on Github
-      </a>
+      </Link>
     </section>
   );
 }
