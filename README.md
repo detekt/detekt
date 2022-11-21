@@ -125,6 +125,15 @@ dependencies {
 }
 ```
 
+Similarly, there are extra rule sets available for Detekt from Detekt:
+```kotlin
+dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:[version]")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-ruleauthors:[version]")
+}
+```
+For more info visit the [Detekt Marketplace](https://detekt.dev/marketplace).
+
 Likewise custom [extensions](https://detekt.dev/extensions.html) can be added to detekt.
 
 ### Contributing
