@@ -186,7 +186,7 @@ export const extensions = [
     tags: ["ruleset"],
   },
   /*
-  Pro Tip: add your ruleset in alphabetical order.
-  Appending your ruleset here (at the end) is more likely to produce Git conflicts.
+   * Pro Tip: add your ruleset in alphabetical order.
+   * Appending your ruleset here (at the end) is more likely to produce Git conflicts.
    */
 ];
