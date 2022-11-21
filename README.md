@@ -142,9 +142,7 @@ See [CONTRIBUTING](.github/CONTRIBUTING.md)
 
 Thanks to all the people who contributed to detekt!
 
-<a href="https://github.com/detekt/detekt/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=detekt/detekt" />
-</a>
+[![Profile images of all the contributors](https://contrib.rocks/image?repo=detekt/detekt)](https://github.com/detekt/detekt/graphs/contributors)
 
 ### Mentions
 
