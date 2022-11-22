@@ -15,7 +15,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 class NoWildcardImports(config: Config) : FormattingRule(config) {
 
     override val wrapping = NoWildcardImportsRule()
-    override val issue = issueFor("Detects wildcast import usages")
+    override val issue = issueFor("Detects wildcard imports")
 
     @Configuration("Defines allowed wildcard imports")
     private val packagesToUseImportOnDemandProperty by config(ALLOWED_WILDCARD_IMPORTS)
