@@ -35,9 +35,7 @@ class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "Mark forbidden annotations. A forbidden annotation could be an invocation of an unwanted " +
-            "language annotation which does not require explicit import and hence you might want to mark it " +
-            "as forbidden in order to get warned about the usage.",
+        "Avoid using this annotation.",
         Debt.FIVE_MINS
     )
 
