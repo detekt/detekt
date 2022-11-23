@@ -102,10 +102,10 @@ If you wish to use the `libraries` ruleset we introduced you should add the foll
 +     active: true
 ```
 
-and add the following to you `build.gradle` file:
+and add the following to your `build.gradle` file:
 
 ```kotlin
-detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-authors:$version")
+detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:$version")
 ```
 
 If you're using our KtLint wrapper (i.e. `detekt-formatting`) you should also update your config file as follows:
