@@ -219,4 +219,15 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
             .hasStartSourceLocation(2, 1)
             .hasTextLocations(37 to 41)
     }
+
+    @Test
+    fun `should report annotations for expressions`() {
+        val code = """
+        val num = @SuppressWarnings("MagicNumber") 42
+        val x = 0 + @SuppressWarnings("UnnecessaryParentheses") (((1)+(2))) + 3
+        """.trimIndent()
+        val findings = ForbiddenAnnotation(TestConfig()).compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(2)
+            .hasTextLocations(10 to 27, 58 to 75)
+    }
 }
