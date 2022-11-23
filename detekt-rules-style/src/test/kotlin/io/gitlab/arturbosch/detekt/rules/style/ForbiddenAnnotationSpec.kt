@@ -34,6 +34,35 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `should report annotations from java lang annotation package by default`() {
+        val code = """
+        import java.lang.annotation.Retention 
+        import java.lang.annotation.Documented 
+        import java.lang.annotation.Target
+        import java.lang.annotation.Repeatable
+        import java.lang.annotation.Inherited
+        import java.lang.Deprecated
+        @Deprecated
+        @Documented    
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.TYPE)
+        @Repeatable
+        @Inherited
+        annotation class SomeClass
+        """.trimIndent()
+        val findings = ForbiddenAnnotation(TestConfig()).compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(6)
+        assertThat(findings).hasTextLocations(
+            219 to 230,
+            231 to 242,
+            247 to 257,
+            283 to 290,
+            309 to 320,
+            321 to 331
+        )
+    }
+
+    @Test
     fun `should report nothing when annotations do not match`() {
         val code = """
         @SuppressWarnings("unused") 
