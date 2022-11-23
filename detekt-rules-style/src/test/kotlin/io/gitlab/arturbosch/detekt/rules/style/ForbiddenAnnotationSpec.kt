@@ -230,4 +230,16 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
         assertThat(findings).hasSize(2)
             .hasTextLocations(10 to 27, 58 to 75)
     }
+
+    @Test
+    fun `should report annotations for blocks`() {
+        val code = """
+        fun f(list: List<String>) {
+            list.map @SuppressWarnings("x") { it.length }
+        }
+        """.trimIndent()
+        val findings = ForbiddenAnnotation(TestConfig()).compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+            .hasTextLocations(41 to 58)
+    }
 }
