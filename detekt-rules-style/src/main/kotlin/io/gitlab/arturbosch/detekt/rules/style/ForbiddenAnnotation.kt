@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
@@ -15,6 +16,7 @@ import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
@@ -67,7 +69,14 @@ class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
             } else {
                 "The annotation `${forbidden.name}` has been forbidden in the detekt config."
             }
-            report(CodeSmell(issue, Entity.from(annotation), message))
+            val location = Location.from(annotation).let { location ->
+                location.copy(
+                    text = location.text.copy(
+                        end = annotation.children.firstOrNull()?.endOffset ?: location.text.end
+                    )
+                )
+            }
+            report(CodeSmell(issue, Entity.from(annotation, location), message))
         }
     }
 

@@ -26,6 +26,7 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
             .hasStartSourceLocations(
                 SourceLocation(1, 1)
             )
+            .hasTextLocations(0 to 17)
             .extracting("message")
             .containsExactly(
                 "The annotation `java.lang.SuppressWarnings` has been forbidden: it is a java annotation. Use `Suppress` instead.",
@@ -54,7 +55,7 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
             TestConfig(mapOf(ANNOTATIONS to listOf("java.lang.SuppressWarnings")))
         ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-        assertThat(findings).hasTextLocations(0 to 37)
+        assertThat(findings).hasTextLocations(0 to 27)
     }
 
     @Test
@@ -79,7 +80,7 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
             )
         ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(3)
-        assertThat(findings).hasTextLocations(0 to 27, 54 to 64, 69 to 78)
+        assertThat(findings).hasTextLocations(0 to 17, 54 to 64, 69 to 78)
     }
 
     @Test
