@@ -15,9 +15,12 @@ import io.gitlab.arturbosch.detekt.api.valuesWithReason
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
+import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.types.KotlinType
 
 /**
  * This rule allows to set a list of forbidden annotations. This can be used to discourage the use
@@ -52,7 +55,7 @@ class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
             "java.lang.annotation.Retention" to "it is a java annotation. Use `kotlin.annotation.Retention` instead.",
             "java.lang.annotation.Repeatable" to "it is a java annotation. Use `kotlin.annotation.Repeatable` instead.",
             "java.lang.annotation.Inherited" to "Kotlin doesn't support @Inherited annotation, see https://youtrack.jetbrains.com/issue/KT-22265",
-            )
+        )
     ) { list ->
         list.associate { it.value to Forbidden(it.value, it.reason) }
     }
@@ -63,9 +66,24 @@ class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
             return
         }
 
-        val forbidden = annotation.typeReference?.fqNameOrNull()?.let {
-            annotations[it.asString()]
+        annotation.typeReference?.fqNameOrNull()?.let {
+            check(annotation, it)
         }
+    }
+
+    override fun visitExpression(expression: KtExpression) {
+        super.visitExpression(expression)
+
+        if (annotations.isEmpty()) {
+            return
+        }
+        expression.expressionTypeOrNull()?.fqNameOrNull()?.let {
+            check(expression, it)
+        }
+    }
+
+    private fun check(element: KtElement, fqName: FqName) {
+        val forbidden = annotations[fqName.asString()]
 
         if (forbidden != null) {
             val message = if (forbidden.reason != null) {
@@ -73,14 +91,14 @@ class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
             } else {
                 "The annotation `${forbidden.name}` has been forbidden in the detekt config."
             }
-            val location = Location.from(annotation).let { location ->
+            val location = Location.from(element).let { location ->
                 location.copy(
                     text = location.text.copy(
-                        end = annotation.children.firstOrNull()?.endOffset ?: location.text.end
+                        end = element.children.firstOrNull()?.endOffset ?: location.text.end
                     )
                 )
             }
-            report(CodeSmell(issue, Entity.from(annotation, location), message))
+            report(CodeSmell(issue, Entity.from(element, location), message))
         }
     }
 
@@ -89,6 +107,14 @@ class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
     private fun KtTypeReference.fqNameOrNull(): FqName? {
         return if (bindingContext != BindingContext.EMPTY) {
             bindingContext[BindingContext.TYPE, this]?.fqNameOrNull()
+        } else {
+            null
+        }
+    }
+
+    private fun KtExpression.expressionTypeOrNull(): KotlinType? {
+        return if (bindingContext != BindingContext.EMPTY) {
+            bindingContext[BindingContext.EXPRESSION_TYPE_INFO, this]?.type
         } else {
             null
         }

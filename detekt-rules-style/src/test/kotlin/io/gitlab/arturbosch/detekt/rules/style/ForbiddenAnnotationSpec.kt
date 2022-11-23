@@ -192,4 +192,18 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
         ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1).hasStartSourceLocation(2, 5)
     }
+
+    @Test
+    fun `should report nested annotations`() {
+        val code = """
+        @Deprecated("unused", ReplaceWith("bar"))
+        fun foo() = "1234"
+        """.trimIndent()
+        val findings = ForbiddenAnnotation(
+            TestConfig(mapOf(ANNOTATIONS to listOf("kotlin.ReplaceWith")))
+        ).compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+            .hasStartSourceLocation(1, 23)
+            .hasTextLocations("ReplaceWith")
+    }
 }
