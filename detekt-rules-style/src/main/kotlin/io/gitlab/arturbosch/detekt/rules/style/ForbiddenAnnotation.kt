@@ -50,11 +50,13 @@ class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
         valuesWithReason(
             "java.lang.SuppressWarnings" to "it is a java annotation. Use `Suppress` instead.",
             "java.lang.Deprecated" to "it is a java annotation. Use `kotlin.Deprecated` instead.",
-            "java.lang.annotation.Documented" to "it is a java annotation. Use `kotlin.annotation.MustBeDocumented` instead.",
+            "java.lang.annotation.Documented" to "it is a java annotation. " +
+                "Use `kotlin.annotation.MustBeDocumented` instead.",
             "java.lang.annotation.Target" to "it is a java annotation. Use `kotlin.annotation.Target` instead.",
             "java.lang.annotation.Retention" to "it is a java annotation. Use `kotlin.annotation.Retention` instead.",
             "java.lang.annotation.Repeatable" to "it is a java annotation. Use `kotlin.annotation.Repeatable` instead.",
-            "java.lang.annotation.Inherited" to "Kotlin doesn't support @Inherited annotation, see https://youtrack.jetbrains.com/issue/KT-22265",
+            "java.lang.annotation.Inherited" to "Kotlin does not support @Inherited annotation, " +
+                "see https://youtrack.jetbrains.com/issue/KT-22265",
         )
     ) { list ->
         list.associate { it.value to Forbidden(it.value, it.reason) }

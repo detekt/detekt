@@ -41,24 +41,26 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
         import java.lang.annotation.Target
         import java.lang.annotation.Repeatable
         import java.lang.annotation.Inherited
+        import java.lang.annotation.RetentionPolicy
+        import java.lang.annotation.ElementType
         import java.lang.Deprecated
         @Deprecated
         @Documented    
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.TYPE)
-        @Repeatable
+        @Repeatable(value = SomeClass::class)
         @Inherited
-        annotation class SomeClass
+        annotation class SomeClass(val value: Array<SomeClass>)
         """.trimIndent()
         val findings = ForbiddenAnnotation(TestConfig()).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(6)
         assertThat(findings).hasTextLocations(
-            219 to 230,
-            231 to 242,
-            247 to 257,
-            283 to 290,
-            309 to 320,
-            321 to 331
+            303 to 314,
+            315 to 326,
+            331 to 341,
+            367 to 374,
+            393 to 404,
+            431 to 441
         )
     }
 
@@ -223,23 +225,27 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `should report annotations for expressions`() {
         val code = """
-        val num = @SuppressWarnings("MagicNumber") 42
-        val x = 0 + @SuppressWarnings("UnnecessaryParentheses") (((1)+(2))) + 3
+        val num = @Suppress("MagicNumber") 42
+        val x = 0 + @Suppress("UnnecessaryParentheses") (((1)+(2))) + 3
         """.trimIndent()
-        val findings = ForbiddenAnnotation(TestConfig()).compileAndLintWithContext(env, code)
+        val findings = ForbiddenAnnotation(
+            TestConfig(mapOf(ANNOTATIONS to listOf("kotlin.Suppress")))
+        ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(2)
-            .hasTextLocations(10 to 27, 58 to 75)
+            .hasTextLocations(10 to 19, 50 to 59)
     }
 
     @Test
     fun `should report annotations for blocks`() {
         val code = """
         fun f(list: List<String>) {
-            list.map @SuppressWarnings("x") { it.length }
+            list.map @Suppress("x") { it.length }
         }
         """.trimIndent()
-        val findings = ForbiddenAnnotation(TestConfig()).compileAndLintWithContext(env, code)
+        val findings = ForbiddenAnnotation(
+            TestConfig(mapOf(ANNOTATIONS to listOf("kotlin.Suppress")))
+        ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-            .hasTextLocations(41 to 58)
+            .hasTextLocations(41 to 50)
     }
 }
