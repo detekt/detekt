@@ -206,4 +206,17 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
             .hasStartSourceLocation(1, 23)
             .hasTextLocations("ReplaceWith")
     }
+
+    @Test
+    fun `should report aliased annotations`() {
+        val code = """
+        typealias Dep = java.lang.Deprecated
+        @Dep
+        fun f() = Unit
+        """.trimIndent()
+        val findings = ForbiddenAnnotation(TestConfig()).compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+            .hasStartSourceLocation(2, 1)
+            .hasTextLocations(37 to 41)
+    }
 }
