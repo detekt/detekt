@@ -68,6 +68,7 @@ class DetektPlugin : Plugin<Project> {
         }
 
         tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
+            @Suppress("DEPRECATION") // Internal usage, might be rewired later.
             it.config.setFrom(project.provider { extension.config })
             it.usesService(detektGenerateConfigSingleExecution)
         }
