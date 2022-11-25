@@ -110,19 +110,9 @@ class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
 
     private data class Forbidden(val name: String, val reason: String?)
 
-    private fun KtTypeReference.fqNameOrNull(): FqName? {
-        return if (bindingContext != BindingContext.EMPTY) {
-            bindingContext[BindingContext.TYPE, this]?.fqNameOrNull()
-        } else {
-            null
-        }
-    }
+    private fun KtTypeReference.fqNameOrNull(): FqName? =
+        bindingContext[BindingContext.TYPE, this]?.fqNameOrNull()
 
-    private fun KtExpression.expressionTypeOrNull(): KotlinType? {
-        return if (bindingContext != BindingContext.EMPTY) {
-            bindingContext[BindingContext.EXPRESSION_TYPE_INFO, this]?.type
-        } else {
-            null
-        }
-    }
+    private fun KtExpression.expressionTypeOrNull(): KotlinType? =
+        bindingContext[BindingContext.EXPRESSION_TYPE_INFO, this]?.type
 }
