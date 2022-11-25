@@ -16,7 +16,7 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `should report SuppressWarnings usages by default`() {
         val code = """
-        @SuppressWarnings("unused")    
+        @SuppressWarnings("unused")
         fun main() {}
         """.trimIndent()
         val findings = ForbiddenAnnotation(TestConfig()).compileAndLintWithContext(env, code)
@@ -36,8 +36,8 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `should report annotations from java lang annotation package by default`() {
         val code = """
-        import java.lang.annotation.Retention 
-        import java.lang.annotation.Documented 
+        import java.lang.annotation.Retention
+        import java.lang.annotation.Documented
         import java.lang.annotation.Target
         import java.lang.annotation.Repeatable
         import java.lang.annotation.Inherited
@@ -45,7 +45,7 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
         import java.lang.annotation.ElementType
         import java.lang.Deprecated
         @Deprecated
-        @Documented    
+        @Documented
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.TYPE)
         @Repeatable(value = SomeClass::class)
@@ -55,19 +55,19 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
         val findings = ForbiddenAnnotation(TestConfig()).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(6)
         assertThat(findings).hasTextLocations(
-            303 to 314,
-            315 to 326,
-            331 to 341,
-            367 to 374,
-            393 to 404,
-            431 to 441
+            301 to 312,
+            313 to 324,
+            325 to 335,
+            361 to 368,
+            387 to 398,
+            425 to 435
         )
     }
 
     @Test
     fun `should report nothing when annotations do not match`() {
         val code = """
-        @SuppressWarnings("unused") 
+        @SuppressWarnings("unused")
         fun main() {}
         """.trimIndent()
         val findings = ForbiddenAnnotation(
@@ -79,7 +79,7 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `should report annotation call when the fully qualified name is used`() {
         val code = """
-        @java.lang.SuppressWarnings("unused") 
+        @java.lang.SuppressWarnings("unused")
         fun main() {}
         """.trimIndent()
         val findings = ForbiddenAnnotation(
