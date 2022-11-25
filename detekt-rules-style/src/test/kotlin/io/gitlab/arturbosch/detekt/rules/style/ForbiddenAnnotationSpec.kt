@@ -205,7 +205,6 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
             TestConfig(mapOf(ANNOTATIONS to listOf("kotlin.ReplaceWith")))
         ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-            .hasStartSourceLocation(1, 23)
             .hasTextLocations("ReplaceWith")
     }
 
