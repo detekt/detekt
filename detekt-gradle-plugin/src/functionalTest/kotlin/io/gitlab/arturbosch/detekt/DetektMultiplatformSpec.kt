@@ -154,6 +154,7 @@ class DetektMultiplatformSpec {
                         }
                         android {
                             compileSdk = 30
+                            namespace = "io.gitlab.arturbosch.detekt.app"
                             sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
                             buildTypes {
                                 release {
