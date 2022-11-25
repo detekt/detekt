@@ -41,7 +41,7 @@ keywords: [changelog, release-notes, migration]
   - We deprecated the MultiRule class as it was overly complicated. The suggested approach is to just provide separated rules. - [#5161](https://github.com/detekt/detekt/pull/5161)
   - The `--fail-fast` CLI flag (and `failFast` Gradle property) has been removed. It was deprecated since 1.16.x - [#5290](https://github.com/detekt/detekt/pull/5290)
   - We **deprecated** the following rules `DuplicateCaseInWhenExpression`, `MissingWhenCase`, `RedundantElseInWhen` as the Kotlin Compiler is already reporting errors for those scenarios - [#5309](https://github.com/detekt/detekt/pull/5309)
-  - We removed the `--print-ast` CLI flag as PsiViewer provides the same features - [#5418](https://github.com/detekt/detekt/pull/5418)
+  - We removed the `--print-ast` CLI flag as [PsiViewer](https://www.jetbrains.com/help/idea/psi-viewer.html) provides the same features - [#5418](https://github.com/detekt/detekt/pull/5418)
 - Notable changes to existing rules
   - `ArrayPrimitive` is now working only with Type Resolution - [#5175](https://github.com/detekt/detekt/pull/5175)
   - `WildcardImport` is now running also on tests by default - [#5121](https://github.com/detekt/detekt/pull/5121)

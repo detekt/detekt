@@ -29,7 +29,7 @@ function MarketplaceCard(input) {
           </Link>
         </div>
         <div className={styles.marketplaceCardBody}>
-          <Link href={extension.repo}>{extension.repo}</Link>
+          <Link href={extension.docs ?? extension.repo}>{extension.docs ?? extension.repo}</Link>
           <p>{extension.description}</p>
           {extension.rules && (
             <p>
@@ -38,7 +38,7 @@ function MarketplaceCard(input) {
                 Uses type resolution:{" "}
                 <strong>{extension.usesTypeResolution.toString()}</strong>
               </p>
-              <p>
+              <p className={styles.marketplaceCardRules}>
                 <ul>
                   {extension.rules.map((rule) => (
                     <li>

@@ -23,18 +23,39 @@ export const tagTypes = {
   ruleset: {
     color: "#39ca30",
     description: "A collection of custom rules for Detekt",
+    communityUrls: [
+      "https://github.com/topics/detekt-rules",
+      "https://github.com/search?q=%22io.gitlab.arturbosch.detekt.api.RuleSetProvider%22+-org%3Adetekt&type=code",
+    ],
   },
   processor: {
     color: "#e9669e",
     description: "A custom processor for Detekt",
+    communityUrls: [
+      "https://github.com/search?q=%22io.gitlab.arturbosch.detekt.api.FileProcessListener%22+-org%3Adetekt&type=code",
+    ],
   },
   reporter: {
     color: "#fe6829",
     description: "A custom reporter for Detekt",
+    communityUrls: [
+      "https://github.com/search?q=%22io.gitlab.arturbosch.detekt.api.OutputReport%22+-org%3Adetekt&type=code",
+      "https://github.com/search?q=%22io.gitlab.arturbosch.detekt.api.ConsoleReport%22+-org%3Adetekt&type=code",
+    ],
+  },
+  configvalidator: {
+    color: "#53dbb7",
+    description: "A custom config validator for Detekt",
+    communityUrls: [
+      "https://github.com/search?q=%22io.gitlab.arturbosch.detekt.api.ConfigValidator%22+-org%3Adetekt&type=code",
+    ],
   },
   plugin: {
     color: "#a44fb7",
     description: "A plugin or a tool built on top of Detekt",
+    communityUrls: [
+      "https://github.com/topics/detekt-plugin"
+    ],
   },
 };
 
@@ -61,12 +82,15 @@ export const extensions = [
     ruleset: "compose",
     rules: [
       "ComposableEventParameterNaming",
+      "ComposableParametersOrdering",
+      "ComposeFunctionName",
       "MissingModifierDefaultValue",
       "ModifierDefaultValue",
       "ModifierHeightWithText",
       "ModifierParameterPosition",
       "PublicComposablePreview",
       "ReusedModifierInstance",
+      "TopLevelComposableFunctions",
       "UnnecessaryEventHandlerParameter",
     ],
     usesTypeResolution: false,
@@ -77,10 +101,13 @@ export const extensions = [
     description:
       "Static checks to aid with a healthy adoption of Jetpack Compose.",
     repo: "https://github.com/twitter/compose-rules/",
+    docs: "https://twitter.github.io/compose-rules/",
     ruleset: "TwitterCompose",
     rules: [
       "ComposableNaming",
       "ComposableParamOrder",
+      "CompositionLocalAllowlist",
+      "CompositionLocalNaming",
       "ContentEmitterReturningValues",
       "ModifierComposable",
       "ModifierMissing",
@@ -88,13 +115,29 @@ export const extensions = [
       "ModifierWithoutDefault",
       "MultipleEmitters",
       "MutableParams",
+      "PreviewNaming",
       "PreviewPublic",
       "RememberMissing",
+      "UnstableCollections",
       "ViewModelForwarding",
       "ViewModelInjection",
     ],
     usesTypeResolution: false,
     tags: ["ruleset"],
+  },
+  {
+    title: "Detekt Rule Authors",
+    description:
+      "The rule authors ruleset provides rules that ensures good practices when writing detekt rules.",
+    repo: "https://github.com/detekt/detekt",
+    docs: "https://detekt.dev/docs/next/rules/ruleauthors",
+    tags: ["ruleset"],
+    ruleset: "ruleauthors",
+    rules: [
+      "UseEntityAtName",
+      "ViolatesTypeResolutionRequirements",
+    ],
+    usesTypeResolution: true,
   },
   {
     title: "Doist detekt-rules",
@@ -112,6 +155,102 @@ export const extensions = [
     ],
     usesTypeResolution: false,
     tags: ["ruleset"],
+  },
+  {
+    title: "GitLab Report",
+    description:
+      "A reporter to export Detekt findings to GitLab Code Quality (and other code climate compatible tools).\nThis is designed for use with GitLab, but should also work fine with everything else that accepts the code climate format.",
+    repo: "https://gitlab.com/cromefire/detekt-gitlab-report",
+    tags: ["reporter"],
+  },
+  {
+    title: "Hint",
+    description:
+      "A ruleset to implement detection of violation of programming principles. detekt-hint offers also instructions on how to integrate with Danger and Github Actions",
+    repo: "https://github.com/mkohm/detekt-hint",
+    docs: "https://mkohm.github.io/detekt-hint/",
+    tags: ["plugin", "ruleset"],
+    ruleset: "detekt-hint",
+    rules: [
+      "InterfaceSegregationPrinciple",
+      "LackOfCohesionMethods",
+      "OpenClosedPrinciple",
+      "UseCompositionInsteadOfInheritance",
+    ],
+    usesTypeResolution: true,
+  },
+  {
+    title: "ktlint",
+    description:
+      "This rule set provides wrappers for rules implemented by ktlint.",
+    repo: "https://github.com/detekt/detekt",
+    docs: "https://detekt.dev/docs/next/rules/formatting",
+    tags: ["ruleset"],
+    ruleset: "formatting",
+    rules: [
+      "AnnotationOnSeparateLine",
+      "AnnotationSpacing",
+      "ArgumentListWrapping",
+      "BlockCommentInitialStarAlignment",
+      "ChainWrapping",
+      "CommentSpacing",
+      "CommentWrapping",
+      "DiscouragedCommentLocation",
+      "EnumEntryNameCase",
+      "Filename",
+      "FinalNewline",
+      "FunKeywordSpacing",
+      "FunctionReturnTypeSpacing",
+      "FunctionSignature",
+      "FunctionStartOfBodySpacing",
+      "FunctionTypeReferenceSpacing",
+      "ImportOrdering",
+      "Indentation",
+      "KdocWrapping",
+      "MaximumLineLength",
+      "ModifierListSpacing",
+      "ModifierOrdering",
+      "MultiLineIfElse",
+      "NoBlankLineBeforeRbrace",
+      "NoBlankLinesInChainedMethodCalls",
+      "NoConsecutiveBlankLines",
+      "NoEmptyClassBody",
+      "NoEmptyFirstLineInMethodBlock",
+      "NoLineBreakAfterElse",
+      "NoLineBreakBeforeAssignment",
+      "NoMultipleSpaces",
+      "NoSemicolons",
+      "NoTrailingSpaces",
+      "NoUnitReturn",
+      "NoUnusedImports",
+      "NoWildcardImports",
+      "NullableTypeSpacing",
+      "PackageName",
+      "ParameterListSpacing",
+      "ParameterListWrapping",
+      "SpacingAroundAngleBrackets",
+      "SpacingAroundColon",
+      "SpacingAroundComma",
+      "SpacingAroundCurly",
+      "SpacingAroundDot",
+      "SpacingAroundDoubleColon",
+      "SpacingAroundKeyword",
+      "SpacingAroundOperators",
+      "SpacingAroundParens",
+      "SpacingAroundRangeOperator",
+      "SpacingAroundUnaryOperator",
+      "SpacingBetweenDeclarationsWithAnnotations",
+      "SpacingBetweenDeclarationsWithComments",
+      "SpacingBetweenFunctionNameAndOpeningParenthesis",
+      "StringTemplate",
+      "TrailingCommaOnCallSite",
+      "TrailingCommaOnDeclarationSite",
+      "TypeArgumentListSpacing",
+      "TypeParameterListSpacing",
+      "UnnecessaryParenthesesBeforeTrailingLambda",
+      "Wrapping",
+    ],
+    usesTypeResolution: false,
   },
   {
     title: "Kure",
@@ -135,26 +274,19 @@ export const extensions = [
     usesTypeResolution: true,
   },
   {
-    title: "Hint",
+    title: "Library Authors",
     description:
-      "A ruleset to implement detection of violation of programming principles. detekt-hint offers also instructions on how to integrate with Danger and Github Actions",
-    repo: "https://github.com/mkohm/detekt-hint",
-    tags: ["plugin", "ruleset"],
-    ruleset: "detekt-hint",
+      "Rules in this rule set report issues related to libraries API exposure.",
+    repo: "https://github.com/detekt/detekt",
+    docs: "https://detekt.dev/docs/next/rules/libraries",
+    tags: ["ruleset"],
+    ruleset: "libraries",
     rules: [
-      "InterfaceSegregationPrinciple",
-      "LackOfCohesionMethods",
-      "OpenClosedPrinciple",
-      "UseCompositionInsteadOfInheritance",
+      "ForbiddenPublicDataClass",
+      "LibraryCodeMustSpecifyReturnType",
+      "LibraryEntitiesShouldNotBePublic",
     ],
     usesTypeResolution: true,
-  },
-  {
-    title: "Gitlab Report",
-    description:
-      "A reporter to export Detekt findings to GitLab Code Quality (and other code climate compatible tools).\nThis is designed for use with GitLab, but should also work fine with everything else that accepts the code climate format.",
-    repo: "https://gitlab.com/cromefire/detekt-gitlab-report",
-    tags: ["reporter"],
   },
   {
     title: "Operator",
@@ -186,7 +318,7 @@ export const extensions = [
     tags: ["ruleset"],
   },
   /*
-  Pro Tip: add your ruleset in alphabetical order.
-  Appending your ruleset here (at the end) is more likely to produce Git conflicts.
+   * Pro Tip: add your ruleset in alphabetical order.
+   * Appending your ruleset here (at the end) is more likely to produce Git conflicts.
    */
 ];
