@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.ValueWithReason
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
@@ -49,7 +50,7 @@ class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
     @Configuration(
         "List of fully qualified annotation classes which are forbidden."
     )
-    private val annotations: Map<String, Forbidden> by config(
+    private val annotations: Map<String, ValueWithReason> by config(
         valuesWithReason(
             "java.lang.SuppressWarnings" to "it is a java annotation. Use `Suppress` instead.",
             "java.lang.Deprecated" to "it is a java annotation. Use `kotlin.Deprecated` instead.",
@@ -62,7 +63,7 @@ class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
                 "see https://youtrack.jetbrains.com/issue/KT-22265",
         )
     ) { list ->
-        list.associate { it.value to Forbidden(it.value, it.reason) }
+        list.associateBy { it.value }
     }
 
     override fun visitAnnotationEntry(annotation: KtAnnotationEntry) {
@@ -92,9 +93,9 @@ class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
 
         if (forbidden != null) {
             val message = if (forbidden.reason != null) {
-                "The annotation `${forbidden.name}` has been forbidden: ${forbidden.reason}"
+                "The annotation `${forbidden.value}` has been forbidden: ${forbidden.reason}"
             } else {
-                "The annotation `${forbidden.name}` has been forbidden in the detekt config."
+                "The annotation `${forbidden.value}` has been forbidden in the detekt config."
             }
             val location = Location.from(element).let { location ->
                 location.copy(
@@ -106,8 +107,6 @@ class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
             report(CodeSmell(issue, Entity.from(element, location), message))
         }
     }
-
-    private data class Forbidden(val name: String, val reason: String?)
 
     private fun KtTypeReference.fqNameOrNull(): FqName? =
         bindingContext[BindingContext.TYPE, this]?.fqNameOrNull()
