@@ -31,6 +31,10 @@ import org.jetbrains.kotlin.types.KotlinType
  * class SomeClass()
  * </noncompliant>
  *
+ * <compliant>
+ * @@Suppress("unused")
+ * class SomeClass()
+ * </compliant>
  */
 @RequiresTypeResolution
 class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
