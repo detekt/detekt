@@ -47,8 +47,7 @@ class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration(
-        "List of fully qualified annotation classes which are forbidden. " +
-            "For example, `kotlin.jvm.Transient`."
+        "List of fully qualified annotation classes which are forbidden."
     )
     private val annotations: Map<String, Forbidden> by config(
         valuesWithReason(
