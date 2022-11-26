@@ -26,7 +26,7 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
             .hasStartSourceLocations(
                 SourceLocation(1, 1)
             )
-            .hasTextLocations(0 to 17)
+            .hasTextLocations("@SuppressWarnings")
             .extracting("message")
             .containsExactly(
                 "The annotation `java.lang.SuppressWarnings` has been forbidden: it is a java annotation. Use `Suppress` instead.",
@@ -54,14 +54,14 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenAnnotation(TestConfig()).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(6)
-        assertThat(findings).hasTextLocations(
-            301 to 312,
-            313 to 324,
-            325 to 335,
-            361 to 368,
-            387 to 398,
-            425 to 435
-        )
+            .hasTextLocations(
+                "@Deprecated",
+                "@Documented",
+                "@Retention",
+                "@Target",
+                "@Repeatable",
+                "@Inherited"
+            )
     }
 
     @Test
@@ -86,7 +86,7 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
             TestConfig(mapOf(ANNOTATIONS to listOf("java.lang.SuppressWarnings")))
         ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-        assertThat(findings).hasTextLocations(0 to 27)
+            .hasTextLocations("@java.lang.SuppressWarnings")
     }
 
     @Test
@@ -111,7 +111,7 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
             )
         ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(3)
-        assertThat(findings).hasTextLocations(0 to 17, 54 to 64, 69 to 78)
+            .hasTextLocations("@SuppressWarnings", "@Transient", "@Volatile")
     }
 
     @Test
@@ -123,7 +123,8 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
         val findings = ForbiddenAnnotation(
             TestConfig(mapOf(ANNOTATIONS to listOf("java.lang.SuppressWarnings")))
         ).compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(1, 1)
+        assertThat(findings).hasSize(1)
+            .hasTextLocations("@SuppressWarnings")
     }
 
     @Test
@@ -137,7 +138,8 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
         val findings = ForbiddenAnnotation(
             TestConfig(mapOf(ANNOTATIONS to listOf("java.lang.SuppressWarnings")))
         ).compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(2, 5)
+        assertThat(findings).hasSize(1)
+            .hasTextLocations("@SuppressWarnings")
     }
 
     @Test
@@ -151,7 +153,8 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
         val findings = ForbiddenAnnotation(
             TestConfig(mapOf(ANNOTATIONS to listOf("java.lang.SuppressWarnings")))
         ).compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(2, 5)
+        assertThat(findings).hasSize(1)
+            .hasTextLocations("@SuppressWarnings")
     }
 
     @Test
@@ -162,7 +165,8 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
         val findings = ForbiddenAnnotation(
             TestConfig(mapOf(ANNOTATIONS to listOf("java.lang.SuppressWarnings")))
         ).compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(1, 10)
+        assertThat(findings).hasSize(1)
+            .hasTextLocations("@SuppressWarnings")
     }
 
     @Test
@@ -177,7 +181,8 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
         val findings = ForbiddenAnnotation(
             TestConfig(mapOf(ANNOTATIONS to listOf("java.lang.SuppressWarnings")))
         ).compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(2, 5)
+        assertThat(findings).hasSize(1)
+            .hasTextLocations("@SuppressWarnings")
     }
 
     @Test
@@ -192,13 +197,14 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
         val findings = ForbiddenAnnotation(
             TestConfig(mapOf(ANNOTATIONS to listOf("java.lang.SuppressWarnings")))
         ).compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(2, 5)
+        assertThat(findings).hasSize(1)
+            .hasTextLocations("@SuppressWarnings")
     }
 
     @Test
     fun `should report nested annotations`() {
         val code = """
-        @Deprecated("unused", ReplaceWith("bar"))
+        @Deprecated(message = "unused", replaceWith = ReplaceWith("bar"))
         fun foo() = "1234"
         """.trimIndent()
         val findings = ForbiddenAnnotation(
@@ -217,21 +223,19 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenAnnotation(TestConfig()).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-            .hasStartSourceLocation(2, 1)
-            .hasTextLocations(37 to 41)
+            .hasTextLocations("@Dep")
     }
 
     @Test
     fun `should report annotations for expressions`() {
         val code = """
-        val num = @Suppress("MagicNumber") 42
         val x = 0 + @Suppress("UnnecessaryParentheses") (((1)+(2))) + 3
         """.trimIndent()
         val findings = ForbiddenAnnotation(
             TestConfig(mapOf(ANNOTATIONS to listOf("kotlin.Suppress")))
         ).compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(2)
-            .hasTextLocations(10 to 19, 50 to 59)
+        assertThat(findings).hasSize(1)
+            .hasTextLocations("@Suppress")
     }
 
     @Test
@@ -245,6 +249,6 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
             TestConfig(mapOf(ANNOTATIONS to listOf("kotlin.Suppress")))
         ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-            .hasTextLocations(41 to 50)
+            .hasTextLocations("@Suppress")
     }
 }
