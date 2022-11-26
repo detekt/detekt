@@ -7,3 +7,7 @@ repositories {
     mavenCentral()
     mavenLocal()
 }
+
+tasks.detektMain {
+    exclude("**/Callee.kt")
+}
