@@ -589,9 +589,8 @@ class DetektAndroidSpec {
 internal fun isAndroidSdkInstalled() =
     System.getenv("ANDROID_SDK_ROOT") != null || System.getenv("ANDROID_HOME") != null
 
-internal fun manifestContent(packageName: String = "io.gitlab.arturbosch.detekt.app") = """
-    <manifest package="$packageName"
-        xmlns:android="http://schemas.android.com/apk/res/android"/>
+internal fun manifestContent() = """
+    <manifest xmlns:android="http://schemas.android.com/apk/res/android"/>
 """.trimIndent()
 
 private val APP_PLUGIN_BLOCK = """
@@ -620,12 +619,14 @@ private val KOTLIN_ONLY_LIB_PLUGIN_BLOCK = """
 private val ANDROID_BLOCK = """
     android {
        compileSdk = 30
+       namespace = "io.gitlab.arturbosch.detekt.app"
     }
 """.trimIndent()
 
 private val ANDROID_BLOCK_WITH_FLAVOR = """
     android {
         compileSdk = 30
+        namespace = "io.gitlab.arturbosch.detekt.app"
         flavorDimensions("age", "name")
         productFlavors {
            create("harry") {
@@ -644,6 +645,7 @@ private val ANDROID_BLOCK_WITH_FLAVOR = """
 private val ANDROID_BLOCK_WITH_VIEW_BINDING = """
     android {
         compileSdk = 30
+        namespace = "io.gitlab.arturbosch.detekt.app"
         defaultConfig {
             applicationId = "io.gitlab.arturbosch.detekt.app"
             minSdk = 24
