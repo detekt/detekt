@@ -204,6 +204,7 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `should report nested annotations`() {
         val code = """
+        import kotlin.Deprecated
         @Deprecated(message = "unused", replaceWith = ReplaceWith("bar"))
         fun foo() = "1234"
         """.trimIndent()
