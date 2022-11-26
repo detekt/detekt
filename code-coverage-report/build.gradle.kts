@@ -43,27 +43,3 @@ dependencies {
 tasks.check {
     dependsOn(tasks.named("jacocoMergedReport"))
 }
-
-// The `allCodeCoverageReportClassDirectories` configuration provided by the jacoco-report-aggregation plugin actually
-// resolves JARs and not class directories as the name suggests. Because the detekt-formatting JAR bundles ktlint and
-// other dependencies in its JAR, they are incorrectly displayed on the coverage report even though they're external
-// dependencies.
-configurations.allCodeCoverageReportClassDirectories.get().attributes {
-    attributes.attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category::class, Category.LIBRARY))
-    attributes.attribute(
-        LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE,
-        objects.named(LibraryElements::class, LibraryElements.CLASSES)
-    )
-}
-
-val customClassDirectories = configurations.allCodeCoverageReportClassDirectories.get().incoming.artifactView {
-    componentFilter {
-        it is ProjectComponentIdentifier
-    }
-    lenient(true)
-}
-
-tasks.named("jacocoMergedReport", JacocoReport::class).configure {
-    this.classDirectories.setFrom(customClassDirectories.files)
-    mustRunAfter(rootProject.project("detekt-generator").tasks.named("generateDocumentation"))
-}
