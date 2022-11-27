@@ -63,6 +63,20 @@ tasks {
         args = listOf("@./config/detekt/argsfile", "-p", pluginsJar.files.joinToString(",") { it.path })
     }
 
+    // use in CI only to  https://github.com/detekt/detekt/issues/5247
+    register<JavaExec>("runWithAutocorrectAndFormatting") {
+        inputs.files(pluginsJar)
+        doNotTrackState("The entire root directory is read as the input source.")
+        classpath = files(shadowJar)
+        workingDir = projectDir
+        args = listOf(
+            "--auto-correct",
+            "--build-upon-default-config",
+            "-p",
+            pluginsJar.files.joinToString(",") { it.path }
+        )
+    }
+
     check {
         dependsOn(runWithHelpFlag, runWithArgsFile)
     }

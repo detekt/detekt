@@ -59,6 +59,11 @@ jobs:
         with:
           arguments: :detekt-cli:runWithArgsFile
 
+      - name: Run detekt-cli with autocorrect
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
+        with:
+          arguments: :detekt-cli:runWithAutocorrectAndFormatting
+
       - name: Try to publish to Maven Local
         uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
         with:
