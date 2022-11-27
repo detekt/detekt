@@ -28,6 +28,7 @@ ktlint-core = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktli
 ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint" }
 ktlint-rulesetExperimental = { module = "com.pinterest.ktlint:ktlint-ruleset-experimental", version.ref = "ktlint" }
 slf4j-nop = { module = "org.slf4j:slf4j-nop", version = "1.7.36" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "1.7.36" }
 
 spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version = "2.0.19" }
 

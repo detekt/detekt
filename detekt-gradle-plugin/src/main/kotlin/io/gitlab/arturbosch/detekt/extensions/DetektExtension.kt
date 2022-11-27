@@ -5,6 +5,8 @@ import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.quality.CodeQualityExtension
 import java.io.File
+import java.io.InputStream
+import java.net.URL
 import java.util.Properties
 import javax.inject.Inject
 
@@ -107,24 +109,33 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
 
 internal fun loadDetektVersion(classLoader: ClassLoader): String {
     // Other Gradle plugins can also have a versions.properties.
-    val distinctVersions = classLoader.getResources("versions.properties").toList().mapNotNull { versions ->
-        Properties().run {
-            val inputStream = versions.openConnection()
-                /*
-                 * Due to https://bugs.openjdk.java.net/browse/JDK-6947916 and https://bugs.openjdk.java.net/browse/JDK-8155607,
-                 * it is necessary to disallow caches to maintain stability on JDK 8 and 11 (and possibly more).
-                 * Otherwise, simultaneous invocations of Detekt in the same VM can fail spuriously. A similar bug is referenced in
-                 * https://github.com/detekt/detekt/issues/3396. The performance regression is likely unnoticeable.
-                 * Due to https://github.com/detekt/detekt/issues/4332 it is included for all JDKs.
-                 */
-                .apply { useCaches = false }
-                .getInputStream()
-            load(inputStream)
-            getProperty("detektVersion")
+    val distinctVersions = classLoader
+        .getResources("versions.properties")
+        .toList()
+        .mapNotNull { versions ->
+            Properties().run {
+                load(versions.openSafeStream())
+                getProperty("detektVersion")
+            }
         }
-    }.distinct()
+        .distinct()
     return distinctVersions.singleOrNull() ?: error(
         "You're importing two Detekt plugins which have different versions. " +
             "(${distinctVersions.joinToString()}) Make sure to align the versions."
     )
+}
+
+// Copy-paste from io.github.detekt.utils.openSafeStream in Resources.kt.
+// Can't use that function, because gradle-plugin is minimising dependencies: see #4748.
+private fun URL.openSafeStream(): InputStream {
+    return openConnection()
+        /*
+         * Due to https://bugs.openjdk.java.net/browse/JDK-6947916 and https://bugs.openjdk.java.net/browse/JDK-8155607,
+         * it is necessary to disallow caches to maintain stability on JDK 8 and 11 (and possibly more).
+         * Otherwise, simultaneous invocations of Detekt in the same VM can fail spuriously. A similar bug is referenced in
+         * https://github.com/detekt/detekt/issues/3396. The performance regression is likely unnoticeable.
+         * Due to https://github.com/detekt/detekt/issues/4332 it is included for all JDKs.
+         */
+        .apply { useCaches = false }
+        .getInputStream()
 }

@@ -23,4 +23,5 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.reflections)
     testImplementation(libs.assertj)
+    testRuntimeOnly(libs.slf4j.simple)
 }
