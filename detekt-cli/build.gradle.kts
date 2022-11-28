@@ -70,6 +70,13 @@ tasks {
         args = listOf("@./config/detekt/argsfile", "-p", pluginsJar.files.joinToString(",") { it.path })
     }
 
+    withType<Jar>().configureEach {
+        manifest {
+            // Workaround for https://github.com/detekt/detekt/issues/5576
+            attributes(mapOf("Add-Opens" to "java.base/java.lang"))
+        }
+    }
+
     check {
         dependsOn(runWithHelpFlag, runWithArgsFile)
     }
