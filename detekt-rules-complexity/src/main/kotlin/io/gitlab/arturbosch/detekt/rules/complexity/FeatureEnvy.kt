@@ -48,11 +48,16 @@ class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
         debt = Debt.TWENTY_MINS
     )
 
-    //@Configuration("Locality of Attribute Accesses - The threshold-ratio of attributes used from the methods class to attributes used from other classes")
+    // @Configuration("Locality of Attribute Accesses - The threshold-ratio of attributes used from the methods class to attributes used from other classes")
     private val localityOfDataAccessThreshold = 0.33f
+
     @Configuration("The maximum number of attributes from other classes that may be used.")
     private val atfdThreshold: Int by config(defaultValue = 2)
-    @Configuration("The minimum number of foreign data providers which must be used so that no Feature Envy is present.")
+
+    @Configuration(
+        "The minimum number of foreign data providers which " +
+            "must be used so that no Feature Envy is present."
+    )
     private val fdpThreshold: Int by config(defaultValue = 2)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
@@ -69,12 +74,11 @@ class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
         val foreignDataProviderCount = getForeignDataProvidersUsedInBlock(funBlock, containerFqName).count()
 
         // this is the ATFD measure
-        val numOfForeignDataAccesses =
-            getFqNamesOfAllDataAccessedInBlock(funBlock).filter {
-                !localPropertyFqNames.contains(it)
-            }.groupingBy {
-                it
-            }.eachCount().values.sum()
+        val numOfForeignDataAccesses = getFqNamesOfAllDataAccessedInBlock(funBlock).filter {
+            !localPropertyFqNames.contains(it)
+        }.groupingBy {
+            it
+        }.eachCount().values.sum()
 
         // if there is not ATFD, there can't be feature envy
         if (numOfForeignDataAccesses == 0) return
@@ -83,20 +87,21 @@ class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
 
         val localityOfAttributeAccess = numOfLocalDataAccesses / numOfForeignDataAccesses.toFloat()
 
-        if (numOfForeignDataAccesses > atfdThreshold &&
+        if (
+            numOfForeignDataAccesses > atfdThreshold &&
             localityOfAttributeAccess < localityOfDataAccessThreshold &&
             foreignDataProviderCount <= fdpThreshold
         ) {
             report(
                 ThresholdedCodeSmell(
-                    issue,
-                    Entity.from(function),
-                    Metric(
-                        "Locality of Data access",
-                        localityOfDataAccessThreshold.toDouble(),
-                        localityOfDataAccessThreshold.toDouble()
+                    issue = issue,
+                    entity = Entity.from(function),
+                    metric = Metric(
+                        type = "Locality of Data access",
+                        value = localityOfDataAccessThreshold.toDouble(),
+                        threshold = localityOfDataAccessThreshold.toDouble()
                     ),
-                    issue.description
+                    message = issue.description
                 )
             )
         }
@@ -111,7 +116,7 @@ class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
             }
 
             is KtObjectDeclaration -> {
-                container.body?.let { it.properties.mapNotNull { property -> property.fqName } } ?: listOf()
+                container.body?.let { it.properties.mapNotNull { property -> property.fqName } }.orEmpty()
             }
 
             else -> {
@@ -148,18 +153,25 @@ class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
         return function.findDescendantOfType<KtBlockExpression>()?.collectDescendantsOfType<KtNameReferenceExpression>()
             ?.filter {
                 it.parent !is KtDotQualifiedExpression
-            }?.mapNotNull { reference ->
-            // This removes all ReferenceExpressions to functions etc.
-            reference.getResolvedCall(bindingContext)?.resultingDescriptor?.referencedProperty
-        }?.filter {
-            // Constants not considered ATFD
-            !it.isConst
-        }?.map {
-            it.fqNameSafe
-        }?.filter {
-            localProperties.contains(it)
-        }?.groupingBy {
-            it
-        }?.eachCount() ?: emptyMap()
+            }
+            ?.mapNotNull { reference ->
+                // This removes all ReferenceExpressions to functions etc.
+                reference.getResolvedCall(bindingContext)?.resultingDescriptor?.referencedProperty
+            }
+            ?.filter {
+                // Constants not considered ATFD
+                !it.isConst
+            }
+            ?.map {
+                it.fqNameSafe
+            }
+            ?.filter {
+                localProperties.contains(it)
+            }
+            ?.groupingBy {
+                it
+            }
+            ?.eachCount()
+            .orEmpty()
     }
 }
