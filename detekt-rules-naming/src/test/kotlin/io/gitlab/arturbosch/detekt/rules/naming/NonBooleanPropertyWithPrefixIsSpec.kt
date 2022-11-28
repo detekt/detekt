@@ -47,6 +47,17 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
+        fun `should not detect AtomicBoolean`() {
+            val code = """
+                import java.util.concurrent.atomic.AtomicBoolean
+                data class O (var isDefault: AtomicBoolean)
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
         fun `should warn about primitive types`() {
             val code = """data class O (var isDefault: Int)"""
             val findings = subject.compileAndLintWithContext(env, code)
@@ -158,6 +169,19 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class O {
                     var isDefault: java.lang.Boolean? = null
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should not detect AtomicBoolean`() {
+            val code = """
+                import java.util.concurrent.atomic.AtomicBoolean
+                class O {
+                    var isDefault = AtomicBoolean()
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
