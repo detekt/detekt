@@ -4,13 +4,11 @@ import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties
 import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
 import com.pinterest.ktlint.ruleset.standard.IndentationRule
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
-import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#indentation) for documentation.
@@ -34,15 +32,4 @@ class Indentation(config: Config) : FormattingRule(config) {
         mapOf(
             DefaultEditorConfigProperties.indentSizeProperty to indentSize.toString(),
         )
-
-    /**
-     * [IndentationRule] has visitor modifier RunOnRootNodeOnly, so [node] is always the root file.
-     * Override the parent implementation to highlight the entire file.
-     */
-    override fun getTextLocationForViolation(node: ASTNode, offset: Int): TextLocation {
-        val relativeEnd = node.text
-            .drop(offset)
-            .indexOfFirst { !it.isWhitespace() }
-        return TextLocation(offset, offset + relativeEnd)
-    }
 }

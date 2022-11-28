@@ -43,7 +43,6 @@ internal class Analyzer(
     ): Map<RuleSetId, List<Finding>> {
         val languageVersionSettings = settings.environment.configuration.languageVersionSettings
 
-        @Suppress("DEPRECATION")
         val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
         val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
         val findingsPerFile: FindingsResult =
@@ -52,8 +51,9 @@ internal class Analyzer(
             } else {
                 runSync(ktFiles, bindingContext, compilerResources)
             }
+
         if (bindingContext == BindingContext.EMPTY) {
-            warnAboutEnabledRequiresTypeResolutionRules(settings::info)
+            warnAboutEnabledRequiresTypeResolutionRules()
         }
 
         val findingsPerRuleSet = HashMap<RuleSetId, List<Finding>>()
@@ -144,7 +144,7 @@ internal class Analyzer(
         return result
     }
 
-    private fun warnAboutEnabledRequiresTypeResolutionRules(log: (String) -> Unit) {
+    private fun warnAboutEnabledRequiresTypeResolutionRules() {
         providers.asSequence()
             .map { it to config.subConfig(it.ruleSetId) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
@@ -153,7 +153,7 @@ internal class Analyzer(
             .filter { rule -> (rule as? Rule)?.active == true }
             .filter { rule -> rule::class.hasAnnotation<RequiresTypeResolution>() }
             .forEach { rule ->
-                log("The rule '${rule.ruleId}' requires type resolution but it was run without it.")
+                settings.debug { "The rule '${rule.ruleId}' requires type resolution but it was run without it." }
             }
     }
 }

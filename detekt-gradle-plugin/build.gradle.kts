@@ -5,7 +5,7 @@ plugins {
     idea
     alias(libs.plugins.pluginPublishing)
     // We use this published version of the Detekt plugin to self analyse this project.
-    id("io.gitlab.arturbosch.detekt") version "1.21.0"
+    id("io.gitlab.arturbosch.detekt") version "1.22.0"
     id("org.gradle.test-retry") version "1.4.1"
 }
 
@@ -38,6 +38,7 @@ testing {
 
             dependencies {
                 implementation(libs.assertj)
+                implementation(testFixtures(project(":")))
             }
 
             targets {
@@ -67,15 +68,11 @@ dependencies {
     compileOnly(libs.kotlin.gradlePluginApi)
     implementation(libs.sarif4k)
 
-    // Migrate to `implementation(testFixtures(project))` in test suite configuration when this issue is fixed:
-    // https://github.com/gradle/gradle/pull/19472
-    functionalTestImplementation(testFixtures(project))
-
     pluginCompileOnly(libs.android.gradle)
     pluginCompileOnly(libs.kotlin.gradle)
 
     // We use this published version of the detekt-formatting to self analyse this project.
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.21.0")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
 }
 
 gradlePlugin {

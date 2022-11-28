@@ -29,7 +29,7 @@ internal val DEFAULT_PROPERTY_EXCLUDES = setOf(
     ".*>.*>autoCorrect",
     ".*>severity",
     ".*>.*>severity",
-    "build>weights.*",
+    "build>weights",
     ".*>.*>ignoreAnnotated",
     ".*>.*>ignoreFunction",
 ).joinToString(",")

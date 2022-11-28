@@ -62,6 +62,14 @@ import org.jetbrains.kotlin.types.isNullable
  * This rule inspects variables marked as nullable and reports which could be
  * declared as non-nullable instead.
  *
+ * It's preferred to not have functions that do "nothing".
+ * A function that does nothing when the value is null hides the logic,
+ * so it should not allow null values in the first place.
+ * It is better to move the null checks up around the calls,
+ * instead of having it inside the function.
+ *
+ * This could lead to less nullability overall in the codebase.
+ *
  * <noncompliant>
  * class A {
  *     var a: Int? = 5

@@ -96,7 +96,7 @@ internal class DetektMultiplatform(private val project: Project) {
         ) {
             setSource(inputSource)
             if (runWithTypeResolution) {
-                classpath.setFrom(inputSource, compilation.compileDependencyFiles)
+                classpath.setFrom(compilation.output.classesDirs, compilation.compileDependencyFiles)
             }
             // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
             // We try to find the configured baseline or alternatively a specific variant matching this task.
@@ -121,7 +121,7 @@ internal class DetektMultiplatform(private val project: Project) {
         ) {
             setSource(inputSource)
             if (runWithTypeResolution) {
-                classpath.setFrom(inputSource, compilation.compileDependencyFiles)
+                classpath.setFrom(compilation.output.classesDirs, compilation.compileDependencyFiles)
             }
             val variantBaselineFile = if (runWithTypeResolution) {
                 extension.baseline?.addVariantName(compilation.name)

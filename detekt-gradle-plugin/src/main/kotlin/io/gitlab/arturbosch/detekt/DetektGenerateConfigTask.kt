@@ -10,7 +10,6 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
-import org.gradle.api.provider.Provider
 import org.gradle.api.services.BuildService
 import org.gradle.api.services.BuildServiceParameters
 import org.gradle.api.tasks.CacheableTask
@@ -57,12 +56,11 @@ abstract class DetektGenerateConfigTask @Inject constructor(
         }
 
     @get:Internal
-    internal val arguments: Provider<List<String>> = project.provider {
-        listOf(
+    internal val arguments
+        get() = listOf(
             GenerateConfigArgument,
             ConfigArgument(configFile.get())
         ).flatMap(CliArgument::toArgument)
-    }
 
     @TaskAction
     fun generateConfig() {
@@ -74,7 +72,7 @@ abstract class DetektGenerateConfigTask @Inject constructor(
         Files.createDirectories(configFile.get().asFile.parentFile.toPath())
 
         DetektInvoker.create(task = this).invokeCli(
-            arguments = arguments.get(),
+            arguments = arguments,
             classpath = detektClasspath.plus(pluginClasspath),
             taskName = name,
         )

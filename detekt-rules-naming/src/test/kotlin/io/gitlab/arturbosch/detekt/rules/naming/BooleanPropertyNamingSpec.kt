@@ -254,6 +254,24 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
 
             assertThat(findings).isEmpty()
         }
+
+        @Test
+        fun `should highlight only the name`() {
+            val code = """
+                data class Test(
+                    /**
+                     * True if the user's e-mail address has been verified; otherwise false.
+                     */
+                    @Deprecated("Don't use this", replaceWith = ReplaceWith("email_verified"))
+                    val emailVerified: Boolean?,
+                )
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+
+            assertThat(findings)
+                .hasSize(1)
+                .hasTextLocations("emailVerified")
+        }
     }
 
     @Nested
@@ -616,6 +634,24 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
             val config = TestConfig(mapOf(ALLOWED_PATTERN to "^(is|has|are|need)"))
             assertThat(BooleanPropertyNaming(config).compileAndLint(code))
                 .isEmpty()
+        }
+
+        @Test
+        fun `should highlight only the name`() {
+            val code = """
+                class Test {
+                    /**
+                     * True if the user's e-mail address has been verified; otherwise false.
+                     */
+                    @Deprecated("Don't use this", replaceWith = ReplaceWith("email_verified"))
+                    var emailVerified: Boolean? = false
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+
+            assertThat(findings)
+                .hasSize(1)
+                .hasTextLocations("emailVerified")
         }
     }
 }

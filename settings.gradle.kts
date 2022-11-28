@@ -28,6 +28,7 @@ include("detekt-rules-documentation")
 include("detekt-rules-empty")
 include("detekt-rules-errorprone")
 include("detekt-rules-exceptions")
+include("detekt-rules-libraries")
 include("detekt-rules-naming")
 include("detekt-rules-performance")
 include("detekt-rules-ruleauthors")
@@ -39,11 +40,12 @@ include("detekt-tooling")
 include("detekt-utils")
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
 // build scan plugin can only be applied in settings file
 plugins {
-    id("com.gradle.enterprise") version "3.11.1"
-    id("com.gradle.common-custom-user-data-gradle-plugin") version "1.8.1"
+    id("com.gradle.enterprise") version "3.11.4"
+    id("com.gradle.common-custom-user-data-gradle-plugin") version "1.8.2"
 }
 
 val isCiBuild = System.getenv("CI") != null

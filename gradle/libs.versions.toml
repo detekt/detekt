@@ -1,8 +1,8 @@
 [versions]
-dokka = "1.7.10"
+dokka = "1.7.20"
 jacoco = "0.8.8"
-kotlin = "1.7.10"
-ktlint = "0.46.1"
+kotlin = "1.7.21"
+ktlint = "0.47.1"
 junit = "5.9.1"
 contester = "0.2.0"
 
@@ -22,12 +22,13 @@ kotlin-reflection = { module = "org.jetbrains.kotlin:kotlin-reflect", version.re
 kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.8.0"
 kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
 
-android-gradle = "com.android.tools.build:gradle:7.3.0"
+android-gradle = "com.android.tools.build:gradle:7.3.1"
 
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktlint" }
 ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint" }
 ktlint-rulesetExperimental = { module = "com.pinterest.ktlint:ktlint-ruleset-experimental", version.ref = "ktlint" }
 slf4j-nop = { module = "org.slf4j:slf4j-nop", version = "1.7.36" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "1.7.36" }
 
 spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version = "2.0.19" }
 
@@ -36,15 +37,15 @@ junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "jun
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.0.1"
 assertj = "org.assertj:assertj-core:3.23.1"
 reflections = "org.reflections:reflections:0.10.2"
-mockk = "io.mockk:mockk:1.12.8"
-snakeyaml = "org.yaml:snakeyaml:1.32"
+mockk = "io.mockk:mockk:1.13.2"
+snakeyaml = "org.yaml:snakeyaml:1.33"
 jcommander = "com.beust:jcommander:1.82"
 contester-breakpoint = { module = "io.github.davidburstrom.contester:contester-breakpoint", version.ref = "contester" }
 contester-driver = { module = "io.github.davidburstrom.contester:contester-driver", version.ref = "contester" }
 
 [plugins]
-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.11.1" }
+binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.12.1" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-gradleVersions = { id = "com.github.ben-manes.versions", version = "0.42.0" }
-pluginPublishing = { id = "com.gradle.plugin-publish", version = "1.0.0" }
+gradleVersions = { id = "com.github.ben-manes.versions", version = "0.44.0" }
+pluginPublishing = { id = "com.gradle.plugin-publish", version = "1.1.0" }
 shadow = { id = "com.github.johnrengelman.shadow", version = "7.1.2" }

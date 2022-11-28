@@ -7,11 +7,20 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isConstant
+import io.gitlab.arturbosch.detekt.rules.safeAs
+import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
+import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.psi.KtPrimaryConstructor
+import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.jetbrains.kotlin.psi.KtValueArgument
+import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiver
-import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
  * All the Raw strings that have more than one line should be followed by `trimMargin()` or `trimIndent()`.
@@ -48,9 +57,7 @@ class TrimMultilineRawString(val config: Config) : Rule(config) {
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
         super.visitStringTemplateExpression(expression)
 
-        if (expression.text.lines().count() <= 1) return
-
-        if (!expression.isTrimmed()) {
+        if (expression.isRawStringWithLineBreak() && !expression.isTrimmed() && !expression.isExpectedAsConstant()) {
             report(
                 CodeSmell(
                     issue,
@@ -62,17 +69,39 @@ class TrimMultilineRawString(val config: Config) : Rule(config) {
     }
 }
 
-fun KtStringTemplateExpression.isTrimmed(): Boolean {
-    fun KtExpression.asKtCallExpression(): KtCallExpression? = this as? KtCallExpression
+fun KtStringTemplateExpression.isRawStringWithLineBreak(): Boolean =
+    text.startsWith("\"\"\"") && text.endsWith("\"\"\"") && entries.any {
+        val literalText = it.safeAs<KtLiteralStringTemplateEntry>()?.text
+        literalText != null && "\n" in literalText
+    }
 
-    val nextCall = getQualifiedExpressionForSelectorOrThis()
-        .getQualifiedExpressionForReceiver()
+fun KtStringTemplateExpression.isTrimmed(): Boolean {
+    val nextCall = getQualifiedExpressionForReceiver()
         ?.selectorExpression
-        ?.asKtCallExpression()
+        ?.safeAs<KtCallExpression>()
         ?.calleeExpression
         ?.text
 
     return nextCall in trimFunctions
+}
+
+@Suppress("ReturnCount")
+private fun KtStringTemplateExpression.isExpectedAsConstant(): Boolean {
+    val expression = KtPsiUtil.safeDeparenthesize(this)
+
+    val property = getStrictParentOfType<KtProperty>()?.takeIf { it.initializer == expression }
+    if (property != null && property.isConstant()) return true
+
+    val argument = expression.getStrictParentOfType<KtValueArgument>()
+        ?.takeIf { it.getArgumentExpression() == expression }
+    if (argument?.parent?.parent is KtAnnotationEntry) return true
+
+    val parameter = expression.getStrictParentOfType<KtParameter>()
+        ?.takeIf { it.defaultValue == expression }
+    val primaryConstructor = parameter?.parent?.parent?.safeAs<KtPrimaryConstructor>()
+    if (primaryConstructor?.containingClass()?.isAnnotation() == true) return true
+
+    return false
 }
 
 private val trimFunctions = listOf("trimIndent", "trimMargin")

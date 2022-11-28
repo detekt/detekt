@@ -1,8 +1,8 @@
+rootProject.name = "detekt-gradle-plugin"
+
 pluginManagement {
     includeBuild("../build-logic")
 }
-
-includeBuild("..")
 
 dependencyResolutionManagement {
     versionCatalogs {

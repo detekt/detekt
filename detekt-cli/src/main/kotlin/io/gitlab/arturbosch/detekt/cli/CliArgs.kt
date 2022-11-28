@@ -149,13 +149,6 @@ class CliArgs {
     )
     var runRule: String? = null
 
-    @Parameter(
-        names = ["--print-ast"],
-        description = "Prints the AST for given [input] file. Must be no directory.",
-        hidden = true
-    )
-    var printAst: Boolean = false
-
     /*
         The following @Parameters are used for type resolution. When additional parameters are required the
         names should mirror the names found in this file (e.g. "classpath", "language-version", "jvm-target"):

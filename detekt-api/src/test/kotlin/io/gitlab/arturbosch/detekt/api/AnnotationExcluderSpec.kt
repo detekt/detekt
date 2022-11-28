@@ -79,7 +79,9 @@ class AnnotationExcluderSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `should exclude when the annotation was found with SplitPattern`() {
             val (file, ktAnnotation) = createKtFile("@SinceKotlin")
-            val excluder = @Suppress("DEPRECATION") AnnotationExcluder(file, SplitPattern("SinceKotlin"))
+
+            @Suppress("DEPRECATION")
+            val excluder = AnnotationExcluder(file, SplitPattern("SinceKotlin"))
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
         }
@@ -87,7 +89,9 @@ class AnnotationExcluderSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `should exclude when the annotation was found with List of Strings`() {
             val (file, ktAnnotation) = createKtFile("@SinceKotlin")
-            val excluder = @Suppress("DEPRECATION") AnnotationExcluder(file, listOf("SinceKo*"))
+
+            @Suppress("DEPRECATION")
+            val excluder = AnnotationExcluder(file, listOf("SinceKo*"))
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
         }

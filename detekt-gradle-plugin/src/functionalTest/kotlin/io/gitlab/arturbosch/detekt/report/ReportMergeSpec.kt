@@ -105,6 +105,7 @@ class ReportMergeSpec {
                     }
                     android {
                        compileSdk = 30
+                       namespace = "io.github.detekt.app"
                     }
                     dependencies {
                         implementation(project(":lib"))
@@ -122,6 +123,7 @@ class ReportMergeSpec {
                     }
                     android {
                        compileSdk = 30
+                       namespace = "io.github.detekt.lib"
                     }
                 """.trimIndent(),
                 srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
@@ -174,11 +176,11 @@ class ReportMergeSpec {
         gradleRunner.setupProject()
         gradleRunner.writeProjectFile(
             "app/src/main/AndroidManifest.xml",
-            manifestContent("io.github.detekt.app")
+            manifestContent()
         )
         gradleRunner.writeProjectFile(
             "lib/src/main/AndroidManifest.xml",
-            manifestContent("io.github.detekt.lib")
+            manifestContent()
         )
         gradleRunner.runTasksAndCheckResult("detektMain", "reportMerge", "--continue") { result ->
             projectLayout.submodules.forEach { submodule ->

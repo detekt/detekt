@@ -63,8 +63,11 @@ internal class DetektAndroid(private val project: Project) {
         }
 
     private val BaseVariant.testVariants: List<BaseVariant>
-        get() = if (this is TestedVariant) listOfNotNull(testVariant, unitTestVariant)
-        else emptyList()
+        get() = if (this is TestedVariant) {
+            listOfNotNull(testVariant, unitTestVariant)
+        } else {
+            emptyList()
+        }
 
     fun registerTasks(extension: DetektExtension) {
         // There is not a single Android plugin, but each registers an extension based on BaseExtension,

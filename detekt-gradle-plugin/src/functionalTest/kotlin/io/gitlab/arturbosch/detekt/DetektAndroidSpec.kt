@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -139,7 +138,7 @@ class DetektAndroidSpec {
         @DisplayName("task :app:detektMain")
         fun appDetektMain() {
             gradleRunner.runTasksAndExpectFailure(":app:detektMain") { result ->
-                assertThat(result.output).contains("Task 'detektMain' not found in project")
+                assertThat(result.output).containsIgnoringCase("Task 'detektMain' not found in project")
             }
         }
 
@@ -147,7 +146,7 @@ class DetektAndroidSpec {
         @DisplayName("task :app:detektTest")
         fun appDetektTest() {
             gradleRunner.runTasksAndExpectFailure(":app:detektTest") { result ->
-                assertThat(result.output).contains("Task 'detektTest' not found in project")
+                assertThat(result.output).containsIgnoringCase("Task 'detektTest' not found in project")
             }
         }
     }
@@ -274,7 +273,6 @@ class DetektAndroidSpec {
 
         @Test
         @DisplayName("task :android_lib:detektMain")
-        @Disabled("https://github.com/detekt/detekt/issues/5150")
         fun libDetektMain() {
             gradleRunner.runTasksAndCheckResult(
                 "--configuration-cache",
@@ -289,6 +287,31 @@ class DetektAndroidSpec {
                 assertThat(buildResult.tasks.map { it.path }).containsAll(
                     listOf(
                         ":android_lib:detektMain",
+                    )
+                )
+            }
+        }
+
+        @Test
+        @DisplayName("task :android_lib:detektTest")
+        fun libDetektTest() {
+            gradleRunner.runTasksAndCheckResult(
+                "--configuration-cache",
+                ":android_lib:detektTest",
+            ) { buildResult ->
+                assertThat(buildResult.output).contains("Configuration cache")
+                assertThat(buildResult.output).containsPattern(
+                    """--baseline \S*[/\\]detekt-baseline-debugUnitTest.xml """
+                )
+                assertThat(buildResult.output).containsPattern(
+                    """--baseline \S*[/\\]detekt-baseline-debugAndroidTest.xml """
+                )
+                assertThat(buildResult.output).contains("--report xml:")
+                assertThat(buildResult.output).contains("--report sarif:")
+                assertThat(buildResult.output).doesNotContain("--report txt:")
+                assertThat(buildResult.tasks.map { it.path }).containsAll(
+                    listOf(
+                        ":android_lib:detektTest",
                     )
                 )
             }
@@ -566,9 +589,8 @@ class DetektAndroidSpec {
 internal fun isAndroidSdkInstalled() =
     System.getenv("ANDROID_SDK_ROOT") != null || System.getenv("ANDROID_HOME") != null
 
-internal fun manifestContent(packageName: String = "io.gitlab.arturbosch.detekt.app") = """
-    <manifest package="$packageName"
-        xmlns:android="http://schemas.android.com/apk/res/android"/>
+internal fun manifestContent() = """
+    <manifest xmlns:android="http://schemas.android.com/apk/res/android"/>
 """.trimIndent()
 
 private val APP_PLUGIN_BLOCK = """
@@ -597,12 +619,14 @@ private val KOTLIN_ONLY_LIB_PLUGIN_BLOCK = """
 private val ANDROID_BLOCK = """
     android {
        compileSdk = 30
+       namespace = "io.gitlab.arturbosch.detekt.app"
     }
 """.trimIndent()
 
 private val ANDROID_BLOCK_WITH_FLAVOR = """
     android {
         compileSdk = 30
+        namespace = "io.gitlab.arturbosch.detekt.app"
         flavorDimensions("age", "name")
         productFlavors {
            create("harry") {
@@ -621,6 +645,7 @@ private val ANDROID_BLOCK_WITH_FLAVOR = """
 private val ANDROID_BLOCK_WITH_VIEW_BINDING = """
     android {
         compileSdk = 30
+        namespace = "io.gitlab.arturbosch.detekt.app"
         defaultConfig {
             applicationId = "io.gitlab.arturbosch.detekt.app"
             minSdk = 24

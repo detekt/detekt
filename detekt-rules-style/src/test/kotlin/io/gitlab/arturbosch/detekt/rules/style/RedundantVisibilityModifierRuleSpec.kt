@@ -197,7 +197,6 @@ class RedundantVisibilityModifierRuleSpec {
                 hint(ExplicitApiMode::class)
                 languageVersionSettings.getFlag(AnalysisFlags.explicitApiMode)
             } returns mode
-            @Suppress("DEPRECATION")
             return CompilerResources(languageVersionSettings, DataFlowValueFactoryImpl(languageVersionSettings))
         }
 

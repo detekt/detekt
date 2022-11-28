@@ -41,7 +41,6 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             ForbiddenComment(config),
             ForbiddenImport(config),
             ForbiddenMethodCall(config),
-            ForbiddenPublicDataClass(config),
             ForbiddenSuppress(config),
             FunctionOnlyReturningConstant(config),
             SpacingBetweenPackageAndImports(config),
@@ -89,8 +88,6 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseCheckOrError(config),
             UseIfInsteadOfWhen(config),
             RedundantExplicitType(config),
-            LibraryEntitiesShouldNotBePublic(config),
-            LibraryCodeMustSpecifyReturnType(config),
             UseArrayLiteralsInAnnotations(config),
             UseEmptyCounterpart(config),
             UseCheckNotNull(config),
@@ -104,6 +101,8 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseAnyOrNoneInsteadOfFind(config),
             UnnecessaryBackticks(config),
             MaxChainedCallsOnSameLine(config),
+            AlsoCouldBeApply(config),
+            UseSumOfInsteadOfFlatMapSize(config),
         )
     )
 }

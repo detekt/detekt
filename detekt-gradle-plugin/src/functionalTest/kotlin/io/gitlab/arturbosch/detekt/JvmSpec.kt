@@ -14,11 +14,15 @@ class JvmSpec {
             .withArguments("detektMain")
             .buildAndFail()
 
-        assertThat(result.output).contains("failed with 2 weighted issues.")
+        assertThat(result.output).contains("failed with 3 weighted issues.")
         assertThat(result.output).contains(
             "Do not directly exit the process outside the `main` function. Throw an exception(...)"
         )
+        assertThat(result.output).contains(
+            "The method `jvm.src.main.kotlin.Callee.forbiddenMethod` has been forbidden in th(...)"
+        )
         assertThat(result.output).contains("Errors.kt:7:9")
         assertThat(result.output).contains("Errors.kt:12:16")
+        assertThat(result.output).contains("Caller.kt:5:18")
     }
 }

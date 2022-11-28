@@ -43,6 +43,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
  * map.getOrElse("key", { "" })
  * </compliant>
  */
+@Suppress("ViolatesTypeResolutionRequirements")
 @ActiveByDefault(since = "1.21.0")
 class MapGetWithNotNullAssertionOperator(config: Config) : Rule(config) {
 

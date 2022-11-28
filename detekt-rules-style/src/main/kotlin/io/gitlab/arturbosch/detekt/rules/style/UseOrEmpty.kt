@@ -69,7 +69,9 @@ class UseOrEmpty(config: Config = Config.empty) : Rule(config) {
             if (functionDescriptor != null &&
                 functionDescriptor.isOperator &&
                 functionDescriptor.typeParameters.isNotEmpty()
-            ) return
+            ) {
+                return
+            }
         }
 
         val rightType = right.getType(bindingContext) ?: return

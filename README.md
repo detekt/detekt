@@ -33,7 +33,7 @@ Visit [the project website](https://detekt.dev/) for installation guides, rule d
 - [Changelog and migration guides](https://detekt.dev/changelog.html)
 - [Available CLI options](https://detekt.dev/cli.html)
 - [Rule set and rule descriptions](https://detekt.dev/complexity.html)
-- [Writing custom rules and extending detekt](https://detekt.dev/extensions.html)
+- [Writing custom rules and extending detekt](https://detekt.dev/docs/introduction/extensions/)
 - [Suppressing issues in code](https://detekt.dev/suppressing-rules.html)
 - [Suppressing issues via baseline file](https://detekt.dev/baseline.html)
 - [Configuring detekt](https://detekt.dev/configurations.html)
@@ -110,7 +110,7 @@ Gradle 6.7.1+ is the minimum requirement. However, the recommended versions toge
 
 | Detekt Version | Gradle  | Kotlin   | AGP     | Java Target Level | JDK Max Version |
 | -------------- | ------- | -------- | ------- | ----------------- | --------------- |
-| `1.21.0`       | `7.5` | `1.6.21` | `7.2.1` | `1.8`             | `17`            |
+| `1.22.0`       | `7.5.1` | `1.7.21` | `7.3.1` | `1.8`             | `17`            |
 
 The list of [recommended versions for previous detekt version is listed here](https://detekt.dev/compatibility.html).
 
@@ -125,7 +125,16 @@ dependencies {
 }
 ```
 
-Likewise custom [extensions](https://detekt.dev/extensions.html) can be added to detekt.
+Similarly, there are extra rule sets available for Detekt from Detekt:
+```kotlin
+dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:[version]")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-ruleauthors:[version]")
+}
+```
+For more info visit the [Detekt Marketplace](https://detekt.dev/marketplace).
+
+Likewise custom [extensions](https://detekt.dev/docs/introduction/extensions/) can be added to detekt.
 
 ### Contributing
 
@@ -133,9 +142,7 @@ See [CONTRIBUTING](.github/CONTRIBUTING.md)
 
 Thanks to all the people who contributed to detekt!
 
-<a href="https://github.com/detekt/detekt/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=detekt/detekt" />
-</a>
+[![Profile images of all the contributors](https://contrib.rocks/image?repo=detekt/detekt)](https://github.com/detekt/detekt/graphs/contributors)
 
 ### Mentions
 

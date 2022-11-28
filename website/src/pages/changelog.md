@@ -6,23 +6,30 @@ keywords: [changelog, release-notes, migration]
 
 # Changelog and Migration Guide
 
-#### 1.22.0-RC1 - 2022-09-19
+#### 1.22.0 - 2022-11-20
 
 ##### Notable Changes
 
+- We're introducing the [**Detekt Marketplace**](https://detekt.dev/marketplace), a place where you can add your own 3rd party extension such as rule, plugins, custom reporter, etc. - [#5191](https://github.com/detekt/detekt/pull/5191)
 - Our website is now versioned. You can find the changes for each version using the dropdown menu on the top bar. Documentation for the upcoming version (next) [can be found here](https://detekt.dev/docs/next/intro).
-- We added **10** new Rules to Detekt
+- We added **16** new Rules to Detekt
+  - `AlsoCouldBeApply` - [#5333](https://github.com/detekt/detekt/pull/5333) 
   - `MultilineRawStringIndentation` - [#5058](https://github.com/detekt/detekt/pull/5058)
   - `TrimMultilineRawString` - [#5051](https://github.com/detekt/detekt/pull/5051)
+  - `UnnecessaryNotNullCheck` - [#5218](https://github.com/detekt/detekt/pull/5218)
   - `UnnecessaryPartOfBinaryExpression` - [#5203](https://github.com/detekt/detekt/pull/5203)
+  - `UseSumOfInsteadOfFlatMapSize` - [#5405](https://github.com/detekt/detekt/pull/5405)
   - `FunctionReturnTypeSpacing` from KtLint - [#5256](https://github.com/detekt/detekt/pull/5256)
   - `FunctionSignature` from KtLint - [#5256](https://github.com/detekt/detekt/pull/5256)
   - `FunctionStartOfBodySpacing` from KtLint - [#5256](https://github.com/detekt/detekt/pull/5256)
   - `NullableTypeSpacing` from KtLint - [#5256](https://github.com/detekt/detekt/pull/5256)
   - `ParameterListSpacing` from KtLint - [#5256](https://github.com/detekt/detekt/pull/5256)
   - `SpacingBetweenFunctionNameAndOpeningParenthesis` from KtLint - [#5256](https://github.com/detekt/detekt/pull/5256)
+  - `TrailingCommaOnCallSite` from KtLint - [#5312](https://github.com/detekt/detekt/pull/5312)
+  - `TrailingCommaOnDeclarationSite` from KtLint - [#5312](https://github.com/detekt/detekt/pull/5312)
   - `TypeParameterListSpacing` from KtLint - [#5256](https://github.com/detekt/detekt/pull/5256)
-- We added a new ruleset called `detekt-rules-ruleauthors` containing rules for Rule Authors to enforce best practices on Detetk rules - [#5129](https://github.com/detekt/detekt/pull/5129)
+- We added a new ruleset called `detekt-rules-ruleauthors` containing rules for Rule Authors to enforce best practices on Detekt rules such as the new `ViolatesTypeResolutionRequirements` - [#5129](https://github.com/detekt/detekt/pull/5129) [#5182](https://github.com/detekt/detekt/pull/5182)
+- We added a new ruleset called `detekt-rules-libraries` containing rules mostly useful for Library Authors - We moved the following rules inside `ForbiddenPublicDataClass`, `LibraryCodeMustSpecifyReturnType`, `LibraryEntitiesShouldNotBePublic` this new ruleset - See Migration below on how to migrate [#5360](https://github.com/detekt/detekt/pull/5360)
 - We added support for JVM toolchain. This means that Detekt will now respect the JDK toolchain you specify on your Gradle configuration. You will also be able to specify a custom JDK home with the `--jdk-home` CLI parameter - [#5269](https://github.com/detekt/detekt/pull/5269)
 - Improvement for Type Resolution
   - We will now skip rules annotated with `@RequiresTypeResolution` when without Type Resolution - [#5176](https://github.com/detekt/detekt/pull/5176)
@@ -32,16 +39,150 @@ keywords: [changelog, release-notes, migration]
   - We added support for generating custom configuration for rule authors - [#5080](https://github.com/detekt/detekt/pull/5080)
 - Deprecations & Removals
   - We deprecated the MultiRule class as it was overly complicated. The suggested approach is to just provide separated rules. - [#5161](https://github.com/detekt/detekt/pull/5161)
-  - The `--fail-fast` CLI flag (and `failFast` Gradle property) has been remove. It was deprecated since 1.16.x - [#5290](https://github.com/detekt/detekt/pull/5290)
+  - The `--fail-fast` CLI flag (and `failFast` Gradle property) has been removed. It was deprecated since 1.16.x - [#5290](https://github.com/detekt/detekt/pull/5290)
+  - We **deprecated** the following rules `DuplicateCaseInWhenExpression`, `MissingWhenCase`, `RedundantElseInWhen` as the Kotlin Compiler is already reporting errors for those scenarios - [#5309](https://github.com/detekt/detekt/pull/5309)
+  - We removed the `--print-ast` CLI flag as [PsiViewer](https://www.jetbrains.com/help/idea/psi-viewer.html) provides the same features - [#5418](https://github.com/detekt/detekt/pull/5418)
 - Notable changes to existing rules
   - `ArrayPrimitive` is now working only with Type Resolution - [#5175](https://github.com/detekt/detekt/pull/5175)
   - `WildcardImport` is now running also on tests by default - [#5121](https://github.com/detekt/detekt/pull/5121)
   - `ForbiddenImport` allows now to specify a reason for every forbidden import - [#4909](https://github.com/detekt/detekt/pull/4909)
-- This version of Detekt is built with Gradle `v7.5.1`, AGP `7.3.0` and Kotlin `1.7.10` (see [#4821](https://github.com/detekt/detekt/pull/4821) [#5189](https://github.com/detekt/detekt/pull/5189) [#5306](https://github.com/detekt/detekt/pull/5306))
+  - `IgnoredReturnValue`: option `restrictToAnnotatedMethods` is now deprecated in favor of `restrictToConfig` - [#4922](https://github.com/detekt/detekt/pull/4922)
+- This version of Detekt is built with Gradle `v7.5.1`, AGP `7.3.1`, Kotlin `1.7.21` and KtLint `0.47.1` (see [#5363](https://github.com/detekt/detekt/pull/5363) [#5189](https://github.com/detekt/detekt/pull/5189) [#5411](https://github.com/detekt/detekt/pull/5411) [#5312](https://github.com/detekt/detekt/pull/5312) [#5519](https://github.com/detekt/detekt/pull/5519))
 - The minimum supported Gradle version is now `v6.7.1` - [#4964](https://github.com/detekt/detekt/pull/4964)
+
+##### Migration
+
+We deprecated a number of rules in this release. 
+
+You should update your config file as follows:
+
+```diff
+  potential-bugs:
+    active: true
+    ...
+-   DuplicateCaseInWhenExpression:
+-     active: true
+    ...
+-   MissingWhenCase:
+-     active: true
+-     allowElseExpression: true
+    ...
+-   RedundantElseInWhen:
+-     active: true
+
+  style:
+    active: true
+    ...
+-   ForbiddenPublicDataClass:
+-     active: true
+-     excludes: ['**']
+-     ignorePackages:
+-       - '*.internal'
+-       - '*.internal.*'
+    ...
+-   LibraryCodeMustSpecifyReturnType:
+-     active: true
+-     excludes: ['**']
+    ...
+-   LibraryEntitiesShouldNotBePublic:
+-     active: true
+-     excludes: ['**']
+```
+
+If you wish to use the `libraries` ruleset we introduced you should add the following to your config file:
+
+```diff
++ libraries:
++   active: true
++   ForbiddenPublicDataClass:
++     active: false
++   LibraryEntitiesShouldNotBePublic:
++     active: false
++   LibraryCodeMustSpecifyReturnType:
++     active: true
+```
+
+and add the following to your `build.gradle` file:
+
+```kotlin
+detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:$version")
+```
+
+If you're using our KtLint wrapper (i.e. `detekt-formatting`) you should also update your config file as follows:
+
+```diff
+formatting:
+  active: true
+  ...
+- TrailingComma:
+-   active: false
+-   autoCorrect: true
+-   allowTrailingComma: false
+-   allowTrailingCommaOnCallSite: false
+  ...
++ TrailingCommaOnCallSite:
++   active: false
++   autoCorrect: true
++   useTrailingCommaOnCallSite: false
++ TrailingCommaOnDeclarationSite:
++   active: false
++   autoCorrect: true
++   useTrailingCommaOnDeclarationSite: false
+```
 
 ##### Changelog
 
+- ReturnCount: correctly count assignment expressions with elvis return as guard clauses - [#5539](https://github.com/detekt/detekt/pull/5539)
+- UnnecessaryPartOfBinaryExpression: fix false positive with pair creation - [#5516](https://github.com/detekt/detekt/pull/5516)
+- False positive at `UnnecessaryPartOfBinaryExpression` - [#5514](https://github.com/detekt/detekt/issues/5514)
+- Update documentation for TrailingComma rules - [#5513](https://github.com/detekt/detekt/pull/5513)
+- `TrimMultilineRawString` false-positive on annotation parameters - [#5476](https://github.com/detekt/detekt/issues/5476)
+- Detekt 1.22.0-RC1 -> 1.22.0-RC2 breaks UnreachableCode - [#5435](https://github.com/detekt/detekt/issues/5435)
+- Detekt 1.22.0-RC1 -> 1.22.0-RC2 breaks ignoreAnnotated - [#5427](https://github.com/detekt/detekt/issues/5427)
+- Fix issues introduced by #5152 - [#5508](https://github.com/detekt/detekt/pull/5508)
+- MultilineLambdaItParameter: fix false positive for one-line statements with a lambda argument - [#5505](https://github.com/detekt/detekt/pull/5505)
+- UseArrayLiteralsInAnnotations: fix false negative with primitive array factory calls - [#5482](https://github.com/detekt/detekt/pull/5482)
+- TrimMultilineRawString: fix false positive when it's expected as constant - [#5480](https://github.com/detekt/detekt/pull/5480)
+- Fix false negative `SafeCast` with no braces - [#5479](https://github.com/detekt/detekt/pull/5479)
+- Update gradle/wrapper-validation-action digest to 55e685c - [#5472](https://github.com/detekt/detekt/pull/5472)
+- Grant permission for type resolution Gradle job - [#5470](https://github.com/detekt/detekt/pull/5470)
+- Fix ObjectPropertyNaming Rule false positive - [#5466](https://github.com/detekt/detekt/pull/5466)
+- Fix LambdaParameterNaming rule false positive - [#5465](https://github.com/detekt/detekt/pull/5465)
+- Fix ReturnCount false positive when excludeReturnFromLambda is enabled - [#5459](https://github.com/detekt/detekt/pull/5459)
+- CognitiveComplexity: count else/else-if as one complexity - [#5458](https://github.com/detekt/detekt/pull/5458)
+- Fix false positive MultilineRawStringIndentation with tab indentation - [#5453](https://github.com/detekt/detekt/pull/5453)
+- Don't show the number of issues generating the BindingContext - [#5449](https://github.com/detekt/detekt/pull/5449)
+- Make detekt less noisy - [#5448](https://github.com/detekt/detekt/pull/5448)
+- New ruleauthors rule for Entity.from(x.nameIdentifier ?: x) -> Entity.atName(x) - [#5444](https://github.com/detekt/detekt/pull/5444)
+- Separating ComplexMethod rule into CyclomaticComplexMethod and CognitiveComplexMethod - [#5442](https://github.com/detekt/detekt/pull/5442)
+- Improve error reporting for CascadingCallWrapping - [#5439](https://github.com/detekt/detekt/pull/5439)
+- TrimMultilineRawString: fix false positive with not a raw string - [#5438](https://github.com/detekt/detekt/pull/5438)
+- BooleanPropertyNaming highlight only the name of the variable - [#5431](https://github.com/detekt/detekt/pull/5431)
+- Deprecate `TrailingComma` as it's now split in two rules - [#5423](https://github.com/detekt/detekt/pull/5423)
+- Remove unused constant - [#5421](https://github.com/detekt/detekt/pull/5421)
+- Report if/else as issue location instead of block - [#5407](https://github.com/detekt/detekt/pull/5407)
+- Remove some unnecessary suppressions - [#5400](https://github.com/detekt/detekt/pull/5400)
+- Check FormattingRule is auto-correctable by information provided by ktlint - [#5398](https://github.com/detekt/detekt/pull/5398)
+- Fix false negative MultilineLambdaItParameter on complex multiline single statement - [#5397](https://github.com/detekt/detekt/pull/5397)
+- ObjectPropertyNaming: fix false positive with top level properties - [#5390](https://github.com/detekt/detekt/pull/5390)
+- Remove usage of MPP targets function for JVM-only projects - [#5383](https://github.com/detekt/detekt/pull/5383)
+- UnnecessaryNotNullCheck: fix false negative with smart casted arguments - [#5380](https://github.com/detekt/detekt/pull/5380)
+- Add missing overlapping info & fix rules URLs - [#5378](https://github.com/detekt/detekt/pull/5378)
+- AlsoCouldBeApply: fix false positive when all statements are not `it`-started expressions - [#5376](https://github.com/detekt/detekt/pull/5376)
+- UnusedPrivateMember: fix false negative with named arguments - [#5374](https://github.com/detekt/detekt/pull/5374)
+- Change requires type resolution rule warning to debug level to not spam the user console - [#5353](https://github.com/detekt/detekt/pull/5353)
+- Report UseDataClass findings on class name - [#5352](https://github.com/detekt/detekt/pull/5352)
+- Report LabeledExpression as the label instead of the whole expression - [#5351](https://github.com/detekt/detekt/pull/5351)
+- Report CastToNullableType at the cast operator instead of the whole expression - [#5350](https://github.com/detekt/detekt/pull/5350)
+- Convert previously known string property to list based on default value - [#5347](https://github.com/detekt/detekt/pull/5347)
+- CastToNullableType: highlights too much - [#5346](https://github.com/detekt/detekt/issues/5346)
+- UseDataClass flags the whole class body, not just the name - [#5338](https://github.com/detekt/detekt/issues/5338)
+- CanBeNonNullable: explain why the rule does what it does. - [#5332](https://github.com/detekt/detekt/pull/5332)
+- Differentiate between correctable and non-correctable KtLint rules - [#5324](https://github.com/detekt/detekt/pull/5324)
+- ReturnCount 1.22.0 crashes on valid 1.21.0 config property excludedFunctions when using --all-rules cli flag - [#5323](https://github.com/detekt/detekt/issues/5323)
+- LabeledExpression to highlight only label - [#5316](https://github.com/detekt/detekt/issues/5316)
+- Use the correct source directory set on JVM - [#5163](https://github.com/detekt/detekt/pull/5163)
+- Get Android variant compile classpath from compileConfiguration - [#5152](https://github.com/detekt/detekt/pull/5152)
 - Use list config for `FunctionOnlyReturningConstant>excludedFunctions` - [#5120](https://github.com/detekt/detekt/pull/5120)
 - MaxLineLength: raw typo and test cleanup - [#5315](https://github.com/detekt/detekt/pull/5315)
 - EndOfSentenceFormat: fix HTML tag heuristic - [#5313](https://github.com/detekt/detekt/pull/5313)
@@ -106,12 +247,15 @@ keywords: [changelog, release-notes, migration]
 - ReturnCount.excludedFunctions should be a List&lt;String&gt; - [#5081](https://github.com/detekt/detekt/pull/5081)
 - Make ForbiddenMethodCall to support property getters/setters and method references - [#5078](https://github.com/detekt/detekt/pull/5078)
 - Refactor Gradle tasks to use Gradle's managed properties - [#4966](https://github.com/detekt/detekt/pull/4966)
-- `IgnoredReturnValue`: add option `returnValueTypes` to enable rule for particular types - [#4922](https://github.com/detekt/detekt/pull/4922)
 - Add option to add a reason to `ForbiddenMethodCall` - [#4910](https://github.com/detekt/detekt/pull/4910)
 - UnnecessaryParentheses: add options to allow in ambiguous cases - [#4881](https://github.com/detekt/detekt/pull/4881)
 
 ##### Dependency Updates
 
+- Update dependency com.android.tools.build:gradle to v7.3.1 - [#5411](https://github.com/detekt/detekt/pull/5411)
+- Update plugin com.gradle.enterprise to v3.11.2 - [#5406](https://github.com/detekt/detekt/pull/5406)
+- Update dependency org.jetbrains.dokka to v1.7.20 - [#5401](https://github.com/detekt/detekt/pull/5401)
+- Update dependency org.yaml:snakeyaml to v1.33 - [#5354](https://github.com/detekt/detekt/pull/5354)
 - Update dependency org.spekframework.spek2:spek-dsl-jvm to v2.0.19 - [#5237](https://github.com/detekt/detekt/pull/5237)
 - Update dependency com.android.tools.build:gradle to v7.2.2 - [#5178](https://github.com/detekt/detekt/pull/5178)
 - Update org.jetbrains.kotlinx - [#5072](https://github.com/detekt/detekt/pull/5072)
@@ -121,6 +265,8 @@ keywords: [changelog, release-notes, migration]
 
 ##### Housekeeping & Refactorings
 
+- Document and test edge cases for ForbiddenMethodCall function signatures - [#5495](https://github.com/detekt/detekt/pull/5495)
+- Fix invalid syntaxes in test code - [#5446](https://github.com/detekt/detekt/pull/5446)
 - Improve raw strings format - [#5244](https://github.com/detekt/detekt/pull/5244)
 - Enable trim multiline raw string - [#5243](https://github.com/detekt/detekt/pull/5243)
 - Remove old configurations - [#5198](https://github.com/detekt/detekt/pull/5198)
@@ -255,6 +401,7 @@ Because of this, some users might have to **recreate their baseline** as the loc
 
 ##### Dependency Updates
 
+- Update plugin binaryCompatibilityValidator to v0.12.0 - [#5456](https://github.com/detekt/detekt/pull/5456)
 - Update dependency gradle to v7.5 - [#5074](https://github.com/detekt/detekt/pull/5074)
 - Update plugin binaryCompatibilityValidator to v0.11.0 - [#5069](https://github.com/detekt/detekt/pull/5069)
 - Update dependency org.jetbrains.kotlinx:kotlinx-coroutines-core to v1.6.3 - [#4976](https://github.com/detekt/detekt/pull/4976)

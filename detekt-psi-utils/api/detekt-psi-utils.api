@@ -45,7 +45,7 @@ public final class io/gitlab/arturbosch/detekt/rules/AllowedExceptionNamePattern
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/GuardClausesKt {
-	public static final fun isElvisOperatorGuardClause (Lorg/jetbrains/kotlin/psi/KtExpression;)Z
+	public static final fun isElvisOperatorGuardClause (Lorg/jetbrains/kotlin/psi/KtExpression;Lorg/jetbrains/kotlin/psi/KtExpression;)Z
 	public static final fun isIfConditionGuardClause (Lorg/jetbrains/kotlin/psi/KtExpression;Lorg/jetbrains/kotlin/psi/KtExpression;)Z
 }
 
@@ -85,6 +85,10 @@ public final class io/gitlab/arturbosch/detekt/rules/KtCallExpressionKt {
 	public static final fun isCalling (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/name/FqName;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 	public static final fun isCalling (Lorg/jetbrains/kotlin/resolve/calls/model/ResolvedCall;Lorg/jetbrains/kotlin/name/FqName;)Z
 	public static final fun isCallingWithNonNullCheckArgument (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/name/FqName;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
+}
+
+public final class io/gitlab/arturbosch/detekt/rules/KtIfExpressionKt {
+	public static final fun isElseIf (Lorg/jetbrains/kotlin/psi/KtIfExpression;)Z
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/KtLambdaExpressionKt {
@@ -141,5 +145,7 @@ public final class io/gitlab/arturbosch/detekt/rules/TraversingKt {
 
 public final class io/gitlab/arturbosch/detekt/rules/TypeUtilsKt {
 	public static final fun fqNameOrNull (Lorg/jetbrains/kotlin/types/KotlinType;)Lorg/jetbrains/kotlin/name/FqName;
+	public static final fun getDataFlowAwareTypes (Lorg/jetbrains/kotlin/psi/KtExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;Lorg/jetbrains/kotlin/types/KotlinType;)Ljava/util/Set;
+	public static synthetic fun getDataFlowAwareTypes$default (Lorg/jetbrains/kotlin/psi/KtExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;Lorg/jetbrains/kotlin/types/KotlinType;ILjava/lang/Object;)Ljava/util/Set;
 }
 

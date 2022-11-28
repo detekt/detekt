@@ -186,10 +186,12 @@ class ReturnCountSpec {
     @Nested
     inner class `a file with multiple guard clauses` {
         val code = """
-            fun multipleGuards(a: Int?, b: Any?, c: Int?) {
+            var x = 1
+            fun multipleGuards(a: Int?, b: Any?, c: Int?, d: Int?) {
                 if(a == null) return
                 val models = b as? Int ?: return
                 val position = c?.takeIf { it != -1 } ?: return
+                x = d ?: return
                 if(b !is String) {
                     println("b is not a String")
                     return
@@ -509,6 +511,44 @@ class ReturnCountSpec {
                     )
                 )
             ).lint(code)
+            assertThat(findings).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `function with lambda which has explicit label` {
+        val code = """
+        fun test() {
+            listOf(1, 2, 3, 4, 5).forEach lit@{
+                if (it == 3) return@lit
+                if (it == 4) return@lit
+            }
+            return
+        }
+        """.trimIndent()
+
+        @Test
+        fun `should count labeled return of lambda with explicit label`() {
+            val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_RETURN_FROM_LAMBDA to "false"))).compileAndLint(code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should not count labeled return of lambda with explicit label when deactivated by default`() {
+            val findings = ReturnCount().compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `excludeReturnFromLambda should take precedence over excludeLabeled`() {
+            val findings = ReturnCount(
+                TestConfig(
+                    mapOf(
+                        EXCLUDE_RETURN_FROM_LAMBDA to "true",
+                        EXCLUDE_LABELED to "false"
+                    )
+                )
+            ).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
     }

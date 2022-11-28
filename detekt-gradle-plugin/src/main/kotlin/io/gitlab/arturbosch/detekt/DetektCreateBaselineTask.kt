@@ -20,7 +20,6 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileTree
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
-import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Console
@@ -115,8 +114,8 @@ abstract class DetektCreateBaselineTask : SourceTask() {
     abstract val jdkHome: DirectoryProperty
 
     @get:Internal
-    internal val arguments: Provider<List<String>> = project.provider {
-        listOf(
+    internal val arguments
+        get() = listOf(
             CreateBaselineArgument,
             ClasspathArgument(classpath),
             JvmTargetArgument(jvmTargetProp.orNull),
@@ -131,7 +130,6 @@ abstract class DetektCreateBaselineTask : SourceTask() {
             BasePathArgument(basePathProp.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
         ).flatMap(CliArgument::toArgument)
-    }
 
     @InputFiles
     @SkipWhenEmpty
@@ -142,7 +140,7 @@ abstract class DetektCreateBaselineTask : SourceTask() {
     @TaskAction
     fun baseline() {
         DetektInvoker.create(task = this).invokeCli(
-            arguments = arguments.get(),
+            arguments = arguments,
             ignoreFailures = ignoreFailures.getOrElse(false),
             classpath = detektClasspath.plus(pluginClasspath),
             taskName = name

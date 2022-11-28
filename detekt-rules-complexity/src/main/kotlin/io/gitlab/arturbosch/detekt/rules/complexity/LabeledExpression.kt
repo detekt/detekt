@@ -76,10 +76,10 @@ class LabeledExpression(config: Config = Config.empty) : Rule(config) {
     override fun visitExpressionWithLabel(expression: KtExpressionWithLabel) {
         super.visitExpressionWithLabel(expression)
         if (expression !is KtThisExpression || isNotReferencingOuterClass(expression)) {
-            expression.getLabelName()?.let { labelName ->
-                if (ignoredLabels.none { labelName.contains(it, ignoreCase = true) }) {
-                    report(CodeSmell(issue, Entity.from(expression), issue.description))
-                }
+            val label = expression.getTargetLabel()
+            val labelName = label?.getReferencedName()
+            if (labelName != null && ignoredLabels.none { labelName.contains(it, ignoreCase = true) }) {
+                report(CodeSmell(issue, Entity.from(label), issue.description))
             }
         }
     }

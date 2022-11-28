@@ -1,10 +1,15 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
 plugins {
     id("releasing")
     id("io.gitlab.arturbosch.detekt")
     alias(libs.plugins.gradleVersions)
+}
+
+val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {
+    output.set(rootProject.layout.buildDirectory.file("reports/detekt/merge.sarif"))
 }
 
 allprojects {
@@ -27,10 +32,11 @@ allprojects {
     dependencies {
         detekt(project(":detekt-cli"))
         detektPlugins(project(":detekt-formatting"))
+        detektPlugins(project(":detekt-rules-libraries"))
         detektPlugins(project(":detekt-rules-ruleauthors"))
     }
 
-    tasks.withType<Detekt>().configureEach {
+    tasks.withType<Detekt> detekt@{
         jvmTarget = "1.8"
         reports {
             xml.required.set(true)
@@ -39,6 +45,11 @@ allprojects {
             sarif.required.set(true)
             md.required.set(true)
         }
+        basePath = rootProject.projectDir.absolutePath
+        finalizedBy(detektReportMergeSarif)
+        detektReportMergeSarif.configure {
+            input.from(this@detekt.sarifReportFile)
+        }
     }
     tasks.withType<DetektCreateBaselineTask>().configureEach {
         jvmTarget = "1.8"
@@ -46,7 +57,7 @@ allprojects {
 }
 
 subprojects {
-    tasks.withType<Test> {
+    tasks.withType<Test>().configureEach {
         predictiveSelection {
             enabled.set(System.getenv("CI") == null)
         }

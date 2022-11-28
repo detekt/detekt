@@ -284,6 +284,100 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `should report method with array argument`() {
+        val code = """
+            package io.gitlab.arturbosch.detekt.rules.style
+            
+            fun arrayMethod(args: Array<Any>) = args.size
+
+            fun test() {
+                val s = arrayMethod(arrayOf("test"))
+            }
+        """.trimIndent()
+        val methodName = "io.gitlab.arturbosch.detekt.rules.style.arrayMethod(kotlin.Array)"
+        val findings = ForbiddenMethodCall(TestConfig(mapOf(METHODS to listOf(methodName))))
+            .compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(1).hasStartSourceLocation(6, 13)
+    }
+
+    @Test
+    fun `should report method with list argument`() {
+        val code = """
+            package io.gitlab.arturbosch.detekt.rules.style
+            
+            fun listMethod(args: List<Any>) = args.size
+
+            fun test() {
+                val s = listMethod(listOf("test"))
+            }
+        """.trimIndent()
+        val methodName = "io.gitlab.arturbosch.detekt.rules.style.listMethod(kotlin.collections.List)"
+        val findings = ForbiddenMethodCall(TestConfig(mapOf(METHODS to listOf(methodName))))
+            .compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(1).hasStartSourceLocation(6, 13)
+    }
+
+    @Test
+    fun `should report method with vararg argument`() {
+        val code = """
+            package io.gitlab.arturbosch.detekt.rules.style
+            
+            fun varargMethod(vararg args: Any) = args.size
+
+            fun test() {
+                val s = varargMethod(arrayOf("test"))
+            }
+        """.trimIndent()
+        val methodName = "io.gitlab.arturbosch.detekt.rules.style.varargMethod(kotlin.Array)"
+        val findings = ForbiddenMethodCall(TestConfig(mapOf(METHODS to listOf(methodName))))
+            .compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(1).hasStartSourceLocation(6, 13)
+    }
+
+    @Test
+    fun `should report companion object method`() {
+        val code = """
+            package io.gitlab.arturbosch.detekt.rules.style
+            
+            class TestClass {
+                companion object {
+                    fun staticMethod() {}
+                }
+            }
+
+            fun test() {
+                TestClass.staticMethod()
+            }
+        """.trimIndent()
+        val methodName = "io.gitlab.arturbosch.detekt.rules.style.TestClass.Companion.staticMethod()"
+        val findings = ForbiddenMethodCall(TestConfig(mapOf(METHODS to listOf(methodName))))
+            .compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(1).hasStartSourceLocation(10, 15)
+    }
+
+    @Test
+    fun `should report @JvmStatic method`() {
+        val code = """
+            package io.gitlab.arturbosch.detekt.rules.style
+            
+            class TestClass {
+                companion object {
+                    @JvmStatic
+                    fun staticMethod() {}
+                }
+            }
+
+            fun test() {
+                TestClass.staticMethod()
+            }
+        """.trimIndent()
+        val methodName = "io.gitlab.arturbosch.detekt.rules.style.TestClass.Companion.staticMethod()"
+        val findings = ForbiddenMethodCall(TestConfig(mapOf(METHODS to listOf(methodName))))
+            .compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(1).hasStartSourceLocation(11, 15)
+    }
+
+    @Test
     fun `should report overriding method calls`() {
         val code = """
             package org.example.com

@@ -45,6 +45,7 @@ import org.jetbrains.kotlin.types.KotlinType
  * class A(val b: B) : I by b
  * </compliant>
  */
+@Suppress("ViolatesTypeResolutionRequirements")
 class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
@@ -102,7 +103,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
                 report(
                     CodeSmell(
                         issue,
-                        Entity.from(klass),
+                        Entity.atName(klass),
                         "The class ${klass.nameAsSafeName} defines no " +
                             "functionality and only holds data. Consider converting it to a data class."
                     )

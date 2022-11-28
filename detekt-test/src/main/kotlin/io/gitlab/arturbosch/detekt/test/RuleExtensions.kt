@@ -46,7 +46,6 @@ fun BaseRule.lintWithContext(
     val bindingContext = environment.getContextForPaths(listOf(ktFile) + additionalKtFiles)
     val languageVersionSettings = environment.configuration.languageVersionSettings
 
-    @Suppress("DEPRECATION")
     val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
     val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
     return findingsAfterVisit(ktFile, bindingContext, compilerResources)

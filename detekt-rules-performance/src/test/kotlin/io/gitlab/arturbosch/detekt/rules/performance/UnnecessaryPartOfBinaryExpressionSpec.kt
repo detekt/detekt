@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class UnnecessaryPartOfBinaryExpressionSpec {
@@ -90,6 +90,22 @@ class UnnecessaryPartOfBinaryExpressionSpec {
 
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         assertThat(findings).hasSize(0)
+    }
+
+    @Test
+    fun `Report error if condition contains different operators`() {
+        val code = """
+            fun bar() {
+                val foo = true
+                val baz = false
+                if (foo || baz && baz) {
+                    //TODO    
+                }
+            }
+        """.trimIndent()
+
+        val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
+        assertThat(findings).hasSize(1).hasTextLocations("baz && baz")
     }
 
     @Test
@@ -267,5 +283,17 @@ class UnnecessaryPartOfBinaryExpressionSpec {
 
         val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
         assertThat(findings).hasSize(1)
+    }
+
+    @Test
+    fun `Don't raise issues with pair creation`() {
+        val code = """
+            fun foo() {
+                1 to 1
+            }
+        """.trimIndent()
+
+        val findings = UnnecessaryPartOfBinaryExpression().compileAndLint(code)
+        assertThat(findings).hasSize(0)
     }
 }

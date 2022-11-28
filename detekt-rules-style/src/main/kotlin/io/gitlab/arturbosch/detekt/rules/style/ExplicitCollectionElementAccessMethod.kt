@@ -58,9 +58,11 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
     }
 
     private fun isIndexGetterRecommended(expression: KtCallExpression): Boolean {
-        val getter =
-            if (expression.calleeExpression?.text == "get") expression.getFunctionDescriptor()
-            else null
+        val getter = if (expression.calleeExpression?.text == "get") {
+            expression.getFunctionDescriptor()
+        } else {
+            null
+        }
         if (getter == null) return false
 
         return canReplace(getter) && shouldReplace(getter)
@@ -70,8 +72,11 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
         when (expression.calleeExpression?.text) {
             "set" -> {
                 val setter = expression.getFunctionDescriptor()
-                if (setter == null) false
-                else canReplace(setter) && shouldReplace(setter)
+                if (setter == null) {
+                    false
+                } else {
+                    canReplace(setter) && shouldReplace(setter)
+                }
             }
             // `put` isn't an operator function, but can be replaced with indexer when the caller is Map.
             "put" -> isCallerMap(expression)
