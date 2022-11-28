@@ -41,11 +41,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.getOwnerForEffectiveDispatchR
 @RequiresTypeResolution
 class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
 
-    // Does not work with extension functions yet
-    // Does not work with top level functions
-    // Does not work with functions without block body
-    // Does not work with unnamed functions
-
     override val issue = Issue(
         id = "FeatureEnvy",
         severity = Severity.Maintainability,
