@@ -29,60 +29,35 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.getOwnerForEffectiveDispatchReceiverParameter
 
 /**
- * This rule is about feature envy :)
+ * This rule reports methods with Feature Envy.
+ * Methods with Feature Envy access a lot of data of other classes, which might be a sign that the method was displaced
+ * and should be moved to another class.
  *
- * <noncompliant>
- * </noncompliant>
+ * Methods with Feature Envy uses more than a few attributes of other classes, use more attributes from other classes
+ * than its own and the used foreign data belongs to few other classes.
  *
- * <compliant>
- * </compliant>
+ * For more information see: Object-Oriented Metrics in Practice - Michele Lanza & Radu Marinescu
  */
 @RequiresTypeResolution
 class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
 
     // Does not work with extension functions yet
-    // Does not work with functions outside of classes
+    // Does not work with top level functions
     // Does not work with functions without block body
+    // Does not work with unnamed functions
 
     override val issue = Issue(
         id = "FeatureEnvy",
         severity = Severity.Maintainability,
-        description = "Feature Envy Description.",
+        description = "Feature Envy is a sign of a displaced method",
         debt = Debt.TWENTY_MINS
     )
 
-    /*
-    TODO: Offenen Fragen:
-
-    RuleVisitor.kt getArgument
-    Macht faxen, wenn man eigene Debts definiert:
-    if (text.startsWith(name, true) && type.size == 2) {
-    type.size ist nicht == 2, weil
-    val type = text.split('.')
-    Hier gibts aber nichts zu splitten -> type.size ist immer 1
-
-     Float Configuration Values scheinen nicht möglich zu sein, wieso?
-
-Exception in thread "main" java.lang.IllegalStateException: 0.33f is neither a literal nor a constant
-	at io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector$DefaultValueSupport.toDefaultValue(ConfigurationCollector.kt:144)
-	at io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector$DefaultValueSupport.getDefaultValue(ConfigurationCollector.kt:123)
-	at io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.toConfiguration(ConfigurationCollector.kt:99)
-	at io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.parseConfigurationAnnotation(ConfigurationCollector.kt:80)
-	at io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.getConfiguration(ConfigurationCollector.kt:41)
-	at io.gitlab.arturbosch.detekt.generator.collection.RuleVisitor.getRule(RuleVisitor.kt:44)
-	at io.gitlab.arturbosch.detekt.generator.collection.RuleCollector.visit(RuleCollector.kt:13)
-	at io.gitlab.arturbosch.detekt.generator.collection.DetektCollector.visit(DetektCollector.kt:60)
-	at io.gitlab.arturbosch.detekt.generator.Generator.execute(Generator.kt:33)
-	at io.gitlab.arturbosch.detekt.generator.Main.main(Main.kt:28)
-
-     */
-
-
-    @Configuration("LAA")
-    private val localityOfDataAccessThreshold = 0.3f
-    @Configuration("ATFD")
+    //@Configuration("Locality of Attribute Accesses - The threshold-ratio of attributes used from the methods class to attributes used from other classes")
+    private val localityOfDataAccessThreshold = 0.33f
+    @Configuration("The maximum number of attributes from other classes that may be used.")
     private val atfdThreshold: Int by config(defaultValue = 2)
-    @Configuration("FDP")
+    @Configuration("The minimum number of foreign data providers which must be used so that no Feature Envy is present.")
     private val fdpThreshold: Int by config(defaultValue = 2)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
@@ -193,85 +168,3 @@ Exception in thread "main" java.lang.IllegalStateException: 0.33f is neither a l
         }?.eachCount() ?: emptyMap()
     }
 }
-
-/*
-@file:Suppress
-package io.gitlab.arturbosch.detekt.rules.complexity
-
-const val BLA = "lala"
-
-data class B(val b: Int = 18, val bb: Int = 100) {
-
-    val test: Int? = null
-
-    fun lala() {}
-}
-
-object LSÖFDK {
-    val test = 10
-    fun lalalalala(){}
-}
-
-class Test(
-    val param: Int,
-    param2: Int
-) {
-    val a = 5
-
-    fun test(b: B) {
-        val temp = 5
-
-        b.lala()
-
-        b.apply {
-            this.b.plus(bb)
-            bb.plus(a)
-        }
-
-        println(b.b)
-        println(BLA)
-    }
-}
-
-data class ContactInfo(
-    val city: String,
-    val postalCode: String,
-    val street: String,
-    val number: String
-)
-
-class User(val contactInfo: ContactInfo) {
-
-    fun prettyPrintAddress() {
-        val prettyAddress = buildString {
-            append(contactInfo.postalCode)
-            append(" ")
-            append(contactInfo.city)
-            append("\n")
-            append(contactInfo.street)
-            append(" ")
-            append(contactInfo.number)
-        }
-        println(prettyAddress)
-    }
-
-}
-
-data class Rectangle(val width: Int, val height: Int)
-
-class RectangleUsageSite(val rectangle: Rectangle) {
-    fun printArea() {
-        val area = rectangle.width * rectangle.height
-        println("The area is: \${'$'}{area}")
-    }
-}
-
-data class Cube(val width: Int, val length: Int, val height: Int)
-
-class CubeUsageSite(val cube: Cube) {
-    fun printVolume() {
-        val volume = cube.width * cube.length * cube.height
-        println("The volume is: \${volume}")
-    }
-}
- */

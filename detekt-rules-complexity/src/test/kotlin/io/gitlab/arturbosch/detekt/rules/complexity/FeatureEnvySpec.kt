@@ -79,4 +79,3 @@ class FeatureEnvySpec(private val env: KotlinCoreEnvironment) {
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 }
-
