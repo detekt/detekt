@@ -43,3 +43,7 @@ dependencies {
 tasks.check {
     dependsOn(tasks.named("jacocoMergedReport"))
 }
+
+tasks.withType<JacocoReport>().configureEach {
+    dependsOn(":detekt-generator:generateDocumentation")
+}
