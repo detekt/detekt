@@ -68,9 +68,6 @@ class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
 
     override fun visitAnnotationEntry(annotation: KtAnnotationEntry) {
         super.visitAnnotationEntry(annotation)
-        if (annotations.isEmpty()) {
-            return
-        }
 
         annotation.typeReference?.fqNameOrNull()?.let {
             check(annotation, it)
@@ -80,9 +77,6 @@ class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
     override fun visitExpression(expression: KtExpression) {
         super.visitExpression(expression)
 
-        if (annotations.isEmpty()) {
-            return
-        }
         expression.expressionTypeOrNull()?.fqNameOrNull()?.let {
             check(expression, it)
         }
