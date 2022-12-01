@@ -86,6 +86,14 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     )
 }
 
+rootProject.project("detekt-rules-libraries").tasks.withType<ProcessResources>().configureEach {
+    dependsOn(generateDocumentation)
+}
+
+rootProject.project("detekt-rules-ruleauthors").tasks.withType<ProcessResources>().configureEach {
+    dependsOn(generateDocumentation)
+}
+
 val verifyGeneratorOutput by tasks.registering(Exec::class) {
     dependsOn(generateDocumentation)
     description = "Verifies that generated config files are up-to-date"
