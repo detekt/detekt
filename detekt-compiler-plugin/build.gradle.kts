@@ -4,12 +4,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.ByteArrayOutputStream
 
 val kotlinVersion: String = libs.versions.kotlin.get()
+val detektVersion: String = Versions.DETEKT
 
 val kotlinCompilerChecksum: String by project
 val detektPluginVersion: String by project
 
 group = "io.github.detekt"
-version = detektPluginVersion
+version = "$kotlinVersion-$detektVersion"
 
 val detektPublication = "DetektPublication"
 
