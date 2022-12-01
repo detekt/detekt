@@ -1,7 +1,11 @@
 package io.github.detekt.gradle
 
 import io.github.detekt.gradle.extensions.KotlinCompileTaskDetektExtension
+import io.gitlab.arturbosch.detekt.CONFIGURATION_DETEKT_PLUGINS
 import io.gitlab.arturbosch.detekt.DetektPlugin
+import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.CONFIG_DIR_NAME
+import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.CONFIG_FILE
+import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.DETEKT_EXTENSION
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
 import org.gradle.api.file.ConfigurableFileCollection
@@ -28,7 +32,7 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
 
         val extension =
             target.extensions.findByType(DetektExtension::class.java) ?: target.extensions.create(
-                DETEKT_NAME,
+                DETEKT_EXTENSION,
                 DetektExtension::class.java
             )
 
@@ -47,7 +51,7 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
         }
 
         target.tasks.withType(KotlinCompile::class.java).configureEach { task ->
-            task.extensions.create(DETEKT_NAME, KotlinCompileTaskDetektExtension::class.java, target).apply {
+            task.extensions.create(DETEKT_EXTENSION, KotlinCompileTaskDetektExtension::class.java, target).apply {
                 isEnabled.convention(extension.enableCompilerPlugin)
                 baseline.convention(target.layout.file(target.provider { extension.baseline }))
                 debug.convention(target.provider { extension.debug })
@@ -112,7 +116,7 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
         return options
     }
 
-    override fun getCompilerPluginId(): String = DETEKT_COMPILER_PLUGIN
+    override fun getCompilerPluginId(): String = "detekt-compiler-plugin"
 
     override fun getPluginArtifact(): SubpluginArtifact {
         // Other Gradle plugins can also have a versions.properties.
