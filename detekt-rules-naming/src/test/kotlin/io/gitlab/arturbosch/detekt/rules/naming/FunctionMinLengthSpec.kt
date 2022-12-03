@@ -27,4 +27,19 @@ class FunctionMinLengthSpec {
         val code = "fun three() = 3"
         assertThat(FunctionMinLength().compileAndLint(code)).isEmpty()
     }
+
+    @Test
+    fun `should not report an overridden function name that is too short`() {
+        val code = """
+        class C : I {
+            override fun tooShortButShouldNotBeReportedByDefault() {}
+        }
+        interface I { @Suppress("FunctionMinLength") fun tooShortButShouldNotBeReportedByDefault() }
+        """.trimIndent()
+        assertThat(
+            FunctionMinLength(
+                TestConfig(mapOf("minimumFunctionNameLength" to 50))
+            ).compileAndLint(code)
+        ).isEmpty()
+    }
 }
