@@ -7,7 +7,6 @@ val kotlinVersion: String = libs.versions.kotlin.get()
 val detektVersion: String = Versions.DETEKT
 
 val kotlinCompilerChecksum: String by project
-val detektPluginVersion: String by project
 
 group = "io.github.detekt"
 version = "$kotlinVersion-$detektVersion"
