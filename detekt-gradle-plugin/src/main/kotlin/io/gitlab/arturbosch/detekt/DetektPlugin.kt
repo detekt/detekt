@@ -14,7 +14,12 @@ class DetektPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         project.pluginManager.apply(ReportingBasePlugin::class.java)
-        val extension = project.extensions.create(DETEKT_EXTENSION, DetektExtension::class.java)
+        val extension =
+            project.extensions.findByType(DetektExtension::class.java) ?: project.extensions.create(
+                DETEKT_EXTENSION,
+                DetektExtension::class.java
+            )
+
         extension.reportsDir = project.extensions.getByType(ReportingExtension::class.java).file("detekt")
 
         val defaultConfigFile =
@@ -75,7 +80,7 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
-        project.configurations.create(CONFIGURATION_DETEKT_PLUGINS) { configuration ->
+        project.configurations.maybeCreate(CONFIGURATION_DETEKT_PLUGINS).let { configuration ->
             configuration.isVisible = false
             configuration.isTransitive = true
             configuration.description = "The $CONFIGURATION_DETEKT_PLUGINS libraries to be used for this project."
