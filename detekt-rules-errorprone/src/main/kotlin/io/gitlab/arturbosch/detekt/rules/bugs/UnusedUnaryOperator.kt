@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
 /**
- * This rule detects unused unary operators.
+ * Detects unused unary operators.
  *
  * <noncompliant>
  * val x = 1 + 2
