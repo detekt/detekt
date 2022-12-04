@@ -54,6 +54,7 @@ tasks.withType<KotlinCompile>().configureEach {
         freeCompilerArgs += listOf(
             "-progressive",
         )
+        useK2 = true
         allWarningsAsErrors = project.findProperty("warningsAsErrors") == "true"
     }
 }

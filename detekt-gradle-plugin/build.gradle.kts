@@ -1,5 +1,9 @@
 plugins {
-    id("module")
+//    id("module") K2 does not support plugins yet
+    id("packaging")
+    kotlin("jvm") version libs.versions.kotlin
+    `maven-publish`
+    jacoco
     `java-gradle-plugin`
     `java-test-fixtures`
     idea

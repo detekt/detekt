@@ -87,5 +87,6 @@ buildCache {
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
+        gradlePluginPortal()
     }
 }
