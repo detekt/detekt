@@ -22,6 +22,7 @@ import io.gitlab.arturbosch.detekt.invoke.JdkHomeArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
+import io.gitlab.arturbosch.detekt.invoke.RunRuleArgument
 import io.gitlab.arturbosch.detekt.invoke.isDryRunEnabled
 import org.gradle.api.Action
 import org.gradle.api.file.ConfigurableFileCollection
@@ -61,6 +62,14 @@ import javax.inject.Inject
 abstract class Detekt @Inject constructor(
     private val objects: ObjectFactory
 ) : SourceTask(), VerificationTask {
+
+    @get:Optional
+    @get:Input
+    @set:Option(
+        option = "run-rule",
+        description = "Rule to run"
+    )
+    var ruleToRun: String = ""
 
     @get:Classpath
     abstract val detektClasspath: ConfigurableFileCollection
@@ -228,7 +237,8 @@ abstract class Detekt @Inject constructor(
             AllRulesArgument(allRulesProp.getOrElse(false)),
             AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
             BasePathArgument(basePathProp.orNull),
-            DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
+            DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false)),
+            RunRuleArgument(ruleToRun + ""),
         ).plus(convertCustomReportsToArguments()).flatMap(CliArgument::toArgument)
 
     @InputFiles

@@ -23,6 +23,7 @@ private const val LANGUAGE_VERSION_PARAMETER = "--language-version"
 private const val JVM_TARGET_PARAMETER = "--jvm-target"
 private const val JDK_HOME_PARAMETER = "--jdk-home"
 private const val BASE_PATH_PARAMETER = "--base-path"
+private const val RUN_RULE_PARAMETER = "--run-rule"
 
 internal sealed class CliArgument {
     abstract fun toArgument(): List<String>
@@ -38,6 +39,15 @@ internal object GenerateConfigArgument : CliArgument() {
 
 internal data class InputArgument(val fileCollection: FileCollection) : CliArgument() {
     override fun toArgument() = listOf(INPUT_PARAMETER, fileCollection.joinToString(",") { it.absolutePath })
+}
+
+internal data class RunRuleArgument(val rule: String) : CliArgument() {
+    override fun toArgument() = if (rule.isNotEmpty()) {
+        println(">>> Run the only rule <<<")
+        listOf(RUN_RULE_PARAMETER, rule)
+    } else {
+        emptyList()
+    }
 }
 
 internal data class ClasspathArgument(val fileCollection: FileCollection) : CliArgument() {

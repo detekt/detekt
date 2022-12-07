@@ -6,6 +6,7 @@ pluginManagement {
     includeBuild("build-logic")
     includeBuild("detekt-gradle-plugin")
 }
+includeBuild("detekt-gradle-plugin")
 
 include("code-coverage-report")
 include("detekt-api")
