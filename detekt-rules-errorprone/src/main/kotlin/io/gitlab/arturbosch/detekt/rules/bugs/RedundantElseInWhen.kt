@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
 /**
- * Turn on this rule to flag `when` expressions that contain a redundant `else` case. This occurs when it can be
+ * Reports `when` expressions that contain a redundant `else` case. This occurs when it can be
  * verified that all cases are already covered when checking cases on an enum or sealed class.
  *
  * <noncompliant>
