@@ -4,12 +4,14 @@ import org.jetbrains.kotlin.compiler.plugin.AbstractCliOption
 import org.jetbrains.kotlin.compiler.plugin.CliOption
 import org.jetbrains.kotlin.compiler.plugin.CliOptionProcessingException
 import org.jetbrains.kotlin.compiler.plugin.CommandLineProcessor
+import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import java.io.ByteArrayInputStream
 import java.io.ObjectInputStream
 import java.nio.file.Paths
 import java.util.Base64
 
+@OptIn(ExperimentalCompilerApi::class)
 class DetektCommandLineProcessor : CommandLineProcessor {
 
     override val pluginId: String = "detekt-compiler-plugin"

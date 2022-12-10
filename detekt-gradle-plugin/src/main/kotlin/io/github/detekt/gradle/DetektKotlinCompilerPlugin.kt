@@ -69,6 +69,8 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
         val project = kotlinCompilation.target.project
 
         val projectExtension = project.extensions.getByType(DetektExtension::class.java)
+
+        @Suppress("DEPRECATION")
         val taskExtension =
             kotlinCompilation.compileKotlinTask.extensions.getByType(KotlinCompileTaskDetektExtension::class.java)
 
