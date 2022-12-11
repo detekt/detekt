@@ -1,6 +1,5 @@
 import de.undercouch.gradle.tasks.download.Download
 import de.undercouch.gradle.tasks.download.Verify
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.ByteArrayOutputStream
 
 val kotlinVersion: String = libs.versions.kotlin.get()
@@ -108,10 +107,4 @@ val testPluginKotlinc by tasks.registering(RunTestExecutable::class) {
         }
         (this as RunTestExecutable).executionResult.get().assertNormalExitValue()
     }
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions.freeCompilerArgs = listOf(
-        "-opt-in=kotlin.RequiresOptIn"
-    )
 }
