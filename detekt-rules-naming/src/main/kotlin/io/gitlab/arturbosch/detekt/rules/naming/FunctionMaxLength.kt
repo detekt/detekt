@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.identifierName
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -31,6 +32,10 @@ class FunctionMaxLength(config: Config = Config.empty) : Rule(config) {
     private val maximumFunctionNameLength: Int by config(30)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
+        if (function.isOverride()) {
+            return
+        }
+
         if (function.identifierName().length > maximumFunctionNameLength) {
             report(
                 CodeSmell(

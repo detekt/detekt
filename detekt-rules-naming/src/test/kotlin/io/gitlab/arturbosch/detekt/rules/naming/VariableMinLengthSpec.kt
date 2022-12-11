@@ -53,4 +53,24 @@ class VariableMinLengthSpec {
         """.trimIndent()
         assertThat(VariableMinLength().compileAndLint(code)).isEmpty()
     }
+
+    @Test
+    fun `should not report an overridden variable name that is too short`() {
+        val code = """
+            class C : I {
+                override val shortButOk = "banana"
+            }
+            interface I : I2 {
+                override val shortButOk: String
+            }
+            interface I2 {
+                @Suppress("VariableMinLength") val shortButOk: String
+            }
+        """.trimIndent()
+        assertThat(
+            VariableMinLength(
+                TestConfig(mapOf("minimumVariableNameLength" to 15))
+            ).compileAndLint(code)
+        ).isEmpty()
+    }
 }
