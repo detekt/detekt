@@ -51,8 +51,12 @@ class FunctionMinLengthSpec {
                     Point2D(x = x + another.x, y = y + another.y)
             }
         """.trimIndent()
-        assertThat(FunctionMinLength(
-            TestConfig(mapOf("minimumFunctionNameLength" to 5))
-        ).compileAndLint(code)).isEmpty()
+        assertThat(
+            FunctionMinLength(
+                TestConfig(
+                    mapOf("minimumFunctionNameLength" to 5)
+                )
+            ).compileAndLint(code)
+        ).isEmpty()
     }
 }

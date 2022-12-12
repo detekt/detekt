@@ -56,7 +56,9 @@ class FunctionMaxLengthSpec {
         """.trimIndent()
         assertThat(
             FunctionMaxLength(
-                TestConfig(mapOf("maximumFunctionNameLength" to 5))
+                TestConfig(
+                    mapOf("maximumFunctionNameLength" to 5)
+                )
             ).compileAndLint(code)
         ).isEmpty()
     }
