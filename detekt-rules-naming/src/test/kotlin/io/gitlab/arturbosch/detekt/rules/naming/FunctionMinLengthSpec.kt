@@ -42,4 +42,17 @@ class FunctionMinLengthSpec {
             ).compileAndLint(code)
         ).isEmpty()
     }
+
+    @Test
+    fun `should not report an operator function`() {
+        val code = """
+            data class Point2D(var x: Int = 0, var y: Int = 0) {
+                operator fun plus(another: Point2D): Point2D =
+                    Point2D(x = x + another.x, y = y + another.y)
+            }
+        """.trimIndent()
+        assertThat(FunctionMinLength(
+            TestConfig(mapOf("minimumFunctionNameLength" to 5))
+        ).compileAndLint(code)).isEmpty()
+    }
 }

@@ -43,4 +43,21 @@ class FunctionMaxLengthSpec {
         val code = "fun three() = 3"
         assertThat(FunctionMaxLength().compileAndLint(code)).isEmpty()
     }
+
+    @Test
+    fun `should not report an operator function`() {
+        val code = """
+            data class Point2D(var x: Int = 0, var y: Int = 0) {
+                operator fun plusAssign(another: Point2D) {
+                    x += another.x
+                    y += another.y
+                }
+            }
+        """.trimIndent()
+        assertThat(
+            FunctionMaxLength(
+                TestConfig(mapOf("maximumFunctionNameLength" to 5))
+            ).compileAndLint(code)
+        ).isEmpty()
+    }
 }
