@@ -62,7 +62,7 @@ val detektTask = tasks.register<JavaExec>("detekt") {
 }
 
 dependencies {
-    detekt("io.gitlab.arturbosch.detekt:detekt-cli:[detekt_version])
+    detekt("io.gitlab.arturbosch.detekt:detekt-cli:[detekt_version]")
 }
 
 // Remove this block if you don't want to run detekt on every build
