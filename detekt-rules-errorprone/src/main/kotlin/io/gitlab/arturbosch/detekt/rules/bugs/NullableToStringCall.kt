@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.types.isFlexible
 import org.jetbrains.kotlin.types.isNullable
 
 /**
- * Turn on this rule to flag 'toString' calls with a nullable receiver that may return the string "null".
+ * Reports `toString()` calls with a nullable receiver that may return the string "null".
  *
  * <noncompliant>
  * fun foo(a: Any?): String {
@@ -55,7 +55,7 @@ class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Defect,
-        "This call may return the string \"null\"",
+        "`toString()` on nullable receiver may return the string \"null\"",
         Debt.FIVE_MINS
     )
 

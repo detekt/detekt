@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class KDocReferencesNonPublicPropertySpec {
@@ -22,6 +22,23 @@ class KDocReferencesNonPublicPropertySpec {
             }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
+
+    @Test
+    fun `does not report referenced non-public properties in primary constructor`() {
+        val code = """
+            /**
+             * Comment
+             * [prop1] - non-public property
+             * [prop2] - public property
+             */
+            class Test(
+                private val nonReferencedProp: Int = 0,
+                private val prop1: Int = 0,
+                val prop2: Int = 0,
+            )
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -126,6 +143,54 @@ class KDocReferencesNonPublicPropertySpec {
                 }
                 object C {
                     val prop3 = 0
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report local variable with the same name as a public property`() {
+        val code = """
+            /**
+             * [prop] - public property
+             */
+            class Test {
+                val prop: String = ""
+
+                fun foo(): Int {
+                    val prop = 0
+                    return prop
+                } 
+
+                companion object {
+                    fun foo(): Int {
+                        val prop = 0
+                        return prop
+                    } 
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report local variable with the same name as a public constructor property`() {
+        val code = """
+            /**
+             * [prop] - public property
+             */
+            class Test(val prop: String) {
+                fun foo(): Int {
+                    val prop = 0
+                    return prop
+                } 
+
+                companion object {
+                    fun foo(): Int {
+                        val prop = 0
+                        return prop
+                    } 
                 }
             }
         """.trimIndent()

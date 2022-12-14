@@ -10,6 +10,7 @@ pluginManagement {
 include("code-coverage-report")
 include("detekt-api")
 include("detekt-cli")
+include("detekt-compiler-plugin")
 include("detekt-core")
 include("detekt-formatting")
 include("detekt-generator")
@@ -44,7 +45,7 @@ enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
 // build scan plugin can only be applied in settings file
 plugins {
-    id("com.gradle.enterprise") version "3.11.4"
+    id("com.gradle.enterprise") version "3.12"
     id("com.gradle.common-custom-user-data-gradle-plugin") version "1.8.2"
 }
 

@@ -42,10 +42,12 @@ snakeyaml = "org.yaml:snakeyaml:1.33"
 jcommander = "com.beust:jcommander:1.82"
 contester-breakpoint = { module = "io.github.davidburstrom.contester:contester-breakpoint", version.ref = "contester" }
 contester-driver = { module = "io.github.davidburstrom.contester:contester-driver", version.ref = "contester" }
+kotlinCompileTesting = { module = "com.github.tschuchortdev:kotlin-compile-testing", version = "1.4.9" }
 
 [plugins]
 binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.12.1" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+download = { id = "de.undercouch.download", version = "5.3.0" }
 gradleVersions = { id = "com.github.ben-manes.versions", version = "0.44.0" }
 pluginPublishing = { id = "com.gradle.plugin-publish", version = "1.1.0" }
 shadow = { id = "com.github.johnrengelman.shadow", version = "7.1.2" }
