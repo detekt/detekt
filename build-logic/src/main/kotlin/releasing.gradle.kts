@@ -10,8 +10,6 @@ nexusPublishing {
 
     repositories {
         create("sonatype") {
-            stagingProfileId.set("1d8efc8232c5c")
-
             username.set(
                 findProperty("sonatypeUsername")
                     ?.toString()
