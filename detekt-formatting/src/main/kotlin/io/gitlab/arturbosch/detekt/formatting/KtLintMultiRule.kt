@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.BlockCommentInitialStarAl
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ContextReceiverMapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.DiscouragedCommentLocation
 import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumEntryNameCase
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Filename
@@ -124,6 +125,7 @@ class KtLintMultiRule(config: Config = Config.empty) :
         // Wrappers for ktlint-ruleset-experimental rules. Disabled by default.
         BlockCommentInitialStarAlignment(config),
         CommentWrapping(config),
+        ContextReceiverMapping(config),
         DiscouragedCommentLocation(config),
         FunctionReturnTypeSpacing(config),
         FunKeywordSpacing(config),
