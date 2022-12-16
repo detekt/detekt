@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
-import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties
 import com.pinterest.ktlint.core.api.editorconfig.EditorConfigProperty
+import com.pinterest.ktlint.core.api.editorconfig.MAX_LINE_LENGTH_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.ParameterListWrappingRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.config
@@ -31,6 +31,6 @@ class ParameterListWrapping(config: Config) : FormattingRule(config) {
 
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
         mapOf(
-            DefaultEditorConfigProperties.maxLineLengthProperty to maxLineLength.toString()
+            MAX_LINE_LENGTH_PROPERTY to maxLineLength.toString()
         )
 }

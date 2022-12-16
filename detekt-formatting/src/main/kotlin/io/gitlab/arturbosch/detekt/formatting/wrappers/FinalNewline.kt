@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
-import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties
 import com.pinterest.ktlint.core.api.editorconfig.EditorConfigProperty
+import com.pinterest.ktlint.core.api.editorconfig.INSERT_FINAL_NEWLINE_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.FinalNewlineRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.config
@@ -27,5 +27,5 @@ class FinalNewline(config: Config) : FormattingRule(config) {
     private val insertFinalNewLine by config(true)
 
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
-        mapOf(DefaultEditorConfigProperties.insertNewLineProperty to insertFinalNewLine.toString())
+        mapOf(INSERT_FINAL_NEWLINE_PROPERTY to insertFinalNewLine.toString())
 }

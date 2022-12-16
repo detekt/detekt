@@ -22,7 +22,7 @@ class NoWildcardImports(config: Config) : FormattingRule(config) {
 
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
         mapOf(
-            NoWildcardImportsRule.packagesToUseImportOnDemandProperty to packagesToUseImportOnDemandProperty
+            NoWildcardImportsRule.IJ_KOTLIN_PACKAGES_TO_USE_IMPORT_ON_DEMAND to packagesToUseImportOnDemandProperty
         )
 
     companion object {

@@ -1,7 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
-import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties
 import com.pinterest.ktlint.core.api.editorconfig.EditorConfigProperty
+import com.pinterest.ktlint.core.api.editorconfig.INDENT_SIZE_PROPERTY
+import com.pinterest.ktlint.core.api.editorconfig.MAX_LINE_LENGTH_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.ArgumentListWrappingRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.config
@@ -29,7 +30,7 @@ class ArgumentListWrapping(config: Config) : FormattingRule(config) {
 
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
         mapOf(
-            DefaultEditorConfigProperties.indentSizeProperty to indentSize.toString(),
-            DefaultEditorConfigProperties.maxLineLengthProperty to maxLineLength.toString()
+            INDENT_SIZE_PROPERTY to indentSize.toString(),
+            MAX_LINE_LENGTH_PROPERTY to maxLineLength.toString()
         )
 }

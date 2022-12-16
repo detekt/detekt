@@ -32,7 +32,7 @@ class TrailingCommaOnDeclarationSite(config: Config) : FormattingRule(config) {
 
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
         mapOf(
-            TrailingCommaOnDeclarationSiteRule.allowTrailingCommaProperty to
+            TrailingCommaOnDeclarationSiteRule.TRAILING_COMMA_ON_DECLARATION_SITE_PROPERTY to
                 useTrailingCommaOnDeclarationSite.toString(),
         )
 }

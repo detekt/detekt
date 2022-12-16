@@ -32,6 +32,6 @@ class TrailingCommaOnCallSite(config: Config) : FormattingRule(config) {
 
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
         mapOf(
-            TrailingCommaOnCallSiteRule.allowTrailingCommaOnCallSiteProperty to useTrailingCommaOnCallSite.toString(),
+            TrailingCommaOnCallSiteRule.TRAILING_COMMA_ON_CALL_SITE_PROPERTY to useTrailingCommaOnCallSite.toString(),
         )
 }

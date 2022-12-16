@@ -1,9 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.pinterest.ktlint.core.KtLint
 import com.pinterest.ktlint.core.Rule.VisitorModifier.RunAsLateAsPossible
-import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties.codeStyleSetProperty
 import com.pinterest.ktlint.core.api.EditorConfigProperties
+import com.pinterest.ktlint.core.api.editorconfig.CODE_STYLE_PROPERTY
 import com.pinterest.ktlint.core.api.editorconfig.EditorConfigProperty
 import io.github.detekt.psi.fileName
 import io.github.detekt.psi.toFilePath
@@ -78,7 +77,6 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         this.root = root
         positionByOffset = KtLintLineColCalculator
             .calculateLineColByOffset(KtLintLineColCalculator.normalizeText(root.text))
-        root.node.putUserData(KtLint.FILE_PATH_USER_DATA_KEY, root.name)
 
         wrapping.beforeFirstNode(computeEditorConfigProperties())
         root.node.visitASTNodes()
@@ -92,7 +90,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
             ?: mutableMapOf()
 
         if (isAndroid) {
-            usesEditorConfigProperties[codeStyleSetProperty] = "android"
+            usesEditorConfigProperties[CODE_STYLE_PROPERTY] = "android"
         }
 
         return buildMap {
