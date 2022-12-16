@@ -69,6 +69,8 @@ formatting:
   active: true
   android: false
   autoCorrect: true
+  ContextReceiverMapping:
+    active: true
   Filename:
     active: false
   FunctionReturnTypeSpacing:
