@@ -10,16 +10,8 @@ nexusPublishing {
 
     repositories {
         create("sonatype") {
-            username.set(
-                findProperty("sonatypeUsername")
-                    ?.toString()
-                    ?: System.getenv("MAVEN_CENTRAL_USER")
-            )
-            password.set(
-                findProperty("sonatypePassword")
-                    ?.toString()
-                    ?: System.getenv("MAVEN_CENTRAL_PW")
-            )
+            System.getenv("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")?.let { username.set(it) }
+            System.getenv("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")?.let { password.set(it) }
         }
     }
 }
