@@ -25,7 +25,7 @@ jobs:
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3
+        uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b # v3
 
       - name: Setup Java
         uses: actions/setup-java@1df8dbefe2a8cbc99770194893dd902763bee34b # v3
@@ -53,7 +53,7 @@ jobs:
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3
+        uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b # v3
 
       - name: Setup Java
         uses: actions/setup-java@1df8dbefe2a8cbc99770194893dd902763bee34b # v3
