@@ -56,8 +56,8 @@ class UnusedUnaryOperator(config: Config = Config.empty) : Rule(config) {
         if (operationToken != KtTokens.PLUS && operationToken != KtTokens.MINUS) return
 
         if (expression.node.leaves(forward = false)
-            .takeWhile { it is PsiWhiteSpace || it is PsiComment }
-            .none { it is PsiWhiteSpace && it.textContains('\n') }
+                .takeWhile { it is PsiWhiteSpace || it is PsiComment }
+                .none { it is PsiWhiteSpace && it.textContains('\n') }
         ) {
             return
         }
