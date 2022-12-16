@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
-import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
+import com.pinterest.ktlint.core.api.editorconfig.EditorConfigProperty
 import com.pinterest.ktlint.ruleset.standard.TrailingCommaOnCallSiteRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.configWithAndroidVariants
@@ -30,7 +30,7 @@ class TrailingCommaOnCallSite(config: Config) : FormattingRule(config) {
         defaultAndroidValue = false,
     )
 
-    override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
+    override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
         mapOf(
             TrailingCommaOnCallSiteRule.allowTrailingCommaOnCallSiteProperty to useTrailingCommaOnCallSite.toString(),
         )

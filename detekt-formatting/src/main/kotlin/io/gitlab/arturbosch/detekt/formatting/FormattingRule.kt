@@ -4,7 +4,7 @@ import com.pinterest.ktlint.core.KtLint
 import com.pinterest.ktlint.core.Rule.VisitorModifier.RunAsLateAsPossible
 import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties.codeStyleSetProperty
 import com.pinterest.ktlint.core.api.EditorConfigProperties
-import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
+import com.pinterest.ktlint.core.api.editorconfig.EditorConfigProperty
 import io.github.detekt.psi.fileName
 import io.github.detekt.psi.toFilePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
@@ -85,7 +85,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         wrapping.afterLastNode()
     }
 
-    open fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String>? = null
+    open fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String>? = null
 
     private fun computeEditorConfigProperties(): EditorConfigProperties {
         val usesEditorConfigProperties = overrideEditorConfigProperties()?.toMutableMap()
