@@ -1,7 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
-import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties
-import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
+import com.pinterest.ktlint.core.api.editorconfig.EditorConfigProperty
+import com.pinterest.ktlint.core.api.editorconfig.INDENT_SIZE_PROPERTY
+import com.pinterest.ktlint.core.api.editorconfig.MAX_LINE_LENGTH_PROPERTY
 import com.pinterest.ktlint.ruleset.experimental.FunctionSignatureRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.config
@@ -32,12 +33,12 @@ class FunctionSignature(config: Config) : FormattingRule(config) {
     @Configuration("indentation size")
     private val indentSize by config(4)
 
-    override fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String> =
+    override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
         mapOf(
-            FunctionSignatureRule.forceMultilineWhenParameterCountGreaterOrEqualThanProperty to
+            FunctionSignatureRule.FORCE_MULTILINE_WHEN_PARAMETER_COUNT_GREATER_OR_EQUAL_THAN_PROPERTY to
                 forceMultilineWhenParameterCountGreaterOrEqualThan.toString(),
-            FunctionSignatureRule.functionBodyExpressionWrappingProperty to functionBodyExpressionWrapping,
-            DefaultEditorConfigProperties.maxLineLengthProperty to maxLineLength.toString(),
-            DefaultEditorConfigProperties.indentSizeProperty to indentSize.toString(),
+            FunctionSignatureRule.FUNCTION_BODY_EXPRESSION_WRAPPING_PROPERTY to functionBodyExpressionWrapping,
+            MAX_LINE_LENGTH_PROPERTY to maxLineLength.toString(),
+            INDENT_SIZE_PROPERTY to indentSize.toString(),
         )
 }

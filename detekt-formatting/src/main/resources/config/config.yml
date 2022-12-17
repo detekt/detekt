@@ -26,6 +26,11 @@ formatting:
     active: false
     autoCorrect: true
     indentSize: 4
+  ContextReceiverMapping:
+    active: false
+    autoCorrect: true
+    maxLineLength: 120
+    indentSize: 4
   DiscouragedCommentLocation:
     active: false
     autoCorrect: true

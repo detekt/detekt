@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.pinterest.ktlint.core.ast.visit
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.compileForTest
 import io.github.detekt.test.utils.resource
