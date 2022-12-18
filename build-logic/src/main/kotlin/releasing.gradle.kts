@@ -2,18 +2,18 @@ import com.vdurmont.semver4j.Semver
 
 plugins {
     id("com.github.breadmoirai.github-release")
-    id("io.codearte.nexus-staging")
+    id("io.github.gradle-nexus.publish-plugin")
 }
 
-nexusStaging {
-    packageGroup = "io.gitlab.arturbosch"
-    stagingProfileId = "1d8efc8232c5c"
-    username = findProperty("sonatypeUsername")
-        ?.toString()
-        ?: System.getenv("MAVEN_CENTRAL_USER")
-    password = findProperty("sonatypePassword")
-        ?.toString()
-        ?: System.getenv("MAVEN_CENTRAL_PW")
+nexusPublishing {
+    packageGroup.set("io.gitlab.arturbosch")
+
+    repositories {
+        create("sonatype") {
+            System.getenv("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")?.let { username.set(it) }
+            System.getenv("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")?.let { password.set(it) }
+        }
+    }
 }
 
 project.afterEvaluate {
