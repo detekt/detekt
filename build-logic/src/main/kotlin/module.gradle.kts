@@ -27,12 +27,12 @@ tasks.withType<PublishToMavenRepository>().configureEach {
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
     systemProperty("junit.jupiter.testinstance.lifecycle.default", "per_class")
-    val compileSnippetText: Boolean = if (project.hasProperty("compile-test-snippets")) {
+    val compileTestSnippets: Boolean = if (project.hasProperty("compile-test-snippets")) {
         (project.property("compile-test-snippets") as String).toBoolean()
     } else {
         false
     }
-    systemProperty("compile-snippet-tests", compileSnippetText)
+    systemProperty("compile-test-snippets", compileTestSnippets)
     testLogging {
         // set options for log level LIFECYCLE
         events = setOf(
