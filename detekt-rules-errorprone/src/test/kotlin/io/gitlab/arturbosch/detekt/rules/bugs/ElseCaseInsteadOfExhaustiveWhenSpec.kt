@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
@@ -149,6 +150,114 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
             assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `Various ignoreSubjectTypes configurations` {
+
+        @Test
+        fun `does not report if _when_ contains _else_ case for ignored _enum_ subject type`() {
+            val code = """
+            package com.example
+
+            enum class Color {
+                RED,
+                GREEN,
+                BLUE
+            }
+
+            fun whenOnEnumPasses(c: Color) {
+                when (c) {
+                    Color.BLUE -> {}
+                    Color.GREEN -> {}
+                    else -> {}
+                }
+            }
+            """.trimIndent()
+            assertThat(
+                ElseCaseInsteadOfExhaustiveWhen(
+                    TestConfig(mapOf("ignoredSubjectTypes" to listOf("com.example.Color")))
+                ).compileAndLintWithContext(env, code)
+            ).isEmpty()
+        }
+
+        @Test
+        fun `does not report if _when_ contains _else_ case for ignored _sealed_ subject type`() {
+            val code = """
+                package com.example
+
+                sealed class Variant {
+                    object VariantA : Variant()
+                    class VariantB : Variant()
+                    object VariantC : Variant()
+                }
+
+                fun whenOnSealedPasses(v: Variant) {
+                    when (v) {
+                        is Variant.VariantA -> {}
+                        is Variant.VariantB -> {}
+                        else -> {}
+                    }
+                }
+            """.trimIndent()
+            assertThat(
+                ElseCaseInsteadOfExhaustiveWhen(
+                    TestConfig(mapOf("ignoredSubjectTypes" to listOf("com.example.Variant")))
+                ).compileAndLintWithContext(env, code)
+            ).isEmpty()
+        }
+
+        @Test
+        fun `reports if _when_ contains _else_ case for non-ignored _enum_ subject type`() {
+            val code = """
+            package com.example
+
+            enum class Color {
+                RED,
+                GREEN,
+                BLUE
+            }
+
+            fun whenOnEnumFails(c: Color) {
+                when (c) {
+                    Color.BLUE -> {}
+                    Color.GREEN -> {}
+                    else -> {}
+                }
+            }
+            """.trimIndent()
+            assertThat(
+                ElseCaseInsteadOfExhaustiveWhen(
+                    TestConfig(mapOf("ignoredSubjectTypes" to listOf("com.example.Class")))
+                ).compileAndLintWithContext(env, code)
+            ).hasSize(1)
+        }
+
+        @Test
+        fun `reports if _when_ contains _else_ case for non-ignored _sealed_ subject type`() {
+            val code = """
+                package com.example
+
+                sealed class Variant {
+                    object VariantA : Variant()
+                    class VariantB : Variant()
+                    object VariantC : Variant()
+                }
+
+                fun whenOnSealedPasses(v: Variant) {
+                    when (v) {
+                        is Variant.VariantA -> {}
+                        is Variant.VariantB -> {}
+                        else -> {}
+                    }
+                }
+            """.trimIndent()
+            assertThat(
+                ElseCaseInsteadOfExhaustiveWhen(
+                    TestConfig(mapOf("ignoredSubjectTypes" to listOf("com.example.Class")))
+                ).compileAndLintWithContext(env, code)
+            ).hasSize(1)
         }
     }
 
