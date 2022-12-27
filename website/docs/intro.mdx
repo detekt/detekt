@@ -10,12 +10,12 @@ summary:
 
 ### Features
 
-- Code smell analysis for your [Kotlin projects](https://kotlinlang.org/).
+- Code smell analysis for your [Kotlin](https://kotlinlang.org/) projects.
 - Highly configurable rule sets.
-- Code Smell baseline and suppression for legacy projects.
-- Suppression of findings with `@Suppress` annotations.
-- Support for different report formats: html, markdown, [SARIF](https://sarifweb.azurewebsites.net/) and xml (checkstyle). Is it not enough? You can extend detekt and create your own reports.
-- Extensibility by enabling incorporation of personal rule sets, `FileProcessListener's` and `OutputReport's`.
+- Generate baselines to suppress existing issues for legacy projects while making sure no new issues are introduced.
+- Suppress issues in source files using `@Suppress` annotations.
+- Support for different report formats: HTML, Markdown, [SARIF](https://sarifweb.azurewebsites.net/), XML (Checkstyle) and custom reports.
+- [Extend detekt](introduction/extensions) with custom rule sets and reports.
 - Complexity reports based on lines of code, cyclomatic complexity and number of code smells.
 - First party integration with Gradle with our [Gradle plugin](#with-gradle).
 - A community of [third party plugins](https://github.com/topics/detekt-plugin) that adds more rules and features to detekt.
@@ -26,7 +26,7 @@ Apply the following configuration to your Gradle project build file:
 
 ```kotlin
 plugins {
-    id("io.gitlab.arturbosch.detekt").version("[detekt_version]")
+    id("io.gitlab.arturbosch.detekt") version("[detekt_version]")
 }
 
 repositories {
@@ -34,13 +34,12 @@ repositories {
 }
 ```
 
-The format is very similar if you use the Gradle Groovy DSL. You can find what is the **latest version of detekt** in
-the [release notes](/docs/introduction/changelog).
+You can find what is the **latest version of detekt** in the [release notes](/changelog).
 
-Once you have set up detekt in your project, simply run `gradle detekt`.
+Once you have set up detekt in your project, simply run `gradlew detekt`.
 
-To change the default behaviour of detekt rules, first generate yourself a detekt configuration file by running the
-`detektGenerateConfig` task and applying any changes to the generated file.
+To change the default behaviour of detekt rules, first generate yourself a detekt configuration file by running
+`gradlew detektGenerateConfig` task and applying any changes to the generated file.
 
 Don't forget to reference the newly generated config inside the `detekt { }` closure. Optionally, it is possible to
 slim down the configuration file to only the changes from the default configuration, by applying the
@@ -82,17 +81,15 @@ tasks.withType(Detekt).configureEach {
 }
 ```
 
-See [reporting](/docs/introduction/reporting) docs for more details on configuring reports.
+See [reporting](introduction/reporting) docs for more details on configuring reports.
 
 ### Adding more rule sets
 
 detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as the `formatting` rule set
-which can be easily added to the gradle configuration:
+which can be easily added to the Gradle configuration:
 
 ```gradle
 dependencies {
-    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:[detekt_version]"
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:[detekt_version]")
 }
 ```
-
-Likewise custom [extensions](/docs/introduction/extensions) can be added to detekt.

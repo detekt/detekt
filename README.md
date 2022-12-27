@@ -18,12 +18,12 @@ Visit [the project website](https://detekt.dev/) for installation guides, rule d
 
 ### Features
 
-- Code smell analysis for your [Kotlin projects](https://kotlinlang.org/).
+- Code smell analysis for your [Kotlin](https://kotlinlang.org/) projects.
 - Highly configurable rule sets.
-- Code Smell baseline and suppression for legacy projects.
-- Suppression of findings with `@Suppress` annotations.
-- Support for different report formats: html, markdown, [SARIF](https://sarifweb.azurewebsites.net/) and xml (checkstyle). Is it not enough? You can extend detekt and create your own reports. 
-- Extensibility by enabling incorporation of personal rule sets, `FileProcessListener's` and `OutputReport's`.
+- Generate baselines to suppress existing issues for legacy projects while making sure no new issues are introduced.
+- Suppress issues in source files using `@Suppress` annotations.
+- Support for different report formats: HTML, Markdown, [SARIF](https://sarifweb.azurewebsites.net/), XML (Checkstyle) and custom reports.
+- [Extend detekt](https://detekt.dev/docs/introduction/extensions) with custom rule sets and reports.
 - Complexity reports based on lines of code, cyclomatic complexity and number of code smells.
 - First party integration with Gradle with our [Gradle plugin](#with-gradle).
 - A community of [third party plugins](https://github.com/topics/detekt-plugin) that adds more rules and features to detekt.
@@ -109,7 +109,7 @@ If you want to use a SNAPSHOT version, you can find more info on [this documenta
 Gradle 6.7.1+ is the minimum requirement. However, the recommended versions together with the other tools recommended versions are:
 
 | Detekt Version | Gradle  | Kotlin   | AGP     | Java Target Level | JDK Max Version |
-| -------------- | ------- | -------- | ------- | ----------------- | --------------- |
+|----------------|---------|----------|---------|-------------------|-----------------|
 | `1.22.0`       | `7.5.1` | `1.7.21` | `7.3.1` | `1.8`             | `17`            |
 
 The list of [recommended versions for previous detekt version is listed here](https://detekt.dev/compatibility.html).
