@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+
 plugins {
     id("module")
     `java-gradle-plugin`
@@ -162,14 +164,12 @@ tasks.withType<Sign>().configureEach {
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions {
-        apiVersion = "1.4"
-        freeCompilerArgs += listOf(
-            "-Xsuppress-version-warnings",
-        )
+    compilerOptions {
+        apiVersion.set(KotlinVersion.KOTLIN_1_4)
+        freeCompilerArgs.add("-Xsuppress-version-warnings")
         // Note: Currently there are warnings for detekt-gradle-plugin that seemingly can't be fixed
         //       until Gradle releases an update (https://github.com/gradle/gradle/issues/16345)
-        allWarningsAsErrors = false
+        allWarningsAsErrors.set(false)
     }
 }
 
