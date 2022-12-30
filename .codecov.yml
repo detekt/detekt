@@ -1,3 +1,6 @@
+codecov:
+  branch: main
+
 coverage:
   status:
     # master branch only
