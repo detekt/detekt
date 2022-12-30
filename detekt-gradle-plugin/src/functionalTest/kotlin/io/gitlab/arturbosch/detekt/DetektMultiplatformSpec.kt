@@ -221,7 +221,7 @@ class DetektMultiplatformSpec {
                     buildFileContent = """
                     $KMM_PLUGIN_BLOCK
                     kotlin {
-                        js {
+                        js(IR) {
                             browser()
                         }
                     }

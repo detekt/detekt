@@ -1,8 +1,10 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 object Versions {
 
     const val DETEKT: String = "1.22.0"
     const val SNAPSHOT_NAME: String = "main"
-    const val JVM_TARGET: String = "1.8"
+    val JVM_TARGET: JvmTarget = JvmTarget.JVM_1_8
 
     fun currentOrSnapshot(): String {
         if (System.getProperty("snapshot")?.toBoolean() == true) {

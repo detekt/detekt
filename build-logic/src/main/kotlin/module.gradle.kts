@@ -45,12 +45,10 @@ tasks.withType<Test>().configureEach {
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = Versions.JVM_TARGET
-        freeCompilerArgs += listOf(
-            "-progressive",
-        )
-        allWarningsAsErrors = project.findProperty("warningsAsErrors") == "true"
+    compilerOptions {
+        jvmTarget.set(Versions.JVM_TARGET)
+        freeCompilerArgs.add("-progressive")
+        allWarningsAsErrors.set(project.findProperty("warningsAsErrors") == "true")
     }
 }
 
