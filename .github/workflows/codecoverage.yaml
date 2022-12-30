@@ -8,9 +8,6 @@ on:
     branches:
       - '**'
 
-env:
-  GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
-
 permissions:
   contents: read
 
@@ -32,6 +29,8 @@ jobs:
         uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
         with:
           arguments: jacocoMergedReport
+        env:
+          GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
 
       - name: Publish Coverage
         if: success()
