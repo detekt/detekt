@@ -36,3 +36,5 @@ jobs:
       - name: Publish Coverage
         if: success()
         uses: codecov/codecov-action@d9f34f8cd5cb3b3eb79b3e4b5dae3a16df499a70 # tag=v3
+        with:
+          files: ./code-coverage-report/build/reports/jacoco/jacocoMergedReport/jacocoMergedReport.xml
