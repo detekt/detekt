@@ -42,6 +42,11 @@ javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElement
     skip()
 }
 
+tasks.test {
+    // https://github.com/detekt/detekt/issues/5646
+    enabled = false
+}
+
 tasks.shadowJar.configure {
     relocate("org.jetbrains.kotlin.com.intellij", "com.intellij")
     mergeServiceFiles()
