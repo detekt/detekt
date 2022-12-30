@@ -620,6 +620,13 @@ private val ANDROID_BLOCK = """
     android {
        compileSdk = 30
        namespace = "io.gitlab.arturbosch.detekt.app"
+       compileOptions {
+           sourceCompatibility = JavaVersion.VERSION_1_8
+           targetCompatibility = JavaVersion.VERSION_1_8
+       }
+       kotlinOptions {
+           jvmTarget = "1.8"
+       }
     }
 """.trimIndent()
 
@@ -639,6 +646,13 @@ private val ANDROID_BLOCK_WITH_FLAVOR = """
              dimension = "age"
            }
         }
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+        }
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
     }
 """.trimIndent()
 
@@ -652,6 +666,13 @@ private val ANDROID_BLOCK_WITH_VIEW_BINDING = """
         }
         buildFeatures {
             viewBinding = true
+        }
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+        }
+        kotlinOptions {
+            jvmTarget = "1.8"
         }
     }
 """.trimIndent()

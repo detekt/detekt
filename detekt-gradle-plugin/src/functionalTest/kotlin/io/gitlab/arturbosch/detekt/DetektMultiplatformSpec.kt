@@ -98,6 +98,7 @@ class DetektMultiplatformSpec {
                         kotlin {
                             jvm("jvmBackend")
                             jvm("jvmEmbedded")
+                            jvmToolchain(8)
                         }
                         $DETEKT_BLOCK
                     """.trimIndent(),
@@ -165,6 +166,7 @@ class DetektMultiplatformSpec {
                         }
                         kotlin {
                             android()
+                            jvmToolchain(8)
                         }
                         $DETEKT_BLOCK
                     """.trimIndent(),
