@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.types.error.ErrorType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
+import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 
 /**
  * In Kotlin functions `get` or `set` can be replaced with the shorter operator — `[]`,
@@ -39,6 +40,7 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * </compliant>
  */
 @RequiresTypeResolution
+@Suppress("ReturnCount")
 class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue =
@@ -64,6 +66,8 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
             null
         }
         if (getter == null) return false
+
+        expression.valueArguments.drop(1).any { it.isSpread }.ifTrue { return false }
 
         return canReplace(getter) && shouldReplace(getter)
     }
