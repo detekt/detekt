@@ -68,6 +68,19 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
     }
 
     @Test
+    fun `does not report unnecessary safe check chain to NonNullable type`() {
+        val code = """
+            class Foo {
+                fun test() {
+                    val z = 1?.and(2) as Int
+                }
+            }
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
     fun `does not report casting of Nullable type to NonNullable expression with assertion to NonNullable type`() {
         val code = """
             fun foo(bar: Any?) {
