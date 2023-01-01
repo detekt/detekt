@@ -67,7 +67,7 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
         }
         if (getter == null) return false
 
-        expression.valueArguments.drop(1).any { it.isSpread }.ifTrue { return false }
+        expression.valueArguments.any { it.isSpread }.ifTrue { return false }
 
         return canReplace(getter) && shouldReplace(getter)
     }
