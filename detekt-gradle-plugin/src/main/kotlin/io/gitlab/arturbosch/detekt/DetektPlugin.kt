@@ -84,12 +84,16 @@ class DetektPlugin : Plugin<Project> {
             configuration.isVisible = false
             configuration.isTransitive = true
             configuration.description = "The $CONFIGURATION_DETEKT_PLUGINS libraries to be used for this project."
+            configuration.isCanBeResolved = true
+            configuration.isCanBeConsumed = false
         }
 
         project.configurations.create(CONFIGURATION_DETEKT) { configuration ->
             configuration.isVisible = false
             configuration.isTransitive = true
             configuration.description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
+            configuration.isCanBeResolved = true
+            configuration.isCanBeConsumed = false
 
             configuration.defaultDependencies { dependencySet ->
                 val version = extension.toolVersion
