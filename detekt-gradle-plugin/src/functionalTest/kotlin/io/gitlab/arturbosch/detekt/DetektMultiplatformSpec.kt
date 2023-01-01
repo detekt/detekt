@@ -95,9 +95,14 @@ class DetektMultiplatformSpec {
                     1,
                     buildFileContent = """
                         $KMM_PLUGIN_BLOCK
+                        val targetType = Attribute.of("com.example.target.type", String::class.java)
+
                         kotlin {
-                            jvm("jvmBackend")
+                            jvm("jvmBackend") {
+                                attributes.attribute(targetType, "jvmBackend")
+                            }
                             jvm("jvmEmbedded")
+                            jvmToolchain(8)
                         }
                         $DETEKT_BLOCK
                     """.trimIndent(),
@@ -165,6 +170,7 @@ class DetektMultiplatformSpec {
                         }
                         kotlin {
                             android()
+                            jvmToolchain(8)
                         }
                         $DETEKT_BLOCK
                     """.trimIndent(),

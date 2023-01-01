@@ -78,12 +78,15 @@ dependencies {
 }
 
 gradlePlugin {
+    website.set("https://detekt.dev")
+    vcsUrl.set("https://github.com/detekt/detekt")
     plugins {
         create("detektPlugin") {
             id = "io.gitlab.arturbosch.detekt"
             implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
             displayName = "Static code analysis for Kotlin"
             description = "Static code analysis for Kotlin"
+            tags.set(listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android"))
         }
     }
     // Source sets that require the Gradle TestKit dependency
@@ -98,6 +101,7 @@ gradlePlugin {
         create("detektCompilerPlugin") {
             id = "io.github.detekt.gradle.compiler-plugin"
             implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
+            tags.set(listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android"))
         }
     }
 }
@@ -115,12 +119,6 @@ tasks.pluginUnderTestMetadata {
 
 tasks.validatePlugins {
     enableStricterValidation.set(true)
-}
-
-pluginBundle {
-    website = "https://detekt.dev"
-    vcsUrl = "https://github.com/detekt/detekt"
-    tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
 }
 
 tasks {

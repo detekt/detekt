@@ -106,6 +106,13 @@ class ReportMergeSpec {
                     android {
                        compileSdk = 30
                        namespace = "io.github.detekt.app"
+                       compileOptions {
+                           sourceCompatibility = JavaVersion.VERSION_11
+                           targetCompatibility = JavaVersion.VERSION_11
+                       }
+                    }
+                    kotlin {
+                        jvmToolchain(11)
                     }
                     dependencies {
                         implementation(project(":lib"))
@@ -124,6 +131,13 @@ class ReportMergeSpec {
                     android {
                        compileSdk = 30
                        namespace = "io.github.detekt.lib"
+                       compileOptions {
+                           sourceCompatibility = JavaVersion.VERSION_11
+                           targetCompatibility = JavaVersion.VERSION_11
+                       }
+                    }
+                    kotlin {
+                        jvmToolchain(11)
                     }
                 """.trimIndent(),
                 srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
