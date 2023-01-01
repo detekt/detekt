@@ -76,13 +76,10 @@ fun KtExpression.getDataFlowAwareTypes(
 @Suppress("ReturnCount")
 fun KtExpression.isNullable(
     bindingContext: BindingContext,
-    languageVersionSettings: LanguageVersionSettings?,
-    dataFlowValueFactory: DataFlowValueFactory?,
+    languageVersionSettings: LanguageVersionSettings,
+    dataFlowValueFactory: DataFlowValueFactory,
     shouldConsiderPlatformTypeAsNullable: Boolean,
 ): Boolean {
-    languageVersionSettings ?: return false
-    dataFlowValueFactory ?: return false
-
     val safeAccessOperation = safeAs<KtSafeQualifiedExpression>()?.operationTokenNode?.safeAs<PsiElement>()
     if (safeAccessOperation != null) {
         return bindingContext.diagnostics.forElement(safeAccessOperation).none {

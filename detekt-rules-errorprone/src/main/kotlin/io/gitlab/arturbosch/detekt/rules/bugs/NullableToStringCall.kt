@@ -64,14 +64,18 @@ class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
             simpleOrCallExpression.descriptor(bindingContext)?.fqNameOrNull() == toString
         ) {
             report(targetExpression)
-        } else if (targetExpression.parent is KtStringTemplateEntry && targetExpression.isNullable(
-                bindingContext,
-                compilerResources?.languageVersionSettings,
-                compilerResources?.dataFlowValueFactory,
-                shouldConsiderPlatformTypeAsNullable = false,
-            )
-        ) {
-            report(targetExpression.parent)
+        } else if (targetExpression.parent is KtStringTemplateEntry) {
+            compilerResources?.let { compilerResources ->
+                if (targetExpression.isNullable(
+                        bindingContext,
+                        compilerResources.languageVersionSettings,
+                        compilerResources.dataFlowValueFactory,
+                        shouldConsiderPlatformTypeAsNullable = false,
+                    )
+                ) {
+                    report(targetExpression.parent)
+                }
+            }
         }
     }
 

@@ -51,10 +51,11 @@ class CastNullableToNonNullableType(config: Config = Config.empty) : Rule(config
         if (expression.left.text == KtTokens.NULL_KEYWORD.value) return
         val typeElement = expression.right?.typeElement ?: return
         (typeElement is KtNullableType).ifTrue { return }
+        val compilerResourcesNonNull = compilerResources ?: return
         expression.left.isNullable(
             bindingContext,
-            compilerResources?.languageVersionSettings,
-            compilerResources?.dataFlowValueFactory,
+            compilerResourcesNonNull.languageVersionSettings,
+            compilerResourcesNonNull.dataFlowValueFactory,
             shouldConsiderPlatformTypeAsNullable = true,
         ).ifFalse { return }
 
