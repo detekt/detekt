@@ -144,7 +144,6 @@ public final class io/gitlab/arturbosch/detekt/rules/TraversingKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/TypeUtilsKt {
-	public static final fun descriptor (Lorg/jetbrains/kotlin/psi/KtExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;)Lorg/jetbrains/kotlin/descriptors/CallableDescriptor;
 	public static final fun fqNameOrNull (Lorg/jetbrains/kotlin/types/KotlinType;)Lorg/jetbrains/kotlin/name/FqName;
 	public static final fun getDataFlowAwareTypes (Lorg/jetbrains/kotlin/psi/KtExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;Lorg/jetbrains/kotlin/types/KotlinType;)Ljava/util/Set;
 	public static synthetic fun getDataFlowAwareTypes$default (Lorg/jetbrains/kotlin/psi/KtExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;Lorg/jetbrains/kotlin/types/KotlinType;ILjava/lang/Object;)Ljava/util/Set;

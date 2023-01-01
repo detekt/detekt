@@ -98,5 +98,5 @@ fun KtExpression.isNullable(
     return dataFlowTypes.all { it.isNullable() }
 }
 
-fun KtExpression.descriptor(bindingContext: BindingContext): CallableDescriptor? =
+private fun KtExpression.descriptor(bindingContext: BindingContext): CallableDescriptor? =
     getResolvedCall(bindingContext)?.resultingDescriptor

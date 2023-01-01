@@ -8,10 +8,10 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-import io.gitlab.arturbosch.detekt.rules.descriptor
 import io.gitlab.arturbosch.detekt.rules.isNullable
 import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -19,6 +19,7 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
@@ -61,7 +62,7 @@ class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
         val targetExpression = simpleOrCallExpression.targetExpression() ?: return
 
         if (simpleOrCallExpression.safeAs<KtCallExpression>()?.calleeExpression?.text == "toString" &&
-            simpleOrCallExpression.descriptor(bindingContext)?.fqNameOrNull() == toString
+            simpleOrCallExpression.descriptor()?.fqNameOrNull() == toString
         ) {
             report(targetExpression)
         } else if (targetExpression.parent is KtStringTemplateEntry) {
@@ -98,6 +99,8 @@ class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
         )
         report(codeSmell)
     }
+
+    private fun KtExpression.descriptor(): CallableDescriptor? = getResolvedCall(bindingContext)?.resultingDescriptor
 
     companion object {
         val toString = FqName("kotlin.toString")
