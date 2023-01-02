@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 private const val CONVERSION_FUNCTION_PREFIX = "conversionFunctionPrefix"
+private const val ALLOW_OPERATORS = "allowOperators"
 
 class DataClassContainsFunctionsSpec {
     val subject = DataClassContainsFunctions()
@@ -40,6 +41,72 @@ class DataClassContainsFunctionsSpec {
             val config = TestConfig(mapOf(CONVERSION_FUNCTION_PREFIX to emptyList<String>()))
             val rule = DataClassContainsFunctions(config)
             assertThat(rule.compileAndLint(code)).hasSize(2)
+        }
+    }
+
+    @Nested
+    inner class `operators in data class` {
+        val code = """
+            data class Vector2(val x: Float, val y: Float) {
+                operator fun plus(other: Vector2): Vector2 = Vector2(x + other.x, y + other.y)
+            }
+        """.trimIndent()
+
+        @Test
+        fun `reports operators if not allowed by default`() {
+            val rule = DataClassContainsFunctions()
+            assertThat(rule.compileAndLint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports operators if not allowed`() {
+            val config = TestConfig(mapOf(ALLOW_OPERATORS to false))
+            val rule = DataClassContainsFunctions(config)
+            assertThat(rule.compileAndLint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report operators if allowed`() {
+            val config = TestConfig(mapOf(ALLOW_OPERATORS to true))
+            val rule = DataClassContainsFunctions(config)
+            assertThat(rule.compileAndLint(code)).isEmpty()
+        }
+
+        @Nested
+        inner class `operators in data class via class delegation` {
+            val code = """
+                interface VerticalLine {
+                    operator fun get(index: Int): Float
+                }
+
+                class VerticalLineImpl(private val xValue: Float) : VerticalLine {
+                    override fun get(index: Int): Float {
+                        return xValue
+                    }
+                }
+
+                data class VectorOnYAxis(val x: Float) : VerticalLine by VerticalLineImpl(0F)
+            """.trimIndent()
+
+            @Test
+            fun `does not report delegated operators if not allowed by default`() {
+                val rule = DataClassContainsFunctions()
+                assertThat(rule.compileAndLint(code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report delegated operators if not allowed`() {
+                val config = TestConfig(mapOf(ALLOW_OPERATORS to false))
+                val rule = DataClassContainsFunctions(config)
+                assertThat(rule.compileAndLint(code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report delegated operators if allowed`() {
+                val config = TestConfig(mapOf(ALLOW_OPERATORS to true))
+                val rule = DataClassContainsFunctions(config)
+                assertThat(rule.compileAndLint(code)).isEmpty()
+            }
         }
     }
 

@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.rules.isOperator
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -39,6 +40,9 @@ class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
     @Configuration("allowed conversion function names")
     private val conversionFunctionPrefix: List<String> by config(listOf("to"))
 
+    @Configuration("allows overloading an operator")
+    private val allowOperators by config(false)
+
     override fun visitClass(klass: KtClass) {
         if (klass.isData()) {
             klass.body?.declarations
@@ -52,7 +56,7 @@ class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
         if (function.isOverride()) return
 
         val functionName = function.name
-        if (functionName != null && conversionFunctionPrefix.any { functionName.startsWith(it) }) return
+        if (functionName != null && (isAllowedConversionFunction(functionName) || checkOperator(function))) return
 
         report(
             CodeSmell(
@@ -62,5 +66,13 @@ class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
                     "conversion functions. The offending method is called $functionName"
             )
         )
+    }
+
+    private fun checkOperator(function: KtNamedFunction): Boolean {
+        return allowOperators && function.isOperator()
+    }
+
+    private fun isAllowedConversionFunction(functionName: String): Boolean {
+        return conversionFunctionPrefix.any { functionName.startsWith(it) }
     }
 }
