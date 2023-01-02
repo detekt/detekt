@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test
 class ExplicitCollectionElementAccessMethodSpec {
     val subject = ExplicitCollectionElementAccessMethod(Config.empty)
 
-    @Suppress("ClassName")
     @Nested
     @KotlinCoreEnvironmentTest
     inner class WithDefaultSources(val env: KotlinCoreEnvironment) {
