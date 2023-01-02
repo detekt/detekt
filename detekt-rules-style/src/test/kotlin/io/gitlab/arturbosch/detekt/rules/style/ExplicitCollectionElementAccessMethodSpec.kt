@@ -476,7 +476,6 @@ class ExplicitCollectionElementAccessMethodSpec {
                             operator fun get(vararg objects: Int): String = objects.toString()
                         }
                         fun test(c: C) {
-                            val objects = listOf(0, 1).toIntArray()
                             c.get(0)
                         }
                     """.trimIndent()
