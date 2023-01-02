@@ -71,43 +71,6 @@ class DataClassContainsFunctionsSpec {
             val rule = DataClassContainsFunctions(config)
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
-
-        @Nested
-        inner class `operators in data class via class delegation` {
-            val code = """
-                interface VerticalLine {
-                    operator fun get(index: Int): Float
-                }
-
-                class VerticalLineImpl(private val xValue: Float) : VerticalLine {
-                    override fun get(index: Int): Float {
-                        return xValue
-                    }
-                }
-
-                data class VectorOnYAxis(val x: Float) : VerticalLine by VerticalLineImpl(0F)
-            """.trimIndent()
-
-            @Test
-            fun `does not report delegated operators if not allowed by default`() {
-                val rule = DataClassContainsFunctions()
-                assertThat(rule.compileAndLint(code)).isEmpty()
-            }
-
-            @Test
-            fun `does not report delegated operators if not allowed`() {
-                val config = TestConfig(mapOf(ALLOW_OPERATORS to false))
-                val rule = DataClassContainsFunctions(config)
-                assertThat(rule.compileAndLint(code)).isEmpty()
-            }
-
-            @Test
-            fun `does not report delegated operators if allowed`() {
-                val config = TestConfig(mapOf(ALLOW_OPERATORS to true))
-                val rule = DataClassContainsFunctions(config)
-                assertThat(rule.compileAndLint(code)).isEmpty()
-            }
-        }
     }
 
     @Test

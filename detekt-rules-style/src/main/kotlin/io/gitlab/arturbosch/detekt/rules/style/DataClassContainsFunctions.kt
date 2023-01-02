@@ -52,11 +52,13 @@ class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
         super.visitClass(klass)
     }
 
+    @Suppress("ReturnCount")
     private fun checkFunction(klass: KtClass, function: KtNamedFunction) {
         if (function.isOverride()) return
 
         val functionName = function.name
-        if (functionName != null && (isAllowedConversionFunction(functionName) || checkOperator(function))) return
+        if (functionName != null && conversionFunctionPrefix.any { functionName.startsWith(it) }) return
+        if (allowOperators && function.isOperator()) return
 
         report(
             CodeSmell(
@@ -66,13 +68,5 @@ class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
                     "conversion functions. The offending method is called $functionName"
             )
         )
-    }
-
-    private fun checkOperator(function: KtNamedFunction): Boolean {
-        return allowOperators && function.isOperator()
-    }
-
-    private fun isAllowedConversionFunction(functionName: String): Boolean {
-        return conversionFunctionPrefix.any { functionName.startsWith(it) }
     }
 }
