@@ -40,7 +40,6 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
  * </compliant>
  */
 @RequiresTypeResolution
-@Suppress("ReturnCount")
 class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue =
@@ -59,6 +58,7 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
         }
     }
 
+    @Suppress("ReturnCount")
     private fun isIndexGetterRecommended(expression: KtCallExpression): Boolean {
         val getter = if (expression.calleeExpression?.text == "get") {
             expression.getFunctionDescriptor()
@@ -100,6 +100,7 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
         return function.isOperator
     }
 
+    @Suppress("ReturnCount")
     private fun shouldReplace(function: FunctionDescriptor): Boolean {
         // The intent of kotlin operation functions is to support indexed accessed, so should always be replaced.
         if (!function.isFromJava) return true
