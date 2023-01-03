@@ -43,7 +43,6 @@ internal data class InputArgument(val fileCollection: FileCollection) : CliArgum
 
 internal data class RunRuleArgument(val rule: String) : CliArgument() {
     override fun toArgument() = if (rule.isNotEmpty()) {
-        println(">>> Run the only rule <<<")
         listOf(RUN_RULE_PARAMETER, rule)
     } else {
         emptyList()
