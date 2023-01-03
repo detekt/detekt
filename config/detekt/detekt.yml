@@ -79,8 +79,6 @@ formatting:
     active: true
   MaximumLineLength:
     active: false
-  NoSemicolons:
-    active: false # https://github.com/pinterest/ktlint/issues/1733
   NullableTypeSpacing:
     active: true
   ParameterListSpacing:
