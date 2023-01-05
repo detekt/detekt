@@ -127,8 +127,7 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
                 crossinlineBlock()
             }.toString() + noinlineBlock()
         
-            suspend fun bar()
-            {
+            suspend fun bar() {
                 runCatching {
                     foo(
                         noinlineBlock = {
@@ -159,11 +158,11 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
                 noinline noinlineBlock: suspend () -> Unit,
                 inlineBlock: () -> Unit,
                 crossinline crossinlineBlock: suspend () -> Unit,
-            ) = inlineBlock().toString() + MainScope().launch {
-                noinlineBlock()
-            }.toString() + runBlocking {
-                crossinlineBlock()
-            }.toString() + noinlineBlock()
+            ) =
+            inlineBlock().toString() +
+              MainScope().launch { noinlineBlock() }.toString() +
+              runBlocking { crossinlineBlock() }.toString() +
+              noinlineBlock()
         
             suspend fun bar()
             {
