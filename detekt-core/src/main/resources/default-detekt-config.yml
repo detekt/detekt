@@ -190,7 +190,7 @@ coroutines:
     active: true
   SleepInsteadOfDelay:
     active: true
-  SuspendFunInsideRunCatching:
+  SuspendFunSwallowedCancellation:
     active: false
   SuspendFunWithCoroutineScopeReceiver:
     active: false

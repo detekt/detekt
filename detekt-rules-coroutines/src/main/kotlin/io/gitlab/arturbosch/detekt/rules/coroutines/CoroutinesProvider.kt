@@ -22,7 +22,7 @@ class CoroutinesProvider : DefaultRuleSetProvider {
             SleepInsteadOfDelay(config),
             SuspendFunWithFlowReturnType(config),
             SuspendFunWithCoroutineScopeReceiver(config),
-            SuspendFunInsideRunCatching(config),
+            SuspendFunSwallowedCancellation(config),
         )
     )
 }

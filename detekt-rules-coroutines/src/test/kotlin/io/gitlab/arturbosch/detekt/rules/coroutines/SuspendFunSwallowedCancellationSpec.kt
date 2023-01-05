@@ -9,14 +9,14 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
+class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment) {
 
-    private val subject = SuspendFunInsideRunCatching(Config.empty)
+    private val subject = SuspendFunSwallowedCancellation(Config.empty)
 
     @Test
     fun `does report suspend function call in runCatching`() {
         val code = """
-            import kotlinx.coroutines.delay            
+            import kotlinx.coroutines.delay
 
             suspend fun foo() {
                 runCatching {
@@ -25,31 +25,33 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindings(findings, "delay(1000L)")
+        assertFindings(findings, "delay")
     }
 
     @Test
     fun `does report for in case of nested runCatching`() {
         val code = """
-            import kotlinx.coroutines.delay            
+            import kotlinx.coroutines.delay
+
+            suspend fun bar() = delay(2000)
 
             suspend fun foo() {
                 runCatching {
                     delay(1000L)
                     runCatching { 
-                        delay(2000L)
+                        bar()
                     }
                 }
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindings(findings, "delay(1000L)", "delay(2000L)")
+        assertFindings(findings, "delay", "bar")
     }
 
     @Test
     fun `does report for delay() in suspend functions`() {
         val code = """
-            import kotlinx.coroutines.delay            
+            import kotlinx.coroutines.delay
 
             suspend fun foo() {
                 runCatching {
@@ -58,7 +60,7 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindings(findings, "delay(1000L)")
+        assertFindings(findings, "delay")
     }
 
     @Test
@@ -75,9 +77,53 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `does report when _when_ is used in result`() {
+        val code = """
+            import kotlinx.coroutines.delay
+            suspend fun bar() = delay(1000L)
+            suspend fun foo(): Result<*> {
+                val result = runCatching { bar() }
+                when(result.isSuccess) {
+                    true -> TODO()
+                    false -> TODO()
+                }
+                return result
+            }
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertFindings(findings, "bar")
+    }
+
+    @Test
+    fun `does report when onSuccess is used in result`() {
+        val code = """
+            import kotlinx.coroutines.delay
+            suspend fun bar() = delay(1000L)
+            suspend fun foo() {
+                runCatching { bar() }.onSuccess { 
+                    TODO()
+                }
+            }
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertFindings(findings, "bar")
+    }
+
+    @Test
+    fun `does report when runCatching is used as function expression`() {
+        val code = """
+            import kotlinx.coroutines.delay
+            suspend fun bar() = delay(1000L)
+            suspend fun foo() = runCatching { bar() }
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertFindings(findings, "bar")
+    }
+
+    @Test
     fun `does not report when try catch is used`() {
         val code = """
-            import kotlinx.coroutines.delay            
+            import kotlinx.coroutines.delay
 
             suspend fun foo() {
                 try {
@@ -94,7 +140,7 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does report when suspend fun is called inside inline function`() {
         val code = """
-            import kotlinx.coroutines.delay            
+            import kotlinx.coroutines.delay
 
             suspend fun foo() {
                 runCatching {
@@ -106,7 +152,7 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindings(findings, "delay(it)")
+        assertFindings(findings, "delay")
     }
 
     @Test
@@ -123,9 +169,9 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
                 crossinline crossinlineBlock: suspend () -> Unit,
             ) = inlineBlock().toString() + MainScope().launch {
                 noinlineBlock()
-            }.toString() + runBlocking {
+            } + runBlocking {
                 crossinlineBlock()
-            }.toString() + noinlineBlock()
+            }.toString()
         
             suspend fun bar() {
                 runCatching {
@@ -142,10 +188,9 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindings(findings, "delay(1000L)")
+        assertFindings(findings, "delay")
     }
 
-    // Failing
     @Test
     fun `does report when inside inline function with noinline and cross inline parameters not in same order`() {
         val code = """
@@ -158,11 +203,11 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
                 noinline noinlineBlock: suspend () -> Unit,
                 inlineBlock: () -> Unit,
                 crossinline crossinlineBlock: suspend () -> Unit,
-            ) =
-            inlineBlock().toString() +
-              MainScope().launch { noinlineBlock() }.toString() +
-              runBlocking { crossinlineBlock() }.toString() +
-              noinlineBlock()
+            ) = inlineBlock().toString() + MainScope().launch {
+                noinlineBlock()
+            } + runBlocking {
+                crossinlineBlock()
+            }.toString()
         
             suspend fun bar()
             {
@@ -180,7 +225,7 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindings(findings, "delay(1000L)")
+        assertFindings(findings, "delay")
     }
 
     @Test
@@ -204,6 +249,60 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
 
         val findings = subject.compileAndLintWithContext(env, code)
         assertFindings(findings)
+    }
+
+    @Test
+    fun `does not report when lambda parameter chain has noinline function call`() {
+        val code = """
+            import kotlinx.coroutines.MainScope
+            import kotlinx.coroutines.delay
+            import kotlinx.coroutines.launch
+
+            inline fun <R> inline(block: () -> R) = block()
+            fun <R> noInline(block: suspend () -> R) = MainScope().launch { block() }
+        
+            suspend fun bar()
+            {
+                runCatching {
+                    inline {
+                        noInline {
+                            inline {
+                                delay(1000)
+                            }
+                        }
+                        
+                    }
+                }
+            }
+        """.trimIndent()
+
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertFindings(findings)
+    }
+
+    @Test
+    fun `does report when lambda parameter chain has all inlined function call`() {
+        val code = """
+            import kotlinx.coroutines.MainScope
+            import kotlinx.coroutines.delay
+            import kotlinx.coroutines.launch
+
+            inline fun <R> inline(block: () -> R) = block()
+        
+            suspend fun bar()
+            {
+                runCatching {
+                    inline {
+                        inline {
+                            delay(1000)
+                        }
+                    }
+                }
+            }
+        """.trimIndent()
+
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertFindings(findings, "delay")
     }
 
     @Test
@@ -252,10 +351,9 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
 
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-        assertFindings(findings, "await()")
+        assertFindings(findings, "await")
     }
 
-    // Failing
     @Test
     fun `does report when suspending iterator is used`() {
         val code = """
@@ -275,7 +373,12 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindings(findings, "iterator.next()")
+        assertThat(findings).hasSize(1)
+        assertThat(findings[0].message).isEqualTo(
+            "The for-loop expression has suspending operator which is called " +
+                "inside `runCatching`. You should either use specific `try-catch` only catching exception that you are " +
+                "expecting or rethrow the `CancellationException` if already caught."
+        )
     }
 
     @Test
@@ -292,7 +395,7 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindings(findings, "suspendBlock()")
+        assertFindings(findings, "invoke")
     }
 
     @Test
@@ -312,14 +415,7 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
 
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-        assertFindings(
-            findings,
-            """
-                suspendCancellableCoroutine {
-                            it.resume(Unit)
-                        }
-            """.trimIndent()
-        )
+        assertFindings(findings, "suspendCancellableCoroutine")
     }
 
     @Test
@@ -336,7 +432,7 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindings(findings, "invoke()")
+        assertFindings(findings, "invoke")
     }
 
     @Test
@@ -354,7 +450,7 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
 
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-        assertFindings(findings, "localFun()")
+        assertFindings(findings, "localFun")
     }
 
     @Test
@@ -375,7 +471,7 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindings(findings, "C()()", "invoke()")
+        assertFindings(findings, "invoke", "invoke")
     }
 
     @Test
@@ -415,7 +511,7 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindings(findings, "join()")
+        assertFindings(findings, "join")
     }
 
     @Test
@@ -455,7 +551,7 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindings(findings, "await()")
+        assertFindings(findings, "await")
     }
 
     @Test
@@ -514,16 +610,16 @@ class SuspendFunInsideRunCatchingSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindings(findings, "delay(1000)")
+        assertFindings(findings, "delay")
     }
 
     private fun assertFindings(findings: List<Finding>, vararg funCallExpression: String) {
         assertThat(findings).hasSize(funCallExpression.size)
         assertThat(findings.map { it.message }).containsExactlyInAnyOrder(
             *funCallExpression.map {
-                "The suspend function call $it is inside `runCatching`. You should either " +
-                    "use specific `try-catch` only catching exception that you are expecting or rethrow the " +
-                    "`CancellationException` if already caught"
+                "The suspend function call $it called inside " +
+                    "`runCatching`. You should either use specific `try-catch` only catching exception that you " +
+                    "are expecting or rethrow the `CancellationException` if already caught."
             }.toTypedArray()
         )
     }
