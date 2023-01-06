@@ -718,6 +718,7 @@ style:
     active: false
   UseIfInsteadOfWhen:
     active: false
+    ignoreWhenContainingVariableDeclaration: false
   UseIsNullOrEmpty:
     active: true
   UseOrEmpty:

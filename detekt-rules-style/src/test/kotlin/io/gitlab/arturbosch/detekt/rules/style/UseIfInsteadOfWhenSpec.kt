@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -63,5 +64,49 @@ class UseIfInsteadOfWhenSpec {
             }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    // TC inspired from https://github.com/JetBrains/kotlin/pull/2921/files
+    @Test
+    fun `does not report 'when' variable declaration is present in subject expression when flag is true`() {
+        val code = """
+            enum class Type {
+                HYDRO,
+                PYRO
+            }
+            
+            fun select(t: Type) {
+                when (val i = t.ordinal) {
+                    0 -> 1
+                    else -> 42
+                }
+            }
+        """.trimIndent()
+        val subject = UseIfInsteadOfWhen(TestConfig(IGNORE_WHEN_CONTAINING_VARIABLE_DECLARATION to true))
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    // TC inspired from https://github.com/JetBrains/kotlin/pull/2921/files
+    @Test
+    fun `does report 'when' variable declaration is present in subject expression when flag is false`() {
+        val code = """
+            enum class Type {
+                HYDRO,
+                PYRO
+            }
+            
+            fun select(t: Type) {
+                when (val i = t.ordinal) {
+                    0 -> 1
+                    else -> 42
+                }
+            }
+        """.trimIndent()
+        val subject = UseIfInsteadOfWhen(TestConfig(IGNORE_WHEN_CONTAINING_VARIABLE_DECLARATION to false))
+        assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
+
+    companion object {
+        private const val IGNORE_WHEN_CONTAINING_VARIABLE_DECLARATION = "ignoreWhenContainingVariableDeclaration"
     }
 }
