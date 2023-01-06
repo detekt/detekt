@@ -74,4 +74,4 @@ signing {
     isRequired = !(signingKey.isNullOrBlank() || signingPwd.isNullOrBlank())
 }
 
-val String.byProperty: String? get() = findProperty(this) as? String
+val String.byProperty: String? get() = providers.gradleProperty(this).orNull

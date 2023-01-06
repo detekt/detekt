@@ -22,7 +22,6 @@ import io.gitlab.arturbosch.detekt.invoke.JdkHomeArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
-import io.gitlab.arturbosch.detekt.invoke.isDryRunEnabled
 import org.gradle.api.Action
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
@@ -201,7 +200,7 @@ abstract class Detekt @Inject constructor(
         .dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
         .dir("detekt")
 
-    private val isDryRun: Boolean = project.isDryRunEnabled()
+    private val isDryRun = project.providers.gradleProperty(DRY_RUN_PROPERTY)
 
     init {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
@@ -250,7 +249,7 @@ abstract class Detekt @Inject constructor(
 
     @TaskAction
     fun check() {
-        DetektInvoker.create(task = this, isDryRun = isDryRun).invokeCli(
+        DetektInvoker.create(task = this, isDryRun = isDryRun.orNull.toBoolean()).invokeCli(
             arguments = arguments,
             ignoreFailures = ignoreFailures,
             classpath = detektClasspath.plus(pluginClasspath),
@@ -285,3 +284,5 @@ abstract class Detekt @Inject constructor(
         return provider
     }
 }
+
+private const val DRY_RUN_PROPERTY = "detekt-dry-run"

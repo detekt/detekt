@@ -23,11 +23,7 @@ jacoco.toolVersion = versionCatalog.findVersion("jacoco").get().requiredVersion
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
     systemProperty("junit.jupiter.testinstance.lifecycle.default", "per_class")
-    val compileTestSnippets: Boolean = if (project.hasProperty("compile-test-snippets")) {
-        (project.property("compile-test-snippets") as String).toBoolean()
-    } else {
-        false
-    }
+    val compileTestSnippets = providers.gradleProperty("compile-test-snippets").orNull.toBoolean()
     systemProperty("compile-test-snippets", compileTestSnippets)
     testLogging {
         // set options for log level LIFECYCLE
@@ -48,7 +44,7 @@ tasks.withType<KotlinCompile>().configureEach {
     compilerOptions {
         jvmTarget.set(Versions.JVM_TARGET)
         freeCompilerArgs.add("-progressive")
-        allWarningsAsErrors.set(project.findProperty("warningsAsErrors") == "true")
+        allWarningsAsErrors.set(providers.gradleProperty("warningsAsErrors").orNull.toBoolean())
     }
 }
 

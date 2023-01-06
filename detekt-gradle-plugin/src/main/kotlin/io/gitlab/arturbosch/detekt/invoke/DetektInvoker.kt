@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.invoke
 import io.gitlab.arturbosch.detekt.internal.ClassLoaderCache
 import io.gitlab.arturbosch.detekt.internal.GlobalClassLoaderCache
 import org.gradle.api.GradleException
-import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.file.FileCollection
 import org.gradle.api.logging.Logger
@@ -28,12 +27,6 @@ internal interface DetektInvoker {
                 DefaultCliInvoker()
             }
     }
-}
-
-private const val DRY_RUN_PROPERTY = "detekt-dry-run"
-
-internal fun Project.isDryRunEnabled(): Boolean {
-    return hasProperty(DRY_RUN_PROPERTY) && property(DRY_RUN_PROPERTY) == "true"
 }
 
 internal class DefaultCliInvoker(
