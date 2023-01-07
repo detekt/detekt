@@ -35,7 +35,7 @@ spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version = "2.0.19"
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.2.0"
-assertj = "org.assertj:assertj-core:3.24.0"
+assertj = "org.assertj:assertj-core:3.24.1"
 reflections = "org.reflections:reflections:0.10.2"
 mockk = "io.mockk:mockk:1.13.3"
 snakeyaml = "org.yaml:snakeyaml:1.33"
