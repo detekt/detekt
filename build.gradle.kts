@@ -1,5 +1,4 @@
 import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
 plugins {
@@ -37,7 +36,6 @@ allprojects {
     }
 
     tasks.withType<Detekt> detekt@{
-        jvmTarget = "1.8"
         reports {
             xml.required.set(true)
             html.required.set(true)
@@ -50,9 +48,6 @@ allprojects {
         detektReportMergeSarif.configure {
             input.from(this@detekt.sarifReportFile)
         }
-    }
-    tasks.withType<DetektCreateBaselineTask>().configureEach {
-        jvmTarget = "1.8"
     }
 }
 
