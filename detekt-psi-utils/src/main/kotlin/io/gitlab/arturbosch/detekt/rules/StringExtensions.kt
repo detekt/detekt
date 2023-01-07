@@ -8,3 +8,15 @@ fun String.lastArgumentMatchesUrl(): Boolean {
         URL(lastArgument).toURI()
     }.isSuccess
 }
+
+fun String.lastArgumentMatchesMarkdownUrlSyntax(): Boolean {
+    val urlNonCapturingRegex = "(?:[^ ]*)"
+    val markdownUrlTitleRegexStr = "\"[^\"\\\\\\n]*(?:\\\\.[^\"\\\\\\n]*)*\""
+    val regex = "\\[.*\\]\\($urlNonCapturingRegex(?: $markdownUrlTitleRegexStr)?\\)$".toRegex()
+    return trimEnd().contains(regex)
+}
+
+fun String.lastArgumentMatchesKotlinReferenceUrlSyntax(): Boolean {
+    val regex = "\\[[\\w|\\.]*\\]$".toRegex()
+    return trimEnd().contains(regex)
+}

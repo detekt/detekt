@@ -128,6 +128,8 @@ public final class io/gitlab/arturbosch/detekt/rules/MethodSignatureKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/StringExtensionsKt {
+	public static final fun lastArgumentMatchesKotlinReferenceUrlSyntax (Ljava/lang/String;)Z
+	public static final fun lastArgumentMatchesMarkdownUrlSyntax (Ljava/lang/String;)Z
 	public static final fun lastArgumentMatchesUrl (Ljava/lang/String;)Z
 }
 
