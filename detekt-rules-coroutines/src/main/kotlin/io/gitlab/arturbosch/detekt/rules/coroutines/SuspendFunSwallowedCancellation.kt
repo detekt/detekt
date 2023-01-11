@@ -98,14 +98,14 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(config) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        val resultingDescriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor
-        resultingDescriptor ?: return
+        val resultingDescriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor ?: return
+
         if (resultingDescriptor.fqNameSafe != RUN_CATCHING_FQ) return
 
-        val shouldTraverseInside: (PsiElement) -> Boolean = {
-            expression == it || shouldTraverseInside(it, bindingContext)
-        }
-        expression.forEachDescendantOfType<KtCallExpression>(shouldTraverseInside) { descendant ->
+        fun shouldTraverseInside(element: PsiElement): Boolean =
+            expression == element || shouldTraverseInside(element, bindingContext)
+
+        expression.forEachDescendantOfType<KtCallExpression>(::shouldTraverseInside) { descendant ->
             val callableDescriptor = descendant.getResolvedCall(bindingContext)?.resultingDescriptor
             if (callableDescriptor?.isSuspend == true) {
                 report(
@@ -117,7 +117,7 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(config) {
             }
         }
 
-        expression.forEachDescendantOfType<KtForExpression>(shouldTraverseInside) { descendant ->
+        expression.forEachDescendantOfType<KtForExpression>(::shouldTraverseInside) { descendant ->
             if (descendant.hasSuspendingIterators()) {
                 report(
                     message = "The for-loop expression has suspending operator which is called inside " +
