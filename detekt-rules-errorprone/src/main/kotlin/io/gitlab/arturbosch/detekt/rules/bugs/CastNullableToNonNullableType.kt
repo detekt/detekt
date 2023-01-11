@@ -28,12 +28,16 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
  *
  * <compliant>
  * fun foo(bar: Any?) {
+ *     val x = checkNotNull(bar) as String
+ * }
+ *
+ * // Alternative
+ * fun foo(bar: Any?) {
  *     val x = (bar ?: error("null assertion message")) as String
  * }
  * </compliant>
  */
 @RequiresTypeResolution
-@Suppress("ReturnCount")
 class CastNullableToNonNullableType(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         javaClass.simpleName,
@@ -43,6 +47,7 @@ class CastNullableToNonNullableType(config: Config = Config.empty) : Rule(config
         Debt.FIVE_MINS
     )
 
+    @Suppress("ReturnCount")
     override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
         super.visitBinaryWithTypeRHSExpression(expression)
 
