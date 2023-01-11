@@ -23,30 +23,30 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 
 /**
-`suspend` functions should not be called inside `runCatching`'s lambda block, because `runCatching` catches all the
-`Exception`s. For Coroutines to work in all cases, developers should make sure to propagate `CancellationException`
-exceptions. This means `CancellationException` should never be:
- * caught and swallowed (even if logged)
- * caught and propagated to external systems
- * caught and shown to the user
-
-they must always be rethrown in the same context.
-
-Using `runCatching` increases this risk of mis-handling cancellation. If you catch and don't rethrow all the
-`CancellationException`, your coroutines are not cancelled even if you cancel their `CoroutineScope`.
-
-This can very easily lead to:
- * unexpected crashes
- * extremely hard to diagnose bugs
- * memory leaks
- * performance issues
- * battery drain
-
-For reference, see [Kotlin doc](https://kotlinlang.org/docs/cancellation-and-timeouts.html#cancellation-is-cooperative).
-
-If your project wants to use `runCatching` and `Result` objects, it is recommended to write a `coRunCatching`
-utility function which immediately re-throws `CancellationException`; and forbid `runCatching` and `suspend`
-combinations by activating this rule.
+ * `suspend` functions should not be called inside `runCatching`'s lambda block, because `runCatching` catches all the
+ * `Exception`s. For Coroutines to work in all cases, developers should make sure to propagate `CancellationException`
+ * exceptions. This means `CancellationException` should never be:
+ * * caught and swallowed (even if logged)
+ * * caught and propagated to external systems
+ * * caught and shown to the user
+ *
+ * they must always be rethrown in the same context.
+ *
+ * Using `runCatching` increases this risk of mis-handling cancellation. If you catch and don't rethrow all the
+ * `CancellationException`, your coroutines are not cancelled even if you cancel their `CoroutineScope`.
+ *
+ * This can very easily lead to:
+ * * unexpected crashes
+ * * extremely hard to diagnose bugs
+ * * memory leaks
+ * * performance issues
+ * * battery drain
+ *
+ * See reference, [Kotlin doc](https://kotlinlang.org/docs/cancellation-and-timeouts.html#cancellation-is-cooperative).
+ *
+ * If your project wants to use `runCatching` and `Result` objects, it is recommended to write a `coRunCatching`
+ * utility function which immediately re-throws `CancellationException`; and forbid `runCatching` and `suspend`
+ * combinations by activating this rule.
  *
  * <noncompliant>
  * @@Throws(IllegalStateException::class)
@@ -90,8 +90,8 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(config) {
     override val issue = Issue(
         id = "SuspendFunInsideRunCatching",
         severity = Severity.Minor,
-        description = "`suspend` functions should not be called inside `runCatching`'s lambda block, because " +
-            "`runCatching` catches all the `Exception`s.",
+        description = "`runCatching` does not propagate `CancellationException`, don't use it with `suspend` lambda " +
+            "blocks.",
         debt = Debt.TEN_MINS
     )
 
@@ -102,9 +102,10 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(config) {
         resultingDescriptor ?: return
         if (resultingDescriptor.fqNameSafe != RUN_CATCHING_FQ) return
 
-        expression.forEachDescendantOfType<KtCallExpression>({
+        val shouldTraverseInside: (PsiElement) -> Boolean = {
             expression == it || shouldTraverseInside(it, bindingContext)
-        }) { descendant ->
+        }
+        expression.forEachDescendantOfType<KtCallExpression>(shouldTraverseInside) { descendant ->
             val callableDescriptor = descendant.getResolvedCall(bindingContext)?.resultingDescriptor
             if (callableDescriptor?.isSuspend == true) {
                 report(
@@ -116,8 +117,8 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(config) {
             }
         }
 
-        expression.forEachDescendantOfType<KtForExpression> { descendant ->
-            if (descendant.doesLoopHasSuspendingIterators()) {
+        expression.forEachDescendantOfType<KtForExpression>(shouldTraverseInside) { descendant ->
+            if (descendant.hasSuspendingIterators()) {
                 report(
                     message = "The for-loop expression has suspending operator which is called inside " +
                         "`runCatching`. You should either use specific `try-catch` only catching exception that you " +
@@ -130,28 +131,26 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(config) {
 
     @Suppress("ReturnCount")
     private fun shouldTraverseInside(psiElement: PsiElement, bindingContext: BindingContext): Boolean {
-        if (psiElement is KtCallExpression) {
-            val callableDescriptor =
-                psiElement.getResolvedCall(bindingContext)?.resultingDescriptor as? FunctionDescriptor
-            callableDescriptor ?: return false
+        return when (psiElement) {
+            is KtCallExpression -> {
+                val callableDescriptor =
+                    (psiElement.getResolvedCall(bindingContext)?.resultingDescriptor as? FunctionDescriptor)
+                        ?: return false
 
-            if (callableDescriptor.fqNameSafe == RUN_CATCHING_FQ) return false
+                callableDescriptor.fqNameSafe != RUN_CATCHING_FQ && callableDescriptor.isInline
+            }
+            is KtValueArgument -> {
+                val callExpression = psiElement.getParentOfType<KtCallExpression>(true) ?: return false
+                val valueParameterDescriptor =
+                    callExpression.getResolvedCall(bindingContext)?.getParameterForArgument(psiElement) ?: return false
 
-            if (callableDescriptor.isInline.not()) return false
+                valueParameterDescriptor.isCrossinline.not() && valueParameterDescriptor.isNoinline.not()
+            }
+            else -> true
         }
-
-        if (psiElement is KtValueArgument) {
-            val callExpression = psiElement.getParentOfType<KtCallExpression>(true)
-            callExpression ?: return false
-            val valueParameterDescriptor =
-                callExpression.getResolvedCall(bindingContext)?.getParameterForArgument(psiElement)
-            valueParameterDescriptor ?: return false
-            if (valueParameterDescriptor.isCrossinline || valueParameterDescriptor.isNoinline) return false
-        }
-        return true
     }
 
-    private fun KtForExpression.doesLoopHasSuspendingIterators(): Boolean {
+    private fun KtForExpression.hasSuspendingIterators(): Boolean {
         val iteratorResolvedCall = bindingContext[BindingContext.LOOP_RANGE_ITERATOR_RESOLVED_CALL, this.loopRange]
         val loopRangeHasNextResolvedCall =
             bindingContext[BindingContext.LOOP_RANGE_HAS_NEXT_RESOLVED_CALL, this.loopRange]
