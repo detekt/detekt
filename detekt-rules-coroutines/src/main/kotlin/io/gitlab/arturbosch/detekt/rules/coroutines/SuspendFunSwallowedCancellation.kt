@@ -88,7 +88,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 @RequiresTypeResolution
 class SuspendFunSwallowedCancellation(config: Config) : Rule(config) {
     override val issue = Issue(
-        id = "SuspendFunInsideRunCatching",
+        id = javaClass.simpleName,
         severity = Severity.Minor,
         description = "`runCatching` does not propagate `CancellationException`, don't use it with `suspend` lambda " +
             "blocks.",
