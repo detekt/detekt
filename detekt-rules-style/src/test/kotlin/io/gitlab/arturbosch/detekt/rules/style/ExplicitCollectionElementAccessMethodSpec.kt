@@ -383,6 +383,104 @@ class ExplicitCollectionElementAccessMethodSpec {
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
+
+            @Nested
+            inner class `with vararg parameter` {
+                @Test
+                fun `does not report with spread operator to spread the vararg`() {
+                    val code = """
+                        class C {
+                            operator fun get(key: String, vararg objects: Int): String = ""
+                        }
+                        fun test(c: C) {
+                            val objects = listOf(0, 1).toIntArray()
+                            c.get("key", *objects)
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                @Test
+                fun `does not report with spread operator to spread the vararg and normal parameter`() {
+                    val code = """
+                        class C {
+                            operator fun get(key: String, vararg objects: Int): String = ""
+                        }
+                        fun test(c: C) {
+                            val objects = listOf(0, 1).toIntArray()
+                            c.get("key", 1, *objects)
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                @Test
+                fun `does not report with spread operator to spread the vararg as key`() {
+                    val code = """
+                        class C {
+                            operator fun get(vararg objects: Int): String = objects.toString()
+                        }
+                        fun test(c: C) {
+                            val objects = listOf(0, 1).toIntArray()
+                            c.get(*objects)
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                @Test
+                fun `does not report with normal parameter and spread operator to spread the vararg`() {
+                    val code = """
+                        class C {
+                            operator fun get(key: String, vararg objects: Int): String = ""
+                        }
+                        fun test(c: C) {
+                            val objects = listOf(0, 1).toIntArray()
+                            c.get("key", *objects, 1)
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                @Test
+                fun `does report with no value is passed for vararg parameter`() {
+                    val code = """
+                        class C {
+                            operator fun get(key: String, vararg objects: Int): String = ""
+                        }
+                        fun test(c: C) {
+                            c.get("key")
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                }
+
+                @Test
+                fun `does report with 1 value is passed for vararg parameter`() {
+                    val code = """
+                        class C {
+                            operator fun get(key: String, vararg objects: Int): String = ""
+                        }
+                        fun test(c: C) {
+                            c.get("key", 1)
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                }
+
+                @Test
+                fun `does report with 1 value is passed for vararg parameter as key`() {
+                    val code = """
+                        class C {
+                            operator fun get(vararg objects: Int): String = objects.toString()
+                        }
+                        fun test(c: C) {
+                            c.get(0)
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                }
+            }
         }
 
         @Nested
