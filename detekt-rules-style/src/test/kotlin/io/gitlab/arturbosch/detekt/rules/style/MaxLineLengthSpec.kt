@@ -272,4 +272,26 @@ class MaxLineLengthSpec {
         assertThat(rule.findings).hasSize(2)
         assertThat(rule.findings).hasTextLocations(40 to 97, 98 to 157)
     }
+
+    @Test
+    fun `report the correct lines on raw strings with backslash on it 2 - issue #5314`() {
+        val rule = MaxLineLength(
+            TestConfig(
+                MAX_LINE_LENGTH to "30",
+                "excludeRawStrings" to "false",
+            )
+        )
+
+        rule.visitKtFile(
+            compileContentForTest(
+                """
+                    // some other content
+                    val x = "Foo".matches(${"\"\"\""}...too long\(parens\) and some more${"\"\"\""}.toRegex())
+                    // that is the right length
+                """.trimIndent()
+            )
+        )
+        assertThat(rule.findings).hasSize(1)
+        assertThat(rule.findings).hasTextLocations(22 to 96)
+    }
 }
