@@ -8,19 +8,25 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-import org.jetbrains.kotlin.backend.common.descriptors.isSuspend
+import org.jetbrains.kotlin.builtins.StandardNames.COROUTINES_PACKAGE_FQ_NAME
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtForExpression
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtOperationExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
-import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
+import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getParameterForArgument
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
+import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 
 /**
  * `suspend` functions should not be called inside `runCatching`'s lambda block, because `runCatching` catches all the
@@ -105,28 +111,9 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(config) {
         fun shouldTraverseInside(element: PsiElement): Boolean =
             expression == element || shouldTraverseInside(element, bindingContext)
 
-        expression.forEachDescendantOfType<KtCallExpression>(::shouldTraverseInside) { descendant ->
-            val callableDescriptor = descendant.getResolvedCall(bindingContext)?.resultingDescriptor
-            if (callableDescriptor?.isSuspend == true) {
-                report(
-                    message = "The suspend function call ${callableDescriptor.fqNameSafe.shortName()} called inside " +
-                        "`runCatching`. You should either use specific `try-catch` only catching exception that you " +
-                        "are expecting or rethrow the `CancellationException` if already caught.",
-                    expression
-                )
-            }
-        }
-
-        expression.forEachDescendantOfType<KtForExpression>(::shouldTraverseInside) { descendant ->
-            if (descendant.hasSuspendingIterators()) {
-                report(
-                    message = "The for-loop expression has suspending operator which is called inside " +
-                        "`runCatching`. You should either use specific `try-catch` only catching exception that you " +
-                        "are expecting or rethrow the `CancellationException` if already caught.",
-                    expression
-                )
-            }
-        }
+        expression.anyDescendantOfType<KtExpression>(::shouldTraverseInside) { descendant ->
+            descendant.hasSuspendCalls()
+        }.ifTrue { report(expression) }
     }
 
     @Suppress("ReturnCount")
@@ -140,9 +127,9 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(config) {
                 callableDescriptor.fqNameSafe != RUN_CATCHING_FQ && callableDescriptor.isInline
             }
             is KtValueArgument -> {
-                val callExpression = psiElement.getParentOfType<KtCallExpression>(true) ?: return false
+                val callExpression = psiElement.getParentOfType<KtCallExpression>(true)
                 val valueParameterDescriptor =
-                    callExpression.getResolvedCall(bindingContext)?.getParameterForArgument(psiElement) ?: return false
+                    callExpression?.getResolvedCall(bindingContext)?.getParameterForArgument(psiElement) ?: return false
 
                 valueParameterDescriptor.isCrossinline.not() && valueParameterDescriptor.isNoinline.not()
             }
@@ -150,30 +137,52 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(config) {
         }
     }
 
-    private fun KtForExpression.hasSuspendingIterators(): Boolean {
-        val iteratorResolvedCall = bindingContext[BindingContext.LOOP_RANGE_ITERATOR_RESOLVED_CALL, this.loopRange]
-        val loopRangeHasNextResolvedCall =
-            bindingContext[BindingContext.LOOP_RANGE_HAS_NEXT_RESOLVED_CALL, this.loopRange]
-        val loopRangeNextResolvedCall = bindingContext[BindingContext.LOOP_RANGE_NEXT_RESOLVED_CALL, this.loopRange]
-        return listOf(iteratorResolvedCall, loopRangeHasNextResolvedCall, loopRangeNextResolvedCall).any {
-            it?.resultingDescriptor?.isSuspend == true
+    @Suppress("ReturnCount")
+    private fun KtExpression.hasSuspendCalls(): Boolean {
+        return when (this) {
+            is KtForExpression -> {
+                val loopRangeIterator = bindingContext[BindingContext.LOOP_RANGE_ITERATOR_RESOLVED_CALL, loopRange]
+                val loopRangeHasNext =
+                    bindingContext[BindingContext.LOOP_RANGE_HAS_NEXT_RESOLVED_CALL, loopRange]
+                val loopRangeNext = bindingContext[BindingContext.LOOP_RANGE_NEXT_RESOLVED_CALL, loopRange]
+                listOf(loopRangeIterator, loopRangeHasNext, loopRangeNext).any {
+                    it?.resultingDescriptor?.isSuspend == true
+                }
+            }
+            is KtCallExpression, is KtOperationExpression -> {
+                val resolvedCall = getResolvedCall(bindingContext) ?: return false
+                (resolvedCall.resultingDescriptor as? FunctionDescriptor)?.isSuspend == true
+            }
+            is KtNameReferenceExpression -> {
+                val resolvedCall = getResolvedCall(bindingContext) ?: return false
+                val propertyDescriptor = resolvedCall.resultingDescriptor as? PropertyDescriptor
+                propertyDescriptor?.fqNameSafe == COROUTINE_CONTEXT_FQ_NAME
+            }
+            else -> {
+                false
+            }
         }
     }
 
     private fun report(
-        message: String,
         expression: KtCallExpression,
     ) {
         report(
             CodeSmell(
                 issue,
-                Entity.from(expression),
-                message
+                Entity.from((expression.calleeExpression as? PsiElement) ?: expression),
+                "The `runCatching` has suspend call inside. You should either use specific `try-catch` " +
+                    "only catching exception that you are expecting or rethrow the `CancellationException` if " +
+                    "already caught."
             )
         )
     }
 
     companion object {
         private val RUN_CATCHING_FQ = FqName("kotlin.runCatching")
+
+        // Based on code from Kotlin project:
+        // https://github.com/JetBrains/kotlin/commit/87bbac9d43e15557a2ff0dc3254fd41a9d5639e1
+        private val COROUTINE_CONTEXT_FQ_NAME = COROUTINES_PACKAGE_FQ_NAME.child(Name.identifier("coroutineContext"))
     }
 }

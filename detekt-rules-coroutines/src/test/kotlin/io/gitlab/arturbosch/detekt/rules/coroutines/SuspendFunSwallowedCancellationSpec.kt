@@ -2,10 +2,12 @@ package io.gitlab.arturbosch.detekt.rules.coroutines
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
@@ -25,7 +27,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings, "delay")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(4, 5)),
+            listOf(SourceLocation(4, 16))
+        )
     }
 
     @Test
@@ -45,7 +51,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings, "delay", "bar")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(6, 5), SourceLocation(8, 9)),
+            listOf(SourceLocation(6, 16), SourceLocation(8, 20))
+        )
     }
 
     @Test
@@ -69,7 +79,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings, "bar")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(11, 13)),
+            listOf(SourceLocation(11, 24))
+        )
     }
 
     @Test
@@ -93,7 +107,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings, "delay")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(8, 5)),
+            listOf(SourceLocation(8, 16))
+        )
     }
 
     @Test
@@ -108,7 +126,31 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings, "delay")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(4, 5)),
+            listOf(SourceLocation(4, 16))
+        )
+    }
+
+    @Test
+    fun `does report for coroutineContext in suspend functions`() {
+        val code = """
+            import kotlinx.coroutines.delay
+            import kotlin.coroutines.coroutineContext
+
+            suspend fun foo() {
+                runCatching {
+                    coroutineContext    
+                }
+            }
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(5, 5)),
+            listOf(SourceLocation(5, 16))
+        )
     }
 
     @Test
@@ -121,7 +163,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -139,7 +181,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings, "bar")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(4, 18)),
+            listOf(SourceLocation(4, 29))
+        )
     }
 
     @Test
@@ -154,7 +200,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings, "bar")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(4, 5)),
+            listOf(SourceLocation(4, 16))
+        )
     }
 
     @Test
@@ -165,7 +215,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             suspend fun foo() = runCatching { bar() }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings, "bar")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(3, 21)),
+            listOf(SourceLocation(3, 32))
+        )
     }
 
     @Test
@@ -182,7 +236,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -200,7 +254,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings, "delay")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(4, 5)),
+            listOf(SourceLocation(4, 16))
+        )
     }
 
     @Test
@@ -236,7 +294,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings, "delay")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(17, 5)),
+            listOf(SourceLocation(17, 16))
+        )
     }
 
     @Test
@@ -257,8 +319,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 crossinlineBlock()
             }.toString()
         
-            suspend fun bar()
-            {
+            suspend fun bar() {
                 runCatching {
                     foo(
                         inlineBlock = { delay(1000L) },
@@ -273,7 +334,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings, "delay")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(17, 5)),
+            listOf(SourceLocation(17, 16))
+        )
     }
 
     @Test
@@ -296,7 +361,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -309,8 +374,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             inline fun <R> inline(block: () -> R) = block()
             fun <R> noInline(block: suspend () -> R) = MainScope().launch { block() }
         
-            suspend fun bar()
-            {
+            suspend fun bar() {
                 runCatching {
                     inline {
                         noInline {
@@ -325,7 +389,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -337,8 +401,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
 
             inline fun <R> inline(block: () -> R) = block()
         
-            suspend fun bar()
-            {
+            suspend fun bar() {
                 runCatching {
                     inline {
                         inline {
@@ -350,7 +413,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings, "delay")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(8, 5)),
+            listOf(SourceLocation(8, 16))
+        )
     }
 
     @Test
@@ -380,7 +447,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -388,7 +455,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         val code = """
             import kotlinx.coroutines.delay
 
-            private suspend fun List<Long>.await() = delay(100L)
+            suspend fun List<Long>.await() = delay(100L)
 
             suspend fun foo() {
                 runCatching {
@@ -399,7 +466,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
 
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-        assertFindingsForSuspendCall(findings, "await")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(6, 5)),
+            listOf(SourceLocation(6, 16))
+        )
     }
 
     @Test
@@ -421,7 +492,33 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendingIterator(findings, 1)
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(8, 5)),
+            listOf(SourceLocation(8, 16))
+        )
+    }
+
+    @Test
+    fun `does report when suspend fun in for subject is used`() {
+        val code = """
+            suspend fun bar() = 10
+            
+            suspend fun foo() {
+                runCatching {
+                    for (i in 1..bar()) {
+                        println(i)
+                    }
+                }
+            }
+        """.trimIndent()
+
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(4, 5)),
+            listOf(SourceLocation(4, 16))
+        )
     }
 
     @Test
@@ -430,7 +527,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             import kotlinx.coroutines.delay
 
             class SuspendingIterator {
-                suspend operator fun iterator(): Iterator<Any> = iterator { yield("value") }
+                suspend operator fun iterator(): Iterator<String> = iterator { yield("value") }
             }
         
             suspend fun bar() {
@@ -445,7 +542,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendingIterator(findings, 2)
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(8, 5)),
+            listOf(SourceLocation(8, 16))
+        )
     }
 
     @Test
@@ -469,7 +570,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendingIterator(findings, 1)
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(8, 5)),
+            listOf(SourceLocation(8, 16))
+        )
     }
 
     @Test
@@ -499,7 +604,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendingIterator(findings, 1)
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(14, 5)),
+            listOf(SourceLocation(14, 16))
+        )
     }
 
     @Test
@@ -525,7 +634,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendingIterator(findings, 0)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -542,7 +651,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings, "invoke")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(5, 5)),
+            listOf(SourceLocation(5, 16))
+        )
     }
 
     @Test
@@ -550,6 +663,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         val code = """
             import kotlinx.coroutines.delay
             import kotlinx.coroutines.suspendCancellableCoroutine
+            import kotlin.coroutines.resume
 
             suspend fun foo() {
                 runCatching {
@@ -561,8 +675,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertFindingsForSuspendCall(findings, "suspendCancellableCoroutine")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(6, 5)),
+            listOf(SourceLocation(6, 16))
+        )
     }
 
     @Test
@@ -579,7 +696,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings, "invoke")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(5, 5)),
+            listOf(SourceLocation(5, 16))
+        )
     }
 
     @Test
@@ -596,29 +717,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertFindingsForSuspendCall(findings, "localFun")
-    }
-
-    @Test
-    fun `does report in suspend operator is invoked`() {
-        val code = """
-            import kotlinx.coroutines.delay
-
-            class C {
-                suspend operator fun invoke() = delay(1000L)
-            }
-            
-            suspend fun foo() {
-                runCatching {
-                    C()()
-                    C().invoke()
-                }
-            }
-        """.trimIndent()
-
-        val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings, "invoke", "invoke")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(5, 5)),
+            listOf(SourceLocation(5, 16))
+        )
     }
 
     @Test
@@ -638,7 +741,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -658,7 +761,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings, "join")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(6, 5)),
+            listOf(SourceLocation(6, 16))
+        )
     }
 
     @Test
@@ -678,7 +785,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -698,7 +805,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings, "await")
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(6, 5)),
+            listOf(SourceLocation(6, 16))
+        )
     }
 
     @Test
@@ -722,7 +833,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -741,7 +852,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -757,26 +868,292 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
 
         val findings = subject.compileAndLintWithContext(env, code)
-        assertFindingsForSuspendCall(findings, "delay")
-    }
-
-    private fun assertFindingsForSuspendCall(findings: List<Finding>, vararg funCallExpression: String) {
-        assertThat(findings).hasSize(funCallExpression.size)
-        assertThat(findings.map { it.message }).containsExactlyInAnyOrder(
-            *funCallExpression.map {
-                "The suspend function call $it called inside " +
-                    "`runCatching`. You should either use specific `try-catch` only catching exception that you " +
-                    "are expecting or rethrow the `CancellationException` if already caught."
-            }.toTypedArray()
+        assertFindingsForSuspendCall(
+            findings,
+            listOf(SourceLocation(4, 5)),
+            listOf(SourceLocation(4, 16))
         )
     }
 
-    private fun assertFindingsForSuspendingIterator(findings: List<Finding>, size: Int) {
-        assertThat(findings).hasSize(size)
-        assertThat(findings.map { it.message }).allMatch {
-            return@allMatch it == "The for-loop expression has suspending operator which is called " +
-                "inside `runCatching`. You should either use specific `try-catch` only catching exception that you " +
-                "are expecting or rethrow the `CancellationException` if already caught."
+    @Nested
+    inner class `Containing suspending operator` {
+        @Test
+        fun `does report in case of suspend invoked operator`() {
+            val code = """
+                import kotlinx.coroutines.delay
+    
+                class C {
+                    suspend operator fun invoke() = delay(1000L)
+                }
+                
+                suspend fun foo() {
+                    runCatching {
+                        C()()
+                        C().invoke()
+                    }
+                }
+            """.trimIndent()
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertFindingsForSuspendCall(
+                findings,
+                listOf(SourceLocation(8, 5)),
+                listOf(SourceLocation(8, 16))
+            )
         }
+
+        @Test
+        fun `does report in case of suspend inc operator`() {
+            val code = """
+                class OperatorClass {
+                    suspend operator fun inc(): OperatorClass = OperatorClass()
+                    suspend operator fun dec(): OperatorClass = OperatorClass()
+                }
+                
+                suspend fun foo() {
+                    runCatching {
+                        var operatorClass = OperatorClass()
+                        operatorClass++
+                    }
+                    runCatching {
+                        var operatorClass = OperatorClass()
+                        operatorClass--
+                    }
+                }
+            """.trimIndent()
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertFindingsForSuspendCall(
+                findings,
+                listOf(SourceLocation(7, 5), SourceLocation(11, 5)),
+                listOf(SourceLocation(7, 16), SourceLocation(11, 16))
+            )
+        }
+
+        @Test
+        fun `does report in case of suspend not operator`() {
+            val code = """
+                class OperatorClass {
+                    suspend operator fun not() = false
+                }
+                
+                suspend fun foo() {
+                    runCatching {
+                        val operatorClass = OperatorClass()
+                        println(!operatorClass)
+                    }
+                }
+            """.trimIndent()
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertFindingsForSuspendCall(
+                findings,
+                listOf(SourceLocation(6, 5)),
+                listOf(SourceLocation(6, 16))
+            )
+        }
+
+        @Test
+        fun `does report in case of suspend unaryPlus operator`() {
+            val code = """
+                class OperatorClass {
+                    suspend operator fun unaryPlus() = OperatorClass()
+                }
+                
+                suspend fun foo() {
+                    runCatching {
+                        val operatorClass = OperatorClass()
+                        println(+operatorClass)
+                    }
+                }
+            """.trimIndent()
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertFindingsForSuspendCall(
+                findings,
+                listOf(SourceLocation(6, 5)),
+                listOf(SourceLocation(6, 16))
+            )
+        }
+
+        @Test
+        fun `does report in case of suspend plus operator`() {
+            val code = """
+                class OperatorClass {
+                    suspend operator fun plus(test: OperatorClass) = test
+                }
+                
+                suspend fun foo() {
+                    runCatching {
+                        val operatorClass1 = OperatorClass()
+                        val operatorClass2 = OperatorClass()
+                        println(operatorClass1 + operatorClass2)
+                    }
+                }
+            """.trimIndent()
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertFindingsForSuspendCall(
+                findings,
+                listOf(SourceLocation(6, 5)),
+                listOf(SourceLocation(6, 16))
+            )
+        }
+
+        @Test
+        fun `does report in case of suspend div operator`() {
+            val code = """
+                class OperatorClass {
+                    suspend operator fun div(value: Int) = OperatorClass()
+                }
+                
+                suspend fun foo() {
+                    runCatching {
+                        val operatorClass = OperatorClass()
+                        println(operatorClass / 2)
+                    }
+                }
+            """.trimIndent()
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertFindingsForSuspendCall(
+                findings,
+                listOf(SourceLocation(6, 5)),
+                listOf(SourceLocation(6, 16))
+            )
+        }
+
+        @Test
+        fun `does report in case of suspend compareTo operator`() {
+            val code = """
+                class OperatorClass {
+                    suspend operator fun compareTo(operatorClass: OperatorClass) = 0
+                }
+                
+                suspend fun foo() {
+                    runCatching {
+                        val operatorClass1 = OperatorClass()
+                        val operatorClass2 = OperatorClass()
+                        println(operatorClass1 < operatorClass2)
+                    }
+                }
+            """.trimIndent()
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertFindingsForSuspendCall(
+                findings,
+                listOf(SourceLocation(6, 5)),
+                listOf(SourceLocation(6, 16))
+            )
+        }
+
+        @Test
+        fun `does report in case of suspend plusAssign operator`() {
+            val code = """
+                class OperatorClass {
+                    suspend operator fun plusAssign(operatorClass: OperatorClass) { }
+                }
+                
+                suspend fun foo() {
+                    runCatching {
+                        val operatorClass1 = OperatorClass()
+                        val operatorClass2 = OperatorClass()
+                        operatorClass1 += (operatorClass2)
+                    }
+                }
+            """.trimIndent()
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertFindingsForSuspendCall(
+                findings,
+                listOf(SourceLocation(6, 5)),
+                listOf(SourceLocation(6, 16))
+            )
+        }
+
+        @Test
+        fun `does report in case of suspend divAssign operator`() {
+            val code = """
+            class OperatorClass {
+                suspend operator fun divAssign(operatorClass: OperatorClass) {
+                    delay(1000)
+                }
+            }
+            
+            suspend fun foo() {
+                runCatching {
+                    val operatorClass1 = OperatorClass()
+                    val operatorClass2 = OperatorClass()
+                    operatorClass1 /= (operatorClass2)
+                }
+            }
+            """.trimIndent()
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertFindingsForSuspendCall(
+                findings,
+                listOf(SourceLocation(8, 5)),
+                listOf(SourceLocation(8, 16))
+            )
+        }
+
+        @Test
+        fun `does report in case of suspend rangeTo operator`() {
+            val code = """
+            class OperatorClass {
+                suspend operator fun rangeTo(operatorClass: OperatorClass) = OperatorClass()
+            }
+            
+            suspend fun foo() {
+                runCatching {
+                    val operatorClass1 = OperatorClass()
+                    val operatorClass2 = OperatorClass()
+                    println(operatorClass1..operatorClass2)
+                }
+            }
+            """.trimIndent()
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertFindingsForSuspendCall(
+                findings,
+                listOf(SourceLocation(6, 5)),
+                listOf(SourceLocation(6, 16))
+            )
+        }
+
+        @Test
+        fun `does report in case of suspend times operator`() {
+            val code = """
+            class OperatorClass {
+                suspend operator fun times(operatorClass: OperatorClass) = OperatorClass()
+            }
+            
+            suspend fun foo() {
+                runCatching {
+                    val operatorClass1 = OperatorClass()
+                    val operatorClass2 = OperatorClass()
+                    println(operatorClass1 * operatorClass2)
+                }
+            }
+            """.trimIndent()
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertFindingsForSuspendCall(
+                findings,
+                listOf(SourceLocation(6, 5)),
+                listOf(SourceLocation(6, 16))
+            )
+        }
+    }
+
+    private fun assertFindingsForSuspendCall(
+        findings: List<Finding>,
+        listOfStartLocation: List<SourceLocation>,
+        listOfEndLocation: List<SourceLocation>,
+    ) {
+        check(listOfEndLocation.size == listOfStartLocation.size)
+        assertThat(findings).hasSize(listOfStartLocation.size)
+        assertThat(findings).hasStartSourceLocations(*listOfStartLocation.toTypedArray())
+        assertThat(findings).hasEndSourceLocations(*listOfEndLocation.toTypedArray())
     }
 }
