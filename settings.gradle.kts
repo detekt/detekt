@@ -2,10 +2,8 @@ import com.gradle.enterprise.gradleplugin.internal.extension.BuildScanExtensionW
 
 rootProject.name = "detekt"
 
-pluginManagement {
-    includeBuild("build-logic")
-    includeBuild("detekt-gradle-plugin")
-}
+includeBuild("build-logic")
+includeBuild("detekt-gradle-plugin")
 
 include("code-coverage-report")
 include("detekt-api")
