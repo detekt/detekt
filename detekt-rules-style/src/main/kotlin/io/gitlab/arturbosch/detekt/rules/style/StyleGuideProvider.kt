@@ -77,6 +77,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             MayBeConst(config),
             PreferToOverPairSyntax(config),
             MandatoryBracesIfStatements(config),
+            BracesOnIfStatements(config),
             MandatoryBracesLoops(config),
             NullableBooleanCheck(config),
             VarCouldBeVal(config),

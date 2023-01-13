@@ -149,6 +149,10 @@ potential-bugs:
     active: true
 
 style:
+  BracesOnIfStatements:
+    active: true
+    singleLine: 'consistent'
+    multiLine: 'consistent'
   CanBeNonNullable:
     active: true
   CascadingCallWrapping:
