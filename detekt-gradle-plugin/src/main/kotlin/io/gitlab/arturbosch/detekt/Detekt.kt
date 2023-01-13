@@ -238,7 +238,7 @@ abstract class Detekt @Inject constructor(
             AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
             BasePathArgument(basePathProp.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false)),
-            RunRuleArgument(ruleToRun + ""),
+            RunRuleArgument(ruleToRun),
         ).plus(convertCustomReportsToArguments()).flatMap(CliArgument::toArgument)
 
     @InputFiles
