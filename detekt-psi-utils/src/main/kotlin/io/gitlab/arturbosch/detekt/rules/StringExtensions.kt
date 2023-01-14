@@ -10,13 +10,19 @@ fun String.lastArgumentMatchesUrl(): Boolean {
 }
 
 fun String.lastArgumentMatchesMarkdownUrlSyntax(): Boolean {
-    val urlNonCapturingRegex = "(?:[^ ]*)"
-    val markdownUrlTitleRegexStr = "\"[^\"\\\\\\n]*(?:\\\\.[^\"\\\\\\n]*)*\""
-    val regex = "\\[.*\\]\\($urlNonCapturingRegex(?: $markdownUrlTitleRegexStr)?\\)$".toRegex()
+    val urlNonCapturingRegex = """(?:(?!\s).)+"""
+    val markdownUrlTitleRegexStrWithBraces = """\([^\(\\\n]*(?:\\.[^\)\\\n]*)*\)"""
+    // Below regex works for both " and ' by using captured group \1
+    // It uses negative lookahead to use captured group \1 as to exclude it
+    val markdownUrlTitleRegexStrWithSingleOrDoubleQuotes = """(["'])(?:(?!(?:\1|\\)).)*(?:\\.(?:(?!(?:\1|\\)).)*)*\1"""
+    val markdownUrlTitleRegex =
+        """(?:$markdownUrlTitleRegexStrWithSingleOrDoubleQuotes|$markdownUrlTitleRegexStrWithBraces)"""
+    val regex =
+        """\[.+\]\($urlNonCapturingRegex(?:\s+$markdownUrlTitleRegex)?\s*\)$""".toRegex()
     return trimEnd().contains(regex)
 }
 
 fun String.lastArgumentMatchesKotlinReferenceUrlSyntax(): Boolean {
-    val regex = "\\[[\\w|\\.]*\\]$".toRegex()
+    val regex = """\[[\w|\.]*\]$""".toRegex()
     return trimEnd().contains(regex)
 }

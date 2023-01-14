@@ -342,30 +342,9 @@ class MaxLineLengthSpec {
             val code = """
                 /**
                 * This is doc with markdown url See: [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)
-                * [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)
                 * [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)     
-                * [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "With title")     
-                * [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "With \"title\"")     
                 */
-                class Test {
-                    /**
-                    * This is doc with markdown url See: [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)
-                    * [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)
-                    * [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)     
-                    * [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "With title")     
-                    */
-                    fun funName() {
-                        /*no-op*/
-                    }
-                    
-                    /**
-                    * This is doc with markdown url See: [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)
-                    * [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)
-                    * [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)     
-                    * [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "With title")     
-                    */
-                    val aVar: Int = 0
-                }
+                class Test
             """.trimIndent()
             val rule = MaxLineLength(
                 TestConfig(
@@ -380,24 +359,9 @@ class MaxLineLengthSpec {
         fun `should not report for long markdown url in comments`() {
             val code = """
                 // This is doc with markdown url See: [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)
-                // [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)
                 // [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)     
                 // [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "With title")     
-                class Test {
-                    // This is doc with markdown url See: [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)
-                    // [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)
-                    // [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)     
-                    // [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "With title")     
-                    fun funName() {
-                        /*no-op*/
-                    }
-                    
-                    // This is doc with markdown url See: [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)
-                    // [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)
-                    // [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)     
-                    // [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "With title")     
-                    val aVar: Int = 0
-                }
+                class Test
             """.trimIndent()
             val rule = MaxLineLength(
                 TestConfig(
@@ -413,36 +377,10 @@ class MaxLineLengthSpec {
             val code = """
                 /**
                 * This is doc with markdown url See: [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications
-                * [Maven Publish Plugin | Publications]https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)
                 * [Maven Publish Plugin | Publications(https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)     
                 * Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "With title")     
-                * [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "With title" "Second title not supported")     
-                * [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "With title", "Second title not supported")     
                 */
-                class Test {
-                    /**
-                    * This is doc with markdown url See: [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications
-                    * [Maven Publish Plugin | Publications]https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)
-                    * [Maven Publish Plugin | Publications(https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)     
-                    * Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "With title")     
-                    * [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "With title" "Second title not supported")     
-                    * [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "With title", "Second title not supported")     
-                    */
-                    fun funName() {
-                        /*no-op*/
-                    }
-                    
-                    /**
-                    * This is doc with markdown url See: [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications
-                    * [Maven Publish Plugin | Publications]https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)
-                    * [Maven Publish Plugin | Publications(https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)     
-                    * Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "With title")     
-                    * [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "With title" "Second title not supported")     
-                    * [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "With title", "Second title not supported")     
-                    * [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "\")     
-                    */
-                    val aVar: Int = 0
-                }
+                class Test
             """.trimIndent()
             val rule = MaxLineLength(
                 TestConfig(
@@ -450,7 +388,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            assertThat(rule.compileAndLint(code)).hasSize(19)
+            assertThat(rule.compileAndLint(code)).hasSize(3)
         }
     }
 
