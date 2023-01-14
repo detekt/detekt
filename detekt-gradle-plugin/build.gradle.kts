@@ -57,8 +57,6 @@ testing {
     }
 }
 
-val functionalTestImplementation: Configuration by configurations.getting
-
 val testKitRuntimeOnly: Configuration by configurations.creating
 
 dependencies {
