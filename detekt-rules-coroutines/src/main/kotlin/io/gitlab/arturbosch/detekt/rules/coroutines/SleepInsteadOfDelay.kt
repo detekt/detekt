@@ -9,13 +9,20 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import org.jetbrains.kotlin.builtins.isSuspendFunctionType
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtQualifiedExpression
+import org.jetbrains.kotlin.psi.KtLambdaArgument
+import org.jetbrains.kotlin.psi.KtLambdaExpression
+import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
-import org.jetbrains.kotlin.psi.psiUtil.hasSuspendModifier
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.util.getParameterForArgument
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
@@ -48,26 +55,45 @@ class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    override fun visitNamedFunction(function: KtNamedFunction) {
-        if (function.modifierList?.hasSuspendModifier() == true) {
-            function.checkDescendants(SUSPEND_FUN_MESSAGE)
+    override fun visitBlockExpression(expression: KtBlockExpression) {
+        expression.forEachDescendantOfType<KtCallExpression>(::shouldTraverseInside) {
+            it.verifyExpression(SUSPEND_FUN_MESSAGE)
         }
-        super.visitNamedFunction(function)
+
+        expression.forEachDescendantOfType<KtCallableReferenceExpression>(::shouldTraverseInside) {
+            it.verifyExpression(SUSPEND_FUN_MESSAGE)
+        }
     }
 
-    override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
-        val fqName = expression.getResolvedCall(bindingContext)
-            ?.resultingDescriptor
-            ?.fqNameOrNull()
-            ?.asString()
-        if (fqName in COROUTINE_NAMES) {
-            expression.checkDescendants(COROUTINE_MESSAGE)
+    @Suppress("ReturnCount")
+    private fun shouldTraverseInside(psiElement: PsiElement): Boolean {
+        return when (psiElement) {
+            is KtLambdaExpression -> {
+                val psiParent = psiElement.parent
+                if (psiParent is KtLambdaArgument) {
+                    return psiParent.shouldTraverseInside()
+                }
+                bindingContext[BindingContext.EXPRESSION_TYPE_INFO, psiElement]?.let {
+                    it.type?.isSuspendFunctionType == true
+                } ?: false
+            }
+            else -> {
+                true
+            }
         }
-        super.visitQualifiedExpression(expression)
     }
 
-    private fun PsiElement.checkDescendants(message: String) {
-        forEachDescendantOfType<KtCallExpression> { it.verifyExpression(message) }
+    @Suppress("ReturnCount")
+    private fun KtLambdaArgument.shouldTraverseInside(): Boolean {
+        val callExpression = this.getParentOfType<KtCallExpression>(true)
+        val callDescriptor = callExpression?.getResolvedCall(bindingContext) ?: return false
+        val functionDescriptor = callDescriptor.resultingDescriptor as? FunctionDescriptor ?: return false
+        val valueParameterDescriptor = callDescriptor.getParameterForArgument(this) ?: return false
+
+        return (
+            functionDescriptor.isInline &&
+                (valueParameterDescriptor.isNoinline.not() && valueParameterDescriptor.isCrossinline.not())
+            ) || valueParameterDescriptor.returnType?.isSuspendFunctionType == true
     }
 
     private fun KtExpression.verifyExpression(message: String) {
@@ -80,12 +106,16 @@ class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
         }
     }
 
+    private fun KtCallableReferenceExpression.verifyExpression(message: String) {
+        if (this.parent is KtValueArgument) {
+            // Only checking if this is used as for invocation
+            this.callableReference.verifyExpression(message)
+        }
+    }
+
     companion object {
         private const val SUSPEND_FUN_MESSAGE =
             "This use of Thread.sleep() inside a suspend function should be replaced by delay()."
-        private const val COROUTINE_MESSAGE =
-            "This use of Thread.sleep() inside a coroutine should be replaced by delay()."
         private const val FQ_NAME = "java.lang.Thread.sleep"
-        private val COROUTINE_NAMES = listOf("kotlinx.coroutines.launch", "kotlinx.coroutines.async")
     }
 }
