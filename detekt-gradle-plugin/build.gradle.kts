@@ -2,6 +2,7 @@
 // https://github.com/gradle/gradle/issues/21285
 @file:Suppress("StringLiteralDuplication")
 
+import com.gradle.enterprise.gradleplugin.testretry.retry
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
@@ -12,7 +13,6 @@ plugins {
     alias(libs.plugins.pluginPublishing)
     // We use this published version of the Detekt plugin to self analyse this project.
     id("io.gitlab.arturbosch.detekt") version "1.22.0"
-    id("org.gradle.test-retry") version "1.5.0"
 }
 
 repositories {
