@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 /**
  * This rule detects the usage of the Pair constructor to create pairs of values.
  *
- * Using <value1> to <value2> is preferred.
+ * Using `<value1>` to `<value2>` is preferred.
  *
  * <noncompliant>
  * val pair = Pair(1, 2)
