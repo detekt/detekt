@@ -1,3 +1,7 @@
+// Gradle test suite limitations mean we have to reference "functionalTest" in many places.
+// https://github.com/gradle/gradle/issues/21285
+@file:Suppress("StringLiteralDuplication")
+
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
@@ -57,21 +61,17 @@ testing {
     }
 }
 
-val pluginCompileOnly: Configuration by configurations.creating
-val functionalTestImplementation: Configuration by configurations.getting
-
-configurations.compileOnly { extendsFrom(pluginCompileOnly) }
-
-pluginCompileOnly.attributes {
-    attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category::class.java, "library"))
-}
+val testKitRuntimeOnly: Configuration by configurations.creating
+val testKitJava11RuntimeOnly: Configuration by configurations.creating
 
 dependencies {
+    compileOnly(libs.android.gradle.minSupported)
+    compileOnly(libs.kotlin.gradle)
     compileOnly(libs.kotlin.gradlePluginApi)
     implementation(libs.sarif4k)
 
-    pluginCompileOnly(libs.android.gradle)
-    pluginCompileOnly(libs.kotlin.gradle)
+    testKitRuntimeOnly(libs.kotlin.gradle)
+    testKitJava11RuntimeOnly(libs.android.gradle.maxSupported)
 
     // We use this published version of the detekt-formatting to self analyse this project.
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
@@ -114,7 +114,11 @@ kotlin.target.compilations.getByName("functionalTest") {
 
 // Manually inject dependency to gradle-testkit since the default injected plugin classpath is from `main.runtime`.
 tasks.pluginUnderTestMetadata {
-    pluginClasspath.from(pluginCompileOnly)
+    pluginClasspath.from(testKitRuntimeOnly)
+
+    if (tasks.named<Test>("functionalTest").get().javaVersion.isJava11Compatible) {
+        pluginClasspath.from(testKitJava11RuntimeOnly)
+    }
 }
 
 tasks.validatePlugins {
