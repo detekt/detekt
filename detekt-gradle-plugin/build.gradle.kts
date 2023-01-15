@@ -1,3 +1,7 @@
+// Gradle test suite limitations mean we have to reference "functionalTest" in many places.
+// https://github.com/gradle/gradle/issues/21285
+@file:Suppress("StringLiteralDuplication")
+
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
