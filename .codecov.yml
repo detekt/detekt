@@ -1,5 +1,6 @@
 codecov:
   branch: main
+  max_report_age: off
 
 coverage:
   status:
