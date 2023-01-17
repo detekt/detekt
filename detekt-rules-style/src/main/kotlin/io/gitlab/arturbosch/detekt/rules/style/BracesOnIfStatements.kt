@@ -9,34 +9,68 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
-import org.jetbrains.kotlin.psi.psiUtil.siblings
 
 /**
  * This rule detects `if` statements which do not comply with the specified rules.
  * Keeping braces consistent would improve readability and avoid possible errors.
  *
+ * SingleLine if-statement has no '\n':
+ * if (a) b else c
+ * MultiLine if-statement has at least one '\n':
+ * if (a) b
+ * else c
+ *
  * <noncompliant>
- * val i = 1
- * if (i > 0)
- *    println(i)
- * else {
- *    println(-i)
- * }
+ * // singleLine = 'never'
+ * if (a) { b } else { c }
+ * if (a) { b } else c
+ * // multiLine = 'never'
+ * if (a) { b }
+ * else { c }
+ *
+ * // singleLine = 'always'
+ * if (a) b else c
+ * if (a) { b } else c
+ * // multiLine = 'always'
+ * if (a) { b }
+ * else c
+ *
+ * // singleLine = 'consistent'
+ * if (a) b else { c }
+ * // multiLine = 'consistent'
+ * if (a) b
+ * else { c }
  * </noncompliant>
  *
  * <compliant>
- * || singleLine = 'never' multiLine = 'always'
- * val x = if (condition) 5 else 4
- * val x = if (condition) {
- *     5
- * } else {
- *     4
- * }
+ * // singleLine = 'never'
+ * if (a) b else c
+ * if (a) b else { c; d; } // multi-expression
+ * // multiLine = 'never'
+ * if (a) b
+ * else c
+ *
+ * // singleLine = 'always'
+ * if (a) { b } else { c }
+ * if (a) { b } else if (c) { d }
+ * // multiLine = 'always'
+ * if (a) { b }
+ * else { c }
+ * if (a) { b }
+ * else if (c) { d }
+ *
+ * // singleLine = 'consistent'
+ * if (a) { b } else { c }
+ * if (a) b else { c; d } // multi-expression
+ * // multiLine = 'consistent'
+ * if (a) { b }
+ * else { c }
+ * if (a) b
+ * else c
  * </compliant>
  */
 class BracesOnIfStatements(config: Config = Config.empty) : Rule(config) {
@@ -49,88 +83,88 @@ class BracesOnIfStatements(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("single-line braces policy")
-    private val singleLine: String by config(BRACES_NEVER)
+    private val singleLine: BracePolicy by config(BRACES_NEVER) { BracePolicy.getValue(it) }
 
     @Configuration("multi-line braces policy")
-    private val multiLine: String by config(BRACES_ALWAYS)
+    private val multiLine: BracePolicy by config(BRACES_ALWAYS) { BracePolicy.getValue(it) }
 
     override fun visitIfExpression(expression: KtIfExpression) {
         super.visitIfExpression(expression)
 
-        val isMultiline = isMultiline(expression.ifKeyword)
+        val policy = policy(expression)
 
         val thenExpression = expression.then ?: return
-        if (!isCompliant(thenExpression, isMultiline)) {
+        if (!isExpressionCompliant(policy, thenExpression)) {
             report(CodeSmell(issue, Entity.from(expression.ifKeyword), issue.description))
         }
 
         val elseExpression = expression.`else` ?: return
-        if (!shouldSkip(elseExpression) && !isCompliant(elseExpression, isMultiline)) {
+        if (!shouldSkipElse(elseExpression) && !isExpressionCompliant(policy, elseExpression)) {
             report(CodeSmell(issue, Entity.from(expression.elseKeyword ?: elseExpression), issue.description))
         }
 
-        if (!isConsistent(thenExpression, elseExpression, isMultiline)) {
+        if (!isStatementConsistent(policy, thenExpression, elseExpression)) {
             report(CodeSmell(issue, Entity.from(expression.ifKeyword), "Inconsistent braces"))
         }
     }
 
-    private fun isCompliant(expression: KtExpression, isMultiline: Boolean): Boolean = when {
-        isMultiStatement(expression) -> {
-            true
-        }
+    private fun policy(expression: KtExpression) = if (expression.textContains('\n')) multiLine else singleLine
 
-        isMultiline && (multiLine == BRACES_ALWAYS) || !isMultiline && (singleLine == BRACES_ALWAYS) -> {
-            expression is KtBlockExpression
-        }
+    private fun hasBraces(expression: KtExpression) = expression is KtBlockExpression
 
-        isMultiline && (multiLine == BRACES_NEVER) || !isMultiline && (singleLine == BRACES_NEVER) -> {
-            expression !is KtBlockExpression
-        }
+    private fun isExpressionCompliant(policy: BracePolicy, expression: KtExpression): Boolean {
+        if (isMultiStatement(expression)) return true
 
-        else -> {
-            true
+        return when (policy) {
+            BracePolicy.Always -> { hasBraces(expression) }
+            BracePolicy.Never -> { !hasBraces(expression) }
+            BracePolicy.Consistent -> { true }
         }
     }
 
-    private fun isConsistent(
+    private fun isStatementConsistent(
+        policy: BracePolicy,
         thenExpression: KtExpression,
-        elseExpression: KtExpression,
-        isMultiline: Boolean
-    ): Boolean = when {
-        shouldSkip(elseExpression) -> {
-            true
-        }
+        elseExpression: KtExpression
+    ): Boolean {
+        if (shouldSkipElse(elseExpression) ||
+            isMultiStatement(thenExpression) ||
+            isMultiStatement(elseExpression)
+        ) { return true }
 
-        isMultiline && (multiLine == BRACES_CONSISTENT) || !isMultiline && (singleLine == BRACES_CONSISTENT) -> {
-            thenExpression is KtBlockExpression && elseExpression is KtBlockExpression ||
-                thenExpression !is KtBlockExpression && elseExpression !is KtBlockExpression
-        }
-
-        else -> {
-            true
-        }
+        return if (policy == BracePolicy.Consistent) {
+            hasBraces(thenExpression) && hasBraces(elseExpression) ||
+                !hasBraces(thenExpression) && !hasBraces(elseExpression)
+        } else { true }
     }
 
-    private fun isMultiStatement(expression: KtExpression): Boolean {
-        if (expression !is KtBlockExpression) return false
+    private fun isMultiStatement(expression: KtExpression): Boolean =
+        expression is KtBlockExpression && expression.statements.size > 1
 
-        return expression
-            .firstChild
-            .siblings(forward = true, withItself = false)
-            .count { it is KtExpression } > 0
-    }
-
-    private fun isMultiline(element: PsiElement?): Boolean {
-        if (element == null) return false
-        return element.siblings().any { it.textContains('\n') }
-    }
-
-    private fun shouldSkip(expression: KtExpression): Boolean =
-        expression is KtIfExpression || expression is KtWhenExpression
+    private fun shouldSkipElse(elseExpression: KtExpression): Boolean =
+        elseExpression is KtIfExpression || elseExpression is KtWhenExpression
 
     companion object {
         private const val BRACES_ALWAYS = "always"
         private const val BRACES_NEVER = "never"
         private const val BRACES_CONSISTENT = "consistent"
+    }
+
+    enum class BracePolicy {
+        Always,
+        Never,
+        Consistent;
+
+        companion object {
+            fun getValue(arg: String) =
+                when (arg) {
+                    BRACES_NEVER -> Never
+                    BRACES_ALWAYS -> Always
+                    BRACES_CONSISTENT -> Consistent
+                    else -> error(
+                        "Unknown value $arg, allowed values are: $BRACES_NEVER|$BRACES_ALWAYS|$BRACES_CONSISTENT"
+                    )
+                }
+        }
     }
 }

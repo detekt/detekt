@@ -23,7 +23,7 @@ class BracesOnIfStatementsSpec {
         val subject = createSubject("consistent", "consistent")
 
         @Test
-        fun `does not report consistent multi-line with else if`() {
+        fun `does not report multi-line with else if`() {
             val findings = subject.compileAndLint(
                 """
                     fun f() {
@@ -40,7 +40,7 @@ class BracesOnIfStatementsSpec {
         }
 
         @Test
-        fun `does not report consistent single-line with else if`() {
+        fun `does not report single-line with else if`() {
             val findings = subject.compileAndLint(
                 """
                     fun f() {
