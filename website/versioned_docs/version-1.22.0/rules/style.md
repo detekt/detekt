@@ -1262,7 +1262,7 @@ when (i) {
 
 This rule detects the usage of the Pair constructor to create pairs of values.
 
-Using &lt;value1&gt; to &lt;value2&gt; is preferred.
+Using `<value1>` to `<value2>` is preferred.
 
 **Active by default**: No
 

@@ -45,11 +45,11 @@ internal class RulePrinterTest {
         }
 
         @Test
-        fun `with html tags`() {
-            val description = "The return type is Array<String>"
+        fun `with html tags does not escape them`() {
+            val description = "The return type is `Array<String>`"
             val rule = ruleTemplate.copy(description = description)
             val actual = RulePrinter.print(rule)
-            assertThat(actual).contains("The return type is Array&lt;String&gt;")
+            assertThat(actual).contains("The return type is `Array<String>`")
         }
     }
 
