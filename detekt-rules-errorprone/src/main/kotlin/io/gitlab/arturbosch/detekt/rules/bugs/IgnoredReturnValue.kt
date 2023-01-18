@@ -16,6 +16,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
+import org.jetbrains.kotlin.backend.common.serialization.findPackage
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -62,12 +63,24 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
     private val restrictToConfig: Boolean by configWithFallback(::restrictToAnnotatedMethods, defaultValue = true)
 
     @Configuration("List of glob patterns to be used as inspection annotation")
-    private val returnValueAnnotations: List<Regex> by config(listOf("*.CheckResult", "*.CheckReturnValue")) {
+    private val returnValueAnnotations: List<Regex> by config(
+        listOf(
+            "CheckResult",
+            "*.CheckResult",
+            "CheckReturnValue",
+            "*.CheckReturnValue"
+        )
+    ) {
         it.map(String::simplePatternToRegex)
     }
 
     @Configuration("Annotations to skip this inspection")
-    private val ignoreReturnValueAnnotations: List<Regex> by config(listOf("*.CanIgnoreReturnValue")) {
+    private val ignoreReturnValueAnnotations: List<Regex> by config(
+        listOf(
+            "CanIgnoreReturnValue",
+            "*.CanIgnoreReturnValue"
+        )
+    ) {
         it.map(String::simplePatternToRegex)
     }
 
@@ -102,7 +115,7 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
 
         if (ignoreFunctionCall.any { it.match(resultingDescriptor) }) return
 
-        val annotations = resultingDescriptor.annotations
+        val annotations = resultingDescriptor.annotations + resultingDescriptor.findPackage().annotations
         if (annotations.any { it in ignoreReturnValueAnnotations }) return
         if (restrictToConfig &&
             resultingDescriptor.returnType !in returnValueTypes &&
