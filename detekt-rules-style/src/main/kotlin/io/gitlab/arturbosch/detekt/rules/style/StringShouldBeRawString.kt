@@ -19,10 +19,11 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypesAndPredicate
 import org.jetbrains.kotlin.psi2ir.deparenthesize
 
 /**
- * This rule reports when string can be converted to Kotlin raw string.
- *
- * Usage of raw string is preferred as that avoids the need of escaping strings escape characters like `\n`, `\t`, `"`.
- * Raw string also allow us to represent multiline string without the need of `\n`
+ * This rule reports when the string can be converted to Kotlin raw string.
+ * Usage of a raw string is preferred as that avoids the need for escaping strings escape characters like \n, \t, ".
+ * Raw string also allows us to represent multiline string without the need of \n.
+ * Also, see [Kotlin coding convention](https://kotlinlang.org/docs/coding-conventions.html#strings)  for
+ * recommendation on using multiline strings
  *
  * <noncompliant>
  * val windowJson = "{\n" +
@@ -90,11 +91,12 @@ class StringShouldBeRawString(config: Config) : Rule(config) {
             expressionParent !is KtBinaryExpression ||
             (rootElement != null && expression.isPivotElementInTheTree(rootElement))
         ) {
-            val shouldReport = rootElement.buildStringExcludingRawString().flatMap { stringTemplateExpressionText ->
-                REGEX_FOR_ESCAPE_CHARS.findAll(stringTemplateExpressionText).filter {
-                    it.value !in ignoredCharacters
-                }
-            }.take(maxEscapedCharacterCount + 1).toList().size > maxEscapedCharacterCount
+            val shouldReport =
+                rootElement.getStringSequenceExcludingRawString().flatMap { stringTemplateExpressionText ->
+                    REGEX_FOR_ESCAPE_CHARS.findAll(stringTemplateExpressionText).filter {
+                        it.value !in ignoredCharacters
+                    }
+                }.take(maxEscapedCharacterCount + 1).toList().size > maxEscapedCharacterCount
             if (shouldReport) {
                 report(
                     CodeSmell(
@@ -118,7 +120,7 @@ class StringShouldBeRawString(config: Config) : Rule(config) {
         }
     }
 
-    private fun KtElement?.buildStringExcludingRawString(): Sequence<String> {
+    private fun KtElement?.getStringSequenceExcludingRawString(): Sequence<String> {
         this ?: return sequence { yield("") }
 
         fun KtElement?.getStringSequence(): Sequence<KtStringTemplateExpression> = sequence {
