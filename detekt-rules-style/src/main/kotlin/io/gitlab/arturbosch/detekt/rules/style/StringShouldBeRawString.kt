@@ -81,23 +81,19 @@ class StringShouldBeRawString(config: Config) : Rule(config) {
 
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
         super.visitStringTemplateExpression(expression)
-        if (maxEscapedCharacterCount == Int.MAX_VALUE) {
-            return
-        }
-        val maxEscapedCharacterCount = this.maxEscapedCharacterCount.coerceAtLeast(0)
         val expressionParent = expression.getParentExpressionAfterParenthesis()
         val rootElement = expression.getRootExpression()
         if (
             expressionParent !is KtBinaryExpression ||
             (rootElement != null && expression.isPivotElementInTheTree(rootElement))
         ) {
-            val shouldReport =
-                rootElement.getStringSequenceExcludingRawString().flatMap { stringTemplateExpressionText ->
-                    REGEX_FOR_ESCAPE_CHARS.findAll(stringTemplateExpressionText).filter {
-                        it.value !in ignoredCharacters
-                    }
-                }.take(maxEscapedCharacterCount + 1).toList().size > maxEscapedCharacterCount
-            if (shouldReport) {
+            val stringSeqToProcess = rootElement?.getStringSequenceExcludingRawString() ?: sequenceOf("")
+            val hasNoViolations = stringSeqToProcess.flatMap { stringTemplateExpressionText ->
+                REGEX_FOR_ESCAPE_CHARS.findAll(stringTemplateExpressionText).filter {
+                    it.value !in ignoredCharacters
+                }
+            }.drop(maxEscapedCharacterCount).none()
+            if (hasNoViolations.not()) {
                 report(
                     CodeSmell(
                         issue,
@@ -120,18 +116,19 @@ class StringShouldBeRawString(config: Config) : Rule(config) {
         }
     }
 
-    private fun KtElement?.getStringSequenceExcludingRawString(): Sequence<String> {
-        this ?: return sequence { yield("") }
-
-        fun KtElement?.getStringSequence(): Sequence<KtStringTemplateExpression> = sequence {
+    private fun KtElement.getStringSequenceExcludingRawString(): Sequence<String> {
+        fun KtElement.getStringSequence(): Sequence<KtStringTemplateExpression> = sequence {
             if (this@getStringSequence is KtStringTemplateExpression) {
                 yield(this@getStringSequence)
             } else if (this@getStringSequence is KtBinaryExpression) {
-                yieldAll(left?.deparenthesize().getStringSequence())
-                yieldAll(right?.deparenthesize().getStringSequence())
+                left?.let {
+                    yieldAll(it.deparenthesize().getStringSequence())
+                }
+                right?.let {
+                    yieldAll(it.deparenthesize().getStringSequence())
+                }
             }
         }
-
         return this.getStringSequence().filter {
             (it.text.startsWith("\"\"\"") && it.text.endsWith("\"\"\"")).not()
         }.map {

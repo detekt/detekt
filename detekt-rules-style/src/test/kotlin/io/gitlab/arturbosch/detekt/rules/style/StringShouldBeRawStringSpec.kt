@@ -134,6 +134,19 @@ class StringShouldBeRawStringSpec {
     }
 
     @Test
+    fun `does report in case of multiple violations in multiple expressions`() {
+        val code = """
+            fun test() {
+                val size1 = "\n + \n".length
+                val size2 = "\n + \n".length
+            }
+        """.trimIndent()
+        val subject = StringShouldBeRawString(TestConfig(mapOf(MAX_ESCAPED_CHARACTER_COUNT to 1)))
+        subject.compileAndLint(code)
+        assertThat(subject.findings).hasSize(2)
+    }
+
+    @Test
     fun `does report in case of string has operator call with violations`() {
         val code = """
             operator fun String.not() = true
@@ -303,19 +316,6 @@ class StringShouldBeRawStringSpec {
     }
 
     @Test
-    fun `does report in case of multiple violations in multiple expressions`() {
-        val code = """
-            fun test() {
-                val size1 = "\n + \n".length
-                val size2 = "\n + \n".length
-            }
-        """.trimIndent()
-        val subject = StringShouldBeRawString(TestConfig(mapOf(MAX_ESCAPED_CHARACTER_COUNT to 1)))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(2)
-    }
-
-    @Test
     fun `does not report in case of single line comment`() {
         val code = """
             fun test() {
@@ -367,54 +367,6 @@ class StringShouldBeRawStringSpec {
         val subject = StringShouldBeRawString(TestConfig(mapOf(MAX_ESCAPED_CHARACTER_COUNT to 0)))
         subject.compileAndLint(code)
         assertThat(subject.findings).isEmpty()
-    }
-
-    @Test
-    fun `does not report non violating string in case maximum violations is Int MAX`() {
-        val code = """
-            fun test() {
-                val size1 = "This rule is awesome".length
-            }
-        """.trimIndent()
-        val subject = StringShouldBeRawString(TestConfig(mapOf(MAX_ESCAPED_CHARACTER_COUNT to Int.MAX_VALUE)))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
-    }
-
-    @Test
-    fun `does not report one violating string in case maximum violations is Int MAX`() {
-        val code = """
-            fun test() {
-                val size1 = "This rule is awesome \n".length
-            }
-        """.trimIndent()
-        val subject = StringShouldBeRawString(TestConfig(mapOf(MAX_ESCAPED_CHARACTER_COUNT to Int.MAX_VALUE)))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
-    }
-
-    @Test
-    fun `does not report non violating string in case maximum violations is Int MIN`() {
-        val code = """
-            fun test() {
-                val size1 = "This rule is awesome".length
-            }
-        """.trimIndent()
-        val subject = StringShouldBeRawString(TestConfig(mapOf(MAX_ESCAPED_CHARACTER_COUNT to Int.MIN_VALUE)))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
-    }
-
-    @Test
-    fun `does not report one violating string in case maximum violations is Int MIN`() {
-        val code = """
-            fun test() {
-                val size1 = "This rule is awesome \n".length
-            }
-        """.trimIndent()
-        val subject = StringShouldBeRawString(TestConfig(mapOf(MAX_ESCAPED_CHARACTER_COUNT to Int.MIN_VALUE)))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(1)
     }
 
     companion object {
@@ -574,7 +526,6 @@ class StringShouldBeRawStringSpec {
             return Stream.of(
                 Arguments.of(""""\t\t\t"""", 3, listOf("\\t")),
                 Arguments.of(""""\\\\\\"""", 3, listOf("\\\\")),
-                Arguments.of(""""\n\n\n"""", 3, listOf("\\n")),
                 Arguments.of(""" "abc" + "\n" + "efg" + "\n" + "hij\n"  """, 3, listOf("\\n")),
                 Arguments.of(""""\"[^\"\\\\\\n]*(?:\\\\.[^\"\\\\\\n]*)*\""""", 12, listOf("\\n", "\\\\", "\\\"")),
                 Arguments.of(""""In java new line char is \n"""", 1, listOf("\\n")),
