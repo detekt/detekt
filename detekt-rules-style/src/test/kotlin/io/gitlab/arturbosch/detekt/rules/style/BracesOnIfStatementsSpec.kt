@@ -3,8 +3,162 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+
+@Language("kotlin")
+private const val BLOCK_WITHOUT_BRACES_PASS = """
+    fun f() { 
+        if (true) println() 
+        if (true) 
+            println() 
+        if (true) println() else println() 
+        if (true) 
+            println() 
+        else
+            println()
+
+        if (true) println() else if (true) println() else println()
+        if (true) 
+            println() 
+        else 
+            if (true) println() else println()
+
+        val a = 0
+        when (a) {
+            0 -> if (true) println() else println()
+            1 -> if (true) 
+                    println() 
+                else 
+                    println()
+            2 -> if (true) println() else if (true) println() else println()
+            3 -> if (true) 
+                    println() 
+                else 
+                    if (true) println() else println()
+        }
+    }
+"""
+
+@Language("kotlin")
+private const val BLOCK_WITH_BRACES_PASS = """
+    fun f() { 
+        if (true) { println() } 
+        if (true) {
+            println()
+        }
+        if (true) { println() } else { println() } 
+        if (true) {
+            println()
+        } else { 
+            println()
+        }
+
+        if (true) { println() } else if (true) { println() } else { println() }
+        if (true) { println() } else { if (true) { println() } else { println() } }
+        if (true) { 
+            println()
+        } else if (true) { 
+            println() 
+        } else { 
+            println() 
+        }
+
+        val a = 0
+        when (a) {
+            0 -> if (true) { println() } else { println() }
+            1 -> if (true) {
+                    println()
+                } else { 
+                    println()
+                }
+            2 -> if (true) { println() } else if (true) { println() } else { println() }
+            3 -> if (true) {
+                    println()
+                } else if (true) {
+                    println()
+                } else {
+                    println()
+                }
+        }
+    }
+"""
+
+@Language("kotlin")
+private const val BLOCK_WITHOUT_BRACES_FAIL = """
+    fun f() { 
+        if (true) println() 
+        if (true) 
+            println() 
+        if (true) { println() } else println() 
+        if (true) 
+            println() 
+        else {
+            println()
+        }
+
+        if (true) println() else if (true) println() else { println() }
+        if (true) 
+            println() 
+        else 
+            if (true) { println() } else println()
+
+        val a = 0
+        when (a) {
+            0 -> if (true) println() else { println() }
+            1 -> if (true) 
+                    { println() } 
+                else 
+                    println()
+            2 -> if (true) println() else if (true) { println() } else println()
+            3 -> if (true) 
+                    println() 
+                else 
+                    if (true) println() else { println() }
+        }
+    }
+"""
+
+@Language("kotlin")
+private const val BLOCK_WITH_BRACES_FAIL = """
+    fun f() { 
+        if (true) { println() } 
+        if (true) {
+            println()
+        }
+        if (true) println() else { println() } 
+        if (true) {
+            println()
+        } else println()
+
+        if (true) { println() } else if (true) println() else { println() }
+        if (true) println() else { if (true) println() else println() }
+        if (true) { 
+            println()
+        } else if (true) { 
+            println() 
+        } else 
+            println()
+
+        val a = 0
+        when (a) {
+            0 -> if (true) { println() } else println()
+            1 -> if (true) println()
+                else { 
+                    println()
+                }
+            2 -> if (true) { println() } else if (true) { println() } else println()
+            3 -> if (true) {
+                    println()
+                } else if (true)
+                    println()
+                else {
+                    println()
+                }
+        }
+    }
+"""
 
 class BracesOnIfStatementsSpec {
 
@@ -19,335 +173,129 @@ class BracesOnIfStatementsSpec {
     }
 
     @Nested
-    inner class `consistency checks` {
+    inner class `braces consistent` {
         val subject = createSubject("consistent", "consistent")
 
         @Test
-        fun `does not report multi-line with else if`() {
-            val findings = subject.compileAndLint(
-                """
-                    fun f() {
-                        if (true) { 
-                            println() 
-                        } else if (true) println()
-                        if (true) println() 
-                        else if (true) println()
-                    }
-                """.trimIndent()
-            )
+        fun `does not report consistent block without braces`() {
+            val findings = subject.compileAndLint(BLOCK_WITHOUT_BRACES_PASS)
 
             assertThat(findings).isEmpty()
         }
 
         @Test
-        fun `does not report single-line with else if`() {
-            val findings = subject.compileAndLint(
-                """
-                    fun f() {
-                        if (true) { println() } else if (true) println()
-                        if (true) { println() } else { if (true) println() }
-                        if (true) println() else if (true) println()
-                    }
-                """.trimIndent()
-            )
+        fun `does not report consistent block with braces`() {
+            val findings = subject.compileAndLint(BLOCK_WITH_BRACES_PASS)
 
             assertThat(findings).isEmpty()
         }
 
         @Test
-        fun `does not report consistent single line if`() {
-            val findings = subject.compileAndLint(
-                """
-                    fun f() {
-                        if (true) println() else println()
-                        if (true) { println() } else { println() }
-                    }
-                """.trimIndent()
-            )
+        fun `reports inconsistent block without braces`() {
+            val findings = subject.compileAndLint(BLOCK_WITHOUT_BRACES_FAIL)
 
-            assertThat(findings).isEmpty()
+            assertThat(findings).hasSize(8)
+            assertThat(findings).hasTextLocations(
+                119 to 123,
+                185 to 189,
+                278 to 282,
+                365 to 367,
+                479 to 483,
+                577 to 581,
+                655 to 657,
+                815 to 819
+            )
         }
 
         @Test
-        fun `does not report consistent multi-line if`() {
-            val findings = subject.compileAndLint(
-                """
-                    fun f() {
-                        if (true) { 
-                            println()
-                        } else {
-                            println()
-                        }
-                        if (true) println()
-                        else println()
-                    }
-                """.trimIndent()
-            )
+        fun `reports inconsistent block with braces`() {
+            val findings = subject.compileAndLint(BLOCK_WITH_BRACES_FAIL)
 
-            assertThat(findings).isEmpty()
+            assertThat(findings).hasSize(9)
+            assertThat(findings).hasTextLocations(
+                129 to 133,
+                201 to 205,
+                254 to 256,
+                321 to 325,
+                469 to 473,
+                576 to 580,
+                644 to 648,
+                770 to 774,
+                867 to 869
+            )
         }
 
         @Test
-        fun `reports inconsistent single line if`() {
+        fun `reports if when else is multi-statement`() {
             val findings = subject.compileAndLint(
                 """
                     fun f() {
-                        if (true) { println() } else println()
-                        if (true) println() else { println() }
+                        if (true) println() else { println(); println() }
                     }
                 """.trimIndent()
             )
-
-            assertThat(findings).hasSize(2)
-            assertThat(findings).hasTextLocations(14 to 16, 57 to 59)
-        }
-
-        @Test
-        fun `reports inconsistent multi line if`() {
-            val findings = subject.compileAndLint(
-                """
-                    fun f() {
-                        if (true) {
-                            println() 
-                        } else println()
-                        if (true) 
-                            println()
-                        else { println() }
-                    }
-                """.trimIndent()
-            )
-
-            assertThat(findings).hasSize(2)
-            assertThat(findings).hasTextLocations(14 to 16, 70 to 72)
-        }
-    }
-
-    @Nested
-    inner class `if statements which should have braces` {
-        val subject = createSubject("never", "always")
-
-        @Test
-        fun `reports either then or else without braces`() {
-            val findings = subject.compileAndLint(
-                """
-                    fun f() {
-                        if (true) { println() } 
-                        else println()
-                        
-                        if (true) println() 
-                        else { println() }
-                    }
-                """.trimIndent()
-            )
-
-            assertThat(findings).hasSize(2)
-            assertThat(findings).hasTextLocations(43 to 47, 67 to 69)
-        }
-
-        @Test
-        fun `reports a simple if`() {
-            val findings = subject.compileAndLint(
-                """
-            fun f() {
-                if (true)
-                    println()
-            }
-                """.trimIndent()
-            )
-
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(14 to 16)
         }
+    }
+
+    @Nested
+    inner class `braces always` {
+        val subject = createSubject("always", "always")
 
         @Test
-        fun `reports a simple if with a single statement in multiple lines`() {
-            val findings = subject.compileAndLint(
-                """
-                fun f() {
-                	if (true) 50
-                        .toString()
-                }
-                """.trimIndent()
-            )
+        fun `does not report correct block with braces`() {
+            val findings = subject.compileAndLint(BLOCK_WITH_BRACES_PASS)
 
-            assertThat(findings).hasSize(1)
+            assertThat(findings).isEmpty()
         }
 
         @Test
-        fun `reports if-else with a single statement in multiple lines`() {
-            val findings = subject.compileAndLint(
-                """
-                fun f() {
-                	if (true) 50
-                        .toString() else 50
-                        .toString()
-                }
-                """.trimIndent()
+        fun `reports incorrect block with braces`() {
+            val findings = subject.compileAndLint(BLOCK_WITH_BRACES_FAIL)
+
+            assertThat(findings).hasSize(10)
+            assertThat(findings).hasTextLocations(
+                109 to 111,
+                201 to 205,
+                254 to 256,
+                328 to 330,
+                301 to 303,
+                469 to 473,
+                576 to 580,
+                608 to 610,
+                770 to 774,
+                867 to 869
             )
-
-            assertThat(findings).hasSize(2)
-            assertThat(findings).hasTextLocations(11 to 13, 44 to 48)
-        }
-
-        @Test
-        fun `reports if-else`() {
-            val findings = subject.compileAndLint(
-                """
-            fun f() {
-                if (true)
-                    println()
-                else
-                    println()
-            }
-                """.trimIndent()
-            )
-
-            assertThat(findings).hasSize(2)
-            assertThat(findings).hasTextLocations(14 to 16, 46 to 50)
-        }
-
-        @Test
-        fun `reports if-else with else-if`() {
-            val findings = subject.compileAndLint(
-                """
-            fun f() {
-                if (true)
-                    println()
-                else if (false)
-                    println()
-                else
-                    println()
-            }
-                """.trimIndent()
-            )
-
-            assertThat(findings).hasSize(3)
-            assertThat(findings).hasTextLocations(14 to 16, 51 to 53, 84 to 88)
-        }
-
-        @Test
-        fun `reports if with braces but else without`() {
-            val findings = subject.compileAndLint(
-                """
-            fun f() {
-                if (true) {
-                    println()
-                } else
-                    println()
-            }
-                """.trimIndent()
-            )
-
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(50 to 54)
-        }
-
-        @Test
-        fun `reports else with braces but if without`() {
-            val findings = subject.compileAndLint(
-                """
-            fun f() {
-                if (true)
-                    println()
-                else {
-                    println()
-                }
-            }
-                """.trimIndent()
-            )
-
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(14 to 16)
-        }
-
-        @Test
-        fun `reports both then and else 1`() {
-            val findings = subject.compileAndLint(
-                """
-            fun f() {
-                if (true) println()
-                else println()
-            }
-                """.trimIndent()
-            )
-
-            assertThat(findings).hasSize(2)
-            assertThat(findings).hasTextLocations(14 to 16, 38 to 42)
-        }
-
-        @Test
-        fun `reports both then and else 2`() {
-            val findings = subject.compileAndLint(
-                """
-            fun f() {
-                if (true) println() else
-                    println()
-            }
-                """.trimIndent()
-            )
-
-            assertThat(findings).hasSize(2)
-            assertThat(findings).hasTextLocations(14 to 16, 34 to 38)
         }
     }
 
     @Nested
-    inner class `multiline if statements with braces` {
-        val subject = createSubject("never", "always")
+    inner class `braces never` {
+        val subject = createSubject("never", "never")
 
         @Test
-        fun `does not report if statements with braces`() {
-            val code = """
-                fun f() {
-                	if (true) {
-                		println()
-                	}
-                	if (true)
-                	{
-                		println()
-                	}
-                	if (true)                 
-                		{ println() }
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+        fun `does not report correct block without braces`() {
+            val findings = subject.compileAndLint(BLOCK_WITHOUT_BRACES_PASS)
+
+            assertThat(findings).isEmpty()
         }
-    }
-
-    @Nested
-    inner class `single-line if statements which don't need braces` {
-        val subject = createSubject("never", "always")
 
         @Test
-        fun `does not report single-line if statements`() {
-            val code = """
-                fun f() {
-                	if (true) println()
-                	if (true) println() else println()
-                	if (true) println() else if (false) println() else println()
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
-    }
+        fun `reports incorrect block without braces`() {
+            val findings = subject.compileAndLint(BLOCK_WITHOUT_BRACES_FAIL)
 
-    @Nested
-    inner class `multi-line when following an else statement without requiring braces` {
-        val subject = createSubject("never", "always")
-
-        @Test
-        fun `does not report multi-line when`() {
-            val code = """
-                fun f(i: Int) {
-                	if (true) {
-                        println()
-                    } else when(i) {
-                        1 -> println(1)
-                        else -> println()
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(findings).hasSize(8)
+            assertThat(findings).hasTextLocations(
+                95 to 97,
+                185 to 189,
+                278 to 282,
+                365 to 367,
+                479 to 483,
+                515 to 517,
+                655 to 657,
+                815 to 819
+            )
         }
     }
 }
