@@ -294,4 +294,43 @@ class MaxLineLengthSpec {
         assertThat(rule.findings).hasSize(1)
         assertThat(rule.findings).hasTextLocations(22 to 96)
     }
+
+    @Test
+    fun `report the correct lines on interpolated strings - issue #5314`() {
+        val rule = MaxLineLength(
+            TestConfig(
+                MAX_LINE_LENGTH to "65",
+            )
+        )
+
+        rule.visitKtFile(
+            compileContentForTest(
+                """
+                    interface TaskContainer {
+                        fun register(name: String, block: Number.() -> Unit = {})
+                    }
+                    interface Project {
+                        val tasks: TaskContainer
+                    }
+                    fun repros(project: Project) {
+                        val part = "name".capitalize()
+                        project.tasks.register("shortName${'$'}{part}WithSuffix")
+                        project.tasks.register("veryVeryVeryVeryVeryVeryLongName${'$'}{part}WithSuffix1")
+                        project.tasks.register("veryVeryVeryVeryVeryVeryLongName${'$'}{part}WithSuffix2") {
+                            this.toByte()
+                        }
+                        project.tasks
+                            .register("veryVeryVeryVeryVeryVeryLongName${'$'}{part}WithSuffix3") {
+                            this.toByte()
+                        }
+                    }
+                """.trimIndent()
+            )
+        )
+        assertThat(rule.findings).hasTextLocations(
+            "    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix1\")",
+            "    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix2\") {",
+            "        .register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix3\") {",
+        )
+    }
 }
