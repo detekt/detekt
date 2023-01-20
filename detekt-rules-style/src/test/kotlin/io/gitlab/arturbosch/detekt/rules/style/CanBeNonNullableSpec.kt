@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
+import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -48,6 +49,26 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+        }
+
+        @Test
+        fun `reports when class-level vars are never assigned nullable values via chained call`() {
+            val code = """
+            class A {
+                $COMMON_CHAIN_CODE
+                private var bar: RandomBar = RandomBar()
+                private var a: String? = ""
+                private var b: String? = ""
+                private var c: String? = ""
+
+                fun foo() {
+                    a = bar.nonNullId
+                    b = bar.nonNullId.nullable().nonNullable()
+                    c = bar.nullId.nonNullable()
+                }
+            }
+            """.trimIndent()
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
         }
 
         @Test
@@ -123,6 +144,27 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         return if (bizz % 2 == 0) null else bizz
                     }
                 }
+            """.trimIndent()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report when class-level vars are assigned nullable values via chained call`() {
+            val code = """
+            $COMMON_CHAIN_CODE
+
+            class A {
+                private var a: String? = ""
+                private var b: String? = ""
+                private var c: String? = ""
+                private val bar: RandomBar = RandomBar()
+
+                fun foo() {
+                    a = bar.nullId
+                    b = bar.nullId.nonNullable().nullable()
+                    c = bar.nonNullId.nullable()
+                }
+            }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
@@ -269,8 +311,6 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report when class-level vals are assigned a nullable value`() {
             val code = """
-                import kotlin.random.Random
-                
                 class A(cVal: Int?) {
                     val a: Int? = null
                     val b: Int?
@@ -281,6 +321,26 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         c = cVal
                     }
                 }
+            """.trimIndent()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report when class-level vals are assigned a nullable value by chained call`() {
+            val code = """
+            $COMMON_CHAIN_CODE
+            class A(cVal: Int?) {
+                val bar = RandomBar()
+                val a: String?
+                val b: String?
+                val c: String?
+
+                init {
+                    a = bar.nullId
+                    b = bar.nullId.nonNullable().nullable()
+                    c = bar.nonNullId.nullable()
+                }
+            }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
@@ -575,6 +635,19 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     """.trimIndent()
                     assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                 }
+
+                @Test
+                fun `does not report when chained nullable call is the only expression of the function`() {
+                    val code = """
+                        $COMMON_CHAIN_CODE
+                        val bar = RandomBar()
+                        
+                        fun foo1(a: A?) = bar.nullId
+                        fun foo2(a: A?) = bar.nullId.nonNullable().nullable()
+                        fun foo3(a: A?) = bar.nonNullId.nullable()
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
             }
 
             @Nested
@@ -720,6 +793,193 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                 }
 
+                // Failing
+                @Test
+                fun `does not report when else expression variable is smart casted to null`() {
+                    val code = """
+                        $COMMON_CHAIN_CODE
+                        fun foo(a: RandomBar?) {
+                            when {
+                                a?.nonNullId != null -> println("")
+                                else -> println("a is always null")
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                // Failing
+                @Test
+                fun `does not report when the parameter is checked on nullity via non null property call`() {
+                    val code = """
+                        $COMMON_CHAIN_CODE
+                        fun foo(a: RandomBar?) {
+                            when {
+                                a?.nullId?.length == 0 -> println("doesn't handle null a")
+                                a?.nonNullId == null -> println("handles a is null/non-null case")
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                @Test
+                fun `does report when the parameter chained call does not handle null`() {
+                    val code = """
+                        $COMMON_CHAIN_CODE
+                        fun foo(a: RandomBar?) {
+                            when {
+                                a?.nullId?.length == 0 -> println("doesn't handle when a is null")
+                                a?.nonNullId?.nullable() != null -> println("does not handle a is null case")
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                }
+
+                // Failing
+                @Test
+                fun `does not report when the parameter is checked on nullity via chained property and function`() {
+                    val code = """
+                        $COMMON_CHAIN_CODE
+                        fun foo(a: RandomBar?) {
+                            when {
+                                a?.nullId?.length == 0 -> println("doesn't handle when a is null")
+                                a?.nonNullId?.nullable() == null -> println("handles a is null/non-null case")
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                // Failing
+                @Test
+                fun `does not report when the parameter is checked via chained null property and non null property`() {
+                    val code = """
+                        $COMMON_CHAIN_CODE
+                        fun foo(a: RandomBar?) {
+                            when {
+                                a?.nullId?.length != 0 -> println("handles a is null/non-null case")
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                @Test
+                fun `does report when parameter is not checked for nullability with inc operator`() {
+                    val code = """
+                        class A {
+                            operator fun not() = this
+                        }
+                        
+                        
+                        var c = 100
+                        fun test(a: A, b: A?) {
+                            when {
+                                b != null && !b != a -> {
+                                    println("doesn't handle null")
+                                }
+                                (b != null) && !b != a -> {
+                                    println("doesn't handle null")
+                                }
+                                (c > 10 || (b != null && !b != a)) -> {
+                                    println("doesn't handle null")
+                                }
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                }
+
+                @Test
+                fun `does not report when parameter handles for nullability with dec operator`() {
+                    val code = """
+                        operator fun A?.not() = this
+                        class A
+                        
+                        fun test(a: A, b: A?) {
+                            when {
+                                !b != a -> {
+                                    println("handles b is null/non-null case")
+                                }
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                @Test
+                fun `does not report when parameter handles for nullability with dec operator with && clause`() {
+                    val code = """
+                        operator fun A?.not() = this
+                        class A
+                        
+                        fun test(a: A, b: A?) {
+                            when {
+                                (b != null) && !b != a -> {
+                                    println("doesn't handle null")
+                                }
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                @Test
+                fun `does not report when parameter handles for null with dec operator with _and_ and _or_ clause`() {
+                    val code = """
+                        operator fun A?.not() = this
+                        class A
+
+                        var c = 10
+                        fun test(a: A, b: A?) {
+                            when {
+                                (c > 10 || (b != null && !b != a)) -> {
+                                    println("doesn't handle null")
+                                }
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                // Failing
+                @Test
+                fun `does report when parameter is not checked for nullability with get operator`() {
+                    val code = """
+                        class A {
+                            operator fun get(key: String) = this
+                        }
+                        
+                        fun test(a: A, b: A?) {
+                            when {
+                                (b != null) && b[""] != a -> {
+                                    println("doesn't handle null")
+                                }
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                }
+
+                @Test
+                fun `does not report when parameter handles for null with get operator`() {
+                    val code = """
+                        operator fun A?.get(key: String) = this
+                        class A
+                        
+                        fun test(a: A, b: A?) {
+                            when {
+                                b[""] != a -> {
+                                    println("handles b is null/non-null case")
+                                }
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
                 @Test
                 fun `does not report on nullable type matching`() {
                     val code = """
@@ -774,6 +1034,36 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     """.trimIndent()
                     assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                 }
+
+                // Failing
+                @Test
+                fun `does not report when else handles null case`() {
+                    val code = """
+                        $COMMON_CHAIN_CODE
+                        fun foo(a: RandomBar?) {
+                            when {
+                                a?.nonNullId != null -> println("")
+                                else -> println("a is null")
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                // Failing
+                @Test
+                fun `does not report when else handles null case as well`() {
+                    val code = """
+                        $COMMON_CHAIN_CODE
+                        fun foo(a: RandomBar?) {
+                            when {
+                                a?.nullId?.length == 0 -> println("")
+                                else -> println("a is null")
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
             }
 
             @Nested
@@ -784,6 +1074,92 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         fun foo(a: Int?) {
                             when (a) {
                                 null -> println("a is null")
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                // Failing
+                @Test
+                fun `does not report when else handles null case with non null property`() {
+                    val code = """
+                        $COMMON_CHAIN_CODE
+                        fun foo(a: RandomBar?) {
+                            when(a?.nonNullId) {
+                                is String -> println("")
+                                else -> println("a is null")
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                // Failing
+                @Test
+                fun `does not report when else handles null case with nullable property`() {
+                    val code = """
+                        $COMMON_CHAIN_CODE
+                        fun foo(a: RandomBar?) {
+                            when(a?.nullId) {
+                                is String -> println("")
+                                else -> println("a is null")
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                @Test
+                fun `does report when null case is not handled in chained call`() {
+                    val code = """
+                        $COMMON_CHAIN_CODE
+                        fun foo(a: RandomBar?) {
+                            when(a?.nullId?.nullable()) {
+                                is String -> println("")
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                }
+
+                // Failing
+                @Test
+                fun `does not report when null case is handled in chained call`() {
+                    val code = """
+                        $COMMON_CHAIN_CODE
+                        fun foo(a: RandomBar?) {
+                            when(a?.nullId?.nullable()) {
+                                null -> println("")
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                @Test
+                fun `does not report when prefix operator takes null`() {
+                    val code = """
+                        operator fun A?.not() = false
+                        class A
+                        fun foo(a: A?) {
+                            when(!a) {
+                                true -> println("handles a is null/non-null case")
+                                false -> println("handles a is null/non-null case")
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                @Test
+                fun `does not report when suffix operator takes null`() {
+                    val code = """
+                        operator fun A?.get(key: String) = this
+                        class A
+                        fun foo(a: A?) {
+                            when(a[""]) {
+                                is A -> println("handles a is null/non-null case")
                             }
                         }
                     """.trimIndent()
@@ -972,5 +1348,30 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
+    }
+
+    companion object {
+        @Language("kotlin")
+        private const val COMMON_CHAIN_CODE = """
+            fun log(msg: String) {
+                println(msg)
+            }
+        
+            fun <M : Any> M.nullable(): M? = if (System.currentTimeMillis() % 2 == 0L) this else null
+            inline fun <reified M : Any> M?.nonNullable(): M 
+                = this ?: M::class.java.getConstructor().newInstance()
+            class RandomBar {
+                val nonNullId
+                    get() = System.currentTimeMillis().toString()
+                val nullId
+                    get() = if (System.currentTimeMillis() % 2 == 0L) System.currentTimeMillis().toString() else null
+            }
+            fun foo(a: RandomBar?) {
+                when {
+                    a?.nullId == null -> println("Either a is null or a.nullId is null")
+                    a?.nonNullId.nonNullable().nullable() == null -> println("a is null")
+                }
+            }
+        """
     }
 }
