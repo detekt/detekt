@@ -295,10 +295,10 @@ core-js@^3.8.2:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.24.1.tgz#cf7724d41724154010a6576b7b57d94c5d66e64f"
   integrity sha512-0QTBSYSUZ6Gq21utGzkfITDylE8jWC9Ne1D2MrhvlsZBI1x39OdDIVbzSqtgMndIy6BlHxBXpMGqzZmnztg2rg==
 
-danger@11.2.1:
-  version "11.2.1"
-  resolved "https://registry.yarnpkg.com/danger/-/danger-11.2.1.tgz#0ac1f098926bfb8cbbdee32d5a0b286298d33e61"
-  integrity sha512-X2meihnBuCg6TRFzahf+Mi5uFIJSJzigrSiySawgvnsdyEB87vz9bNFf+vlgXjIYtWq5OceFqzstTadhoCHJhA==
+danger@11.2.2:
+  version "11.2.2"
+  resolved "https://registry.yarnpkg.com/danger/-/danger-11.2.2.tgz#916ef20150b8f2513aab7ca1a42f01c5f374c35f"
+  integrity sha512-T/MV1wyPpzIW19uXNKiMKrwOMbBNvgepLNieJ93XcKUCipH4WB63EZhQf34uK0swfJsJRkaSBDu3B5x3dcuuqA==
   dependencies:
     "@gitbeaker/node" "^21.3.0"
     "@octokit/rest" "^18.12.0"
