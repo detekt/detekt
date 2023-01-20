@@ -9,11 +9,11 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-@KotlinCoreEnvironmentTest
-class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
+class IgnoredReturnValueSpec {
 
     @Nested
-    inner class `default config with non-annotated return values` {
+    @KotlinCoreEnvironmentTest
+    inner class `default config with non-annotated return values`(private val env: KotlinCoreEnvironment) {
         private val subject = IgnoredReturnValue()
 
         @Test
@@ -182,7 +182,8 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    inner class `default config with annotated return values` {
+    @KotlinCoreEnvironmentTest
+    inner class `default config with annotated return values`(private val env: KotlinCoreEnvironment) {
         private val subject = IgnoredReturnValue()
 
         @Test
@@ -709,7 +710,8 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    inner class `custom annotation config` {
+    @KotlinCoreEnvironmentTest
+    inner class `custom annotation config`(private val env: KotlinCoreEnvironment) {
         val subject = IgnoredReturnValue(
             TestConfig(mapOf("returnValueAnnotations" to listOf("*.CustomReturn")))
         )
@@ -771,7 +773,8 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    inner class `restrict to config` {
+    @KotlinCoreEnvironmentTest
+    inner class `restrict to config`(private val env: KotlinCoreEnvironment) {
         val subject = IgnoredReturnValue(TestConfig(mapOf("restrictToConfig" to false)))
 
         @Test
@@ -902,7 +905,8 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    inner class `return value types default config` {
+    @KotlinCoreEnvironmentTest
+    inner class `return value types default config`(private val env: KotlinCoreEnvironment) {
         private val subject = IgnoredReturnValue()
 
         @Test
@@ -964,6 +968,38 @@ class IgnoredReturnValueSpec(private val env: KotlinCoreEnvironment) {
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
+        }
+    }
+
+    @Nested
+    @KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
+    inner class `Java sources`(val env: KotlinCoreEnvironment) {
+        private val subject = IgnoredReturnValue()
+
+        @Test
+        fun `reports when annotation is on the method`() {
+            val code = """
+                import com.example.ignore_return_value.Foo
+                
+                fun test(foo: Foo) {
+                    foo.foo()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `reports when annotation is on the package`() {
+            val code = """
+                import com.example.ignore_return_value.annotation_on_package.Bar
+
+                fun test(bar: Bar) {
+                    bar.bar()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).hasSize(1)
         }
     }
 }
