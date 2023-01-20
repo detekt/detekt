@@ -17,57 +17,105 @@ import org.jetbrains.kotlin.psi.KtIfExpression
  * This rule detects `if` statements which do not comply with the specified rules.
  * Keeping braces consistent would improve readability and avoid possible errors.
  *
- * SingleLine if-statement has no '\n':
+ * The available options are:
+ *  * `always`: forces braces on all `if` and `else` branches in the whole codebase.
+ *  * `consistent`: ensures that braces are consistent within each `if`-`else if`-`else` chain.
+ *    If there's a brace on one of the branches, all branches should have it.
+ *  * `necessary`: forces no braces on any `if` and `else` branches in the whole codebase
+ *    except where necessary for multi-statement branches.
+ *  * `never`: forces no braces on any `if` and `else` branches in the whole codebase.
+ *
+ * SingleLine if-statement has no \n:
+ * ```
  * if (a) b else c
- * MultiLine if-statement has at least one '\n':
+ * ```
+ * MultiLine if-statement has at least one \n:
+ * ```
  * if (a) b
  * else c
+ * ```
  *
  * <noncompliant>
+ *
  * // singleLine = 'never'
  * if (a) { b } else { c }
+ *
  * if (a) { b } else c
+ *
+ * if (a) b else { c; d }
+ *
  * // multiLine = 'never'
- * if (a) { b }
- * else { c }
+ * if (a) {
+ *    b
+ * } else {
+ *    c
+ * }
  *
  * // singleLine = 'always'
  * if (a) b else c
+ *
  * if (a) { b } else c
+ *
  * // multiLine = 'always'
- * if (a) { b }
- * else c
+ * if (a) {
+ *    b
+ * } else
+ *    c
  *
  * // singleLine = 'consistent'
  * if (a) b else { c }
+ * if (a) b else if (c) d else { e }
+ *
  * // multiLine = 'consistent'
- * if (a) b
- * else { c }
+ * if (a)
+ *    b
+ * else {
+ *    c
+ * }
  * </noncompliant>
  *
  * <compliant>
  * // singleLine = 'never'
  * if (a) b else c
- * if (a) b else { c; d; } // multi-expression
+ *
  * // multiLine = 'never'
- * if (a) b
- * else c
+ * if (a)
+ *    b
+ * else
+ *    c
  *
  * // singleLine = 'always'
  * if (a) { b } else { c }
+ *
  * if (a) { b } else if (c) { d }
+ *
  * // multiLine = 'always'
- * if (a) { b }
- * else { c }
- * if (a) { b }
- * else if (c) { d }
+ * if (a) {
+ *    b
+ * } else {
+ *    c
+ * }
+ *
+ * if (a) {
+ *    b
+ * } else if (c) {
+ *    d
+ * }
  *
  * // singleLine = 'consistent'
  * if (a) { b } else { c }
- * if (a) b else { c; d } // multi-expression
+ *
+ * if (a) b else c
+ *
+ * if (a) { b } else { c; d }
+ *
  * // multiLine = 'consistent'
- * if (a) { b }
- * else { c }
+ * if (a) {
+ *    b
+ * } else {
+ *    c
+ * }
+ *
  * if (a) b
  * else c
  * </compliant>
@@ -82,10 +130,10 @@ class BracesOnIfStatements(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("single-line braces policy")
-    private val singleLine: BracePolicy by config(BRACES_NEVER) { BracePolicy.getValue(it) }
+    private val singleLine: BracePolicy by config("never") { BracePolicy.getValue(it) }
 
     @Configuration("multi-line braces policy")
-    private val multiLine: BracePolicy by config(BRACES_ALWAYS) { BracePolicy.getValue(it) }
+    private val multiLine: BracePolicy by config("always") { BracePolicy.getValue(it) }
 
     override fun visitIfExpression(expression: KtIfExpression) {
         super.visitIfExpression(expression)
@@ -110,38 +158,45 @@ class BracesOnIfStatements(config: Config = Config.empty) : Rule(config) {
     private fun validate(list: List<KtExpression>, policy: BracePolicy) {
         when (policy) {
             BracePolicy.Always -> {
-                if (!list.all { hasBraces(it) }) {
-                    val violator = list.first { !hasBraces(it) }
-                    report(violator, policy)
-                }
+                list.filter { !hasBraces(it) }.report(policy)
+            }
+
+            BracePolicy.Necessary -> {
+                list.filter { !isMultiStatement(it) && hasBraces(it) }.report(policy)
             }
 
             BracePolicy.Never -> {
-                if (!list.all { !hasBraces(it) }) {
-                    val violator = list.first { hasBraces(it) }
-                    report(violator, policy)
-                }
+                list.filter { hasBraces(it) }.report(policy)
             }
 
             BracePolicy.Consistent -> {
-                val reference = hasBraces(list.first())
-                if (!list.all { hasBraces(it) == reference }) {
-                    val violator = list.first { hasBraces(it) != reference }
-                    report(violator, policy)
+                val braces = list.count { hasBraces(it) }
+                val noBraces = list.count { !hasBraces(it) }
+                if (braces != 0 && noBraces != 0) {
+                    list.take(1).report(policy)
                 }
             }
         }
+    }
+
+    private fun List<KtExpression>.report(policy: BracePolicy) {
+        this.forEach { report(it, policy) }
     }
 
     private fun report(violator: KtExpression, policy: BracePolicy) {
         val iff = violator.parent.parent as KtIfExpression
         val reported = when {
             iff.then === violator -> iff.ifKeyword
-            iff.`else` === violator && isMultiStatement(violator) -> iff.ifKeyword
             iff.`else` === violator -> iff.elseKeyword
-            else -> error("Violating element ($violator) is not part of this if: $iff")
+            else -> error("Violating element (${violator.text}) is not part of this if (${iff.text})")
         }
-        report(CodeSmell(issue, Entity.from(reported ?: violator), issue.description + ": $policy"))
+        val message = when (policy) {
+            BracePolicy.Always -> "Missing braces on this branch, add them."
+            BracePolicy.Consistent -> "Inconsistent braces, make sure all branches either have or don't have braces."
+            BracePolicy.Necessary -> "Extra braces exist on this branch, remove them (ignore multi-statement)."
+            BracePolicy.Never -> "Extra braces exist on this branch, remove them."
+        }
+        report(CodeSmell(issue, Entity.from(reported ?: violator), message))
     }
 
     private fun isMultiStatement(expression: KtExpression) =
@@ -152,27 +207,16 @@ class BracesOnIfStatements(config: Config = Config.empty) : Rule(config) {
 
     private fun hasBraces(expression: KtExpression): Boolean = expression is KtBlockExpression
 
-    companion object {
-        private const val BRACES_ALWAYS = "always"
-        private const val BRACES_NEVER = "never"
-        private const val BRACES_CONSISTENT = "consistent"
-    }
-
-    enum class BracePolicy {
-        Always,
-        Never,
-        Consistent;
+    enum class BracePolicy(val config: String) {
+        Always("always"),
+        Consistent("consistent"),
+        Necessary("necessary"),
+        Never("never");
 
         companion object {
             fun getValue(arg: String): BracePolicy =
-                when (arg) {
-                    BRACES_NEVER -> Never
-                    BRACES_ALWAYS -> Always
-                    BRACES_CONSISTENT -> Consistent
-                    else -> error(
-                        "Unknown value $arg, allowed values are: $BRACES_NEVER|$BRACES_ALWAYS|$BRACES_CONSISTENT"
-                    )
-                }
+                values().singleOrNull { it.config == arg }
+                    ?: error("Unknown value $arg, allowed values are: ${values().joinToString("|")}")
         }
     }
 }

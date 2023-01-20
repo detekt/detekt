@@ -8,47 +8,57 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @Language("kotlin")
-private const val BLOCK_WITHOUT_BRACES_PASS = """
+private val BLOCK_WITHOUT_BRACES_PASS = """
     fun f() { 
-        if (true) println() 
+        if (true) println()
+
         if (true) 
-            println() 
-        if (true) println() else println() 
+            println()
+
+        if (true) println() else println()
+
         if (true) 
             println() 
         else
             println()
 
         if (true) println() else if (true) println() else println()
+
         if (true) 
             println() 
-        else 
-            if (true) println() else println()
+        else if (true)
+            println() 
+        else
+            println()
 
-        val a = 0
-        when (a) {
-            0 -> if (true) println() else println()
-            1 -> if (true) 
+        when (true) {
+            true -> if (true) println() else println()
+            true -> if (true) 
                     println() 
                 else 
                     println()
-            2 -> if (true) println() else if (true) println() else println()
-            3 -> if (true) 
+            true -> if (true) println() else if (true) println() else println()
+            else -> if (true) 
                     println() 
-                else 
-                    if (true) println() else println()
+                else if (true)
+                    println()
+                else
+                    println()
         }
     }
-"""
+""".trimIndent()
 
 @Language("kotlin")
-private const val BLOCK_WITH_BRACES_PASS = """
+private val BLOCK_WITH_BRACES_PASS = """
     fun f() { 
-        if (true) { println() } 
+        if (true) { println() }
+
         if (true) {
             println()
         }
-        if (true) { println() } else { println() } 
+
+        if (true) { println() } else { println() }
+
         if (true) {
             println()
         } else { 
@@ -56,7 +66,9 @@ private const val BLOCK_WITH_BRACES_PASS = """
         }
 
         if (true) { println() } else if (true) { println() } else { println() }
+
         if (true) { println() } else { if (true) { println() } else { println() } }
+
         if (true) { 
             println()
         } else if (true) { 
@@ -65,16 +77,15 @@ private const val BLOCK_WITH_BRACES_PASS = """
             println() 
         }
 
-        val a = 0
-        when (a) {
-            0 -> if (true) { println() } else { println() }
-            1 -> if (true) {
+        when (true) {
+            true -> if (true) { println() } else { println() }
+            true -> if (true) {
                     println()
                 } else { 
                     println()
                 }
-            2 -> if (true) { println() } else if (true) { println() } else { println() }
-            3 -> if (true) {
+            true -> if (true) { println() } else if (true) { println() } else { println() }
+            else -> if (true) {
                     println()
                 } else if (true) {
                     println()
@@ -83,15 +94,13 @@ private const val BLOCK_WITH_BRACES_PASS = """
                 }
         }
     }
-"""
+""".trimIndent()
 
 @Language("kotlin")
-private const val BLOCK_WITHOUT_BRACES_FAIL = """
+private val BLOCK_WITHOUT_BRACES_FAIL = """
     fun f() { 
-        if (true) println() 
-        if (true) 
-            println() 
-        if (true) { println() } else println() 
+        if (true) { println() } else println()
+
         if (true) 
             println() 
         else {
@@ -99,41 +108,46 @@ private const val BLOCK_WITHOUT_BRACES_FAIL = """
         }
 
         if (true) println() else if (true) println() else { println() }
+
         if (true) 
             println() 
-        else 
-            if (true) { println() } else println()
+        else if (true) {
+            println()
+        } else
+            println()
 
-        val a = 0
-        when (a) {
-            0 -> if (true) println() else { println() }
-            1 -> if (true) 
-                    { println() } 
-                else 
-                    println()
-            2 -> if (true) println() else if (true) { println() } else println()
-            3 -> if (true) 
+        when (true) {
+            true -> if (true) println() else { println() }
+            true -> if (true) {
                     println() 
-                else 
-                    if (true) println() else { println() }
+                } else 
+                    println()
+            true -> if (true) println() else if (true) { println() } else println()
+            else -> if (true) 
+                    println() 
+                else if (true)
+                    println()
+                else {
+                    println()
+                }
         }
     }
-"""
+""".trimIndent()
 
 @Language("kotlin")
-private const val BLOCK_WITH_BRACES_FAIL = """
+private val BLOCK_WITH_BRACES_FAIL = """
     fun f() { 
-        if (true) { println() } 
+        if (true) println() else { println() }
+
         if (true) {
             println()
-        }
-        if (true) println() else { println() } 
-        if (true) {
+        } else
             println()
-        } else println()
 
         if (true) { println() } else if (true) println() else { println() }
+
         if (true) println() else { if (true) println() else println() }
+
         if (true) { 
             println()
         } else if (true) { 
@@ -141,15 +155,14 @@ private const val BLOCK_WITH_BRACES_FAIL = """
         } else 
             println()
 
-        val a = 0
-        when (a) {
-            0 -> if (true) { println() } else println()
-            1 -> if (true) println()
+        when (true) {
+            true -> if (true) { println() } else println()
+            true -> if (true) println()
                 else { 
                     println()
                 }
-            2 -> if (true) { println() } else if (true) { println() } else println()
-            3 -> if (true) {
+            true -> if (true) { println() } else if (true) { println() } else println()
+            else -> if (true) {
                     println()
                 } else if (true)
                     println()
@@ -158,7 +171,38 @@ private const val BLOCK_WITH_BRACES_FAIL = """
                 }
         }
     }
-"""
+""".trimIndent()
+
+@Language("kotlin")
+private val BLOCK_NECESSARY_BRACES_PASS = """
+    fun f() { 
+        if (true) println() else if (true) { println(); println() } else println()
+
+        if (true) 
+            println() 
+        else if (true) {
+            println()
+            println() 
+        } else
+            println()
+    }
+""".trimIndent()
+
+@Language("kotlin")
+private val BLOCK_NECESSARY_BRACES_FAIL = """
+    fun f() { 
+        if (true) println() else if (true) { println(); println() } else { println() }
+
+        if (true) 
+            println() 
+        else if (true) {
+            println()
+            println() 
+        } else {
+            println()
+        }
+    }
+""".trimIndent()
 
 class BracesOnIfStatementsSpec {
 
@@ -170,6 +214,37 @@ class BracesOnIfStatementsSpec {
             )
         )
         return BracesOnIfStatements(config)
+    }
+
+    @Nested
+    inner class `braces always` {
+        val subject = createSubject("always", "always")
+
+        @Test
+        fun `does not report correct block with braces`() {
+            val findings = subject.compileAndLint(BLOCK_WITH_BRACES_PASS)
+
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `reports incorrect block with braces`() {
+            val findings = subject.compileAndLint(BLOCK_WITH_BRACES_FAIL)
+
+            assertThat(findings).hasTextLocations(
+                15 to 17,
+                95 to 99,
+                152 to 154,
+                223 to 225,
+                243 to 247,
+                196 to 198,
+                345 to 349,
+                428 to 432,
+                459 to 461,
+                608 to 612,
+                696 to 698
+            )
+        }
     }
 
     @Nested
@@ -194,16 +269,15 @@ class BracesOnIfStatementsSpec {
         fun `reports inconsistent block without braces`() {
             val findings = subject.compileAndLint(BLOCK_WITHOUT_BRACES_FAIL)
 
-            assertThat(findings).hasSize(8)
             assertThat(findings).hasTextLocations(
-                119 to 123,
-                185 to 189,
-                278 to 282,
-                365 to 367,
-                479 to 483,
-                577 to 581,
-                655 to 657,
-                815 to 819
+                15 to 17,
+                59 to 61,
+                129 to 131,
+                198 to 200,
+                331 to 333,
+                386 to 388,
+                487 to 489,
+                567 to 569
             )
         }
 
@@ -211,17 +285,16 @@ class BracesOnIfStatementsSpec {
         fun `reports inconsistent block with braces`() {
             val findings = subject.compileAndLint(BLOCK_WITH_BRACES_FAIL)
 
-            assertThat(findings).hasSize(9)
             assertThat(findings).hasTextLocations(
-                129 to 133,
-                201 to 205,
-                254 to 256,
-                321 to 325,
-                469 to 473,
-                576 to 580,
-                644 to 648,
-                770 to 774,
-                867 to 869
+                15 to 17,
+                59 to 61,
+                123 to 125,
+                196 to 198,
+                265 to 267,
+                404 to 406,
+                459 to 461,
+                555 to 557,
+                639 to 641
             )
         }
 
@@ -234,39 +307,7 @@ class BracesOnIfStatementsSpec {
                     }
                 """.trimIndent()
             )
-            assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(14 to 16)
-        }
-    }
-
-    @Nested
-    inner class `braces always` {
-        val subject = createSubject("always", "always")
-
-        @Test
-        fun `does not report correct block with braces`() {
-            val findings = subject.compileAndLint(BLOCK_WITH_BRACES_PASS)
-
-            assertThat(findings).isEmpty()
-        }
-
-        @Test
-        fun `reports incorrect block with braces`() {
-            val findings = subject.compileAndLint(BLOCK_WITH_BRACES_FAIL)
-
-            assertThat(findings).hasSize(10)
-            assertThat(findings).hasTextLocations(
-                109 to 111,
-                201 to 205,
-                254 to 256,
-                328 to 330,
-                301 to 303,
-                469 to 473,
-                576 to 580,
-                608 to 610,
-                770 to 774,
-                867 to 869
-            )
         }
     }
 
@@ -285,16 +326,84 @@ class BracesOnIfStatementsSpec {
         fun `reports incorrect block without braces`() {
             val findings = subject.compileAndLint(BLOCK_WITHOUT_BRACES_FAIL)
 
-            assertThat(findings).hasSize(8)
             assertThat(findings).hasTextLocations(
-                95 to 97,
-                185 to 189,
-                278 to 282,
-                365 to 367,
-                479 to 483,
-                515 to 517,
-                655 to 657,
-                815 to 819
+                15 to 17,
+                93 to 97,
+                174 to 178,
+                237 to 239,
+                351 to 355,
+                386 to 388,
+                512 to 514,
+                670 to 674
+            )
+        }
+    }
+
+    @Nested
+    inner class `braces necessary` {
+        val subject = createSubject("necessary", "necessary")
+
+        @Test
+        fun `does not report correct block without braces`() {
+            val findings = subject.compileAndLint(BLOCK_NECESSARY_BRACES_PASS)
+
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `reports incorrect block without braces`() {
+            val findings = subject.compileAndLint(BLOCK_NECESSARY_BRACES_FAIL)
+
+            assertThat(findings).hasTextLocations(
+                75 to 79,
+                193 to 197
+            )
+        }
+    }
+
+    @Nested
+    inner class `mixed policy` {
+        val subject = createSubject("never", "always")
+
+        @Test
+        fun `does not report correct block`() {
+            val findings = subject.compileAndLint(
+                """
+                    fun f() {
+                        if (true) println() else println()
+
+                        if (true) { 
+                            println()
+                        } else {
+                            println()
+                        }
+                    }
+                
+                """.trimIndent()
+            )
+
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `reports incorrect block`() {
+            val findings = subject.compileAndLint(
+                """
+                    fun f() {
+                        if (true) println() else { println() }
+
+                        if (true) { 
+                            println()
+                        } else
+                            println()
+                    }
+                
+                """.trimIndent()
+            )
+
+            assertThat(findings).hasTextLocations(
+                34 to 38,
+                95 to 99
             )
         }
     }
