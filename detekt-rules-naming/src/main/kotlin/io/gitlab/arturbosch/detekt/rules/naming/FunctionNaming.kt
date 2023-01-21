@@ -37,13 +37,10 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
     @Configuration("ignores functions in classes which match this regex")
     private val excludeClassPattern: Regex by config("$^", String::toRegex)
 
-    @Configuration("ignores functions that have the override modifier")
-    private val ignoreOverridden: Boolean by config(true)
-
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
 
-        if (ignoreOverridden && function.isOverride()) {
+        if (function.isOverride()) {
             return
         }
 
@@ -65,6 +62,5 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
     companion object {
         const val FUNCTION_PATTERN = "functionPattern"
         const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
-        const val IGNORE_OVERRIDDEN = "ignoreOverridden"
     }
 }
