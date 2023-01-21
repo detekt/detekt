@@ -314,7 +314,6 @@ naming:
     parameterPattern: '[a-z][A-Za-z0-9]*'
     privateParameterPattern: '[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
-    ignoreOverridden: true
   EnumNaming:
     active: true
     enumEntryPattern: '[A-Z][_a-zA-Z0-9]*'
