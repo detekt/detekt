@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
 import org.jetbrains.kotlin.psi.KtConstructor
@@ -50,11 +49,11 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
             return
         }
 
-        val identifier = parameter.identifierName()
+        val identifier = parameter.name
         if (parameter.isPrivate()) {
             visitPrivateParameter(parameter)
         } else {
-            if (!identifier.matches(parameterPattern)) {
+            if (identifier?.matches(parameterPattern) == false) {
                 report(
                     CodeSmell(
                         issue,
@@ -67,8 +66,8 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun visitPrivateParameter(parameter: KtParameter) {
-        val identifier = parameter.identifierName()
-        if (!identifier.matches(privateParameterPattern)) {
+        val identifier = parameter.name
+        if (identifier?.matches(privateParameterPattern) == false) {
             report(
                 CodeSmell(
                     issue,
