@@ -41,9 +41,11 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  *   }
  * }
  * </compliant>
- */@ActiveByDefault(since = "1.23.0")
+ */
+@ActiveByDefault(since = "1.23.0")
 class UnusedPrivateProperty(config: Config = Config.empty) : Rule(config) {
-    override val defaultRuleIdAliases: Set<String> = setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused")
+    override val defaultRuleIdAliases: Set<String> =
+        setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused", "UnusedPrivateMember")
 
     override val issue: Issue = Issue(
         "UnusedPrivateProperty",
