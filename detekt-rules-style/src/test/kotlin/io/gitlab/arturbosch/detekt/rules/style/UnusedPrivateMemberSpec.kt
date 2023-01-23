@@ -895,7 +895,6 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    @Disabled
     inner class `highlights declaration name - #4916` {
         @Test
         fun function() {
@@ -908,34 +907,6 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(5, 17)
-        }
-
-        @Test
-        fun property() {
-            val code = """
-                class Test {
-                    /**
-                     * kdoc
-                     */
-                    private val foo = 1
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(5, 17)
-        }
-
-        @Test
-        fun parameter() {
-            val code = """
-                class Test {
-                    fun test(
-                        /**
-                         * kdoc
-                         */
-                        x: Int
-                    ) = 1
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(6, 9)
         }
     }
 

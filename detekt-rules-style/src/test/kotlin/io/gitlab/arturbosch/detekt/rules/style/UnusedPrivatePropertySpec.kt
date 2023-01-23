@@ -673,4 +673,20 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
+
+    @Nested
+    inner class `highlights declaration name - #4916` {
+        @Test
+        fun property() {
+            val code = """
+                class Test {
+                    /**
+                     * kdoc
+                     */
+                    private val foo = 1
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(5, 17)
+        }
+    }
 }

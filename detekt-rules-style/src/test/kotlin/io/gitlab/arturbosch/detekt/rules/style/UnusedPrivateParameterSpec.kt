@@ -373,4 +373,23 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
+
+    @Nested
+    inner class `highlights declaration name - #4916` {
+
+        @Test
+        fun parameter() {
+            val code = """
+                class Test {
+                    fun test(
+                        /**
+                         * kdoc
+                         */
+                        x: Int
+                    ) = 1
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(6, 9)
+        }
+    }
 }
