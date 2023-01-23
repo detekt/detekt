@@ -52,8 +52,8 @@ import org.jetbrains.kotlin.util.OperatorNameConventions
 private const val ARRAY_GET_METHOD_NAME = "get"
 
 /**
- * Reports unused private properties, function parameters and functions.
- * If these private elements are unused they should be removed. Otherwise, this dead code
+ * Reports unused private functions.
+ * If these private functions are unused they should be removed. Otherwise, this dead code
  * can lead to confusion and potential bugs.
  */
 @Suppress("ViolatesTypeResolutionRequirements")
@@ -65,21 +65,19 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UnusedPrivateMember",
         Severity.Maintainability,
-        "Private member is unused and should be removed.",
+        "Private function is unused and should be removed.",
         Debt.FIVE_MINS,
     )
 
-    @Configuration("unused private member names matching this regex are ignored")
+    @Configuration("unused private function names matching this regex are ignored")
     private val allowedNames: Regex by config("(_|ignored|expected|serialVersionUID)", String::toRegex)
 
     override fun visit(root: KtFile) {
         super.visit(root)
         root.acceptUnusedMemberVisitor(UnusedFunctionVisitor(allowedNames, bindingContext))
-        root.acceptUnusedMemberVisitor(UnusedParameterVisitor(allowedNames))
-        root.acceptUnusedMemberVisitor(UnusedPropertyVisitor(allowedNames))
     }
 
-    private fun KtFile.acceptUnusedMemberVisitor(visitor: UnusedMemberVisitor) {
+    private fun KtFile.acceptUnusedMemberVisitor(visitor: UnusedFunctionVisitor) {
         accept(visitor)
         visitor.getUnusedReports(issue).forEach { report(it) }
     }
@@ -91,16 +89,16 @@ private abstract class UnusedMemberVisitor(protected val allowedNames: Regex) : 
 }
 
 private class UnusedFunctionVisitor(
-    allowedNames: Regex,
+    private val allowedNames: Regex,
     private val bindingContext: BindingContext,
-) : UnusedMemberVisitor(allowedNames) {
+) : DetektVisitor() {
 
     private val functionDeclarations = mutableMapOf<String, MutableList<KtFunction>>()
     private val functionReferences = mutableMapOf<String, MutableList<KtReferenceExpression>>()
     private val propertyDelegates = mutableListOf<KtPropertyDelegate>()
 
-    @Suppress("ComplexMethod")
-    override fun getUnusedReports(issue: Issue): List<CodeSmell> {
+    @Suppress("ComplexMethod", "LongMethod")
+    fun getUnusedReports(issue: Issue): List<CodeSmell> {
         val propertyDelegateResultingDescriptors by lazy(LazyThreadSafetyMode.NONE) {
             propertyDelegates.flatMap { it.resultingDescriptors() }
         }
@@ -211,6 +209,7 @@ private class UnusedFunctionVisitor(
     }
 }
 
+@Suppress("unused")
 private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(allowedNames) {
 
     private val unusedParameters: MutableSet<KtParameter> = mutableSetOf()
@@ -280,6 +279,7 @@ private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(
             isExpect() || isActual() || isProtected()
 }
 
+@Suppress("unused")
 private class UnusedPropertyVisitor(allowedNames: Regex) : UnusedMemberVisitor(allowedNames) {
 
     private val properties = mutableSetOf<KtNamedDeclaration>()

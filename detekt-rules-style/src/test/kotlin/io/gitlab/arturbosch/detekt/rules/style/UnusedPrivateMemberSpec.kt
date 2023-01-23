@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.regex.PatternSyntaxException
@@ -122,6 +123,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
+        @Disabled
         fun `reports unused private fields defined as parameters of primary constructors`() {
             val code = """
                 actual class Foo actual constructor(private val bar: String) {}
@@ -244,6 +246,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
+    @Disabled
     inner class `classes with properties` {
 
         @Test
@@ -289,6 +292,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
+        @Disabled
         fun `does not report used members but reports unused members`() {
             val code = """
                 class Test {
@@ -323,6 +327,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
+    @Disabled
     inner class `classes with properties and local properties` {
 
         @Test
@@ -449,6 +454,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
+    @Disabled
     inner class `objects with properties` {
         @Test
         fun `reports multiple unused properties`() {
@@ -484,6 +490,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
+    @Disabled
     inner class `loop iterators` {
 
         @Test
@@ -554,6 +561,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
+        @Disabled
         fun `does not report used loop properties in indexed array`() {
             val code = """
                 class Test {
@@ -571,6 +579,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
+    @Disabled
     inner class `properties used to initialize other properties` {
 
         @Test
@@ -628,6 +637,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
+    @Disabled
     inner class `top level properties` {
         @Test
         fun `reports single parameters if they are unused`() {
@@ -758,6 +768,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
+    @Disabled
     inner class `nested class declarations` {
 
         @Test
@@ -787,6 +798,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
+    @Disabled
     inner class `properties in primary constructors` {
         @Test
         fun `reports unused private property`() {
@@ -828,6 +840,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
+    @Disabled
     inner class `error messages` {
         @Test
         fun `are specific for function parameters`() {
@@ -868,6 +881,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
+    @Disabled
     inner class `suppress unused property warning annotations` {
         @Test
         fun `does not report annotated private constructor properties`() {
@@ -1419,6 +1433,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
+    @Disabled
     inner class `backtick identifiers - #3825` {
 
         @Test
@@ -1606,6 +1621,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
+    @Disabled
     inner class `highlights declaration name - #4916` {
         @Test
         fun function() {
@@ -1650,6 +1666,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
+    @Disabled
     inner class `parameter with the same name as a named argument #5373` {
         @Test
         fun `unused parameter`() {
