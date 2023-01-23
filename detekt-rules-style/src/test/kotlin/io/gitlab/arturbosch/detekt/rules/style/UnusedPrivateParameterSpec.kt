@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -359,6 +360,17 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `backtick identifiers - #5251` {
+        @Test
+        fun `does not report used backtick parameters`() {
+            val code = """
+                fun test(`foo bar`: Int) = `foo bar`
+            """.trimIndent()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 }
