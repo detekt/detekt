@@ -65,6 +65,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             DataClassShouldBeImmutable(config),
             UseDataClass(config),
             UnusedImports(config),
+            UnusedParameter(config),
             UnusedPrivateClass(config),
             UnusedPrivateMember(config),
             ExpressionBodySyntax(config),

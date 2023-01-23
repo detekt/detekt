@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.psi.KtValueArgumentName
 import org.jetbrains.kotlin.psi.psiUtil.isProtected
 
 /**
- * An unused parameter for a function can be removed and simplify the signature of the function.
+ * An unused parameter can be removed to simplify the signature of the function.
  *
  * <noncompliant>
  * fun foo(unused: String) {
@@ -49,9 +49,9 @@ class UnusedParameter(config: Config = Config.empty) : Rule(config) {
     override val defaultRuleIdAliases: Set<String> = setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused")
 
     override val issue: Issue = Issue(
-        "UnusedParameterMember",
+        "UnusedParameter",
         Severity.Maintainability,
-        "Function parameter unused and should be removed.",
+        "Function parameter is unused and should be removed.",
         Debt.FIVE_MINS,
     )
 
