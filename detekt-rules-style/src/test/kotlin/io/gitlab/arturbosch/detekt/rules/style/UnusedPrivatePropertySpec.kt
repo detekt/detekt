@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.regex.PatternSyntaxException
@@ -111,19 +110,18 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
     inner class `classes with properties and local properties` {
 
         @Test
-        @Disabled
         fun `reports multiple unused properties`() {
             val code = """
-                class UnusedPrivateMemberPositive {
+                class UnusedPrivatePropertyPositive {
                     private val unusedField = 5
                     val publicField = 2
                     private val clashingName = 4
-                    private fun unusedFunction(unusedParam: Int) {
+                    private fun unusedFunction() {
                         val unusedLocal = 5
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(5)
+            assertThat(subject.lint(code)).hasSize(3)
         }
 
         @Test
