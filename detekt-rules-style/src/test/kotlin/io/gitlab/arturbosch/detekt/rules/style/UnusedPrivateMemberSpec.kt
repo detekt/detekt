@@ -307,7 +307,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         fun `does not fail when disabled with invalid regex`() {
             val configRules = mapOf(
                 "active" to "false",
-                ALLOWED_NAMES_PATTERN to "*foo"
+                ALLOWED_NAMES_PATTERN to "*foo",
             )
             val config = TestConfig(configRules)
             assertThat(UnusedPrivateMember(config).lint(regexTestingCode)).isEmpty()
@@ -1321,7 +1321,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1).hasStartSourceLocations(
-                SourceLocation(3, 30)
+                SourceLocation(3, 30),
             )
         }
     }

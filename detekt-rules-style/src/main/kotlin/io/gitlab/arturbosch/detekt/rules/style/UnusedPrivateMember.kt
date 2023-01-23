@@ -66,7 +66,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
         "UnusedPrivateMember",
         Severity.Maintainability,
         "Private member is unused and should be removed.",
-        Debt.FIVE_MINS
+        Debt.FIVE_MINS,
     )
 
     @Configuration("unused private member names matching this regex are ignored")
@@ -92,7 +92,7 @@ private abstract class UnusedMemberVisitor(protected val allowedNames: Regex) : 
 
 private class UnusedFunctionVisitor(
     allowedNames: Regex,
-    private val bindingContext: BindingContext
+    private val bindingContext: BindingContext,
 ) : UnusedMemberVisitor(allowedNames) {
 
     private val functionDeclarations = mutableMapOf<String, MutableList<KtFunction>>()
@@ -125,7 +125,8 @@ private class UnusedFunctionVisitor(
                                 KtTokens.MINUS,
                                 KtTokens.MUL,
                                 KtTokens.DIV,
-                                KtTokens.PERC -> operatorValue?.let { functionReferences["$it="] }.orEmpty()
+                                KtTokens.PERC,
+                                -> operatorValue?.let { functionReferences["$it="] }.orEmpty()
                                 else -> emptyList()
                             }
                             val containingReferences = if (functionNameAsName == OperatorNameConventions.CONTAINS) {
@@ -291,7 +292,7 @@ private class UnusedPropertyVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
                 CodeSmell(
                     issue,
                     Entity.atName(it),
-                    "Private property `${it.nameAsSafeName.identifier}` is unused."
+                    "Private property `${it.nameAsSafeName.identifier}` is unused.",
                 )
             }
     }
