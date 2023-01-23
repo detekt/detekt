@@ -709,4 +709,45 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             assertThat(subject.lint(code)).hasSize(1)
         }
     }
+
+    @Nested
+    inner class `properties in primary constructors` {
+        @Test
+        fun `reports unused private property`() {
+            val code = """
+                class Test(private val unused: Any)
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report public property`() {
+            val code = """
+                class Test(val unused: Any)
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report private property used in init block`() {
+            val code = """
+                class Test(private val used: Any) {
+                    init { used.toString() }
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report private property used in function`() {
+            val code = """
+                class Test(private val used: Any) {
+                    fun something() {
+                        used.toString()
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
 }

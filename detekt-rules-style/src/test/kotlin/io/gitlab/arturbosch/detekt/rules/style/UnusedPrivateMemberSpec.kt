@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -287,48 +286,6 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test {
                     private fun ignored(ignored: Int) {}
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-    }
-
-    @Nested
-    @Disabled
-    inner class `properties in primary constructors` {
-        @Test
-        fun `reports unused private property`() {
-            val code = """
-                class Test(private val unused: Any)
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
-        }
-
-        @Test
-        fun `does not report public property`() {
-            val code = """
-                class Test(val unused: Any)
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report private property used in init block`() {
-            val code = """
-                class Test(private val used: Any) {
-                    init { used.toString() }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report private property used in function`() {
-            val code = """
-                class Test(private val used: Any) {
-                    fun something() {
-                        used.toString()
-                    }
                 }
             """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
