@@ -423,4 +423,27 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
+
+    @Nested
+    inner class `actual functions and classes` {
+
+        @Test
+        fun `should not report unused parameters in actual functions`() {
+            val code = """
+                actual class Foo {
+                    actual fun bar(i: Int) {}
+                    actual fun baz(i: Int, s: String) {}
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should not report unused parameters in actual constructors`() {
+            val code = """
+                actual class Foo actual constructor(bar: String) {}
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
 }

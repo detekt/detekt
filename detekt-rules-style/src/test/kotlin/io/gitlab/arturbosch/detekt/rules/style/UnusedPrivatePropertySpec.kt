@@ -689,4 +689,24 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(5, 17)
         }
     }
+
+    @Nested
+    inner class `actual functions and classes` {
+
+        @Test
+        fun `should not report unused actual fields defined as parameters of primary constructors`() {
+            val code = """
+                actual class Foo actual constructor(actual val bar: String) {}
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `reports unused private fields defined as parameters of primary constructors`() {
+            val code = """
+                actual class Foo actual constructor(private val bar: String) {}
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+    }
 }
