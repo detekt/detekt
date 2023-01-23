@@ -10,9 +10,8 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-@Disabled
 class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
-    val subject = UnusedPrivateMember()
+    val subject = UnusedParameter()
 
     @Nested
     inner class `function parameters` {
@@ -168,6 +167,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
+    @Disabled
     inner class `parameters in primary constructors` {
         @Test
         fun `reports unused parameter`() {
@@ -210,6 +210,7 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
+    @Disabled
     inner class `secondary parameters` {
         @Test
         fun `report unused parameters in secondary constructors`() {

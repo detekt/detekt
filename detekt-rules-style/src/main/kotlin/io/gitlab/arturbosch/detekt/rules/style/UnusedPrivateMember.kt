@@ -11,14 +11,9 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isActual
 import io.gitlab.arturbosch.detekt.rules.isExpect
-import io.gitlab.arturbosch.detekt.rules.isExternal
-import io.gitlab.arturbosch.detekt.rules.isMainFunction
-import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOperator
-import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.lexer.KtSingleValueToken
@@ -26,7 +21,6 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtArrayAccessExpression
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -39,11 +33,9 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPropertyDelegate
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
-import org.jetbrains.kotlin.psi.KtValueArgumentName
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
-import org.jetbrains.kotlin.psi.psiUtil.isProtected
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
@@ -207,76 +199,6 @@ private class UnusedFunctionVisitor(
         } ?: return
         functionReferences.getOrPut(name) { mutableListOf() }.add(expression)
     }
-}
-
-@Suppress("unused")
-private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(allowedNames) {
-
-    private val unusedParameters: MutableSet<KtParameter> = mutableSetOf()
-
-    override fun getUnusedReports(issue: Issue): List<CodeSmell> {
-        return unusedParameters.map {
-            CodeSmell(issue, Entity.atName(it), "Function parameter `${it.nameAsSafeName.identifier}` is unused.")
-        }
-    }
-
-    override fun visitClassOrObject(klassOrObject: KtClassOrObject) {
-        if (klassOrObject.isExpect()) return
-
-        super.visitClassOrObject(klassOrObject)
-    }
-
-    override fun visitClass(klass: KtClass) {
-        if (klass.isInterface()) return
-        if (klass.isExternal()) return
-
-        super.visitClass(klass)
-    }
-
-    override fun visitNamedFunction(function: KtNamedFunction) {
-        if (!function.isRelevant()) {
-            return
-        }
-
-        collectParameters(function)
-
-        super.visitNamedFunction(function)
-    }
-
-    private fun collectParameters(function: KtNamedFunction) {
-        val parameters = mutableMapOf<String, KtParameter>()
-        function.valueParameterList?.parameters?.forEach { parameter ->
-            val name = parameter.nameAsSafeName.identifier
-            if (!allowedNames.matches(name)) {
-                parameters[name] = parameter
-            }
-        }
-
-        function.accept(object : DetektVisitor() {
-            override fun visitProperty(property: KtProperty) {
-                if (property.isLocal) {
-                    val name = property.nameAsSafeName.identifier
-                    parameters.remove(name)
-                }
-                super.visitProperty(property)
-            }
-
-            override fun visitReferenceExpression(expression: KtReferenceExpression) {
-                if (expression.parent !is KtValueArgumentName) {
-                    parameters.remove(expression.text.removeSurrounding("`"))
-                }
-                super.visitReferenceExpression(expression)
-            }
-        })
-
-        unusedParameters.addAll(parameters.values)
-    }
-
-    private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()
-
-    private fun KtNamedFunction.isAllowedToHaveUnusedParameters() =
-        isAbstract() || isOpen() || isOverride() || isOperator() || isMainFunction() || isExternal() ||
-            isExpect() || isActual() || isProtected()
 }
 
 @Suppress("unused")
