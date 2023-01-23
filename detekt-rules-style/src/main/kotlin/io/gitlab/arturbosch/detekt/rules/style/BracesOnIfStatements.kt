@@ -25,11 +25,11 @@ import org.jetbrains.kotlin.psi.KtIfExpression
  *    except where necessary for multi-statement branches.
  *  * `never`: forces no braces on any `if` and `else` branches in the whole codebase.
  *
- * SingleLine if-statement has no \n:
+ * SingleLine if-statement has no line break (\n):
  * ```
  * if (a) b else c
  * ```
- * MultiLine if-statement has at least one \n:
+ * MultiLine if-statement has at least one line break (\n):
  * ```
  * if (a) b
  * else c

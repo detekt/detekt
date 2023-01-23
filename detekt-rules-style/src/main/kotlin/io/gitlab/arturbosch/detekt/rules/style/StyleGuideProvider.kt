@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
+import io.gitlab.arturbosch.detekt.rules.style.optional.MandatoryBracesIfStatements
 import io.gitlab.arturbosch.detekt.rules.style.optional.MandatoryBracesLoops
 import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalUnit
 import io.gitlab.arturbosch.detekt.rules.style.optional.PreferToOverPairSyntax
@@ -75,8 +76,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UnnecessaryLet(config),
             MayBeConst(config),
             PreferToOverPairSyntax(config),
-            @Suppress("DEPRECATION")
-            io.gitlab.arturbosch.detekt.rules.style.optional.MandatoryBracesIfStatements(config),
+            MandatoryBracesIfStatements(config),
             BracesOnIfStatements(config),
             MandatoryBracesLoops(config),
             NullableBooleanCheck(config),

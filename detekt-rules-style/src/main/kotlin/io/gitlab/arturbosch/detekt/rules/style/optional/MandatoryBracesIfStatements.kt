@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  * val x = if (condition) 5 else 4
  * </compliant>
  */
-@Deprecated("Use 'BracesOnIfStatements' with 'always' configuration instead")
+// @Deprecated("Use `BracesOnIfStatements` with `always` configuration instead")
 class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(

@@ -602,6 +602,8 @@ style:
     ignoreEnums: false
     ignoreRanges: false
     ignoreExtensionFunctions: true
+  MandatoryBracesIfStatements:
+    active: false
   MandatoryBracesLoops:
     active: false
   MaxChainedCallsOnSameLine:
