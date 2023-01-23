@@ -254,47 +254,6 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    @Disabled
-    inner class `top level properties` {
-        @Test
-        fun `reports single parameters if they are unused`() {
-            val code = """
-                private val usedTopLevelVal = 1
-                private const val unusedTopLevelConst = 1
-                private val unusedTopLevelVal = usedTopLevelVal
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(2)
-        }
-
-        @Test
-        fun `does not report used top level properties`() {
-            val code = """
-                val stuff = object : Iterator<String?> {
-
-                    var mutatable: String? = null
-
-                    private fun preCall() {
-                        mutatable = "done"
-                    }
-
-                    override fun next(): String? {
-                        preCall()
-                        return mutatable
-                    }
-
-                    override fun hasNext(): Boolean = true
-                }
-
-                fun main(args: Array<String>) {
-                    println(stuff.next())
-                    calledFromMain()
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-    }
-
-    @Nested
     inner class `unused private functions` {
         @Test
         fun `does not report used private functions`() {
@@ -362,16 +321,6 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
 
     @Nested
     inner class `unused class declarations which are allowed` {
-
-        @Test
-        fun `does not report the unused private property`() {
-            val code = """
-                class Test {
-                    private val ignored = ""
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
 
         @Test
         fun `does not report the unused private function and parameter`() {
