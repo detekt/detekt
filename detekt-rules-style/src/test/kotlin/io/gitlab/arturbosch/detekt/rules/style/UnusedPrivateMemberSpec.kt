@@ -769,57 +769,6 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    @Disabled
-    inner class `backtick identifiers - #3825` {
-
-        @Test
-        fun `does report unused variables with keyword name`() {
-            val code = """
-                fun main() {
-                    val `in` = "foo"
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
-
-        @Test
-        fun `does not report used variables with keyword name`() {
-            val code = """
-                fun main() {
-                    val `in` = "fee"
-                    val expected = "foo"
-                    println(expected == `in`)
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report used variables when referenced with backticks`() {
-            val code = """
-                fun main() {
-                    val actual = "fee"
-                    val expected = "foo"
-                    println(expected == `actual`)
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report used variables when declared with backticks`() {
-            val code = """
-                fun main() {
-                    val `actual` = "fee"
-                    val expected = "foo"
-                    println(expected == actual)
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-    }
-
-    @Nested
     inner class `backtick identifiers - #5251` {
         @Test
         fun `does not report used backtick parameters`() {

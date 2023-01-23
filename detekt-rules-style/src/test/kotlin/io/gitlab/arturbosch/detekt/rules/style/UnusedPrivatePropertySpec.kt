@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
@@ -620,6 +621,56 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `backtick identifiers - #3825` {
+
+        @Test
+        fun `does report unused variables with keyword name`() {
+            val code = """
+                fun main() {
+                    val `in` = "foo"
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report used variables with keyword name`() {
+            val code = """
+                fun main() {
+                    val `in` = "fee"
+                    val expected = "foo"
+                    println(expected == `in`)
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report used variables when referenced with backticks`() {
+            val code = """
+                fun main() {
+                    val actual = "fee"
+                    val expected = "foo"
+                    println(expected == `actual`)
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report used variables when declared with backticks`() {
+            val code = """
+                fun main() {
+                    val `actual` = "fee"
+                    val expected = "foo"
+                    println(expected == actual)
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 }
