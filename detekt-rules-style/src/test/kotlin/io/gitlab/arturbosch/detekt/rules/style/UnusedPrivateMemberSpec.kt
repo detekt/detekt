@@ -335,36 +335,6 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
 
     @Nested
     @Disabled
-    inner class `nested class declarations` {
-
-        @Test
-        fun `reports unused nested private property`() {
-            val code = """
-                class Test {
-                    class Inner {
-                        private val unused = 1
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
-        }
-
-        @Test
-        fun `does not report used nested private property`() {
-            val code = """
-                class Test {
-                    class Inner {
-                        private val used = 1
-                        fun someFunction() = used
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-    }
-
-    @Nested
-    @Disabled
     inner class `properties in primary constructors` {
         @Test
         fun `reports unused private property`() {
