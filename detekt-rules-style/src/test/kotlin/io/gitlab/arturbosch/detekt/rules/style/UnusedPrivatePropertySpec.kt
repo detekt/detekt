@@ -473,4 +473,153 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             assertThat(lint.first().message).startsWith("Private property")
         }
     }
+
+    @Nested
+    inner class `suppress unused property warning annotations` {
+        @Test
+        fun `does not report annotated private constructor properties`() {
+            val code = """
+                class Test(@Suppress("unused") private val foo: String) {}
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `reports private constructor properties without annotation`() {
+            val code = """
+                class Test(
+                    @Suppress("unused") private val foo: String,
+                    private val bar: String
+                ) {}
+            """.trimIndent()
+
+            val lint = subject.lint(code)
+
+            assertThat(lint).hasSize(1)
+            assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String")
+        }
+
+        @Test
+        fun `does not report private constructor properties in annotated class`() {
+            val code = """
+                @Suppress("unused")
+                class Test(
+                    private val foo: String,
+                    private val bar: String
+                ) {}
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report private constructor properties in class with annotated outer class`() {
+            val code = """
+                @Suppress("unused")
+                class Test(
+                    private val foo: String,
+                    private val bar: String
+                ) {
+                    class InnerTest(
+                        private val baz: String
+                    ) {}
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report private constructor properties in annotated file`() {
+            val code = """
+                @file:Suppress("unused")
+
+                class Test(
+                    private val foo: String,
+                    private val bar: String
+                ) {
+                    class InnerTest(
+                        private val baz: String
+                    ) {}
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report annotated private properties`() {
+            val code = """
+                class Test {
+                    @Suppress("unused") private val foo: String
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `reports private properties without annotation`() {
+            val code = """
+                class Test {
+                    @Suppress("unused") private val foo: String
+                    private val bar: String
+                }
+            """.trimIndent()
+
+            val lint = subject.lint(code)
+
+            assertThat(lint).hasSize(1)
+            assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String")
+        }
+
+        @Test
+        fun `does not report private properties in annotated class`() {
+            val code = """
+                @Suppress("unused")
+                class Test {
+                    private val foo: String
+                    private val bar: String
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report private properties in class with annotated outer class`() {
+            val code = """
+                @Suppress("unused")
+                class Test {
+                    private val foo: String
+                    private val bar: String
+
+                    class InnerTest {
+                        private val baz: String
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report private properties in annotated file`() {
+            val code = """
+                @file:Suppress("unused")
+
+                class Test {
+                    private val foo: String
+                    private val bar: String
+
+                    class InnerTest {
+                        private val baz: String
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
 }
