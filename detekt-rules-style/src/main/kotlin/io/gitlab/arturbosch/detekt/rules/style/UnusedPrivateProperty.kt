@@ -52,7 +52,7 @@ class UnusedPrivateProperty(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS,
     )
 
-    @Configuration("unused properties names matching this regex are ignored")
+    @Configuration("unused property names matching this regex are ignored")
     private val allowedNames: Regex by config("(_|ignored|expected|serialVersionUID)", String::toRegex)
 
     override fun visit(root: KtFile) {
