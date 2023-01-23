@@ -68,6 +68,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UnusedParameter(config),
             UnusedPrivateClass(config),
             UnusedPrivateMember(config),
+            UnusedPrivateProperty(config),
             ExpressionBodySyntax(config),
             NestedClassesVisibility(config),
             RedundantVisibilityModifierRule(config),

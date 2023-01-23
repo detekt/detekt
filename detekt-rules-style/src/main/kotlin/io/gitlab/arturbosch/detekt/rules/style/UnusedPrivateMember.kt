@@ -11,8 +11,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.rules.isActual
-import io.gitlab.arturbosch.detekt.rules.isExpect
 import io.gitlab.arturbosch.detekt.rules.isOperator
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
@@ -24,16 +22,11 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
-import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
-import org.jetbrains.kotlin.psi.KtParameter
-import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPropertyDelegate
 import org.jetbrains.kotlin.psi.KtReferenceExpression
-import org.jetbrains.kotlin.psi.KtSecondaryConstructor
-import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -73,11 +66,6 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
         accept(visitor)
         visitor.getUnusedReports(issue).forEach { report(it) }
     }
-}
-
-private abstract class UnusedMemberVisitor(protected val allowedNames: Regex) : DetektVisitor() {
-
-    abstract fun getUnusedReports(issue: Issue): List<CodeSmell>
 }
 
 private class UnusedFunctionVisitor(
@@ -198,73 +186,5 @@ private class UnusedFunctionVisitor(
             else -> null
         } ?: return
         functionReferences.getOrPut(name) { mutableListOf() }.add(expression)
-    }
-}
-
-@Suppress("unused")
-private class UnusedPropertyVisitor(allowedNames: Regex) : UnusedMemberVisitor(allowedNames) {
-
-    private val properties = mutableSetOf<KtNamedDeclaration>()
-    private val nameAccesses = mutableSetOf<String>()
-
-    override fun getUnusedReports(issue: Issue): List<CodeSmell> {
-        return properties
-            .filter { it.nameAsSafeName.identifier !in nameAccesses }
-            .map {
-                CodeSmell(
-                    issue,
-                    Entity.atName(it),
-                    "Private property `${it.nameAsSafeName.identifier}` is unused.",
-                )
-            }
-    }
-
-    override fun visitParameter(parameter: KtParameter) {
-        super.visitParameter(parameter)
-        if (parameter.isLoopParameter) {
-            val destructuringDeclaration = parameter.destructuringDeclaration
-            if (destructuringDeclaration != null) {
-                for (variable in destructuringDeclaration.entries) {
-                    maybeAddUnusedProperty(variable)
-                }
-            } else {
-                maybeAddUnusedProperty(parameter)
-            }
-        }
-    }
-
-    override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
-        super.visitPrimaryConstructor(constructor)
-        constructor.valueParameters
-            .filter {
-                (it.isPrivate() || (!it.hasValOrVar() && !constructor.isActual())) &&
-                    it.containingClassOrObject?.isExpect() == false
-            }
-            .forEach { maybeAddUnusedProperty(it) }
-    }
-
-    override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
-        super.visitSecondaryConstructor(constructor)
-        constructor.valueParameters.forEach { maybeAddUnusedProperty(it) }
-    }
-
-    private fun maybeAddUnusedProperty(it: KtNamedDeclaration) {
-        if (!allowedNames.matches(it.nameAsSafeName.identifier)) {
-            properties.add(it)
-        }
-    }
-
-    override fun visitProperty(property: KtProperty) {
-        if (property.isPrivate() && property.isMemberOrTopLevel() || property.isLocal) {
-            maybeAddUnusedProperty(property)
-        }
-        super.visitProperty(property)
-    }
-
-    private fun KtProperty.isMemberOrTopLevel() = isMember || isTopLevel
-
-    override fun visitReferenceExpression(expression: KtReferenceExpression) {
-        nameAccesses.add(expression.text.removeSurrounding("`"))
-        super.visitReferenceExpression(expression)
     }
 }
