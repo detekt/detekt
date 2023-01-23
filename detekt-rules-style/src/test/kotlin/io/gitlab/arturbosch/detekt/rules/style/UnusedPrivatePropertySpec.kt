@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
@@ -456,6 +457,20 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `error messages` {
+        @Test
+        fun `are specific for local variables`() {
+            val code = """
+                fun foo(){ val unused = 1 }
+            """.trimIndent()
+
+            val lint = subject.lint(code)
+
+            assertThat(lint.first().message).startsWith("Private property")
         }
     }
 }

@@ -376,29 +376,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    @Disabled
     inner class `error messages` {
-        @Test
-        fun `are specific for function parameters`() {
-            val code = """
-                fun foo(unused: Int){}
-            """.trimIndent()
-
-            val lint = subject.lint(code)
-
-            assertThat(lint.first().message).startsWith("Function parameter")
-        }
-
-        @Test
-        fun `are specific for local variables`() {
-            val code = """
-                fun foo(){ val unused = 1 }
-            """.trimIndent()
-
-            val lint = subject.lint(code)
-
-            assertThat(lint.first().message).startsWith("Private property")
-        }
 
         @Test
         fun `are specific for private functions`() {

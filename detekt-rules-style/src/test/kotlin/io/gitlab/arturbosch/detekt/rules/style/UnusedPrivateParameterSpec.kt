@@ -319,4 +319,18 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
             assertThat(subject.lint(code)).isEmpty()
         }
     }
+
+    @Nested
+    inner class `error messages` {
+        @Test
+        fun `are specific for function parameters`() {
+            val code = """
+                fun foo(unused: Int){}
+            """.trimIndent()
+
+            val lint = subject.lint(code)
+
+            assertThat(lint.first().message).startsWith("Function parameter")
+        }
+    }
 }
