@@ -750,4 +750,64 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             assertThat(subject.lint(code)).isEmpty()
         }
     }
+
+    @Nested
+    inner class `parameters in primary constructors` {
+        @Test
+        fun `reports unused parameter`() {
+            val code = """
+                class Test(unused: Any)
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report used parameter for calling super`() {
+            val code = """
+                class Parent(val ignored: Any)
+                class Test(used: Any) : Parent(used)
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report used parameter in init block`() {
+            val code = """
+                class Test(used: Any) {
+                    init {
+                        used.toString()
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report used parameter to initialize property`() {
+            val code = """
+                class Test(used: Any) {
+                    val usedString = used.toString()
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `secondary parameters` {
+        @Test
+        fun `report unused parameters in secondary constructors`() {
+            val code = """
+                private class ClassWithSecondaryConstructor {
+                    constructor(used: Any, unused: Any) {
+                        used.toString()
+                    }
+
+                    // this is actually unused, but clashes with the other constructor
+                    constructor(used: Any)
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+    }
 }
