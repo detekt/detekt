@@ -333,4 +333,32 @@ class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
             assertThat(lint.first().message).startsWith("Function parameter")
         }
     }
+
+    @Nested
+    inner class `main methods` {
+
+        @Test
+        fun `does not report the args parameter of the main function inside an object`() {
+            val code = """
+                object O {
+
+                    @JvmStatic
+                    fun main(args: Array<String>) {
+                        println("b")
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report the args parameter of the main function as top level function`() {
+            val code = """
+                fun main(args: Array<String>) {
+                    println("b")
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
 }
