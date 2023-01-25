@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class UnusedPrivateParameterSpec(val env: KotlinCoreEnvironment) {
+class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
     val subject = UnusedParameter()
 
     @Nested
