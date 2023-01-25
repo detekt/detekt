@@ -117,7 +117,8 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
 
         val annotations = resultingDescriptor.annotations + resultingDescriptor.findPackage().annotations
         if (resultingDescriptor.annotations.any { it in ignoreReturnValueAnnotations } ||
-            resultingDescriptor.findPackage().annotations.any { it in ignoreReturnValueAnnotations }) {
+            resultingDescriptor.findPackage().annotations.any { it in ignoreReturnValueAnnotations }
+        ) {
             return
         }
         if (restrictToConfig &&
