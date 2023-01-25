@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Named
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -411,7 +412,7 @@ class UnnecessaryParenthesesSpec {
 
     @ParameterizedTest
     @MethodSource("cases")
-    fun `does report inc operator when parens not required`(testCase: RuleTestCase) {
+    fun `does report unnecessary parens in case of constant literal when using inc operator`(testCase: RuleTestCase) {
         val code = """
             class Foo(var value: Int) {
                 operator fun inc() = Foo(value + 1)
@@ -423,15 +424,53 @@ class UnnecessaryParenthesesSpec {
             
             fun test() {
                 val violation = ++(2.foo)
-                var a = 2.foo
-                val violation1 = (++a.value)
-                val violation2 = ((++a).value)
-                val violation3 = (++(a.value))
-                val violation4 = ++((a.value))
             }
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 5 else 7)
+        assertThat(testCase.rule.lint(code)).hasSize(1)
+    }
+
+    @Test
+    fun `given allowForUnclearPrecedence allowed, does report unnecessary outer parens in case of inc operator`() {
+        val code = """
+            class Foo(var value: Int) {
+                operator fun inc() = Foo(value + 1)
+            }
+            
+            var Int.foo: Foo
+                get() = Foo(value = this)
+                set(value) {}
+            
+            fun test() {
+                var a = 2.foo
+                val violation1 = ((++a).value)
+                val violation2 = (++(a.value))
+                val violation3 = ++((a.value))
+            }
+        """.trimIndent()
+
+        assertThat(RuleTestCase(allowForUnclearPrecedence = true).rule.lint(code)).hasSize(3)
+    }
+
+    @Test
+    fun `given allowForUnclearPrecedence not allowed, does report unnecessary outer and clarifying inner parens`() {
+        val code = """
+            class Foo(var value: Int) {
+                operator fun inc() = Foo(value + 1)
+            }
+            
+            var Int.foo: Foo
+                get() = Foo(value = this)
+                set(value) {}
+            
+            fun test() {
+                var a = 2.foo
+                val violation1 = ((++a).value)
+                val violation2 = (++(a.value))
+                val violation3 = ++((a.value))
+            }
+        """.trimIndent()
+        assertThat(RuleTestCase(allowForUnclearPrecedence = false).rule.lint(code)).hasSize(5)
     }
 
     @ParameterizedTest
