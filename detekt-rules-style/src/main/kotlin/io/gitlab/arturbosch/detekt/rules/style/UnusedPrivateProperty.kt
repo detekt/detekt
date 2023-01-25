@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
- * An unused private property can be removed to simplify the class etc.
+ * An unused private property can be removed to simplify the source file.
  *
  * <noncompliant>
  * class Foo {
