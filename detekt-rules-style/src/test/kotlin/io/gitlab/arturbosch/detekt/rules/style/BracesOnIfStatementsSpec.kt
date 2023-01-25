@@ -1,208 +1,98 @@
+@file:Suppress("ClassName", "PrivatePropertyName")
+
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.intellij.lang.annotations.Language
+import org.junit.jupiter.api.DynamicNode
+import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
 
-@Language("kotlin")
-private val BLOCK_WITHOUT_BRACES_PASS = """
-    fun f() { 
-        if (true) println()
-
-        if (true) 
-            println()
-
-        if (true) println() else println()
-
-        if (true) 
-            println() 
-        else
-            println()
-
-        if (true) println() else if (true) println() else println()
-
-        if (true) 
-            println() 
-        else if (true)
-            println() 
-        else
-            println()
-
-        when (true) {
-            true -> if (true) println() else println()
-            true -> if (true) 
-                    println() 
-                else 
-                    println()
-            true -> if (true) println() else if (true) println() else println()
-            else -> if (true) 
-                    println() 
-                else if (true)
-                    println()
-                else
-                    println()
-        }
-    }
+private val NO_BRACES_SINGLE: String = """
+    if (true) println()
+    if (true) println() else println()
+    if (true) println() else if println()
+    if (true) println() else if println() else println()
+    if (true) println() else if println() else if println() else println()
 """.trimIndent()
 
-@Language("kotlin")
-private val BLOCK_WITH_BRACES_PASS = """
-    fun f() { 
-        if (true) { println() }
+private val NO_BRACES_SINGLE_LOCATIONS: Array<Pair<Int, Int>> = arrayOf(
+    14 to 16,
+    38 to 40,
+    58 to 62,
+    77 to 79,
+    102 to 104,
+    119 to 121,
+    144 to 146,
+    157 to 161,
+    176 to 178,
+    201 to 203,
+    219 to 221,
+    232 to 236,
+)
 
-        if (true) {
-            println()
-        }
-
-        if (true) { println() } else { println() }
-
-        if (true) {
-            println()
-        } else { 
-            println()
-        }
-
-        if (true) { println() } else if (true) { println() } else { println() }
-
-        if (true) { println() } else { if (true) { println() } else { println() } }
-
-        if (true) { 
-            println()
-        } else if (true) { 
-            println() 
-        } else { 
-            println() 
-        }
-
-        when (true) {
-            true -> if (true) { println() } else { println() }
-            true -> if (true) {
-                    println()
-                } else { 
-                    println()
-                }
-            true -> if (true) { println() } else if (true) { println() } else { println() }
-            else -> if (true) {
-                    println()
-                } else if (true) {
-                    println()
-                } else {
-                    println()
-                }
-        }
-    }
+private val ALL_BRACES_SINGLE: String = """
+    if (true) { println() }
+    if (true) { println() } else { println() }
+    if (true) { println() } else if { println() }
+    if (true) { println() } else if { println() } else { println() }
+    if (true) { println() } else if { println() } else if { println() } else { println() }
 """.trimIndent()
 
-@Language("kotlin")
-private val BLOCK_WITHOUT_BRACES_FAIL = """
-    fun f() { 
-        if (true) { println() } else println()
+private val ALL_BRACES_SINGLE_LOCATIONS: Array<Pair<Int, Int>> = arrayOf(
+    14 to 16,
+    42 to 44,
+    66 to 70,
+    89 to 91,
+    118 to 120,
+    139 to 141,
+    168 to 170,
+    185 to 189,
+    208 to 210,
+    237 to 239,
+    259 to 261,
+    276 to 280,
+)
 
-        if (true) 
-            println() 
-        else {
-            println()
-        }
-
-        if (true) println() else if (true) println() else { println() }
-
-        if (true) 
-            println() 
-        else if (true) {
-            println()
-        } else
-            println()
-
-        when (true) {
-            true -> if (true) println() else { println() }
-            true -> if (true) {
-                    println() 
-                } else 
-                    println()
-            true -> if (true) println() else if (true) { println() } else println()
-            else -> if (true) 
-                    println() 
-                else if (true)
-                    println()
-                else {
-                    println()
-                }
-        }
-    }
+private val IF_BRACES_SINGLE: String = """
+    if (true) { println() }
+    if (true) { println() } else println()
+    if (true) { println() } else if println()
+    if (true) { println() } else if println() else println()
+    if (true) { println() } else if println() else if println() else println()
 """.trimIndent()
 
-@Language("kotlin")
-private val BLOCK_WITH_BRACES_FAIL = """
-    fun f() { 
-        if (true) println() else { println() }
+private val IF_BRACES_SINGLE_BRACE_LOCATIONS: Array<Pair<Int, Int>> = arrayOf(
+    14 to 16,
+    42 to 44,
+    85 to 87,
+    131 to 133,
+    192 to 194,
+)
 
-        if (true) {
-            println()
-        } else
-            println()
+private val IF_BRACES_SINGLE_NO_BRACE_LOCATIONS: Array<Pair<Int, Int>> = arrayOf(
+    66 to 70,
+    114 to 116,
+    160 to 162,
+    173 to 177,
+    221 to 223,
+    239 to 241,
+    252 to 256,
+)
 
-        if (true) { println() } else if (true) println() else { println() }
-
-        if (true) println() else { if (true) println() else println() }
-
-        if (true) { 
-            println()
-        } else if (true) { 
-            println() 
-        } else 
-            println()
-
-        when (true) {
-            true -> if (true) { println() } else println()
-            true -> if (true) println()
-                else { 
-                    println()
-                }
-            true -> if (true) { println() } else if (true) { println() } else println()
-            else -> if (true) {
-                    println()
-                } else if (true)
-                    println()
-                else {
-                    println()
-                }
-        }
-    }
+private val ELSE_BRACES_SINGLE: String = """
+    if (true) println()
+    if (true) println() else { println() }
+    if (true) println() else if println()
+    if (true) println() else if println() else { println() }
+    if (true) println() else if println() else if println()
+    if (true) println() else if println() else if println() else { println() }
 """.trimIndent()
 
-@Language("kotlin")
-private val BLOCK_NECESSARY_BRACES_PASS = """
-    fun f() { 
-        if (true) println() else if (true) { println(); println() } else println()
-
-        if (true) 
-            println() 
-        else if (true) {
-            println()
-            println() 
-        } else
-            println()
-    }
-""".trimIndent()
-
-@Language("kotlin")
-private val BLOCK_NECESSARY_BRACES_FAIL = """
-    fun f() { 
-        if (true) println() else if (true) { println(); println() } else { println() }
-
-        if (true) 
-            println() 
-        else if (true) {
-            println()
-            println() 
-        } else {
-            println()
-        }
-    }
-""".trimIndent()
+private const val NOT_RELEVANT = "*"
 
 class BracesOnIfStatementsSpec {
 
@@ -216,195 +106,180 @@ class BracesOnIfStatementsSpec {
         return BracesOnIfStatements(config)
     }
 
+    private fun BracesOnIfStatements.compileAndLintInF(code: String): List<Finding> =
+        compileAndLint(
+            """
+                fun f() {
+                    ${code.prependIndent("                    ").trimStart()}
+                }
+            """.trimIndent()
+        )
+
     @Nested
-    inner class `braces always` {
-        val subject = createSubject("always", "always")
+    inner class singleLine {
 
-        @Test
-        fun `does not report correct block with braces`() {
-            val findings = subject.compileAndLint(BLOCK_WITH_BRACES_PASS)
+        @Nested
+        inner class `=always` {
 
-            assertThat(findings).isEmpty()
+            private val singleLine = BracesOnIfStatements.BracePolicy.Always.config
+
+            @TestFactory
+            fun `missing braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
+                val findings = compileAndLintInF(NO_BRACES_SINGLE)
+
+                assertThat(findings).hasTextLocations(*NO_BRACES_SINGLE_LOCATIONS)
+            }
+
+            @TestFactory
+            fun `existing braces are accepted`() = braceTests(singleLine, NOT_RELEVANT) {
+                val findings = compileAndLintInF(ALL_BRACES_SINGLE)
+
+                assertThat(findings).isEmpty()
+            }
+
+            @TestFactory
+            fun `partially missing braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
+                val findings = compileAndLintInF(IF_BRACES_SINGLE)
+
+                assertThat(findings).hasTextLocations(*IF_BRACES_SINGLE_NO_BRACE_LOCATIONS)
+            }
         }
 
-        @Test
-        fun `reports incorrect block with braces`() {
-            val findings = subject.compileAndLint(BLOCK_WITH_BRACES_FAIL)
+        @Nested
+        inner class `=never` {
 
-            assertThat(findings).hasTextLocations(
-                15 to 17,
-                95 to 99,
-                152 to 154,
-                223 to 225,
-                243 to 247,
-                196 to 198,
-                345 to 349,
-                428 to 432,
-                459 to 461,
-                608 to 612,
-                696 to 698
-            )
+            private val singleLine = BracesOnIfStatements.BracePolicy.Never.config
+
+            @TestFactory
+            fun `no braces are accepted`() = braceTests(singleLine, NOT_RELEVANT) {
+                val findings = compileAndLintInF(NO_BRACES_SINGLE)
+
+                assertThat(findings).isEmpty()
+            }
+
+            @TestFactory
+            fun `existing braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
+                val findings = compileAndLintInF(ALL_BRACES_SINGLE)
+
+                assertThat(findings).hasTextLocations(*ALL_BRACES_SINGLE_LOCATIONS)
+            }
+
+            @TestFactory
+            fun `partially extra braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
+                val findings = compileAndLintInF(IF_BRACES_SINGLE)
+
+                assertThat(findings).hasTextLocations(*IF_BRACES_SINGLE_BRACE_LOCATIONS)
+            }
+        }
+
+        @Nested
+        inner class `=necessary` {
+
+            private val singleLine = BracesOnIfStatements.BracePolicy.Necessary.config
+
+            @TestFactory
+            fun `no braces are accepted`() = braceTests(singleLine, NOT_RELEVANT) {
+                val findings = compileAndLintInF(NO_BRACES_SINGLE)
+
+                assertThat(findings).isEmpty()
+            }
+
+            @TestFactory
+            fun `existing braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
+                val findings = compileAndLintInF(ALL_BRACES_SINGLE)
+
+                assertThat(findings).hasTextLocations(*ALL_BRACES_SINGLE_LOCATIONS)
+            }
+
+            @TestFactory
+            fun `partially extra braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
+                val findings = compileAndLintInF(IF_BRACES_SINGLE)
+
+                assertThat(findings).hasTextLocations(*IF_BRACES_SINGLE_BRACE_LOCATIONS)
+            }
+        }
+
+        @Nested
+        inner class `=consistent` {
+
+            private val singleLine = BracesOnIfStatements.BracePolicy.Consistent.config
+
+            @TestFactory
+            fun `no braces are accepted`() = braceTests(singleLine, NOT_RELEVANT) {
+                val findings = compileAndLintInF(NO_BRACES_SINGLE)
+
+                assertThat(findings).isEmpty()
+            }
+
+            @TestFactory
+            fun `existing braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
+                val findings = compileAndLintInF(ALL_BRACES_SINGLE)
+
+                assertThat(findings).isEmpty()
+            }
+
+            @TestFactory
+            fun `partial braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
+                val findings = compileAndLintInF(IF_BRACES_SINGLE)
+
+                assertThat(findings).hasTextLocations(*IF_BRACES_SINGLE_BRACE_LOCATIONS.drop(1).toTypedArray())
+            }
         }
     }
 
-    @Nested
-    inner class `braces consistent` {
-        val subject = createSubject("consistent", "consistent")
+    @TestFactory
+    fun `whens are not flagged`() = braceTests(NOT_RELEVANT, NOT_RELEVANT) {
+        val findings = compileAndLintInF(
+            """
+                when (true) {
+                    true -> println()
+                    else -> println()
+                }
+            """.trimIndent()
+        )
 
-        @Test
-        fun `does not report consistent block without braces`() {
-            val findings = subject.compileAndLint(BLOCK_WITHOUT_BRACES_PASS)
-
-            assertThat(findings).isEmpty()
-        }
-
-        @Test
-        fun `does not report consistent block with braces`() {
-            val findings = subject.compileAndLint(BLOCK_WITH_BRACES_PASS)
-
-            assertThat(findings).isEmpty()
-        }
-
-        @Test
-        fun `reports inconsistent block without braces`() {
-            val findings = subject.compileAndLint(BLOCK_WITHOUT_BRACES_FAIL)
-
-            assertThat(findings).hasTextLocations(
-                15 to 17,
-                59 to 61,
-                129 to 131,
-                198 to 200,
-                331 to 333,
-                386 to 388,
-                487 to 489,
-                567 to 569
-            )
-        }
-
-        @Test
-        fun `reports inconsistent block with braces`() {
-            val findings = subject.compileAndLint(BLOCK_WITH_BRACES_FAIL)
-
-            assertThat(findings).hasTextLocations(
-                15 to 17,
-                59 to 61,
-                123 to 125,
-                196 to 198,
-                265 to 267,
-                404 to 406,
-                459 to 461,
-                555 to 557,
-                639 to 641
-            )
-        }
-
-        @Test
-        fun `reports if when else is multi-statement`() {
-            val findings = subject.compileAndLint(
-                """
-                    fun f() {
-                        if (true) println() else { println(); println() }
-                    }
-                """.trimIndent()
-            )
-            assertThat(findings).hasTextLocations(14 to 16)
-        }
+        assertThat(findings).isEmpty()
     }
 
-    @Nested
-    inner class `braces never` {
-        val subject = createSubject("never", "never")
-
-        @Test
-        fun `does not report correct block without braces`() {
-            val findings = subject.compileAndLint(BLOCK_WITHOUT_BRACES_PASS)
-
-            assertThat(findings).isEmpty()
-        }
-
-        @Test
-        fun `reports incorrect block without braces`() {
-            val findings = subject.compileAndLint(BLOCK_WITHOUT_BRACES_FAIL)
-
-            assertThat(findings).hasTextLocations(
-                15 to 17,
-                93 to 97,
-                174 to 178,
-                237 to 239,
-                351 to 355,
-                386 to 388,
-                512 to 514,
-                670 to 674
-            )
-        }
-    }
-
-    @Nested
-    inner class `braces necessary` {
-        val subject = createSubject("necessary", "necessary")
-
-        @Test
-        fun `does not report correct block without braces`() {
-            val findings = subject.compileAndLint(BLOCK_NECESSARY_BRACES_PASS)
-
-            assertThat(findings).isEmpty()
-        }
-
-        @Test
-        fun `reports incorrect block without braces`() {
-            val findings = subject.compileAndLint(BLOCK_NECESSARY_BRACES_FAIL)
-
-            assertThat(findings).hasTextLocations(
-                75 to 79,
-                193 to 197
-            )
-        }
-    }
-
-    @Nested
-    inner class `mixed policy` {
-        val subject = createSubject("never", "always")
-
-        @Test
-        fun `does not report correct block`() {
-            val findings = subject.compileAndLint(
-                """
-                    fun f() {
-                        if (true) println() else println()
-
-                        if (true) { 
-                            println()
-                        } else {
-                            println()
+    private fun braceTests(
+        singleLine: String,
+        multiLine: String,
+        test: BracesOnIfStatements.() -> Unit
+    ): List<DynamicNode> {
+        val singleOptions = options(singleLine)
+        val multiOptions = options(multiLine)
+        return when {
+            singleOptions.size > 1 && multiOptions.size > 1 ->
+                singleOptions.flatMap { singleLineOption ->
+                    multiOptions.map { multiLineOption ->
+                        dynamicTest("singleLine=${singleLineOption}, multiLine=${multiLineOption}") {
+                            createSubject(singleLineOption, multiLineOption).test()
                         }
                     }
-                
-                """.trimIndent()
-            )
+                }
 
-            assertThat(findings).isEmpty()
-        }
-
-        @Test
-        fun `reports incorrect block`() {
-            val findings = subject.compileAndLint(
-                """
-                    fun f() {
-                        if (true) println() else { println() }
-
-                        if (true) { 
-                            println()
-                        } else
-                            println()
+            singleOptions.size > 1 && multiOptions.size == 1 ->
+                singleOptions.map { singleLineOption ->
+                    dynamicTest("singleLine=${singleLineOption}}") {
+                        createSubject(singleLineOption, multiOptions.single()).test()
                     }
-                
-                """.trimIndent()
-            )
+                }
 
-            assertThat(findings).hasTextLocations(
-                34 to 38,
-                95 to 99
-            )
+            singleOptions.size == 1 && multiOptions.size > 1 ->
+                multiOptions.map { multiLineOption ->
+                    dynamicTest("multiLine=${multiLineOption}") {
+                        createSubject(singleOptions.single(), multiLineOption).test()
+                    }
+                }
+
+            else ->
+                error("No options to test: $singleLine -> $singleOptions, $multiLine -> $multiOptions")
         }
     }
+
+    private fun options(option: String): List<String> =
+        if (option == NOT_RELEVANT)
+            BracesOnIfStatements.BracePolicy.values().map { it.config }
+        else
+            listOf(option)
 }
