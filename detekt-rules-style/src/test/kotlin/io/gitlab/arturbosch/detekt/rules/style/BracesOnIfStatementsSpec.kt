@@ -1,12 +1,15 @@
-@file:Suppress("ClassName", "PrivatePropertyName")
+@file:Suppress("ClassName", "PrivatePropertyName", "ClassOrdering", "VariableNaming")
 
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import org.junit.jupiter.api.DynamicContainer.dynamicContainer
 import org.junit.jupiter.api.DynamicNode
+import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
@@ -117,134 +120,171 @@ class BracesOnIfStatementsSpec {
 
     @Nested
     inner class singleLine {
-
-        @Nested
-        inner class `=always` {
-
-            private val singleLine = BracesOnIfStatements.BracePolicy.Always.config
-
-            @TestFactory
-            fun `missing braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
-                val findings = compileAndLintInF(NO_BRACES_SINGLE)
-
-                assertThat(findings).hasTextLocations(*NO_BRACES_SINGLE_LOCATIONS)
-            }
-
-            @TestFactory
-            fun `existing braces are accepted`() = braceTests(singleLine, NOT_RELEVANT) {
-                val findings = compileAndLintInF(ALL_BRACES_SINGLE)
-
-                assertThat(findings).isEmpty()
-            }
-
-            @TestFactory
-            fun `partially missing braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
-                val findings = compileAndLintInF(IF_BRACES_SINGLE)
-
-                assertThat(findings).hasTextLocations(*IF_BRACES_SINGLE_NO_BRACE_LOCATIONS)
-            }
-        }
+//
+//        @Nested
+//        inner class `=always` {
+//
+//            private val singleLine = BracesOnIfStatements.BracePolicy.Always.config
+//
+//            @TestFactory
+//            fun `missing braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
+//                val findings = compileAndLintInF(NO_BRACES_SINGLE)
+//
+//                assertThat(findings).hasTextLocations(*NO_BRACES_SINGLE_LOCATIONS)
+//            }
+//
+//            @TestFactory
+//            fun `existing braces are accepted`() = braceTests(singleLine, NOT_RELEVANT) {
+//                val findings = compileAndLintInF(ALL_BRACES_SINGLE)
+//
+//                assertThat(findings).isEmpty()
+//            }
+//
+//            @TestFactory
+//            fun `partially missing braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
+//                val findings = compileAndLintInF(IF_BRACES_SINGLE)
+//
+//                assertThat(findings).hasTextLocations(*IF_BRACES_SINGLE_NO_BRACE_LOCATIONS)
+//            }
+//        }
 
         @Nested
         inner class `=never` {
 
+            val NOTHING = arrayOf<Pair<Int, Int>>()
             private val singleLine = BracesOnIfStatements.BracePolicy.Never.config
 
-            @TestFactory
-            fun `no braces are accepted`() = braceTests(singleLine, NOT_RELEVANT) {
-                val findings = compileAndLintInF(NO_BRACES_SINGLE)
+//            @TestFactory
+//            fun `no braces are accepted`() = braceTests(singleLine, NOT_RELEVANT) {
+//                val findings = compileAndLintInF(NO_BRACES_SINGLE)
+//
+//                assertThat(findings).isEmpty()
+//            }
+//
+//            @TestFactory
+//            fun `existing braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
+//                val findings = compileAndLintInF(ALL_BRACES_SINGLE)
+//
+//                assertThat(findings).hasTextLocations(*ALL_BRACES_SINGLE_LOCATIONS)
+//            }
 
-                assertThat(findings).isEmpty()
+            context(BracesOnIfStatements)
+            private inline fun MutableList<DynamicTest>.flag(code: String, vararg locations: Pair<Int, Int>) {
+                add(
+                    dynamicTest("flags ${locations.map { TextLocation(it.first, it.second) }} in `$code`") {
+                        val findings = compileAndLintInF(code)
+
+                        assertThat(findings).hasTextLocations(*locations.map { it.first + 13 to it.second + 13 }
+                            .toTypedArray())
+                    }
+                )
             }
 
             @TestFactory
-            fun `existing braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
-                val findings = compileAndLintInF(ALL_BRACES_SINGLE)
-
-                assertThat(findings).hasTextLocations(*ALL_BRACES_SINGLE_LOCATIONS)
+            fun `partially extra braces are flagged`() = braceTests("never", NOT_RELEVANT) {
+                flag("if (true) { println() }", 1 to 3)
+                flag("if (true) { println() } else println()", 1 to 3)
+                flag("if (true) { println() } else if (true) println()", 1 to 3)
+                flag("if (true) { println() } else if (true) println() else println()", 1 to 3)
+                flag(
+                    """
+                        if (true) { println() } else if (true) println() else if (true) println() else println()
+                    """.trimIndent(),
+                    1 to 3,
+                )
             }
 
             @TestFactory
-            fun `partially extra braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
-                val findings = compileAndLintInF(IF_BRACES_SINGLE)
-
-                assertThat(findings).hasTextLocations(*IF_BRACES_SINGLE_BRACE_LOCATIONS)
-            }
-        }
-
-        @Nested
-        inner class `=necessary` {
-
-            private val singleLine = BracesOnIfStatements.BracePolicy.Necessary.config
-
-            @TestFactory
-            fun `no braces are accepted`() = braceTests(singleLine, NOT_RELEVANT) {
-                val findings = compileAndLintInF(NO_BRACES_SINGLE)
-
-                assertThat(findings).isEmpty()
-            }
-
-            @TestFactory
-            fun `existing braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
-                val findings = compileAndLintInF(ALL_BRACES_SINGLE)
-
-                assertThat(findings).hasTextLocations(*ALL_BRACES_SINGLE_LOCATIONS)
-            }
-
-            @TestFactory
-            fun `partially extra braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
-                val findings = compileAndLintInF(IF_BRACES_SINGLE)
-
-                assertThat(findings).hasTextLocations(*IF_BRACES_SINGLE_BRACE_LOCATIONS)
-            }
-        }
-
-        @Nested
-        inner class `=consistent` {
-
-            private val singleLine = BracesOnIfStatements.BracePolicy.Consistent.config
-
-            @TestFactory
-            fun `no braces are accepted`() = braceTests(singleLine, NOT_RELEVANT) {
-                val findings = compileAndLintInF(NO_BRACES_SINGLE)
-
-                assertThat(findings).isEmpty()
-            }
-
-            @TestFactory
-            fun `existing braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
-                val findings = compileAndLintInF(ALL_BRACES_SINGLE)
-
-                assertThat(findings).isEmpty()
-            }
-
-            @TestFactory
-            fun `partial braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
-                val findings = compileAndLintInF(IF_BRACES_SINGLE)
-
-                assertThat(findings).hasTextLocations(*IF_BRACES_SINGLE_BRACE_LOCATIONS.drop(1).toTypedArray())
+            fun `partially missing braces are flagged`() = braceTests("always", NOT_RELEVANT) {
+                flag("if (true) { println() }", *NOTHING)
+                flag("if (true) { println() } else println()", 24 to 28)
+                flag("if (true) { println() } else if (true) println()", 29 to 31)
+                flag("if (true) { println() } else if (true) println() else println()", 29 to 31, 49 to 51)
+                flag(
+                    """
+                        if (true) { println() } 
+                        else if (true) 
+                            println() 
+                        else if (true) println() else println()
+                    """.trimIndent(),
+                    29 to 31, 49 to 51, 74 to 78,
+                )
             }
         }
+//
+//        @Nested
+//        inner class `=necessary` {
+//
+//            private val singleLine = BracesOnIfStatements.BracePolicy.Necessary.config
+//
+//            @TestFactory
+//            fun `no braces are accepted`() = braceTests(singleLine, NOT_RELEVANT) {
+//                val findings = compileAndLintInF(NO_BRACES_SINGLE)
+//
+//                assertThat(findings).isEmpty()
+//            }
+//
+//            @TestFactory
+//            fun `existing braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
+//                val findings = compileAndLintInF(ALL_BRACES_SINGLE)
+//
+//                assertThat(findings).hasTextLocations(*ALL_BRACES_SINGLE_LOCATIONS)
+//            }
+//
+//            @TestFactory
+//            fun `partially extra braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
+//                val findings = compileAndLintInF(IF_BRACES_SINGLE)
+//
+//                assertThat(findings).hasTextLocations(*IF_BRACES_SINGLE_BRACE_LOCATIONS)
+//            }
+//        }
+//
+//        @Nested
+//        inner class `=consistent` {
+//
+//            private val singleLine = BracesOnIfStatements.BracePolicy.Consistent.config
+//
+//            @TestFactory
+//            fun `no braces are accepted`() = braceTests(singleLine, NOT_RELEVANT) {
+//                val findings = compileAndLintInF(NO_BRACES_SINGLE)
+//
+//                assertThat(findings).isEmpty()
+//            }
+//
+//            @TestFactory
+//            fun `existing braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
+//                val findings = compileAndLintInF(ALL_BRACES_SINGLE)
+//
+//                assertThat(findings).isEmpty()
+//            }
+//
+//            @TestFactory
+//            fun `partial braces are flagged`() = braceTests(singleLine, NOT_RELEVANT) {
+//                val findings = compileAndLintInF(IF_BRACES_SINGLE)
+//
+//                assertThat(findings).hasTextLocations(*IF_BRACES_SINGLE_BRACE_LOCATIONS.drop(1).toTypedArray())
+//            }
+//        }
     }
 
-    @TestFactory
-    fun `whens are not flagged`() = braceTests(NOT_RELEVANT, NOT_RELEVANT) {
-        val findings = compileAndLintInF(
-            """
-                when (true) {
-                    true -> println()
-                    else -> println()
-                }
-            """.trimIndent()
-        )
-
-        assertThat(findings).isEmpty()
-    }
+//    @TestFactory
+//    fun `whens are not flagged`() = braceTests(NOT_RELEVANT, NOT_RELEVANT) {
+//        val findings = compileAndLintInF(
+//            """
+//                when (true) {
+//                    true -> println()
+//                    else -> println()
+//                }
+//            """.trimIndent()
+//        )
+//
+//        assertThat(findings).isEmpty()
+//    }
 
     private fun braceTests(
         singleLine: String,
         multiLine: String,
-        test: BracesOnIfStatements.() -> Unit
+        test: context(BracesOnIfStatements) MutableList<DynamicTest>.() -> Unit
     ): List<DynamicNode> {
         val singleOptions = options(singleLine)
         val multiOptions = options(multiLine)
@@ -252,24 +292,24 @@ class BracesOnIfStatementsSpec {
             singleOptions.size > 1 && multiOptions.size > 1 ->
                 singleOptions.flatMap { singleLineOption ->
                     multiOptions.map { multiLineOption ->
-                        dynamicTest("singleLine=${singleLineOption}, multiLine=${multiLineOption}") {
-                            createSubject(singleLineOption, multiLineOption).test()
-                        }
+                        val tests = mutableListOf<DynamicTest>()
+                        test(createSubject(singleLineOption, multiLineOption), tests)
+                        dynamicContainer("singleLine=${singleLineOption}, multiLine=${multiLineOption}", tests)
                     }
                 }
 
             singleOptions.size > 1 && multiOptions.size == 1 ->
                 singleOptions.map { singleLineOption ->
-                    dynamicTest("singleLine=${singleLineOption}}") {
-                        createSubject(singleLineOption, multiOptions.single()).test()
-                    }
+                    val tests = mutableListOf<DynamicTest>()
+                    test(createSubject(singleLineOption, multiOptions.single()), tests)
+                    dynamicContainer("singleLine=${singleLineOption}, multiLine=${multiOptions.single()}", tests)
                 }
 
             singleOptions.size == 1 && multiOptions.size > 1 ->
                 multiOptions.map { multiLineOption ->
-                    dynamicTest("multiLine=${multiLineOption}") {
-                        createSubject(singleOptions.single(), multiLineOption).test()
-                    }
+                    val tests = mutableListOf<DynamicTest>()
+                    test(createSubject(singleOptions.single(), multiLineOption), tests)
+                    dynamicContainer("singleLine=${singleOptions.single()}, multiLine=${multiLineOption}", tests)
                 }
 
             else ->

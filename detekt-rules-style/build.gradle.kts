@@ -11,3 +11,7 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.assertj)
 }
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    compilerOptions.freeCompilerArgs.add("-Xcontext-receivers")
+}
