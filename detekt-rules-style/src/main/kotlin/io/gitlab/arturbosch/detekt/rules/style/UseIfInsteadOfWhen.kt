@@ -37,7 +37,7 @@ class UseIfInsteadOfWhen(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Configuration("ignores when variable declaration is used in subject")
+    @Configuration("ignores when statements with a variable declaration used in the subject")
     private val ignoreWhenContainingVariableDeclaration: Boolean by config(false)
 
     @Suppress("ReturnCount")
