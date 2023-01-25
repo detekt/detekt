@@ -26,6 +26,9 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 /**
  * An unused private property can be removed to simplify the source file.
  *
+ * This rule also detects unused constructor parameters since these can become
+ * properties of the class when they are declared with `val` or `var`.
+ *
  * <noncompliant>
  * class Foo {
  *   private val unused = "unused"
