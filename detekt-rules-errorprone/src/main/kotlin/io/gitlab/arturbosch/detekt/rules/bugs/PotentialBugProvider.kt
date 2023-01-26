@@ -51,6 +51,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             NullableToStringCall(config),
             UnreachableCatchBlock(config),
             CastToNullableType(config),
+            CastNullableToNonNullableType(config),
             UnusedUnaryOperator(config)
         )
     )
