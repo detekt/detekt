@@ -169,7 +169,7 @@ class BracesOnIfStatementsSpec {
 //            }
 
             context(BracesOnIfStatements)
-            private inline fun MutableList<DynamicTest>.flag(code: String, vararg locations: Pair<Int, Int>) {
+            private fun MutableList<DynamicTest>.flag(code: String, vararg locations: Pair<Int, Int>) {
                 add(
                     dynamicTest("flags ${locations.map { TextLocation(it.first, it.second) }} in `$code`") {
                         val findings = compileAndLintInF(code)
@@ -197,17 +197,14 @@ class BracesOnIfStatementsSpec {
             @TestFactory
             fun `partially missing braces are flagged`() = braceTests("always", NOT_RELEVANT) {
                 flag("if (true) { println() }", *NOTHING)
-                flag("if (true) { println() } else println()", 24 to 28)
-                flag("if (true) { println() } else if (true) println()", 29 to 31)
-                flag("if (true) { println() } else if (true) println() else println()", 29 to 31, 49 to 51)
+                flag("if (true) { println() } else println()", 25 to 29)
+                flag("if (true) { println() } else if (true) println()", 30 to 32)
+                flag("if (true) { println() } else if (true) println() else println()", 30 to 32, 50 to 52)
                 flag(
                     """
-                        if (true) { println() } 
-                        else if (true) 
-                            println() 
-                        else if (true) println() else println()
+                        if (true) { println() } else if (true) println() else if (true) println() else println()
                     """.trimIndent(),
-                    29 to 31, 49 to 51, 74 to 78,
+                    30 to 32, 50 to 52, 75 to 79,
                 )
             }
         }
