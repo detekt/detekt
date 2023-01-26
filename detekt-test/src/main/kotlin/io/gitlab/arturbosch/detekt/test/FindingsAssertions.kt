@@ -87,6 +87,23 @@ class FindingsAssert(actual: List<Finding>) :
         }
     }
 
+    fun hasOffsetTextLocations(offset: Int, vararg expected: Pair<Int, Int>) = apply {
+        val actualSources = actual.asSequence()
+            .map { it.location.text }
+            .map { (start, end) -> TextLocation(start - offset, end - offset) }
+            .sortedWith(compareBy({ it.start }, { it.end }))
+
+        val expectedSources = expected.asSequence()
+            .map { (start, end) -> TextLocation(start - offset, end - offset) }
+            .sortedWith(compareBy({ it.start }, { it.end }))
+
+        if (!Objects.deepEquals(actualSources.toList(), expectedSources.toList())) {
+            failWithMessage(
+                "Expected text locations to be ${expectedSources.toList()} but was ${actualSources.toList()}"
+            )
+        }
+    }
+
     fun hasTextLocations(vararg expected: String): FindingsAssert {
         val finding = actual.firstOrNull()
         if (finding == null) {

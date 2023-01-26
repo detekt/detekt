@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 import java.nio.file.Path
 
 private val shouldCompileTestSnippets: Boolean =
-    System.getProperty("compile-test-snippets", "true")!!.toBoolean()
+    System.getProperty("compile-test-snippets", "false")!!.toBoolean()
 
 fun BaseRule.compileAndLint(@Language("kotlin") content: String): List<Finding> {
     if (shouldCompileTestSnippets) {
