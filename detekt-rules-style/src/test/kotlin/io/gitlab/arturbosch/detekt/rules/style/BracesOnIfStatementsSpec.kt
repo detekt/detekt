@@ -276,7 +276,7 @@ class BracesOnIfStatementsSpec {
                         // select the "Stack trace of TestFactory" cause's last relevant line to jump to the actual test.
                         test(createSubject(singleLineOption, multiLineOption))
                     } catch (e: Throwable) {
-                        generateSequence(e) { e.cause }.last().initCause(trace)
+                        generateSequence(e) { it.cause }.last().initCause(trace)
                         throw e
                     }
                 }
