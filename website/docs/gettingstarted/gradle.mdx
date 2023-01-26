@@ -496,15 +496,16 @@ The source code of the plugin is available here: [detekt/detekt-intellij-plugin]
 detekt is tightly coupled to the Kotlin compiler and requires a specific version to be available at runtime to perform
 its analysis.
 
-If detekt is run with an unexpected version of the Kotlin compiler on its runtime classpath, you will see an error like
-this when you try to run detekt via Gradle:
+If detekt is run with an unexpected version of the Kotlin compiler on its classpath, you will see an error like this
+when you try to run detekt via Gradle:
 
 ```
 detekt was compiled with Kotlin 1.8.0 but is currently running with 1.7.0
 ```
 
-This happens when the version of `kotlin-compiler-embeddable` is overridden on detekt's classpath. This can happen when
-build scripts use things like this which override all dependency configurations:
+This happens when the version of `kotlin-compiler-embeddable` is overridden on detekt's classpath (in the `detekt`
+dependency configuration). This can happen when build scripts use things like this which override all dependency
+configurations:
 
 ```kotlin
 configurations.all {
@@ -516,5 +517,5 @@ configurations.all {
 }
 ```
 
-If Kotlin dependencies are being aligned like this then exclude the `detekt` dependency configuration with something like
-`configurations.matching { it.name != "detekt" }.all`.
+If Kotlin dependencies are being aligned like this then exclude the `detekt` dependency configuration with something
+like `configurations.matching { it.name != "detekt" }.all`.
