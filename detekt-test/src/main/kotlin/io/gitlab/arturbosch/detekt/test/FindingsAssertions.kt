@@ -71,9 +71,12 @@ class FindingsAssert(actual: List<Finding>) :
         hasEndSourceLocations(SourceLocation(line, column))
     }
 
-    fun hasTextLocations(vararg expected: Pair<Int, Int>) = apply {
+    fun hasTextLocations(vararg expected: Pair<Int, Int>) = hasOffsetTextLocations(0, *expected)
+
+    fun hasOffsetTextLocations(offset: Int, vararg expected: Pair<Int, Int>) = apply {
         val actualSources = actual.asSequence()
             .map { it.location.text }
+            .map { (start, end) -> TextLocation(start - offset, end - offset) }
             .sortedWith(compareBy({ it.start }, { it.end }))
 
         val expectedSources = expected.asSequence()
