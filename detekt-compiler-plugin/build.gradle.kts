@@ -83,7 +83,7 @@ val testPluginKotlinc by tasks.registering(RunTestExecutable::class) {
 
     args(
         listOf(
-            "$rootDir/src/test/resources/hello.kt",
+            "$projectDir/src/test/resources/hello.kt",
             "-Xplugin=${tasks.shadowJar.get().archiveFile.get().asFile.absolutePath}",
             "-P",
         )
