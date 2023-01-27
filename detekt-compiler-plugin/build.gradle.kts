@@ -79,6 +79,7 @@ val unzipKotlinCompiler by tasks.registering(Copy::class) {
 }
 
 val testPluginKotlinc by tasks.registering(RunTestExecutable::class) {
+    notCompatibleWithConfigurationCache("cannot serialize objects currently used in this task")
     dependsOn(unzipKotlinCompiler, tasks.shadowJar)
 
     args(
