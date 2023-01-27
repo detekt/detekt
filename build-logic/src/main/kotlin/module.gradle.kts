@@ -42,7 +42,6 @@ tasks.withType<Test>().configureEach {
 
 tasks.withType<KotlinCompile>().configureEach {
     compilerOptions {
-        jvmTarget.set(Versions.JVM_TARGET)
         freeCompilerArgs.add("-progressive")
         allWarningsAsErrors.set(providers.gradleProperty("warningsAsErrors").orNull.toBoolean())
     }
@@ -63,6 +62,5 @@ dependencies {
 java {
     withSourcesJar()
     withJavadocJar()
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    toolchain.languageVersion.set(JavaLanguageVersion.of(Versions.JVM_TARGET))
 }
