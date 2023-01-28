@@ -92,4 +92,7 @@ java {
     withSourcesJar()
     withJavadocJar()
     toolchain.languageVersion.set(JavaLanguageVersion.of(Versions.JVM_TARGET))
+    consistentResolution {
+        useCompileClasspathVersions()
+    }
 }
