@@ -41,15 +41,18 @@ tasks.withType<Test>().configureEach {
     }
 }
 
+@Suppress("MagicNumber")
 listOf(8, 11, 17).forEach { jdkVersion ->
     // Windows with JDK8 are really flaky
     if (jdkVersion == 8 && Os.isFamily(Os.FAMILY_WINDOWS)) return@forEach
 
     val jdkTest = tasks.register<Test>("testJdk$jdkVersion") {
         val javaToolchains = project.extensions.getByType(JavaToolchainService::class)
-        javaLauncher.set(javaToolchains.launcherFor {
-            languageVersion.set(JavaLanguageVersion.of(jdkVersion))
-        })
+        javaLauncher.set(
+            javaToolchains.launcherFor {
+                languageVersion.set(JavaLanguageVersion.of(jdkVersion))
+            }
+        )
 
         description = "Runs the test suite on JDK $jdkVersion"
         group = LifecycleBasePlugin.VERIFICATION_GROUP
