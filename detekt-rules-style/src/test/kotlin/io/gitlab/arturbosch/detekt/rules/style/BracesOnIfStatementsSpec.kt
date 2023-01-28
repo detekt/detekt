@@ -1,5 +1,3 @@
-@file:Suppress("ForbiddenImport")
-
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.TextLocation
@@ -9,7 +7,8 @@ import io.gitlab.arturbosch.detekt.rules.style.BracesOnIfStatementsSpec.Companio
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.junit.jupiter.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.DynamicContainer.dynamicContainer
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -33,13 +32,13 @@ class BracesOnIfStatementsSpec {
     @Test
     fun `validate behavior of occurrence function`() {
         val code = "fun f() { if (true) else if (true) if (true) true }"
-        Assertions.assertEquals(10 to 12, "if"(1)(code))
-        Assertions.assertEquals(25 to 27, "if"(2)(code))
-        Assertions.assertEquals(35 to 37, "if"(3)(code))
-        Assertions.assertEquals(20 to 24, "else"(1)(code))
-        Assertions.assertThrows(IllegalArgumentException::class.java) { "if"(4)(code) }
-        Assertions.assertThrows(IllegalArgumentException::class.java) { "if"(0)(code) }
-        Assertions.assertThrows(IllegalArgumentException::class.java) { "else"(2)(code) }
+        assertThat("if"(1)(code)).isEqualTo(10 to 12)
+        assertThat("if"(2)(code)).isEqualTo(25 to 27)
+        assertThat("if"(3)(code)).isEqualTo(35 to 37)
+        assertThat("else"(1)(code)).isEqualTo(20 to 24)
+        assertThatCode { "if"(4)(code) }.isInstanceOf(IllegalArgumentException::class.java)
+        assertThatCode { "if"(0)(code) }.isInstanceOf(IllegalArgumentException::class.java)
+        assertThatCode { "else"(2)(code) }.isInstanceOf(IllegalArgumentException::class.java)
     }
 
     @Nested
