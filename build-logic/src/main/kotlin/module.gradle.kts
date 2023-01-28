@@ -1,3 +1,4 @@
+import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -37,6 +38,29 @@ tasks.withType<Test>().configureEach {
         showExceptions = true
         showCauses = true
         showStackTraces = true
+    }
+}
+
+listOf(8, 11, 17).forEach { jdkVersion ->
+    // Windows with JDK8 are really flaky
+    if (jdkVersion == 8 && Os.isFamily(Os.FAMILY_WINDOWS)) return@forEach
+
+    val jdkTest = tasks.register<Test>("testJdk$jdkVersion") {
+        val javaToolchains = project.extensions.getByType(JavaToolchainService::class)
+        javaLauncher.set(javaToolchains.launcherFor {
+            languageVersion.set(JavaLanguageVersion.of(jdkVersion))
+        })
+
+        description = "Runs the test suite on JDK $jdkVersion"
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
+
+        // Copy inputs from normal Test task.
+        val testTask = tasks.test.get()
+        classpath = testTask.classpath
+        testClassesDirs = testTask.testClassesDirs
+    }
+    tasks.check {
+        dependsOn(jdkTest)
     }
 }
 

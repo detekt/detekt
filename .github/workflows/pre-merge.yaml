@@ -23,10 +23,6 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        jdk: [8, 11, 17]
-        exclude: # windows with JDK8 are *really* flaky
-          - os: windows-latest
-            jdk: 8
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Repo
@@ -35,7 +31,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@1df8dbefe2a8cbc99770194893dd902763bee34b # v3
         with:
-          java-version: ${{ matrix.jdk }}
+          java-version: 17
           distribution: 'temurin'
 
       - name: Build detekt
