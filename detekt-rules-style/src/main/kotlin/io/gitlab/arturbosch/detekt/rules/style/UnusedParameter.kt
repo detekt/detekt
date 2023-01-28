@@ -61,11 +61,8 @@ class UnusedParameter(config: Config = Config.empty) : Rule(config) {
 
     override fun visit(root: KtFile) {
         super.visit(root)
-        root.acceptUnusedMemberVisitor(UnusedParameterVisitor(allowedNames))
-    }
-
-    private fun KtFile.acceptUnusedMemberVisitor(visitor: UnusedParameterVisitor) {
-        accept(visitor)
+        val visitor = UnusedParameterVisitor(allowedNames)
+        root.accept(visitor)
         visitor.getUnusedReports(issue).forEach { report(it) }
     }
 }

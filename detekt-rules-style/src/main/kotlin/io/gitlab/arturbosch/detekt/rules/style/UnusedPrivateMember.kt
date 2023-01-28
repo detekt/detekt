@@ -59,11 +59,8 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 
     override fun visit(root: KtFile) {
         super.visit(root)
-        root.acceptUnusedMemberVisitor(UnusedFunctionVisitor(allowedNames, bindingContext))
-    }
-
-    private fun KtFile.acceptUnusedMemberVisitor(visitor: UnusedFunctionVisitor) {
-        accept(visitor)
+        val visitor = UnusedFunctionVisitor(allowedNames, bindingContext)
+        root.accept(visitor)
         visitor.getUnusedReports(issue).forEach { report(it) }
     }
 }
