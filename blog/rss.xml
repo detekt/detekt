@@ -11,7 +11,7 @@
         <item>
             <title><![CDATA[Recipe: diff your detekt config with the default one]]></title>
             <link>https://detekt.dev/blog/2020/09/27/additional-diff-config-task</link>
-            <guid>/2020/09/27/additional-diff-config-task</guid>
+            <guid>https://detekt.dev/blog/2020/09/27/additional-diff-config-task</guid>
             <pubDate>Sun, 27 Sep 2020 00:00:00 GMT</pubDate>
             <description><![CDATA[detekt's ./gradlew detektGenerateConfig task copies the default configuration file to the location]]></description>
             <content:encoded><![CDATA[<p>detekt's <code>./gradlew detektGenerateConfig</code> task copies the default configuration file to the location
@@ -23,7 +23,7 @@ When already using Gradle, we can write a custom task and share this procedure w
         <item>
             <title><![CDATA[Howto: make detekt silent]]></title>
             <link>https://detekt.dev/blog/2019/08/14/custom-console-reports</link>
-            <guid>/2019/08/14/custom-console-reports</guid>
+            <guid>https://detekt.dev/blog/2019/08/14/custom-console-reports</guid>
             <pubDate>Wed, 14 Aug 2019 00:00:00 GMT</pubDate>
             <description><![CDATA[detekt's reporting mechanism relies on implementations of ConsoleReport's.]]></description>
             <content:encoded><![CDATA[<p>detekt's reporting mechanism relies on implementations of <a href="/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/index.html">ConsoleReport</a>'s.
@@ -36,7 +36,7 @@ This can be achieved by implementing a custom <code>ConsoleReport</code>.</p><di
         <item>
             <title><![CDATA[Calling it One Zero]]></title>
             <link>https://detekt.dev/blog/2019/08/04/calling-it-one-zero</link>
-            <guid>/2019/08/04/calling-it-one-zero</guid>
+            <guid>https://detekt.dev/blog/2019/08/04/calling-it-one-zero</guid>
             <pubDate>Sun, 04 Aug 2019 00:00:00 GMT</pubDate>
             <description><![CDATA[Today we are announcing the 1.0 release of detekt, a static code analysis tool for Kotlin.]]></description>
             <content:encoded><![CDATA[<p>Today we are announcing the <strong>1.0</strong> release of detekt, a static code analysis tool for Kotlin.
@@ -55,7 +55,7 @@ We are excited to see how many users will jump on the 1.x.x release train and ho
         <item>
             <title><![CDATA[Howto: using snapshot releases of detekt]]></title>
             <link>https://detekt.dev/blog/2019/06/29/using-detekt-snapshots</link>
-            <guid>/2019/06/29/using-detekt-snapshots</guid>
+            <guid>https://detekt.dev/blog/2019/06/29/using-detekt-snapshots</guid>
             <pubDate>Sat, 29 Jun 2019 00:00:00 GMT</pubDate>
             <description><![CDATA[detekt uses bintray for releases and artifactory for snapshots.]]></description>
             <content:encoded><![CDATA[<p>detekt uses <a href="https://bintray.com/arturbosch/code-analysis/detekt" target="_blank" rel="noopener noreferrer">bintray</a> for releases and <a href="https://oss.jfrog.org/artifactory/webapp/#/artifacts/browse/tree/General/oss-snapshot-local/io/gitlab/arturbosch/detekt/detekt-cli/" target="_blank" rel="noopener noreferrer">artifactory</a> for snapshots.
@@ -65,7 +65,7 @@ To configure snapshot usage in your gradle plugin apply the following changes to
         <item>
             <title><![CDATA[Howto: migrating from the *test-pattern*]]></title>
             <link>https://detekt.dev/blog/2019/06/08/migrating-the-test-pattern</link>
-            <guid>/2019/06/08/migrating-the-test-pattern</guid>
+            <guid>https://detekt.dev/blog/2019/06/08/migrating-the-test-pattern</guid>
             <pubDate>Sat, 08 Jun 2019 00:00:00 GMT</pubDate>
             <description><![CDATA[Starting with RC15 the test-pattern is obsolete. This post shows how to leverage rule path excludes to achieve the same functionality.]]></description>
             <content:encoded><![CDATA[<p>Starting with RC15 the test-pattern is obsolete. This post shows how to leverage rule path excludes to achieve the same functionality.</p><p>With version &lt; RC15 the configuration file allowed to specify
@@ -84,7 +84,7 @@ All <em>exclude-rules</em> and <em>exclude-rule-sets</em> will now make use of <
         <item>
             <title><![CDATA[Howto: build upon the default yaml config file]]></title>
             <link>https://detekt.dev/blog/2019/03/03/build-upon-the-default-config</link>
-            <guid>/2019/03/03/build-upon-the-default-config</guid>
+            <guid>https://detekt.dev/blog/2019/03/03/build-upon-the-default-config</guid>
             <pubDate>Sun, 03 Mar 2019 00:00:00 GMT</pubDate>
             <description><![CDATA[A common use case of detekt users was to build upon the default config file and use a second config file to override]]></description>
             <content:encoded><![CDATA[<p>A common use case of <em>detekt</em> users was to build upon the default config file and use a second config file to override
@@ -97,7 +97,7 @@ no rule configuration is found in the specified configuration (<code>--config</c
         <item>
             <title><![CDATA[Howto: configure detekt for gradle root project]]></title>
             <link>https://detekt.dev/blog/2019/03/03/configure-detekt-on-root-project</link>
-            <guid>/2019/03/03/configure-detekt-on-root-project</guid>
+            <guid>https://detekt.dev/blog/2019/03/03/configure-detekt-on-root-project</guid>
             <pubDate>Sun, 03 Mar 2019 00:00:00 GMT</pubDate>
             <description><![CDATA[When configuring detekt for your Gradle based project, you basically have two options:]]></description>
             <content:encoded><![CDATA[<p>When configuring <em>detekt</em> for your <em>Gradle</em> based project, you basically have two options:</p><ul><li>for each sub module a new gradle task should be created</li><li>or one <strong>uber</strong>-task analyzes your whole project</li></ul><p>For the first option, please see how <a href="https://github.com/detekt/detekt" target="_blank" rel="noopener noreferrer">detekt</a> itself creates a task for each module:</p><div class="language-gradle codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-gradle codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">subprojecs {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">...</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    detekt {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        debug = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        toolVersion = usedDetektVersion</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        buildUponDefaultConfig = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        config = files(project.rootDir.resolve("reports/failfast.yml"))</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        baseline = project.rootDir.resolve("reports/baseline.xml")</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        reports {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            xml.enabled = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            html.enabled = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg class="copyButtonIcon_y97N" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg class="copyButtonSuccessIcon_LjdS" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div><p>Sometimes it makes sense to add an additional <em>detekt</em> task which runs over the whole project and produces one big report.
@@ -108,7 +108,7 @@ Using the <em>Kotlin-Dsl</em> it could look like this:</p><div class="language-g
         <item>
             <title><![CDATA[Website Online]]></title>
             <link>https://detekt.dev/blog/2018/02/11/website-online</link>
-            <guid>/2018/02/11/website-online</guid>
+            <guid>https://detekt.dev/blog/2018/02/11/website-online</guid>
             <pubDate>Sun, 11 Feb 2018 00:00:00 GMT</pubDate>
             <description><![CDATA[As of today the website was launched!]]></description>
             <content:encoded><![CDATA[<p>As of today the website was launched!</p><p>{% include links.html %}</p>]]></content:encoded>

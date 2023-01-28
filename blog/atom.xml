@@ -9,7 +9,7 @@
     <icon>https://detekt.dev/img/favicon.svg</icon>
     <entry>
         <title type="html"><![CDATA[Recipe: diff your detekt config with the default one]]></title>
-        <id>/2020/09/27/additional-diff-config-task</id>
+        <id>https://detekt.dev/blog/2020/09/27/additional-diff-config-task</id>
         <link href="https://detekt.dev/blog/2020/09/27/additional-diff-config-task"/>
         <updated>2020-09-27T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[detekt's ./gradlew detektGenerateConfig task copies the default configuration file to the location]]></summary>
@@ -21,7 +21,7 @@ When already using Gradle, we can write a custom task and share this procedure w
     </entry>
     <entry>
         <title type="html"><![CDATA[Howto: make detekt silent]]></title>
-        <id>/2019/08/14/custom-console-reports</id>
+        <id>https://detekt.dev/blog/2019/08/14/custom-console-reports</id>
         <link href="https://detekt.dev/blog/2019/08/14/custom-console-reports"/>
         <updated>2019-08-14T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[detekt's reporting mechanism relies on implementations of ConsoleReport's.]]></summary>
@@ -34,7 +34,7 @@ This can be achieved by implementing a custom <code>ConsoleReport</code>.</p><di
     </entry>
     <entry>
         <title type="html"><![CDATA[Calling it One Zero]]></title>
-        <id>/2019/08/04/calling-it-one-zero</id>
+        <id>https://detekt.dev/blog/2019/08/04/calling-it-one-zero</id>
         <link href="https://detekt.dev/blog/2019/08/04/calling-it-one-zero"/>
         <updated>2019-08-04T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[Today we are announcing the 1.0 release of detekt, a static code analysis tool for Kotlin.]]></summary>
@@ -53,7 +53,7 @@ We are excited to see how many users will jump on the 1.x.x release train and ho
     </entry>
     <entry>
         <title type="html"><![CDATA[Howto: using snapshot releases of detekt]]></title>
-        <id>/2019/06/29/using-detekt-snapshots</id>
+        <id>https://detekt.dev/blog/2019/06/29/using-detekt-snapshots</id>
         <link href="https://detekt.dev/blog/2019/06/29/using-detekt-snapshots"/>
         <updated>2019-06-29T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[detekt uses bintray for releases and artifactory for snapshots.]]></summary>
@@ -63,7 +63,7 @@ To configure snapshot usage in your gradle plugin apply the following changes to
     </entry>
     <entry>
         <title type="html"><![CDATA[Howto: migrating from the *test-pattern*]]></title>
-        <id>/2019/06/08/migrating-the-test-pattern</id>
+        <id>https://detekt.dev/blog/2019/06/08/migrating-the-test-pattern</id>
         <link href="https://detekt.dev/blog/2019/06/08/migrating-the-test-pattern"/>
         <updated>2019-06-08T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[Starting with RC15 the test-pattern is obsolete. This post shows how to leverage rule path excludes to achieve the same functionality.]]></summary>
@@ -82,7 +82,7 @@ All <em>exclude-rules</em> and <em>exclude-rule-sets</em> will now make use of <
     </entry>
     <entry>
         <title type="html"><![CDATA[Howto: build upon the default yaml config file]]></title>
-        <id>/2019/03/03/build-upon-the-default-config</id>
+        <id>https://detekt.dev/blog/2019/03/03/build-upon-the-default-config</id>
         <link href="https://detekt.dev/blog/2019/03/03/build-upon-the-default-config"/>
         <updated>2019-03-03T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[A common use case of detekt users was to build upon the default config file and use a second config file to override]]></summary>
@@ -95,7 +95,7 @@ no rule configuration is found in the specified configuration (<code>--config</c
     </entry>
     <entry>
         <title type="html"><![CDATA[Howto: configure detekt for gradle root project]]></title>
-        <id>/2019/03/03/configure-detekt-on-root-project</id>
+        <id>https://detekt.dev/blog/2019/03/03/configure-detekt-on-root-project</id>
         <link href="https://detekt.dev/blog/2019/03/03/configure-detekt-on-root-project"/>
         <updated>2019-03-03T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[When configuring detekt for your Gradle based project, you basically have two options:]]></summary>
@@ -106,7 +106,7 @@ Using the <em>Kotlin-Dsl</em> it could look like this:</p><div class="language-g
     </entry>
     <entry>
         <title type="html"><![CDATA[Website Online]]></title>
-        <id>/2018/02/11/website-online</id>
+        <id>https://detekt.dev/blog/2018/02/11/website-online</id>
         <link href="https://detekt.dev/blog/2018/02/11/website-online"/>
         <updated>2018-02-11T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[As of today the website was launched!]]></summary>
