@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
-import io.gitlab.arturbosch.detekt.core.exists
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -50,7 +49,7 @@ class BaselineResultMappingSpec {
 
         mapping.transformFindings(emptyMap())
 
-        assertThat(baselineFile.exists()).isFalse()
+        assertThat(baselineFile).doesNotExist()
     }
 
     @Test
@@ -90,7 +89,7 @@ class BaselineResultMappingSpec {
 
         mapping.transformFindings(findings)
 
-        assertThat(baselineFile.exists()).isFalse()
+        assertThat(baselineFile).doesNotExist()
     }
 
     @Test
@@ -102,7 +101,7 @@ class BaselineResultMappingSpec {
 
         mapping.transformFindings(findings)
 
-        assertThat(baselineFile.exists()).isTrue()
+        assertThat(baselineFile).exists()
     }
 
     @Test

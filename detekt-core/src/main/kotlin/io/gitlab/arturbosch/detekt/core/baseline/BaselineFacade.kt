@@ -2,10 +2,10 @@ package io.gitlab.arturbosch.detekt.core.baseline
 
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.core.exists
-import io.gitlab.arturbosch.detekt.core.isFile
 import java.nio.file.Path
 import kotlin.io.path.createDirectories
+import kotlin.io.path.exists
+import kotlin.io.path.isRegularFile
 
 class BaselineFacade {
 
@@ -32,5 +32,5 @@ class BaselineFacade {
         }
     }
 
-    private fun baselineExists(baseline: Path) = baseline.exists() && baseline.isFile()
+    private fun baselineExists(baseline: Path) = baseline.exists() && baseline.isRegularFile()
 }

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.isRegularFile
 
 class InclusionExclusionPatternsSpec {
 
@@ -90,7 +91,7 @@ class InclusionExclusionPatternsSpec {
 
             OnlyLibraryTrackingRule(config).apply {
                 Files.walk(resourceAsPath("library/Library.kt").parent)
-                    .filter { Files.isRegularFile(it) }
+                    .filter { it.isRegularFile() }
                     .forEach { this.lint(it) }
                 assertOnlyLibraryFileVisited(false)
                 assertCounterWasCalledTimes(2)
@@ -108,7 +109,7 @@ class InclusionExclusionPatternsSpec {
 
             OnlyLibraryTrackingRule(config).apply {
                 Files.walk(resourceAsPath("library/Library.kt").parent)
-                    .filter { Files.isRegularFile(it) }
+                    .filter { it.isRegularFile() }
                     .forEach { this.lint(it) }
                 assertOnlyLibraryFileVisited(true)
                 assertCounterWasCalledTimes(0)

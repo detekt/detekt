@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.ParameterException
+import kotlin.io.path.isRegularFile
 import java.nio.file.Files
 
 fun parseArguments(args: Array<out String>): CliArgs {
@@ -42,7 +43,7 @@ private fun CliArgs.validate(jCommander: JCommander) {
     if (!createBaseline && baseline != null) {
         if (Files.notExists(baseline)) {
             violations.appendLine("The file specified by --baseline should exist '$baseline'.")
-        } else if (!Files.isRegularFile(baseline)) {
+        } else if (!baseline.isRegularFile()) {
             violations.appendLine("The path specified by --baseline should be a file '$baseline'.")
         }
     }
