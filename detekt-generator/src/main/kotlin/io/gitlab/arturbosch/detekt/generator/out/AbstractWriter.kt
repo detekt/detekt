@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.generator.out
 import java.io.PrintStream
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.createDirectories
 
 internal abstract class AbstractWriter(
     private val outputPrinter: PrintStream,
@@ -14,7 +15,7 @@ internal abstract class AbstractWriter(
         val filePath = path.resolve("$fileName.$ending")
         filePath.parent?.let { parentPath ->
             if (!Files.exists(parentPath)) {
-                Files.createDirectories(parentPath)
+                parentPath.createDirectories()
             }
         }
         Files.write(filePath, content().toByteArray())

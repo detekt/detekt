@@ -4,8 +4,8 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.core.exists
 import io.gitlab.arturbosch.detekt.core.isFile
-import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.createDirectories
 
 class BaselineFacade {
 
@@ -27,7 +27,7 @@ class BaselineFacade {
         val baselineFormat = BaselineFormat()
         val baseline = baselineFormat.of(oldBaseline.manuallySuppressedIssues, ids)
         if (oldBaseline != baseline) {
-            baselineFile.parent?.let { Files.createDirectories(it) }
+            baselineFile.parent?.createDirectories()
             baselineFormat.write(baselineFile, baseline)
         }
     }
