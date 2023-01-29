@@ -5,15 +5,15 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import java.io.File
-import java.nio.file.Files
 import kotlin.io.path.Path
+import kotlin.io.path.createTempDirectory
 import kotlin.io.path.readText
 
 class GeneratorSpec {
     private val configPath = "/src/main/resources/config/config.yml"
 
-    private val tempDir1: File = Files.createTempDirectory(null).toFile()
-    private val tempDir2: File = Files.createTempDirectory(null).toFile()
+    private val tempDir1: File = createTempDirectory().toFile()
+    private val tempDir2: File = createTempDirectory().toFile()
 
     @BeforeAll
     fun init() {
