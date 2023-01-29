@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.psi.KtPsiFactory
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.absolute
+import kotlin.io.path.readText
 
 open class KtCompiler(
     protected val environment: KotlinCoreEnvironment = createKotlinCoreEnvironment(printStream = System.err)
@@ -19,7 +20,7 @@ open class KtCompiler(
 
     fun compile(basePath: Path?, path: Path): KtFile {
         require(Files.isRegularFile(path)) { "Given sub path ($path) should be a regular file!" }
-        val content = path.toFile().readText()
+        val content = path.readText()
         return createKtFile(content, basePath, path)
     }
 

@@ -11,6 +11,10 @@ import org.snakeyaml.engine.v2.api.Load
 import org.snakeyaml.engine.v2.api.LoadSettings
 import java.io.Reader
 import java.nio.file.Path
+import kotlin.io.path.exists
+import kotlin.io.path.isReadable
+import kotlin.io.path.isRegularFile
+import kotlin.io.path.reader
 
 /**
  * Config implementation using the yaml format. SubConfigurations can return sub maps according to the
@@ -52,17 +56,15 @@ class YamlConfig internal constructor(
         private const val ALIASES_LIMIT = 10
 
         /**
-         * Factory method to load a yaml configuration. Given path must exist
-         * and point to a readable file.
+         * Factory method to load a yaml configuration. Given path must exist and point to a readable file.
          */
-        fun load(path: Path): Config =
-            load(
-                path.toFile().apply {
-                    require(exists()) { "Configuration does not exist: $path" }
-                    require(isFile) { "Configuration must be a file: $path" }
-                    require(canRead()) { "Configuration must be readable: $path" }
-                }.reader()
-            )
+        fun load(path: Path): Config {
+            require(path.exists()) { "Configuration does not exist: $path" }
+            require(path.isRegularFile()) { "Configuration must be a file: $path" }
+            require(path.isReadable()) { "Configuration must be readable: $path" }
+
+            return load(path.reader())
+        }
 
         /**
          * Constructs a [YamlConfig] from any [Reader].
