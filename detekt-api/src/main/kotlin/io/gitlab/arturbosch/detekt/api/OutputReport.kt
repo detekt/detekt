@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.api
 
 import java.nio.file.Path
 import kotlin.io.path.createDirectories
+import kotlin.io.path.extension
 import kotlin.io.path.writeText
 
 /**
@@ -27,7 +28,7 @@ abstract class OutputReport : Extension {
     fun write(filePath: Path, detektion: Detektion) {
         val reportData = render(detektion)
         if (reportData != null) {
-            assert(filePath.fileName.toString().endsWith(ending)) {
+            assert(filePath.extension == ending) {
                 "The $name needs to have a file ending of type .$ending, but was ${filePath.fileName}."
             }
             filePath.parent?.createDirectories()

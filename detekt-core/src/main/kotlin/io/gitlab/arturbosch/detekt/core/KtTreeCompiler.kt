@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Files
 import java.nio.file.Path
-import kotlin.io.path.absolutePathString
+import kotlin.io.path.extension
 import kotlin.streams.asSequence
 
 class KtTreeCompiler(
@@ -49,11 +49,7 @@ class KtTreeCompiler(
         }
     }
 
-    private fun Path.isKotlinFile(): Boolean {
-        val fullPath = absolutePathString()
-        val kotlinEnding = fullPath.substring(fullPath.lastIndexOf('.') + 1)
-        return kotlinEnding in KT_ENDINGS
-    }
+    private fun Path.isKotlinFile() = extension in KT_ENDINGS
 
     private fun isIgnored(path: Path): Boolean {
         val ignored = pathFilters?.isIgnored(path)
