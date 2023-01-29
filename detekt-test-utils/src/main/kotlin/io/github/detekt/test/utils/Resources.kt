@@ -4,7 +4,7 @@ import java.net.URI
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
+import kotlin.io.path.toPath
 
 internal object Resources
 
@@ -15,7 +15,7 @@ fun resourceUrl(name: String): URL {
 
 fun resource(name: String): URI = resourceUrl(name).toURI()
 
-fun resourceAsPath(name: String): Path = Paths.get(resource(name))
+fun resourceAsPath(name: String): Path = resource(name).toPath()
 
 fun readResourceContent(name: String): String {
     val path = resourceAsPath(name)

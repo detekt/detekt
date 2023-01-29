@@ -7,7 +7,7 @@ import java.io.File
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 class ExistingPathConverter : IStringConverter<Path> {
     override fun convert(value: String): Path {
@@ -21,9 +21,7 @@ class ExistingPathConverter : IStringConverter<Path> {
 }
 
 class PathConverter : IStringConverter<Path> {
-    override fun convert(value: String): Path {
-        return Paths.get(value)
-    }
+    override fun convert(value: String) = Path(value)
 }
 
 interface DetektInputPathConverter<T> : IStringConverter<List<T>> {

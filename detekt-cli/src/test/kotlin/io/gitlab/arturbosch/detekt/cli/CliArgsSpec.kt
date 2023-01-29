@@ -9,7 +9,7 @@ import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 internal class CliArgsSpec {
 
@@ -22,7 +22,7 @@ internal class CliArgsSpec {
         fun `the current working directory is used if parameter is not set`() {
             val cli = parseArguments(emptyArray())
             assertThat(cli.inputPaths).hasSize(1)
-            assertThat(cli.inputPaths.first()).isEqualTo(Paths.get(System.getProperty("user.dir")))
+            assertThat(cli.inputPaths.first()).isEqualTo(Path(System.getProperty("user.dir")))
         }
 
         @Test

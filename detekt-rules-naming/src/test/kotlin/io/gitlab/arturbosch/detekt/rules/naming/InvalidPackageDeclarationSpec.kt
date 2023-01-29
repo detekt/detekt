@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.FileSystems
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 private const val ROOT_PACKAGE = "rootPackage"
 private const val REQUIRE_ROOT_PACKAGE = "requireRootInDeclaration"
@@ -173,6 +173,6 @@ class InvalidPackageDeclarationSpec {
 private fun createPath(universalPath: String): String {
     val pathSegments = universalPath.split('/')
     val aRootPath = FileSystems.getDefault().rootDirectories.first()
-    val path = Paths.get(aRootPath.toString(), *pathSegments.toTypedArray())
+    val path = Path(aRootPath.toString(), *pathSegments.toTypedArray())
     return path.toString()
 }

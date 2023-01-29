@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import java.io.File
-import java.nio.file.Paths
+import kotlin.io.path.toPath
 
 fun FormattingRule.lint(@Language("kotlin") content: String, fileName: String = "Test.kt"): List<Finding> {
     val root = compileContentForTest(content, fileName)
@@ -15,7 +15,7 @@ fun FormattingRule.lint(@Language("kotlin") content: String, fileName: String = 
     return this.findings
 }
 
-fun loadFile(resourceName: String) = compileForTest(Paths.get(resource(resourceName)))
+fun loadFile(resourceName: String) = compileForTest(resource(resourceName).toPath())
 
 fun loadFileContent(resourceName: String) =
     StringUtilRt.convertLineSeparators(File(resource(resourceName)).readText())

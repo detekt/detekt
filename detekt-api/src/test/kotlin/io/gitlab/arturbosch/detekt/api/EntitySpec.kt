@@ -8,11 +8,11 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 class EntitySpec {
 
-    private val path = Paths.get("/full/path/to/Test.kt")
+    private val path = Path("/full/path/to/Test.kt")
     private val code = compileContentForTest(
         """
             package test

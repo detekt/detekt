@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisHandlerExtension
 import java.nio.file.FileSystems
 import java.nio.file.Path
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 class DetektAnalysisExtension(
     private val log: MessageCollector,
@@ -32,7 +32,7 @@ class DetektAnalysisExtension(
         }
         val matchers = excludes.map { FileSystems.getDefault().getPathMatcher("glob:$it") }
         val (includedFiles, excludedFiles) = files.partition { file ->
-            matchers.none { it.matches(rootPath.relativize(Paths.get(file.virtualFilePath))) }
+            matchers.none { it.matches(rootPath.relativize(Path(file.virtualFilePath))) }
         }
         log.info("Running detekt on module '${module.name.asString()}'")
         excludedFiles.forEach { log.info("File excluded by filter: ${it.virtualFilePath}") }

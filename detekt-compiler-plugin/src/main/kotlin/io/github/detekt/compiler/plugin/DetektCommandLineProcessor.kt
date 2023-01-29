@@ -8,8 +8,8 @@ import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import java.io.ByteArrayInputStream
 import java.io.ObjectInputStream
-import java.nio.file.Paths
 import java.util.Base64
+import kotlin.io.path.Path
 
 @OptIn(ExperimentalCompilerApi::class)
 class DetektCommandLineProcessor : CommandLineProcessor {
@@ -97,8 +97,8 @@ class DetektCommandLineProcessor : CommandLineProcessor {
 
     override fun processOption(option: AbstractCliOption, value: String, configuration: CompilerConfiguration) {
         when (option.optionName) {
-            Options.baseline -> configuration.put(Keys.BASELINE, Paths.get(value))
-            Options.config -> configuration.put(Keys.CONFIG, value.split(",;").map { Paths.get(it) })
+            Options.baseline -> configuration.put(Keys.BASELINE, Path(value))
+            Options.config -> configuration.put(Keys.CONFIG, value.split(",;").map { Path(it) })
             Options.configDigest -> configuration.put(Keys.CONFIG_DIGEST, value)
             Options.debug -> configuration.put(Keys.DEBUG, value.toBoolean())
             Options.isEnabled -> configuration.put(Keys.IS_ENABLED, value.toBoolean())
@@ -106,12 +106,12 @@ class DetektCommandLineProcessor : CommandLineProcessor {
             Options.allRules -> configuration.put(Keys.ALL_RULES, value.toBoolean())
             Options.disableDefaultRuleSets -> configuration.put(Keys.DISABLE_DEFAULT_RULE_SETS, value.toBoolean())
             Options.parallel -> configuration.put(Keys.PARALLEL, value.toBoolean())
-            Options.rootPath -> configuration.put(Keys.ROOT_PATH, Paths.get(value))
+            Options.rootPath -> configuration.put(Keys.ROOT_PATH, Path(value))
             Options.excludes -> configuration.put(Keys.EXCLUDES, value.decodeToGlobSet())
             Options.report -> configuration.put(
                 Keys.REPORTS,
                 value.substringBefore(':'),
-                Paths.get(value.substringAfter(':')),
+                Path(value.substringAfter(':')),
             )
             else -> throw CliOptionProcessingException("Unknown option: ${option.optionName}")
         }

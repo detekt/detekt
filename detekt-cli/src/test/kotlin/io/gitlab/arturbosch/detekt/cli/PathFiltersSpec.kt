@@ -5,15 +5,15 @@ import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 class PathFiltersSpec {
 
     @Test
     fun `should load single filter`() {
         val filters = CliArgs { excludes = "**/one/**" }.toSpecFilters()
-        assertThat(filters?.isIgnored(Paths.get("/one/path"))).isTrue()
-        assertThat(filters?.isIgnored(Paths.get("/two/path"))).isFalse()
+        assertThat(filters?.isIgnored(Path("/one/path"))).isTrue()
+        assertThat(filters?.isIgnored(Path("/two/path"))).isFalse()
     }
 
     @Nested
@@ -28,28 +28,28 @@ class PathFiltersSpec {
         fun `parses includes correctly`() {
             val pathFilter = PathFilters.of(listOf("**/one/**", "**/two/**"), emptyList())
             assertThat(pathFilter).isNotNull
-            assertThat(pathFilter?.isIgnored(Paths.get("/one/path"))).isFalse
-            assertThat(pathFilter?.isIgnored(Paths.get("/two/path"))).isFalse
-            assertThat(pathFilter?.isIgnored(Paths.get("/three/path"))).isTrue
+            assertThat(pathFilter?.isIgnored(Path("/one/path"))).isFalse
+            assertThat(pathFilter?.isIgnored(Path("/two/path"))).isFalse
+            assertThat(pathFilter?.isIgnored(Path("/three/path"))).isTrue
         }
 
         @Test
         fun `parses excludes correctly`() {
             val pathFilter = PathFilters.of(emptyList(), listOf("**/one/**", "**/two/**"))
             assertThat(pathFilter).isNotNull
-            assertThat(pathFilter?.isIgnored(Paths.get("/one/path"))).isTrue
-            assertThat(pathFilter?.isIgnored(Paths.get("/two/path"))).isTrue
-            assertThat(pathFilter?.isIgnored(Paths.get("/three/path"))).isFalse
+            assertThat(pathFilter?.isIgnored(Path("/one/path"))).isTrue
+            assertThat(pathFilter?.isIgnored(Path("/two/path"))).isTrue
+            assertThat(pathFilter?.isIgnored(Path("/three/path"))).isFalse
         }
 
         @Test
         fun `parses both includes and excludes correctly`() {
             val pathFilter = PathFilters.of(listOf("**/one/**"), listOf("**/two/**"))
             assertThat(pathFilter).isNotNull
-            assertThat(pathFilter?.isIgnored(Paths.get("/one/path"))).isFalse
-            assertThat(pathFilter?.isIgnored(Paths.get("/two/path"))).isTrue
-            assertThat(pathFilter?.isIgnored(Paths.get("/three/path"))).isTrue
-            assertThat(pathFilter?.isIgnored(Paths.get("/one/two/three/path"))).isTrue
+            assertThat(pathFilter?.isIgnored(Path("/one/path"))).isFalse
+            assertThat(pathFilter?.isIgnored(Path("/two/path"))).isTrue
+            assertThat(pathFilter?.isIgnored(Path("/three/path"))).isTrue
+            assertThat(pathFilter?.isIgnored(Path("/one/two/three/path"))).isTrue
         }
     }
 
@@ -96,11 +96,11 @@ class PathFiltersSpec {
     @Test
     fun `should ignore empty and blank filters`() {
         val filters = CliArgs { excludes = " ,,**/three" }.toSpecFilters()
-        assertThat(filters?.isIgnored(Paths.get("/three"))).isTrue()
-        assertThat(filters?.isIgnored(Paths.get("/root/three"))).isTrue()
-        assertThat(filters?.isIgnored(Paths.get("/one/path"))).isFalse()
-        assertThat(filters?.isIgnored(Paths.get("/two/path"))).isFalse()
-        assertThat(filters?.isIgnored(Paths.get("/three/path"))).isFalse()
+        assertThat(filters?.isIgnored(Path("/three"))).isTrue()
+        assertThat(filters?.isIgnored(Path("/root/three"))).isTrue()
+        assertThat(filters?.isIgnored(Path("/one/path"))).isFalse()
+        assertThat(filters?.isIgnored(Path("/two/path"))).isFalse()
+        assertThat(filters?.isIgnored(Path("/three/path"))).isFalse()
     }
 }
 
@@ -111,9 +111,9 @@ private fun CliArgs.toSpecFilters(): PathFilters? {
 
 // can parse pattern **/one/**,**/two/**,**/three
 private fun assertSameFiltersIndependentOfSpacingAndSeparater(filters: PathFilters?) {
-    assertThat(filters?.isIgnored(Paths.get("/one/path"))).isTrue()
-    assertThat(filters?.isIgnored(Paths.get("/two/path"))).isTrue()
-    assertThat(filters?.isIgnored(Paths.get("/three"))).isTrue()
-    assertThat(filters?.isIgnored(Paths.get("/root/three"))).isTrue()
-    assertThat(filters?.isIgnored(Paths.get("/three/path"))).isFalse()
+    assertThat(filters?.isIgnored(Path("/one/path"))).isTrue()
+    assertThat(filters?.isIgnored(Path("/two/path"))).isTrue()
+    assertThat(filters?.isIgnored(Path("/three"))).isTrue()
+    assertThat(filters?.isIgnored(Path("/root/three"))).isTrue()
+    assertThat(filters?.isIgnored(Path("/three/path"))).isFalse()
 }

@@ -7,7 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 class DetektYmlConfigSpec {
 
@@ -20,7 +20,7 @@ class DetektYmlConfigSpec {
     )
 
     private val config: YamlConfig = YamlConfig.load(
-        Paths.get("../detekt-core/src/main/resources/default-detekt-config.yml").toAbsolutePath()
+        Path("../detekt-core/src/main/resources/default-detekt-config.yml").toAbsolutePath()
     ) as YamlConfig
 
     private fun ruleSetsNamesToPackage(): List<Arguments> = listOf(

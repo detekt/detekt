@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import java.io.BufferedReader
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
+import kotlin.io.path.toPath
 
 @OptIn(UnstableApi::class)
 class LicenceHeaderLoaderExtension : FileProcessListener {
@@ -27,7 +27,7 @@ class LicenceHeaderLoaderExtension : FileProcessListener {
 
     override fun init(context: SetupContext) {
         this.config = context.config
-        this.configPath = context.configUris.lastOrNull()?.let(Paths::get)
+        this.configPath = context.configUris.lastOrNull()?.toPath()
     }
 
     override fun onStart(files: List<KtFile>, bindingContext: BindingContext) {

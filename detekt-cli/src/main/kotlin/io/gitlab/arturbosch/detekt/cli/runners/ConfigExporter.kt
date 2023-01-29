@@ -4,7 +4,7 @@ import io.github.detekt.tooling.api.DefaultConfigurationProvider
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.MultipleExistingPathConverter
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 class ConfigExporter(
     private val arguments: CliArgs,
@@ -12,7 +12,7 @@ class ConfigExporter(
 ) : Executable {
 
     override fun execute() {
-        val configPath = Paths.get(arguments.config ?: "detekt.yml")
+        val configPath = Path(arguments.config ?: "detekt.yml")
         val spec = ProcessingSpec {
             extensions {
                 disableDefaultRuleSets = arguments.disableDefaultRuleSets

@@ -24,7 +24,7 @@ import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.junit.jupiter.api.Test
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 @OptIn(UnstableApi::class)
 class SarifOutputReportSpec {
@@ -57,7 +57,7 @@ class SarifOutputReportSpec {
             .apply {
                 init(
                     EmptySetupContext().apply {
-                        register(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY, Paths.get(basePath))
+                        register(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY, Path(basePath))
                     }
                 )
             }
@@ -68,7 +68,7 @@ class SarifOutputReportSpec {
 
         // Note: Github CI uses D: drive, but it could be any drive for local development
         val systemAwareExpectedReport = if (whichOS().startsWith("windows", ignoreCase = true)) {
-            val winRoot = Paths.get("/").toAbsolutePath().toString().replace("\\", "/")
+            val winRoot = Path("/").toAbsolutePath().toString().replace("\\", "/")
             expectedReport.replace("file:///", "file://$winRoot")
         } else {
             expectedReport

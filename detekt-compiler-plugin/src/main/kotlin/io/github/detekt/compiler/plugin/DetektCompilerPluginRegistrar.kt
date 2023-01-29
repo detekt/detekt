@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.compiler.plugin.CompilerPluginRegistrar
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisHandlerExtension
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 @OptIn(ExperimentalCompilerApi::class)
 class DetektCompilerPluginRegistrar : CompilerPluginRegistrar() {
@@ -25,7 +25,7 @@ class DetektCompilerPluginRegistrar : CompilerPluginRegistrar() {
             DetektAnalysisExtension(
                 messageCollector,
                 configuration.toSpec(messageCollector),
-                configuration.get(Keys.ROOT_PATH, Paths.get(System.getProperty("user.dir"))),
+                configuration.get(Keys.ROOT_PATH, Path(System.getProperty("user.dir"))),
                 configuration.getList(Keys.EXCLUDES)
             )
         )
