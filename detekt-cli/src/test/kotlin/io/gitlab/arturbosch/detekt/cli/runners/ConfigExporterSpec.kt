@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.cli.parseArguments
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
+import kotlin.io.path.readLines
 
 class ConfigExporterSpec {
 
@@ -16,6 +17,6 @@ class ConfigExporterSpec {
 
         ConfigExporter(cliArgs, NullPrintStream()).execute()
 
-        assertThat(Files.readAllLines(tmpConfig)).isNotEmpty
+        assertThat(tmpConfig.readLines()).isNotEmpty
     }
 }

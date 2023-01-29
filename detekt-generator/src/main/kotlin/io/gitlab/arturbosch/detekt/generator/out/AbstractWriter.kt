@@ -4,6 +4,7 @@ import java.io.PrintStream
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.createDirectories
+import kotlin.io.path.writeText
 
 internal abstract class AbstractWriter(
     private val outputPrinter: PrintStream,
@@ -18,7 +19,7 @@ internal abstract class AbstractWriter(
                 parentPath.createDirectories()
             }
         }
-        Files.write(filePath, content().toByteArray())
+        filePath.writeText(content())
         outputPrinter.println("Wrote: $filePath")
     }
 }

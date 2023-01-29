@@ -14,10 +14,10 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
-import java.io.BufferedReader
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.absolute
+import kotlin.io.path.readText
 import kotlin.io.path.toPath
 
 @OptIn(UnstableApi::class)
@@ -58,9 +58,7 @@ class LicenceHeaderLoaderExtension : FileProcessListener {
                 """.trimIndent()
             }
 
-            return Files.newBufferedReader(templateFile)
-                .use(BufferedReader::readText)
-                .convertLineSeparators()
+            return templateFile.readText().convertLineSeparators()
         }
 
         fun cacheLicence(dir: Path, isRegexTemplate: Boolean) {
