@@ -17,6 +17,7 @@ import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.getOrNull
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import java.nio.file.Path
+import kotlin.io.path.absolute
 
 const val DETEKT_OUTPUT_REPORT_BASE_PATH_KEY = "detekt.output.report.base.path"
 const val SRCROOT = "%SRCROOT%"
@@ -34,7 +35,7 @@ class SarifOutputReport : OutputReport() {
     override fun init(context: SetupContext) {
         this.config = context.config
         this.basePath = context.getOrNull<Path>(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY)
-            ?.toAbsolutePath()
+            ?.absolute()
             ?.toUnifiedString()
             ?.let {
                 if (!it.endsWith("/")) "$it/" else it

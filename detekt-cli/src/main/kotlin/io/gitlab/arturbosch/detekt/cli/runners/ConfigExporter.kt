@@ -5,6 +5,7 @@ import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.MultipleExistingPathConverter
 import kotlin.io.path.Path
+import kotlin.io.path.absolute
 
 class ConfigExporter(
     private val arguments: CliArgs,
@@ -20,6 +21,6 @@ class ConfigExporter(
             }
         }
         DefaultConfigurationProvider.load(spec.extensionsSpec).copy(configPath)
-        outputPrinter.appendLine("Successfully copied default config to ${configPath.toAbsolutePath()}")
+        outputPrinter.appendLine("Successfully copied default config to ${configPath.absolute()}")
     }
 }

@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import java.io.BufferedReader
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.absolute
 import kotlin.io.path.toPath
 
 @OptIn(UnstableApi::class)
@@ -52,7 +53,7 @@ class LicenceHeaderLoaderExtension : FileProcessListener {
 
             require(Files.exists(templateFile)) {
                 """
-                    Rule '$RULE_NAME': License template file not found at `${templateFile.toAbsolutePath()}`.
+                    Rule '$RULE_NAME': License template file not found at `${templateFile.absolute()}`.
                     Create file license header file or check your running path.
                 """.trimIndent()
             }

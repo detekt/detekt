@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.absolutePathString
 import kotlin.streams.asSequence
 
 class KtTreeCompiler(
@@ -49,7 +50,7 @@ class KtTreeCompiler(
     }
 
     private fun Path.isKotlinFile(): Boolean {
-        val fullPath = toAbsolutePath().toString()
+        val fullPath = absolutePathString()
         val kotlinEnding = fullPath.substring(fullPath.lastIndexOf('.') + 1)
         return kotlinEnding in KT_ENDINGS
     }
