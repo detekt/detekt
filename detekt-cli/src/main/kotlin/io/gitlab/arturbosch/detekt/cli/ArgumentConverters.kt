@@ -5,15 +5,15 @@ import com.beust.jcommander.ParameterException
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.io.File
 import java.net.URL
-import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.Path
+import kotlin.io.path.notExists
 
 class ExistingPathConverter : IStringConverter<Path> {
     override fun convert(value: String): Path {
         require(value.isNotBlank()) { "Provided path '$value' is empty." }
         val config = File(value).toPath()
-        if (Files.notExists(config)) {
+        if (config.notExists()) {
             throw ParameterException("Provided path '$value' does not exist!")
         }
         return config

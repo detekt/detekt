@@ -14,9 +14,9 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
-import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.absolute
+import kotlin.io.path.exists
 import kotlin.io.path.readText
 import kotlin.io.path.toPath
 
@@ -51,7 +51,7 @@ class LicenceHeaderLoaderExtension : FileProcessListener {
         fun loadLicence(dir: Path): String {
             val templateFile = dir.resolve(getPathToTemplate())
 
-            require(Files.exists(templateFile)) {
+            require(templateFile.exists()) {
                 """
                     Rule '$RULE_NAME': License template file not found at `${templateFile.absolute()}`.
                     Create file license header file or check your running path.

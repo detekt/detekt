@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.generator
 
 import com.beust.jcommander.Parameter
-import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.Path
+import kotlin.io.path.exists
 
 class GeneratorArgs {
 
@@ -56,7 +56,7 @@ class GeneratorArgs {
             .map(String::trim)
             .filter { it.isNotEmpty() }
             .map { first -> Path(first) }
-            .onEach { require(Files.exists(it)) { "Input path must exist!" } }
+            .onEach { require(it.exists()) { "Input path must exist!" } }
             .toList()
     }
     val documentationPath: Path

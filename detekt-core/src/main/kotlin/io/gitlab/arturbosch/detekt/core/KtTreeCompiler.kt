@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.exists
 import kotlin.io.path.extension
 import kotlin.io.path.isDirectory
 import kotlin.io.path.isRegularFile
@@ -22,7 +23,7 @@ class KtTreeCompiler(
         PathFilters.of(projectSpec.includes.toList(), projectSpec.excludes.toList())
 
     fun compile(path: Path): List<KtFile> {
-        require(Files.exists(path)) { "Given path $path does not exist!" }
+        require(path.exists()) { "Given path $path does not exist!" }
         return when {
             path.isRegularFile() && path.isKotlinFile() -> listOf(compiler.compile(basePath, path))
             path.isDirectory() -> compileProject(path)
