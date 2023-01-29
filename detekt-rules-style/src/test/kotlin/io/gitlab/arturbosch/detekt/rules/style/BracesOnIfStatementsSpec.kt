@@ -1,3 +1,5 @@
+@file:Suppress("ForbiddenImport")
+
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.TextLocation
@@ -7,10 +9,12 @@ import io.gitlab.arturbosch.detekt.rules.style.BracesOnIfStatementsSpec.Companio
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DynamicContainer.dynamicContainer
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
 /**
@@ -19,8 +23,24 @@ import org.junit.jupiter.api.TestFactory
  *  * To debug a specific test case, remove all other test cases from the same method.
  *  * Test coverage is added for all possible configuration options, see [NOT_RELEVANT].
  */
-@Suppress("ClassName")
+@Suppress(
+    "ClassName",
+    "LongMethod",
+    "CommentOverPrivateProperty"
+)
 class BracesOnIfStatementsSpec {
+
+    @Test
+    fun `validate behavior of occurrence function`() {
+        val code = "fun f() { if (true) else if (true) if (true) true }"
+        Assertions.assertEquals(10 to 12, "if"(1)(code))
+        Assertions.assertEquals(25 to 27, "if"(2)(code))
+        Assertions.assertEquals(35 to 37, "if"(3)(code))
+        Assertions.assertEquals(20 to 24, "else"(1)(code))
+        Assertions.assertThrows(IllegalArgumentException::class.java) { "if"(4)(code) }
+        Assertions.assertThrows(IllegalArgumentException::class.java) { "if"(0)(code) }
+        Assertions.assertThrows(IllegalArgumentException::class.java) { "else"(2)(code) }
+    }
 
     @Nested
     inner class singleLine {
@@ -28,33 +48,268 @@ class BracesOnIfStatementsSpec {
         @Nested
         inner class `=always` {
 
-            private fun flag(code: String, vararg locations: Pair<Int, Int>) =
-                testCombinations(BracePolicy.Always.config, NOT_RELEVANT, code, *locations)
+            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
+                testCombinations(
+                    BracePolicy.Always.config,
+                    NOT_RELEVANT,
+                    code,
+                    *(locations.map { it(code) }.toTypedArray())
+                )
 
             @TestFactory
             fun `missing braces are flagged`() = listOf(
-                flag("if (true) println()", 0 to 2),
-                flag("if (true) println() else println()", 0 to 2, 20 to 24),
+                flag("if (true) println()", "if"(1)),
+                flag("if (true) println() else println()", "if"(1), "else"(1)),
                 flag(
                     "if (true) println() else if (true) println()",
-                    0 to 2, 25 to 27
+                    "if"(1),
+                    "if"(2)
                 ),
                 flag(
                     "if (true) println() else if (true) println() else println()",
-                    0 to 2, 25 to 27, 45 to 49
+                    "if"(1),
+                    "if"(2),
+                    "else"(2)
                 ),
                 flag(
                     "if (true) println() else if (true) println() else if (true) println()",
-                    0 to 2, 25 to 27, 50 to 52
+                    "if"(1),
+                    "if"(2),
+                    "if"(3)
                 ),
                 flag(
                     "if (true) println() else if (true) println() else if (true) println() else println()",
-                    0 to 2, 25 to 27, 50 to 52, 70 to 74
+                    "if"(1),
+                    "if"(2),
+                    "if"(3),
+                    "else"(3)
                 ),
             )
 
             @TestFactory
             fun `existing braces are accepted`() = listOf(
+                flag("if (true) { println() }", *NOTHING),
+                flag("if (true) { println() } else { println() }", *NOTHING),
+                flag("if (true) { println() } else if (true) { println() }", *NOTHING),
+                flag("if (true) { println() } else if (true) { println() } else { println() }", *NOTHING),
+                flag(
+                    "if (true) { println() } else if (true) { println() } else if (true) { println() }",
+                    *NOTHING
+                ),
+                flag(
+                    "if (true) { println() } else if (true) { println() } else if (true) { println() } else { println() }",
+                    *NOTHING
+                ),
+            )
+
+            @TestFactory
+            fun `partially missing braces are flagged`() = listOf(
+                flag("if (true) { println() } else println()", "else"(1)),
+                flag("if (true) { println() } else if (true) println()", "if"(2)),
+                flag(
+                    "if (true) { println() } else if (true) println() else println()",
+                    "if"(2),
+                    "else"(2)
+                ),
+                flag(
+                    "if (true) { println() } else if (true) println() else if (true) println()",
+                    "if"(2),
+                    "if"(3)
+                ),
+                flag(
+                    "if (true) { println() } else if (true) println() else if (true) println() else println()",
+                    "if"(2),
+                    "if"(3),
+                    "else"(3)
+                ),
+            )
+        }
+
+        @Nested
+        inner class `=never` {
+
+            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) = testCombinations(
+                BracePolicy.Never.config,
+                NOT_RELEVANT,
+                code,
+                *(locations.map { it(code) }.toTypedArray())
+            )
+
+            @TestFactory fun `no braces are accepted`() = listOf(
+                flag("if (true) println()", *NOTHING),
+                flag("if (true) println() else println()", *NOTHING),
+                flag("if (true) println() else if (true) println()", *NOTHING),
+                flag("if (true) println() else if (true) println() else println()", *NOTHING),
+                flag("if (true) println() else if (true) println() else if (true) println()", *NOTHING),
+                flag(
+                    "if (true) println() else if (true) println() else if (true) println() else println()",
+                    *NOTHING
+                ),
+            )
+
+            @TestFactory
+            fun `existing braces are flagged`() = listOf(
+                flag("if (true) { println() }", "if"(1)),
+                flag("if (true) { println() } else { println() }", "if"(1), "else"(1)),
+                flag("if (true) { println() } else if (true) { println() }", "if"(1), "if"(2)),
+                flag(
+                    "if (true) { println() } else if (true) { println() } else { println() }",
+                    "if"(1),
+                    "if"(2),
+                    "else"(2)
+                ),
+                flag(
+                    "if (true) { println() } else if (true) { println() } else if (true) { println() }",
+                    "if"(1),
+                    "if"(2),
+                    "if"(3)
+                ),
+                flag(
+                    "if (true) { println() } else if (true) { println() } else if (true) { println() } else { println() }",
+                    "if"(1),
+                    "if"(2),
+                    "if"(3),
+                    "else"(3)
+                ),
+            )
+
+            @TestFactory
+            fun `partially extra braces are flagged`() = listOf(
+                flag("if (true) { println() }", "if"(1)),
+                flag("if (true) { println() } else println()", "if"(1)),
+                flag("if (true) { println() } else if (true) println()", "if"(1)),
+                flag("if (true) { println() } else if (true) println() else println()", "if"(1)),
+                flag("if (true) { println() } else if (true) println() else if (true) println()", "if"(1)),
+                flag(
+                    "if (true) { println() } else if (true) println() else if (true) println() else println()",
+                    "if"(1)
+                ),
+                // More cases, not just first branch
+                flag("if (true) println() else { println() }", "else"(1)),
+                flag("if (true) println() else if (true) { println() }", "if"(2)),
+                flag("if (true) println() else if (true) println() else { println() }", "else"(2)),
+                flag("if (true) println() else if (true) println() else if (true) { println() }", "if"(3)),
+                flag(
+                    "if (true) println() else if (true) println() else if (true) println() else { println() }",
+                    "else"(3)
+                ),
+            )
+
+            @TestFactory fun `fully extra braces are flagged`() = listOf(
+                flag("if (true) { println() }", "if"(1)),
+                flag("if (true) { println() } else { println() }", "if"(1), "else"(1)),
+                flag("if (true) { println() } else if (true) { println() }", "if"(1), "if"(2)),
+                flag(
+                    "if (true) { println() } else if (true) { println() } else { println() }",
+                    "if"(1),
+                    "if"(2),
+                    "else"(2)
+                ),
+                flag(
+                    "if (true) { println() } else if (true) { println() } else if (true) { println() }",
+                    "if"(1),
+                    "if"(2),
+                    "if"(3)
+                ),
+                flag(
+                    "if (true) { println() } else if (true) { println() } else if (true) { println() } else { println() }",
+                    "if"(1),
+                    "if"(2),
+                    "if"(3),
+                    "else"(3)
+                ),
+            )
+        }
+
+        @Nested
+        inner class `=necessary` {
+
+            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
+                testCombinations(
+                    BracePolicy.Necessary.config,
+                    NOT_RELEVANT,
+                    code,
+                    *(locations.map { it(code) }.toTypedArray())
+                )
+
+            @TestFactory
+            fun `no braces are accepted`() = listOf(
+                flag("if (true) println()", *NOTHING),
+                flag("if (true) println() else println()", *NOTHING),
+                flag("if (true) println() else if (true) println()", *NOTHING),
+                flag("if (true) println() else if (true) println() else println()", *NOTHING),
+                flag("if (true) println() else if (true) println() else if (true) println()", *NOTHING),
+                flag("if (true) println() else if (true) println() else if (true) println() else println()", *NOTHING),
+            )
+
+            @TestFactory
+            fun `existing braces are flagged`() = listOf(
+                flag("if (true) { println() }", "if"(1)),
+                flag("if (true) { println() } else { println() }", "if"(1), "else"(1)),
+                flag(
+                    "if (true) { println() } else if (true) { println() }",
+                    "if"(1),
+                    "if"(2)
+                ),
+                flag(
+                    "if (true) { println() } else if (true) { println() } else { println() }",
+                    "if"(1),
+                    "if"(2),
+                    "else"(2)
+                ),
+                flag(
+                    "if (true) { println() } else if (true) { println() } else if (true) { println() }",
+                    "if"(1),
+                    "if"(2),
+                    "if"(3)
+                ),
+                flag(
+                    "if (true) { println() } else if (true) { println() } else if (true) { println() } else { println() }",
+                    "if"(1),
+                    "if"(2),
+                    "if"(3),
+                    "else"(3)
+                ),
+            )
+
+            @TestFactory
+            fun `partially extra braces are flagged`() = listOf(
+                flag("if (true) { println() }", "if"(1)),
+                flag("if (true) { println() } else println()", "if"(1)),
+                flag("if (true) { println() } else if (true) println()", "if"(1)),
+                flag("if (true) { println() } else if (true) println() else println()", "if"(1)),
+                flag("if (true) { println() } else if (true) println() else if (true) println()", "if"(1)),
+                flag(
+                    "if (true) { println() } else if (true) println() else if (true) println() else println()",
+                    "if"(1)
+                ),
+                // TODO add more cases, not just first branch
+            )
+        }
+
+        @Nested
+        inner class `=consistent` {
+
+            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
+                testCombinations(
+                    BracePolicy.Consistent.config,
+                    NOT_RELEVANT,
+                    code,
+                    *(locations.map { it(code) }.toTypedArray())
+                )
+
+            @TestFactory
+            fun `no braces are accepted`() = listOf(
+                flag("if (true) println()", *NOTHING),
+                flag("if (true) println() else println()", *NOTHING),
+                flag("if (true) println() else if (true) println()", *NOTHING),
+                flag("if (true) println() else if (true) println() else println()", *NOTHING),
+                flag("if (true) println() else if (true) println() else if (true) println()", *NOTHING),
+                flag("if (true) println() else if (true) println() else if (true) println() else println()", *NOTHING),
+            )
+
+            @TestFactory
+            fun `existing braces are flagged`() = listOf(
                 flag("if (true) { println() }", *NOTHING),
                 flag("if (true) { println() } else { println() }", *NOTHING),
                 flag("if (true) { println() } else if (true) { println() }", *NOTHING),
@@ -67,63 +322,594 @@ class BracesOnIfStatementsSpec {
             )
 
             @TestFactory
+            fun `partial braces are flagged`() = listOf(
+                flag("if (true) { println() }", *NOTHING),
+                flag("if (true) { println() } else println()", "if"(1)),
+                flag("if (true) { println() } else if (true) println()", "if"(1)),
+                flag("if (true) { println() } else if (true) println() else println()", "if"(1)),
+                flag("if (true) { println() } else if (true) println() else if (true) println()", "if"(1)),
+                flag(
+                    "if (true) { println() } else if (true) println() else if (true) println() else println()",
+                    "if"(1)
+                ),
+                // More cases, not just first branch
+                flag("if (true) println() else { println() }", "if"(1)),
+                flag(
+                    "if (true) { println() } else if (true) println() else if (true) println() else { println() }",
+                    "if"(1)
+                ),
+            )
+        }
+    }
+
+    @Nested
+    inner class multiLine {
+
+        @Nested
+        inner class `=always` {
+
+            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
+                testCombinations(
+                    NOT_RELEVANT,
+                    BracePolicy.Always.config,
+                    code,
+                    *(locations.map { it(code) }.toTypedArray())
+                )
+
+            @TestFactory
+            fun `missing braces are flagged`() = listOf(
+                flag(
+                    """
+                        if (true)
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) 
+                            println()
+                        else
+                            println()
+                    """.trimIndent(),
+                    "if"(1),
+                    "else"(1)
+                ),
+                flag(
+                    """
+                        if (true)
+                            println() 
+                        else if (true) 
+                            println()
+                    """.trimIndent(),
+                    "if"(1),
+                    "if"(2)
+                ),
+                flag(
+                    """
+                        if (true) 
+                            println() 
+                        else if (true)
+                            println() 
+                        else
+                            println()
+                    """.trimIndent(),
+                    "if"(1),
+                    "if"(2),
+                    "else"(2)
+                ),
+                flag(
+                    """
+                        if (true) 
+                            println()
+                        else if (true) 
+                            println()
+                        else if (true) 
+                            println()
+                    """.trimIndent(),
+                    "if"(1),
+                    "if"(2),
+                    "if"(3)
+                ),
+                flag(
+                    """
+                        if (true) 
+                            println() 
+                        else if (true)
+                            println()
+                        else if (true)
+                            println()
+                        else println()
+                    """.trimIndent(),
+                    "if"(1),
+                    "if"(2),
+                    "if"(3),
+                    "else"(3)
+                ),
+            )
+
+            @TestFactory
+            fun `existing braces are accepted`() = listOf(
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        }
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else { 
+                            println() 
+                        }
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) {
+                            println() 
+                        }
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println() 
+                        } else if (true) {
+                            println() 
+                        } else { 
+                            println() 
+                        }
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println() 
+                        } else if (true) {
+                            println() 
+                        } else if (true) {
+                            println() 
+                        }
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println() 
+                        } else if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        } else {
+                            println() 
+                        }
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+            )
+
+            @TestFactory
             fun `partially missing braces are flagged`() = listOf(
-                flag("if (true) { println() }"),
-                flag("if (true) { println() } else println()"),
-                flag("if (true) { println() } else if (true) println()"),
-                flag("if (true) { println() } else if (true) println() else println()"),
-                flag("if (true) { println() } else if (true) println() else if (true) println()"),
-                flag("if (true) { println() } else if (true) println() else if (true) println() else println()"),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else
+                            println()
+                    """.trimIndent(),
+                    "else"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true)
+                            println()
+                    """.trimIndent(),
+                    "if"(2)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true)
+                            println()
+                        else
+                            println()
+                    """.trimIndent(),
+                    "if"(2),
+                    "else"(2)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true)
+                            println()
+                        else if (true)
+                            println()
+                    """.trimIndent(),
+                    "if"(2),
+                    "if"(3)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true)
+                            println()
+                        else if (true)
+                            println()
+                        else
+                            println()
+                    """.trimIndent(),
+                    "if"(2),
+                    "if"(3),
+                    "else"(3)
+                ),
             )
         }
 
         @Nested
         inner class `=never` {
-
-            private fun flag(code: String, vararg locations: Pair<Int, Int>) =
-                testCombinations(BracePolicy.Never.config, NOT_RELEVANT, code, *locations)
+            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) = testCombinations(
+                NOT_RELEVANT,
+                BracePolicy.Never.config,
+                code,
+                *(locations.map { it(code) }.toTypedArray())
+            )
 
             @TestFactory fun `no braces are accepted`() = listOf(
-                flag("if (true) println()", *NOTHING),
-                flag("if (true) println() else println()", *NOTHING),
-                flag("if (true) println() else if (true) println()", *NOTHING),
-                flag("if (true) println() else if (true) println() else println()", *NOTHING),
-                flag("if (true) println() else if (true) println() else if (true) println()", *NOTHING),
-                flag("if (true) println() else if (true) println() else if (true) println() else println()", *NOTHING),
+                flag(
+                    """
+                        if (true)
+                            println()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) 
+                            println() 
+                        else
+                            println()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) 
+                            println() 
+                        else if (true) 
+                            println()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true)
+                            println() 
+                        else if (true)
+                            println()
+                        else 
+                            println()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) 
+                            println() 
+                        else if (true) 
+                            println() 
+                        else if (true) 
+                            println()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true)
+                            println()
+                        else if (true)
+                            println()
+                        else if (true)
+                            println()
+                        else
+                            println()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
             )
 
             @TestFactory
             fun `existing braces are flagged`() = listOf(
-                flag("if (true) { println() }" /*TODO*/),
-                flag("if (true) { println() } else { println() }" /*TODO*/),
-                flag("if (true) { println() } else if (true) { println() }" /*TODO*/),
-                flag("if (true) { println() } else if (true) { println() } else { println() }" /*TODO*/),
-                flag("if (true) { println() } else if (true) { println() } else if (true) { println() }" /*TODO*/),
-                flag("if (true) { println() } else if (true) { println() } else if (true) { println() } else { println() }" /*TODO*/),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1),
+                    "else"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1),
+                    "if"(2)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        } else {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1),
+                    "if"(2),
+                    "else"(2)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) {
+                            println() 
+                        } else if (true) {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1),
+                    "if"(2),
+                    "if"(3)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        } else {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1),
+                    "if"(2),
+                    "if"(3),
+                    "else"(3)
+                ),
             )
 
-            @TestFactory fun `partially extra braces are flagged`() = listOf(
-                flag("if (true) { println() }", 0 to 2),
-                flag("if (true) { println() } else println()", 0 to 2),
-                flag("if (true) { println() } else if (true) println()", 0 to 2),
-                flag("if (true) { println() } else if (true) println() else println()", 0 to 2),
-                flag("if (true) { println() } else if (true) println() else if (true) println()", 0 to 2),
+            @TestFactory
+            fun `partially extra braces are flagged`() = listOf(
                 flag(
-                    "if (true) { println() } else if (true) println() else if (true) println() else println()",
-                    0 to 2
+                    """
+                        if (true) {
+                            println() 
+                        }
+                    """.trimIndent(),
+                    "if"(1)
                 ),
-                // TODO add more cases, not just first branch
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else 
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) { 
+                            println()
+                        } else if (true)
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) 
+                            println() 
+                        else 
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println() 
+                        } else if (true) 
+                            println() 
+                        else if (true) 
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true)
+                            println() 
+                        else if (true) 
+                            println() 
+                        else 
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                // More cases, not just first branch
+                flag(
+                    """
+                        if (true) 
+                            println() 
+                        else { 
+                            println() 
+                        }
+                    """.trimIndent(),
+                    "else"(1)
+                ),
+                flag(
+                    """
+                        if (true) 
+                            println() 
+                        else if (true) {
+                            println() 
+                        }
+                    """.trimIndent(),
+                    "if"(2)
+                ),
+                flag(
+                    """
+                        if (true) 
+                            println() 
+                        else if (true) 
+                            println() 
+                        else { 
+                            println() 
+                        }
+                    """.trimIndent(),
+                    "else"(2)
+                ),
+                flag(
+                    """
+                        if (true) 
+                            println() 
+                        else if (true) 
+                            println() 
+                        else if (true) {
+                            println() 
+                        }
+                    """.trimIndent(),
+                    "if"(3)
+                ),
+                flag(
+                    """
+                        if (true) 
+                            println() 
+                        else if (true) 
+                            println() 
+                        else if (true) 
+                            println() 
+                        else { 
+                            println() 
+                        }
+                    """.trimIndent(),
+                    "else"(3)
+                ),
             )
 
             @TestFactory fun `fully extra braces are flagged`() = listOf(
-                flag("if (true) { println() }", 0 to 2),
-                flag("if (true) { println() } else { println() }", 0 to 2),
-                flag("if (true) { println() } else if (true) { println() }", 0 to 2),
-                flag("if (true) { println() } else if (true) { println() } else { println() }", 0 to 2),
-                flag("if (true) { println() } else if (true) { println() } else if (true) { println() }", 0 to 2),
                 flag(
-                    "if (true) { println() } else if (true) { println() } else if (true) { println() } else { println() }",
-                    0 to 2
+                    """
+                        if (true) {
+                            println() 
+                        }
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else { 
+                            println() 
+                        }
+                    """.trimIndent(),
+                    "if"(1),
+                    "else"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1),
+                    "if"(2)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println() 
+                        } else if (true) {
+                            println()
+                        } else {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1),
+                    "if"(2),
+                    "else"(2)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1),
+                    "if"(2),
+                    "if"(3)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        } else if (true) {
+                            println() 
+                        } else {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1),
+                    "if"(2),
+                    "if"(3),
+                    "else"(3)
                 ),
             )
         }
@@ -131,42 +917,219 @@ class BracesOnIfStatementsSpec {
         @Nested
         inner class `=necessary` {
 
-            private fun flag(code: String, vararg locations: Pair<Int, Int>) =
-                testCombinations(BracePolicy.Necessary.config, NOT_RELEVANT, code, *locations)
+            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
+                testCombinations(
+                    NOT_RELEVANT,
+                    BracePolicy.Necessary.config,
+                    code,
+                    *(locations.map { it(code) }.toTypedArray())
+                )
 
             @TestFactory
             fun `no braces are accepted`() = listOf(
-                flag("if (true) println()", *NOTHING),
-                flag("if (true) println() else println()", *NOTHING),
-                flag("if (true) println() else if println()", *NOTHING),
-                flag("if (true) println() else if println() else println()", *NOTHING),
-                flag("if (true) println() else if println() else if println()", *NOTHING),
-                flag("if (true) println() else if println() else if println() else println()", *NOTHING),
+                flag(
+                    """
+                        if (true) 
+                            println()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true)
+                            println()
+                        else
+                            println()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) 
+                            println()
+                        else if (true)
+                            println()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true)
+                            println()
+                        else if (true)
+                            println()
+                        else
+                            println()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true)
+                            println()
+                        else if (true)
+                            println()
+                        else if (true)
+                            println()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true)
+                            println()
+                        else if (true)
+                            println()
+                        else if (true)
+                            println()
+                        else
+                            println()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
             )
 
             @TestFactory
             fun `existing braces are flagged`() = listOf(
-                flag("if (true) { println() }", 0 to 2),
-                flag("if (true) { println() } else { println() }", 0 to 2 /*TODO*/),
-                flag("if (true) { println() } else if { println() }", 0 to 2 /*TODO*/),
-                flag("if (true) { println() } else if { println() } else { println() }", 0 to 2 /*TODO*/),
-                flag("if (true) { println() } else if { println() } else if { println() }", 0 to 2 /*TODO*/),
                 flag(
-                    "if (true) { println() } else if { println() } else if { println() } else { println() }",
-                    0 to 2, /*TODO*/
+                    """
+                        if (true) {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1),
+                    "else"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1),
+                    "if"(2)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        } else {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1),
+                    "if"(2),
+                    "else"(2)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1),
+                    "if"(2),
+                    "if"(3)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        } else {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1),
+                    "if"(2),
+                    "if"(3),
+                    "else"(3)
                 ),
             )
 
             @TestFactory
             fun `partially extra braces are flagged`() = listOf(
-                flag("if (true) { println() }", 0 to 2),
-                flag("if (true) { println() } else println()", 0 to 2 /*TODO*/),
-                flag("if (true) { println() } else if println()", 0 to 2 /*TODO*/),
-                flag("if (true) { println() } else if println() else println()", 0 to 2 /*TODO*/),
-                flag("if (true) { println() } else if println() else if println()", 0 to 2 /*TODO*/),
                 flag(
-                    "if (true) { println() } else if println() else if println() else println()",
-                    0 to 2 /*TODO*/
+                    """
+                        if (true) {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true)
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true)
+                            println()
+                        else
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true)
+                            println()
+                        else if (true)
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true)
+                            println()
+                        else if (true)
+                            println()
+                        else 
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
                 ),
                 // TODO add more cases, not just first branch
             )
@@ -175,41 +1138,226 @@ class BracesOnIfStatementsSpec {
         @Nested
         inner class `=consistent` {
 
-            private fun flag(code: String, vararg locations: Pair<Int, Int>) =
-                testCombinations(BracePolicy.Consistent.config, NOT_RELEVANT, code, *locations)
+            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
+                testCombinations(
+                    NOT_RELEVANT,
+                    BracePolicy.Consistent.config,
+                    code,
+                    *(locations.map { it(code) }.toTypedArray())
+                )
 
             @TestFactory
             fun `no braces are accepted`() = listOf(
-                flag("if (true) println()", *NOTHING),
-                flag("if (true) println() else println()", *NOTHING),
-                flag("if (true) println() else if println()", *NOTHING),
-                flag("if (true) println() else if println() else println()", *NOTHING),
-                flag("if (true) println() else if println() else if println()", *NOTHING),
-                flag("if (true) println() else if println() else if println() else println()", *NOTHING),
+                flag(
+                    """
+                        if (true)
+                            println()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true)
+                            println()
+                        else
+                            println()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true)
+                            println()
+                        else if (true)
+                            println()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true)
+                            println()
+                        else if (true)
+                            println()
+                        else
+                            println()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true)
+                            println()
+                        else if (true)
+                            println()
+                        else if (true)
+                            println()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true)
+                            println() 
+                        else if (true)
+                            println()
+                        else if (true)
+                            println()
+                        else
+                            println()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
             )
 
             @TestFactory
             fun `existing braces are flagged`() = listOf(
-                flag("if (true) { println() }", *NOTHING),
-                flag("if (true) { println() } else { println() }", *NOTHING),
-                flag("if (true) { println() } else if { println() }", *NOTHING),
-                flag("if (true) { println() } else if { println() } else { println() }", *NOTHING),
-                flag("if (true) { println() } else if { println() } else if { println() }", *NOTHING),
                 flag(
-                    "if (true) { println() } else if { println() } else if { println() } else { println() }",
+                    """
+                        if (true) {
+                            println()
+                        }
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else {
+                            println()
+                        }
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        }
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        } else {
+                            println()
+                        }
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        }
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        } else { 
+                            println()
+                        }
+                    """.trimIndent(),
                     *NOTHING
                 ),
             )
 
             @TestFactory
             fun `partial braces are flagged`() = listOf(
-                //flag("if (true) { println() }", *NOTHING),
-                flag("if (true) { println() } else println()", 0 to 2),
-                flag("if (true) { println() } else if println()", 0 to 2),
-                flag("if (true) { println() } else if println() else println()", 0 to 2),
-                flag("if (true) { println() } else if println() else if println()", 0 to 2),
-                flag("if (true) { println() } else if println() else if println() else println()", 0 to 2),
-                // TODO add more cases, not just first branch
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        }
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true)
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true)
+                            println() 
+                        else 
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true)
+                            println()
+                        else if (true)
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true)
+                            println()
+                        else if (true)
+                            println()
+                        else
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                // More cases, not just first branch
+                flag(
+                    """
+                        if (true)
+                            println()
+                        else if (true)
+                            println()
+                        else if (true)
+                            println()
+                        else {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1)
+                ),
             )
         }
     }
@@ -224,7 +1372,7 @@ class BracesOnIfStatementsSpec {
                 else -> println()
             }
         """.trimIndent(),
-        *NOTHING
+        *(NOTHING.map { it("") }.toTypedArray())
     )
 
     companion object {
@@ -239,7 +1387,7 @@ class BracesOnIfStatementsSpec {
         /**
          * Nothing is expected to be flagged as a finding.
          */
-        private val NOTHING: Array<Pair<Int, Int>> = emptyArray()
+        private val NOTHING: Array<(String) -> Pair<Int, Int>> = emptyArray()
 
         private fun createSubject(singleLine: String, multiLine: String): BracesOnIfStatements {
             val config = TestConfig(
@@ -252,10 +1400,11 @@ class BracesOnIfStatementsSpec {
         }
 
         private fun options(option: String): List<String> =
-            if (option == NOT_RELEVANT)
+            if (option == NOT_RELEVANT) {
                 BracePolicy.values().map { it.config }
-            else
+            } else {
                 listOf(option)
+            }
 
         private fun testCombinations(
             singleLine: String,
@@ -266,24 +1415,23 @@ class BracesOnIfStatementsSpec {
             val tests = createBraceTests(singleLine, multiLine) { rule ->
                 rule.test(code, *locations)
             }
-            val locationString = if (NOTHING.contentEquals(locations))
+            val locationString = if (NOTHING.contentEquals(locations)) {
                 "nothing"
-            else
+            } else {
                 locations.map { TextLocation(it.first, it.second) }.toString()
+            }
             return dynamicContainer("flags $locationString in `$code`", tests)
         }
 
         private fun BracesOnIfStatements.test(code: String, vararg locations: Pair<Int, Int>) {
-            // This creates a 14 character prefix (signature/9, newline/1, indent/4) for every code example.
-            val findings = compileAndLint(
-                """
-                    fun f() {
-                        ${code.prependIndent("                        ").trimStart()}
-                    }
-                """.trimIndent()
-            )
+            // This creates a 10 character prefix (signature/9, space/1) for every code example.
+            val findings = compileAndLint("fun f() { $code }")
             // Offset text locations by the above prefix, it results in 0-indexed locations.
-            assertThat(findings).hasOffsetTextLocations(14, *locations)
+            val offset = 10
+            assertThat(findings)
+                .hasTextLocations(
+                    *(locations.map { it.first + offset to it.second + offset }).toTypedArray()
+                )
         }
 
         /**
@@ -300,12 +1448,12 @@ class BracesOnIfStatementsSpec {
             val singleOptions = options(singleLine)
             val multiOptions = options(multiLine)
             require(singleOptions.isNotEmpty() && multiOptions.isNotEmpty()) {
-                "No options to test: ${singleLine} -> ${singleOptions}, ${multiLine} -> ${multiOptions}"
+                "No options to test: $singleLine -> $singleOptions, $multiLine -> $multiOptions"
             }
             return singleOptions.flatMap { singleLineOption ->
                 multiOptions.map { multiLineOption ->
                     val trace = Exception("Async stack trace of TestFactory")
-                    dynamicTest("singleLine=${singleLineOption}, multiLine=${multiLineOption}") {
+                    dynamicTest("singleLine=$singleLineOption, multiLine=$multiLineOption") {
                         try {
                             // Note: if you jumped here from a failed test's stack trace,
                             // select the "Async stack trace of TestFactory" cause's
@@ -319,5 +1467,18 @@ class BracesOnIfStatementsSpec {
                 }
             }
         }
+
+        operator fun String.invoke(ordinal: Int): (String) -> Pair<Int, Int> =
+            { code ->
+                fun String.next(string: String, start: Int): Int? = indexOf(string, start).takeIf { it != -1 }
+
+                val indices = generateSequence(code.next(this, 0)) { startIndex ->
+                    code.next(this, startIndex + 1)
+                }
+                val index = requireNotNull(indices.elementAtOrNull(ordinal - 1)) {
+                    "There's no $ordinal. occurrence of '$this' in '$code'"
+                }
+                index to index + this.length
+            }
     }
 }

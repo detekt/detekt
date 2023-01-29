@@ -23,8 +23,8 @@ jacoco.toolVersion = versionCatalog.findVersion("jacoco").get().requiredVersion
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
     systemProperty("junit.jupiter.testinstance.lifecycle.default", "per_class")
-    providers.gradleProperty("compile-test-snippets").orNull
-        ?.let { systemProperty("compile-test-snippets", it.toBoolean()) }
+    val compileTestSnippets = providers.gradleProperty("compile-test-snippets").orNull.toBoolean()
+    systemProperty("compile-test-snippets", compileTestSnippets)
     testLogging {
         // set options for log level LIFECYCLE
         events = setOf(

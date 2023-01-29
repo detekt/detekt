@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class MandatoryBracesIfStatementsSpec {
-    @Suppress("DEPRECATION")
     val subject = MandatoryBracesIfStatements(Config.empty)
 
     @Nested
