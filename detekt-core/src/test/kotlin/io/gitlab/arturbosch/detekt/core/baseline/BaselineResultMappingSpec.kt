@@ -15,8 +15,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.io.PrintStream
 import java.net.URI
-import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.copyTo
 import kotlin.io.path.deleteIfExists
 
 @OptIn(UnstableApi::class)
@@ -107,7 +107,7 @@ class BaselineResultMappingSpec {
 
     @Test
     fun `should update an existing baseline file if a file is configured`() {
-        Files.copy(existingBaselineFile, baselineFile)
+        existingBaselineFile.copyTo(baselineFile)
         val existing = DefaultBaseline.load(baselineFile)
         val mapping = resultMapping(
             baselineFile = baselineFile,
