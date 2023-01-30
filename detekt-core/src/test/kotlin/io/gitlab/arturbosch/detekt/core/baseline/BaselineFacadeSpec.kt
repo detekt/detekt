@@ -8,6 +8,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
+import kotlin.io.path.deleteIfExists
 
 class BaselineFacadeSpec {
 
@@ -16,7 +17,7 @@ class BaselineFacadeSpec {
 
     @AfterEach
     fun tearDown() {
-        Files.deleteIfExists(baselineFile)
+        baselineFile.deleteIfExists()
     }
 
     @Test
