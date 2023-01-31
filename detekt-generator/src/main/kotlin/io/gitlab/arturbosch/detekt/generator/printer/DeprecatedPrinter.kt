@@ -41,6 +41,7 @@ internal fun writeMigratedRules(): String {
         style>ForbiddenPublicDataClass=Rule migrated to `libraries` ruleset plugin
         style>LibraryCodeMustSpecifyReturnType=Rule migrated to `libraries` ruleset plugin
         style>LibraryEntitiesShouldNotBePublic=Rule migrated to `libraries` ruleset plugin
+        style>MandatoryBracesIfStatements=Use `BracesOnIfStatements` with `always` configuration instead
         complexity>ComplexMethod=Rule is renamed to `CyclomaticComplexMethod` to distinguish between Cyclomatic Complexity and Cognitive Complexity
     """.trimIndent()
 }

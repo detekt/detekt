@@ -100,6 +100,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 import kotlinx.coroutines.coroutineScope
                 import kotlinx.coroutines.delay
+                import kotlinx.coroutines.launch
                 import kotlin.time.Duration.Companion.seconds
 
                 suspend fun foo() = coroutineScope {
@@ -117,6 +118,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
                 import kotlinx.coroutines.delay
                 import kotlinx.coroutines.launch
                 import kotlinx.coroutines.CoroutineScope
+                import kotlinx.coroutines.coroutineScope
 
                 suspend fun Long.foo() = coroutineScope {
                     launch {
