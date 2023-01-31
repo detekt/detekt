@@ -7,4 +7,8 @@ import javax.script.ScriptException
  * Exception types thrown by the underlying scripting implementations are wrapped in instances of
  * KotlinScriptException.
  */
+@Deprecated(
+    "Test snippet compilation failures are now reported as IllegalStateException.",
+    level = DeprecationLevel.ERROR,
+)
 class KotlinScriptException(e: ScriptException) : RuntimeException("Given Kotlin code is invalid.", e)
