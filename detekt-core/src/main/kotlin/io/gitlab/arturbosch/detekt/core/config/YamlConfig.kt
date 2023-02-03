@@ -7,7 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Config.Companion.CONFIG_SEPARATOR
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.core.config.validation.ValidatableConfiguration
 import io.gitlab.arturbosch.detekt.core.config.validation.validateConfig
-import org.yaml.snakeyaml.Yaml
+import org.snakeyaml.engine.v2.api.Load
+import org.snakeyaml.engine.v2.api.LoadSettings
 import java.io.Reader
 import java.nio.file.Path
 
@@ -66,8 +67,7 @@ class YamlConfig internal constructor(
          */
         fun load(reader: Reader): Config = reader.buffered().use { bufferedReader ->
             val map: Map<*, *>? = runCatching {
-                @Suppress("USELESS_CAST") // runtime inference bug
-                Yaml().loadAs(bufferedReader, Map::class.java) as Map<*, *>?
+                createYamlLoad().loadFromReader(bufferedReader) as Map<String, *>?
             }.getOrElse { throw Config.InvalidConfigurationError(it) }
             if (map == null) {
                 YamlConfig(emptyMap())
@@ -75,5 +75,13 @@ class YamlConfig internal constructor(
                 YamlConfig(map as Map<String, Any>)
             }
         }
+
+        private fun createYamlLoad() = Load(LoadSettings.builder()
+                .setAllowDuplicateKeys(false)
+                .setAllowRecursiveKeys(false)
+                .setCodePointLimit(100000) // limit to 100 kB
+                .setLabel("detekt") // to show in error messages
+                .setMaxAliasesForCollections(10)
+                .build())
     }
 }

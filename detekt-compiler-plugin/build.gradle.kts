@@ -53,7 +53,7 @@ tasks.shadowJar.configure {
     dependencies {
         include(dependency("io.gitlab.arturbosch.detekt:.*"))
         include(dependency("io.github.detekt:.*"))
-        include(dependency("org.yaml:snakeyaml"))
+        include(dependency("org.snakeyaml:snakeyaml-engine"))
         include(dependency("io.github.davidburstrom.contester:contester-breakpoint"))
     }
 }
