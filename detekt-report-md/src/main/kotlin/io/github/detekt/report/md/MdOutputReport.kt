@@ -1,7 +1,6 @@
 package io.github.detekt.report.md
 
 import io.github.detekt.metrics.ComplexityReportGenerator
-import io.github.detekt.psi.toUnifiedString
 import io.github.detekt.utils.MarkdownContent
 import io.github.detekt.utils.codeBlock
 import io.github.detekt.utils.emptyLine
@@ -22,6 +21,7 @@ import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.io.path.invariantSeparatorsPathString
 import kotlin.math.max
 import kotlin.math.min
 
@@ -129,7 +129,8 @@ private fun MarkdownContent.renderFindings(findings: Map<String, List<Finding>>)
 
 private fun MarkdownContent.renderFinding(finding: Finding): String {
     val filePath = finding.location.filePath.relativePath ?: finding.location.filePath.absolutePath
-    val location = "${filePath.toUnifiedString()}:${finding.location.source.line}:${finding.location.source.column}"
+    val location =
+        "${filePath.invariantSeparatorsPathString}:${finding.location.source.line}:${finding.location.source.column}"
 
     val message = if (finding.message.isNotEmpty()) {
         codeBlock("") { finding.message }
