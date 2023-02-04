@@ -49,7 +49,7 @@ class ExpressionBodySyntaxSpec {
                 fun stuff(): Int {
                     return if (true) return 5 else return 3
                 }
-                fun stuff(): Int {
+                fun stuff2(): Int {
                     return try { return 5 } catch (e: Exception) { return 3 }
                 }
                     """.trimIndent()

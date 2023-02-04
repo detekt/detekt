@@ -29,7 +29,7 @@ class UseEmptyCounterpartSpec(val env: KotlinCoreEnvironment) {
         val code = """
             val array: Array<Any> = arrayOf()
             val list: List<Any> = listOf()
-            val list: List<Any> = listOfNotNull()
+            val list2: List<Any> = listOfNotNull()
             val map: Map<Any, Any> = mapOf()
             val sequence: Sequence<Any> = sequenceOf()
             val set: Set<Any> = setOf()
