@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import java.io.PrintStream
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.stream.Collectors
+import kotlin.streams.asSequence
 import kotlin.system.measureTimeMillis
 
 class Generator(
@@ -20,9 +20,10 @@ class Generator(
 
     private fun parseAll(parser: KtCompiler, root: Path): Collection<KtFile> =
         Files.walk(root)
+            .asSequence()
             .filter { it.fileName.toString().endsWith(".kt") }
             .map { parser.compile(root, it) }
-            .collect(Collectors.toList())
+            .toList()
 
     fun execute() {
         val parser = KtCompiler()

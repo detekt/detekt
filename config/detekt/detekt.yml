@@ -181,6 +181,8 @@ style:
         reason: 'Import Assertions.assertThat instead.'
       - value: 'org.junit.jupiter.api.Assertions*'
         reason: 'Use AssertJ assertions instead.'
+      - value: 'java.util.stream.*'
+        reason: "Use Kotlin's sequences instead."
   ForbiddenMethodCall:
     active: true
     methods:
