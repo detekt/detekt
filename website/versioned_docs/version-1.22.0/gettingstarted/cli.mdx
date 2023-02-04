@@ -37,6 +37,12 @@ unzip detekt-cli-[detekt_version].zip
 ./detekt-cli-[detekt_version]/bin/detekt-cli --help
 ```
 
+### NixOS
+
+```sh
+nix-shell -p detekt -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/f80ac848e3d6f0c12c52758c0f25c10c97ca3b62.tar.gz --command 'detekt --version' [detekt_version]
+```
+
 ## Use the cli
 
 detekt will exit with one of the following exit codes:
