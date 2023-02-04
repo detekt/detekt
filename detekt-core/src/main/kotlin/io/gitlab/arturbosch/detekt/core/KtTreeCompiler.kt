@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.stream.Collectors
+import kotlin.streams.asSequence
 
 class KtTreeCompiler(
     private val settings: ProcessingSettings,
@@ -32,6 +32,7 @@ class KtTreeCompiler(
 
     private fun compileProject(project: Path): List<KtFile> {
         val kotlinFiles = Files.walk(project)
+            .asSequence()
             .filter(Path::isFile)
             .filter { it.isKotlinFile() }
             .filter { !isIgnored(it) }
@@ -40,10 +41,10 @@ class KtTreeCompiler(
             val tasks = kotlinFiles.map { path ->
                 service.task { compiler.compile(basePath, path) }
                     .recover { settings.error("Could not compile '$path'.", it); null }
-            }.collect(Collectors.toList())
+            }.toList()
             return awaitAll(tasks).filterNotNull()
         } else {
-            kotlinFiles.map { compiler.compile(basePath, it) }.collect(Collectors.toList())
+            kotlinFiles.map { compiler.compile(basePath, it) }.toList()
         }
     }
 
