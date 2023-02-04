@@ -135,7 +135,7 @@ class ArrayPrimitiveSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    inner class `arrayOf` {
+    inner class ArrayOf {
         @Test
         fun `is arrayOf(Char)`() {
             val code = "fun foo(x: Char) = arrayOf(x)"
@@ -198,7 +198,7 @@ class ArrayPrimitiveSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    inner class `emptyArray` {
+    inner class EmptyArray {
         @Test
         @DisplayName("is emptyArray<Char>()")
         fun isEmptyArrayChar() {

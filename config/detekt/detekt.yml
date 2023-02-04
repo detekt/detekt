@@ -235,6 +235,8 @@ style:
     active: true
   UnnecessaryAnnotationUseSiteTarget:
     active: true
+  UnnecessaryBackticks:
+    active: true
   UnnecessaryFilter:
     active: true
   UnnecessaryLet:

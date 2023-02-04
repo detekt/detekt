@@ -47,7 +47,7 @@ class CognitiveComplexitySpec {
     }
 
     @Nested
-    inner class `recursion` {
+    inner class Recursion {
 
         @Test
         fun `adds one for recursion inside class`() {
