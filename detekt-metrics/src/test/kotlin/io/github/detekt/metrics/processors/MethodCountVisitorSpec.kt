@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class MethodCountVisitorSpec {
 
     @Test
-    fun `defaultMethodCount`() {
+    fun defaultMethodCount() {
         val file = compileContentForTest(complexClass)
         val count = getMethodCount(file)
         assertThat(count).isEqualTo(6)

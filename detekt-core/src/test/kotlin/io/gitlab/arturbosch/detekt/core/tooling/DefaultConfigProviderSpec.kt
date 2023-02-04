@@ -14,7 +14,7 @@ class DefaultConfigProviderSpec {
         private val extensionsSpec = createNullLoggingSpec {}.extensionsSpec
 
         @Test
-        fun `gets`() {
+        fun gets() {
             val config = DefaultConfigProvider().apply { init(extensionsSpec) }.get()
 
             assertThat(config.parentPath).isNull()
@@ -23,7 +23,7 @@ class DefaultConfigProviderSpec {
         }
 
         @Test
-        fun `copies`() {
+        fun copies() {
             val path = createTempFileForTest("test", "test")
             DefaultConfigProvider().apply { init(extensionsSpec) }.copy(path)
 
@@ -41,7 +41,7 @@ class DefaultConfigProviderSpec {
         }.extensionsSpec
 
         @Test
-        fun `gets`() {
+        fun gets() {
             val config = DefaultConfigProvider().apply { init(extensionsSpec) }.get()
 
             assertThat(config.parentPath).isNull()
@@ -50,7 +50,7 @@ class DefaultConfigProviderSpec {
         }
 
         @Test
-        fun `copies`() {
+        fun copies() {
             val path = createTempFileForTest("test", "test")
             DefaultConfigProvider().apply { init(extensionsSpec) }.copy(path)
 

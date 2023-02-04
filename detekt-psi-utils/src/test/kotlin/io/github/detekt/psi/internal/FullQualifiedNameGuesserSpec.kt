@@ -22,7 +22,7 @@ class FullQualifiedNameGuesserSpec {
         )
 
         @Test
-        fun `import`() {
+        fun import() {
             assertThat(sut.getFullQualifiedName("JvmField"))
                 .containsExactlyInAnyOrder("kotlin.jvm.JvmField")
         }

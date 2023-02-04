@@ -58,7 +58,7 @@ class EntitySpec {
     }
 
     @Nested
-    inner class `Classes` {
+    inner class Classes {
         private val clazz = requireNotNull(code.findDescendantOfType<KtClass>())
 
         @Test
@@ -73,7 +73,7 @@ class EntitySpec {
     }
 
     @Nested
-    inner class `Files` {
+    inner class Files {
 
         @Test
         fun `includes package and file name in entity signature`() {

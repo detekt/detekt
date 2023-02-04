@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class FieldCountVisitorSpec {
 
     @Test
-    fun `defaultFieldCount`() {
+    fun defaultFieldCount() {
         val file = compileContentForTest(classWithFields)
         val count = with(file) {
             accept(PropertyCountVisitor())

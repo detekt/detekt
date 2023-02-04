@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class ValueOrDefaultCommaSeparatedSpec {
 
     @Nested
-    inner class `valueOrDefaultCommaSeparated` {
+    inner class ValueOrDefaultCommaSeparated {
 
         @Test
         fun `returns the default when there is not a config value`() {

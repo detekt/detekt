@@ -10,7 +10,7 @@ class OutdatedDocumentationSpec {
     val subject = OutdatedDocumentation()
 
     @Nested
-    inner class `general` {
+    inner class General {
         @Test
         fun `should not report when doc is missing`() {
             val withoutDoc = """
@@ -217,7 +217,7 @@ class OutdatedDocumentationSpec {
     }
 
     @Nested
-    inner class `function` {
+    inner class Function {
 
         @Test
         fun `should not report when doc match function params`() {

@@ -19,7 +19,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
         private val subject = MissingWhenCase()
 
         @Nested
-        inner class `enum` {
+        inner class Enum {
             @Test
             fun `reports when _when_ expression used as statement and not all cases are covered`() {
                 val code = """
@@ -318,7 +318,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
         )
 
         @Nested
-        inner class `enum` {
+        inner class Enum {
             @Test
             fun `reports when _when_ expression used as statement and not all cases are covered`() {
                 val code = """

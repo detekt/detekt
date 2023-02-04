@@ -14,7 +14,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
     @Nested
     inner class `report RedundantHigherOrderMapUsage rule` {
         @Test
-        fun `simple`() {
+        fun simple() {
             val code = """
                 fun test() {
                     listOf(1, 2, 3)

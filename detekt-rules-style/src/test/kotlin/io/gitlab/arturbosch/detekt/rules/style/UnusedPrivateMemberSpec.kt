@@ -1116,7 +1116,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    inner class `operators` {
+    inner class Operators {
 
         @Test
         fun `does not report used plus operator - #1354`() {

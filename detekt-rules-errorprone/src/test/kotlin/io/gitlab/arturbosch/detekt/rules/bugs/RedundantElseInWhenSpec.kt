@@ -15,7 +15,7 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
     private val subject = RedundantElseInWhen()
 
     @Nested
-    inner class `enum` {
+    inner class Enum {
         @Test
         fun `reports when _when_ expression used as statement contains _else_ case when all cases already covered`() {
             val code = """
