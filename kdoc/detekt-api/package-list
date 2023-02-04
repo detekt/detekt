@@ -9,6 +9,7 @@ $dokka.location:io.gitlab.arturbosch.detekt.api.internal//ruleSetConfig/#TypePar
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal//valueOrDefaultCommaSeparated/io.gitlab.arturbosch.detekt.api.Config#kotlin.String#kotlin.collections.List[kotlin.String]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/value-or-default-comma-separated.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal//whichDetekt/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/which-detekt.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal//whichJava/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/which-java.html
+$dokka.location:io.gitlab.arturbosch.detekt.api.internal//whichKotlin/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/which-kotlin.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal//whichOS/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/which-o-s.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/ActiveByDefault///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-active-by-default/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/ActiveByDefault/since/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-active-by-default/since.html
