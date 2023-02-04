@@ -56,7 +56,7 @@ class MdOutputReport : OutputReport() {
         }
     }
 
-    private fun renderVersion(): String = whichDetekt() ?: "unknown"
+    private fun renderVersion(): String = whichDetekt()
 
     private fun renderDate(): String {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")

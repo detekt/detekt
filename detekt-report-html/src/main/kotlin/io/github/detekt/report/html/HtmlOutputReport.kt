@@ -61,7 +61,7 @@ class HtmlOutputReport : OutputReport() {
             .replace(PLACEHOLDER_COMPLEXITY_REPORT, renderComplexity(getComplexityMetrics(detektion)))
             .replace(PLACEHOLDER_FINDINGS, renderFindings(detektion.findings))
 
-    private fun renderVersion(): String = whichDetekt() ?: "unknown"
+    private fun renderVersion(): String = whichDetekt()
 
     private fun renderDate(): String {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
