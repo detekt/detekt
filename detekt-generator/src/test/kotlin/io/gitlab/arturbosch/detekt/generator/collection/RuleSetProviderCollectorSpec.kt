@@ -365,7 +365,7 @@ class RuleSetProviderCollectorSpec {
             }
         }
         """.trimIndent()
-        private val items = subject.run(code)
+        private val items by lazy { subject.run(code) }
 
         @Test
         fun `extracts boolean configuration option`() {
@@ -417,7 +417,7 @@ class RuleSetProviderCollectorSpec {
         """.trimIndent()
 
         @Test
-        fun `fails`() {
+        fun fails() {
             assertThatThrownBy { subject.run(code) }
                 .isInstanceOf(InvalidDocumentationException::class.java)
                 .hasMessageContaining("""Unsupported default value format 'listOf("a")'""")
