@@ -417,7 +417,7 @@ class RuleSetProviderCollectorSpec {
         """.trimIndent()
 
         @Test
-        fun `fails`() {
+        fun fails() {
             assertThatThrownBy { subject.run(code) }
                 .isInstanceOf(InvalidDocumentationException::class.java)
                 .hasMessageContaining("""Unsupported default value format 'listOf("a")'""")

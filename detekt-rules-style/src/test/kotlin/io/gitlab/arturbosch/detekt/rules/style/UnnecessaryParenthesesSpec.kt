@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Named
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import java.util.stream.Stream
 
 class UnnecessaryParenthesesSpec {
     @ParameterizedTest
@@ -340,8 +339,8 @@ class UnnecessaryParenthesesSpec {
         }
 
         @JvmStatic
-        fun cases(): Stream<Arguments> {
-            return Stream.of(
+        fun cases(): List<Arguments> {
+            return listOf(
                 Arguments.of(
                     Named.of("Without allow for unclear precedence", RuleTestCase(allowForUnclearPrecedence = false))
                 ),

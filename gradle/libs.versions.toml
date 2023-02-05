@@ -2,7 +2,7 @@
 dokka = "1.7.20"
 jacoco = "0.8.8"
 kotlin = "1.8.0"
-ktlint = "0.48.1"
+ktlint = "0.48.2"
 junit = "5.9.2"
 contester = "0.2.0"
 
@@ -28,7 +28,7 @@ android-gradle-minSupported = "com.android.tools.build:gradle:7.0.0"
 
 # This version of AGP is used for testing and should be updated when new AGP versions are released to ensure detekt's
 # Gradle plugin remains compatible.
-android-gradle-maxSupported = "com.android.tools.build:gradle:7.4.0"
+android-gradle-maxSupported = "com.android.tools.build:gradle:7.4.1"
 
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktlint" }
 ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint" }
@@ -43,7 +43,7 @@ junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "jun
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.2.0"
 assertj = "org.assertj:assertj-core:3.24.2"
 reflections = "org.reflections:reflections:0.10.2"
-mockk = "io.mockk:mockk:1.13.3"
+mockk = "io.mockk:mockk:1.13.4"
 snakeyaml = "org.yaml:snakeyaml:1.33"
 jcommander = "com.beust:jcommander:1.82"
 contester-breakpoint = { module = "io.github.davidburstrom.contester:contester-breakpoint", version.ref = "contester" }
@@ -53,7 +53,7 @@ kotlinCompileTesting = { module = "com.github.tschuchortdev:kotlin-compile-testi
 [plugins]
 binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.12.1" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-download = { id = "de.undercouch.download", version = "5.3.0" }
-gradleVersions = { id = "com.github.ben-manes.versions", version = "0.44.0" }
+download = { id = "de.undercouch.download", version = "5.3.1" }
+gradleVersions = { id = "com.github.ben-manes.versions", version = "0.45.0" }
 pluginPublishing = { id = "com.gradle.plugin-publish", version = "1.1.0" }
 shadow = { id = "com.github.johnrengelman.shadow", version = "7.1.2" }

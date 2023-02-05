@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class EmptyDefaultConstructorSpec {
 
     @Test
-    fun `EmptyConstructor`() {
+    fun emptyConstructor() {
         val code = """
             class EmptyConstructor()
         """.trimIndent()
@@ -17,7 +17,7 @@ internal class EmptyDefaultConstructorSpec {
     }
 
     @Test
-    fun `EmptyPrimaryConstructor`() {
+    fun EmptyPrimaryConstructor() {
         val code = """
             class EmptyPrimaryConstructor constructor()
         """.trimIndent()
@@ -25,7 +25,7 @@ internal class EmptyDefaultConstructorSpec {
     }
 
     @Test
-    fun `EmptyPublicPrimaryConstructor`() {
+    fun emptyPublicPrimaryConstructor() {
         val code = """
             class EmptyPublicPrimaryConstructor public constructor()
         """.trimIndent()
@@ -33,7 +33,7 @@ internal class EmptyDefaultConstructorSpec {
     }
 
     @Test
-    fun `PrimaryConstructorWithParameter`() {
+    fun primaryConstructorWithParameter() {
         val code = """
             class PrimaryConstructorWithParameter constructor(x: Int)
         """.trimIndent()
@@ -41,7 +41,7 @@ internal class EmptyDefaultConstructorSpec {
     }
 
     @Test
-    fun `PrimaryConstructorWithAnnotation`() {
+    fun primaryConstructorWithAnnotation() {
         val code = """
             class PrimaryConstructorWithAnnotation @SafeVarargs constructor()
         """.trimIndent()
@@ -49,7 +49,7 @@ internal class EmptyDefaultConstructorSpec {
     }
 
     @Test
-    fun `PrivatePrimaryConstructor`() {
+    fun privatePrimaryConstructor() {
         val code = """
             class PrivatePrimaryConstructor private constructor()
         """.trimIndent()
@@ -57,7 +57,7 @@ internal class EmptyDefaultConstructorSpec {
     }
 
     @Test
-    fun `EmptyConstructorIsCalled`() {
+    fun emptyConstructorIsCalled() {
         val code = """
             class EmptyConstructorIsCalled() {
 

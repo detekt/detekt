@@ -406,6 +406,8 @@ potential-bugs:
     active: true
     forbiddenTypePatterns:
       - 'kotlin.String'
+  CastNullableToNonNullableType:
+    active: false
   CastToNullableType:
     active: false
   Deprecation:
@@ -425,6 +427,7 @@ potential-bugs:
       - 'java.util.HashMap'
   ElseCaseInsteadOfExhaustiveWhen:
     active: false
+    ignoredSubjectTypes: []
   EqualsAlwaysReturnsTrueOrFalse:
     active: true
   EqualsWithHashCodeExist:
@@ -728,6 +731,7 @@ style:
     active: false
   UseIfInsteadOfWhen:
     active: false
+    ignoreWhenContainingVariableDeclaration: false
   UseIsNullOrEmpty:
     active: true
   UseOrEmpty:

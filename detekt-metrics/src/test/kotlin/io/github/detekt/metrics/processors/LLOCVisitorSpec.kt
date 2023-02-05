@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class LLOCVisitorSpec {
 
     @Test
-    fun `defaultCaseHasOneClassAndAnnotationLine`() {
+    fun defaultCaseHasOneClassAndAnnotationLine() {
         val file = compileContentForTest(default)
 
         val lloc = with(file) {
@@ -19,7 +19,7 @@ class LLOCVisitorSpec {
     }
 
     @Test
-    fun `llocOfComplexClass`() {
+    fun llocOfComplexClass() {
         val file = compileContentForTest(complexClass)
 
         val lloc = with(file) {

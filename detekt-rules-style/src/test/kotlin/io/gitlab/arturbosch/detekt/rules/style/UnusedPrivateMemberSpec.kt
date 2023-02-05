@@ -383,7 +383,35 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    inner class `operators` {
+    inner class `main methods` {
+
+        @Test
+        fun `does not report the args parameter of the main function inside an object`() {
+            val code = """
+                object O {
+
+                    @JvmStatic
+                    fun main(args: Array<String>) {
+                        println("b")
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report the args parameter of the main function as top level function`() {
+            val code = """
+                fun main(args: Array<String>) {
+                    println("b")
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class Operators {
 
         @Test
         fun `does not report used plus operator - #1354`() {

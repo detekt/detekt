@@ -25,12 +25,12 @@ class EmptyCodeSpec {
     """.trimIndent()
 
     @Test
-    fun `findsEmptyCatch`() {
+    fun findsEmptyCatch() {
         test { EmptyCatchBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyNestedCatch`() {
+    fun findsEmptyNestedCatch() {
         val code = """
         fun f() {
             try {
@@ -45,7 +45,7 @@ class EmptyCodeSpec {
     }
 
     @Test
-    fun `doesNotReportIgnoredOrExpectedException`() {
+    fun doesNotReportIgnoredOrExpectedException() {
         val code = """
         fun f() {
             try {
@@ -58,7 +58,7 @@ class EmptyCodeSpec {
     }
 
     @Test
-    fun `doesNotReportEmptyCatchWithConfig`() {
+    fun doesNotReportEmptyCatchWithConfig() {
         val code = """
         fun f() {
             try {
@@ -71,62 +71,62 @@ class EmptyCodeSpec {
     }
 
     @Test
-    fun `findsEmptyFinally`() {
+    fun findsEmptyFinally() {
         test { EmptyFinallyBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyIf`() {
+    fun findsEmptyIf() {
         test { EmptyIfBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyElse`() {
+    fun findsEmptyElse() {
         test { EmptyElseBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyFor`() {
+    fun findsEmptyFor() {
         test { EmptyForBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyWhile`() {
+    fun findsEmptyWhile() {
         test { EmptyWhileBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyDoWhile`() {
+    fun findsEmptyDoWhile() {
         test { EmptyDoWhileBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyFun`() {
+    fun findsEmptyFun() {
         test { EmptyFunctionBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyClass`() {
+    fun findsEmptyClass() {
         test { EmptyClassBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyTry`() {
+    fun findsEmptyTry() {
         test { EmptyTryBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyWhen`() {
+    fun findsEmptyWhen() {
         test { EmptyWhenBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyInit`() {
+    fun findsEmptyInit() {
         test { EmptyInitBlock(Config.empty) }
     }
 
     @Test
-    fun `findsOneEmptySecondaryConstructor`() {
+    fun findsOneEmptySecondaryConstructor() {
         test { EmptySecondaryConstructor(Config.empty) }
     }
 
@@ -137,7 +137,7 @@ class EmptyCodeSpec {
     }
 
     @Test
-    fun `doesNotFailWithInvalidRegexWhenDisabled`() {
+    fun doesNotFailWithInvalidRegexWhenDisabled() {
         val configValues = mapOf(
             "active" to "false",
             ALLOWED_EXCEPTION_NAME_REGEX to "*foo"
@@ -147,7 +147,7 @@ class EmptyCodeSpec {
     }
 
     @Test
-    fun `doesFailWithInvalidRegex`() {
+    fun doesFailWithInvalidRegex() {
         val configValues = mapOf(ALLOWED_EXCEPTION_NAME_REGEX to "*foo")
         val config = TestConfig(configValues)
         assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
