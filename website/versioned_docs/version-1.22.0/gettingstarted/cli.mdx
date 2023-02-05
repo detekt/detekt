@@ -40,7 +40,7 @@ unzip detekt-cli-[detekt_version].zip
 ### NixOS
 
 ```sh
-nix-shell -p detekt -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/f80ac848e3d6f0c12c52758c0f25c10c97ca3b62.tar.gz --command 'detekt --version' [detekt_version]
+nix-shell -p detekt -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/[hash].tar.gz --command 'detekt --version' [detekt_version]
 ```
 
 ## Use the cli
