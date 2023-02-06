@@ -46,13 +46,10 @@ class YamlConfig internal constructor(
         validateConfig(this, baseline, excludePatterns)
 
     companion object {
-        private const val YAML_DOC_LIMIT = 102400 // limit the YAML size to 100 kB
+        private const val YAML_DOC_LIMIT = 102_400 // limit the YAML size to 100 kB
 
-        /**
-         * limit the anchors/aliases for collections to prevent attacks from for untrusted sources
-         */
+        // limit the anchors/aliases for collections to prevent attacks from for untrusted sources
         private const val ALIASES_LIMIT = 10
-
 
         /**
          * Factory method to load a yaml configuration. Given path must exist
@@ -85,11 +82,11 @@ class YamlConfig internal constructor(
 
         private fun createYamlLoad() = Load(
             LoadSettings.builder()
-            .setAllowDuplicateKeys(false)
-            .setAllowRecursiveKeys(false)
-            .setCodePointLimit(YAML_DOC_LIMIT)
-            .setMaxAliasesForCollections(ALIASES_LIMIT)
-            .build()
+                .setAllowDuplicateKeys(false)
+                .setAllowRecursiveKeys(false)
+                .setCodePointLimit(YAML_DOC_LIMIT)
+                .setMaxAliasesForCollections(ALIASES_LIMIT)
+                .build()
         )
     }
 }
