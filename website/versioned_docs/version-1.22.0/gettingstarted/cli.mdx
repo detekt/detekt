@@ -39,8 +39,10 @@ unzip detekt-cli-[detekt_version].zip
 
 ### NixOS
 
+As a prerequisite, you have to add the unstable channel via `nix-channel` and then execute the following command.
+
 ```sh
-nix-shell -p detekt -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/[hash].tar.gz --command 'detekt --version' [detekt_version]
+nix-shell -I nixpkgs=channel:nixpkgs-unstable -p detekt
 ```
 
 ## Use the cli
