@@ -19,11 +19,6 @@ plugins {
     alias(libs.plugins.download)
 }
 
-repositories {
-    mavenCentral()
-    mavenLocal()
-}
-
 dependencies {
     compileOnly(kotlin("stdlib"))
     compileOnly(libs.kotlin.compiler)
