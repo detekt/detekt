@@ -114,3 +114,7 @@ val testPluginKotlinc by tasks.registering(RunTestExecutable::class) {
         (this as RunTestExecutable).executionResult.get().assertNormalExitValue()
     }
 }
+
+tasks.check {
+    dependsOn(testPluginKotlinc)
+}
