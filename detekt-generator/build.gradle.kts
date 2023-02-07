@@ -3,8 +3,6 @@ plugins {
     id("module")
 }
 
-tasks.build { finalizedBy(tasks.shadowJar) }
-
 dependencies {
     implementation(projects.detektParser)
     implementation(projects.detektApi)
@@ -37,7 +35,6 @@ val ruleModules = rootProject.subprojects
 
 val generateDocumentation by tasks.registering(JavaExec::class) {
     dependsOn(
-        tasks.assemble,
         tasks.shadowJar,
         ":detekt-api:dokkaHtml",
         ":detekt-rules-libraries:sourcesJar",
@@ -84,6 +81,25 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         "--cli-options",
         cliOptionsFile,
     )
+}
+
+val generateDocumentationConfigurationLibraries: Configuration by configurations.creating {
+    isCanBeConsumed = true
+    isCanBeResolved = false
+}
+
+val generateDocumentationConfigurationRules: Configuration by configurations.creating {
+    isCanBeConsumed = true
+    isCanBeResolved = false
+}
+
+artifacts {
+    add(generateDocumentationConfigurationLibraries.name, file(librariesConfigFile)) {
+        builtBy(generateDocumentation)
+    }
+    add(generateDocumentationConfigurationRules.name, file(ruleauthorsConfigFile)) {
+        builtBy(generateDocumentation)
+    }
 }
 
 val verifyGeneratorOutput by tasks.registering(Exec::class) {
