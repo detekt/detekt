@@ -20,7 +20,6 @@ plugins {
 }
 
 dependencies {
-    compileOnly(kotlin("stdlib"))
     compileOnly(libs.kotlin.compiler)
 
     implementation(projects.detektApi)
