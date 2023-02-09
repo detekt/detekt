@@ -44,7 +44,7 @@ sarif4k = "io.github.detekt.sarif4k:sarif4k:0.2.0"
 assertj = "org.assertj:assertj-core:3.24.2"
 reflections = "org.reflections:reflections:0.10.2"
 mockk = "io.mockk:mockk:1.13.4"
-snakeyaml = "org.yaml:snakeyaml:1.33"
+snakeyaml = "org.snakeyaml:snakeyaml-engine:2.6"
 jcommander = "com.beust:jcommander:1.82"
 contester-breakpoint = { module = "io.github.davidburstrom.contester:contester-breakpoint", version.ref = "contester" }
 contester-driver = { module = "io.github.davidburstrom.contester:contester-driver", version.ref = "contester" }

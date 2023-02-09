@@ -13,7 +13,7 @@ import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.yaml.snakeyaml.parser.ParserException
+import org.snakeyaml.engine.v2.exceptions.ParserException
 import java.nio.file.Paths
 
 class YamlConfigSpec {
