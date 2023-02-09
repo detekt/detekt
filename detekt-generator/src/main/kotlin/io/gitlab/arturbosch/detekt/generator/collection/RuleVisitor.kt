@@ -5,11 +5,9 @@ import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidAliasesDeclaration
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidIssueDeclaration
-import io.gitlab.arturbosch.detekt.rules.empty.EmptyRule
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -167,12 +165,16 @@ internal class RuleVisitor : DetektVisitor() {
     }
 
     companion object {
-        @Suppress("DEPRECATION")
         private val ruleClasses = listOf(
-            io.gitlab.arturbosch.detekt.api.Rule::class.simpleName,
-            FormattingRule::class.simpleName,
-            io.gitlab.arturbosch.detekt.api.ThresholdRule::class.simpleName,
-            EmptyRule::class.simpleName
+            // These references are stringly-typed to prevent dependency cycle:
+            // This class requires FormattingRule,
+            // which needs detekt-formatting.jar,
+            // which needs :detekt-formatting:processResources task output,
+            // which needs output of this class.
+            /*io.gitlab.arturbosch.detekt.api.Rule*/ "Rule",
+            /*io.gitlab.arturbosch.detekt.formatting.FormattingRule*/ "FormattingRule",
+            /*io.gitlab.arturbosch.detekt.api.ThresholdRule*/ "ThresholdRule",
+            /*io.gitlab.arturbosch.detekt.rules.empty*/ "EmptyRule",
         )
 
         private const val ISSUE_ARGUMENT_SIZE = 4
