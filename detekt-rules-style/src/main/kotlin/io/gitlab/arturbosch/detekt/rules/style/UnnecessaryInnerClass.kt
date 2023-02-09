@@ -19,7 +19,6 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.classId
-import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 /**
  * This rule reports unnecessary inner classes. Nested classes that do not access members from the outer class do
@@ -111,12 +110,9 @@ class UnnecessaryInnerClass(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun findResolvedContainingClassId(expression: KtReferenceExpression): ClassId? {
-        return bindingContext[BindingContext.REFERENCE_TARGET, expression]
-            ?.containingDeclaration
-            ?.safeAs<ClassifierDescriptor>()
+    private fun findResolvedContainingClassId(expression: KtReferenceExpression): ClassId? =
+        (bindingContext[BindingContext.REFERENCE_TARGET, expression]?.containingDeclaration as? ClassifierDescriptor)
             ?.classId
-    }
 
     private fun KtThisExpression.referenceClassId(): ClassId? {
         return getResolvedCall(bindingContext)
