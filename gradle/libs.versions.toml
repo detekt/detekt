@@ -1,7 +1,7 @@
 [versions]
 dokka = "1.7.20"
 jacoco = "0.8.8"
-kotlin = "1.8.0"
+kotlin = "1.8.10"
 ktlint = "0.48.2"
 junit = "5.9.2"
 contester = "0.2.0"

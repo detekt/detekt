@@ -365,7 +365,7 @@ class RuleSetProviderCollectorSpec {
             }
         }
         """.trimIndent()
-        private val items = subject.run(code)
+        private val items by lazy { subject.run(code) }
 
         @Test
         fun `extracts boolean configuration option`() {
