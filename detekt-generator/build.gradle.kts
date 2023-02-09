@@ -83,21 +83,21 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     )
 }
 
-val generateDocumentationConfigurationLibraries: Configuration by configurations.creating {
+val generatedLibrariesConfig: Configuration by configurations.creating {
     isCanBeConsumed = true
     isCanBeResolved = false
 }
 
-val generateDocumentationConfigurationRules: Configuration by configurations.creating {
+val generatedRulesConfig: Configuration by configurations.creating {
     isCanBeConsumed = true
     isCanBeResolved = false
 }
 
 artifacts {
-    add(generateDocumentationConfigurationLibraries.name, file(librariesConfigFile)) {
+    add(generatedLibrariesConfig.name, file(librariesConfigFile)) {
         builtBy(generateDocumentation)
     }
-    add(generateDocumentationConfigurationRules.name, file(ruleauthorsConfigFile)) {
+    add(generatedRulesConfig.name, file(ruleauthorsConfigFile)) {
         builtBy(generateDocumentation)
     }
 }

@@ -2,7 +2,7 @@ plugins {
     id("module")
 }
 
-val generateDocumentationConfiguration: Configuration by configurations.creating {
+val generatedRulesConfig: Configuration by configurations.creating {
     isCanBeConsumed = false
     isCanBeResolved = true
 }
@@ -12,13 +12,8 @@ dependencies {
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
 
-    generateDocumentationConfiguration(
-        project(
-            mapOf(
-                "path" to ":detekt-generator",
-                "configuration" to "generateDocumentationConfigurationRules"
-            )
-        )
+    generatedRulesConfig(
+        project(":detekt-generator", "generatedRulesConfig")
     )
 }
 
@@ -27,8 +22,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 }
 
 tasks.withType<ProcessResources>().configureEach {
-    val generateDocumentationFiles: FileCollection = generateDocumentationConfiguration
-    inputs.files(generateDocumentationFiles)
-        .withPropertyName("generateDocumentationConfiguration")
+    inputs.files(generatedRulesConfig)
+        .withPropertyName(generatedRulesConfig.name)
         .withPathSensitivity(PathSensitivity.RELATIVE)
 }

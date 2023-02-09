@@ -2,7 +2,7 @@ plugins {
     id("module")
 }
 
-val generateDocumentationConfiguration: Configuration by configurations.creating {
+val generatedLibrariesConfig: Configuration by configurations.creating {
     isCanBeConsumed = false
     isCanBeResolved = true
 }
@@ -12,19 +12,13 @@ dependencies {
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
 
-    generateDocumentationConfiguration(
-        project(
-            mapOf(
-                "path" to ":detekt-generator",
-                "configuration" to "generateDocumentationConfigurationLibraries"
-            )
-        )
+    generatedLibrariesConfig(
+        project(":detekt-generator", "generatedLibrariesConfig")
     )
 }
 
 tasks.withType<ProcessResources>().configureEach {
-    val generateDocumentationFiles: FileCollection = generateDocumentationConfiguration
-    inputs.files(generateDocumentationFiles)
-        .withPropertyName("generateDocumentationConfiguration")
+    inputs.files(generatedLibrariesConfig)
+        .withPropertyName(generatedLibrariesConfig.name)
         .withPathSensitivity(PathSensitivity.RELATIVE)
 }
