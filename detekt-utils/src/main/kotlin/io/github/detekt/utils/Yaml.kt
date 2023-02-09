@@ -13,24 +13,10 @@ sealed class YML(open val indent: Int = 0, open var content: String = "") {
         content = "$content\n"
     }
 
-    private fun getIndent(): String {
-        var spaces = ""
-        indent times {
-            spaces += SINGLE_INDENT
-        }
-        return spaces
-    }
+    private fun getIndent(): String = SINGLE_INDENT.repeat(indent)
 }
 
 data class YamlNode(override val indent: Int = 0, override var content: String = "") : YML()
-
-infix fun Int.times(function: () -> Unit) {
-    var i = this
-    while (i > 0) {
-        function()
-        i--
-    }
-}
 
 inline fun yaml(content: YamlNode.() -> Unit): String {
     return YamlNode().let { yaml ->
