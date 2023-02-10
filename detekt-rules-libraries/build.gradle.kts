@@ -2,7 +2,7 @@ plugins {
     id("module")
 }
 
-val generatedLibrariesConfig: Configuration by configurations.creating {
+val generatedConfig: Configuration by configurations.creating {
     isCanBeConsumed = false
     isCanBeResolved = true
 }
@@ -12,13 +12,11 @@ dependencies {
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
 
-    generatedLibrariesConfig(
-        project(projects.detektGenerator.path, "generatedLibrariesConfig")
-    )
+    generatedConfig(project(projects.detektGenerator.path, "generatedLibrariesConfig"))
 }
 
-tasks.named<ProcessResources>("processResources").configure {
-    inputs.files(generatedLibrariesConfig)
-        .withPropertyName(generatedLibrariesConfig.name)
+tasks.named("processResources").configure {
+    inputs.files(generatedConfig)
+        .withPropertyName(generatedConfig.name)
         .withPathSensitivity(PathSensitivity.RELATIVE)
 }

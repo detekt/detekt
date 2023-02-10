@@ -2,7 +2,7 @@ plugins {
     id("module")
 }
 
-val generatedCoreConfig: Configuration by configurations.creating {
+val generatedConfig: Configuration by configurations.creating {
     isCanBeConsumed = false
     isCanBeResolved = true
 }
@@ -30,13 +30,11 @@ dependencies {
     testImplementation(libs.assertj)
     testRuntimeOnly(libs.slf4j.simple)
 
-    generatedCoreConfig(
-        project(projects.detektGenerator.path, "generatedCoreConfig")
-    )
+    generatedConfig(project(projects.detektGenerator.path, "generatedCoreConfig"))
 }
 
 tasks.named("sourcesJar").configure {
-    inputs.files(generatedCoreConfig)
-        .withPropertyName(generatedCoreConfig.name)
+    inputs.files(generatedConfig)
+        .withPropertyName(generatedConfig.name)
         .withPathSensitivity(PathSensitivity.RELATIVE)
 }
