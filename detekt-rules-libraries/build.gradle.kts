@@ -17,7 +17,7 @@ dependencies {
     )
 }
 
-tasks.withType<ProcessResources>().configureEach {
+tasks.named<ProcessResources>("processResources").configure {
     inputs.files(generatedLibrariesConfig)
         .withPropertyName(generatedLibrariesConfig.name)
         .withPathSensitivity(PathSensitivity.RELATIVE)

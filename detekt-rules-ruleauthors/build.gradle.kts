@@ -21,7 +21,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
     compilerOptions.freeCompilerArgs.add("-Xcontext-receivers")
 }
 
-tasks.withType<ProcessResources>().configureEach {
+tasks.named<ProcessResources>("processResources").configure {
     inputs.files(generatedRuleauthorsConfig)
         .withPropertyName(generatedRuleauthorsConfig.name)
         .withPathSensitivity(PathSensitivity.RELATIVE)
