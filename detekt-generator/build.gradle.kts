@@ -93,11 +93,22 @@ val generatedRulesConfig: Configuration by configurations.creating {
     isCanBeResolved = false
 }
 
+val generatedCoreConfig: Configuration by configurations.creating {
+    isCanBeConsumed = true
+    isCanBeResolved = false
+}
+
 artifacts {
     add(generatedLibrariesConfig.name, file(librariesConfigFile)) {
         builtBy(generateDocumentation)
     }
     add(generatedRulesConfig.name, file(ruleauthorsConfigFile)) {
+        builtBy(generateDocumentation)
+    }
+    add(generatedCoreConfig.name, file(defaultConfigFile)) {
+        builtBy(generateDocumentation)
+    }
+    add(generatedCoreConfig.name, file(deprecationFile)) {
         builtBy(generateDocumentation)
     }
 }

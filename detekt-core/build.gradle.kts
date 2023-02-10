@@ -2,6 +2,11 @@ plugins {
     id("module")
 }
 
+val generatedCoreConfig: Configuration by configurations.creating {
+    isCanBeConsumed = false
+    isCanBeResolved = true
+}
+
 dependencies {
     api(projects.detektApi)
     api(projects.detektParser)
@@ -24,4 +29,15 @@ dependencies {
     testImplementation(libs.reflections)
     testImplementation(libs.assertj)
     testRuntimeOnly(libs.slf4j.simple)
+
+    generatedCoreConfig(
+        project(":detekt-generator", "generatedCoreConfig")
+    )
 }
+
+tasks.named("sourcesJar").configure {
+    inputs.files(generatedCoreConfig)
+        .withPropertyName(generatedCoreConfig.name)
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+}
+
