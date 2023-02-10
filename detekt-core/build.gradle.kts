@@ -40,4 +40,3 @@ tasks.named("sourcesJar").configure {
         .withPropertyName(generatedCoreConfig.name)
         .withPathSensitivity(PathSensitivity.RELATIVE)
 }
-
