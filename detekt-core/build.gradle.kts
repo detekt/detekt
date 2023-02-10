@@ -31,7 +31,7 @@ dependencies {
     testRuntimeOnly(libs.slf4j.simple)
 
     generatedCoreConfig(
-        project(":detekt-generator", "generatedCoreConfig")
+        project(projects.detektGenerator.path, "generatedCoreConfig")
     )
 }
 

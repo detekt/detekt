@@ -13,7 +13,7 @@ dependencies {
     testImplementation(libs.assertj)
 
     generatedLibrariesConfig(
-        project(":detekt-generator", "generatedLibrariesConfig")
+        project(projects.detektGenerator.path, "generatedLibrariesConfig")
     )
 }
 

@@ -13,7 +13,7 @@ dependencies {
     testImplementation(libs.assertj)
 
     generatedRulesConfig(
-        project(":detekt-generator", "generatedRulesConfig")
+        project(projects.detektGenerator.path, "generatedRulesConfig")
     )
 }
 
