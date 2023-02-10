@@ -2,7 +2,7 @@ plugins {
     id("module")
 }
 
-val generatedRulesConfig: Configuration by configurations.creating {
+val generatedRuleauthorsConfig: Configuration by configurations.creating {
     isCanBeConsumed = false
     isCanBeResolved = true
 }
@@ -12,8 +12,8 @@ dependencies {
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
 
-    generatedRulesConfig(
-        project(projects.detektGenerator.path, "generatedRulesConfig")
+    generatedRuleauthorsConfig(
+        project(projects.detektGenerator.path, "generatedRuleauthorsConfig")
     )
 }
 
@@ -22,7 +22,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 }
 
 tasks.withType<ProcessResources>().configureEach {
-    inputs.files(generatedRulesConfig)
-        .withPropertyName(generatedRulesConfig.name)
+    inputs.files(generatedRuleauthorsConfig)
+        .withPropertyName(generatedRuleauthorsConfig.name)
         .withPathSensitivity(PathSensitivity.RELATIVE)
 }
