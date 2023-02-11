@@ -49,6 +49,7 @@ class PathFiltersSpec {
             assertThat(pathFilter?.isIgnored(Paths.get("/one/path"))).isFalse
             assertThat(pathFilter?.isIgnored(Paths.get("/two/path"))).isTrue
             assertThat(pathFilter?.isIgnored(Paths.get("/three/path"))).isTrue
+            assertThat(pathFilter?.isIgnored(Paths.get("/one/two/three/path"))).isTrue
         }
     }
 
