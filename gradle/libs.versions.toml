@@ -11,6 +11,7 @@ githubRelease-gradle = "com.github.breadmoirai:github-release:2.4.1"
 nexusPublish-gradle = "io.github.gradle-nexus:publish-plugin:1.1.0"
 semver4j-gradle = "com.vdurmont:semver4j:3.1.0"
 
+kotlin-compiler = { module = "org.jetbrains.kotlin:kotlin-compiler", version.ref = "kotlin" }
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-gradlePluginApi = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }

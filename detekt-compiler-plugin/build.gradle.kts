@@ -19,14 +19,8 @@ plugins {
     alias(libs.plugins.download)
 }
 
-repositories {
-    mavenCentral()
-    mavenLocal()
-}
-
 dependencies {
-    compileOnly(kotlin("stdlib"))
-    compileOnly(kotlin("compiler-embeddable"))
+    compileOnly(libs.kotlin.compiler)
 
     implementation(projects.detektApi)
     implementation(projects.detektTooling)
@@ -35,6 +29,7 @@ dependencies {
 
     testImplementation(libs.assertj)
     testImplementation(libs.kotlinCompileTesting)
+    testImplementation(libs.kotlin.compilerEmbeddable)
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants
