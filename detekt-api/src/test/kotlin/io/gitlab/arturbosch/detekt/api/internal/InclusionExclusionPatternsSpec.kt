@@ -83,8 +83,8 @@ class InclusionExclusionPatternsSpec {
         fun `should only run on dummies`() {
             val config = TestConfig(
                 mapOf(
-                    Config.INCLUDES_KEY to "**Dummy*.kt",
-                    Config.EXCLUDES_KEY to "**/library/**"
+                    Config.INCLUDES_KEY to "**/library/**",
+                    Config.EXCLUDES_KEY to "**Library.kt"
                 )
             )
 
@@ -101,8 +101,8 @@ class InclusionExclusionPatternsSpec {
         fun `should only run on library file`() {
             val config = TestConfig(
                 mapOf(
-                    Config.INCLUDES_KEY to "**Library.kt",
-                    Config.EXCLUDES_KEY to "**/library/**"
+                    Config.INCLUDES_KEY to "**/library/**",
+                    Config.EXCLUDES_KEY to "**Dummy*.kt"
                 )
             )
 
