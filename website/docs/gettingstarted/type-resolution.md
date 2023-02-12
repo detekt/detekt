@@ -123,32 +123,4 @@ class MyRuleSpec(private val env: KotlinCoreEnvironment) {
 }
 ```
 
-If you're using Spek for testing, you can create a `setupKotlinEnvironment()` util function, and get access to the
-`KotlinCoreEnvironment` by simply calling `val env: KotlinCoreEnvironment by memoized()`:
-
-```kotlin
-fun org.spekframework.spek2.dsl.Root.setupKotlinEnvironment(additionalJavaSourceRootPath: Path? = null) {
-    val wrapper by memoized(
-        CachingMode.SCOPE,
-        { createEnvironment(additionalJavaSourceRootPaths = listOfNotNull(additionalJavaSourceRootPath?.toFile())) },
-        { it.dispose() }
-    )
-
-    // `env` name is used for delegation
-    @Suppress("UNUSED_VARIABLE")
-    val env: KotlinCoreEnvironment by memoized(CachingMode.EACH_GROUP) { wrapper.env }
-}
-
-class MyRuleTest : Spek({
-    setupKotlinEnvironment()
-
-    val env: KotlinCoreEnvironment by memoized()
-
-    it("reports cast that cannot succeed") {
-        val code = """/* The code you want to test */"""
-        assertThat(MyRuleSpec().compileAndLintWithContext(env, code)).hasSize(1)
-    }
-})
-```
-
 If you're using another testing framework (e.g. JUnit 4), you can use the [`createEnvironment()`](https://github.com/detekt/detekt/blob/cd659ce8737fb177caf140f46f73a1a86b22be56/detekt-test-utils/src/main/kotlin/io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper.kt#L26-L31) method from `detekt-test-utils`.

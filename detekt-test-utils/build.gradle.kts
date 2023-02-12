@@ -6,7 +6,6 @@ plugins {
 dependencies {
     api(libs.kotlin.stdlibJdk8)
     api(libs.junit.api)
-    compileOnly(libs.spek.dsl)
     implementation(projects.detektParser)
     implementation(libs.kotlin.scriptUtil)
 
