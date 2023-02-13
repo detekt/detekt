@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules
 
+import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
@@ -9,6 +10,9 @@ fun KtFunction.isEqualsFunction() =
 
 fun KtFunction.isHashCodeFunction() =
     this.name == "hashCode" && this.isOverride() && this.valueParameters.isEmpty()
+
+fun KtDeclaration.isJvmFinalizeFunction() =
+    this.name == "finalize" && this is KtNamedFunction && this.valueParameters.isEmpty()
 
 private val knownAnys = setOf("Any?", "kotlin.Any?")
 fun KtFunction.hasCorrectEqualsParameter() =

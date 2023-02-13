@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.rules.isJvmFinalizeFunction
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtClass
@@ -68,7 +69,7 @@ class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) 
     internal inner class DeclarationVisitor : DetektVisitor() {
 
         override fun visitDeclaration(dcl: KtDeclaration) {
-            if (dcl.isProtected() && !dcl.isOverride()) {
+            if (dcl.isProtected() && !dcl.isOverride() && !dcl.isJvmFinalizeFunction()) {
                 report(CodeSmell(issue, Entity.from(dcl), issue.description))
             }
         }
