@@ -2,11 +2,6 @@ plugins {
     id("module")
 }
 
-val generatedConfig: Configuration by configurations.creating {
-    isCanBeConsumed = false
-    isCanBeResolved = true
-}
-
 dependencies {
     api(projects.detektApi)
     api(projects.detektParser)
@@ -29,14 +24,10 @@ dependencies {
     testImplementation(libs.reflections)
     testImplementation(libs.assertj)
     testRuntimeOnly(libs.slf4j.simple)
-
-    generatedConfig(projects.detektGenerator) {
-        targetConfiguration = "generatedCoreConfig"
-    }
 }
 
-tasks.named("sourcesJar").configure {
-    inputs.files(generatedConfig)
-        .withPropertyName(generatedConfig.name)
-        .withPathSensitivity(PathSensitivity.RELATIVE)
-}
+consumeGeneratedConfig(
+    fromProject = projects.detektGenerator,
+    fromConfiguration = "generatedCoreConfig",
+    forTask = "sourcesJar"
+)
