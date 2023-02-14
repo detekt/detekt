@@ -30,7 +30,9 @@ dependencies {
     testImplementation(libs.assertj)
     testRuntimeOnly(libs.slf4j.simple)
 
-    generatedConfig(project(projects.detektGenerator.path, "generatedCoreConfig"))
+    generatedConfig(projects.detektGenerator) {
+        targetConfiguration = "generatedCoreConfig"
+    }
 }
 
 tasks.named("sourcesJar").configure {

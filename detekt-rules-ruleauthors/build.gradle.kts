@@ -12,7 +12,9 @@ dependencies {
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
 
-    generatedConfig(project(projects.detektGenerator.path, "generatedRuleauthorsConfig"))
+    generatedConfig(projects.detektGenerator) {
+        targetConfiguration = "generatedRuleauthorsConfig"
+    }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {

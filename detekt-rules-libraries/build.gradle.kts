@@ -12,7 +12,9 @@ dependencies {
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
 
-    generatedConfig(project(projects.detektGenerator.path, "generatedLibrariesConfig"))
+    generatedConfig(projects.detektGenerator) {
+        targetConfiguration = "generatedLibrariesConfig"
+    }
 }
 
 tasks.named("processResources").configure {
