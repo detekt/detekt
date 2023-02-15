@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
+import org.jetbrains.kotlin.lexer.KtModifierKeywordToken
 import org.jetbrains.kotlin.lexer.KtTokens.ABSTRACT_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.ACTUAL_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.ANNOTATION_KEYWORD
@@ -86,13 +86,13 @@ class ModifierOrder(config: Config = Config.empty) : Rule(config) {
         super.visitModifierList(list)
 
         val modifiers = list.allChildren
-            .filter { it !is PsiWhiteSpace }
+            .mapNotNull { it.node.elementType as? KtModifierKeywordToken }
             .toList()
 
-        val sortedModifiers = modifiers.sortedWith(compareBy { order.indexOf(it.node.elementType) })
+        val sortedModifiers = modifiers.sortedWith(compareBy { order.indexOf(it) })
 
         if (modifiers != sortedModifiers) {
-            val modifierString = sortedModifiers.joinToString(" ") { it.text }
+            val modifierString = sortedModifiers.joinToString(" ") { it.value }
 
             report(
                 CodeSmell(
