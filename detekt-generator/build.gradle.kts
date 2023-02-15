@@ -83,6 +83,11 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     )
 }
 
+val generatedFormattingConfig: Configuration by configurations.creating {
+    isCanBeConsumed = true
+    isCanBeResolved = false
+}
+
 val generatedLibrariesConfig: Configuration by configurations.creating {
     isCanBeConsumed = true
     isCanBeResolved = false
@@ -99,6 +104,9 @@ val generatedCoreConfig: Configuration by configurations.creating {
 }
 
 artifacts {
+    add(generatedFormattingConfig.name, file(formattingConfigFile)) {
+        builtBy(generateDocumentation)
+    }
     add(generatedLibrariesConfig.name, file(librariesConfigFile)) {
         builtBy(generateDocumentation)
     }

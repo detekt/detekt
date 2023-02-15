@@ -23,7 +23,11 @@ dependencies {
     extraDepsToPackage(libs.slf4j.nop)
 }
 
-tasks.build { finalizedBy(":detekt-generator:generateDocumentation") }
+consumeGeneratedConfig(
+    fromProject = projects.detektGenerator,
+    fromConfiguration = "generatedFormattingConfig",
+    forTask = "sourcesJar"
+)
 
 val depsToPackage = setOf(
     "org.ec4j.core",
