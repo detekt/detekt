@@ -52,7 +52,7 @@ contester-driver = { module = "io.github.davidburstrom.contester:contester-drive
 kotlinCompileTesting = { module = "com.github.tschuchortdev:kotlin-compile-testing", version = "1.4.9" }
 
 [plugins]
-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.12.1" }
+binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.13.0" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 download = { id = "de.undercouch.download", version = "5.3.1" }
 gradleVersions = { id = "com.github.ben-manes.versions", version = "0.45.0" }
