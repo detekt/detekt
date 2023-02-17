@@ -37,8 +37,6 @@ ktlint-rulesetExperimental = { module = "com.pinterest.ktlint:ktlint-ruleset-exp
 slf4j-nop = { module = "org.slf4j:slf4j-nop", version = "1.7.36" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "1.7.36" }
 
-spek-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version = "2.0.19" }
-
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.2.0"
