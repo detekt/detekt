@@ -1760,6 +1760,48 @@ class BracesOnIfStatementsSpec {
         locations = NOTHING
     )
 
+    @TestFactory
+    fun `nested ifs are flagged for consistency`() = testCombinations(
+        singleLine = NOT_RELEVANT,
+        multiLine = BracePolicy.Consistent.config,
+        code = """
+            if (true) {
+                if (true) {
+                    println()
+                } else println()
+            } else println()
+        """.trimIndent(),
+        locations = arrayOf(
+            "if"(1),
+            "if"(2),
+        ),
+    )
+
+    @TestFactory
+    fun `nested ifs are flagged for always`() = testCombinations(
+        singleLine = BracePolicy.Always.config,
+        multiLine = BracePolicy.Always.config,
+        code = """
+            if (if (true) true else false)
+                if (true)
+                    println()
+                else
+                    println()
+            else
+                println(if (true) true else false)
+        """.trimIndent(),
+        locations = arrayOf(
+            "if"(1),
+            "if"(2),
+            "else"(1),
+            "if"(3),
+            "else"(2),
+            "else"(3),
+            "if"(4),
+            "else"(4),
+        ),
+    )
+
     companion object {
 
         /**
