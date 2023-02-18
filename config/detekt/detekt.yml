@@ -181,6 +181,16 @@ style:
         reason: 'Import Assertions.assertThat instead.'
       - value: 'org.junit.jupiter.api.Assertions*'
         reason: 'Use AssertJ assertions instead.'
+      - value: 'org.junit.jupiter.api.assertAll'
+        reason: 'Use AssertJ assertSoftly instead.'
+      - value: 'org.junit.jupiter.api.assertThrows'
+        reason: 'Use AssertJ assertThatCode { }.isInstanceOf() or assertThatExceptionOfType().isThrownBy { } instead.'
+      - value: 'org.junit.jupiter.api.assertDoesNotThrow'
+        reason: 'Use AssertJ assertThatCode { }.doesNotThrowAnyException() instead.'
+      # These don't have AssertJ alternatives, so just allow them:
+      #- value: 'org.junit.jupiter.api.fail'
+      #- value: 'org.junit.jupiter.api.assertTimeout'
+      #- value: 'org.junit.jupiter.api.assertTimeoutPreemptively'
       - value: 'java.util.stream.*'
         reason: "Use Kotlin's sequences instead."
   ForbiddenMethodCall:
