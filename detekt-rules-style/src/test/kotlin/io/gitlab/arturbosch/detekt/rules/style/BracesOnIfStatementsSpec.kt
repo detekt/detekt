@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.rules.style.BracesOnIfStatementsSpec.Companio
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.DynamicContainer.dynamicContainer
@@ -1411,7 +1412,11 @@ class BracesOnIfStatementsSpec {
             code: String,
             vararg locations: Pair<Int, Int>
         ): DynamicNode {
-            val tests = createBraceTests(singleLine, multiLine) { rule ->
+            // Separately compile the code because otherwise all the combinations would compile them again and again.
+            val compileTest = dynamicTest("Compiles: $code") {
+                BracesOnIfStatements().compileAndLint(code)
+            }
+            val validationTests = createBraceTests(singleLine, multiLine) { rule ->
                 rule.test(code, *locations)
             }
             val locationString = if (NOTHING.contentEquals(locations)) {
@@ -1419,12 +1424,13 @@ class BracesOnIfStatementsSpec {
             } else {
                 locations.map { TextLocation(it.first, it.second) }.toString()
             }
-            return dynamicContainer("flags $locationString in `$code`", tests)
+            return dynamicContainer("flags $locationString in `$code`", validationTests + compileTest)
         }
 
         private fun BracesOnIfStatements.test(code: String, vararg locations: Pair<Int, Int>) {
             // This creates a 10 character prefix (signature/9, space/1) for every code example.
-            val findings = compileAndLint("fun f() { $code }")
+            // Note: not compileAndLint for performance reasons, compilation is in a separate test.
+            val findings = lint("fun f() { $code }")
             // Offset text locations by the above prefix, it results in 0-indexed locations.
             val offset = 10
             assertThat(findings)
