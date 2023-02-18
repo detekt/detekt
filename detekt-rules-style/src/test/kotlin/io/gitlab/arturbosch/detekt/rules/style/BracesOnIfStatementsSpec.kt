@@ -49,12 +49,7 @@ class BracesOnIfStatementsSpec {
         inner class `=always` {
 
             private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
-                testCombinations(
-                    BracePolicy.Always.config,
-                    NOT_RELEVANT,
-                    code,
-                    *(locations.map { it(code) }.toTypedArray())
-                )
+                testCombinations(BracePolicy.Always.config, NOT_RELEVANT, code, *locations)
 
             @TestFactory
             fun `missing braces are flagged`() = listOf(
@@ -126,12 +121,7 @@ class BracesOnIfStatementsSpec {
         inner class `=never` {
 
             private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
-                testCombinations(
-                    BracePolicy.Never.config,
-                    NOT_RELEVANT,
-                    code,
-                    *(locations.map { it(code) }.toTypedArray())
-                )
+                testCombinations(BracePolicy.Never.config, NOT_RELEVANT, code, *locations)
 
             @TestFactory fun `no braces are accepted`() = listOf(
                 flag("if (true) println()", *NOTHING),
@@ -220,12 +210,7 @@ class BracesOnIfStatementsSpec {
         inner class `=necessary` {
 
             private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
-                testCombinations(
-                    BracePolicy.Necessary.config,
-                    NOT_RELEVANT,
-                    code,
-                    *(locations.map { it(code) }.toTypedArray())
-                )
+                testCombinations(BracePolicy.Necessary.config, NOT_RELEVANT, code, *locations)
 
             @TestFactory
             fun `no braces are accepted`() = listOf(
@@ -282,12 +267,7 @@ class BracesOnIfStatementsSpec {
         inner class `=consistent` {
 
             private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
-                testCombinations(
-                    BracePolicy.Consistent.config,
-                    NOT_RELEVANT,
-                    code,
-                    *(locations.map { it(code) }.toTypedArray())
-                )
+                testCombinations(BracePolicy.Consistent.config, NOT_RELEVANT, code, *locations)
 
             @TestFactory
             fun `no braces are accepted`() = listOf(
@@ -340,12 +320,7 @@ class BracesOnIfStatementsSpec {
         inner class `=always` {
 
             private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
-                testCombinations(
-                    NOT_RELEVANT,
-                    BracePolicy.Always.config,
-                    code,
-                    *(locations.map { it(code) }.toTypedArray())
-                )
+                testCombinations(NOT_RELEVANT, BracePolicy.Always.config, code, *locations)
 
             @TestFactory
             fun `missing braces are flagged`() = listOf(
@@ -556,12 +531,7 @@ class BracesOnIfStatementsSpec {
         inner class `=never` {
 
             private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
-                testCombinations(
-                    NOT_RELEVANT,
-                    BracePolicy.Never.config,
-                    code,
-                    *(locations.map { it(code) }.toTypedArray())
-                )
+                testCombinations(NOT_RELEVANT, BracePolicy.Never.config, code, *locations)
 
             @TestFactory fun `no braces are accepted`() = listOf(
                 flag(
@@ -912,12 +882,7 @@ class BracesOnIfStatementsSpec {
         inner class `=necessary` {
 
             private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
-                testCombinations(
-                    NOT_RELEVANT,
-                    BracePolicy.Necessary.config,
-                    code,
-                    *(locations.map { it(code) }.toTypedArray())
-                )
+                testCombinations(NOT_RELEVANT, BracePolicy.Necessary.config, code, *locations)
 
             @TestFactory
             fun `no braces are accepted`() = listOf(
@@ -1133,12 +1098,7 @@ class BracesOnIfStatementsSpec {
         inner class `=consistent` {
 
             private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
-                testCombinations(
-                    NOT_RELEVANT,
-                    BracePolicy.Consistent.config,
-                    code,
-                    *(locations.map { it(code) }.toTypedArray())
-                )
+                testCombinations(NOT_RELEVANT, BracePolicy.Consistent.config, code, *locations)
 
             @TestFactory
             fun `no braces are accepted`() = listOf(
@@ -1358,15 +1318,15 @@ class BracesOnIfStatementsSpec {
 
     @TestFactory
     fun `whens are not flagged`() = testCombinations(
-        NOT_RELEVANT,
-        NOT_RELEVANT,
-        """
+        singleLine = NOT_RELEVANT,
+        multiLine = NOT_RELEVANT,
+        code = """
             when (true) {
                 true -> println()
                 else -> println()
             }
         """.trimIndent(),
-        *(NOTHING.map { it("") }.toTypedArray())
+        locations = NOTHING
     )
 
     companion object {
@@ -1404,19 +1364,20 @@ class BracesOnIfStatementsSpec {
             singleLine: String,
             multiLine: String,
             code: String,
-            vararg locations: Pair<Int, Int>
+            vararg locations: (String) -> Pair<Int, Int>
         ): DynamicNode {
+            val codeLocation = locations.map { it(code) }.toTypedArray()
             // Separately compile the code because otherwise all the combinations would compile them again and again.
             val compileTest = dynamicTest("Compiles: $code") {
                 BracesOnIfStatements().compileAndLint(code)
             }
             val validationTests = createBraceTests(singleLine, multiLine) { rule ->
-                rule.test(code, *locations)
+                rule.test(code, *codeLocation)
             }
-            val locationString = if (NOTHING.contentEquals(locations)) {
+            val locationString = if (NOTHING.contentEquals(codeLocation)) {
                 "nothing"
             } else {
-                locations.map { TextLocation(it.first, it.second) }.toString()
+                codeLocation.map { TextLocation(it.first, it.second) }.toString()
             }
             return dynamicContainer("flags $locationString in `$code`", validationTests + compileTest)
         }
