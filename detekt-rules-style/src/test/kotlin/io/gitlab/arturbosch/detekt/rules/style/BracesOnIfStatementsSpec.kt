@@ -95,7 +95,7 @@ class BracesOnIfStatementsSpec {
             )
 
             @TestFactory
-            fun `partially missing braces are flagged`() = listOf(
+            fun `partially missing braces are flagged (first branch)`() = listOf(
                 flag("if (true) { println() } else println()", "else"(1)),
                 flag("if (true) { println() } else if (true) println()", "if"(2)),
                 flag(
@@ -112,6 +112,47 @@ class BracesOnIfStatementsSpec {
                     "if (true) { println() } else if (true) println() else if (true) println() else println()",
                     "if"(2),
                     "if"(3),
+                    "else"(3)
+                ),
+            )
+
+            @TestFactory
+            fun `partially missing braces are flagged (last branch)`() = listOf(
+                flag("if (true) println() else { println() }", "if"(1)),
+                flag("if (true) println() else if (true) { println() }", "if"(1)),
+                flag(
+                    "if (true) println() else if (true) println() else { println() }",
+                    "if"(1),
+                    "if"(2)
+                ),
+                flag(
+                    "if (true) println() else if (true) println() else if (true) { println() }",
+                    "if"(1),
+                    "if"(2)
+                ),
+                flag(
+                    "if (true) println() else if (true) println() else if (true) println() else { println() }",
+                    "if"(1),
+                    "if"(2),
+                    "if"(3)
+                ),
+            )
+
+            @TestFactory
+            fun `partially missing braces are flagged (middle branches)`() = listOf(
+                flag(
+                    "if (true) println() else if (true) { println() } else println()",
+                    "if"(1),
+                    "else"(2)
+                ),
+                flag(
+                    "if (true) println() else if (true) { println() } else if (true) println()",
+                    "if"(1),
+                    "if"(3)
+                ),
+                flag(
+                    "if (true) println() else if (true) { println() } else if (true) { println() } else println()",
+                    "if"(1),
                     "else"(3)
                 ),
             )
@@ -159,7 +200,7 @@ class BracesOnIfStatementsSpec {
             )
 
             @TestFactory
-            fun `partially extra braces are flagged`() = listOf(
+            fun `partially extra braces are flagged (first branch)`() = listOf(
                 flag("if (true) { println() }", "if"(1)),
                 flag("if (true) { println() } else println()", "if"(1)),
                 flag("if (true) { println() } else if (true) println()", "if"(1)),
@@ -169,7 +210,10 @@ class BracesOnIfStatementsSpec {
                     "if (true) { println() } else if (true) println() else if (true) println() else println()",
                     "if"(1)
                 ),
-                // More cases, not just first branch
+            )
+
+            @TestFactory
+            fun `partially extra braces are flagged (last branch)`() = listOf(
                 flag("if (true) println() else { println() }", "else"(1)),
                 flag("if (true) println() else if (true) { println() }", "if"(2)),
                 flag("if (true) println() else if (true) println() else { println() }", "else"(2)),
@@ -177,6 +221,17 @@ class BracesOnIfStatementsSpec {
                 flag(
                     "if (true) println() else if (true) println() else if (true) println() else { println() }",
                     "else"(3)
+                ),
+            )
+
+            @TestFactory
+            fun `partially extra braces are flagged (middle branches)`() = listOf(
+                flag("if (true) println() else if (true) { println() } else println()", "if"(2)),
+                flag("if (true) println() else if (true) { println() } else if (true) println()", "if"(2)),
+                flag(
+                    "if (true) println() else if (true) { println() } else if (true) { println() } else println()",
+                    "if"(2),
+                    "if"(3)
                 ),
             )
 
@@ -249,7 +304,7 @@ class BracesOnIfStatementsSpec {
             )
 
             @TestFactory
-            fun `partially extra braces are flagged`() = listOf(
+            fun `partially extra braces are flagged (first branch)`() = listOf(
                 flag("if (true) { println() }", "if"(1)),
                 flag("if (true) { println() } else println()", "if"(1)),
                 flag("if (true) { println() } else if (true) println()", "if"(1)),
@@ -259,7 +314,29 @@ class BracesOnIfStatementsSpec {
                     "if (true) { println() } else if (true) println() else if (true) println() else println()",
                     "if"(1)
                 ),
-                // TODO add more cases, not just first branch
+            )
+
+            @TestFactory
+            fun `partially extra braces are flagged (last branch)`() = listOf(
+                flag("if (true) println() else { println() }", "else"(1)),
+                flag("if (true) println() else if (true) { println() }", "if"(2)),
+                flag("if (true) println() else if (true) println() else { println() }", "else"(2)),
+                flag("if (true) println() else if (true) println() else if (true) { println() }", "if"(3)),
+                flag(
+                    "if (true) println() else if (true) println() else if (true) println() else { println() }",
+                    "else"(3)
+                ),
+            )
+
+            @TestFactory
+            fun `partially extra braces are flagged (middle branches)`() = listOf(
+                flag("if (true) println() else if (true) { println() } else println()", "if"(2)),
+                flag("if (true) println() else if (true) { println() } else if (true) println()", "if"(2)),
+                flag(
+                    "if (true) println() else if (true) { println() } else if (true) { println() } else println()",
+                    "if"(2),
+                    "if"(3),
+                ),
             )
         }
 
@@ -293,7 +370,7 @@ class BracesOnIfStatementsSpec {
             )
 
             @TestFactory
-            fun `partial braces are flagged`() = listOf(
+            fun `partial braces are flagged (first branch)`() = listOf(
                 flag("if (true) { println() }", *NOTHING),
                 flag("if (true) { println() } else println()", "if"(1)),
                 flag("if (true) { println() } else if (true) println()", "if"(1)),
@@ -303,10 +380,26 @@ class BracesOnIfStatementsSpec {
                     "if (true) { println() } else if (true) println() else if (true) println() else println()",
                     "if"(1)
                 ),
-                // More cases, not just first branch
+            )
+
+            @TestFactory
+            fun `partial braces are flagged (last branch)`() = listOf(
                 flag("if (true) println() else { println() }", "if"(1)),
+                flag("if (true) println() else if (true) { println() }", "if"(1)),
+                flag("if (true) println() else if (true) println() else { println() }", "if"(1)),
+                flag("if (true) println() else if (true) println() else if (true) { println() }", "if"(1)),
                 flag(
-                    "if (true) { println() } else if (true) println() else if (true) println() else { println() }",
+                    "if (true) println() else if (true) println() else if (true) println() else { println() }",
+                    "if"(1),
+                ),
+            )
+
+            @TestFactory
+            fun `partial braces are flagged (middle branches)`() = listOf(
+                flag("if (true) println() else if (true) { println() } else println()", "if"(1)),
+                flag("if (true) println() else if (true) { println() } else if (true) println()", "if"(1)),
+                flag(
+                    "if (true) println() else if (true) { println() } else if (true) { println() } else println()",
                     "if"(1)
                 ),
             )
@@ -738,7 +831,7 @@ class BracesOnIfStatementsSpec {
                     """.trimIndent(),
                     "if"(1)
                 ),
-                // More cases, not just first branch
+                // More cases, not just first branch.
                 flag(
                     """
                         if (true)
@@ -1090,7 +1183,7 @@ class BracesOnIfStatementsSpec {
                     """.trimIndent(),
                     "if"(1)
                 ),
-                // TODO add more cases, not just first branch
+                // TODO add more cases, not just first branch.
             )
         }
 
@@ -1297,7 +1390,7 @@ class BracesOnIfStatementsSpec {
                     """.trimIndent(),
                     "if"(1)
                 ),
-                // More cases, not just first branch
+                // More cases, not just first branch.
                 flag(
                     """
                         if (true)
