@@ -13,7 +13,6 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -303,7 +302,7 @@ class RunnerSpec {
 
     @Test
     fun `does not fail on rule property type change from comma separated string to list when YamlConfig is wrapped`() {
-        assertDoesNotThrow {
+        assertThatCode {
             executeDetekt(
                 "--all-rules", // wrapping config
                 "--input",
@@ -313,6 +312,6 @@ class RunnerSpec {
                 "--max-issues",
                 "-1"
             )
-        }
+        }.doesNotThrowAnyException()
     }
 }
