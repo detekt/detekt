@@ -1783,7 +1783,7 @@ class BracesOnIfStatementsSpec {
         multiLine = BracePolicy.Always.config,
         code = """
             if (if (true) true else false)
-                if (true)
+                if (if (if (true) true else false) true else false)
                     println()
                 else
                     println()
@@ -1795,10 +1795,14 @@ class BracesOnIfStatementsSpec {
             "if"(2),
             "else"(1),
             "if"(3),
+            "if"(4),
+            "if"(5),
             "else"(2),
             "else"(3),
-            "if"(4),
             "else"(4),
+            "else"(5),
+            "if"(6),
+            "else"(6),
         ),
     )
 
