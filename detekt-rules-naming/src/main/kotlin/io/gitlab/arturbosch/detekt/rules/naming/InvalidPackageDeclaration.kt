@@ -20,6 +20,8 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
 @ActiveByDefault(since = "1.21.0")
 class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
 
+    override val defaultRuleIdAliases: Set<String> = setOf("PackageDirectoryMismatch")
+
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Maintainability,
