@@ -14,7 +14,19 @@ class PackageNamingSpec {
     }
 
     @Test
-    fun `should ignore the issue by alias suppression`() {
+    fun `should ignore the issue by alias suppression - PackageName`() {
+        assertThat(
+            PackageNaming().compileAndLint(
+                """
+                @file:Suppress("PackageName")
+                package FOO.BAR
+                """.trimIndent()
+            )
+        ).isEmpty()
+    }
+
+    @Test
+    fun `should ignore the issue by alias suppression - PackageDirectoryMismatch`() {
         assertThat(
             PackageNaming().compileAndLint(
                 """

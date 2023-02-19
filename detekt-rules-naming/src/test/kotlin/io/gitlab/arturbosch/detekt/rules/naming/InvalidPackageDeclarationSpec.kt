@@ -29,6 +29,21 @@ class InvalidPackageDeclarationSpec {
     }
 
     @Test
+    fun `should ignore the issue by alias suppression`() {
+        val source = """
+            @file:Suppress("PackageDirectoryMismatch")
+            package foo
+
+            class C
+        """.trimIndent()
+
+        val ktFile = compileContentForTest(source, createPath("project/src/bar/File.kt"))
+        val findings = InvalidPackageDeclaration().lint(ktFile)
+
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
     fun `should report if package declaration does not match source location`() {
         val source = "package foo\n\nclass C"
 
