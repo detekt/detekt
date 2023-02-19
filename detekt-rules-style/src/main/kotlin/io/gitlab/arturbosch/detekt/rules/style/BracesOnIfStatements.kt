@@ -139,8 +139,9 @@ class BracesOnIfStatements(config: Config = Config.empty) : Rule(config) {
         super.visitIfExpression(expression)
 
         val parent = expression.parent.parent
-        val parentCondition = (parent as? KtIfExpression)?.condition
-        if ((parent is KtIfExpression) && (parentCondition !== expression)) return
+        // Ignore `then` and `else` branches, they're handled by the initial `if`'s visit.
+        // But let us process conditions, because they might be `if` themselves.
+        if (parent is KtIfExpression && parent.condition !== expression) return
 
         val branches: List<KtExpression> = walk(expression)
         validate(branches, policy(expression))
