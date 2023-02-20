@@ -185,31 +185,30 @@ class BracesOnIfStatements(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun validate(list: List<KtExpression>, policy: BracePolicy) {
-        when (policy) {
+        val violators = when (policy) {
             BracePolicy.Always -> {
-                list.filter { !hasBraces(it) }.report(policy)
+                list.filter { !hasBraces(it) }
             }
 
             BracePolicy.Necessary -> {
-                list.filter { !isMultiStatement(it) && hasBraces(it) }.report(policy)
+                list.filter { !isMultiStatement(it) && hasBraces(it) }
             }
 
             BracePolicy.Never -> {
-                list.filter { hasBraces(it) }.report(policy)
+                list.filter { hasBraces(it) }
             }
 
             BracePolicy.Consistent -> {
                 val braces = list.count { hasBraces(it) }
                 val noBraces = list.count { !hasBraces(it) }
                 if (braces != 0 && noBraces != 0) {
-                    list.take(1).report(policy)
+                    list.take(1)
+                } else {
+                    emptyList()
                 }
             }
         }
-    }
-
-    private fun List<KtExpression>.report(policy: BracePolicy) {
-        this.forEach { report(it, policy) }
+        violators.forEach { report(it, policy) }
     }
 
     private fun report(violator: KtExpression, policy: BracePolicy) {
