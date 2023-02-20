@@ -426,7 +426,7 @@ class BracesOnIfStatementsSpec {
                 ),
                 flag(
                     """
-                        if (true) 
+                        if (true)
                             println()
                         else
                             println()
@@ -437,8 +437,8 @@ class BracesOnIfStatementsSpec {
                 flag(
                     """
                         if (true)
-                            println() 
-                        else if (true) 
+                            println()
+                        else if (true)
                             println()
                     """.trimIndent(),
                     "if"(1),
@@ -446,10 +446,10 @@ class BracesOnIfStatementsSpec {
                 ),
                 flag(
                     """
-                        if (true) 
-                            println() 
+                        if (true)
+                            println()
                         else if (true)
-                            println() 
+                            println()
                         else
                             println()
                     """.trimIndent(),
@@ -459,11 +459,11 @@ class BracesOnIfStatementsSpec {
                 ),
                 flag(
                     """
-                        if (true) 
+                        if (true)
                             println()
-                        else if (true) 
+                        else if (true)
                             println()
-                        else if (true) 
+                        else if (true)
                             println()
                     """.trimIndent(),
                     "if"(1),
@@ -472,8 +472,8 @@ class BracesOnIfStatementsSpec {
                 ),
                 flag(
                     """
-                        if (true) 
-                            println() 
+                        if (true)
+                            println()
                         else if (true)
                             println()
                         else if (true)
@@ -502,8 +502,8 @@ class BracesOnIfStatementsSpec {
                     """
                         if (true) {
                             println()
-                        } else { 
-                            println() 
+                        } else {
+                            println()
                         }
                     """.trimIndent(),
                     *NOTHING
@@ -513,7 +513,7 @@ class BracesOnIfStatementsSpec {
                         if (true) {
                             println()
                         } else if (true) {
-                            println() 
+                            println()
                         }
                     """.trimIndent(),
                     *NOTHING
@@ -521,11 +521,11 @@ class BracesOnIfStatementsSpec {
                 flag(
                     """
                         if (true) {
-                            println() 
+                            println()
                         } else if (true) {
-                            println() 
-                        } else { 
-                            println() 
+                            println()
+                        } else {
+                            println()
                         }
                     """.trimIndent(),
                     *NOTHING
@@ -533,11 +533,11 @@ class BracesOnIfStatementsSpec {
                 flag(
                     """
                         if (true) {
-                            println() 
+                            println()
                         } else if (true) {
-                            println() 
+                            println()
                         } else if (true) {
-                            println() 
+                            println()
                         }
                     """.trimIndent(),
                     *NOTHING
@@ -545,13 +545,13 @@ class BracesOnIfStatementsSpec {
                 flag(
                     """
                         if (true) {
-                            println() 
+                            println()
                         } else if (true) {
                             println()
                         } else if (true) {
                             println()
                         } else {
-                            println() 
+                            println()
                         }
                     """.trimIndent(),
                     *NOTHING
@@ -744,8 +744,8 @@ class BracesOnIfStatementsSpec {
                 ),
                 flag(
                     """
-                        if (true) 
-                            println() 
+                        if (true)
+                            println()
                         else
                             println()
                     """.trimIndent(),
@@ -753,9 +753,9 @@ class BracesOnIfStatementsSpec {
                 ),
                 flag(
                     """
-                        if (true) 
-                            println() 
-                        else if (true) 
+                        if (true)
+                            println()
+                        else if (true)
                             println()
                     """.trimIndent(),
                     *NOTHING
@@ -763,21 +763,21 @@ class BracesOnIfStatementsSpec {
                 flag(
                     """
                         if (true)
-                            println() 
+                            println()
                         else if (true)
                             println()
-                        else 
+                        else
                             println()
                     """.trimIndent(),
                     *NOTHING
                 ),
                 flag(
                     """
-                        if (true) 
-                            println() 
-                        else if (true) 
-                            println() 
-                        else if (true) 
+                        if (true)
+                            println()
+                        else if (true)
+                            println()
+                        else if (true)
                             println()
                     """.trimIndent(),
                     *NOTHING
@@ -848,7 +848,7 @@ class BracesOnIfStatementsSpec {
                         if (true) {
                             println()
                         } else if (true) {
-                            println() 
+                            println()
                         } else if (true) {
                             println()
                         }
@@ -881,7 +881,7 @@ class BracesOnIfStatementsSpec {
                 flag(
                     """
                         if (true) {
-                            println() 
+                            println()
                         }
                     """.trimIndent(),
                     "if"(1)
@@ -890,38 +890,7 @@ class BracesOnIfStatementsSpec {
                     """
                         if (true) {
                             println()
-                        } else 
-                            println()
-                    """.trimIndent(),
-                    "if"(1)
-                ),
-                flag(
-                    """
-                        if (true) { 
-                            println()
-                        } else if (true)
-                            println()
-                    """.trimIndent(),
-                    "if"(1)
-                ),
-                flag(
-                    """
-                        if (true) {
-                            println()
-                        } else if (true) 
-                            println() 
-                        else 
-                            println()
-                    """.trimIndent(),
-                    "if"(1)
-                ),
-                flag(
-                    """
-                        if (true) {
-                            println() 
-                        } else if (true) 
-                            println() 
-                        else if (true) 
+                        } else
                             println()
                     """.trimIndent(),
                     "if"(1)
@@ -931,10 +900,41 @@ class BracesOnIfStatementsSpec {
                         if (true) {
                             println()
                         } else if (true)
-                            println() 
-                        else if (true) 
-                            println() 
-                        else 
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true)
+                            println()
+                        else
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true)
+                            println()
+                        else if (true)
+                            println()
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true)
+                            println()
+                        else if (true)
+                            println()
+                        else
                             println()
                     """.trimIndent(),
                     "if"(1)
@@ -1046,7 +1046,7 @@ class BracesOnIfStatementsSpec {
                 flag(
                     """
                         if (true) {
-                            println() 
+                            println()
                         }
                     """.trimIndent(),
                     "if"(1)
@@ -1055,8 +1055,8 @@ class BracesOnIfStatementsSpec {
                     """
                         if (true) {
                             println()
-                        } else { 
-                            println() 
+                        } else {
+                            println()
                         }
                     """.trimIndent(),
                     "if"(1),
@@ -1076,7 +1076,7 @@ class BracesOnIfStatementsSpec {
                 flag(
                     """
                         if (true) {
-                            println() 
+                            println()
                         } else if (true) {
                             println()
                         } else {
@@ -1108,7 +1108,7 @@ class BracesOnIfStatementsSpec {
                         } else if (true) {
                             println()
                         } else if (true) {
-                            println() 
+                            println()
                         } else {
                             println()
                         }
@@ -1131,7 +1131,7 @@ class BracesOnIfStatementsSpec {
             fun `no braces are accepted`() = listOf(
                 flag(
                     """
-                        if (true) 
+                        if (true)
                             println()
                     """.trimIndent(),
                     *NOTHING
@@ -1147,7 +1147,7 @@ class BracesOnIfStatementsSpec {
                 ),
                 flag(
                     """
-                        if (true) 
+                        if (true)
                             println()
                         else if (true)
                             println()
@@ -1328,7 +1328,7 @@ class BracesOnIfStatementsSpec {
                             println()
                         else if (true)
                             println()
-                        else 
+                        else
                             println()
                     """.trimIndent(),
                     "if"(1)
@@ -1427,7 +1427,7 @@ class BracesOnIfStatementsSpec {
                             println()
                         else if (true) {
                             println()
-                        } else if (true) { 
+                        } else if (true) {
                             println()
                         } else
                             println()
@@ -1496,7 +1496,7 @@ class BracesOnIfStatementsSpec {
                 flag(
                     """
                         if (true)
-                            println() 
+                            println()
                         else if (true)
                             println()
                         else if (true)
@@ -1570,7 +1570,7 @@ class BracesOnIfStatementsSpec {
                             println()
                         } else if (true) {
                             println()
-                        } else { 
+                        } else {
                             println()
                         }
                     """.trimIndent(),
@@ -1713,7 +1713,7 @@ class BracesOnIfStatementsSpec {
                             println()
                         else if (true) {
                             println()
-                        } else 
+                        } else
                             println()
                     """.trimIndent(),
                     "if"(1)
