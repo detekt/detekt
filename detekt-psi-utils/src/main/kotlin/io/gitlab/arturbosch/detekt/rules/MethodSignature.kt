@@ -11,8 +11,8 @@ fun KtFunction.isEqualsFunction() =
 fun KtFunction.isHashCodeFunction() =
     this.name == "hashCode" && this.isOverride() && this.valueParameters.isEmpty()
 
-fun KtDeclaration.isJvmFinalizeFunction() =
-    this.name == "finalize" && this is KtNamedFunction && this.valueParameters.isEmpty()
+fun KtNamedFunction.isJvmFinalizeFunction() =
+    this.name == "finalize" && this.valueParameters.isEmpty()
 
 private val knownAnys = setOf("Any?", "kotlin.Any?")
 fun KtFunction.hasCorrectEqualsParameter() =
