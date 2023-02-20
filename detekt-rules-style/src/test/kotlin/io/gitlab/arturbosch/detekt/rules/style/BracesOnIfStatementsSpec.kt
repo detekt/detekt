@@ -1689,7 +1689,6 @@ class BracesOnIfStatementsSpec {
                     """.trimIndent(),
                     "if"(1)
                 ),
-                // More cases, not just first branch.
                 flag(
                     """
                         if (true)
@@ -1778,15 +1777,41 @@ class BracesOnIfStatementsSpec {
     )
 
     @TestFactory
+    fun `only multiline ifs are are flagged (complex)`() = testCombinations(
+        singleLine = BracePolicy.Never.config,
+        multiLine = BracePolicy.Always.config,
+        code = """
+            if (if (true) true else false)
+                if (true) true else false
+            else
+                println(if (true) true else false)
+        """.trimIndent(),
+        locations = arrayOf(
+            "if"(1),
+            "else"(3),
+        ),
+    )
+
+    @TestFactory
+    fun `only multiline ifs are are flagged (simple)`() = testCombinations(
+        singleLine = BracePolicy.Never.config,
+        multiLine = BracePolicy.Always.config,
+        code = """
+            if (true)
+                if (true) true else false
+        """.trimIndent(),
+        locations = arrayOf(
+            "if"(1),
+        ),
+    )
+
+    @TestFactory
     fun `nested ifs are flagged for always`() = testCombinations(
         singleLine = BracePolicy.Always.config,
         multiLine = BracePolicy.Always.config,
         code = """
             if (if (true) true else false)
-                if (if (if (true) true else false) true else false)
-                    println()
-                else
-                    println()
+                if (true) println() else println()
             else
                 println(if (true) true else false)
         """.trimIndent(),
@@ -1795,14 +1820,43 @@ class BracesOnIfStatementsSpec {
             "if"(2),
             "else"(1),
             "if"(3),
-            "if"(4),
-            "if"(5),
             "else"(2),
             "else"(3),
+            "if"(4),
             "else"(4),
-            "else"(5),
-            "if"(6),
-            "else"(6),
+        ),
+    )
+
+    @TestFactory
+    fun `nested ifs inside condition are flagged for always`() = testCombinations(
+        singleLine = BracePolicy.Always.config,
+        multiLine = NOT_RELEVANT,
+        code = """
+            if (if (if (true) true else false) true else false) println()
+        """.trimIndent(),
+        locations = arrayOf(
+            "if"(1),
+            "if"(2),
+            "if"(3),
+            "else"(1),
+            "else"(2),
+        ),
+    )
+
+    @TestFactory
+    fun `nested ifs inside then are flagged for always`() = testCombinations(
+        singleLine = BracePolicy.Always.config,
+        multiLine = NOT_RELEVANT,
+        code = """
+            if (true) if (true) if (true) println() else println() else println() else println()
+        """.trimIndent(),
+        locations = arrayOf(
+            "if"(1),
+            "if"(2),
+            "if"(3),
+            "else"(1),
+            "else"(2),
+            "else"(3),
         ),
     )
 
