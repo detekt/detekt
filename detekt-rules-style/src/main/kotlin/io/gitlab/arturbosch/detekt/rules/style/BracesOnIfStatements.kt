@@ -72,7 +72,7 @@ import org.jetbrains.kotlin.psi.KtIfExpression
  * else {
  *    c
  * }
- * 
+ *
  * // singleLine = 'necessary'
  * if (a) { b } else { c; d }
  *
@@ -231,9 +231,9 @@ class BracesOnIfStatements(config: Config = Config.empty) : Rule(config) {
      * Returns a potential parent of the expression, that could be a [KtIfExpression].
      * There's a double-indirection needed because the `then` and `else` branches
      * are represented as a [org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody].
-     * Also, the condition inside the `if` is in an intermediate [org.jetbrains.kotlin.psi.KtContainerNode]. 
+     * Also, the condition inside the `if` is in an intermediate [org.jetbrains.kotlin.psi.KtContainerNode].
      * ```
-               if        (parent)
+     *         if        (parent)
      *      /  |  \
      * cond  then  else  (parent)
      *  |     |     |
