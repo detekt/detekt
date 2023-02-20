@@ -9,13 +9,14 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 
 /**
  * This rule detects `if` statements which do not comply with the specified rules.
- * Keeping braces consistent would improve readability and avoid possible errors.
+ * Keeping braces consistent will improve readability and avoid possible errors.
  *
  * The available options are:
  *  * `always`: forces braces on all `if` and `else` branches in the whole codebase.
@@ -25,18 +26,17 @@ import org.jetbrains.kotlin.psi.KtIfExpression
  *    except where necessary for multi-statement branches.
  *  * `never`: forces no braces on any `if` and `else` branches in the whole codebase.
  *
- * SingleLine if-statement has no line break (\n):
- * ```
+ * Single-line if-statement has no line break (\n):
+ * ```kotlin
  * if (a) b else c
  * ```
- * MultiLine if-statement has at least one line break (\n):
- * ```
+ * Multi-line if-statement has at least one line break (\n):
+ * ```kotlin
  * if (a) b
  * else c
  * ```
  *
  * <noncompliant>
- *
  * // singleLine = 'never'
  * if (a) { b } else { c }
  *
@@ -72,6 +72,19 @@ import org.jetbrains.kotlin.psi.KtIfExpression
  * else {
  *    c
  * }
+ * 
+ * // singleLine = 'necessary'
+ * if (a) { b } else { c; d }
+ *
+ * // multiLine = 'necessary'
+ * if (a) {
+ *    b
+ *    c
+ * } else if (d) {
+ *    e
+ * } else {
+ *    f
+ * }
  * </noncompliant>
  *
  * <compliant>
@@ -103,9 +116,9 @@ import org.jetbrains.kotlin.psi.KtIfExpression
  * }
  *
  * // singleLine = 'consistent'
- * if (a) { b } else { c }
- *
  * if (a) b else c
+ *
+ * if (a) { b } else { c }
  *
  * if (a) { b } else { c; d }
  *
@@ -118,6 +131,18 @@ import org.jetbrains.kotlin.psi.KtIfExpression
  *
  * if (a) b
  * else c
+ *
+ * // singleLine = 'necessary'
+ * if (a) b else { c; d }
+ *
+ * // multiLine = 'necessary'
+ * if (a) {
+ *    b
+ *    c
+ * } else if (d)
+ *    e
+ * else
+ *    f
  * </compliant>
  */
 class BracesOnIfStatements(config: Config = Config.empty) : Rule(config) {
@@ -138,7 +163,7 @@ class BracesOnIfStatements(config: Config = Config.empty) : Rule(config) {
     override fun visitIfExpression(expression: KtIfExpression) {
         super.visitIfExpression(expression)
 
-        val parent = expression.parent.parent
+        val parent = expression.parentIfCandidate()
         // Ignore `else` branches, they're handled by the initial `if`'s visit.
         // But let us process `then` branches and conditions, because they might be `if` themselves.
         if (parent is KtIfExpression && parent.`else` === expression) return
@@ -188,7 +213,7 @@ class BracesOnIfStatements(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun report(violator: KtExpression, policy: BracePolicy) {
-        val iff = violator.parent.parent as KtIfExpression
+        val iff = violator.parentIfCandidate() as KtIfExpression
         val reported = when {
             iff.then === violator -> iff.ifKeyword
             iff.`else` === violator -> iff.elseKeyword
@@ -203,13 +228,33 @@ class BracesOnIfStatements(config: Config = Config.empty) : Rule(config) {
         report(CodeSmell(issue, Entity.from(reported ?: violator), message))
     }
 
-    private fun isMultiStatement(expression: KtExpression) =
+    /**
+     * Returns a potential parent of the expression, that could be a [KtIfExpression].
+     * There's a double-indirection needed because the `then` and `else` branches
+     * are represented as a [org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody].
+     * Also, the condition inside the `if` is in an intermediate [org.jetbrains.kotlin.psi.KtContainerNode]. 
+     * ```
+               if        (parent)
+     *      /  |  \
+     * cond  then  else  (parent)
+     *  |     |     |
+     * expr  expr  expr
+     * ```
+     * @see org.jetbrains.kotlin.KtNodeTypes.CONDITION
+     * @see org.jetbrains.kotlin.KtNodeTypes.THEN
+     * @see org.jetbrains.kotlin.KtNodeTypes.ELSE
+     */
+    private fun KtExpression.parentIfCandidate(): PsiElement? =
+        this.parent.parent
+
+    private fun isMultiStatement(expression: KtExpression): Boolean =
         expression is KtBlockExpression && expression.statements.size > 1
 
     private fun policy(expression: KtExpression): BracePolicy =
         if (expression.textContains('\n')) multiLine else singleLine
 
-    private fun hasBraces(expression: KtExpression): Boolean = expression is KtBlockExpression
+    private fun hasBraces(expression: KtExpression): Boolean =
+        expression is KtBlockExpression
 
     enum class BracePolicy(val config: String) {
         Always("always"),
