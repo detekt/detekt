@@ -338,6 +338,41 @@ class BracesOnIfStatementsSpec {
                     "if"(3),
                 ),
             )
+
+            @TestFactory
+            fun `existing braces are not flagged when necessary`() = listOf(
+                flag("if (true) { println(); println() }", *NOTHING),
+                flag("if (true) println() else { println(); println() }", *NOTHING),
+                flag("if (true) println() else if (true) { println(); println() }", *NOTHING),
+                flag("if (true) println() else if (true) println() else { println(); println() }", *NOTHING),
+            )
+
+            @TestFactory
+            fun `extra braces are flagged when not necessary (first)`() = listOf(
+                flag("if (true) { println(); println() } else { println() }", "else"(1)),
+                flag("if (true) { println(); println() } else if (true) { println() }", "if"(2)),
+                flag("if (true) { println(); println() } else if (true) println() else { println() }", "else"(2)),
+                flag("if (true) { println(); println() } else if (true) { println() } else println()", "if"(2)),
+                flag(
+                    "if (true) { println(); println() } else if (true) { println() } else { println() }",
+                    "if"(2),
+                    "else"(2)
+                ),
+            )
+
+            @TestFactory
+            fun `extra braces are flagged when not necessary (last)`() = listOf(
+                flag("if (true) { println() } else { println(); println() }", "if"(1)),
+                flag("if (true) { println() } else if (true) { println(); println() }", "if"(1)),
+                flag("if (true) { println() } else if (true) println() else { println(); println() }", "if"(1)),
+                flag("if (true) { println() } else if (true) println() else { println(); println() }", "if"(1)),
+                flag("if (true) println() else if (true) { println() } else { println(); println() }", "if"(2)),
+                flag(
+                    "if (true) { println() } else if (true) { println() } else { println(); println() }",
+                    "if"(1),
+                    "if"(2)
+                ),
+            )
         }
 
         @Nested
@@ -1434,6 +1469,198 @@ class BracesOnIfStatementsSpec {
                     """.trimIndent(),
                     "if"(2),
                     "if"(3)
+                ),
+            )
+
+            @TestFactory
+            fun `existing braces are not flagged when necessary`() = listOf(
+                flag(
+                    """
+                        if (true) {
+                            println()
+                            println()
+                        }
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true)
+                            println()
+                        else {
+                            println()
+                            println()
+                        }
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true)
+                            println()
+                        else if (true) {
+                            println()
+                            println()
+                        }
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true)
+                            println()
+                        else if (true)
+                            println()
+                        else {
+                            println()
+                            println()
+                        }
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+            )
+
+            @TestFactory
+            fun `extra braces are flagged when not necessary (first)`() = listOf(
+                flag(
+                    """
+                        if (true) {
+                            println()
+                            println()
+                        } else {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "else"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                            println()
+                        } else if (true) {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(2)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                            println()
+                        } else if (true)
+                            println()
+                        else {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "else"(2)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                            println()
+                        } else if (true) {
+                            println()
+                        } else
+                            println()
+                    """.trimIndent(),
+                    "if"(2)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                            println()
+                        } else if (true) {
+                            println()
+                        } else {
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(2),
+                    "else"(2)
+                ),
+            )
+
+            @TestFactory
+            fun `extra braces are flagged when not necessary (last)`() = listOf(
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else {
+                            println()
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true)
+                            println()
+                        else {
+                            println()
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true)
+                            println()
+                        else {
+                            println()
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1)
+                ),
+                flag(
+                    """
+                        if (true)
+                            println()
+                        else if (true) {
+                            println()
+                        } else {
+                            println()
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(2)
+                ),
+                flag(
+                    """
+                        if (true) {
+                            println()
+                        } else if (true) {
+                            println()
+                        } else {
+                            println()
+                            println()
+                        }
+                    """.trimIndent(),
+                    "if"(1),
+                    "if"(2)
                 ),
             )
         }
