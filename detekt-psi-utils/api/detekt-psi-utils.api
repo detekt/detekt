@@ -124,6 +124,7 @@ public final class io/gitlab/arturbosch/detekt/rules/MethodSignatureKt {
 	public static final fun hasCorrectEqualsParameter (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
 	public static final fun isEqualsFunction (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
 	public static final fun isHashCodeFunction (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
+	public static final fun isJvmFinalizeFunction (Lorg/jetbrains/kotlin/psi/KtNamedFunction;)Z
 	public static final fun isMainFunction (Lorg/jetbrains/kotlin/psi/KtNamedFunction;)Z
 }
 
