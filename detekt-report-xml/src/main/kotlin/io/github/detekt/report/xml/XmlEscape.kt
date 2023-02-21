@@ -69,7 +69,7 @@ object XmlEscape {
             /*
              * Shortcut: most characters will be ASCII/Alphanumeric, and we won't need to do anything at
              * all for them
-            */
+             */
             if (codepoint <= Xml10EscapeSymbolsInitializer.XmlEscapeSymbols.LEVELS_LEN - 2 &&
                 level < symbols.ESCAPE_LEVELS[codepoint] &&
                 codepointValid
@@ -302,10 +302,10 @@ private object Xml10EscapeSymbolsInitializer {
         references: References,
         escapeLevels: ByteArray,
         /*
-        * This object will be in charge of validating each codepoint in input, in order to determine
-        * whether such codepoint will be allowed in escaped output (escaped or not). Invalid codepoints
-        * will be simply discarded.
-        */
+         * This object will be in charge of validating each codepoint in input, in order to determine
+         * whether such codepoint will be allowed in escaped output (escaped or not). Invalid codepoints
+         * will be simply discarded.
+         */
         val CODEPOINT_VALIDATOR: XmlCodepointValidator
     ) {
 

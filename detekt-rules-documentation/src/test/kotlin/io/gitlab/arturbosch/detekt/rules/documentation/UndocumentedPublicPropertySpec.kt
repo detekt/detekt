@@ -90,8 +90,8 @@ class UndocumentedPublicPropertySpec {
         val code = """
             class Test {
                 /**
-                * Comment
-                */
+                 * Comment
+                 */
                 val a = 1
             }
         """.trimIndent()
@@ -187,11 +187,11 @@ class UndocumentedPublicPropertySpec {
     fun `does not report documented public properties in a primary constructor`() {
         val code = """
             /**
-            * @property a int1
-            * [b] int2
-            * @property [c] int3
-            * @param d int4
-            */
+             * @property a int1
+             * [b] int2
+             * @property [c] int3
+             * @param d int4
+             */
             class Test(
                 val a: Int, 
                 val b: Int, 

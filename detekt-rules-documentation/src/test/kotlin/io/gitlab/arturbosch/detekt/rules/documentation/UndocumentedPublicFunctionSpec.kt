@@ -80,8 +80,8 @@ class UndocumentedPublicFunctionSpec {
         val code = """
         class Test {
             /**
-            *
-            */
+             *
+             */
             fun commented() {}
         }
         """.trimIndent()
