@@ -98,6 +98,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseIfEmptyOrIfBlank(config),
             MultilineLambdaItParameter(config),
             MultilineRawStringIndentation(config),
+            StringShouldBeRawString(config),
             UseIsNullOrEmpty(config),
             UseOrEmpty(config),
             UseAnyOrNoneInsteadOfFind(config),
