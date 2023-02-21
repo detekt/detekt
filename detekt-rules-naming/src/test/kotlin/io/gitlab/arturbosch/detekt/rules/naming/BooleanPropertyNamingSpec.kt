@@ -29,7 +29,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean
                 }
-
+                
                 data class TestImpl (override var default: Boolean) : Test
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
@@ -43,7 +43,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean
                 }
-
+                
                 data class TestImpl (override var default: Boolean) : Test
             """.trimIndent()
             val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to false))
@@ -58,7 +58,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean
                 }
-
+                
                 data class TestImpl (override var default: Boolean) : Test
             """.trimIndent()
             val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
@@ -81,7 +81,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean?
                 }
-
+                
                 data class TestImpl (override var default: Boolean?) : Test
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
@@ -95,7 +95,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean?
                 }
-
+                
                 data class TestImpl (override var default: Boolean?) : Test
             """.trimIndent()
             val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to false))
@@ -110,7 +110,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean?
                 }
-
+                
                 data class TestImpl (override var default: Boolean?) : Test
             """.trimIndent()
             val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
@@ -133,7 +133,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean
                 }
-
+                
                 data class TestImpl (override var default: Boolean = false) : Test
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
@@ -147,7 +147,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean
                 }
-
+                
                 data class TestImpl (override var default: Boolean = false) : Test
             """.trimIndent()
             val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to false))
@@ -162,7 +162,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean
                 }
-
+                
                 data class TestImpl (override var default: Boolean = false) : Test
             """.trimIndent()
             val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
@@ -185,7 +185,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: java.lang.Boolean
                 }
-
+                
                 data class TestImpl (override var default: java.lang.Boolean) : Test
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
@@ -199,7 +199,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: java.lang.Boolean
                 }
-
+                
                 class TestImpl : Test {
                     override val default: java.lang.Boolean = java.lang.Boolean(true)
                 }
@@ -215,7 +215,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: java.lang.Boolean
                 }
-
+                
                 data class TestImpl (override var default: java.lang.Boolean) : Test
             """.trimIndent()
             val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to false))
@@ -230,7 +230,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: java.lang.Boolean
                 }
-
+                
                 data class TestImpl (override var default: java.lang.Boolean) : Test
             """.trimIndent()
             val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
@@ -294,7 +294,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean
                 }
-
+                
                 class TestImpl : Test {
                     override var default: Boolean = true
                 }
@@ -322,7 +322,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean
                 }
-
+                
                 class TestImpl : Test {
                     override var default: Boolean = true
                 }
@@ -339,7 +339,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean
                 }
-
+                
                 class TestImpl : Test {
                     override var default: Boolean = true
                 }
@@ -368,7 +368,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean?
                 }
-
+                
                 class TestImpl : Test {
                     override var default: Boolean? = null
                 }
@@ -384,7 +384,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean?
                 }
-
+                
                 class TestImpl : Test {
                     override var default: Boolean? = null
                 }
@@ -401,7 +401,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean?
                 }
-
+                
                 class TestImpl : Test {
                     override var default: Boolean? = null
                 }
@@ -430,7 +430,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean
                 }
-
+                
                 class TestImpl : Test {
                     override var default: Boolean = false
                 }
@@ -446,7 +446,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean
                 }
-
+                
                 class TestImpl : Test {
                     override var default: Boolean = false
                 }
@@ -463,7 +463,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean
                 }
-
+                
                 class TestImpl : Test {
                     override var default: Boolean = false
                 }
@@ -492,7 +492,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean
                 }
-
+                
                 class TestImpl : Test {
                     override var default = true
                 }
@@ -508,7 +508,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean
                 }
-
+                
                 class TestImpl : Test {
                     override var default = true
                 }
@@ -525,7 +525,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: Boolean
                 }
-
+                
                 class TestImpl : Test {
                     override var default = true
                 }
@@ -554,7 +554,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: java.lang.Boolean
                 }
-
+                
                 class TestImpl : Test {
                     override var default: java.lang.Boolean = java.lang.Boolean(true)
                 }
@@ -570,7 +570,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: java.lang.Boolean
                 }
-
+                
                 class TestImpl : Test {
                     override var default: java.lang.Boolean = java.lang.Boolean(true)
                 }
@@ -587,7 +587,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 interface Test {
                     val default: java.lang.Boolean
                 }
-
+                
                 class TestImpl : Test {
                     override var default: java.lang.Boolean = java.lang.Boolean(true)
                 }

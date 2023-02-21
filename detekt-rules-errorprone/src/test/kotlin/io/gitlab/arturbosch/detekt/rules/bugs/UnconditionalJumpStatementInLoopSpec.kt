@@ -336,7 +336,7 @@ class UnconditionalJumpStatementInLoopSpec {
                 }
                 return 0
             }
-
+            
             fun g(): Int {
                 for (i in 0 until 10) {
                     val a = i * i

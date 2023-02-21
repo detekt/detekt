@@ -30,7 +30,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                 val foo = true
                 val baz = 10
                 val bar = Bar(true)
-                   
+            
                 if (baz < 10 || foo || bar.bar || baz > 10) {
                     //TODO
                 }
@@ -49,7 +49,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                 val foo = true
                 val baz = 10
                 val bar = Bar(true)
-                   
+            
                 if (baz < 10 || foo || bar.bar || baz > 10 || baz < 10) {
                     //TODO
                 }
@@ -129,7 +129,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             class Bar(val bar: Boolean, val baz: Boolean)
             fun bar() {
                 val bar = Bar(true, true)
-                
+            
                 if (bar.bar || bar.baz || bar.bar) {
                     //TODO
                 }
@@ -146,7 +146,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             class Bar(val bar: Boolean)
             fun bar() {
                 val bar = Bar(true)
-                
+            
                 if (bar.bar || bar.bar) {
                     //TODO
                 }
@@ -194,7 +194,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             
             fun bar() {
                 val bar = Bar(true)
-                
+            
                 if (bar.bar && bar.bar) {
                     //TODO
                 }
@@ -241,7 +241,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
         val code = """
             fun bar() {
                 val list = listOf<Int>()
-
+            
                 list.filter { it > 1 || it > 1 }
             }
         """.trimIndent()
@@ -257,7 +257,6 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                 val foo = true
                 when {
                     foo || foo -> {
-                    
                     }
                 }
             }
@@ -275,7 +274,6 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                 val bar = true
                 when {
                     foo || bar || foo -> {
-                    
                     }
                 }
             }

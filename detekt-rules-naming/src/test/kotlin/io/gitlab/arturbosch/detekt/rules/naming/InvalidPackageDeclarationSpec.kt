@@ -18,7 +18,7 @@ class InvalidPackageDeclarationSpec {
     fun `should pass if package declaration is correct`() {
         val source = """
             package foo.bar
-
+            
             class C
         """.trimIndent()
 
@@ -33,7 +33,7 @@ class InvalidPackageDeclarationSpec {
         val source = """
             @file:Suppress("PackageDirectoryMismatch")
             package foo
-
+            
             class C
         """.trimIndent()
 
@@ -63,7 +63,7 @@ class InvalidPackageDeclarationSpec {
         fun `should pass if file is located within the root package`() {
             val source = """
                 package com.example
-
+                
                 class C
             """.trimIndent()
 
@@ -77,7 +77,7 @@ class InvalidPackageDeclarationSpec {
         fun `should pass if file is located relative to root package`() {
             val source = """
                 package com.example.foo.bar
-
+                
                 class C
             """.trimIndent()
 
@@ -91,7 +91,7 @@ class InvalidPackageDeclarationSpec {
         fun `should pass if file is located in directory corresponding to package declaration`() {
             val source = """
                 package com.example.foo.bar
-
+                
                 class C
             """.trimIndent()
 
@@ -105,7 +105,7 @@ class InvalidPackageDeclarationSpec {
         fun `should report if package declaration does not match`() {
             val source = """
                 package com.example.foo.baz
-
+                
                 class C
             """.trimIndent()
 
@@ -119,7 +119,7 @@ class InvalidPackageDeclarationSpec {
         fun `should report if file path matches root package but package declaration differs`() {
             val source = """
                 package io.foo.bar
-
+                
                 class C
             """.trimIndent()
 
@@ -139,7 +139,7 @@ class InvalidPackageDeclarationSpec {
         fun `should pass if declaration starts with root package`() {
             val source = """
                 package com.example.foo.bar
-
+                
                 class C
             """.trimIndent()
 
@@ -158,7 +158,7 @@ class InvalidPackageDeclarationSpec {
         fun `should report if root package is missing`() {
             val source = """
                 package foo.bar
-
+                
                 class C
             """.trimIndent()
 

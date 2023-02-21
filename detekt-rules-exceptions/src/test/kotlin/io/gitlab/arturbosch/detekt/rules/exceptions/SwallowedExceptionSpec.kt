@@ -277,7 +277,7 @@ class SwallowedExceptionSpec {
         val code = """
             import java.net.MalformedURLException
             import java.text.ParseException
-
+            
             fun f() {
                 try {
                 } catch (e: $exceptionName) {
@@ -300,7 +300,7 @@ class SwallowedExceptionSpec {
         val code = """
             import java.net.MalformedURLException
             import java.text.ParseException
-
+            
             fun f() {
                 try {
                 } catch (e: Exception) {

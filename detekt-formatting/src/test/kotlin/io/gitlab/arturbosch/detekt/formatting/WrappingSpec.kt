@@ -21,11 +21,11 @@ class WrappingSpec {
             class A() : B,
                 C {
             }
-
+            
             interface B
-
+            
             interface C
-
+            
         """.trimIndent()
 
         subject.lint(code).assert()

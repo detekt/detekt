@@ -71,7 +71,7 @@ class UseEmptyCounterpartSpec(val env: KotlinCoreEnvironment) {
             fun <K, V> mapOf(): Map<K, V> = TODO()
             fun <T> sequenceOf(): Sequence<T> = TODO()
             fun <T> setOf(): Set<T> = TODO()
-
+            
             val array = arrayOf<Any>()
             val list = listOf<Any>()
             val nonNullList = listOfNotNull<Any>()

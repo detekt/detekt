@@ -116,7 +116,7 @@ class MatchingDeclarationNameSpec {
         fun `should pass for a class with a typealias`() {
             val code = """
             typealias Foo = FooImpl
-
+            
             class FooImpl {}
             """.trimIndent()
             val ktFile = compileContentForTest(code, filename = "Foo.kt")

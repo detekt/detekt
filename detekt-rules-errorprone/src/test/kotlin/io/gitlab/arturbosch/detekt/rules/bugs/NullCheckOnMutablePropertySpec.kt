@@ -207,7 +207,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                         }
                     }
                 }
-
+            
                 fun foo() {
                     if (a != null) {
                         println(2 + a)

@@ -142,14 +142,14 @@ class NullableToStringCallSpec(private val env: KotlinCoreEnvironment) {
                 println("${'$'}{a}")
                 println(${'"'}""${'$'}a""${'"'})
             }
-
+            
             data class Foo(val a: Any?)
             fun test5(foo: Foo) {
                 if (foo.a == null) return
                 val x = foo.a.toString()
                 val y = "${'$'}{foo.a}"
             }
-
+            
             data class Bar(val a: Any)
             fun test6(bar: Bar?) {
                 if (bar == null) return

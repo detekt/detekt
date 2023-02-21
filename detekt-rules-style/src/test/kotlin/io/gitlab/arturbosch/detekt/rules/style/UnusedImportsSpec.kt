@@ -15,9 +15,9 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
     fun `does not report infix operators`() {
         val main = """
             import tasks.success
-
+            
             fun task(f: () -> Unit) = 1
-
+            
             fun main() {
                 task {
                 } success {
@@ -26,7 +26,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val additional = """
             package tasks
-
+            
             infix fun Int.success(f: () -> Unit) {}
         """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
@@ -38,9 +38,9 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             import tasks.success
             import tasks.failure
             import tasks.undefined
-
+            
             fun task(f: () -> Unit) = 1
-
+            
             /**
              *  Reference to [failure]
              */
@@ -55,7 +55,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val additional = """
             package tasks
-
+            
             infix fun Int.success(f: () -> Unit) {}
             infix fun Int.failure(f: () -> Unit) {}
             infix fun Int.undefined(f: () -> Unit) {}
@@ -69,9 +69,9 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             import tasks.success
             import tasks.failure
             import tasks.undefined
-
+            
             fun task(f: () -> Unit) = 1
-
+            
             /**
              * Reference [undefined][failure]
              */
@@ -100,12 +100,12 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         val main = """
             package test
             import test.SomeClass
-
+            
             val a: SomeClass? = null
         """.trimIndent()
         val additional = """
             package test
-
+            
             class SomeClass
         """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional)
@@ -119,9 +119,9 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
     fun `does not report KDoc references with method calls`() {
         val main = """
             package com.example
-
+            
             import android.text.TextWatcher
-
+            
             class Test {
                 /**
                  * [TextWatcher.beforeTextChanged]
@@ -133,7 +133,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val additional = """
             package android.text
-
+            
             class TextWatcher {
                 fun beforeTextChanged() {}
             }
@@ -152,7 +152,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             import escaped.`when`
             import escaped.`foo` // positive
             import p.D
-
+            
             /** reference to [D] */
             fun main() {
                 println(a())
@@ -160,12 +160,12 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
                 fn(B2.NAME)
                 `when`()
             }
-
+            
             fun fn(s: String) {}
         """.trimIndent()
         val p = """
             package p
-
+            
             fun a() {}
             class B6
             class B
@@ -176,14 +176,14 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val p2 = """
             package p2
-
+            
             object B {
                 const val NAME = ""
             }
         """.trimIndent()
         val escaped = """
             package escaped
-
+            
             fun `when`() {}
             fun `foo`() {}
         """.trimIndent()
@@ -224,7 +224,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
     fun `does not report KDoc @see annotation linking to class`() {
         val main = """
             import tasks.success
-
+            
             /**
              * Do something.
              * @see success
@@ -233,7 +233,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val additional = """
             package tasks
-
+            
             fun success() {}
         """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
@@ -243,7 +243,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
     fun `does not report KDoc @see annotation linking to class with description`() {
         val main = """
             import tasks.success
-
+            
             /**
              * Do something.
              * @see success something
@@ -252,7 +252,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val additional = """
             package tasks
-
+            
             fun success() {}
         """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
@@ -262,7 +262,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
     fun `reports KDoc @see annotation that does not link to class`() {
         val main = """
             import tasks.success
-
+            
             /**
              * Do something.
              * @see something
@@ -271,7 +271,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val additional = """
             package tasks
-
+            
             fun success() {}
         """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).hasSize(1)
@@ -281,7 +281,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
     fun `reports KDoc @see annotation that links after description`() {
         val main = """
             import tasks.success
-
+            
             /**
              * Do something.
              * @see something success
@@ -290,7 +290,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val additional = """
             package tasks
-
+            
             fun success() {}
         """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).hasSize(1)
@@ -301,7 +301,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         val main = """
             import tasks.success   // here
             import tasks.undefined // and here
-
+            
             /**
              * Do something.
              * @throws success when ...
@@ -313,7 +313,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val additional = """
             package tasks
-
+            
             fun success() {}
             fun undefined() {}
         """.trimIndent()
@@ -337,10 +337,10 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
     fun `should not report used alias even when import is from same package`() {
         val main = """
             package com.example
-
+            
             import com.example.foo as myFoo // from same package but with alias, check alias usage
             import com.example.other.foo as otherFoo // not from package with used alias
-
+            
             fun f(): Boolean {
                 return myFoo() == otherFoo()
             }
@@ -387,7 +387,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             import com.example.MyClass.component1
             import com.example.MyClass.component2
             import com.example.MyClass.component543
-
+            
             fun test() {
                 val (a, b) = MyClass(1, 2)
             }
@@ -407,7 +407,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             import com.example.component1.Unused
             import com.example.components
             import com.example.component1AndSomethingElse
-
+            
             fun test() {
                 println("Testing")
             }
@@ -502,7 +502,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
     fun `does not report when used as a annotation`() {
         val mainFile = """
             import x.y.z.Ann
-
+            
             @Ann
             fun foo() {}
         """.trimIndent()
@@ -614,9 +614,9 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
     fun `does not report unused import for import used in kdoc - #4815`() {
         val mainFile = """
         import x.y.z.SomeClass
-
+        
         class MyView
-
+        
         /**
          * Style for [MyView]
          * Blablabla
@@ -628,7 +628,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
 
         val additionalFile = """
         package x.y.z
-
+        
         class SomeClass
         """.trimIndent()
 
@@ -640,12 +640,12 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         val mainFile = """
         import x.y.z.foo
         import x.y.z.Bar
-
+        
         fun test() {
             foo()
             foo("", 123)
             foo
-
+        
             Bar().baz()
         }
         """.trimIndent()
@@ -658,7 +658,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         val mainFile = """
         import x.y.z.foo
         import x.y.z.Bar
-
+        
         fun test() {
             2 + 3
         }

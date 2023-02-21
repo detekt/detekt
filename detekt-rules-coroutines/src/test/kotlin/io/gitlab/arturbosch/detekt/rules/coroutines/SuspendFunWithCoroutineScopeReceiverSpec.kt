@@ -22,7 +22,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
                 import kotlinx.coroutines.CoroutineScope
                 import kotlinx.coroutines.launch
                 import kotlinx.coroutines.delay
-
+                
                 suspend fun CoroutineScope.foo() {
                     launch {
                         delay(timeMillis = 1000)
@@ -36,7 +36,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
         fun `reports when top-level suspend function has explicit CoroutineScope receiver type and star import used`() {
             val code = """
                 import kotlinx.coroutines.*
-
+                
                 suspend fun CoroutineScope.foo() {
                     launch {
                         delay(timeMillis = 1000)
@@ -51,7 +51,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 import kotlinx.coroutines.launch
                 import kotlinx.coroutines.delay
-
+                
                 suspend fun kotlinx.coroutines.CoroutineScope.foo() {
                     launch {
                         delay(timeMillis = 1000)
@@ -69,7 +69,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
                 import kotlinx.coroutines.delay
                 
                 interface TestScope: CoroutineScope
-
+                
                 suspend fun TestScope.foo() {
                     launch {
                         delay(timeMillis = 1000)
@@ -85,7 +85,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
                 import kotlinx.coroutines.CoroutineScope
                 import kotlinx.coroutines.launch
                 import kotlinx.coroutines.delay
-
+                
                 fun CoroutineScope.foo() {
                     launch {
                         delay(timeMillis = 1000)
@@ -102,7 +102,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
                 import kotlinx.coroutines.delay
                 import kotlinx.coroutines.launch
                 import kotlin.time.Duration.Companion.seconds
-
+                
                 suspend fun foo() = coroutineScope {
                     launch {
                         delay(timeMillis = 1000)
@@ -119,7 +119,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
                 import kotlinx.coroutines.launch
                 import kotlinx.coroutines.CoroutineScope
                 import kotlinx.coroutines.coroutineScope
-
+                
                 suspend fun Long.foo() = coroutineScope {
                     launch {
                         delay(timeMillis = this@foo)
@@ -140,7 +140,7 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
                 import kotlinx.coroutines.launch
                 import kotlinx.coroutines.delay
                 import kotlinx.coroutines.coroutineScope
-
+                
                 suspend fun CoroutineScope.foo(action: suspend CoroutineScope.() -> Unit) {
                     action()
                 }

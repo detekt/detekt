@@ -564,7 +564,7 @@ class ExplicitCollectionElementAccessMethodSpec {
         fun `does not report setters defined in java which are unlikely to be collection accessors`() {
             val code = """
                 import com.example.fromjava.Rect
-
+                
                 fun foo() {
                     val rect = Rect()
                     rect.set(0, 1)

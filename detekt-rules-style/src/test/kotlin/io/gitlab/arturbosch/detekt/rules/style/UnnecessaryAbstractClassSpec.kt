@@ -93,7 +93,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
             fun `does not report abstract class that inherits from an abstract class and an interface in that order`() {
                 val code = """
                 interface I
-
+                
                 @Deprecated("We don't care about this first class")
                 abstract class A {
                     abstract val i: Int
@@ -108,7 +108,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
             fun `does not report abstract class that inherits from an interface and an abstract class in that order`() {
                 val code = """
                 interface I
-
+                
                 @Deprecated("We don't care about this first class")
                 abstract class A {
                     abstract val i: Int
@@ -127,7 +127,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                     abstract fun f()
                     val i: Int = 0
                 }
-
+                
                 abstract class B : A() {
                     abstract fun g()
                 }

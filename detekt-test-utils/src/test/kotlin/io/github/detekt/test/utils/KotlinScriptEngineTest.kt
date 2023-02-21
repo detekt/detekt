@@ -20,7 +20,7 @@ class KotlinScriptEngineTest {
     fun `fails compiling an invalid script`() {
         val invalidCode = """
             package foo.b
-
+            
             val unknownType: UnknownType
         """.trimIndent()
         assertThatThrownBy { KotlinScriptEngine.compile(invalidCode) }
@@ -41,7 +41,7 @@ class KotlinScriptEngineTest {
     fun `fails repeatedly on invalid script`() {
         val invalidCode = """
             package foo.d
-
+            
             val unknownType: UnknownType
         """.trimIndent()
         assertThatThrownBy { KotlinScriptEngine.compile(invalidCode) }

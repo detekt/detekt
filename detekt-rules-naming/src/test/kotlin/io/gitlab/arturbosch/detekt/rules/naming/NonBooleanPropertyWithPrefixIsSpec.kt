@@ -113,7 +113,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class O {
                     var isDefault: Boolean
-                    
+                
                     init {
                         isDefault = true
                     }
@@ -153,7 +153,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
             val code = """
                class O {
                     var isDefault: java.lang.Boolean
-                    
+               
                     init {
                         isDefault = java.lang.Boolean(false)
                     }
@@ -230,7 +230,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class O {
                     var isDefault: Inner = Inner()
-                    
+                
                     class Inner
                 }
             """.trimIndent()
@@ -320,7 +320,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
         fun `issue 4675 check function reference type parameter`() {
             val code = """
                 val isRemoved = suspend { null == null }
-
+                
                 fun trueFun() = true
                 val isReferenceBoolean = ::trueFun
             """.trimIndent()

@@ -60,7 +60,7 @@ class TrailingWhitespaceSpec {
         fun `does not report a class and function declaration with no whitespaces at the end`() {
             val code = """
                 class C {
-
+                
                     fun f() {
                         println("A message")
                         println("Another message") ;

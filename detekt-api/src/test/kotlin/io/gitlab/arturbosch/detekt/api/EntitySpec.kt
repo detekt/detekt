@@ -16,12 +16,12 @@ class EntitySpec {
     private val code = compileContentForTest(
         """
             package test
-
+            
             class C : Any() {
-
+            
                 private fun memberFun(): Int = 5
             }
-
+            
             fun topLevelFun(number: Int) = Unit
         """.trimIndent(),
         path.toString()

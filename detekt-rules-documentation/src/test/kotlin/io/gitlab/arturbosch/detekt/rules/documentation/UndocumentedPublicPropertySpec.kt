@@ -246,7 +246,7 @@ class UndocumentedPublicPropertySpec {
             class Outer {
                 class Inner {
                     val i = 0
-                    
+            
                     class InnerInner {
                         val ii = 0
                     }

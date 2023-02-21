@@ -129,7 +129,7 @@ class AlsoCouldBeApplySpec {
                     it.baz()
                 }
             }
-
+            
             class Foo {
                 fun bar() {}
                 fun baz() {}
@@ -145,7 +145,7 @@ class AlsoCouldBeApplySpec {
                 foo.also {
                 }
             }
-
+            
             class Foo
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()

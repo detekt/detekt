@@ -102,7 +102,7 @@ class ForbiddenPublicDataClassSpec {
     fun `public data class inside an internal package should pass`() {
         val code = """
             package com.example.internal
-
+            
             data class C(val a: String)
         """.trimIndent()
 
@@ -113,7 +113,7 @@ class ForbiddenPublicDataClassSpec {
     fun `public data class inside an internal subpackage should pass`() {
         val code = """
             package com.example.internal.other
-
+            
             data class C(val a: String)
         """.trimIndent()
 
@@ -124,7 +124,7 @@ class ForbiddenPublicDataClassSpec {
     fun `public data class inside an internalise package should fail`() {
         val code = """
             package com.example.internalise
-
+            
             data class C(val a: String)
         """.trimIndent()
 
@@ -135,7 +135,7 @@ class ForbiddenPublicDataClassSpec {
     fun `public data class inside a random package should fail`() {
         val code = """
             package com.random
-
+            
             data class C(val a: String)
         """.trimIndent()
 
@@ -146,7 +146,7 @@ class ForbiddenPublicDataClassSpec {
     fun `public data class inside an ignored package should pass`() {
         val code = """
             package com.example
-
+            
             data class C(val a: String)
         """.trimIndent()
 
@@ -158,7 +158,7 @@ class ForbiddenPublicDataClassSpec {
     fun `public data class inside an ignored package should pass config as string`() {
         val code = """
             package org.example
-
+            
             data class C(val a: String)
         """.trimIndent()
 

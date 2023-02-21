@@ -211,7 +211,7 @@ class EndOfSentenceFormatSpec {
         /** http://www.google.com */
         class Test1 {
         }
-
+        
         /** Look here
         http://google.com */
         class Test2 {

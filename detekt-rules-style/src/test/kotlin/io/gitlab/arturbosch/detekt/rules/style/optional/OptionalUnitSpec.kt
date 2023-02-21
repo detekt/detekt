@@ -44,7 +44,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                 }
                 return Unit
             }
-
+            
             fun returnsUnit2() = Unit
         """.trimIndent()
         lateinit var findings: List<Finding>
@@ -98,7 +98,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     Unit
                 }
             }
-
+            
             class A {
                 init {
                     Unit
@@ -365,7 +365,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     block(list)
                     return list.first()
                 }
-
+                
                 fun doFoo(): Unit = foo {}
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
@@ -389,7 +389,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     block(list)
                     return list.first()
                 }
-
+                
                 fun doFoo(): Unit = foo<Nothing> {}
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)

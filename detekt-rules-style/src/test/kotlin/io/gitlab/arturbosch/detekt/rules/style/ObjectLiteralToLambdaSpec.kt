@@ -119,7 +119,7 @@ class ObjectLiteralToLambdaSpec {
                         fun foo()
                     }
                     fun interface Second: First
-        
+                    
                     fun bar() {
                         object : Second {
                             override fun foo(){
@@ -246,7 +246,7 @@ class ObjectLiteralToLambdaSpec {
                         fun foo()
                     }
                     interface Second
-        
+                    
                     val a: First = object : First, Second {
                         override fun foo() {
                         }
@@ -264,7 +264,7 @@ class ObjectLiteralToLambdaSpec {
                     fun interface Second {
                         fun foo()
                     }
-        
+                    
                     val a: First = object : First(), Second {
                         override fun foo() {
                         }
@@ -376,7 +376,7 @@ class ObjectLiteralToLambdaSpec {
                         override fun hasMoreElements(): Boolean {
                             return true
                         }
-        
+                    
                         override fun nextElement(): Int {
                             return 1
                         }
@@ -394,7 +394,7 @@ class ObjectLiteralToLambdaSpec {
                     fun interface Sam {
                         fun foo()
                     }
-                
+                    
                     fun aa() {
                         object : Sam {
                             override fun foo() {
@@ -412,9 +412,9 @@ class ObjectLiteralToLambdaSpec {
                     fun interface Sam {
                         fun foo()
                     }
-        
+                    
                     fun Sam.bar() {}
-                
+                    
                     fun aa() {
                         object : Sam {
                             override fun foo() {
@@ -432,7 +432,7 @@ class ObjectLiteralToLambdaSpec {
                     fun interface Sam {
                         fun foo()
                     }
-                
+                    
                     fun aa() {
                         object : Sam {
                             override fun foo() {
@@ -450,7 +450,7 @@ class ObjectLiteralToLambdaSpec {
                     fun interface Sam {
                         fun foo()
                     }
-                
+                    
                     fun aa() {
                         object : Sam {
                             override fun foo() {
@@ -475,7 +475,7 @@ class ObjectLiteralToLambdaSpec {
                     fun interface Sam {
                         fun foo()
                     }
-                
+                    
                     class Target {
                         init {
                             object : Sam {
@@ -498,7 +498,7 @@ class ObjectLiteralToLambdaSpec {
                     fun interface Sam {
                         fun foo()
                     }
-                
+                    
                     fun a() {
                         object : Sam {
                             override fun foo() {
@@ -520,14 +520,14 @@ class ObjectLiteralToLambdaSpec {
                     fun interface Sam {
                         fun foo()
                     }
-        
+                    
                     fun newObject() = object : Sam {
                         override fun foo() {
                         }
                     }
-        
+                    
                     fun lambda() = Sam {}
-        
+                    
                     val a = newObject() === newObject() // false
                     val b = lambda() === lambda() // true
                 """.trimIndent()

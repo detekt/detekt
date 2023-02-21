@@ -18,11 +18,11 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
             import kotlin.coroutines.Continuation
             import kotlin.coroutines.resume
             import kotlin.coroutines.suspendCoroutine
-
+            
             suspend fun suspendCoroutine() = suspendCoroutine { continuation: Continuation<String> ->
                 continuation.resume("string")
             }
-
+            
             class RedundantSuspend {
                 suspend fun redundantSuspend() {
                     println("hello world")
@@ -38,11 +38,11 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
             import kotlin.coroutines.Continuation
             import kotlin.coroutines.resume
             import kotlin.coroutines.suspendCoroutine
-
+            
             suspend fun suspendCoroutine() = suspendCoroutine { continuation: Continuation<String> ->
                 continuation.resume("string")
             }
-
+            
             suspend fun doesSuspend() {
                 suspendCoroutine()
             }
@@ -78,7 +78,7 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
             interface SuspendInterface {
                 suspend fun empty()
             }
-
+            
             class SuspendClass : SuspendInterface {
                 override suspend fun empty() {
                     println("hello world")
@@ -94,7 +94,7 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
             class SuspendingIterator {
                 suspend operator fun iterator(): Iterator<Any> = iterator { yield("value") }
             }
-
+            
             suspend fun bar() {
                 for (x in SuspendingIterator()) {
                     println(x)
@@ -110,9 +110,9 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
             class SuspendingIterator {
                 suspend operator fun iterator(): Iterator<Any> = iterator { yield("value") }
             }
-
+            
             fun coroutine(block: suspend () -> Unit) {}
-
+            
             suspend fun bar() {
                 val lazyValue: String by lazy {
                     coroutine {

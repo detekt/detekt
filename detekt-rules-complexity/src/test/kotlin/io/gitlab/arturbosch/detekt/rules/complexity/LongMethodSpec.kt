@@ -17,7 +17,7 @@ class LongMethodSpec {
                 println()
                 println()
                 println()
-        
+            
                 fun nestedLongMethod() { // 5 lines
                     println()
                     println()
@@ -111,7 +111,7 @@ class LongMethodSpec {
                 println()
                 println()
                 println()
-        
+            
                 fun nestedLongMethod(
                     param1: String
                 ) { // 5 lines
@@ -136,7 +136,7 @@ class LongMethodSpec {
             ) { // 4 lines
                 println()
                 println()
-        
+            
                 fun nestedLongMethod(
                     param1: String
                 ) { // 5 lines

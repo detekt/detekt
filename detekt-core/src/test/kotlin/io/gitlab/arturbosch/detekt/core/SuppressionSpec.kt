@@ -164,7 +164,7 @@ class SuppressionSpec {
                 """
             @file:Suppress("Detekt.ALL")
             object SuppressedWithDetektPrefix {
-
+            
                 fun stuff() {
                     println("FAILED TEST")
                 }
@@ -182,7 +182,7 @@ class SuppressionSpec {
                 """
             @file:Suppress("detekt:ALL")
             object SuppressedWithDetektPrefix {
-
+            
                 fun stuff() {
                     println("FAILED TEST")
                 }
@@ -200,7 +200,7 @@ class SuppressionSpec {
                 """
             @file:Suppress("DETEKT:ALL")
             object SuppressedWithDetektPrefix {
-
+            
                 fun stuff() {
                     println("FAILED TEST")
                 }
@@ -222,7 +222,7 @@ class SuppressionSpec {
                 """
             @file:Suppress("detekt:MyTest")
             object SuppressedWithDetektPrefixAndCustomConfigBasedPrefix {
-
+            
                 fun stuff() {
                     println("FAILED TEST")
                 }

@@ -54,7 +54,7 @@ class UnnecessaryParenthesesSpec {
             fun function (a: (input: String) -> Unit) {
                 a.invoke("TEST")
             }
-
+            
             fun test() {
                 function({ input -> println(input) })
             }
@@ -70,7 +70,7 @@ class UnnecessaryParenthesesSpec {
             fun function (integer: Int, a: (input: String) -> Unit) {
                 a.invoke("TEST")
             }
-
+            
             fun test() {
                 function(1, { input -> println(input) })
             }
@@ -158,7 +158,7 @@ class UnnecessaryParenthesesSpec {
                     first(1)
                     second(2)
                 }
-
+            
                 fun call() {
                     test({ println(it) }) { println(it) }
                 }
@@ -177,7 +177,7 @@ class UnnecessaryParenthesesSpec {
                     first(1)
                     second(2)
                 }
-
+            
                 fun call() {
                     test({ println(it) }, { println(it) })
                 }
@@ -198,7 +198,7 @@ class UnnecessaryParenthesesSpec {
                     first()
                     second()
                 }
-
+            
                 fun call() {
                     test("hello", { println(it) }) { println(it) }
                 }
@@ -225,11 +225,11 @@ class UnnecessaryParenthesesSpec {
             val a1 = (1 * 2) + 3
             val a2 = (1 / 2) + 3
             val a3 = (1 % 2) + 3
-
+            
             val b1 = 3 + (1 * 2)
             val b2 = 3 + (1 / 2)
             val b3 = 3 + (1 % 2)
-
+            
             val c = (4 + 5) * 3 // parens required
         """.trimIndent()
 
@@ -294,13 +294,13 @@ class UnnecessaryParenthesesSpec {
         val code = """
             val a1 = null ?: (1 to 2) // parens required
             val a2 = (null ?: 1) to 2
-
+            
             val b1 = null ?: (1 == 2) // parens required
             val b2 = (null ?: 1) == 2
-
+            
             val c1 = null ?: (1 > 2) // parens required
             val c2 = (null ?: 1) > 2
-
+            
             val d1 = null ?: (1 in 2) // parens required
             val d2 = (null ?: 1) in 2
         """.trimIndent()

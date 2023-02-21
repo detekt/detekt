@@ -140,12 +140,12 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     abstract fun abstractFun(arg: Any)
                     open fun openFun(arg: Any): Int = 0
                 }
-
+                
                 class Child : Parent() {
                     override fun abstractFun(arg: Any) {
                         println(arg)
                     }
-
+                
                     override fun openFun(arg: Any): Int {
                         println(arg)
                         return 1
@@ -177,7 +177,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     companion object {
                         private const val MY_CONST = 42
                     }
-
+                
                     fun a() {
                         Completable.timer(MY_CONST.toLong(), TimeUnit.MILLISECONDS)
                                 .subscribe()
@@ -219,7 +219,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
             class Test {
                 val value = usedMethod()
-
+            
                 private fun usedMethod(): Int {
                     return 5
                 }
@@ -267,7 +267,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 private fun unusedFunction(): Int {
                     return someOtherUnusedFunction()
                 }
-
+            
                 private fun someOtherUnusedFunction() {
                     println("Never used")
                 }
@@ -354,7 +354,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class Test {
                     private fun foo(): String = ""
                     private fun bar(): String = ""
-
+                
                     class InnerTest {
                         private fun baz(): String = ""
                     }
@@ -371,7 +371,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class Test {
                     private fun foo(): String = ""
                     private fun bar(): String = ""
-
+                
                     class InnerTest {
                         private fun baz(): String = ""
                     }
@@ -418,10 +418,10 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 object Test {
                     private operator fun invoke(i: Int): Int = i
-
+                
                     fun answer() = Test(1)
                 }
-
+                
                 val answer = Test.answer()
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -454,7 +454,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class C {
                     val isInside = "bar" in listOf("foo".toRegex())
-                    
+                
                     private operator fun Iterable<Regex>.contains(a: String): Boolean {
                         return any { it.matches(a) }
                     }
@@ -468,7 +468,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class C {
                     val isInside = "bar" !in listOf("foo".toRegex())
-                    
+                
                     private operator fun Iterable<Regex>.contains(a: String): Boolean {
                         return any { it.matches(a) }
                     }
@@ -502,7 +502,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                         return 5
                     }
                 }
-
+                
                 class Test2 {
                     private fun f(): Int {
                         return 5
@@ -517,15 +517,15 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test {
                     val value = f(1)
-
+                
                     private fun f(): Int {
                         return 5
                     }
-
+                
                     private fun f(num: Int): Int {
                         return num
                     }
-
+                
                     private fun f(num: String): Int {
                         return num.toInt()
                     }
@@ -539,15 +539,15 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test {
                     val value = 1.f()
-
+                
                     private fun f(): Int {
                         return 5
                     }
-
+                
                     private fun Int.f(): Int {
                         return this
                     }
-
+                
                     private fun String.f(): Int {
                         return toInt()
                     }
@@ -565,7 +565,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test {
                     private operator fun Foo.plus(other: Foo): Foo = Foo(value + other.value)
-
+                
                     inner class Foo(val value: Int) {
                         fun double(): Foo = this + this
                     }
@@ -580,7 +580,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class Test {
                     private operator fun Foo.plus(other: Foo): Foo = Foo(value + other.value)
                     private operator fun Foo.minus(other: Foo): Foo = Foo(value - other.value)
-
+                
                     inner class Foo(val value: Int) {
                         fun double(): Foo = this + this
                     }
@@ -602,18 +602,18 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class A
                 class B
                 class C(val elements: Set<B>, val flag: Boolean)
-
+                
                 class Test {
                     private fun A.someMethod(
                           param1: B,
                           param2: Boolean = true
                       ) = someMethod(setOf(param1), param2)
-
+                
                     private fun A.someMethod(
                           param1: Set<B>,
                           param2: Boolean = true
                       ) = C(param1, param2)
-
+                
                     fun main() {
                         val aInstance = A()
                         aInstance.someMethod(B(), true)
@@ -632,14 +632,14 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         fun `does not report used private getValue and setValue operator functions`() {
             val code = """
                 import kotlin.reflect.KProperty
-
+                
                 class Test {
                     var delegated by "Hello"
-
+                
                     private operator fun String.getValue(test: Test, prop: KProperty<*>): String {
                         return "working"
                     }
-
+                
                     private operator fun String.setValue(test: Test, prop: KProperty<*>, value: String) {
                         error("setValue")
                     }
@@ -652,13 +652,13 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         fun `does not report getValue and setValue operator function parameters`() {
             val code = """
                 import kotlin.reflect.KProperty
-        
+                
                 class SingleAssign<String> {
-        
+                
                     operator fun getValue(thisRef: Any?, property: KProperty<*>): kotlin.String {
                         return ""
                     }
-
+                
                     operator fun setValue(thisRef: Any?, property: KProperty<*>, value: String) {
                     }
                 }
@@ -670,12 +670,12 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         fun `reports unused private getValue and setValue operator functions`() {
             val code = """
                 import kotlin.reflect.KProperty
-
+                
                 class Test {
                     private operator fun String.getValue(test: Test, prop: KProperty<*>): String {
                         return "working"
                     }
-
+                
                     private operator fun String.setValue(test: Test, prop: KProperty<*>, value: String) {
                         error("setValue")
                     }
@@ -693,7 +693,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 class TestWrapper {
                     private operator fun List<StringWrapper>.get(s: String) =
                         this.firstOrNull { it.s == s }
@@ -708,12 +708,12 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 class TestWrapper(
                     private val strings: List<StringWrapper>
                 ) {
                     fun getWrapperForString(s: String) = strings[s]
-
+                
                     private operator fun List<StringWrapper>.get(s: String) =
                         this.firstOrNull { it.s == s }
                 }
@@ -727,12 +727,12 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 class TestWrapper(
                     private val strings: List<StringWrapper>
                 ) {
                     fun getWrapperForString(a: String, b: String) = strings[a, b]
-
+                
                     private operator fun List<StringWrapper>.get(a: String, b: String) =
                         this.firstOrNull { it.s == b }
                 }
@@ -746,12 +746,12 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 class TestWrapper(
                     private val strings: List<StringWrapper>
                 ) {
                     fun getWrapperForString(s: String) = strings.get(s)
-
+                
                     private operator fun List<StringWrapper>.get(s: String) =
                         this.firstOrNull { it.s == s }
                 }
@@ -765,7 +765,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 private operator fun List<StringWrapper>.get(s: String) =
                     this.firstOrNull { it.s == s }
             """.trimIndent()
@@ -778,13 +778,13 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 class Test(
                     private val strings: List<StringWrapper>
                 ) {
                     fun getWrapperForString(s: String) = strings[s]
                 }
-
+                
                 private operator fun List<StringWrapper>.get(s: String) =
                     this.firstOrNull { it.s == s }
             """.trimIndent()
@@ -797,13 +797,13 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 class Test(
                     private val strings: List<StringWrapper>
                 ) {
                     fun getWrapperForString(s: String) = strings.get(s)
                 }
-
+                
                 private operator fun List<StringWrapper>.get(s: String) =
                     this.firstOrNull { it.s == s }
             """.trimIndent()

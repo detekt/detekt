@@ -80,7 +80,7 @@ class CascadingCallWrappingSpec {
         val code = """
             val a = ""
                 .plus("").length
-
+            
             val b = ""
                 .length.plus(0)
         """.trimIndent()

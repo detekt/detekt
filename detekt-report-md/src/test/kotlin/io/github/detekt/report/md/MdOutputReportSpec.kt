@@ -154,11 +154,11 @@ private fun mockKtElement(): KtElement {
         
         class Test() {
             val greeting: String = "Hello, World!"
-
+        
             init {
                 println(greetings)
             }
-            
+        
             fun foo() {
                 println(greetings)
                 return this

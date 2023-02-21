@@ -70,11 +70,11 @@ class KDocReferencesNonPublicPropertySpec {
              */
             class Test {
                 private val prop1 = 0
-                
+            
                 object A {
                     private val nonReferencedProp = 0
                     private val prop2 = 0
-
+            
                     private object B {
                         val prop3 = 0
                     }
@@ -157,12 +157,12 @@ class KDocReferencesNonPublicPropertySpec {
              */
             class Test {
                 val prop: String = ""
-
+            
                 fun foo(): Int {
                     val prop = 0
                     return prop
                 }
-
+            
                 companion object {
                     fun foo(): Int {
                         val prop = 0
@@ -185,7 +185,7 @@ class KDocReferencesNonPublicPropertySpec {
                     val prop = 0
                     return prop
                 }
-
+            
                 companion object {
                     fun foo(): Int {
                         val prop = 0

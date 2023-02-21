@@ -105,10 +105,10 @@ class SpacingBetweenPackageAndImportsSpec {
     fun `has multiple imports in file`() {
         val code = """
             package com.my
-
+            
             import kotlin.collections.List
             import kotlin.collections.Set
-
+            
             class A { }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
@@ -118,7 +118,7 @@ class SpacingBetweenPackageAndImportsSpec {
     fun `has no class`() {
         val code = """
             package com.my.has.no.clazz
-
+            
             import kotlin.collections.List
             import kotlin.collections.Set
         """.trimIndent()

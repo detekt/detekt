@@ -67,15 +67,15 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             val root = compileContentForTest(
                 """
                     @file:Composable
-
+                    
                     import androidx.compose.runtime.Composable
-
+                    
                     class OneClass {
                         fun function(parameter: String) {
                             val a = 0
                         }
                     }
-
+                    
                     fun topLevelFunction() = Unit
                 """.trimIndent()
             )
@@ -122,14 +122,14 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             val root = compileContentForTest(
                 """
                     import androidx.compose.runtime.Composable
-
+                    
                     class OneClass {
                         @Composable
                         fun function(parameter: String) {
                             val a = 0
                         }
                     }
-
+                    
                     fun topLevelFunction() = Unit
                 """.trimIndent()
             )
@@ -176,13 +176,13 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             val root = compileContentForTest(
                 """
                     import androidx.compose.runtime.Composable
-
+                    
                     class OneClass {
                         fun function(parameter: String) {
                             val a = 0
                         }
                     }
-
+                    
                     fun topLevelFunction() = Unit
                 """.trimIndent()
             )
@@ -229,9 +229,9 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             val root = compileContentForTest(
                 """
                     @file:A
-
+                    
                     import androidx.compose.runtime.Composable
-
+                    
                     @B
                     class OneClass {
                         @Composable
@@ -240,7 +240,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
                             val a = 0
                         }
                     }
-
+                    
                     @E
                     fun topLevelFunction() = Unit
                 """.trimIndent()
@@ -290,14 +290,14 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             compileContentForTest(
                 """
                     package androidx.compose.runtime
-
+                    
                     annotation class Composable
                 """.trimIndent()
             ),
             compileContentForTest(
                 """
                     package foo.bar
-
+                    
                     annotation class Composable
                 """.trimIndent()
             ),
@@ -308,9 +308,9 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             val root = compileContentForTest(
                 """
                     package foo.bar
-
+                    
                     import androidx.compose.runtime.Composable
-
+                    
                     @Composable
                     fun function() = Unit
                 """.trimIndent()
@@ -406,7 +406,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             val root = compileContentForTest(
                 """
                     package foo.bar
-
+                    
                     @Composable
                     fun function() = Unit
                 """.trimIndent()
@@ -427,7 +427,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             val root = compileContentForTest(
                 """
                     package foo.bar
-
+                    
                     @androidx.compose.runtime.Composable
                     fun function() = Unit
                 """.trimIndent()
@@ -448,9 +448,9 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             val root = compileContentForTest(
                 """
                     package foo.bar
-
+                    
                     import androidx.compose.runtime.Composable as Bar
-
+                    
                     @Bar
                     fun function() = Unit
                 """.trimIndent()
@@ -473,14 +473,14 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             compileContentForTest(
                 """
                     package androidx.compose.runtime
-
+                    
                     annotation class Composable
                 """.trimIndent()
             ),
             compileContentForTest(
                 """
                     package androidx.compose.ui.tooling.preview
-
+                    
                     annotation class Preview(showBackground: Boolean = true)
                 """.trimIndent()
             ),
@@ -490,7 +490,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             """
                 import androidx.compose.runtime.Composable
                 import androidx.compose.ui.tooling.preview.Preview
-
+                
                 @Composable
                 @Preview(showBackground = true)
                 fun function() = Unit

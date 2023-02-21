@@ -378,10 +378,10 @@ class RuleCollectorSpec {
                 class SomeRandomClass() : Rule {
                     @Configuration("description")
                     private val config1: List<String> by config(DEFAULT_CONFIG_VALUE)
-
+                
                     @Configuration("description")
                     private val config2: List<String> by config(listOf(DEFAULT_CONFIG_VALUE_A, "b"))
-
+                
                     companion object {
                         private val DEFAULT_CONFIG_VALUE = listOf("a", "b")
                         private val DEFAULT_CONFIG_VALUE_A = "a"
@@ -403,7 +403,7 @@ class RuleCollectorSpec {
                 class SomeRandomClass() : Rule {
                     @Configuration("description")
                     private val config1: List<String> by config(listOf())
-
+                
                     @Configuration("description")
                     private val config2: List<String> by config(emptyList())
                 }
@@ -423,10 +423,10 @@ class RuleCollectorSpec {
                 class SomeRandomClass() : Rule {
                     @Configuration("description")
                     private val config1: List<Int> by config(listOf<String>()) { it.map(String::toInt) }
-
+                
                     @Configuration("description")
                     private val config2: List<Int> by config(DEFAULT_CONFIG_VALUE) { it.map(String::toInt) }
-
+                
                     companion object {
                         private val DEFAULT_CONFIG_VALUE: List<String> = emptyList()
                     }
@@ -818,7 +818,7 @@ class RuleCollectorSpec {
              * description
              */
             class SomeRandomClass : Rule {
-
+            
                 val style = Severity.Style
                 override val issue = Issue(javaClass.simpleName,
                         style,
@@ -836,7 +836,7 @@ class RuleCollectorSpec {
              * description
              */
             class SomeRandomClass : Rule {
-
+            
                 val a = setOf("UNUSED_VARIABLE")
                 override val defaultRuleIdAliases = a
                 override val issue = Issue(javaClass.simpleName,

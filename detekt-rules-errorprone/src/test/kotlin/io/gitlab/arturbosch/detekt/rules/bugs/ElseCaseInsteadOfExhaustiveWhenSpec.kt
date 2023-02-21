@@ -23,7 +23,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                 GREEN,
                 BLUE
             }
-
+            
             fun whenOnEnumFail(c: Color) {
                 when (c) {
                     Color.BLUE -> {}
@@ -44,7 +44,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                 GREEN,
                 BLUE
             }
-
+            
             fun whenOnEnumFail(c: Color) {
                 val x = when (c) {
                     Color.BLUE -> 1
@@ -65,21 +65,21 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                 GREEN,
                 BLUE
             }
-
+            
             fun whenOnEnumPassA(c: Color) {
                 when (c) {
                     Color.BLUE -> {}
                     Color.GREEN -> {}
                     Color.RED -> {}
                 }
-
+            
                 val x = when (c) {
                     Color.BLUE -> 1
                     Color.GREEN -> 2
                     Color.RED -> 3
                 }
             }
-
+            
             fun whenOnEnumPassB(c: Color) {
                 when (c) {
                     Color.BLUE -> {}
@@ -101,7 +101,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     class VariantB : Variant()
                     object VariantC : Variant()
                 }
-
+                
                 fun whenOnSealedFail(v: Variant) {
                     when (v) {
                         is Variant.VariantA -> {}
@@ -121,7 +121,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     class VariantB : Variant()
                     object VariantC : Variant()
                 }
-
+                
                 fun whenOnSealedFail(v: Variant) {
                     val x = when (v) {
                         is Variant.VariantA -> "a"
@@ -141,7 +141,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     class VariantB : Variant()
                     object VariantC : Variant()
                 }
-
+                
                 fun whenOnSealedPass(v: Variant) {
                     when (v) {
                         is Variant.VariantA -> {}
@@ -160,13 +160,13 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
         fun `does not report if _when_ contains _else_ case for ignored _enum_ subject type`() {
             val code = """
             package com.example
-
+            
             enum class Color {
                 RED,
                 GREEN,
                 BLUE
             }
-
+            
             fun whenOnEnumPasses(c: Color) {
                 when (c) {
                     Color.BLUE -> {}
@@ -186,13 +186,13 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
         fun `does not report if _when_ contains _else_ case for ignored _sealed_ subject type`() {
             val code = """
                 package com.example
-
+                
                 sealed class Variant {
                     object VariantA : Variant()
                     class VariantB : Variant()
                     object VariantC : Variant()
                 }
-
+                
                 fun whenOnSealedPasses(v: Variant) {
                     when (v) {
                         is Variant.VariantA -> {}
@@ -212,13 +212,13 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
         fun `reports if _when_ contains _else_ case for non-ignored _enum_ subject type`() {
             val code = """
             package com.example
-
+            
             enum class Color {
                 RED,
                 GREEN,
                 BLUE
             }
-
+            
             fun whenOnEnumFails(c: Color) {
                 when (c) {
                     Color.BLUE -> {}
@@ -238,13 +238,13 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
         fun `reports if _when_ contains _else_ case for non-ignored _sealed_ subject type`() {
             val code = """
                 package com.example
-
+                
                 sealed class Variant {
                     object VariantA : Variant()
                     class VariantB : Variant()
                     object VariantC : Variant()
                 }
-
+                
                 fun whenOnSealedPasses(v: Variant) {
                     when (v) {
                         is Variant.VariantA -> {}
@@ -271,7 +271,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     class VariantB : Variant
                     class VariantC : Variant
                 }
-
+                
                 fun whenOnSealedFail(v: Variant) {
                     when (v) {
                         is Variant.VariantA -> {}
@@ -291,7 +291,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     class VariantB : Variant
                     class VariantC : Variant
                 }
-
+                
                 fun whenOnSealedFail(v: Variant) {
                     val x = when (v) {
                         is Variant.VariantA -> "a"
@@ -343,7 +343,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     true -> {}
                     false -> {}
                 }
-
+            
                 val x = when (b) {
                     true -> 1
                     false -> 2
@@ -362,7 +362,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     false -> {}
                     null -> {}
                 }
-
+            
                 val x = when (b) {
                     true -> 1
                     false -> 2
@@ -382,28 +382,28 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                 fun whenChecks() {
                     val x = 3
                     val s = "3"
-
+                
                     when (x) {
                         0, 1 -> print("x == 0 or x == 1")
                         else -> print("otherwise")
                     }
-
+                
                     when (x) {
                         Integer.parseInt(s) -> print("s encodes x")
                         else -> print("s does not encode x")
                     }
-
+                
                     when (x) {
                         in 1..10 -> print("x is in the range")
                         !in 10..20 -> print("x is outside the range")
                         else -> print("none of the above")
                     }
-
+                
                     val y = when(s) {
                         is String -> s.startsWith("prefix")
                         else -> false
                     }
-
+                
                     when {
                         x.equals(s) -> print("x equals s")
                         x.plus(3) == 4 -> print("x is 1")
