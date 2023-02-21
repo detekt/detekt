@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.test.assertThat
+import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -13,7 +14,7 @@ class TrailingWhitespaceSpec {
 
     private val subject = TrailingWhitespace()
 
-    private fun compileAndLintWithoutTrim(code: String): List<Finding> {
+    private fun compileAndLintWithoutTrim(@Language("kotlin") code: String): List<Finding> {
         val ktFile = compileContentForTest(code)
         subject.visitKtFile(ktFile)
         return subject.findings

@@ -19,6 +19,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import org.assertj.core.api.Assertions.assertThat
+import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtElement
 import org.junit.jupiter.api.AfterEach
@@ -144,6 +145,8 @@ class MdOutputReportSpec {
 private fun mockKtElement(): KtElement {
     val ktElementMock = mockk<KtElement>()
     val psiFileMock = mockk<PsiFile>()
+
+    @Language("kotlin")
     val code = """
         package com.example.test
         
