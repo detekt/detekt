@@ -120,7 +120,7 @@ class CascadingCallWrappingSpec {
             """.trimIndent()
 
             assertThat(subject.compileAndLint(code))
-                .hasTextLocations(65 to 86)
+                .hasTextLocations(64 to 85)
                 .hasSize(1)
         }
 
