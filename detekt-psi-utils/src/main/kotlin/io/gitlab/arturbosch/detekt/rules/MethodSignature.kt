@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules
 
-import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 fun KtFunction.isEqualsFunction() =
     this.name == "equals" && this.isOverride() && hasCorrectEqualsParameter()
@@ -11,8 +11,14 @@ fun KtFunction.isEqualsFunction() =
 fun KtFunction.isHashCodeFunction() =
     this.name == "hashCode" && this.isOverride() && this.valueParameters.isEmpty()
 
+/**
+ * [Kotlin Documentation](https://kotlinlang.org/docs/java-interop.html#finalize)
+ */
 fun KtNamedFunction.isJvmFinalizeFunction() =
-    this.name == "finalize" && this.valueParameters.isEmpty()
+    this.name == "finalize" &&
+        this.valueParameters.isEmpty() &&
+        !this.isOverride() &&
+        !this.isPrivate()
 
 private val knownAnys = setOf("Any?", "kotlin.Any?")
 fun KtFunction.hasCorrectEqualsParameter() =
