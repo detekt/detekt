@@ -38,6 +38,7 @@ private const val ARRAY_GET_METHOD_NAME = "get"
 
 /**
  * Reports unused private functions.
+ *
  * If these private functions are unused they should be removed. Otherwise, this dead code
  * can lead to confusion and potential bugs.
  */
@@ -55,7 +56,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("unused private function names matching this regex are ignored")
-    private val allowedNames: Regex by config("(_|ignored|expected|serialVersionUID)", String::toRegex)
+    private val allowedNames: Regex by config("(ignored|expected|serialVersionUID)", String::toRegex)
 
     override fun visit(root: KtFile) {
         super.visit(root)
