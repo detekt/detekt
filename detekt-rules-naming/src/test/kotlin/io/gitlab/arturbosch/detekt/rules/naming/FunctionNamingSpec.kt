@@ -120,8 +120,7 @@ class FunctionNamingSpec {
             FunctionNaming(config).compileAndLint(
                 """
         class Foo {
-            fun `name with back ticks`(){
-              
+            fun `name with back ticks`() {
             }
         }
                 """.trimIndent()

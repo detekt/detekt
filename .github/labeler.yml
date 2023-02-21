@@ -28,7 +28,7 @@ formatting:
 
 gradle-plugin:
   - "detekt-gradle-plugin/src/**/*"
-  
+
 compiler-plugin:
   - "detekt-compiler-plugin/src/**/*"
 

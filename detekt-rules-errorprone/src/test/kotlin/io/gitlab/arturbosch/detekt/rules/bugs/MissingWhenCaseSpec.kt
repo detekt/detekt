@@ -439,7 +439,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
             @Test
             fun `does not report when else is used for non enum or sealed _when_ expression`() {
                 val code = """
-                     fun whenChecks() {
+                    fun whenChecks() {
                         val x = 3
 
                         when (x) {
