@@ -705,12 +705,12 @@ style:
     active: false
   UnusedParameter:
     active: true
-    allowedNames: '(ignored|expected|serialVersionUID)'
+    allowedNames: '(ignored|expected)'
   UnusedPrivateClass:
     active: true
   UnusedPrivateMember:
     active: true
-    allowedNames: '(ignored|expected|serialVersionUID)'
+    allowedNames: '(ignored|expected)'
   UnusedPrivateProperty:
     active: true
     allowedNames: '(_|ignored|expected|serialVersionUID)'
