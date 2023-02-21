@@ -427,6 +427,185 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
+        @Suppress("ClassName")
+        @Nested
+        inner class `containing invoke operator` {
+            @Test
+            fun `does not report when invoke operator is used - #4435`() {
+                val code = """
+                    object Test {
+                        private operator fun invoke(i: Int): Int = i
+                    
+                        fun answer() = Test(1)
+                    }
+    
+                    val answer = Test.answer()
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report used invoke operator defined in companion`() {
+                val code = """
+                    class A {
+                        companion object {
+                            private operator fun invoke(i: Int): Int = i
+                        }
+                        val answer = A(1)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report used invoke operator in file with instance`() {
+                val code = """
+                    class A
+                    private operator fun A.invoke(i: Int): Int = i
+                    fun answer() = A()(9)
+                    val answer = answer()
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report used nullable dispatch receiver invoke operator in file`() {
+                val code = """
+                    class A
+                    private operator fun A?.invoke(i: Int): Int = i
+                    fun answer() = A()(9)
+                    val answer = answer()
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report used invoke operator is used with child class dispatcher`() {
+                val code = """
+                    open class A
+                    class B : A()
+                    private operator fun A.invoke(i: Int): Int = i
+                    val answer = B()(1)
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does report unused overloaded invoke operator`() {
+                val code = """
+                    open class A {
+                    companion object {
+                        private operator fun invoke(i: Int): Int = i
+                        private operator fun invoke(i: Int, j: Int): Int = i
+                    }
+                    val answer = A(1, 1)
+                }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code))
+                    .hasSize(1)
+                    .hasStartSourceLocations(
+                        SourceLocation(3, 30)
+                    )
+            }
+
+            @Test
+            fun `does report unused overloaded invoke operator with nullable int`() {
+                val code = """
+                    class A
+                    private operator fun A.invoke(i: Int): Int = i
+                    private operator fun A.invoke(i: Int?): Int = i ?: 0
+                    fun answer() = A()(9)
+                    val answer = answer()
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code))
+                    .hasSize(1)
+                    .hasStartSourceLocations(
+                        SourceLocation(3, 24)
+                    )
+            }
+
+            @Test
+            fun `does report unused overloaded invoke operator with non-null int`() {
+                val code = """
+                    class A
+                    private operator fun A.invoke(i: Int): Int = i
+                    private operator fun A.invoke(i: Int?): Int = i ?: 0
+                    val nullableInt: Int? = if (System.currentTimeMillis() % 2 == 0L) 0 else null
+                    fun answer() = A()(nullableInt)
+                    val answer = answer()
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code))
+                    .hasSize(1)
+                    .hasStartSourceLocations(
+                        SourceLocation(2, 24)
+                    )
+            }
+
+            @Test
+            fun `does not report used overloaded invoke operator when no binding context`() {
+                val code = """
+                    open class A {
+                        companion object {
+                            private operator fun invoke(i: Int): Int = i
+                            private operator fun invoke(i: Int, j: Int): Int = i
+                        }
+                        val answer = A(1, 1)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report used invoke operator when both dispatch and extension is present`() {
+                val code = """
+                    class A
+                    class B {
+                        private operator fun A.invoke(i: Int): Int = i
+                        val answer = A()(1)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report unused invoke operator when both dispatch and extension is present with no context`() {
+                val code = """
+                    class A
+                    class B {
+                        private operator fun A.invoke(i: Int): Int = i
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report used invoke operator in companion when both dispatch and extension is present`() {
+                val code = """
+                    class A
+                    class B {
+                        companion object {
+                            private operator fun A.invoke(i: Int): Int = i
+                        }
+                        val answer = A()(1)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report unused overridden invoke operator`() {
+                val code = """
+                    interface I {
+                        operator fun invoke(): String
+                    }
+                    class A : I {
+                        override operator fun invoke() = "A"
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+        }
+
         @Test
         fun `does not report used operator methods when used with the equal sign`() {
             val code = """
