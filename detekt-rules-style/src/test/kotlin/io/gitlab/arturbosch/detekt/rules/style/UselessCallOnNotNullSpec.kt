@@ -228,7 +228,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
         val code = """
             fun <T : Any> listOfNotNull(vararg elements: T?): List<T> = TODO()
 
-            val strings = listOfNotNull("string", null)                
+            val strings = listOfNotNull("string", null)
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
@@ -265,7 +265,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
         val code = """
             fun test(list: List<Int>) {
                 list.isNullOrEmpty()
-            }                
+            }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)

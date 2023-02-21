@@ -315,7 +315,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     println(this)
                 }
                 
-                enum class E { A, B } 
+                enum class E { A, B }
                 
                 fun test(i: Int, e: E) {
                     when (i) {

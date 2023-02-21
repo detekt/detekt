@@ -81,7 +81,7 @@ class LongMethodSpec {
     @Test
     fun `should find long method with method call with params on separate lines`() {
         val code = """
-            fun longMethod( 
+            fun longMethod(
                 x1: Int,
                 x2: Int,
                 y1: Int,

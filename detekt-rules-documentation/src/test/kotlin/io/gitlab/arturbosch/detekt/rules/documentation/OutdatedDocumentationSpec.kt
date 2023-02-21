@@ -317,7 +317,7 @@ class OutdatedDocumentationSpec {
              */
             class MyClass(someParam: String) {
                 /**
-                 * @param someParam Description of param 
+                 * @param someParam Description of param
                  */
                 fun myFun(someParam: String) {}
             }
@@ -333,15 +333,15 @@ class OutdatedDocumentationSpec {
              */
             class MyClass(val someProp: String) {
                 /**
-                 * @param someParam Description of param 
+                 * @param someParam Description of param
                  */
                 fun myFun(someParam: String, someSecondParam: String) {}
                 /**
-                 * @param someParam Description of param 
+                 * @param someParam Description of param
                  */
                 fun myOtherFun(otherParam: String) {}
                 /**
-                 * @param someParam Description of param 
+                 * @param someParam Description of param
                  */
                 class MyNestedClass(otherParam: String)
             }

@@ -83,7 +83,7 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
                 override suspend fun empty() {
                     println("hello world")
                 }
-            }                                
+            }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }

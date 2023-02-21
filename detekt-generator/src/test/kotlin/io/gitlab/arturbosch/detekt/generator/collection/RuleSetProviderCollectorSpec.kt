@@ -106,7 +106,7 @@ class RuleSetProviderCollectorSpec {
         /**
          * $description
          *
-         * 
+         *
          */
         @ActiveByDefault("1.0.0")
         class TestProvider: RuleSetProvider {

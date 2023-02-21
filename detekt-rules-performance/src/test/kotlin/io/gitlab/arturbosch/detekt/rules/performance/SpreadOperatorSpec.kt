@@ -107,8 +107,8 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
         fun `respects pass through of vararg parameter - #3145`() {
             val code = """
                 fun b(vararg bla: Int) = Unit
-                fun a(vararg bla: Int) { 
-                    b(*bla) 
+                fun a(vararg bla: Int) {
+                    b(*bla)
                 }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -221,7 +221,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
         fun `respects pass through of vararg parameter - #3145`() {
             val code = """
                 fun b(vararg bla: Int) = Unit
-                fun a(vararg bla: Int) { 
+                fun a(vararg bla: Int) {
                     b(*bla)
                 }
             """.trimIndent()

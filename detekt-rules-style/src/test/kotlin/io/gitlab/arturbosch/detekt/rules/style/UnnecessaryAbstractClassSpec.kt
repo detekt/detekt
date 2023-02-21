@@ -130,7 +130,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
 
                 abstract class B : A() {
                     abstract fun g()
-                } 
+                }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
@@ -302,7 +302,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 @kotlin.Deprecated("test")
                 abstract class B {
                     abstract fun f()
-                } 
+                }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }

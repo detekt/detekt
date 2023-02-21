@@ -97,7 +97,7 @@ class CascadingCallWrappingSpec {
                     .plus(
                         0
                     )
-                    .let { 
+                    .let {
                         0
                     }
             """.trimIndent()
@@ -112,7 +112,7 @@ class CascadingCallWrappingSpec {
                     .plus(
                         0
                     )
-                    .let { 
+                    .let {
                         0
                     }.plus(
                         0

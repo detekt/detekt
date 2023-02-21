@@ -37,7 +37,7 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinCoreEnvironment) {
                     listOf(1, 2, 3)
                         .map {
                             doSomething()
-                            it 
+                            it
                         }
                         .filter { it > 1 }
                 }

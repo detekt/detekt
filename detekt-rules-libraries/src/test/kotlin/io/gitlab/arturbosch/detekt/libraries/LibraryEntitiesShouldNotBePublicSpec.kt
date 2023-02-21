@@ -15,7 +15,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
         assertThat(
             subject.compileAndLint(
                 """
-                class A 
+                class A
                 """.trimIndent()
             )
         ).isEmpty()

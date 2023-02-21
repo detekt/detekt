@@ -161,13 +161,13 @@ class KDocReferencesNonPublicPropertySpec {
                 fun foo(): Int {
                     val prop = 0
                     return prop
-                } 
+                }
 
                 companion object {
                     fun foo(): Int {
                         val prop = 0
                         return prop
-                    } 
+                    }
                 }
             }
         """.trimIndent()
@@ -184,13 +184,13 @@ class KDocReferencesNonPublicPropertySpec {
                 fun foo(): Int {
                     val prop = 0
                     return prop
-                } 
+                }
 
                 companion object {
                     fun foo(): Int {
                         val prop = 0
                         return prop
-                    } 
+                    }
                 }
             }
         """.trimIndent()

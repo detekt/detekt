@@ -292,7 +292,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
         fun `should not warn about Kotlin Boolean override by default`() {
             val code = """
                 interface Test {
-                    val default: Boolean                    
+                    val default: Boolean
                 }
 
                 class TestImpl : Test {
@@ -320,7 +320,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
         fun `should warn about Kotlin Boolean override if isIgnoreOverridden is false`() {
             val code = """
                 interface Test {
-                    val default: Boolean                    
+                    val default: Boolean
                 }
 
                 class TestImpl : Test {
@@ -337,7 +337,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
         fun `should not warn about Kotlin Boolean override if isIgnoreOverridden is true`() {
             val code = """
                 interface Test {
-                    val default: Boolean                    
+                    val default: Boolean
                 }
 
                 class TestImpl : Test {

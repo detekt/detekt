@@ -19,7 +19,7 @@ class AvoidReferentialEqualitySpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `reports usage of === for strings`() {
             val code = """
-                val s = "a string" 
+                val s = "a string"
                 val b = s === "something"
                 fun f(other: String) = s === other
                 fun g(other: String) = if (s === other) 1 else 2
@@ -33,7 +33,7 @@ class AvoidReferentialEqualitySpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `reports usage of === with nullable`() {
             val code = """
-                var s: String? = "a string" 
+                var s: String? = "a string"
                 val b1 = s === "something"
                 val b2 = "something" === s
                 fun f(other: String) = s === other
@@ -48,7 +48,7 @@ class AvoidReferentialEqualitySpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `reports usage of !== for strings`() {
             val code = """
-                var s: String = "a string" 
+                var s: String = "a string"
                 val b = s !== "something"
             """.trimIndent()
 
@@ -60,7 +60,7 @@ class AvoidReferentialEqualitySpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `ignores usage of === for non strings`() {
             val code = """
-                val i = 42 
+                val i = 42
                 val l = 99L
                 val c = 'a'
                 val b = i === 1 || l === 100L || c === 'b'
@@ -74,7 +74,7 @@ class AvoidReferentialEqualitySpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `ignores usage of == for strings`() {
             val code = """
-                val s = "a string" 
+                val s = "a string"
                 val b = s == "something"
                 fun f(other: String) = s == other
                 fun g(other: String) = if (s == other) 1 else 2
@@ -105,8 +105,8 @@ class AvoidReferentialEqualitySpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `reports usage of === for strings`() {
             val code = """
-                val s = "a string" 
-                val i = 1 
+                val s = "a string"
+                val i = 1
                 val list = listOf(1)
                 val b = s === "other" || i === 42 || list === listOf(2)
             """.trimIndent()

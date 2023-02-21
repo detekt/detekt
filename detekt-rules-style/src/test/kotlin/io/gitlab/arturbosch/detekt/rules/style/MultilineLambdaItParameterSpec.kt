@@ -80,7 +80,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
         fun `does not report when parameter name is an implicit 'it'`() {
             val code = """
             fun f() {
-                val digits = 1234.let { 
+                val digits = 1234.let {
                     listOf(it)
                 }
             }
@@ -189,7 +189,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
             val code = """
             fun f() {
                 val digits = 1234.let { param -> listOf(param) }
-            }   
+            }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
@@ -217,7 +217,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
             fun f() {
                 val flat = listOf(listOf(1), listOf(2)).mapIndexed { index, it ->
                     println(it)
-                    it + index 
+                    it + index
                 }
             }
             """.trimIndent()
@@ -229,9 +229,9 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
         fun `does not report when none of the explicit parameters is an 'it'`() {
             val code = """
             fun f() {
-                val lambda = { item: Int, that: String -> 
+                val lambda = { item: Int, that: String ->
                     println(item)
-                    item.toString() + that 
+                    item.toString() + that
                 }
             }
             """.trimIndent()

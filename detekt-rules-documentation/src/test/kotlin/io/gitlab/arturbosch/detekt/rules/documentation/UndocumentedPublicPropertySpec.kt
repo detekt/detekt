@@ -32,7 +32,7 @@ class UndocumentedPublicPropertySpec {
         val code = """
             class Test {
                 object NestedTest {
-                    val a = 1 
+                    val a = 1
                 }
             }
         """.trimIndent()
@@ -193,14 +193,14 @@ class UndocumentedPublicPropertySpec {
              * @param d int4
              */
             class Test(
-                val a: Int, 
-                val b: Int, 
-                val c: Int, 
+                val a: Int,
+                val b: Int,
+                val c: Int,
                 val d: Int,
                 /**
                  * Some docs.
                  */
-                val e: Int                    
+                val e: Int
             )
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
@@ -243,7 +243,7 @@ class UndocumentedPublicPropertySpec {
         @Test
         fun `reports undocumented public properties in nested classes`() {
             val code = """
-            class Outer { 
+            class Outer {
                 class Inner {
                     val i = 0
                     

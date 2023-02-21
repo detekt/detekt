@@ -86,7 +86,7 @@ class ObjectExtendsThrowableSpec(val env: KotlinCoreEnvironment) {
             object Exception3 : DomainException()
         }
 
-        open class CustomException(message: String) 
+        open class CustomException(message: String)
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
@@ -124,7 +124,7 @@ class ObjectExtendsThrowableSpec(val env: KotlinCoreEnvironment) {
             class Exception3 : DomainException()
         }
 
-        open class CustomException(message: String) 
+        open class CustomException(message: String)
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }

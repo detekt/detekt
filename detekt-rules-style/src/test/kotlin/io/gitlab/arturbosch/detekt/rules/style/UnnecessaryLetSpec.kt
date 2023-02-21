@@ -403,7 +403,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
             }
             
             fun test(value: Int?) {
-                value?.let { 
+                value?.let {
                     callMe {
                         println(it)
                     }

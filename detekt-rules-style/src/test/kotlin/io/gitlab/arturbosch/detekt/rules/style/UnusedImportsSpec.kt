@@ -79,7 +79,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
                 task {
                 } success {
                 }
-            }                
+            }
         """.trimIndent()
         val additional = """
             package tasks
@@ -136,7 +136,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
 
             class TextWatcher {
                 fun beforeTextChanged() {}
-            }                
+            }
         """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
@@ -205,7 +205,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             
             open class Something<T>
             
-            class Foo : Something<Inner>()                
+            class Foo : Something<Inner>()
         """.trimIndent()
         val additional = """
             package test
@@ -347,11 +347,11 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val additional1 = """
             package com.example
-            fun foo() = 1                
+            fun foo() = 1
         """.trimIndent()
         val additional2 = """
             package com.example.other
-            fun foo() = 1                
+            fun foo() = 1
         """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional1, additional2)).isEmpty()
     }
@@ -364,7 +364,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             
             class DumpVersionProperties {
                 private val dumpVersionProperties by Foo()
-            }                
+            }
         """.trimIndent()
         val additional = """
             package org.gradle.kotlin.dsl
@@ -376,7 +376,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             operator fun <T> Foo.provideDelegate(
                 thisRef: T,
                 prop: KProperty<*>
-            ) = lazy { "" }                
+            ) = lazy { "" }
         """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
@@ -394,7 +394,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val additional = """
             package com.example
-            data class MyClass(val a: Int, val b: Int)                
+            data class MyClass(val a: Int, val b: Int)
         """.trimIndent()
 
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
@@ -440,7 +440,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
             import bar.test
             fun main() {
                 test(1)
-            }      
+            }
         """.trimIndent()
         val additionalFile1 = """
             package foo
@@ -620,7 +620,7 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
         /**
          * Style for [MyView]
          * Blablabla
-         * 
+         *
          * @property someVal Someval for [SomeClass]
          */
          data class StyleClass(val someVal: String)

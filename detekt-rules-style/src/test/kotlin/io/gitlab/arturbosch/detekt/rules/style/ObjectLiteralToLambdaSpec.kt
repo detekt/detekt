@@ -28,7 +28,7 @@ class ObjectLiteralToLambdaSpec {
                     val a = object : Sam {
                         override fun foo() {
                         }
-                    }   
+                    }
                 """.trimIndent()
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -86,7 +86,7 @@ class ObjectLiteralToLambdaSpec {
                         override fun foo(): Int {
                             return 1
                         }
-                    }   
+                    }
                 """.trimIndent()
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -104,7 +104,7 @@ class ObjectLiteralToLambdaSpec {
                     val a = object : Sam {
                         override fun foo() {
                         }
-                    }   
+                    }
                 """.trimIndent()
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -329,7 +329,7 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `is convertible`() {
                 val code = """
-                    val a = object : Runnable { 
+                    val a = object : Runnable {
                         override fun run(){
                         }
                     }
@@ -554,7 +554,7 @@ class ObjectLiteralToLambdaSpec {
                             println()
                         }
                     }
-                } 
+                }
             """.trimIndent()
 
             subject.lintWithContext(env, code).assert().hasSize(1)
@@ -568,7 +568,7 @@ class ObjectLiteralToLambdaSpec {
                 fun main() {
                     val x = object : OnlyDefaultMethods {
                     }
-                } 
+                }
             """.trimIndent()
             subject.lintWithContext(env, code).assert().isEmpty()
         }
@@ -584,7 +584,7 @@ class ObjectLiteralToLambdaSpec {
                             println()
                         }
                     }
-                } 
+                }
             """.trimIndent()
             subject.lintWithContext(env, code).assert().isEmpty()
         }

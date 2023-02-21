@@ -221,7 +221,7 @@ class UseIfEmptyOrIfBlankSpec(val env: KotlinCoreEnvironment) {
                     } else {
                         this
                     }
-                }                
+                }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
@@ -263,7 +263,7 @@ class UseIfEmptyOrIfBlankSpec(val env: KotlinCoreEnvironment) {
         fun `!isNotEmpty`() {
             val code = """
                 fun test(list: List<Int>): List<Int> {
-                    return if (!list.isNotEmpty()) { // list.isEmpty() 
+                    return if (!list.isNotEmpty()) { // list.isEmpty()
                         listOf(1)
                     } else {
                         list
@@ -411,7 +411,7 @@ class UseIfEmptyOrIfBlankSpec(val env: KotlinCoreEnvironment) {
                     } else {
                         list + list
                     }
-                }                
+                }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
@@ -442,7 +442,7 @@ class UseIfEmptyOrIfBlankSpec(val env: KotlinCoreEnvironment) {
                     } else {
                         list
                     }
-                }                
+                }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()

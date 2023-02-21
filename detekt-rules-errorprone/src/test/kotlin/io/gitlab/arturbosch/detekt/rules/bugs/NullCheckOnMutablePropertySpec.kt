@@ -19,7 +19,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     if (a != null) {
                         println(2 + a!!)
-                    } 
+                    }
                 }
             }
         """.trimIndent()
@@ -33,7 +33,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     if (b == 5 && a != null) {
                         println(2 + a!!)
-                    } 
+                    }
                 }
             }
         """.trimIndent()
@@ -47,7 +47,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     if (a != null && a == 2) {
                         println("a is 2")
-                    } 
+                    }
                 }
             }
         """.trimIndent()
@@ -61,7 +61,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     if (a != null) {
                         println(a)
-                    } 
+                    }
                 }
             }
         """.trimIndent()
@@ -78,7 +78,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                             return
                         }
                         println(2 + a!!)
-                    } 
+                    }
                 }
             }
         """.trimIndent()
@@ -92,7 +92,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     if (a != null) {
                         println("'a' is not null")
-                    } 
+                    }
                 }
             }
         """.trimIndent()
@@ -107,7 +107,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     val a = a
                     if (a != null) {
                         println(2 + a)
-                    } 
+                    }
                 }
             }
         """.trimIndent()
@@ -121,7 +121,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     if (a != null) {
                         println(2 + a)
-                    } 
+                    }
                 }
             }
         """.trimIndent()
@@ -136,7 +136,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     if (a != null) {
                         println(2 + a!!)
-                    } 
+                    }
                 }
             }
         """.trimIndent()
@@ -151,7 +151,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     if (a != null) {
                         println(2 + a)
-                    } 
+                    }
                 }
             }
         """.trimIndent()
@@ -169,7 +169,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     if (a != null) {
                         println(2 + a!!)
-                    } 
+                    }
                 }
                 private fun genA(): Int? {
                     val randInt = Random.nextInt()
@@ -188,7 +188,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     fun foo() {
                         if (a != null) {
                             println(2 + a!!)
-                        } 
+                        }
                     }
                 }
             }
@@ -204,14 +204,14 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     fun foo() {
                         if (a != null) {
                             println(2 + a!!)
-                        } 
+                        }
                     }
                 }
 
                 fun foo() {
                     if (a != null) {
                         println(2 + a)
-                    } 
+                    }
                 }
             }
         """.trimIndent()
@@ -227,7 +227,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     if (a != null) {
                         println(2 + a!!)
-                    } 
+                    }
                 }
             }
         """.trimIndent()
@@ -243,7 +243,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     if (a != null) {
                         println(2 + a)
-                    } 
+                    }
                 }
             }
         """.trimIndent()
@@ -257,7 +257,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     if (a != null) {
                         println(2 + a!!)
-                    } 
+                    }
                 }
             }
         """.trimIndent()
@@ -271,7 +271,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     if (null != a) {
                         println(2 + a!!)
-                    } 
+                    }
                 }
             }
         """.trimIndent()
@@ -286,7 +286,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                     val otherA = null
                     if (a != otherA) {
                         println(2 + a!!)
-                    } 
+                    }
                 }
             }
         """.trimIndent()
@@ -303,7 +303,7 @@ class NullCheckOnMutablePropertySpec(private val env: KotlinCoreEnvironment) {
                 fun foo() {
                     if (otherFoo() != null) {
                         println(2 + otherFoo()!!)
-                    } 
+                    }
                 }
             }
         """.trimIndent()

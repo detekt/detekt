@@ -170,7 +170,7 @@ private fun constrainRegion(startLine: Int, startColumn: Int, endLine: Int, endC
       "endLine": $endLine,
       "startColumn": $startColumn,
       "startLine": $startLine
-    }            
+    }
 """.trimIndent()
 
 class TestRule : Rule() {

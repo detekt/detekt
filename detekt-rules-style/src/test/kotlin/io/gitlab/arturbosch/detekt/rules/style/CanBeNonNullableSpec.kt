@@ -550,7 +550,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     
                     class B : A {
                         override fun foo(a: Int?) {
-                            val b = a!! + 2 
+                            val b = a!! + 2
                         }
                     }
                 """.trimIndent()

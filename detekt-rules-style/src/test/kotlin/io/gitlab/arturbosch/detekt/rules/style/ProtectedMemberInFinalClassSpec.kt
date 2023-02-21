@@ -214,7 +214,7 @@ class ProtectedMemberInFinalClassSpec {
         fun `does not report protected definitions in enum class`() {
             val code = """
                 enum class EnumClass {
-                    ;   
+                    ;
                     protected fun foo() {}
                 }
             """.trimIndent()

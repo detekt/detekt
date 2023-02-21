@@ -391,8 +391,8 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                 subject.compileAndLintWithContext(
                     env,
                     """
-                class C { 
-                    val prop = 5 
+                class C {
+                    val prop = 5
                 }
 
                 fun f() {
