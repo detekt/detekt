@@ -25,7 +25,7 @@ class SerialVersionUIDInSerializableClassSpec {
             
             class C : Serializable {
                 companion object {
-                    const val serialVersionUID = 1
+                    private const val serialVersionUID = 1
                 }
             }
         """.trimIndent()
@@ -39,7 +39,21 @@ class SerialVersionUIDInSerializableClassSpec {
             
             class C : Serializable {
                 companion object {
-                    const val serialVersionUID: Int = 1
+                    private const val serialVersionUID: Int = 1
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports class with wrong visibility`() {
+        val code = """
+            import java.io.Serializable
+
+            class C : Serializable {
+                companion object {
+                    const val serialVersionUID: Long = 1L
                 }
             }
         """.trimIndent()
@@ -53,11 +67,11 @@ class SerialVersionUIDInSerializableClassSpec {
             
             class C : Serializable {
                 companion object {
-                    const val serialVersionUUID = 1L
+                    private const val serialVersionUUID = 1L
                 }
             
                 object NestedIncorrectSerialVersionUID : Serializable {
-                    val serialVersionUUID = 1L
+                    private val serialVersionUUID = 1L
                 }
             }
         """.trimIndent()
@@ -87,7 +101,7 @@ class SerialVersionUIDInSerializableClassSpec {
             
             class C : Serializable {
                 companion object {
-                    const val serialVersionUID = 1L
+                    private const val serialVersionUID = 1L
                 }
             }
         """.trimIndent()
@@ -101,7 +115,7 @@ class SerialVersionUIDInSerializableClassSpec {
             
             class C : Serializable {
                 companion object {
-                    const val serialVersionUID = -1L
+                    private const val serialVersionUID = -1L
                 }
             }
         """.trimIndent()
@@ -115,7 +129,7 @@ class SerialVersionUIDInSerializableClassSpec {
             
             class C : Serializable {
                 companion object {
-                    const val serialVersionUID: Long = 1
+                    private const val serialVersionUID: Long = 1
                 }
             }
         """.trimIndent()
