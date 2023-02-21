@@ -279,20 +279,6 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    inner class `unused class declarations which are allowed` {
-
-        @Test
-        fun `does not report the unused private function and parameter`() {
-            val code = """
-                class Test {
-                    private fun ignored(ignored: Int) {}
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-    }
-
-    @Nested
     inner class `error messages` {
 
         @Test

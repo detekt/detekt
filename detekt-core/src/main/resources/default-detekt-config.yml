@@ -710,7 +710,7 @@ style:
     active: true
   UnusedPrivateMember:
     active: true
-    allowedNames: 'ignored|expected'
+    allowedNames: ''
   UnusedPrivateProperty:
     active: true
     allowedNames: '_|ignored|expected|serialVersionUID'
