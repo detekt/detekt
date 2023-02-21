@@ -66,7 +66,7 @@ class EmptyCodeSpec {
             }
         }
         """.trimIndent()
-        val config = TestConfig(mapOf(ALLOWED_EXCEPTION_NAME_REGEX to "foo"))
+        val config = TestConfig(ALLOWED_EXCEPTION_NAME_REGEX to "foo")
         assertThat(EmptyCatchBlock(config).compileAndLint(code)).isEmpty()
     }
 
@@ -138,18 +138,16 @@ class EmptyCodeSpec {
 
     @Test
     fun doesNotFailWithInvalidRegexWhenDisabled() {
-        val configValues = mapOf(
+        val config = TestConfig(
             "active" to "false",
-            ALLOWED_EXCEPTION_NAME_REGEX to "*foo"
+            ALLOWED_EXCEPTION_NAME_REGEX to "*foo",
         )
-        val config = TestConfig(configValues)
         assertThat(EmptyCatchBlock(config).compileAndLint(regexTestingCode)).isEmpty()
     }
 
     @Test
     fun doesFailWithInvalidRegex() {
-        val configValues = mapOf(ALLOWED_EXCEPTION_NAME_REGEX to "*foo")
-        val config = TestConfig(configValues)
+        val config = TestConfig(ALLOWED_EXCEPTION_NAME_REGEX to "*foo")
         assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
             EmptyCatchBlock(config).compileAndLint(regexTestingCode)
         }

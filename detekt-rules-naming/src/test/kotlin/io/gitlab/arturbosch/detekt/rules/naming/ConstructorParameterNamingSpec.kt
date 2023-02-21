@@ -59,7 +59,7 @@ class ConstructorParameterNamingSpec {
             
             interface I { val PARAM: String }
         """.trimIndent()
-        val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
+        val config = TestConfig(IGNORE_OVERRIDDEN to "false")
         assertThat(ConstructorParameterNaming(config).compileAndLint(code)).hasTextLocations(8 to 34)
     }
 

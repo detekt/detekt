@@ -22,7 +22,7 @@ class InclusionExclusionPatternsSpec {
     @Nested
     inner class `rule should only run on library file specified by 'includes' pattern` {
 
-        private val config = TestConfig(mapOf(Config.INCLUDES_KEY to "**/library/*.kt"))
+        private val config = TestConfig(Config.INCLUDES_KEY to "**/library/*.kt")
 
         @Test
         fun `should run`() {
@@ -42,7 +42,7 @@ class InclusionExclusionPatternsSpec {
     @Nested
     inner class `rule should only run on library file not matching the specified 'excludes' pattern` {
 
-        private val config = TestConfig(mapOf(Config.EXCLUDES_KEY to "glob:**/Default.kt"))
+        private val config = TestConfig(Config.EXCLUDES_KEY to "glob:**/Default.kt")
 
         @Test
         fun `should run`() {
@@ -83,10 +83,8 @@ class InclusionExclusionPatternsSpec {
         @Test
         fun `should only run on dummies`() {
             val config = TestConfig(
-                mapOf(
-                    Config.INCLUDES_KEY to "**/library/**",
-                    Config.EXCLUDES_KEY to "**Library.kt"
-                )
+                Config.INCLUDES_KEY to "**/library/**",
+                Config.EXCLUDES_KEY to "**Library.kt",
             )
 
             OnlyLibraryTrackingRule(config).apply {
@@ -101,10 +99,8 @@ class InclusionExclusionPatternsSpec {
         @Test
         fun `should only run on library file`() {
             val config = TestConfig(
-                mapOf(
-                    Config.INCLUDES_KEY to "**/library/**",
-                    Config.EXCLUDES_KEY to "**Dummy*.kt"
-                )
+                Config.INCLUDES_KEY to "**/library/**",
+                Config.EXCLUDES_KEY to "**Dummy*.kt",
             )
 
             OnlyLibraryTrackingRule(config).apply {

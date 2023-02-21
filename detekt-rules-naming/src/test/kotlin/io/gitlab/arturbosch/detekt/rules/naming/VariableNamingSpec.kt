@@ -26,17 +26,16 @@ class VariableNamingSpec {
 
         @Test
         fun shouldNotFailWithInvalidRegexWhenDisabledVariableNaming() {
-            val configValues = mapOf(
+            val config = TestConfig(
                 "active" to "false",
-                VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo"
+                VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo",
             )
-            val config = TestConfig(configValues)
             assertThat(VariableNaming(config).compileAndLint(excludeClassPatternVariableRegexCode)).isEmpty()
         }
 
         @Test
         fun shouldFailWithInvalidRegexVariableNaming() {
-            val config = TestConfig(mapOf(VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo"))
+            val config = TestConfig(VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo")
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
                 VariableNaming(config).compileAndLint(excludeClassPatternVariableRegexCode)
             }
@@ -54,7 +53,7 @@ class VariableNamingSpec {
             val MYVar = 3
         }
         """.trimIndent()
-        val config = TestConfig(mapOf(VariableNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar"))
+        val config = TestConfig(VariableNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar")
         assertThat(VariableNaming(config).compileAndLint(code)).isEmpty()
     }
 
@@ -129,7 +128,7 @@ class VariableNamingSpec {
                 @Suppress("VariableNaming") val SHOULD_BE_FLAGGED: String
             }
         """.trimIndent()
-        val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
+        val config = TestConfig(IGNORE_OVERRIDDEN to "false")
         assertThat(VariableNaming(config).compileAndLint(code))
             .hasStartSourceLocations(
                 SourceLocation(2, 18),

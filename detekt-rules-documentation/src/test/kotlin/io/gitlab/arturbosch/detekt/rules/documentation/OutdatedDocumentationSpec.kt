@@ -352,8 +352,7 @@ class OutdatedDocumentationSpec {
 
     @Nested
     inner class `configuration matchTypeParameters` {
-        val configuredSubject =
-            OutdatedDocumentation(TestConfig(mapOf("matchTypeParameters" to "false")))
+        private val configuredSubject = OutdatedDocumentation(TestConfig("matchTypeParameters" to "false"))
 
         @Test
         fun `should not report when class type parameters mismatch and configuration is off`() {
@@ -380,8 +379,7 @@ class OutdatedDocumentationSpec {
 
     @Nested
     inner class `configuration matchDeclarationsOrder` {
-        val configuredSubject =
-            OutdatedDocumentation(TestConfig(mapOf("matchDeclarationsOrder" to "false")))
+        private val configuredSubject = OutdatedDocumentation(TestConfig("matchDeclarationsOrder" to "false"))
 
         @Test
         fun `should not report when declarations order mismatch and configuration is off`() {
@@ -412,8 +410,9 @@ class OutdatedDocumentationSpec {
 
     @Nested
     inner class `configuration allowParamOnConstructorProperties` {
-        val configuredSubject =
-            OutdatedDocumentation(TestConfig(mapOf("allowParamOnConstructorProperties" to "true")))
+        private val configuredSubject = OutdatedDocumentation(
+            TestConfig("allowParamOnConstructorProperties" to "true")
+        )
 
         @Test
         fun `should not report when property is documented as param`() {
@@ -442,15 +441,12 @@ class OutdatedDocumentationSpec {
 
     @Nested
     inner class `configuration matchDeclarationsOrder and allowParamOnConstructorProperties` {
-        val configuredSubject =
-            OutdatedDocumentation(
-                TestConfig(
-                    mapOf(
-                        "matchDeclarationsOrder" to "false",
-                        "allowParamOnConstructorProperties" to "true"
-                    )
-                )
+        private val configuredSubject = OutdatedDocumentation(
+            TestConfig(
+                "matchDeclarationsOrder" to "false",
+                "allowParamOnConstructorProperties" to "true",
             )
+        )
 
         @Test
         fun `should not report when property is documented as param`() {

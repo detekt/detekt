@@ -43,7 +43,7 @@ class FunctionParameterNamingSpec {
                 }
                 interface I { fun someStuff(`object`: String) }
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
+            val config = TestConfig(IGNORE_OVERRIDDEN to "false")
             assertThat(FunctionParameterNaming(config).compileAndLint(code)).hasSize(2)
         }
 
@@ -61,7 +61,7 @@ class FunctionParameterNamingSpec {
     @Nested
     inner class `parameters in a function of an excluded class` {
 
-        val config = TestConfig(mapOf(EXCLUDE_CLASS_PATTERN to "Excluded"))
+        val config = TestConfig(EXCLUDE_CLASS_PATTERN to "Excluded")
 
         @Test
         fun `should not detect function parameter`() {

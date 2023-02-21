@@ -37,7 +37,7 @@ class FunctionNamingSpec {
             fun SHOULD_NOT_BE_FLAGGED() {}
         }
         """.trimIndent()
-        val config = TestConfig(mapOf(FunctionNaming.EXCLUDE_CLASS_PATTERN to ".*Test$"))
+        val config = TestConfig(FunctionNaming.EXCLUDE_CLASS_PATTERN to ".*Test$")
         assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
     }
 
@@ -73,7 +73,7 @@ class FunctionNamingSpec {
         
         fun Foo(): Foo = FooImpl()
         """.trimIndent()
-        val config = TestConfig(mapOf(FunctionNaming.IGNORE_OVERRIDDEN to "false"))
+        val config = TestConfig(FunctionNaming.IGNORE_OVERRIDDEN to "false")
         assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
     }
 
@@ -98,7 +98,7 @@ class FunctionNamingSpec {
         }
         interface I { fun SHOULD_BE_FLAGGED() }
         """.trimIndent()
-        val config = TestConfig(mapOf(FunctionNaming.IGNORE_OVERRIDDEN to "false"))
+        val config = TestConfig(FunctionNaming.IGNORE_OVERRIDDEN to "false")
         assertThat(FunctionNaming(config).compileAndLint(code)).hasStartSourceLocations(
             SourceLocation(2, 18),
             SourceLocation(4, 19)
@@ -115,7 +115,7 @@ class FunctionNamingSpec {
 
     @Test
     fun `should use custom name for method`() {
-        val config = TestConfig(mapOf(FunctionNaming.FUNCTION_PATTERN to "^`.+`$"))
+        val config = TestConfig(FunctionNaming.FUNCTION_PATTERN to "^`.+`$")
         assertThat(
             FunctionNaming(config).compileAndLint(
                 """
@@ -139,7 +139,7 @@ class FunctionNamingSpec {
             fun MYFun() {}
         }
         """.trimIndent()
-        val config = TestConfig(mapOf(FunctionNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar"))
+        val config = TestConfig(FunctionNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar")
         assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
     }
 
@@ -165,7 +165,7 @@ class FunctionNamingSpec {
 
         @Test
         fun shouldFailWithInvalidRegexFunctionNaming() {
-            val config = TestConfig(mapOf(FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo"))
+            val config = TestConfig(FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo")
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
                 FunctionNaming(config).compileAndLint(excludeClassPatternFunctionRegexCode)
             }
@@ -173,11 +173,10 @@ class FunctionNamingSpec {
 
         @Test
         fun shouldNotFailWithInvalidRegexWhenDisabledFunctionNaming() {
-            val configRules = mapOf(
+            val config = TestConfig(
                 "active" to "false",
-                FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo"
+                FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo",
             )
-            val config = TestConfig(configRules)
             assertThat(FunctionNaming(config).compileAndLint(excludeClassPatternFunctionRegexCode)).isEmpty()
         }
     }

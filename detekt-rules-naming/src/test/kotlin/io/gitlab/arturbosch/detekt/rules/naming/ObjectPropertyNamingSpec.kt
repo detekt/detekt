@@ -183,14 +183,11 @@ class ObjectPropertyNamingSpec {
     @Nested
     inner class `variables and constants in objects with custom config` {
 
-        val config =
-            TestConfig(
-                mapOf(
-                    CONSTANT_PATTERN to "_[A-Za-z]*",
-                    PRIVATE_PROPERTY_PATTERN to ".*"
-                )
-            )
-        val subject = ObjectPropertyNaming(config)
+        private val config = TestConfig(
+            CONSTANT_PATTERN to "_[A-Za-z]*",
+            PRIVATE_PROPERTY_PATTERN to ".*",
+        )
+        private val subject = ObjectPropertyNaming(config)
 
         @Test
         fun `should not detect constants in object with underscores`() {
@@ -219,11 +216,7 @@ class ObjectPropertyNamingSpec {
     inner class `local properties` {
         @Test
         fun `should not detect local properties`() {
-            val config = TestConfig(
-                mapOf(
-                    PROPERTY_PATTERN to "valid"
-                )
-            )
+            val config = TestConfig(PROPERTY_PATTERN to "valid")
             val subject = ObjectPropertyNaming(config)
 
             val code = """

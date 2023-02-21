@@ -40,7 +40,7 @@ class IssueExtensionSpec {
 
         @Test
         fun `excludeCorrectable = true`() {
-            val config = TestConfig(mapOf("maxIssues" to "0", "excludeCorrectable" to "true"))
+            val config = TestConfig("maxIssues" to "0", "excludeCorrectable" to "true")
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = issues
             }

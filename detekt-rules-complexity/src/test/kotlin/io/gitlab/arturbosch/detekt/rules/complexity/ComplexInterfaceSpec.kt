@@ -7,20 +7,14 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 private const val THRESHOLD = 4
-private val defaultConfigMap = mapOf("threshold" to THRESHOLD)
-private val staticDeclarationsConfig = TestConfig(
-    defaultConfigMap + ("includeStaticDeclarations" to true)
-)
-private val privateDeclarationsConfig = TestConfig(
-    defaultConfigMap + ("includePrivateDeclarations" to true)
-)
-private val ignoreOverloadedConfig = TestConfig(
-    defaultConfigMap + ("ignoreOverloaded" to true)
-)
+private val defaultConfig = "threshold" to THRESHOLD
+private val staticDeclarationsConfig = TestConfig(defaultConfig, "includeStaticDeclarations" to true)
+private val privateDeclarationsConfig = TestConfig(defaultConfig, "includePrivateDeclarations" to true)
+private val ignoreOverloadedConfig = TestConfig(defaultConfig, "ignoreOverloaded" to true)
 
 class ComplexInterfaceSpec {
 
-    private val subject = ComplexInterface(TestConfig(defaultConfigMap))
+    private val subject = ComplexInterface(TestConfig(defaultConfig))
 
     @Nested
     inner class `ComplexInterface rule positives` {

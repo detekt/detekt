@@ -177,7 +177,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
             """.trimIndent()
             assertThat(
                 ElseCaseInsteadOfExhaustiveWhen(
-                    TestConfig(mapOf("ignoredSubjectTypes" to listOf("com.example.Color")))
+                    TestConfig("ignoredSubjectTypes" to listOf("com.example.Color"))
                 ).compileAndLintWithContext(env, code)
             ).isEmpty()
         }
@@ -203,7 +203,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
             """.trimIndent()
             assertThat(
                 ElseCaseInsteadOfExhaustiveWhen(
-                    TestConfig(mapOf("ignoredSubjectTypes" to listOf("com.example.Variant")))
+                    TestConfig("ignoredSubjectTypes" to listOf("com.example.Variant"))
                 ).compileAndLintWithContext(env, code)
             ).isEmpty()
         }
@@ -229,7 +229,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
             """.trimIndent()
             assertThat(
                 ElseCaseInsteadOfExhaustiveWhen(
-                    TestConfig(mapOf("ignoredSubjectTypes" to listOf("com.example.Class")))
+                    TestConfig("ignoredSubjectTypes" to listOf("com.example.Class"))
                 ).compileAndLintWithContext(env, code)
             ).hasSize(1)
         }
@@ -255,7 +255,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
             """.trimIndent()
             assertThat(
                 ElseCaseInsteadOfExhaustiveWhen(
-                    TestConfig(mapOf("ignoredSubjectTypes" to listOf("com.example.Class")))
+                    TestConfig("ignoredSubjectTypes" to listOf("com.example.Class"))
                 ).compileAndLintWithContext(env, code)
             ).hasSize(1)
         }

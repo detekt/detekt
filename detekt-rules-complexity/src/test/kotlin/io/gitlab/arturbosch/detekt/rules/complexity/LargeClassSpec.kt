@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
-private fun subject(threshold: Int) = LargeClass(TestConfig(mapOf("threshold" to threshold)))
+private fun subject(threshold: Int) = LargeClass(TestConfig("threshold" to threshold))
 
 class LargeClassSpec {
 

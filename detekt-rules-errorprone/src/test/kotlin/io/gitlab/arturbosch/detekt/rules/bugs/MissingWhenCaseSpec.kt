@@ -314,7 +314,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
 
         @Suppress("DEPRECATION")
         private val subject = MissingWhenCase(
-            TestConfig(mapOf("allowElseExpression" to false))
+            TestConfig("allowElseExpression" to false)
         )
 
         @Nested

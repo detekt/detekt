@@ -39,7 +39,7 @@ class VariableMaxLengthSpec {
         """.trimIndent()
         assertThat(
             VariableMaxLength(
-                TestConfig(mapOf("maximumVariableNameLength" to 10))
+                TestConfig("maximumVariableNameLength" to 10)
             ).compileAndLint(code)
         ).isEmpty()
     }

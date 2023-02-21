@@ -8,13 +8,11 @@ import org.junit.jupiter.api.Test
 
 class LongParameterListSpec {
 
-    val defaultThreshold = 2
-    val defaultConfig =
+    private val defaultThreshold = 2
+    private val defaultConfig =
         TestConfig(
-            mapOf(
-                "functionThreshold" to defaultThreshold,
-                "constructorThreshold" to defaultThreshold
-            )
+            "functionThreshold" to defaultThreshold,
+            "constructorThreshold" to defaultThreshold,
         )
 
     val subject = LongParameterList(defaultConfig)
@@ -46,7 +44,7 @@ class LongParameterListSpec {
 
     @Test
     fun `does not report long parameter list if parameters with defaults should be ignored`() {
-        val config = TestConfig(mapOf("ignoreDefaultParameters" to "true"))
+        val config = TestConfig("ignoreDefaultParameters" to "true")
         val rule = LongParameterList(config)
         val code = "fun long(a: Int, b: Int, c: Int = 2) {}"
         assertThat(rule.compileAndLint(code)).isEmpty()
@@ -82,7 +80,7 @@ class LongParameterListSpec {
 
     @Test
     fun `reports long parameter list if custom threshold is set`() {
-        val config = TestConfig(mapOf("constructorThreshold" to "1"))
+        val config = TestConfig("constructorThreshold" to "1")
         val rule = LongParameterList(config)
         val code = "class LongCtor(a: Int)"
         assertThat(rule.compileAndLint(code)).hasSize(1)
@@ -91,10 +89,8 @@ class LongParameterListSpec {
     @Test
     fun `does not report long parameter list for constructors of data classes if asked`() {
         val config = TestConfig(
-            mapOf(
-                "ignoreDataClasses" to "true",
-                "constructorThreshold" to "1"
-            )
+            "ignoreDataClasses" to "true",
+            "constructorThreshold" to "1",
         )
         val rule = LongParameterList(config)
         val code = "data class Data(val a: Int)"
@@ -104,21 +100,18 @@ class LongParameterListSpec {
     @Nested
     inner class `constructors and functions with ignored annotations` {
 
-        val config =
-            TestConfig(
-                mapOf(
-                    "ignoreAnnotatedParameter" to listOf(
-                        "Generated",
-                        "kotlin.Deprecated",
-                        "kotlin.jvm.JvmName",
-                        "kotlin.Suppress"
-                    ),
-                    "functionThreshold" to 1,
-                    "constructorThreshold" to 1
-                )
-            )
+        private val config = TestConfig(
+            "ignoreAnnotatedParameter" to listOf(
+                "Generated",
+                "kotlin.Deprecated",
+                "kotlin.jvm.JvmName",
+                "kotlin.Suppress",
+            ),
+            "functionThreshold" to 1,
+            "constructorThreshold" to 1,
+        )
 
-        val rule = LongParameterList(config)
+        private val rule = LongParameterList(config)
 
         @Test
         fun `reports long parameter list for constructors if constructor parameters are annotated with annotation that is not ignored`() {

@@ -21,7 +21,7 @@ class TrailingCommaOnCallSiteSpec {
             val code = """
                 val foo1 = listOf("a", "b",)
             """.trimIndent()
-            val findings = TrailingCommaOnCallSite(TestConfig(mapOf(USE_TRAILING_COMMA to false))).lint(code)
+            val findings = TrailingCommaOnCallSite(TestConfig(USE_TRAILING_COMMA to false)).lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -30,7 +30,7 @@ class TrailingCommaOnCallSiteSpec {
             val code = """
                 val foo2 = Pair(1, 2,)
             """.trimIndent()
-            val findings = TrailingCommaOnCallSite(TestConfig(mapOf(USE_TRAILING_COMMA to false))).lint(code)
+            val findings = TrailingCommaOnCallSite(TestConfig(USE_TRAILING_COMMA to false)).lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -39,7 +39,7 @@ class TrailingCommaOnCallSiteSpec {
             val code = """
                 val foo3: List<String,> = emptyList()
             """.trimIndent()
-            val findings = TrailingCommaOnCallSite(TestConfig(mapOf(USE_TRAILING_COMMA to false))).lint(code)
+            val findings = TrailingCommaOnCallSite(TestConfig(USE_TRAILING_COMMA to false)).lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -49,7 +49,7 @@ class TrailingCommaOnCallSiteSpec {
                 val foo4 = Array(2) { 42 }
                 val bar4 = foo4[1,]
             """.trimIndent()
-            val findings = TrailingCommaOnCallSite(TestConfig(mapOf(USE_TRAILING_COMMA to false))).lint(code)
+            val findings = TrailingCommaOnCallSite(TestConfig(USE_TRAILING_COMMA to false)).lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -59,7 +59,7 @@ class TrailingCommaOnCallSiteSpec {
                 @Foo5([1, 2,])
                 val foo5: Int = 0
             """.trimIndent()
-            val findings = TrailingCommaOnCallSite(TestConfig(mapOf(USE_TRAILING_COMMA to false))).lint(code)
+            val findings = TrailingCommaOnCallSite(TestConfig(USE_TRAILING_COMMA to false)).lint(code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -76,7 +76,7 @@ class TrailingCommaOnCallSiteSpec {
                     "b"
                 )
             """.trimIndent()
-            val findings = TrailingCommaOnCallSite(TestConfig(mapOf(USE_TRAILING_COMMA to true))).lint(code)
+            val findings = TrailingCommaOnCallSite(TestConfig(USE_TRAILING_COMMA to true)).lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -89,7 +89,7 @@ class TrailingCommaOnCallSiteSpec {
                     2
                 )
             """.trimIndent()
-            val findings = TrailingCommaOnCallSite(TestConfig(mapOf(USE_TRAILING_COMMA to true))).lint(code)
+            val findings = TrailingCommaOnCallSite(TestConfig(USE_TRAILING_COMMA to true)).lint(code)
             assertThat(findings).hasSize(1)
         }
     }

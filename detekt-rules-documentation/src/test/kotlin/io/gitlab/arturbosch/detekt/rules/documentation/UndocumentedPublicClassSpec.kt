@@ -102,21 +102,21 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `should not report inner classes when turned off`() {
         val findings =
-            UndocumentedPublicClass(TestConfig(mapOf(SEARCH_IN_INNER_CLASS to "false"))).compileAndLint(inner)
+            UndocumentedPublicClass(TestConfig(SEARCH_IN_INNER_CLASS to "false")).compileAndLint(inner)
         assertThat(findings).isEmpty()
     }
 
     @Test
     fun `should not report inner objects when turned off`() {
         val findings =
-            UndocumentedPublicClass(TestConfig(mapOf(SEARCH_IN_INNER_OBJECT to "false"))).compileAndLint(innerObject)
+            UndocumentedPublicClass(TestConfig(SEARCH_IN_INNER_OBJECT to "false")).compileAndLint(innerObject)
         assertThat(findings).isEmpty()
     }
 
     @Test
     fun `should not report inner interfaces when turned off`() {
         val findings =
-            UndocumentedPublicClass(TestConfig(mapOf(SEARCH_IN_INNER_INTERFACE to "false"))).compileAndLint(
+            UndocumentedPublicClass(TestConfig(SEARCH_IN_INNER_INTERFACE to "false")).compileAndLint(
                 innerInterface
             )
         assertThat(findings).isEmpty()
@@ -125,7 +125,7 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `should not report nested classes when turned off`() {
         val findings =
-            UndocumentedPublicClass(TestConfig(mapOf(SEARCH_IN_NESTED_CLASS to "false"))).compileAndLint(nested)
+            UndocumentedPublicClass(TestConfig(SEARCH_IN_NESTED_CLASS to "false")).compileAndLint(nested)
         assertThat(findings).isEmpty()
     }
 
@@ -250,7 +250,7 @@ class UndocumentedPublicClassSpec {
         protected class Test {
         }
         """.trimIndent()
-        val subject = UndocumentedPublicClass(TestConfig(mapOf(SEARCH_IN_PROTECTED_CLASS to "true")))
+        val subject = UndocumentedPublicClass(TestConfig(SEARCH_IN_PROTECTED_CLASS to "true"))
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 }

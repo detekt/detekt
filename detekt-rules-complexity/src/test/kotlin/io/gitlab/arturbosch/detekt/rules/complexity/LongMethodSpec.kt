@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class LongMethodSpec {
 
-    val subject = LongMethod(TestConfig(mapOf("threshold" to 5)))
+    val subject = LongMethod(TestConfig("threshold" to 5))
 
     @Test
     fun `should find two long methods`() {

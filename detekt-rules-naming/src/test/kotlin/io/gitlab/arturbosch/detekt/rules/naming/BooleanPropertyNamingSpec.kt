@@ -46,7 +46,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 
                 data class TestImpl (override var default: Boolean) : Test
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to false))
+            val config = TestConfig(IGNORE_OVERRIDDEN to false)
             val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(2)
@@ -61,7 +61,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 
                 data class TestImpl (override var default: Boolean) : Test
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
+            val config = TestConfig(IGNORE_OVERRIDDEN to true)
             val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
@@ -98,7 +98,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 
                 data class TestImpl (override var default: Boolean?) : Test
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to false))
+            val config = TestConfig(IGNORE_OVERRIDDEN to false)
             val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(2)
@@ -113,7 +113,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 
                 data class TestImpl (override var default: Boolean?) : Test
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
+            val config = TestConfig(IGNORE_OVERRIDDEN to true)
             val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
@@ -150,7 +150,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 
                 data class TestImpl (override var default: Boolean = false) : Test
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to false))
+            val config = TestConfig(IGNORE_OVERRIDDEN to false)
             val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(2)
@@ -165,7 +165,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 
                 data class TestImpl (override var default: Boolean = false) : Test
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
+            val config = TestConfig(IGNORE_OVERRIDDEN to true)
             val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
@@ -218,7 +218,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 
                 data class TestImpl (override var default: java.lang.Boolean) : Test
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to false))
+            val config = TestConfig(IGNORE_OVERRIDDEN to false)
             val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(2)
@@ -233,7 +233,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 
                 data class TestImpl (override var default: java.lang.Boolean) : Test
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
+            val config = TestConfig(IGNORE_OVERRIDDEN to true)
             val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
@@ -327,7 +327,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     override var default: Boolean = true
                 }
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to false))
+            val config = TestConfig(IGNORE_OVERRIDDEN to false)
             val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(2)
@@ -344,7 +344,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     override var default: Boolean = true
                 }
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
+            val config = TestConfig(IGNORE_OVERRIDDEN to true)
             val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
@@ -389,7 +389,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     override var default: Boolean? = null
                 }
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to false))
+            val config = TestConfig(IGNORE_OVERRIDDEN to false)
             val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(2)
@@ -406,7 +406,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     override var default: Boolean? = null
                 }
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
+            val config = TestConfig(IGNORE_OVERRIDDEN to true)
             val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
@@ -451,7 +451,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     override var default: Boolean = false
                 }
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to false))
+            val config = TestConfig(IGNORE_OVERRIDDEN to false)
             val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(2)
@@ -468,7 +468,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     override var default: Boolean = false
                 }
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
+            val config = TestConfig(IGNORE_OVERRIDDEN to true)
             val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
@@ -513,7 +513,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     override var default = true
                 }
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to false))
+            val config = TestConfig(IGNORE_OVERRIDDEN to false)
             val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(2)
@@ -530,7 +530,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     override var default = true
                 }
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
+            val config = TestConfig(IGNORE_OVERRIDDEN to true)
             val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
@@ -575,7 +575,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     override var default: java.lang.Boolean = java.lang.Boolean(true)
                 }
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to false))
+            val config = TestConfig(IGNORE_OVERRIDDEN to false)
             val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(2)
@@ -592,7 +592,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                     override var default: java.lang.Boolean = java.lang.Boolean(true)
                 }
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to true))
+            val config = TestConfig(IGNORE_OVERRIDDEN to true)
             val findings = BooleanPropertyNaming(config).compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
@@ -631,7 +631,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            val config = TestConfig(mapOf(ALLOWED_PATTERN to "^(is|has|are|need)"))
+            val config = TestConfig(ALLOWED_PATTERN to "^(is|has|are|need)")
             assertThat(BooleanPropertyNaming(config).compileAndLint(code))
                 .isEmpty()
         }

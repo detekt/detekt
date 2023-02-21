@@ -213,7 +213,7 @@ class SwallowedExceptionSpec {
     @Nested
     inner class `ignores given exception name config` {
 
-        val config = TestConfig(mapOf("allowedExceptionNameRegex" to "myIgnore"))
+        val config = TestConfig("allowedExceptionNameRegex" to "myIgnore")
         val rule = SwallowedException(config)
 
         @Test

@@ -11,7 +11,7 @@ class FunctionMaxLengthSpec {
     fun `should report a function name that is too long base on config`() {
         val code = "fun thisFunctionLongName() = 3"
         assertThat(
-            FunctionMaxLength(TestConfig(mapOf("maximumFunctionNameLength" to 10)))
+            FunctionMaxLength(TestConfig("maximumFunctionNameLength" to 10))
                 .compileAndLint(code)
         )
             .hasSize(1)
@@ -27,7 +27,7 @@ class FunctionMaxLengthSpec {
         """.trimIndent()
         assertThat(
             FunctionMaxLength(
-                TestConfig(mapOf("maximumFunctionNameLength" to 10))
+                TestConfig("maximumFunctionNameLength" to 10)
             ).compileAndLint(code)
         ).isEmpty()
     }
@@ -56,9 +56,7 @@ class FunctionMaxLengthSpec {
         """.trimIndent()
         assertThat(
             FunctionMaxLength(
-                TestConfig(
-                    mapOf("maximumFunctionNameLength" to 5)
-                )
+                TestConfig("maximumFunctionNameLength" to 5)
             ).compileAndLint(code)
         ).isEmpty()
     }

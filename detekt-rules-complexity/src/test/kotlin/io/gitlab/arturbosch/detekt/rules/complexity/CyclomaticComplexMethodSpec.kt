@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-private val defaultConfigMap: Map<String, Any> = mapOf("threshold" to "1")
+private val defaultConfig = "threshold" to "1"
 
 class CyclomaticComplexMethodSpec {
 
@@ -21,7 +21,7 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `counts different loops`() {
-            val findings = CyclomaticComplexMethod(TestConfig(defaultConfigMap)).compileAndLint(
+            val findings = CyclomaticComplexMethod(TestConfig(defaultConfig)).compileAndLint(
                 """
                 fun test() {
                     for (i in 1..10) {}
@@ -37,7 +37,7 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `counts catch blocks`() {
-            val findings = CyclomaticComplexMethod(TestConfig(defaultConfigMap)).compileAndLint(
+            val findings = CyclomaticComplexMethod(TestConfig(defaultConfig)).compileAndLint(
                 """
                 fun test() {
                     try {} catch(e: IllegalArgumentException) {} catch(e: Exception) {} finally {}
@@ -50,7 +50,7 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `counts nested conditional statements`() {
-            val findings = CyclomaticComplexMethod(TestConfig(defaultConfigMap)).compileAndLint(
+            val findings = CyclomaticComplexMethod(TestConfig(defaultConfig)).compileAndLint(
                 """
                 fun test() {
                     try {
@@ -85,31 +85,31 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `counts three with nesting function 'forEach'`() {
-            val config = TestConfig(defaultConfigMap.plus("ignoreNestingFunctions" to "false"))
+            val config = TestConfig(defaultConfig, "ignoreNestingFunctions" to "false")
             assertExpectedComplexityValue(code, config, expectedValue = 3)
         }
 
         @Test
         fun `can ignore nesting functions like 'forEach'`() {
-            val config = TestConfig(defaultConfigMap.plus("ignoreNestingFunctions" to "true"))
+            val config = TestConfig(defaultConfig, "ignoreNestingFunctions" to "true")
             assertExpectedComplexityValue(code, config, expectedValue = 2)
         }
 
         @Test
         fun `skips all if if the nested functions is empty`() {
-            val config = TestConfig(defaultConfigMap.plus("nestingFunctions" to ""))
+            val config = TestConfig(defaultConfig, "nestingFunctions" to "")
             assertExpectedComplexityValue(code, config, expectedValue = 2)
         }
 
         @Test
         fun `skips 'forEach' as it is not specified`() {
-            val config = TestConfig(defaultConfigMap.plus("nestingFunctions" to "let,apply,also"))
+            val config = TestConfig(defaultConfig, "nestingFunctions" to "let,apply,also")
             assertExpectedComplexityValue(code, config, expectedValue = 2)
         }
 
         @Test
         fun `skips 'forEach' as it is not specified list`() {
-            val config = TestConfig(defaultConfigMap.plus("nestingFunctions" to listOf("let", "apply", "also")))
+            val config = TestConfig(defaultConfig, "nestingFunctions" to listOf("let", "apply", "also"))
             assertExpectedComplexityValue(code, config, expectedValue = 2)
         }
     }
@@ -122,10 +122,8 @@ class CyclomaticComplexMethodSpec {
         @Test
         fun `does not report complex methods with a single when expression`() {
             val config = TestConfig(
-                mapOf(
-                    "threshold" to "4",
-                    "ignoreSingleWhenExpression" to "true"
-                )
+                "threshold" to "4",
+                "ignoreSingleWhenExpression" to "true",
             )
             val subject = CyclomaticComplexMethod(config)
 
@@ -134,7 +132,7 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `reports all complex methods`() {
-            val config = TestConfig(mapOf("threshold" to "4"))
+            val config = TestConfig("threshold" to "4")
             val subject = CyclomaticComplexMethod(config)
 
             assertThat(subject.lint(path)).hasStartSourceLocations(
@@ -148,7 +146,7 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `does not trip for a reasonable amount of simple when entries when ignoreSimpleWhenEntries is true`() {
-            val config = TestConfig(mapOf("ignoreSimpleWhenEntries" to "true"))
+            val config = TestConfig("ignoreSimpleWhenEntries" to "true")
             val subject = CyclomaticComplexMethod(config)
             val code = """
                  fun f() {

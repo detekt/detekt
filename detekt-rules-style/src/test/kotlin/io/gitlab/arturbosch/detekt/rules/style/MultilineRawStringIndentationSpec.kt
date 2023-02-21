@@ -340,7 +340,7 @@ class MultilineRawStringIndentationSpec {
                 $TAB)
                 }
             """.trimIndent()
-            val subject = MultilineRawStringIndentation(TestConfig(mapOf("indentSize" to 1)))
+            val subject = MultilineRawStringIndentation(TestConfig("indentSize" to 1))
             subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
         }
