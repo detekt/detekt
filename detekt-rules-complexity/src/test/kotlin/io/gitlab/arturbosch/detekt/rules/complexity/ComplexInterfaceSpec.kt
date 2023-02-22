@@ -208,7 +208,7 @@ class ComplexInterfaceSpec {
                     fun fImpl() {
                         val x = 0 // should not report
                     }
-
+                
                     val i: Int
                     // a comment shouldn't be detected
                 }
@@ -221,7 +221,7 @@ class ComplexInterfaceSpec {
             val code = """
                 interface I {
                     fun f()
-
+                
                     companion object {
                         fun sf() = 0
                         const val c = 0

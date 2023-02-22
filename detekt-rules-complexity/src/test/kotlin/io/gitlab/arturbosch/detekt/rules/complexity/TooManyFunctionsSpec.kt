@@ -125,7 +125,7 @@ class TooManyFunctionsSpec {
             @Deprecated("")
             fun f() {
             }
-
+            
             class A {
                 @Deprecated("")
                 fun f() {
@@ -194,12 +194,12 @@ class TooManyFunctionsSpec {
                     @Deprecated("")
                     private fun c() = Unit
                 }
-
+                
                 interface I {
                     fun a() = Unit
                     fun b() = Unit
                 }
-
+                
                 class B : I {
                     override fun a() = Unit
                     override fun b() = Unit
@@ -228,7 +228,7 @@ class TooManyFunctionsSpec {
                     fun func1()
                     fun func2()
                 }
-
+                
                 class Foo : I1 {
                     override fun func1() = Unit
                     override fun func2() = Unit

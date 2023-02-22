@@ -86,7 +86,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
             val code = """
             private var fileA: Int? = 5
             private var fileB: Int? = 5
-
+            
             fun fileFoo() {
                 fileB = 6
             }
@@ -98,7 +98,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
         fun `does not report when class-level vars are assigned nullable values`() {
             val code = """
             import kotlin.random.Random
-
+            
             class A(fVal: Int?) {
                 private var a: Int? = 0
                 private var b: Int? = 0
@@ -106,11 +106,11 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 private var d: Int? = 0
                 private var e: Int? = null
                 private var f: Int?
-                
+            
                 init {
                     f = fVal
                 }
-
+            
                 fun foo(fizz: Int): Int {
                     a = null
                     b = if (fizz % 2 == 0) fizz else null
@@ -118,7 +118,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     d = a
                     return fizz
                 }
-
+            
                 private fun buzz(bizz: Int): Int? {
                     return if (bizz % 2 == 0) null else bizz
                 }
@@ -141,15 +141,15 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
         fun `does not report when file-level vars are assigned nullable values`() {
             val code = """
             import kotlin.random.Random
-
+            
             private var fileA: Int? = 5
             private var fileB: Int? = null
             private var fileC: Int? = 5
-
+            
             fun fileFoo() {
                 fileC = null
             }
-
+            
             class A {
                 fun foo() {
                     fileA = null
@@ -236,7 +236,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 val a: Int? = 5
                 val b: Int?
                 val c: Int?
-                
+            
                 init {
                     b = 5
                     c = cVal
@@ -270,12 +270,12 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
         fun `does not report when class-level vals are assigned a nullable value`() {
             val code = """
             import kotlin.random.Random
-
+            
             class A(cVal: Int?) {
                 val a: Int? = null
                 val b: Int?
                 val c: Int?
-                
+            
                 init {
                     b = null
                     c = cVal
@@ -289,7 +289,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
         fun `does not report when vals utilize nullable delegate values`() {
             val code = """
             import kotlin.random.Random
-
+            
             class A {
                 val d: Int? by lazy {
                     val randVal = Random.nextInt()
@@ -338,7 +338,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     }
                 val c: Int?
                     get() = foo()
-                
+            
                 private fun foo(): Int {
                     return 5
                 }
@@ -514,7 +514,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     fun foo(a: Int?) {
                         val b = a!!.plus(2)
                     }
-
+                    
                     fun fizz(b: Int?) = b!!.plus(2)
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
@@ -535,7 +535,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
             fun `does not report a double-bang call the field of a non-null param`() {
                 val code = """
                     class A(val a: Int?)
-
+                    
                     fun foo(a: A) {
                         val b = a.a!! + 2
                     }
@@ -552,7 +552,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     
                     class B : A {
                         override fun foo(a: Int?) {
-                            val b = a!! + 2 
+                            val b = a!! + 2
                         }
                     }
                 """.trimIndent()
@@ -583,7 +583,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 fun `does report when the safe-qualified expression is the only expression of the function`() {
                     val code = """
                         class A(val foo: String)
-
+                        
                         fun foo(a: A?) {
                             a?.let { println(it.foo) }
                         }
@@ -599,7 +599,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                                 callback.invoke()
                             }
                         }
-
+                        
                         fun foo(a: String?, aObj: A) {
                             aObj.doFoo {
                                 a?.let { println("a not null") }
@@ -728,7 +728,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                                 a !is Int -> println("a is null")
                             }
                         }
-
+                        
                         fun fizz(b: Int?) {
                             when {
                                 b is Int? -> println("b is null")
@@ -798,7 +798,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                                 !is Int -> println("a is null")
                             }
                         }
-
+                        
                         fun fizz(b: Int?) {
                             when (b) {
                                 is Int? -> println("b is null")
@@ -845,7 +845,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             println("'a' is null")
                         }
                     }
-
+                    
                     fun fizz(a: Int?) {
                         if (null == a) {
                             println("'a' is null")
@@ -877,7 +877,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             println(a + 5)
                         }
                     }
-
+                    
                     fun fizz(a: Int?) {
                         if (null != a) {
                             println(a + 5)

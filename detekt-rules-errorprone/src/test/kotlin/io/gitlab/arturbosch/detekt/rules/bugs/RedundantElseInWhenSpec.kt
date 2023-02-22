@@ -24,7 +24,7 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                 GREEN,
                 BLUE
             }
-
+            
             fun whenOnEnumFail(c: Color) {
                 when (c) {
                     Color.BLUE -> {}
@@ -46,7 +46,7 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                 GREEN,
                 BLUE
             }
-
+            
             fun whenOnEnumFail(c: Color) {
                 val x = when (c) {
                     Color.BLUE -> 1
@@ -68,14 +68,14 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                 GREEN,
                 BLUE
             }
-
+            
             fun whenOnEnumPass(c: Color) {
                 when (c) {
                     Color.BLUE -> {}
                     Color.GREEN -> {}
                     else -> {}
                 }
-
+            
                 val x = when (c) {
                     Color.BLUE -> 1
                     Color.GREEN -> 2
@@ -94,21 +94,21 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                 GREEN,
                 BLUE
             }
-
+            
             fun whenOnEnumPassA(c: Color) {
                 when (c) {
                     Color.BLUE -> {}
                     Color.GREEN -> {}
                     Color.RED -> {}
                 }
-
+            
                 val x = when (c) {
                     Color.BLUE -> 1
                     Color.GREEN -> 2
                     Color.RED -> 3
                 }
             }
-
+            
             fun whenOnEnumPassB(c: Color) {
                 when (c) {
                     Color.BLUE -> {}
@@ -130,7 +130,7 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                     class VariantB : Variant()
                     object VariantC : Variant()
                 }
-
+                
                 fun whenOnEnumFail(v: Variant) {
                     when (v) {
                         is Variant.VariantA -> {}
@@ -151,7 +151,7 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                     class VariantB : Variant()
                     object VariantC : Variant()
                 }
-
+                
                 fun whenOnEnumFail(v: Variant) {
                     val x = when (v) {
                         is Variant.VariantA -> "a"
@@ -172,14 +172,14 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                     class VariantB : Variant()
                     object VariantC : Variant()
                 }
-
+                
                 fun whenOnEnumPass(v: Variant) {
                     when (v) {
                         is Variant.VariantA -> {}
                         is Variant.VariantB -> {}
                         else -> {}
                     }
-
+                
                     val x = when (v) {
                         is Variant.VariantA -> "a"
                         is Variant.VariantB -> "b"
@@ -198,7 +198,7 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                     class VariantB : Variant()
                     object VariantC : Variant()
                 }
-
+                
                 fun whenOnEnumPass(v: Variant) {
                     when (v) {
                         is Variant.VariantA -> {}
@@ -218,28 +218,28 @@ class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
                 fun whenChecks() {
                     val x = 3
                     val s = "3"
-
+                
                     when (x) {
                         0, 1 -> print("x == 0 or x == 1")
                         else -> print("otherwise")
                     }
-
+                
                     when (x) {
                         Integer.parseInt(s) -> print("s encodes x")
                         else -> print("s does not encode x")
                     }
-
+                
                     when (x) {
                         in 1..10 -> print("x is in the range")
                         !in 10..20 -> print("x is outside the range")
                         else -> print("none of the above")
                     }
-
+                
                     val y = when(s) {
                         is String -> s.startsWith("prefix")
                         else -> false
                     }
-
+                
                     when {
                         x.equals(s) -> print("x equals s")
                         x.plus(3) == 4 -> print("x is 1")

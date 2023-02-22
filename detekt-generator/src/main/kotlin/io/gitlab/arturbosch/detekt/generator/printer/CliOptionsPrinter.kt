@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.generator.printer
 
 import com.beust.jcommander.JCommander
 import io.gitlab.arturbosch.detekt.cli.CliArgs
-import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.writeText
 
 class CliOptionsPrinter {
 
@@ -12,13 +12,12 @@ class CliOptionsPrinter {
     }
 
     fun print(filePath: Path) {
-        Files.write(
-            filePath,
+        filePath.writeText(
             buildString {
                 appendLine("```")
                 jCommander.usageFormatter.usage(this)
                 appendLine("```")
-            }.toByteArray()
+            }
         )
     }
 }

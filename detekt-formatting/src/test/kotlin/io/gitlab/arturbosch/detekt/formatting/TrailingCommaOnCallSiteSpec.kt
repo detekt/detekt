@@ -72,7 +72,7 @@ class TrailingCommaOnCallSiteSpec {
             val code = """
                 val foo1 = listOf("a", "b")
                 val foo2 = listOf(
-                    "a", 
+                    "a",
                     "b"
                 )
             """.trimIndent()
@@ -85,7 +85,7 @@ class TrailingCommaOnCallSiteSpec {
             val code = """
                 val foo2 = Pair(1, 2)
                 val foo2 = Pair(
-                    1, 
+                    1,
                     2
                 )
             """.trimIndent()

@@ -30,7 +30,7 @@ internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCor
             
             class A(config: Config) : Rule(config) {
                 override val issue = error("I don't care")
-
+            
                 private fun asdf() {
                     bindingContext
                 }
@@ -60,11 +60,11 @@ internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCor
             import io.gitlab.arturbosch.detekt.api.Config
             import io.gitlab.arturbosch.detekt.api.Rule
             import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-
+            
             @RequiresTypeResolution
             class A(config: Config) : Rule(config) {
                 override val issue = error("I don't care")
-
+            
                 private fun asdf() {
                     bindingContext
                 }
@@ -80,7 +80,7 @@ internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCor
             import io.gitlab.arturbosch.detekt.api.Config
             import io.gitlab.arturbosch.detekt.api.Rule
             import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-
+            
             @RequiresTypeResolution
             class A(config: Config) : Rule(config) {
                 override val issue = error("I don't care")
@@ -95,15 +95,15 @@ internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCor
         val code = """
             import io.gitlab.arturbosch.detekt.api.Config
             import io.gitlab.arturbosch.detekt.api.Rule
-
+            
             class A(config: Config) : Rule(config) {
                 override val issue = error("I don't care")
-
+            
                 private fun asdf() {
                     extension()
                 }
             }
-
+            
             inline fun Rule.extension(): Boolean {
                 bindingContext
                 return true

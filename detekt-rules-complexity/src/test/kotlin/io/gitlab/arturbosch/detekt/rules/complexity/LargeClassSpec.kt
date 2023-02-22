@@ -22,8 +22,8 @@ class LargeClassSpec {
     @Test
     fun `should not report anything in files without classes`() {
         val code = """
-            val i = 0 
-
+            val i = 0
+            
             fun f() {
                 println()
                 println()

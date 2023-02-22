@@ -57,7 +57,7 @@ class ReportMergeSpec {
             |    detekt {
             |        reports.xml.enabled = true
             |    }
-            |    
+            |
             |    plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
             |        tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
             |            finalizedBy(reportMerge)
@@ -111,8 +111,10 @@ class ReportMergeSpec {
                            targetCompatibility = JavaVersion.VERSION_11
                        }
                     }
-                    kotlin {
-                        jvmToolchain(11)
+                    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+                        compilerOptions {
+                            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+                        }
                     }
                     dependencies {
                         implementation(project(":lib"))
@@ -136,8 +138,10 @@ class ReportMergeSpec {
                            targetCompatibility = JavaVersion.VERSION_11
                        }
                     }
-                    kotlin {
-                        jvmToolchain(11)
+                    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+                        compilerOptions {
+                            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+                        }
                     }
                 """.trimIndent(),
                 srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
@@ -168,7 +172,7 @@ class ReportMergeSpec {
             |    detekt {
             |        reports.xml.enabled = true
             |    }
-            |    
+            |
             |    plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
             |        tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
             |            finalizedBy(reportMerge)

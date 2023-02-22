@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Named
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -54,7 +55,7 @@ class UnnecessaryParenthesesSpec {
             fun function (a: (input: String) -> Unit) {
                 a.invoke("TEST")
             }
-
+            
             fun test() {
                 function({ input -> println(input) })
             }
@@ -70,7 +71,7 @@ class UnnecessaryParenthesesSpec {
             fun function (integer: Int, a: (input: String) -> Unit) {
                 a.invoke("TEST")
             }
-
+            
             fun test() {
                 function(1, { input -> println(input) })
             }
@@ -158,7 +159,7 @@ class UnnecessaryParenthesesSpec {
                     first(1)
                     second(2)
                 }
-
+            
                 fun call() {
                     test({ println(it) }) { println(it) }
                 }
@@ -177,7 +178,7 @@ class UnnecessaryParenthesesSpec {
                     first(1)
                     second(2)
                 }
-
+            
                 fun call() {
                     test({ println(it) }, { println(it) })
                 }
@@ -198,7 +199,7 @@ class UnnecessaryParenthesesSpec {
                     first()
                     second()
                 }
-
+            
                 fun call() {
                     test("hello", { println(it) }) { println(it) }
                 }
@@ -225,11 +226,11 @@ class UnnecessaryParenthesesSpec {
             val a1 = (1 * 2) + 3
             val a2 = (1 / 2) + 3
             val a3 = (1 % 2) + 3
-
+            
             val b1 = 3 + (1 * 2)
             val b2 = 3 + (1 / 2)
             val b3 = 3 + (1 % 2)
-
+            
             val c = (4 + 5) * 3 // parens required
         """.trimIndent()
 
@@ -294,13 +295,13 @@ class UnnecessaryParenthesesSpec {
         val code = """
             val a1 = null ?: (1 to 2) // parens required
             val a2 = (null ?: 1) to 2
-
+            
             val b1 = null ?: (1 == 2) // parens required
             val b2 = (null ?: 1) == 2
-
+            
             val c1 = null ?: (1 > 2) // parens required
             val c2 = (null ?: 1) > 2
-
+            
             val d1 = null ?: (1 in 2) // parens required
             val d2 = (null ?: 1) in 2
         """.trimIndent()
@@ -319,6 +320,203 @@ class UnnecessaryParenthesesSpec {
         """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 4)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `does not report unary operator with value when precedence is clear`(testCase: RuleTestCase) {
+        val code = """
+            class Foo(val value: Int) {
+              operator fun unaryMinus() = Foo(value * -value)
+              operator fun unaryPlus() = Foo(value * -value)
+            }
+
+            val Int.foo: Foo get() = Foo(value = this)
+
+            fun test() {
+                val a = -2.foo
+                val b = (-2).foo
+                val c = +2.foo
+                val d = (+2).foo
+
+                val e = -2.foo.value.foo
+                val f = (-2).foo.value.foo
+            }
+        """.trimIndent()
+
+        assertThat(testCase.rule.lint(code)).isEmpty()
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `unary operator with value when precedence is unclear`(testCase: RuleTestCase) {
+        val code = """
+            class Foo(val value: Int) {
+              operator fun unaryMinus() = Foo(value * -value)
+              operator fun unaryPlus() = Foo(value * -value)
+            }
+
+            val Int.foo: Foo get() = Foo(value = this)
+
+            fun test() {
+                val a = -(2.foo)
+                val b = +(2.foo)
+                
+                val c = -(2.foo.value.foo)
+                val d = +(2.foo.value.foo)
+            }
+        """.trimIndent()
+
+        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 4)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `not operator with value when precedence is clear`(testCase: RuleTestCase) {
+        val code = """
+            class Bar(var value: Boolean) {
+                operator fun not() = false
+            }
+
+            val Boolean.bar get() = Bar(false)
+
+            fun test() {
+                val someBool = false
+                val a = !someBool.bar
+                val b = (!someBool).bar
+            }
+        """.trimIndent()
+
+        assertThat(testCase.rule.lint(code)).isEmpty()
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `not operator with value when precedence is unclear`(testCase: RuleTestCase) {
+        val code = """
+            class Bar(var value: Boolean) {
+                operator fun not() = false
+            }
+
+            val Boolean.bar get() = Bar(false)
+
+            fun test() {
+                val someBool = false
+                val a = !(someBool.bar)
+            }
+        """.trimIndent()
+
+        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 1)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `does report unnecessary parens in case of constant literal when using inc operator`(testCase: RuleTestCase) {
+        val code = """
+            class Foo(var value: Int) {
+                operator fun inc() = Foo(value + 1)
+            }
+            
+            var Int.foo: Foo
+                get() = Foo(value = this)
+                set(value) {}
+            
+            fun test() {
+                val violation = ++(2.foo)
+            }
+        """.trimIndent()
+
+        assertThat(testCase.rule.lint(code)).hasSize(1)
+    }
+
+    @Test
+    fun `given allowForUnclearPrecedence allowed, does report unnecessary outer parens in case of inc operator`() {
+        val code = """
+            class Foo(var value: Int) {
+                operator fun inc() = Foo(value + 1)
+            }
+            
+            var Int.foo: Foo
+                get() = Foo(value = this)
+                set(value) {}
+            
+            fun test() {
+                var a = 2.foo
+                val violation1 = ((++a).value)
+                val violation2 = (++(a.value))
+                val violation3 = ++((a.value))
+            }
+        """.trimIndent()
+
+        assertThat(RuleTestCase(allowForUnclearPrecedence = true).rule.lint(code)).hasSize(3)
+    }
+
+    @Test
+    fun `given allowForUnclearPrecedence not allowed, does report unnecessary outer and clarifying inner parens`() {
+        val code = """
+            class Foo(var value: Int) {
+                operator fun inc() = Foo(value + 1)
+            }
+            
+            var Int.foo: Foo
+                get() = Foo(value = this)
+                set(value) {}
+            
+            fun test() {
+                var a = 2.foo
+                val violation1 = ((++a).value)
+                val violation2 = (++(a.value))
+                val violation3 = ++((a.value))
+            }
+        """.trimIndent()
+        assertThat(RuleTestCase(allowForUnclearPrecedence = false).rule.lint(code)).hasSize(5)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `inc operator with value when precedence is clear`(testCase: RuleTestCase) {
+        val code = """
+            class Foo(var value: Int) {
+                operator fun inc() = Foo(value + 1)
+                operator fun dec() = Foo(value - 1)
+            }
+            
+            var Int.foo: Foo
+                get() = Foo(value = this)
+                set(value) {}
+            
+            fun test() {
+                var a = 2.foo
+                val noViolations = ++a.value
+                val noViolations1 = (++a).value
+            }
+        """.trimIndent()
+
+        assertThat(testCase.rule.lint(code)).isEmpty()
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `inc operator with value when precedence is unclear`(testCase: RuleTestCase) {
+        val code = """
+            class Foo(var value: Int) {
+                operator fun inc() = Foo(value + 1)
+                operator fun dec() = Foo(value - 1)
+            }
+            
+            var Int.foo: Foo
+                get() = Foo(value = this)
+                set(value) {}
+            
+            fun test() {
+                var a = 2.foo
+                val b = ++(a.value)
+                val c = ++(a.value.foo.value)
+                val d = ++(a.value.foo)
+            }
+        """.trimIndent()
+
+        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 3)
     }
 
     @ParameterizedTest

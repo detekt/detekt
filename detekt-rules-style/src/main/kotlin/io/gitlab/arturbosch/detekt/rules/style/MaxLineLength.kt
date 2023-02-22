@@ -13,6 +13,8 @@ import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesKotlinReferenceUrlSyntax
+import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesMarkdownUrlSyntax
 import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtFile
@@ -82,7 +84,10 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
     private fun isValidLine(file: KtFile, offset: Int, line: String): Boolean {
         val isUrl = line.lastArgumentMatchesUrl()
-        return line.length <= maxLineLength || isIgnoredStatement(file, offset, line) || isUrl
+        val isMarkdownOrRefUrl =
+            line.lastArgumentMatchesMarkdownUrlSyntax() ||
+                line.lastArgumentMatchesKotlinReferenceUrlSyntax()
+        return line.length <= maxLineLength || isIgnoredStatement(file, offset, line) || isUrl || isMarkdownOrRefUrl
     }
 
     private fun isIgnoredStatement(file: KtFile, offset: Int, line: String): Boolean {

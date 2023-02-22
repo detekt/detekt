@@ -25,3 +25,9 @@ dependencies {
     testImplementation(libs.assertj)
     testRuntimeOnly(libs.slf4j.simple)
 }
+
+consumeGeneratedConfig(
+    fromProject = projects.detektGenerator,
+    fromConfiguration = "generatedCoreConfig",
+    forTask = "sourcesJar"
+)

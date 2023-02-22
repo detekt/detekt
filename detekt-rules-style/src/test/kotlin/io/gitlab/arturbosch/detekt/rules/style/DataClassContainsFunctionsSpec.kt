@@ -17,7 +17,7 @@ class DataClassContainsFunctionsSpec {
         val code = """
             data class C(val s: String) {
                 fun f() {}
-
+            
                 data class Nested(val i: Int) {
                     fun toConversion() = C(i.toString())
                 }
@@ -93,15 +93,15 @@ class DataClassContainsFunctionsSpec {
     fun `does not report a data class with overridden functions`() {
         val code = """
             data class C(val i: Int) {
-
+            
                 override fun hashCode(): Int {
                     return super.hashCode()
                 }
-
+            
                 override fun equals(other: Any?): Boolean {
                     return super.equals(other)
                 }
-
+            
                 override fun toString(): String {
                     return super.toString()
                 }

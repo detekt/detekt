@@ -54,7 +54,7 @@ class MayBeConstSpec {
             object Something {
                 const val A = 0
             }
-
+            
             class Test {
                 companion object {
                     const val B = Something.A + 1
@@ -268,7 +268,7 @@ class MayBeConstSpec {
         fun `has some annotation`() {
             val code = """
             annotation class A
-
+            
             @A val a = 55
             """.trimIndent()
             subject.compileAndLint(code)
@@ -281,7 +281,7 @@ class MayBeConstSpec {
             interface Base {
                 val property: Int
             }
-
+            
             object Derived : Base {
                 override val property = 1
             }

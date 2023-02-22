@@ -18,7 +18,7 @@ class VariableNamingSpec {
             class Bar {
                 val MYVar = 3
             }
-
+            
             object Foo {
                 val MYVar = 3
             }
@@ -49,7 +49,7 @@ class VariableNamingSpec {
         class Bar {
             val MYVar = 3
         }
-
+        
         object Foo {
             val MYVar = 3
         }

@@ -27,7 +27,7 @@ class EqualsOnSignatureLineSpec {
             val findings = subject.compileAndLint(
                 """
             fun foo() = 1
-
+            
             fun bar() =
                 2
                 """.trimIndent()
@@ -44,12 +44,12 @@ class EqualsOnSignatureLineSpec {
                 """
             fun one(): Int
                 = 1
-
+            
             fun two(
                 foo: String
             )
                 = 2
-
+            
             fun three(
                 foo: String
             ): Int
@@ -65,26 +65,26 @@ class EqualsOnSignatureLineSpec {
                 """
             fun one(): Int =
                 1
-
+            
             fun two()
                 : Int =
                 2
-
+            
             fun three():
                 Int =
                 3
-
+            
             fun four(
                 foo: String
             ): Int =
                 4
-
+            
             fun five(
                 foo: String
             )
             : Int =
                 5
-
+            
             fun six(
                 foo: String
             )
@@ -105,12 +105,12 @@ class EqualsOnSignatureLineSpec {
                 """
             fun <V> one(): Int where V : Number
                 = 1
-
+            
             fun <V> two(
                 foo: String
             ) where V : Number
                 = 2
-
+            
             fun <V> three(
                 foo: String
             ): Int
@@ -127,7 +127,7 @@ class EqualsOnSignatureLineSpec {
                 """
             fun <V> one(): Int where V : Number =
                 1
-
+            
             fun <V> two() : Int
                 where V : Number =
                 2
@@ -144,11 +144,11 @@ class EqualsOnSignatureLineSpec {
             """
         fun foo() {
         }
-
+        
         fun bar()
         {
         }
-
+        
         fun baz()
         :
         Unit

@@ -26,7 +26,7 @@ class DeprecatedBlockTagSpec {
         val code = """
             /**
              * I am a KDoc block
-             * 
+             *
              * @deprecated oh no, this should not be here
              */
             fun ohNo() { }
@@ -113,7 +113,7 @@ class DeprecatedBlockTagSpec {
                         get() = 10
                         /**
                          * Do not use this setter
-                         * 
+                         *
                          * @deprecated Do not use it
                          */
                         set(value) { println(value) }
@@ -129,7 +129,7 @@ class DeprecatedBlockTagSpec {
                     var someProperty: Int
                         /**
                          * Do not use this getter
-                         * 
+                         *
                          * @deprecated Do not use it
                          */
                         get() = 10

@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 class MaximumLineLengthSpec {
 
@@ -34,7 +34,7 @@ class MaximumLineLengthSpec {
         fun `reports issues with the filename and package as signature`() {
             val finding = subject.lint(
                 code,
-                Paths.get("home", "test", "Test.kt").toString()
+                Path("home", "test", "Test.kt").toString()
             ).first()
 
             assertThat(finding.entity.signature).isEqualTo("home.test.Test.kt:2")

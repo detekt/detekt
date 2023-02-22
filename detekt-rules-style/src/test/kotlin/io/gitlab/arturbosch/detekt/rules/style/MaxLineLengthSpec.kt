@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.assertj.core.api.Assertions.assertThat as doAssert
@@ -81,9 +82,9 @@ class MaxLineLengthSpec {
     inner class `a kt file with a long package name and long import statements` {
         val code = """
             package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
-
+            
             import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
-
+            
             class Test {
             }
         """.trimIndent()
@@ -180,9 +181,9 @@ class MaxLineLengthSpec {
     inner class `a kt file with a long package name, long import statements and a long line` {
         val code = """
             package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
-
+            
             import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
-
+            
             class Test {
                 fun anIncrediblyLongAndComplexMethodNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot() {}
             }
@@ -332,5 +333,110 @@ class MaxLineLengthSpec {
             "    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix2\") {",
             "        .register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix3\") {",
         )
+    }
+
+    @Nested
+    inner class `code containing comment with long markdown url` {
+        @Test
+        fun `should not report for long markdown url in kdoc`() {
+            val code = """
+                /**
+                * This is doc with markdown url See: [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)
+                * [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)     
+                */
+                class Test
+            """.trimIndent()
+            val rule = MaxLineLength(
+                TestConfig(
+                    MAX_LINE_LENGTH to "60",
+                )
+            )
+
+            assertThat(rule.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should not report for long markdown url in comments`() {
+            val code = """
+                // This is doc with markdown url See: [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)
+                // [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)     
+                // [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "With title")     
+                class Test
+            """.trimIndent()
+            val rule = MaxLineLength(
+                TestConfig(
+                    MAX_LINE_LENGTH to "60",
+                )
+            )
+
+            assertThat(rule.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should report for wrong formatted long markdown url in comments`() {
+            val code = """
+                /**
+                * This is doc with markdown url See: [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications
+                * [Maven Publish Plugin | Publications(https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)     
+                * Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications "With title")     
+                */
+                class Test
+            """.trimIndent()
+            val rule = MaxLineLength(
+                TestConfig(
+                    MAX_LINE_LENGTH to "60",
+                )
+            )
+
+            assertThat(rule.compileAndLint(code)).hasSize(3)
+        }
+    }
+
+    @Nested
+    inner class `code containing comment with long reference url` {
+        @Test
+        fun `should not report for long markdown url in kdoc`() {
+            val code = """
+                class Test {
+                    /**
+                    * [Maven Publish Plugin | Publications][funNameWhichIsVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLong]
+                    * [Maven Publish Plugin | Publications] [funNameWhichIsVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLong]
+                    * [funNameWhichIsVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLong]
+                    */
+                    fun funNameWhichIsVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLong() {
+                        /*no-op*/
+                    }
+                }
+            """.trimIndent()
+            val rule = MaxLineLength(
+                TestConfig(
+                    MAX_LINE_LENGTH to "60",
+                )
+            )
+
+            assertThat(rule.compileAndLint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `should report for wrong formatted long markdown url in comments`() {
+            val code = """
+                class Test {
+                    /**
+                    * [funNameWhichIsVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVery VeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLong]
+                    * [funNameWhichIsVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLong ]
+                    */
+                    fun funNameWhichIsVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLong() {
+                        /*no-op*/
+                    }
+                }
+            """.trimIndent()
+            val rule = MaxLineLength(
+                TestConfig(
+                    MAX_LINE_LENGTH to "60",
+                )
+            )
+
+            assertThat(rule.compileAndLint(code)).hasSize(3)
+        }
     }
 }

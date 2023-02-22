@@ -21,7 +21,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec {
                     val (x, y) = Pair(3, 4)
                     println(x)
                     println(y)
-
+                
                     val (a, b, c) = Triple(1, 2, 3)
                     println(a)
                     println(b)
@@ -36,7 +36,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec {
             val code = """
                 fun testFun() {
                     data class ManyElements(val a: Int, val b: Int, val c: Int, val d: Int)
-
+                
                     val (a, b, c, d) = ManyElements(1, 2, 3, 4)
                     println(a)
                     println(b)
@@ -52,7 +52,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec {
             val code = """
                 fun testFun() {
                     val items = listOf(Pair(3, 4))
-
+                
                     items.forEach { (a, b) ->
                         println(a)
                         println(b)
@@ -67,7 +67,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec {
             val code = """
                 fun testFun() {
                     data class ManyElements(val a: Int, val b: Int, val c: Int, val d: Int)
-
+                
                     val items = listOf(ManyElements(1, 2, 3, 4))
                     items.forEach { (a, b, c, d) ->
                         println(a)

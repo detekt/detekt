@@ -24,7 +24,7 @@ class UnsafeCallOnNullableTypeSpec(private val env: KotlinCoreEnvironment) {
     fun `does not report unsafe call on platform type`() {
         val code = """
                 import java.util.UUID
-
+                
                 val version = UUID.randomUUID()!!
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()

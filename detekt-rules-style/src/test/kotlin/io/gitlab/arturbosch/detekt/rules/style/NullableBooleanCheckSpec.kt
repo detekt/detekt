@@ -26,9 +26,9 @@ class NullableBooleanCheckSpec(val env: KotlinCoreEnvironment) {
     fun `does not report when there is no context`(bool: Boolean) {
         val code = """
             import kotlin.random.Random
-
+            
             fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
-
+            
             fun foo(): Boolean {
                 return nullableBoolean() ?: $bool
             }
@@ -42,9 +42,9 @@ class NullableBooleanCheckSpec(val env: KotlinCoreEnvironment) {
     fun `reports elvis in statement`(bool: Boolean) {
         val code = """
             import kotlin.random.Random
-
+            
             fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
-
+            
             fun foo(): Boolean {
                 return nullableBoolean() ?: $bool
             }
@@ -63,9 +63,9 @@ class NullableBooleanCheckSpec(val env: KotlinCoreEnvironment) {
     fun `reports elvis in if condition`(bool: Boolean) {
         val code = """
             import kotlin.random.Random
-
+            
             fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
-
+            
             fun foo() {
                 if (nullableBoolean() ?: $bool) println("foo")
             }
@@ -83,9 +83,9 @@ class NullableBooleanCheckSpec(val env: KotlinCoreEnvironment) {
     fun `does not report for non-constant fallback`() {
         val code = """
             import kotlin.random.Random
-
+            
             fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
-
+            
             fun foo(): Boolean {
                 return nullableBoolean() ?: Random.nextBoolean()
             }
@@ -99,9 +99,9 @@ class NullableBooleanCheckSpec(val env: KotlinCoreEnvironment) {
     fun `does not report elvis for non-boolean statement with boolean default`(bool: Boolean) {
         val code = """
             import kotlin.random.Random
-
+            
             fun nullableAny(): Any? = Unit.takeIf { Random.nextBoolean() }
-
+            
             fun foo(): Any {
                 return nullableAny() ?: $bool
             }
@@ -114,9 +114,9 @@ class NullableBooleanCheckSpec(val env: KotlinCoreEnvironment) {
     fun `does not report non-boolean elvis`() {
         val code = """
             import kotlin.random.Random
-
+            
             fun nullableInt(): Int? = 42.takeIf { Random.nextBoolean() }
-
+            
             fun foo(): Int {
                 return nullableInt() ?: 0
             }
@@ -129,7 +129,7 @@ class NullableBooleanCheckSpec(val env: KotlinCoreEnvironment) {
     fun `does not report non-elvis binary expression`() {
         val code = """
             import kotlin.random.Random
-
+            
             fun foo(): Boolean {
                 return Random.nextBoolean() || false
             }

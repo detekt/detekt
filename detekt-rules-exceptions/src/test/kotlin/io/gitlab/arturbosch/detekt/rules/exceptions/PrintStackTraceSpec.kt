@@ -49,7 +49,7 @@ class PrintStackTraceSpec {
             val code = """
             fun x() {
                 Thread.dumpStack()
-
+            
                 fun dumpStack() {}
                 dumpStack()
             }

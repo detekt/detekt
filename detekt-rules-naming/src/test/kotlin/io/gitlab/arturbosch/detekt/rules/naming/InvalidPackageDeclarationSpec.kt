@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.FileSystems
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 private const val ROOT_PACKAGE = "rootPackage"
 private const val REQUIRE_ROOT_PACKAGE = "requireRootInDeclaration"
@@ -18,11 +18,26 @@ class InvalidPackageDeclarationSpec {
     fun `should pass if package declaration is correct`() {
         val source = """
             package foo.bar
-
+            
             class C
         """.trimIndent()
 
         val ktFile = compileContentForTest(source, createPath("project/src/foo/bar/File.kt"))
+        val findings = InvalidPackageDeclaration().lint(ktFile)
+
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `should ignore the issue by alias suppression`() {
+        val source = """
+            @file:Suppress("PackageDirectoryMismatch")
+            package foo
+            
+            class C
+        """.trimIndent()
+
+        val ktFile = compileContentForTest(source, createPath("project/src/bar/File.kt"))
         val findings = InvalidPackageDeclaration().lint(ktFile)
 
         assertThat(findings).isEmpty()
@@ -48,7 +63,7 @@ class InvalidPackageDeclarationSpec {
         fun `should pass if file is located within the root package`() {
             val source = """
                 package com.example
-
+                
                 class C
             """.trimIndent()
 
@@ -62,7 +77,7 @@ class InvalidPackageDeclarationSpec {
         fun `should pass if file is located relative to root package`() {
             val source = """
                 package com.example.foo.bar
-
+                
                 class C
             """.trimIndent()
 
@@ -76,7 +91,7 @@ class InvalidPackageDeclarationSpec {
         fun `should pass if file is located in directory corresponding to package declaration`() {
             val source = """
                 package com.example.foo.bar
-
+                
                 class C
             """.trimIndent()
 
@@ -90,7 +105,7 @@ class InvalidPackageDeclarationSpec {
         fun `should report if package declaration does not match`() {
             val source = """
                 package com.example.foo.baz
-
+                
                 class C
             """.trimIndent()
 
@@ -104,7 +119,7 @@ class InvalidPackageDeclarationSpec {
         fun `should report if file path matches root package but package declaration differs`() {
             val source = """
                 package io.foo.bar
-
+                
                 class C
             """.trimIndent()
 
@@ -124,7 +139,7 @@ class InvalidPackageDeclarationSpec {
         fun `should pass if declaration starts with root package`() {
             val source = """
                 package com.example.foo.bar
-
+                
                 class C
             """.trimIndent()
 
@@ -143,7 +158,7 @@ class InvalidPackageDeclarationSpec {
         fun `should report if root package is missing`() {
             val source = """
                 package foo.bar
-
+                
                 class C
             """.trimIndent()
 
@@ -158,6 +173,6 @@ class InvalidPackageDeclarationSpec {
 private fun createPath(universalPath: String): String {
     val pathSegments = universalPath.split('/')
     val aRootPath = FileSystems.getDefault().rootDirectories.first()
-    val path = Paths.get(aRootPath.toString(), *pathSegments.toTypedArray())
+    val path = Path(aRootPath.toString(), *pathSegments.toTypedArray())
     return path.toString()
 }

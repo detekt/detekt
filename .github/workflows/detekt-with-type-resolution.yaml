@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
 
       - name: Setup Java
-        uses: actions/setup-java@1df8dbefe2a8cbc99770194893dd902763bee34b # v3
+        uses: actions/setup-java@3f07048e3d294f56e9b90ac5ea2c6f74e9ad0f98 # v3
         with:
           java-version: 17
           distribution: 'temurin'
@@ -39,7 +39,7 @@ jobs:
           arguments: :detekt-cli:runWithArgsFile
 
       - name: Upload SARIF to Github using the upload-sarif action
-        uses: github/codeql-action/upload-sarif@39d8d7e78f59cf6b40ac3b9fbebef0c753d7c9e5 # v2
+        uses: github/codeql-action/upload-sarif@17573ee1cc1b9d061760f3a006fc4aac4f944fd5 # v2
         if: success() || failure()
         with:
           sarif_file: build/detekt-report.sarif
@@ -56,7 +56,7 @@ jobs:
         uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
 
       - name: Setup Java
-        uses: actions/setup-java@1df8dbefe2a8cbc99770194893dd902763bee34b # v3
+        uses: actions/setup-java@3f07048e3d294f56e9b90ac5ea2c6f74e9ad0f98 # v3
         with:
           java-version: 17
           distribution: 'temurin'
@@ -67,7 +67,7 @@ jobs:
           arguments: detektMain detektTest :detektReportMergeSarif --continue
 
       - name: Upload SARIF to Github using the upload-sarif action
-        uses: github/codeql-action/upload-sarif@39d8d7e78f59cf6b40ac3b9fbebef0c753d7c9e5 # v2
+        uses: github/codeql-action/upload-sarif@17573ee1cc1b9d061760f3a006fc4aac4f944fd5 # v2
         if: success() || failure()
         with:
           sarif_file: build/reports/detekt/merge.sarif

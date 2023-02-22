@@ -96,7 +96,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                     env,
                     """
                 fun b(i: Int?) {}
-
+                
                 fun main() {
                     val a: Int? = null
                     b(a.apply {
@@ -117,7 +117,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                 class C {
                     var prop = 0
                 }
-
+                
                 fun main() {
                     val list = ArrayList<C>()
                     list.add(
@@ -156,7 +156,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                     env,
                     """
                 fun b(i: Int?) {}
-
+                
                 fun main() {
                     val a: Int? = null
                     a?.apply {
@@ -246,7 +246,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                 class C {
                     var prop = 0
                 }
-
+                
                 fun main() {
                     val c = C()
                     c.apply {
@@ -267,7 +267,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                 class C {
                     var prop = 0
                 }
-
+                
                 fun main() {
                     val c = C().apply {
                         prop = 1
@@ -372,7 +372,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                 class C {
                     fun has() = true
                 }
-
+                
                 fun f() {
                     C().apply {
                         if (has()) {
@@ -391,15 +391,15 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                 subject.compileAndLintWithContext(
                     env,
                     """
-                class C { 
-                    val prop = 5 
+                class C {
+                    val prop = 5
                 }
-
+                
                 fun f() {
                     C().apply {
                         prop
                     }
-
+                
                     C().apply {
                         this.prop
                     }
@@ -444,7 +444,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
                 class C {
                     fun f() {}
                 }
-
+                
                 fun print(block: () -> C) {
                     println(block())
                 }

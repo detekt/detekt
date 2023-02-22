@@ -49,7 +49,7 @@ class CheckConfigurationSpec {
             sample-rule-set:
               TooManyFunctions:
                 active: true
-
+            
             # This properties are unknown to detekt and must be excluded.
             my_additional_properties:
               magic_number: 7
@@ -92,13 +92,13 @@ class CheckConfigurationSpec {
              # However only properties defined in the default config are known to detekt.
              # All unknown properties are treated as errors if not excluded.
              excludes: 'my_additional_properties'
-
+           
            # Properties of custom rule sets get excluded by default.
            # If you want to validate them further, consider implementing a ConfigValidator.
            sample-rule-set:
              TooManyFunctions:
                active: true
-
+           
            # This properties are unknown to detekt and must be excluded.
            my_additional_properties:
              magic_number: 7

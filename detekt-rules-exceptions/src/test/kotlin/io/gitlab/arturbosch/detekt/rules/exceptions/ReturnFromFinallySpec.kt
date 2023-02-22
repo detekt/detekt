@@ -92,7 +92,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
     inner class `a finally block with a return as labelled expression` {
         val code = """
             fun x() {
-                label@{ 
+                label@{
                     try {
                     } finally {
                         return@label
@@ -186,7 +186,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                     "try"
                 } catch (e: Exception) {
                     "exception"
-                } 
+                }
             """.trimIndent()
 
             val finding = subject.compileAndLintWithContext(env, code)

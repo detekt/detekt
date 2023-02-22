@@ -7,9 +7,14 @@ import io.gitlab.arturbosch.detekt.api.Config.Companion.CONFIG_SEPARATOR
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.core.config.validation.ValidatableConfiguration
 import io.gitlab.arturbosch.detekt.core.config.validation.validateConfig
-import org.yaml.snakeyaml.Yaml
+import org.snakeyaml.engine.v2.api.Load
+import org.snakeyaml.engine.v2.api.LoadSettings
 import java.io.Reader
 import java.nio.file.Path
+import kotlin.io.path.exists
+import kotlin.io.path.isReadable
+import kotlin.io.path.isRegularFile
+import kotlin.io.path.reader
 
 /**
  * Config implementation using the yaml format. SubConfigurations can return sub maps according to the
@@ -45,19 +50,21 @@ class YamlConfig internal constructor(
         validateConfig(this, baseline, excludePatterns)
 
     companion object {
+        private const val YAML_DOC_LIMIT = 102_400 // limit the YAML size to 100 kB
+
+        // limit the anchors/aliases for collections to prevent attacks from for untrusted sources
+        private const val ALIASES_LIMIT = 10
 
         /**
-         * Factory method to load a yaml configuration. Given path must exist
-         * and point to a readable file.
+         * Factory method to load a yaml configuration. Given path must exist and point to a readable file.
          */
-        fun load(path: Path): Config =
-            load(
-                path.toFile().apply {
-                    require(exists()) { "Configuration does not exist: $path" }
-                    require(isFile) { "Configuration must be a file: $path" }
-                    require(canRead()) { "Configuration must be readable: $path" }
-                }.reader()
-            )
+        fun load(path: Path): Config {
+            require(path.exists()) { "Configuration does not exist: $path" }
+            require(path.isRegularFile()) { "Configuration must be a file: $path" }
+            require(path.isReadable()) { "Configuration must be readable: $path" }
+
+            return load(path.reader())
+        }
 
         /**
          * Constructs a [YamlConfig] from any [Reader].
@@ -66,8 +73,7 @@ class YamlConfig internal constructor(
          */
         fun load(reader: Reader): Config = reader.buffered().use { bufferedReader ->
             val map: Map<*, *>? = runCatching {
-                @Suppress("USELESS_CAST") // runtime inference bug
-                Yaml().loadAs(bufferedReader, Map::class.java) as Map<*, *>?
+                createYamlLoad().loadFromReader(bufferedReader) as Map<String, *>?
             }.getOrElse { throw Config.InvalidConfigurationError(it) }
             if (map == null) {
                 YamlConfig(emptyMap())
@@ -75,5 +81,14 @@ class YamlConfig internal constructor(
                 YamlConfig(map as Map<String, Any>)
             }
         }
+
+        private fun createYamlLoad() = Load(
+            LoadSettings.builder()
+                .setAllowDuplicateKeys(false)
+                .setAllowRecursiveKeys(false)
+                .setCodePointLimit(YAML_DOC_LIMIT)
+                .setMaxAliasesForCollections(ALIASES_LIMIT)
+                .build()
+        )
     }
 }

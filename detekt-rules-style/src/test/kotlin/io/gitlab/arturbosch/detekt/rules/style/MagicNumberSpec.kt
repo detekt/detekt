@@ -455,11 +455,11 @@ class MagicNumberSpec {
             const val BORING_CONSTANT = 93871
             val duration = Duration.seconds(10)
             val durationWithStdlibFunction = 10.toDuration(DurationUnit.MILLISECONDS)
-
+        
             override fun hashCode(): Int {
                 val iAmSoMagic = 7328672
             }
-
+        
             companion object {
                 val anotherBoringNumber = 43
                 const val anotherBoringConstant = 93872
@@ -467,7 +467,7 @@ class MagicNumberSpec {
                 val colorWithExplicitParameter = Color(color = 0x66000000)
             }
         }
-
+        
         data class Color(val color: Int)
         """.trimIndent()
 
@@ -520,7 +520,7 @@ class MagicNumberSpec {
     inner class `magic numbers in companion object property assignments` {
         val code = """
         class A {
-
+        
             companion object {
                 val anotherBoringNumber = 43
                 const val anotherBoringConstant = 93872
@@ -643,7 +643,7 @@ class MagicNumberSpec {
                     val someVal: Int,
                     val other: String = "default"
             )
-
+            
             var model = Model(someVal = $numberString)
             """.trimIndent()
 
@@ -685,7 +685,7 @@ class MagicNumberSpec {
             fun `should ignore named arguments in inheritance - #992`() {
                 val code = """
                 abstract class A(n: Int)
-
+                
                 object B : A(n = 5)
                 """.trimIndent()
                 assertThat(MagicNumber().compileAndLint(code)).isEmpty()
@@ -707,7 +707,7 @@ class MagicNumberSpec {
                     val someVal: Int,
                     val other: String = "default"
             )
-
+            
             var model = Model($numberString)
             """.trimIndent()
 
@@ -721,7 +721,7 @@ class MagicNumberSpec {
         inner class `in function invocation` {
             private fun code(number: Number) = """
             fun tested(someVal: Int, other: String = "default")
-
+            
             val t = tested(someVal = $number)
             """.trimIndent()
 
@@ -992,7 +992,7 @@ class MagicNumberSpec {
         fun `should not report when function`() {
             val code = """
                 fun Int.dp() = this + 1
-
+                
                 val a = 500.dp()
             """.trimIndent()
 
@@ -1004,7 +1004,7 @@ class MagicNumberSpec {
             val code = """
                 val Int.dp: Int
                   get() = this + 1
-
+                
                 val a = 500.dp
             """.trimIndent()
 
@@ -1015,7 +1015,7 @@ class MagicNumberSpec {
         fun `should report the argument`() {
             val code = """
                 fun Int.dp(a: Int) = this + a
-
+                
                 val a = 500.dp(400)
             """.trimIndent()
 

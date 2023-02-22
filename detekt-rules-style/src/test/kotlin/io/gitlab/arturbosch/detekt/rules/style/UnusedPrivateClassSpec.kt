@@ -62,7 +62,7 @@ class UnusedPrivateClassSpec {
                 private interface Foo<in T> {
                     operator fun invoke(b: T): Unit
                 }
-
+                
                 data class FooOne(val b: Bar) : Foo<Bar> {
                     override fun invoke(b: Bar): Unit = Unit
                 }
@@ -167,7 +167,7 @@ class UnusedPrivateClassSpec {
             val code = """
                 private class Foo
                 private var a = bar<Foo>()
-
+                
                 fun <T> bar(): T {
                     throw Exception()
                 }
@@ -294,7 +294,7 @@ class UnusedPrivateClassSpec {
                 private abstract class Foo {
                     abstract fun bar()
                 }
-
+                
                 private object Bar {
                     private fun foo() = object : Foo() {
                         override fun bar() = Unit
@@ -332,7 +332,7 @@ class UnusedPrivateClassSpec {
                     class Test {
                         val items = Item.values().map { it.text }.toList()
                     }
-
+                    
                     private enum class Item(val text: String) {
                         A("A"),
                         B("B"),
@@ -350,16 +350,16 @@ class UnusedPrivateClassSpec {
         fun doesNotReportClassesUsedWithinClass() {
             val code = """
                     class UnusedPrivateClassTest {
-
+                    
                         private data class SomeClass(val name: String)
-
+                    
                         private data class AnotherClass(val id: Long)
-
+                    
                         fun `verify class is used`(): Boolean {
                             val instance = SomeClass(name = "test")
                             return AnotherClass::class.java.simpleName == instance::class.java.simpleName
                         }
-
+                    
                         fun getSomeObject(): ((String) -> Any) = ::InternalClass
                         private class InternalClass(val param: String)
                     }
@@ -377,7 +377,7 @@ class UnusedPrivateClassSpec {
                 private annotation class Test2
                 private annotation class Test3
                 private annotation class Test4
-
+                
                 @Test1 class Custom(@Test2 param: String) {
                     @Test3 val property = ""
                     @Test4 fun function() {}
@@ -393,14 +393,14 @@ class UnusedPrivateClassSpec {
         fun `does not report imported enum class - #2809`() {
             val code = """
                 package com.example
-
+                
                 import com.example.C.E.E1
-
+                
                 class C {
                     fun test() {
                         println(E1)
                     }
-
+                
                     private enum class E {
                         E1,
                         E2,
@@ -416,18 +416,18 @@ class UnusedPrivateClassSpec {
         fun `should report not imported enum class - #2809, #2816`() {
             val code = """
                 package com.example
-
+                
                 import com.example.C.EFG.EFG1
-
+                
                 class C {
                     fun test() {
                         println(EFG1)
                     }
-
+                
                     private enum class E {
                         E1
                     }
-
+                
                     private enum class EFG {
                         EFG1
                     }

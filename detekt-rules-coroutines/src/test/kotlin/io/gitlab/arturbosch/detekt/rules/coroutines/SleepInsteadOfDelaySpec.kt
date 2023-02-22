@@ -18,7 +18,7 @@ class SleepInsteadOfDelaySpec(val env: KotlinCoreEnvironment) {
     fun `should report no issue for delay() in suspend functions`() {
         val code = """
             import kotlinx.coroutines.delay
-
+            
             suspend fun foo() {
                 delay(1000L)
             }

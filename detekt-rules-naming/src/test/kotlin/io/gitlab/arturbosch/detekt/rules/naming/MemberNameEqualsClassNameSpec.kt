@@ -201,7 +201,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
         fun `reports a function which has no return type`() {
             val code = """
                 class WrongFactoryClass1 {
-
+                
                     companion object {
                         fun wrongFactoryClass1() {}
                     }
@@ -214,7 +214,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
         fun `reports a function which has the wrong return type`() {
             val code = """
                 class WrongFactoryClass2 {
-
+                
                     companion object {
                         fun wrongFactoryClass2(): Int {
                             return 0
@@ -284,7 +284,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                 }
                 
                 class B: A()
-
+                
                 class C: A()
             """.trimIndent()
 

@@ -18,14 +18,14 @@ class WrappingSpec {
     @Test
     fun `Given a wrong wrapping in the class definition`() {
         val code = """
-            class A() : B, 
+            class A() : B,
                 C {
             }
-
+            
             interface B
-
+            
             interface C
-
+            
         """.trimIndent()
 
         subject.lint(code).assert()

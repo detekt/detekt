@@ -17,7 +17,7 @@ class WildcardImportSpec {
         val code = """
             import io.gitlab.arturbosch.detekt.*
             import io.mockk.*
-
+            
             class Test {
             }
         """.trimIndent()
@@ -95,9 +95,9 @@ class WildcardImportSpec {
     inner class `a kt file with no wildcard imports` {
         val code = """
         package org
-
+        
         import io.mockk.mockk
-
+        
         class Test {
         }
         """.trimIndent()

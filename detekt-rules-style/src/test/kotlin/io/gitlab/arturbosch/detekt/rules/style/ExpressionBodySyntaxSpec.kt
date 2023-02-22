@@ -79,7 +79,7 @@ class ExpressionBodySyntaxSpec {
                 fun caller(): String {
                     return callee("" as String? ?: return "")
                 }
-
+                
                 fun callee(a: String): String = ""
                     """.trimIndent()
                 )

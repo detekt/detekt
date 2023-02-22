@@ -248,7 +248,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             package io.gitlab.arturbosch.detekt.rules.style
             
             fun `some, test`() = "String"
-
+            
             fun test() {
                 val s = `some, test`()
             }
@@ -266,7 +266,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             package io.gitlab.arturbosch.detekt.rules.style
             
             fun defaultParamsMethod(s:String, i:Int = 0) = s + i
-
+            
             fun test() {
                 val s = defaultParamsMethod("test")
             }
@@ -289,7 +289,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             package io.gitlab.arturbosch.detekt.rules.style
             
             fun arrayMethod(args: Array<Any>) = args.size
-
+            
             fun test() {
                 val s = arrayMethod(arrayOf("test"))
             }
@@ -306,7 +306,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             package io.gitlab.arturbosch.detekt.rules.style
             
             fun listMethod(args: List<Any>) = args.size
-
+            
             fun test() {
                 val s = listMethod(listOf("test"))
             }
@@ -323,7 +323,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             package io.gitlab.arturbosch.detekt.rules.style
             
             fun varargMethod(vararg args: Any) = args.size
-
+            
             fun test() {
                 val s = varargMethod(arrayOf("test"))
             }
@@ -344,7 +344,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                     fun staticMethod() {}
                 }
             }
-
+            
             fun test() {
                 TestClass.staticMethod()
             }
@@ -366,7 +366,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                     fun staticMethod() {}
                 }
             }
-
+            
             fun test() {
                 TestClass.staticMethod()
             }
@@ -405,9 +405,9 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
     fun `should report functions with lambda params`() {
         val code = """
             package org.example
-
+            
             fun bar(b: (String) -> String) = Unit
-
+            
             fun foo() {
                 bar { "" }
             }
@@ -422,9 +422,9 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
     fun `should report extension functions`() {
         val code = """
             package org.example
-
+            
             fun String.bar() = Unit
-
+            
             fun foo() {
                 "".bar()
             }
@@ -439,9 +439,9 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
     inner class `work with generics` {
         val code = """
             package org.example
-
+            
             fun <T, U> bar(a: T, b: U, c: String) = Unit
-
+            
             fun foo() {
                 bar(1, "", "")
             }
@@ -468,9 +468,9 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
     inner class `work with generic extensions` {
         val code = """
             package org.example
-
+            
             fun <R> R.bar(a: String) = Unit
-
+            
             fun foo() {
                 1.bar("")
             }
@@ -497,7 +497,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
     inner class `Should distinguish between runCatching - #4448` {
         val code = """
             package org.example
-
+            
             class A {
                 fun foo() {
                     kotlin.runCatching {}
@@ -611,7 +611,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             fun `empty constructor`() {
                 val code = """
                     import java.util.Date
-
+                    
                     val a = Date()
                 """.trimIndent()
                 val findings =
@@ -626,7 +626,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             fun `no-empty constructor`() {
                 val code = """
                     import java.util.Date
-
+                    
                     val a = Date(2022, 8 ,7)
                 """.trimIndent()
                 val findings =
@@ -644,7 +644,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             fun `empty constructor`() {
                 val code = """
                     import java.util.Date
-
+                    
                     val a = Date()
                 """.trimIndent()
                 val findings =
@@ -659,7 +659,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             fun `no-empty constructor`() {
                 val code = """
                     import java.util.Date
-
+                    
                     val a = Date(2022, 8 ,7)
                 """.trimIndent()
                 val findings =

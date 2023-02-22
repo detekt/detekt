@@ -28,9 +28,9 @@ class SuppressorsSpec {
             compileContentForTest(
                 """
                     @file:Composable
-
+                    
                     import androidx.compose.runtime.Composable
-
+                    
                     fun foo() = Unit
                 """.trimIndent()
             )

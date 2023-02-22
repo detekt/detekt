@@ -19,14 +19,8 @@ plugins {
     alias(libs.plugins.download)
 }
 
-repositories {
-    mavenCentral()
-    mavenLocal()
-}
-
 dependencies {
-    compileOnly(kotlin("stdlib"))
-    compileOnly(kotlin("compiler-embeddable"))
+    compileOnly(libs.kotlin.compiler)
 
     implementation(projects.detektApi)
     implementation(projects.detektTooling)
@@ -35,6 +29,7 @@ dependencies {
 
     testImplementation(libs.assertj)
     testImplementation(libs.kotlinCompileTesting)
+    testImplementation(libs.kotlin.compilerEmbeddable)
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants
@@ -53,7 +48,7 @@ tasks.shadowJar.configure {
     dependencies {
         include(dependency("io.gitlab.arturbosch.detekt:.*"))
         include(dependency("io.github.detekt:.*"))
-        include(dependency("org.yaml:snakeyaml"))
+        include(dependency("org.snakeyaml:snakeyaml-engine"))
         include(dependency("io.github.davidburstrom.contester:contester-breakpoint"))
     }
 }
@@ -113,4 +108,8 @@ val testPluginKotlinc by tasks.registering(RunTestExecutable::class) {
         }
         (this as RunTestExecutable).executionResult.get().assertNormalExitValue()
     }
+}
+
+tasks.check {
+    dependsOn(testPluginKotlinc)
 }
