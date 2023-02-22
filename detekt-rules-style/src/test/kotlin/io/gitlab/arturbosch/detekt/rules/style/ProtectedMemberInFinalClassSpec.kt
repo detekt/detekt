@@ -142,6 +142,32 @@ class ProtectedMemberInFinalClassSpec {
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(1, 42)
         }
+
+        @Test
+        fun `reports a protected method named finalize if id does not match JVM signuatre in a final class`() {
+            val code = """
+                class MyFinalizable {
+                     protected fun finalize(parameter: String) { // note parameters are not empty
+                     
+                     }               
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasStartSourceLocation(2, 6)
+        }
+
+        @Test
+        fun `reports a protected property named finalize in a final class`() {
+            val code = """
+                class MyFinalizable {
+                     protected val finalize get() = "hello world"         
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasStartSourceLocation(2, 6)
+        }
     }
 
     @Nested
@@ -216,6 +242,18 @@ class ProtectedMemberInFinalClassSpec {
                 enum class EnumClass {
                     ;
                     protected fun foo() {}
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report protected definitions of finalize method`() {
+            val code = """
+                class MyFinalizable {
+                     protected fun finalize() {
+                     
+                     }               
                 }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
