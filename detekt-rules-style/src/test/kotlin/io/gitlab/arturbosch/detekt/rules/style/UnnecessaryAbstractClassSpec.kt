@@ -13,8 +13,7 @@ private const val EXCLUDE_ANNOTATED_CLASSES = "excludeAnnotatedClasses"
 
 @KotlinCoreEnvironmentTest
 class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
-    val subject =
-        UnnecessaryAbstractClass(TestConfig(EXCLUDE_ANNOTATED_CLASSES to listOf("Deprecated")))
+    val subject = UnnecessaryAbstractClass(TestConfig(EXCLUDE_ANNOTATED_CLASSES to listOf("Deprecated")))
 
     @Nested
     inner class `abstract classes with no concrete members` {

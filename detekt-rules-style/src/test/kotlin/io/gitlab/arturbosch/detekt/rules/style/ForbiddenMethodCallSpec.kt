@@ -536,11 +536,9 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                     val day = calendar.getFirstDayOfWeek()
                 }
             """.trimIndent()
-            val findings =
-                ForbiddenMethodCall(TestConfig(METHODS to listOf("java.util.Calendar.getFirstDayOfWeek"))).compileAndLintWithContext(
-                    env,
-                    code
-                )
+            val findings = ForbiddenMethodCall(
+                TestConfig(METHODS to listOf("java.util.Calendar.getFirstDayOfWeek"))
+            ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -554,11 +552,9 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                     val day = calendar.firstDayOfWeek
                 }
             """.trimIndent()
-            val findings =
-                ForbiddenMethodCall(TestConfig(METHODS to listOf("java.util.Calendar.getFirstDayOfWeek"))).compileAndLintWithContext(
-                    env,
-                    code
-                )
+            val findings = ForbiddenMethodCall(
+                TestConfig(METHODS to listOf("java.util.Calendar.getFirstDayOfWeek"))
+            ).compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -573,11 +569,9 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                     calendar.firstDayOfWeek = 1
                 }
         """.trimIndent()
-        val findings =
-            ForbiddenMethodCall(TestConfig(METHODS to listOf("java.util.Calendar.setFirstDayOfWeek"))).compileAndLintWithContext(
-                env,
-                code
-            )
+        val findings = ForbiddenMethodCall(
+            TestConfig(METHODS to listOf("java.util.Calendar.setFirstDayOfWeek"))
+        ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -591,11 +585,9 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                     calendar.let(calendar::compareTo)
                 }
         """.trimIndent()
-        val findings =
-            ForbiddenMethodCall(TestConfig(METHODS to listOf("java.util.Calendar.compareTo"))).compileAndLintWithContext(
-                env,
-                code
-            )
+        val findings = ForbiddenMethodCall(
+            TestConfig(METHODS to listOf("java.util.Calendar.compareTo"))
+        ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -610,11 +602,9 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                     
                     val a = Date()
                 """.trimIndent()
-                val findings =
-                    ForbiddenMethodCall(TestConfig(METHODS to listOf("java.util.Date.<init>"))).compileAndLintWithContext(
-                        env,
-                        code
-                    )
+                val findings = ForbiddenMethodCall(
+                    TestConfig(METHODS to listOf("java.util.Date.<init>"))
+                ).compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -625,11 +615,9 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                     
                     val a = Date(2022, 8 ,7)
                 """.trimIndent()
-                val findings =
-                    ForbiddenMethodCall(TestConfig(METHODS to listOf("java.util.Date.<init>"))).compileAndLintWithContext(
-                        env,
-                        code
-                    )
+                val findings = ForbiddenMethodCall(
+                    TestConfig(METHODS to listOf("java.util.Date.<init>"))
+                ).compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -643,11 +631,9 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                     
                     val a = Date()
                 """.trimIndent()
-                val findings =
-                    ForbiddenMethodCall(TestConfig(METHODS to listOf("java.util.Date.<init>()"))).compileAndLintWithContext(
-                        env,
-                        code
-                    )
+                val findings = ForbiddenMethodCall(
+                    TestConfig(METHODS to listOf("java.util.Date.<init>()"))
+                ).compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -658,10 +644,9 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                     
                     val a = Date(2022, 8 ,7)
                 """.trimIndent()
-                val findings =
-                    ForbiddenMethodCall(
-                        TestConfig(METHODS to listOf("java.util.Date.<init>(kotlin.Int, kotlin.Int, kotlin.Int)"))
-                    ).compileAndLintWithContext(env, code)
+                val findings = ForbiddenMethodCall(
+                    TestConfig(METHODS to listOf("java.util.Date.<init>(kotlin.Int, kotlin.Int, kotlin.Int)"))
+                ).compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
         }

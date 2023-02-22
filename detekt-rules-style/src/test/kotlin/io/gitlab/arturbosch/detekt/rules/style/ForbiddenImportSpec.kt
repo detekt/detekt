@@ -77,8 +77,7 @@ class ForbiddenImportSpec {
     @DisplayName("should report kotlin.SinceKotlin and kotlin.jvm.JvmField when specified via fully qualified names")
     fun reportMultipleConfiguredImportsCommaSeparated() {
         val findings =
-            ForbiddenImport(TestConfig(IMPORTS to listOf("kotlin.SinceKotlin", "kotlin.jvm.JvmField")))
-                .lint(code)
+            ForbiddenImport(TestConfig(IMPORTS to listOf("kotlin.SinceKotlin", "kotlin.jvm.JvmField"))).lint(code)
         assertThat(findings).hasSize(2)
     }
 

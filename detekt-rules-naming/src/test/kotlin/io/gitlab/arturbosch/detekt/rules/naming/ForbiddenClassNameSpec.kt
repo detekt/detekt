@@ -19,8 +19,7 @@ class ForbiddenClassNameSpec {
         assertThat(
             ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("Manager", "Provider")))
                 .compileAndLint(code)
-        )
-            .hasSize(2)
+        ).hasSize(2)
     }
 
     @Test
@@ -29,8 +28,7 @@ class ForbiddenClassNameSpec {
         assertThat(
             ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("test")))
                 .compileAndLint(code)
-        )
-            .hasSize(1)
+        ).hasSize(1)
     }
 
     @Test
@@ -43,8 +41,7 @@ class ForbiddenClassNameSpec {
         assertThat(
             ForbiddenClassName(TestConfig(FORBIDDEN_NAME to "Manager, Provider"))
                 .compileAndLint(code)
-        )
-            .hasSize(2)
+        ).hasSize(2)
     }
 
     @Test
@@ -57,8 +54,7 @@ class ForbiddenClassNameSpec {
         assertThat(
             ForbiddenClassName(TestConfig(FORBIDDEN_NAME to "*Manager*, *Provider*"))
                 .compileAndLint(code)
-        )
-            .hasSize(2)
+        ).hasSize(2)
     }
 
     @Test

@@ -9,17 +9,16 @@ import org.junit.jupiter.api.Test
 class LongParameterListSpec {
 
     private val defaultThreshold = 2
-    private val defaultConfig =
-        TestConfig(
-            "functionThreshold" to defaultThreshold,
-            "constructorThreshold" to defaultThreshold,
-        )
+    private val defaultConfig = TestConfig(
+        "functionThreshold" to defaultThreshold,
+        "constructorThreshold" to defaultThreshold,
+    )
 
-    val subject = LongParameterList(defaultConfig)
+    private val subject = LongParameterList(defaultConfig)
 
-    val reportMessageForFunction = "The function long(a: Int, b: Int) has too many parameters. " +
+    private val reportMessageForFunction = "The function long(a: Int, b: Int) has too many parameters. " +
         "The current threshold is set to $defaultThreshold."
-    val reportMessageForConstructor = "The constructor(a: Int, b: Int) has too many parameters. " +
+    private val reportMessageForConstructor = "The constructor(a: Int, b: Int) has too many parameters. " +
         "The current threshold is set to $defaultThreshold."
 
     @Test

@@ -68,9 +68,7 @@ class VariableMinLengthSpec {
             }
         """.trimIndent()
         assertThat(
-            VariableMinLength(
-                TestConfig("minimumVariableNameLength" to 15)
-            ).compileAndLint(code)
+            VariableMinLength(TestConfig("minimumVariableNameLength" to 15)).compileAndLint(code)
         ).isEmpty()
     }
 }

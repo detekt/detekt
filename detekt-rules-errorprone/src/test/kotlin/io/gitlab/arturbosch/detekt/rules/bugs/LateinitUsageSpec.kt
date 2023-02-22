@@ -29,9 +29,7 @@ class LateinitUsageSpec {
     @DisplayName("should only report lateinit property with no @SinceKotlin annotation")
     fun `should only report lateinit property with no SinceKotlin annotation`() {
         val findings =
-            LateinitUsage(TestConfig(EXCLUDE_ANNOTATED_PROPERTIES to listOf("SinceKotlin"))).compileAndLint(
-                code
-            )
+            LateinitUsage(TestConfig(EXCLUDE_ANNOTATED_PROPERTIES to listOf("SinceKotlin"))).compileAndLint(code)
         assertThat(findings).hasSize(1)
     }
 
@@ -94,9 +92,11 @@ class LateinitUsageSpec {
 
     @Test
     fun `should not fail when disabled with faulty regex pattern`() {
-        val findings = LateinitUsage(
-            TestConfig("active" to "false", IGNORE_ON_CLASSES_PATTERN to "*Test")
-        ).compileAndLint(code)
+        val config = TestConfig(
+            "active" to "false",
+            IGNORE_ON_CLASSES_PATTERN to "*Test"
+        )
+        val findings = LateinitUsage(config).compileAndLint(code)
         assertThat(findings).isEmpty()
     }
 }
