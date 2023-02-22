@@ -25,11 +25,11 @@ class DetektReportMergeSpec {
                 |
                 |subprojects {
                 |  ${builder.gradleSubprojectsApplyPlugins}
-                |  
+                |
                 |  detekt {
                 |    reports.sarif.enabled = true
                 |  }
-                |  
+                |
                 |  plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin::class) {
                 |    tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class) detekt@{
                 |       sarifReportMerge.configure {

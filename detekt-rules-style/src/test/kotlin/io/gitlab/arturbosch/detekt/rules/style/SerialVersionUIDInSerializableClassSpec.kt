@@ -12,7 +12,7 @@ class SerialVersionUIDInSerializableClassSpec {
     fun `reports class with no serialVersionUID`() {
         val code = """
             import java.io.Serializable
-
+            
             class C : Serializable
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -22,7 +22,7 @@ class SerialVersionUIDInSerializableClassSpec {
     fun `reports class with wrong datatype`() {
         val code = """
             import java.io.Serializable
-
+            
             class C : Serializable {
                 companion object {
                     const val serialVersionUID = 1
@@ -36,7 +36,7 @@ class SerialVersionUIDInSerializableClassSpec {
     fun `reports class with wrong explicitly defined datatype`() {
         val code = """
             import java.io.Serializable
-
+            
             class C : Serializable {
                 companion object {
                     const val serialVersionUID: Int = 1
@@ -50,12 +50,12 @@ class SerialVersionUIDInSerializableClassSpec {
     fun `reports class with wrong naming and without const modifier`() {
         val code = """
             import java.io.Serializable
-
+            
             class C : Serializable {
                 companion object {
                     const val serialVersionUUID = 1L
                 }
-
+            
                 object NestedIncorrectSerialVersionUID : Serializable {
                     val serialVersionUUID = 1L
                 }
@@ -74,7 +74,7 @@ class SerialVersionUIDInSerializableClassSpec {
     fun `does not report an interface that implements Serializable`() {
         val code = """
             import java.io.Serializable
-
+            
             interface I : Serializable
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
@@ -84,7 +84,7 @@ class SerialVersionUIDInSerializableClassSpec {
     fun `does not report UID constant with positive value`() {
         val code = """
             import java.io.Serializable
-
+            
             class C : Serializable {
                 companion object {
                     const val serialVersionUID = 1L
@@ -98,7 +98,7 @@ class SerialVersionUIDInSerializableClassSpec {
     fun `does not report UID constant with negative value`() {
         val code = """
             import java.io.Serializable
-
+            
             class C : Serializable {
                 companion object {
                     const val serialVersionUID = -1L
@@ -112,7 +112,7 @@ class SerialVersionUIDInSerializableClassSpec {
     fun `does not report UID constant with explicit Long type`() {
         val code = """
             import java.io.Serializable
-
+            
             class C : Serializable {
                 companion object {
                     const val serialVersionUID: Long = 1

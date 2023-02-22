@@ -23,7 +23,7 @@ class EndOfSentenceFormatSpec {
     fun `reports invalid KDoc endings on function with expression body`() {
         val code = """
             /** Some doc */
-            fun f(x: Int, y: Int, z: Int) = 
+            fun f(x: Int, y: Int, z: Int) =
                 if (x == 0) y + z else x + y
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -211,7 +211,7 @@ class EndOfSentenceFormatSpec {
         /** http://www.google.com */
         class Test1 {
         }
-
+        
         /** Look here
         http://google.com */
         class Test2 {

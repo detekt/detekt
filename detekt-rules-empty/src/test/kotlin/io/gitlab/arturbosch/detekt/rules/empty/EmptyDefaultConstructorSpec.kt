@@ -60,7 +60,7 @@ internal class EmptyDefaultConstructorSpec {
     fun emptyConstructorIsCalled() {
         val code = """
             class EmptyConstructorIsCalled() {
-
+            
                 constructor(i: Int) : this()
             }
         """.trimIndent()

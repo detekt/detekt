@@ -21,7 +21,7 @@ class UnconditionalJumpStatementInLoopSpec {
     fun `reports an unconditional return in while loop`() {
         val code = """
             fun f() {
-                while (true) { return } 
+                while (true) { return }
             }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -31,7 +31,7 @@ class UnconditionalJumpStatementInLoopSpec {
     fun `reports an unconditional return in do-while loop`() {
         val code = """
             fun f() {
-                do { return } while(true) 
+                do { return } while(true)
             }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -51,7 +51,7 @@ class UnconditionalJumpStatementInLoopSpec {
     fun `reports an unconditional continue in while loop`() {
         val code = """
             fun f() {
-                while (true) { continue } 
+                while (true) { continue }
             }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -61,7 +61,7 @@ class UnconditionalJumpStatementInLoopSpec {
     fun `reports an unconditional continue in do-while loop`() {
         val code = """
             fun f() {
-                do { continue } while(true) 
+                do { continue } while(true)
             }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -81,7 +81,7 @@ class UnconditionalJumpStatementInLoopSpec {
     fun `reports an unconditional break in while loop`() {
         val code = """
             fun f() {
-                while (true) { break } 
+                while (true) { break }
             }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -91,7 +91,7 @@ class UnconditionalJumpStatementInLoopSpec {
     fun `reports an unconditional break in do-while loop`() {
         val code = """
             fun f() {
-                do { break } while(true) 
+                do { break } while(true)
             }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -336,7 +336,7 @@ class UnconditionalJumpStatementInLoopSpec {
                 }
                 return 0
             }
-
+            
             fun g(): Int {
                 for (i in 0 until 10) {
                     val a = i * i

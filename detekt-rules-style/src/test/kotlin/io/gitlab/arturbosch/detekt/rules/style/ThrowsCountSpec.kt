@@ -96,7 +96,7 @@ class ThrowsCountSpec {
     inner class `code with a nested function with 3 throw expressions` {
         val code = """
             import java.io.IOException
-
+            
             fun foo(x: Int) {
                 fun bar(x: Int) {
                     when (x) {
@@ -280,7 +280,7 @@ class ThrowsCountSpec {
                     println("b is not a String")
                     throw Exception()
                 }
-
+            
                 throw Exception()
             }
         """.trimIndent()

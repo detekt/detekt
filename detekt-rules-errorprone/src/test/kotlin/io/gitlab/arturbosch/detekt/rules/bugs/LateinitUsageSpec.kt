@@ -12,7 +12,7 @@ class LateinitUsageSpec {
 
     val code = """
         import kotlin.SinceKotlin
-
+        
         class SomeRandomTest {
             lateinit var v1: String
             @SinceKotlin("1.0.0") lateinit var v2: String

@@ -32,7 +32,7 @@ class TooGenericExceptionCaughtSpec {
 
         val code = """
             class MyTooGenericException : RuntimeException()
-
+            
             fun f() {
                 try {
                     throw Throwable()

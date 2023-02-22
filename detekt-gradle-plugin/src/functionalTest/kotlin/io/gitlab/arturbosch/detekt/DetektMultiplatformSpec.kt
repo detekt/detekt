@@ -96,7 +96,7 @@ class DetektMultiplatformSpec {
                     buildFileContent = """
                         $KMM_PLUGIN_BLOCK
                         val targetType = Attribute.of("com.example.target.type", String::class.java)
-
+                        
                         kotlin {
                             jvm("jvmBackend") {
                                 attributes.attribute(targetType, "jvmBackend")

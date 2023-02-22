@@ -10,7 +10,7 @@ internal class MissingPackageDeclarationSpec {
     fun `should pass if package declaration is declared`() {
         val code = """
             package foo.bar
-
+            
             class C
         """.trimIndent()
         val findings = MissingPackageDeclaration().compileAndLint(code)

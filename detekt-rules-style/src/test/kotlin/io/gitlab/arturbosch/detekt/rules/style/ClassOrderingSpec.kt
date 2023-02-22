@@ -13,15 +13,15 @@ class ClassOrderingSpec {
         val code = """
             class InOrder(private val x: String) {
                 val y = x
-
+            
                 init {
                     check(x == "yes")
                 }
-
+            
                 constructor(z: Int): this(z.toString())
-
+            
                 fun returnX() = x
-
+            
                 companion object {
                     const val IMPORTANT_VALUE = 3
                 }
@@ -38,13 +38,13 @@ class ClassOrderingSpec {
                 init {
                     check(x == "yes")
                 }
-
+            
                 val y = x
-
+            
                 constructor(z: Int): this(z.toString())
-
+            
                 fun returnX() = x
-
+            
                 companion object {
                     const val IMPORTANT_VALUE = 3
                 }
@@ -59,15 +59,15 @@ class ClassOrderingSpec {
         val code = """
             class OutOfOrder(private val x: String) {
                 val y = x
-
+            
                 constructor(z: Int): this(z.toString())
-
+            
                 init {
                     check(x == "yes")
                 }
-
+            
                 fun returnX() = x
-
+            
                 companion object {
                     const val IMPORTANT_VALUE = 3
                 }
@@ -86,15 +86,15 @@ class ClassOrderingSpec {
         val code = """
             class OutOfOrder(private val x: String) {
                 constructor(z: Int): this(z.toString())
-
+            
                 val y = x
-
+            
                 init {
                     check(x == "yes")
                 }
-
+            
                 fun returnX() = x
-
+            
                 companion object {
                     const val IMPORTANT_VALUE = 3
                 }
@@ -116,15 +116,15 @@ class ClassOrderingSpec {
         val code = """
             class OutOfOrder(private val x: String) {
                 fun returnX() = x
-
+            
                 val y = x
-
+            
                 init {
                     check(x == "yes")
                 }
-
+            
                 constructor(z: Int): this(z.toString())
-
+            
                 companion object {
                     const val IMPORTANT_VALUE = 3
                 }
@@ -146,17 +146,17 @@ class ClassOrderingSpec {
         val code = """
             class OutOfOrder(private val x: String) {
                 val y = x
-
+            
                 init {
                     check(x == "yes")
                 }
-
+            
                 constructor(z: Int): this(z.toString())
-
+            
                 companion object {
                     const val IMPORTANT_VALUE = 3
                 }
-
+            
                 fun returnX() = x
             }
         """.trimIndent()
@@ -171,17 +171,17 @@ class ClassOrderingSpec {
         val code = """
             class OutOfOrder(private val x: String) {
                 val y = x
-
+            
                 init {
                     check(x == "yes")
                 }
-
+            
                 constructor(z: Int): this(z.toString())
-
+            
                 class Nested {
                     fun foo() = 2
                 }
-
+            
                 fun returnX() = x
             }
         """.trimIndent()
@@ -194,17 +194,17 @@ class ClassOrderingSpec {
         val code = """
             class OutOfOrder(private val x: String) {
                 val y = x
-
+            
                 init {
                     check(x == "yes")
                 }
-
+            
                 constructor(z: Int): this(z.toString())
-
+            
                 object AnonymousObject {
                     fun foo() = 2
                 }
-
+            
                 fun returnX() = x
             }
         """.trimIndent()
@@ -219,17 +219,17 @@ class ClassOrderingSpec {
                 companion object {
                     const val IMPORTANT_VALUE = 3
                 }
-
+            
                 class Nested { }
-
+            
                 fun returnX() = x
-
+            
                 class Nested2 { }
-
+            
                 constructor(z: Int): this(z.toString())
-
+            
                 class Nested3 { }
-                
+            
                 val y = x
             }
         """.trimIndent()
@@ -251,11 +251,11 @@ class ClassOrderingSpec {
                 companion object {
                     const val IMPORTANT_VALUE = 3
                 }
-
+            
                 fun returnX() = x
-
+            
                 constructor(z: Int): this(z.toString())
-                
+            
                 val y = x
             }
         """.trimIndent()

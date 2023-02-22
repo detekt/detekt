@@ -16,7 +16,7 @@ class GlobalCoroutineUsageSpec {
             import kotlinx.coroutines.delay
             import kotlinx.coroutines.GlobalScope
             import kotlinx.coroutines.launch
-
+            
             fun foo() {
                 GlobalScope.launch { delay(1_000L) }
             }
@@ -31,7 +31,7 @@ class GlobalCoroutineUsageSpec {
             import kotlinx.coroutines.async
             import kotlinx.coroutines.delay
             import kotlinx.coroutines.GlobalScope
-
+            
             fun foo() {
                 GlobalScope.async { delay(1_000L) }
             }
@@ -44,9 +44,9 @@ class GlobalCoroutineUsageSpec {
         val code = """
             import kotlinx.coroutines.CoroutineScope
             import kotlinx.coroutines.GlobalScope
-
+            
             fun bar(scope: CoroutineScope) = Unit
-
+            
             fun foo() {
                 bar(GlobalScope)
             }
@@ -59,9 +59,9 @@ class GlobalCoroutineUsageSpec {
         val code = """
             import kotlinx.coroutines.CoroutineScope
             import kotlinx.coroutines.GlobalScope
-
+            
             fun bar(scope: CoroutineScope) = Unit
-
+            
             fun foo() {
                 val scope = GlobalScope
                 bar(scope)

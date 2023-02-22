@@ -43,7 +43,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
         fun `does not report private variables that are re-assigned`() {
             val code = """
                 private var a = 1
-
+                
                 fun foo() {
                     a = 2
                 }
@@ -56,7 +56,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
         fun `does not report private variables that are re-assigned inside an unknown type`() {
             val code = """
             private var a = 1
-
+            
             fun foo() {
                 with(UnknownReference) {
                     a = 2
@@ -71,10 +71,10 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
         fun `reports private variables that have the same name as those re-assigned within a known type`() {
             val code = """
             class MyClass(var a: Int)
-
+            
             private var a = 1
             private val myObj = MyClass(1)
-
+            
             fun foo() {
                 with(myObj) {
                     a = 2
@@ -123,7 +123,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class A {
                     private var a = 1
-                    
+                
                     fun foo() {
                         a = 2
                     }
@@ -137,7 +137,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class A<T> {
                     private var a = 1
-                    
+                
                     fun foo(): A<T> = apply {
                         a = 2
                     }

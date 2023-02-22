@@ -59,8 +59,8 @@ class EqualsWithHashCodeExistSpec {
             val code = """
             interface I {
                 fun equals(other: Any?, i: Int): Boolean
-            }                    
-
+            }
+            
             class A : I {
                 override fun equals(other: Any?, i: Int): Boolean { return super.equals(other) }
                 override fun hashCode(): Int { return super.hashCode() }
@@ -74,8 +74,8 @@ class EqualsWithHashCodeExistSpec {
             val code = """
             interface I {
                 fun hashCode(i: Int): Int
-            }                    
-
+            }
+            
             class A : I {
                 override fun equals(other: Any?): Boolean { return super.equals(other) }
                 override fun hashCode(i: Int): Int { return super.hashCode() }

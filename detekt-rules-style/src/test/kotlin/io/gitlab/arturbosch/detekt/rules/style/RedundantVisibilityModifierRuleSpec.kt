@@ -22,7 +22,7 @@ class RedundantVisibilityModifierRuleSpec {
             abstract class A {
                 abstract protected fun f()
             }
-
+            
             class Test : A() {
                 override public fun f() {}
             }
@@ -36,7 +36,7 @@ class RedundantVisibilityModifierRuleSpec {
             abstract class A {
                 abstract protected fun f()
             }
-
+            
             class Test : A() {
                 override fun f() {}
             }
@@ -50,7 +50,7 @@ class RedundantVisibilityModifierRuleSpec {
             interface A {
                 fun f()
             }
-
+            
             class Test : A {
                 override public fun f() {}
             }
@@ -135,7 +135,7 @@ class RedundantVisibilityModifierRuleSpec {
             abstract class A {
                 abstract val test: String
             }
-
+            
             class B : A() {
                 override val test: String = "valid"
             }
@@ -149,7 +149,7 @@ class RedundantVisibilityModifierRuleSpec {
             abstract class A {
                 abstract val test: String
             }
-
+            
             class B : A() {
                 override public val test: String = "valid"
             }

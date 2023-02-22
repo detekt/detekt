@@ -68,7 +68,7 @@ class FunctionSuppressorSpec {
                             return ""
                         }
                     }
-
+                    
                     fun toString() = Unit
                 """.trimIndent()
             )
@@ -163,7 +163,7 @@ class FunctionSuppressorSpec {
                             return ""
                         }
                     }
-
+                    
                     fun compare() = Unit
                 """.trimIndent()
             )

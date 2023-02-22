@@ -102,9 +102,9 @@ class MethodOverloadingSpec {
         fun `does not report nested overloaded methods which do not exceed the threshold`() {
             val code = """
                 class Outer {
-
+                
                     fun f() {}
-
+                
                     internal class Inner {
                         fun f(i: Int) {}
                         fun f(i: Int, j: Int) {}
@@ -172,9 +172,9 @@ class MethodOverloadingSpec {
         fun `does not report overloaded methods in classes or objects that do not exceed the threshold`() {
             val code = """
                 class Test {
-
+                
                     fun f() {}
-
+                
                     companion object {
                         fun f() {}
                         fun f(i: Int) {}
@@ -188,7 +188,6 @@ class MethodOverloadingSpec {
         fun `reports overloaded methods inside an anonymous object expression`() {
             val code = """
                 class A {
-                
                     fun f() {
                         object : Runnable {
                             override fun run() {}
@@ -218,7 +217,7 @@ class MethodOverloadingSpec {
                     E3 {
                         override fun f() {}
                     };
-
+                
                     abstract fun f()
                 }
             """.trimIndent()

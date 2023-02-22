@@ -95,7 +95,7 @@ types of descriptions:
    underneath the issue description. Built-in console reports such as
    `LiteFindingsReport` use these messages to display identified code smells to
    the user.
-   
+
 It is important that you provide a documentation string, an issue description,
 and a message for each code smell that the new rule generates. When authoring
 these descriptions, you should keep two different target audiences in mind:
@@ -169,7 +169,7 @@ guidelines:
    [Markdown][4]):
    - :heavy_check_mark:: ``Reports referential equality checks for types such as `String` and `List`.``
    - :x:: `Reports referential equality checks for types such as String and List.`
- 
+
 #### General remarks on issue descriptions and code smell messages
 
 Adhere to the following guidelines when authoring an issue description or code

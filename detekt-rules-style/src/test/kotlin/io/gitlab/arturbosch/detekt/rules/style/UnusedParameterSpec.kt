@@ -75,7 +75,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
             val code = """
             class Test {
                 val value = usedMethod(1)
-
+            
                 private fun usedMethod(unusedParameter: Int): Int {
                     return 5
                 }
@@ -91,11 +91,11 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
             class Test {
                 val value = usedMethod(1)
                 val value2 = usedMethod2(1)
-
+            
                 private fun usedMethod(unusedParameter: Int): Int {
                     return 5
                 }
-
+            
                 private fun usedMethod2(unusedParameter: Int) {
                     return 5
                 }
@@ -110,7 +110,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
             val code = """
             class Test {
                 val value = usedMethod(1)
-
+            
                 private fun usedMethod(used: Int): Int {
                     return used
                 }
@@ -125,7 +125,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
             val code = """
             class Test {
                 val value = usedMethod(1)
-
+            
                 private fun usedMethod(used: Int) {
                     println(used)
                 }
@@ -140,7 +140,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
             val code = """
             class Test {
                 val value = usedMethod(1, 2)
-
+            
                 private fun usedMethod(unusedParameter: Int, usedParameter: Int): Int {
                     return usedParameter
                 }
@@ -155,7 +155,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
             val code = """
             class Test {
                 val value = usedMethod(1, 2)
-
+            
                 private fun usedMethod(unusedParameter: Int, usedParameter: Int) {
                     println(usedParameter)
                 }
@@ -230,7 +230,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 @Suppress("UNUSED_PARAMETER")
                 class Test {
                     fun foo(unused: String){}
-
+                
                     class InnerTest {
                         fun bar(unused: String){}
                     }
@@ -244,10 +244,10 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         fun `does not report parameters in annotated file`() {
             val code = """
                 @file:Suppress("UNUSED_PARAMETER")
-
+                
                 class Test {
                     fun foo(unused: String){}
-
+                
                     class InnerTest {
                         fun bar(unused: String){}
                     }
@@ -279,7 +279,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         fun `does not report the args parameter of the main function inside an object`() {
             val code = """
                 object O {
-
+                
                     @JvmStatic
                     fun main(args: Array<String>) {
                         println("b")

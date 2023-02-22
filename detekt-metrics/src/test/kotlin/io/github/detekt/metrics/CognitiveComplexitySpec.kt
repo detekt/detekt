@@ -220,7 +220,7 @@ class CognitiveComplexitySpec {
                     """
                     fun test(cond: Boolean) {
                         if (                    // +1
-                            !cond 
+                            !cond
                             && !cond && !cond   // +1
                             || cond || cond     // +1
                             && cond             // +1
@@ -238,7 +238,7 @@ class CognitiveComplexitySpec {
                     """
                     fun test(cond: Boolean) {
                         if (                    // +1
-                            !cond 
+                            !cond
                             && !(cond && cond)  // +2
                         ) {}
                     }
@@ -254,7 +254,7 @@ class CognitiveComplexitySpec {
                     """
                     fun test(cond: Boolean) {
                         if (                    // +1
-                            !cond 
+                            !cond
                             && !(cond && cond && cond)  // +2
                         ) {}
                     }
@@ -270,7 +270,7 @@ class CognitiveComplexitySpec {
                     """
                     fun test(cond: Boolean) {
                         if (                            // +1
-                            !cond 
+                            !cond
                             && !(cond && cond && cond)  // +2
                             || !(cond || cond)          // +2
                         ) {}
@@ -318,7 +318,7 @@ class CognitiveComplexitySpec {
             val code = compileContentForTest(
                 """
                 fun test(condition: Boolean) {
-                    if (condition) { // +1                
+                    if (condition) { // +1
                     } else if (condition) { // +1
                     } else if (condition) { // +1
                     } else { // + 1

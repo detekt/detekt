@@ -70,7 +70,7 @@ class FunctionNamingSpec {
         val code = """
         interface Foo
         private class FooImpl : Foo
-
+        
         fun Foo(): Foo = FooImpl()
         """.trimIndent()
         val config = TestConfig(mapOf(FunctionNaming.IGNORE_OVERRIDDEN to "false"))
@@ -120,8 +120,7 @@ class FunctionNamingSpec {
             FunctionNaming(config).compileAndLint(
                 """
         class Foo {
-            fun `name with back ticks`(){
-              
+            fun `name with back ticks`() {
             }
         }
                 """.trimIndent()
@@ -135,7 +134,7 @@ class FunctionNamingSpec {
         class Bar {
             fun MYFun() {}
         }
-
+        
         object Foo {
             fun MYFun() {}
         }
@@ -158,7 +157,7 @@ class FunctionNamingSpec {
             class Bar {
                 fun MYFun() {}
             }
-
+            
             object Foo {
                 fun MYFun() {}
             }

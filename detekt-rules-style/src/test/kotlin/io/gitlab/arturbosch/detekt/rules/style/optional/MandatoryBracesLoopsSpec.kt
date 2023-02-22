@@ -106,7 +106,7 @@ class MandatoryBracesLoopsSpec {
         fun `reports in nested loop outer`() {
             val code = """
             fun test() {
-                for (i in 0..10) 
+                for (i in 0..10)
                     for (j in 0..10) {
                         println()
                     }
@@ -161,8 +161,8 @@ class MandatoryBracesLoopsSpec {
         fun `reports with multi-line if statement`() {
             val code = """
             fun test() {
-                // because if statements are expressions, this code properly prints "Odd" and "Even" 
-                for (i in 0..10) 
+                // because if statements are expressions, this code properly prints "Odd" and "Even"
+                for (i in 0..10)
                     if (i % 2 == 0) {
                         println("Even")
                     } else {
@@ -185,7 +185,7 @@ class MandatoryBracesLoopsSpec {
                 // this if statement would also be reported, but we're only checking the loop
                 val i = 2
                 if (i % 2 == 0)
-                    for (j in 0..10) 
+                    for (j in 0..10)
                         println(i)
                 else {
                     println("Odd")

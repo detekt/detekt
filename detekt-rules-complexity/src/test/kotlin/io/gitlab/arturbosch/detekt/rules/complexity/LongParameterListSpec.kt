@@ -125,7 +125,7 @@ class LongParameterListSpec {
             val code = """
                 @Target(AnnotationTarget.VALUE_PARAMETER)
                 annotation class CustomAnnotation
-
+                
                 class Data constructor(@CustomAnnotation val a: Int)
             """.trimIndent()
             assertThat(rule.compileAndLint(code)).hasSize(1)
@@ -136,7 +136,7 @@ class LongParameterListSpec {
             val code = """
                 @Target(AnnotationTarget.VALUE_PARAMETER)
                 annotation class CustomAnnotation
-
+                
                 class Data { fun foo(@CustomAnnotation a: Int) {} }
             """.trimIndent()
             assertThat(rule.compileAndLint(code)).hasSize(1)

@@ -82,9 +82,9 @@ class MaxLineLengthSpec {
     inner class `a kt file with a long package name and long import statements` {
         val code = """
             package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
-
+            
             import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
-
+            
             class Test {
             }
         """.trimIndent()
@@ -181,9 +181,9 @@ class MaxLineLengthSpec {
     inner class `a kt file with a long package name, long import statements and a long line` {
         val code = """
             package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
-
+            
             import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
-
+            
             class Test {
                 fun anIncrediblyLongAndComplexMethodNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot() {}
             }

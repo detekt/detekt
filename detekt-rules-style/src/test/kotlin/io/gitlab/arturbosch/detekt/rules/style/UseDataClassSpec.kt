@@ -374,7 +374,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
     fun `does not report a class which has an ignored annotation`() {
         val code = """
             import kotlin.SinceKotlin
-
+            
             @SinceKotlin("1.0.0")
             class AnnotatedClass(val i: Int) {}
         """.trimIndent()

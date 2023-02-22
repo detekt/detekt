@@ -78,7 +78,7 @@ class UnnecessarySafeCallSpec(private val env: KotlinCoreEnvironment) {
         fun `does not report safe calls with non specified types`() {
             val code = """
                 import com.sample.function.from.outside
-
+                
                 fun test(s: String) {
                     val a = outside()
                     val b = a?.plus(42)
@@ -92,7 +92,7 @@ class UnnecessarySafeCallSpec(private val env: KotlinCoreEnvironment) {
         fun `does not report safe calls if nullable type is specified`() {
             val code = """
                 import com.sample.function.from.outside
-
+                
                 fun test(s: String) {
                     val a : Int? = outside()
                     val b = a?.plus(42)
@@ -106,7 +106,7 @@ class UnnecessarySafeCallSpec(private val env: KotlinCoreEnvironment) {
         fun `reports safe calls if non nullable type is specified`() {
             val code = """
                 import com.sample.function.from.outside
-
+                
                 fun test(s: String) {
                     val a : Int = outside()
                     val b = a?.plus(42)

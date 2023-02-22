@@ -14,10 +14,10 @@ private const val FORBIDDEN_PATTERNS = "forbiddenPatterns"
 class ForbiddenImportSpec {
     val code = """
         package foo
-
+        
         import kotlin.jvm.JvmField
         import kotlin.SinceKotlin
-
+        
         import com.example.R.string
         import net.example.R.dimen
         import net.example.R.dimension

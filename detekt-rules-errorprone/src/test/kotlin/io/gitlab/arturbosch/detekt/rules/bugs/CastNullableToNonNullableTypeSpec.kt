@@ -32,7 +32,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
             fun foo(bar: Any?) {
                 bar() as Int
             }
-
+            
             fun bar(): Int? {
                 return null
             }

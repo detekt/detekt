@@ -80,7 +80,7 @@ class CascadingCallWrappingSpec {
         val code = """
             val a = ""
                 .plus("").length
-
+            
             val b = ""
                 .length.plus(0)
         """.trimIndent()
@@ -97,7 +97,7 @@ class CascadingCallWrappingSpec {
                     .plus(
                         0
                     )
-                    .let { 
+                    .let {
                         0
                     }
             """.trimIndent()
@@ -112,7 +112,7 @@ class CascadingCallWrappingSpec {
                     .plus(
                         0
                     )
-                    .let { 
+                    .let {
                         0
                     }.plus(
                         0
@@ -120,7 +120,7 @@ class CascadingCallWrappingSpec {
             """.trimIndent()
 
             assertThat(subject.compileAndLint(code))
-                .hasTextLocations(65 to 86)
+                .hasTextLocations(64 to 85)
                 .hasSize(1)
         }
 
