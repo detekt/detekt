@@ -70,8 +70,7 @@ class ConstructorParameterNamingSpec {
             val code = """
                 class Foo(val `is`: Boolean)
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
-            assertThat(ConstructorParameterNaming(config).compileAndLint(code)).isEmpty()
+            assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -79,8 +78,7 @@ class ConstructorParameterNamingSpec {
             val code = """
                 class Foo(private val `is`: Boolean)
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
-            assertThat(ConstructorParameterNaming(config).compileAndLint(code)).isEmpty()
+            assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -88,8 +86,7 @@ class ConstructorParameterNamingSpec {
             val code = """
                 class Foo(private val `PARAM_NAME`: Boolean)
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
-            assertThat(ConstructorParameterNaming(config).compileAndLint(code))
+            assertThat(ConstructorParameterNaming().compileAndLint(code))
                 .hasSize(1)
                 .hasStartSourceLocation(1, 11)
         }
@@ -102,8 +99,7 @@ class ConstructorParameterNamingSpec {
                     constructor(`is`: Boolean, `when`: Boolean): this(`is`)
                 }
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
-            assertThat(ConstructorParameterNaming(config).compileAndLint(code)).isEmpty()
+            assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
         }
     }
 }
