@@ -44,7 +44,6 @@ class DetektJvmSpec {
         assertThat(argumentString).contains("--report sarif:")
         assertThat(argumentString).doesNotContain("--report txt:")
         assertThat(argumentString).contains("--classpath")
-        assertThat(argumentString).doesNotContain("--jvm-target")
         assertThat(argumentString).doesNotContain("--language-version")
     }
 
