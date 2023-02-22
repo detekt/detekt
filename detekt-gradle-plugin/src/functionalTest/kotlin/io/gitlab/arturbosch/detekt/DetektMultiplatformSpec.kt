@@ -102,7 +102,6 @@ class DetektMultiplatformSpec {
                                 attributes.attribute(targetType, "jvmBackend")
                             }
                             jvm("jvmEmbedded")
-                            jvmToolchain(8)
                         }
                         $DETEKT_BLOCK
                     """.trimIndent(),
@@ -169,8 +168,11 @@ class DetektMultiplatformSpec {
                             }
                         }
                         kotlin {
-                            android()
-                            jvmToolchain(8)
+                            android {
+                                compilations.all {
+                                    kotlinOptions.jvmTarget = "1.8"
+                                }
+                            }
                         }
                         $DETEKT_BLOCK
                     """.trimIndent(),
