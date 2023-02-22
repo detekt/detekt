@@ -34,6 +34,13 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `reports 4 calls on a single line with a max of 3 but with inlined lambda`() {
+        val code = "val a = 0.plus(0).let { it }.plus(0)"
+
+        assertThat(rule.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
     fun `reports 4 safe qualified calls on a single line with a max of 3`() {
         val code = "val a = 0?.plus(0)?.plus(0)?.plus(0)"
 
