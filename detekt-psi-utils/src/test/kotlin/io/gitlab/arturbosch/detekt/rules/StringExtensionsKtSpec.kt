@@ -4,7 +4,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import java.util.stream.Stream
 
 internal class StringExtensionsKtSpec {
     @ParameterizedTest(name = "Given string pattern {0}, calling lastArgumentMatchesMarkdownUrlSyntax() returns true")
@@ -39,7 +38,7 @@ internal class StringExtensionsKtSpec {
 
     companion object {
         @JvmStatic
-        fun getAllowedMarkDownUrlPattern(): Stream<Arguments> = Stream.of(
+        fun getAllowedMarkDownUrlPattern() = listOf(
             Arguments.of("""[Label](www.foo.com)"""),
             Arguments.of("""some other words [Label](www.foo.com)"""),
             Arguments.of("""[Label with space](www.foo.com)"""),
@@ -63,7 +62,7 @@ internal class StringExtensionsKtSpec {
         )
 
         @JvmStatic
-        fun getDisAllowedMarkDownUrlPattern(): Stream<Arguments> = Stream.of(
+        fun getDisAllowedMarkDownUrlPattern() = listOf(
             Arguments.of("""[]()"""),
             Arguments.of("""[](foo)"""),
             Arguments.of("""[bar]()"""),
@@ -85,7 +84,7 @@ internal class StringExtensionsKtSpec {
         )
 
         @JvmStatic
-        fun getAllowedKotlinReferenceUrlPattern(): Stream<Arguments> = Stream.of(
+        fun getAllowedKotlinReferenceUrlPattern() = listOf(
             Arguments.of("""This is sample [Label][funName]"""),
             Arguments.of("""[Label][AClass.funName]"""),
             Arguments.of("""[Label][funName]"""),
@@ -99,7 +98,7 @@ internal class StringExtensionsKtSpec {
         )
 
         @JvmStatic
-        fun getDisAllowedKotlinReferenceUrlPattern(): Stream<Arguments> = Stream.of(
+        fun getDisAllowedKotlinReferenceUrlPattern() = listOf(
             Arguments.of("""[fun Name]"""),
             Arguments.of("""[fun  Name]"""),
             Arguments.of("[fun\tName]"),
