@@ -133,7 +133,7 @@ class EmptyCodeSpec {
     @Test
     fun `reports an empty kt file`() {
         val rule = EmptyKtFile(Config.empty)
-        assertThat(rule.compileAndLint("")).hasSize(1)
+        assertThat(rule.lint("")).hasSize(1)
     }
 
     @Test

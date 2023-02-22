@@ -408,6 +408,8 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report on properties of a parameterized type which must be nullable`() {
             val code = """
+                import kotlin.random.Random
+
                 class P<T : Any>(private val foo: T) {
                     val a: T
                         get() = foo

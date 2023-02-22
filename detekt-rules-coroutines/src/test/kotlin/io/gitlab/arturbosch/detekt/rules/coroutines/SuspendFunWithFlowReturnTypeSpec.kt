@@ -229,12 +229,12 @@ class SuspendFunWithFlowReturnTypeSpec(val env: KotlinCoreEnvironment) {
             
             suspend fun delayValue2(value: Long) = value.apply { delay(1_000L) }
             
-            suspend fun Long.delayValue(): Long {
+            suspend fun Long.delayValue3(): Long {
                 delay(1_000L)
                 return this
             }
             
-            suspend fun Long.delayValue2() = this.apply { delay(1_000L) }
+            suspend fun Long.delayValue4() = this.apply { delay(1_000L) }
             
             interface ValueRepository {
                 suspend fun getValue(): Long
