@@ -6,7 +6,8 @@ import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import java.io.File
 import java.nio.file.Path
-import java.nio.file.Paths
+import kotlin.io.path.Path
+import kotlin.io.path.invariantSeparatorsPathString
 
 const val KOTLIN_SUFFIX = ".kt"
 const val KOTLIN_SCRIPT_SUFFIX = ".kts"
@@ -22,11 +23,11 @@ fun PsiFile.fileNameWithoutSuffix(): String {
     return fileName.removeSuffix(KOTLIN_SUFFIX)
 }
 
-fun PsiFile.absolutePath(): Path = Paths.get(name)
+fun PsiFile.absolutePath(): Path = Path(name)
 
-fun PsiFile.relativePath(): Path? = getUserData(RELATIVE_PATH)?.let { Paths.get(it) }
+fun PsiFile.relativePath(): Path? = getUserData(RELATIVE_PATH)?.let { Path(it) }
 
-fun PsiFile.basePath(): Path? = getUserData(BASE_PATH)?.let { Paths.get(it) }
+fun PsiFile.basePath(): Path? = getUserData(BASE_PATH)?.let { Path(it) }
 
 /**
  * Represents both absolute path and relative path if available.
@@ -82,4 +83,8 @@ fun getLineAndColumnInPsiFile(file: PsiFile, range: TextRange): PsiDiagnosticUti
 /**
  * Returns a system-independent string with UNIX system file separator.
  */
-fun Path.toUnifiedString(): String = toString().replace(File.separatorChar, '/')
+@Deprecated(
+    "Use stdlib method",
+    ReplaceWith("invariantSeparatorsPathString", "kotlin.io.path.invariantSeparatorsPathString")
+)
+fun Path.toUnifiedString(): String = invariantSeparatorsPathString

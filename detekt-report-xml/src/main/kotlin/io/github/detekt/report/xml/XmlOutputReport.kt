@@ -1,10 +1,10 @@
 package io.github.detekt.report.xml
 
-import io.github.detekt.psi.toUnifiedString
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import java.util.Locale
+import kotlin.io.path.invariantSeparatorsPathString
 
 /**
  * Contains rule violations in an XML format. The report follows the structure of a Checkstyle report.
@@ -28,7 +28,7 @@ class XmlOutputReport : OutputReport() {
 
         smells.groupBy { it.location.filePath.relativePath ?: it.location.filePath.absolutePath }
             .forEach { (filePath, findings) ->
-                lines += "<file name=\"${filePath.toUnifiedString().toXmlString()}\">"
+                lines += "<file name=\"${filePath.invariantSeparatorsPathString.toXmlString()}\">"
                 findings.forEach {
                     lines += arrayOf(
                         "\t<error line=\"${it.location.source.line.toXmlString()}\"",

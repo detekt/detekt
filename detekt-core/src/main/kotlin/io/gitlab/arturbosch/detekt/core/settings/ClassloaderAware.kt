@@ -4,7 +4,8 @@ import io.github.detekt.tooling.api.spec.ExtensionsSpec
 import org.jetbrains.kotlin.utils.closeQuietly
 import java.io.Closeable
 import java.net.URLClassLoader
-import java.nio.file.Files
+import kotlin.io.path.exists
+import kotlin.io.path.extension
 
 interface ClassloaderAware {
 
@@ -19,8 +20,8 @@ class ExtensionFacade(
 
     init {
         plugins?.paths?.forEach {
-            require(Files.exists(it)) { "Given plugin ‘$it’ does not exist." }
-            require(it.toString().endsWith("jar")) { "Given plugin ‘$it’ is not a JAR." }
+            require(it.exists()) { "Given plugin ‘$it’ does not exist." }
+            require(it.extension == "jar") { "Given plugin ‘$it’ is not a JAR." }
         }
     }
 

@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.nio.file.Files
+import kotlin.io.path.readText
 
 class DefaultConfigProviderSpec {
     @Nested
@@ -54,8 +54,8 @@ class DefaultConfigProviderSpec {
             val path = createTempFileForTest("test", "test")
             DefaultConfigProvider().apply { init(extensionsSpec) }.copy(path)
 
-            val actual = String(Files.readAllBytes(path), Charsets.UTF_8)
-            val expected = String(Files.readAllBytes(resourceAsPath("default-detekt-config.yml")), Charsets.UTF_8) +
+            val actual = path.readText()
+            val expected = resourceAsPath("default-detekt-config.yml").readText() +
                 """
                     |
                     |sample:

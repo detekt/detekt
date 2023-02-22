@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
-import io.gitlab.arturbosch.detekt.core.exists
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -16,8 +15,9 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.io.PrintStream
 import java.net.URI
-import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.copyTo
+import kotlin.io.path.deleteIfExists
 
 @OptIn(UnstableApi::class)
 class BaselineResultMappingSpec {
@@ -38,7 +38,7 @@ class BaselineResultMappingSpec {
 
     @AfterEach
     fun tearDown() {
-        Files.deleteIfExists(baselineFile)
+        baselineFile.deleteIfExists()
     }
 
     @Test
@@ -50,7 +50,7 @@ class BaselineResultMappingSpec {
 
         mapping.transformFindings(emptyMap())
 
-        assertThat(baselineFile.exists()).isFalse()
+        assertThat(baselineFile).doesNotExist()
     }
 
     @Test
@@ -90,7 +90,7 @@ class BaselineResultMappingSpec {
 
         mapping.transformFindings(findings)
 
-        assertThat(baselineFile.exists()).isFalse()
+        assertThat(baselineFile).doesNotExist()
     }
 
     @Test
@@ -102,12 +102,12 @@ class BaselineResultMappingSpec {
 
         mapping.transformFindings(findings)
 
-        assertThat(baselineFile.exists()).isTrue()
+        assertThat(baselineFile).exists()
     }
 
     @Test
     fun `should update an existing baseline file if a file is configured`() {
-        Files.copy(existingBaselineFile, baselineFile)
+        existingBaselineFile.copyTo(baselineFile)
         val existing = DefaultBaseline.load(baselineFile)
         val mapping = resultMapping(
             baselineFile = baselineFile,
