@@ -11,4 +11,4 @@ fun yamlConfig(name: String): Config =
     resource(name).toURL().openSafeStream().reader().use(YamlConfig::load)
 
 fun yamlConfigFromContent(@Language("yaml") content: String): Config =
-    StringReader(content.trimIndent()).use(YamlConfig::load)
+    StringReader(content).use(YamlConfig::load)
