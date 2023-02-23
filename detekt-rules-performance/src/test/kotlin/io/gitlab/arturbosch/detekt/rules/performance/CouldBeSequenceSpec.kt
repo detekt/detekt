@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class CouldBeSequenceSpec(val env: KotlinCoreEnvironment) {
-    val subject = CouldBeSequence(TestConfig(mapOf("threshold" to 3)))
+    val subject = CouldBeSequence(TestConfig("threshold" to 3))
 
     @Test
     fun `long collection chain should be sequence`() {

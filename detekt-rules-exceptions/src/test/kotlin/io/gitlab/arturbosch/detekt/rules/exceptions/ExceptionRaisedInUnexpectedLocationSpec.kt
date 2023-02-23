@@ -24,7 +24,7 @@ class ExceptionRaisedInUnexpectedLocationSpec {
 
     @Test
     fun `reports the configured method`() {
-        val config = TestConfig(mapOf("methodNames" to listOf("toDo", "todo2")))
+        val config = TestConfig("methodNames" to listOf("toDo", "todo2"))
         val findings = ExceptionRaisedInUnexpectedLocation(config).compileAndLint(
             """
         fun toDo() {
@@ -37,7 +37,7 @@ class ExceptionRaisedInUnexpectedLocationSpec {
 
     @Test
     fun `reports the configured method with String`() {
-        val config = TestConfig(mapOf("methodNames" to "toDo,todo2"))
+        val config = TestConfig("methodNames" to "toDo,todo2")
         val findings = ExceptionRaisedInUnexpectedLocation(config).compileAndLint(
             """
         fun toDo() {

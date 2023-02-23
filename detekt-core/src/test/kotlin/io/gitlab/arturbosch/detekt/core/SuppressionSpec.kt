@@ -229,7 +229,7 @@ class SuppressionSpec {
             }
                 """.trimIndent()
             )
-            val rule = TestRule(TestConfig(mutableMapOf("aliases" to "[MyTest]")))
+            val rule = TestRule(TestConfig("aliases" to "[MyTest]"))
             rule.visitFile(ktFile)
             assertThat(rule.expected).isNotNull()
         }

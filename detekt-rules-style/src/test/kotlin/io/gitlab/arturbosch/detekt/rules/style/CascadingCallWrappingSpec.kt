@@ -151,8 +151,8 @@ class CascadingCallWrappingSpec {
 
     @Nested
     inner class `with elvis operators` {
-        private val subjectIncludingElvis = CascadingCallWrapping(TestConfig(mapOf("includeElvis" to true)))
-        private val subjectExcludingElvis = CascadingCallWrapping(TestConfig(mapOf("includeElvis" to false)))
+        private val subjectIncludingElvis = CascadingCallWrapping(TestConfig("includeElvis" to true))
+        private val subjectExcludingElvis = CascadingCallWrapping(TestConfig("includeElvis" to false))
 
         @Test
         fun `does not report with wrapping`() {

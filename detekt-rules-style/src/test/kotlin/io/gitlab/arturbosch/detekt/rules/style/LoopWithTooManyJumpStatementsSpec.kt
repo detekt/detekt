@@ -19,7 +19,7 @@ class LoopWithTooManyJumpStatementsSpec {
 
     @Test
     fun `does not report when max count configuration is set to 2`() {
-        val config = TestConfig(mapOf(MAX_JUMP_COUNT to "2"))
+        val config = TestConfig(MAX_JUMP_COUNT to "2")
         val findings = LoopWithTooManyJumpStatements(config).lint(path)
         assertThat(findings).isEmpty()
     }

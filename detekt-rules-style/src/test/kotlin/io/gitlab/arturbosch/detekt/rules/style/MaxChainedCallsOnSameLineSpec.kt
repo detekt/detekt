@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
-    private val rule = MaxChainedCallsOnSameLine(TestConfig(mapOf("maxChainedCalls" to 3)))
+    private val rule = MaxChainedCallsOnSameLine(TestConfig("maxChainedCalls" to 3))
 
     @Test
     fun `does not report 2 calls on a single line with a max of 3`() {

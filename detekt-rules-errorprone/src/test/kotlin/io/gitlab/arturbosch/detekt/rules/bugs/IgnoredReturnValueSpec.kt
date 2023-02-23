@@ -713,7 +713,7 @@ class IgnoredReturnValueSpec {
     @KotlinCoreEnvironmentTest
     inner class `custom annotation config`(private val env: KotlinCoreEnvironment) {
         val subject = IgnoredReturnValue(
-            TestConfig(mapOf("returnValueAnnotations" to listOf("*.CustomReturn")))
+            TestConfig("returnValueAnnotations" to listOf("*.CustomReturn"))
         )
 
         @Test
@@ -775,7 +775,7 @@ class IgnoredReturnValueSpec {
     @Nested
     @KotlinCoreEnvironmentTest
     inner class `restrict to config`(private val env: KotlinCoreEnvironment) {
-        val subject = IgnoredReturnValue(TestConfig(mapOf("restrictToConfig" to false)))
+        val subject = IgnoredReturnValue(TestConfig("restrictToConfig" to false))
 
         @Test
         fun `reports when a function is annotated with a custom annotation`() {
@@ -869,10 +869,8 @@ class IgnoredReturnValueSpec {
             """.trimIndent()
             val rule = IgnoredReturnValue(
                 TestConfig(
-                    mapOf(
-                        "ignoreReturnValueAnnotations" to listOf("*.CustomIgnoreReturn"),
-                        "restrictToConfig" to false
-                    )
+                    "ignoreReturnValueAnnotations" to listOf("*.CustomIgnoreReturn"),
+                    "restrictToConfig" to false,
                 )
             )
             val findings = rule.compileAndLintWithContext(env, code)
@@ -893,10 +891,8 @@ class IgnoredReturnValueSpec {
             """.trimIndent()
             val rule = IgnoredReturnValue(
                 TestConfig(
-                    mapOf(
-                        "ignoreFunctionCall" to listOf("foo.listOfChecked"),
-                        "restrictToConfig" to false
-                    )
+                    "ignoreFunctionCall" to listOf("foo.listOfChecked"),
+                    "restrictToConfig" to false,
                 )
             )
             val findings = rule.compileAndLintWithContext(env, code)

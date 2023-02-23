@@ -43,7 +43,7 @@ class ModifierOrderSpec {
 
         @Test
         fun `should not report issues if inactive`() {
-            val rule = ModifierOrder(TestConfig(mapOf(Config.ACTIVE_KEY to "false")))
+            val rule = ModifierOrder(TestConfig(Config.ACTIVE_KEY to "false"))
             assertThat(rule.compileAndLint(bad1)).isEmpty()
             assertThat(rule.lint(bad2)).isEmpty()
             assertThat(rule.lint(bad3)).isEmpty()

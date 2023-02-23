@@ -98,7 +98,7 @@ class ForbiddenCommentSpec {
 
         @Nested
         inner class `when given Banana` {
-            val config = TestConfig(mapOf(VALUES to "Banana"))
+            val config = TestConfig(VALUES to "Banana")
 
             @Test
             @DisplayName("should not report TODO: usages")
@@ -129,7 +129,7 @@ class ForbiddenCommentSpec {
 
             @Test
             fun `should report Banana usages regardless of case sensitive`() {
-                val forbiddenComment = ForbiddenComment(TestConfig(mapOf(VALUES to "bAnAnA")))
+                val forbiddenComment = ForbiddenComment(TestConfig(VALUES to "bAnAnA"))
                 val findings = forbiddenComment.compileAndLint(banana)
                 assertThat(findings).hasSize(1)
             }
@@ -138,7 +138,7 @@ class ForbiddenCommentSpec {
         @Nested
         @DisplayName("when given listOf(\"banana\")")
         inner class ListOfBanana {
-            val config = TestConfig(mapOf(VALUES to listOf("Banana")))
+            val config = TestConfig(VALUES to listOf("Banana"))
 
             @Test
             @DisplayName("should not report TODO: usages")
@@ -169,7 +169,7 @@ class ForbiddenCommentSpec {
 
             @Test
             fun `should report Banana usages regardless of case sensitive`() {
-                val forbiddenComment = ForbiddenComment(TestConfig(mapOf(VALUES to "bAnAnA")))
+                val forbiddenComment = ForbiddenComment(TestConfig(VALUES to "bAnAnA"))
                 val findings = forbiddenComment.compileAndLint(banana)
                 assertThat(findings).hasSize(1)
             }
@@ -179,13 +179,10 @@ class ForbiddenCommentSpec {
     @Nested
     inner class `custom default values with allowed patterns are configured` {
 
-        val patternsConfig =
-            TestConfig(
-                mapOf(
-                    VALUES to "Comment",
-                    ALLOWED_PATTERNS to "Ticket|Task"
-                )
-            )
+        private val patternsConfig = TestConfig(
+            VALUES to "Comment",
+            ALLOWED_PATTERNS to "Ticket|Task",
+        )
 
         @Test
         fun `should report Comment usages when regex does not match`() {
@@ -211,13 +208,10 @@ class ForbiddenCommentSpec {
 
     @Nested
     inner class `custom message is configured` {
-        val messageConfig =
-            TestConfig(
-                mapOf(
-                    VALUES to "Comment",
-                    MESSAGE to "Custom Message"
-                )
-            )
+        private val messageConfig = TestConfig(
+            VALUES to "Comment",
+            MESSAGE to "Custom Message",
+        )
 
         @Test
         fun `should report a Finding with message 'Custom Message'`() {
@@ -230,12 +224,7 @@ class ForbiddenCommentSpec {
 
     @Nested
     inner class `custom message is not configured` {
-        val messageConfig =
-            TestConfig(
-                mapOf(
-                    VALUES to "Comment"
-                )
-            )
+        private val messageConfig = TestConfig(VALUES to "Comment")
 
         @Test
         fun `should report a Finding with default Message`() {

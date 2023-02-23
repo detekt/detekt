@@ -6,21 +6,14 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-private const val THRESHOLD = 4
-private val defaultConfigMap = mapOf("threshold" to THRESHOLD)
-private val staticDeclarationsConfig = TestConfig(
-    defaultConfigMap + ("includeStaticDeclarations" to true)
-)
-private val privateDeclarationsConfig = TestConfig(
-    defaultConfigMap + ("includePrivateDeclarations" to true)
-)
-private val ignoreOverloadedConfig = TestConfig(
-    defaultConfigMap + ("ignoreOverloaded" to true)
-)
+private val defaultThreshold = "threshold" to 4
+private val staticDeclarationsConfig = TestConfig(defaultThreshold, "includeStaticDeclarations" to true)
+private val privateDeclarationsConfig = TestConfig(defaultThreshold, "includePrivateDeclarations" to true)
+private val ignoreOverloadedConfig = TestConfig(defaultThreshold, "ignoreOverloaded" to true)
 
 class ComplexInterfaceSpec {
 
-    private val subject = ComplexInterface(TestConfig(defaultConfigMap))
+    private val subject = ComplexInterface(TestConfig(defaultThreshold))
 
     @Nested
     inner class `ComplexInterface rule positives` {

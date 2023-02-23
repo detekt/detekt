@@ -57,7 +57,7 @@ class InvalidPackageDeclarationSpec {
     @Nested
     inner class `with root package specified` {
 
-        val config = TestConfig(mapOf(ROOT_PACKAGE to "com.example"))
+        val config = TestConfig(ROOT_PACKAGE to "com.example")
 
         @Test
         fun `should pass if file is located within the root package`() {
@@ -133,7 +133,7 @@ class InvalidPackageDeclarationSpec {
     @Nested
     inner class `with root package required` {
 
-        val config = TestConfig(mapOf(ROOT_PACKAGE to "com.example", REQUIRE_ROOT_PACKAGE to true))
+        val config = TestConfig(ROOT_PACKAGE to "com.example", REQUIRE_ROOT_PACKAGE to true)
 
         @Test
         fun `should pass if declaration starts with root package`() {

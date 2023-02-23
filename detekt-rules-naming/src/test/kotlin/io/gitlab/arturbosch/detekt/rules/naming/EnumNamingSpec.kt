@@ -9,7 +9,7 @@ class EnumNamingSpec {
 
     @Test
     fun `should use custom name for enum`() {
-        val rule = EnumNaming(TestConfig(mapOf(EnumNaming.ENUM_PATTERN to "^(enum1)|(enum2)$")))
+        val rule = EnumNaming(TestConfig(EnumNaming.ENUM_PATTERN to "^(enum1)|(enum2)$"))
         assertThat(
             rule.compileAndLint(
                 """

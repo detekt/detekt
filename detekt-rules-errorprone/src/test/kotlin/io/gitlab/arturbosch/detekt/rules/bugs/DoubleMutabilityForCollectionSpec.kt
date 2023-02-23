@@ -120,11 +120,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
             @Test
             fun `detects var declaration with MutableState, when configured`() {
                 val rule = DoubleMutabilityForCollection(
-                    TestConfig(
-                        mapOf(
-                            MUTABLE_TYPES to listOf("MutableState")
-                        )
-                    )
+                    TestConfig(MUTABLE_TYPES to listOf("MutableState"))
                 )
 
                 val code = """
@@ -141,11 +137,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
             @Test
             fun `detects var declaration with MutableState via factory function, when configured`() {
                 val rule = DoubleMutabilityForCollection(
-                    TestConfig(
-                        mapOf(
-                            MUTABLE_TYPES to listOf("MutableState")
-                        )
-                    )
+                    TestConfig(MUTABLE_TYPES to listOf("MutableState"))
                 )
 
                 val code = """
@@ -162,13 +154,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
 
             @Test
             fun `detects var declaration with MutableState via calculation lambda, when configured`() {
-                val rule = DoubleMutabilityForCollection(
-                    TestConfig(
-                        mapOf(
-                            MUTABLE_TYPES to listOf("MutableState")
-                        )
-                    )
-                )
+                val rule = DoubleMutabilityForCollection(TestConfig(MUTABLE_TYPES to listOf("MutableState")))
 
                 val code = """
                 data class MutableState<T>(var state: T)
@@ -319,11 +305,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
             @Test
             fun `does not detect var declaration with property delegate`() {
                 val rule = DoubleMutabilityForCollection(
-                    TestConfig(
-                        mapOf(
-                            MUTABLE_TYPES to listOf("MutableState")
-                        )
-                    )
+                    TestConfig(MUTABLE_TYPES to listOf("MutableState"))
                 )
 
                 val code = """
@@ -433,11 +415,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
             @Test
             fun `detects var declaration with MutableState, when configured`() {
                 val rule = DoubleMutabilityForCollection(
-                    TestConfig(
-                        mapOf(
-                            MUTABLE_TYPES to listOf("MutableState")
-                        )
-                    )
+                    TestConfig(MUTABLE_TYPES to listOf("MutableState"))
                 )
 
                 val code = """
@@ -452,11 +430,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
             @Test
             fun `detects var declaration with MutableState via factory function, when configured`() {
                 val rule = DoubleMutabilityForCollection(
-                    TestConfig(
-                        mapOf(
-                            MUTABLE_TYPES to listOf("MutableState")
-                        )
-                    )
+                    TestConfig(MUTABLE_TYPES to listOf("MutableState"))
                 )
 
                 val code = """
@@ -472,11 +446,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
             @Test
             fun `detects var declaration with MutableState via calculation lambda, when configured`() {
                 val rule = DoubleMutabilityForCollection(
-                    TestConfig(
-                        mapOf(
-                            MUTABLE_TYPES to listOf("MutableState")
-                        )
-                    )
+                    TestConfig(MUTABLE_TYPES to listOf("MutableState"))
                 )
 
                 val code = """
@@ -604,11 +574,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
             @Test
             fun `does not detect var declaration with property delegate`() {
                 val rule = DoubleMutabilityForCollection(
-                    TestConfig(
-                        mapOf(
-                            MUTABLE_TYPES to listOf("MutableState")
-                        )
-                    )
+                    TestConfig(MUTABLE_TYPES to listOf("MutableState"))
                 )
 
                 val code = """
@@ -732,11 +698,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
             @Test
             fun `detects var declaration with MutableState, when configured`() {
                 val rule = DoubleMutabilityForCollection(
-                    TestConfig(
-                        mapOf(
-                            MUTABLE_TYPES to listOf("MutableState")
-                        )
-                    )
+                    TestConfig(MUTABLE_TYPES to listOf("MutableState"))
                 )
 
                 val code = """
@@ -753,11 +715,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
             @Test
             fun `detects var declaration with MutableState via factory function, when configured`() {
                 val rule = DoubleMutabilityForCollection(
-                    TestConfig(
-                        mapOf(
-                            MUTABLE_TYPES to listOf("MutableState")
-                        )
-                    )
+                    TestConfig(MUTABLE_TYPES to listOf("MutableState"))
                 )
 
                 val code = """
@@ -775,11 +733,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
             @Test
             fun `detects var declaration with MutableState via calculation lambda, when configured`() {
                 val rule = DoubleMutabilityForCollection(
-                    TestConfig(
-                        mapOf(
-                            MUTABLE_TYPES to listOf("MutableState")
-                        )
-                    )
+                    TestConfig(MUTABLE_TYPES to listOf("MutableState"))
                 )
 
                 val code = """
@@ -931,11 +885,7 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinCoreEnvironment) 
             @Test
             fun `does not detect var declaration with property delegate`() {
                 val rule = DoubleMutabilityForCollection(
-                    TestConfig(
-                        mapOf(
-                            MUTABLE_TYPES to listOf("MutableState")
-                        )
-                    )
+                    TestConfig(MUTABLE_TYPES to listOf("MutableState"))
                 )
 
                 val code = """

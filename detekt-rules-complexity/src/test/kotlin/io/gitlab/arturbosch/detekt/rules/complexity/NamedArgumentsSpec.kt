@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
     val defaultThreshold = 2
-    val defaultConfig = TestConfig(mapOf("threshold" to defaultThreshold))
+    val defaultConfig = TestConfig("threshold" to defaultThreshold)
     val subject = NamedArguments(defaultConfig)
 
     @Test
@@ -204,7 +204,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 require(n == 2) { "N is not 2" }
             }
             """.trimIndent()
-            val subject = NamedArguments(TestConfig(mapOf("threshold" to 1)))
+            val subject = NamedArguments(TestConfig("threshold" to 1))
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(0)
         }
@@ -215,7 +215,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
         @Nested
         inner class `ignoreArgumentsMatchingNames is true` {
             val subject =
-                NamedArguments(TestConfig(mapOf("threshold" to 2, "ignoreArgumentsMatchingNames" to true)))
+                NamedArguments(TestConfig("threshold" to 2, "ignoreArgumentsMatchingNames" to true))
 
             @Test
             fun `all arguments are the same as the parameter names`() {

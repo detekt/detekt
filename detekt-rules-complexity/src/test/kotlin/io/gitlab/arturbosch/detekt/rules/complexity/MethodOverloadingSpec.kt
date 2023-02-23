@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class MethodOverloadingSpec {
     val defaultThreshold = 3
-    val defaultConfig = TestConfig(mapOf("threshold" to defaultThreshold))
+    val defaultConfig = TestConfig("threshold" to defaultThreshold)
 
     val subject = MethodOverloading(defaultConfig)
 
