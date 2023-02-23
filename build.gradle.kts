@@ -36,7 +36,7 @@ allprojects {
         detektPlugins(project(":detekt-rules-ruleauthors"))
     }
 
-    tasks.withType<Detekt>().configureEach detekt@{
+    tasks.withType<Detekt>().configureEach {
         jvmTarget = "1.8"
         reports {
             xml.required.set(true)
@@ -47,9 +47,9 @@ allprojects {
         }
         basePath = rootProject.projectDir.absolutePath
         finalizedBy(detektReportMergeSarif)
-        detektReportMergeSarif.configure {
-            input.from(this@detekt.sarifReportFile)
-        }
+    }
+    detektReportMergeSarif {
+        input.from(tasks.withType<Detekt>().map { it.sarifReportFile })
     }
     tasks.withType<DetektCreateBaselineTask>().configureEach {
         jvmTarget = "1.8"

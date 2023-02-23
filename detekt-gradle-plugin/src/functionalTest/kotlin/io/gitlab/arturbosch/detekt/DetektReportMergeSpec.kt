@@ -30,13 +30,11 @@ class DetektReportMergeSpec {
                 |    reports.sarif.enabled = true
                 |  }
                 |
-                |  plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin::class) {
-                |    tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class) detekt@{
-                |       sarifReportMerge.configure {
-                |         this.mustRunAfter(this@detekt)
-                |         input.from(this@detekt.sarifReportFile)
-                |       }
-                |    }
+                |  tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class).configureEach {
+                |     finalizedBy(sarifReportMerge)
+                |  }
+                |  sarifReportMerge {
+                |    input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.sarifReportFile })
                 |  }
                 |}
                 |
@@ -103,13 +101,11 @@ class DetektReportMergeSpec {
             |    reports.xml.enabled = true
             |  }
             |
-            |  plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin::class) {
-            |    tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class) detekt@{
-            |       xmlReportMerge.configure {
-            |         this.mustRunAfter(this@detekt)
-            |         input.from(this@detekt.xmlReportFile)
-            |       }
-            |    }
+            |  tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class).configureEach {
+            |     finalizedBy(xmlReportMerge)
+            |  }
+            |  xmlReportMerge {
+            |    input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.xmlReportFile })
             |  }
             |}
             |
