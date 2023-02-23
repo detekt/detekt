@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class ConstructorParameterNamingSpec {
@@ -60,6 +61,46 @@ class ConstructorParameterNamingSpec {
         """.trimIndent()
         val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
         assertThat(ConstructorParameterNaming(config).compileAndLint(code)).hasTextLocations(8 to 34)
+    }
+
+    @Nested
+    inner class `with backticks` {
+        @Test
+        fun `should not complain about public param name - #5531`() {
+            val code = """
+                class Foo(val `is`: Boolean)
+            """.trimIndent()
+            assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should not complain about private param name`() {
+            val code = """
+                class Foo(private val `is`: Boolean)
+            """.trimIndent()
+            assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should complain about param name with violation`() {
+            val code = """
+                class Foo(private val `PARAM_NAME`: Boolean)
+            """.trimIndent()
+            assertThat(ConstructorParameterNaming().compileAndLint(code))
+                .hasSize(1)
+                .hasStartSourceLocation(1, 11)
+        }
+
+        @Test
+        fun `should not complain about param in secondary constructor`() {
+            val code = """
+                @JvmInline
+                value class A1 constructor(val `is`: Boolean) {
+                    constructor(`is`: Boolean, `when`: Boolean): this(`is`)
+                }
+            """.trimIndent()
+            assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
+        }
     }
 }
 
