@@ -100,7 +100,6 @@ constructor(
     fun projectFile(path: String): File = File(rootDir, path).canonicalFile
 
     fun writeProjectFile(filename: String, content: String) {
-        println("Writing file $filename with content:\n${content.replace(" ", ".")}")
         File(rootDir, filename)
             .also { it.parentFile.mkdirs() }
             .writeText(content)
@@ -116,7 +115,6 @@ constructor(
     }
 
     private fun Submodule.writeModuleFile(filename: String, content: String) {
-        println("Writing file $filename with content:\n${content.replace(" ", ".")}")
         File(moduleRoot, filename).writeText(content)
     }
 
