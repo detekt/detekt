@@ -41,28 +41,13 @@ jobs:
       - name: Build detekt
         uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
         with:
-          arguments: build -x detekt
+          arguments: build -x detekt publishToMavenLocal
 
       - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3
         with:
           name: heap-dump
           path: '**.hprof'
           if-no-files-found: ignore
-
-      - name: Run detekt-cli --help
-        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
-        with:
-          arguments: :detekt-cli:runWithHelpFlag
-
-      - name: Run detekt-cli with argsfile
-        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
-        with:
-          arguments: :detekt-cli:runWithArgsFile
-
-      - name: Try to publish to Maven Local
-        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
-        with:
-          arguments: publishToMavenLocal
 
   verify-generated-config-file:
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
