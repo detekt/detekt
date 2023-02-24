@@ -711,15 +711,15 @@ style:
     active: false
   UnusedParameter:
     active: true
-    allowedNames: '(_|ignored|expected|serialVersionUID)'
+    allowedNames: 'ignored|expected'
   UnusedPrivateClass:
     active: true
   UnusedPrivateMember:
     active: true
-    allowedNames: '(_|ignored|expected|serialVersionUID)'
+    allowedNames: ''
   UnusedPrivateProperty:
     active: true
-    allowedNames: '(_|ignored|expected|serialVersionUID)'
+    allowedNames: '_|ignored|expected|serialVersionUID'
   UseAnyOrNoneInsteadOfFind:
     active: true
   UseArrayLiteralsInAnnotations:
