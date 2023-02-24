@@ -7,7 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.identifierName
@@ -34,6 +36,16 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
 
     @Configuration("ignores variables in classes which match this regex")
     private val excludeClassPattern: Regex by config("$^", String::toRegex)
+
+    @Configuration("ignores overridden functions with parameters not matching the pattern")
+    @Deprecated("Use `ignoreOverridden` instead")
+    private val ignoreOverriddenFunctions: Boolean by config(true)
+
+    @Configuration("ignores overridden functions with parameters not matching the pattern")
+    @Deprecated("This configuration is ignored and will be removed in the future")
+    @Suppress("DEPRECATION", "UnusedPrivateMember")
+    @OptIn(UnstableApi::class)
+    private val ignoreOverridden: Boolean by configWithFallback(::ignoreOverriddenFunctions, true)
 
     override fun visitParameter(parameter: KtParameter) {
         if (parameter.isParameterInFunction()) {

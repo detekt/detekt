@@ -41,6 +41,11 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
     @Configuration("ignores variables in classes which match this regex")
     private val excludeClassPattern: Regex by config("$^", String::toRegex)
 
+    @Configuration("ignores member properties that have the override modifier")
+    @Deprecated("This configuration is ignored and will be removed in the future")
+    @Suppress("UnusedPrivateMember")
+    private val ignoreOverridden: Boolean by config(true)
+
     override fun visitProperty(property: KtProperty) {
         if (property.isPropertyTopLevelOrInCompanion()) {
             return

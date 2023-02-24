@@ -36,6 +36,11 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
     @Configuration("naming pattern")
     private val allowedPattern: Regex by config("^(is|has|are)", String::toRegex)
 
+    @Configuration("ignores properties that have the override modifier")
+    @Deprecated("This configuration is ignored and will be removed in the future")
+    @Suppress("UnusedPrivateMember")
+    private val ignoreOverridden: Boolean by config(true)
+
     override val issue = Issue(
         javaClass.simpleName,
         Severity.CodeSmell,
