@@ -87,7 +87,7 @@ class VariableNamingSpec {
     }
 
     @Test
-    fun `should not flag overridden member properties by default`() {
+    fun `should not flag overridden member properties`() {
         val code = """
             class C : I {
                 override val SHOULD_NOT_BE_FLAGGED = "banana"
