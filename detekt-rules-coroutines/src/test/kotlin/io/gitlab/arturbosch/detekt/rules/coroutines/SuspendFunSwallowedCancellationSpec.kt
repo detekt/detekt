@@ -246,7 +246,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         fun `does report when suspend fun is called inside inline function`() {
             val code = """
                 import kotlinx.coroutines.delay
-    
+
                 suspend fun foo() {
                     runCatching {
                         listOf(1L, 2L, 3L).map {
@@ -270,7 +270,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 import kotlinx.coroutines.MainScope
                 import kotlinx.coroutines.delay
                 import kotlinx.coroutines.launch
-    
+
                 inline fun <R> foo(crossinline block: suspend () -> R) = MainScope().launch {
                     block()
                 }
@@ -293,7 +293,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 import kotlinx.coroutines.MainScope
                 import kotlinx.coroutines.delay
                 import kotlinx.coroutines.launch
-    
+
                 suspend inline fun <R> foo(crossinline block: suspend () -> R) = block()
                 suspend fun bar() {
                     runCatching {
@@ -318,10 +318,10 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 import kotlinx.coroutines.MainScope
                 import kotlinx.coroutines.delay
                 import kotlinx.coroutines.launch
-    
+
                 inline fun <R> inline(block: () -> R) = block()
                 fun <R> noInline(block: suspend () -> R) = MainScope().launch { block() }
-            
+
                 suspend fun bar() {
                     runCatching {
                         inline {
@@ -346,9 +346,9 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 import kotlinx.coroutines.MainScope
                 import kotlinx.coroutines.delay
                 import kotlinx.coroutines.launch
-    
+
                 inline fun <R> inline(block: () -> R) = block()
-            
+
                 suspend fun bar() {
                     runCatching {
                         inline {
@@ -374,7 +374,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 import kotlinx.coroutines.MainScope
                 import kotlinx.coroutines.delay
                 import kotlinx.coroutines.launch
-    
+
                 inline fun <R> foo(noinline block: suspend () -> R) = MainScope().launch {
                     block()
                 }
@@ -384,7 +384,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                         foo {
                             delay(1000L)
                         }
-    
+
                         val baz = suspend {
                             delay(1000L)
                         }
@@ -402,7 +402,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         fun `does report when lambda in suspend inline function is passed as noinline`() {
             val code = """
                 import kotlinx.coroutines.delay
-    
+
                 suspend inline fun <R> foo(noinline block: suspend () -> R) = block()
                 suspend fun bar() {
                     runCatching {
@@ -426,8 +426,8 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             val code = """
                 import kotlinx.coroutines.delay
                 @Suppress("RedundantSuspendModifier")
-                suspend fun List<Long>.await() = delay(this.size)
-    
+                suspend fun List<Long>.await() = delay(this.size.toLong())
+
                 suspend fun foo() {
                     runCatching {
                         listOf(1L, 2L, 3L).await()
@@ -451,7 +451,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 import kotlinx.coroutines.delay
                 import kotlinx.coroutines.launch
                 import kotlinx.coroutines.runBlocking
-    
+
                 inline fun foo(
                     noinline noinlineBlock: suspend () -> Unit,
                     inlineBlock: () -> Unit,
@@ -461,7 +461,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 } + runBlocking {
                     crossinlineBlock()
                 }.toString()
-            
+
                 suspend fun bar() {
                     runCatching {
                         foo(
@@ -470,7 +470,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                             },
                             inlineBlock = { delay(1000L) },
                         ) {
-            
+
                         }
                     }
                 }
@@ -491,7 +491,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 import kotlinx.coroutines.delay
                 import kotlinx.coroutines.launch
                 import kotlinx.coroutines.runBlocking
-    
+
                 inline fun foo(
                     noinline noinlineBlock: suspend () -> Unit,
                     inlineBlock: () -> Unit,
@@ -501,7 +501,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 } + runBlocking {
                     crossinlineBlock()
                 }.toString()
-            
+
                 suspend fun bar() {
                     runCatching {
                         foo(
@@ -510,7 +510,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                                 delay(2000L)
                             },
                         ) {
-            
+
                         }
                     }
                 }
@@ -748,7 +748,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         fun `does report in case of suspend invoked operator`() {
             val code = """
                 import kotlinx.coroutines.delay
-    
+
                 class C {
                     suspend operator fun invoke() = delay(1000L)
                 }
@@ -980,7 +980,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 class C
                 @Suppress("RedundantSuspendModifier")
                 suspend operator fun C.plus(i: Int): C = TODO()
-        
+
                 suspend fun f() {
                     runCatching {
                         var x = C()
@@ -1001,6 +1001,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         @Test
         fun `does report in case of suspend divAssign operator`() {
             val code = """
+                import kotlinx.coroutines.delay
                 class OperatorClass {
                     suspend operator fun divAssign(operatorClass: OperatorClass) {
                         delay(1000)
@@ -1014,13 +1015,13 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                         operatorClass1 /= (operatorClass2)
                     }
                 }
-                """.trimIndent()
+            """.trimIndent()
 
             val findings = subject.compileAndLintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
-                listOf(SourceLocation(8, 5)),
-                listOf(SourceLocation(8, 16))
+                listOf(SourceLocation(9, 5)),
+                listOf(SourceLocation(9, 16))
             )
         }
 
@@ -1039,7 +1040,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                         println(operatorClass1..operatorClass2)
                     }
                 }
-                """.trimIndent()
+            """.trimIndent()
 
             val findings = subject.compileAndLintWithContext(env, code)
             assertFindingsForSuspendCall(
@@ -1064,7 +1065,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                         println(operatorClass1 * operatorClass2)
                     }
                 }
-                """.trimIndent()
+            """.trimIndent()
 
             val findings = subject.compileAndLintWithContext(env, code)
             assertFindingsForSuspendCall(
@@ -1081,11 +1082,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             fun `does report when suspending iterator is used`() {
                 val code = """
                     import kotlinx.coroutines.delay
-        
+
                     class SuspendingIterator {
                         suspend operator fun iterator(): Iterator<Any> = iterator { yield("value") }
                     }
-                
+
                     suspend fun bar() {
                         runCatching { 
                             for (x in SuspendingIterator()) {
@@ -1107,11 +1108,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             fun `does report when nested suspending iterator is used`() {
                 val code = """
                     import kotlinx.coroutines.delay
-        
+
                     class SuspendingIterator {
                         suspend operator fun iterator(): Iterator<String> = iterator { yield("value") }
                     }
-                
+
                     suspend fun bar() {
                         runCatching { 
                             for (x in SuspendingIterator()) {
@@ -1135,11 +1136,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             fun `does report when nested iterator with one suspending iterator is used`() {
                 val code = """
                     import kotlinx.coroutines.delay
-        
+
                     class SuspendingIterator {
                         suspend operator fun iterator(): Iterator<Any> = iterator { yield("value") }
                     }
-                
+
                     suspend fun bar() {
                         runCatching { 
                             for (x in 1..10) {
@@ -1165,7 +1166,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                     import kotlinx.coroutines.MainScope
                     import kotlinx.coroutines.delay
                     import kotlinx.coroutines.launch
-        
+
                     class SuspendingIterator {
                         suspend operator fun iterator(): Iterator<Any> = iterator { yield("value") }
                     }
@@ -1173,7 +1174,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                     inline fun foo(lambda: () -> Unit) {
                         lambda()
                     }
-                
+
                     suspend fun bar() {
                         runCatching {
                             foo {
@@ -1199,11 +1200,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                     import kotlinx.coroutines.MainScope
                     import kotlinx.coroutines.delay
                     import kotlinx.coroutines.launch
-        
+
                     class SuspendingIterator {
                         suspend operator fun iterator(): Iterator<Any> = iterator { yield("value") }
                     }
-                
+
                     suspend fun bar() {
                         runCatching { 
                             MainScope().launch { 
@@ -1223,7 +1224,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             fun `does report when suspend function is invoked`() {
                 val code = """
                     import kotlinx.coroutines.delay
-        
+
                     suspend fun foo() {
                         val suspendBlock = suspend { }
                         runCatching {
@@ -1246,7 +1247,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                     import kotlinx.coroutines.delay
                     import kotlinx.coroutines.MainScope
                     import kotlinx.coroutines.launch
-        
+
                     fun bar(lambda: suspend () -> Unit) {
                         MainScope().launch { lambda() }
                     }
