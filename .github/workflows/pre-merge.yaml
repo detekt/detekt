@@ -49,16 +49,6 @@ jobs:
           path: '**.hprof'
           if-no-files-found: ignore
 
-      - name: Run detekt-cli --help
-        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
-        with:
-          arguments: :detekt-cli:runWithHelpFlag
-
-      - name: Run detekt-cli with argsfile
-        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
-        with:
-          arguments: :detekt-cli:runWithArgsFile
-
       - name: Try to publish to Maven Local
         uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
         with:
