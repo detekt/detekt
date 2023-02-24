@@ -8,7 +8,7 @@ abstract class DslTestBuilder {
     abstract val gradleBuildName: String
     abstract val gradlePlugins: String
     abstract val gradleSubprojectsApplyPlugins: String
-    
+
     @Language("gradle.kts")
     val gradleRepositories = """
         repositories {
