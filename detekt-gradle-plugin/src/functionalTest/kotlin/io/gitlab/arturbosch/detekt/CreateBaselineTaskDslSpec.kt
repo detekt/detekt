@@ -11,12 +11,11 @@ class CreateBaselineTaskDslSpec {
     fun `detektBaseline task can be executed when baseline file is specified`() {
         val baselineFilename = "baseline.xml"
 
-        @Suppress("TrimMultilineRawString")
         val detektConfig = """
-            |detekt {
-            |   baseline = file("$baselineFilename")
-            |}
-        """
+            detekt {
+                baseline = file("$baselineFilename")
+            }
+        """.trimIndent()
         val gradleRunner = DslTestBuilder.kotlin()
             .withProjectLayout(
                 ProjectLayout(
@@ -36,11 +35,10 @@ class CreateBaselineTaskDslSpec {
 
     @Test
     fun `detektBaseline task can be executed when baseline file is not specified`() {
-        @Suppress("TrimMultilineRawString")
         val detektConfig = """
-            |detekt {
-            |}
-        """
+            detekt {
+            }
+        """.trimIndent()
         val gradleRunner = DslTestBuilder.kotlin()
             .withProjectLayout(
                 ProjectLayout(
@@ -59,12 +57,11 @@ class CreateBaselineTaskDslSpec {
 
     @Test
     fun `detektBaseline task can not be executed when baseline file is specified null`() {
-        @Suppress("TrimMultilineRawString")
         val detektConfig = """
-            |detekt {
-            |   baseline = null
-            |}
-        """
+            detekt {
+                baseline = null
+            }
+        """.trimIndent()
         val gradleRunner = DslTestBuilder.kotlin()
             .withProjectLayout(
                 ProjectLayout(

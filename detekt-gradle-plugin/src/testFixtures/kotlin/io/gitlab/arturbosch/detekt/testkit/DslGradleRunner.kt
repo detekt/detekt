@@ -4,6 +4,7 @@ import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
+import org.intellij.lang.annotations.Language
 import java.io.File
 import java.nio.file.Files
 import java.util.UUID
@@ -13,6 +14,7 @@ class DslGradleRunner @Suppress("LongParameterList")
 constructor(
     val projectLayout: ProjectLayout,
     val buildFileName: String,
+    @Language("gradle.kts")
     val mainBuildFileContent: String = "",
     val configFileOrNone: String? = null,
     val baselineFiles: List<String> = emptyList(),
@@ -25,37 +27,40 @@ constructor(
     private val rootDir: File = Files.createTempDirectory("applyPlugin").toFile().apply { deleteOnExit() }
     private val randomString = UUID.randomUUID().toString()
 
+    @Language("gradle.kts")
     private val settingsContent = """
-        |rootProject.name = "rootDir-project"
-        |include(${projectLayout.submodules.joinToString(",") { "\"${it.name}\"" }})
-        |
-    """.trimMargin()
+        rootProject.name = "rootDir-project"
+        include(${projectLayout.submodules.joinToString(",") { "\"${it.name}\"" }})
+    """.trimIndent()
 
+    @Language("xml")
     private val baselineContent = """
-        |<some>
-        |   <xml/>
-        |</some>
-    """.trimMargin()
+        <some>
+            <xml/>
+        </some>
+    """.trimIndent()
 
+    @Language("yaml")
     private val configFileContent = """
-        |build:
-        |  maxIssues: 5
-        |style:
-        |  MagicNumber:
-        |    active: true
-    """.trimMargin()
+        build:
+          maxIssues: 5
+        style:
+          MagicNumber:
+            active: true
+    """.trimIndent()
 
     /**
      * Each generated file is different so the artifacts are not cached in between test runs
      */
+    @Language("kotlin")
     private fun ktFileContent(className: String, withCodeSmell: Boolean = false) = """
-        |internal class $className(
-        |   val randomDefaultValue: String = "$randomString"
-        |) {
-        |   val smellyConstant: Int = ${if (withCodeSmell) "11" else "0"}
-        |}
-        |
-    """.trimMargin()
+        internal class $className(
+            val randomDefaultValue: String = "$randomString"
+        ) {
+            val smellyConstant: Int = ${if (withCodeSmell) "11" else "0"}
+        }
+        
+    """.trimIndent() // Last line to prevent NewLineAtEndOfFile.
 
     fun setupProject() {
         writeProjectFile(buildFileName, mainBuildFileContent)
@@ -95,6 +100,7 @@ constructor(
     fun projectFile(path: String): File = File(rootDir, path).canonicalFile
 
     fun writeProjectFile(filename: String, content: String) {
+        println("Writing file $filename with content:\n${content.replace(" ", ".")}")
         File(rootDir, filename)
             .also { it.parentFile.mkdirs() }
             .writeText(content)
@@ -110,6 +116,7 @@ constructor(
     }
 
     private fun Submodule.writeModuleFile(filename: String, content: String) {
+        println("Writing file $filename with content:\n${content.replace(" ", ".")}")
         File(moduleRoot, filename).writeText(content)
     }
 

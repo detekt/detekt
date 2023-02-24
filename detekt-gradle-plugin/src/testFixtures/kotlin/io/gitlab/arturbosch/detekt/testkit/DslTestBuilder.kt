@@ -1,11 +1,15 @@
 package io.gitlab.arturbosch.detekt.testkit
 
+import org.intellij.lang.annotations.Language
+
 abstract class DslTestBuilder {
 
     abstract val gradleBuildConfig: String
     abstract val gradleBuildName: String
     abstract val gradlePlugins: String
     abstract val gradleSubprojectsApplyPlugins: String
+    
+    @Language("gradle.kts")
     val gradleRepositories = """
         repositories {
             mavenLocal()
@@ -13,6 +17,7 @@ abstract class DslTestBuilder {
         }
     """.trimIndent()
 
+    @Language("gradle.kts")
     private var detektConfig: String = ""
     private var projectLayout: ProjectLayout = ProjectLayout(1)
     private var baselineFile: String? = null
@@ -20,7 +25,7 @@ abstract class DslTestBuilder {
     private var gradleVersion: String? = null
     private var dryRun: Boolean = false
 
-    fun withDetektConfig(config: String): DslTestBuilder {
+    fun withDetektConfig(@Language("gradle.kts") config: String): DslTestBuilder {
         detektConfig = config
         return this
     }
@@ -51,14 +56,10 @@ abstract class DslTestBuilder {
     }
 
     fun build(): DslGradleRunner {
-        val mainBuildFileContent = """
-            |$gradleBuildConfig
-            |$detektConfig
-        """.trimMargin()
         val runner = DslGradleRunner(
             projectLayout = projectLayout,
             buildFileName = gradleBuildName,
-            mainBuildFileContent = mainBuildFileContent,
+            mainBuildFileContent = joinGradleBlocks(gradleBuildConfig, detektConfig),
             configFileOrNone = configFile,
             baselineFiles = baselineFile?.let { listOf(it) }.orEmpty(),
             gradleVersionOrNone = gradleVersion,
@@ -77,30 +78,28 @@ abstract class DslTestBuilder {
 private class GroovyBuilder : DslTestBuilder() {
     override val gradleBuildName: String = "build.gradle"
 
-    @Suppress("TrimMultilineRawString")
+    @Language("gradle")
     override val gradlePlugins = """
-        |plugins {
-        |  id 'java-library'
-        |  id "io.gitlab.arturbosch.detekt"
-        |}
-        |
-    """
+        plugins {
+            id 'java-library'
+            id "io.gitlab.arturbosch.detekt"
+        }
+    """.trimIndent()
 
-    override val gradleBuildConfig: String = """
-        |$gradlePlugins
-        |
-        |$gradleRepositories
-        |
-        |dependencies {
-        |   implementation "org.jetbrains.kotlin:kotlin-stdlib"
-        |}
-    """.trimMargin()
+    @Language("gradle")
+    private val dependencies = """
+        dependencies {
+            implementation "org.jetbrains.kotlin:kotlin-stdlib"
+        }
+    """.trimIndent()
 
-    @Suppress("TrimMultilineRawString")
+    @Language("gradle")
+    override val gradleBuildConfig: String = joinGradleBlocks(gradlePlugins, gradleRepositories, dependencies)
+
+    @Language("gradle")
     override val gradleSubprojectsApplyPlugins = """
-        |apply plugin: "io.gitlab.arturbosch.detekt"
-        |
-    """
+        apply plugin: "io.gitlab.arturbosch.detekt"
+    """.trimIndent()
 
     override fun toString() = "build.gradle"
 }
@@ -108,30 +107,28 @@ private class GroovyBuilder : DslTestBuilder() {
 private class KotlinBuilder : DslTestBuilder() {
     override val gradleBuildName: String = "build.gradle.kts"
 
-    @Suppress("TrimMultilineRawString")
+    @Language("gradle.kts")
     override val gradlePlugins = """
-        |plugins {
-        |   `java-library`
-        |   id("io.gitlab.arturbosch.detekt")
-        |}
-        |
-    """
+        plugins {
+            `java-library`
+            id("io.gitlab.arturbosch.detekt")
+        }
+    """.trimIndent()
 
-    override val gradleBuildConfig: String = """
-        |$gradlePlugins
-        |
-        |$gradleRepositories
-        |
-        |dependencies {
-        |   implementation(kotlin("stdlib"))
-        |}
-    """.trimMargin()
+    @Language("gradle.kts")
+    private val dependencies = """
+        dependencies {
+            implementation(kotlin("stdlib"))
+        }
+    """.trimIndent()
 
-    @Suppress("TrimMultilineRawString")
+    @Language("gradle.kts")
+    override val gradleBuildConfig: String = joinGradleBlocks(gradlePlugins, gradleRepositories, dependencies)
+
+    @Language("gradle.kts")
     override val gradleSubprojectsApplyPlugins = """
-        |plugins.apply("io.gitlab.arturbosch.detekt")
-        |
-    """
+        plugins.apply("io.gitlab.arturbosch.detekt")
+    """.trimIndent()
 
     override fun toString() = "build.gradle.kts"
 }
