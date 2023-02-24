@@ -219,15 +219,15 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `shouldn't report`() {
             val code = """
-               fun expression() {
-                   try {
-                       "try"
-                   } catch (e: Exception) {
-                       "exception"
-                   } finally {
-                       "finally"
-                   }
-               }
+                fun expression() {
+                    try {
+                        "try"
+                    } catch (e: Exception) {
+                        "exception"
+                    } finally {
+                        "finally"
+                    }
+                }
             """.trimIndent()
 
             val finding = subject.compileAndLintWithContext(env, code)

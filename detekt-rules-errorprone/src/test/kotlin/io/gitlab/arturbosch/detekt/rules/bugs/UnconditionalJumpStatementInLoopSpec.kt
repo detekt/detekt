@@ -328,25 +328,25 @@ class UnconditionalJumpStatementInLoopSpec {
     fun `does not report a return after a conditional jump`() {
         val findings = subject.compileAndLint(
             """
-            fun f(): Int {
-                for (i in 0 until 10) {
-                    val a = i * i
-                    if (a < 27) continue
-                    return a
-                }
-                return 0
-            }
-            
-            fun g(): Int {
-                for (i in 0 until 10) {
-                    val a = i * i
-                    when {
-                        a < 27 -> continue
+                fun f(): Int {
+                    for (i in 0 until 10) {
+                        val a = i * i
+                        if (a < 27) continue
+                        return a
                     }
-                    return a
+                    return 0
                 }
-                return 0
-            }
+                
+                fun g(): Int {
+                    for (i in 0 until 10) {
+                        val a = i * i
+                        when {
+                            a < 27 -> continue
+                        }
+                        return a
+                    }
+                    return 0
+                }
             """.trimIndent()
         )
 

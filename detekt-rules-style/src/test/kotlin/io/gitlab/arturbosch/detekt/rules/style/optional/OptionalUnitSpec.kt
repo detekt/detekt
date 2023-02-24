@@ -132,13 +132,13 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
         fun `should not report Unit reference`() {
             val findings = subject.compileAndLint(
                 """
-                fun returnsNothing(u: Unit, us: () -> String) {
-                    val u1 = u is Unit
-                    val u2: Unit = Unit
-                    val Unit = 1
-                    Unit.equals(null)
-                    val i: (Int) -> Unit = { _ -> }
-                }
+                    fun returnsNothing(u: Unit, us: () -> String) {
+                        val u1 = u is Unit
+                        val u2: Unit = Unit
+                        val Unit = 1
+                        Unit.equals(null)
+                        val i: (Int) -> Unit = { _ -> }
+                    }
                 """.trimIndent()
             )
             assertThat(findings).isEmpty()

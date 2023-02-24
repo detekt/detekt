@@ -76,13 +76,13 @@ class LabeledExpressionSpec {
     @Test
     fun `does not report inner class referencing outer class`() {
         val code = """
-        class Outer {
-            inner class Inner {
-                fun f() {
-                    print(this@Outer)
+            class Outer {
+                inner class Inner {
+                    fun f() {
+                        print(this@Outer)
+                    }
                 }
             }
-        }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -90,14 +90,14 @@ class LabeledExpressionSpec {
     @Test
     fun `does not report inner class referencing outer class in extension function`() {
         val code = """
-        class Outer {
-            inner class Inner {
-                fun Int.f() {
-                    print(this@Inner)
-                    print(this@Outer)
+            class Outer {
+                inner class Inner {
+                    fun Int.f() {
+                        print(this@Inner)
+                        print(this@Outer)
+                    }
                 }
             }
-        }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -105,13 +105,13 @@ class LabeledExpressionSpec {
     @Test
     fun `does not report nested class referencing outer class in extension function`() {
         val code = """
-        class Outer {
-            class Nested {
-                fun Int.f() {
-                    print(this@Nested)
+            class Outer {
+                class Nested {
+                    fun Int.f() {
+                        print(this@Nested)
+                    }
                 }
             }
-        }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -119,20 +119,20 @@ class LabeledExpressionSpec {
     @Test
     fun `does not report inner classes referencing outer class in extension function`() {
         val code = """
-        class Outer {
-            inner class Inner {
-                inner class InnerInner {
-                    fun f() {
-                        print(this@Outer)
-                        print(this@Inner)
-                    }
-                    fun Int.f() {
-                        print(this@Inner)
-                        print(this@InnerInner)
+            class Outer {
+                inner class Inner {
+                    inner class InnerInner {
+                        fun f() {
+                            print(this@Outer)
+                            print(this@Inner)
+                        }
+                        fun Int.f() {
+                            print(this@Inner)
+                            print(this@InnerInner)
+                        }
                     }
                 }
             }
-        }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }

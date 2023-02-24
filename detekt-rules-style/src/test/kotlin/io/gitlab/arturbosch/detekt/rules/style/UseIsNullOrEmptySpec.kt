@@ -377,9 +377,9 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
             @Test
             fun `null or count() == 0`() {
                 val code = """
-                fun test(x: Sequence<Int>?) {
-                    if (x == null || x.count() == 0) return
-                }
+                    fun test(x: Sequence<Int>?) {
+                        if (x == null || x.count() == 0) return
+                    }
                 """.trimIndent()
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()

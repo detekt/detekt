@@ -27,7 +27,7 @@ class ClassNamingSpec {
         assertThat(
             ClassNaming(config).compileAndLint(
                 """
-        class aBbD{}
+                    class aBbD{}
                 """.trimIndent()
             )
         ).isEmpty()

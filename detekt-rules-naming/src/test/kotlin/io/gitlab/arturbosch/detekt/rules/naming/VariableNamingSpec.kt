@@ -45,13 +45,13 @@ class VariableNamingSpec {
     @Test
     fun shouldExcludeClassesFromVariableNaming() {
         val code = """
-        class Bar {
-            val MYVar = 3
-        }
-        
-        object Foo {
-            val MYVar = 3
-        }
+            class Bar {
+                val MYVar = 3
+            }
+            
+            object Foo {
+                val MYVar = 3
+            }
         """.trimIndent()
         val config = TestConfig(VariableNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar")
         assertThat(VariableNaming(config).compileAndLint(code)).isEmpty()

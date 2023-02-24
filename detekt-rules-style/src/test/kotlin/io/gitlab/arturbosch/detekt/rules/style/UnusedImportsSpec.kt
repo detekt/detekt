@@ -613,23 +613,23 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `does not report unused import for import used in kdoc - #4815`() {
         val mainFile = """
-        import x.y.z.SomeClass
-        
-        class MyView
-        
-        /**
-         * Style for [MyView]
-         * Blablabla
-         *
-         * @property someVal Someval for [SomeClass]
-         */
-         data class StyleClass(val someVal: String)
+            import x.y.z.SomeClass
+            
+            class MyView
+            
+            /**
+             * Style for [MyView]
+             * Blablabla
+             *
+             * @property someVal Someval for [SomeClass]
+             */
+             data class StyleClass(val someVal: String)
         """.trimIndent()
 
         val additionalFile = """
-        package x.y.z
-        
-        class SomeClass
+            package x.y.z
+            
+            class SomeClass
         """.trimIndent()
 
         assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
@@ -638,16 +638,16 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `does not report imports which detekt cannot resolve but have string matches`() {
         val mainFile = """
-        import x.y.z.foo
-        import x.y.z.Bar
-        
-        fun test() {
-            foo()
-            foo("", 123)
-            foo
-        
-            Bar().baz()
-        }
+            import x.y.z.foo
+            import x.y.z.Bar
+            
+            fun test() {
+                foo()
+                foo("", 123)
+                foo
+            
+                Bar().baz()
+            }
         """.trimIndent()
 
         assertThat(subject.lintWithContext(env, mainFile)).isEmpty()
@@ -656,12 +656,12 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `reports imports which detekt cannot resolve and do not have string matches`() {
         val mainFile = """
-        import x.y.z.foo
-        import x.y.z.Bar
-        
-        fun test() {
-            2 + 3
-        }
+            import x.y.z.foo
+            import x.y.z.Bar
+            
+            fun test() {
+                2 + 3
+            }
         """.trimIndent()
 
         assertThat(subject.lintWithContext(env, mainFile)).hasSize(2)

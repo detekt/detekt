@@ -78,13 +78,13 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `doesn't report when function doesn't take a vararg parameter`() {
             val code = """
-            fun test0(strs: Array<String>) {
-                test(strs)
-            }
-            
-            fun test(strs: Array<String>) {
-                strs.forEach { println(it) }
-            }
+                fun test0(strs: Array<String>) {
+                    test(strs)
+                }
+                
+                fun test(strs: Array<String>) {
+                    strs.forEach { println(it) }
+                }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
@@ -92,13 +92,13 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `doesn't report with expression inside params`() {
             val code = """
-            fun test0(strs: Array<String>) {
-                test(2*2)
-            }
-            
-            fun test(test : Int) {
-                println(test)
-            }
+                fun test0(strs: Array<String>) {
+                    test(2*2)
+                }
+                
+                fun test(test : Int) {
+                    println(test)
+                }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
@@ -192,13 +192,13 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `doesn't report when function doesn't take a vararg parameter`() {
             val code = """
-            fun test0(strs: Array<String>) {
-                test(strs)
-            }
-            
-            fun test(strs: Array<String>) {
-                strs.forEach { println(it) }
-            }
+                fun test0(strs: Array<String>) {
+                    test(strs)
+                }
+                
+                fun test(strs: Array<String>) {
+                    strs.forEach { println(it) }
+                }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -206,13 +206,13 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `doesn't report with expression inside params`() {
             val code = """
-            fun test0(strs: Array<String>) {
-                test(2*2)
-            }
-            
-            fun test(test : Int) {
-                println(test)
-            }
+                fun test0(strs: Array<String>) {
+                    test(2*2)
+                }
+                
+                fun test(test : Int) {
+                    println(test)
+                }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }

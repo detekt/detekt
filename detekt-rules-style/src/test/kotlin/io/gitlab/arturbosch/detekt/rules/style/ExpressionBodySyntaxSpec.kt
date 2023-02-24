@@ -20,9 +20,9 @@ class ExpressionBodySyntaxSpec {
             assertThat(
                 subject.compileAndLint(
                     """
-                fun stuff(): Int {
-                    return 5
-                }
+                        fun stuff(): Int {
+                            return 5
+                        }
                     """.trimIndent()
                 )
             ).hasSize(1)
@@ -33,9 +33,9 @@ class ExpressionBodySyntaxSpec {
             assertThat(
                 subject.compileAndLint(
                     """
-                fun stuff(): String {
-                    return StringBuilder().append(0).toString()
-                }
+                        fun stuff(): String {
+                            return StringBuilder().append(0).toString()
+                        }
                     """.trimIndent()
                 )
             ).hasSize(1)
@@ -46,12 +46,12 @@ class ExpressionBodySyntaxSpec {
             assertThat(
                 subject.compileAndLint(
                     """
-                fun stuff(): Int {
-                    return if (true) return 5 else return 3
-                }
-                fun stuff2(): Int {
-                    return try { return 5 } catch (e: Exception) { return 3 }
-                }
+                        fun stuff(): Int {
+                            return if (true) return 5 else return 3
+                        }
+                        fun stuff2(): Int {
+                            return try { return 5 } catch (e: Exception) { return 3 }
+                        }
                     """.trimIndent()
                 )
             ).hasSize(2)
@@ -62,10 +62,10 @@ class ExpressionBodySyntaxSpec {
             assertThat(
                 subject.compileAndLint(
                     """
-                fun stuff(): Boolean {
-                    if (true) return true
-                    return false
-                }
+                        fun stuff(): Boolean {
+                            if (true) return true
+                            return false
+                        }
                     """.trimIndent()
                 )
             ).isEmpty()
@@ -76,11 +76,11 @@ class ExpressionBodySyntaxSpec {
             assertThat(
                 subject.compileAndLint(
                     """
-                fun caller(): String {
-                    return callee("" as String? ?: return "")
-                }
-                
-                fun callee(a: String): String = ""
+                        fun caller(): String {
+                            return callee("" as String? ?: return "")
+                        }
+                        
+                        fun callee(a: String): String = ""
                     """.trimIndent()
                 )
             ).isEmpty()

@@ -137,10 +137,10 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `should not report non-public nested classes`() {
         val code = """
-        internal class Outer {
-            class Nested
-            inner class Inner
-        }
+            internal class Outer {
+                class Nested
+                inner class Inner
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -148,9 +148,9 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `should not report non-public nested interfaces`() {
         val code = """
-        internal class Outer {
-            interface Inner
-        }
+            internal class Outer {
+                interface Inner
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -158,9 +158,9 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `should not report non-public nested objects`() {
         val code = """
-        internal class Outer {
-            object Inner
-        }
+            internal class Outer {
+                object Inner
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -168,19 +168,19 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `should not report for documented public object`() {
         val code = """
-        /**
-         * Class docs not being recognized.
-         */
-        object Main {
             /**
-             * The entry point for the application.
-             *
-             * @param args The list of process arguments.
+             * Class docs not being recognized.
              */
-            @JvmStatic
-            fun main(args: Array<String>) {
+            object Main {
+                /**
+                 * The entry point for the application.
+                 *
+                 * @param args The list of process arguments.
+                 */
+                @JvmStatic
+                fun main(args: Array<String>) {
+                }
             }
-        }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -188,12 +188,12 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `should not report for anonymous objects`() {
         val code = """
-        fun main(args: Array<String>) {
-            val value = object : Iterator<Int> {
-                override fun hasNext() = true
-                override fun next() = 1
+            fun main(args: Array<String>) {
+                val value = object : Iterator<Int> {
+                    override fun hasNext() = true
+                    override fun next() = 1
+                }
             }
-        }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -201,9 +201,9 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `should report for enum classes`() {
         val code = """
-        enum class Enum {
-            CONSTANT
-        }
+            enum class Enum {
+                CONSTANT
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
@@ -211,10 +211,10 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `should not report for enum constants`() {
         val code = """
-        /** Some doc */
-        enum class Enum {
-            CONSTANT
-        }
+            /** Some doc */
+            enum class Enum {
+                CONSTANT
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -222,15 +222,15 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `should not report for fun interfaces`() {
         val code = """
-        /**
-         * This interface is an example
-         */
-        fun interface Example {
             /**
-             * Trigger when done
+             * This interface is an example
              */
-            fun onComplete()
-        }
+            fun interface Example {
+                /**
+                 * Trigger when done
+                 */
+                fun onComplete()
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -238,8 +238,8 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `does not report protected class by default`() {
         val code = """
-        protected class Test {
-        }
+            protected class Test {
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -247,8 +247,8 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `reports protected class if configured`() {
         val code = """
-        protected class Test {
-        }
+            protected class Test {
+            }
         """.trimIndent()
         val subject = UndocumentedPublicClass(TestConfig(SEARCH_IN_PROTECTED_CLASS to "true"))
         assertThat(subject.compileAndLint(code)).hasSize(1)

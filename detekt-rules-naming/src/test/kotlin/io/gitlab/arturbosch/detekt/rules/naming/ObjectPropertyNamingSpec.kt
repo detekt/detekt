@@ -249,9 +249,9 @@ class ObjectPropertyNamingSpec {
     fun `should not detect class properties`() {
         val subject = ObjectPropertyNaming()
         val code = """
-                class O {
-                    val _invalidNaming = 1
-                }
+            class O {
+                val _invalidNaming = 1
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -260,11 +260,11 @@ class ObjectPropertyNamingSpec {
     fun `should not detect properties of class in object declaration`() {
         val subject = ObjectPropertyNaming()
         val code = """
-                object A {
-                    class O {
-                        val _invalidNaming = 1
-                    }
+            object A {
+                class O {
+                    val _invalidNaming = 1
                 }
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -274,12 +274,12 @@ class ObjectPropertyNamingSpec {
 abstract class NamingSnippet(private val isPrivate: Boolean, private val isConst: Boolean) {
 
     val negative = """
-                    ${visibility()}${const()}val MY_NAME_8 = "Artur"
-                    ${visibility()}${const()}val MYNAME = "Artur"
-                    ${visibility()}${const()}val MyNAME = "Artur"
-                    ${visibility()}${const()}val name = "Artur"
-                    ${visibility()}${const()}val nAme = "Artur"
-                    ${visibility()}${const()}val serialVersionUID = 42L
+        ${visibility()}${const()}val MY_NAME_8 = "Artur"
+        ${visibility()}${const()}val MYNAME = "Artur"
+        ${visibility()}${const()}val MyNAME = "Artur"
+        ${visibility()}${const()}val name = "Artur"
+        ${visibility()}${const()}val nAme = "Artur"
+        ${visibility()}${const()}val serialVersionUID = 42L
     """.trimIndent()
     val positive = """${visibility()}${const()}val _nAme = "Artur""""
 

@@ -74,9 +74,9 @@ class CyclomaticComplexitySpec {
 
         private val code = compileContentForTest(
             """
-                    fun test(i: Int) {
-                        (1..10).forEach { println(it) }
-                    }
+                fun test(i: Int) {
+                    (1..10).forEach { println(it) }
+                }
             """.trimIndent()
         )
 
@@ -122,13 +122,13 @@ class CyclomaticComplexitySpec {
         fun `counts simple when branches as 1`() {
             val function = compileContentForTest(
                 """
-                fun test() {
-                    when (System.currentTimeMillis()) {
-                        0 -> println("Epoch!")
-                        1 -> println("1 past epoch.")
-                        else -> println("Meh")
+                    fun test() {
+                        when (System.currentTimeMillis()) {
+                            0 -> println("Epoch!")
+                            1 -> println("1 past epoch.")
+                            else -> println("Meh")
+                        }
                     }
-                }
                 """.trimIndent()
             ).getFunctionByName("test")
 
@@ -143,15 +143,15 @@ class CyclomaticComplexitySpec {
         fun `counts block when branches as 1`() {
             val function = compileContentForTest(
                 """
-                fun test() {
-                    when (System.currentTimeMillis()) {
-                        0 -> {
-                            println("Epoch!")
+                    fun test() {
+                        when (System.currentTimeMillis()) {
+                            0 -> {
+                                println("Epoch!")
+                            }
+                            1 -> println("1 past epoch.")
+                            else -> println("Meh")
                         }
-                        1 -> println("1 past epoch.")
-                        else -> println("Meh")
                     }
-                }
                 """.trimIndent()
             ).getFunctionByName("test")
 
@@ -170,13 +170,13 @@ class CyclomaticComplexitySpec {
         fun `counts a when with only simple branches as 1`() {
             val function = compileContentForTest(
                 """
-                fun test() {
-                    when (System.currentTimeMillis()) {
-                        0 -> println("Epoch!")
-                        1 -> println("1 past epoch.")
-                        else -> println("Meh")
+                    fun test() {
+                        when (System.currentTimeMillis()) {
+                            0 -> println("Epoch!")
+                            1 -> println("1 past epoch.")
+                            else -> println("Meh")
+                        }
                     }
-                }
                 """.trimIndent()
             ).getFunctionByName("test")
 
@@ -191,18 +191,18 @@ class CyclomaticComplexitySpec {
         fun `does not count simple when branches`() {
             val function = compileContentForTest(
                 """
-                fun test() {
-                    when (System.currentTimeMillis()) {
-                        0 -> {
-                            println("Epoch!")
-                            println("yay")
+                    fun test() {
+                        when (System.currentTimeMillis()) {
+                            0 -> {
+                                println("Epoch!")
+                                println("yay")
+                            }
+                            1 -> {
+                                println("1 past epoch!")
+                            }
+                            else -> println("Meh")
                         }
-                        1 -> {
-                            println("1 past epoch!")
-                        }
-                        else -> println("Meh")
                     }
-                }
                 """.trimIndent()
             ).getFunctionByName("test")
 
@@ -217,20 +217,20 @@ class CyclomaticComplexitySpec {
         fun `counts block when branches as 1`() {
             val function = compileContentForTest(
                 """
-                fun test() {
-                    when (System.currentTimeMillis()) {
-                        0 -> {
-                            println("Epoch!")
-                            println("yay!")
+                    fun test() {
+                        when (System.currentTimeMillis()) {
+                            0 -> {
+                                println("Epoch!")
+                                println("yay!")
+                            }
+                            1 -> {
+                                println("1 past epoch.")
+                                println("yay?")
+                            }
+                            2 -> println("shrug")
+                            else -> println("Meh")
                         }
-                        1 -> {
-                            println("1 past epoch.")
-                            println("yay?")
-                        }
-                        2 -> println("shrug")
-                        else -> println("Meh")
                     }
-                }
                 """.trimIndent()
             ).getFunctionByName("test")
 

@@ -92,12 +92,12 @@ class WildcardImportSpec {
     @Nested
     inner class `a kt file with no wildcard imports` {
         val code = """
-        package org
-        
-        import io.mockk.mockk
-        
-        class Test {
-        }
+            package org
+            
+            import io.mockk.mockk
+            
+            class Test {
+            }
         """.trimIndent()
 
         @Test

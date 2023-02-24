@@ -13,9 +13,9 @@ class UseArrayLiteralsInAnnotationsSpec {
     fun `finds an arrayOf usage`() {
         val findings = subject.compileAndLint(
             """
-        annotation class Test(val values: Array<String>)
-        @Test(arrayOf("value"))
-        fun test() = Unit
+                annotation class Test(val values: Array<String>)
+                @Test(arrayOf("value"))
+                fun test() = Unit
             """.trimIndent()
         )
 
@@ -62,9 +62,9 @@ class UseArrayLiteralsInAnnotationsSpec {
     fun expectsBracketSyntax() {
         val findings = subject.compileAndLint(
             """
-        annotation class Test(val values: Array<String>)
-        @Test(["value"])
-        fun test() = Unit
+                annotation class Test(val values: Array<String>)
+                @Test(["value"])
+                fun test() = Unit
             """.trimIndent()
         )
 
