@@ -115,17 +115,14 @@ class FunctionNamingSpec {
 
     @Test
     fun `should use custom name for method`() {
+        val code = """
+            class Foo {
+                fun `name with back ticks`() {
+                }
+            }
+        """.trimIndent()
         val config = TestConfig(FunctionNaming.FUNCTION_PATTERN to "^`.+`$")
-        assertThat(
-            FunctionNaming(config).compileAndLint(
-                """
-                    class Foo {
-                        fun `name with back ticks`() {
-                        }
-                    }
-                """.trimIndent()
-            )
-        ).isEmpty()
+        assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
     }
 
     @Test

@@ -321,16 +321,14 @@ class MayBeConstSpec {
 
         @Test
         fun `does not report vals inside anonymous object declaration`() {
-            subject.compileAndLint(
-                """
-                    fun main() {
-                        val versions = object {
-                            val prop = ""
-                        }
+            val code = """
+                fun main() {
+                    val versions = object {
+                        val prop = ""
                     }
-                """.trimIndent()
-            )
-
+                }
+            """.trimIndent()
+            subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
         }
 

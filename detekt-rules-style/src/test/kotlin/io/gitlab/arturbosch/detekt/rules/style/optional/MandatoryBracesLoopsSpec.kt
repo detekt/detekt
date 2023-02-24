@@ -353,7 +353,7 @@ class MandatoryBracesLoopsSpec {
             val code = """
                 fun test() {
                     var i = 0
-                    do do i += 1 while(i < 5) while (i < 5)	
+                    do do i += 1 while(i < 5) while (i < 5)
                 }
             """.trimIndent()
 
@@ -363,10 +363,10 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `reports in nested loop outer`() {
             val code = """
-                fun test() {	
+                fun test() {
                     do
-                        do {		
-                            println()		
+                        do {
+                            println()
                         } while (true)
                     while (true)
                 }

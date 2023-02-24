@@ -18,7 +18,7 @@ class ReturnCountSpec {
 
     @Nested
     inner class `a function without a body` {
-        val code = """
+        private val code = """
             fun func() = Unit
         """.trimIndent()
 
@@ -30,7 +30,7 @@ class ReturnCountSpec {
 
     @Nested
     inner class `a function with an empty body` {
-        val code = """
+        private val code = """
             fun func() {}
         """.trimIndent()
 
@@ -42,7 +42,7 @@ class ReturnCountSpec {
 
     @Nested
     inner class `a file with an if condition guard clause and 2 returns` {
-        val code = """
+        private val code = """
             fun test(x: Int): Int {
                 if (x < 4) return 0
                 when (x) {
@@ -63,7 +63,7 @@ class ReturnCountSpec {
 
     @Nested
     inner class `a file with an if condition guard clause with body and 2 returns` {
-        val code = """
+        private val code = """
             fun test(x: Int): Int {
                 if (x < 4) {
                     println("x x is less than 4")
@@ -94,7 +94,7 @@ class ReturnCountSpec {
 
     @Nested
     inner class `reports a too-complicated if statement for being a guard clause` {
-        val code = """
+        private val code = """
             fun test(x: Int): Int {
                 if (x < 4) {
                     println("x x is less than 4")
@@ -122,7 +122,7 @@ class ReturnCountSpec {
 
     @Nested
     inner class `a file with an ELVIS operator guard clause and 2 returns` {
-        val code = """
+        private val code = """
             fun test(x: Int): Int {
                 val y = x ?: return 0
                 when (x) {
@@ -143,7 +143,7 @@ class ReturnCountSpec {
 
     @Nested
     inner class `a file with 2 returns and an if condition guard clause which is not the first statement` {
-        val code = """
+        private val code = """
             fun test(x: Int): Int {
                 when (x) {
                     5 -> println("x=5")
@@ -164,7 +164,7 @@ class ReturnCountSpec {
 
     @Nested
     inner class `a file with 2 returns and an ELVIS guard clause which is not the first statement` {
-        val code = """
+        private val code = """
             fun test(x: Int): Int {
                 when (x) {
                     5 -> println("x=5")
