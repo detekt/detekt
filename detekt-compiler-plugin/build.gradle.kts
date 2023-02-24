@@ -1,6 +1,5 @@
 import de.undercouch.gradle.tasks.download.Download
 import de.undercouch.gradle.tasks.download.Verify
-import java.io.ByteArrayOutputStream
 
 val kotlinVersion: String = libs.versions.kotlin.get()
 val detektVersion: String = Versions.DETEKT
@@ -73,40 +72,37 @@ val unzipKotlinCompiler by tasks.registering(Copy::class) {
     into(file("$rootDir/build/kotlinc/$kotlinVersion"))
 }
 
-val testPluginKotlinc by tasks.registering(RunTestExecutable::class) {
-    notCompatibleWithConfigurationCache("cannot serialize objects currently used in this task")
+val testPluginKotlinc by tasks.registering(Task::class) {
     dependsOn(unzipKotlinCompiler, tasks.shadowJar)
-
-    args(
-        listOf(
-            "$projectDir/src/test/resources/hello.kt",
-            "-Xplugin=${tasks.shadowJar.get().archiveFile.get().asFile.absolutePath}",
-            "-P",
-        )
-    )
 
     val baseExecutablePath = "${unzipKotlinCompiler.get().destinationDir}/kotlinc/bin/kotlinc"
     val pluginParameters = "plugin:detekt-compiler-plugin:debug=true"
 
-    if (org.apache.tools.ant.taskdefs.condition.Os.isFamily("windows")) {
-        executable(file("$baseExecutablePath.bat"))
-        args("\"$pluginParameters\"")
-    } else {
-        executable(file(baseExecutablePath))
-        args(pluginParameters)
+    val kotlincExecution = providers.exec {
+        workingDir = file("$buildDir/tmp/kotlinc")
+        workingDir.mkdirs()
+
+        args = listOf(
+            "$projectDir/src/test/resources/hello.kt",
+            "-Xplugin=${tasks.shadowJar.get().archiveFile.get().asFile.absolutePath}",
+            "-P",
+        )
+
+        if (org.apache.tools.ant.taskdefs.condition.Os.isFamily("windows")) {
+            executable = "$baseExecutablePath.bat"
+            args("\"$pluginParameters\"")
+        } else {
+            executable = baseExecutablePath
+            args(pluginParameters)
+        }
     }
 
-    errorOutput = ByteArrayOutputStream()
-    // dummy path - required for RunTestExecutable task but doesn't do anything
-    outputDir = file("$buildDir/tmp/kotlinc")
-
     doLast {
-        if (!errorOutput.toString().contains("warning: magicNumber:")) {
+        if (!kotlincExecution.standardError.asText.get().contains("warning: magicNumber:")) {
             throw GradleException(
-                "kotlinc $kotlinVersion run with compiler plugin did not find MagicNumber issue as expected"
+                "kotlinc run with compiler plugin did not find MagicNumber issue as expected"
             )
         }
-        (this as RunTestExecutable).executionResult.get().assertNormalExitValue()
     }
 }
 
