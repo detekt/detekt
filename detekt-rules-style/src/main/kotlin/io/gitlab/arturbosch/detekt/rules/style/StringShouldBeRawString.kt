@@ -48,7 +48,7 @@ import org.jetbrains.kotlin.psi2ir.deparenthesize
  *              "height": 500
  *          }
  *     }
- * """.trimMargin()
+ * """.trimIndent()
  *
  * val patRegex = """/^(\/[^\/]+){0,2}\/?$/gm"""
  * </compliant>
