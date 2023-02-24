@@ -66,6 +66,17 @@ class FunctionNamingSpec {
     }
 
     @Test
+    fun `does not report when the function name is identical to the type of the result`() {
+        val code = """
+        interface Foo
+        private class FooImpl : Foo
+
+        fun Foo(): Foo = FooImpl()
+        """.trimIndent()
+        assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
+    }
+
+    @Test
     fun `flags functions with bad names inside overridden functions by default`() {
         val code = """
         class C : I {
