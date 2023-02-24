@@ -109,6 +109,22 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
             assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
         }
 
+        @DisplayName("When toString")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "fun toString() = Unit,                            true",
+            "fun toString(hello: String) = Unit,               true",
+            "'fun toString(hello: String, world: Int) = Unit', true",
+            "fun compare() = Unit,                             false",
+            "fun compare(hello: String) = Unit,                false",
+            "'fun compare(hello: String, world: Int) = Unit',  false"
+        )
+        fun `When toString without package`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code, false)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("toString")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+        }
+
         @DisplayName("When toString()")
         @ParameterizedTest(name = "in case {0} it return {1}")
         @CsvSource(
@@ -185,6 +201,22 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
         )
         fun `When toString(String)`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("toString(String)")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+        }
+
+        @DisplayName("When toString(String)")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "fun toString() = Unit,                            false",
+            "fun toString(hello: String) = Unit,               false",
+            "'fun toString(hello: String, world: Int) = Unit', false",
+            "fun compare() = Unit,                             false",
+            "fun compare(hello: String) = Unit,                false",
+            "'fun compare(hello: String, world: Int) = Unit',  false"
+        )
+        fun `When toString(String) without package`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code, false)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString(String)")
             assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
         }
@@ -314,8 +346,17 @@ private class TestCase(
     val expectedFunctionMatcher: FunctionMatcher,
 )
 
-private fun buildKtFunction(environment: KotlinCoreEnvironment, code: String): Pair<KtNamedFunction, BindingContext> {
-    val ktFile = compileContentForTest(code)
+private fun buildKtFunction(
+    environment: KotlinCoreEnvironment,
+    code: String,
+    includePackage: Boolean = true
+): Pair<KtNamedFunction, BindingContext> {
+    val ktFile = compileContentForTest(
+        """
+        ${if (includePackage) "package io.github.detekt" else ""}
+        $code
+        """.trimIndent()
+    )
     val bindingContext = environment.getContextForPaths(listOf(ktFile))
     return ktFile.findChildByClass(KtNamedFunction::class.java)!! to bindingContext
 }
