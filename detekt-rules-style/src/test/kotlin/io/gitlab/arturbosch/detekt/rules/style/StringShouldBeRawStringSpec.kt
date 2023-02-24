@@ -375,7 +375,6 @@ class StringShouldBeRawStringSpec {
         fun getViolations() = listOf(
             Arguments.of(""""\"[^\"\\\\\\n]*(?:\\\\.[^\"\\\\\\n]*)*\""""", 0, listOf("\\\\", "\\n", "\\\"")),
             Arguments.of(
-                @Suppress("TrimMultilineRawString")
                 """
                     "{\n" +
                     "  \"window\": {\n" +
@@ -385,7 +384,7 @@ class StringShouldBeRawStringSpec {
                     "    \"height\": 500\n" +
                     "  }\n" +
                     "}"
-                """,
+                """.trimIndent(),
                 2,
                 listOf("\\n", "\\\""),
             ),
@@ -456,11 +455,7 @@ class StringShouldBeRawStringSpec {
                 0,
                 listOf("\\n"),
             ),
-            Arguments.of(
-                """"\n \\".isEmpty()""",
-                0,
-                listOf("\\n", "\\\\"),
-            ),
+            Arguments.of(""""\n \\".isEmpty()""", 0, listOf("\\n", "\\\\")),
         )
 
         @Suppress("LongMethod")
@@ -485,8 +480,8 @@ class StringShouldBeRawStringSpec {
                 2
             ),
             Arguments.of(
-                @Suppress("TrimMultilineRawString")
-                """""${'"'}
+                """
+                    ""${'"'}
                       {
                           "window": {
                             "title": "Sample Quantum With AI and ML Widget",
@@ -496,7 +491,7 @@ class StringShouldBeRawStringSpec {
                           }
                       }
                     ""${'"'}
-                """,
+                """.trimIndent(),
                 0
             ),
             Arguments.of(
@@ -525,7 +520,6 @@ class StringShouldBeRawStringSpec {
             Arguments.of(""""This is point number ${'$'}i In java new line char is \n"""", 1, listOf("\\n")),
             Arguments.of(""" "abc" + "\n" + "efg" + "\n" + "hij"  """, 2, listOf("\\n")),
             Arguments.of(
-                @Suppress("TrimMultilineRawString")
                 """
                     "{\n" +
                     "  \"window\": {\n" +
@@ -535,7 +529,7 @@ class StringShouldBeRawStringSpec {
                     "    \"height\": 500\n" +
                     "  }\n" +
                     "}"
-                """,
+                """.trimIndent(),
                 21,
                 listOf("\\n", "\\\""),
             ),
