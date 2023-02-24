@@ -57,14 +57,14 @@ class DefaultConfigProviderSpec {
             val actual = path.readText()
             val expected = resourceAsPath("default-detekt-config.yml").readText() +
                 """
-                    |
-                    |sample:
-                    |  TooManyFunctions:
-                    |    active: true
-                    |  TooManyFunctionsTwo:
-                    |    active: true
-                    |
-                """.trimMargin()
+                    
+                    sample:
+                      TooManyFunctions:
+                        active: true
+                      TooManyFunctionsTwo:
+                        active: true
+                    
+                """.trimIndent()
 
             assertThat(actual).isEqualTo(expected)
         }
