@@ -23,12 +23,12 @@ class CyclomaticComplexMethodSpec {
         fun `counts different loops`() {
             val findings = CyclomaticComplexMethod(TestConfig(defaultThreshold)).compileAndLint(
                 """
-                fun test() {
-                    for (i in 1..10) {}
-                    while (true) {}
-                    do {} while(true)
-                    (1..10).forEach {}
-                }
+                    fun test() {
+                        for (i in 1..10) {}
+                        while (true) {}
+                        do {} while(true)
+                        (1..10).forEach {}
+                    }
                 """.trimIndent()
             )
 
@@ -39,9 +39,9 @@ class CyclomaticComplexMethodSpec {
         fun `counts catch blocks`() {
             val findings = CyclomaticComplexMethod(TestConfig(defaultThreshold)).compileAndLint(
                 """
-                fun test() {
-                    try {} catch(e: IllegalArgumentException) {} catch(e: Exception) {} finally {}
-                }
+                    fun test() {
+                        try {} catch(e: IllegalArgumentException) {} catch(e: Exception) {} finally {}
+                    }
                 """.trimIndent()
             )
 
@@ -52,20 +52,20 @@ class CyclomaticComplexMethodSpec {
         fun `counts nested conditional statements`() {
             val findings = CyclomaticComplexMethod(TestConfig(defaultThreshold)).compileAndLint(
                 """
-                fun test() {
-                    try {
-                        while (true) {
-                            if (true) {
-                                when ("string") {
-                                    "" -> println()
-                                    else -> println()
+                    fun test() {
+                        try {
+                            while (true) {
+                                if (true) {
+                                    when ("string") {
+                                        "" -> println()
+                                        else -> println()
+                                    }
                                 }
                             }
+                        } finally {
+                            // only catches count
                         }
-                    } finally {
-                        // only catches count
                     }
-                }
                 """.trimIndent()
             )
 
@@ -77,10 +77,10 @@ class CyclomaticComplexMethodSpec {
     inner class `nesting functions` {
 
         val code = """
-                fun test() {
-                    for (i in 1..10) {}
-                    (1..10).forEach {}
-                }
+            fun test() {
+                for (i in 1..10) {}
+                (1..10).forEach {}
+            }
         """.trimIndent()
 
         @Test
@@ -149,7 +149,7 @@ class CyclomaticComplexMethodSpec {
             val config = TestConfig("ignoreSimpleWhenEntries" to "true")
             val subject = CyclomaticComplexMethod(config)
             val code = """
-                 fun f() {
+                fun f() {
                     val map = HashMap<Any, String>()
                     for ((key, value) in map) {
                         when (key) {
@@ -176,51 +176,51 @@ class CyclomaticComplexMethodSpec {
     inner class `function containing object literal with many overridden functions` {
 
         val code = """
-        fun f(): List<Any> {
-            return object : List<Any> {
-                override val size: Int get() = TODO("not implemented")
-        
-                override fun contains(element: Any): Boolean {
-                    TODO("not implemented")
-                }
-        
-                override fun containsAll(elements: Collection<Any>): Boolean {
-                    TODO("not implemented")
-                }
-        
-                override fun get(index: Int): Any {
-                    TODO("not implemented")
-                }
-        
-                override fun indexOf(element: Any): Int {
-                    TODO("not implemented")
-                }
-        
-                override fun isEmpty(): Boolean {
-                    TODO("not implemented")
-                }
-        
-                override fun iterator(): Iterator<Any> {
-                    TODO("not implemented")
-                }
-        
-                override fun lastIndexOf(element: Any): Int {
-                    TODO("not implemented")
-                }
-        
-                override fun listIterator(): ListIterator<Any> {
-                    TODO("not implemented")
-                }
-        
-                override fun listIterator(index: Int): ListIterator<Any> {
-                    TODO("not implemented")
-                }
-        
-                override fun subList(fromIndex: Int, toIndex: Int): List<Any> {
-                    TODO("not implemented")
+            fun f(): List<Any> {
+                return object : List<Any> {
+                    override val size: Int get() = TODO("not implemented")
+            
+                    override fun contains(element: Any): Boolean {
+                        TODO("not implemented")
+                    }
+            
+                    override fun containsAll(elements: Collection<Any>): Boolean {
+                        TODO("not implemented")
+                    }
+            
+                    override fun get(index: Int): Any {
+                        TODO("not implemented")
+                    }
+            
+                    override fun indexOf(element: Any): Int {
+                        TODO("not implemented")
+                    }
+            
+                    override fun isEmpty(): Boolean {
+                        TODO("not implemented")
+                    }
+            
+                    override fun iterator(): Iterator<Any> {
+                        TODO("not implemented")
+                    }
+            
+                    override fun lastIndexOf(element: Any): Int {
+                        TODO("not implemented")
+                    }
+            
+                    override fun listIterator(): ListIterator<Any> {
+                        TODO("not implemented")
+                    }
+            
+                    override fun listIterator(index: Int): ListIterator<Any> {
+                        TODO("not implemented")
+                    }
+            
+                    override fun subList(fromIndex: Int, toIndex: Int): List<Any> {
+                        TODO("not implemented")
+                    }
                 }
             }
-        }
         """.trimIndent()
 
         @Test

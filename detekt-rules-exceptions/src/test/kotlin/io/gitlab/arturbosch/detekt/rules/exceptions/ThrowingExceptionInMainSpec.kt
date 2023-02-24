@@ -92,13 +92,13 @@ class ThrowingExceptionInMainSpec {
     @Test
     fun `does not report main functions with no @JvmStatic annotation inside a class`() {
         val code = """
-        class A {
-            fun main(args: Array<String>) { throw IllegalArgumentException() }
-            
-            companion object {
+            class A {
                 fun main(args: Array<String>) { throw IllegalArgumentException() }
+                
+                companion object {
+                    fun main(args: Array<String>) { throw IllegalArgumentException() }
+                }
             }
-        }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }

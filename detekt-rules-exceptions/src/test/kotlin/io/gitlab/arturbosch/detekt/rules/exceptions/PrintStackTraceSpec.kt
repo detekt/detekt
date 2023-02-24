@@ -14,12 +14,12 @@ class PrintStackTraceSpec {
         @Test
         fun `prints a stacktrace`() {
             val code = """
-            fun x() {
-                try {
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                fun x() {
+                    try {
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
-            }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
@@ -27,15 +27,15 @@ class PrintStackTraceSpec {
         @Test
         fun `does not print a stacktrace`() {
             val code = """
-            fun x() {
-                try {
-                } catch (e: Exception) {
-                    e.fillInStackTrace()
-                    val msg = e.message
-                    fun printStackTrace() {}
-                    printStackTrace()
+                fun x() {
+                    try {
+                    } catch (e: Exception) {
+                        e.fillInStackTrace()
+                        val msg = e.message
+                        fun printStackTrace() {}
+                        printStackTrace()
+                    }
                 }
-            }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -47,12 +47,12 @@ class PrintStackTraceSpec {
         @Test
         fun `prints one`() {
             val code = """
-            fun x() {
-                Thread.dumpStack()
-            
-                fun dumpStack() {}
-                dumpStack()
-            }
+                fun x() {
+                    Thread.dumpStack()
+                
+                    fun dumpStack() {}
+                    dumpStack()
+                }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }

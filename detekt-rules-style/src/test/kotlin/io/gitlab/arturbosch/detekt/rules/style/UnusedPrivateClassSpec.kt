@@ -32,8 +32,8 @@ class UnusedPrivateClassSpec {
             @Test
             fun `should report them if not used`() {
                 val code = """
-                private class Foo
-                class Bar
+                    private class Foo
+                    class Bar
                 """.trimIndent()
 
                 val findings = subject.compileAndLint(code)
@@ -45,8 +45,8 @@ class UnusedPrivateClassSpec {
             @Test
             fun `should not report them if used as parent`() {
                 val code = """
-                private open class Foo
-                private class Bar : Foo()
+                    private open class Foo
+                    private class Bar : Foo()
                 """.trimIndent()
 
                 val findings = subject.compileAndLint(code)
@@ -58,14 +58,14 @@ class UnusedPrivateClassSpec {
             @Test
             fun `should not report them used as generic parent type`() {
                 val code = """
-                class Bar
-                private interface Foo<in T> {
-                    operator fun invoke(b: T): Unit
-                }
-                
-                data class FooOne(val b: Bar) : Foo<Bar> {
-                    override fun invoke(b: Bar): Unit = Unit
-                }
+                    class Bar
+                    private interface Foo<in T> {
+                        operator fun invoke(b: T): Unit
+                    }
+                    
+                    data class FooOne(val b: Bar) : Foo<Bar> {
+                        override fun invoke(b: Bar): Unit = Unit
+                    }
                 """.trimIndent()
 
                 val findings = subject.compileAndLint(code)
@@ -329,15 +329,15 @@ class UnusedPrivateClassSpec {
         @DisplayName("does not report (companion-)object/named-dot references - #1347")
         fun doesNotReportObjectNamedDotReferences() {
             val code = """
-                    class Test {
-                        val items = Item.values().map { it.text }.toList()
-                    }
-                    
-                    private enum class Item(val text: String) {
-                        A("A"),
-                        B("B"),
-                        C("C")
-                    }
+                class Test {
+                    val items = Item.values().map { it.text }.toList()
+                }
+                
+                private enum class Item(val text: String) {
+                    A("A"),
+                    B("B"),
+                    C("C")
+                }
             """.trimIndent()
 
             val findings = UnusedPrivateClass().compileAndLint(code)
@@ -349,20 +349,20 @@ class UnusedPrivateClassSpec {
         @DisplayName("does not report classes that are used with ::class - #1390")
         fun doesNotReportClassesUsedWithinClass() {
             val code = """
-                    class UnusedPrivateClassTest {
-                    
-                        private data class SomeClass(val name: String)
-                    
-                        private data class AnotherClass(val id: Long)
-                    
-                        fun `verify class is used`(): Boolean {
-                            val instance = SomeClass(name = "test")
-                            return AnotherClass::class.java.simpleName == instance::class.java.simpleName
-                        }
-                    
-                        fun getSomeObject(): ((String) -> Any) = ::InternalClass
-                        private class InternalClass(val param: String)
+                class UnusedPrivateClassTest {
+                
+                    private data class SomeClass(val name: String)
+                
+                    private data class AnotherClass(val id: Long)
+                
+                    fun `verify class is used`(): Boolean {
+                        val instance = SomeClass(name = "test")
+                        return AnotherClass::class.java.simpleName == instance::class.java.simpleName
                     }
+                
+                    fun getSomeObject(): ((String) -> Any) = ::InternalClass
+                    private class InternalClass(val param: String)
+                }
             """.trimIndent()
 
             val findings = UnusedPrivateClass().compileAndLint(code)

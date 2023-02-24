@@ -17,10 +17,10 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `should report kotlin print usages by default`() {
         val code = """
-        fun main() {
-            print("3")
-            println("4")
-        }
+            fun main() {
+                print("3")
+                println("4")
+            }
         """.trimIndent()
         val findings = ForbiddenMethodCall(TestConfig()).compileAndLintWithContext(env, code)
 
@@ -40,10 +40,10 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `should report nothing when methods are blank`() {
         val code = """
-        import java.lang.System
-        fun main() {
-            System.out.println("hello")
-        }
+            import java.lang.System
+            fun main() {
+                System.out.println("hello")
+            }
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("  "))
@@ -54,10 +54,10 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `should report nothing when methods do not match`() {
         val code = """
-        import java.lang.System
-        fun main() {
-            System.out.println("hello")
-        }
+            import java.lang.System
+            fun main() {
+                System.out.println("hello")
+            }
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.lang.System.gc"))
@@ -68,9 +68,9 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `should report method call when using the fully qualified name`() {
         val code = """
-        fun main() {
-            java.lang.System.out.println("hello")
-        }
+            fun main() {
+                java.lang.System.out.println("hello")
+            }
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.io.PrintStream.println"))
@@ -82,10 +82,10 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `should report method call when not using the fully qualified name`() {
         val code = """
-        import java.lang.System.out
-        fun main() {
-            out.println("hello")
-        }
+            import java.lang.System.out
+            fun main() {
+                out.println("hello")
+            }
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.io.PrintStream.println"))
@@ -97,11 +97,11 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `should report multiple different methods`() {
         val code = """
-        import java.lang.System
-        fun main() {
-        System.out.println("hello")
-            System.gc()
-        }
+            import java.lang.System
+            fun main() {
+            System.out.println("hello")
+                System.gc()
+            }
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(
@@ -562,12 +562,12 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `should report property setters call`() {
         val code = """
-                import java.util.Calendar
-                
-                fun main() {
-                    val calendar = Calendar.getInstance()
-                    calendar.firstDayOfWeek = 1
-                }
+            import java.util.Calendar
+            
+            fun main() {
+                val calendar = Calendar.getInstance()
+                calendar.firstDayOfWeek = 1
+            }
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.util.Calendar.setFirstDayOfWeek"))
@@ -578,12 +578,12 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `should report reference call`() {
         val code = """
-                import java.util.Calendar
-                
-                fun main() {
-                    val calendar = Calendar.getInstance()
-                    calendar.let(calendar::compareTo)
-                }
+            import java.util.Calendar
+            
+            fun main() {
+                val calendar = Calendar.getInstance()
+                calendar.let(calendar::compareTo)
+            }
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.util.Calendar.compareTo"))

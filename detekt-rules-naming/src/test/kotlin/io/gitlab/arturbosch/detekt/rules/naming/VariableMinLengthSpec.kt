@@ -11,7 +11,7 @@ class VariableMinLengthSpec {
     @Nested
     inner class `VariableMinLength rule with a custom minimum length` {
 
-        val variableMinLength =
+        private val variableMinLength =
             VariableMinLength(TestConfig(VariableMinLength.MINIMUM_VARIABLE_NAME_LENGTH to "2"))
 
         @Test
@@ -25,7 +25,7 @@ class VariableMinLengthSpec {
             val code = """
                 class C {
                     val prop: (Int) -> Unit = { _ -> Unit }
-            }
+                }
             """.trimIndent()
             assertThat(variableMinLength.compileAndLint(code)).isEmpty()
         }

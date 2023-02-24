@@ -31,10 +31,10 @@ class FunctionMinLengthSpec {
     @Test
     fun `should not report an overridden function name that is too short`() {
         val code = """
-        class C : I {
-            override fun tooShortButShouldNotBeReportedByDefault() {}
-        }
-        interface I { @Suppress("FunctionMinLength") fun tooShortButShouldNotBeReportedByDefault() }
+            class C : I {
+                override fun tooShortButShouldNotBeReportedByDefault() {}
+            }
+            interface I { @Suppress("FunctionMinLength") fun tooShortButShouldNotBeReportedByDefault() }
         """.trimIndent()
         assertThat(
             FunctionMinLength(

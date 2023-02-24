@@ -333,13 +333,13 @@ class MagicNumberSpec {
     @Nested
     inner class `a when statement with magic numbers` {
         val code = """
-        fun test(x: Int) {
-            when (x) {
-                5 -> return 5
-                4 -> return 4
-                3 -> return 3
+            fun test(x: Int) {
+                when (x) {
+                    5 -> return 5
+                    4 -> return 4
+                    3 -> return 3
+                }
             }
-        }
         """.trimIndent()
 
         @Test
@@ -359,9 +359,9 @@ class MagicNumberSpec {
     @Nested
     inner class `a method containing variables with magic numbers` {
         val code = """
-        fun test(x: Int) {
-            val i = 5
-        }
+            fun test(x: Int) {
+                val i = 5
+            }
         """.trimIndent()
 
         @Test
@@ -374,9 +374,9 @@ class MagicNumberSpec {
     @Nested
     inner class `a boolean value` {
         val code = """
-        fun test() : Boolean {
-            return true;
-        }
+            fun test() : Boolean {
+                return true;
+            }
         """.trimIndent()
 
         @Test
@@ -449,26 +449,26 @@ class MagicNumberSpec {
     @Nested
     inner class `ignoring properties` {
         val code = """
-        @Magic(number = 69)
-        class A {
-            val boringNumber = 42
-            const val BORING_CONSTANT = 93871
-            val duration = Duration.seconds(10)
-            val durationWithStdlibFunction = 10.toDuration(DurationUnit.MILLISECONDS)
-        
-            override fun hashCode(): Int {
-                val iAmSoMagic = 7328672
+            @Magic(number = 69)
+            class A {
+                val boringNumber = 42
+                const val BORING_CONSTANT = 93871
+                val duration = Duration.seconds(10)
+                val durationWithStdlibFunction = 10.toDuration(DurationUnit.MILLISECONDS)
+            
+                override fun hashCode(): Int {
+                    val iAmSoMagic = 7328672
+                }
+            
+                companion object {
+                    val anotherBoringNumber = 43
+                    const val anotherBoringConstant = 93872
+                    val color = Color(0x66000000)
+                    val colorWithExplicitParameter = Color(color = 0x66000000)
+                }
             }
-        
-            companion object {
-                val anotherBoringNumber = 43
-                const val anotherBoringConstant = 93872
-                val color = Color(0x66000000)
-                val colorWithExplicitParameter = Color(color = 0x66000000)
-            }
-        }
-        
-        data class Color(val color: Int)
+            
+            data class Color(val color: Int)
         """.trimIndent()
 
         @Test
@@ -515,13 +515,13 @@ class MagicNumberSpec {
     @Nested
     inner class `magic numbers in companion object property assignments` {
         val code = """
-        class A {
-        
-            companion object {
-                val anotherBoringNumber = 43
-                const val anotherBoringConstant = 93872
+            class A {
+            
+                companion object {
+                    val anotherBoringNumber = 43
+                    const val anotherBoringConstant = 93872
+                }
             }
-        }
         """.trimIndent()
 
         @Test
@@ -623,12 +623,12 @@ class MagicNumberSpec {
         @Nested
         inner class `in constructor invocation` {
             private fun code(numberString: String) = """
-            data class Model(
-                    val someVal: Int,
-                    val other: String = "default"
-            )
-            
-            var model = Model(someVal = $numberString)
+                data class Model(
+                        val someVal: Int,
+                        val other: String = "default"
+                )
+                
+                var model = Model(someVal = $numberString)
             """.trimIndent()
 
             @Test
@@ -668,9 +668,9 @@ class MagicNumberSpec {
             @Test
             fun `should ignore named arguments in inheritance - #992`() {
                 val code = """
-                abstract class A(n: Int)
-                
-                object B : A(n = 5)
+                    abstract class A(n: Int)
+                    
+                    object B : A(n = 5)
                 """.trimIndent()
                 assertThat(MagicNumber().compileAndLint(code)).isEmpty()
             }
@@ -687,12 +687,12 @@ class MagicNumberSpec {
         inner class `Issue#659 - false-negative reporting on unnamed argument when ignore is true` {
 
             private fun code(numberString: String) = """
-            data class Model(
-                    val someVal: Int,
-                    val other: String = "default"
-            )
-            
-            var model = Model($numberString)
+                data class Model(
+                        val someVal: Int,
+                        val other: String = "default"
+                )
+                
+                var model = Model($numberString)
             """.trimIndent()
 
             @Test
@@ -704,9 +704,9 @@ class MagicNumberSpec {
         @Nested
         inner class `in function invocation` {
             private fun code(number: Number) = """
-            fun tested(someVal: Int, other: String = "default")
-            
-            val t = tested(someVal = $number)
+                fun tested(someVal: Int, other: String = "default")
+                
+                val t = tested(someVal = $number)
             """.trimIndent()
 
             @Test
@@ -733,10 +733,10 @@ class MagicNumberSpec {
         @Nested
         inner class `in enum constructor argument` {
             val code = """
-            enum class Bag(id: Int) {
-                SMALL(1),
-                EXTRA_LARGE(5)
-            }
+                enum class Bag(id: Int) {
+                    SMALL(1),
+                    EXTRA_LARGE(5)
+                }
             """.trimIndent()
 
             @Test
@@ -754,10 +754,10 @@ class MagicNumberSpec {
         @Nested
         inner class `in enum constructor as named argument` {
             val code = """
-            enum class Bag(id: Int) {
-                SMALL(id = 1),
-                EXTRA_LARGE(id = 5)
-            }
+                enum class Bag(id: Int) {
+                    SMALL(id = 1),
+                    EXTRA_LARGE(id = 5)
+                }
             """.trimIndent()
 
             @Test
@@ -785,8 +785,8 @@ class MagicNumberSpec {
         @Test
         fun `does not report functions that always returns a constant value`() {
             val code = """
-            fun x() = 9
-            fun y(): Int { return 9 }
+                fun x() = 9
+                fun y(): Int { return 9 }
             """.trimIndent()
             assertThat(MagicNumber().compileAndLint(code)).isEmpty()
         }
@@ -794,8 +794,8 @@ class MagicNumberSpec {
         @Test
         fun `reports functions that does not return a constant value`() {
             val code = """
-            fun x() = 9 + 1
-            fun y(): Int { return 9 + 1 }
+                fun x() = 9 + 1
+                fun y(): Int { return 9 + 1 }
             """.trimIndent()
             assertThat(MagicNumber().compileAndLint(code)).hasSize(2)
         }
@@ -830,9 +830,9 @@ class MagicNumberSpec {
         @Test
         fun `reports no finding`() {
             val code = """
-            class SomeClassWithDefault {
-                constructor(val defaultValue: Int = 10) { }
-            }
+                class SomeClassWithDefault {
+                    constructor(val defaultValue: Int = 10) { }
+                }
             """.trimIndent()
             assertThat(MagicNumber().lint(code)).isEmpty()
         }
@@ -840,9 +840,9 @@ class MagicNumberSpec {
         @Test
         fun `reports no finding for a function expression`() {
             val code = """
-            class SomeClassWithDefault {
-                constructor(val defaultValue: Duration = 10.toDuration(DurationUnit.MILLISECONDS)) { }
-            }
+                class SomeClassWithDefault {
+                    constructor(val defaultValue: Duration = 10.toDuration(DurationUnit.MILLISECONDS)) { }
+                }
             """.trimIndent()
             assertThat(MagicNumber().lint(code)).isEmpty()
         }

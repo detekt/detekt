@@ -27,9 +27,9 @@ class ExceptionRaisedInUnexpectedLocationSpec {
         val config = TestConfig("methodNames" to listOf("toDo", "todo2"))
         val findings = ExceptionRaisedInUnexpectedLocation(config).compileAndLint(
             """
-        fun toDo() {
-            throw IllegalStateException()
-        }
+                fun toDo() {
+                    throw IllegalStateException()
+                }
             """.trimIndent()
         )
         assertThat(findings).hasSize(1)
@@ -40,9 +40,9 @@ class ExceptionRaisedInUnexpectedLocationSpec {
         val config = TestConfig("methodNames" to "toDo,todo2")
         val findings = ExceptionRaisedInUnexpectedLocation(config).compileAndLint(
             """
-        fun toDo() {
-            throw IllegalStateException()
-        }
+                fun toDo() {
+                    throw IllegalStateException()
+                }
             """.trimIndent()
         )
         assertThat(findings).hasSize(1)

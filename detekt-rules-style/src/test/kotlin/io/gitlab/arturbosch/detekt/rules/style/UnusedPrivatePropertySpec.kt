@@ -19,14 +19,14 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
     val subject = UnusedPrivateProperty()
 
     val regexTestingCode = """
-                class Test {
-                    private val used = "This is used"
-                    private val unused = "This is not used"
-                
-                    fun use() {
-                        println(used)
-                    }
-                }
+        class Test {
+            private val used = "This is used"
+            private val unused = "This is not used"
+        
+            fun use() {
+                println(used)
+            }
+        }
     """.trimIndent()
 
     @Nested

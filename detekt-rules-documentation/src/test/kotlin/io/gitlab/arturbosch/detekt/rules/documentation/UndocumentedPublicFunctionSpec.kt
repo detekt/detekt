@@ -78,12 +78,12 @@ class UndocumentedPublicFunctionSpec {
     @Test
     fun `does not report documented public function in class`() {
         val code = """
-        class Test {
-            /**
-             *
-             */
-            fun commented() {}
-        }
+            class Test {
+                /**
+                 *
+                 */
+                fun commented() {}
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }

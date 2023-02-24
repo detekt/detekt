@@ -67,9 +67,9 @@ class ForbiddenCommentSpec {
         @Test
         fun `should report violation in multiline comment`() {
             val code = """
-               /*
-                TODO: I need to fix this.
-                */
+                /*
+                 TODO: I need to fix this.
+                 */
             """.trimIndent()
             val findings = ForbiddenComment().compileAndLint(code)
             assertThat(findings).hasSize(1)

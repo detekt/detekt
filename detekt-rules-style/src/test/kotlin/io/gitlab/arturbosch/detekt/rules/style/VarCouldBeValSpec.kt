@@ -55,13 +55,13 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report private variables that are re-assigned inside an unknown type`() {
             val code = """
-            private var a = 1
-            
-            fun foo() {
-                with(UnknownReference) {
-                    a = 2
+                private var a = 1
+                
+                fun foo() {
+                    with(UnknownReference) {
+                        a = 2
+                    }
                 }
-            }
             """.trimIndent()
 
             assertThat(subject.lintWithContext(env, code)).isEmpty()
@@ -70,16 +70,16 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports private variables that have the same name as those re-assigned within a known type`() {
             val code = """
-            class MyClass(var a: Int)
-            
-            private var a = 1
-            private val myObj = MyClass(1)
-            
-            fun foo() {
-                with(myObj) {
-                    a = 2
+                class MyClass(var a: Int)
+                
+                private var a = 1
+                private val myObj = MyClass(1)
+                
+                fun foo() {
+                    with(myObj) {
+                        a = 2
+                    }
                 }
-            }
             """.trimIndent()
 
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
@@ -163,10 +163,10 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report variables that are re-assigned`() {
             val code = """
-            fun test() {
-                var a = 1
-                a = 2
-            }
+                fun test() {
+                    var a = 1
+                    a = 2
+                }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
@@ -174,10 +174,10 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report variables that are re-assigned with assignment operator`() {
             val code = """
-            fun test() {
-                var a = 1
-                a += 2
-            }
+                fun test() {
+                    var a = 1
+                    a += 2
+                }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
@@ -185,10 +185,10 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report variables that are re-assigned with postfix operators`() {
             val code = """
-            fun test() {
-                var a = 1
-                a++
-            }
+                fun test() {
+                    var a = 1
+                    a++
+                }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
@@ -196,10 +196,10 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report variables that are re-assigned with infix operators`() {
             val code = """
-            fun test() {
-                var a = 1
-                --a
-            }
+                fun test() {
+                    var a = 1
+                    --a
+                }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
@@ -207,12 +207,12 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report variables that are re-assigned inside scope functions`() {
             val code = """
-            fun test() {
-                var a = 1
-                a.also {
-                    a = 2
+                fun test() {
+                    var a = 1
+                    a.also {
+                        a = 2
+                    }
                 }
-            }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
@@ -220,10 +220,10 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports variables that are not re-assigned, but used in expressions`() {
             val code = """
-            fun test() {
-                var a = 1
-                val b = a + 2
-            }
+                fun test() {
+                    var a = 1
+                    val b = a + 2
+                }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
@@ -234,10 +234,10 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports variables that are not re-assigned, but used in function calls`() {
             val code = """
-            fun test() {
-                var a = 1
-                println(a)
-            }
+                fun test() {
+                    var a = 1
+                    println(a)
+                }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
@@ -248,13 +248,13 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports variables that are not re-assigned, but shadowed by one that is`() {
             val code = """
-            fun test() {
-                var shadowed = 1
-                fun nestedFunction() {
-                    var shadowed = 2
-                    shadowed = 3
+                fun test() {
+                    var shadowed = 1
+                    fun nestedFunction() {
+                        var shadowed = 2
+                        shadowed = 3
+                    }
                 }
-            }
             """.trimIndent()
             val lint = subject.compileAndLintWithContext(env, code)
 
@@ -341,14 +341,14 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should not report when a property overrides a var`() {
             val code = """
-                    interface I {
-                        var optionEnabled: Boolean
+                interface I {
+                    var optionEnabled: Boolean
+                }
+                class Test {
+                    val test = object : I {
+                        override var optionEnabled: Boolean = false
                     }
-                    class Test {
-                        val test = object : I {
-                            override var optionEnabled: Boolean = false
-                        }
-                    }
+                }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }

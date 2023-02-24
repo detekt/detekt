@@ -227,13 +227,13 @@ class DetektMultiplatformSpec {
                     1,
                     1,
                     buildFileContent = """
-                    $KMM_PLUGIN_BLOCK
-                    kotlin {
-                        js(IR) {
-                            browser()
+                        $KMM_PLUGIN_BLOCK
+                        kotlin {
+                            js(IR) {
+                                browser()
+                            }
                         }
-                    }
-                    $DETEKT_BLOCK
+                        $DETEKT_BLOCK
                     """.trimIndent(),
                     srcDirs = listOf(
                         "src/commonMain/kotlin",
@@ -278,11 +278,11 @@ class DetektMultiplatformSpec {
                     1,
                     1,
                     buildFileContent = """
-                    $KMM_PLUGIN_BLOCK
-                    kotlin {
-                        ios()
-                    }
-                    $DETEKT_BLOCK
+                        $KMM_PLUGIN_BLOCK
+                        kotlin {
+                            ios()
+                        }
+                        $DETEKT_BLOCK
                     """.trimIndent(),
                     srcDirs = listOf(
                         "src/commonMain/kotlin",

@@ -391,28 +391,28 @@ class StringShouldBeRawStringSpec {
             ),
             Arguments.of(
                 """
-                    "{\n" +
-                "  \"window\": {\n" +
-                "    \"title\": \"Sample Quantum With AI and ML Widget\",\n" +
-                "    \"name\": \"main_window\",\n" +
-                "    \"width\": 500,\n" +
-                "    \"height\": 500\n" +
-                "  }\n" +
-                "}"
+                        "{\n" +
+                    "  \"window\": {\n" +
+                    "    \"title\": \"Sample Quantum With AI and ML Widget\",\n" +
+                    "    \"name\": \"main_window\",\n" +
+                    "    \"width\": 500,\n" +
+                    "    \"height\": 500\n" +
+                    "  }\n" +
+                    "}"
                 """.trimIndent(),
                 2,
                 listOf("\\n", "\\\""),
             ),
             Arguments.of(
                 """
-            |        "{\n" +
-                |"  \"window\": {\n" +
-              |  "    \"title\": \"Sample Quantum With AI and ML Widget\",\n" +
-             |   "    \"name\": \"main_window\",\n" +
-               | "    \"width\": 500,\n" +
-              |  "    \"height\": 500\n" +
-                "  }\n" +
-                "}"
+                    |        "{\n" +
+                        |"  \"window\": {\n" +
+                      |  "    \"title\": \"Sample Quantum With AI and ML Widget\",\n" +
+                     |   "    \"name\": \"main_window\",\n" +
+                       | "    \"width\": 500,\n" +
+                      |  "    \"height\": 500\n" +
+                        "  }\n" +
+                        "}"
                 """.trimMargin(),
                 2,
                 listOf("\\n", "\\\""),
@@ -473,7 +473,8 @@ class StringShouldBeRawStringSpec {
             Arguments.of("""""${'"'}In java new line char is \n""${'"'}""", 0),
             Arguments.of("""""${'"'}This is point number ${'$'}i In java new line char is \n""${'"'}""", 0),
             Arguments.of(
-                """""${'"'}
+                """
+                    ""${'"'}
                     abc
                     
                     efg

@@ -16,12 +16,12 @@ private const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
 
 class EmptyCodeSpec {
 
-    val regexTestingCode = """
-            fun f() {
-                try {
-                } catch (foo: Exception) {
-                }
+    private val regexTestingCode = """
+        fun f() {
+            try {
+            } catch (foo: Exception) {
             }
+        }
     """.trimIndent()
 
     @Test
@@ -32,14 +32,14 @@ class EmptyCodeSpec {
     @Test
     fun findsEmptyNestedCatch() {
         val code = """
-        fun f() {
-            try {
-            } catch (ignore: Exception) {
+            fun f() {
                 try {
-                } catch (e: Exception) {
+                } catch (ignore: Exception) {
+                    try {
+                    } catch (e: Exception) {
+                    }
                 }
             }
-        }
         """.trimIndent()
         assertThat(EmptyCatchBlock(Config.empty).compileAndLint(code)).hasSize(1)
     }
@@ -47,12 +47,12 @@ class EmptyCodeSpec {
     @Test
     fun doesNotReportIgnoredOrExpectedException() {
         val code = """
-        fun f() {
-            try {
-            } catch (ignore: IllegalArgumentException) {
-            } catch (expected: Exception) {
+            fun f() {
+                try {
+                } catch (ignore: IllegalArgumentException) {
+                } catch (expected: Exception) {
+                }
             }
-        }
         """.trimIndent()
         assertThat(EmptyCatchBlock(Config.empty).compileAndLint(code)).isEmpty()
     }
@@ -60,11 +60,11 @@ class EmptyCodeSpec {
     @Test
     fun doesNotReportEmptyCatchWithConfig() {
         val code = """
-        fun f() {
-            try {
-            } catch (foo: Exception) {
+            fun f() {
+                try {
+                } catch (foo: Exception) {
+                }
             }
-        }
         """.trimIndent()
         val config = TestConfig(ALLOWED_EXCEPTION_NAME_REGEX to "foo")
         assertThat(EmptyCatchBlock(config).compileAndLint(code)).isEmpty()

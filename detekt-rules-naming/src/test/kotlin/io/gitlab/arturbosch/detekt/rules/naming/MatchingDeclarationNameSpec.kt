@@ -47,9 +47,9 @@ class MatchingDeclarationNameSpec {
         fun `should pass for enum declaration`() {
             val ktFile = compileContentForTest(
                 """
-                enum class E {
-                    ONE, TWO, THREE
-                }
+                    enum class E {
+                        ONE, TWO, THREE
+                    }
                 """.trimIndent(),
                 filename = "E.kt"
             )
@@ -61,9 +61,9 @@ class MatchingDeclarationNameSpec {
         fun `should pass for multiple declaration`() {
             val ktFile = compileContentForTest(
                 """
-                class C
-                object O
-                fun a() = 5
+                    class C
+                    object O
+                    fun a() = 5
                 """.trimIndent(),
                 filename = "MultiDeclarations.kt"
             )
@@ -75,9 +75,9 @@ class MatchingDeclarationNameSpec {
         fun `should pass for class declaration with utility functions`() {
             val ktFile = compileContentForTest(
                 """
-                class C
-                fun a() = 5
-                fun C.b() = 5
+                    class C
+                    fun a() = 5
+                    fun C.b() = 5
                 """.trimIndent(),
                 filename = "C.kt"
             )
@@ -89,9 +89,9 @@ class MatchingDeclarationNameSpec {
         fun `should pass for class declaration not as first declaration with utility functions`() {
             val ktFile = compileContentForTest(
                 """
-                fun a() = 5
-                fun C.b() = 5
-                class C
+                    fun a() = 5
+                    fun C.b() = 5
+                    class C
                 """.trimIndent(),
                 filename = "Classes.kt"
             )
@@ -103,8 +103,8 @@ class MatchingDeclarationNameSpec {
         fun `should pass for private class declaration`() {
             val ktFile = compileContentForTest(
                 """
-            private class C
-            fun a() = 5
+                    private class C
+                    fun a() = 5
                 """.trimIndent(),
                 filename = "b.kt"
             )
@@ -115,9 +115,9 @@ class MatchingDeclarationNameSpec {
         @Test
         fun `should pass for a class with a typealias`() {
             val code = """
-            typealias Foo = FooImpl
-            
-            class FooImpl {}
+                typealias Foo = FooImpl
+                
+                class FooImpl {}
             """.trimIndent()
             val ktFile = compileContentForTest(code, filename = "Foo.kt")
             val findings = MatchingDeclarationName().lint(ktFile)

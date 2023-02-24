@@ -12,12 +12,12 @@ class ThrowingNewInstanceOfSameExceptionSpec {
     @Nested
     inner class `a catch block which rethrows a new instance of the caught exception` {
         val code = """
-        fun x() {
-            try {
-            } catch (e: IllegalStateException) {
-                throw IllegalStateException(e)
+            fun x() {
+                try {
+                } catch (e: IllegalStateException) {
+                    throw IllegalStateException(e)
+                }
             }
-        }
         """.trimIndent()
 
         @Test
@@ -30,12 +30,12 @@ class ThrowingNewInstanceOfSameExceptionSpec {
     @Nested
     inner class `a catch block which rethrows a new instance of another exception` {
         val code = """
-        fun x() {
-            try {
-            } catch (e: IllegalStateException) {
-                throw IllegalArgumentException(e)
+            fun x() {
+                try {
+                } catch (e: IllegalStateException) {
+                    throw IllegalArgumentException(e)
+                }
             }
-        }
         """.trimIndent()
 
         @Test
@@ -51,12 +51,12 @@ class ThrowingNewInstanceOfSameExceptionSpec {
     )
     inner class CatchBlockThrowingSameExceptionWithoutWrapping {
         val code = """
-        fun x() {
-            try {
-            } catch (e: IllegalStateException) {
-                throw IllegalStateException()
+            fun x() {
+                try {
+                } catch (e: IllegalStateException) {
+                    throw IllegalStateException()
+                }
             }
-        }
         """.trimIndent()
 
         @Test

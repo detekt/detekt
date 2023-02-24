@@ -22,12 +22,12 @@ class StringLiteralDuplicationSpec {
         @Test
         fun `reports 3 equal hardcoded strings`() {
             val code = """
-            class Duplication {
-                var s1 = "lorem"
-                fun f(s: String = "lorem") {
-                    s1.equals("lorem")
+                class Duplication {
+                    var s1 = "lorem"
+                    fun f(s: String = "lorem") {
+                        s1.equals("lorem")
+                    }
                 }
-            }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
@@ -66,7 +66,7 @@ class StringLiteralDuplicationSpec {
     @Nested
     inner class `strings with less than 5 characters` {
 
-        val code = """val str = "amet" + "amet" + "amet""""
+        private val code = """val str = "amet" + "amet" + "amet""""
 
         @Test
         fun `does not report strings with 4 characters`() {
@@ -83,7 +83,7 @@ class StringLiteralDuplicationSpec {
     @Nested
     inner class `strings with values to match for the regex` {
 
-        val regexTestingCode = """
+        private val regexTestingCode = """
             val str1 = "lorem" + "lorem" + "lorem"
             val str2 = "ipsum" + "ipsum" + "ipsum"
         """.trimIndent()
@@ -122,12 +122,12 @@ class StringLiteralDuplicationSpec {
         @Test
         fun `reports 3 locations for 'lorem'`() {
             val code = """
-            class Duplication {
-                var s1 = "lorem"
-                fun f(s: String = "lorem") {
-                    s1.equals("lorem")
+                class Duplication {
+                    var s1 = "lorem"
+                    fun f(s: String = "lorem") {
+                        s1.equals("lorem")
+                    }
                 }
-            }
             """.trimIndent()
             val finding = subject.compileAndLint(code)[0]
             val locations = finding.references.map { it.location } + finding.entity.location

@@ -24,15 +24,15 @@ class DetektTaskMultiModuleSpec {
         val builder = DslTestBuilder.kotlin()
 
         val mainBuildFileContent: String = """
-                    |${builder.gradlePlugins}
-                    |
-                    |allprojects {
-                    |   ${builder.gradleRepositories}
-                    |}
-                    |subprojects {
-                    |   ${builder.gradleSubprojectsApplyPlugins}
-                    |}
-                    |
+            |${builder.gradlePlugins}
+            |
+            |allprojects {
+            |   ${builder.gradleRepositories}
+            |}
+            |subprojects {
+            |   ${builder.gradleSubprojectsApplyPlugins}
+            |}
+            |
         """.trimMargin()
 
         val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
@@ -69,13 +69,13 @@ class DetektTaskMultiModuleSpec {
         val builder = DslTestBuilder.kotlin()
 
         val mainBuildFileContent: String = """
-                    |${builder.gradlePlugins}
-                    |
-                    |allprojects {
-                    |   ${builder.gradleRepositories}
-                    |   ${builder.gradleSubprojectsApplyPlugins}
-                    |}
-                    |
+            |${builder.gradlePlugins}
+            |
+            |allprojects {
+            |   ${builder.gradleRepositories}
+            |   ${builder.gradleSubprojectsApplyPlugins}
+            |}
+            |
         """.trimMargin()
 
         val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
@@ -108,17 +108,17 @@ class DetektTaskMultiModuleSpec {
         val builder = DslTestBuilder.kotlin()
 
         val mainBuildFileContent: String = """
-                    |${builder.gradlePlugins}
-                    |
-                    |allprojects {
-                    |   ${builder.gradleRepositories}
-                    |   ${builder.gradleSubprojectsApplyPlugins}
-                    |
-                    |   detekt {
-                    |       reportsDir = file("build/detekt-reports")
-                    |   }
-                    |}
-                    |
+            |${builder.gradlePlugins}
+            |
+            |allprojects {
+            |   ${builder.gradleRepositories}
+            |   ${builder.gradleSubprojectsApplyPlugins}
+            |
+            |   detekt {
+            |       reportsDir = file("build/detekt-reports")
+            |   }
+            |}
+            |
         """.trimMargin()
 
         val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
@@ -144,10 +144,10 @@ class DetektTaskMultiModuleSpec {
     @DisplayName("it allows changing defaults in allprojects block that can be overwritten in subprojects")
     fun allowsChangingDefaultsInAllProjectsThatAreOverwrittenInSubprojects() {
         val child2DetektConfig = """
-                    |detekt {
-                    |   reportsDir = file("build/custom")
-                    |}
-                    |
+            |detekt {
+            |   reportsDir = file("build/custom")
+            |}
+            |
         """.trimMargin()
 
         val projectLayout = ProjectLayout(1).apply {
@@ -158,17 +158,17 @@ class DetektTaskMultiModuleSpec {
         val builder = DslTestBuilder.kotlin()
 
         val mainBuildFileContent: String = """
-                    |${builder.gradlePlugins}
-                    |
-                    |allprojects {
-                    |   ${builder.gradleRepositories}
-                    |   ${builder.gradleSubprojectsApplyPlugins}
-                    |
-                    |   detekt {
-                    |       reportsDir = file("build/detekt-reports")
-                    |   }
-                    |}
-                    |
+            |${builder.gradlePlugins}
+            |
+            |allprojects {
+            |   ${builder.gradleRepositories}
+            |   ${builder.gradleSubprojectsApplyPlugins}
+            |
+            |   detekt {
+            |       reportsDir = file("build/detekt-reports")
+            |   }
+            |}
+            |
         """.trimMargin()
 
         val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
@@ -200,13 +200,13 @@ class DetektTaskMultiModuleSpec {
         }
 
         val detektConfig: String = """
-                    |detekt {
-                    |    source = files(
-                    |       "${"$"}projectDir/src",
-                    |       "${"$"}projectDir/child1/src",
-                    |       "${"$"}projectDir/child2/src"
-                    |    )
-                    |}
+            |detekt {
+            |    source = files(
+            |       "${"$"}projectDir/src",
+            |       "${"$"}projectDir/child1/src",
+            |       "${"$"}projectDir/child2/src"
+            |    )
+            |}
         """.trimMargin()
         val gradleRunner = DslTestBuilder.kotlin()
             .withProjectLayout(projectLayout)
