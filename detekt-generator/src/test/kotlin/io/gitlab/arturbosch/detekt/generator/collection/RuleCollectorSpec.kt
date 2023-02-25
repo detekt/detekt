@@ -631,33 +631,33 @@ class RuleCollectorSpec {
         @Nested
         inner class `values with reason property` {
             private val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val singleWithPositionalParam: ValuesWithReason
-                                by config(valuesWithReason("value" to "reason"))
-                            @Configuration("description")
-                            private val singleWithNamedParam
-                                by config(defaultValue = valuesWithReason("value" to "reason"))
-                            @Configuration("description")
-                            private val singleWithConstant by config(DEFAULT_VALUE)
-                            @Configuration("description")
-                            private val noValues by config(valuesWithReason())
-                            @Configuration("description")
-                            private val multipleValues by config(valuesWithReason("a" to "A and A", "b" to "B and B"))
-                            @Configuration("description")
-                            private val multipleLines
-                                by config(valuesWithReason(
-                                    "a" to "A " +
-                                        "and A",
-                                    "b" to ""${"\""}B and B""${"\""}))
-                            
-                            companion object {
-                                private val DEFAULT_VALUE = valuesWithReason("value" to "reason")
-                            }
-                        }
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Configuration("description")
+                    private val singleWithPositionalParam: ValuesWithReason
+                        by config(valuesWithReason("value" to "reason"))
+                    @Configuration("description")
+                    private val singleWithNamedParam
+                        by config(defaultValue = valuesWithReason("value" to "reason"))
+                    @Configuration("description")
+                    private val singleWithConstant by config(DEFAULT_VALUE)
+                    @Configuration("description")
+                    private val noValues by config(valuesWithReason())
+                    @Configuration("description")
+                    private val multipleValues by config(valuesWithReason("a" to "A and A", "b" to "B and B"))
+                    @Configuration("description")
+                    private val multipleLines
+                        by config(valuesWithReason(
+                            "a" to "A " +
+                                "and A",
+                            "b" to ""${"\""}B and B""${"\""}))
+                    
+                    companion object {
+                        private val DEFAULT_VALUE = valuesWithReason("value" to "reason")
+                    }
+                }
             """.trimIndent()
 
             @Test

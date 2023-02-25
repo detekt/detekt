@@ -154,11 +154,11 @@ class SwallowedExceptionSpec {
         @Test
         fun `ignores given exception type in configuration`() {
             val code = """
-            fun f() {
-                try {
-                } catch (e: IllegalArgumentException) {
+                fun f() {
+                    try {
+                    } catch (e: IllegalArgumentException) {
+                    }
                 }
-            }
             """.trimIndent()
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
@@ -166,11 +166,11 @@ class SwallowedExceptionSpec {
         @Test
         fun `reports exception type that is missing in the configuration`() {
             val code = """
-            fun f() {
-                try {
-                } catch (e: Exception) {
+                fun f() {
+                    try {
+                    } catch (e: Exception) {
+                    }
                 }
-            }
             """.trimIndent()
             assertThat(rule.compileAndLint(code)).hasSize(1)
         }
@@ -188,11 +188,11 @@ class SwallowedExceptionSpec {
         @Test
         fun `ignores given exception type in configuration`() {
             val code = """
-            fun f() {
-                try {
-                } catch (e: IllegalArgumentException) {
+                fun f() {
+                    try {
+                    } catch (e: IllegalArgumentException) {
+                    }
                 }
-            }
             """.trimIndent()
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
@@ -200,11 +200,11 @@ class SwallowedExceptionSpec {
         @Test
         fun `reports exception type that is missing in the configuration`() {
             val code = """
-            fun f() {
-                try {
-                } catch (e: Exception) {
+                fun f() {
+                    try {
+                    } catch (e: Exception) {
+                    }
                 }
-            }
             """.trimIndent()
             assertThat(rule.compileAndLint(code)).hasSize(1)
         }
@@ -213,8 +213,7 @@ class SwallowedExceptionSpec {
     @Nested
     inner class `ignores given exception name config` {
 
-        val config = TestConfig(mapOf("allowedExceptionNameRegex" to "myIgnore"))
-        val rule = SwallowedException(config)
+        val rule = SwallowedException(TestConfig("allowedExceptionNameRegex" to "myIgnore"))
 
         @Test
         fun `ignores given exception name`() {

@@ -2107,10 +2107,8 @@ class BracesOnIfStatementsSpec {
 
         private fun createSubject(singleLine: String, multiLine: String): BracesOnIfStatements {
             val config = TestConfig(
-                mapOf(
-                    "singleLine" to singleLine,
-                    "multiLine" to multiLine
-                )
+                "singleLine" to singleLine,
+                "multiLine" to multiLine,
             )
             return BracesOnIfStatements(config)
         }

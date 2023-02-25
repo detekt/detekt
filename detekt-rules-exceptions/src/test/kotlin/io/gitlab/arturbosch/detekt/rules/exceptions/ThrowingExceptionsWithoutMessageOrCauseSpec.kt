@@ -42,9 +42,9 @@ class ThrowingExceptionsWithoutMessageOrCauseSpec {
         @Test
         fun `does not report a call to this exception`() {
             val code = """
-            fun test() {
-                org.assertj.core.api.Assertions.assertThatIllegalArgumentException().isThrownBy { println() }
-            }
+                fun test() {
+                    org.assertj.core.api.Assertions.assertThatIllegalArgumentException().isThrownBy { println() }
+                }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }

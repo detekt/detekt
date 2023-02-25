@@ -20,12 +20,12 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
             subject.compileAndLintWithContext(
                 env,
                 """
-            fun foo() = 5
-            val bar = 5
-            class A {
-                fun b() = 2
-                val c = 2
-            }
+                    fun foo() = 5
+                    val bar = 5
+                    class A {
+                        fun b() = 2
+                        val c = 2
+                    }
                 """.trimIndent()
             )
         ).isEmpty()
@@ -41,7 +41,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                 subject.compileAndLintWithContext(
                     env,
                     """
-                fun foo() = 5
+                        fun foo() = 5
                     """.trimIndent()
                 )
             ).hasSize(1)
@@ -53,7 +53,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                 subject.compileAndLintWithContext(
                     env,
                     """
-                val foo = 5
+                        val foo = 5
                     """.trimIndent()
                 )
             ).hasSize(1)
@@ -65,10 +65,10 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                 subject.compileAndLintWithContext(
                     env,
                     """
-                class A {
-                    val foo = 5
-                    fun bar() = 5
-                }
+                        class A {
+                            val foo = 5
+                            fun bar() = 5
+                        }
                     """.trimIndent()
                 )
             ).hasSize(2)
@@ -80,10 +80,10 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                 subject.compileAndLintWithContext(
                     env,
                     """
-                open class A {
-                    protected val foo = 5
-                    protected fun bar() = 5
-                }
+                        open class A {
+                            protected val foo = 5
+                            protected fun bar() = 5
+                        }
                     """.trimIndent()
                 )
             ).hasSize(2)
@@ -100,7 +100,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                 subject.compileAndLintWithContext(
                     env,
                     """
-                fun foo(): Int = 5
+                        fun foo(): Int = 5
                     """.trimIndent()
                 )
             ).isEmpty()
@@ -112,7 +112,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                 subject.compileAndLintWithContext(
                     env,
                     """
-                fun foo() {}
+                        fun foo() {}
                     """.trimIndent()
                 )
             ).isEmpty()
@@ -124,7 +124,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                 subject.compileAndLintWithContext(
                     env,
                     """
-                val foo: Int = 5
+                        val foo: Int = 5
                     """.trimIndent()
                 )
             ).isEmpty()
@@ -136,10 +136,10 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                 subject.compileAndLintWithContext(
                     env,
                     """
-                class A {
-                    val foo: Int = 5
-                    fun bar(): Int = 5
-                }
+                        class A {
+                            val foo: Int = 5
+                            fun bar(): Int = 5
+                        }
                     """.trimIndent()
                 )
             ).isEmpty()
@@ -156,8 +156,8 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                 subject.lintWithContext(
                     env,
                     """
-                internal fun bar() = 5
-                private fun foo() = 5
+                        internal fun bar() = 5
+                        private fun foo() = 5
                     """.trimIndent()
                 )
             ).isEmpty()
@@ -169,7 +169,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                 subject.compileAndLintWithContext(
                     env,
                     """
-                internal val foo = 5
+                        internal val foo = 5
                     """.trimIndent()
                 )
             ).isEmpty()
@@ -181,13 +181,13 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                 subject.compileAndLintWithContext(
                     env,
                     """
-                internal class A {
-                    internal val foo = 5
-                    private fun bar() {
-                        fun stuff() = Unit
-                        val a = 5
-                    }
-                }
+                        internal class A {
+                            internal val foo = 5
+                            private fun bar() {
+                                fun stuff() = Unit
+                                val a = 5
+                            }
+                        }
                     """.trimIndent()
                 )
             ).isEmpty()
@@ -199,10 +199,10 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                 subject.compileAndLintWithContext(
                     env,
                     """
-                internal class A {
-                    fun baz() = 5
-                    val qux = 5
-                }
+                        internal class A {
+                            fun baz() = 5
+                            val qux = 5
+                        }
                     """.trimIndent()
                 )
             ).isEmpty()

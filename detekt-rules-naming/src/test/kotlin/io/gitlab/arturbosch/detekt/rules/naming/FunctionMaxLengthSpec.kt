@@ -11,24 +11,20 @@ class FunctionMaxLengthSpec {
     fun `should report a function name that is too long base on config`() {
         val code = "fun thisFunctionLongName() = 3"
         assertThat(
-            FunctionMaxLength(TestConfig(mapOf("maximumFunctionNameLength" to 10)))
-                .compileAndLint(code)
-        )
-            .hasSize(1)
+            FunctionMaxLength(TestConfig("maximumFunctionNameLength" to 10)).compileAndLint(code)
+        ).hasSize(1)
     }
 
     @Test
     fun `should not report an overridden function name that is too long`() {
         val code = """
-        class C : I {
-            override fun thisFunctionIsWayTooLongButStillShouldNotBeReportedByDefault() {}
-        }
-        interface I { @Suppress("FunctionMaxLength") fun thisFunctionIsWayTooLongButStillShouldNotBeReportedByDefault() }
+            class C : I {
+                override fun thisFunctionIsWayTooLongButStillShouldNotBeReportedByDefault() {}
+            }
+            interface I { @Suppress("FunctionMaxLength") fun thisFunctionIsWayTooLongButStillShouldNotBeReportedByDefault() }
         """.trimIndent()
         assertThat(
-            FunctionMaxLength(
-                TestConfig(mapOf("maximumFunctionNameLength" to 10))
-            ).compileAndLint(code)
+            FunctionMaxLength(TestConfig("maximumFunctionNameLength" to 10)).compileAndLint(code)
         ).isEmpty()
     }
 
@@ -55,11 +51,7 @@ class FunctionMaxLengthSpec {
             }
         """.trimIndent()
         assertThat(
-            FunctionMaxLength(
-                TestConfig(
-                    mapOf("maximumFunctionNameLength" to 5)
-                )
-            ).compileAndLint(code)
+            FunctionMaxLength(TestConfig("maximumFunctionNameLength" to 5)).compileAndLint(code)
         ).isEmpty()
     }
 }

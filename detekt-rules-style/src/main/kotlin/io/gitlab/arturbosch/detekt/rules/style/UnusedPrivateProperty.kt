@@ -58,7 +58,7 @@ class UnusedPrivateProperty(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("unused property names matching this regex are ignored")
-    private val allowedNames: Regex by config("(_|ignored|expected|serialVersionUID)", String::toRegex)
+    private val allowedNames: Regex by config("_|ignored|expected|serialVersionUID", String::toRegex)
 
     override fun visit(root: KtFile) {
         super.visit(root)

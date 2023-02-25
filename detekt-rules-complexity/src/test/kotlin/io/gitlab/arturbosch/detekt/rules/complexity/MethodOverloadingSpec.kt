@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class MethodOverloadingSpec {
     val defaultThreshold = 3
-    val defaultConfig = TestConfig(mapOf("threshold" to defaultThreshold))
+    val defaultConfig = TestConfig("threshold" to defaultThreshold)
 
     val subject = MethodOverloading(defaultConfig)
 
@@ -43,10 +43,10 @@ class MethodOverloadingSpec {
         fun `does not report overloaded methods which do not exceed the threshold`() {
             subject.compileAndLint(
                 """
-            class Test {
-                fun x() { }
-                fun x(i: Int) { }
-            }
+                    class Test {
+                        fun x() { }
+                        fun x(i: Int) { }
+                    }
                 """.trimIndent()
             )
             assertThat(subject.findings.size).isZero()
@@ -60,9 +60,9 @@ class MethodOverloadingSpec {
         fun `does not report extension methods with a different receiver`() {
             subject.compileAndLint(
                 """
-            fun Boolean.foo() {}
-            fun Int.foo() {}
-            fun Long.foo() {}
+                    fun Boolean.foo() {}
+                    fun Int.foo() {}
+                    fun Long.foo() {}
                 """.trimIndent()
             )
             assertThat(subject.findings.size).isZero()
@@ -72,9 +72,9 @@ class MethodOverloadingSpec {
         fun `reports extension methods with the same receiver`() {
             subject.compileAndLint(
                 """
-            fun Int.foo() {}
-            fun Int.foo(i: Int) {}
-            fun Int.foo(i: String) {}
+                    fun Int.foo() {}
+                    fun Int.foo(i: Int) {}
+                    fun Int.foo(i: String) {}
                 """.trimIndent()
             )
             assertThat(subject.findings.size).isEqualTo(1)

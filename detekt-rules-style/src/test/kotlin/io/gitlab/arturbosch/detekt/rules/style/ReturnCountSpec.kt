@@ -18,7 +18,7 @@ class ReturnCountSpec {
 
     @Nested
     inner class `a function without a body` {
-        val code = """
+        private val code = """
             fun func() = Unit
         """.trimIndent()
 
@@ -30,7 +30,7 @@ class ReturnCountSpec {
 
     @Nested
     inner class `a function with an empty body` {
-        val code = """
+        private val code = """
             fun func() {}
         """.trimIndent()
 
@@ -42,20 +42,20 @@ class ReturnCountSpec {
 
     @Nested
     inner class `a file with an if condition guard clause and 2 returns` {
-        val code = """
-        fun test(x: Int): Int {
-            if (x < 4) return 0
-            when (x) {
-                5 -> println("x=5")
-                4 -> return 4
+        private val code = """
+            fun test(x: Int): Int {
+                if (x < 4) return 0
+                when (x) {
+                    5 -> println("x=5")
+                    4 -> return 4
+                }
+                return 6
             }
-            return 6
-        }
         """.trimIndent()
 
         @Test
         fun `should not get flagged for if condition guard clauses`() {
-            val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true")))
+            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "true"))
                 .compileAndLint(code)
             assertThat(findings).isEmpty()
         }
@@ -63,30 +63,30 @@ class ReturnCountSpec {
 
     @Nested
     inner class `a file with an if condition guard clause with body and 2 returns` {
-        val code = """
-        fun test(x: Int): Int {
-            if (x < 4) {
-                println("x x is less than 4")
-                return 0
+        private val code = """
+            fun test(x: Int): Int {
+                if (x < 4) {
+                    println("x x is less than 4")
+                    return 0
+                }
+                when (x) {
+                    5 -> println("x=5")
+                    4 -> return 4
+                }
+                return 6
             }
-            when (x) {
-                5 -> println("x=5")
-                4 -> return 4
-            }
-            return 6
-        }
         """.trimIndent()
 
         @Test
         fun `should not get flagged for if condition guard clauses`() {
-            val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true")))
+            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "true"))
                 .compileAndLint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should get flagged without guard clauses`() {
-            val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "false")))
+            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "false"))
                 .compileAndLint(code)
             assertThat(findings).hasSize(1)
         }
@@ -94,27 +94,27 @@ class ReturnCountSpec {
 
     @Nested
     inner class `reports a too-complicated if statement for being a guard clause` {
-        val code = """
-        fun test(x: Int): Int {
-            if (x < 4) {
-                println("x x is less than 4")
-                if (x < 2) {
-                  println("x is also less than 2")
-                  return 1
+        private val code = """
+            fun test(x: Int): Int {
+                if (x < 4) {
+                    println("x x is less than 4")
+                    if (x < 2) {
+                      println("x is also less than 2")
+                      return 1
+                    }
+                    return 0
                 }
-                return 0
+                when (x) {
+                    5 -> println("x=5")
+                    4 -> return 4
+                }
+                return 6
             }
-            when (x) {
-                5 -> println("x=5")
-                4 -> return 4
-            }
-            return 6
-        }
         """.trimIndent()
 
         @Test
         fun `should report a too-complicated if statement for being a guard clause, with EXCLUDE_GUARD_CLAUSES on`() {
-            val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true")))
+            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "true"))
                 .compileAndLint(code)
             assertThat(findings).hasSize(1)
         }
@@ -122,20 +122,20 @@ class ReturnCountSpec {
 
     @Nested
     inner class `a file with an ELVIS operator guard clause and 2 returns` {
-        val code = """
-        fun test(x: Int): Int {
-            val y = x ?: return 0
-            when (x) {
-                5 -> println("x=5")
-                4 -> return 4
+        private val code = """
+            fun test(x: Int): Int {
+                val y = x ?: return 0
+                when (x) {
+                    5 -> println("x=5")
+                    4 -> return 4
+                }
+                return 6
             }
-            return 6
-        }
         """.trimIndent()
 
         @Test
         fun `should not get flagged for ELVIS operator guard clauses`() {
-            val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true")))
+            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "true"))
                 .compileAndLint(code)
             assertThat(findings).isEmpty()
         }
@@ -143,20 +143,20 @@ class ReturnCountSpec {
 
     @Nested
     inner class `a file with 2 returns and an if condition guard clause which is not the first statement` {
-        val code = """
-        fun test(x: Int): Int {
-            when (x) {
-                5 -> println("x=5")
-                4 -> return 4
+        private val code = """
+            fun test(x: Int): Int {
+                when (x) {
+                    5 -> println("x=5")
+                    4 -> return 4
+                }
+                if (x < 4) return 0
+                return 6
             }
-            if (x < 4) return 0
-            return 6
-        }
         """.trimIndent()
 
         @Test
         fun `should get flagged for an if condition guard clause which is not the first statement`() {
-            val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true")))
+            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "true"))
                 .compileAndLint(code)
             assertThat(findings).hasSize(1)
         }
@@ -164,20 +164,20 @@ class ReturnCountSpec {
 
     @Nested
     inner class `a file with 2 returns and an ELVIS guard clause which is not the first statement` {
-        val code = """
-        fun test(x: Int): Int {
-            when (x) {
-                5 -> println("x=5")
-                4 -> return 4
+        private val code = """
+            fun test(x: Int): Int {
+                when (x) {
+                    5 -> println("x=5")
+                    4 -> return 4
+                }
+                val y = x ?: return 0
+                return 6
             }
-            val y = x ?: return 0
-            return 6
-        }
         """.trimIndent()
 
         @Test
         fun `should get flagged for an ELVIS guard clause which is not the first statement`() {
-            val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true")))
+            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "true"))
                 .compileAndLint(code)
             assertThat(findings).hasSize(1)
         }
@@ -224,15 +224,15 @@ class ReturnCountSpec {
 
     @Nested
     inner class `a file with 3 returns` {
-        val code = """
-        fun test(x: Int): Int {
-            when (x) {
-                5 -> println("x=5")
-                4 -> return 4
-                3 -> return 3
+        private val code = """
+            fun test(x: Int): Int {
+                when (x) {
+                    5 -> println("x=5")
+                    4 -> return 4
+                    3 -> return 3
+                }
+                return 6
             }
-            return 6
-        }
         """.trimIndent()
 
         @Test
@@ -243,27 +243,27 @@ class ReturnCountSpec {
 
         @Test
         fun `should not get flagged when max value is 3`() {
-            val findings = ReturnCount(TestConfig(mapOf(MAX to "3"))).compileAndLint(code)
+            val findings = ReturnCount(TestConfig(MAX to "3")).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should get flagged when max value is 1`() {
-            val findings = ReturnCount(TestConfig(mapOf(MAX to "1"))).compileAndLint(code)
+            val findings = ReturnCount(TestConfig(MAX to "1")).compileAndLint(code)
             assertThat(findings).hasSize(1)
         }
     }
 
     @Nested
     inner class `a file with 2 returns` {
-        val code = """
-        fun test(x: Int): Int {
-            when (x) {
-                5 -> println("x=5")
-                4 -> return 4
+        private val code = """
+            fun test(x: Int): Int {
+                when (x) {
+                    5 -> println("x=5")
+                    4 -> return 4
+                }
+                return 6
             }
-            return 6
-        }
         """.trimIndent()
 
         @Test
@@ -274,38 +274,36 @@ class ReturnCountSpec {
 
         @Test
         fun `should not get flagged when max value is 2`() {
-            val findings = ReturnCount(TestConfig(mapOf(MAX to "2"))).compileAndLint(code)
+            val findings = ReturnCount(TestConfig(MAX to "2")).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should get flagged when max value is 1`() {
-            val findings = ReturnCount(TestConfig(mapOf(MAX to "1"))).compileAndLint(code)
+            val findings = ReturnCount(TestConfig(MAX to "1")).compileAndLint(code)
             assertThat(findings).hasSize(1)
         }
     }
 
     @Nested
     inner class `a function is ignored` {
-        val code = """
-        fun test(x: Int): Int {
-            when (x) {
-                5 -> println("x=5")
-                4 -> return 4
-                3 -> return 3
+        private val code = """
+            fun test(x: Int): Int {
+                when (x) {
+                    5 -> println("x=5")
+                    4 -> return 4
+                    3 -> return 3
+                }
+                return 6
             }
-            return 6
-        }
         """.trimIndent()
 
         @Test
         fun `should not get flagged`() {
             val findings = ReturnCount(
                 TestConfig(
-                    mapOf(
-                        MAX to "2",
-                        EXCLUDED_FUNCTIONS to "test"
-                    )
+                    MAX to "2",
+                    EXCLUDED_FUNCTIONS to "test",
                 )
             ).compileAndLint(code)
             assertThat(findings).isEmpty()
@@ -314,43 +312,41 @@ class ReturnCountSpec {
 
     @Nested
     inner class `a subset of functions are ignored` {
-        val code = """
-        fun factorial(x: Int): Int {
-            when (x) {
-                5 -> println("x=5")
-                4 -> return 4
-                3 -> return 3
+        private val code = """
+            fun factorial(x: Int): Int {
+                when (x) {
+                    5 -> println("x=5")
+                    4 -> return 4
+                    3 -> return 3
+                }
+                return 6
             }
-            return 6
-        }
-        
-        fun fac(x: Int): Int {
-            when (x) {
-                5 -> println("x=5")
-                4 -> return 4
-                3 -> return 3
+            
+            fun fac(x: Int): Int {
+                when (x) {
+                    5 -> println("x=5")
+                    4 -> return 4
+                    3 -> return 3
+                }
+                return 6
             }
-            return 6
-        }
-        
-        fun fansOfFactorial(x: Int): Int {
-            when (x) {
-                5 -> println("x=5")
-                4 -> return 4
-                3 -> return 3
+            
+            fun fansOfFactorial(x: Int): Int {
+                when (x) {
+                    5 -> println("x=5")
+                    4 -> return 4
+                    3 -> return 3
+                }
+                return 6
             }
-            return 6
-        }
         """.trimIndent()
 
         @Test
         fun `should flag none of the ignored functions`() {
             val findings = ReturnCount(
                 TestConfig(
-                    mapOf(
-                        MAX to "2",
-                        EXCLUDED_FUNCTIONS to listOf("factorial", "fac"),
-                    )
+                    MAX to "2",
+                    EXCLUDED_FUNCTIONS to listOf("factorial", "fac"),
                 )
             ).compileAndLint(code)
             assertThat(findings).hasSize(1)
@@ -360,10 +356,8 @@ class ReturnCountSpec {
         fun `should flag none of the ignored functions using globbing`() {
             val findings = ReturnCount(
                 TestConfig(
-                    mapOf(
-                        MAX to "2",
-                        EXCLUDED_FUNCTIONS to listOf("fa*ctorial"),
-                    )
+                    MAX to "2",
+                    EXCLUDED_FUNCTIONS to listOf("fa*ctorial"),
                 )
             ).compileAndLint(code)
             assertThat(findings).hasSize(1)
@@ -372,119 +366,118 @@ class ReturnCountSpec {
 
     @Nested
     inner class `a function with inner object` {
-        val code = """
-        fun test(x: Int): Int {
-            val a = object {
-                fun test2(x: Int): Int {
-                    when (x) {
-                        5 -> println("x=5")
-                        else -> return 0
+        private val code = """
+            fun test(x: Int): Int {
+                val a = object {
+                    fun test2(x: Int): Int {
+                        when (x) {
+                            5 -> println("x=5")
+                            else -> return 0
+                        }
+                        return 6
                     }
-                    return 6
                 }
+                when (x) {
+                    5 -> println("x=5")
+                    else -> return 0
+                }
+                return 6
             }
-            when (x) {
-                5 -> println("x=5")
-                else -> return 0
-            }
-            return 6
-        }
         """.trimIndent()
 
         @Test
         fun `should not get flag when returns is in inner object`() {
-            val findings = ReturnCount(TestConfig(mapOf(MAX to "2"))).compileAndLint(code)
+            val findings = ReturnCount(TestConfig(MAX to "2")).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
     }
 
     @Nested
     inner class `a function with 2 inner object` {
-        val code = """
-        fun test(x: Int): Int {
-            val a = object {
-                fun test2(x: Int): Int {
-                    val b = object {
-                        fun test3(x: Int): Int {
-                            when (x) {
-                                5 -> println("x=5")
-                                else -> return 0
+        private val code = """
+            fun test(x: Int): Int {
+                val a = object {
+                    fun test2(x: Int): Int {
+                        val b = object {
+                            fun test3(x: Int): Int {
+                                when (x) {
+                                    5 -> println("x=5")
+                                    else -> return 0
+                                }
+                                return 6
                             }
-                            return 6
                         }
+                        when (x) {
+                            5 -> println("x=5")
+                            else -> return 0
+                        }
+                        return 6
                     }
-                    when (x) {
-                        5 -> println("x=5")
-                        else -> return 0
-                    }
-                    return 6
                 }
+                when (x) {
+                    5 -> println("x=5")
+                    else -> return 0
+                }
+                return 6
             }
-            when (x) {
-                5 -> println("x=5")
-                else -> return 0
-            }
-            return 6
-        }
         """.trimIndent()
 
         @Test
         fun `should not get flag when returns is in inner object`() {
-            val findings = ReturnCount(TestConfig(mapOf(MAX to "2"))).compileAndLint(code)
+            val findings = ReturnCount(TestConfig(MAX to "2")).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
     }
 
     @Nested
     inner class `a function with 2 inner object and exceeded max` {
-        val code = """
-        fun test(x: Int): Int {
-            val a = object {
-                fun test2(x: Int): Int {
-                    val b = object {
-                        fun test3(x: Int): Int {
-                            when (x) {
-                                5 -> println("x=5")
-                                else -> return 0
+        private val code = """
+            fun test(x: Int): Int {
+                val a = object {
+                    fun test2(x: Int): Int {
+                        val b = object {
+                            fun test3(x: Int): Int {
+                                when (x) {
+                                    5 -> println("x=5")
+                                    else -> return 0
+                                }
+                                return 6
                             }
-                            return 6
                         }
+                        when (x) {
+                            5 -> println("x=5")
+                            else -> return 0
+                        }
+                        return 6
                     }
-                    when (x) {
-                        5 -> println("x=5")
-                        else -> return 0
-                    }
-                    return 6
                 }
+                when (x) {
+                    5 -> println("x=5")
+                    4 -> return 4
+                    3 -> return 3
+                    else -> return 0
+                }
+                return 6
             }
-            when (x) {
-                5 -> println("x=5")
-                4 -> return 4
-                3 -> return 3
-                else -> return 0
-            }
-            return 6
-        }
         """.trimIndent()
 
         @Test
         fun `should get flagged when returns is in inner object`() {
-            val findings = ReturnCount(TestConfig(mapOf(MAX to "2"))).compileAndLint(code)
+            val findings = ReturnCount(TestConfig(MAX to "2")).compileAndLint(code)
             assertThat(findings).hasSize(1)
         }
     }
 
     @Nested
     inner class `function with multiple labeled return statements` {
-
-        val code = """
-        fun readUsers(name: String): Flowable<User> {
-        return userDao.read(name)
-            .flatMap {
-                if (it.isEmpty()) return@flatMap Flowable.empty<User>()
-                return@flatMap Flowable.just(it[0])
+        private val code = """
+            fun readUsers(name: String): Flowable<User> {
+            return userDao.read(name)
+                .flatMap {
+                    if (it.isEmpty()) return@flatMap Flowable.empty<User>()
+                    return@flatMap Flowable.just(it[0])
+                }
             }
-        }
         """.trimIndent()
 
         @Test
@@ -496,7 +489,7 @@ class ReturnCountSpec {
         @Test
         fun `should count labeled returns from lambda when activated`() {
             val findings = ReturnCount(
-                TestConfig(mapOf(EXCLUDE_RETURN_FROM_LAMBDA to "false"))
+                TestConfig(EXCLUDE_RETURN_FROM_LAMBDA to "false")
             ).lint(code)
             assertThat(findings).hasSize(1)
         }
@@ -505,10 +498,8 @@ class ReturnCountSpec {
         fun `should be empty when labeled returns are de-activated`() {
             val findings = ReturnCount(
                 TestConfig(
-                    mapOf(
-                        EXCLUDE_LABELED to "true",
-                        EXCLUDE_RETURN_FROM_LAMBDA to "false"
-                    )
+                    EXCLUDE_LABELED to "true",
+                    EXCLUDE_RETURN_FROM_LAMBDA to "false",
                 )
             ).lint(code)
             assertThat(findings).isEmpty()
@@ -517,19 +508,19 @@ class ReturnCountSpec {
 
     @Nested
     inner class `function with lambda which has explicit label` {
-        val code = """
-        fun test() {
-            listOf(1, 2, 3, 4, 5).forEach lit@{
-                if (it == 3) return@lit
-                if (it == 4) return@lit
+        private val code = """
+            fun test() {
+                listOf(1, 2, 3, 4, 5).forEach lit@{
+                    if (it == 3) return@lit
+                    if (it == 4) return@lit
+                }
+                return
             }
-            return
-        }
         """.trimIndent()
 
         @Test
         fun `should count labeled return of lambda with explicit label`() {
-            val findings = ReturnCount(TestConfig(mapOf(EXCLUDE_RETURN_FROM_LAMBDA to "false"))).compileAndLint(code)
+            val findings = ReturnCount(TestConfig(EXCLUDE_RETURN_FROM_LAMBDA to "false")).compileAndLint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -543,10 +534,8 @@ class ReturnCountSpec {
         fun `excludeReturnFromLambda should take precedence over excludeLabeled`() {
             val findings = ReturnCount(
                 TestConfig(
-                    mapOf(
-                        EXCLUDE_RETURN_FROM_LAMBDA to "true",
-                        EXCLUDE_LABELED to "false"
-                    )
+                    EXCLUDE_RETURN_FROM_LAMBDA to "true",
+                    EXCLUDE_LABELED to "false",
                 )
             ).compileAndLint(code)
             assertThat(findings).isEmpty()

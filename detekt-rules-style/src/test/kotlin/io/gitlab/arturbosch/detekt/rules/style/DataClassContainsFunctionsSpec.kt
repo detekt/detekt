@@ -31,14 +31,14 @@ class DataClassContainsFunctionsSpec {
 
         @Test
         fun `reports valid data class without conversion function string`() {
-            val config = TestConfig(mapOf(CONVERSION_FUNCTION_PREFIX to ""))
+            val config = TestConfig(CONVERSION_FUNCTION_PREFIX to "")
             val rule = DataClassContainsFunctions(config)
             assertThat(rule.compileAndLint(code)).hasSize(2)
         }
 
         @Test
         fun `reports valid data class without conversion function list`() {
-            val config = TestConfig(mapOf(CONVERSION_FUNCTION_PREFIX to emptyList<String>()))
+            val config = TestConfig(CONVERSION_FUNCTION_PREFIX to emptyList<String>())
             val rule = DataClassContainsFunctions(config)
             assertThat(rule.compileAndLint(code)).hasSize(2)
         }
@@ -60,14 +60,14 @@ class DataClassContainsFunctionsSpec {
 
         @Test
         fun `reports operators if not allowed`() {
-            val config = TestConfig(mapOf(ALLOW_OPERATORS to false))
+            val config = TestConfig(ALLOW_OPERATORS to false)
             val rule = DataClassContainsFunctions(config)
             assertThat(rule.compileAndLint(code)).hasSize(1)
         }
 
         @Test
         fun `does not report operators if allowed`() {
-            val config = TestConfig(mapOf(ALLOW_OPERATORS to true))
+            val config = TestConfig(ALLOW_OPERATORS to true)
             val rule = DataClassContainsFunctions(config)
             assertThat(rule.compileAndLint(code)).isEmpty()
         }

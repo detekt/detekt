@@ -130,14 +130,14 @@ class ThrowsCountSpec {
 
         @Test
         fun `does not report when max parameter is 3`() {
-            val config = TestConfig(mapOf(MAX to "3"))
+            val config = TestConfig(MAX to "3")
             val subject = ThrowsCount(config)
             assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
         fun `reports violation when max parameter is 2`() {
-            val config = TestConfig(mapOf(MAX to "2"))
+            val config = TestConfig(MAX to "2")
             val subject = ThrowsCount(config)
             assertThat(subject.lint(code)).hasSize(1)
         }
@@ -158,14 +158,14 @@ class ThrowsCountSpec {
 
         @Test
         fun `should not report violation with EXCLUDE_GUARD_CLAUSES as true`() {
-            val config = TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true"))
+            val config = TestConfig(EXCLUDE_GUARD_CLAUSES to "true")
             val subject = ThrowsCount(config)
             assertThat(subject.lint(codeWithGuardClause)).isEmpty()
         }
 
         @Test
         fun `should report violation with EXCLUDE_GUARD_CLAUSES as false`() {
-            val config = TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "false"))
+            val config = TestConfig(EXCLUDE_GUARD_CLAUSES to "false")
             val subject = ThrowsCount(config)
             assertThat(subject.lint(codeWithGuardClause)).hasSize(1)
         }
@@ -186,14 +186,14 @@ class ThrowsCountSpec {
 
         @Test
         fun `should not report violation with EXCLUDE_GUARD_CLAUSES as true`() {
-            val config = TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true"))
+            val config = TestConfig(EXCLUDE_GUARD_CLAUSES to "true")
             val subject = ThrowsCount(config)
             assertThat(subject.lint(codeWithGuardClause)).isEmpty()
         }
 
         @Test
         fun `should report violation with EXCLUDE_GUARD_CLAUSES as false`() {
-            val config = TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "false"))
+            val config = TestConfig(EXCLUDE_GUARD_CLAUSES to "false")
             val subject = ThrowsCount(config)
             assertThat(subject.lint(codeWithGuardClause)).hasSize(1)
         }
@@ -221,7 +221,7 @@ class ThrowsCountSpec {
 
         @Test
         fun `should report violation even with EXCLUDE_GUARD_CLAUSES as true`() {
-            val config = TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true"))
+            val config = TestConfig(EXCLUDE_GUARD_CLAUSES to "true")
             val subject = ThrowsCount(config)
             assertThat(subject.lint(codeWithIfCondition)).hasSize(1)
         }
@@ -242,7 +242,7 @@ class ThrowsCountSpec {
 
         @Test
         fun `should report the violation even with EXCLUDE_GUARD_CLAUSES as true`() {
-            val config = TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true"))
+            val config = TestConfig(EXCLUDE_GUARD_CLAUSES to "true")
             val subject = ThrowsCount(config)
             assertThat(subject.lint(codeWithIfCondition)).hasSize(1)
         }
@@ -263,7 +263,7 @@ class ThrowsCountSpec {
 
         @Test
         fun `should report the violation even with EXCLUDE_GUARD_CLAUSES as true`() {
-            val config = TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true"))
+            val config = TestConfig(EXCLUDE_GUARD_CLAUSES to "true")
             val subject = ThrowsCount(config)
             assertThat(subject.lint(codeWithIfCondition)).hasSize(1)
         }
@@ -287,14 +287,14 @@ class ThrowsCountSpec {
 
         @Test
         fun `should not report violation with EXCLUDE_GUARD_CLAUSES as true`() {
-            val config = TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "true"))
+            val config = TestConfig(EXCLUDE_GUARD_CLAUSES to "true")
             val subject = ThrowsCount(config)
             assertThat(subject.lint(codeWithMultipleGuardClauses)).isEmpty()
         }
 
         @Test
         fun `should report violation with EXCLUDE_GUARD_CLAUSES as false`() {
-            val config = TestConfig(mapOf(EXCLUDE_GUARD_CLAUSES to "false"))
+            val config = TestConfig(EXCLUDE_GUARD_CLAUSES to "false")
             val subject = ThrowsCount(config)
             assertThat(subject.lint(codeWithMultipleGuardClauses)).hasSize(1)
         }

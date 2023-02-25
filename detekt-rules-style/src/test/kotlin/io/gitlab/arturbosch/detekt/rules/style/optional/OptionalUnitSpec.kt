@@ -130,8 +130,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
 
         @Test
         fun `should not report Unit reference`() {
-            val findings = subject.compileAndLint(
-                """
+            val code = """
                 fun returnsNothing(u: Unit, us: () -> String) {
                     val u1 = u is Unit
                     val u2: Unit = Unit
@@ -139,8 +138,8 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     Unit.equals(null)
                     val i: (Int) -> Unit = { _ -> }
                 }
-                """.trimIndent()
-            )
+            """.trimIndent()
+            val findings = subject.compileAndLint(code)
             assertThat(findings).isEmpty()
         }
     }

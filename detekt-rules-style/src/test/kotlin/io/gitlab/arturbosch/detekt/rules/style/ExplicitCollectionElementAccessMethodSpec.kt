@@ -536,10 +536,10 @@ class ExplicitCollectionElementAccessMethodSpec {
             @Test
             fun `does not report for unresolvable code`() {
                 val code = """
-                     fun f() {
-                        val unknownType = UnknownType()
-                        val value = unknownType.put("answer", 42)
-                     }
+                    fun f() {
+                       val unknownType = UnknownType()
+                       val value = unknownType.put("answer", 42)
+                    }
                 """.trimIndent()
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }

@@ -14,7 +14,7 @@ permissions:
 jobs:
   gradle:
     runs-on: ubuntu-latest
-    if: github.repository == 'detekt/detekt' && !contains(github.event.head_commit.message, 'ci skip')
+    if: github.repository == 'detekt/detekt'
     steps:
       - name: Checkout Repo
         uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-java@3f07048e3d294f56e9b90ac5ea2c6f74e9ad0f98 # v3
         with:
           java-version: 17
-          distribution: 'temurin'
+          distribution: "temurin"
 
       - name: Build detekt
         uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2

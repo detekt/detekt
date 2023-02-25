@@ -49,12 +49,12 @@ constructor(
      * Each generated file is different so the artifacts are not cached in between test runs
      */
     private fun ktFileContent(className: String, withCodeSmell: Boolean = false) = """
-    |internal class $className(
-    |   val randomDefaultValue: String = "$randomString"
-    |) {
-    |   val smellyConstant: Int = ${if (withCodeSmell) "11" else "0"}
-    |}
-    |
+        |internal class $className(
+        |   val randomDefaultValue: String = "$randomString"
+        |) {
+        |   val smellyConstant: Int = ${if (withCodeSmell) "11" else "0"}
+        |}
+        |
     """.trimMargin()
 
     fun setupProject() {

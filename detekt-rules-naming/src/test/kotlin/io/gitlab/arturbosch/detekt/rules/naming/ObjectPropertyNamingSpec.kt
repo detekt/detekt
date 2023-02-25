@@ -183,14 +183,11 @@ class ObjectPropertyNamingSpec {
     @Nested
     inner class `variables and constants in objects with custom config` {
 
-        val config =
-            TestConfig(
-                mapOf(
-                    CONSTANT_PATTERN to "_[A-Za-z]*",
-                    PRIVATE_PROPERTY_PATTERN to ".*"
-                )
-            )
-        val subject = ObjectPropertyNaming(config)
+        private val config = TestConfig(
+            CONSTANT_PATTERN to "_[A-Za-z]*",
+            PRIVATE_PROPERTY_PATTERN to ".*",
+        )
+        private val subject = ObjectPropertyNaming(config)
 
         @Test
         fun `should not detect constants in object with underscores`() {
@@ -219,11 +216,7 @@ class ObjectPropertyNamingSpec {
     inner class `local properties` {
         @Test
         fun `should not detect local properties`() {
-            val config = TestConfig(
-                mapOf(
-                    PROPERTY_PATTERN to "valid"
-                )
-            )
+            val config = TestConfig(PROPERTY_PATTERN to "valid")
             val subject = ObjectPropertyNaming(config)
 
             val code = """
@@ -256,9 +249,9 @@ class ObjectPropertyNamingSpec {
     fun `should not detect class properties`() {
         val subject = ObjectPropertyNaming()
         val code = """
-                class O {
-                    val _invalidNaming = 1
-                }
+            class O {
+                val _invalidNaming = 1
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -267,11 +260,11 @@ class ObjectPropertyNamingSpec {
     fun `should not detect properties of class in object declaration`() {
         val subject = ObjectPropertyNaming()
         val code = """
-                object A {
-                    class O {
-                        val _invalidNaming = 1
-                    }
+            object A {
+                class O {
+                    val _invalidNaming = 1
                 }
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -281,12 +274,12 @@ class ObjectPropertyNamingSpec {
 abstract class NamingSnippet(private val isPrivate: Boolean, private val isConst: Boolean) {
 
     val negative = """
-                    ${visibility()}${const()}val MY_NAME_8 = "Artur"
-                    ${visibility()}${const()}val MYNAME = "Artur"
-                    ${visibility()}${const()}val MyNAME = "Artur"
-                    ${visibility()}${const()}val name = "Artur"
-                    ${visibility()}${const()}val nAme = "Artur"
-                    ${visibility()}${const()}val serialVersionUID = 42L
+        ${visibility()}${const()}val MY_NAME_8 = "Artur"
+        ${visibility()}${const()}val MYNAME = "Artur"
+        ${visibility()}${const()}val MyNAME = "Artur"
+        ${visibility()}${const()}val name = "Artur"
+        ${visibility()}${const()}val nAme = "Artur"
+        ${visibility()}${const()}val serialVersionUID = 42L
     """.trimIndent()
     val positive = """${visibility()}${const()}val _nAme = "Artur""""
 

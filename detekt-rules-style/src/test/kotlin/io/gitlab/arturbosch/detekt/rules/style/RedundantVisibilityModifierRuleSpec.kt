@@ -180,14 +180,13 @@ class RedundantVisibilityModifierRuleSpec {
     @Nested
     inner class `Explicit API mode` {
 
-        val code =
-            compileContentForTest(
-                """
+        val code = compileContentForTest(
+            """
                 public class A() {
                     fun f()
                 }
-                """.trimIndent()
-            )
+            """.trimIndent()
+        )
 
         val rule = RedundantVisibilityModifierRule()
 

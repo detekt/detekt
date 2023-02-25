@@ -18,8 +18,8 @@ class PackageNamingSpec {
         assertThat(
             PackageNaming().compileAndLint(
                 """
-                @file:Suppress("PackageName")
-                package FOO.BAR
+                    @file:Suppress("PackageName")
+                    package FOO.BAR
                 """.trimIndent()
             )
         ).isEmpty()
@@ -30,8 +30,8 @@ class PackageNamingSpec {
         assertThat(
             PackageNaming().compileAndLint(
                 """
-                @file:Suppress("PackageDirectoryMismatch")
-                package FOO.BAR
+                    @file:Suppress("PackageDirectoryMismatch")
+                    package FOO.BAR
                 """.trimIndent()
             )
         ).isEmpty()

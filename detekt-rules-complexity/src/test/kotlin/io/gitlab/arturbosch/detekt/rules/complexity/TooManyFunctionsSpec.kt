@@ -16,18 +16,15 @@ private const val IGNORE_PRIVATE = "ignorePrivate"
 private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
 
 class TooManyFunctionsSpec {
-    val rule =
-        TooManyFunctions(
-            TestConfig(
-                mapOf(
-                    THRESHOLD_IN_CLASSES to "1",
-                    THRESHOLD_IN_ENUMS to "1",
-                    THRESHOLD_IN_FILES to "1",
-                    THRESHOLD_IN_INTERFACES to "1",
-                    THRESHOLD_IN_OBJECTS to "1"
-                )
-            )
+    val rule = TooManyFunctions(
+        TestConfig(
+            THRESHOLD_IN_CLASSES to "1",
+            THRESHOLD_IN_ENUMS to "1",
+            THRESHOLD_IN_FILES to "1",
+            THRESHOLD_IN_INTERFACES to "1",
+            THRESHOLD_IN_OBJECTS to "1",
         )
+    )
 
     @Test
     fun `finds one function in class`() {
@@ -142,11 +139,9 @@ class TooManyFunctionsSpec {
         fun `finds no deprecated functions`() {
             val configuredRule = TooManyFunctions(
                 TestConfig(
-                    mapOf(
-                        THRESHOLD_IN_CLASSES to "1",
-                        THRESHOLD_IN_FILES to "1",
-                        IGNORE_DEPRECATED to "true"
-                    )
+                    THRESHOLD_IN_CLASSES to "1",
+                    THRESHOLD_IN_FILES to "1",
+                    IGNORE_DEPRECATED to "true",
                 )
             )
             assertThat(configuredRule.compileAndLint(code)).isEmpty()
@@ -171,11 +166,9 @@ class TooManyFunctionsSpec {
         fun `finds no private functions`() {
             val configuredRule = TooManyFunctions(
                 TestConfig(
-                    mapOf(
-                        THRESHOLD_IN_CLASSES to "1",
-                        THRESHOLD_IN_FILES to "1",
-                        IGNORE_PRIVATE to "true"
-                    )
+                    THRESHOLD_IN_CLASSES to "1",
+                    THRESHOLD_IN_FILES to "1",
+                    IGNORE_PRIVATE to "true",
                 )
             )
             assertThat(configuredRule.compileAndLint(code)).isEmpty()
@@ -207,13 +200,11 @@ class TooManyFunctionsSpec {
             """.trimIndent()
             val configuredRule = TooManyFunctions(
                 TestConfig(
-                    mapOf(
-                        THRESHOLD_IN_CLASSES to "1",
-                        THRESHOLD_IN_FILES to "1",
-                        IGNORE_PRIVATE to "true",
-                        IGNORE_DEPRECATED to "true",
-                        IGNORE_OVERRIDDEN to "true"
-                    )
+                    THRESHOLD_IN_CLASSES to "1",
+                    THRESHOLD_IN_FILES to "1",
+                    IGNORE_PRIVATE to "true",
+                    IGNORE_DEPRECATED to "true",
+                    IGNORE_OVERRIDDEN to "true",
                 )
             )
             assertThat(configuredRule.compileAndLint(code)).isEmpty()
@@ -224,26 +215,24 @@ class TooManyFunctionsSpec {
     inner class `overridden functions` {
 
         val code = """
-                interface I1 {
-                    fun func1()
-                    fun func2()
-                }
-                
-                class Foo : I1 {
-                    override fun func1() = Unit
-                    override fun func2() = Unit
-                }
+            interface I1 {
+                fun func1()
+                fun func2()
+            }
+            
+            class Foo : I1 {
+                override fun func1() = Unit
+                override fun func2() = Unit
+            }
         """.trimIndent()
 
         @Test
         fun `should not report class with overridden functions, if ignoreOverridden is enabled`() {
             val configuredRule = TooManyFunctions(
                 TestConfig(
-                    mapOf(
-                        THRESHOLD_IN_CLASSES to "1",
-                        THRESHOLD_IN_FILES to "1",
-                        IGNORE_OVERRIDDEN to "true"
-                    )
+                    THRESHOLD_IN_CLASSES to "1",
+                    THRESHOLD_IN_FILES to "1",
+                    IGNORE_OVERRIDDEN to "true",
                 )
             )
             assertThat(configuredRule.compileAndLint(code)).isEmpty()
@@ -253,11 +242,9 @@ class TooManyFunctionsSpec {
         fun `should count overridden functions, if ignoreOverridden is disabled`() {
             val configuredRule = TooManyFunctions(
                 TestConfig(
-                    mapOf(
-                        THRESHOLD_IN_CLASSES to "1",
-                        THRESHOLD_IN_FILES to "1",
-                        IGNORE_OVERRIDDEN to "false"
-                    )
+                    THRESHOLD_IN_CLASSES to "1",
+                    THRESHOLD_IN_FILES to "1",
+                    IGNORE_OVERRIDDEN to "false",
                 )
             )
             assertThat(configuredRule.compileAndLint(code)).hasSize(1)

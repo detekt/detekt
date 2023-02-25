@@ -217,13 +217,13 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report used private functions`() {
             val code = """
-            class Test {
-                val value = usedMethod()
-            
-                private fun usedMethod(): Int {
-                    return 5
+                class Test {
+                    val value = usedMethod()
+                
+                    private fun usedMethod(): Int {
+                        return 5
+                    }
                 }
-            }
             """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
@@ -232,11 +232,11 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports unused private functions`() {
             val code = """
-            class Test {
-                private fun unusedFunction(): Int {
-                    return 5
+                class Test {
+                    private fun unusedFunction(): Int {
+                        return 5
+                    }
                 }
-            }
             """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(1)
@@ -263,32 +263,18 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports the non called private function`() {
             val code = """
-            class Test {
-                private fun unusedFunction(): Int {
-                    return someOtherUnusedFunction()
+                class Test {
+                    private fun unusedFunction(): Int {
+                        return someOtherUnusedFunction()
+                    }
+                
+                    private fun someOtherUnusedFunction() {
+                        println("Never used")
+                    }
                 }
-            
-                private fun someOtherUnusedFunction() {
-                    println("Never used")
-                }
-            }
             """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(1)
-        }
-    }
-
-    @Nested
-    inner class `unused class declarations which are allowed` {
-
-        @Test
-        fun `does not report the unused private function and parameter`() {
-            val code = """
-                class Test {
-                    private fun ignored(ignored: Int) {}
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -298,11 +284,11 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `are specific for private functions`() {
             val code = """
-            class Test {
-                private fun unusedFunction(): Int {
-                    return 5
+                class Test {
+                    private fun unusedFunction(): Int {
+                        return 5
+                    }
                 }
-            }
             """.trimIndent()
 
             val lint = subject.lint(code)
@@ -438,7 +424,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     
                         fun answer() = Test(1)
                     }
-    
+                    
                     val answer = Test.answer()
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -494,12 +480,12 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             fun `does report unused overloaded invoke operator`() {
                 val code = """
                     open class A {
-                    companion object {
-                        private operator fun invoke(i: Int): Int = i
-                        private operator fun invoke(i: Int, j: Int): Int = i
+                        companion object {
+                            private operator fun invoke(i: Int): Int = i
+                            private operator fun invoke(i: Int, j: Int): Int = i
+                        }
+                        val answer = A(1, 1)
                     }
-                    val answer = A(1, 1)
-                }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code))
                     .hasSize(1)

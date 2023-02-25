@@ -52,12 +52,12 @@ class DeprecatedBlockTagSpec {
         @Test
         fun `report deprecation tag on class`() {
             val code = """
-            /**
-             * Hello there
-             *
-             * @deprecated This thing is deprecated
-             */
-            class Thing { }
+                /**
+                 * Hello there
+                 *
+                 * @deprecated This thing is deprecated
+                 */
+                class Thing { }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
@@ -65,14 +65,14 @@ class DeprecatedBlockTagSpec {
         @Test
         fun `report deprecation tag on property`() {
             val code = """
-            class Thing {
-                /**
-                 * A thing you should not use
-                 *
-                 * @deprecated Do not use that
-                 */
-                val doNotUseMe = 0
-            }
+                class Thing {
+                    /**
+                     * A thing you should not use
+                     *
+                     * @deprecated Do not use that
+                     */
+                    val doNotUseMe = 0
+                }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }

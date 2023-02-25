@@ -73,8 +73,8 @@ class PluginTaskBehaviorSpec {
     @Test
     fun `should run again after changing config`() {
         val configFileWithCommentsDisabled = """
-                        |comments:
-                        |  active: false
+            |comments:
+            |  active: false
         """.trimMargin()
 
         gradleRunner.runDetektTaskAndCheckResult { result ->
@@ -92,10 +92,10 @@ class PluginTaskBehaviorSpec {
     @Test
     fun `should run again after changing baseline`() {
         val changedBaselineContent = """
-                        |<some>
-                        |    <more/>
-                        |    <xml/>
-                        |</some>
+            |<some>
+            |    <more/>
+            |    <xml/>
+            |</some>
         """.trimMargin()
 
         gradleRunner.runDetektTaskAndCheckResult { result ->

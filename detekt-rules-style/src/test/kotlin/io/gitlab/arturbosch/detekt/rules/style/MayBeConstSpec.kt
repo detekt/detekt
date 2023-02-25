@@ -27,9 +27,9 @@ class MayBeConstSpec {
         @Test
         fun `is const vals in object`() {
             val code = """
-            object Test {
-                const val TEST = "Test"
-            }
+                object Test {
+                    const val TEST = "Test"
+                }
             """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
@@ -38,11 +38,11 @@ class MayBeConstSpec {
         @Test
         fun `isconst vals in companion objects`() {
             val code = """
-            class Test {
-                companion object {
-                    const val B = 1
+                class Test {
+                    companion object {
+                        const val B = 1
+                    }
                 }
-            }
             """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
@@ -51,15 +51,15 @@ class MayBeConstSpec {
         @Test
         fun `does not report const vals that use other const vals`() {
             val code = """
-            object Something {
-                const val A = 0
-            }
-            
-            class Test {
-                companion object {
-                    const val B = Something.A + 1
+                object Something {
+                    const val A = 0
                 }
-            }
+                
+                class Test {
+                    companion object {
+                        const val B = Something.A + 1
+                    }
+                }
             """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
@@ -68,11 +68,11 @@ class MayBeConstSpec {
         @Test
         fun `does not report none const val candidates`() {
             val code = """
-            object Something {
-                const val a = 0
-            }
-            val p = Pair(Something.a, Something.a + Something.a)
-            val p2 = emptyList<Int>().plus(Something.a)
+                object Something {
+                    const val a = 0
+                }
+                val p = Pair(Something.a, Something.a + Something.a)
+                val p2 = emptyList<Int>().plus(Something.a)
             """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
@@ -84,7 +84,7 @@ class MayBeConstSpec {
         @Test
         fun `is a simple val`() {
             val code = """
-            val x = 1
+                val x = 1
             """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
@@ -95,7 +95,7 @@ class MayBeConstSpec {
         @Test
         fun `is a simple JvmField val`() {
             val code = """
-            @JvmField val x = 1
+                @JvmField val x = 1
             """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
@@ -106,9 +106,9 @@ class MayBeConstSpec {
         @Test
         fun `is a field in an object`() {
             val code = """
-            object Test {
-                @JvmField val test = "Test"
-            }
+                object Test {
+                    @JvmField val test = "Test"
+                }
             """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
@@ -119,11 +119,11 @@ class MayBeConstSpec {
         @Test
         fun `reports vals in companion objects`() {
             val code = """
-            class Test {
-                companion object {
-                    val b = 1
+                class Test {
+                    companion object {
+                        val b = 1
+                    }
                 }
-            }
             """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
@@ -137,10 +137,10 @@ class MayBeConstSpec {
         @Test
         fun `is a constant binary expression`() {
             val code = """
-            object Something {
-                const val one = 1
-                val two = one * 2
-            }
+                object Something {
+                    const val one = 1
+                    val two = one * 2
+                }
             """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
@@ -151,12 +151,12 @@ class MayBeConstSpec {
         @Test
         fun `is a constant binary expression in a companion object`() {
             val code = """
-            class Test {
-                companion object {
-                    const val one = 1
-                    val two = one * 2
+                class Test {
+                    companion object {
+                        const val one = 1
+                        val two = one * 2
+                    }
                 }
-            }
             """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
@@ -167,10 +167,10 @@ class MayBeConstSpec {
         @Test
         fun `is a nested constant binary expression`() {
             val code = """
-            object Something {
-                const val one = 1
-                val two = one * 2 + 1
-            }
+                object Something {
+                    const val one = 1
+                    val two = one * 2 + 1
+                }
             """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
@@ -181,10 +181,10 @@ class MayBeConstSpec {
         @Test
         fun `is a nested constant parenthesised expression`() {
             val code = """
-            object Something {
-                const val one = 1
-                val two = one * (2 + 1)
-            }
+                object Something {
+                    const val one = 1
+                    val two = one * (2 + 1)
+                }
             """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
@@ -195,12 +195,12 @@ class MayBeConstSpec {
         @Test
         fun `reports vals that use other const vals`() {
             val code = """
-            object Something {
-                const val a = 0
-            
-                @JvmField
-                val b = a + 1
-            }
+                object Something {
+                    const val a = 0
+                
+                    @JvmField
+                    val b = a + 1
+                }
             """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
@@ -211,10 +211,10 @@ class MayBeConstSpec {
         @Test
         fun `reports concatenated string vals`() {
             val code = """
-            object Something {
-                private const val A = "a"
-                private val B = A + "b"
-            }
+                object Something {
+                    private const val A = "a"
+                    private val B = A + "b"
+                }
             """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
@@ -256,9 +256,9 @@ class MayBeConstSpec {
         @Test
         fun `is a JvmField in a class`() {
             val code = """
-            class Test {
-                @JvmField val a = 3
-            }
+                class Test {
+                    @JvmField val a = 3
+                }
             """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
@@ -267,9 +267,9 @@ class MayBeConstSpec {
         @Test
         fun `has some annotation`() {
             val code = """
-            annotation class A
-            
-            @A val a = 55
+                annotation class A
+                
+                @A val a = 55
             """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
@@ -278,13 +278,13 @@ class MayBeConstSpec {
         @Test
         fun `overrides something`() {
             val code = """
-            interface Base {
-                val property: Int
-            }
-            
-            object Derived : Base {
-                override val property = 1
-            }
+                interface Base {
+                    val property: Int
+                }
+                
+                object Derived : Base {
+                    override val property = 1
+                }
             """.trimIndent()
             subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
@@ -321,16 +321,14 @@ class MayBeConstSpec {
 
         @Test
         fun `does not report vals inside anonymous object declaration`() {
-            subject.compileAndLint(
-                """
+            val code = """
                 fun main() {
                     val versions = object {
                         val prop = ""
                     }
                 }
-                """.trimIndent()
-            )
-
+            """.trimIndent()
+            subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
         }
 

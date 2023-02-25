@@ -526,5 +526,5 @@ private open class TestConfigAware(private vararg val data: Pair<String, Any>) :
     override val ruleId: RuleId
         get() = "test"
     override val ruleSetConfig: Config
-        get() = TestConfig(data.toMap())
+        get() = TestConfig(*data)
 }
