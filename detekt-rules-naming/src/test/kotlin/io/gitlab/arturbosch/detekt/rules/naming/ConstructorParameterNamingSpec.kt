@@ -43,24 +43,13 @@ class ConstructorParameterNamingSpec {
     }
 
     @Test
-    fun `should not complain about override by default`() {
+    fun `should not complain about override`() {
         val code = """
             class C(override val PARAM: String) : I
             
             interface I { val PARAM: String }
         """.trimIndent()
         assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
-    }
-
-    @Test
-    fun `should not complain about override when ignore overridden = false`() {
-        val code = """
-            class C(override val PARAM: String) : I
-            
-            interface I { val PARAM: String }
-        """.trimIndent()
-        val config = TestConfig(IGNORE_OVERRIDDEN to "false")
-        assertThat(ConstructorParameterNaming(config).compileAndLint(code)).hasTextLocations(8 to 34)
     }
 
     @Nested
@@ -103,5 +92,3 @@ class ConstructorParameterNamingSpec {
         }
     }
 }
-
-private const val IGNORE_OVERRIDDEN = "ignoreOverridden"

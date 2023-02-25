@@ -55,7 +55,7 @@ class FunctionNamingSpec {
     }
 
     @Test
-    fun `ignores overridden functions by default`() {
+    fun `ignores overridden functions`() {
         val code = """
             class C : I {
                 override fun SHOULD_NOT_BE_FLAGGED() {}
@@ -73,8 +73,7 @@ class FunctionNamingSpec {
             
             fun Foo(): Foo = FooImpl()
         """.trimIndent()
-        val config = TestConfig(FunctionNaming.IGNORE_OVERRIDDEN to "false")
-        assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
+        assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -88,21 +87,6 @@ class FunctionNamingSpec {
             interface I { @Suppress("FunctionNaming") fun SHOULD_BE_FLAGGED() }
         """.trimIndent()
         assertThat(FunctionNaming().compileAndLint(code)).hasStartSourceLocation(3, 13)
-    }
-
-    @Test
-    fun `doesn't ignore overridden functions if ignoreOverridden is false`() {
-        val code = """
-            class C : I {
-                override fun SHOULD_BE_FLAGGED() {}
-            }
-            interface I { fun SHOULD_BE_FLAGGED() }
-        """.trimIndent()
-        val config = TestConfig(FunctionNaming.IGNORE_OVERRIDDEN to "false")
-        assertThat(FunctionNaming(config).compileAndLint(code)).hasStartSourceLocations(
-            SourceLocation(2, 18),
-            SourceLocation(4, 19)
-        )
     }
 
     @Test

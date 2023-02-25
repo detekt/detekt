@@ -25,7 +25,7 @@ class FunctionParameterNamingSpec {
         }
 
         @Test
-        fun `should not detect violations in overridden function by default`() {
+        fun `should not detect violations in overridden function`() {
             val code = """
                 class C : I {
                     override fun someStuff(`object`: String) {}
@@ -33,18 +33,6 @@ class FunctionParameterNamingSpec {
                 interface I { fun someStuff(@Suppress("FunctionParameterNaming") `object`: String) }
             """.trimIndent()
             assertThat(FunctionParameterNaming().compileAndLint(code)).isEmpty()
-        }
-
-        @Test
-        fun `should detect violations in overridden function if ignoreOverridden is false`() {
-            val code = """
-                class C : I {
-                    override fun someStuff(`object`: String) {}
-                }
-                interface I { fun someStuff(`object`: String) }
-            """.trimIndent()
-            val config = TestConfig(IGNORE_OVERRIDDEN to "false")
-            assertThat(FunctionParameterNaming(config).compileAndLint(code)).hasSize(2)
         }
 
         @Test
