@@ -38,6 +38,16 @@ class SleepInsteadOfDelaySpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `should report overloaded Thread sleep() in suspend functions`() {
+        val code = """
+            suspend fun foo() {
+                Thread.sleep(1000L, 1000)
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
     @DisplayName("should report Thread.sleep() in CoroutineScope.launch()")
     fun reportThreadSleepInCoroutineScopeLaunch() {
         val code = """
@@ -192,6 +202,66 @@ class SleepInsteadOfDelaySpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `should report Thread sleep() called in custom inline function inside suspend crossinline lambda`() {
+        val code = """
+            import kotlinx.coroutines.MainScope
+            import kotlinx.coroutines.launch
+            
+            inline fun suspendBlock(crossinline lambda: suspend () -> Unit) {
+                MainScope().launch {
+                    lambda()
+                }
+            }
+
+            fun test() {
+                suspendBlock {
+                    Thread.sleep(1000L)
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `should report Thread sleep() called in custom inline function inside suspend noinline lambda`() {
+        val code = """
+            import kotlinx.coroutines.MainScope
+            import kotlinx.coroutines.launch
+
+            inline fun suspendBlock(noinline lambda: suspend () -> Unit) {
+                MainScope().launch {
+                    lambda()
+                }
+            }
+
+            fun test() {
+                suspendBlock {
+                    Thread.sleep(1000L)
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `should report Thread sleep() inside local function defined inside lambda`() {
+        val code = """
+            fun normalBlock(lambda: () -> Unit) {
+                lambda()
+            }
+
+            fun test() {
+                normalBlock {
+                    suspend fun test() {
+                        Thread.sleep(1000L)
+                    }
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
     fun `should report Thread sleep() when called inside withContext`() {
         @Suppress("DeferredResultUnused")
         val code = """
@@ -199,7 +269,7 @@ class SleepInsteadOfDelaySpec(private val env: KotlinCoreEnvironment) {
             import kotlinx.coroutines.GlobalScope
             import kotlinx.coroutines.launch
             import kotlinx.coroutines.withContext
-            
+
             fun test() {
                 GlobalScope.launch { 
                     withContext(Dispatchers.IO) {
@@ -239,7 +309,7 @@ class SleepInsteadOfDelaySpec(private val env: KotlinCoreEnvironment) {
             import kotlinx.coroutines.GlobalScope
             import kotlinx.coroutines.launch
             import kotlinx.coroutines.withContext
-            
+
             fun test() {
                 GlobalScope.launch {
                      val funRef: (Long) -> Unit = Thread::sleep
@@ -257,7 +327,7 @@ class SleepInsteadOfDelaySpec(private val env: KotlinCoreEnvironment) {
             import kotlinx.coroutines.GlobalScope
             import kotlinx.coroutines.launch
             import kotlinx.coroutines.withContext
-            
+
             @Suppress("RedundantSuspendModifier")
             suspend fun test() {
                 GlobalScope.launch {
@@ -279,7 +349,7 @@ class SleepInsteadOfDelaySpec(private val env: KotlinCoreEnvironment) {
             import kotlinx.coroutines.GlobalScope
             import kotlinx.coroutines.launch
             import kotlinx.coroutines.withContext
-            
+
             fun test() {
                 GlobalScope.launch {
                     listOf(1L, 2L, 3L).map(Thread::sleep)
@@ -297,7 +367,7 @@ class SleepInsteadOfDelaySpec(private val env: KotlinCoreEnvironment) {
             import kotlinx.coroutines.GlobalScope
             import kotlinx.coroutines.launch
             import kotlinx.coroutines.withContext
-            
+
             fun test() {
                 GlobalScope.launch {
                     listOf(1L, 2L, 3L).map {
@@ -316,7 +386,7 @@ class SleepInsteadOfDelaySpec(private val env: KotlinCoreEnvironment) {
             import kotlinx.coroutines.GlobalScope
             import kotlinx.coroutines.launch
             import kotlinx.coroutines.withContext
-            
+
             inline fun inlineFun(lambda: () -> Unit) = lambda()
             
             suspend fun test() {
@@ -333,7 +403,7 @@ class SleepInsteadOfDelaySpec(private val env: KotlinCoreEnvironment) {
             import kotlinx.coroutines.GlobalScope
             import kotlinx.coroutines.launch
             import kotlinx.coroutines.withContext
-            
+
             fun test() {
                 GlobalScope.launch {
                     val localLambda: suspend () -> Unit = {
@@ -348,11 +418,9 @@ class SleepInsteadOfDelaySpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `should not report Thread sleep() called inside non-suspend lambda variable`() {
         val code = """
-            import kotlinx.coroutines.Dispatchers
             import kotlinx.coroutines.GlobalScope
             import kotlinx.coroutines.launch
-            import kotlinx.coroutines.withContext
-            
+
             suspend fun test() {
                 GlobalScope.launch {
                     val localLambda: () -> Unit = {
@@ -365,13 +433,39 @@ class SleepInsteadOfDelaySpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `should report Thread sleep() called inside suspend local fun inside non-suspend lambda variable`() {
+        val code = """
+            fun test() {
+                val localLambda: () -> Unit = {
+                    suspend fun test() {
+                        Thread.sleep(1000L)
+                    }
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `should report Thread sleep() called inside suspend local fun inside nested non-suspend lambda variable`() {
+        val code = """
+            val localLambda: () -> Unit = {
+                val localLambda2: () -> Unit = {
+                    suspend fun test() {
+                        Thread.sleep(1000L)
+                    }
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
     fun `should report Thread sleep() only once when called inside both suspend function and suspend lambda block`() {
         val code = """
-            import kotlinx.coroutines.Dispatchers
             import kotlinx.coroutines.GlobalScope
             import kotlinx.coroutines.launch
-            import kotlinx.coroutines.withContext
-            
+
             suspend fun test() {
                 GlobalScope.launch {
                     Thread.sleep(1000)
@@ -384,11 +478,7 @@ class SleepInsteadOfDelaySpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `should report Thread sleep() only once called inside nested suspend fun`() {
         val code = """
-            import kotlinx.coroutines.Dispatchers
-            import kotlinx.coroutines.GlobalScope
-            import kotlinx.coroutines.launch
-            import kotlinx.coroutines.withContext
-            
+
             suspend fun test() {
                 suspend fun test2() {
                     Thread.sleep(1000)
@@ -401,11 +491,9 @@ class SleepInsteadOfDelaySpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `should report Thread sleep() only once when called inside nested suspend lambda`() {
         val code = """
-            import kotlinx.coroutines.Dispatchers
             import kotlinx.coroutines.GlobalScope
             import kotlinx.coroutines.launch
-            import kotlinx.coroutines.withContext
-            
+
             fun test() {
                 GlobalScope.launch {
                     GlobalScope.launch { 

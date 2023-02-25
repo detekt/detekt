@@ -12,15 +12,15 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.builtins.isSuspendFunctionType
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
-import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtLambdaArgument
-import org.jetbrains.kotlin.psi.KtLambdaExpression
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtValueArgument
-import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypes
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getParameterForArgument
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
@@ -55,36 +55,62 @@ class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    override fun visitBlockExpression(expression: KtBlockExpression) {
-        expression.forEachDescendantOfType<KtCallExpression>(::shouldTraverseInside) {
-            it.verifyExpression(SUSPEND_FUN_MESSAGE)
-        }
+    override fun visitCallExpression(expression: KtCallExpression) {
+        super.visitCallExpression(expression)
+        checkAndReport(expression)
+    }
 
-        expression.forEachDescendantOfType<KtCallableReferenceExpression>(::shouldTraverseInside) {
-            it.verifyExpression(SUSPEND_FUN_MESSAGE)
+    override fun visitCallableReferenceExpression(expression: KtCallableReferenceExpression) {
+        super.visitCallableReferenceExpression(expression)
+        checkAndReport(expression)
+    }
+
+    private fun checkAndReport(expression: KtExpression) {
+        if (expression.isThreadSleepFunction() && expression.isInSuspendBlock()) {
+            report(CodeSmell(issue, Entity.from(expression), SUSPEND_FUN_MESSAGE))
         }
     }
 
-    @Suppress("ReturnCount")
-    private fun shouldTraverseInside(psiElement: PsiElement): Boolean {
-        return when (psiElement) {
-            is KtLambdaExpression -> {
-                val psiParent = psiElement.parent
+    private fun KtExpression.isThreadSleepFunction(): Boolean {
+        fun KtCallableReferenceExpression.isSleepCallableRef(): Boolean {
+            return if (this.parent is KtValueArgument) {
+                // Only checking if this is used as for invocation
+                this.callableReference.isThreadSleepFunction()
+            } else {
+                false
+            }
+        }
+        return if (this is KtCallableReferenceExpression) {
+            this.isSleepCallableRef()
+        } else {
+            getResolvedCall(bindingContext)
+                ?.resultingDescriptor
+                ?.fqNameOrNull()
+                ?.asString() == FQ_NAME
+        }
+    }
+
+    private fun PsiElement.isSuspendingBlock(): Boolean {
+        return when (this) {
+            is KtFunctionLiteral -> {
+                val psiParent = this.parent.parent
                 if (psiParent is KtLambdaArgument) {
-                    return psiParent.shouldTraverseInside()
+                    psiParent.isSuspendAllowedLambdaArgument()
+                } else {
+                    this.isSuspendScope()
                 }
-                bindingContext[BindingContext.EXPRESSION_TYPE_INFO, psiElement]?.let {
-                    it.type?.isSuspendFunctionType == true
-                } ?: false
+            }
+            is KtNamedFunction -> {
+                this.isSuspendScope()
             }
             else -> {
-                true
+                false
             }
         }
     }
 
     @Suppress("ReturnCount")
-    private fun KtLambdaArgument.shouldTraverseInside(): Boolean {
+    private fun KtLambdaArgument.isSuspendAllowedLambdaArgument(): Boolean {
         val callExpression = this.getParentOfType<KtCallExpression>(true)
         val callDescriptor = callExpression?.getResolvedCall(bindingContext) ?: return false
         val functionDescriptor = callDescriptor.resultingDescriptor as? FunctionDescriptor ?: return false
@@ -96,21 +122,19 @@ class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
             ) || valueParameterDescriptor.returnType?.isSuspendFunctionType == true
     }
 
-    private fun KtExpression.verifyExpression(message: String) {
-        val fqName = getResolvedCall(bindingContext)
-            ?.resultingDescriptor
-            ?.fqNameOrNull()
-            ?.asString()
-        if (fqName == FQ_NAME) {
-            report(CodeSmell(issue, Entity.from(this), message))
-        }
+    private fun PsiElement.isSuspendScope(): Boolean {
+        val functionDescriptor = bindingContext[BindingContext.FUNCTION, this] ?: return false
+        return functionDescriptor.isSuspend
     }
 
-    private fun KtCallableReferenceExpression.verifyExpression(message: String) {
-        if (this.parent is KtValueArgument) {
-            // Only checking if this is used as for invocation
-            this.callableReference.verifyExpression(message)
-        }
+    private fun KtExpression.isInSuspendBlock(): Boolean {
+        val containingBlockExpression =
+            this.getParentOfTypes<PsiElement>(
+                true,
+                KtNamedFunction::class.java,
+                KtFunctionLiteral::class.java
+            ) ?: return false
+        return containingBlockExpression.isSuspendingBlock()
     }
 
     companion object {
