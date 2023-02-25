@@ -510,6 +510,10 @@ style:
     active: false
     singleLine: 'never'
     multiLine: 'always'
+  BracesOnWhenStatements:
+    active: false
+    singleLine: 'consistent'
+    multiLine: 'consistent'
   CanBeNonNullable:
     active: false
   CascadingCallWrapping:
