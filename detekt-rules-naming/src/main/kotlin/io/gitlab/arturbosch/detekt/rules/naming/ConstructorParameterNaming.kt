@@ -39,12 +39,14 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
     private val excludeClassPattern: Regex by config("$^") { it.toRegex() }
 
     @Configuration("ignores constructor properties that have the override modifier")
+    @Deprecated("This configuration is ignored and will be removed in the future")
+    @Suppress("UnusedPrivateMember")
     private val ignoreOverridden: Boolean by config(true)
 
     override fun visitParameter(parameter: KtParameter) {
         if (!parameter.isConstructor() ||
             parameter.isContainingExcludedClassOrObject(excludeClassPattern) ||
-            isIgnoreOverridden(parameter)
+            parameter.isOverride()
         ) {
             return
         }
@@ -77,8 +79,6 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
             )
         }
     }
-
-    private fun isIgnoreOverridden(parameter: KtParameter) = ignoreOverridden && parameter.isOverride()
 
     private fun KtParameter.isConstructor(): Boolean {
         return this.ownerFunction is KtConstructor<*>
