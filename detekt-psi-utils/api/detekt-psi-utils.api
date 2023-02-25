@@ -47,6 +47,7 @@ public final class io/gitlab/arturbosch/detekt/rules/AllowedExceptionNamePattern
 public final class io/gitlab/arturbosch/detekt/rules/GuardClausesKt {
 	public static final fun isElvisOperatorGuardClause (Lorg/jetbrains/kotlin/psi/KtExpression;Lorg/jetbrains/kotlin/psi/KtExpression;)Z
 	public static final fun isIfConditionGuardClause (Lorg/jetbrains/kotlin/psi/KtExpression;Lorg/jetbrains/kotlin/psi/KtExpression;)Z
+	public static final fun isSuperCall (Lorg/jetbrains/kotlin/psi/KtExpression;)Z
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/IdentifierNameKt {

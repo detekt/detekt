@@ -220,6 +220,124 @@ class ReturnCountSpec {
             ).compileAndLint(code)
             assertThat(findings).hasSize(1)
         }
+
+        @Nested
+        inner class WithSuperCall {
+            @Test
+            fun `should ignore first super call`() {
+                val code = """
+                    open class A {
+                        open fun a(list: List<Int>) {
+
+                        }
+                    }
+
+                    class B: A() {
+                        override fun a(list: List<Int>) {
+                            super.a(list)
+
+                            if (list.isEmpty()) return
+                            if (list.contains(-1)) return
+                            if (list.contains(-2)) return
+                            if (list.contains(-3)) return
+                        }
+                    }
+                """.trimIndent()
+                val findings = ReturnCount(
+                    TestConfig(
+                        EXCLUDE_GUARD_CLAUSES to "true",
+                        MAX to 0,
+                    )
+                ).compileAndLint(code)
+                assertThat(findings).isEmpty()
+            }
+
+            @Test
+            fun `should ignore in between guard clauses`() {
+                val code = """
+                    open class A {
+                        open fun a(list: List<Int>) {
+
+                        }
+                    }
+
+                    class B: A() {
+                        override fun a(list: List<Int>) {
+                            if (list.isEmpty()) return
+                            if (list.contains(-1)) return
+                            super.a(list)
+                            if (list.contains(-2)) return
+                            if (list.contains(-3)) return
+                        }
+                    }
+                """.trimIndent()
+                val findings = ReturnCount(
+                    TestConfig(
+                        EXCLUDE_GUARD_CLAUSES to "true",
+                        MAX to 0,
+                    )
+                ).compileAndLint(code)
+                assertThat(findings).isEmpty()
+            }
+
+            @Test
+            fun `should ignore last super call`() {
+                val code = """
+                    open class A {
+                        open fun a(list: List<Int>) {
+
+                        }
+                    }
+
+                    class B: A() {
+                        override fun a(list: List<Int>) {
+                            if (list.isEmpty()) return
+                            if (list.contains(-1)) return
+                            if (list.contains(-2)) return
+                            if (list.contains(-3)) return
+
+                            super.a(list)
+                        }
+                    }
+                """.trimIndent()
+                val findings = ReturnCount(
+                    TestConfig(
+                        EXCLUDE_GUARD_CLAUSES to "true",
+                        MAX to 0,
+                    )
+                ).compileAndLint(code)
+                assertThat(findings).isEmpty()
+            }
+
+            @Test
+            fun `should work normally with super call in between and with EXCLUDE_GUARD_CLAUSES false`() {
+                val code = """
+                    open class A {
+                        open fun a(list: List<Int>) {
+
+                        }
+                    }
+
+                    class B: A() {
+                        override fun a(list: List<Int>) {
+                            if (list.isEmpty()) return
+                            if (list.contains(-1)) return
+                            super.a(list)                
+                            if (list.contains(-2)) return
+                            if (list.contains(-3)) return
+
+                        }
+                    }
+                """.trimIndent()
+                val findings = ReturnCount(
+                    TestConfig(
+                        EXCLUDE_GUARD_CLAUSES to "false",
+                        MAX to 3,
+                    )
+                ).compileAndLint(code)
+                assertThat(findings).hasSize(1)
+            }
+        }
     }
 
     @Nested
