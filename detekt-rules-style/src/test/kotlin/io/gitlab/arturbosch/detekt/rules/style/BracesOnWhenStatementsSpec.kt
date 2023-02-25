@@ -805,10 +805,8 @@ class BracesOnWhenStatementsSpec {
 
         private fun createSubject(singleLine: String, multiLine: String): BracesOnWhenStatements {
             val config = TestConfig(
-                mapOf(
-                    "singleLine" to singleLine,
-                    "multiLine" to multiLine
-                )
+                "singleLine" to singleLine,
+                "multiLine" to multiLine
             )
             return BracesOnWhenStatements(config)
         }
