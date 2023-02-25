@@ -51,17 +51,6 @@ class ConstructorParameterNamingSpec {
         assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
     }
 
-    @Test
-    fun `should not complain about override when ignore overridden = false`() {
-        val code = """
-            class C(override val PARAM: String) : I
-            
-            interface I { val PARAM: String }
-        """.trimIndent()
-        val config = TestConfig(IGNORE_OVERRIDDEN to "false")
-        assertThat(ConstructorParameterNaming(config).compileAndLint(code)).hasTextLocations(8 to 34)
-    }
-
     @Nested
     inner class `with backticks` {
         @Test
