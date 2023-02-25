@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 private const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
-private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
 
 class FunctionParameterNamingSpec {
 
