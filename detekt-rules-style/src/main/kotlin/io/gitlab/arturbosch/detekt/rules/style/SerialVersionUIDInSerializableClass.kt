@@ -20,7 +20,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
  * Classes which implement the `Serializable` interface should also correctly declare a `serialVersionUID`.
- * This rule verifies that a `serialVersionUID` was correctly defined.
+ * This rule verifies that a `serialVersionUID` was correctly defined and declared as `private`.
  *
  * [More about `SerialVersionUID`](https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html)
  *
