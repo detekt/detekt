@@ -175,30 +175,28 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
     }
 }
 
-afterEvaluate {
-    publishing {
-        publications.filterIsInstance<MavenPublication>().forEach {
-            it.pom {
-                description.set("The official Detekt Gradle Plugin")
-                name.set("detekt-gradle-plugin")
-                url.set("https://detekt.dev")
-                licenses {
-                    license {
-                        name.set("The Apache Software License, Version 2.0")
-                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-                        distribution.set("repo")
-                    }
+publishing {
+    publications.withType<MavenPublication> {
+        pom {
+            description.set("The official Detekt Gradle Plugin")
+            name.set("detekt-gradle-plugin")
+            url.set("https://detekt.dev")
+            licenses {
+                license {
+                    name.set("The Apache Software License, Version 2.0")
+                    url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                    distribution.set("repo")
                 }
-                developers {
-                    developer {
-                        id.set("Detekt Developers")
-                        name.set("Detekt Developers")
-                        email.set("info@detekt.dev")
-                    }
+            }
+            developers {
+                developer {
+                    id.set("Detekt Developers")
+                    name.set("Detekt Developers")
+                    email.set("info@detekt.dev")
                 }
-                scm {
-                    url.set("https://github.com/detekt/detekt")
-                }
+            }
+            scm {
+                url.set("https://github.com/detekt/detekt")
             }
         }
     }
