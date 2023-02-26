@@ -353,8 +353,8 @@ private fun buildKtFunction(
 ): Pair<KtNamedFunction, BindingContext> {
     val ktFile = compileContentForTest(
         """
-        ${if (includePackage) "package io.github.detekt" else ""}
-        $code
+            ${if (includePackage) "package io.github.detekt" else ""}
+            $code
         """.trimIndent()
     )
     val bindingContext = environment.getContextForPaths(listOf(ktFile))
