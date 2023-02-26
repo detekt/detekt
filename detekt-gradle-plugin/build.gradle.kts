@@ -69,6 +69,7 @@ dependencies {
     compileOnly(libs.kotlin.gradle)
     compileOnly(libs.kotlin.gradlePluginApi)
     implementation(libs.sarif4k)
+    compileOnly("io.gitlab.arturbosch.detekt:detekt-cli:1.22.0")
 
     testKitRuntimeOnly(libs.kotlin.gradle)
     testKitJava11RuntimeOnly(libs.android.gradle.maxSupported)

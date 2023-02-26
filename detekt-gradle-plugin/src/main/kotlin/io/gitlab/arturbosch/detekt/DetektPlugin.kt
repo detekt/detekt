@@ -136,3 +136,4 @@ class DetektPlugin : Plugin<Project> {
 
 const val CONFIGURATION_DETEKT = "detekt"
 const val CONFIGURATION_DETEKT_PLUGINS = "detektPlugins"
+const val USE_WORKER_API = "detekt.use.worker.api"
