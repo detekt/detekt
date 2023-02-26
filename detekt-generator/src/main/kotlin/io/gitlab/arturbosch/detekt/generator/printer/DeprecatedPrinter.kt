@@ -13,7 +13,7 @@ object DeprecatedPrinter : DocumentationPrinter<List<RuleSetPage>> {
                 if (rule.isDeprecated()) {
                     builder.appendLine(writeRule(ruleSet, rule))
                 }
-                rule.configuration.forEach { configuration ->
+                rule.configurations.forEach { configuration ->
                     if (configuration.isDeprecated()) {
                         builder.appendLine(writeProperty(ruleSet, rule, configuration))
                     }
