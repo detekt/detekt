@@ -36,12 +36,14 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
     group = "documentation"
 
-    val ruleModules = rootProject.subprojects
+    val ruleModules = rootProject.subprojects.asSequence()
         .filter { "rules" in it.name || it.name == "detekt-formatting" }
         .filterNot { it.name == "detekt-rules" }
-        .map { "${it.projectDir}/src/main/kotlin" }
+        .flatMap { it.sourceSets.main.get().kotlin.srcDirs }
+        .filter { it.exists() }
+        .toList()
 
-    inputs.files(ruleModules.map { fileTree(it) })
+    inputs.files(ruleModules)
 
     outputs.files(
         fileTree(documentationDir),
