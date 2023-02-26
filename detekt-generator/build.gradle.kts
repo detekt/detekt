@@ -38,9 +38,8 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
 
     val ruleModules = rootProject.subprojects
         .filter { "rules" in it.name || it.name == "detekt-formatting" }
-        .map { it.name }
-        .filterNot { it == "detekt-rules" }
-        .map { "$rootDir/$it/src/main/kotlin" }
+        .filterNot { it.name == "detekt-rules" }
+        .map { "${it.projectDir}/src/main/kotlin" }
 
     inputs.files(ruleModules.map { fileTree(it) })
 
