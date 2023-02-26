@@ -59,7 +59,7 @@ allprojects {
 subprojects {
     tasks.withType<Test>().configureEach {
         predictiveSelection {
-            enabled.set(providers.gradleProperty("enablePTS").map(String::toBooleanStrict).orElse(false))
+            enabled.set(providers.gradleProperty("enablePTS").map(String::toBooleanStrict))
         }
     }
 }
