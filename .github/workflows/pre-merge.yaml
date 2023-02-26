@@ -38,7 +38,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build detekt
-        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
+        uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f # v2
         with:
           arguments: build -x detekt publishToMavenLocal
 
@@ -61,7 +61,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Verify Generated Detekt Config File
-        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
+        uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f # v2
         with:
           arguments: verifyGeneratorOutput
 
@@ -78,7 +78,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build and compile test snippets
-        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
+        uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f # v2
         with:
           arguments: test -Pcompile-test-snippets=true
 
@@ -95,6 +95,6 @@ jobs:
           distribution: 'temurin'
 
       - name: Run with allWarningsAsErrors
-        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
+        uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f # v2
         with:
           arguments: compileKotlin compileTestKotlin compileTestFixturesKotlin -PwarningsAsErrors=true
