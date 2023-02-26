@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
@@ -23,7 +22,8 @@ sealed class FunctionMatcher {
         }
 
         override fun match(function: KtNamedFunction, bindingContext: BindingContext): Boolean {
-            return function.name == fullyQualifiedName
+            return function.name == fullyQualifiedName ||
+                function.fqName?.asString() == fullyQualifiedName
         }
 
         override fun toString(): String {
@@ -48,7 +48,7 @@ sealed class FunctionMatcher {
 
         override fun match(function: KtNamedFunction, bindingContext: BindingContext): Boolean {
             if (bindingContext == BindingContext.EMPTY) return false
-            if (function.name != fullyQualifiedName) return false
+            if (function.name != fullyQualifiedName && function.fqName?.asString() != fullyQualifiedName) return false
 
             val encounteredParameters =
                 (listOfNotNull(function.receiverTypeReference) + function.valueParameters.map { it.typeReference })
