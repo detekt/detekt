@@ -64,12 +64,11 @@ class DetektTaskDslSpec {
 
     @Nested
     inner class `without multiple detekt configs` {
-        @Suppress("TrimMultilineRawString")
         private val config = """
-                |detekt {
-                |    config.setFrom(files("firstConfig.yml", "secondConfig.yml"))
-                |}
-            """
+            detekt {
+                config.setFrom(files("firstConfig.yml", "secondConfig.yml"))
+            }
+        """.trimIndent()
         private val builder = kotlin().dryRun()
         private val gradleRunner = builder.withDetektConfig(config).build()
         private val result = gradleRunner.runDetektTask()
@@ -88,12 +87,11 @@ class DetektTaskDslSpec {
     inner class `with custom baseline file` {
         val baselineFilename = "custom-baseline.xml"
 
-        @Suppress("TrimMultilineRawString")
         private val config = """
-                |detekt {
-                |   baseline = file("$baselineFilename")
-                |}
-            """
+            detekt {
+                baseline = file("$baselineFilename")
+            }
+        """.trimIndent()
         private val builder = kotlin().dryRun()
         private val gradleRunner = builder
             .withDetektConfig(config)
@@ -113,12 +111,11 @@ class DetektTaskDslSpec {
     inner class `with custom baseline file that doesn't exist` {
         val baselineFilename = "detekt-baseline-no-exist.xml"
 
-        @Suppress("TrimMultilineRawString")
         private val config = """
-                |detekt {
-                |   baseline = file("$baselineFilename")
-                |}
-            """
+            detekt {
+                baseline = file("$baselineFilename")
+            }
+        """.trimIndent()
         private val builder = kotlin().dryRun()
         private val gradleRunner = builder
             .withDetektConfig(config)
@@ -138,12 +135,11 @@ class DetektTaskDslSpec {
         val customSrc2 = "src/main/kotlin"
         private val builder = kotlin().dryRun()
 
-        @Suppress("TrimMultilineRawString")
         private val config = """
-                |detekt {
-                |    input = files("$customSrc1", "$customSrc2", "folder_that_does_not_exist")
-                |}
-            """
+            detekt {
+                input = files("$customSrc1", "$customSrc2", "folder_that_does_not_exist")
+            }
+        """.trimIndent()
 
         val projectLayout = ProjectLayout(1, srcDirs = listOf(customSrc1, customSrc2))
         private val gradleRunner = builder
@@ -172,12 +168,11 @@ class DetektTaskDslSpec {
         val customSrc2 = "src/main/kotlin"
         private val builder = kotlin().dryRun()
 
-        @Suppress("TrimMultilineRawString")
         private val config = """
-                |detekt {
-                |    source = files("$customSrc1", "$customSrc2", "folder_that_does_not_exist")
-                |}
-            """
+            detekt {
+                source = files("$customSrc1", "$customSrc2", "folder_that_does_not_exist")
+            }
+        """.trimIndent()
 
         private val projectLayout = ProjectLayout(1, srcDirs = listOf(customSrc1, customSrc2))
         private val gradleRunner = builder
@@ -202,12 +197,11 @@ class DetektTaskDslSpec {
 
     @Nested
     inner class `with custom reports dir` {
-        @Suppress("TrimMultilineRawString")
         private val config = """
-                |detekt {
-                |    reportsDir = file("build/detekt-reports")
-                |}
-            """
+            detekt {
+                reportsDir = file("build/detekt-reports")
+            }
+        """.trimIndent()
         private val builder = kotlin().dryRun()
         private val gradleRunner = builder.withDetektConfig(config).build()
         private val result = gradleRunner.runDetektTask()
@@ -239,18 +233,17 @@ class DetektTaskDslSpec {
 
     @Nested
     inner class `with custom reports dir and custom report filename` {
-        @Suppress("TrimMultilineRawString")
         private val config = """
-                |detekt {
-                |    reportsDir = file("build/detekt-reports")
-                |}
-                |
-                |tasks.detekt {
-                |    reports {
-                |        xml.destination = file("build/xml-reports/custom-detekt.xml")
-                |    }
-                |}
-            """
+            detekt {
+                reportsDir = file("build/detekt-reports")
+            }
+            
+            tasks.detekt {
+                reports {
+                    xml.destination = file("build/xml-reports/custom-detekt.xml")
+                }
+            }
+        """.trimIndent()
         private val builder = kotlin().dryRun()
         private val gradleRunner = builder.withDetektConfig(config).build()
         private val result = gradleRunner.runDetektTask()
@@ -276,26 +269,25 @@ class DetektTaskDslSpec {
 
     @Nested
     inner class `with disabled reports` {
-        @Suppress("TrimMultilineRawString")
         private val config = """
-                |tasks.detekt {
-                |    reports {
-                |        xml.enabled = false
-                |        html {
-                |            enabled = false
-                |        }
-                |        txt {
-                |            enabled = false
-                |        }
-                |        sarif {
-                |            enabled = false
-                |        }
-                |        md {
-                |            enabled = false
-                |        }
-                |    }
-                |}
-            """
+            tasks.detekt {
+                reports {
+                    xml.enabled = false
+                    html {
+                        enabled = false
+                    }
+                    txt {
+                        enabled = false
+                    }
+                    sarif {
+                        enabled = false
+                    }
+                    md {
+                        enabled = false
+                    }
+                }
+            }
+        """.trimIndent()
         private val builder = kotlin().dryRun()
         private val gradleRunner = builder.withDetektConfig(config).build()
         private val result = gradleRunner.runDetektTask()
@@ -310,21 +302,20 @@ class DetektTaskDslSpec {
     inner class `with custom report types` {
         @Nested
         inner class `configured correctly` {
-            @Suppress("TrimMultilineRawString")
             private val config = """
-                    |tasks.detekt {
-                    |    reports {
-                    |        custom {
-                    |           reportId = "customXml"
-                    |           destination = file("build/reports/custom.xml")
-                    |       }
-                    |        custom {
-                    |           reportId = "customJson"
-                    |           destination = file("build/reports/custom.json")
-                    |       }
-                    |    }
-                    |}
-                """
+                tasks.detekt {
+                    reports {
+                        custom {
+                           reportId = "customXml"
+                           destination = file("build/reports/custom.xml")
+                       }
+                        custom {
+                           reportId = "customJson"
+                           destination = file("build/reports/custom.json")
+                       }
+                    }
+                }
+            """.trimIndent()
             private val builder = kotlin().dryRun()
             private val gradleRunner = builder.withDetektConfig(config).build()
             private val result = gradleRunner.runDetektTask()
@@ -344,16 +335,15 @@ class DetektTaskDslSpec {
 
         @Nested
         inner class `report id is missing` {
-            @Suppress("TrimMultilineRawString")
             private val config = """
-                    |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-                    |    reports {
-                    |        custom {
-                    |           destination = file("build/reports/custom.xml")
-                    |       }
-                    |    }
-                    |}
-                """
+                tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+                    reports {
+                        custom {
+                           destination = file("build/reports/custom.xml")
+                       }
+                    }
+                }
+            """.trimIndent()
             private val builder = kotlin().dryRun()
             private val gradleRunner = builder.withDetektConfig(config).build()
 
@@ -368,16 +358,15 @@ class DetektTaskDslSpec {
 
         @Nested
         inner class `report filename is missing` {
-            @Suppress("TrimMultilineRawString")
             private val config = """
-                    |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-                    |    reports {
-                    |        custom {
-                    |           reportId = "customJson"
-                    |       }
-                    |    }
-                    |}
-                """
+                tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+                    reports {
+                        custom {
+                           reportId = "customJson"
+                       }
+                    }
+                }
+            """.trimIndent()
             private val builder = kotlin().dryRun()
             private val gradleRunner = builder.withDetektConfig(config).build()
 
@@ -394,17 +383,16 @@ class DetektTaskDslSpec {
         inner class `report filename is a directory` {
             private val aDirectory = "\${rootDir}/src"
 
-            @Suppress("TrimMultilineRawString")
             private val config = """
-                    |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-                    |    reports {
-                    |        custom {
-                    |           reportId = "foo"
-                    |           destination = file("$aDirectory")
-                    |       }
-                    |    }
-                    |}
-                """
+                tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+                    reports {
+                        custom {
+                           reportId = "foo"
+                           destination = file("$aDirectory")
+                       }
+                    }
+                }
+            """.trimIndent()
             private val builder = kotlin().dryRun()
             private val gradleRunner = builder.withDetektConfig(config).build()
 
@@ -423,17 +411,16 @@ class DetektTaskDslSpec {
             @ParameterizedTest
             @EnumSource(DetektReportType::class)
             fun `fails the build`(wellKnownType: DetektReportType) {
-                @Suppress("TrimMultilineRawString")
                 val config = """
-                    |tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-                    |    reports {
-                    |        custom {
-                    |            reportId = "${wellKnownType.reportId}"
-                    |            destination = file("build/reports/custom.xml")
-                    |        }
-                    |    }
-                    |}
-                """
+                    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+                        reports {
+                            custom {
+                                reportId = "${wellKnownType.reportId}"
+                                destination = file("build/reports/custom.xml")
+                            }
+                        }
+                    }
+                """.trimIndent()
 
                 val gradleRunner = builder.withDetektConfig(config).build()
                 gradleRunner.runDetektTaskAndExpectFailure { result ->
@@ -448,18 +435,17 @@ class DetektTaskDslSpec {
     inner class `with flags` {
         private val builder = kotlin().dryRun()
 
-        @Suppress("TrimMultilineRawString")
         private val config = """
-            |detekt {
-            |    debug = true
-            |    parallel = true
-            |    disableDefaultRuleSets = true
-            |    allRules = true
-            |    autoCorrect = true
-            |    buildUponDefaultConfig = true
-            |    ignoreFailures = true
-            |}
-        """
+            detekt {
+                debug = true
+                parallel = true
+                disableDefaultRuleSets = true
+                allRules = true
+                autoCorrect = true
+                buildUponDefaultConfig = true
+                ignoreFailures = true
+            }
+        """.trimIndent()
 
         private val gradleRunner = builder.withDetektConfig(config).build()
         private val result = gradleRunner.runDetektTask()
@@ -514,12 +500,11 @@ class DetektTaskDslSpec {
 
     @Nested
     inner class `with an additional plugin` {
-        @Suppress("TrimMultilineRawString")
         private val config = """
-                |dependencies {
-                |   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$defaultDetektVersion")
-                |}
-            """
+            dependencies {
+               detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$defaultDetektVersion")
+            }
+        """.trimIndent()
         private val builder = kotlin().dryRun()
         private val gradleRunner = builder.withDetektConfig(config).build()
         private val result = gradleRunner.runTasks("dependencies", "--configuration", "detektPlugins")
@@ -539,12 +524,11 @@ class DetektTaskDslSpec {
     inner class `with a custom tool version` {
         val customVersion = "1.0.0.RC8"
 
-        @Suppress("TrimMultilineRawString")
         private val config = """
-                |detekt {
-                |    toolVersion = "$customVersion"
-                |}
-            """
+            detekt {
+                toolVersion = "$customVersion"
+            }
+        """.trimIndent()
         private val builder = kotlin().dryRun()
         private val gradleRunner = builder.withDetektConfig(config).build()
         private val result = gradleRunner.runTasks("dependencies", "--offline", "--configuration", "detekt")
@@ -564,37 +548,36 @@ class DetektTaskDslSpec {
     inner class `and creating a custom task` {
         private val builder = kotlin().dryRun()
 
-        @Suppress("TrimMultilineRawString")
         private val config = """
-                |task<io.gitlab.arturbosch.detekt.Detekt>("myDetekt") {
-                |    description = "Runs a custom detekt build."
-                |
-                |    setSource(files("${"$"}projectDir"))
-                |    setIncludes(listOf("**/*.kt", "**/*.kts"))
-                |    setExcludes(listOf("build/"))
-                |    config.setFrom(files("config.yml"))
-                |    debug = true
-                |    parallel = true
-                |    disableDefaultRuleSets = true
-                |    buildUponDefaultConfig = true
-                |    allRules = false
-                |    ignoreFailures = false
-                |    autoCorrect = false
-                |    reports {
-                |        xml {
-                |            enabled = true
-                |            destination = file("build/reports/mydetekt.xml")
-                |        }
-                |        html.destination = file("build/reports/mydetekt.html")
-                |        txt.destination = file("build/reports/mydetekt.txt")
-                |        sarif {
-                |            enabled = true
-                |            destination = file("build/reports/mydetekt.sarif")
-                |        }
-                |    }
-                |    basePath = projectDir.toString()
-                |}
-            """
+            task<io.gitlab.arturbosch.detekt.Detekt>("myDetekt") {
+                description = "Runs a custom detekt build."
+            
+                setSource(files("${"$"}projectDir"))
+                setIncludes(listOf("**/*.kt", "**/*.kts"))
+                setExcludes(listOf("build/"))
+                config.setFrom(files("config.yml"))
+                debug = true
+                parallel = true
+                disableDefaultRuleSets = true
+                buildUponDefaultConfig = true
+                allRules = false
+                ignoreFailures = false
+                autoCorrect = false
+                reports {
+                    xml {
+                        enabled = true
+                        destination = file("build/reports/mydetekt.xml")
+                    }
+                    html.destination = file("build/reports/mydetekt.html")
+                    txt.destination = file("build/reports/mydetekt.txt")
+                    sarif {
+                        enabled = true
+                        destination = file("build/reports/mydetekt.sarif")
+                    }
+                }
+                basePath = projectDir.toString()
+            }
+        """.trimIndent()
 
         private val gradleRunner = builder
             .withDetektConfig(config)
