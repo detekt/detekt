@@ -323,11 +323,11 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
         ) {
             val ktFile = compileContentForTest(
                 """
-                package io.github.detekt
+                    package io.github.detekt
 
-                $classSignature {
-                    $functionSignature {}
-                }
+                    $classSignature {
+                        $functionSignature {}
+                    }
                 """.trimIndent()
             )
             val bindingContext = env.getContextForPaths(listOf(ktFile))
