@@ -777,6 +777,19 @@ class MagicNumberSpec {
                 assertThat(rule.lint(code)).isEmpty()
             }
         }
+
+        @Test
+        fun `in constructor invocation with complex expression`() {
+            val rule = MagicNumber(TestConfig(IGNORE_NAMED_ARGUMENT to "true"))
+            val code = """
+                data class Image(val size: Float)
+                val a = Image(
+                  size = if (true) 1f else 0.6f
+                )
+            """.trimIndent()
+
+            assertThat(rule.compileAndLint(code)).isEmpty()
+        }
     }
 
     @Nested
