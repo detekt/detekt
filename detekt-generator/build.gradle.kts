@@ -35,7 +35,6 @@ val ruleModules = rootProject.subprojects
 
 val generateDocumentation by tasks.registering(JavaExec::class) {
     dependsOn(
-        tasks.shadowJar,
         ":detekt-api:dokkaHtml",
         ":detekt-rules-libraries:sourcesJar",
         ":detekt-rules-ruleauthors:sourcesJar",
@@ -48,7 +47,6 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         fileTree("$rootDir/detekt-rules-libraries/src/main/kotlin"),
         fileTree("$rootDir/detekt-rules-ruleauthors/src/main/kotlin"),
         fileTree("$rootDir/detekt-formatting/src/main/kotlin"),
-        file("$rootDir/detekt-generator/build/libs/detekt-generator-${Versions.DETEKT}-all.jar"),
     )
 
     outputs.files(
