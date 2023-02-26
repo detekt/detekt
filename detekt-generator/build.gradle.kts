@@ -28,7 +28,7 @@ val librariesConfigFile = "$rootDir/detekt-rules-libraries/src/main/resources/co
 val ruleauthorsConfigFile = "$rootDir/detekt-rules-ruleauthors/src/main/resources/config/config.yml"
 
 val ruleModules = rootProject.subprojects
-    .filter { "rules" in it.name }
+    .filter { "rules" in it.name || it.name == "detekt-formatting" }
     .map { it.name }
     .filterNot { it == "detekt-rules" }
     .map { "$rootDir/$it/src/main/kotlin" }
@@ -42,12 +42,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
     group = "documentation"
 
-    inputs.files(
-        ruleModules.map { fileTree(it) },
-        fileTree("$rootDir/detekt-rules-libraries/src/main/kotlin"),
-        fileTree("$rootDir/detekt-rules-ruleauthors/src/main/kotlin"),
-        fileTree("$rootDir/detekt-formatting/src/main/kotlin"),
-    )
+    inputs.files(ruleModules.map { fileTree(it) })
 
     outputs.files(
         fileTree(documentationDir),
@@ -67,11 +62,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     mainClass.set("io.gitlab.arturbosch.detekt.generator.Main")
     args = listOf(
         "--input",
-        ruleModules
-            .plus("$rootDir/detekt-rules-libraries/src/main/kotlin")
-            .plus("$rootDir/detekt-rules-ruleauthors/src/main/kotlin")
-            .plus("$rootDir/detekt-formatting/src/main/kotlin")
-            .joinToString(","),
+        ruleModules.joinToString(","),
         "--documentation",
         documentationDir,
         "--config",
