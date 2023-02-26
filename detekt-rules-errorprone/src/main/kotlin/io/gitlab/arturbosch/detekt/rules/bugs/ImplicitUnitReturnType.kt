@@ -54,7 +54,6 @@ class ImplicitUnitReturnType(config: Config) : Rule(config) {
     @Configuration("if functions with explicit 'Unit' return type should be allowed")
     private val allowExplicitReturnType: Boolean by config(true)
 
-    @Suppress("ReturnCount")
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
 

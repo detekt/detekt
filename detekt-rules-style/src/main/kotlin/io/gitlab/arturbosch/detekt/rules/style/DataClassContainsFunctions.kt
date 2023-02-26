@@ -52,7 +52,6 @@ class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
         super.visitClass(klass)
     }
 
-    @Suppress("ReturnCount")
     private fun checkFunction(klass: KtClass, function: KtNamedFunction) {
         if (function.isOverride()) return
 

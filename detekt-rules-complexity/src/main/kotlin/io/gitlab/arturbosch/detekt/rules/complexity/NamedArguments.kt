@@ -58,7 +58,6 @@ class NamedArguments(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    @Suppress("ReturnCount")
     private fun KtCallExpression.canNameArguments(): Boolean {
         val resolvedCall = getResolvedCall(bindingContext) ?: return false
         if (!resolvedCall.candidateDescriptor.hasStableParameterNames()) return false

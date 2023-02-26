@@ -46,7 +46,6 @@ class CouldBeSequence(config: Config = Config.empty) : Rule(config) {
 
     private var visitedCallExpressions = mutableListOf<KtExpression>()
 
-    @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
