@@ -27,12 +27,6 @@ val formattingConfigFile = "$rootDir/detekt-formatting/src/main/resources/config
 val librariesConfigFile = "$rootDir/detekt-rules-libraries/src/main/resources/config/config.yml"
 val ruleauthorsConfigFile = "$rootDir/detekt-rules-ruleauthors/src/main/resources/config/config.yml"
 
-val ruleModules = rootProject.subprojects
-    .filter { "rules" in it.name || it.name == "detekt-formatting" }
-    .map { it.name }
-    .filterNot { it == "detekt-rules" }
-    .map { "$rootDir/$it/src/main/kotlin" }
-
 val generateDocumentation by tasks.registering(JavaExec::class) {
     dependsOn(
         ":detekt-api:dokkaHtml",
@@ -41,6 +35,12 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     )
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
     group = "documentation"
+
+    val ruleModules = rootProject.subprojects
+        .filter { "rules" in it.name || it.name == "detekt-formatting" }
+        .map { it.name }
+        .filterNot { it == "detekt-rules" }
+        .map { "$rootDir/$it/src/main/kotlin" }
 
     inputs.files(ruleModules.map { fileTree(it) })
 
