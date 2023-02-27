@@ -196,7 +196,7 @@ class DetektTaskMultiModuleSpec {
 
         val detektConfig: String = """
             detekt {
-                source = files(
+                source.setFrom(
                    "${"$"}projectDir/src",
                    "${"$"}projectDir/child1/src",
                    "${"$"}projectDir/child2/src"
