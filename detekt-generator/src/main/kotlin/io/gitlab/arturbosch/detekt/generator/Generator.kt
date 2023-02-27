@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.generator
 
 import io.github.detekt.parser.KtCompiler
 import io.gitlab.arturbosch.detekt.generator.collection.DetektCollector
-import io.gitlab.arturbosch.detekt.generator.printer.CliOptionsPrinter
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.PrintStream
 import java.nio.file.Files
@@ -17,7 +16,6 @@ class Generator(
 ) {
     private val collector = DetektCollector(arguments.textReplacements)
     private val printer = DetektPrinter(arguments)
-    private val cliOptionsPrinter = CliOptionsPrinter()
 
     private fun parseAll(parser: KtCompiler, root: Path): Collection<KtFile> =
         Files.walk(root)
@@ -35,8 +33,6 @@ class Generator(
             ktFiles.forEach(collector::visit)
 
             printer.print(collector.items)
-
-            cliOptionsPrinter.print(arguments.cliOptionsPath)
         }
 
         outPrinter.println("\nGenerated all detekt documentation in $time ms.")
