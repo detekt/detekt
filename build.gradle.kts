@@ -1,3 +1,4 @@
+import com.gradle.enterprise.gradleplugin.testretry.retry
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
@@ -19,7 +20,7 @@ allprojects {
     apply(plugin = "io.gitlab.arturbosch.detekt")
 
     detekt {
-        source = objects.fileCollection().from(
+        source.setFrom(
             io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_SRC_DIR_JAVA,
             io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_TEST_SRC_DIR_JAVA,
             io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_SRC_DIR_KOTLIN,
@@ -58,8 +59,15 @@ allprojects {
 
 subprojects {
     tasks.withType<Test>().configureEach {
+        retry {
+            @Suppress("MagicNumber")
+            if (System.getenv().containsKey("CI")) {
+                maxRetries.set(3)
+                maxFailures.set(20)
+            }
+        }
         predictiveSelection {
-            enabled.set(System.getenv("CI") == null)
+            enabled.set(providers.gradleProperty("enablePTS").map(String::toBooleanStrict))
         }
     }
 }

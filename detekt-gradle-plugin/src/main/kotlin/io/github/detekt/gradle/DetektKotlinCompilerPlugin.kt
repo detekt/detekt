@@ -41,7 +41,7 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
         val defaultConfigFile =
             target.file("${target.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
         if (defaultConfigFile.exists()) {
-            extension.config = target.files(defaultConfigFile)
+            extension.config.setFrom(target.files(defaultConfigFile))
         }
 
         target.configurations.maybeCreate(CONFIGURATION_DETEKT_PLUGINS).apply {

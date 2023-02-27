@@ -109,10 +109,8 @@ class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    @Suppress("ReturnCount")
     private fun KtLambdaArgument.isSuspendAllowedLambdaArgument(): Boolean {
-        val callExpression = this.getParentOfType<KtCallExpression>(true)
-        val callDescriptor = callExpression?.getResolvedCall(bindingContext) ?: return false
+        val callDescriptor = getParentOfType<KtCallExpression>(true)?.getResolvedCall(bindingContext) ?: return false
         val functionDescriptor = callDescriptor.resultingDescriptor as? FunctionDescriptor ?: return false
         val valueParameterDescriptor = callDescriptor.getParameterForArgument(this) ?: return false
 

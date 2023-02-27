@@ -25,7 +25,7 @@ class DetektPlugin : Plugin<Project> {
         val defaultConfigFile =
             project.file("${project.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
         if (defaultConfigFile.exists()) {
-            extension.config = project.files(defaultConfigFile)
+            extension.config.setFrom(project.files(defaultConfigFile))
         }
 
         configurePluginDependencies(project, extension)

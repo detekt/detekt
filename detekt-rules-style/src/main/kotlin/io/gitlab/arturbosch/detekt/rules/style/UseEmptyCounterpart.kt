@@ -43,7 +43,6 @@ class UseEmptyCounterpart(config: Config) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 

@@ -815,6 +815,21 @@ class IgnoredReturnValueSpec {
         }
 
         @Test
+        fun `reports when a single function inside main is not annotated - #5806`() {
+            val code = """
+                fun main() {
+                    ignoredReturn()
+                }
+                
+                fun ignoredReturn(): String = "asd"
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasStartSourceLocation(2, 5)
+            assertThat(findings[0]).hasMessage("The call ignoredReturn is returning a value that is ignored.")
+        }
+
+        @Test
         fun `reports when a function returns type that should not be ignored`() {
             val code = """
                 import kotlinx.coroutines.flow.MutableStateFlow

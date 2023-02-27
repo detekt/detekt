@@ -64,14 +64,12 @@ class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
     )
     private val allowForUnclearPrecedence: Boolean by config(defaultValue = false)
 
-    @Suppress("ReturnCount")
     override fun visitParenthesizedExpression(expression: KtParenthesizedExpression) {
         super.visitParenthesizedExpression(expression)
 
         val inner = expression.expression ?: return
-        val outer = expression.parent
 
-        if (outer is KtDelegatedSuperTypeEntry) return
+        if (expression.parent is KtDelegatedSuperTypeEntry) return
 
         if (!KtPsiUtil.areParenthesesUseless(expression)) return
 
