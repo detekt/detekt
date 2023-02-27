@@ -27,7 +27,7 @@ detekt {
     source.from("src/functionalTest/kotlin")
     buildUponDefaultConfig = true
     baseline = file("config/gradle-plugin-baseline.xml")
-    config = files("config/gradle-plugin-detekt.yml")
+    config.setFrom("config/gradle-plugin-detekt.yml")
 }
 
 testing {
