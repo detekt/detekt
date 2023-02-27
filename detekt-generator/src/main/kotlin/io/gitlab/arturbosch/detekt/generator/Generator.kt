@@ -17,13 +17,6 @@ class Generator(
     private val collector = DetektCollector(arguments.textReplacements)
     private val printer = DetektPrinter(arguments.documentationPath, arguments.configPath)
 
-    private fun parseAll(parser: KtCompiler, root: Path): Collection<KtFile> =
-        Files.walk(root)
-            .asSequence()
-            .filter { it.extension == "kt" }
-            .map { parser.compile(root, it) }
-            .toList()
-
     fun execute() {
         val parser = KtCompiler()
         val time = measureTimeMillis {
@@ -58,3 +51,10 @@ class Generator(
         outPrinter.println("\nGenerated custom rules config in $time ms.")
     }
 }
+
+private fun parseAll(parser: KtCompiler, root: Path): Collection<KtFile> =
+    Files.walk(root)
+        .asSequence()
+        .filter { it.extension == "kt" }
+        .map { parser.compile(root, it) }
+        .toList()
