@@ -59,7 +59,7 @@ allprojects {
 subprojects {
     tasks.withType<Test>().configureEach {
         predictiveSelection {
-            enabled.set(System.getenv("CI") == null)
+            enabled.set(providers.gradleProperty("enablePTS").map(String::toBooleanStrict))
         }
     }
 }

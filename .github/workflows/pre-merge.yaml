@@ -40,7 +40,7 @@ jobs:
       - name: Build detekt
         uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f # v2
         with:
-          arguments: build -x detekt publishToMavenLocal
+          arguments: build -x detekt publishToMavenLocal -PenablePTS=${{ github.event_name == 'pull_request' }}
 
       - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3
         with:
