@@ -55,7 +55,6 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Suppress("ReturnCount")
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)
 
