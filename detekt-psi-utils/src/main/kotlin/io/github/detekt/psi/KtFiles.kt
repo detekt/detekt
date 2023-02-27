@@ -10,9 +10,9 @@ import java.nio.file.Paths
 
 const val KOTLIN_SUFFIX = ".kt"
 const val KOTLIN_SCRIPT_SUFFIX = ".kts"
-const val KOTLIN_KMP_COMMON_SUFFIX = ".common.kt"
+private const val KOTLIN_KMP_COMMON_SUFFIX = ".common.kt"
 
-val KOTLIN_FILE_SUFFIXES = arrayOf(
+private val KOTLIN_FILE_SUFFIXES = arrayOf(
     KOTLIN_KMP_COMMON_SUFFIX,
     KOTLIN_SUFFIX,
     KOTLIN_SCRIPT_SUFFIX
@@ -23,7 +23,7 @@ val PsiFile.fileName: String
 
 /**
  * Removes kotlin specific file name suffixes, e.g. .kt.
- * Note, will note remove other possible/knowb file suffixes like .java
+ * Note, will not remove other possible/known file suffixes like '.java'
  */
 fun PsiFile.fileNameWithoutSuffix(): String {
     val fileName = this.fileName
