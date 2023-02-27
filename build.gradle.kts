@@ -1,3 +1,4 @@
+import com.gradle.enterprise.gradleplugin.testretry.retry
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
@@ -58,6 +59,13 @@ allprojects {
 
 subprojects {
     tasks.withType<Test>().configureEach {
+        retry {
+            @Suppress("MagicNumber")
+            if (System.getenv().containsKey("CI")) {
+                maxRetries.set(3)
+                maxFailures.set(20)
+            }
+        }
         predictiveSelection {
             enabled.set(providers.gradleProperty("enablePTS").map(String::toBooleanStrict))
         }
