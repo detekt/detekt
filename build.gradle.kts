@@ -9,7 +9,7 @@ plugins {
 }
 
 val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {
-    output.set(rootProject.layout.buildDirectory.file("reports/detekt/merge.sarif"))
+    output.set(layout.buildDirectory.file("reports/detekt/merge.sarif"))
 }
 
 allprojects {
@@ -45,7 +45,7 @@ allprojects {
             sarif.required.set(true)
             md.required.set(true)
         }
-        basePath = rootProject.projectDir.absolutePath
+        basePath = rootDir.absolutePath
         finalizedBy(detektReportMergeSarif)
     }
     detektReportMergeSarif {
