@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   fossa-scan:
-    if: ${{ github.repository == 'detekt/detekt' }}
+    if: github.repository == 'detekt/detekt'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
