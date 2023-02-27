@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.generator.printer.DeprecatedPrinter
 import io.gitlab.arturbosch.detekt.generator.printer.RuleSetPagePrinter
 import io.gitlab.arturbosch.detekt.generator.printer.defaultconfig.ConfigPrinter
 import io.gitlab.arturbosch.detekt.generator.printer.defaultconfig.printRuleSetPage
+import java.nio.file.Path
 import kotlin.io.path.Path
 
 class DetektPrinter(private val arguments: GeneratorArgs) {
@@ -50,8 +51,8 @@ class DetektPrinter(private val arguments: GeneratorArgs) {
         }
     }
 
-    fun printCustomRuleConfig(pages: List<RuleSetPage>, folder: String) {
-        yamlWriter.write(Path(folder), "config") {
+    fun printCustomRuleConfig(pages: List<RuleSetPage>, folder: Path) {
+        yamlWriter.write(folder, "config") {
             ConfigPrinter.printCustomRuleConfig(pages)
         }
     }
