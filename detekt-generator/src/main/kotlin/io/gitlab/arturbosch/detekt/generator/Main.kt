@@ -17,13 +17,13 @@ fun main(args: Array<String>) {
         exitProcess(0)
     }
 
-    if (options.generateCustomRuleConfig) {
-        Generator(options).executeCustomRuleConfig()
-        return
-    }
-
     require(options.documentationPath.isDirectory()) { "Documentation path must be a directory." }
     require(options.configPath.isDirectory()) { "Config path must be a directory." }
 
-    Generator(options).execute()
+    val generator = Generator(options)
+    if (options.generateCustomRuleConfig) {
+        generator.executeCustomRuleConfig()
+    } else {
+        generator.execute()
+    }
 }
