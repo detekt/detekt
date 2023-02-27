@@ -22,6 +22,7 @@ object DeprecatedPrinter : DocumentationPrinter<List<RuleSetPage>> {
             }
         }
             .plus(migratedRules())
+            .sorted()
             .joinToString("\n", postfix = "\n")
     }
 }

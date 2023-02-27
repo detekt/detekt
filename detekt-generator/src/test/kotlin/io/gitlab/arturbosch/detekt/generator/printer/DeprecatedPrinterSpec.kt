@@ -15,6 +15,7 @@ class DeprecatedPrinterSpec {
             "style>DuplicateCaseInWhenExpression=is deprecated",
         )
             .plus(migratedRules())
+            .sorted()
             .joinToString("\n", postfix = "\n")
 
         assertThat(propertiesString).isEqualTo(expectedPropertiesString)
