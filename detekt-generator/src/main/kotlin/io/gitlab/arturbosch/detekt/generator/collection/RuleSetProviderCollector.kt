@@ -39,8 +39,10 @@ class RuleSetProviderCollector : Collector<RuleSetProvider> {
 
 private const val PROPERTY_RULE_SET_ID = "ruleSetId"
 
-private val SUPPORTED_PROVIDERS =
-    setOf(RuleSetProvider::class.simpleName, DefaultRuleSetProvider::class.simpleName)
+private val SUPPORTED_PROVIDERS = setOf(
+    io.gitlab.arturbosch.detekt.api.RuleSetProvider::class.simpleName,
+    DefaultRuleSetProvider::class.simpleName,
+)
 
 private class RuleSetProviderVisitor : DetektVisitor() {
     var containsRuleSetProvider = false
