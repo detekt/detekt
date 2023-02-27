@@ -10,11 +10,9 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-import org.jetbrains.kotlin.builtins.StandardNames
-import org.jetbrains.kotlin.psi.KtExpression
+import io.gitlab.arturbosch.detekt.rules.hasImplicitUnitReturnType
+import io.gitlab.arturbosch.detekt.rules.isUnitExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.types.typeUtil.isUnit
 
 /**
  * Functions using expression statements have an implicit return type.
@@ -66,7 +64,7 @@ class ImplicitUnitReturnType(config: Config) : Rule(config) {
             return
         }
 
-        if (function.hasImplicitUnitReturnType()) {
+        if (function.hasImplicitUnitReturnType(bindingContext)) {
             val message = buildString {
                 append("'${function.name}'  has the implicit return type 'Unit'.")
                 append(" Prefer using a block statement")
@@ -84,9 +82,4 @@ class ImplicitUnitReturnType(config: Config) : Rule(config) {
             )
         }
     }
-
-    private fun KtExpression.isUnitExpression() = text == StandardNames.FqNames.unit.shortName().asString()
-
-    private fun KtNamedFunction.hasImplicitUnitReturnType() =
-        bodyExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType?.isUnit() == true
 }
