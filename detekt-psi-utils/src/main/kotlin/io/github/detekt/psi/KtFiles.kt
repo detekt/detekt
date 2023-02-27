@@ -8,16 +8,24 @@ import java.io.File
 import java.nio.file.Path
 import java.nio.file.Paths
 
+const val KOTLIN_SUFFIX = ".kt"
+const val KOTLIN_SCRIPT_SUFFIX = ".kts"
+const val KOTLIN_KMP_COMMON_SUFFIX = ".common.kts"
+
 val KOTLIN_FILE_SUFFIXES = arrayOf(
-    ".common.kt", // KMP file in common module
-    ".kt", // normal kotlin file
-    ".kts", // kotlin-script file
+    KOTLIN_KMP_COMMON_SUFFIX,
+    KOTLIN_SUFFIX,
+    KOTLIN_SCRIPT_SUFFIX
 )
 
 val PsiFile.fileName: String
     get() = name.substringAfterLast(File.separatorChar)
 
-fun PsiFile.fileNameWithoutKotlinSuffix(): String {
+/**
+ * Removes kotlin specific file name suffixes, e.g. .kt.
+ * Note, will note remove other possible/knowb file suffixes like .java
+ */
+fun PsiFile.fileNameWithoutSuffix(): String {
     val fileName = this.fileName
     for (suffix in KOTLIN_FILE_SUFFIXES) {
         if (fileName.endsWith(suffix)) {

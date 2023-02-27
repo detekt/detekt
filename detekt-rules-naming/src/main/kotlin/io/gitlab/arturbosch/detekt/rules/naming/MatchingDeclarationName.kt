@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.github.detekt.psi.fileNameWithoutKotlinSuffix
+import io.github.detekt.psi.fileNameWithoutSuffix
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -77,7 +77,7 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
         if (declarations.size == 1 && matchesFirstClassOrObjectCondition()) {
             val declaration = declarations.first()
             val declarationName = declaration.name
-            val filename = file.fileNameWithoutKotlinSuffix()
+            val filename = file.fileNameWithoutSuffix()
             if (declarationName != filename && hasNoMatchingTypeAlias(filename)) {
                 val entity = Entity.atName(declaration).copy(ktElement = file)
                 report(
