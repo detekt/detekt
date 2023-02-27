@@ -42,7 +42,7 @@ private const val PROPERTY_RULE_SET_ID = "ruleSetId"
 private val SUPPORTED_PROVIDERS =
     setOf(RuleSetProvider::class.simpleName, DefaultRuleSetProvider::class.simpleName)
 
-class RuleSetProviderVisitor : DetektVisitor() {
+private class RuleSetProviderVisitor : DetektVisitor() {
     var containsRuleSetProvider = false
     private var name: String = ""
     private var description: String = ""
