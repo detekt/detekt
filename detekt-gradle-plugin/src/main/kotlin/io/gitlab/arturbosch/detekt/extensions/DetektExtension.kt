@@ -34,6 +34,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
     val reports: DetektReports = objects.newInstance(DetektReports::class.java)
 
     @Deprecated(message = "Please use the source property instead.", replaceWith = ReplaceWith("source"))
+    @Suppress("DoubleMutabilityForCollection")
     var input: ConfigurableFileCollection
         get() = source
         set(value) {
@@ -41,6 +42,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
             source = value
         }
 
+    @Suppress("DoubleMutabilityForCollection")
     var source: ConfigurableFileCollection = objects.fileCollection()
         .from(
             DEFAULT_SRC_DIR_JAVA,
@@ -64,6 +66,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
     val enableCompilerPlugin: Property<Boolean> =
         objects.property(Boolean::class.java).convention(DEFAULT_COMPILER_PLUGIN_ENABLED)
 
+    @Suppress("DoubleMutabilityForCollection")
     var config: ConfigurableFileCollection = objects.fileCollection()
         @Deprecated("Setter will be removed in a future release. Use `from` or `setFrom` instead.")
         set(value) {
