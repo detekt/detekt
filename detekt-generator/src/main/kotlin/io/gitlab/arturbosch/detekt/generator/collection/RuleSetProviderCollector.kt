@@ -22,7 +22,11 @@ data class RuleSetProvider(
     val defaultActivationStatus: DefaultActivationStatus,
     val rules: List<String> = emptyList(),
     val configuration: List<Configuration> = emptyList()
-)
+) {
+    init {
+        require(name.length > 1) { "Rule set name must be not empty or less than two symbols." }
+    }
+}
 
 class RuleSetProviderCollector : Collector<RuleSetProvider> {
     override val items = mutableListOf<RuleSetProvider>()
