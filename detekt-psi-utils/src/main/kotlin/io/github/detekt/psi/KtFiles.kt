@@ -10,7 +10,7 @@ import java.nio.file.Paths
 
 const val KOTLIN_SUFFIX = ".kt"
 const val KOTLIN_SCRIPT_SUFFIX = ".kts"
-const val KOTLIN_KMP_COMMON_SUFFIX = ".common.kts"
+const val KOTLIN_KMP_COMMON_SUFFIX = ".common.kt"
 
 val KOTLIN_FILE_SUFFIXES = arrayOf(
     KOTLIN_KMP_COMMON_SUFFIX,
