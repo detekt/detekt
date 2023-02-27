@@ -27,9 +27,15 @@ val formattingConfigFile = "$rootDir/detekt-formatting/src/main/resources/config
 val librariesConfigFile = "$rootDir/detekt-rules-libraries/src/main/resources/config/config.yml"
 val ruleauthorsConfigFile = "$rootDir/detekt-rules-ruleauthors/src/main/resources/config/config.yml"
 
+tasks.register("generateWebsite") {
+    dependsOn(
+        generateDocumentation,
+        ":detekt-api:dokkaHtml",
+    )
+}
+
 val generateDocumentation by tasks.registering(JavaExec::class) {
     dependsOn(
-        ":detekt-api:dokkaHtml",
         ":detekt-rules-libraries:sourcesJar",
         ":detekt-rules-ruleauthors:sourcesJar",
     )
