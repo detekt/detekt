@@ -48,7 +48,7 @@ githubRelease {
 }
 
 fun updateVersion(increment: (Semver) -> Semver) {
-    val versionsFile = file("${rootProject.rootDir}/build-logic/src/main/kotlin/Versions.kt")
+    val versionsFile = file("$rootDir/build-logic/src/main/kotlin/Versions.kt")
     val newContent = versionsFile.readLines()
         .joinToString("\n") {
             if (it.contains("const val DETEKT: String")) {
@@ -69,7 +69,7 @@ tasks {
     register("incrementMajor") { doLast { updateVersion { it.nextMajor() } } }
 
     register<UpdateVersionInFileTask>("applyDocVersion") {
-        fileToUpdate.set(file("${rootProject.rootDir}/website/src/remark/detektVersionReplace.js"))
+        fileToUpdate.set(file("$rootDir/website/src/remark/detektVersionReplace.js"))
         linePartToFind.set("const detektVersion = ")
         lineTransformation.set("const detektVersion = \"${Versions.DETEKT}\";")
     }
