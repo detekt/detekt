@@ -8,18 +8,23 @@ import java.io.File
 import java.nio.file.Path
 import java.nio.file.Paths
 
-const val KOTLIN_SUFFIX = ".kt"
-const val KOTLIN_SCRIPT_SUFFIX = ".kts"
+val KOTLIN_FILE_SUFFIXES = arrayOf(
+    ".common.kt", // KMP file in common module
+    ".kt", // normal kotlin file
+    ".kts", // kotlin-script file
+)
 
 val PsiFile.fileName: String
     get() = name.substringAfterLast(File.separatorChar)
 
-fun PsiFile.fileNameWithoutSuffix(): String {
+fun PsiFile.fileNameWithoutKotlinSuffix(): String {
     val fileName = this.fileName
-    if (fileName.endsWith(KOTLIN_SCRIPT_SUFFIX)) {
-        return fileName.removeSuffix(KOTLIN_SCRIPT_SUFFIX)
+    for (suffix in KOTLIN_FILE_SUFFIXES) {
+        if (fileName.endsWith(suffix)) {
+            return fileName.removeSuffix(suffix)
+        }
     }
-    return fileName.removeSuffix(KOTLIN_SUFFIX)
+    return fileName
 }
 
 fun PsiFile.absolutePath(): Path = Paths.get(name)
@@ -66,6 +71,7 @@ fun PsiFile.toFilePath(): FilePath {
             basePath = basePath,
             relativePath = relativePath
         )
+
         basePath == null && relativePath == null -> FilePath(absolutePath = absolutePath())
         else -> error("Cannot build a FilePath from base path = $basePath and relative path = $relativePath")
     }

@@ -123,6 +123,13 @@ class MatchingDeclarationNameSpec {
             val findings = MatchingDeclarationName().lint(ktFile)
             assertThat(findings).isEmpty()
         }
+
+        @Test
+        fun `should pass for class declaration and name with common suffix`() {
+            val ktFile = compileContentForTest("class C", filename = "C.common.kt")
+            val findings = MatchingDeclarationName().lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
     }
 
     @Nested
