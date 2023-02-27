@@ -11,16 +11,19 @@ import kotlin.streams.asSequence
 import kotlin.system.measureTimeMillis
 
 class Generator(
-    private val arguments: GeneratorArgs,
+    private val inputPaths: List<Path>,
+    private val textReplacements: Map<String, String>,
+    documentationPath: Path,
+    configPath: Path,
     private val outPrinter: PrintStream = System.out
 ) {
-    private val collector = DetektCollector(arguments.textReplacements)
-    private val printer = DetektPrinter(arguments.documentationPath, arguments.configPath)
+    private val collector = DetektCollector(textReplacements)
+    private val printer = DetektPrinter(documentationPath, configPath)
 
     fun execute() {
         val parser = KtCompiler()
         val time = measureTimeMillis {
-            val ktFiles = arguments.inputPath
+            val ktFiles = inputPaths
                 .flatMap { parseAll(parser, it) }
 
             ktFiles.forEach(collector::visit)
@@ -34,10 +37,10 @@ class Generator(
     fun executeCustomRuleConfig() {
         val parser = KtCompiler()
         val time = measureTimeMillis {
-            arguments.inputPath
+            inputPaths
                 .map { parseAll(parser, it.resolve("src/main/kotlin/")) to it }
                 .forEach { (list: Collection<KtFile>, folder: Path) ->
-                    val collector = DetektCollector(arguments.textReplacements)
+                    val collector = DetektCollector(textReplacements)
                     list.forEach { file ->
                         collector.visit(file)
                     }

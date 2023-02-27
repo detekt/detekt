@@ -20,7 +20,12 @@ fun main(args: Array<String>) {
     require(options.documentationPath.isDirectory()) { "Documentation path must be a directory." }
     require(options.configPath.isDirectory()) { "Config path must be a directory." }
 
-    val generator = Generator(options)
+    val generator = Generator(
+        inputPaths = options.inputPath,
+        textReplacements = options.textReplacements,
+        documentationPath = options.documentationPath,
+        configPath = options.configPath,
+    )
     if (options.generateCustomRuleConfig) {
         generator.executeCustomRuleConfig()
     } else {
