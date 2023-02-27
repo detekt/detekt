@@ -37,6 +37,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
     var input: ConfigurableFileCollection
         get() = source
         set(value) {
+            @Suppress("DEPRECATION")
             source = value
         }
 
@@ -47,6 +48,10 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
             DEFAULT_SRC_DIR_KOTLIN,
             DEFAULT_TEST_SRC_DIR_KOTLIN,
         )
+        @Deprecated("Setter will be removed in a future release. Use `from` or `setFrom` instead.")
+        set(value) {
+            field = value
+        }
 
     var baseline: File? = objects
         .fileProperty()
@@ -60,6 +65,10 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
         objects.property(Boolean::class.java).convention(DEFAULT_COMPILER_PLUGIN_ENABLED)
 
     var config: ConfigurableFileCollection = objects.fileCollection()
+        @Deprecated("Setter will be removed in a future release. Use `from` or `setFrom` instead.")
+        set(value) {
+            field = value
+        }
 
     var debug: Boolean = DEFAULT_DEBUG_VALUE
 
