@@ -15,7 +15,7 @@ class Generator(
     private val outPrinter: PrintStream = System.out
 ) {
     private val collector = DetektCollector(arguments.textReplacements)
-    private val printer = DetektPrinter(arguments)
+    private val printer = DetektPrinter(arguments.documentationPath, arguments.configPath)
 
     private fun parseAll(parser: KtCompiler, root: Path): Collection<KtFile> =
         Files.walk(root)
