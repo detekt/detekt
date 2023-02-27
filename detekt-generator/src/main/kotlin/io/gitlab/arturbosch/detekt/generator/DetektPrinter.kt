@@ -57,13 +57,13 @@ class DetektPrinter(private val arguments: GeneratorArgs) {
         }
     }
 
-    private fun markdownHeader(ruleSet: String): String {
+    private fun markdownHeader(ruleSetName: String): String {
         return """
             ---
-            title: ${ruleSet[0].uppercaseChar()}${ruleSet.substring(1)} Rule Set
+            title: ${ruleSetName[0].uppercaseChar()}${ruleSetName.substring(1)} Rule Set
             sidebar: home_sidebar
-            keywords: [rules, $ruleSet]
-            permalink: $ruleSet.html
+            keywords: [rules, $ruleSetName]
+            permalink: $ruleSetName.html
             toc: true
             folder: documentation
             ---
