@@ -28,7 +28,7 @@ android-gradle-minSupported = "com.android.tools.build:gradle:7.0.0"
 
 # This version of AGP is used for testing and should be updated when new AGP versions are released to ensure detekt's
 # Gradle plugin remains compatible.
-android-gradle-maxSupported = "com.android.tools.build:gradle:7.4.1"
+android-gradle-maxSupported = "com.android.tools.build:gradle:7.4.2"
 
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktlint" }
 ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint" }
