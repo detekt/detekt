@@ -73,13 +73,19 @@ val unzipKotlinCompiler by tasks.registering(Copy::class) {
 }
 
 val testPluginKotlinc by tasks.registering(Task::class) {
-    dependsOn(unzipKotlinCompiler, tasks.shadowJar)
+    val outputDir = layout.buildDirectory.dir("tmp/kotlinc")
+
+    inputs.dir(unzipKotlinCompiler.map { it.destinationDir })
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.file(tasks.shadowJar.map { it.archiveFile })
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    outputs.dir(outputDir)
 
     val baseExecutablePath = "${unzipKotlinCompiler.get().destinationDir}/kotlinc/bin/kotlinc"
     val pluginParameters = "plugin:detekt-compiler-plugin:debug=true"
 
     val kotlincExecution = providers.exec {
-        workingDir = file("$buildDir/tmp/kotlinc")
+        workingDir = outputDir.get().asFile
         workingDir.mkdirs()
 
         args = listOf(
