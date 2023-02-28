@@ -4,9 +4,9 @@ import io.github.detekt.tooling.api.Baseline
 import io.github.detekt.tooling.api.FindingId
 import io.github.detekt.tooling.api.FindingsIdList
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.core.exists
-import io.gitlab.arturbosch.detekt.core.isFile
 import java.nio.file.Path
+import kotlin.io.path.exists
+import kotlin.io.path.isRegularFile
 
 internal data class DefaultBaseline(
     override val manuallySuppressedIssues: FindingsIdList,
@@ -20,7 +20,7 @@ internal data class DefaultBaseline(
 
         fun load(baselineFile: Path): Baseline {
             require(baselineFile.exists()) { "Baseline file does not exist." }
-            require(baselineFile.isFile()) { "Baseline file is not a regular file." }
+            require(baselineFile.isRegularFile()) { "Baseline file is not a regular file." }
             return BaselineFormat().read(baselineFile)
         }
     }

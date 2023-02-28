@@ -131,7 +131,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
     fun `only reports on a Kotlin list`() {
         val code = """
             fun String.orEmpty(): List<Char> = this.toCharArray().asList()
-
+            
             val noList = "str".orEmpty()
             val list = listOf(1, 2, 3).orEmpty()
         """.trimIndent()
@@ -227,8 +227,8 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
     fun `does not report when calling custom function named listOfNotNull on all non-nullable arguments`() {
         val code = """
             fun <T : Any> listOfNotNull(vararg elements: T?): List<T> = TODO()
-
-            val strings = listOfNotNull("string", null)                
+            
+            val strings = listOfNotNull("string", null)
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
@@ -250,7 +250,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
     fun `does not report when calling listOfNotNull with values whose type is derived and unknown`() {
         val code = """
             import kotlin.random.Random
-
+            
             fun test() {
                 listOfNotNull(unknown.takeIf { Random.nextBoolean() })
             }
@@ -265,7 +265,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
         val code = """
             fun test(list: List<Int>) {
                 list.isNullOrEmpty()
-            }                
+            }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)

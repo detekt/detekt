@@ -23,8 +23,8 @@ class ExplicitCollectionElementAccessMethodSpec {
             fun `reports map element access with get method`() {
                 val code = """
                     fun f() {
-                        val map = mapOf<String, String>() 
-                        val value = map.get("key") 
+                        val map = mapOf<String, String>()
+                        val value = map.get("key")
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
@@ -34,8 +34,8 @@ class ExplicitCollectionElementAccessMethodSpec {
             fun `does not report safe map element access`() {
                 val code = """
                     fun f() {
-                        val map = mapOf<String, String>() 
-                        val value = map?.get("key") 
+                        val map = mapOf<String, String>()
+                        val value = map?.get("key")
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -45,8 +45,8 @@ class ExplicitCollectionElementAccessMethodSpec {
             fun `reports map set method usage with unused return value`() {
                 val code = """
                     fun f() {
-                        val map = mutableMapOf<String, String>() 
-                        map.set("key", "value") 
+                        val map = mutableMapOf<String, String>()
+                        map.set("key", "value")
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
@@ -57,7 +57,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                 val code = """
                     fun f() {
                         val map = mutableMapOf<String, String>()
-                        map.put("key", "val") 
+                        map.put("key", "val")
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
@@ -67,8 +67,8 @@ class ExplicitCollectionElementAccessMethodSpec {
             fun `does not report map put method usage with variable assignment`() {
                 val code = """
                     fun f() {
-                        val map = mutableMapOf<String, String>() 
-                        val oldValue = map.put("key", "val") 
+                        val map = mutableMapOf<String, String>()
+                        val oldValue = map.put("key", "val")
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -89,8 +89,8 @@ class ExplicitCollectionElementAccessMethodSpec {
             fun `reports map element access with get method of non-abstract map`() {
                 val code = """
                     fun f() {
-                        val map = hashMapOf<String, String>() 
-                        val value = map.get("key") 
+                        val map = hashMapOf<String, String>()
+                        val value = map.get("key")
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
@@ -100,8 +100,8 @@ class ExplicitCollectionElementAccessMethodSpec {
             fun `reports map element insert with put method of non-abstract map`() {
                 val code = """
                     fun f() {
-                        val map = hashMapOf<String, String>() 
-                        map.put("key", "value") 
+                        val map = hashMapOf<String, String>()
+                        map.put("key", "value")
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
@@ -113,7 +113,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                 val code = """
                     fun f() {
                         val map = mapOf<String, String>()
-                        val value = map["key"] 
+                        val value = map["key"]
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -125,7 +125,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                 val code = """
                     fun f() {
                         val map = mutableMapOf<String, String>()
-                        map["key"] = "value" 
+                        map["key"] = "value"
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -147,7 +147,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                 val code = """
                     fun f() {
                         val map = linkedMapOf<String, String>()
-                        val value = map.get("key") 
+                        val value = map.get("key")
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
@@ -171,8 +171,8 @@ class ExplicitCollectionElementAccessMethodSpec {
             fun `reports list element access with get method`() {
                 val code = """
                     fun f() {
-                        val list = listOf<String>() 
-                        val value = list.get(0) 
+                        val list = listOf<String>()
+                        val value = list.get(0)
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
@@ -183,7 +183,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                 val code = """
                     fun f() {
                         val list = mutableListOf<String>()
-                        val value = list.get(0) 
+                        val value = list.get(0)
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
@@ -194,8 +194,8 @@ class ExplicitCollectionElementAccessMethodSpec {
             fun noReportElementAccessWithBrackets() {
                 val code = """
                     fun f() {
-                        val list = listOf<String>() 
-                        val value = list[0] 
+                        val list = listOf<String>()
+                        val value = list[0]
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -205,8 +205,8 @@ class ExplicitCollectionElementAccessMethodSpec {
             fun `reports element access with get method of non-abstract list`() {
                 val code = """
                     fun f() {
-                        val list = arrayListOf<String>() 
-                        val value = list.get(0) 
+                        val list = arrayListOf<String>()
+                        val value = list.get(0)
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
@@ -231,8 +231,8 @@ class ExplicitCollectionElementAccessMethodSpec {
             fun `reports map element access with get method`() {
                 val code = """
                     fun f() {
-                        val map = java.util.HashMap<String, String>() 
-                        val value = map.get("key") 
+                        val map = java.util.HashMap<String, String>()
+                        val value = map.get("key")
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
@@ -242,8 +242,8 @@ class ExplicitCollectionElementAccessMethodSpec {
             fun `reports map set method usage with unused return value`() {
                 val code = """
                     fun f() {
-                        val map = java.util.HashMap<String, String>() 
-                        map.set("key", "val") 
+                        val map = java.util.HashMap<String, String>()
+                        map.set("key", "val")
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
@@ -253,8 +253,8 @@ class ExplicitCollectionElementAccessMethodSpec {
             fun `reports map put method usage with unused return value`() {
                 val code = """
                     fun f() {
-                        val map = java.util.HashMap<String, String>() 
-                        map.put("key", "val") 
+                        val map = java.util.HashMap<String, String>()
+                        map.put("key", "val")
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
@@ -265,8 +265,8 @@ class ExplicitCollectionElementAccessMethodSpec {
             fun noReportMapAccessWithBrackets() {
                 val code = """
                     fun f() {
-                        val map = java.util.HashMap<String, String>() 
-                        val value = map["key"] 
+                        val map = java.util.HashMap<String, String>()
+                        val value = map["key"]
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -277,8 +277,8 @@ class ExplicitCollectionElementAccessMethodSpec {
             fun noReportMapInsertWithBrackets() {
                 val code = """
                     fun f() {
-                        val map = java.util.HashMap<String, String>() 
-                        map["key"] = "value" 
+                        val map = java.util.HashMap<String, String>()
+                        map["key"] = "value"
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -288,8 +288,8 @@ class ExplicitCollectionElementAccessMethodSpec {
             fun `reports map element access with get method from map in a chain`() {
                 val code = """
                     fun f() {
-                        val map = java.util.HashMap<String, String>() 
-                        val value = listOf("1", "2").associateBy { it }.get("1") 
+                        val map = java.util.HashMap<String, String>()
+                        val value = listOf("1", "2").associateBy { it }.get("1")
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
@@ -383,6 +383,104 @@ class ExplicitCollectionElementAccessMethodSpec {
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
+
+            @Nested
+            inner class `with vararg parameter` {
+                @Test
+                fun `does not report with spread operator to spread the vararg`() {
+                    val code = """
+                        class C {
+                            operator fun get(key: String, vararg objects: Int): String = ""
+                        }
+                        fun test(c: C) {
+                            val objects = listOf(0, 1).toIntArray()
+                            c.get("key", *objects)
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                @Test
+                fun `does not report with spread operator to spread the vararg and normal parameter`() {
+                    val code = """
+                        class C {
+                            operator fun get(key: String, vararg objects: Int): String = ""
+                        }
+                        fun test(c: C) {
+                            val objects = listOf(0, 1).toIntArray()
+                            c.get("key", 1, *objects)
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                @Test
+                fun `does not report with spread operator to spread the vararg as key`() {
+                    val code = """
+                        class C {
+                            operator fun get(vararg objects: Int): String = objects.toString()
+                        }
+                        fun test(c: C) {
+                            val objects = listOf(0, 1).toIntArray()
+                            c.get(*objects)
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                @Test
+                fun `does not report with normal parameter and spread operator to spread the vararg`() {
+                    val code = """
+                        class C {
+                            operator fun get(key: String, vararg objects: Int): String = ""
+                        }
+                        fun test(c: C) {
+                            val objects = listOf(0, 1).toIntArray()
+                            c.get("key", *objects, 1)
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                @Test
+                fun `does report with no value is passed for vararg parameter`() {
+                    val code = """
+                        class C {
+                            operator fun get(key: String, vararg objects: Int): String = ""
+                        }
+                        fun test(c: C) {
+                            c.get("key")
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                }
+
+                @Test
+                fun `does report with 1 value is passed for vararg parameter`() {
+                    val code = """
+                        class C {
+                            operator fun get(key: String, vararg objects: Int): String = ""
+                        }
+                        fun test(c: C) {
+                            c.get("key", 1)
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                }
+
+                @Test
+                fun `does report with 1 value is passed for vararg parameter as key`() {
+                    val code = """
+                        class C {
+                            operator fun get(vararg objects: Int): String = objects.toString()
+                        }
+                        fun test(c: C) {
+                            c.get(0)
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                }
+            }
         }
 
         @Nested
@@ -392,8 +490,8 @@ class ExplicitCollectionElementAccessMethodSpec {
             fun `reports list element access with get method`() {
                 val code = """
                     fun f() {
-                        val list = java.util.ArrayList<String>() 
-                        val value = list.get(0) 
+                        val list = java.util.ArrayList<String>()
+                        val value = list.get(0)
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
@@ -404,8 +502,8 @@ class ExplicitCollectionElementAccessMethodSpec {
             fun noReportElementAccessWithBrackets() {
                 val code = """
                     fun f() {
-                        val list = java.util.ArrayList<String>() 
-                        val value = list[0] 
+                        val list = java.util.ArrayList<String>()
+                        val value = list[0]
                     }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -438,10 +536,10 @@ class ExplicitCollectionElementAccessMethodSpec {
             @Test
             fun `does not report for unresolvable code`() {
                 val code = """
-                     fun f() {
-                        val unknownType = UnknownType()
-                        val value = unknownType.put("answer", 42)
-                     }
+                    fun f() {
+                       val unknownType = UnknownType()
+                       val value = unknownType.put("answer", 42)
+                    }
                 """.trimIndent()
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
@@ -466,7 +564,7 @@ class ExplicitCollectionElementAccessMethodSpec {
         fun `does not report setters defined in java which are unlikely to be collection accessors`() {
             val code = """
                 import com.example.fromjava.Rect
-
+                
                 fun foo() {
                     val rect = Rect()
                     rect.set(0, 1)

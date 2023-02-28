@@ -48,7 +48,6 @@ class UseSumOfInsteadOfFlatMapSize(config: Config = Config.empty) : Rule(config)
         Debt.FIVE_MINS
     )
 
-    @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
@@ -66,7 +65,6 @@ class UseSumOfInsteadOfFlatMapSize(config: Config = Config.empty) : Rule(config)
 
     private fun KtCallExpression.isFlatMapOrFlatten(): Boolean = isCalling(flatMapAndFlattenFqName, bindingContext)
 
-    @Suppress("ReturnCount")
     private fun KtExpression.isSizeOrCount(receiver: KtExpression): Boolean {
         if (safeAs<KtNameReferenceExpression>()?.text == "size") {
             val receiverType = receiver.getType(bindingContext) ?: return false

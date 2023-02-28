@@ -9,8 +9,8 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.fileClasses.javaFileFacadeFqName
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
-import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.writeText
 
 class KtFileModifier : FileProcessListener {
 
@@ -19,7 +19,7 @@ class KtFileModifier : FileProcessListener {
             .map { it.absolutePath() to it.unnormalizeContent() }
             .forEach {
                 result.add(ModificationNotification(it.first))
-                Files.write(it.first, it.second.toByteArray())
+                it.first.writeText(it.second)
             }
     }
 

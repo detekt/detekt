@@ -7,10 +7,12 @@ import io.github.detekt.tooling.api.MaxIssuesReached
 import io.github.detekt.tooling.api.UnexpectedError
 import io.github.detekt.tooling.api.exitCode
 import io.github.detekt.tooling.internal.NotApiButProbablyUsedByUsers
+import io.gitlab.arturbosch.detekt.api.internal.whichKotlin
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Executable
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.cli.runners.VersionPrinter
+import org.jetbrains.kotlin.config.KotlinCompilerVersion
 import java.io.PrintStream
 import kotlin.system.exitProcess
 
@@ -50,6 +52,12 @@ fun buildRunner(
     outputPrinter: PrintStream,
     errorPrinter: PrintStream
 ): Executable {
+    check(KotlinCompilerVersion.VERSION == whichKotlin()) {
+        """
+            detekt was compiled with Kotlin ${whichKotlin()} but is currently running with ${KotlinCompilerVersion.VERSION}.
+            This is not supported. See https://detekt.dev/docs/gettingstarted/gradle#dependencies for more information.
+        """.trimIndent()
+    }
     val arguments = parseArguments(args)
     return when {
         arguments.showVersion -> VersionPrinter(outputPrinter)

@@ -46,7 +46,7 @@ class UnsafeCast(config: Config = Config.empty) : Rule(config) {
 
     override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
         if (bindingContext.diagnostics.forElement(expression.operationReference)
-            .any { it.factory == Errors.CAST_NEVER_SUCCEEDS }
+                .any { it.factory == Errors.CAST_NEVER_SUCCEEDS }
         ) {
             report(
                 CodeSmell(

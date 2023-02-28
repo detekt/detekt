@@ -42,7 +42,7 @@ class MultiRuleCollectorSpec {
             class MyRule : MultiRule {
                 val p1 = Rule3()
                 val p2 = Rule4()
-
+            
                 override val rules: List<Rule> = listOf(
                     Rule1(),
                     Rule2(),

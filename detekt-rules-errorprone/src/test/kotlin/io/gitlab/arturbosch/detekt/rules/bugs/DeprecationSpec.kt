@@ -17,11 +17,11 @@ class DeprecationSpec(private val env: KotlinCoreEnvironment) {
             @Deprecated("deprecation message")
             abstract class Foo {
                 abstract fun bar() : Int
-
+            
                 fun baz() {
                 }
             }
-
+            
             abstract class Oof : Foo() {
                 fun spam() {
                 }
@@ -41,7 +41,7 @@ class DeprecationSpec(private val env: KotlinCoreEnvironment) {
             }
             abstract class Foo {
                 abstract fun bar() : Int
-
+            
                 fun baz() {
                 }
             }

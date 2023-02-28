@@ -62,8 +62,9 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
             expression.getFunctionDescriptor()
         } else {
             null
-        }
-        if (getter == null) return false
+        } ?: return false
+
+        if (expression.valueArguments.any { it.isSpread }) return false
 
         return canReplace(getter) && shouldReplace(getter)
     }

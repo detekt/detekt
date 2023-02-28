@@ -150,7 +150,7 @@ class MultilineRawStringIndentationSpec {
         @Test
         fun `raise multiline raw string without indentation`() {
             val code = """
-                val a = 
+                val a =
                     $TQ
                     Hello world!
                     $TQ.trimIndent()
@@ -165,7 +165,7 @@ class MultilineRawStringIndentationSpec {
         @Test
         fun `raise multiline raw strings without indentation`() {
             val code = """
-                val a = 
+                val a =
                     $TQ
                     Hello world!
                     How are you?
@@ -179,7 +179,7 @@ class MultilineRawStringIndentationSpec {
         @Test
         fun `raise multiline raw strings without right indentation`() {
             val code = """
-                val a = 
+                val a =
                     $TQ
                      Hello world!
                         How are you?
@@ -212,7 +212,7 @@ class MultilineRawStringIndentationSpec {
         @Test
         fun `don't raise multiline raw strings if one has correct indentation and the other more`() {
             val code = """
-                val a = 
+                val a =
                     $TQ
                           Hello world!
                         How are you?
@@ -226,7 +226,7 @@ class MultilineRawStringIndentationSpec {
         @Test
         fun `don't raise multiline raw strings if all have the correct indentation`() {
             val code = """
-                val a = 
+                val a =
                     $TQ
                         Hello world!
                         How are you?
@@ -240,7 +240,7 @@ class MultilineRawStringIndentationSpec {
         @Test
         fun `raise multiline raw strings with too much indentation on closing`() {
             val code = """
-                val a = 
+                val a =
                     $TQ
                         Hello world!
                         How are you?
@@ -256,7 +256,7 @@ class MultilineRawStringIndentationSpec {
         @Test
         fun `raise multiline raw strings with too little indentation on closing`() {
             val code = """
-                val a = 
+                val a =
                     $TQ
                         Hello world!
                         How are you?
@@ -340,7 +340,7 @@ class MultilineRawStringIndentationSpec {
                 $TAB)
                 }
             """.trimIndent()
-            val subject = MultilineRawStringIndentation(TestConfig(mapOf("indentSize" to 1)))
+            val subject = MultilineRawStringIndentation(TestConfig("indentSize" to 1))
             subject.compileAndLint(code)
             assertThat(subject.findings).isEmpty()
         }

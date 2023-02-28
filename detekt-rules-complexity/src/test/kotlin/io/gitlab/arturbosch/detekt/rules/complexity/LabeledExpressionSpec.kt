@@ -76,13 +76,13 @@ class LabeledExpressionSpec {
     @Test
     fun `does not report inner class referencing outer class`() {
         val code = """
-        class Outer {
-            inner class Inner {
-                fun f() {
-                    print(this@Outer)
+            class Outer {
+                inner class Inner {
+                    fun f() {
+                        print(this@Outer)
+                    }
                 }
             }
-        }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -90,14 +90,14 @@ class LabeledExpressionSpec {
     @Test
     fun `does not report inner class referencing outer class in extension function`() {
         val code = """
-        class Outer {
-            inner class Inner {
-                fun Int.f() {
-                    print(this@Inner)
-                    print(this@Outer)
+            class Outer {
+                inner class Inner {
+                    fun Int.f() {
+                        print(this@Inner)
+                        print(this@Outer)
+                    }
                 }
             }
-        }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -105,13 +105,13 @@ class LabeledExpressionSpec {
     @Test
     fun `does not report nested class referencing outer class in extension function`() {
         val code = """
-        class Outer {
-            class Nested {
-                fun Int.f() {
-                    print(this@Nested)
+            class Outer {
+                class Nested {
+                    fun Int.f() {
+                        print(this@Nested)
+                    }
                 }
             }
-        }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -119,20 +119,20 @@ class LabeledExpressionSpec {
     @Test
     fun `does not report inner classes referencing outer class in extension function`() {
         val code = """
-        class Outer {
-            inner class Inner {
-                inner class InnerInner {
-                    fun f() {
-                        print(this@Outer)
-                        print(this@Inner)
-                    }
-                    fun Int.f() {
-                        print(this@Inner)
-                        print(this@InnerInner)
+            class Outer {
+                inner class Inner {
+                    inner class InnerInner {
+                        fun f() {
+                            print(this@Outer)
+                            print(this@Inner)
+                        }
+                        fun Int.f() {
+                            print(this@Inner)
+                            print(this@InnerInner)
+                        }
                     }
                 }
             }
-        }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -144,7 +144,7 @@ class LabeledExpressionSpec {
                 loop@ for (i in 1..5) {}
             }
         """.trimIndent()
-        val config = TestConfig(mapOf("ignoredLabels" to listOf("loop")))
+        val config = TestConfig("ignoredLabels" to listOf("loop"))
         val findings = LabeledExpression(config).compileAndLint(code)
         assertThat(findings).isEmpty()
     }
@@ -156,7 +156,7 @@ class LabeledExpressionSpec {
                 loop@ for (i in 1..5) {}
             }
         """.trimIndent()
-        val config = TestConfig(mapOf("ignoredLabels" to "loop"))
+        val config = TestConfig("ignoredLabels" to "loop")
         val findings = LabeledExpression(config).compileAndLint(code)
         assertThat(findings).isEmpty()
     }
@@ -168,7 +168,7 @@ class LabeledExpressionSpec {
                 loop@ for (i in 1..5) {}
             }
         """.trimIndent()
-        val config = TestConfig(mapOf("ignoredLabels" to "*loop*,other"))
+        val config = TestConfig("ignoredLabels" to "*loop*,other")
         val findings = LabeledExpression(config).compileAndLint(code)
         assertThat(findings).isEmpty()
     }

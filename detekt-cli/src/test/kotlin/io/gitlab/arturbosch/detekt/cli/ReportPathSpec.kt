@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.DisabledOnOs
 import org.junit.jupiter.api.condition.EnabledOnOs
 import org.junit.jupiter.api.condition.OS
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 class ReportPathSpec {
 
@@ -19,14 +19,14 @@ class ReportPathSpec {
         fun `parses a valid absolute path correctly`() {
             val reportPath = ReportPath.from("test:C:\\tmp\\valid\\report")
 
-            assertThat(reportPath.path).isEqualTo(Paths.get("C:\\tmp\\valid\\report"))
+            assertThat(reportPath.path).isEqualTo(Path("C:\\tmp\\valid\\report"))
         }
 
         @Test
         fun `parses a valid relative path correctly`() {
             val reportPath = ReportPath.from("test:valid\\report")
 
-            assertThat(reportPath.path).isEqualTo(Paths.get("valid\\report"))
+            assertThat(reportPath.path).isEqualTo(Path("valid\\report"))
         }
 
         @Test
@@ -49,14 +49,14 @@ class ReportPathSpec {
         fun `parses a valid absolute path correctly`() {
             val reportPath = ReportPath.from("test:/tmp/valid/report")
 
-            assertThat(reportPath.path).isEqualTo(Paths.get("/tmp/valid/report"))
+            assertThat(reportPath.path).isEqualTo(Path("/tmp/valid/report"))
         }
 
         @Test
         fun `parses a valid relative path correctly`() {
             val reportPath = ReportPath.from("test:valid/report")
 
-            assertThat(reportPath.path).isEqualTo(Paths.get("valid/report"))
+            assertThat(reportPath.path).isEqualTo(Path("valid/report"))
         }
 
         @Test

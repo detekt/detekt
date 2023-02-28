@@ -1,5 +1,3 @@
-@file:Suppress("ReturnCount")
-
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
@@ -84,6 +82,7 @@ class RedundantHigherOrderMapUsage(config: Config = Config.empty) : Rule(config)
         Debt.FIVE_MINS
     )
 
+    @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
@@ -112,8 +111,8 @@ class RedundantHigherOrderMapUsage(config: Config = Config.empty) : Rule(config)
     }
 
     private fun KtCallExpression.lambda(): KtLambdaExpression? {
-        val argument = lambdaArguments.singleOrNull() ?: valueArguments.singleOrNull()
-        val lambda = argument?.getArgumentExpression()?.unpackFunctionLiteral() ?: return null
+        val argument = lambdaArguments.singleOrNull() ?: valueArguments.singleOrNull() ?: return null
+        val lambda = argument.getArgumentExpression()?.unpackFunctionLiteral() ?: return null
         if (lambda.valueParameters.firstOrNull()?.destructuringDeclaration != null) return null
         return lambda
     }

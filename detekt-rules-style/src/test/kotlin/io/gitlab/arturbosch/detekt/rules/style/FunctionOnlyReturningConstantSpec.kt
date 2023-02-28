@@ -45,7 +45,7 @@ class FunctionOnlyReturningConstantSpec {
 
         @Test
         fun `reports overridden functions which return constants`() {
-            val config = TestConfig(mapOf(IGNORE_OVERRIDABLE_FUNCTION to "false"))
+            val config = TestConfig(IGNORE_OVERRIDABLE_FUNCTION to "false")
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.lint(path)).hasSize(9)
         }
@@ -57,7 +57,7 @@ class FunctionOnlyReturningConstantSpec {
 
         @Test
         fun `reports actual functions which return constants`() {
-            val config = TestConfig(mapOf(IGNORE_ACTUAL_FUNCTION to "false"))
+            val config = TestConfig(IGNORE_ACTUAL_FUNCTION to "false")
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.lint(actualFunctionCode)).hasSize(1)
         }
@@ -65,7 +65,7 @@ class FunctionOnlyReturningConstantSpec {
         @Test
         fun `does not report excluded function which returns a constant (with string configuration)`() {
             val code = "fun f() = 1"
-            val config = TestConfig(mapOf(EXCLUDED_FUNCTIONS to "f"))
+            val config = TestConfig(EXCLUDED_FUNCTIONS to "f")
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
@@ -73,7 +73,7 @@ class FunctionOnlyReturningConstantSpec {
         @Test
         fun `does not report excluded function which returns a constant`() {
             val code = "fun f() = 1"
-            val config = TestConfig(mapOf(EXCLUDED_FUNCTIONS to listOf("f")))
+            val config = TestConfig(EXCLUDED_FUNCTIONS to listOf("f"))
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
@@ -81,7 +81,7 @@ class FunctionOnlyReturningConstantSpec {
         @Test
         fun `does not report wildcard excluded function which returns a constant`() {
             val code = "fun function() = 1"
-            val config = TestConfig(mapOf(EXCLUDED_FUNCTIONS to listOf("f*ion")))
+            val config = TestConfig(EXCLUDED_FUNCTIONS to listOf("f*ion"))
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
@@ -91,7 +91,7 @@ class FunctionOnlyReturningConstantSpec {
             "does not report excluded annotated function which returns a constant when given \"kotlin.SinceKotlin\""
         )
         fun ignoreAnnotatedFunctionWhichReturnsConstantWhenGivenKotlinSinceKotlin() {
-            val config = TestConfig(mapOf(EXCLUDE_ANNOTATED_FUNCTION to "kotlin.SinceKotlin"))
+            val config = TestConfig(EXCLUDE_ANNOTATED_FUNCTION to "kotlin.SinceKotlin")
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
@@ -101,7 +101,7 @@ class FunctionOnlyReturningConstantSpec {
             "does not report excluded annotated function which returns a constant when given listOf(\"kotlin.SinceKotlin\")"
         )
         fun ignoreAnnotatedFunctionWhichReturnsConstantWhenGivenListOfKotlinSinceKotlin() {
-            val config = TestConfig(mapOf(EXCLUDE_ANNOTATED_FUNCTION to listOf("kotlin.SinceKotlin")))
+            val config = TestConfig(EXCLUDE_ANNOTATED_FUNCTION to listOf("kotlin.SinceKotlin"))
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.compileAndLint(code)).isEmpty()
         }

@@ -34,7 +34,7 @@ class MainSpec {
 
         @ParameterizedTest
         @MethodSource("runnerConfigs")
-        fun `builds correct runnner`(args: Array<String>, expectedRunnerClass: KClass<*>) {
+        fun `builds correct runner`(args: Array<String>, expectedRunnerClass: KClass<*>) {
             val runner = buildRunner(args, NullPrintStream(), NullPrintStream())
 
             assertThat(runner).isExactlyInstanceOf(expectedRunnerClass.java)

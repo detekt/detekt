@@ -14,12 +14,24 @@ class PackageNamingSpec {
     }
 
     @Test
-    fun `should ignore the issue by alias suppression`() {
+    fun `should ignore the issue by alias suppression - PackageName`() {
         assertThat(
             PackageNaming().compileAndLint(
                 """
-                @file:Suppress("PackageDirectoryMismatch")
-                package FOO.BAR
+                    @file:Suppress("PackageName")
+                    package FOO.BAR
+                """.trimIndent()
+            )
+        ).isEmpty()
+    }
+
+    @Test
+    fun `should ignore the issue by alias suppression - PackageDirectoryMismatch`() {
+        assertThat(
+            PackageNaming().compileAndLint(
+                """
+                    @file:Suppress("PackageDirectoryMismatch")
+                    package FOO.BAR
                 """.trimIndent()
             )
         ).isEmpty()

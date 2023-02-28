@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.manifestContent
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
+import io.gitlab.arturbosch.detekt.testkit.reIndent
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.Test
@@ -22,50 +23,50 @@ class ReportMergeSpec {
                 "child1",
                 numberOfSourceFilesPerSourceDir = 2,
                 buildFileContent = """
-                    ${builder.gradleSubprojectsApplyPlugins}
-                    |plugins.apply("java-library")
-                """.trimMargin()
+                    ${builder.gradleSubprojectsApplyPlugins.reIndent(baseIndent = 5)}
+                    plugins.apply("java-library")
+                """.trimIndent()
             )
             addSubmodule(
                 "child2",
                 numberOfSourceFilesPerSourceDir = 2,
                 buildFileContent = """
-                    ${builder.gradleSubprojectsApplyPlugins}
-                    |plugins.apply("java-library")
-                """.trimMargin()
+                    ${builder.gradleSubprojectsApplyPlugins.reIndent(baseIndent = 5)}
+                    plugins.apply("java-library")
+                """.trimIndent()
             )
         }
         val mainBuildFileContent: String = """
-            |plugins {
-            |    id("io.gitlab.arturbosch.detekt")
-            |}
-            |
-            |allprojects {
-            |    ${builder.gradleRepositories}
-            |}
-            |
-            |val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
-            |    output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml"))
-            |    outputs.cacheIf { false }
-            |    outputs.upToDateWhen { false }
-            |}
-            |
-            |subprojects {
-            |    apply(plugin = "org.jetbrains.kotlin.jvm")
-            |    apply(plugin = "io.gitlab.arturbosch.detekt")
-            |
-            |    detekt {
-            |        reports.xml.enabled = true
-            |    }
-            |    
-            |    plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
-            |        tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-            |            finalizedBy(reportMerge)
-            |            reportMerge.configure { input.from(xmlReportFile) }
-            |        }
-            |    }
-            |}
-        """.trimMargin()
+            plugins {
+                id("io.gitlab.arturbosch.detekt")
+            }
+            
+            allprojects {
+                ${builder.gradleRepositories.reIndent(1)}
+            }
+            
+            val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
+                output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml"))
+                outputs.cacheIf { false }
+                outputs.upToDateWhen { false }
+            }
+            
+            subprojects {
+                apply(plugin = "org.jetbrains.kotlin.jvm")
+                apply(plugin = "io.gitlab.arturbosch.detekt")
+            
+                detekt {
+                    reports.xml.enabled = true
+                }
+            
+                plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
+                    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+                        finalizedBy(reportMerge)
+                        reportMerge.configure { input.from(xmlReportFile) }
+                    }
+                }
+            }
+        """.trimIndent()
 
         val gradleRunner = DslGradleRunner(
             projectLayout = projectLayout,
@@ -106,6 +107,15 @@ class ReportMergeSpec {
                     android {
                        compileSdk = 30
                        namespace = "io.github.detekt.app"
+                       compileOptions {
+                           sourceCompatibility = JavaVersion.VERSION_11
+                           targetCompatibility = JavaVersion.VERSION_11
+                       }
+                    }
+                    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+                        compilerOptions {
+                            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+                        }
                     }
                     dependencies {
                         implementation(project(":lib"))
@@ -122,47 +132,56 @@ class ReportMergeSpec {
                         kotlin("android")
                     }
                     android {
-                       compileSdk = 30
-                       namespace = "io.github.detekt.lib"
+                        compileSdk = 30
+                        namespace = "io.github.detekt.lib"
+                        compileOptions {
+                            sourceCompatibility = JavaVersion.VERSION_11
+                            targetCompatibility = JavaVersion.VERSION_11
+                        }
+                    }
+                    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+                        compilerOptions {
+                            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+                        }
                     }
                 """.trimIndent(),
                 srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
             )
         }
         val mainBuildFileContent: String = """
-            |plugins {
-            |    id("io.gitlab.arturbosch.detekt")
-            |}
-            |
-            |allprojects {
-            |    repositories {
-            |        mavenCentral()
-            |        google()
-            |        mavenLocal()
-            |    }
-            |}
-            |
-            |val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
-            |    output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml"))
-            |    outputs.cacheIf { false }
-            |    outputs.upToDateWhen { false }
-            |}
-            |
-            |subprojects {
-            |    apply(plugin = "io.gitlab.arturbosch.detekt")
-            |
-            |    detekt {
-            |        reports.xml.enabled = true
-            |    }
-            |    
-            |    plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
-            |        tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-            |            finalizedBy(reportMerge)
-            |            reportMerge.configure { input.from(xmlReportFile) }
-            |        }
-            |    }
-            |}
-        """.trimMargin()
+            plugins {
+                id("io.gitlab.arturbosch.detekt")
+            }
+            
+            allprojects {
+                repositories {
+                    mavenCentral()
+                    google()
+                    mavenLocal()
+                }
+            }
+            
+            val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
+                output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml"))
+                outputs.cacheIf { false }
+                outputs.upToDateWhen { false }
+            }
+            
+            subprojects {
+                apply(plugin = "io.gitlab.arturbosch.detekt")
+            
+                detekt {
+                    reports.xml.enabled = true
+                }
+            
+                plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
+                    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+                        finalizedBy(reportMerge)
+                        reportMerge.configure { input.from(xmlReportFile) }
+                    }
+                }
+            }
+        """.trimIndent()
 
         val jvmArgs = "-Xmx2g -XX:MaxMetaspaceSize=1g"
 
@@ -174,14 +193,8 @@ class ReportMergeSpec {
         )
 
         gradleRunner.setupProject()
-        gradleRunner.writeProjectFile(
-            "app/src/main/AndroidManifest.xml",
-            manifestContent()
-        )
-        gradleRunner.writeProjectFile(
-            "lib/src/main/AndroidManifest.xml",
-            manifestContent()
-        )
+        gradleRunner.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent())
+        gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
         gradleRunner.runTasksAndCheckResult("detektMain", "reportMerge", "--continue") { result ->
             projectLayout.submodules.forEach { submodule ->
                 assertThat(result.task(":${submodule.name}:detektMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)

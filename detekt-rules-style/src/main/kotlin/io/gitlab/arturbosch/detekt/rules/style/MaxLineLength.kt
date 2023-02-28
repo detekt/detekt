@@ -5,11 +5,16 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.SourceLocation
+import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesKotlinReferenceUrlSyntax
+import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesMarkdownUrlSyntax
 import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtFile
@@ -61,12 +66,16 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
         for (line in lines) {
             offset += line.length
             if (!isValidLine(file, offset, line)) {
-                val ktElement = findFirstMeaningfulKtElementInParents(file, offset, line)
-                if (ktElement != null) {
-                    report(CodeSmell(issue, Entity.from(ktElement), issue.description))
-                } else {
-                    report(CodeSmell(issue, Entity.from(file, offset), issue.description))
+                val ktElement = findFirstMeaningfulKtElementInParents(file, offset, line) ?: file
+                val location = Location.from(file, offset - line.length).let { location ->
+                    Location(
+                        source = location.source,
+                        endSource = SourceLocation(location.source.line, line.length + 1),
+                        text = TextLocation(offset - line.length, offset),
+                        filePath = location.filePath,
+                    )
                 }
+                report(CodeSmell(issue, Entity.from(ktElement, location), issue.description))
             }
 
             offset += 1 /* '\n' */
@@ -75,7 +84,10 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
     private fun isValidLine(file: KtFile, offset: Int, line: String): Boolean {
         val isUrl = line.lastArgumentMatchesUrl()
-        return line.length <= maxLineLength || isIgnoredStatement(file, offset, line) || isUrl
+        val isMarkdownOrRefUrl =
+            line.lastArgumentMatchesMarkdownUrlSyntax() ||
+                line.lastArgumentMatchesKotlinReferenceUrlSyntax()
+        return line.length <= maxLineLength || isIgnoredStatement(file, offset, line) || isUrl || isMarkdownOrRefUrl
     }
 
     private fun isIgnoredStatement(file: KtFile, offset: Int, line: String): Boolean {

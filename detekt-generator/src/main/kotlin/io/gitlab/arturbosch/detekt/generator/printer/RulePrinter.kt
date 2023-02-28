@@ -17,13 +17,13 @@ internal object RulePrinter : DocumentationPrinter<Rule> {
         return markdown {
             if (item.isDeprecated()) {
                 h3 { crossOut { item.name } }
-                paragraph { escapeHtml(item.deprecationMessage.orEmpty()) }
+                paragraph { item.deprecationMessage.orEmpty() }
             } else {
                 h3 { item.name }
             }
 
             if (item.description.isNotEmpty()) {
-                paragraph { escapeHtml(item.description) }
+                paragraph { item.description }
             } else {
                 paragraph { "TODO: Specify description" }
             }
@@ -68,8 +68,4 @@ internal object RulePrinter : DocumentationPrinter<Rule> {
             paragraph { codeBlock { rule.compliantCodeExample } }
         }
     }
-
-    internal fun escapeHtml(input: String) = input
-        .replace("<", "&lt;")
-        .replace(">", "&gt;")
 }

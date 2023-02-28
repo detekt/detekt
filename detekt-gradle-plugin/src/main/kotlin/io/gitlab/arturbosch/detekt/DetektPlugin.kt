@@ -14,13 +14,18 @@ class DetektPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         project.pluginManager.apply(ReportingBasePlugin::class.java)
-        val extension = project.extensions.create(DETEKT_EXTENSION, DetektExtension::class.java)
+        val extension =
+            project.extensions.findByType(DetektExtension::class.java) ?: project.extensions.create(
+                DETEKT_EXTENSION,
+                DetektExtension::class.java
+            )
+
         extension.reportsDir = project.extensions.getByType(ReportingExtension::class.java).file("detekt")
 
         val defaultConfigFile =
             project.file("${project.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
         if (defaultConfigFile.exists()) {
-            extension.config = project.files(defaultConfigFile)
+            extension.config.setFrom(project.files(defaultConfigFile))
         }
 
         configurePluginDependencies(project, extension)
@@ -75,16 +80,20 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
-        project.configurations.create(CONFIGURATION_DETEKT_PLUGINS) { configuration ->
+        project.configurations.maybeCreate(CONFIGURATION_DETEKT_PLUGINS).let { configuration ->
             configuration.isVisible = false
             configuration.isTransitive = true
             configuration.description = "The $CONFIGURATION_DETEKT_PLUGINS libraries to be used for this project."
+            configuration.isCanBeResolved = true
+            configuration.isCanBeConsumed = false
         }
 
         project.configurations.create(CONFIGURATION_DETEKT) { configuration ->
             configuration.isVisible = false
             configuration.isTransitive = true
             configuration.description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
+            configuration.isCanBeResolved = true
+            configuration.isCanBeConsumed = false
 
             configuration.defaultDependencies { dependencySet ->
                 val version = extension.toolVersion
@@ -127,3 +136,4 @@ class DetektPlugin : Plugin<Project> {
 
 const val CONFIGURATION_DETEKT = "detekt"
 const val CONFIGURATION_DETEKT_PLUGINS = "detektPlugins"
+const val USE_WORKER_API = "detekt.use.worker.api"

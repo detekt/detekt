@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
+import io.gitlab.arturbosch.detekt.testkit.reIndent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -11,36 +12,32 @@ class DetektReportMergeSpec {
     @Suppress("LongMethod")
     fun `Sarif merge is configured correctly for multi module project`() {
         val builder = DslTestBuilder.kotlin()
-        val buildFileContent =
-            """
-                |${builder.gradlePlugins}
-                |
-                |allprojects {
-                |  ${builder.gradleRepositories}
-                |}
-                |
-                |val sarifReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
-                |  output.set(project.layout.buildDirectory.file("reports/detekt/merge.sarif"))
-                |}
-                |
-                |subprojects {
-                |  ${builder.gradleSubprojectsApplyPlugins}
-                |  
-                |  detekt {
-                |    reports.sarif.enabled = true
-                |  }
-                |  
-                |  plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin::class) {
-                |    tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class) detekt@{
-                |       sarifReportMerge.configure {
-                |         this.mustRunAfter(this@detekt)
-                |         input.from(this@detekt.sarifReportFile)
-                |       }
-                |    }
-                |  }
-                |}
-                |
-            """.trimMargin()
+        val buildFileContent = """
+            ${builder.gradlePlugins.reIndent()}
+            
+            allprojects {
+                ${builder.gradleRepositories.reIndent(1)}
+            }
+            
+            val sarifReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
+                output.set(project.layout.buildDirectory.file("reports/detekt/merge.sarif"))
+            }
+            
+            subprojects {
+                ${builder.gradleSubprojectsApplyPlugins.reIndent(1)}
+            
+                detekt {
+                    reports.sarif.enabled = true
+                }
+            
+                tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class).configureEach {
+                    finalizedBy(sarifReportMerge)
+                }
+                sarifReportMerge {
+                  input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.sarifReportFile })
+                }
+            }
+        """.trimIndent()
 
         val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
             addSubmodule(
@@ -86,34 +83,31 @@ class DetektReportMergeSpec {
     fun `XML merge is configured correctly for multi module project`() {
         val builder = DslTestBuilder.kotlin()
         val buildFileContent = """
-            |${builder.gradlePlugins}
-            |
-            |allprojects {
-            |  ${builder.gradleRepositories}
-            |}
-            |
-            |val xmlReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
-            |  output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml"))
-            |}
-            |
-            |subprojects {
-            |  ${builder.gradleSubprojectsApplyPlugins}
-            |
-            |  detekt {
-            |    reports.xml.enabled = true
-            |  }
-            |
-            |  plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin::class) {
-            |    tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class) detekt@{
-            |       xmlReportMerge.configure {
-            |         this.mustRunAfter(this@detekt)
-            |         input.from(this@detekt.xmlReportFile)
-            |       }
-            |    }
-            |  }
-            |}
-            |
-        """.trimMargin()
+            ${builder.gradlePlugins.reIndent()}
+            
+            allprojects {
+                ${builder.gradleRepositories.reIndent(1)}
+            }
+            
+            val xmlReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
+                output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml"))
+            }
+            
+            subprojects {
+                ${builder.gradleSubprojectsApplyPlugins.reIndent(1)}
+            
+                detekt {
+                    reports.xml.enabled = true
+                }
+            
+                tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class).configureEach {
+                    finalizedBy(xmlReportMerge)
+                }
+                xmlReportMerge {
+                    input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.xmlReportFile })
+                }
+            }
+        """.trimIndent()
 
         val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
             addSubmodule(
@@ -147,7 +141,7 @@ class DetektReportMergeSpec {
             assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
             assertThat(projectFile("build/reports/detekt/merge.xml")).exists()
             assertThat(projectFile("build/reports/detekt/merge.xml").readText())
-                .contains("<error column=\"30\" line=\"4\"")
+                .contains("<error column=\"31\" line=\"4\"")
             projectLayout.submodules.forEach {
                 assertThat(projectFile("${it.name}/build/reports/detekt/detekt.xml")).exists()
             }

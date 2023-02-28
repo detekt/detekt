@@ -11,12 +11,13 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.builtins.isFunctionOrKFunctionTypeWithAnySuspendability
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.typeUtil.isBoolean
+import org.jetbrains.kotlin.types.isError
 
 /**
  * Reports when property with 'is' prefix doesn't have a boolean type.
@@ -33,8 +34,11 @@ import org.jetbrains.kotlin.types.typeUtil.isBoolean
 @RequiresTypeResolution
 class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(config) {
 
-    private val kotlinBooleanTypeName = "kotlin.Boolean"
-    private val javaBooleanTypeName = "java.lang.Boolean"
+    private val booleanTypes = listOf(
+        "kotlin.Boolean",
+        "java.lang.Boolean",
+        "java.util.concurrent.atomic.AtomicBoolean",
+    ).map { FqName(it) }.toSet()
 
     override val issue = Issue(
         javaClass.simpleName,
@@ -59,46 +63,35 @@ class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(con
 
     private fun validateDeclaration(declaration: KtCallableDeclaration) {
         val name = declaration.identifierName()
-
-        if (name.startsWith("is") && name.length > 2 && !name[2].isLowerCase()) {
-            val type = getType(declaration)
-            val typeName = type?.getTypeName()
-            val isNotBooleanType = typeName != kotlinBooleanTypeName && typeName != javaBooleanTypeName
-
-            if (!typeName.isNullOrEmpty() &&
-                isNotBooleanType &&
-                !type.isBooleanFunction()
-            ) {
-                report(
-                    reportCodeSmell(declaration, name, typeName)
-                )
+        if (name.startsWith("is") && name.getOrNull(2)?.isUpperCase() == true) {
+            val (type, typeFqName) = getType(declaration) ?: return
+            if (!type.isBoolean()) {
+                report(declaration, name, typeFqName)
             }
         }
     }
 
-    private fun reportCodeSmell(
-        declaration: KtCallableDeclaration,
-        name: String,
-        typeName: String
-    ): CodeSmell {
-        return CodeSmell(
+    private fun getType(parameter: KtCallableDeclaration): Pair<KotlinType, FqName>? {
+        val type = parameter.createTypeBindingForReturnType(bindingContext)?.type ?: return null
+        if (type.isError) return null
+        val fqName = type.fqNameOrNull() ?: return null
+        return type to fqName
+    }
+
+    private fun KotlinType.isBoolean(): Boolean =
+        if (isFunctionOrKFunctionTypeWithAnySuspendability) {
+            arguments.lastOrNull()?.type?.fqNameOrNull() in booleanTypes
+        } else {
+            fqNameOrNull() in booleanTypes
+        }
+
+    private fun report(declaration: KtCallableDeclaration, name: String, typeFqName: FqName) {
+        val typeName = typeFqName.shortName().asString()
+        val codeSmell = CodeSmell(
             issue,
             Entity.from(declaration),
             message = "Non-boolean properties shouldn't start with 'is' prefix. Actual type of $name: $typeName"
         )
-    }
-
-    private fun getType(parameter: KtCallableDeclaration): KotlinType? =
-        parameter.createTypeBindingForReturnType(bindingContext)
-            ?.type
-
-    private fun KotlinType.getTypeName(): String? =
-        fqNameOrNull()
-            ?.asString()
-
-    private fun KotlinType.isBooleanFunction(): Boolean {
-        if (!isFunctionOrKFunctionTypeWithAnySuspendability) return false
-
-        return arguments.isNotEmpty() && arguments.last().type.isBoolean()
+        report(codeSmell)
     }
 }

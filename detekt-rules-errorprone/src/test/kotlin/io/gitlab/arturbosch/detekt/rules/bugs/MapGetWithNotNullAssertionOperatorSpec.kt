@@ -14,10 +14,10 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
     @Test
     fun `reports map get operator function with not null assertion when assigned`() {
         val code = """
-                fun f() {
-                    val map = emptyMap<Any, Any>()
-                    val value = map["key"]!!
-                }
+            fun f() {
+                val map = emptyMap<Any, Any>()
+                val value = map["key"]!!
+            }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
@@ -25,10 +25,10 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
     @Test
     fun `reports map_get() with not null assertion`() {
         val code = """
-                fun f() {
-                    val map = emptyMap<Any, Any>()
-                    val value = map.get("key")!!
-                }
+            fun f() {
+                val map = emptyMap<Any, Any>()
+                val value = map.get("key")!!
+            }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
@@ -36,10 +36,10 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
     @Test
     fun `does not report map get operator function call without not-null assert`() {
         val code = """
-                fun f() {
-                    val map = emptyMap<String, String>()
-                    map["key"]
-                }
+            fun f() {
+                val map = emptyMap<String, String>()
+                map["key"]
+            }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
@@ -47,10 +47,10 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
     @Test
     fun `does not report map_getValue() call`() {
         val code = """
-                fun f() {
-                    val map = emptyMap<String, String>()
-                    map.getValue("key")
-                }
+            fun f() {
+                val map = emptyMap<String, String>()
+                map.getValue("key")
+            }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
@@ -58,10 +58,10 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
     @Test
     fun `does not report map_getOrDefault() call`() {
         val code = """
-                fun f() {
-                    val map = emptyMap<String, String>()
-                    map.getOrDefault("key", "")
-                }
+            fun f() {
+                val map = emptyMap<String, String>()
+                map.getOrDefault("key", "")
+            }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
@@ -69,10 +69,10 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
     @Test
     fun `does not report map_getOrElse() call`() {
         val code = """
-                fun f() {
-                    val map = emptyMap<String, String>()
-                    map.getOrElse("key", { "" })
-                }
+            fun f() {
+                val map = emptyMap<String, String>()
+                map.getOrElse("key", { "" })
+            }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }

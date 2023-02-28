@@ -15,10 +15,13 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.parsing.KotlinExpressionParsing.Precedence
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
+import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtDelegatedSuperTypeEntry
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
+import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
 
 /**
@@ -61,18 +64,18 @@ class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
     )
     private val allowForUnclearPrecedence: Boolean by config(defaultValue = false)
 
-    @Suppress("ReturnCount")
     override fun visitParenthesizedExpression(expression: KtParenthesizedExpression) {
         super.visitParenthesizedExpression(expression)
 
         val inner = expression.expression ?: return
-        val outer = expression.parent
 
-        if (outer is KtDelegatedSuperTypeEntry) return
+        if (expression.parent is KtDelegatedSuperTypeEntry) return
 
         if (!KtPsiUtil.areParenthesesUseless(expression)) return
 
         if (allowForUnclearPrecedence && inner.isBinaryOperationPrecedenceUnclearWithParent()) return
+
+        if (allowForUnclearPrecedence && expression.isUnaryOperationPrecedenceUnclear()) return
 
         val message = "Parentheses in ${expression.text} are unnecessary and can be replaced with: " +
             KtPsiUtil.deparenthesize(expression)?.text
@@ -152,6 +155,31 @@ class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
             val outerOp = firstNonParenParent()?.binaryOp() ?: return false
 
             return childToUnclearPrecedenceParentsMapping[innerOp]?.contains(outerOp) == true
+        }
+
+        /**
+         * Determines whether this is unary operation whose precedence is unclear
+         */
+        @Suppress("ReturnCount")
+        private fun KtParenthesizedExpression.isUnaryOperationPrecedenceUnclear(): Boolean {
+            val parentExpression = this.parent
+            if (parentExpression !is KtPrefixExpression) return false
+
+            if (parentExpression.operationReference.getReferencedNameElementType() in listOf(
+                    KtTokens.PLUSPLUS,
+                    KtTokens.MINUSMINUS,
+                ) && (this.expression as? KtDotQualifiedExpression)?.receiverExpression is KtConstantExpression
+            ) {
+                return false
+            }
+
+            return parentExpression.operationReference.getReferencedNameElementType() in listOf(
+                KtTokens.PLUS,
+                KtTokens.MINUS,
+                KtTokens.EXCL,
+                KtTokens.PLUSPLUS,
+                KtTokens.MINUSMINUS,
+            )
         }
     }
 }

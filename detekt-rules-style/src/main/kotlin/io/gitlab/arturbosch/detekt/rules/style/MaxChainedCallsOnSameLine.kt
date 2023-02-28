@@ -43,7 +43,6 @@ class MaxChainedCallsOnSameLine(config: Config = Config.empty) : Rule(config) {
     @Configuration("maximum chained calls allowed on a single line")
     private val maxChainedCalls: Int by config(defaultValue = 5)
 
-    @Suppress("ReturnCount")
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)
 

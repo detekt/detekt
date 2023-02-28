@@ -8,6 +8,12 @@ dependencies {
     testImplementation(libs.assertj)
 }
 
+consumeGeneratedConfig(
+    fromProject = projects.detektGenerator,
+    fromConfiguration = "generatedRuleauthorsConfig",
+    forTask = "processResources"
+)
+
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions.freeCompilerArgs = listOf("-Xcontext-receivers")
+    compilerOptions.freeCompilerArgs.add("-Xcontext-receivers")
 }

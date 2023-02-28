@@ -3,9 +3,10 @@ package io.gitlab.arturbosch.detekt.core.util
 import io.gitlab.arturbosch.detekt.api.PropertiesAware
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.getOrNull
-import java.time.Duration
 import java.util.EnumMap
 import java.util.LinkedList
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 class PerformanceMonitor {
 
@@ -34,7 +35,7 @@ class PerformanceMonitor {
     fun finish(phase: Phase) {
         val start = requireNotNull(started[phase])
         val end = System.currentTimeMillis()
-        finished.add(Entry(phase, Duration.ofMillis(end - start)))
+        finished.add(Entry(phase, (end - start).milliseconds))
     }
 
     fun <R> measure(phase: Phase, block: () -> R): R {

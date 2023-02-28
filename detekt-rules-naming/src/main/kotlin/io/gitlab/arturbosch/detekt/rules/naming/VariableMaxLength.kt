@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.identifierName
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtProperty
 
 /**
@@ -28,6 +29,10 @@ class VariableMaxLength(config: Config = Config.empty) : Rule(config) {
     private val maximumVariableNameLength: Int by config(DEFAULT_MAXIMUM_VARIABLE_NAME_LENGTH)
 
     override fun visitProperty(property: KtProperty) {
+        if (property.isOverride()) {
+            return
+        }
+
         if (property.identifierName().length > maximumVariableNameLength) {
             report(
                 CodeSmell(

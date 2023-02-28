@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class LongMethodSpec {
 
-    val subject = LongMethod(TestConfig(mapOf("threshold" to 5)))
+    val subject = LongMethod(TestConfig("threshold" to 5))
 
     @Test
     fun `should find two long methods`() {
@@ -17,7 +17,7 @@ class LongMethodSpec {
                 println()
                 println()
                 println()
-        
+            
                 fun nestedLongMethod() { // 5 lines
                     println()
                     println()
@@ -81,7 +81,7 @@ class LongMethodSpec {
     @Test
     fun `should find long method with method call with params on separate lines`() {
         val code = """
-            fun longMethod( 
+            fun longMethod(
                 x1: Int,
                 x2: Int,
                 y1: Int,
@@ -111,7 +111,7 @@ class LongMethodSpec {
                 println()
                 println()
                 println()
-        
+            
                 fun nestedLongMethod(
                     param1: String
                 ) { // 5 lines
@@ -136,7 +136,7 @@ class LongMethodSpec {
             ) { // 4 lines
                 println()
                 println()
-        
+            
                 fun nestedLongMethod(
                     param1: String
                 ) { // 5 lines

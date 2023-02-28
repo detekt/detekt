@@ -78,12 +78,12 @@ class UndocumentedPublicFunctionSpec {
     @Test
     fun `does not report documented public function in class`() {
         val code = """
-        class Test {
-            /**
-            *
-            */
-            fun commented() {}
-        }
+            class Test {
+                /**
+                 *
+                 */
+                fun commented() {}
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -161,7 +161,7 @@ class UndocumentedPublicFunctionSpec {
                 protected fun noComment1() {}
             }
         """.trimIndent()
-        val subject = UndocumentedPublicFunction(TestConfig(mapOf(SEARCH_PROTECTED_FUN to "true")))
+        val subject = UndocumentedPublicFunction(TestConfig(SEARCH_PROTECTED_FUN to "true"))
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 

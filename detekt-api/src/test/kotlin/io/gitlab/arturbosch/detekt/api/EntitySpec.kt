@@ -8,20 +8,20 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 class EntitySpec {
 
-    private val path = Paths.get("/full/path/to/Test.kt")
+    private val path = Path("/full/path/to/Test.kt")
     private val code = compileContentForTest(
         """
             package test
-
+            
             class C : Any() {
-
+            
                 private fun memberFun(): Int = 5
             }
-
+            
             fun topLevelFun(number: Int) = Unit
         """.trimIndent(),
         path.toString()
@@ -58,7 +58,7 @@ class EntitySpec {
     }
 
     @Nested
-    inner class `Classes` {
+    inner class Classes {
         private val clazz = requireNotNull(code.findDescendantOfType<KtClass>())
 
         @Test
@@ -73,7 +73,7 @@ class EntitySpec {
     }
 
     @Nested
-    inner class `Files` {
+    inner class Files {
 
         @Test
         fun `includes package and file name in entity signature`() {

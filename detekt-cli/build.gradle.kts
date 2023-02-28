@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 plugins {
     alias(libs.plugins.shadow)
     id("module")
@@ -46,6 +48,11 @@ publishing {
 tasks {
     shadowJar {
         mergeServiceFiles()
+    }
+
+    processTestResources {
+        filter(ReplaceTokens::class, "tokens" to mapOf("kotlinVersion" to libs.versions.kotlin.get()))
+        filteringCharset = "UTF-8"
     }
 
     val runWithHelpFlag by registering(JavaExec::class) {

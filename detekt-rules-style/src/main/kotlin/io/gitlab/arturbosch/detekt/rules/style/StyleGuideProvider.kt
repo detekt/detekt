@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
-import io.gitlab.arturbosch.detekt.rules.style.optional.MandatoryBracesIfStatements
 import io.gitlab.arturbosch.detekt.rules.style.optional.MandatoryBracesLoops
 import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalUnit
 import io.gitlab.arturbosch.detekt.rules.style.optional.PreferToOverPairSyntax
@@ -38,6 +37,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             NoTabs(config),
             EqualsOnSignatureLine(config),
             EqualsNullCall(config),
+            ForbiddenAnnotation(config),
             ForbiddenComment(config),
             ForbiddenImport(config),
             ForbiddenMethodCall(config),
@@ -64,8 +64,10 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             DataClassShouldBeImmutable(config),
             UseDataClass(config),
             UnusedImports(config),
+            UnusedParameter(config),
             UnusedPrivateClass(config),
             UnusedPrivateMember(config),
+            UnusedPrivateProperty(config),
             ExpressionBodySyntax(config),
             NestedClassesVisibility(config),
             RedundantVisibilityModifierRule(config),
@@ -75,7 +77,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UnnecessaryLet(config),
             MayBeConst(config),
             PreferToOverPairSyntax(config),
-            MandatoryBracesIfStatements(config),
+            BracesOnIfStatements(config),
             MandatoryBracesLoops(config),
             NullableBooleanCheck(config),
             VarCouldBeVal(config),
@@ -96,6 +98,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseIfEmptyOrIfBlank(config),
             MultilineLambdaItParameter(config),
             MultilineRawStringIndentation(config),
+            StringShouldBeRawString(config),
             UseIsNullOrEmpty(config),
             UseOrEmpty(config),
             UseAnyOrNoneInsteadOfFind(config),

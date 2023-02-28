@@ -40,7 +40,7 @@ const FeatureList = [
     description: (
       <>
         Detekt is entirely open-source and developed by the community. Join us
-        on Github and help us shape the future of this tool.
+        on GitHub and help us shape the future of this tool.
       </>
     ),
   },

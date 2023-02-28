@@ -11,7 +11,7 @@ dependencies {
     implementation(libs.kotlin.gradle)
     implementation(libs.githubRelease.gradle)
     implementation(libs.semver4j.gradle)
-    implementation(libs.nexusStaging.gradle)
+    implementation(libs.nexusPublish.gradle)
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {

@@ -82,7 +82,7 @@ Deprecated elements are expected to be removed in the future. Alternatives shoul
 
 Down-casting immutable types from kotlin.collections should be discouraged.
 The result of the downcast is platform specific and can lead to unexpected crashes.
-Prefer to use instead the `toMutable&lt;Type&gt;()` functions.
+Prefer to use instead the `toMutable<Type>()` functions.
 
 **Active by default**: No
 

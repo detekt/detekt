@@ -10,7 +10,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/stale@5ebf00ea0e4c1561e9b43a292ed34424fb1d4578 # tag=v6
+      - uses: actions/stale@6f05e4244c9a0b2ed3401882b05d701dd0a7289b # v7
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           days-before-stale: 90
@@ -23,7 +23,7 @@ jobs:
           exempt-issue-labels: help wanted, good first issue, never gets stale, blocked
           exempt-pr-labels: help wanted, good first issue, never gets stale, blocked
           exempt-milestones: Future Breaking Changes in Major Versions
-      - uses: actions/stale@5ebf00ea0e4c1561e9b43a292ed34424fb1d4578 # tag=v6
+      - uses: actions/stale@6f05e4244c9a0b2ed3401882b05d701dd0a7289b # v7
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           days-before-stale: 30

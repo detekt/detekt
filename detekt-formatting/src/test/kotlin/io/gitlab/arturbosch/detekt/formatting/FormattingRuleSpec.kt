@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 class FormattingRuleSpec {
 
@@ -60,7 +60,7 @@ class FormattingRuleSpec {
                 """.trimIndent()
             )
 
-            assertThat(findings.first().signature).isEqualTo("Test.kt:2")
+            assertThat(findings.first().signature).isEqualTo("Test.kt:1")
         }
 
         @Test
@@ -73,13 +73,13 @@ class FormattingRuleSpec {
                 """.trimIndent()
             )
 
-            assertThat(findings.first().signature).isEqualTo("test.test.test.Test.kt:3")
+            assertThat(findings.first().signature).isEqualTo("test.test.test.Test.kt:2")
         }
     }
 
     @Test
     fun `#3063_ formatting issues have an absolute path`() {
-        val expectedPath = Paths.get("/root/kotlin/test.kt").toString()
+        val expectedPath = Path("/root/kotlin/test.kt").toString()
 
         val findings = subject.lint(
             """

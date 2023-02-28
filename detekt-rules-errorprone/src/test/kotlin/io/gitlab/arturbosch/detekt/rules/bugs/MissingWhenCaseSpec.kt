@@ -19,22 +19,22 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
         private val subject = MissingWhenCase()
 
         @Nested
-        inner class `enum` {
+        inner class Enum {
             @Test
             fun `reports when _when_ expression used as statement and not all cases are covered`() {
                 val code = """
-                enum class Color {
-                    RED,
-                    GREEN,
-                    BLUE
-                }
-
-                fun whenOnEnumFail(c: Color) {
-                    when(c) {
-                        Color.BLUE -> {}
-                        Color.GREEN -> {}
+                    enum class Color {
+                        RED,
+                        GREEN,
+                        BLUE
                     }
-                }
+                    
+                    fun whenOnEnumFail(c: Color) {
+                        when(c) {
+                            Color.BLUE -> {}
+                            Color.GREEN -> {}
+                        }
+                    }
                 """.trimIndent()
                 val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
@@ -47,18 +47,18 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
             @Test
             fun `reports when _when_ expression used as statement and not all cases including null are covered`() {
                 val code = """
-                enum class Color {
-                    RED,
-                    GREEN,
-                    BLUE
-                }
-
-                fun whenOnEnumFail(c: Color?) {
-                    when(c) {
-                        Color.BLUE -> {}
-                        Color.GREEN -> {}
+                    enum class Color {
+                        RED,
+                        GREEN,
+                        BLUE
                     }
-                }
+                    
+                    fun whenOnEnumFail(c: Color?) {
+                        when(c) {
+                            Color.BLUE -> {}
+                            Color.GREEN -> {}
+                        }
+                    }
                 """.trimIndent()
                 val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
@@ -71,19 +71,19 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
             @Test
             fun `reports when _when_ expression used as statement and null case is not covered`() {
                 val code = """
-                enum class Color {
-                    RED,
-                    GREEN,
-                    BLUE
-                }
-
-                fun whenOnEnumFail(c: Color?) {
-                    when(c) {
-                        Color.BLUE -> {}
-                        Color.GREEN -> {}
-                        Color.RED -> {}
+                    enum class Color {
+                        RED,
+                        GREEN,
+                        BLUE
                     }
-                }
+                    
+                    fun whenOnEnumFail(c: Color?) {
+                        when(c) {
+                            Color.BLUE -> {}
+                            Color.GREEN -> {}
+                            Color.RED -> {}
+                        }
+                    }
                 """.trimIndent()
                 val actual = subject.lintWithContext(env, code)
                 assertThat(actual).hasSize(1)
@@ -96,20 +96,20 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
             @Test
             fun `does not report missing null case in _when_ expression when it is handled outside of _when_`() {
                 val code = """
-                enum class Color {
-                    RED,
-                    GREEN,
-                    BLUE
-                }
-
-                fun whenNulLCheckEnum(c: Color?) {
-                    if(c == null) return
-                    when(c) {
-                        Color.BLUE -> {}
-                        Color.GREEN -> {}
-                        Color.RED -> {}
+                    enum class Color {
+                        RED,
+                        GREEN,
+                        BLUE
                     }
-                }
+                    
+                    fun whenNulLCheckEnum(c: Color?) {
+                        if(c == null) return
+                        when(c) {
+                            Color.BLUE -> {}
+                            Color.GREEN -> {}
+                            Color.RED -> {}
+                        }
+                    }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
@@ -117,26 +117,26 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
             @Test
             fun `does not report when _when_ expression used as statement and all cases are covered`() {
                 val code = """
-                enum class Color {
-                    RED,
-                    GREEN,
-                    BLUE
-                }
-
-                fun whenOnEnumPass(c: Color) {
-                    when(c) {
-                        Color.BLUE -> {}
-                        Color.GREEN -> {}
-                        Color.RED -> {}
+                    enum class Color {
+                        RED,
+                        GREEN,
+                        BLUE
                     }
-                }
-
-                fun whenOnEnumPass2(c: Color) {
-                    when(c) {
-                        Color.BLUE -> {}
-                        else -> {}
+                    
+                    fun whenOnEnumPass(c: Color) {
+                        when(c) {
+                            Color.BLUE -> {}
+                            Color.GREEN -> {}
+                            Color.RED -> {}
+                        }
                     }
-                }
+                    
+                    fun whenOnEnumPass2(c: Color) {
+                        when(c) {
+                            Color.BLUE -> {}
+                            else -> {}
+                        }
+                    }
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
@@ -152,7 +152,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                         class VariantB : Variant()
                         object VariantC : Variant()
                     }
-
+                    
                     fun whenOnEnumFail(v: Variant) {
                         when(v) {
                             is Variant.VariantA -> {}
@@ -176,7 +176,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                         class VariantB : Variant()
                         object VariantC : Variant()
                     }
-
+                    
                     fun whenOnEnumFail(v: Variant?) {
                         when(v) {
                             is Variant.VariantA -> {}
@@ -201,7 +201,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                         class VariantB : Variant()
                         object VariantC : Variant()
                     }
-
+                    
                     fun whenOnEnumFail(v: Variant?) {
                         when(v) {
                             is Variant.VariantA -> {}
@@ -220,12 +220,12 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
             @Test
             fun `does not report missing null case in _when_ expression when it is handled outside of _when_`() {
                 val code = """
-                sealed class Variant {
+                    sealed class Variant {
                         object VariantA : Variant()
                         class VariantB : Variant()
                         object VariantC : Variant()
                     }
-
+                    
                     fun whenOnEnumFail(v: Variant?) {
                         if(v == null) return
                         when(v) {
@@ -246,7 +246,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                         class VariantB : Variant()
                         object VariantC : Variant()
                     }
-
+                    
                     fun whenOnEnumPassA(v: Variant) {
                         when(v) {
                             is Variant.VariantA -> {}
@@ -254,7 +254,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                             else -> {}
                         }
                     }
-
+                    
                     fun whenOnEnumPassB(v: Variant) {
                         when(v) {
                             is Variant.VariantA -> {}
@@ -275,28 +275,28 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                     fun whenChecks() {
                         val x = 3
                         val s = "3"
-
+                    
                         when (x) {
                             0, 1 -> print("x == 0 or x == 1")
                             else -> print("otherwise")
                         }
-
+                    
                         when (x) {
                             Integer.parseInt(s) -> print("s encodes x")
                             else -> print("s does not encode x")
                         }
-
+                    
                         when (x) {
                             in 1..10 -> print("x is in the range")
                             !in 10..20 -> print("x is outside the range")
                             else -> print("none of the above")
                         }
-
+                    
                         val y = when(s) {
                             is String -> s.startsWith("prefix")
                             else -> false
                         }
-
+                    
                         when {
                             x.equals(s) -> print("x equals s")
                             x.plus(3) == 4 -> print("x is 1")
@@ -313,28 +313,26 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
     inner class `MissingWhenCase rule when else expression is not considered` {
 
         @Suppress("DEPRECATION")
-        private val subject = MissingWhenCase(
-            TestConfig(mapOf("allowElseExpression" to false))
-        )
+        private val subject = MissingWhenCase(TestConfig("allowElseExpression" to false))
 
         @Nested
-        inner class `enum` {
+        inner class Enum {
             @Test
             fun `reports when _when_ expression used as statement and not all cases are covered`() {
                 val code = """
-                enum class Color {
-                    RED,
-                    GREEN,
-                    BLUE
-                }
-
-                fun whenOnEnumFail(c: Color) {
-                    when(c) {
-                        Color.BLUE -> {}
-                        Color.GREEN -> {}
-                        else -> {}
+                    enum class Color {
+                        RED,
+                        GREEN,
+                        BLUE
                     }
-                }
+                    
+                    fun whenOnEnumFail(c: Color) {
+                        when(c) {
+                            Color.BLUE -> {}
+                            Color.GREEN -> {}
+                            else -> {}
+                        }
+                    }
                 """.trimIndent()
                 val actual = subject.compileAndLintWithContext(env, code)
                 assertThat(actual).hasSize(1)
@@ -345,20 +343,20 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
             @Test
             fun `reports when _when_ expression used as statement and null case is not covered`() {
                 val code = """
-                enum class Color {
-                    RED,
-                    GREEN,
-                    BLUE
-                }
-
-                fun whenOnEnumFail(c: Color?) {
-                    when(c) {
-                        Color.BLUE -> {}
-                        Color.GREEN -> {}
-                        Color.RED -> {}
-                        else -> {}
+                    enum class Color {
+                        RED,
+                        GREEN,
+                        BLUE
                     }
-                }
+                    
+                    fun whenOnEnumFail(c: Color?) {
+                        when(c) {
+                            Color.BLUE -> {}
+                            Color.GREEN -> {}
+                            Color.RED -> {}
+                            else -> {}
+                        }
+                    }
                 """.trimIndent()
                 val actual = subject.compileAndLintWithContext(env, code)
                 assertThat(actual).hasSize(1)
@@ -369,19 +367,19 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
             @Test
             fun `does not reports when _when_ expression used as statement and all cases are covered`() {
                 val code = """
-                enum class Color {
-                    RED,
-                    GREEN,
-                    BLUE
-                }
-
-                fun whenOnEnumFail(c: Color) {
-                    when(c) {
-                        Color.BLUE -> {}
-                        Color.GREEN -> {}
-                        Color.RED -> {}
+                    enum class Color {
+                        RED,
+                        GREEN,
+                        BLUE
                     }
-                }
+                    
+                    fun whenOnEnumFail(c: Color) {
+                        when(c) {
+                            Color.BLUE -> {}
+                            Color.GREEN -> {}
+                            Color.RED -> {}
+                        }
+                    }
                 """.trimIndent()
                 val actual = subject.compileAndLintWithContext(env, code)
                 assertThat(actual).isEmpty()
@@ -398,7 +396,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                         class VariantB : Variant()
                         object VariantC : Variant()
                     }
-
+                    
                     fun whenOnEnumFail(v: Variant) {
                         when(v) {
                             is Variant.VariantA -> {}
@@ -421,7 +419,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                         class VariantB : Variant()
                         object VariantC : Variant()
                     }
-
+                    
                     fun whenOnEnumPassA(v: Variant) {
                         when(v) {
                             is Variant.VariantA -> {}
@@ -439,9 +437,9 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
             @Test
             fun `does not report when else is used for non enum or sealed _when_ expression`() {
                 val code = """
-                     fun whenChecks() {
+                    fun whenChecks() {
                         val x = 3
-
+                    
                         when (x) {
                             0, 1 -> print("x == 0 or x == 1")
                             else -> print("otherwise")

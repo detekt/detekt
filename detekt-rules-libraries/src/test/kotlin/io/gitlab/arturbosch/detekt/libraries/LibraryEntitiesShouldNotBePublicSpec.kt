@@ -15,7 +15,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
         assertThat(
             subject.compileAndLint(
                 """
-                class A 
+                    class A
                 """.trimIndent()
             )
         ).isEmpty()
@@ -30,7 +30,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
             assertThat(
                 subject.compileAndLint(
                     """
-                class A
+                        class A
                     """.trimIndent()
                 )
             ).hasSize(1)
@@ -41,11 +41,11 @@ class LibraryEntitiesShouldNotBePublicSpec {
             assertThat(
                 subject.compileAndLint(
                     """
-                class A {
-                    fun foo(): Int{
-                        return 1
-                    }
-                }
+                        class A {
+                            fun foo(): Int{
+                                return 1
+                            }
+                        }
                     """.trimIndent()
                 )
             ).hasSize(1)
@@ -56,7 +56,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
             assertThat(
                 subject.compileAndLint(
                     """
-                typealias A = List<String>
+                        typealias A = List<String>
                     """.trimIndent()
                 )
             ).hasSize(1)
@@ -67,8 +67,8 @@ class LibraryEntitiesShouldNotBePublicSpec {
             assertThat(
                 subject.compileAndLint(
                     """
-                typealias A = List<String>
-                fun foo() = Unit
+                        typealias A = List<String>
+                        fun foo() = Unit
                     """.trimIndent()
                 )
             ).hasSize(2)
@@ -79,7 +79,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
             assertThat(
                 subject.compileAndLint(
                     """
-                fun foo() = Unit
+                        fun foo() = Unit
                     """.trimIndent()
                 )
             ).hasSize(1)
@@ -95,11 +95,11 @@ class LibraryEntitiesShouldNotBePublicSpec {
             assertThat(
                 subject.compileAndLint(
                     """
-                internal class A {
-                    fun foo(): Int{
-                        return 1
-                    }
-                }
+                        internal class A {
+                            fun foo(): Int{
+                                return 1
+                            }
+                        }
                     """.trimIndent()
                 )
             ).isEmpty()
@@ -110,7 +110,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
             assertThat(
                 subject.compileAndLint(
                     """
-                internal class A
+                        internal class A
                     """.trimIndent()
                 )
             ).isEmpty()
@@ -121,7 +121,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
             assertThat(
                 subject.compileAndLint(
                     """
-                internal typealias A = List<String>
+                        internal typealias A = List<String>
                     """.trimIndent()
                 )
             ).isEmpty()

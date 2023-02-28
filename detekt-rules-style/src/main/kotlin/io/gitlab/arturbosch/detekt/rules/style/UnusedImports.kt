@@ -81,7 +81,6 @@ class UnusedImports(config: Config) : Rule(config) {
             fun KtImportDirective.isFromSamePackage() =
                 importedFqName?.parent() == currentPackage && alias == null
 
-            @Suppress("ReturnCount")
             fun KtImportDirective.isNotUsed(): Boolean {
                 if (aliasName in (namedReferencesInKDoc + namedReferencesAsString)) return false
                 val identifier = identifier()

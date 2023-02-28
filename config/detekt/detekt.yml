@@ -69,6 +69,8 @@ formatting:
   active: true
   android: false
   autoCorrect: true
+  ContextReceiverMapping:
+    active: true
   Filename:
     active: false
   FunctionReturnTypeSpacing:
@@ -147,6 +149,10 @@ potential-bugs:
     active: true
 
 style:
+  BracesOnIfStatements:
+    active: true
+    singleLine: 'consistent'
+    multiLine: 'consistent'
   CanBeNonNullable:
     active: true
   CascadingCallWrapping:
@@ -179,6 +185,18 @@ style:
         reason: 'Import Assertions.assertThat instead.'
       - value: 'org.junit.jupiter.api.Assertions*'
         reason: 'Use AssertJ assertions instead.'
+      - value: 'org.junit.jupiter.api.assertAll'
+        reason: 'Use AssertJ assertSoftly instead.'
+      - value: 'org.junit.jupiter.api.assertThrows'
+        reason: 'Use AssertJ assertThatCode { }.isInstanceOf() or assertThatExceptionOfType().isThrownBy { } instead.'
+      - value: 'org.junit.jupiter.api.assertDoesNotThrow'
+        reason: 'Use AssertJ assertThatCode { }.doesNotThrowAnyException() instead.'
+      # These don't have AssertJ alternatives, so just allow them:
+      #- value: 'org.junit.jupiter.api.fail'
+      #- value: 'org.junit.jupiter.api.assertTimeout'
+      #- value: 'org.junit.jupiter.api.assertTimeoutPreemptively'
+      - value: 'java.util.stream.*'
+        reason: "Use Kotlin's sequences instead."
   ForbiddenMethodCall:
     active: true
     methods:
@@ -208,6 +226,8 @@ style:
     active: true
     excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
     excludeCommentStatements: true
+  MultilineRawStringIndentation:
+    active: true
   NestedClassesVisibility:
     active: true
   ObjectLiteralToLambda:
@@ -230,6 +250,8 @@ style:
   UnderscoresInNumericLiterals:
     active: true
   UnnecessaryAnnotationUseSiteTarget:
+    active: true
+  UnnecessaryBackticks:
     active: true
   UnnecessaryFilter:
     active: true
