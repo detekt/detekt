@@ -74,10 +74,13 @@ val unzipKotlinCompiler by tasks.registering(Copy::class) {
 
 val testPluginKotlinc by tasks.registering(Task::class) {
     val outputDir = layout.buildDirectory.dir("tmp/kotlinc")
+    val sourceFile = file("src/test/resources/hello.kt")
 
     inputs.dir(unzipKotlinCompiler.map { it.destinationDir })
         .withPathSensitivity(PathSensitivity.RELATIVE)
     inputs.file(tasks.shadowJar.map { it.archiveFile })
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.file(sourceFile)
         .withPathSensitivity(PathSensitivity.RELATIVE)
     outputs.dir(outputDir)
 
@@ -89,7 +92,7 @@ val testPluginKotlinc by tasks.registering(Task::class) {
         workingDir.mkdirs()
 
         args = listOf(
-            "$projectDir/src/test/resources/hello.kt",
+            sourceFile.path,
             "-Xplugin=${tasks.shadowJar.get().archiveFile.get().asFile.absolutePath}",
             "-P",
         )
