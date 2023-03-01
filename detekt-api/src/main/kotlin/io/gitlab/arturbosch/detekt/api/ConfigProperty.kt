@@ -115,7 +115,8 @@ private fun <T : Any> getValueOrDefault(configAware: ConfigAware, propertyName: 
         is List<*> -> configAware.getListOrDefault(propertyName, defaultValue) as T
         is String,
         is Boolean,
-        is Int -> configAware.valueOrDefault(propertyName, defaultValue)
+        is Int,
+        is Float -> configAware.valueOrDefault(propertyName, defaultValue)
         else -> error(
             "${defaultValue.javaClass} is not supported for delegated config property '$propertyName'. " +
                 "Use one of String, Boolean, Int or List<String> instead."

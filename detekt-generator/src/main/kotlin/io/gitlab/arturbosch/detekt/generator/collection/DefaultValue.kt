@@ -16,6 +16,7 @@ sealed interface DefaultValue {
         fun of(defaultValue: String): DefaultValue = StringDefault(defaultValue)
         fun of(defaultValue: Boolean): DefaultValue = BooleanDefault(defaultValue)
         fun of(defaultValue: Int): DefaultValue = IntegerDefault(defaultValue)
+        fun of(defaultValue: Float): DefaultValue = FloatDefault(defaultValue)
         fun of(defaultValue: List<String>): DefaultValue = StringListDefault(defaultValue)
         fun of(defaultValue: ValuesWithReason): DefaultValue = ValuesWithReasonDefault(defaultValue)
     }
@@ -42,6 +43,16 @@ private data class BooleanDefault(private val defaultValue: Boolean) : DefaultVa
 }
 
 private data class IntegerDefault(private val defaultValue: Int) : DefaultValue {
+    override fun getPlainValue(): String = defaultValue.toString()
+    override fun printAsYaml(name: String, yaml: YamlNode) {
+        yaml.keyValue { name to defaultValue.toString() }
+    }
+
+    override fun printAsMarkdownCode(): String = defaultValue.toString()
+}
+
+// DoubleDefault and IntegerDefault could probably be combined to NumericalDefault(?)
+private data class FloatDefault(private val defaultValue: Float) : DefaultValue {
     override fun getPlainValue(): String = defaultValue.toString()
     override fun printAsYaml(name: String, yaml: YamlNode) {
         yaml.keyValue { name to defaultValue.toString() }

@@ -10,6 +10,7 @@ private fun String.toDefaultValueIfLiteral(): DefaultValue? {
         isStringLiteral() -> DefaultValue.of(withoutQuotes())
         isBooleanLiteral() -> DefaultValue.of(toBoolean())
         isIntegerLiteral() -> DefaultValue.of(withoutUnderscores().toInt())
+        isFloatLiteral() -> DefaultValue.of(withoutUnderscores().toFloat())
         else -> null
     }
 }
@@ -18,5 +19,7 @@ private fun String.withoutUnderscores() = replace("_", "")
 private fun String.isStringLiteral() = length > 1 && startsWith(QUOTES) && endsWith(QUOTES)
 private fun String.isBooleanLiteral() = this == TRUE_KEYWORD.value || this == FALSE_KEYWORD.value
 private fun String.isIntegerLiteral() = withoutUnderscores().toIntOrNull() != null
+
+private fun String.isFloatLiteral() = withoutUnderscores().toFloatOrNull() != null
 
 private const val QUOTES = "\""
