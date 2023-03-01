@@ -12,7 +12,7 @@ class FeatureEnvySpec(private val env: KotlinCoreEnvironment) {
     val subject = FeatureEnvy()
 
     @Test
-    fun `detect feature envy in standard example`() {
+    fun `detect feature envy in standard example of feature envy`() {
         val code = """
             data class ContactInfo(
                 val city: String,
@@ -48,7 +48,7 @@ class FeatureEnvySpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    fun `rectangle sample`() {
+    fun `do not detect feature envy if atfd is too low`() {
         val code = """
             data class Rectangle(val width: Int, val height: Int)
 
@@ -64,15 +64,122 @@ class FeatureEnvySpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    fun `cube sample`() {
+    fun `no feature envy if class has no functions`() {
         val code = """
-            data class Cube(val width: Int, val length: Int, val height: Int)
+            data class Foo(val foo: Boolean)
             
-            class CubeUsageSite(val cube: Cube) {
-                fun printVolume() {
-                    val volume = cube.width * cube.length * cube.height
-                    println("The volume is: \${'$'}{volume}")
+            class Bar
+        """.trimIndent()
+
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `do not detect feature envy if enough foreign data providers are used`() {
+        val code = """
+            data class A(val a: String)
+            data class B(val b: String)
+            data class C(val c: String)
+            
+            class DataCombiner {
+                fun combineDate(a: A, b: B, c: C): String = a.a + b.b + c.c
+            }
+            
+        """.trimIndent()
+
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+    }
+
+    @Test
+    fun `do not detect feature envy if enough local variables are used`() {
+
+        val code = """
+            data class Foo(
+                val foo1: String,
+                val foo2: String,
+                val foo3: String,
+                val foo4: String,
+            )
+            
+            class Bar(val foo: Foo) {
+
+                val test1 = "TestString"
+                val test2 = "TestString"
+            
+                fun doCalculationThatUsesLotsOfVariables(): String {
+                    return foo.foo1 + foo.foo2 + foo.foo3 + foo.foo4 + test1 + test2
                 }
+            }
+        """.trimIndent()
+
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+    }
+
+    @Test
+    fun `do not detect feature envy if enough local variables are used in expression block`() {
+
+        val code = """
+            data class Foo(
+                val foo1: String,
+                val foo2: String,
+                val foo3: String,
+                val foo4: String,
+            )
+            
+            class Bar(val foo: Foo) {
+
+                val test1 = "TestString"
+                val test2 = "TestString"
+            
+                fun doCalculationThatUsesLotsOfVariables(): String = foo.foo1 + foo.foo2 + foo.foo3 + foo.foo4 + test1 + test2
+            }
+        """.trimIndent()
+
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+    }
+
+    @Test
+    fun `detect feature envy if not enough local variables are used`() {
+
+        val code = """
+            data class Foo(
+                val foo1: String,
+                val foo2: String,
+                val foo3: String,
+                val foo4: String,
+            )
+            
+            class Bar(val foo: Foo) {
+
+                val test1 = "TestString"
+                val test2 = "TestString"
+            
+                fun doCalculationThatUsesLotsOfVariables(): String {
+                    return foo.foo1 + foo.foo2 + foo.foo3 + foo.foo4 + test1
+                }
+            }
+        """.trimIndent()
+
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `detect feature envy if not enough local variables are used in expression block`() {
+
+        val code = """
+            data class Foo(
+                val foo1: String,
+                val foo2: String,
+                val foo3: String,
+                val foo4: String,
+            )
+            
+            class Bar(val foo: Foo) {
+
+                val test1 = "TestString"
+                val test2 = "TestString"
+            
+                fun doCalculationThatUsesLotsOfVariables(): String =foo.foo1 + foo.foo2 + foo.foo3 + foo.foo4 + test1
             }
         """.trimIndent()
 

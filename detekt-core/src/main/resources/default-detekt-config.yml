@@ -122,6 +122,7 @@ complexity:
       - 'with'
   FeatureEnvy:
     active: false
+    localityOfDataAccessThreshold: 0.33
     atfdThreshold: 2
     fdpThreshold: 2
   LabeledExpression:

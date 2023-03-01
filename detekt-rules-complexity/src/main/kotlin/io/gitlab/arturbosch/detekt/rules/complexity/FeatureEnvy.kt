@@ -13,9 +13,9 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.descriptors.impl.referencedProperty
 import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
@@ -23,7 +23,6 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.getValueParameters
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.getOwnerForEffectiveDispatchReceiverParameter
@@ -48,8 +47,8 @@ class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
         debt = Debt.TWENTY_MINS
     )
 
-    // @Configuration("Locality of Attribute Accesses - The threshold-ratio of attributes used from the methods class to attributes used from other classes")
-    private val localityOfDataAccessThreshold = 0.33f
+    @Configuration("Locality of Attribute Accesses - The threshold-ratio of attributes used from the methods class to attributes used from other classes")
+    private val localityOfDataAccessThreshold by config(defaultValue = 0.33f)
 
     @Configuration("The maximum number of attributes from other classes that may be used.")
     private val atfdThreshold: Int by config(defaultValue = 2)
@@ -61,50 +60,40 @@ class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
     private val fdpThreshold: Int by config(defaultValue = 2)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (bindingContext == BindingContext.EMPTY) {
-            return
-        }
-
-        val funBlock = function.findDescendantOfType<KtBlockExpression>() ?: return
+        val funExpression = function.findDescendantOfType<KtExpression>() ?: return
         val containerFqName = function.containingClassOrObject?.fqName ?: return
-
         val localPropertyFqNames: List<FqName> = getFqNamesOfLocalPropertiesOfClassFunIsIn(function)
+            .also { if (it.isEmpty()) return }
 
-        // this is the FDP measure
-        val foreignDataProviderCount = getForeignDataProvidersUsedInBlock(funBlock, containerFqName).count()
+        val foreignDataProviderCount = getForeignDataProvidersUsedInExpression(funExpression, containerFqName).count()
+        // as per definition there can't be feature envy if there are more foreign data providers than the threshold
+        if (foreignDataProviderCount > fdpThreshold) return
 
-        // this is the ATFD measure
-        val numOfForeignDataAccesses = getFqNamesOfAllDataAccessedInBlock(funBlock).filter {
+        val numOfForeignDataAccesses = getFqNamesOfAllDataAccessedInExpression(funExpression).filter {
             !localPropertyFqNames.contains(it)
         }.groupingBy {
             it
         }.eachCount().values.sum()
-
-        // if there is not ATFD, there can't be feature envy
-        if (numOfForeignDataAccesses == 0) return
+        // if the number of foreign data accesses does not meet the threshold there is no feature envy
+        if (numOfForeignDataAccesses <= atfdThreshold) return
 
         val numOfLocalDataAccesses = getFqNameToNumOfUsagesOfLocalDataInFunction(function).values.sum()
+        val localityOfAttributeAccess = numOfLocalDataAccesses / numOfForeignDataAccesses.toDouble()
+        if (localityOfAttributeAccess >= localityOfDataAccessThreshold) return
 
-        val localityOfAttributeAccess = numOfLocalDataAccesses / numOfForeignDataAccesses.toFloat()
-
-        if (
-            numOfForeignDataAccesses > atfdThreshold &&
-            localityOfAttributeAccess < localityOfDataAccessThreshold &&
-            foreignDataProviderCount <= fdpThreshold
-        ) {
-            report(
-                ThresholdedCodeSmell(
-                    issue = issue,
-                    entity = Entity.from(function),
-                    metric = Metric(
-                        type = "Locality of Data access",
-                        value = localityOfDataAccessThreshold.toDouble(),
-                        threshold = localityOfDataAccessThreshold.toDouble()
-                    ),
-                    message = issue.description
-                )
+        // has not returned -> all conditions met -> report code smell
+        report(
+            ThresholdedCodeSmell(
+                issue = issue,
+                entity = Entity.from(function),
+                metric = Metric(
+                    type = "Locality of Data access",
+                    value = localityOfDataAccessThreshold.toDouble(),
+                    threshold = localityOfDataAccessThreshold.toDouble()
+                ),
+                message = issue.description
             )
-        }
+        )
     }
 
     private fun getFqNamesOfLocalPropertiesOfClassFunIsIn(function: KtNamedFunction): List<FqName> =
@@ -124,8 +113,8 @@ class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
             }
         }
 
-    private fun getForeignDataProvidersUsedInBlock(block: KtBlockExpression, containerName: FqName): List<FqName> =
-        block.collectDescendantsOfType<KtNameReferenceExpression>().mapNotNull { reference ->
+    private fun getForeignDataProvidersUsedInExpression(expression: KtExpression, containerName: FqName): List<FqName> =
+        expression.collectDescendantsOfType<KtNameReferenceExpression>().mapNotNull { reference ->
             // This removes all ReferenceExpressions to functions etc.
             reference.getResolvedCall(bindingContext)?.resultingDescriptor?.referencedProperty
         }.filter {
@@ -137,8 +126,8 @@ class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
             it != containerName
         }.filterNotNull().distinct()
 
-    private fun getFqNamesOfAllDataAccessedInBlock(block: KtBlockExpression): List<FqName> =
-        block.collectDescendantsOfType<KtNameReferenceExpression>().mapNotNull { reference ->
+    private fun getFqNamesOfAllDataAccessedInExpression(expression: KtExpression): List<FqName> =
+        expression.collectDescendantsOfType<KtNameReferenceExpression>().mapNotNull { reference ->
             // This removes all ReferenceExpressions to functions etc.
             reference.getResolvedCall(bindingContext)?.resultingDescriptor?.referencedProperty
         }.filter {
@@ -150,7 +139,7 @@ class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
 
     private fun getFqNameToNumOfUsagesOfLocalDataInFunction(function: KtNamedFunction): Map<FqName, Int> {
         val localProperties = getFqNamesOfLocalPropertiesOfClassFunIsIn(function)
-        return function.findDescendantOfType<KtBlockExpression>()?.collectDescendantsOfType<KtNameReferenceExpression>()
+        return function.findDescendantOfType<KtExpression>()?.collectDescendantsOfType<KtNameReferenceExpression>()
             ?.filter {
                 it.parent !is KtDotQualifiedExpression
             }
