@@ -51,7 +51,7 @@ internal object RulePrinter : DocumentationPrinter<Rule> {
                 }
             }
 
-            markdown { RuleConfigurationPrinter.print(item.configuration) }
+            markdown { RuleConfigurationPrinter.print(item.configurations) }
 
             printRuleCodeExamples(item)
         }

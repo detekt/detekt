@@ -11,16 +11,29 @@ import kotlin.io.path.invariantSeparatorsPathString
 
 const val KOTLIN_SUFFIX = ".kt"
 const val KOTLIN_SCRIPT_SUFFIX = ".kts"
+private const val KOTLIN_KMP_COMMON_SUFFIX = ".common.kt"
+
+private val KOTLIN_FILE_SUFFIXES = arrayOf(
+    KOTLIN_KMP_COMMON_SUFFIX,
+    KOTLIN_SUFFIX,
+    KOTLIN_SCRIPT_SUFFIX
+)
 
 val PsiFile.fileName: String
     get() = name.substringAfterLast(File.separatorChar)
 
+/**
+ * Removes kotlin specific file name suffixes, e.g. .kt.
+ * Note, will not remove other possible/known file suffixes like '.java'
+ */
 fun PsiFile.fileNameWithoutSuffix(): String {
     val fileName = this.fileName
-    if (fileName.endsWith(KOTLIN_SCRIPT_SUFFIX)) {
-        return fileName.removeSuffix(KOTLIN_SCRIPT_SUFFIX)
+    for (suffix in KOTLIN_FILE_SUFFIXES) {
+        if (fileName.endsWith(suffix)) {
+            return fileName.removeSuffix(suffix)
+        }
     }
-    return fileName.removeSuffix(KOTLIN_SUFFIX)
+    return fileName
 }
 
 fun PsiFile.absolutePath(): Path = Path(name)
@@ -67,6 +80,7 @@ fun PsiFile.toFilePath(): FilePath {
             basePath = basePath,
             relativePath = relativePath
         )
+
         basePath == null && relativePath == null -> FilePath(absolutePath = absolutePath())
         else -> error("Cannot build a FilePath from base path = $basePath and relative path = $relativePath")
     }

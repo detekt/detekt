@@ -8,12 +8,16 @@ class DeprecatedPrinterSpec {
 
     @Test
     fun `prints the correct properties`() {
-        val markdownString = DeprecatedPrinter.print(listOf(createRuleSetPage()))
-        val expectedMarkdownString = """
-            style>MagicNumber>conf2=use conf1 instead
-            style>MagicNumber>conf4=use conf3 instead
-            style>DuplicateCaseInWhenExpression=is deprecated
-        """.trimIndent() + "\n${writeMigratedRules()}\n"
-        assertThat(markdownString).isEqualTo(expectedMarkdownString)
+        val propertiesString = DeprecatedPrinter.print(listOf(createRuleSetPage()))
+        val expectedPropertiesString = listOf(
+            "style>MagicNumber>conf2=use conf1 instead",
+            "style>MagicNumber>conf4=use conf3 instead",
+            "style>DuplicateCaseInWhenExpression=is deprecated",
+        )
+            .plus(migratedRules())
+            .sorted()
+            .joinToString("\n", postfix = "\n")
+
+        assertThat(propertiesString).isEqualTo(expectedPropertiesString)
     }
 }

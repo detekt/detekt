@@ -182,7 +182,7 @@ class RuleCollectorSpec {
                 class SomeRandomClass : Rule
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration).isEmpty()
+            assertThat(items[0].configurations).isEmpty()
         }
 
         @Test
@@ -197,7 +197,7 @@ class RuleCollectorSpec {
                 }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration).hasSize(1)
+            assertThat(items[0].configurations).hasSize(1)
             val expectedConfiguration = Configuration(
                 name = "config",
                 description = "description",
@@ -205,7 +205,7 @@ class RuleCollectorSpec {
                 defaultAndroidValue = null,
                 deprecated = null
             )
-            assertThat(items[0].configuration[0]).isEqualTo(expectedConfiguration)
+            assertThat(items[0].configurations[0]).isEqualTo(expectedConfiguration)
         }
 
         @Test
@@ -220,8 +220,8 @@ class RuleCollectorSpec {
                 }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration).hasSize(1)
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(1_999_000))
+            assertThat(items[0].configurations).hasSize(1)
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(of(1_999_000))
         }
 
         @Test
@@ -236,7 +236,7 @@ class RuleCollectorSpec {
                 }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(of("abcd"))
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(of("abcd"))
         }
 
         @Test
@@ -251,7 +251,7 @@ class RuleCollectorSpec {
                 }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(99))
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(of(99))
         }
 
         @Test
@@ -272,7 +272,7 @@ class RuleCollectorSpec {
             """.trimIndent()
             val items = subject.run(code)
             val expected = of(listOf("a", "b"))
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(expected)
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(expected)
         }
 
         @Test
@@ -290,7 +290,7 @@ class RuleCollectorSpec {
                 }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration).hasSize(2)
+            assertThat(items[0].configurations).hasSize(2)
         }
 
         @Test
@@ -308,8 +308,8 @@ class RuleCollectorSpec {
                 }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration[0].description).isEqualTo("This is a multi line description")
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(of("a"))
+            assertThat(items[0].configurations[0].description).isEqualTo("This is a multi line description")
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(of("a"))
         }
 
         @Test
@@ -328,7 +328,7 @@ class RuleCollectorSpec {
                 }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(99))
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(of(99))
         }
 
         @Test
@@ -347,7 +347,7 @@ class RuleCollectorSpec {
                 }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(99))
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(of(99))
         }
 
         @Test
@@ -366,7 +366,7 @@ class RuleCollectorSpec {
                 }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(of("a"))
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(of("a"))
         }
 
         @Test
@@ -390,8 +390,8 @@ class RuleCollectorSpec {
             """.trimIndent()
             val items = subject.run(code)
             val expected = of(listOf("a", "b"))
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(expected)
-            assertThat(items[0].configuration[1].defaultValue).isEqualTo(expected)
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(expected)
+            assertThat(items[0].configurations[1].defaultValue).isEqualTo(expected)
         }
 
         @Test
@@ -410,8 +410,8 @@ class RuleCollectorSpec {
             """.trimIndent()
             val items = subject.run(code)
             val expected = of(emptyList())
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(expected)
-            assertThat(items[0].configuration[1].defaultValue).isEqualTo(expected)
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(expected)
+            assertThat(items[0].configurations[1].defaultValue).isEqualTo(expected)
         }
 
         @Test
@@ -434,8 +434,8 @@ class RuleCollectorSpec {
             """.trimIndent()
             val items = subject.run(code)
             val expected = of(emptyList())
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(expected)
-            assertThat(items[0].configuration[1].defaultValue).isEqualTo(expected)
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(expected)
+            assertThat(items[0].configurations[1].defaultValue).isEqualTo(expected)
         }
 
         @Test
@@ -451,7 +451,7 @@ class RuleCollectorSpec {
                 }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration[0].deprecated).isEqualTo("use config1 instead")
+            assertThat(items[0].configurations[0].deprecated).isEqualTo("use config1 instead")
         }
 
         @Test
@@ -522,7 +522,7 @@ class RuleCollectorSpec {
                     }
                 """.trimIndent()
                 val items = subject.run(code)
-                assertThat(items[0].configuration[0]).isEqualTo(
+                assertThat(items[0].configurations[0]).isEqualTo(
                     Configuration(
                         name = "maxLineLength",
                         description = "description",
@@ -546,7 +546,7 @@ class RuleCollectorSpec {
                     }
                 """.trimIndent()
                 val items = subject.run(code)
-                assertThat(items[0].configuration[0]).isEqualTo(
+                assertThat(items[0].configurations[0]).isEqualTo(
                     Configuration(
                         name = "maxLineLength",
                         description = "description",
@@ -578,7 +578,7 @@ class RuleCollectorSpec {
                     }
                 """.trimIndent()
                 val items = subject.run(code)
-                val fallbackProperties = items[0].configuration.filter { it.name.startsWith("config") }
+                val fallbackProperties = items[0].configurations.filter { it.name.startsWith("config") }
                 assertThat(fallbackProperties).hasSize(3)
                 assertThat(fallbackProperties.map { it.defaultValue }).containsOnly(of(99))
             }
@@ -618,13 +618,13 @@ class RuleCollectorSpec {
             @Test
             fun `extracts default value with transformer function`() {
                 val items = subject.run(code)
-                assertThat(items[0].configuration[0].defaultValue).isEqualTo(of("[a-z]+"))
+                assertThat(items[0].configurations[0].defaultValue).isEqualTo(of("[a-z]+"))
             }
 
             @Test
             fun `extracts default value with method reference`() {
                 val items = subject.run(code)
-                assertThat(items[0].configuration[1].defaultValue).isEqualTo(of(false))
+                assertThat(items[0].configurations[1].defaultValue).isEqualTo(of(false))
             }
         }
 
@@ -663,13 +663,13 @@ class RuleCollectorSpec {
             @Test
             fun `parse options of type ValuesWithReason`() {
                 val rule = subject.run(code)[0]
-                assertThat(rule.configuration).hasSize(6)
+                assertThat(rule.configurations).hasSize(6)
             }
 
             @Test
             fun `no values`() {
                 val rule = subject.run(code)[0]
-                val config = rule.configuration.first { it.name == "noValues" }
+                val config = rule.configurations.first { it.name == "noValues" }
                 assertThat(config.defaultValue).isEqualTo(of(valuesWithReason()))
             }
 
@@ -677,7 +677,7 @@ class RuleCollectorSpec {
             fun `single value`() {
                 val rule = subject.run(code)[0]
                 val expected = of(valuesWithReason("value" to "reason"))
-                val singleValueConfigs = rule.configuration.filter { it.name.startsWith("single") }
+                val singleValueConfigs = rule.configurations.filter { it.name.startsWith("single") }
                 assertThat(singleValueConfigs)
                     .hasSize(3)
                     .extracting("defaultValue")
@@ -687,7 +687,7 @@ class RuleCollectorSpec {
             @Test
             fun `multiple values`() {
                 val rule = subject.run(code)[0]
-                val configs = rule.configuration.filter { it.name.startsWith("multiple") }
+                val configs = rule.configurations.filter { it.name.startsWith("multiple") }
                 val expected = of(
                     valuesWithReason(
                         "a" to "A and A",
