@@ -47,6 +47,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             LoopWithTooManyJumpStatements(config),
             SafeCast(config),
             UnnecessaryAbstractClass(config),
+            ClassCanBeInterface(config),
             UnnecessaryAnnotationUseSiteTarget(config),
             UnnecessaryParentheses(config),
             UnnecessaryInheritance(config),

@@ -13,6 +13,8 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isAbstract
+import io.gitlab.arturbosch.detekt.rules.isInternal
+import io.gitlab.arturbosch.detekt.rules.isProtected
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.MemberDescriptor
 import org.jetbrains.kotlin.descriptors.Modality
@@ -25,22 +27,22 @@ import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyClassMemberScope
 import org.jetbrains.kotlin.types.typeUtil.isInterface
 
 /**
- * This rule inspects `abstract` classes. Abstract classes which do not define any `abstract` members should instead be
- * refactored into concrete classes.
+ * This rule inspects `abstract` classes. In case an `abstract class` does not define any
+ * `abstract` members, it should instead be refactored into concrete classes.
  *
  * <noncompliant>
- * abstract class OnlyConcreteMembersInAbstractClass { // violation: no abstract members
+ * abstract class OnlyAbstractMembersInAbstractClass { // violation: no concrete members
  *
- *     val i: Int = 0
- *     fun f() { }
+ *     abstract val i: Int
+ *     abstract fun f()
  * }
  * </noncompliant>
  */
-@ActiveByDefault(since = "1.2.0")
+@ActiveByDefault(since = "1.23.0")
 @RequiresTypeResolution
-class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
+class ClassCanBeInterface(config: Config = Config.empty) : Rule(config) {
 
-    private val noAbstractMember = "An abstract class without an abstract member can be refactored to a concrete class."
+    private val noConcreteMember = "An abstract class without a concrete member can be refactored to an interface."
 
     override val issue =
         Issue(
@@ -79,8 +81,8 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
         when {
             members.isNotEmpty() -> checkMembers(members, nameIdentifier)
             hasInheritedMember(true) && isAnyParentAbstract() -> return
-            hasConstructorParameter() ->
-                report(CodeSmell(issue, Entity.from(nameIdentifier), noAbstractMember))
+            !hasConstructorParameter() ->
+                report(CodeSmell(issue, Entity.from(nameIdentifier), noConcreteMember))
         }
     }
 
@@ -88,9 +90,14 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
         members: List<KtCallableDeclaration>,
         nameIdentifier: PsiElement
     ) {
-        val (abstractMembers, _) = members.partition { it.isAbstract() }
-        if (abstractMembers.isEmpty() && !hasInheritedMember(true)) {
-            report(CodeSmell(issue, Entity.from(nameIdentifier), noAbstractMember))
+        val (abstractMembers, concreteMembers) = members.partition { it.isAbstract() }
+        when {
+            abstractMembers.isEmpty() && !hasInheritedMember(true) ->
+                Unit
+            abstractMembers.any { it.isInternal() || it.isProtected() } || hasConstructorParameter() ->
+                Unit
+            concreteMembers.isEmpty() && !hasInheritedMember(false) ->
+                report(CodeSmell(issue, Entity.from(nameIdentifier), noConcreteMember))
         }
     }
 

@@ -12,15 +12,15 @@ import org.junit.jupiter.api.Test
 private const val EXCLUDE_ANNOTATED_CLASSES = "excludeAnnotatedClasses"
 
 @KotlinCoreEnvironmentTest
-class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
-    val subject = UnnecessaryAbstractClass(TestConfig(EXCLUDE_ANNOTATED_CLASSES to listOf("Deprecated")))
+class ClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
+    val subject = ClassCanBeInterface(TestConfig(EXCLUDE_ANNOTATED_CLASSES to listOf("Deprecated")))
 
     @Nested
     inner class `abstract classes with no concrete members` {
         val message = "An abstract class without a concrete member can be refactored to an interface."
 
         @Test
-        fun `does not report an abstract class with no concrete member`() {
+        fun `reports an abstract class with no concrete member`() {
             val code = """
                 abstract class A {
                     abstract val i: Int
@@ -29,37 +29,39 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).isEmpty()
+            assertFindingMessage(findings, message)
+            assertThat(findings).hasStartSourceLocation(1, 16)
         }
 
         @Nested
-        inner class `does not report completely-empty abstract classes` {
+        inner class `reports completely-empty abstract classes` {
             @Test
             fun `case 1`() {
                 val code = "abstract class A"
                 val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).isEmpty()
+                assertFindingMessage(findings, message)
+                assertThat(findings).hasStartSourceLocation(1, 16)
             }
 
             @Test
             fun `case 2`() {
                 val code = "abstract class A()"
                 val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).isEmpty()
+                assertFindingMessage(findings, message)
             }
 
             @Test
             fun `case 3`() {
                 val code = "abstract class A {}"
                 val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).isEmpty()
+                assertFindingMessage(findings, message)
             }
 
             @Test
             fun `case 4`() {
                 val code = "abstract class A() {}"
                 val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).isEmpty()
+                assertFindingMessage(findings, message)
             }
 
             @Test
@@ -71,7 +73,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                     abstract class B : A
                 """.trimIndent()
                 val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).isEmpty()
+                assertFindingMessage(findings, message)
             }
 
             @Test
@@ -167,7 +169,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertFindingMessage(findings, message)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -180,7 +182,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertFindingMessage(findings, message)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -193,30 +195,28 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertFindingMessage(findings, message)
+            assertThat(findings).isEmpty()
         }
 
         @Test
         fun `does not report no abstract members in an abstract class with just a constructor`() {
             val code = "abstract class A(val i: Int)"
             val findings = subject.compileAndLintWithContext(env, code)
-            assertFindingMessage(findings, message)
-            assertThat(findings).hasStartSourceLocation(1, 16)
+            assertThat(findings).isEmpty()
         }
 
         @Test
         fun `does not report no abstract members in an abstract class with a body and a constructor`() {
             val code = "abstract class A(val i: Int) {}"
             val findings = subject.compileAndLintWithContext(env, code)
-            assertFindingMessage(findings, message)
+            assertThat(findings).isEmpty()
         }
 
         @Test
         fun `does not report no abstract members in an abstract class with just a constructor parameter`() {
             val code = "abstract class A(i: Int)"
             val findings = subject.compileAndLintWithContext(env, code)
-            assertFindingMessage(findings, message)
-            assertThat(findings).hasStartSourceLocation(1, 16)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -238,7 +238,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertFindingMessage(findings, message)
+            assertThat(findings).isEmpty()
         }
     }
 

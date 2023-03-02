@@ -510,6 +510,8 @@ style:
   CascadingCallWrapping:
     active: false
     includeElvis: true
+  ClassCanBeInterface:
+    active: true
   ClassOrdering:
     active: false
   CollapsibleIfStatements:
