@@ -12,7 +12,6 @@ data class Rule(
     val parent: String,
     val configurations: List<Configuration> = emptyList(),
     val autoCorrect: Boolean = false,
-    var inMultiRule: String? = null,
     val requiresTypeResolution: Boolean = false,
     val deprecationMessage: String? = null
 ) {
