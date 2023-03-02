@@ -28,6 +28,7 @@ jobs:
       - name: Build detekt
         uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f # v2
         with:
+          gradle-home-cache-cleanup: true
           arguments: build
 
       - name: Deploy Snapshot
@@ -38,4 +39,5 @@ jobs:
           ORG_GRADLE_PROJECT_SONATYPE_USERNAME: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPE_USERNAME }}
           ORG_GRADLE_PROJECT_SONATYPE_PASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPE_PASSWORD }}
         with:
+          gradle-home-cache-cleanup: true
           arguments: publishAllToSonatypeSnapshot -Dsnapshot=true --stacktrace

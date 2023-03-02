@@ -2,9 +2,7 @@ name: "Danger"
 
 on:
   pull_request_target:
-    types: [assigned, opened, synchronize, reopened]
-    branches:
-      - "**"
+    types: [ assigned, opened, synchronize, reopened ]
 
 permissions:
   actions: write
@@ -16,7 +14,7 @@ permissions:
 
 jobs:
   danger:
-    if: ${{ github.event.sender != 'codecov' }}
+    if: github.event.sender != 'codecov'
     name: Danger JS
     runs-on: ubuntu-latest
     steps:

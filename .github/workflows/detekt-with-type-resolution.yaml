@@ -5,8 +5,6 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - '**'
 
 env:
   GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
@@ -35,6 +33,7 @@ jobs:
       - name: Run detekt-cli with argsfile
         uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f # v2
         with:
+          gradle-home-cache-cleanup: true
           arguments: :detekt-cli:runWithArgsFile
 
       - name: Upload SARIF to Github using the upload-sarif action
@@ -62,6 +61,7 @@ jobs:
       - name: Run analysis
         uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f # v2
         with:
+          gradle-home-cache-cleanup: true
           arguments: detektMain detektTest detektFunctionalTest detektTestFixtures detektReportMergeSarif --continue
 
       - name: Upload SARIF to Github using the upload-sarif action

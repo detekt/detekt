@@ -5,8 +5,7 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - '**'
+  workflow_dispatch:
 
 env:
   GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
@@ -21,8 +20,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        jdk: [8, 11, 17]
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        jdk: [ 8, 11, 17 ]
         exclude: # windows with JDK8 are *really* flaky
           - os: windows-latest
             jdk: 8
@@ -40,6 +39,7 @@ jobs:
       - name: Build detekt
         uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f # v2
         with:
+          gradle-home-cache-cleanup: true
           arguments: build -x detekt publishToMavenLocal -PenablePTS=${{ github.event_name == 'pull_request' }}
 
       - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3
@@ -63,6 +63,7 @@ jobs:
       - name: Verify Generated Detekt Config File
         uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f # v2
         with:
+          gradle-home-cache-cleanup: true
           arguments: verifyGeneratorOutput
 
   compile-test-snippets:
@@ -80,6 +81,7 @@ jobs:
       - name: Build and compile test snippets
         uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f # v2
         with:
+          gradle-home-cache-cleanup: true
           arguments: test -Pcompile-test-snippets=true
 
   warnings-as-errors:
@@ -97,4 +99,5 @@ jobs:
       - name: Run with allWarningsAsErrors
         uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f # v2
         with:
+          gradle-home-cache-cleanup: true
           arguments: compileKotlin compileTestKotlin compileTestFixturesKotlin -PwarningsAsErrors=true
