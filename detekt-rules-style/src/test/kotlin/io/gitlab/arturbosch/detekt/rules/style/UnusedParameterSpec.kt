@@ -18,9 +18,9 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports single parameters if they are unused in public function`() {
             val code = """
-            fun function(unusedParameter: Int): Int {
-                return 5
-            }
+                fun function(unusedParameter: Int): Int {
+                    return 5
+                }
             """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(1)
@@ -29,9 +29,9 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report single parameters if they used in return statement in public function`() {
             val code = """
-            fun function(used: Int): Int {
-                return used
-            }
+                fun function(used: Int): Int {
+                    return used
+                }
             """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
@@ -40,9 +40,9 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report single parameters if they used in public function`() {
             val code = """
-            fun function(used: Int) {
-                println(used)
-            }
+                fun function(used: Int) {
+                    println(used)
+                }
             """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
@@ -51,9 +51,9 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports parameters that are unused in return statement in public function`() {
             val code = """
-            fun function(unusedParameter: Int, usedParameter: Int): Int {
-                return usedParameter
-            }
+                fun function(unusedParameter: Int, usedParameter: Int): Int {
+                    return usedParameter
+                }
             """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(1)
@@ -62,9 +62,9 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports parameters that are unused in public function`() {
             val code = """
-            fun function(unusedParameter: Int, usedParameter: Int) {
-                println(usedParameter)
-            }
+                fun function(unusedParameter: Int, usedParameter: Int) {
+                    println(usedParameter)
+                }
             """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(1)
@@ -73,13 +73,13 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports single parameters if they are unused in private function`() {
             val code = """
-            class Test {
-                val value = usedMethod(1)
-
-                private fun usedMethod(unusedParameter: Int): Int {
-                    return 5
+                class Test {
+                    val value = usedMethod(1)
+                
+                    private fun usedMethod(unusedParameter: Int): Int {
+                        return 5
+                    }
                 }
-            }
             """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(1)
@@ -88,18 +88,18 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports two parameters if they are unused and called the same in different methods`() {
             val code = """
-            class Test {
-                val value = usedMethod(1)
-                val value2 = usedMethod2(1)
-
-                private fun usedMethod(unusedParameter: Int): Int {
-                    return 5
+                class Test {
+                    val value = usedMethod(1)
+                    val value2 = usedMethod2(1)
+                
+                    private fun usedMethod(unusedParameter: Int): Int {
+                        return 5
+                    }
+                
+                    private fun usedMethod2(unusedParameter: Int) {
+                        return 5
+                    }
                 }
-
-                private fun usedMethod2(unusedParameter: Int) {
-                    return 5
-                }
-            }
             """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(2)
@@ -108,13 +108,13 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report single parameters if they used in return statement in private function`() {
             val code = """
-            class Test {
-                val value = usedMethod(1)
-
-                private fun usedMethod(used: Int): Int {
-                    return used
+                class Test {
+                    val value = usedMethod(1)
+                
+                    private fun usedMethod(used: Int): Int {
+                        return used
+                    }
                 }
-            }
             """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
@@ -123,13 +123,13 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report single parameters if they used in private function`() {
             val code = """
-            class Test {
-                val value = usedMethod(1)
-
-                private fun usedMethod(used: Int) {
-                    println(used)
+                class Test {
+                    val value = usedMethod(1)
+                
+                    private fun usedMethod(used: Int) {
+                        println(used)
+                    }
                 }
-            }
             """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
@@ -138,13 +138,13 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports parameters that are unused in return statement in private function`() {
             val code = """
-            class Test {
-                val value = usedMethod(1, 2)
-
-                private fun usedMethod(unusedParameter: Int, usedParameter: Int): Int {
-                    return usedParameter
+                class Test {
+                    val value = usedMethod(1, 2)
+                
+                    private fun usedMethod(unusedParameter: Int, usedParameter: Int): Int {
+                        return usedParameter
+                    }
                 }
-            }
             """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(1)
@@ -153,13 +153,13 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports parameters that are unused in private function`() {
             val code = """
-            class Test {
-                val value = usedMethod(1, 2)
-
-                private fun usedMethod(unusedParameter: Int, usedParameter: Int) {
-                    println(usedParameter)
+                class Test {
+                    val value = usedMethod(1, 2)
+                
+                    private fun usedMethod(unusedParameter: Int, usedParameter: Int) {
+                        println(usedParameter)
+                    }
                 }
-            }
             """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(1)
@@ -230,7 +230,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 @Suppress("UNUSED_PARAMETER")
                 class Test {
                     fun foo(unused: String){}
-
+                
                     class InnerTest {
                         fun bar(unused: String){}
                     }
@@ -244,10 +244,10 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         fun `does not report parameters in annotated file`() {
             val code = """
                 @file:Suppress("UNUSED_PARAMETER")
-
+                
                 class Test {
                     fun foo(unused: String){}
-
+                
                     class InnerTest {
                         fun bar(unused: String){}
                     }
@@ -279,7 +279,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         fun `does not report the args parameter of the main function inside an object`() {
             val code = """
                 object O {
-
+                
                     @JvmStatic
                     fun main(args: Array<String>) {
                         println("b")

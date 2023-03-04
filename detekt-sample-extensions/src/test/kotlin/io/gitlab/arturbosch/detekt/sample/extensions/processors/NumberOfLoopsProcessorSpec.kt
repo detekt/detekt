@@ -11,13 +11,13 @@ class NumberOfLoopsProcessorSpec {
     @Test
     fun `Number of loops sample rule should expect two loops`() {
         val code = """
-        fun main() {
-            for (i in 0..10) {
-                while (i < 5) {
-                    println(i)
+            fun main() {
+                for (i in 0..10) {
+                    while (i < 5) {
+                        println(i)
+                    }
                 }
             }
-        }
         """.trimIndent()
 
         val ktFile = compileContentForTest(code)

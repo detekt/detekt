@@ -18,7 +18,7 @@ class VariableNamingSpec {
             class Bar {
                 val MYVar = 3
             }
-
+            
             object Foo {
                 val MYVar = 3
             }
@@ -26,17 +26,16 @@ class VariableNamingSpec {
 
         @Test
         fun shouldNotFailWithInvalidRegexWhenDisabledVariableNaming() {
-            val configValues = mapOf(
+            val config = TestConfig(
                 "active" to "false",
-                VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo"
+                VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo",
             )
-            val config = TestConfig(configValues)
             assertThat(VariableNaming(config).compileAndLint(excludeClassPatternVariableRegexCode)).isEmpty()
         }
 
         @Test
         fun shouldFailWithInvalidRegexVariableNaming() {
-            val config = TestConfig(mapOf(VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo"))
+            val config = TestConfig(VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo")
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
                 VariableNaming(config).compileAndLint(excludeClassPatternVariableRegexCode)
             }
@@ -46,15 +45,15 @@ class VariableNamingSpec {
     @Test
     fun shouldExcludeClassesFromVariableNaming() {
         val code = """
-        class Bar {
-            val MYVar = 3
-        }
-
-        object Foo {
-            val MYVar = 3
-        }
+            class Bar {
+                val MYVar = 3
+            }
+            
+            object Foo {
+                val MYVar = 3
+            }
         """.trimIndent()
-        val config = TestConfig(mapOf(VariableNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar"))
+        val config = TestConfig(VariableNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar")
         assertThat(VariableNaming(config).compileAndLint(code)).isEmpty()
     }
 
@@ -88,7 +87,7 @@ class VariableNamingSpec {
     }
 
     @Test
-    fun `should not flag overridden member properties by default`() {
+    fun `should not flag overridden member properties`() {
         val code = """
             class C : I {
                 override val SHOULD_NOT_BE_FLAGGED = "banana"
@@ -117,27 +116,6 @@ class VariableNamingSpec {
     }
 
     @Test
-    fun `doesn't ignore overridden member properties if ignoreOverridden is false`() {
-        val code = """
-            class C : I {
-                override val SHOULD_BE_FLAGGED = "banana"
-            }
-            interface I : I2 {
-                override val SHOULD_BE_FLAGGED: String
-            }
-            interface I2 {
-                @Suppress("VariableNaming") val SHOULD_BE_FLAGGED: String
-            }
-        """.trimIndent()
-        val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
-        assertThat(VariableNaming(config).compileAndLint(code))
-            .hasStartSourceLocations(
-                SourceLocation(2, 18),
-                SourceLocation(5, 18)
-            )
-    }
-
-    @Test
     fun `should not detect any`() {
         val code = """
             data class D(val i: Int, val j: Int)
@@ -148,5 +126,3 @@ class VariableNamingSpec {
         assertThat(VariableNaming().compileAndLint(code)).isEmpty()
     }
 }
-
-private const val IGNORE_OVERRIDDEN = "ignoreOverridden"

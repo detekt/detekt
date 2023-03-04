@@ -42,8 +42,8 @@ class ValueOrDefaultCommaSeparatedSpec {
         @Test
         fun `and empty String`() {
             val config = CompositeConfig(
-                TestConfig(mapOf("imports" to "")),
-                TestConfig(mapOf("imports" to emptyList<String>()))
+                TestConfig("imports" to ""),
+                TestConfig("imports" to emptyList<String>())
             )
 
             assertThat(config.valueOrDefaultCommaSeparated("imports", emptyList())).isEmpty()
@@ -52,8 +52,8 @@ class ValueOrDefaultCommaSeparatedSpec {
         @Test
         fun `and empty List`() {
             val config = CompositeConfig(
-                TestConfig(mapOf("imports" to emptyList<String>())),
-                TestConfig(mapOf("imports" to emptyList<String>()))
+                TestConfig("imports" to emptyList<String>()),
+                TestConfig("imports" to emptyList<String>())
             )
 
             assertThat(config.valueOrDefaultCommaSeparated("imports", emptyList())).isEmpty()
@@ -62,8 +62,8 @@ class ValueOrDefaultCommaSeparatedSpec {
         @Test
         fun `and String with values`() {
             val config = CompositeConfig(
-                TestConfig(mapOf("imports" to "java.utils.*,butterknife.*")),
-                TestConfig(mapOf("imports" to emptyList<String>()))
+                TestConfig("imports" to "java.utils.*,butterknife.*"),
+                TestConfig("imports" to emptyList<String>())
             )
 
             assertThat(config.valueOrDefaultCommaSeparated("imports", emptyList()))
@@ -73,8 +73,8 @@ class ValueOrDefaultCommaSeparatedSpec {
         @Test
         fun `and List with values`() {
             val config = CompositeConfig(
-                TestConfig(mapOf("imports" to listOf("java.utils.*", "butterknife.*"))),
-                TestConfig(mapOf("imports" to emptyList<String>()))
+                TestConfig("imports" to listOf("java.utils.*", "butterknife.*")),
+                TestConfig("imports" to emptyList<String>())
             )
 
             assertThat(config.valueOrDefaultCommaSeparated("imports", emptyList()))

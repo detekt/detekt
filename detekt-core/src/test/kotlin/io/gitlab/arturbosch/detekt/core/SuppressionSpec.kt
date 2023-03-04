@@ -162,13 +162,13 @@ class SuppressionSpec {
         fun `rule should be suppressed by detekt prefix in uppercase with dot separator`() {
             val ktFile = compileContentForTest(
                 """
-            @file:Suppress("Detekt.ALL")
-            object SuppressedWithDetektPrefix {
-
-                fun stuff() {
-                    println("FAILED TEST")
-                }
-            }
+                    @file:Suppress("Detekt.ALL")
+                    object SuppressedWithDetektPrefix {
+                    
+                        fun stuff() {
+                            println("FAILED TEST")
+                        }
+                    }
                 """.trimIndent()
             )
             val rule = TestRule()
@@ -180,13 +180,13 @@ class SuppressionSpec {
         fun `rule should be suppressed by detekt prefix in lowercase with colon separator`() {
             val ktFile = compileContentForTest(
                 """
-            @file:Suppress("detekt:ALL")
-            object SuppressedWithDetektPrefix {
-
-                fun stuff() {
-                    println("FAILED TEST")
-                }
-            }
+                    @file:Suppress("detekt:ALL")
+                    object SuppressedWithDetektPrefix {
+                    
+                        fun stuff() {
+                            println("FAILED TEST")
+                        }
+                    }
                 """.trimIndent()
             )
             val rule = TestRule()
@@ -198,13 +198,13 @@ class SuppressionSpec {
         fun `rule should be suppressed by detekt prefix in all caps with colon separator`() {
             val ktFile = compileContentForTest(
                 """
-            @file:Suppress("DETEKT:ALL")
-            object SuppressedWithDetektPrefix {
-
-                fun stuff() {
-                    println("FAILED TEST")
-                }
-            }
+                    @file:Suppress("DETEKT:ALL")
+                    object SuppressedWithDetektPrefix {
+                    
+                        fun stuff() {
+                            println("FAILED TEST")
+                        }
+                    }
                 """.trimIndent()
             )
             val rule = TestRule()
@@ -220,16 +220,16 @@ class SuppressionSpec {
         fun `allows to declare`() {
             val ktFile = compileContentForTest(
                 """
-            @file:Suppress("detekt:MyTest")
-            object SuppressedWithDetektPrefixAndCustomConfigBasedPrefix {
-
-                fun stuff() {
-                    println("FAILED TEST")
-                }
-            }
+                    @file:Suppress("detekt:MyTest")
+                    object SuppressedWithDetektPrefixAndCustomConfigBasedPrefix {
+                    
+                        fun stuff() {
+                            println("FAILED TEST")
+                        }
+                    }
                 """.trimIndent()
             )
-            val rule = TestRule(TestConfig(mutableMapOf("aliases" to "[MyTest]")))
+            val rule = TestRule(TestConfig("aliases" to "[MyTest]"))
             rule.visitFile(ktFile)
             assertThat(rule.expected).isNotNull()
         }
@@ -312,8 +312,8 @@ private fun assertCodeIsSuppressed(code: String, config: Config) {
 
 private fun isSuppressedBy(annotation: String, argument: String): Boolean {
     val annotated = """
-            @$annotation("$argument")
-            class Test
+        @$annotation("$argument")
+        class Test
     """.trimIndent()
     val file = compileContentForTest(annotated)
     val annotatedClass = file.children.first { it is KtClass } as KtAnnotated

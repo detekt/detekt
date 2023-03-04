@@ -40,7 +40,6 @@ class UseIfInsteadOfWhen(config: Config = Config.empty) : Rule(config) {
     @Configuration("ignores when statements with a variable declaration used in the subject")
     private val ignoreWhenContainingVariableDeclaration: Boolean by config(false)
 
-    @Suppress("ReturnCount")
     override fun visitWhenExpression(expression: KtWhenExpression) {
         super.visitWhenExpression(expression)
 

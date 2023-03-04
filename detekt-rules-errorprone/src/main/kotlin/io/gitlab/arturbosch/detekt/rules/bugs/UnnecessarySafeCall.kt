@@ -39,7 +39,6 @@ class UnnecessarySafeCall(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Suppress("ReturnCount")
     override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
         super.visitSafeQualifiedExpression(expression)
 

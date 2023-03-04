@@ -9,7 +9,7 @@ import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.nio.file.Files
+import kotlin.io.path.readText
 
 class BaselineFormatSpec {
 
@@ -95,8 +95,7 @@ class BaselineFormatSpec {
 
             val format = BaselineFormat()
             format.write(tempFile, savedBaseline)
-            val bytes = Files.readAllBytes(tempFile)
-            val content = String(bytes, Charsets.UTF_8)
+            val content = tempFile.readText()
 
             assertThat(content).endsWith(">\n")
         }

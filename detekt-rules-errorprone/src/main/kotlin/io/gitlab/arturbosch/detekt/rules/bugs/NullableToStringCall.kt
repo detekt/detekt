@@ -46,7 +46,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * </compliant>
  */
 @RequiresTypeResolution
-@Suppress("ReturnCount")
 class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
@@ -80,6 +79,7 @@ class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
         }
     }
 
+    @Suppress("ReturnCount")
     private fun KtExpression.targetExpression(): KtExpression? {
         val qualifiedExpression = getStrictParentOfType<KtQualifiedExpression>()
         val targetExpression = if (qualifiedExpression != null) {

@@ -18,8 +18,12 @@ const detektConfigFileChanges = danger.git.fileMatch(
 const milestone = danger.github.pr.milestone;
 const prReviews = danger.github.reviews;
 
+const optsCheckmark = {
+  icon: ":white_check_mark:",
+};
+
 // Warn if the PR contains a functional change without a test
-if (functionalChanges.length > 0 && testChanges.length === 0) {
+if (functionalChanges.edited && !testChanges.edited) {
   warn(
     "It looks like this PR contains functional changes without a corresponding test."
   );
@@ -28,14 +32,24 @@ if (functionalChanges.length > 0 && testChanges.length === 0) {
 // Handle PRs for new Detekt rules.
 if (rulesChanges.created) {
   message("Thanks for adding a new rule to Detekt :heart:");
-  if (ruleTestChanges.length === 0) {
+  if (!ruleTestChanges.edited) {
     warn(
       "It looks like your new rule doesn't comes with tests. Make sure you include them."
     );
+  } else {
+    message(
+      "We detekted that you added tests, to your rule, that's awesome!",
+      optsCheckmark
+    );
   }
-  if (detektConfigFileChanges.length === 0) {
+  if (!detektConfigFileChanges.edited) {
     warn(
       "It looks like you haven't updated the `default-detekt-config.yml` file in your PR. Make sure you run `./gradlew generateDocumentation`"
+    );
+  } else {
+    message(
+      "We detekted that you updated the `default-detekt-config.yml` file, that's awesome!",
+      optsCheckmark
     );
   }
 }

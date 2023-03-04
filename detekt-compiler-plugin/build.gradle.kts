@@ -1,6 +1,5 @@
 import de.undercouch.gradle.tasks.download.Download
 import de.undercouch.gradle.tasks.download.Verify
-import java.io.ByteArrayOutputStream
 
 val kotlinVersion: String = libs.versions.kotlin.get()
 val detektVersion: String = Versions.DETEKT
@@ -19,14 +18,8 @@ plugins {
     alias(libs.plugins.download)
 }
 
-repositories {
-    mavenCentral()
-    mavenLocal()
-}
-
 dependencies {
-    compileOnly(kotlin("stdlib"))
-    compileOnly(kotlin("compiler-embeddable"))
+    compileOnly(libs.kotlin.compiler)
 
     implementation(projects.detektApi)
     implementation(projects.detektTooling)
@@ -35,6 +28,7 @@ dependencies {
 
     testImplementation(libs.assertj)
     testImplementation(libs.kotlinCompileTesting)
+    testImplementation(libs.kotlin.compilerEmbeddable)
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants
@@ -53,7 +47,7 @@ tasks.shadowJar.configure {
     dependencies {
         include(dependency("io.gitlab.arturbosch.detekt:.*"))
         include(dependency("io.github.detekt:.*"))
-        include(dependency("org.yaml:snakeyaml"))
+        include(dependency("org.snakeyaml:snakeyaml-engine"))
         include(dependency("io.github.davidburstrom.contester:contester-breakpoint"))
     }
 }
@@ -78,39 +72,49 @@ val unzipKotlinCompiler by tasks.registering(Copy::class) {
     into(file("$rootDir/build/kotlinc/$kotlinVersion"))
 }
 
-val testPluginKotlinc by tasks.registering(RunTestExecutable::class) {
-    notCompatibleWithConfigurationCache("cannot serialize objects currently used in this task")
-    dependsOn(unzipKotlinCompiler, tasks.shadowJar)
+val testPluginKotlinc by tasks.registering(Task::class) {
+    val outputDir = layout.buildDirectory.dir("tmp/kotlinc")
+    val sourceFile = file("src/test/resources/hello.kt")
 
-    args(
-        listOf(
-            "$projectDir/src/test/resources/hello.kt",
-            "-Xplugin=${tasks.shadowJar.get().archiveFile.get().asFile.absolutePath}",
-            "-P",
-        )
-    )
+    inputs.dir(unzipKotlinCompiler.map { it.destinationDir })
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.file(tasks.shadowJar.map { it.archiveFile })
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.file(sourceFile)
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    outputs.dir(outputDir)
 
     val baseExecutablePath = "${unzipKotlinCompiler.get().destinationDir}/kotlinc/bin/kotlinc"
     val pluginParameters = "plugin:detekt-compiler-plugin:debug=true"
 
-    if (org.apache.tools.ant.taskdefs.condition.Os.isFamily("windows")) {
-        executable(file("$baseExecutablePath.bat"))
-        args("\"$pluginParameters\"")
-    } else {
-        executable(file(baseExecutablePath))
-        args(pluginParameters)
-    }
+    val kotlincExecution = providers.exec {
+        workingDir = outputDir.get().asFile
+        workingDir.mkdirs()
 
-    errorOutput = ByteArrayOutputStream()
-    // dummy path - required for RunTestExecutable task but doesn't do anything
-    outputDir = file("$buildDir/tmp/kotlinc")
+        args = listOf(
+            sourceFile.path,
+            "-Xplugin=${tasks.shadowJar.get().archiveFile.get().asFile.absolutePath}",
+            "-P",
+        )
+
+        if (org.apache.tools.ant.taskdefs.condition.Os.isFamily("windows")) {
+            executable = "$baseExecutablePath.bat"
+            args("\"$pluginParameters\"")
+        } else {
+            executable = baseExecutablePath
+            args(pluginParameters)
+        }
+    }
 
     doLast {
-        if (!errorOutput.toString().contains("warning: magicNumber:")) {
+        if (!kotlincExecution.standardError.asText.get().contains("warning: magicNumber:")) {
             throw GradleException(
-                "kotlinc $kotlinVersion run with compiler plugin did not find MagicNumber issue as expected"
+                "kotlinc run with compiler plugin did not find MagicNumber issue as expected"
             )
         }
-        (this as RunTestExecutable).executionResult.get().assertNormalExitValue()
     }
+}
+
+tasks.check {
+    dependsOn(testPluginKotlinc)
 }

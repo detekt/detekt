@@ -6,27 +6,41 @@ import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import java.io.File
 import java.nio.file.Path
-import java.nio.file.Paths
+import kotlin.io.path.Path
+import kotlin.io.path.invariantSeparatorsPathString
 
 const val KOTLIN_SUFFIX = ".kt"
 const val KOTLIN_SCRIPT_SUFFIX = ".kts"
+private const val KOTLIN_KMP_COMMON_SUFFIX = ".common.kt"
+
+private val KOTLIN_FILE_SUFFIXES = arrayOf(
+    KOTLIN_KMP_COMMON_SUFFIX,
+    KOTLIN_SUFFIX,
+    KOTLIN_SCRIPT_SUFFIX
+)
 
 val PsiFile.fileName: String
     get() = name.substringAfterLast(File.separatorChar)
 
+/**
+ * Removes kotlin specific file name suffixes, e.g. .kt.
+ * Note, will not remove other possible/known file suffixes like '.java'
+ */
 fun PsiFile.fileNameWithoutSuffix(): String {
     val fileName = this.fileName
-    if (fileName.endsWith(KOTLIN_SCRIPT_SUFFIX)) {
-        return fileName.removeSuffix(KOTLIN_SCRIPT_SUFFIX)
+    for (suffix in KOTLIN_FILE_SUFFIXES) {
+        if (fileName.endsWith(suffix)) {
+            return fileName.removeSuffix(suffix)
+        }
     }
-    return fileName.removeSuffix(KOTLIN_SUFFIX)
+    return fileName
 }
 
-fun PsiFile.absolutePath(): Path = Paths.get(name)
+fun PsiFile.absolutePath(): Path = Path(name)
 
-fun PsiFile.relativePath(): Path? = getUserData(RELATIVE_PATH)?.let { Paths.get(it) }
+fun PsiFile.relativePath(): Path? = getUserData(RELATIVE_PATH)?.let { Path(it) }
 
-fun PsiFile.basePath(): Path? = getUserData(BASE_PATH)?.let { Paths.get(it) }
+fun PsiFile.basePath(): Path? = getUserData(BASE_PATH)?.let { Path(it) }
 
 /**
  * Represents both absolute path and relative path if available.
@@ -66,6 +80,7 @@ fun PsiFile.toFilePath(): FilePath {
             basePath = basePath,
             relativePath = relativePath
         )
+
         basePath == null && relativePath == null -> FilePath(absolutePath = absolutePath())
         else -> error("Cannot build a FilePath from base path = $basePath and relative path = $relativePath")
     }
@@ -82,4 +97,8 @@ fun getLineAndColumnInPsiFile(file: PsiFile, range: TextRange): PsiDiagnosticUti
 /**
  * Returns a system-independent string with UNIX system file separator.
  */
-fun Path.toUnifiedString(): String = toString().replace(File.separatorChar, '/')
+@Deprecated(
+    "Use stdlib method",
+    ReplaceWith("invariantSeparatorsPathString", "kotlin.io.path.invariantSeparatorsPathString")
+)
+fun Path.toUnifiedString(): String = invariantSeparatorsPathString

@@ -19,14 +19,14 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
     val subject = UnusedPrivateProperty()
 
     val regexTestingCode = """
-                class Test {
-                    private val used = "This is used"
-                    private val unused = "This is not used"
-
-                    fun use() {
-                        println(used)
-                    }
-                }
+        class Test {
+            private val used = "This is used"
+            private val unused = "This is not used"
+        
+            fun use() {
+                println(used)
+            }
+        }
     """.trimIndent()
 
     @Nested
@@ -37,7 +37,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test {
                     private val unused = "This is not used"
-
+                
                     fun use() {
                         println("This is not using a property")
                     }
@@ -51,7 +51,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test {
                     val unused = "This is not used"
-
+                
                     fun use() {
                         println("This is not using a property")
                     }
@@ -65,7 +65,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test {
                     private val used = "This is used"
-
+                
                     fun use() {
                         println(used)
                     }
@@ -80,7 +80,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 class Test {
                     private val used = "This is used"
                     private val unused = "This is not used"
-
+                
                     fun use() {
                         println(used)
                     }
@@ -91,18 +91,16 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
 
         @Test
         fun `does not fail when disabled with invalid regex`() {
-            val configRules = mapOf(
+            val config = TestConfig(
                 "active" to "false",
                 ALLOWED_NAMES_PATTERN to "*foo",
             )
-            val config = TestConfig(configRules)
             assertThat(UnusedPrivateMember(config).lint(regexTestingCode)).isEmpty()
         }
 
         @Test
         fun `does fail when enabled with invalid regex`() {
-            val configRules = mapOf(ALLOWED_NAMES_PATTERN to "*foo")
-            val config = TestConfig(configRules)
+            val config = TestConfig(ALLOWED_NAMES_PATTERN to "*foo")
             assertThatExceptionOfType(PatternSyntaxException::class.java)
                 .isThrownBy { UnusedPrivateMember(config).lint(regexTestingCode) }
         }
@@ -131,7 +129,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test {
                     private val unused = "This is not used"
-
+                
                     fun use() {
                         val used = "This is used"
                         println(used)
@@ -146,7 +144,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test {
                     private val used = "This is used"
-
+                
                     fun use() {
                         val text = used
                         println(text)
@@ -199,13 +197,13 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 private class PC { // used private class
                     companion object {
                         internal const val THE_CONST = "" // used private const
-
+                
                         object OO {
                             const val BLA = 4
                         }
                     }
                 }
-
+                
                 internal fun libraryFunction() = run {
                     val o: Function1<Any, Any> = object : Function1<Any, Any> {
                         override fun invoke(p1: Any): Any { // unused but overridden param
@@ -223,7 +221,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test {
                     private val used = "This is used"
-
+                
                     fun use() {
                         val unused = used
                         println(used)
@@ -260,7 +258,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 object O { // public
                     const val NUMBER = 5 // public
                 }
-
+                
                 private object PO { // private, but constants may be used
                     const val TEXT = "text"
                 }
@@ -354,7 +352,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 class Test {
                     private val used = "This is used"
                     private val text = used
-
+                
                     fun use() {
                         println(text)
                     }
@@ -368,7 +366,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test {
                     private val unused = "This is not used"
-
+                
                     inner class Something {
                         val test = unused
                     }
@@ -394,21 +392,21 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         fun `does not report used top level properties`() {
             val code = """
                 val stuff = object : Iterator<String?> {
-
+                
                     var mutatable: String? = null
-
+                
                     private fun preCall() {
                         mutatable = "done"
                     }
-
+                
                     override fun next(): String? {
                         preCall()
                         return mutatable
                     }
-
+                
                     override fun hasNext(): Boolean = true
                 }
-
+                
                 fun main(args: Array<String>) {
                     println(stuff.next())
                     calledFromMain()
@@ -535,7 +533,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         fun `does not report private constructor properties in annotated file`() {
             val code = """
                 @file:Suppress("unused")
-
+                
                 class Test(
                     private val foo: String,
                     private val bar: String
@@ -595,7 +593,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 class Test {
                     private val foo: String
                     private val bar: String
-
+                
                     class InnerTest {
                         private val baz: String
                     }
@@ -609,11 +607,11 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         fun `does not report private properties in annotated file`() {
             val code = """
                 @file:Suppress("unused")
-
+                
                 class Test {
                     private val foo: String
                     private val bar: String
-
+                
                     class InnerTest {
                         private val baz: String
                     }
@@ -802,7 +800,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     constructor(used: Any, unused: Any) {
                         used.toString()
                     }
-
+                
                     // this is actually unused, but clashes with the other constructor
                     constructor(used: Any)
                 }

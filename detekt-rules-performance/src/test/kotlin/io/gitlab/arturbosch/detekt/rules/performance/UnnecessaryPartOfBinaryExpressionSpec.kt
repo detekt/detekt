@@ -13,7 +13,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                 val foo = true
                 val baz = false
                 if (foo || baz || foo) {
-                    //TODO    
+                    //TODO
                 }
             }
         """.trimIndent()
@@ -30,9 +30,9 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                 val foo = true
                 val baz = 10
                 val bar = Bar(true)
-                   
+            
                 if (baz < 10 || foo || bar.bar || baz > 10) {
-                    //TODO    
+                    //TODO
                 }
             }
         """.trimIndent()
@@ -49,9 +49,9 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                 val foo = true
                 val baz = 10
                 val bar = Bar(true)
-                   
+            
                 if (baz < 10 || foo || bar.bar || baz > 10 || baz < 10) {
-                    //TODO    
+                    //TODO
                 }
             }
         """.trimIndent()
@@ -67,7 +67,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                 val foo = true
                 val baz = false
                 if (foo || baz && foo) {
-                    //TODO    
+                    //TODO
                 }
             }
         """.trimIndent()
@@ -83,7 +83,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                 val foo = 5
                 val baz = false
                 if (foo < 5 || baz && foo > 5) {
-                    //TODO    
+                    //TODO
                 }
             }
         """.trimIndent()
@@ -99,7 +99,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                 val foo = true
                 val baz = false
                 if (foo || baz && baz) {
-                    //TODO    
+                    //TODO
                 }
             }
         """.trimIndent()
@@ -114,7 +114,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             fun bar() {
                 val foo = true
                 if (foo || foo) {
-                    //TODO    
+                    //TODO
                 }
             }
         """.trimIndent()
@@ -129,9 +129,9 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             class Bar(val bar: Boolean, val baz: Boolean)
             fun bar() {
                 val bar = Bar(true, true)
-                
+            
                 if (bar.bar || bar.baz || bar.bar) {
-                    //TODO    
+                    //TODO
                 }
             }
         """.trimIndent()
@@ -146,9 +146,9 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             class Bar(val bar: Boolean)
             fun bar() {
                 val bar = Bar(true)
-                
+            
                 if (bar.bar || bar.bar) {
-                    //TODO    
+                    //TODO
                 }
             }
         """.trimIndent()
@@ -163,7 +163,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             fun bar() {
                 val foo = 1
                 if (foo > 1 && foo > 1) {
-                    //TODO    
+                    //TODO
                 }
             }
         """.trimIndent()
@@ -178,7 +178,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             fun bar() {
                 val foo = 1
                 if (foo> 1 && foo >1) {
-                    //TODO    
+                    //TODO
                 }
             }
         """.trimIndent()
@@ -194,9 +194,9 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             
             fun bar() {
                 val bar = Bar(true)
-                
+            
                 if (bar.bar && bar.bar) {
-                    //TODO    
+                    //TODO
                 }
             }
         """.trimIndent()
@@ -211,7 +211,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
             fun bar() {
                 val foo = true
                 if (foo) {
-                    //TODO    
+                    //TODO
                 }
             }
         """.trimIndent()
@@ -227,7 +227,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                 val foo = 0
                 val bar = 1
                 if (foo > bar || foo > 1) {
-                    //TODO    
+                    //TODO
                 }
             }
         """.trimIndent()
@@ -241,7 +241,7 @@ class UnnecessaryPartOfBinaryExpressionSpec {
         val code = """
             fun bar() {
                 val list = listOf<Int>()
-
+            
                 list.filter { it > 1 || it > 1 }
             }
         """.trimIndent()
@@ -257,7 +257,6 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                 val foo = true
                 when {
                     foo || foo -> {
-                    
                     }
                 }
             }
@@ -275,7 +274,6 @@ class UnnecessaryPartOfBinaryExpressionSpec {
                 val bar = true
                 when {
                     foo || bar || foo -> {
-                    
                     }
                 }
             }

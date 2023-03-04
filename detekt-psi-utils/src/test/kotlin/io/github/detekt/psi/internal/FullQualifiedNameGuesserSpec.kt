@@ -13,7 +13,7 @@ class FullQualifiedNameGuesserSpec {
             compileContentForTest(
                 """
                     package foo
-
+                    
                     import kotlin.jvm.JvmField
                     import kotlin.jvm.JvmStatic as Static
                     import java.io.*

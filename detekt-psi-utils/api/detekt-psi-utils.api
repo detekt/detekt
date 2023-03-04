@@ -47,6 +47,7 @@ public final class io/gitlab/arturbosch/detekt/rules/AllowedExceptionNamePattern
 public final class io/gitlab/arturbosch/detekt/rules/GuardClausesKt {
 	public static final fun isElvisOperatorGuardClause (Lorg/jetbrains/kotlin/psi/KtExpression;Lorg/jetbrains/kotlin/psi/KtExpression;)Z
 	public static final fun isIfConditionGuardClause (Lorg/jetbrains/kotlin/psi/KtExpression;Lorg/jetbrains/kotlin/psi/KtExpression;)Z
+	public static final fun isSuperCall (Lorg/jetbrains/kotlin/psi/KtExpression;)Z
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/IdentifierNameKt {
@@ -124,10 +125,13 @@ public final class io/gitlab/arturbosch/detekt/rules/MethodSignatureKt {
 	public static final fun hasCorrectEqualsParameter (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
 	public static final fun isEqualsFunction (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
 	public static final fun isHashCodeFunction (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
+	public static final fun isJvmFinalizeFunction (Lorg/jetbrains/kotlin/psi/KtNamedFunction;)Z
 	public static final fun isMainFunction (Lorg/jetbrains/kotlin/psi/KtNamedFunction;)Z
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/StringExtensionsKt {
+	public static final fun lastArgumentMatchesKotlinReferenceUrlSyntax (Ljava/lang/String;)Z
+	public static final fun lastArgumentMatchesMarkdownUrlSyntax (Ljava/lang/String;)Z
 	public static final fun lastArgumentMatchesUrl (Ljava/lang/String;)Z
 }
 

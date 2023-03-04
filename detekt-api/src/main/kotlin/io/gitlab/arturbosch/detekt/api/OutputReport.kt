@@ -1,7 +1,9 @@
 package io.gitlab.arturbosch.detekt.api
 
-import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.createDirectories
+import kotlin.io.path.extension
+import kotlin.io.path.writeText
 
 /**
  * Translates detekt's result container - [Detektion] - into an output report
@@ -26,11 +28,11 @@ abstract class OutputReport : Extension {
     fun write(filePath: Path, detektion: Detektion) {
         val reportData = render(detektion)
         if (reportData != null) {
-            assert(filePath.fileName.toString().endsWith(ending)) {
+            assert(filePath.extension == ending) {
                 "The $name needs to have a file ending of type .$ending, but was ${filePath.fileName}."
             }
-            filePath.parent?.let { Files.createDirectories(it) }
-            Files.write(filePath, reportData.toByteArray())
+            filePath.parent?.createDirectories()
+            filePath.writeText(reportData)
         }
     }
 

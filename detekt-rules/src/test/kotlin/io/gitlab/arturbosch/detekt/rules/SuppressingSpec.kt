@@ -48,7 +48,7 @@ class SuppressingSpec {
 
     @Test
     fun `should suppress TooManyFunctionsRule on class level`() {
-        val rule = TooManyFunctions(TestConfig(mapOf("thresholdInClass" to "0")))
+        val rule = TooManyFunctions(TestConfig("thresholdInClass" to "0"))
 
         val findings = rule.lint(resourceAsPath("SuppressedElementsByClassAnnotation.kt"))
 

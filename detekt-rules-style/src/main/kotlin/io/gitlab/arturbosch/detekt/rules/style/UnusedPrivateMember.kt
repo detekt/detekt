@@ -12,12 +12,15 @@ import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isOperator
+import org.jetbrains.kotlin.backend.jvm.ir.psiElement
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtArrayAccessExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
@@ -38,6 +41,7 @@ private const val ARRAY_GET_METHOD_NAME = "get"
 
 /**
  * Reports unused private functions.
+ *
  * If these private functions are unused they should be removed. Otherwise, this dead code
  * can lead to confusion and potential bugs.
  */
@@ -55,7 +59,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("unused private function names matching this regex are ignored")
-    private val allowedNames: Regex by config("(_|ignored|expected|serialVersionUID)", String::toRegex)
+    private val allowedNames: Regex by config("", String::toRegex)
 
     override fun visit(root: KtFile) {
         super.visit(root)
@@ -72,6 +76,7 @@ private class UnusedFunctionVisitor(
 
     private val functionDeclarations = mutableMapOf<String, MutableList<KtFunction>>()
     private val functionReferences = mutableMapOf<String, MutableList<KtReferenceExpression>>()
+    private val invokeOperatorReferences = mutableMapOf<CallableDescriptor, MutableList<KtReferenceExpression>>()
     private val propertyDelegates = mutableListOf<KtPropertyDelegate>()
 
     @Suppress("ComplexMethod", "LongMethod")
@@ -91,8 +96,11 @@ private class UnusedFunctionVisitor(
                 val unusedFunctions = when {
                     (functions.size > 1 || isOperator) && bindingContext != BindingContext.EMPTY -> {
                         val functionNameAsName = Name.identifier(functionName)
-                        val referencesViaOperator = if (isOperator) {
-                            val operatorToken = OperatorConventions.getOperationSymbolForName(functionNameAsName)
+                        val operatorToken = OperatorConventions.getOperationSymbolForName(functionNameAsName)
+                        val referencesViaOperator = if (
+                            isOperator &&
+                            functionNameAsName != OperatorNameConventions.INVOKE
+                        ) {
                             val operatorValue = (operatorToken as? KtSingleValueToken)?.value
                             val directReferences = operatorValue?.let { functionReferences[it] }.orEmpty()
                             val assignmentReferences = when (operatorToken) {
@@ -112,6 +120,8 @@ private class UnusedFunctionVisitor(
                                 emptyList()
                             }
                             directReferences + assignmentReferences + containingReferences
+                        } else if (functionNameAsName == OperatorNameConventions.INVOKE) {
+                            getInvokeReferences(functions)
                         } else {
                             emptyList()
                         }
@@ -137,6 +147,15 @@ private class UnusedFunctionVisitor(
                 }
             }
     }
+
+    private fun getInvokeReferences(functions: MutableList<KtFunction>) =
+        functions.flatMap { function ->
+            val callableDescriptor =
+                bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, function]
+            callableDescriptor?.let {
+                invokeOperatorReferences[it]
+            }.orEmpty()
+        }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (!isDeclaredInsideAnInterface(function) && function.isPrivate()) {
@@ -180,6 +199,16 @@ private class UnusedFunctionVisitor(
             is KtOperationReferenceExpression -> expression.getReferencedName()
             is KtNameReferenceExpression -> expression.getReferencedName()
             is KtArrayAccessExpression -> ARRAY_GET_METHOD_NAME
+            is KtCallExpression -> {
+                if (bindingContext != BindingContext.EMPTY) {
+                    val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
+                    val callableDescriptor = resolvedCall.resultingDescriptor
+                    if ((callableDescriptor.psiElement as? KtNamedFunction)?.isOperator() == true) {
+                        invokeOperatorReferences.getOrPut(callableDescriptor) { mutableListOf() }.add(expression)
+                    }
+                }
+                null
+            }
             else -> null
         } ?: return
         functionReferences.getOrPut(name) { mutableListOf() }.add(expression)

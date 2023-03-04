@@ -51,10 +51,9 @@ class ImplicitUnitReturnType(config: Config) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Configuration("if functions with explicit 'Unit' return type should be allowed")
+    @Configuration("if functions with explicit `Unit` return type should be allowed")
     private val allowExplicitReturnType: Boolean by config(true)
 
-    @Suppress("ReturnCount")
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
 
@@ -69,7 +68,7 @@ class ImplicitUnitReturnType(config: Config) : Rule(config) {
 
         if (function.hasImplicitUnitReturnType()) {
             val message = buildString {
-                append("'${function.name}'  has the implicit return type 'Unit'.")
+                append("'${function.name}'  has the implicit return type `Unit`.")
                 append(" Prefer using a block statement")
                 if (allowExplicitReturnType) {
                     append(" or specify the return type explicitly")

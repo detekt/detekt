@@ -78,13 +78,13 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `doesn't report when function doesn't take a vararg parameter`() {
             val code = """
-            fun test0(strs: Array<String>) {
-                test(strs)
-            }
-
-            fun test(strs: Array<String>) {
-                strs.forEach { println(it) }
-            }
+                fun test0(strs: Array<String>) {
+                    test(strs)
+                }
+                
+                fun test(strs: Array<String>) {
+                    strs.forEach { println(it) }
+                }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
@@ -92,13 +92,13 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `doesn't report with expression inside params`() {
             val code = """
-            fun test0(strs: Array<String>) {
-                test(2*2)
-            }
-
-            fun test(test : Int) {
-                println(test)
-            }
+                fun test0(strs: Array<String>) {
+                    test(2*2)
+                }
+                
+                fun test(test : Int) {
+                    println(test)
+                }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
@@ -107,8 +107,8 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
         fun `respects pass through of vararg parameter - #3145`() {
             val code = """
                 fun b(vararg bla: Int) = Unit
-                fun a(vararg bla: Int) { 
-                    b(*bla) 
+                fun a(vararg bla: Int) {
+                    b(*bla)
                 }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -118,7 +118,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
         fun `reports shadowed vararg declaration which may lead to array copy - #3145`() {
             val code = """
                 fun b(vararg bla: String) = Unit
-
+                
                 fun a(vararg bla: Int) {
                     val bla = arrayOf("")
                     b(*bla)
@@ -192,13 +192,13 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `doesn't report when function doesn't take a vararg parameter`() {
             val code = """
-            fun test0(strs: Array<String>) {
-                test(strs)
-            }
-
-            fun test(strs: Array<String>) {
-                strs.forEach { println(it) }
-            }
+                fun test0(strs: Array<String>) {
+                    test(strs)
+                }
+                
+                fun test(strs: Array<String>) {
+                    strs.forEach { println(it) }
+                }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -206,13 +206,13 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `doesn't report with expression inside params`() {
             val code = """
-            fun test0(strs: Array<String>) {
-                test(2*2)
-            }
-
-            fun test(test : Int) {
-                println(test)
-            }
+                fun test0(strs: Array<String>) {
+                    test(2*2)
+                }
+                
+                fun test(test : Int) {
+                    println(test)
+                }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -221,7 +221,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
         fun `respects pass through of vararg parameter - #3145`() {
             val code = """
                 fun b(vararg bla: Int) = Unit
-                fun a(vararg bla: Int) { 
+                fun a(vararg bla: Int) {
                     b(*bla)
                 }
             """.trimIndent()
@@ -232,7 +232,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
         fun `does not report shadowed vararg declaration, we except this false negative here - #3145`() {
             val code = """
                 fun b(vararg bla: String) = Unit
-
+                
                 fun a(vararg bla: Int) {
                     val bla = arrayOf("")
                     b(*bla)

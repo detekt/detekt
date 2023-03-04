@@ -113,7 +113,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class O {
                     var isDefault: Boolean
-                    
+                
                     init {
                         isDefault = true
                     }
@@ -151,13 +151,13 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should not detect Java Boolean uninitialized`() {
             val code = """
-               class O {
-                    var isDefault: java.lang.Boolean
-                    
-                    init {
-                        isDefault = java.lang.Boolean(false)
-                    }
-               }
+                class O {
+                     var isDefault: java.lang.Boolean
+                
+                     init {
+                         isDefault = java.lang.Boolean(false)
+                     }
+                }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
@@ -230,7 +230,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class O {
                     var isDefault: Inner = Inner()
-                    
+                
                     class Inner
                 }
             """.trimIndent()
@@ -305,9 +305,9 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `issue 4674 should handle unknown type as correct`() {
             val code = """
-            class Test {
-                val isDebuggable get() = BuildConfig.DEBUG
-            }
+                class Test {
+                    val isDebuggable get() = BuildConfig.DEBUG
+                }
             """.trimIndent()
 
             // BuildConfig is missing in this test so we can't compile it
@@ -320,7 +320,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
         fun `issue 4675 check function reference type parameter`() {
             val code = """
                 val isRemoved = suspend { null == null }
-
+                
                 fun trueFun() = true
                 val isReferenceBoolean = ::trueFun
             """.trimIndent()

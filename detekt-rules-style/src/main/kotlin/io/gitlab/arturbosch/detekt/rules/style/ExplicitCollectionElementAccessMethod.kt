@@ -20,7 +20,6 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.types.error.ErrorType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
-import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 
 /**
  * In Kotlin functions `get` or `set` can be replaced with the shorter operator — `[]`,
@@ -58,16 +57,14 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
         }
     }
 
-    @Suppress("ReturnCount")
     private fun isIndexGetterRecommended(expression: KtCallExpression): Boolean {
         val getter = if (expression.calleeExpression?.text == "get") {
             expression.getFunctionDescriptor()
         } else {
             null
-        }
-        if (getter == null) return false
+        } ?: return false
 
-        expression.valueArguments.any { it.isSpread }.ifTrue { return false }
+        if (expression.valueArguments.any { it.isSpread }) return false
 
         return canReplace(getter) && shouldReplace(getter)
     }
@@ -100,7 +97,6 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
         return function.isOperator
     }
 
-    @Suppress("ReturnCount")
     private fun shouldReplace(function: FunctionDescriptor): Boolean {
         // The intent of kotlin operation functions is to support indexed accessed, so should always be replaced.
         if (!function.isFromJava) return true

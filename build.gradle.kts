@@ -1,3 +1,4 @@
+import com.gradle.enterprise.gradleplugin.testretry.retry
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
@@ -9,7 +10,7 @@ plugins {
 }
 
 val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {
-    output.set(rootProject.layout.buildDirectory.file("reports/detekt/merge.sarif"))
+    output.set(layout.buildDirectory.file("reports/detekt/merge.sarif"))
 }
 
 allprojects {
@@ -19,7 +20,7 @@ allprojects {
     apply(plugin = "io.gitlab.arturbosch.detekt")
 
     detekt {
-        source = objects.fileCollection().from(
+        source.setFrom(
             io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_SRC_DIR_JAVA,
             io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_TEST_SRC_DIR_JAVA,
             io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_SRC_DIR_KOTLIN,
@@ -36,7 +37,7 @@ allprojects {
         detektPlugins(project(":detekt-rules-ruleauthors"))
     }
 
-    tasks.withType<Detekt> detekt@{
+    tasks.withType<Detekt>().configureEach {
         jvmTarget = "1.8"
         reports {
             xml.required.set(true)
@@ -45,11 +46,11 @@ allprojects {
             sarif.required.set(true)
             md.required.set(true)
         }
-        basePath = rootProject.projectDir.absolutePath
+        basePath = rootDir.absolutePath
         finalizedBy(detektReportMergeSarif)
-        detektReportMergeSarif.configure {
-            input.from(this@detekt.sarifReportFile)
-        }
+    }
+    detektReportMergeSarif {
+        input.from(tasks.withType<Detekt>().map { it.sarifReportFile })
     }
     tasks.withType<DetektCreateBaselineTask>().configureEach {
         jvmTarget = "1.8"
@@ -58,12 +59,27 @@ allprojects {
 
 subprojects {
     tasks.withType<Test>().configureEach {
+        retry {
+            @Suppress("MagicNumber")
+            if (System.getenv().containsKey("CI")) {
+                maxRetries.set(3)
+                maxFailures.set(20)
+            }
+        }
         predictiveSelection {
-            enabled.set(System.getenv("CI") == null)
+            enabled.set(providers.gradleProperty("enablePTS").map(String::toBooleanStrict))
         }
     }
 }
 
-tasks.register("build") {
-    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":build"))
+setOf(
+    "build",
+    "detektMain",
+    "detektTest",
+    "detektFunctionalTest",
+    "detektTestFixtures",
+).forEach { taskName ->
+    tasks.register(taskName) {
+        dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":$taskName"))
+    }
 }

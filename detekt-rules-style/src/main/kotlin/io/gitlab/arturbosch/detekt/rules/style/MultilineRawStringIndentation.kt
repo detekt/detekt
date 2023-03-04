@@ -62,7 +62,6 @@ class MultilineRawStringIndentation(config: Config) : Rule(config) {
     @Configuration("indentation size")
     private val indentSize by config(4)
 
-    @Suppress("ReturnCount")
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
         super.visitStringTemplateExpression(expression)
 

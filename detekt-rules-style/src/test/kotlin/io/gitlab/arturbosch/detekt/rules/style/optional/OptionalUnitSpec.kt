@@ -44,7 +44,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                 }
                 return Unit
             }
-
+            
             fun returnsUnit2() = Unit
         """.trimIndent()
         lateinit var findings: List<Finding>
@@ -98,7 +98,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     Unit
                 }
             }
-
+            
             class A {
                 init {
                     Unit
@@ -130,8 +130,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
 
         @Test
         fun `should not report Unit reference`() {
-            val findings = subject.compileAndLint(
-                """
+            val code = """
                 fun returnsNothing(u: Unit, us: () -> String) {
                     val u1 = u is Unit
                     val u2: Unit = Unit
@@ -139,8 +138,8 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     Unit.equals(null)
                     val i: (Int) -> Unit = { _ -> }
                 }
-                """.trimIndent()
-            )
+            """.trimIndent()
+            val findings = subject.compileAndLint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -315,7 +314,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     println(this)
                 }
                 
-                enum class E { A, B } 
+                enum class E { A, B }
                 
                 fun test(i: Int, e: E) {
                     when (i) {
@@ -365,7 +364,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     block(list)
                     return list.first()
                 }
-
+                
                 fun doFoo(): Unit = foo {}
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
@@ -389,7 +388,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     block(list)
                     return list.first()
                 }
-
+                
                 fun doFoo(): Unit = foo<Nothing> {}
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)

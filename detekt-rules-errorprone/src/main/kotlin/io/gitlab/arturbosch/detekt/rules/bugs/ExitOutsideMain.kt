@@ -53,7 +53,6 @@ class ExitOutsideMain(config: Config = Config.empty) : Rule(config) {
         Debt.TEN_MINS
     )
 
-    @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 

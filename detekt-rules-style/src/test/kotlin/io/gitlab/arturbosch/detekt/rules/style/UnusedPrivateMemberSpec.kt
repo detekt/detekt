@@ -140,12 +140,12 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     abstract fun abstractFun(arg: Any)
                     open fun openFun(arg: Any): Int = 0
                 }
-
+                
                 class Child : Parent() {
                     override fun abstractFun(arg: Any) {
                         println(arg)
                     }
-
+                
                     override fun openFun(arg: Any): Int {
                         println(arg)
                         return 1
@@ -177,7 +177,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     companion object {
                         private const val MY_CONST = 42
                     }
-
+                
                     fun a() {
                         Completable.timer(MY_CONST.toLong(), TimeUnit.MILLISECONDS)
                                 .subscribe()
@@ -217,13 +217,13 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report used private functions`() {
             val code = """
-            class Test {
-                val value = usedMethod()
-
-                private fun usedMethod(): Int {
-                    return 5
+                class Test {
+                    val value = usedMethod()
+                
+                    private fun usedMethod(): Int {
+                        return 5
+                    }
                 }
-            }
             """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
@@ -232,11 +232,11 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports unused private functions`() {
             val code = """
-            class Test {
-                private fun unusedFunction(): Int {
-                    return 5
+                class Test {
+                    private fun unusedFunction(): Int {
+                        return 5
+                    }
                 }
-            }
             """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(1)
@@ -263,32 +263,18 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports the non called private function`() {
             val code = """
-            class Test {
-                private fun unusedFunction(): Int {
-                    return someOtherUnusedFunction()
+                class Test {
+                    private fun unusedFunction(): Int {
+                        return someOtherUnusedFunction()
+                    }
+                
+                    private fun someOtherUnusedFunction() {
+                        println("Never used")
+                    }
                 }
-
-                private fun someOtherUnusedFunction() {
-                    println("Never used")
-                }
-            }
             """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(1)
-        }
-    }
-
-    @Nested
-    inner class `unused class declarations which are allowed` {
-
-        @Test
-        fun `does not report the unused private function and parameter`() {
-            val code = """
-                class Test {
-                    private fun ignored(ignored: Int) {}
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -298,11 +284,11 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `are specific for private functions`() {
             val code = """
-            class Test {
-                private fun unusedFunction(): Int {
-                    return 5
+                class Test {
+                    private fun unusedFunction(): Int {
+                        return 5
+                    }
                 }
-            }
             """.trimIndent()
 
             val lint = subject.lint(code)
@@ -354,7 +340,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class Test {
                     private fun foo(): String = ""
                     private fun bar(): String = ""
-
+                
                     class InnerTest {
                         private fun baz(): String = ""
                     }
@@ -371,7 +357,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class Test {
                     private fun foo(): String = ""
                     private fun bar(): String = ""
-
+                
                     class InnerTest {
                         private fun baz(): String = ""
                     }
@@ -418,13 +404,192 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 object Test {
                     private operator fun invoke(i: Int): Int = i
-
+                
                     fun answer() = Test(1)
                 }
-
+                
                 val answer = Test.answer()
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        @Suppress("ClassName")
+        @Nested
+        inner class `containing invoke operator` {
+            @Test
+            fun `does not report when invoke operator is used - #4435`() {
+                val code = """
+                    object Test {
+                        private operator fun invoke(i: Int): Int = i
+                    
+                        fun answer() = Test(1)
+                    }
+                    
+                    val answer = Test.answer()
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report used invoke operator defined in companion`() {
+                val code = """
+                    class A {
+                        companion object {
+                            private operator fun invoke(i: Int): Int = i
+                        }
+                        val answer = A(1)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report used invoke operator in file with instance`() {
+                val code = """
+                    class A
+                    private operator fun A.invoke(i: Int): Int = i
+                    fun answer() = A()(9)
+                    val answer = answer()
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report used nullable dispatch receiver invoke operator in file`() {
+                val code = """
+                    class A
+                    private operator fun A?.invoke(i: Int): Int = i
+                    fun answer() = A()(9)
+                    val answer = answer()
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report used invoke operator is used with child class dispatcher`() {
+                val code = """
+                    open class A
+                    class B : A()
+                    private operator fun A.invoke(i: Int): Int = i
+                    val answer = B()(1)
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does report unused overloaded invoke operator`() {
+                val code = """
+                    open class A {
+                        companion object {
+                            private operator fun invoke(i: Int): Int = i
+                            private operator fun invoke(i: Int, j: Int): Int = i
+                        }
+                        val answer = A(1, 1)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code))
+                    .hasSize(1)
+                    .hasStartSourceLocations(
+                        SourceLocation(3, 30)
+                    )
+            }
+
+            @Test
+            fun `does report unused overloaded invoke operator with nullable int`() {
+                val code = """
+                    class A
+                    private operator fun A.invoke(i: Int): Int = i
+                    private operator fun A.invoke(i: Int?): Int = i ?: 0
+                    fun answer() = A()(9)
+                    val answer = answer()
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code))
+                    .hasSize(1)
+                    .hasStartSourceLocations(
+                        SourceLocation(3, 24)
+                    )
+            }
+
+            @Test
+            fun `does report unused overloaded invoke operator with non-null int`() {
+                val code = """
+                    class A
+                    private operator fun A.invoke(i: Int): Int = i
+                    private operator fun A.invoke(i: Int?): Int = i ?: 0
+                    val nullableInt: Int? = if (System.currentTimeMillis() % 2 == 0L) 0 else null
+                    fun answer() = A()(nullableInt)
+                    val answer = answer()
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code))
+                    .hasSize(1)
+                    .hasStartSourceLocations(
+                        SourceLocation(2, 24)
+                    )
+            }
+
+            @Test
+            fun `does not report used overloaded invoke operator when no binding context`() {
+                val code = """
+                    open class A {
+                        companion object {
+                            private operator fun invoke(i: Int): Int = i
+                            private operator fun invoke(i: Int, j: Int): Int = i
+                        }
+                        val answer = A(1, 1)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report used invoke operator when both dispatch and extension is present`() {
+                val code = """
+                    class A
+                    class B {
+                        private operator fun A.invoke(i: Int): Int = i
+                        val answer = A()(1)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report unused invoke operator when both dispatch and extension is present with no context`() {
+                val code = """
+                    class A
+                    class B {
+                        private operator fun A.invoke(i: Int): Int = i
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report used invoke operator in companion when both dispatch and extension is present`() {
+                val code = """
+                    class A
+                    class B {
+                        companion object {
+                            private operator fun A.invoke(i: Int): Int = i
+                        }
+                        val answer = A()(1)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report unused overridden invoke operator`() {
+                val code = """
+                    interface I {
+                        operator fun invoke(): String
+                    }
+                    class A : I {
+                        override operator fun invoke() = "A"
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
         }
 
         @Test
@@ -454,7 +619,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class C {
                     val isInside = "bar" in listOf("foo".toRegex())
-                    
+                
                     private operator fun Iterable<Regex>.contains(a: String): Boolean {
                         return any { it.matches(a) }
                     }
@@ -468,7 +633,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class C {
                     val isInside = "bar" !in listOf("foo".toRegex())
-                    
+                
                     private operator fun Iterable<Regex>.contains(a: String): Boolean {
                         return any { it.matches(a) }
                     }
@@ -502,7 +667,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                         return 5
                     }
                 }
-
+                
                 class Test2 {
                     private fun f(): Int {
                         return 5
@@ -517,15 +682,15 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test {
                     val value = f(1)
-
+                
                     private fun f(): Int {
                         return 5
                     }
-
+                
                     private fun f(num: Int): Int {
                         return num
                     }
-
+                
                     private fun f(num: String): Int {
                         return num.toInt()
                     }
@@ -539,15 +704,15 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test {
                     val value = 1.f()
-
+                
                     private fun f(): Int {
                         return 5
                     }
-
+                
                     private fun Int.f(): Int {
                         return this
                     }
-
+                
                     private fun String.f(): Int {
                         return toInt()
                     }
@@ -565,7 +730,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test {
                     private operator fun Foo.plus(other: Foo): Foo = Foo(value + other.value)
-
+                
                     inner class Foo(val value: Int) {
                         fun double(): Foo = this + this
                     }
@@ -580,7 +745,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class Test {
                     private operator fun Foo.plus(other: Foo): Foo = Foo(value + other.value)
                     private operator fun Foo.minus(other: Foo): Foo = Foo(value - other.value)
-
+                
                     inner class Foo(val value: Int) {
                         fun double(): Foo = this + this
                     }
@@ -602,18 +767,18 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class A
                 class B
                 class C(val elements: Set<B>, val flag: Boolean)
-
+                
                 class Test {
                     private fun A.someMethod(
                           param1: B,
                           param2: Boolean = true
                       ) = someMethod(setOf(param1), param2)
-
+                
                     private fun A.someMethod(
                           param1: Set<B>,
                           param2: Boolean = true
                       ) = C(param1, param2)
-
+                
                     fun main() {
                         val aInstance = A()
                         aInstance.someMethod(B(), true)
@@ -632,14 +797,14 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         fun `does not report used private getValue and setValue operator functions`() {
             val code = """
                 import kotlin.reflect.KProperty
-
+                
                 class Test {
                     var delegated by "Hello"
-
+                
                     private operator fun String.getValue(test: Test, prop: KProperty<*>): String {
                         return "working"
                     }
-
+                
                     private operator fun String.setValue(test: Test, prop: KProperty<*>, value: String) {
                         error("setValue")
                     }
@@ -652,13 +817,13 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         fun `does not report getValue and setValue operator function parameters`() {
             val code = """
                 import kotlin.reflect.KProperty
-        
+                
                 class SingleAssign<String> {
-        
+                
                     operator fun getValue(thisRef: Any?, property: KProperty<*>): kotlin.String {
                         return ""
                     }
-
+                
                     operator fun setValue(thisRef: Any?, property: KProperty<*>, value: String) {
                     }
                 }
@@ -670,12 +835,12 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         fun `reports unused private getValue and setValue operator functions`() {
             val code = """
                 import kotlin.reflect.KProperty
-
+                
                 class Test {
                     private operator fun String.getValue(test: Test, prop: KProperty<*>): String {
                         return "working"
                     }
-
+                
                     private operator fun String.setValue(test: Test, prop: KProperty<*>, value: String) {
                         error("setValue")
                     }
@@ -693,7 +858,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 class TestWrapper {
                     private operator fun List<StringWrapper>.get(s: String) =
                         this.firstOrNull { it.s == s }
@@ -708,12 +873,12 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 class TestWrapper(
                     private val strings: List<StringWrapper>
                 ) {
                     fun getWrapperForString(s: String) = strings[s]
-
+                
                     private operator fun List<StringWrapper>.get(s: String) =
                         this.firstOrNull { it.s == s }
                 }
@@ -727,12 +892,12 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 class TestWrapper(
                     private val strings: List<StringWrapper>
                 ) {
                     fun getWrapperForString(a: String, b: String) = strings[a, b]
-
+                
                     private operator fun List<StringWrapper>.get(a: String, b: String) =
                         this.firstOrNull { it.s == b }
                 }
@@ -746,12 +911,12 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 class TestWrapper(
                     private val strings: List<StringWrapper>
                 ) {
                     fun getWrapperForString(s: String) = strings.get(s)
-
+                
                     private operator fun List<StringWrapper>.get(s: String) =
                         this.firstOrNull { it.s == s }
                 }
@@ -765,7 +930,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 private operator fun List<StringWrapper>.get(s: String) =
                     this.firstOrNull { it.s == s }
             """.trimIndent()
@@ -778,13 +943,13 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 class Test(
                     private val strings: List<StringWrapper>
                 ) {
                     fun getWrapperForString(s: String) = strings[s]
                 }
-
+                
                 private operator fun List<StringWrapper>.get(s: String) =
                     this.firstOrNull { it.s == s }
             """.trimIndent()
@@ -797,13 +962,13 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 class Test(
                     private val strings: List<StringWrapper>
                 ) {
                     fun getWrapperForString(s: String) = strings.get(s)
                 }
-
+                
                 private operator fun List<StringWrapper>.get(s: String) =
                     this.firstOrNull { it.s == s }
             """.trimIndent()

@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 private const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
-private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
 
 class FunctionParameterNamingSpec {
 
@@ -25,7 +24,7 @@ class FunctionParameterNamingSpec {
         }
 
         @Test
-        fun `should not detect violations in overridden function by default`() {
+        fun `should not detect violations in overridden function`() {
             val code = """
                 class C : I {
                     override fun someStuff(`object`: String) {}
@@ -33,18 +32,6 @@ class FunctionParameterNamingSpec {
                 interface I { fun someStuff(@Suppress("FunctionParameterNaming") `object`: String) }
             """.trimIndent()
             assertThat(FunctionParameterNaming().compileAndLint(code)).isEmpty()
-        }
-
-        @Test
-        fun `should detect violations in overridden function if ignoreOverridden is false`() {
-            val code = """
-                class C : I {
-                    override fun someStuff(`object`: String) {}
-                }
-                interface I { fun someStuff(`object`: String) }
-            """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
-            assertThat(FunctionParameterNaming(config).compileAndLint(code)).hasSize(2)
         }
 
         @Test
@@ -61,7 +48,7 @@ class FunctionParameterNamingSpec {
     @Nested
     inner class `parameters in a function of an excluded class` {
 
-        val config = TestConfig(mapOf(EXCLUDE_CLASS_PATTERN to "Excluded"))
+        val config = TestConfig(EXCLUDE_CLASS_PATTERN to "Excluded")
 
         @Test
         fun `should not detect function parameter`() {

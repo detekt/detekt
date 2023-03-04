@@ -87,7 +87,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
     fun `reports explicit type for name reference expression`() {
         val code = """
             object Test
-
+            
             fun foo() {
                 val o: Test = Test
             }
@@ -101,9 +101,9 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
             interface Person {
                 val firstName: String
             }
-
+            
             class TallPerson(override val firstName: String, val height: Int): Person
-
+            
             fun tallPerson() {
                 val t: TallPerson = TallPerson("first", 3)
             }
@@ -117,9 +117,9 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
             interface Person {
                 val firstName: String
             }
-
+            
             class TallPerson(override val firstName: String, val height: Int): Person
-
+            
             fun tallPerson() {
                 val t: Person = TallPerson("first", 3)
             }

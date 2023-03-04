@@ -12,7 +12,7 @@ class CastToNullableTypeSpec {
         val code = """
             fun foo(a: Any?) {
                 val x: String? = a as String?
-            } 
+            }
         """.trimIndent()
         val findings = subject.compileAndLint(code)
         assertThat(findings).hasSize(1)
@@ -25,7 +25,7 @@ class CastToNullableTypeSpec {
         val code = """
             fun foo(a: Any?) {
                 val x: String? = a as? String
-            } 
+            }
         """.trimIndent()
         val findings = subject.compileAndLint(code)
         assertThat(findings).isEmpty()
@@ -36,7 +36,7 @@ class CastToNullableTypeSpec {
         val code = """
             fun foo(a: Any?) {
                 val x = a is String?
-            } 
+            }
         """.trimIndent()
         val findings = subject.compileAndLint(code)
         assertThat(findings).isEmpty()

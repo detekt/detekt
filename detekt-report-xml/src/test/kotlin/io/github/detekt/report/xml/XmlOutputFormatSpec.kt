@@ -19,8 +19,8 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
-import java.nio.file.Paths
 import java.util.Locale
+import kotlin.io.path.Path
 
 private const val TAB = "\t"
 
@@ -32,7 +32,7 @@ class XmlOutputFormatSpec {
         Location(
             SourceLocation(11, 1),
             TextLocation(0, 10),
-            FilePath.fromAbsolute(Paths.get("src/main/com/sample/Sample1.kt"))
+            FilePath.fromAbsolute(Path("src/main/com/sample/Sample1.kt"))
         )
     )
     private val entity2 = Entity(
@@ -41,7 +41,7 @@ class XmlOutputFormatSpec {
         Location(
             SourceLocation(22, 2),
             TextLocation(0, 20),
-            FilePath.fromAbsolute(Paths.get("src/main/com/sample/Sample2.kt"))
+            FilePath.fromAbsolute(Path("src/main/com/sample/Sample2.kt"))
         )
     )
     private val outputFormat = XmlOutputReport()

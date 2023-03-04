@@ -12,7 +12,7 @@ class AlsoCouldBeApplySpec {
     fun `does not report when no also is used`() {
         val code = """
             fun f(a: Int) {
-                a.let { 
+                a.let {
                     it.plus(5)
                     it.minus(10)
                 }
@@ -25,7 +25,7 @@ class AlsoCouldBeApplySpec {
     fun `reports an also where only it is used in block`() {
         val code = """
             fun f(a: Int) {
-                a.also { 
+                a.also {
                     it.plus(5)
                 }
             }
@@ -37,7 +37,7 @@ class AlsoCouldBeApplySpec {
     fun `report is focused on also keyword`() {
         val code = """
             fun f(a: Int) {
-                a.also { 
+                a.also {
                     it.plus(5)
                 }
             }
@@ -54,7 +54,7 @@ class AlsoCouldBeApplySpec {
     fun `reports an also on nullable type`() {
         val code = """
             fun f(a: Int?) {
-                a?.also { 
+                a?.also {
                     it.plus(5)
                 }
             }
@@ -66,7 +66,7 @@ class AlsoCouldBeApplySpec {
     fun `reports an also with lambda passed as Argument in parenthesis`() {
         val code = """
             fun f(a: Int?) {
-                a?.also({ 
+                a?.also({
                     it.plus(5)
                 })
             }
@@ -78,7 +78,7 @@ class AlsoCouldBeApplySpec {
     fun `does not report if it is not used in also`() {
         val code = """
             fun f(a: Int?, b: Int) {
-                a?.also { 
+                a?.also {
                     b.plus(5)
                 }
             }
@@ -129,7 +129,7 @@ class AlsoCouldBeApplySpec {
                     it.baz()
                 }
             }
-
+            
             class Foo {
                 fun bar() {}
                 fun baz() {}
@@ -145,7 +145,7 @@ class AlsoCouldBeApplySpec {
                 foo.also {
                 }
             }
-
+            
             class Foo
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()

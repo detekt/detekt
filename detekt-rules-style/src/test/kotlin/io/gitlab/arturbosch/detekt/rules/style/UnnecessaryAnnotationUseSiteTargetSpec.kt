@@ -12,7 +12,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
     fun unnecessaryParamInPropertyConstructor() {
         val code = """
             class C(@param:Asdf private val foo: String)
-
+            
             annotation class Asdf
         """.trimIndent()
         assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("param:")
@@ -23,7 +23,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
     fun unnecessaryParamInConstructor() {
         val code = """
             class C(@param:Asdf foo: String)
-
+            
             annotation class Asdf
         """.trimIndent()
         assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("param:")
@@ -34,7 +34,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
     fun unnecessaryGet() {
         val code = """
             class C(@get:Asdf private val foo: String)
-
+            
             annotation class Asdf
         """.trimIndent()
         assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).isEmpty()
@@ -45,7 +45,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
     fun necessaryProperty() {
         val code = """
             class C(@property:Asdf private val foo: String)
-
+            
             annotation class Asdf
         """.trimIndent()
         assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).isEmpty()
@@ -58,7 +58,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
             class C {
                 @property:Asdf private val foo: String = "bar"
             }
-
+            
             annotation class Asdf
         """.trimIndent()
         assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("property:")
@@ -69,7 +69,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
     fun unnecessaryPropertyAtTopLevel() {
         val code = """
             @property:Asdf private val foo: String = "bar"
-
+            
             annotation class Asdf
         """.trimIndent()
         assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("property:")

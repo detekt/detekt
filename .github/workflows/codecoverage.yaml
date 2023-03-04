@@ -5,15 +5,12 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - '**'
 
 permissions:
   contents: read
 
 jobs:
   publish-code-coverage:
-    if: ${{ !contains(github.event.head_commit.message, 'coverage skip') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -26,8 +23,9 @@ jobs:
           distribution: 'temurin'
 
       - name: Generate Coverage Report
-        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
+        uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f # v2
         with:
+          gradle-home-cache-cleanup: true
           arguments: jacocoMergedReport
         env:
           GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}

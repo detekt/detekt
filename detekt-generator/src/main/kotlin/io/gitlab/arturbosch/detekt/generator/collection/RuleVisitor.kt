@@ -40,7 +40,7 @@ internal class RuleVisitor : DetektVisitor() {
             throw InvalidDocumentationException("Rule $name is missing a description in its KDoc.")
         }
 
-        val configurationByAnnotation = configurationCollector.getConfiguration()
+        val configurationsByAnnotation = configurationCollector.getConfigurations()
 
         return Rule(
             name = name,
@@ -52,7 +52,7 @@ internal class RuleVisitor : DetektVisitor() {
             debt = debt,
             aliases = aliases,
             parent = parent,
-            configuration = configurationByAnnotation,
+            configurations = configurationsByAnnotation,
             autoCorrect = autoCorrect,
             deprecationMessage = deprecationMessage,
             requiresTypeResolution = requiresTypeResolution

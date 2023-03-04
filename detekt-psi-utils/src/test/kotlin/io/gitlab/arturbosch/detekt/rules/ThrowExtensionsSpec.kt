@@ -29,7 +29,7 @@ internal class ThrowExtensionsSpec {
         fun `is true for if statement on separate line`() {
             val code = """
                 fun test() {
-                    if (i == 1) 
+                    if (i == 1)
                         throw IllegalArgumentException()
                 }
             """.trimIndent()

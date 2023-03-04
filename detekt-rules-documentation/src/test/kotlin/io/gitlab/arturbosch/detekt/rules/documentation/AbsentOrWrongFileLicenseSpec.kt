@@ -22,8 +22,8 @@ class AbsentOrWrongFileLicenseSpec {
     fun `file with correct license header reports nothing`() {
         val findings = checkLicence(
             """
-            /* LICENSE */
-            package cases
+                /* LICENSE */
+                package cases
             """.trimIndent()
         )
 
@@ -34,8 +34,8 @@ class AbsentOrWrongFileLicenseSpec {
     fun `file with incorrect license header reports missed license header`() {
         val findings = checkLicence(
             """
-            /* WRONG LICENSE */
-            package cases
+                /* WRONG LICENSE */
+                package cases
             """.trimIndent()
         )
 
@@ -46,7 +46,7 @@ class AbsentOrWrongFileLicenseSpec {
     fun `file with absent license header reports missed license header`() {
         val findings = checkLicence(
             """
-            package cases
+                package cases
             """.trimIndent()
         )
 

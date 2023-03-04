@@ -26,7 +26,7 @@ class DeprecatedBlockTagSpec {
         val code = """
             /**
              * I am a KDoc block
-             * 
+             *
              * @deprecated oh no, this should not be here
              */
             fun ohNo() { }
@@ -52,12 +52,12 @@ class DeprecatedBlockTagSpec {
         @Test
         fun `report deprecation tag on class`() {
             val code = """
-            /**
-             * Hello there
-             *
-             * @deprecated This thing is deprecated
-             */
-            class Thing { }
+                /**
+                 * Hello there
+                 *
+                 * @deprecated This thing is deprecated
+                 */
+                class Thing { }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
@@ -65,14 +65,14 @@ class DeprecatedBlockTagSpec {
         @Test
         fun `report deprecation tag on property`() {
             val code = """
-            class Thing {
-                /**
-                 * A thing you should not use
-                 *
-                 * @deprecated Do not use that
-                 */
-                val doNotUseMe = 0
-            }
+                class Thing {
+                    /**
+                     * A thing you should not use
+                     *
+                     * @deprecated Do not use that
+                     */
+                    val doNotUseMe = 0
+                }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
@@ -113,7 +113,7 @@ class DeprecatedBlockTagSpec {
                         get() = 10
                         /**
                          * Do not use this setter
-                         * 
+                         *
                          * @deprecated Do not use it
                          */
                         set(value) { println(value) }
@@ -129,7 +129,7 @@ class DeprecatedBlockTagSpec {
                     var someProperty: Int
                         /**
                          * Do not use this getter
-                         * 
+                         *
                          * @deprecated Do not use it
                          */
                         get() = 10

@@ -119,7 +119,7 @@ class IgnoredReturnValueSpec {
         fun `does not report when a function which doesn't return a value is called`() {
             val code = """
                 fun noReturnValue() {}
-
+                
                 fun foo() {
                     noReturnValue()
                 }
@@ -201,7 +201,7 @@ class IgnoredReturnValueSpec {
             """.trimIndent()
             val annotationClass = """
                 package annotation
-
+                
                 annotation class CheckReturnValue
             """.trimIndent()
 
@@ -281,10 +281,10 @@ class IgnoredReturnValueSpec {
                 package noreturn
                 
                 annotation class CheckReturnValue
-
+                
                 @CheckReturnValue
                 fun String.listOfChecked() = listOf(this)
-
+                
                 fun foo() : Int {
                     val hello = "world "
                     hello.toUpperCase()
@@ -387,7 +387,7 @@ class IgnoredReturnValueSpec {
                 package specialize
                 
                 annotation class CheckReturnValue
-
+                
                 @CheckReturnValue
                 fun listOfChecked(value: String) = listOf(value)
                 
@@ -407,10 +407,10 @@ class IgnoredReturnValueSpec {
                 package specialize
                 
                 annotation class CheckReturnValue
-
+                
                 @CheckReturnValue
                 fun noReturnValue() {}
-
+                
                 fun foo() : Int {
                     noReturnValue()
                     return 42
@@ -426,7 +426,7 @@ class IgnoredReturnValueSpec {
                 package comparison
                 
                 annotation class CheckReturnValue
-
+                
                 @CheckReturnValue
                 fun returnsBoolean() = true
                 
@@ -444,7 +444,7 @@ class IgnoredReturnValueSpec {
                 package comparison
                 
                 annotation class CheckReturnValue
-
+                
                 @CheckReturnValue
                 fun returnsInt() = 42
                 
@@ -462,7 +462,7 @@ class IgnoredReturnValueSpec {
                 package parameter
                 
                 annotation class CheckReturnValue
-
+                
                 @CheckReturnValue
                 fun returnsInt() = 42
                 
@@ -480,7 +480,7 @@ class IgnoredReturnValueSpec {
                 package parameter
                 
                 annotation class CheckReturnValue
-
+                
                 @CheckReturnValue
                 fun returnsInt() = 42
                 
@@ -498,10 +498,10 @@ class IgnoredReturnValueSpec {
                 package block
                 
                 annotation class CheckReturnValue
-
+                
                 @CheckReturnValue
                 fun returnsInt() = 42
-
+                
                 val result = if (true) {
                     1
                 } else {
@@ -518,10 +518,10 @@ class IgnoredReturnValueSpec {
                 package block
                 
                 annotation class CheckReturnValue
-
+                
                 @CheckReturnValue
                 fun returnsInt() = 42
-
+                
                 val result = if (true) {
                     1
                 } else {
@@ -537,12 +537,12 @@ class IgnoredReturnValueSpec {
         fun `does not report when a function is the last statement in a block and it's in a chain`() {
             val code = """
                 package block
-
+                
                 annotation class CheckReturnValue
-
+                
                 @CheckReturnValue
                 fun returnsInt() = 42
-
+                
                 fun test() {
                     if (true) {
                         1
@@ -559,12 +559,12 @@ class IgnoredReturnValueSpec {
         fun `report when a function is not the last statement in a block and it's in a chain`() {
             val code = """
                 package block
-
+                
                 annotation class CheckReturnValue
-
+                
                 @CheckReturnValue
                 fun returnsInt() = 42
-
+                
                 fun test() {
                     if (true) {
                         1
@@ -582,12 +582,12 @@ class IgnoredReturnValueSpec {
         fun `report when a function is the last statement in a block`() {
             val code = """
                 package block
-
+                
                 annotation class CheckReturnValue
-
+                
                 @CheckReturnValue
                 fun returnsInt() = 42
-
+                
                 fun test() {
                     if (true) {
                         println("hello")
@@ -606,7 +606,7 @@ class IgnoredReturnValueSpec {
                 package callchain
                 
                 annotation class CheckReturnValue
-
+                
                 @CheckReturnValue
                 fun String.listOfChecked() = listOf(this)
                 fun List<String>.print() { println(this) }
@@ -628,7 +628,7 @@ class IgnoredReturnValueSpec {
         fun `reports when the containing class of a function has _@CheckReturnValue_`() {
             val code = """
                 package foo
-
+                
                 annotation class CheckReturnValue
                 
                 @CheckReturnValue
@@ -648,14 +648,14 @@ class IgnoredReturnValueSpec {
         fun `reports when the containing object of a function has _@CheckReturnValue_`() {
             val code = """
                 package foo
-
+                
                 annotation class CheckReturnValue
                 
                 @CheckReturnValue
                 object Assertions {
                     fun listOfChecked(value: String) = listOf(value)
                 }
-
+                
                 fun main() {
                     Assertions.listOfChecked("hello")
                 }
@@ -668,7 +668,7 @@ class IgnoredReturnValueSpec {
         fun `does not report when the containing class of a function has _@CheckReturnValue_ but the function has _@CanIgnoreReturnValue_`() {
             val code = """
                 package foo
-
+                
                 annotation class CheckReturnValue
                 annotation class CanIgnoreReturnValue
                 
@@ -713,7 +713,7 @@ class IgnoredReturnValueSpec {
     @KotlinCoreEnvironmentTest
     inner class `custom annotation config`(private val env: KotlinCoreEnvironment) {
         val subject = IgnoredReturnValue(
-            TestConfig(mapOf("returnValueAnnotations" to listOf("*.CustomReturn")))
+            TestConfig("returnValueAnnotations" to listOf("*.CustomReturn"))
         )
 
         @Test
@@ -759,7 +759,7 @@ class IgnoredReturnValueSpec {
         fun `does not report when a function is not annotated`() {
             val code = """
                 package config
-
+                
                 fun listOfChecked(value: String) = listOf(value)
                 
                 fun foo() : Int {
@@ -775,7 +775,7 @@ class IgnoredReturnValueSpec {
     @Nested
     @KotlinCoreEnvironmentTest
     inner class `restrict to config`(private val env: KotlinCoreEnvironment) {
-        val subject = IgnoredReturnValue(TestConfig(mapOf("restrictToConfig" to false)))
+        val subject = IgnoredReturnValue(TestConfig("restrictToConfig" to false))
 
         @Test
         fun `reports when a function is annotated with a custom annotation`() {
@@ -815,12 +815,27 @@ class IgnoredReturnValueSpec {
         }
 
         @Test
+        fun `reports when a single function inside main is not annotated - #5806`() {
+            val code = """
+                fun main() {
+                    ignoredReturn()
+                }
+                
+                fun ignoredReturn(): String = "asd"
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasStartSourceLocation(2, 5)
+            assertThat(findings[0]).hasMessage("The call ignoredReturn is returning a value that is ignored.")
+        }
+
+        @Test
         fun `reports when a function returns type that should not be ignored`() {
             val code = """
                 import kotlinx.coroutines.flow.MutableStateFlow
-
+                
                 fun flowOfChecked(value: String) = MutableStateFlow(value)
-
+                
                 fun foo() : Int {
                     flowOfChecked("hello")
                     return 42
@@ -837,9 +852,9 @@ class IgnoredReturnValueSpec {
         fun `does not report when a function has _@CanIgnoreReturnValue_`() {
             val code = """
                 package foo
-
+                
                 annotation class CanIgnoreReturnValue
-
+                
                 @CanIgnoreReturnValue
                 fun listOfChecked(value: String) = listOf(value)
                 
@@ -856,9 +871,9 @@ class IgnoredReturnValueSpec {
         fun `does not report when a function has a custom annotation`() {
             val code = """
                 package foo
-
+                
                 annotation class CustomIgnoreReturn
-
+                
                 @CustomIgnoreReturn
                 fun listOfChecked(value: String) = listOf(value)
                 
@@ -869,10 +884,8 @@ class IgnoredReturnValueSpec {
             """.trimIndent()
             val rule = IgnoredReturnValue(
                 TestConfig(
-                    mapOf(
-                        "ignoreReturnValueAnnotations" to listOf("*.CustomIgnoreReturn"),
-                        "restrictToConfig" to false
-                    )
+                    "ignoreReturnValueAnnotations" to listOf("*.CustomIgnoreReturn"),
+                    "restrictToConfig" to false,
                 )
             )
             val findings = rule.compileAndLintWithContext(env, code)
@@ -883,9 +896,9 @@ class IgnoredReturnValueSpec {
         fun `does not report when a function is in ignoreFunctionCall`() {
             val code = """
                 package foo
-
+                
                 fun listOfChecked(value: String) = listOf(value)
-
+                
                 fun foo() : Int {
                     listOfChecked("hello")
                     return 42
@@ -893,10 +906,8 @@ class IgnoredReturnValueSpec {
             """.trimIndent()
             val rule = IgnoredReturnValue(
                 TestConfig(
-                    mapOf(
-                        "ignoreFunctionCall" to listOf("foo.listOfChecked"),
-                        "restrictToConfig" to false
-                    )
+                    "ignoreFunctionCall" to listOf("foo.listOfChecked"),
+                    "restrictToConfig" to false,
                 )
             )
             val findings = rule.compileAndLintWithContext(env, code)
@@ -993,7 +1004,7 @@ class IgnoredReturnValueSpec {
         fun `reports when annotation is on the package`() {
             val code = """
                 import com.example.ignore_return_value.annotation_on_package.Bar
-
+                
                 fun test(bar: Bar) {
                     bar.bar()
                 }

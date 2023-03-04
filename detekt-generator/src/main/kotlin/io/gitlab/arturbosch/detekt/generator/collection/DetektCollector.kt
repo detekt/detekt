@@ -19,7 +19,7 @@ class DetektCollector : Collector<RuleSetPage> {
 
     private fun buildRuleSetPages(): List<RuleSetPage> {
         val multiRules = multiRuleCollector.items
-        val rules = resolveMultiRuleRelations(ruleCollector.items, multiRules)
+        val rules = ruleCollector.items
         val multiRuleNameToRules = multiRules.associateBy({ it.name }, { it.rules })
         val ruleSets = ruleSetProviderCollector.items
 
@@ -32,13 +32,6 @@ class DetektCollector : Collector<RuleSetPage> {
             consolidatedRules.resolveParentRule(rules)
             RuleSetPage(ruleSet, consolidatedRules)
         }
-    }
-
-    private fun resolveMultiRuleRelations(
-        rules: List<Rule>,
-        multiRules: List<MultiRule>
-    ): List<Rule> = rules.onEach { rule ->
-        multiRules.find { rule.name in it }?.apply { rule.inMultiRule = this.name }
     }
 
     private fun List<Rule>.findRuleByName(ruleName: String): Rule {
