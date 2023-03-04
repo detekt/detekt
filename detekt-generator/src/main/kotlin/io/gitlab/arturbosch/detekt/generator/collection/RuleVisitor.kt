@@ -174,7 +174,7 @@ internal class RuleVisitor : DetektVisitor() {
             /*io.gitlab.arturbosch.detekt.api.Rule*/ "Rule",
             /*io.gitlab.arturbosch.detekt.formatting.FormattingRule*/ "FormattingRule",
             /*io.gitlab.arturbosch.detekt.api.ThresholdRule*/ "ThresholdRule",
-            /*io.gitlab.arturbosch.detekt.rules.empty*/ "EmptyRule",
+            /*io.gitlab.arturbosch.detekt.rules.empty.EmptyRule*/ "EmptyRule",
         )
 
         private const val ISSUE_ARGUMENT_SIZE = 4
