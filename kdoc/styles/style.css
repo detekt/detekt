@@ -828,6 +828,11 @@ small {
     color: white;
 }
 
+.platform-tag.wasm-like {
+    background-color: #654FF0;
+    color: white;
+}
+
 .platform-tag.native-like {
     background-color: #CD74F6;
     color: white;
@@ -942,13 +947,14 @@ td.content {
 }
 
 .platform-hinted > .content:not([data-active]),
-.tabs-section-body > *:not([data-active]) {
+.tabs-section-body *[data-togglable]:not([data-active]) {
     display: none;
 }
 
-/*Work around an issue: https://github.com/JetBrains/kotlin-playground/issues/91*/
-.platform-hinted[data-togglable="Samples"] > .content:not([data-active]),
-.tabs-section-body > *[data-togglable="Samples"]:not([data-active]) {
+/* Work around an issue: https://github.com/JetBrains/kotlin-playground/issues/91
+Applies for main description blocks with platform tabs.
+Just in case of possible performance degradation it excluding tabs with briefs on classlike page */
+#content > div:not(.tabbedcontent) .sourceset-dependent-content:not([data-active]) {
     display: block !important;
     visibility: hidden;
     height: 0;
@@ -1290,4 +1296,12 @@ div.runnablesample {
 
 .floating-right {
     float: right;
+}
+
+/*
+the hack to hide the headers inside tabs for a package page because each tab
+has only one header, and the header text is the same as the tab name, so no point in showing it
+*/
+.main-content[data-page-type="package"] .tabs-section-body h2 {
+    display: none;
 }
