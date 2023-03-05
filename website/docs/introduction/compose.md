@@ -10,7 +10,7 @@ Relevant rule sets and their configuration options for Compose styles & usage. T
 - [Compose API Guidelines](https://github.com/androidx/androidx/blob/androidx-main/compose/docs/compose-api-guidelines.md)
 - [Compose source](https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:compose)
 
-### FunctionNaming
+### FunctionNaming for Compose
 
 See [FunctionNaming](/docs/rules/naming#functionnaming).
 
@@ -27,7 +27,7 @@ Choose _either_ of the following options:
 * Augment default `functionPattern` to `'[a-zA-Z][a-zA-Z0-9]*'` (default is: `'[a-z][a-zA-Z0-9]*'`)
 * Set `ignoreAnnotated` to `['Composable']`
 
-### TopLevelPropertyNaming
+### TopLevelPropertyNaming for Compose
 
 See [TopLevelPropertyNaming](/docs/rules/naming#toplevelpropertynaming).
 
@@ -50,7 +50,7 @@ private val FooPadding = 16.dp
 * Set `constantPattern` to `'[A-Z][A-Za-z0-9]*'` (default is: `'[A-Z][_A-Z0-9]*'`)
 
 
-### LongParameterList
+### LongParameterList for Compose
 
 See [LongParameterList](/docs/rules/complexity#longparameterlist).
 
@@ -61,7 +61,7 @@ Composables may boast more than the typical number of function arguments (albeit
 * Set `functionThreshold` to a higher value
 * Additionally, can set `ignoreDefaultParameters = true`
 
-### MagicNumber
+### MagicNumber for Compose
 
 See [MagicNumber](/docs/rules/style#magicnumber).
 
@@ -83,7 +83,7 @@ class Foo {
 
 * Set `ignorePropertyDeclaration = true`, `ignoreCompanionObjectPropertyDeclaration = true` (default)
 
-### UnusedPrivateMember
+### UnusedPrivateMember for Compose
 
 See [UnusedPrivateMember](/docs/rules/style#unusedprivatemember).
 
