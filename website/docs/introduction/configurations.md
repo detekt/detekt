@@ -179,7 +179,7 @@ processors:
 
 ## Config JSON Schema
 
-A JSON Schema for the config file is available on: [json.schemastore.org/detekt](https://json.schemastore.org/detekt).
+A JSON Schema for the config file is available on: [json.schemastore.org/detekt-1.22.0.json](https://json.schemastore.org/detekt-1.22.0.json).
 
 You can configure your IDE (e.g. IntelliJ or Android Studio have built-in support)
 to use that schema to give you **autocompletion** capabilities on your config file.
