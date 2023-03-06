@@ -46,7 +46,7 @@ snakeyaml = "org.snakeyaml:snakeyaml-engine:2.6"
 jcommander = "com.beust:jcommander:1.82"
 contester-breakpoint = { module = "io.github.davidburstrom.contester:contester-breakpoint", version.ref = "contester" }
 contester-driver = { module = "io.github.davidburstrom.contester:contester-driver", version.ref = "contester" }
-kotlinCompileTesting = { module = "com.github.tschuchortdev:kotlin-compile-testing", version = "1.4.9" }
+kotlinCompileTesting = { module = "com.github.tschuchortdev:kotlin-compile-testing", version = "1.5.0" }
 
 [plugins]
 binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.13.0" }
