@@ -46,7 +46,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
         Issue(
             "UnnecessaryAbstractClass",
             Severity.Style,
-            "An abstract class is unnecessary. May be refactored to an interface or to a concrete class.",
+            "An abstract class is unnecessary. May be refactored to a concrete class.",
             Debt.FIVE_MINS
         )
 
