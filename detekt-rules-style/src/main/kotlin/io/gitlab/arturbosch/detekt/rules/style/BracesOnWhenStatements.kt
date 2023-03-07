@@ -178,7 +178,7 @@ class BracesOnWhenStatements(config: Config = Config.empty) : Rule(config) {
         return expression.entries.mapNotNull { it.expression }
     }
 
-    private fun validate(list: List<KtExpression>, policy: BracePolicy) {
+    private fun validate(branches: List<KtExpression>, policy: BracePolicy) {
         val violators = when (policy) {
             BracePolicy.Always -> {
                 list.filter { !hasBraces(it) }
