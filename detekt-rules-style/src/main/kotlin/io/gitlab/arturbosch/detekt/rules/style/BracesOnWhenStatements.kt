@@ -234,7 +234,7 @@ class BracesOnWhenStatements(config: Config = Config.empty) : Rule(config) {
         val message = when (policy) {
             BracePolicy.Always -> "Missing braces on this branch, add them."
             BracePolicy.Consistent -> "Inconsistent braces, make sure all branches either have or don't have braces."
-            BracePolicy.Necessary -> "Extra braces exist on this branch, remove them (ignore multi-statement)."
+            BracePolicy.Necessary -> "Extra braces exist on this branch, remove them."
             BracePolicy.Never -> "Extra braces exist on this branch, remove them."
         }
         report(CodeSmell(issue, Entity.from(reported), message))
