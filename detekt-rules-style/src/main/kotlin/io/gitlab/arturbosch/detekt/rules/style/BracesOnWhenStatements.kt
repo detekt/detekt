@@ -26,7 +26,8 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * or has multiple statements.
  *
  * Available options are:
- *  * `never`: forces no braces on any entry.
+ *  * `never`: forces no braces on any entry.  
+      _Tip_: this is very strict, it will force a simple expression, like a single function call / expression. Extracting a function for "complex" logic is one way to adhere to this policy.
  *  * `necessary`: forces no braces on any entry except where necessary for multi-statement entries.
  *  * `consistent`: ensures that braces are consistent within `when` statement.
  *    If there are braces on one of the entry, all entries should have it.
