@@ -60,7 +60,7 @@ class BracesOnWhenStatementsSpec {
                             2 -> { println() }
                         }
                     """.trimIndent(),
-                    "println()"(1),
+                    "->"(1),
                 ),
             )
 
@@ -88,7 +88,7 @@ class BracesOnWhenStatementsSpec {
                             else -> { println() }
                         }
                     """.trimIndent(),
-                    "println()"(1),
+                    "->"(1),
                 ),
             )
 
@@ -102,7 +102,7 @@ class BracesOnWhenStatementsSpec {
                             else -> println()
                         }
                     """.trimIndent(),
-                    "println()"(3),
+                    "->"(3),
                 ),
             )
 
@@ -116,7 +116,7 @@ class BracesOnWhenStatementsSpec {
                             else -> { println() }
                         }
                     """.trimIndent(),
-                    "println()"(2),
+                    "->"(2),
                 ),
             )
         }
@@ -150,9 +150,9 @@ class BracesOnWhenStatementsSpec {
                             else -> { println() }
                         }
                     """.trimIndent(),
-                    "{ println() }"(1),
-                    "{ println() }"(2),
-                    "{ println() }"(3),
+                    "->"(1),
+                    "->"(2),
+                    "->"(3),
                 ),
             )
 
@@ -166,7 +166,7 @@ class BracesOnWhenStatementsSpec {
                             else -> println()
                         }
                     """.trimIndent(),
-                    "{ println() }"(1),
+                    "->"(1),
                 ),
             )
 
@@ -180,7 +180,7 @@ class BracesOnWhenStatementsSpec {
                             else -> { println() }
                         }
                     """.trimIndent(),
-                    "{ println() }"(1),
+                    "->"(3),
                 ),
             )
 
@@ -194,7 +194,7 @@ class BracesOnWhenStatementsSpec {
                             else -> println()
                         }
                     """.trimIndent(),
-                    "{ println() }"(1),
+                    "->"(2),
                 ),
             )
         }
@@ -212,7 +212,7 @@ class BracesOnWhenStatementsSpec {
                         when (1) {
                             1 -> println()
                             2 -> println()
-                            else -> println()
+                            else -> { println(); println() }
                         }
                     """.trimIndent(),
                     *NOTHING,
@@ -229,9 +229,9 @@ class BracesOnWhenStatementsSpec {
                             else -> { println() }
                         }
                     """.trimIndent(),
-                    "{ println() }"(1),
-                    "{ println() }"(2),
-                    "{ println() }"(3),
+                    "->"(1),
+                    "->"(2),
+                    "->"(3),
                 ),
             )
 
@@ -242,10 +242,10 @@ class BracesOnWhenStatementsSpec {
                         when (1) {
                             1 -> { println() }
                             2 -> println()
-                            else -> println()
+                            else -> { println(); println() }
                         }
                     """.trimIndent(),
-                    "{ println() }"(1),
+                    "->"(1),
                 ),
             )
 
@@ -254,12 +254,12 @@ class BracesOnWhenStatementsSpec {
                 flag(
                     """
                         when (1) {
-                            1 -> println()
+                            1 -> { println(); println() }
                             2 -> println()
                             else -> { println() }
                         }
                     """.trimIndent(),
-                    "{ println() }"(1),
+                    "->"(3),
                 ),
             )
 
@@ -270,10 +270,10 @@ class BracesOnWhenStatementsSpec {
                         when (1) {
                             1 -> println()
                             2 -> { println() }
-                            else -> println()
+                            else -> { println(); println() }
                         }
                     """.trimIndent(),
-                    "{ println() }"(1),
+                    "->"(2),
                 ),
             )
         }
@@ -373,10 +373,13 @@ class BracesOnWhenStatementsSpec {
                             1 -> 
                                 println()
                             2 -> { println() }
-                            else -> { println(); println() }
+                            else -> {
+                                println()
+                                println()
+                            }
                         }
                     """.trimIndent(),
-                    "println()"(1),
+                    "->"(1),
                 ),
             )
 
@@ -389,7 +392,10 @@ class BracesOnWhenStatementsSpec {
                                 println()
                             }
                             2 -> { println() }
-                            else -> { println(); println() }
+                            else -> {
+                                println()
+                                println()
+                            }
                         }
                     """.trimIndent(),
                     *NOTHING,
@@ -405,10 +411,13 @@ class BracesOnWhenStatementsSpec {
                                 println()
                             }
                             2 -> println()
-                            else -> { println(); println() }
+                            else -> {
+                                println()
+                                println()
+                            }
                         }
                     """.trimIndent(),
-                    "println()"(2),
+                    "->"(2),
                 ),
             )
 
@@ -428,7 +437,7 @@ class BracesOnWhenStatementsSpec {
                                 println()
                         }
                     """.trimIndent(),
-                    "println()"(4),
+                    "->"(3),
                 ),
             )
 
@@ -448,7 +457,76 @@ class BracesOnWhenStatementsSpec {
                             }
                         }
                     """.trimIndent(),
-                    "println()"(2),
+                    "->"(2),
+                ),
+            )
+
+            @TestFactory
+            fun `nested when inside when case block`() = listOf(
+                flag(
+                    """
+                        when (1) {
+                            1 -> { 
+                                when (2) {
+                                    1 -> {
+                                        println()
+                                    }
+                                    else -> {
+                                        println()
+                                    }
+                                }
+                            }
+                            2 -> { println() }
+                            else -> { println() }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
+                ),
+            )
+
+            @TestFactory
+            fun `nested when inside when condition`() = listOf(
+                flag(
+                    """
+                        when (
+                            when (2) {
+                                1 -> {
+                                   1
+                                }
+                                else -> {
+                                   2
+                                }
+                            }
+                        ) {
+                            1 -> {
+                                println()
+                            }
+                            2 -> { println() }
+                            else -> { println() }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
+                ),
+            )
+
+            @TestFactory
+            fun `weird curly formatting for multiline whens`() = listOf(
+                flag(
+                    """
+                        when (1) {
+                            1 -> 
+                            {
+                                println()
+                            }
+                            2 -> { println()
+                            }
+                            3 -> { 
+                            println() }
+                            else -> 
+                                { println() }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
                 ),
             )
         }
@@ -468,7 +546,7 @@ class BracesOnWhenStatementsSpec {
                                 println()
                             2 ->
                                 println()
-                            else -> 
+                            else ->
                                 println()
                         }
                     """.trimIndent(),
@@ -492,9 +570,9 @@ class BracesOnWhenStatementsSpec {
                             }
                         }
                     """.trimIndent(),
-                    "{\n        println()\n    }"(1),
-                    "{\n        println()\n    }"(2),
-                    "{\n        println()\n    }"(3),
+                    "->"(1),
+                    "->"(2),
+                    "->"(3),
                 ),
             )
 
@@ -513,7 +591,7 @@ class BracesOnWhenStatementsSpec {
                                 println()
                         }
                     """.trimIndent(),
-                    "{\n        println()\n    }"(1),
+                    "->"(1),
                 ),
             )
 
@@ -528,10 +606,11 @@ class BracesOnWhenStatementsSpec {
                                 println()
                             else -> {
                                 println()
+                                println()
                             }
                         }
                     """.trimIndent(),
-                    "{\n        println()\n    }"(1),
+                    "->"(3),
                 ),
             )
 
@@ -545,13 +624,57 @@ class BracesOnWhenStatementsSpec {
                             
                             2 -> {
                                 println()
+                                println()
                             }
+                            
                             else ->
                                 println()
-                            
                         }
                     """.trimIndent(),
-                    "{\n        println()\n    }"(1),
+                    "->"(2),
+                ),
+            )
+
+            @TestFactory
+            fun `nested when inside when case block`() = listOf(
+                flag(
+                    """
+                        when (1) {
+                            1 -> 
+                                when (2) {
+                                    1 -> 
+                                        println()
+                                    else ->
+                                        println()
+                                }
+                            
+                            2 -> println()
+                            else -> println()
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
+                ),
+            )
+
+            @TestFactory
+            fun `nested when inside when condition`() = listOf(
+                flag(
+                    """
+                        when (
+                            when (2) {
+                                1 ->
+                                   1
+                                else ->
+                                   2
+                            }
+                        ) {
+                            1 -> 
+                                println()
+                            else ->
+                                println()
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
                 ),
             )
         }
@@ -595,9 +718,9 @@ class BracesOnWhenStatementsSpec {
                             }
                         }
                     """.trimIndent(),
-                    "{\n        println()\n    }"(1),
-                    "{\n        println()\n    }"(2),
-                    "{\n        println()\n    }"(3),
+                    "->"(1),
+                    "->"(2),
+                    "->"(3),
                 ),
             )
 
@@ -619,7 +742,7 @@ class BracesOnWhenStatementsSpec {
                             }
                         }
                     """.trimIndent(),
-                    "{\n        println()\n    }"(1),
+                    "->"(1),
                 ),
             )
 
@@ -641,7 +764,7 @@ class BracesOnWhenStatementsSpec {
                             }
                         }
                     """.trimIndent(),
-                    "{\n        println()\n    }"(1),
+                    "->"(3),
                 ),
             )
 
@@ -662,7 +785,7 @@ class BracesOnWhenStatementsSpec {
                             
                         }
                     """.trimIndent(),
-                    "{\n        println()\n    }"(1),
+                    "->"(2),
                 ),
             )
 
@@ -784,6 +907,71 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "when"(1),
+                ),
+            )
+
+            @TestFactory
+            fun `nested when inside when case block`() = listOf(
+                flag(
+                    """
+                        when (1) {
+                            1 -> { 
+                                when (2) {
+                                    1 -> 
+                                        println()
+                                    else ->
+                                        println()
+                                }
+                            }
+                            2 -> { println() }
+                            else -> { println() }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
+                ),
+            )
+
+            @TestFactory
+            fun `nested when inside when condition`() = listOf(
+                flag(
+                    """
+                        when (
+                            when (2) {
+                                1 -> 
+                                    1
+                                else ->
+                                    2
+                            }
+                        ) {
+                            1 -> {
+                                println()
+                            }
+                            2 -> { println() }
+                            else -> { println() }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
+                ),
+            )
+
+            @TestFactory
+            fun `weird curly formatting for multiline whens`() = listOf(
+                flag(
+                    """
+                        when (1) {
+                            1 -> 
+                            {
+                                println()
+                            }
+                            2 -> { println()
+                            }
+                            3 -> { 
+                            println() }
+                            else -> 
+                                { println() }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
                 ),
             )
         }

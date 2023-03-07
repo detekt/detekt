@@ -507,7 +507,7 @@ style:
     multiLine: 'always'
   BracesOnWhenStatements:
     active: false
-    singleLine: 'consistent'
+    singleLine: 'necessary'
     multiLine: 'consistent'
   CanBeNonNullable:
     active: false

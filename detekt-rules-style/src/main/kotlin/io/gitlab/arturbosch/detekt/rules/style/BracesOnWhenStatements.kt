@@ -11,7 +11,7 @@ import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBlockExpression
-import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
 /**
@@ -19,19 +19,19 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * Keeping braces consistent will improve readability and avoid possible errors.
  *
  * Single-line `when` statement is:
- * a `when` where each of the entries are single-line (has no line breaks `\n`).
+ * a `when` where each of the branches are single-line (has no line breaks `\n`).
  *
  * Multi-line `when` statement is:
- * a `when` where at least one of the entries is multi-line (has a break line `\n`)
- * or has multiple statements.
+ * a `when` where at least one of the branches is multi-line (has a break line `\n`).
  *
  * Available options are:
- *  * `never`: forces no braces on any entry.  
-      _Tip_: this is very strict, it will force a simple expression, like a single function call / expression. Extracting a function for "complex" logic is one way to adhere to this policy.
- *  * `necessary`: forces no braces on any entry except where necessary for multi-statement entries.
+ *  * `never`: forces no braces on any branch.
+ *  _Tip_: this is very strict, it will force a simple expression, like a single function call / expression.
+ *  Extracting a function for "complex" logic is one way to adhere to this policy.
+ *  * `necessary`: forces no braces on any branch except where necessary for multi-statement branches.
  *  * `consistent`: ensures that braces are consistent within `when` statement.
- *    If there are braces on one of the entries, all entries should have it.
- *  * `always`: forces braces on all entries.
+ *    If there are braces on one of the branches, all branches should have it.
+ *  * `always`: forces braces on all branches.
  *
  *  <noncompliant>
  *  // singleLine = 'never'
@@ -50,11 +50,15 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  *  when (a) {
  *      1 -> { f1() }
  *      2 -> f2()
+ *      3 -> { f3(); f4() }
  *  }
  *  // multiLine = 'necessary'
  *  when (a) {
  *      1 -> { f1() }
- *      2 -> { f2(); f3() }
+ *      2 -> {
+ *          f2()
+ *          f3()
+ *      }
  *  }
  *
  *  // singleLine = 'consistent'
@@ -163,7 +167,7 @@ class BracesOnWhenStatements(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("single-line braces policy")
-    private val singleLine: BracePolicy by config("consistent") { BracePolicy.getValue(it) }
+    private val singleLine: BracePolicy by config("necessary") { BracePolicy.getValue(it) }
 
     @Configuration("multi-line braces policy")
     private val multiLine: BracePolicy by config("consistent") { BracePolicy.getValue(it) }
@@ -171,33 +175,31 @@ class BracesOnWhenStatements(config: Config = Config.empty) : Rule(config) {
     override fun visitWhenExpression(expression: KtWhenExpression) {
         super.visitWhenExpression(expression)
 
-        val branches: List<KtExpression> = walk(expression)
+        val branches: List<KtWhenEntry> = walk(expression)
         validate(branches, policy(expression))
     }
 
-    private fun walk(expression: KtWhenExpression): List<KtExpression> {
-        return expression.entries.mapNotNull { it.expression }
-    }
+    private fun walk(expression: KtWhenExpression) = expression.entries
 
-    private fun validate(branches: List<KtExpression>, policy: BracePolicy) {
+    private fun validate(branches: List<KtWhenEntry>, policy: BracePolicy) {
         val violators = when (policy) {
             BracePolicy.Always -> {
-                list.filter { !hasBraces(it) }
+                branches.filter { !it.hasBraces() }
             }
 
             BracePolicy.Necessary -> {
-                list.filter { !isMultiStatement(it) && hasBraces(it) }
+                branches.filter { !it.isMultiStatement() && it.hasBraces() }
             }
 
             BracePolicy.Never -> {
-                list.filter { hasBraces(it) }
+                branches.filter { it.hasBraces() }
             }
 
             BracePolicy.Consistent -> {
-                val braces = list.count { hasBraces(it) }
-                val noBraces = list.count { !hasBraces(it) }
+                val braces = branches.count { it.hasBraces() }
+                val noBraces = branches.count { !it.hasBraces() }
                 if (braces != 0 && noBraces != 0) {
-                    list.take(1)
+                    branches.take(1)
                 } else {
                     emptyList()
                 }
@@ -206,31 +208,27 @@ class BracesOnWhenStatements(config: Config = Config.empty) : Rule(config) {
         violators.forEach { report(it, policy) }
     }
 
-    private fun hasBraces(expression: KtExpression): Boolean =
-        expression is KtBlockExpression
+    private fun KtWhenEntry.hasBraces(): Boolean = expression is KtBlockExpression
 
-    private fun KtExpression.parentCandidate(): PsiElement? =
-        this.parent.parent
+    private fun KtWhenEntry.parentCandidate(): PsiElement? = this.parent
 
-    private fun isMultiStatement(expression: KtExpression): Boolean =
-        expression is KtBlockExpression && expression.statements.size > 1
+    private fun KtWhenEntry.isMultiStatement(): Boolean =
+        expression.let { (it is KtBlockExpression) && (it.statements.size > 1) }
 
     private fun policy(expression: KtWhenExpression): BracePolicy {
-        val multiLineCandidate = expression.entries.firstOrNull { entry ->
-            entry.text.substringAfter("->").contains('\n') ||
-                entry.expression?.let { isMultiStatement(it) } ?: false
+        val multiLineCandidate = expression.entries.firstOrNull { branch ->
+            branch.text.substringAfter("->", "").contains('\n')
         }
         return if (multiLineCandidate != null) multiLine else singleLine
     }
 
-    private fun report(violator: KtExpression, policy: BracePolicy) {
+    private fun report(violator: KtWhenEntry, policy: BracePolicy) {
         val parent = violator.parentCandidate() as KtWhenExpression
-        val entries = parent.entries.mapNotNull { it.expression }
         val reported = when {
-            violator in entries && policy == BracePolicy.Consistent -> parent.whenKeyword
-            violator in entries -> violator
+            violator in parent.entries && policy == BracePolicy.Consistent -> parent.whenKeyword
+            violator in parent.entries -> violator.arrow
             else -> error("Violating element (${violator.text}) is not part of this 'when' (${parent.text})")
-        }
+        } ?: return
         val message = when (policy) {
             BracePolicy.Always -> "Missing braces on this branch, add them."
             BracePolicy.Consistent -> "Inconsistent braces, make sure all branches either have or don't have braces."
