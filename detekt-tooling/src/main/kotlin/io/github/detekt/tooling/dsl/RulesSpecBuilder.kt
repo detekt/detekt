@@ -9,13 +9,15 @@ class RulesSpecBuilder : Builder<RulesSpec> {
     var excludeCorrectable: Boolean = false
     var autoCorrect: Boolean = false
     var runPolicy: RulesSpec.RunPolicy = RulesSpec.RunPolicy.NoRestrictions
+    var listActiveRules: Boolean = false
 
     override fun build(): RulesSpec = RulesModel(
         activateAllRules,
         maxIssuePolicy,
         excludeCorrectable,
         autoCorrect,
-        runPolicy
+        runPolicy,
+        listActiveRules,
     )
 }
 
@@ -24,5 +26,6 @@ private data class RulesModel(
     override val maxIssuePolicy: RulesSpec.MaxIssuePolicy,
     override val excludeCorrectable: Boolean,
     override val autoCorrect: Boolean,
-    override val runPolicy: RulesSpec.RunPolicy
+    override val runPolicy: RulesSpec.RunPolicy,
+    override val listActiveRules: Boolean,
 ) : RulesSpec

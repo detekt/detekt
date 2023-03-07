@@ -15,9 +15,12 @@ import io.gitlab.arturbosch.detekt.core.config.validation.checkConfiguration
 import io.gitlab.arturbosch.detekt.core.extensions.handleReportingExtensions
 import io.gitlab.arturbosch.detekt.core.generateBindingContext
 import io.gitlab.arturbosch.detekt.core.reporting.OutputFacade
+import io.gitlab.arturbosch.detekt.core.rules.RuleCollector
 import io.gitlab.arturbosch.detekt.core.rules.createRuleProviders
+import io.gitlab.arturbosch.detekt.core.rules.logCollectedRules
 import io.gitlab.arturbosch.detekt.core.util.PerformanceMonitor.Phase
 import io.gitlab.arturbosch.detekt.core.util.getOrCreateMonitor
+import io.gitlab.arturbosch.detekt.core.workaroundConfiguration
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -40,9 +43,17 @@ internal interface Lifecycle {
         val (processors, ruleSets) = measure(Phase.LoadingExtensions) {
             processorsProvider.invoke() to ruleSetsProvider.invoke()
         }
+        // TODO move workaroundConfiguration to some existing Phase above or create new one?
+        val config = settings.spec.workaroundConfiguration(settings.config)
+
+        measure(Phase.CollectRules) {
+            val rulesCollector = RuleCollector(settings, ruleSets, config)
+            val collectedRules = rulesCollector.run()
+            collectedRules?.let { logCollectedRules(settings, it) }
+        }
 
         val result = measure(Phase.Analyzer) {
-            val analyzer = Analyzer(settings, ruleSets, processors)
+            val analyzer = Analyzer(settings, ruleSets, processors, config)
             processors.forEach { it.onStart(filesToAnalyze, bindingContext) }
             val findings: Map<RuleSetId, List<Finding>> = analyzer.run(filesToAnalyze, bindingContext)
             val result: Detektion = DetektResult(findings.toSortedMap())

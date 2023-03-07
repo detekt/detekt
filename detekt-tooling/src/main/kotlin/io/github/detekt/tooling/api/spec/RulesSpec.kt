@@ -59,6 +59,8 @@ interface RulesSpec {
      */
     val runPolicy: RunPolicy
 
+    val listActiveRules: Boolean
+
     /**
      * Restrict rules to use for current analysis.
      */

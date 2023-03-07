@@ -31,6 +31,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
             }
             excludeCorrectable = false // not yet supported; loaded from config
             runPolicy = args.toRunPolicy()
+            listActiveRules = args.listActiveRules
         }
 
         baseline {

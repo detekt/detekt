@@ -32,10 +32,9 @@ private typealias FindingsResult = List<Map<RuleSetId, List<Finding>>>
 internal class Analyzer(
     private val settings: ProcessingSettings,
     private val providers: List<RuleSetProvider>,
-    private val processors: List<FileProcessListener>
+    private val processors: List<FileProcessListener>,
+    private val config: Config,
 ) {
-
-    private val config: Config = settings.spec.workaroundConfiguration(settings.config)
 
     fun run(
         ktFiles: Collection<KtFile>,

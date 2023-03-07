@@ -149,6 +149,12 @@ class CliArgs {
     )
     var runRule: String? = null
 
+    @Parameter(
+        names = ["--list-active-rules"],
+        description = "List rule sets and their rules and that are used for the analysis.",
+    )
+    var listActiveRules: Boolean = false
+
     /*
         The following @Parameters are used for type resolution. When additional parameters are required the
         names should mirror the names found in this file (e.g. "classpath", "language-version", "jvm-target"):

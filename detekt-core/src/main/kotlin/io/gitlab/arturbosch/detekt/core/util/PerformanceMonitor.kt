@@ -17,6 +17,7 @@ class PerformanceMonitor {
         Parsing,
         Binding,
         LoadingExtensions,
+        CollectRules,
         Analyzer,
         Reporting,
     }
