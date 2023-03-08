@@ -30,7 +30,7 @@ class FreemarkerHtmlOutputReport : OutputReport() {
     private fun createConfiguration(): Configuration =
         Configuration(Configuration.VERSION_2_3_32).apply {
             localizedLookup = false
-            setDirectoryForTemplateLoading(File("/Users/ayakovlev/IdeaProjects/detekt-fork/templates").absoluteFile)
+            setDirectoryForTemplateLoading(File("/templates").absoluteFile)
         }
 
     companion object {
