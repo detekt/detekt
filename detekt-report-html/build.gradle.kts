@@ -6,6 +6,7 @@ dependencies {
     compileOnly(projects.detektApi)
     compileOnly(projects.detektMetrics)
     implementation(projects.detektUtils)
+    implementation(libs.freemarker)
     implementation(libs.kotlinx.html) {
         exclude(group = "org.jetbrains.kotlin")
     }

@@ -51,6 +51,8 @@ contester-breakpoint = { module = "io.github.davidburstrom.contester:contester-b
 contester-driver = { module = "io.github.davidburstrom.contester:contester-driver", version.ref = "contester" }
 kotlinCompileTesting = { module = "com.github.tschuchortdev:kotlin-compile-testing", version = "1.4.9" }
 
+freemarker = "org.freemarker:freemarker-gae:2.3.32"
+
 [plugins]
 binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.12.1" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }

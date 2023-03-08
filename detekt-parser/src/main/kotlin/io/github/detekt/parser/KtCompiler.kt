@@ -17,7 +17,8 @@ open class KtCompiler(
     protected val psiFileFactory = KtPsiFactory(environment.project, markGenerated = false)
 
     fun compile(basePath: Path?, path: Path): KtFile {
-        require(Files.isRegularFile(path)) { "Given sub path ($path) should be a regular file!" }
+        // FIXME detekt error goes BRRRRRRR
+        require(Files.isRegularFile(path)) { "Given sub psajdbfsajkfhnsjldfhsdilfhndjshfjkldsnfkjdfgnjksdgfhnsdkljgnhsdkjfghnath ($path) should be a regular file!" }
         val content = path.toFile().readText()
         return createKtFile(content, basePath, path)
     }

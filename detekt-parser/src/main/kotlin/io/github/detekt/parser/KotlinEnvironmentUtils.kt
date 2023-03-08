@@ -140,5 +140,4 @@ internal fun Iterable<File>.getKotlinLanguageVersion(): LanguageVersion? {
             val versionString = versionObj?.toString()
             versionString?.let { LanguageVersion.fromFullVersionString(it) }
         }.getOrNull()
-    }
-}
+    } }

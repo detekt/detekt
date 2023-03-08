@@ -1,0 +1,107 @@
+<#macro style>
+
+body {
+    font-family: Arial, sans-serif;
+    font-weight: 400;
+}
+
+h1 {
+    font-family: Arial, sans-serif;
+    font-weight: 600;
+    width: fit-content;
+    background: -webkit-linear-gradient(left, rgba(105, 33, 224, 1), rgba(247, 44, 67, 1));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+h2 {
+    font-family: Arial, sans-serif;
+    font-weight: 400;
+    background: rgb(105, 33, 224);
+    background: linear-gradient(90deg, rgba(105, 33, 224, 0.8) 0%, rgba(158, 41, 156, 0.8) 50%, rgba(247, 44, 67, 0.8) 100%);
+    padding: 0.2em;
+    color: #ffffff;
+    border-radius: 4px;
+}
+
+h3 {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(90deg, rgba(105, 33, 224, 0.4) 0%, rgba(158, 41, 156, 0.4) 50%, rgba(247, 44, 67, 0.4) 100%);
+    padding: 0.5em;
+    border-radius: 4px;
+}
+
+.rule-container {
+    background: linear-gradient(90deg, rgba(105, 33, 224, 0.2) 0%, rgba(158, 41, 156, 0.2) 100%);
+    border-radius: 4px;
+    padding-left: 1em;
+    padding-bottom: 0.3em;
+    padding-top: 0.3em;
+    padding-right: 1em;
+    line-height: 1.5em;
+    margin-bottom: 8px;
+    margin-top: 8px;
+}
+
+.rule {
+    font-family: Arial, sans-serif;
+    padding: 0.3em;
+    font-weight: 600;
+    border-radius: 3px;
+}
+
+.description {
+    font-family: Arial, sans-serif;
+    color: #000000;
+    padding: 0.3em;
+}
+
+.location {
+    font-family: Jetbrains Mono, monospace;
+    font-weight: 500;
+    color: #000000;
+    display: block;
+}
+
+.message {
+    font-family: Arial, sans-serif;
+    font-size: 0.8em;
+    color: #444444;
+    display: block;
+    margin-top: 1pt;
+}
+
+code {
+    font-family: JetBrains Mono, monospace;
+    font-weight: 400;
+}
+
+pre {
+    font-family: JetBrains Mono, monospace;
+    font-weight: 500;
+    border: 1px solid #e0e0e0;
+    overflow: auto;
+}
+
+.lineno {
+    margin-right: 24px;
+    color: #9771c3;
+    background-color: rgba(230, 211, 243, 0.51);
+}
+
+.error {
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AwCFR4T/3uLMgAAADxJREFUCNdNyLERQEAABMCjL4lQwIzcjErpguAL+C9AvgKJDbeD/PRpLdm35Hm+MU+cB+tCKaJW4L4YBy+CAiLJrFs9mgAAAABJRU5ErkJggg==) bottom repeat-x;
+}
+
+.exception {
+    color: #b60808;
+    display: inline-block;
+    background-color: #ecdada;
+    border-color: #b60808;
+    border-radius: 10px;
+    border: solid 2px;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-bottom: 16px;
+}
+</#macro>
