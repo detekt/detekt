@@ -50,6 +50,13 @@ tasks {
         mergeServiceFiles()
     }
 
+    shadowDistZip {
+        archiveBaseName.set("detekt-cli")
+    }
+    shadowDistTar { enabled = false }
+    distZip { enabled = false }
+    distTar { enabled = false }
+
     processTestResources {
         filter(ReplaceTokens::class, "tokens" to mapOf("kotlinVersion" to libs.versions.kotlin.get()))
         filteringCharset = "UTF-8"
