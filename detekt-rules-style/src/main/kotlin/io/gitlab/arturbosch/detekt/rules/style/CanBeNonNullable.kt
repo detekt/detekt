@@ -17,6 +17,8 @@ import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
+import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
+import org.jetbrains.kotlin.js.translate.callTranslator.getReturnType
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -231,13 +233,22 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         }
 
         override fun visitWhenExpression(expression: KtWhenExpression) {
-            val subjectDescriptor = expression.subjectExpression
-                ?.let { it as? KtNameReferenceExpression }
-                ?.getResolvedCall(bindingContext)
-                ?.resultingDescriptor
+            val nullCheckedDescriptor =
+                expression.subjectExpression?.collectDescendantsOfType<KtNameReferenceExpression>().orEmpty()
+                    .mapNotNull {
+                        val callDescriptor =
+                            it.getResolvedCall(bindingContext)
+                        val valueParameterDescriptor =
+                            callDescriptor?.resultingDescriptor as? ValueParameterDescriptor
+                        if (valueParameterDescriptor != null && callDescriptor.getReturnType().isNullable()) {
+                            valueParameterDescriptor
+                        } else {
+                            null
+                        }
+                    }
             val whenConditions = expression.entries.flatMap { it.conditions.asList() }
-            if (subjectDescriptor != null) {
-                whenConditions.evaluateSubjectWhenExpression(expression, subjectDescriptor)
+            if (nullCheckedDescriptor.isNotEmpty()) {
+                whenConditions.evaluateSubjectWhenExpression(expression, nullCheckedDescriptor)
             } else {
                 whenConditions.forEach { whenCondition ->
                     if (whenCondition is KtWhenConditionWithExpression) {
@@ -342,7 +353,9 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                 } else {
                     { nullableParam -> nullableParam.isNonNullChecked = true }
                 }
-                nonNullChecks.forEach { nullableParams[it]?.let(nullableParamCallback) }
+                nonNullChecks.forEach {
+                    nullableParams[it]?.let(nullableParamCallback)
+                }
             }
         }
 
@@ -389,7 +402,7 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
 
         private fun List<KtWhenCondition>.evaluateSubjectWhenExpression(
             expression: KtWhenExpression,
-            subjectDescriptor: CallableDescriptor
+            subjectDescriptor: List<CallableDescriptor>,
         ) {
             var isNonNullChecked = false
             var isNullChecked = false
@@ -416,9 +429,11 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                     isNullChecked = true
                 }
             }
-            nullableParams[subjectDescriptor]?.let {
-                if (isNullChecked) it.isNullChecked = true
-                if (isNonNullChecked) it.isNonNullChecked = true
+            subjectDescriptor.forEach { callableDescriptor ->
+                nullableParams[callableDescriptor]?.let {
+                    if (isNullChecked) it.isNullChecked = true
+                    if (isNonNullChecked) it.isNonNullChecked = true
+                }
             }
         }
 
