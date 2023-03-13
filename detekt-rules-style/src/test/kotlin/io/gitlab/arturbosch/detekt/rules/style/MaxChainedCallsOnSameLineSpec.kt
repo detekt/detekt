@@ -487,6 +487,72 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
             assertThat(findings).hasSize(1)
             assertThat(findings[0]).hasMessage(getTestMessage(4, 3))
         }
+
+        @Nested
+        inner class WithNestedCalls {
+            @Test
+            fun `does report inner nested 4 calls on same line with a max of 3`() {
+                val code = """
+                    val a = 0
+                        .plus(
+                            0
+                        ).plus(
+                            0.plus(0).plus(0).plus(0)
+                        ).plus(
+                            0
+                        ).plus(
+                            0
+                        )
+                """.trimIndent()
+                val findings = rule.compileAndLintWithContext(env, code)
+                assertThat(findings).hasSize(1)
+                assertThat(findings[0]).hasMessage(getTestMessage(4, 3))
+            }
+
+            @Test
+            fun `does not report inner nested 3 calls on a same line with a max of 3`() {
+                val code = """
+                    val a = 0
+                        .plus(
+                            0
+                        ).plus(
+                            0.plus(0).plus(0)
+                        ).plus(
+                            0
+                        ).plus(
+                            0
+                        )
+                """.trimIndent()
+                val findings = rule.compileAndLintWithContext(env, code)
+                assertThat(findings).isEmpty()
+            }
+
+            @Test
+            fun `does not report inner nested 3 calls with new style with a max of 3`() {
+                val code = """
+                    val a = 0
+                        .plus(
+                            0
+                        ).plus(
+                            0.plus(
+                                0
+                            ).plus(
+                                0
+                            ).plus(
+                                0
+                            ).plus(
+                                0
+                            )
+                        ).plus(
+                            0
+                        ).plus(
+                            0
+                        )
+                """.trimIndent()
+                val findings = rule.compileAndLintWithContext(env, code)
+                assertThat(findings).isEmpty()
+            }
+        }
     }
 
     private fun getTestMessage(chainedCalls: Int, maxChainedCalls: Int): String {
