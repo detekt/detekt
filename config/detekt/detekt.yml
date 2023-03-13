@@ -124,8 +124,6 @@ potential-bugs:
     active: true
   DontDowncastCollectionTypes:
     active: true
-  DoubleMutabilityForCollection:
-    active: false
   ElseCaseInsteadOfExhaustiveWhen:
     active: true
   ExitOutsideMain:
