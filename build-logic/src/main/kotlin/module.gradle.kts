@@ -22,7 +22,8 @@ val versionCatalog = project.extensions.getByType<VersionCatalogsExtension>().na
 jacoco.toolVersion = versionCatalog.findVersion("jacoco").get().requiredVersion
 
 tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
+    useJUnitPlatform {
+    }
     systemProperty("junit.jupiter.testinstance.lifecycle.default", "per_class")
     val compileTestSnippets = providers.gradleProperty("compile-test-snippets").orNull.toBoolean()
     systemProperty("compile-test-snippets", compileTestSnippets)
