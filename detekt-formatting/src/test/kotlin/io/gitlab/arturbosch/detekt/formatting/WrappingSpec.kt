@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.formatting
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Wrapping
 import io.gitlab.arturbosch.detekt.test.assert
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -28,9 +29,9 @@ class WrappingSpec {
             
         """.trimIndent()
 
-        subject.lint(code).assert()
+        subject.compileAndLint(code).assert()
             .hasSize(1)
-            .hasStartSourceLocation(1, 12)
-            .hasTextLocations(11 to 12)
+            .hasStartSourceLocation(1, 13)
+            .hasTextLocations(12 to 20)
     }
 }

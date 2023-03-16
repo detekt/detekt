@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.formatting.wrappers.MaximumLineLength
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -31,13 +32,13 @@ class MaximumLineLengthSpec {
         }
 
         @Test
-        fun `reports issues with the filename and package as signature`() {
+        fun `reports issues with the filename in signature`() {
             val finding = subject.lint(
                 code,
                 Path("home", "test", "Test.kt").toString()
             ).first()
 
-            assertThat(finding.entity.signature).isEqualTo("home.test.Test.kt:2")
+            assertThat(finding.entity.signature).isEqualTo("Test.kt\$fun")
         }
 
         @Test
@@ -55,14 +56,13 @@ class MaximumLineLengthSpec {
 
     @Test
     fun `reports correct line numbers`() {
-        val findings = subject.lint(longLines)
+        val findings = subject.compileAndLint(longLines)
 
         // Note that KtLint's MaximumLineLength rule, in contrast to detekt's MaxLineLength rule, does not report
         // exceeded lines in block comments.
-        assertThat(findings).hasSize(2)
-
-        assertThat(findings[0].entity.location.source.line).isEqualTo(8)
-        assertThat(findings[1].entity.location.source.line).isEqualTo(14)
+        io.gitlab.arturbosch.detekt.test.assertThat(findings).hasSize(2)
+        io.gitlab.arturbosch.detekt.test.assertThat(findings[0]).hasSourceLocation(7, 8)
+        io.gitlab.arturbosch.detekt.test.assertThat(findings[1]).hasSourceLocation(13, 12)
     }
 
     @Test
