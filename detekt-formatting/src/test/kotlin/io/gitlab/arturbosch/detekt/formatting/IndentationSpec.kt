@@ -3,9 +3,8 @@ package io.gitlab.arturbosch.detekt.formatting
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Indentation
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assert
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -34,7 +33,7 @@ class IndentationSpec {
 
             @Test
             fun `places finding location to the indentation`() {
-                subject.compileAndLint(code).assert()
+                assertThat(subject.compileAndLint(code))
                     .hasStartSourceLocation(1, 13)
                     .hasTextLocations(12 to 14)
             }
