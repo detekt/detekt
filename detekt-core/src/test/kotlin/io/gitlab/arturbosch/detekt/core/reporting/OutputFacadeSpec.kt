@@ -45,10 +45,10 @@ class OutputFacadeSpec {
         spec.withSettings { OutputFacade(this).run(defaultResult) }
 
         assertThat(printStream.toString()).contains(
-            "Successfully generated ${TxtOutputReport().name} at $plainOutputPath",
-            "Successfully generated ${XmlOutputReport().name} at $xmlOutputPath",
-            "Successfully generated ${HtmlOutputReport().name} at $htmlOutputPath",
-            "Successfully generated ${MdOutputReport().name} at $mdOutputPath"
+            "Successfully generated ${TxtOutputReport().name} at ${plainOutputPath.toUri()}",
+            "Successfully generated ${XmlOutputReport().name} at ${xmlOutputPath.toUri()}",
+            "Successfully generated ${HtmlOutputReport().name} at ${htmlOutputPath.toUri()}",
+            "Successfully generated ${MdOutputReport().name} at ${mdOutputPath.toUri()}"
         )
     }
 }
