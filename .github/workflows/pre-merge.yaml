@@ -21,6 +21,10 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
+        jdk: [ 8, 11, 17 ]
+        exclude: # windows with JDK8 are *really* flaky
+          - os: windows-latest
+            jdk: 8
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Repo
@@ -29,11 +33,13 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@3f07048e3d294f56e9b90ac5ea2c6f74e9ad0f98 # v3
         with:
-          java-version: 17
+          java-version: ${{ matrix.jdk }}
           distribution: 'temurin'
 
       - name: Build detekt
         uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f # v2
+        env:
+          ORG_GRADLE_PROJECT_io.github.detekt.javaToolchain.test: ${{ matrix.jdk }}
         with:
           gradle-home-cache-cleanup: true
           arguments: build -x detekt publishToMavenLocal -PenablePTS=${{ github.event_name == 'pull_request' }}
