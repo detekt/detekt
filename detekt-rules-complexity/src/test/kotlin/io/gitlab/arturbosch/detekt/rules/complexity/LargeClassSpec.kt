@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
-private fun subject(threshold: Int) = LargeClass(TestConfig(mapOf("threshold" to threshold)))
+private fun subject(threshold: Int) = LargeClass(TestConfig("threshold" to threshold))
 
 class LargeClassSpec {
 
@@ -22,8 +22,8 @@ class LargeClassSpec {
     @Test
     fun `should not report anything in files without classes`() {
         val code = """
-            val i = 0 
-
+            val i = 0
+            
             fun f() {
                 println()
                 println()

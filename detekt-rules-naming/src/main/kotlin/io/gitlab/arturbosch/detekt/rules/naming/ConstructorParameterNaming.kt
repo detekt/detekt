@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
 import org.jetbrains.kotlin.psi.KtConstructor
@@ -40,21 +39,23 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
     private val excludeClassPattern: Regex by config("$^") { it.toRegex() }
 
     @Configuration("ignores constructor properties that have the override modifier")
+    @Deprecated("This configuration is ignored and will be removed in the future")
+    @Suppress("UnusedPrivateMember")
     private val ignoreOverridden: Boolean by config(true)
 
     override fun visitParameter(parameter: KtParameter) {
         if (!parameter.isConstructor() ||
             parameter.isContainingExcludedClassOrObject(excludeClassPattern) ||
-            isIgnoreOverridden(parameter)
+            parameter.isOverride()
         ) {
             return
         }
 
-        val identifier = parameter.identifierName()
+        val identifier = parameter.name
         if (parameter.isPrivate()) {
             visitPrivateParameter(parameter)
         } else {
-            if (!identifier.matches(parameterPattern)) {
+            if (identifier?.matches(parameterPattern) == false) {
                 report(
                     CodeSmell(
                         issue,
@@ -67,8 +68,8 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun visitPrivateParameter(parameter: KtParameter) {
-        val identifier = parameter.identifierName()
-        if (!identifier.matches(privateParameterPattern)) {
+        val identifier = parameter.name
+        if (identifier?.matches(privateParameterPattern) == false) {
             report(
                 CodeSmell(
                     issue,
@@ -78,8 +79,6 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
             )
         }
     }
-
-    private fun isIgnoreOverridden(parameter: KtParameter) = ignoreOverridden && parameter.isOverride()
 
     private fun KtParameter.isConstructor(): Boolean {
         return this.ownerFunction is KtConstructor<*>

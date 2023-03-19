@@ -21,14 +21,14 @@ class RuleSetProviderCollectorSpec {
 
     @Nested
     inner class `a non-RuleSetProvider class extending nothing` {
-        val code = """
-        package foo
-
-        class SomeRandomClass {
-            fun logSomething(message: String) {
-                println(message)
+        private val code = """
+            package foo
+            
+            class SomeRandomClass {
+                fun logSomething(message: String) {
+                    println(message)
+                }
             }
-        }
         """.trimIndent()
 
         @Test
@@ -40,14 +40,14 @@ class RuleSetProviderCollectorSpec {
 
     @Nested
     inner class `a non-RuleSetProvider class extending a class that is not related to rules` {
-        val code = """
-        package foo
-
-        class SomeRandomClass: SomeOtherClass {
-            fun logSomething(message: String) {
-                println(message)
+        private val code = """
+            package foo
+            
+            class SomeRandomClass: SomeOtherClass {
+                fun logSomething(message: String) {
+                    println(message)
+                }
             }
-        }
         """.trimIndent()
 
         @Test
@@ -59,14 +59,14 @@ class RuleSetProviderCollectorSpec {
 
     @Nested
     inner class `a RuleSetProvider without documentation` {
-        val code = """
-        package foo
-
-        class TestProvider: RuleSetProvider {
-            fun logSomething(message: String) {
-                println(message)
+        private val code = """
+            package foo
+            
+            class TestProvider: RuleSetProvider {
+                fun logSomething(message: String) {
+                    println(message)
+                }
             }
-        }
         """.trimIndent()
 
         @Test
@@ -78,14 +78,14 @@ class RuleSetProviderCollectorSpec {
 
     @Nested
     inner class `a correct RuleSetProvider class extending RuleSetProvider but missing parameters` {
-        val code = """
-        package foo
-
-        class TestProvider: RuleSetProvider {
-            fun logSomething(message: String) {
-                println(message)
+        private val code = """
+            package foo
+            
+            class TestProvider: RuleSetProvider {
+                fun logSomething(message: String) {
+                    println(message)
+                }
             }
-        }
         """.trimIndent()
 
         @Test
@@ -97,27 +97,27 @@ class RuleSetProviderCollectorSpec {
 
     @Nested
     inner class `a correct RuleSetProvider class with full parameters` {
-        val description = "This is a description"
-        val ruleSetId = "test"
-        val ruleName = "TestRule"
-        val code = """
-        package foo
-
-        /**
-         * $description
-         *
-         * 
-         */
-        @ActiveByDefault("1.0.0")
-        class TestProvider: RuleSetProvider {
-            override val ruleSetId: String = "$ruleSetId"
-
-            override fun instance(config: Config): RuleSet {
-                return RuleSet(ruleSetId, listOf(
-                        $ruleName(config)
-                ))
+        private val description = "This is a description"
+        private val ruleSetId = "test"
+        private val ruleName = "TestRule"
+        private val code = """
+            package foo
+            
+            /**
+             * $description
+             *
+             *
+             */
+            @ActiveByDefault("1.0.0")
+            class TestProvider: RuleSetProvider {
+                override val ruleSetId: String = "$ruleSetId"
+            
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, listOf(
+                            $ruleName(config)
+                    ))
+                }
             }
-        }
         """.trimIndent()
 
         @Test
@@ -158,24 +158,24 @@ class RuleSetProviderCollectorSpec {
 
     @Nested
     inner class `an inactive RuleSetProvider` {
-        val description = "This is a description"
-        val ruleSetId = "test"
-        val ruleName = "TestRule"
-        val code = """
-        package foo
-
-        /**
-         * $description
-         */
-        class TestProvider: RuleSetProvider {
-            override val ruleSetId: String = "$ruleSetId"
-
-            override fun instance(config: Config): RuleSet {
-                return RuleSet(ruleSetId, listOf(
-                        $ruleName(config)
-                ))
+        private val description = "This is a description"
+        private val ruleSetId = "test"
+        private val ruleName = "TestRule"
+        private val code = """
+            package foo
+            
+            /**
+             * $description
+             */
+            class TestProvider: RuleSetProvider {
+                override val ruleSetId: String = "$ruleSetId"
+            
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, listOf(
+                            $ruleName(config)
+                    ))
+                }
             }
-        }
         """.trimIndent()
 
         @Test
@@ -188,21 +188,21 @@ class RuleSetProviderCollectorSpec {
 
     @Nested
     inner class `a RuleSetProvider with missing name` {
-        val description = "This is a description"
-        val ruleName = "TestRule"
-        val code = """
-        package foo
-
-        /**
-         * $description
-         */
-        class TestProvider: RuleSetProvider {
-            override fun instance(config: Config): RuleSet {
-                return RuleSet(ruleSetId, listOf(
-                        $ruleName(config)
-                ))
+        private val description = "This is a description"
+        private val ruleName = "TestRule"
+        private val code = """
+            package foo
+            
+            /**
+             * $description
+             */
+            class TestProvider: RuleSetProvider {
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, listOf(
+                            $ruleName(config)
+                    ))
+                }
             }
-        }
         """.trimIndent()
 
         @Test
@@ -214,20 +214,20 @@ class RuleSetProviderCollectorSpec {
 
     @Nested
     inner class `a RuleSetProvider with missing description` {
-        val ruleSetId = "test"
-        val ruleName = "TestRule"
-        val code = """
-        package foo
-
-        class TestProvider: RuleSetProvider {
-            override val ruleSetId: String = "$ruleSetId"
-
-            override fun instance(config: Config): RuleSet {
-                return RuleSet(ruleSetId, listOf(
-                        $ruleName(config)
-                ))
+        private val ruleSetId = "test"
+        private val ruleName = "TestRule"
+        private val code = """
+            package foo
+            
+            class TestProvider: RuleSetProvider {
+                override val ruleSetId: String = "$ruleSetId"
+            
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, listOf(
+                            $ruleName(config)
+                    ))
+                }
             }
-        }
         """.trimIndent()
 
         @Test
@@ -239,22 +239,22 @@ class RuleSetProviderCollectorSpec {
 
     @Nested
     inner class `a RuleSetProvider with invalid activation version` {
-        val code = """
-        package foo
-
-        /**
-         * description
-         */
-        @ActiveByDefault(since = "1.2.xyz")
-        class TestProvider: RuleSetProvider {
-            override val ruleSetId: String = "ruleSetId"
-
-            override fun instance(config: Config): RuleSet {
-                return RuleSet(ruleSetId, listOf(
-                        TestRule(config)
-                ))
+        private val code = """
+            package foo
+            
+            /**
+             * description
+             */
+            @ActiveByDefault(since = "1.2.xyz")
+            class TestProvider: RuleSetProvider {
+                override val ruleSetId: String = "ruleSetId"
+            
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, listOf(
+                            TestRule(config)
+                    ))
+                }
             }
-        }
         """.trimIndent()
 
         @Test
@@ -266,17 +266,17 @@ class RuleSetProviderCollectorSpec {
 
     @Nested
     inner class `a RuleSetProvider with no rules` {
-        val ruleSetId = "test"
-        val code = """
-        package foo
-
-        class TestProvider: RuleSetProvider {
-            override val ruleSetId: String = "$ruleSetId"
-
-            override fun instance(config: Config): RuleSet {
-                return RuleSet(ruleSetId, emptyListOf())
+        private val ruleSetId = "test"
+        private val code = """
+            package foo
+            
+            class TestProvider: RuleSetProvider {
+                override val ruleSetId: String = "$ruleSetId"
+            
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, emptyListOf())
+                }
             }
-        }
         """.trimIndent()
 
         @Test
@@ -288,27 +288,27 @@ class RuleSetProviderCollectorSpec {
 
     @Nested
     inner class `a correct RuleSetProvider class with full parameters and multiple rules` {
-        val description = "This is a description"
-        val ruleSetId = "test"
-        val ruleName = "TestRule"
-        val secondRuleName = "SecondRule"
-        val code = """
-        package foo
-
-        /**
-         * $description
-         */
-        @ActiveByDefault("1.0.0")
-        class TestProvider: RuleSetProvider {
-            override val ruleSetId: String = "$ruleSetId"
-
-            override fun instance(config: Config): RuleSet {
-                return RuleSet(ruleSetId, listOf(
-                        $ruleName(config),
-                        $secondRuleName(config)
-                ))
+        private val description = "This is a description"
+        private val ruleSetId = "test"
+        private val ruleName = "TestRule"
+        private val secondRuleName = "SecondRule"
+        private val code = """
+            package foo
+            
+            /**
+             * $description
+             */
+            @ActiveByDefault("1.0.0")
+            class TestProvider: RuleSetProvider {
+                override val ruleSetId: String = "$ruleSetId"
+            
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, listOf(
+                            $ruleName(config),
+                            $secondRuleName(config)
+                    ))
+                }
             }
-        }
         """.trimIndent()
 
         @Test
@@ -320,9 +320,9 @@ class RuleSetProviderCollectorSpec {
 
     @Nested
     inner class `a RuleSetProvider with configurations in kdoc` {
-        val code = """
+        private val code = """
             package foo
-
+            
             /**
              * description
              * @configuration android - if android style guides should be preferred (default: `false`)
@@ -339,33 +339,33 @@ class RuleSetProviderCollectorSpec {
 
     @Nested
     inner class `a RuleSetProvider with configurations` {
-        val code = """
-        package foo
-
-        /**
-         * description
-         */
-        class TestProvider: RuleSetProvider {
-            override val ruleSetId: String = "ruleSetId"
-
-            override fun instance(config: Config): RuleSet {
-                return RuleSet(ruleSetId, listOf(RruleName(config)))
+        private val code = """
+            package foo
+            
+            /**
+             * description
+             */
+            class TestProvider: RuleSetProvider {
+                override val ruleSetId: String = "ruleSetId"
+            
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, listOf(RruleName(config)))
+                }
+            
+                companion object {
+                    @Configuration("bool description")
+                    val aBool by ruleSetConfig(true)
+            
+                    @Configuration("int description")
+                    val anInt by ruleSetConfig(99)
+            
+                    @Deprecated("use something else")
+                    @Configuration("string description")
+                    val aString by ruleSetConfig("a")
+                }
             }
-
-            companion object {
-                @Configuration("bool description")
-                val aBool by ruleSetConfig(true)
-
-                @Configuration("int description")
-                val anInt by ruleSetConfig(99)
-                
-                @Deprecated("use something else")
-                @Configuration("string description")
-                val aString by ruleSetConfig("a")
-            }
-        }
         """.trimIndent()
-        private val items = subject.run(code)
+        private val items by lazy { subject.run(code) }
 
         @Test
         fun `extracts boolean configuration option`() {
@@ -396,28 +396,28 @@ class RuleSetProviderCollectorSpec {
 
     @Nested
     inner class `a RuleSetProvider with unsupported configuration format` {
-        val code = """
-        package foo
-
-        /**
-         * description
-         */
-        class TestProvider: RuleSetProvider {
-            override val ruleSetId: String = "ruleSetId"
-
-            override fun instance(config: Config): RuleSet {
-                return RuleSet(ruleSetId, listOf(RruleName(config)))
+        private val code = """
+            package foo
+            
+            /**
+             * description
+             */
+            class TestProvider: RuleSetProvider {
+                override val ruleSetId: String = "ruleSetId"
+            
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, listOf(RruleName(config)))
+                }
+            
+                companion object {
+                    @Configuration("a description")
+                    val aConfig by ruleSetConfig(listOf("a"))
+                }
             }
-
-            companion object {
-                @Configuration("a description")
-                val aConfig by ruleSetConfig(listOf("a"))
-            }
-        }
         """.trimIndent()
 
         @Test
-        fun `fails`() {
+        fun fails() {
             assertThatThrownBy { subject.run(code) }
                 .isInstanceOf(InvalidDocumentationException::class.java)
                 .hasMessageContaining("""Unsupported default value format 'listOf("a")'""")

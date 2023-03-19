@@ -97,14 +97,12 @@ subprojects {
     // reports.sarif.required.set(true)
   }
 
-  plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin) {
-    tasks.withType(io.gitlab.arturbosch.detekt.Detekt) { detektTask -> // Sadly it has to be eager.
-      finalizedBy(reportMerge)
+  tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+    finalizedBy(reportMerge)
+  }
 
-      reportMerge.configure { mergeTask ->
-        mergeTask.input.from(detektTask.xmlReportFile) // or detektTask.sarifReportFile
-      }
-    }
+  reportMerge.configure {
+    input.from(tasks.withType(io.gitlab.arturbosch.detekt.Detekt).collect { it.xmlReportFile }) // or sarifReportFile
   }
 }
 ```
@@ -122,14 +120,12 @@ subprojects {
     // reports.sarif.required.set(true)
   }
 
-  plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
-    tasks.withType<io.gitlab.arturbosch.detekt.Detekt> detekt@{ // Sadly it has to be eager.
-      finalizedBy(reportMerge)
+  tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    finalizedBy(reportMerge)
+  }
 
-      reportMerge.configure {
-        input.from(this@detekt.xmlReportFile) // or .sarifReportFile
-      }
-    }
+  reportMerge {
+    input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.xmlReportFile }) // or .sarifReportFile
   }
 }
 ```

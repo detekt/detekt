@@ -13,9 +13,8 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
-import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.readLines
 
 class RunnerSpec {
 
@@ -37,7 +36,7 @@ class RunnerSpec {
                 "/configs/max-issues-2.yml"
             )
 
-            assertThat(Files.readAllLines(tmpReport)).hasSize(1)
+            assertThat(tmpReport.readLines()).hasSize(1)
         }
 
         @Test
@@ -65,7 +64,7 @@ class RunnerSpec {
                 "/configs/max-issues--1.yml"
             )
 
-            assertThat(Files.readAllLines(tmpReport)).hasSize(1)
+            assertThat(tmpReport.readLines()).hasSize(1)
         }
 
         @Nested
@@ -86,7 +85,7 @@ class RunnerSpec {
                     resourceAsPath("configs/baseline-with-two-excludes.xml").toString()
                 )
 
-                assertThat(Files.readAllLines(tmpReport)).isEmpty()
+                assertThat(tmpReport).isEmptyFile()
             }
         }
     }
@@ -242,7 +241,7 @@ class RunnerSpec {
                     "test:test"
                 )
             }.isExactlyInstanceOf(MaxIssuesReached::class.java)
-            assertThat(Files.readAllLines(tmp)).hasSize(1)
+            assertThat(tmp.readLines()).hasSize(1)
         }
 
         @Test
@@ -303,7 +302,7 @@ class RunnerSpec {
 
     @Test
     fun `does not fail on rule property type change from comma separated string to list when YamlConfig is wrapped`() {
-        assertDoesNotThrow {
+        assertThatCode {
             executeDetekt(
                 "--all-rules", // wrapping config
                 "--input",
@@ -313,6 +312,6 @@ class RunnerSpec {
                 "--max-issues",
                 "-1"
             )
-        }
+        }.doesNotThrowAnyException()
     }
 }

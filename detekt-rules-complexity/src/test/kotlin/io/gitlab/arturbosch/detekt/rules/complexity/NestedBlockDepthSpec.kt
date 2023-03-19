@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 class NestedBlockDepthSpec {
 
     val defaultThreshold = 4
-    val defaultConfig = TestConfig(mapOf("threshold" to defaultThreshold))
+    val defaultConfig = TestConfig("threshold" to defaultThreshold)
     val subject = NestedBlockDepth(defaultConfig)
 
     @Test

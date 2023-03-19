@@ -16,140 +16,138 @@ private const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
 
 class EmptyCodeSpec {
 
-    val regexTestingCode = """
-            fun f() {
-                try {
-                } catch (foo: Exception) {
-                }
-            }
-    """.trimIndent()
-
-    @Test
-    fun `findsEmptyCatch`() {
-        test { EmptyCatchBlock(Config.empty) }
-    }
-
-    @Test
-    fun `findsEmptyNestedCatch`() {
-        val code = """
-        fun f() {
-            try {
-            } catch (ignore: Exception) {
-                try {
-                } catch (e: Exception) {
-                }
-            }
-        }
-        """.trimIndent()
-        assertThat(EmptyCatchBlock(Config.empty).compileAndLint(code)).hasSize(1)
-    }
-
-    @Test
-    fun `doesNotReportIgnoredOrExpectedException`() {
-        val code = """
-        fun f() {
-            try {
-            } catch (ignore: IllegalArgumentException) {
-            } catch (expected: Exception) {
-            }
-        }
-        """.trimIndent()
-        assertThat(EmptyCatchBlock(Config.empty).compileAndLint(code)).isEmpty()
-    }
-
-    @Test
-    fun `doesNotReportEmptyCatchWithConfig`() {
-        val code = """
+    private val regexTestingCode = """
         fun f() {
             try {
             } catch (foo: Exception) {
             }
         }
+    """.trimIndent()
+
+    @Test
+    fun findsEmptyCatch() {
+        test { EmptyCatchBlock(Config.empty) }
+    }
+
+    @Test
+    fun findsEmptyNestedCatch() {
+        val code = """
+            fun f() {
+                try {
+                } catch (ignore: Exception) {
+                    try {
+                    } catch (e: Exception) {
+                    }
+                }
+            }
         """.trimIndent()
-        val config = TestConfig(mapOf(ALLOWED_EXCEPTION_NAME_REGEX to "foo"))
+        assertThat(EmptyCatchBlock(Config.empty).compileAndLint(code)).hasSize(1)
+    }
+
+    @Test
+    fun doesNotReportIgnoredOrExpectedException() {
+        val code = """
+            fun f() {
+                try {
+                } catch (ignore: IllegalArgumentException) {
+                } catch (expected: Exception) {
+                }
+            }
+        """.trimIndent()
+        assertThat(EmptyCatchBlock(Config.empty).compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun doesNotReportEmptyCatchWithConfig() {
+        val code = """
+            fun f() {
+                try {
+                } catch (foo: Exception) {
+                }
+            }
+        """.trimIndent()
+        val config = TestConfig(ALLOWED_EXCEPTION_NAME_REGEX to "foo")
         assertThat(EmptyCatchBlock(config).compileAndLint(code)).isEmpty()
     }
 
     @Test
-    fun `findsEmptyFinally`() {
+    fun findsEmptyFinally() {
         test { EmptyFinallyBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyIf`() {
+    fun findsEmptyIf() {
         test { EmptyIfBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyElse`() {
+    fun findsEmptyElse() {
         test { EmptyElseBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyFor`() {
+    fun findsEmptyFor() {
         test { EmptyForBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyWhile`() {
+    fun findsEmptyWhile() {
         test { EmptyWhileBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyDoWhile`() {
+    fun findsEmptyDoWhile() {
         test { EmptyDoWhileBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyFun`() {
+    fun findsEmptyFun() {
         test { EmptyFunctionBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyClass`() {
+    fun findsEmptyClass() {
         test { EmptyClassBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyTry`() {
+    fun findsEmptyTry() {
         test { EmptyTryBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyWhen`() {
+    fun findsEmptyWhen() {
         test { EmptyWhenBlock(Config.empty) }
     }
 
     @Test
-    fun `findsEmptyInit`() {
+    fun findsEmptyInit() {
         test { EmptyInitBlock(Config.empty) }
     }
 
     @Test
-    fun `findsOneEmptySecondaryConstructor`() {
+    fun findsOneEmptySecondaryConstructor() {
         test { EmptySecondaryConstructor(Config.empty) }
     }
 
     @Test
     fun `reports an empty kt file`() {
         val rule = EmptyKtFile(Config.empty)
-        assertThat(rule.compileAndLint("")).hasSize(1)
+        assertThat(rule.lint("")).hasSize(1)
     }
 
     @Test
-    fun `doesNotFailWithInvalidRegexWhenDisabled`() {
-        val configValues = mapOf(
+    fun doesNotFailWithInvalidRegexWhenDisabled() {
+        val config = TestConfig(
             "active" to "false",
-            ALLOWED_EXCEPTION_NAME_REGEX to "*foo"
+            ALLOWED_EXCEPTION_NAME_REGEX to "*foo",
         )
-        val config = TestConfig(configValues)
         assertThat(EmptyCatchBlock(config).compileAndLint(regexTestingCode)).isEmpty()
     }
 
     @Test
-    fun `doesFailWithInvalidRegex`() {
-        val configValues = mapOf(ALLOWED_EXCEPTION_NAME_REGEX to "*foo")
-        val config = TestConfig(configValues)
+    fun doesFailWithInvalidRegex() {
+        val config = TestConfig(ALLOWED_EXCEPTION_NAME_REGEX to "*foo")
         assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
             EmptyCatchBlock(config).compileAndLint(regexTestingCode)
         }

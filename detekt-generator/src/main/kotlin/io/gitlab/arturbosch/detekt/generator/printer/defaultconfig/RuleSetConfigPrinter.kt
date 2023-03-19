@@ -41,7 +41,7 @@ internal fun YamlNode.printRule(rule: Rule) {
         if (ruleExclusion != null) {
             keyValue { Config.EXCLUDES_KEY to ruleExclusion.pattern }
         }
-        rule.configuration.forEach(::printConfiguration)
+        rule.configurations.forEach(::printConfiguration)
     }
 }
 

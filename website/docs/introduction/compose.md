@@ -10,7 +10,7 @@ Relevant rule sets and their configuration options for Compose styles & usage. T
 - [Compose API Guidelines](https://github.com/androidx/androidx/blob/androidx-main/compose/docs/compose-api-guidelines.md)
 - [Compose source](https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:compose)
 
-### FunctionNaming
+### FunctionNaming for Compose
 
 See [FunctionNaming](/docs/rules/naming#functionnaming).
 
@@ -21,13 +21,13 @@ See [FunctionNaming](/docs/rules/naming#functionnaming).
 fun FooButton(text: String, onClick: () -> Unit) { // Violation for FooButton()
 ```
 
-#### Configurations:
+#### Recommended configuration
 Choose _either_ of the following options:
 
 * Augment default `functionPattern` to `'[a-zA-Z][a-zA-Z0-9]*'` (default is: `'[a-z][a-zA-Z0-9]*'`)
 * Set `ignoreAnnotated` to `['Composable']`
 
-### TopLevelPropertyNaming
+### TopLevelPropertyNaming for Compose
 
 See [TopLevelPropertyNaming](/docs/rules/naming#toplevelpropertynaming).
 
@@ -45,23 +45,23 @@ private val FOO_PADDING = 16.dp
 private val FooPadding = 16.dp
 ```
 
-#### Configurations:
+#### Recommended configuration
 
 * Set `constantPattern` to `'[A-Z][A-Za-z0-9]*'` (default is: `'[A-Z][_A-Z0-9]*'`)
 
 
-### LongParameterList
+### LongParameterList for Compose
 
 See [LongParameterList](/docs/rules/complexity#longparameterlist).
 
 Composables may boast more than the typical number of function arguments (albeit mostly with default values). For example, see [OutlinedTextField](https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:compose/material/material/src/commonMain/kotlin/androidx/compose/material/OutlinedTextField.kt;l=133?q=OutlinedTextFieldLayout&ss=androidx%2Fplatform%2Fframeworks%2Fsupport:compose%2F).
 
-#### Configurations:
+#### Recommended configuration
 
 * Set `functionThreshold` to a higher value
 * Additionally, can set `ignoreDefaultParameters = true`
 
-### MagicNumber
+### MagicNumber for Compose
 
 See [MagicNumber](/docs/rules/style#magicnumber).
 
@@ -79,11 +79,11 @@ class Foo {
 }
 ```
 
-#### Configurations:
+#### Recommended configuration
 
 * Set `ignorePropertyDeclaration = true`, `ignoreCompanionObjectPropertyDeclaration = true` (default)
 
-### UnusedPrivateMember
+### UnusedPrivateMember for Compose
 
 See [UnusedPrivateMember](/docs/rules/style#unusedprivatemember).
 
@@ -97,6 +97,6 @@ private fun FooLazyColumnPreview() { // Violation for FooLazyColumnPreview()
 }
 ```
 
-#### Configurations:
+#### Recommended configuration
 
 * Set `ignoreAnnotated` to `['Preview']`

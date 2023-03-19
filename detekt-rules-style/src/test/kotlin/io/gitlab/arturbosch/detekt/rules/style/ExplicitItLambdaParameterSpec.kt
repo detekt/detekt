@@ -15,9 +15,9 @@ class ExplicitItLambdaParameterSpec {
         fun `reports when parameter type is not declared`() {
             val findings = subject.compileAndLint(
                 """
-            fun f() {
-                val digits = 1234.let { it -> listOf(it) }
-            }
+                    fun f() {
+                        val digits = 1234.let { it -> listOf(it) }
+                    }
                 """.trimIndent()
             )
             assertThat(findings).hasSize(1)
@@ -27,9 +27,9 @@ class ExplicitItLambdaParameterSpec {
         fun `reports when parameter type is declared explicitly`() {
             val findings = subject.compileAndLint(
                 """
-            fun f() {
-                val lambda = { it: Int -> it.toString() }
-            }
+                    fun f() {
+                        val lambda = { it: Int -> it.toString() }
+                    }
                 """.trimIndent()
             )
             assertThat(findings).hasSize(1)
@@ -42,11 +42,11 @@ class ExplicitItLambdaParameterSpec {
         fun `does not report implicit 'it' parameter usage`() {
             val findings = subject.compileAndLint(
                 """
-            fun f() {
-                val lambda = { i: Int -> i.toString() }
-                val digits = 1234.let { lambda(it) }.toList()
-                val flat = listOf(listOf(1), listOf(2)).flatMap { it }
-            }
+                    fun f() {
+                        val lambda = { i: Int -> i.toString() }
+                        val digits = 1234.let { lambda(it) }.toList()
+                        val flat = listOf(listOf(1), listOf(2)).flatMap { it }
+                    }
                 """.trimIndent()
             )
             assertThat(findings).isEmpty()
@@ -59,9 +59,9 @@ class ExplicitItLambdaParameterSpec {
         fun `reports when parameter types are not declared`() {
             val findings = subject.compileAndLint(
                 """
-            fun f() {
-                val flat = listOf(listOf(1), listOf(2)).mapIndexed { index, it -> it + index }
-            }
+                    fun f() {
+                        val flat = listOf(listOf(1), listOf(2)).mapIndexed { index, it -> it + index }
+                    }
                 """.trimIndent()
             )
             assertThat(findings).hasSize(1)
@@ -71,9 +71,9 @@ class ExplicitItLambdaParameterSpec {
         fun `reports when parameter types are declared explicitly`() {
             val findings = subject.compileAndLint(
                 """
-            fun f() {
-                val lambda = { it: Int, that: String -> it.toString() + that }
-            }
+                    fun f() {
+                        val lambda = { it: Int, that: String -> it.toString() + that }
+                    }
                 """.trimIndent()
             )
             assertThat(findings).hasSize(1)

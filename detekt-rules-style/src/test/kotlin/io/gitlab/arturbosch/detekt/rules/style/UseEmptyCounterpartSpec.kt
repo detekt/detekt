@@ -29,7 +29,7 @@ class UseEmptyCounterpartSpec(val env: KotlinCoreEnvironment) {
         val code = """
             val array: Array<Any> = arrayOf()
             val list: List<Any> = listOf()
-            val list: List<Any> = listOfNotNull()
+            val list2: List<Any> = listOfNotNull()
             val map: Map<Any, Any> = mapOf()
             val sequence: Sequence<Any> = sequenceOf()
             val set: Set<Any> = setOf()
@@ -70,8 +70,8 @@ class UseEmptyCounterpartSpec(val env: KotlinCoreEnvironment) {
             fun <T> listOfNotNull(): List<T> = TODO()
             fun <K, V> mapOf(): Map<K, V> = TODO()
             fun <T> sequenceOf(): Sequence<T> = TODO()
-            fun <T> setOf(): Set<T> = TODO() 
-
+            fun <T> setOf(): Set<T> = TODO()
+            
             val array = arrayOf<Any>()
             val list = listOf<Any>()
             val nonNullList = listOfNotNull<Any>()

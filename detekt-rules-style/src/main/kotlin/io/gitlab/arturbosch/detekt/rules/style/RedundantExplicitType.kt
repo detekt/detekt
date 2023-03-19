@@ -58,8 +58,7 @@ class RedundantExplicitType(config: Config) : Rule(config) {
     override fun visitProperty(property: KtProperty) {
         if (!property.isLocal) return
         val typeReference = property.typeReference ?: return
-        val type =
-            (bindingContext[BindingContext.VARIABLE, property])?.type ?: return
+        val type = (bindingContext[BindingContext.VARIABLE, property])?.type ?: return
         if (type is AbbreviatedType) return
 
         when (val initializer = property.initializer) {

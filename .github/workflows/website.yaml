@@ -5,8 +5,6 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - '**'
 
 env:
   GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
@@ -20,10 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
+        uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f # v3
 
       - name: Setup Java
-        uses: actions/setup-java@1df8dbefe2a8cbc99770194893dd902763bee34b # v3
+        uses: actions/setup-java@3f07048e3d294f56e9b90ac5ea2c6f74e9ad0f98 # v3
         with:
           java-version: 17
           distribution: 'temurin'
@@ -36,8 +34,9 @@ jobs:
           cache-dependency-path: 'website/yarn.lock'
 
       - name: Build Detekt Documentation
-        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
+        uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f # v2
         with:
+          gradle-home-cache-cleanup: true
           arguments: :detekt-generator:generateDocumentation
 
       - name: Install Yarn Dependencies
@@ -50,7 +49,7 @@ jobs:
 
       - name: Deploy Github Pages (only on main)
         uses: JamesIves/github-pages-deploy-action@ba1486788b0490a235422264426c45848eac35c6 # tag=v4
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           branch: gh-pages
           folder: website/build/

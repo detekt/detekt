@@ -41,7 +41,7 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
         val defaultConfigFile =
             target.file("${target.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
         if (defaultConfigFile.exists()) {
-            extension.config = target.files(defaultConfigFile)
+            extension.config.setFrom(target.files(defaultConfigFile))
         }
 
         target.configurations.maybeCreate(CONFIGURATION_DETEKT_PLUGINS).apply {
@@ -74,9 +74,8 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
         val taskExtension =
             kotlinCompilation.compileKotlinTask.extensions.getByType(KotlinCompileTaskDetektExtension::class.java)
 
-        project.configurations.getByName("kotlinCompilerPluginClasspath").apply {
-            extendsFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
-        }
+        project.configurations.getByName("kotlinCompilerPluginClasspath")
+            .extendsFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
 
         val options = project.objects.listProperty(SubpluginOption::class.java).apply {
             add(SubpluginOption("debug", taskExtension.debug.get().toString()))

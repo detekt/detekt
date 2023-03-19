@@ -232,7 +232,7 @@ internal class SimplePatternToRegexSpec {
     @Nested
     inner class `characters that have a special meaning in regular expression must be escaped` {
         @Nested
-        inner class `Period` {
+        inner class Period {
             private val subject = "a.b.c".simplePatternToRegex()
 
             @Test

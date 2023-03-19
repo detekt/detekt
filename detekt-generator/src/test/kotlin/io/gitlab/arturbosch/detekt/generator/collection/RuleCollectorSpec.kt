@@ -182,7 +182,7 @@ class RuleCollectorSpec {
                 class SomeRandomClass : Rule
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration).isEmpty()
+            assertThat(items[0].configurations).isEmpty()
         }
 
         @Test
@@ -194,10 +194,10 @@ class RuleCollectorSpec {
                 class SomeRandomClass() : Rule {
                     @Configuration("description")
                     private val config: String by config("[A-Z$]")
-                }                        
+                }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration).hasSize(1)
+            assertThat(items[0].configurations).hasSize(1)
             val expectedConfiguration = Configuration(
                 name = "config",
                 description = "description",
@@ -205,7 +205,7 @@ class RuleCollectorSpec {
                 defaultAndroidValue = null,
                 deprecated = null
             )
-            assertThat(items[0].configuration[0]).isEqualTo(expectedConfiguration)
+            assertThat(items[0].configurations[0]).isEqualTo(expectedConfiguration)
         }
 
         @Test
@@ -217,11 +217,11 @@ class RuleCollectorSpec {
                 class SomeRandomClass() : Rule {
                     @Configuration("description")
                     private val config: Int by config(1_999_000)
-                }                        
+                }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration).hasSize(1)
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(1_999_000))
+            assertThat(items[0].configurations).hasSize(1)
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(of(1_999_000))
         }
 
         @Test
@@ -233,10 +233,10 @@ class RuleCollectorSpec {
                 class SomeRandomClass() : Rule {
                     @Configuration("description")
                     private val config: String by config(""${"\""}abcd""${"\""})
-                }                        
+                }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(of("abcd"))
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(of("abcd"))
         }
 
         @Test
@@ -248,10 +248,10 @@ class RuleCollectorSpec {
                 class SomeRandomClass() : Rule {
                     @Configuration("description")
                     private val config: Int by config(defaultValue = 99)
-                }                        
+                }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(99))
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(of(99))
         }
 
         @Test
@@ -264,15 +264,15 @@ class RuleCollectorSpec {
                     @Configuration("description")
                     private val config: List<String> by config(
                         listOf(
-                            "a", 
+                            "a",
                             "b"
                         )
                     )
-                }                        
+                }
             """.trimIndent()
             val items = subject.run(code)
             val expected = of(listOf("a", "b"))
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(expected)
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(expected)
         }
 
         @Test
@@ -287,10 +287,10 @@ class RuleCollectorSpec {
                     
                     @Configuration("description")
                     private val config2: String by config("")
-                }                        
+                }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration).hasSize(2)
+            assertThat(items[0].configurations).hasSize(2)
         }
 
         @Test
@@ -305,11 +305,11 @@ class RuleCollectorSpec {
                         "multi line " +
                         "description")
                     private val config: String by config("a")
-                }                        
+                }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration[0].description).isEqualTo("This is a multi line description")
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(of("a"))
+            assertThat(items[0].configurations[0].description).isEqualTo("This is a multi line description")
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(of("a"))
         }
 
         @Test
@@ -325,10 +325,10 @@ class RuleCollectorSpec {
                     companion object {
                         private const val DEFAULT_CONFIG_VALUE = 99
                     }
-                }                        
+                }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(99))
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(of(99))
         }
 
         @Test
@@ -344,10 +344,10 @@ class RuleCollectorSpec {
                     companion object {
                         private const val DEFAULT_CONFIG_VALUE = 99
                     }
-                }                        
+                }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(of(99))
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(of(99))
         }
 
         @Test
@@ -363,10 +363,10 @@ class RuleCollectorSpec {
                     companion object {
                         private const val DEFAULT_CONFIG_VALUE = "a"
                     }
-                }                        
+                }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(of("a"))
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(of("a"))
         }
 
         @Test
@@ -378,20 +378,20 @@ class RuleCollectorSpec {
                 class SomeRandomClass() : Rule {
                     @Configuration("description")
                     private val config1: List<String> by config(DEFAULT_CONFIG_VALUE)
-
+                
                     @Configuration("description")
                     private val config2: List<String> by config(listOf(DEFAULT_CONFIG_VALUE_A, "b"))
-
+                
                     companion object {
                         private val DEFAULT_CONFIG_VALUE = listOf("a", "b")
                         private val DEFAULT_CONFIG_VALUE_A = "a"
                     }
-                }                        
+                }
             """.trimIndent()
             val items = subject.run(code)
             val expected = of(listOf("a", "b"))
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(expected)
-            assertThat(items[0].configuration[1].defaultValue).isEqualTo(expected)
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(expected)
+            assertThat(items[0].configurations[1].defaultValue).isEqualTo(expected)
         }
 
         @Test
@@ -403,15 +403,15 @@ class RuleCollectorSpec {
                 class SomeRandomClass() : Rule {
                     @Configuration("description")
                     private val config1: List<String> by config(listOf())
-
+                
                     @Configuration("description")
                     private val config2: List<String> by config(emptyList())
-                }                        
+                }
             """.trimIndent()
             val items = subject.run(code)
             val expected = of(emptyList())
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(expected)
-            assertThat(items[0].configuration[1].defaultValue).isEqualTo(expected)
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(expected)
+            assertThat(items[0].configurations[1].defaultValue).isEqualTo(expected)
         }
 
         @Test
@@ -423,19 +423,19 @@ class RuleCollectorSpec {
                 class SomeRandomClass() : Rule {
                     @Configuration("description")
                     private val config1: List<Int> by config(listOf<String>()) { it.map(String::toInt) }
-
+                
                     @Configuration("description")
                     private val config2: List<Int> by config(DEFAULT_CONFIG_VALUE) { it.map(String::toInt) }
-
+                
                     companion object {
                         private val DEFAULT_CONFIG_VALUE: List<String> = emptyList()
                     }
-                }                        
+                }
             """.trimIndent()
             val items = subject.run(code)
             val expected = of(emptyList())
-            assertThat(items[0].configuration[0].defaultValue).isEqualTo(expected)
-            assertThat(items[0].configuration[1].defaultValue).isEqualTo(expected)
+            assertThat(items[0].configurations[0].defaultValue).isEqualTo(expected)
+            assertThat(items[0].configurations[1].defaultValue).isEqualTo(expected)
         }
 
         @Test
@@ -448,10 +448,10 @@ class RuleCollectorSpec {
                     @Deprecated("use config1 instead")
                     @Configuration("description")
                     private val config: String by config("")
-                }                        
+                }
             """.trimIndent()
             val items = subject.run(code)
-            assertThat(items[0].configuration[0].deprecated).isEqualTo("use config1 instead")
+            assertThat(items[0].configurations[0].deprecated).isEqualTo("use config1 instead")
         }
 
         @Test
@@ -462,7 +462,7 @@ class RuleCollectorSpec {
                  * @configuration config1 - description (default: `''`)
                  */
                 class SomeRandomClass() : Rule {
-                }                        
+                }
             """.trimIndent()
             assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
         }
@@ -476,7 +476,7 @@ class RuleCollectorSpec {
                 class SomeRandomClass() : Rule {
                     @Configuration("description")
                     private val config: String = "foo"
-                }                        
+                }
             """.trimIndent()
             assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
         }
@@ -490,7 +490,7 @@ class RuleCollectorSpec {
                 class SomeRandomClass() : Rule {
                     @Configuration("description")
                     private val config: String by lazy { "foo" }
-                }                        
+                }
             """.trimIndent()
             assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
         }
@@ -503,7 +503,7 @@ class RuleCollectorSpec {
                  */
                 class SomeRandomClass() : Rule {
                     private val config: String by config("")
-                }                        
+                }
             """.trimIndent()
             assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
         }
@@ -519,10 +519,10 @@ class RuleCollectorSpec {
                     class SomeRandomClass() : Rule {
                         @Configuration("description")
                         private val maxLineLength: Int by configWithAndroidVariants(120, 100)
-                    }                        
+                    }
                 """.trimIndent()
                 val items = subject.run(code)
-                assertThat(items[0].configuration[0]).isEqualTo(
+                assertThat(items[0].configurations[0]).isEqualTo(
                     Configuration(
                         name = "maxLineLength",
                         description = "description",
@@ -543,10 +543,10 @@ class RuleCollectorSpec {
                         @Configuration("description")
                         private val maxLineLength: Int by
                             configWithAndroidVariants(defaultValue = 120, defaultAndroidValue = 100)
-                    }                        
+                    }
                 """.trimIndent()
                 val items = subject.run(code)
-                assertThat(items[0].configuration[0]).isEqualTo(
+                assertThat(items[0].configurations[0]).isEqualTo(
                     Configuration(
                         name = "maxLineLength",
                         description = "description",
@@ -575,10 +575,10 @@ class RuleCollectorSpec {
                         private val config2: Int by configWithFallback(fallbackProperty = ::prop, defaultValue = 99)
                         @Configuration("description")
                         private val config3: Int by configWithFallback(defaultValue = 99, fallbackProperty = ::prop)
-                    }                        
+                    }
                 """.trimIndent()
                 val items = subject.run(code)
-                val fallbackProperties = items[0].configuration.filter { it.name.startsWith("config") }
+                val fallbackProperties = items[0].configurations.filter { it.name.startsWith("config") }
                 assertThat(fallbackProperties).hasSize(3)
                 assertThat(fallbackProperties.map { it.defaultValue }).containsOnly(of(99))
             }
@@ -593,7 +593,7 @@ class RuleCollectorSpec {
                         val prop: Int = 1
                         @Configuration("description")
                         private val config: Int by configWithFallback(::prop, 99)
-                    }                        
+                    }
                 """.trimIndent()
                 assertThatThrownBy { subject.run(code) }
                     .isInstanceOf(InvalidDocumentationException::class.java)
@@ -612,64 +612,64 @@ class RuleCollectorSpec {
                     private val config1: Regex by config("[a-z]+") { it.toRegex() }
                     @Configuration("description")
                     private val config2: String by config(false, Boolean::toString)
-                }                        
+                }
             """.trimIndent()
 
             @Test
             fun `extracts default value with transformer function`() {
                 val items = subject.run(code)
-                assertThat(items[0].configuration[0].defaultValue).isEqualTo(of("[a-z]+"))
+                assertThat(items[0].configurations[0].defaultValue).isEqualTo(of("[a-z]+"))
             }
 
             @Test
             fun `extracts default value with method reference`() {
                 val items = subject.run(code)
-                assertThat(items[0].configuration[1].defaultValue).isEqualTo(of(false))
+                assertThat(items[0].configurations[1].defaultValue).isEqualTo(of(false))
             }
         }
 
         @Nested
         inner class `values with reason property` {
             private val code = """
-                        /**
-                         * description
-                         */
-                        class SomeRandomClass() : Rule {
-                            @Configuration("description")
-                            private val singleWithPositionalParam: ValuesWithReason 
-                                by config(valuesWithReason("value" to "reason"))
-                            @Configuration("description")
-                            private val singleWithNamedParam 
-                                by config(defaultValue = valuesWithReason("value" to "reason"))
-                            @Configuration("description")
-                            private val singleWithConstant by config(DEFAULT_VALUE)
-                            @Configuration("description")
-                            private val noValues by config(valuesWithReason())
-                            @Configuration("description")
-                            private val multipleValues by config(valuesWithReason("a" to "A and A", "b" to "B and B"))
-                            @Configuration("description")
-                            private val multipleLines 
-                                by config(valuesWithReason(
-                                    "a" to "A " +
-                                        "and A", 
-                                    "b" to ""${"\""}B and B""${"\""}))
-                            
-                            companion object {
-                                private val DEFAULT_VALUE = valuesWithReason("value" to "reason")
-                            }
-                        }
+                /**
+                 * description
+                 */
+                class SomeRandomClass() : Rule {
+                    @Configuration("description")
+                    private val singleWithPositionalParam: ValuesWithReason
+                        by config(valuesWithReason("value" to "reason"))
+                    @Configuration("description")
+                    private val singleWithNamedParam
+                        by config(defaultValue = valuesWithReason("value" to "reason"))
+                    @Configuration("description")
+                    private val singleWithConstant by config(DEFAULT_VALUE)
+                    @Configuration("description")
+                    private val noValues by config(valuesWithReason())
+                    @Configuration("description")
+                    private val multipleValues by config(valuesWithReason("a" to "A and A", "b" to "B and B"))
+                    @Configuration("description")
+                    private val multipleLines
+                        by config(valuesWithReason(
+                            "a" to "A " +
+                                "and A",
+                            "b" to ""${"\""}B and B""${"\""}))
+                    
+                    companion object {
+                        private val DEFAULT_VALUE = valuesWithReason("value" to "reason")
+                    }
+                }
             """.trimIndent()
 
             @Test
             fun `parse options of type ValuesWithReason`() {
                 val rule = subject.run(code)[0]
-                assertThat(rule.configuration).hasSize(6)
+                assertThat(rule.configurations).hasSize(6)
             }
 
             @Test
             fun `no values`() {
                 val rule = subject.run(code)[0]
-                val config = rule.configuration.first { it.name == "noValues" }
+                val config = rule.configurations.first { it.name == "noValues" }
                 assertThat(config.defaultValue).isEqualTo(of(valuesWithReason()))
             }
 
@@ -677,7 +677,7 @@ class RuleCollectorSpec {
             fun `single value`() {
                 val rule = subject.run(code)[0]
                 val expected = of(valuesWithReason("value" to "reason"))
-                val singleValueConfigs = rule.configuration.filter { it.name.startsWith("single") }
+                val singleValueConfigs = rule.configurations.filter { it.name.startsWith("single") }
                 assertThat(singleValueConfigs)
                     .hasSize(3)
                     .extracting("defaultValue")
@@ -687,7 +687,7 @@ class RuleCollectorSpec {
             @Test
             fun `multiple values`() {
                 val rule = subject.run(code)[0]
-                val configs = rule.configuration.filter { it.name.startsWith("multiple") }
+                val configs = rule.configurations.filter { it.name.startsWith("multiple") }
                 val expected = of(
                     valuesWithReason(
                         "a" to "A and A",
@@ -818,7 +818,7 @@ class RuleCollectorSpec {
              * description
              */
             class SomeRandomClass : Rule {
-
+            
                 val style = Severity.Style
                 override val issue = Issue(javaClass.simpleName,
                         style,
@@ -836,7 +836,7 @@ class RuleCollectorSpec {
              * description
              */
             class SomeRandomClass : Rule {
-
+            
                 val a = setOf("UNUSED_VARIABLE")
                 override val defaultRuleIdAliases = a
                 override val issue = Issue(javaClass.simpleName,

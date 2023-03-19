@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class PackageCountVisitorSpec {
 
     @Test
-    fun `twoClassesInSeparatePackage`() {
+    fun twoClassesInSeparatePackage() {
         val files = arrayOf(
             compileContentForTest(default),
             compileContentForTest(emptyEnum)

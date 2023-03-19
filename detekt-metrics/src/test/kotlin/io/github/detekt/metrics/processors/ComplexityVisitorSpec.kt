@@ -6,14 +6,14 @@ import org.junit.jupiter.api.Test
 
 class ComplexityVisitorSpec {
     @Test
-    fun `complexityOfDefaultCaseIsOne`() {
+    fun complexityOfDefaultCaseIsOne() {
         val mcc = calcComplexity(default)
 
         assertThat(mcc).isEqualTo(0)
     }
 
     @Test
-    fun `complexityOfComplexAndNestedClass`() {
+    fun complexityOfComplexAndNestedClass() {
         val mcc = calcComplexity(complexClass)
 
         assertThat(mcc).isEqualTo(44)

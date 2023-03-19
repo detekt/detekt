@@ -2,35 +2,19 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.util.regex.PatternSyntaxException
-
-private const val ALLOWED_NAMES_PATTERN = "allowedNames"
 
 @KotlinCoreEnvironmentTest
 class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     val subject = UnusedPrivateMember()
-
-    val regexTestingCode = """
-                class Test {
-                    private val used = "This is used"
-                    private val unused = "This is not used"
-
-                    fun use() {
-                        println(used)
-                    }
-                }
-    """.trimIndent()
 
     @Nested
     inner class `interface functions` {
@@ -88,45 +72,6 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 expect class Foo2(bar: String) {}
             """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
-        }
-    }
-
-    @Nested
-    inner class `actual functions and classes` {
-
-        @Test
-        fun `should not report unused parameters in actual functions`() {
-            val code = """
-                actual class Foo {
-                    actual fun bar(i: Int) {}
-                    actual fun baz(i: Int, s: String) {}
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `should not report unused parameters in actual constructors`() {
-            val code = """
-                actual class Foo actual constructor(bar: String) {}
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `should not report unused actual fields defined as parameters of primary constructors`() {
-            val code = """
-                actual class Foo actual constructor(actual val bar: String) {}
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `reports unused private fields defined as parameters of primary constructors`() {
-            val code = """
-                actual class Foo actual constructor(private val bar: String) {}
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
         }
     }
 
@@ -195,12 +140,12 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     abstract fun abstractFun(arg: Any)
                     open fun openFun(arg: Any): Int = 0
                 }
-
+                
                 class Child : Parent() {
                     override fun abstractFun(arg: Any) {
                         println(arg)
                     }
-
+                
                     override fun openFun(arg: Any): Int {
                         println(arg)
                         return 1
@@ -232,370 +177,10 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     companion object {
                         private const val MY_CONST = 42
                     }
-
+                
                     fun a() {
                         Completable.timer(MY_CONST.toLong(), TimeUnit.MILLISECONDS)
                                 .subscribe()
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-    }
-
-    @Nested
-    inner class `classes with properties` {
-
-        @Test
-        fun `reports an unused member`() {
-            val code = """
-                class Test {
-                    private val unused = "This is not used"
-
-                    fun use() {
-                        println("This is not using a property")
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
-        }
-
-        @Test
-        fun `does not report unused public members`() {
-            val code = """
-                class Test {
-                    val unused = "This is not used"
-
-                    fun use() {
-                        println("This is not using a property")
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report used members`() {
-            val code = """
-                class Test {
-                    private val used = "This is used"
-
-                    fun use() {
-                        println(used)
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report used members but reports unused members`() {
-            val code = """
-                class Test {
-                    private val used = "This is used"
-                    private val unused = "This is not used"
-
-                    fun use() {
-                        println(used)
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
-        }
-
-        @Test
-        fun `does not fail when disabled with invalid regex`() {
-            val configRules = mapOf(
-                "active" to "false",
-                ALLOWED_NAMES_PATTERN to "*foo"
-            )
-            val config = TestConfig(configRules)
-            assertThat(UnusedPrivateMember(config).lint(regexTestingCode)).isEmpty()
-        }
-
-        @Test
-        fun `does fail when enabled with invalid regex`() {
-            val configRules = mapOf(ALLOWED_NAMES_PATTERN to "*foo")
-            val config = TestConfig(configRules)
-            assertThatExceptionOfType(PatternSyntaxException::class.java)
-                .isThrownBy { UnusedPrivateMember(config).lint(regexTestingCode) }
-        }
-    }
-
-    @Nested
-    inner class `classes with properties and local properties` {
-
-        @Test
-        fun `reports multiple unused properties`() {
-            val code = """
-                class UnusedPrivateMemberPositive {
-                    private val unusedField = 5
-                    val publicField = 2
-                    private val clashingName = 4
-                    private fun unusedFunction(unusedParam: Int) {
-                        val unusedLocal = 5
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(5)
-        }
-
-        @Test
-        fun `reports an unused member`() {
-            val code = """
-                class Test {
-                    private val unused = "This is not used"
-
-                    fun use() {
-                        val used = "This is used"
-                        println(used)
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
-        }
-
-        @Test
-        fun `does not report used members`() {
-            val code = """
-                class Test {
-                    private val used = "This is used"
-
-                    fun use() {
-                        val text = used
-                        println(text)
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report used members and properties`() {
-            val code = """
-                class C {
-                    val myNumber = 5
-                
-                    fun publicFunction(usedParam: String) {
-                        println(usedParam)
-                        println(PC.THE_CONST)
-                        println("Hello " ext "World" ext "!")
-                        println(::doubleColonObjectReferenced)
-                        println(this::doubleColonThisReferenced)
-                    }
-                
-                    fun usesAllowedNames() {
-                        for ((index, _) in mapOf(0 to 0, 1 to 1, 2 to 2)) {  // unused but allowed name
-                            println(index)
-                        }
-                        try {
-                        } catch (_: OutOfMemoryError) { // unused but allowed name
-                        }
-                    }
-                
-                    private fun doubleColonThisReferenced() {}
-                
-                    companion object {
-                        private infix fun String.ext(other: String): String {
-                            return this + other
-                        }
-                
-                        private fun doubleColonObjectReferenced() {}
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report used private classes`() {
-            val code = """
-                private class PC { // used private class
-                    companion object {
-                        internal const val THE_CONST = "" // used private const
-
-                        object OO {
-                            const val BLA = 4
-                        }
-                    }
-                }
-
-                internal fun libraryFunction() = run {
-                    val o: Function1<Any, Any> = object : Function1<Any, Any> {
-                        override fun invoke(p1: Any): Any { // unused but overridden param
-                            throw UnsupportedOperationException("not implemented")
-                        }
-                    }
-                    println(o("$\{PC.Companion.OO.BLA.toString() + ""}"))
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(0)
-        }
-
-        @Test
-        fun `reports unused local properties`() {
-            val code = """
-                class Test {
-                    private val used = "This is used"
-
-                    fun use() {
-                        val unused = used
-                        println(used)
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
-        }
-    }
-
-    @Nested
-    inner class `objects with properties` {
-        @Test
-        fun `reports multiple unused properties`() {
-            val code = """
-                object UnusedPrivateMemberPositiveObject {
-                    private const val unusedObjectConst = 2
-                    private val unusedField = 5
-                    private val clashingName = 5
-                    val useForClashingName = clashingName
-                    private val unusedObjectField = 4
-                
-                    object Foo {
-                        private val unusedNestedVal = 1
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(4)
-        }
-
-        @Test
-        fun `does not report public properties`() {
-            val code = """
-                object O { // public
-                    const val NUMBER = 5 // public
-                }
-
-                private object PO { // private, but constants may be used
-                    const val TEXT = "text"
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-    }
-
-    @Nested
-    inner class `loop iterators` {
-
-        @Test
-        fun `should not depend on evaluation order of functions or properties`() {
-            val code = """
-                fun RuleSetProvider.provided() = ruleSetId in defaultRuleSetIds
-
-                val defaultRuleSetIds = listOf("comments", "complexity", "empty-blocks",
-                        "exceptions", "potential-bugs", "performance", "style")
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `doesn't report loop properties`() {
-            val code = """
-                class Test {
-                    fun use() {
-                        for (i in 0 until 10) {
-                            println(i)
-                        }
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `reports unused loop property`() {
-            val code = """
-                class Test {
-                    fun use() {
-                        for (i in 0 until 10) {
-                        }
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
-        }
-
-        @Test
-        fun `reports unused loop property in indexed array`() {
-            val code = """
-                class Test {
-                    fun use() {
-                        val array = intArrayOf(1, 2, 3)
-                        for ((index, value) in array.withIndex()) {
-                            println(index)
-                        }
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
-        }
-
-        @Test
-        fun `reports all unused loop properties in indexed array`() {
-            val code = """
-                class Test {
-                    fun use() {
-                        val array = intArrayOf(1, 2, 3)
-                        for ((index, value) in array.withIndex()) {
-                        }
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(2)
-        }
-
-        @Test
-        fun `does not report used loop properties in indexed array`() {
-            val code = """
-                class Test {
-                    fun use() {
-                        val array = intArrayOf(1, 2, 3)
-                        for ((index, value) in array.withIndex()) {
-                            println(index)
-                            println(value)
-                        }
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-    }
-
-    @Nested
-    inner class `properties used to initialize other properties` {
-
-        @Test
-        fun `does not report properties used by other properties`() {
-            val code = """
-                class Test {
-                    private val used = "This is used"
-                    private val text = used
-
-                    fun use() {
-                        println(text)
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report properties used by inner classes`() {
-            val code = """
-                class Test {
-                    private val unused = "This is not used"
-
-                    inner class Something {
-                        val test = unused
                     }
                 }
             """.trimIndent()
@@ -628,57 +213,17 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    inner class `top level properties` {
-        @Test
-        fun `reports single parameters if they are unused`() {
-            val code = """
-                private val usedTopLevelVal = 1
-                private const val unusedTopLevelConst = 1
-                private val unusedTopLevelVal = usedTopLevelVal
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(2)
-        }
-
-        @Test
-        fun `does not report used top level properties`() {
-            val code = """
-                val stuff = object : Iterator<String?> {
-
-                    var mutatable: String? = null
-
-                    private fun preCall() {
-                        mutatable = "done"
-                    }
-
-                    override fun next(): String? {
-                        preCall()
-                        return mutatable
-                    }
-
-                    override fun hasNext(): Boolean = true
-                }
-
-                fun main(args: Array<String>) {
-                    println(stuff.next())
-                    calledFromMain()
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-    }
-
-    @Nested
     inner class `unused private functions` {
         @Test
         fun `does not report used private functions`() {
             val code = """
-            class Test {
-                val value = usedMethod()
-
-                private fun usedMethod(): Int {
-                    return 5
+                class Test {
+                    val value = usedMethod()
+                
+                    private fun usedMethod(): Int {
+                        return 5
+                    }
                 }
-            }
             """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
@@ -687,11 +232,11 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports unused private functions`() {
             val code = """
-            class Test {
-                private fun unusedFunction(): Int {
-                    return 5
+                class Test {
+                    private fun unusedFunction(): Int {
+                        return 5
+                    }
                 }
-            }
             """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(1)
@@ -718,301 +263,37 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports the non called private function`() {
             val code = """
-            class Test {
-                private fun unusedFunction(): Int {
-                    return someOtherUnusedFunction()
-                }
-
-                private fun someOtherUnusedFunction() {
-                    println("Never used")
-                }
-            }
-            """.trimIndent()
-
-            assertThat(subject.lint(code)).hasSize(1)
-        }
-    }
-
-    @Nested
-    inner class `unused class declarations which are allowed` {
-
-        @Test
-        fun `does not report the unused private property`() {
-            val code = """
                 class Test {
-                    private val ignored = ""
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report the unused private function and parameter`() {
-            val code = """
-                class Test {
-                    private fun ignored(ignored: Int) {}
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-    }
-
-    @Nested
-    inner class `nested class declarations` {
-
-        @Test
-        fun `reports unused nested private property`() {
-            val code = """
-                class Test {
-                    class Inner {
-                        private val unused = 1
+                    private fun unusedFunction(): Int {
+                        return someOtherUnusedFunction()
+                    }
+                
+                    private fun someOtherUnusedFunction() {
+                        println("Never used")
                     }
                 }
             """.trimIndent()
+
             assertThat(subject.lint(code)).hasSize(1)
-        }
-
-        @Test
-        fun `does not report used nested private property`() {
-            val code = """
-                class Test {
-                    class Inner {
-                        private val used = 1
-                        fun someFunction() = used
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-    }
-
-    @Nested
-    inner class `properties in primary constructors` {
-        @Test
-        fun `reports unused private property`() {
-            val code = """
-                class Test(private val unused: Any)
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
-        }
-
-        @Test
-        fun `does not report public property`() {
-            val code = """
-                class Test(val unused: Any)
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report private property used in init block`() {
-            val code = """
-                class Test(private val used: Any) {
-                    init { used.toString() }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report private property used in function`() {
-            val code = """
-                class Test(private val used: Any) {
-                    fun something() {
-                        used.toString()
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
     @Nested
     inner class `error messages` {
-        @Test
-        fun `are specific for function parameters`() {
-            val code = """
-                fun foo(unused: Int){}
-            """.trimIndent()
-
-            val lint = subject.lint(code)
-
-            assertThat(lint.first().message).startsWith("Function parameter")
-        }
-
-        @Test
-        fun `are specific for local variables`() {
-            val code = """
-                fun foo(){ val unused = 1 }
-            """.trimIndent()
-
-            val lint = subject.lint(code)
-
-            assertThat(lint.first().message).startsWith("Private property")
-        }
 
         @Test
         fun `are specific for private functions`() {
             val code = """
-            class Test {
-                private fun unusedFunction(): Int {
-                    return 5
+                class Test {
+                    private fun unusedFunction(): Int {
+                        return 5
+                    }
                 }
-            }
             """.trimIndent()
 
             val lint = subject.lint(code)
 
             assertThat(lint.first().message).startsWith("Private function")
-        }
-    }
-
-    @Nested
-    inner class `suppress unused property warning annotations` {
-        @Test
-        fun `does not report annotated private constructor properties`() {
-            val code = """
-                class Test(@Suppress("unused") private val foo: String) {}
-            """.trimIndent()
-
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `reports private constructor properties without annotation`() {
-            val code = """
-                class Test(
-                    @Suppress("unused") private val foo: String,
-                    private val bar: String
-                ) {}
-            """.trimIndent()
-
-            val lint = subject.lint(code)
-
-            assertThat(lint).hasSize(1)
-            assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String")
-        }
-
-        @Test
-        fun `does not report private constructor properties in annotated class`() {
-            val code = """
-                @Suppress("unused")
-                class Test(
-                    private val foo: String,
-                    private val bar: String
-                ) {}
-            """.trimIndent()
-
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report private constructor properties in class with annotated outer class`() {
-            val code = """
-                @Suppress("unused")
-                class Test(
-                    private val foo: String,
-                    private val bar: String
-                ) {
-                    class InnerTest(
-                        private val baz: String
-                    ) {}
-                }
-            """.trimIndent()
-
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report private constructor properties in annotated file`() {
-            val code = """
-                @file:Suppress("unused")
-
-                class Test(
-                    private val foo: String,
-                    private val bar: String
-                ) {
-                    class InnerTest(
-                        private val baz: String
-                    ) {}
-                }
-            """.trimIndent()
-
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report annotated private properties`() {
-            val code = """
-                class Test {
-                    @Suppress("unused") private val foo: String
-                }
-            """.trimIndent()
-
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `reports private properties without annotation`() {
-            val code = """
-                class Test {
-                    @Suppress("unused") private val foo: String
-                    private val bar: String
-                }
-            """.trimIndent()
-
-            val lint = subject.lint(code)
-
-            assertThat(lint).hasSize(1)
-            assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String")
-        }
-
-        @Test
-        fun `does not report private properties in annotated class`() {
-            val code = """
-                @Suppress("unused")
-                class Test {
-                    private val foo: String
-                    private val bar: String
-                }
-            """.trimIndent()
-
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report private properties in class with annotated outer class`() {
-            val code = """
-                @Suppress("unused")
-                class Test {
-                    private val foo: String
-                    private val bar: String
-
-                    class InnerTest {
-                        private val baz: String
-                    }
-                }
-            """.trimIndent()
-
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report private properties in annotated file`() {
-            val code = """
-                @file:Suppress("unused")
-
-                class Test {
-                    private val foo: String
-                    private val bar: String
-
-                    class InnerTest {
-                        private val baz: String
-                    }
-                }
-            """.trimIndent()
-
-            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -1059,7 +340,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class Test {
                     private fun foo(): String = ""
                     private fun bar(): String = ""
-
+                
                     class InnerTest {
                         private fun baz(): String = ""
                     }
@@ -1076,7 +357,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class Test {
                     private fun foo(): String = ""
                     private fun bar(): String = ""
-
+                
                     class InnerTest {
                         private fun baz(): String = ""
                     }
@@ -1088,35 +369,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    inner class `main methods` {
-
-        @Test
-        fun `does not report the args parameter of the main function inside an object`() {
-            val code = """
-                object O {
-
-                    @JvmStatic
-                    fun main(args: Array<String>) {
-                        println("b")
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report the args parameter of the main function as top level function`() {
-            val code = """
-                fun main(args: Array<String>) {
-                    println("b")
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-    }
-
-    @Nested
-    inner class `operators` {
+    inner class Operators {
 
         @Test
         fun `does not report used plus operator - #1354`() {
@@ -1151,13 +404,192 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 object Test {
                     private operator fun invoke(i: Int): Int = i
-
+                
                     fun answer() = Test(1)
                 }
-
+                
                 val answer = Test.answer()
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        @Suppress("ClassName")
+        @Nested
+        inner class `containing invoke operator` {
+            @Test
+            fun `does not report when invoke operator is used - #4435`() {
+                val code = """
+                    object Test {
+                        private operator fun invoke(i: Int): Int = i
+                    
+                        fun answer() = Test(1)
+                    }
+                    
+                    val answer = Test.answer()
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report used invoke operator defined in companion`() {
+                val code = """
+                    class A {
+                        companion object {
+                            private operator fun invoke(i: Int): Int = i
+                        }
+                        val answer = A(1)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report used invoke operator in file with instance`() {
+                val code = """
+                    class A
+                    private operator fun A.invoke(i: Int): Int = i
+                    fun answer() = A()(9)
+                    val answer = answer()
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report used nullable dispatch receiver invoke operator in file`() {
+                val code = """
+                    class A
+                    private operator fun A?.invoke(i: Int): Int = i
+                    fun answer() = A()(9)
+                    val answer = answer()
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report used invoke operator is used with child class dispatcher`() {
+                val code = """
+                    open class A
+                    class B : A()
+                    private operator fun A.invoke(i: Int): Int = i
+                    val answer = B()(1)
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does report unused overloaded invoke operator`() {
+                val code = """
+                    open class A {
+                        companion object {
+                            private operator fun invoke(i: Int): Int = i
+                            private operator fun invoke(i: Int, j: Int): Int = i
+                        }
+                        val answer = A(1, 1)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code))
+                    .hasSize(1)
+                    .hasStartSourceLocations(
+                        SourceLocation(3, 30)
+                    )
+            }
+
+            @Test
+            fun `does report unused overloaded invoke operator with nullable int`() {
+                val code = """
+                    class A
+                    private operator fun A.invoke(i: Int): Int = i
+                    private operator fun A.invoke(i: Int?): Int = i ?: 0
+                    fun answer() = A()(9)
+                    val answer = answer()
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code))
+                    .hasSize(1)
+                    .hasStartSourceLocations(
+                        SourceLocation(3, 24)
+                    )
+            }
+
+            @Test
+            fun `does report unused overloaded invoke operator with non-null int`() {
+                val code = """
+                    class A
+                    private operator fun A.invoke(i: Int): Int = i
+                    private operator fun A.invoke(i: Int?): Int = i ?: 0
+                    val nullableInt: Int? = if (System.currentTimeMillis() % 2 == 0L) 0 else null
+                    fun answer() = A()(nullableInt)
+                    val answer = answer()
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code))
+                    .hasSize(1)
+                    .hasStartSourceLocations(
+                        SourceLocation(2, 24)
+                    )
+            }
+
+            @Test
+            fun `does not report used overloaded invoke operator when no binding context`() {
+                val code = """
+                    open class A {
+                        companion object {
+                            private operator fun invoke(i: Int): Int = i
+                            private operator fun invoke(i: Int, j: Int): Int = i
+                        }
+                        val answer = A(1, 1)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report used invoke operator when both dispatch and extension is present`() {
+                val code = """
+                    class A
+                    class B {
+                        private operator fun A.invoke(i: Int): Int = i
+                        val answer = A()(1)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report unused invoke operator when both dispatch and extension is present with no context`() {
+                val code = """
+                    class A
+                    class B {
+                        private operator fun A.invoke(i: Int): Int = i
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report used invoke operator in companion when both dispatch and extension is present`() {
+                val code = """
+                    class A
+                    class B {
+                        companion object {
+                            private operator fun A.invoke(i: Int): Int = i
+                        }
+                        val answer = A()(1)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report unused overridden invoke operator`() {
+                val code = """
+                    interface I {
+                        operator fun invoke(): String
+                    }
+                    class A : I {
+                        override operator fun invoke() = "A"
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
         }
 
         @Test
@@ -1187,7 +619,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class C {
                     val isInside = "bar" in listOf("foo".toRegex())
-                    
+                
                     private operator fun Iterable<Regex>.contains(a: String): Boolean {
                         return any { it.matches(a) }
                     }
@@ -1201,7 +633,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class C {
                     val isInside = "bar" !in listOf("foo".toRegex())
-                    
+                
                     private operator fun Iterable<Regex>.contains(a: String): Boolean {
                         return any { it.matches(a) }
                     }
@@ -1235,7 +667,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                         return 5
                     }
                 }
-
+                
                 class Test2 {
                     private fun f(): Int {
                         return 5
@@ -1250,15 +682,15 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test {
                     val value = f(1)
-
+                
                     private fun f(): Int {
                         return 5
                     }
-
+                
                     private fun f(num: Int): Int {
                         return num
                     }
-
+                
                     private fun f(num: String): Int {
                         return num.toInt()
                     }
@@ -1272,15 +704,15 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test {
                     val value = 1.f()
-
+                
                     private fun f(): Int {
                         return 5
                     }
-
+                
                     private fun Int.f(): Int {
                         return this
                     }
-
+                
                     private fun String.f(): Int {
                         return toInt()
                     }
@@ -1298,7 +730,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test {
                     private operator fun Foo.plus(other: Foo): Foo = Foo(value + other.value)
-
+                
                     inner class Foo(val value: Int) {
                         fun double(): Foo = this + this
                     }
@@ -1313,7 +745,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class Test {
                     private operator fun Foo.plus(other: Foo): Foo = Foo(value + other.value)
                     private operator fun Foo.minus(other: Foo): Foo = Foo(value - other.value)
-
+                
                     inner class Foo(val value: Int) {
                         fun double(): Foo = this + this
                     }
@@ -1321,7 +753,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1).hasStartSourceLocations(
-                SourceLocation(3, 30)
+                SourceLocation(3, 30),
             )
         }
     }
@@ -1335,18 +767,18 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class A
                 class B
                 class C(val elements: Set<B>, val flag: Boolean)
-
+                
                 class Test {
                     private fun A.someMethod(
                           param1: B,
                           param2: Boolean = true
                       ) = someMethod(setOf(param1), param2)
-
+                
                     private fun A.someMethod(
                           param1: Set<B>,
                           param2: Boolean = true
                       ) = C(param1, param2)
-
+                
                     fun main() {
                         val aInstance = A()
                         aInstance.someMethod(B(), true)
@@ -1365,14 +797,14 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         fun `does not report used private getValue and setValue operator functions`() {
             val code = """
                 import kotlin.reflect.KProperty
-
+                
                 class Test {
                     var delegated by "Hello"
-
+                
                     private operator fun String.getValue(test: Test, prop: KProperty<*>): String {
                         return "working"
                     }
-
+                
                     private operator fun String.setValue(test: Test, prop: KProperty<*>, value: String) {
                         error("setValue")
                     }
@@ -1385,13 +817,13 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         fun `does not report getValue and setValue operator function parameters`() {
             val code = """
                 import kotlin.reflect.KProperty
-        
+                
                 class SingleAssign<String> {
-        
+                
                     operator fun getValue(thisRef: Any?, property: KProperty<*>): kotlin.String {
                         return ""
                     }
-
+                
                     operator fun setValue(thisRef: Any?, property: KProperty<*>, value: String) {
                     }
                 }
@@ -1403,79 +835,18 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         fun `reports unused private getValue and setValue operator functions`() {
             val code = """
                 import kotlin.reflect.KProperty
-
+                
                 class Test {
                     private operator fun String.getValue(test: Test, prop: KProperty<*>): String {
                         return "working"
                     }
-
+                
                     private operator fun String.setValue(test: Test, prop: KProperty<*>, value: String) {
                         error("setValue")
                     }
                 }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
-        }
-    }
-
-    @Nested
-    inner class `backtick identifiers - #3825` {
-
-        @Test
-        fun `does report unused variables with keyword name`() {
-            val code = """
-                fun main() {
-                    val `in` = "foo"
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
-
-        @Test
-        fun `does not report used variables with keyword name`() {
-            val code = """
-                fun main() {
-                    val `in` = "fee"
-                    val expected = "foo"
-                    println(expected == `in`)
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report used variables when referenced with backticks`() {
-            val code = """
-                fun main() {
-                    val actual = "fee"
-                    val expected = "foo"
-                    println(expected == `actual`)
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report used variables when declared with backticks`() {
-            val code = """
-                fun main() {
-                    val `actual` = "fee"
-                    val expected = "foo"
-                    println(expected == actual)
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-    }
-
-    @Nested
-    inner class `backtick identifiers - #5251` {
-        @Test
-        fun `does not report used backtick parameters`() {
-            val code = """
-                fun test(`foo bar`: Int) = `foo bar`
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -1487,7 +858,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 class TestWrapper {
                     private operator fun List<StringWrapper>.get(s: String) =
                         this.firstOrNull { it.s == s }
@@ -1502,12 +873,12 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 class TestWrapper(
                     private val strings: List<StringWrapper>
                 ) {
                     fun getWrapperForString(s: String) = strings[s]
-
+                
                     private operator fun List<StringWrapper>.get(s: String) =
                         this.firstOrNull { it.s == s }
                 }
@@ -1521,12 +892,12 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 class TestWrapper(
                     private val strings: List<StringWrapper>
                 ) {
                     fun getWrapperForString(a: String, b: String) = strings[a, b]
-
+                
                     private operator fun List<StringWrapper>.get(a: String, b: String) =
                         this.firstOrNull { it.s == b }
                 }
@@ -1540,12 +911,12 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 class TestWrapper(
                     private val strings: List<StringWrapper>
                 ) {
                     fun getWrapperForString(s: String) = strings.get(s)
-
+                
                     private operator fun List<StringWrapper>.get(s: String) =
                         this.firstOrNull { it.s == s }
                 }
@@ -1559,7 +930,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 private operator fun List<StringWrapper>.get(s: String) =
                     this.firstOrNull { it.s == s }
             """.trimIndent()
@@ -1572,13 +943,13 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 class Test(
                     private val strings: List<StringWrapper>
                 ) {
                     fun getWrapperForString(s: String) = strings[s]
                 }
-
+                
                 private operator fun List<StringWrapper>.get(s: String) =
                     this.firstOrNull { it.s == s }
             """.trimIndent()
@@ -1591,13 +962,13 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 class StringWrapper(
                     val s: String
                 )
-
+                
                 class Test(
                     private val strings: List<StringWrapper>
                 ) {
                     fun getWrapperForString(s: String) = strings.get(s)
                 }
-
+                
                 private operator fun List<StringWrapper>.get(s: String) =
                     this.firstOrNull { it.s == s }
             """.trimIndent()
@@ -1618,65 +989,6 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(5, 17)
-        }
-
-        @Test
-        fun property() {
-            val code = """
-                class Test {
-                    /**
-                     * kdoc
-                     */
-                    private val foo = 1
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(5, 17)
-        }
-
-        @Test
-        fun parameter() {
-            val code = """
-                class Test {
-                    fun test(
-                        /**
-                         * kdoc
-                         */
-                        x: Int
-                    ) = 1
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(6, 9)
-        }
-    }
-
-    @Nested
-    inner class `parameter with the same name as a named argument #5373` {
-        @Test
-        fun `unused parameter`() {
-            val code = """
-                fun foo(modifier: Int) {
-                    bar(modifier = 1)
-                }
-                
-                fun bar(modifier: Int) {
-                    println(modifier)
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1).hasStartSourceLocation(1, 9)
-        }
-
-        @Test
-        fun `used parameter`() {
-            val code = """
-                fun foo(modifier: Int) {
-                    bar(modifier = modifier)
-                }
-                
-                fun bar(modifier: Int) {
-                    println(modifier)
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 }

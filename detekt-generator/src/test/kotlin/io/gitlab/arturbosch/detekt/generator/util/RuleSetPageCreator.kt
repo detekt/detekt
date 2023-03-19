@@ -68,7 +68,7 @@ internal fun createRules(): List<Rule> {
         debt = "10min",
         aliases = "alias1, alias2",
         parent = "",
-        configuration = listOf(
+        configurations = listOf(
             Configuration("conf1", "a config option", of("foo"), null, null),
             Configuration("conf2", "deprecated config", of(false), null, "use conf1 instead"),
             Configuration("conf3", "list config", of(listOf("a", "b")), null, null),
@@ -86,7 +86,7 @@ internal fun createRules(): List<Rule> {
         debt = "",
         aliases = null,
         parent = "WildcardImport",
-        configuration = emptyList()
+        configurations = emptyList()
     )
     val rule3 = Rule(
         name = "NoUnitKeyword",
@@ -98,7 +98,7 @@ internal fun createRules(): List<Rule> {
         debt = "5m",
         aliases = null,
         parent = "",
-        configuration = emptyList(),
+        configurations = emptyList(),
         autoCorrect = true,
         requiresTypeResolution = true
     )

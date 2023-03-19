@@ -47,7 +47,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *
  */
 @RequiresTypeResolution
-@Suppress("ReturnCount", "ComplexMethod")
+@Suppress("ComplexMethod")
 class UseIfEmptyOrIfBlank(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UseIfEmptyOrIfBlank",
@@ -56,6 +56,7 @@ class UseIfEmptyOrIfBlank(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    @Suppress("ReturnCount")
     override fun visitIfExpression(expression: KtIfExpression) {
         super.visitIfExpression(expression)
 
@@ -84,6 +85,7 @@ class UseIfEmptyOrIfBlank(config: Config = Config.empty) : Rule(config) {
         report(CodeSmell(issue, Entity.from(conditionCalleeExpression), message))
     }
 
+    @Suppress("ReturnCount")
     private fun KtIfExpression.condition(): Pair<KtExpression, Boolean>? {
         val condition = this.condition ?: return null
         return if (condition is KtPrefixExpression) {
@@ -95,6 +97,7 @@ class UseIfEmptyOrIfBlank(config: Config = Config.empty) : Rule(config) {
         }
     }
 
+    @Suppress("ReturnCount")
     private fun KtCallExpression.replacement(): Replacement? {
         val descriptor = getResolvedCall(bindingContext)?.resultingDescriptor ?: return null
         val receiverParameter = descriptor.dispatchReceiverParameter ?: descriptor.extensionReceiverParameter

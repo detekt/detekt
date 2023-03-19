@@ -13,8 +13,8 @@ import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.yaml.snakeyaml.parser.ParserException
-import java.nio.file.Paths
+import org.snakeyaml.engine.v2.exceptions.ParserException
+import kotlin.io.path.Path
 
 class YamlConfigSpec {
 
@@ -174,7 +174,7 @@ class YamlConfigSpec {
 
         @Test
         fun `throws an exception on an non-existing file`() {
-            val path = Paths.get("doesNotExist.yml")
+            val path = Path("doesNotExist.yml")
             assertThatIllegalArgumentException()
                 .isThrownBy { YamlConfig.load(path) }
                 .withMessageStartingWith("Configuration does not exist")

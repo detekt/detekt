@@ -37,7 +37,7 @@ class ConfigurationCollector {
     private val constantsByName = mutableMapOf<String, DefaultValue>()
     private val properties = mutableListOf<KtProperty>()
 
-    fun getConfiguration(): List<Configuration> {
+    fun getConfigurations(): List<Configuration> {
         return properties.mapNotNull { it.parseConfigurationAnnotation() }
     }
 

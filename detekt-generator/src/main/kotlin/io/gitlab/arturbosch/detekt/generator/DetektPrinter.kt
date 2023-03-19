@@ -9,7 +9,8 @@ import io.gitlab.arturbosch.detekt.generator.printer.DeprecatedPrinter
 import io.gitlab.arturbosch.detekt.generator.printer.RuleSetPagePrinter
 import io.gitlab.arturbosch.detekt.generator.printer.defaultconfig.ConfigPrinter
 import io.gitlab.arturbosch.detekt.generator.printer.defaultconfig.printRuleSetPage
-import java.nio.file.Paths
+import java.nio.file.Path
+import kotlin.io.path.Path
 
 class DetektPrinter(private val arguments: GeneratorArgs) {
 
@@ -33,40 +34,39 @@ class DetektPrinter(private val arguments: GeneratorArgs) {
             // properties from that ruleset as well.
             DeprecatedPrinter.print(pages)
         }
-        yamlWriter.write(Paths.get("../detekt-formatting/src/main/resources/config"), "config") {
+        yamlWriter.write(Path("../detekt-formatting/src/main/resources/config"), "config") {
             yaml {
                 printRuleSetPage(pages.first { it.ruleSet.name == "formatting" })
             }
         }
-        yamlWriter.write(Paths.get("../detekt-rules-libraries/src/main/resources/config"), "config") {
+        yamlWriter.write(Path("../detekt-rules-libraries/src/main/resources/config"), "config") {
             yaml {
                 printRuleSetPage(pages.first { it.ruleSet.name == "libraries" })
             }
         }
-        yamlWriter.write(Paths.get("../detekt-rules-ruleauthors/src/main/resources/config"), "config") {
+        yamlWriter.write(Path("../detekt-rules-ruleauthors/src/main/resources/config"), "config") {
             yaml {
                 printRuleSetPage(pages.first { it.ruleSet.name == "ruleauthors" })
             }
         }
     }
 
-    fun printCustomRuleConfig(pages: List<RuleSetPage>, folder: String) {
-        yamlWriter.write(Paths.get(folder), "config") {
+    fun printCustomRuleConfig(pages: List<RuleSetPage>, folder: Path) {
+        yamlWriter.write(folder, "config") {
             ConfigPrinter.printCustomRuleConfig(pages)
         }
     }
 
-    private fun markdownHeader(ruleSet: String): String {
-        check(ruleSet.length > 1) { "Rule set name must be not empty or less than two symbols." }
+    private fun markdownHeader(ruleSetName: String): String {
         return """
-            |---
-            |title: ${ruleSet[0].uppercaseChar()}${ruleSet.substring(1)} Rule Set
-            |sidebar: home_sidebar
-            |keywords: [rules, $ruleSet]
-            |permalink: $ruleSet.html
-            |toc: true
-            |folder: documentation
-            |---
-        """.trimMargin()
+            ---
+            title: ${ruleSetName[0].uppercaseChar()}${ruleSetName.substring(1)} Rule Set
+            sidebar: home_sidebar
+            keywords: [rules, $ruleSetName]
+            permalink: $ruleSetName.html
+            toc: true
+            folder: documentation
+            ---
+        """.trimIndent()
     }
 }

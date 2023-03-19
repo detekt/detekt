@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.api.Test
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 class KtTreeCompilerSpec {
 
@@ -48,7 +48,7 @@ class KtTreeCompilerSpec {
     fun `throws an exception if given file does not exist`() {
         val invalidPath = "NOTHERE"
         assertThatIllegalArgumentException()
-            .isThrownBy { fixture { compile(Paths.get(invalidPath)) } }
+            .isThrownBy { fixture { compile(Path(invalidPath)) } }
             .withMessage("Given path $invalidPath does not exist!")
     }
 

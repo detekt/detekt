@@ -22,7 +22,11 @@ data class RuleSetProvider(
     val defaultActivationStatus: DefaultActivationStatus,
     val rules: List<String> = emptyList(),
     val configuration: List<Configuration> = emptyList()
-)
+) {
+    init {
+        require(name.length > 1) { "Rule set name must be not empty or less than two symbols." }
+    }
+}
 
 class RuleSetProviderCollector : Collector<RuleSetProvider> {
     override val items = mutableListOf<RuleSetProvider>()
@@ -39,10 +43,12 @@ class RuleSetProviderCollector : Collector<RuleSetProvider> {
 
 private const val PROPERTY_RULE_SET_ID = "ruleSetId"
 
-private val SUPPORTED_PROVIDERS =
-    setOf(RuleSetProvider::class.simpleName, DefaultRuleSetProvider::class.simpleName)
+private val SUPPORTED_PROVIDERS = setOf(
+    io.gitlab.arturbosch.detekt.api.RuleSetProvider::class.simpleName,
+    DefaultRuleSetProvider::class.simpleName,
+)
 
-class RuleSetProviderVisitor : DetektVisitor() {
+private class RuleSetProviderVisitor : DetektVisitor() {
     var containsRuleSetProvider = false
     private var name: String = ""
     private var description: String = ""

@@ -23,11 +23,11 @@ class ClassNamingSpec {
 
     @Test
     fun `should use custom name for method and class`() {
-        val config = TestConfig(mapOf(ClassNaming.CLASS_PATTERN to "^aBbD$"))
+        val config = TestConfig(ClassNaming.CLASS_PATTERN to "^aBbD$")
         assertThat(
             ClassNaming(config).compileAndLint(
                 """
-        class aBbD{}
+                    class aBbD{}
                 """.trimIndent()
             )
         ).isEmpty()

@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.nio.file.Files
+import kotlin.io.path.readText
 
 class DefaultConfigProviderSpec {
     @Nested
@@ -14,7 +14,7 @@ class DefaultConfigProviderSpec {
         private val extensionsSpec = createNullLoggingSpec {}.extensionsSpec
 
         @Test
-        fun `gets`() {
+        fun gets() {
             val config = DefaultConfigProvider().apply { init(extensionsSpec) }.get()
 
             assertThat(config.parentPath).isNull()
@@ -23,7 +23,7 @@ class DefaultConfigProviderSpec {
         }
 
         @Test
-        fun `copies`() {
+        fun copies() {
             val path = createTempFileForTest("test", "test")
             DefaultConfigProvider().apply { init(extensionsSpec) }.copy(path)
 
@@ -41,7 +41,7 @@ class DefaultConfigProviderSpec {
         }.extensionsSpec
 
         @Test
-        fun `gets`() {
+        fun gets() {
             val config = DefaultConfigProvider().apply { init(extensionsSpec) }.get()
 
             assertThat(config.parentPath).isNull()
@@ -50,21 +50,21 @@ class DefaultConfigProviderSpec {
         }
 
         @Test
-        fun `copies`() {
+        fun copies() {
             val path = createTempFileForTest("test", "test")
             DefaultConfigProvider().apply { init(extensionsSpec) }.copy(path)
 
-            val actual = String(Files.readAllBytes(path), Charsets.UTF_8)
-            val expected = String(Files.readAllBytes(resourceAsPath("default-detekt-config.yml")), Charsets.UTF_8) +
+            val actual = path.readText()
+            val expected = resourceAsPath("default-detekt-config.yml").readText() +
                 """
-                    |
-                    |sample:
-                    |  TooManyFunctions:
-                    |    active: true
-                    |  TooManyFunctionsTwo:
-                    |    active: true
-                    |
-                """.trimMargin()
+                    
+                    sample:
+                      TooManyFunctions:
+                        active: true
+                      TooManyFunctionsTwo:
+                        active: true
+                    
+                """.trimIndent()
 
             assertThat(actual).isEqualTo(expected)
         }

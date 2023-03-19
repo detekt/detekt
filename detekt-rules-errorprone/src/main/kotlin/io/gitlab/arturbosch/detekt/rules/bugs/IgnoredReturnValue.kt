@@ -104,7 +104,7 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         it.map(FunctionMatcher::fromFunctionSignature)
     }
 
-    @Suppress("ReturnCount", "ComplexCondition")
+    @Suppress("ComplexCondition")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 

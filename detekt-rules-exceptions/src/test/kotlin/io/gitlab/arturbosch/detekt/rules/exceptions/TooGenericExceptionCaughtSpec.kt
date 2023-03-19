@@ -32,7 +32,7 @@ class TooGenericExceptionCaughtSpec {
 
         val code = """
             class MyTooGenericException : RuntimeException()
-
+            
             fun f() {
                 try {
                     throw Throwable()
@@ -44,7 +44,7 @@ class TooGenericExceptionCaughtSpec {
 
         @Test
         fun `should not report an ignored catch blocks because of its exception name`() {
-            val config = TestConfig(mapOf(ALLOWED_EXCEPTION_NAME_REGEX to "myIgnore"))
+            val config = TestConfig(ALLOWED_EXCEPTION_NAME_REGEX to "myIgnore")
             val rule = TooGenericExceptionCaught(config)
 
             val findings = rule.compileAndLint(code)
@@ -54,7 +54,7 @@ class TooGenericExceptionCaughtSpec {
 
         @Test
         fun `should not report an ignored catch blocks because of its exception type`() {
-            val config = TestConfig(mapOf(CAUGHT_EXCEPTIONS_PROPERTY to "[MyException]"))
+            val config = TestConfig(CAUGHT_EXCEPTIONS_PROPERTY to "[MyException]")
             val rule = TooGenericExceptionCaught(config)
 
             val findings = rule.compileAndLint(code)
@@ -64,11 +64,10 @@ class TooGenericExceptionCaughtSpec {
 
         @Test
         fun `should not fail when disabled with invalid regex on allowed exception names`() {
-            val configRules = mapOf(
+            val config = TestConfig(
                 "active" to "false",
-                ALLOWED_EXCEPTION_NAME_REGEX to "*MyException"
+                ALLOWED_EXCEPTION_NAME_REGEX to "*MyException",
             )
-            val config = TestConfig(configRules)
             val rule = TooGenericExceptionCaught(config)
             val findings = rule.compileAndLint(tooGenericExceptionCode)
 
@@ -77,7 +76,7 @@ class TooGenericExceptionCaughtSpec {
 
         @Test
         fun `should fail with invalid regex on allowed exception names`() {
-            val config = TestConfig(mapOf(ALLOWED_EXCEPTION_NAME_REGEX to "*Foo"))
+            val config = TestConfig(ALLOWED_EXCEPTION_NAME_REGEX to "*Foo")
             val rule = TooGenericExceptionCaught(config)
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
                 rule.compileAndLint(tooGenericExceptionCode)

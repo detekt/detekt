@@ -318,7 +318,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report class with mutable constructor parameter`() {
             val code = """class DataClassCandidateWithVar(var i: Int)"""
-            val config = TestConfig(mapOf(ALLOW_VARS to "true"))
+            val config = TestConfig(ALLOW_VARS to "true")
             assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
         }
 
@@ -329,7 +329,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     var i2: Int = 0
                 }
             """.trimIndent()
-            val config = TestConfig(mapOf(ALLOW_VARS to "true"))
+            val config = TestConfig(ALLOW_VARS to "true")
             assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
         }
 
@@ -340,7 +340,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     var i2: Int = 0
                 }
             """.trimIndent()
-            val config = TestConfig(mapOf(ALLOW_VARS to "true"))
+            val config = TestConfig(ALLOW_VARS to "true")
             assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
         }
 
@@ -351,7 +351,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     val i2: Int = 0
                 }
             """.trimIndent()
-            val config = TestConfig(mapOf(ALLOW_VARS to "true"))
+            val config = TestConfig(ALLOW_VARS to "true")
             assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
         }
     }
@@ -374,11 +374,11 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
     fun `does not report a class which has an ignored annotation`() {
         val code = """
             import kotlin.SinceKotlin
-
+            
             @SinceKotlin("1.0.0")
             class AnnotatedClass(val i: Int) {}
         """.trimIndent()
-        val config = TestConfig(mapOf(EXCLUDE_ANNOTATED_CLASSES to "kotlin.*"))
+        val config = TestConfig(EXCLUDE_ANNOTATED_CLASSES to "kotlin.*")
         assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
     }
 

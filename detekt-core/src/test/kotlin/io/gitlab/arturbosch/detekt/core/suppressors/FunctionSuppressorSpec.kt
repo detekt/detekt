@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 class FunctionSuppressorSpec {
 
     @Nested
-    inner class `FunctionSuppressorFactory` {
+    inner class FunctionSuppressorFactory {
         @Test
         fun `Factory returns null if ignoreFunction is not set`() {
             val suppressor = functionSuppressorFactory(
@@ -47,7 +47,7 @@ class FunctionSuppressorSpec {
     }
 
     @Nested
-    inner class `FunctionSuppressor` {
+    inner class FunctionSuppressor {
         @Test
         fun `If KtElement is null it returns false`() {
             val suppressor = buildFunctionSuppressor(listOf("toString"), BindingContext.EMPTY)
@@ -68,7 +68,7 @@ class FunctionSuppressorSpec {
                             return ""
                         }
                     }
-
+                    
                     fun toString() = Unit
                 """.trimIndent()
             )
@@ -163,7 +163,7 @@ class FunctionSuppressorSpec {
                             return ""
                         }
                     }
-
+                    
                     fun compare() = Unit
                 """.trimIndent()
             )

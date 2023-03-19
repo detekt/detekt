@@ -33,6 +33,6 @@ jobs:
           close-pr-message: 'This PR was closed because its author has not followed up after 7 days.'
           stale-issue-label: stale
           stale-pr-label: stale
-          any-of-labels: waiting for feedback
+          any-of-labels: waiting for feedback, support
           exempt-issue-labels: never gets stale
           exempt-pr-labels: never gets stale

@@ -32,7 +32,7 @@ class UndocumentedPublicPropertySpec {
         val code = """
             class Test {
                 object NestedTest {
-                    val a = 1 
+                    val a = 1
                 }
             }
         """.trimIndent()
@@ -90,8 +90,8 @@ class UndocumentedPublicPropertySpec {
         val code = """
             class Test {
                 /**
-                * Comment
-                */
+                 * Comment
+                 */
                 val a = 1
             }
         """.trimIndent()
@@ -187,20 +187,20 @@ class UndocumentedPublicPropertySpec {
     fun `does not report documented public properties in a primary constructor`() {
         val code = """
             /**
-            * @property a int1
-            * [b] int2
-            * @property [c] int3
-            * @param d int4
-            */
+             * @property a int1
+             * [b] int2
+             * @property [c] int3
+             * @param d int4
+             */
             class Test(
-                val a: Int, 
-                val b: Int, 
-                val c: Int, 
+                val a: Int,
+                val b: Int,
+                val c: Int,
                 val d: Int,
                 /**
                  * Some docs.
                  */
-                val e: Int                    
+                val e: Int
             )
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
@@ -233,7 +233,7 @@ class UndocumentedPublicPropertySpec {
                 protected val a = 1
             }
         """.trimIndent()
-        val subject = UndocumentedPublicProperty(TestConfig(mapOf(SEARCH_PROTECTED_PROPERTY to "true")))
+        val subject = UndocumentedPublicProperty(TestConfig(SEARCH_PROTECTED_PROPERTY to "true"))
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -243,15 +243,15 @@ class UndocumentedPublicPropertySpec {
         @Test
         fun `reports undocumented public properties in nested classes`() {
             val code = """
-            class Outer { 
-                class Inner {
-                    val i = 0
-                    
-                    class InnerInner {
-                        val ii = 0
+                class Outer {
+                    class Inner {
+                        val i = 0
+                
+                        class InnerInner {
+                            val ii = 0
+                        }
                     }
                 }
-            }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
@@ -259,11 +259,11 @@ class UndocumentedPublicPropertySpec {
         @Test
         fun `reports undocumented public properties in inner classes`() {
             val code = """
-            class Outer {
-                inner class Inner {
-                    val i = 0
+                class Outer {
+                    inner class Inner {
+                        val i = 0
+                    }
                 }
-            }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
@@ -271,11 +271,11 @@ class UndocumentedPublicPropertySpec {
         @Test
         fun `reports undocumented public properties in classes nested in objects`() {
             val code = """
-            object Outer {
-                class Inner {
-                    val i = 0
+                object Outer {
+                    class Inner {
+                        val i = 0
+                    }
                 }
-            }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
@@ -283,11 +283,11 @@ class UndocumentedPublicPropertySpec {
         @Test
         fun `does not report undocumented and non-public properties in nested classes`() {
             val code = """
-            internal class Outer {
-                class Inner {
-                    val i = 0
+                internal class Outer {
+                    class Inner {
+                        val i = 0
+                    }
                 }
-            }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -295,11 +295,11 @@ class UndocumentedPublicPropertySpec {
         @Test
         fun `does not report undocumented and non-public properties in inner classes`() {
             val code = """
-            internal class Outer {
-                inner class Inner {
-                    val i = 0
+                internal class Outer {
+                    inner class Inner {
+                        val i = 0
+                    }
                 }
-            }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -311,11 +311,11 @@ class UndocumentedPublicPropertySpec {
         @Test
         fun `reports undocumented public properties in nested classes`() {
             val code = """
-            class Outer(val a: Int) {
-                class Inner(val b: Int) {
-                    class InnerInner(val c: Int)
+                class Outer(val a: Int) {
+                    class Inner(val b: Int) {
+                        class InnerInner(val c: Int)
+                    }
                 }
-            }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(3)
         }
@@ -323,9 +323,9 @@ class UndocumentedPublicPropertySpec {
         @Test
         fun `reports undocumented public properties in inner classes`() {
             val code = """
-            class Outer(val a: Int) {
-                inner class Inner(val b: Int)
-            }
+                class Outer(val a: Int) {
+                    inner class Inner(val b: Int)
+                }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
@@ -333,9 +333,9 @@ class UndocumentedPublicPropertySpec {
         @Test
         fun `reports undocumented public properties in classes nested in objects`() {
             val code = """
-            object Outer {
-                class Inner(val a: Int)
-            }
+                object Outer {
+                    class Inner(val a: Int)
+                }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
@@ -343,9 +343,9 @@ class UndocumentedPublicPropertySpec {
         @Test
         fun `does not report undocumented and non-public properties in nested classes`() {
             val code = """
-            internal class Outer(val a: Int) {
-                class Inner(val b: Int)
-            }
+                internal class Outer(val a: Int) {
+                    class Inner(val b: Int)
+                }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -353,9 +353,9 @@ class UndocumentedPublicPropertySpec {
         @Test
         fun `does not report undocumented and non-public properties in inner classes`() {
             val code = """
-            internal class Outer(val a: Int) {
-                inner class Inner(val b: Int)
-            }
+                internal class Outer(val a: Int) {
+                    inner class Inner(val b: Int)
+                }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }

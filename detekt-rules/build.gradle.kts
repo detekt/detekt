@@ -27,5 +27,3 @@ dependencies {
     testImplementation(libs.assertj)
     testImplementation(libs.reflections)
 }
-
-tasks.build { finalizedBy(":detekt-generator:generateDocumentation") }

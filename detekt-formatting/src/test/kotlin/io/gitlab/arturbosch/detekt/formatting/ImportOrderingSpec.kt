@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.formatting
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ImportOrdering
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import org.assertj.core.api.Assertions.assertThat
+import io.gitlab.arturbosch.detekt.test.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -112,7 +112,7 @@ class ImportOrderingSpec {
                     import android.view.ViewGroup
                     import java.util.List
                     import kotlin.concurrent.Thread
-
+                    
                     import android.content.Context as Ctx
                     import androidx.fragment.app.Fragment as F
                 """.trimIndent()

@@ -21,7 +21,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
     fun `should report all Void type usage`() {
         val code = """
             lateinit var c: () -> Void
-
+            
             fun method(param: Void) {
                 val a: Void? = null
                 val b: Void = null!!
@@ -63,7 +63,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
     @Nested
     inner class `ignoreOverridden is enabled` {
 
-        val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "true"))
+        val config = TestConfig(IGNORE_OVERRIDDEN to "true")
 
         @Test
         fun `should not report Void in overriding function declarations`() {
@@ -72,7 +72,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                     @Suppress("ForbiddenVoid")
                     abstract fun method(param: Void) : Void
                 }
-
+                
                 class B : A() {
                     override fun method(param: Void) : Void {
                         throw IllegalStateException()
@@ -88,12 +88,12 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
         fun `should not report Void in overriding function declarations with parameterized types`() {
             val code = """
                 class Foo<T> {}
-
+                
                 abstract class A {
                     @Suppress("ForbiddenVoid")
                     abstract fun method(param: Foo<Void>) : Foo<Void>
                 }
-
+                
                 class B : A() {
                     override fun method(param: Foo<Void>) : Foo<Void> {
                         throw IllegalStateException()
@@ -111,7 +111,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                 abstract class A {
                     abstract fun method(param: String)
                 }
-
+                
                 class B : A() {
                     override fun method(param: String) {
                         val a: Void? = null
@@ -139,23 +139,23 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
     @Nested
     inner class `ignoreUsageInGenerics is enabled` {
 
-        val config = TestConfig(mapOf(IGNORE_USAGE_IN_GENERICS to "true"))
+        val config = TestConfig(IGNORE_USAGE_IN_GENERICS to "true")
 
         @Test
         fun `should not report Void in generic type declaration`() {
             val code = """
                 interface A<T>
-
+                
                 class B {
                     fun method(): A<Void>? = null
                 }
-
+                
                 class C(private val b: B) {
                     fun method() {
                         val a: A<Void>? = b.method()
                     }
                 }
-
+                
                 class D : A<Void>
             """.trimIndent()
 
@@ -189,7 +189,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
         fun `should report non-generic Void type usage`() {
             val code = """
                 lateinit var c: () -> Void
-
+                
                 fun method(param: Void) {
                     val a: Void? = null
                     val b: Void = null!!

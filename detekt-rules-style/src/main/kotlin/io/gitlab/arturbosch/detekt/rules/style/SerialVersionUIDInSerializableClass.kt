@@ -16,10 +16,13 @@ import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
  * Classes which implement the `Serializable` interface should also correctly declare a `serialVersionUID`.
- * This rule verifies that a `serialVersionUID` was correctly defined.
+ * This rule verifies that a `serialVersionUID` was correctly defined and declared as `private`.
+ *
+ * [More about `SerialVersionUID`](https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html)
  *
  * <noncompliant>
  * class IncorrectSerializable : Serializable {
@@ -46,11 +49,9 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
         javaClass.simpleName,
         Severity.Warning,
         "A class which implements the Serializable interface does not define a correct serialVersionUID field. " +
-            "The serialVersionUID field should be a constant long value inside a companion object.",
+            "The serialVersionUID field should be a private constant long value inside a companion object.",
         Debt.FIVE_MINS
     )
-
-    private val versionUID = "serialVersionUID"
 
     override fun visitClass(klass: KtClass) {
         if (!klass.isInterface() && isImplementingSerializable(klass)) {
@@ -61,7 +62,7 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
                         issue,
                         Entity.from(klass),
                         "The class ${klass.nameAsSafeName} implements" +
-                            " the Serializable interface and should thus define a serialVersionUID."
+                            " the `Serializable` interface and should thus define a `serialVersionUID`."
                     )
                 )
             }
@@ -79,7 +80,7 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
                     issue,
                     Entity.from(declaration),
                     "The object ${declaration.nameAsSafeName} " +
-                        "implements the Serializable interface and should thus define a serialVersionUID."
+                        "implements the `Serializable` interface and should thus define a `serialVersionUID`."
                 )
             )
         }
@@ -90,8 +91,8 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
         classOrObject.superTypeListEntries.any { it.text == "Serializable" }
 
     private fun hasCorrectSerialVersionUUID(declaration: KtObjectDeclaration): Boolean {
-        val property = declaration.body?.properties?.firstOrNull { it.name == versionUID }
-        return property != null && property.isConstant() && isLongProperty(property)
+        val property = declaration.body?.properties?.firstOrNull { it.name == "serialVersionUID" } ?: return false
+        return property.isConstant() && isLongProperty(property) && property.isPrivate()
     }
 
     private fun isLongProperty(property: KtProperty) = hasLongType(property) || hasLongAssignment(property)

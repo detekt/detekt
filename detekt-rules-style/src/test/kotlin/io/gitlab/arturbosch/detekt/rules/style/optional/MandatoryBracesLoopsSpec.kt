@@ -15,11 +15,11 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `does not report with braces`() {
             val code = """
-            fun test() {
-                for (i in 0..10) {
-                    println(i)
+                fun test() {
+                    for (i in 0..10) {
+                        println(i)
+                    }
                 }
-            }
             """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -28,9 +28,9 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `does not report full loop on single line`() {
             val code = """
-            fun test() {
-                for (i in 0..10) println(i)
-            }
+                fun test() {
+                    for (i in 0..10) println(i)
+                }
             """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -39,9 +39,9 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `does not report full loop on single line with multiple statements`() {
             val code = """
-            fun test() {
-                for (i in 0..10) println(i); print(' ')
-            }
+                fun test() {
+                    for (i in 0..10) println(i); print(' ')
+                }
             """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -50,10 +50,10 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `reports multi-line without braces`() {
             val code = """
-            fun test() {
-                for (i in 0..10)
-                    println(i)
-            }
+                fun test() {
+                    for (i in 0..10)
+                        println(i)
+                }
             """.trimIndent()
 
             val findings = subject.compileAndLint(code)
@@ -66,11 +66,11 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `does not report on suppression`() {
             val code = """
-            fun test() {
-                @Suppress("MandatoryBracesLoops")
-                for (i in 0..10)
-                    println(i)
-            }
+                fun test() {
+                    @Suppress("MandatoryBracesLoops")
+                    for (i in 0..10)
+                        println(i)
+                }
             """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -79,13 +79,13 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `does not report nested loops with braces`() {
             val code = """
-            fun test() {
-                for (i in 0..10) {
-                    for (j in 0..10) {
-                        println()
+                fun test() {
+                    for (i in 0..10) {
+                        for (j in 0..10) {
+                            println()
+                        }
                     }
                 }
-            }
             """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -94,9 +94,9 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `does not report nested loops on single line`() {
             val code = """
-            fun test() {
-                for (i in 0..10) for (j in 0..10) println()
-            }
+                fun test() {
+                    for (i in 0..10) for (j in 0..10) println()
+                }
             """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -105,12 +105,12 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `reports in nested loop outer`() {
             val code = """
-            fun test() {
-                for (i in 0..10) 
-                    for (j in 0..10) {
-                        println()
-                    }
-            }
+                fun test() {
+                    for (i in 0..10)
+                        for (j in 0..10) {
+                            println()
+                        }
+                }
             """.trimIndent()
 
             val findings = subject.compileAndLint(code)
@@ -123,12 +123,12 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `reports in nested loop inner`() {
             val code = """
-            fun test() {
-                for (i in 0..10) {
-                    for (j in 0..10)
-                        println()
+                fun test() {
+                    for (i in 0..10) {
+                        for (j in 0..10)
+                            println()
+                    }
                 }
-            }
             """.trimIndent()
 
             val findings = subject.compileAndLint(code)
@@ -140,11 +140,11 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `reports both violations in nested loop`() {
             val code = """
-            fun test() {
-                for (i in 0..10)
-                    for (j in 0..10)
-                        println()
-            }
+                fun test() {
+                    for (i in 0..10)
+                        for (j in 0..10)
+                            println()
+                }
             """.trimIndent()
 
             val findings = subject.compileAndLint(code)
@@ -160,15 +160,15 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `reports with multi-line if statement`() {
             val code = """
-            fun test() {
-                // because if statements are expressions, this code properly prints "Odd" and "Even" 
-                for (i in 0..10) 
-                    if (i % 2 == 0) {
-                        println("Even")
-                    } else {
-                        println("Odd")
-                    }
-            }
+                fun test() {
+                    // because if statements are expressions, this code properly prints "Odd" and "Even"
+                    for (i in 0..10)
+                        if (i % 2 == 0) {
+                            println("Even")
+                        } else {
+                            println("Odd")
+                        }
+                }
             """.trimIndent()
 
             val findings = subject.compileAndLint(code)
@@ -181,16 +181,16 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `reports inside of if statement without braces`() {
             val code = """
-            fun test() {
-                // this if statement would also be reported, but we're only checking the loop
-                val i = 2
-                if (i % 2 == 0)
-                    for (j in 0..10) 
-                        println(i)
-                else {
-                    println("Odd")
+                fun test() {
+                    // this if statement would also be reported, but we're only checking the loop
+                    val i = 2
+                    if (i % 2 == 0)
+                        for (j in 0..10)
+                            println(i)
+                    else {
+                        println("Odd")
+                    }
                 }
-            }
             """.trimIndent()
 
             val findings = subject.compileAndLint(code)
@@ -207,11 +207,11 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `does not report with braces`() {
             val code = """
-            fun test() {
-                while(true) {
-                    println()
+                fun test() {
+                    while(true) {
+                        println()
+                    }
                 }
-            }
             """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -220,9 +220,9 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `does not report full loop on single line`() {
             val code = """
-            fun test() {
-                while(true) println()
-            }
+                fun test() {
+                    while(true) println()
+                }
             """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -231,10 +231,10 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `reports multi-line without braces`() {
             val code = """
-            fun test() {
-                while (true)
-                    println()
-            }
+                fun test() {
+                    while (true)
+                        println()
+                }
             """.trimIndent()
 
             val findings = subject.compileAndLint(code)
@@ -247,11 +247,11 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `does not report on suppression`() {
             val code = """
-            fun test() {
-                @Suppress("MandatoryBracesLoops")
-                while(true)
-                    println()
-            }
+                fun test() {
+                    @Suppress("MandatoryBracesLoops")
+                    while(true)
+                        println()
+                }
             """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -260,12 +260,12 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `reports in nested loop inner`() {
             val code = """
-            fun test() {
-                while (true) {
-                    while (true)
-                        println()
+                fun test() {
+                    while (true) {
+                        while (true)
+                            println()
+                    }
                 }
-            }
             """.trimIndent()
 
             val findings = subject.compileAndLint(code)
@@ -281,11 +281,11 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `does not report with braces`() {
             val code = """
-            fun test() {
-                do {
-                    println()
-                } while(true)
-            }
+                fun test() {
+                    do {
+                        println()
+                    } while(true)
+                }
             """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -294,9 +294,9 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `does not report full loop on single line`() {
             val code = """
-            fun test() {
-                do println() while(true)
-            }
+                fun test() {
+                    do println() while(true)
+                }
             """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -305,11 +305,11 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `reports multi-line without braces`() {
             val code = """
-            fun test() {
-                do
-                    println()
-                while (true)
-            }
+                fun test() {
+                    do
+                        println()
+                    while (true)
+                }
             """.trimIndent()
 
             val findings = subject.compileAndLint(code)
@@ -322,12 +322,12 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `does not report on suppression`() {
             val code = """
-            fun test() {
-                @Suppress("MandatoryBracesLoops")
-                do
-                    println()
-                while(true)
-            }
+                fun test() {
+                    @Suppress("MandatoryBracesLoops")
+                    do
+                        println()
+                    while(true)
+                }
             """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -336,13 +336,13 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `does not report nested loops with braces`() {
             val code = """
-            fun test() {
-                do {
-                    while (true) {		
-                        println()		
-                    }		
-                } while (true)	
-            }		
+                fun test() {
+                    do {
+                        while (true) {
+                            println()
+                        }
+                    } while (true)
+                }
             """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -351,10 +351,10 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `does not report nested loops on single line`() {
             val code = """
-            fun test() {
-                var i = 0
-                do do i += 1 while(i < 5) while (i < 5)	
-            }		
+                fun test() {
+                    var i = 0
+                    do do i += 1 while(i < 5) while (i < 5)
+                }
             """.trimIndent()
 
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -363,13 +363,13 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `reports in nested loop outer`() {
             val code = """
-            fun test() {	
-                do
-                    do {		
-                        println()		
-                    } while (true)
-                while (true)
-            }
+                fun test() {
+                    do
+                        do {
+                            println()
+                        } while (true)
+                    while (true)
+                }
             """.trimIndent()
 
             val findings = subject.compileAndLint(code)
@@ -382,13 +382,13 @@ class MandatoryBracesLoopsSpec {
         @Test
         fun `reports in nested loop inner`() {
             val code = """
-            fun test() {
-                do {
-                    do
-                        println()
-                    while(true)
-                } while (true)
-            }
+                fun test() {
+                    do {
+                        do
+                            println()
+                        while(true)
+                    } while (true)
+                }
             """.trimIndent()
 
             val findings = subject.compileAndLint(code)

@@ -13,9 +13,9 @@ class UnsafeCallOnNullableTypeSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `reports unsafe call on nullable type`() {
         val code = """
-                fun test(str: String?) {
-                    println(str!!.length)
-                }
+            fun test(str: String?) {
+                println(str!!.length)
+            }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
@@ -23,9 +23,9 @@ class UnsafeCallOnNullableTypeSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does not report unsafe call on platform type`() {
         val code = """
-                import java.util.UUID
-
-                val version = UUID.randomUUID()!!
+            import java.util.UUID
+            
+            val version = UUID.randomUUID()!!
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
@@ -33,9 +33,9 @@ class UnsafeCallOnNullableTypeSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does not report safe call on nullable type`() {
         val code = """
-                fun test(str: String?) {
-                    println(str?.length)
-                }
+            fun test(str: String?) {
+                println(str?.length)
+            }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
@@ -43,9 +43,9 @@ class UnsafeCallOnNullableTypeSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does not report safe call in combination with the elvis operator`() {
         val code = """
-                fun test(str: String?) {
-                    println(str?.length ?: 0)
-                }
+            fun test(str: String?) {
+                println(str?.length ?: 0)
+            }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
