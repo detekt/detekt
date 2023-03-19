@@ -43,6 +43,92 @@ class BracesOnWhenStatementsSpec {
     }
 
     @Nested
+    inner class specialTestCases {
+
+        private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
+            testCombinations(BracePolicy.Never.config, BracePolicy.Always.config, code, *locations)
+
+        @TestFactory
+        fun `nested when inside when case block`() = listOf(
+            flag(
+                """
+                    when (1) {
+                        1 -> { 
+                            when (2) { 1 -> println(); else -> { println() } }
+                        }
+                        2 -> println()
+                        else -> { println() }
+                    }
+                """.trimIndent(),
+                "->"(3),
+                "->"(4),
+            ),
+        )
+
+        @TestFactory
+        fun `nested when inside when subject`() = listOf(
+            flag(
+                """
+                    when (when (2) { 1 -> { 1 }; else -> { 2 } }) {
+                        1 -> {
+                            println()
+                        }
+                        2 -> println()
+                        else -> { println() }
+                    }
+                """.trimIndent(),
+                "->"(1),
+                "->"(2),
+                "->"(4),
+            ),
+        )
+
+        @TestFactory
+        fun `nested when inside when condition`() = listOf(
+            flag(
+                """
+                    fun f(s: String?) {
+                        when {
+                            when { s != null -> { s.length }; else -> { 0 } } > 5 -> {
+                                true
+                            }
+                            when(s) { "foo" -> { 1 }; "bar" -> { 1 }; else -> { 2 } } == 1 -> false
+                            else -> { null }
+                        }
+                    }
+                """.trimIndent(),
+                "->"(1),
+                "->"(2),
+                "->"(4),
+                "->"(5),
+                "->"(6),
+                "->"(7),
+            ),
+        )
+
+        @TestFactory
+        fun `weird curly formatting for multiline whens`() = listOf(
+            flag(
+                """
+                    when (1) {
+                        1 -> 
+                        {
+                            println()
+                        }
+                        2 -> { println()
+                        }
+                        3 -> { 
+                        println() }
+                        else -> 
+                            { println() }
+                    }
+                """.trimIndent(),
+                *NOTHING,
+            ),
+        )
+    }
+
+    @Nested
     inner class singleLine {
 
         @Nested
@@ -57,7 +143,7 @@ class BracesOnWhenStatementsSpec {
                     """
                         when (1) {
                             1 -> println()
-                            2 -> { println() }
+                            2 -> { println(); println() }
                         }
                     """.trimIndent(),
                     "->"(1),
@@ -71,7 +157,7 @@ class BracesOnWhenStatementsSpec {
                         when (1) {
                             1 -> { println() }
                             2 -> { println() }
-                            else -> { println() }
+                            else -> { println(); println() }
                         }
                     """.trimIndent(),
                     *NOTHING,
@@ -85,7 +171,7 @@ class BracesOnWhenStatementsSpec {
                         when (1) {
                             1 -> println()
                             2 -> { println() }
-                            else -> { println() }
+                            else -> { println(); println() }
                         }
                     """.trimIndent(),
                     "->"(1),
@@ -98,7 +184,7 @@ class BracesOnWhenStatementsSpec {
                     """
                         when (1) {
                             1 -> { println() }
-                            2 -> { println() }
+                            2 -> { println(); println() }
                             else -> println()
                         }
                     """.trimIndent(),
@@ -111,7 +197,7 @@ class BracesOnWhenStatementsSpec {
                 flag(
                     """
                         when (1) {
-                            1 -> { println() }
+                            1 -> { println(); println() }
                             2 -> println()
                             else -> { println() }
                         }
@@ -147,7 +233,7 @@ class BracesOnWhenStatementsSpec {
                         when (1) {
                             1 -> { println() }
                             2 -> { println() }
-                            else -> { println() }
+                            else -> { println(); println() }
                         }
                     """.trimIndent(),
                     "->"(1),
@@ -161,7 +247,7 @@ class BracesOnWhenStatementsSpec {
                 flag(
                     """
                         when (1) {
-                            1 -> { println() }
+                            1 -> { println(); println() }
                             2 -> println()
                             else -> println()
                         }
@@ -460,75 +546,6 @@ class BracesOnWhenStatementsSpec {
                     "->"(2),
                 ),
             )
-
-            @TestFactory
-            fun `nested when inside when case block`() = listOf(
-                flag(
-                    """
-                        when (1) {
-                            1 -> { 
-                                when (2) {
-                                    1 -> {
-                                        println()
-                                    }
-                                    else -> {
-                                        println()
-                                    }
-                                }
-                            }
-                            2 -> { println() }
-                            else -> { println() }
-                        }
-                    """.trimIndent(),
-                    *NOTHING,
-                ),
-            )
-
-            @TestFactory
-            fun `nested when inside when condition`() = listOf(
-                flag(
-                    """
-                        when (
-                            when (2) {
-                                1 -> {
-                                   1
-                                }
-                                else -> {
-                                   2
-                                }
-                            }
-                        ) {
-                            1 -> {
-                                println()
-                            }
-                            2 -> { println() }
-                            else -> { println() }
-                        }
-                    """.trimIndent(),
-                    *NOTHING,
-                ),
-            )
-
-            @TestFactory
-            fun `weird curly formatting for multiline whens`() = listOf(
-                flag(
-                    """
-                        when (1) {
-                            1 -> 
-                            {
-                                println()
-                            }
-                            2 -> { println()
-                            }
-                            3 -> { 
-                            println() }
-                            else -> 
-                                { println() }
-                        }
-                    """.trimIndent(),
-                    *NOTHING,
-                ),
-            )
         }
 
         @Nested
@@ -632,49 +649,6 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(2),
-                ),
-            )
-
-            @TestFactory
-            fun `nested when inside when case block`() = listOf(
-                flag(
-                    """
-                        when (1) {
-                            1 -> 
-                                when (2) {
-                                    1 -> 
-                                        println()
-                                    else ->
-                                        println()
-                                }
-                            
-                            2 -> println()
-                            else -> println()
-                        }
-                    """.trimIndent(),
-                    *NOTHING,
-                ),
-            )
-
-            @TestFactory
-            fun `nested when inside when condition`() = listOf(
-                flag(
-                    """
-                        when (
-                            when (2) {
-                                1 ->
-                                   1
-                                else ->
-                                   2
-                            }
-                        ) {
-                            1 -> 
-                                println()
-                            else ->
-                                println()
-                        }
-                    """.trimIndent(),
-                    *NOTHING,
                 ),
             )
         }
@@ -907,71 +881,6 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "when"(1),
-                ),
-            )
-
-            @TestFactory
-            fun `nested when inside when case block`() = listOf(
-                flag(
-                    """
-                        when (1) {
-                            1 -> { 
-                                when (2) {
-                                    1 -> 
-                                        println()
-                                    else ->
-                                        println()
-                                }
-                            }
-                            2 -> { println() }
-                            else -> { println() }
-                        }
-                    """.trimIndent(),
-                    *NOTHING,
-                ),
-            )
-
-            @TestFactory
-            fun `nested when inside when condition`() = listOf(
-                flag(
-                    """
-                        when (
-                            when (2) {
-                                1 -> 
-                                    1
-                                else ->
-                                    2
-                            }
-                        ) {
-                            1 -> {
-                                println()
-                            }
-                            2 -> { println() }
-                            else -> { println() }
-                        }
-                    """.trimIndent(),
-                    *NOTHING,
-                ),
-            )
-
-            @TestFactory
-            fun `weird curly formatting for multiline whens`() = listOf(
-                flag(
-                    """
-                        when (1) {
-                            1 -> 
-                            {
-                                println()
-                            }
-                            2 -> { println()
-                            }
-                            3 -> { 
-                            println() }
-                            else -> 
-                                { println() }
-                        }
-                    """.trimIndent(),
-                    *NOTHING,
                 ),
             )
         }

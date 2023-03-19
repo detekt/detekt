@@ -153,10 +153,6 @@ style:
     active: true
     singleLine: 'consistent'
     multiLine: 'consistent'
-  BracesOnWhenStatements:
-    active: false
-    singleLine: 'necessary'
-    multiLine: 'necessary'
   CanBeNonNullable:
     active: true
   CascadingCallWrapping:
