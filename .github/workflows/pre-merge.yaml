@@ -33,7 +33,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@3f07048e3d294f56e9b90ac5ea2c6f74e9ad0f98 # v3
         with:
-          java-version: ${{ matrix.jdk }}
+          java-version: 17
           distribution: 'temurin'
 
       - name: Build detekt
