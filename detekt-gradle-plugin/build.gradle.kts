@@ -136,7 +136,7 @@ tasks {
     val writeDetektVersionProperties by registering(WriteProperties::class) {
         description = "Write the properties file with the detekt version to be used by the plugin."
         encoding = "UTF-8"
-        outputFile = file("$buildDir/versions.properties")
+        destinationFile.set(file("$buildDir/versions.properties"))
         property("detektVersion", project.version)
         property("detektCompilerPluginVersion", project.version)
     }
@@ -170,6 +170,7 @@ with(components["java"] as AdhocComponentWithVariants) {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     compilerOptions {
+        @Suppress("DEPRECATION")
         apiVersion.set(KotlinVersion.KOTLIN_1_4)
         freeCompilerArgs.add("-Xsuppress-version-warnings")
         // Note: Currently there are warnings for detekt-gradle-plugin that seemingly can't be fixed
