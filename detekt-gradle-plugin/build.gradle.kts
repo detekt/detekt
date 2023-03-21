@@ -168,10 +168,6 @@ with(components["java"] as AdhocComponentWithVariants) {
     withVariantsFromConfiguration(configurations["testFixturesRuntimeElements"]) { skip() }
 }
 
-tasks.withType<Sign>().configureEach {
-    notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13470")
-}
-
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     compilerOptions {
         apiVersion.set(KotlinVersion.KOTLIN_1_4)

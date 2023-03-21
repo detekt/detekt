@@ -4,10 +4,6 @@ plugins {
     signing
 }
 
-tasks.withType<Sign>().configureEach {
-    notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13470")
-}
-
 publishing {
     repositories {
         maven {
