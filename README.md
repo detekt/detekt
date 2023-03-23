@@ -5,6 +5,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.gitlab.arturbosch.detekt/detekt-cli?label=MavenCentral&logo=apache-maven)](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli)
 [![Gradle Plugin](https://img.shields.io/maven-central/v/io.gitlab.arturbosch.detekt/detekt-gradle-plugin?label=Gradle&logo=gradle)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 [![Revved up by Gradle Enterprise](https://img.shields.io/badge/Revved%20up%20by-Gradle%20Enterprise-06A0CE?logo=Gradle&labelColor=02303A)](https://ge.detekt.dev/scans)
+[![License](https://img.shields.io/github/license/detekt/detekt.svg)](LICENSE)
 
 ![Pre Merge Checks](https://github.com/detekt/detekt/workflows/Pre%20Merge%20Checks/badge.svg?branch=main)
 [![Codecov](https://codecov.io/gh/detekt/detekt/branch/main/graph/badge.svg)](https://codecov.io/gh/detekt/detekt)
