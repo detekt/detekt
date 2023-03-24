@@ -13,8 +13,10 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isActual
 import io.gitlab.arturbosch.detekt.rules.isExpect
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
+import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
@@ -131,7 +133,20 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
     private fun KtProperty.isMemberOrTopLevel() = isMember || isTopLevel
 
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
-        nameAccesses.add(expression.text.removeSurrounding("`"))
+        if (!skipNode(expression)) {
+            nameAccesses.add(expression.text.removeSurrounding("`"))
+        }
         super.visitReferenceExpression(expression)
     }
+
+    private fun skipNode(expression: KtReferenceExpression): Boolean {
+        return when {
+            expression.isPackageDirective() -> true
+            else -> false
+        }
+    }
+}
+
+private fun PsiElement.isPackageDirective(): Boolean {
+    return this is KtPackageDirective || parent?.isPackageDirective() == true
 }
