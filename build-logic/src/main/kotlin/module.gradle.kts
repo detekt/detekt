@@ -62,10 +62,6 @@ testing {
     }
 }
 
-dependencies {
-    compileOnly(kotlin("stdlib-jdk8"))
-}
-
 java {
     withSourcesJar()
     withJavadocJar()
