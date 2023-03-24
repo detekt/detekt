@@ -524,6 +524,10 @@ style:
   DestructuringDeclarationWithTooManyEntries:
     active: true
     maxDestructuringEntries: 3
+  DoubleNegativeLambda:
+    active: false
+    negativeFunctions:
+      - 'takeUnless'
   EqualsNullCall:
     active: true
   EqualsOnSignatureLine:

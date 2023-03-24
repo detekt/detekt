@@ -106,6 +106,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             MaxChainedCallsOnSameLine(config),
             AlsoCouldBeApply(config),
             UseSumOfInsteadOfFlatMapSize(config),
+            DoubleNegativeLambda(config),
         )
     )
 }
