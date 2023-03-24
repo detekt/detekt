@@ -6,48 +6,44 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.io.path.Path
-import kotlin.io.path.createTempDirectory
 import kotlin.io.path.readText
 
 class GeneratorSpec {
     private val configPath = "/src/main/resources/config/config.yml"
 
-    private val tempDir1: File = createTempDirectory().toFile()
-    private val tempDir2: File = createTempDirectory().toFile()
+    private val rulePath1: File = Path("../detekt-generator/src/test/resources/ruleset1").toFile()
+    private val rulePath2: File = Path("../detekt-generator/src/test/resources/ruleset2").toFile()
 
     @BeforeAll
     fun init() {
-        Path("../detekt-rules-complexity").toFile().copyRecursively(tempDir1)
-        Path("../detekt-rules-coroutines").toFile().copyRecursively(tempDir2)
-
         val args = arrayOf(
             "--generate-custom-rule-config",
             "--input",
-            "$tempDir1, $tempDir2",
+            "$rulePath1, $rulePath2",
         )
         io.gitlab.arturbosch.detekt.generator.main(args)
     }
 
     @Test
     fun `config files generated successfully`() {
-        assertThat(Path(tempDir1.toString(), configPath)).exists()
-        assertThat(Path(tempDir2.toString(), configPath)).exists()
+        assertThat(Path(rulePath1.toString(), configPath)).exists()
+        assertThat(Path(rulePath2.toString(), configPath)).exists()
     }
 
     @Test
     fun `config files have their own content`() {
-        assertThat(Path(tempDir1.toString(), configPath).readText())
+        assertThat(Path(rulePath1.toString(), configPath).readText())
             .contains("complexity:")
             .doesNotContain("coroutines:")
 
-        assertThat(Path(tempDir2.toString(), configPath).readText())
+        assertThat(Path(rulePath2.toString(), configPath).readText())
             .contains("coroutines:")
             .doesNotContain("complexity:")
     }
 
     @AfterAll
     fun tearDown() {
-        tempDir1.deleteRecursively()
-        tempDir2.deleteRecursively()
+        Path(rulePath1.toString(), configPath).toFile().delete()
+        Path(rulePath2.toString(), configPath).toFile().delete()
     }
 }
