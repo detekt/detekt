@@ -13,6 +13,7 @@ class DoubleNegativeLambdaSpec {
     @Test
     fun `reports simple logical not`() {
         val code = """
+            import kotlin.random.Random
             fun Int.isEven() = this % 2 == 0
             val rand = Random.Default.nextInt().takeUnless { !it.isEven() }
         """.trimIndent()
@@ -23,8 +24,9 @@ class DoubleNegativeLambdaSpec {
     @Test
     fun `reports logical not in binary expression`() {
         val code = """
+            import kotlin.random.Random
             fun Int.isEven() = this % 2 == 0
-            val rand = Random.Default.nextInt().takeUnless { it > 0 && !it.isEven() }
+            val rand = kotlin.random.Random.Default.nextInt().takeUnless { it > 0 && !it.isEven() }
         """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -33,8 +35,9 @@ class DoubleNegativeLambdaSpec {
     @Test
     fun `reports function with 'not' in the name`() {
         val code = """
+            import kotlin.random.Random
             fun Int.isNotZero() = this != 0
-            val rand = Random.Default.nextInt().takeUnless { it.isNotZero() }
+            val rand = kotlin.random.Random.Default.nextInt().takeUnless { it.isNotZero() }
         """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -43,6 +46,7 @@ class DoubleNegativeLambdaSpec {
     @Test
     fun `reports zero-param function with 'non' in the name`() {
         val code = """
+            import kotlin.random.Random
             fun Int.isNonNegative() = 0 < this
             val rand = Random.Default.nextInt().takeUnless { it.isNonNegative() }
         """.trimIndent()
@@ -53,6 +57,7 @@ class DoubleNegativeLambdaSpec {
     @Test
     fun `reports single-param function with 'non' in the name`() {
         val code = """
+            import kotlin.random.Random            
             fun Int.isNotGreaterThan(other: Int) = other < this
             val rand = Random.Default.nextInt().takeUnless { it.isNotGreaterThan(0) }
         """.trimIndent()
@@ -63,6 +68,7 @@ class DoubleNegativeLambdaSpec {
     @Test
     fun `reports not equal`() {
         val code = """
+            import kotlin.random.Random
             val rand = Random.Default.nextInt().takeUnless { it != 0 }
         """.trimIndent()
 
@@ -72,6 +78,7 @@ class DoubleNegativeLambdaSpec {
     @Test
     fun `reports not equal by reference`() {
         val code = """
+            import kotlin.random.Random
             val rand = Random.Default.nextInt().takeUnless { it !== 0 }
         """.trimIndent()
 
@@ -81,6 +88,7 @@ class DoubleNegativeLambdaSpec {
     @Test
     fun `reports !in`() {
         val code = """
+            import kotlin.random.Random
             val rand = Random.Default.nextInt().takeUnless { it !in 1..3 }
         """.trimIndent()
 
@@ -99,6 +107,7 @@ class DoubleNegativeLambdaSpec {
     @Test
     fun `reports use of operator fun not`() {
         val code = """
+            import kotlin.random.Random
             val rand = Random.Default.nextInt().takeUnless { (it > 0).not() }
         """.trimIndent()
 
@@ -118,8 +127,7 @@ class DoubleNegativeLambdaSpec {
     @Test
     fun `does not report non-null assert in takeUnless`() {
         val code = """
-            val list: List<String?> = listOf("", null, "a")
-            val filteredList = list.takeUnless { it!!.isEmpty() }
+            val x = "".takeUnless { it!!.isEmpty() }
         """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).isEmpty()
@@ -139,14 +147,15 @@ class DoubleNegativeLambdaSpec {
     @Test
     fun `reports multiple negations in message`() {
         val code = """
+            import kotlin.random.Random
             val list: List<Int> = listOf(1, 2, 3)
             val rand = Random.Default.nextInt().takeUnless { it !in list && it != 0 }
         """.trimIndent()
 
         val findings = subject.compileAndLint(code)
         assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(2, 37)
-        assertThat(findings).hasEndSourceLocation(2, 74)
+        assertThat(findings).hasStartSourceLocation(3, 37)
+        assertThat(findings).hasEndSourceLocation(3, 74)
         assertThat(findings[0]).hasMessage(
             "Double negative through using `!in`, `!=` inside a `takeUnless` lambda. Rewrite in the positive."
         )
