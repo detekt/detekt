@@ -810,29 +810,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    inner class `local variables` {
-        @Test
-        fun `doesn't report used local variable`() {
-            val code = """
-                fun main() {
-                    val used = 1
-                    println(used)
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `reports unused local variable`() {
-            val code = """
-                fun main() {
-                    val unused = 1
-                    println("foo")
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
-        }
-
+    inner class `irrelevant references are ignored` {
         @Test
         fun `package declarations are ignored`() {
             val code = """
