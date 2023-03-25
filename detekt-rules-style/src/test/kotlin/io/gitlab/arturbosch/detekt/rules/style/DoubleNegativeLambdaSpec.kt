@@ -138,7 +138,7 @@ class DoubleNegativeLambdaSpec {
         val config = TestConfig(DoubleNegativeLambda.NEGATIVE_FUNCTIONS to listOf("none", "filterNot"))
         val code = """
             fun Int.isEven() = this % 2 == 0
-            val isValid = list(1, 2, 3).filterNot { !it.isEven() }.none { it != 0 }
+            val isValid = listOf(1, 2, 3).filterNot { !it.isEven() }.none { it != 0 }
         """.trimIndent()
 
         assertThat(DoubleNegativeLambda(config).compileAndLint(code)).hasSize(2)
