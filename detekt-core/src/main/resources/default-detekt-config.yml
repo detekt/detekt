@@ -528,6 +528,9 @@ style:
     active: false
     negativeFunctions:
       - 'takeUnless'
+    negativeFunctionNameParts:
+      - 'not'
+      - 'non'
   EqualsNullCall:
     active: true
   EqualsOnSignatureLine:

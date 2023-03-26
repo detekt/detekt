@@ -134,7 +134,7 @@ class DoubleNegativeLambdaSpec {
     }
 
     @Test
-    fun `reports function name from config`() {
+    fun `reports negative function name from config`() {
         val config = TestConfig(DoubleNegativeLambda.NEGATIVE_FUNCTIONS to listOf("none", "filterNot"))
         val code = """
             fun Int.isEven() = this % 2 == 0
@@ -142,6 +142,18 @@ class DoubleNegativeLambdaSpec {
         """.trimIndent()
 
         assertThat(DoubleNegativeLambda(config).compileAndLint(code)).hasSize(2)
+    }
+
+    @Test
+    fun `reports negative function name parts from config`() {
+        val config = TestConfig(DoubleNegativeLambda.NEGATIVE_FUNCTION_NAME_PARTS to listOf("isnt"))
+        val code = """
+            import kotlin.random.Random
+            fun Int.isntOdd() = this % 2 == 0
+            val rand = Random.Default.nextInt().takeUnless { it.isntOdd() }
+        """.trimIndent()
+
+        assertThat(DoubleNegativeLambda(config).compileAndLint(code)).hasSize(1)
     }
 
     @Test

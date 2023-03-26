@@ -49,10 +49,13 @@ class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
         KtTokens.NOT_IS,
     )
 
-    private val negatingFunctionNameParts = listOf("not", "non")
-
     @Configuration("Function names expressed in the negative that can form double negatives with their lambda blocks.")
     private val negativeFunctions: Set<String> by config(listOf("takeUnless")) { it.toSet() }
+
+    @Configuration(
+        "Function name parts to look for in the lambda block when deciding if the lambda contains a negative."
+    )
+    private val negativeFunctionNameParts: Set<String> by config(listOf("not", "non")) { it.toSet() }
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -81,7 +84,7 @@ class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
         return when (this) {
             is KtOperationReferenceExpression -> operationSignTokenType in negationTokens
             is KtCallExpression -> text == "not()" || text.split(splitCamelCaseRegex).map { it.lowercase() }
-                .any { it in negatingFunctionNameParts }
+                .any { it in negativeFunctionNameParts }
 
             else -> false
         }
@@ -91,5 +94,6 @@ class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
 
     companion object {
         const val NEGATIVE_FUNCTIONS = "negativeFunctions"
+        const val NEGATIVE_FUNCTION_NAME_PARTS = "negativeFunctionNameParts"
     }
 }
