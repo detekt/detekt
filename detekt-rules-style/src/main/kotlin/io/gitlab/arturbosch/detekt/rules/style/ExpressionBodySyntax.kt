@@ -12,8 +12,10 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtDeclarationWithBody
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 
@@ -50,8 +52,19 @@ class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
     @Configuration("include return statements with line wraps in it")
     private val includeLineWrapping: Boolean by config(false)
 
+    override fun visitProperty(property: KtProperty) {
+        super.visitProperty(property)
+        property.getter?.checkForExpressionBodySyntax()
+        property.setter?.checkForExpressionBodySyntax()
+    }
+
     override fun visitNamedFunction(function: KtNamedFunction) {
-        val stmt = function.bodyExpression
+        super.visitNamedFunction(function)
+        function.checkForExpressionBodySyntax()
+    }
+
+    private fun KtDeclarationWithBody.checkForExpressionBodySyntax() {
+        val stmt = bodyExpression
             ?.singleReturnStatement()
             ?.takeUnless { it.containsReturnStmtsInNullableArguments() }
 
