@@ -808,4 +808,19 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             assertThat(subject.lint(code)).hasSize(1)
         }
     }
+
+    @Nested
+    inner class `irrelevant references are ignored` {
+        @Test
+        fun `package declarations are ignored`() {
+            val code = """
+                package org.detekt
+                fun main() {
+                    val org = 1
+                    println("foo")
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+    }
 }
