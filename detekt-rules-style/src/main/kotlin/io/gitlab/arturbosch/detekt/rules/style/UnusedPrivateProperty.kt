@@ -15,6 +15,7 @@ import io.gitlab.arturbosch.detekt.rules.isActual
 import io.gitlab.arturbosch.detekt.rules.isExpect
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtParameter
@@ -142,6 +143,7 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
     private fun skipNode(expression: KtReferenceExpression): Boolean {
         return when {
             expression.isPackageDirective() -> true
+            expression.isImportDirective() -> true
             else -> false
         }
     }
@@ -149,4 +151,8 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
 
 private fun PsiElement.isPackageDirective(): Boolean {
     return this is KtPackageDirective || parent?.isPackageDirective() == true
+}
+
+private fun PsiElement.isImportDirective(): Boolean {
+    return this is KtImportDirective || parent?.isImportDirective() == true
 }
