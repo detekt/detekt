@@ -92,9 +92,11 @@ tasks.register("reportMerge", io.gitlab.arturbosch.detekt.report.ReportMergeTask
 }
 
 subprojects {
-  detekt {
-    reports.xml.required.set(true)
-    // reports.sarif.required.set(true)
+  tasks.named("detekt").configure {
+    reports {
+      xml.required.set(true)
+      // sarif.required.set(true)
+    }
   }
 
   plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin) {
@@ -117,9 +119,11 @@ val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMe
 }
 
 subprojects {
-  detekt {
-    reports.xml.required.set(true)
-    // reports.sarif.required.set(true)
+  tasks.named("detekt").configure {
+    reports {
+      xml.required.set(true)
+      // sarif.required.set(true)
+    }
   }
 
   plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
