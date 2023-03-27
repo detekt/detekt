@@ -59,7 +59,7 @@ class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
             "takeUnless" to "takeIf",
         )
     ) { list ->
-        list.map { NegativeFunction(name = it.value, positiveCounterpart = it.reason) }
+        list.map { NegativeFunction(simpleName = it.value, positiveCounterpart = it.reason) }
     }
 
     @Configuration(
@@ -71,10 +71,10 @@ class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         val calleeExpression = expression.calleeExpression?.text ?: return
-        val negativeFunction = negativeFunctions.firstOrNull { it.name == calleeExpression } ?: return
-        val lambdaExpression = expression.lambdaArguments.firstOrNull() ?: return
+        val negativeFunction = negativeFunctions.firstOrNull { it.simpleName == calleeExpression } ?: return
+        val lambdaArgument = expression.lambdaArguments.firstOrNull() ?: return
 
-        val forbiddenChildren = lambdaExpression.collectDescendantsOfType<KtExpression> {
+        val forbiddenChildren = lambdaArgument.collectDescendantsOfType<KtExpression> {
             it.isForbiddenNegation()
         }
 
@@ -104,7 +104,7 @@ class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
         negativeFunction: NegativeFunction,
     ) = buildString {
         append("Double negative through using ${forbiddenChildren.joinInBackTicks()} inside a ")
-        append("`${negativeFunction.name}` lambda. ")
+        append("`${negativeFunction.simpleName}` lambda. ")
         append("Rewrite in the positive")
         if (negativeFunction.positiveCounterpart != null) {
             append(" with `${negativeFunction.positiveCounterpart}`.")
@@ -119,7 +119,7 @@ class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
      * A function that can form a double negative with its lambda.
      */
     private data class NegativeFunction(
-        val name: String,
+        val simpleName: String,
         val positiveCounterpart: String?,
     )
 
