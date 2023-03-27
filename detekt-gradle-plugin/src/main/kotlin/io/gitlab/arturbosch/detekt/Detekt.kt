@@ -26,7 +26,6 @@ import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import org.gradle.api.Action
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
-import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileTree
 import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
@@ -36,11 +35,9 @@ import org.gradle.api.provider.Provider
 import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.reporting.ReportingExtension
 import org.gradle.api.tasks.CacheableTask
-import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Console
 import org.gradle.api.tasks.IgnoreEmptyDirectories
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
@@ -50,11 +47,9 @@ import org.gradle.api.tasks.OutputFiles
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
-import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
 import org.gradle.api.tasks.options.Option
-import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.workers.WorkerExecutor
 import java.io.File
 import javax.inject.Inject
@@ -64,27 +59,12 @@ abstract class Detekt @Inject constructor(
     private val objects: ObjectFactory,
     private val workerExecutor: WorkerExecutor,
     private val providers: ProviderFactory,
-) : SourceTask(), VerificationTask {
-
-    @get:Classpath
-    abstract val detektClasspath: ConfigurableFileCollection
-
-    @get:Classpath
-    abstract val pluginClasspath: ConfigurableFileCollection
+) : DetektBaseSourceTask(), VerificationTask {
 
     @get:InputFile
     @get:Optional
     @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val baseline: RegularFileProperty
-
-    @get:InputFiles
-    @get:Optional
-    @get:PathSensitive(PathSensitivity.RELATIVE)
-    abstract val config: ConfigurableFileCollection
-
-    @get:Classpath
-    @get:Optional
-    abstract val classpath: ConfigurableFileCollection
 
     @get:Input
     @get:Optional
@@ -93,19 +73,6 @@ abstract class Detekt @Inject constructor(
         @Internal
         get() = languageVersionProp.get()
         set(value) = languageVersionProp.set(value)
-
-    @get:Input
-    @get:Optional
-    internal abstract val jvmTargetProp: Property<String>
-    var jvmTarget: String
-        @Internal
-        get() = jvmTargetProp.get()
-        set(value) = jvmTargetProp.set(value)
-
-    @get:InputDirectory
-    @get:PathSensitive(PathSensitivity.ABSOLUTE)
-    @get:Optional
-    abstract val jdkHome: DirectoryProperty
 
     @get:Internal
     internal abstract val debugProp: Property<Boolean>
@@ -154,17 +121,6 @@ abstract class Detekt @Inject constructor(
         get() = autoCorrectProp.getOrElse(false)
         set(value) = autoCorrectProp.set(value)
 
-    /**
-     * Respect only the file path for incremental build. Using @InputFile respects both file path and content.
-     */
-    @get:Input
-    @get:Optional
-    internal abstract val basePathProp: Property<String>
-    var basePath: String
-        @Internal
-        get() = basePathProp.getOrElse("")
-        set(value) = basePathProp.set(value)
-
     @get:Internal
     var reports: DetektReports = objects.newInstance(DetektReports::class.java)
 
@@ -206,10 +162,6 @@ abstract class Detekt @Inject constructor(
         .dir("detekt")
 
     private val isDryRun = project.providers.gradleProperty(DRY_RUN_PROPERTY)
-
-    init {
-        group = LifecycleBasePlugin.VERIFICATION_GROUP
-    }
 
     @get:Internal
     internal val arguments

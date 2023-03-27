@@ -16,18 +16,14 @@ import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
-import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileTree
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.tasks.CacheableTask
-import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Console
 import org.gradle.api.tasks.IgnoreEmptyDirectories
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
@@ -35,9 +31,7 @@ import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
-import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
-import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.workers.WorkerExecutor
 import javax.inject.Inject
 
@@ -45,30 +39,14 @@ import javax.inject.Inject
 abstract class DetektCreateBaselineTask @Inject constructor(
     private val workerExecutor: WorkerExecutor,
     private val providers: ProviderFactory,
-) : SourceTask() {
+) : DetektBaseSourceTask() {
 
     init {
         description = "Creates a detekt baseline on the given --baseline path."
-        group = LifecycleBasePlugin.VERIFICATION_GROUP
     }
 
     @get:OutputFile
     abstract val baseline: RegularFileProperty
-
-    @get:InputFiles
-    @get:Optional
-    @get:PathSensitive(PathSensitivity.RELATIVE)
-    abstract val config: ConfigurableFileCollection
-
-    @get:Classpath
-    abstract val detektClasspath: ConfigurableFileCollection
-
-    @get:Classpath
-    abstract val pluginClasspath: ConfigurableFileCollection
-
-    @get:Classpath
-    @get:Optional
-    abstract val classpath: ConfigurableFileCollection
 
     @get:Console
     abstract val debug: Property<Boolean>
@@ -95,30 +73,6 @@ abstract class DetektCreateBaselineTask @Inject constructor(
     @get:Input
     @get:Optional
     abstract val autoCorrect: Property<Boolean>
-
-    /**
-     * Respect only the file path for incremental build. Using @InputFile respects both file path and content.
-     */
-    @get:Input
-    @get:Optional
-    internal abstract val basePathProp: Property<String>
-    var basePath: String
-        @Internal
-        get() = basePathProp.get()
-        set(value) = basePathProp.set(value)
-
-    @get:Input
-    @get:Optional
-    internal abstract val jvmTargetProp: Property<String>
-    var jvmTarget: String
-        @Internal
-        get() = jvmTargetProp.get()
-        set(value) = jvmTargetProp.set(value)
-
-    @get:InputDirectory
-    @get:PathSensitive(PathSensitivity.ABSOLUTE)
-    @get:Optional
-    abstract val jdkHome: DirectoryProperty
 
     @get:Internal
     internal val arguments
