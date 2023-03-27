@@ -23,10 +23,10 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  * of the function (like `takeIf`).
  *
  * <noncompliant>
- * Random.Default.nextInt().takeUnless { !it.isEven() }
+ * fun Int.evenOrNull() = takeUnless { it % 2 != 0 }
  * </noncompliant>
  * <compliant>
- * Random.Default.nextInt().takeIf { it.isOdd() }
+ * fun Int.evenOrNull() = takeIf { it % 2 == 0 }
  * </compliant>
  */
 class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
