@@ -46,6 +46,31 @@ class DoubleNegativeLambdaSpec {
     }
 
     @Test
+    fun `reports negation inside nested lambda`() {
+        val code = """
+            import kotlin.random.Random
+            fun Int.isEven() = this % 2 == 0
+            val rand = kotlin.random.Random.Default.nextInt().takeUnless { it.isEven().takeIf { i -> !i } }
+        """.trimIndent()
+
+        assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports double nested negation`() {
+        val code = """
+            import kotlin.random.Random
+            fun Int.isEven() = this % 2 == 0
+            val rand = kotlin.random.Random.Default.nextInt().takeUnless { it.isEven().takeUnless { i -> !i } }
+        """.trimIndent()
+
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(2)
+        assertThat(findings[0]).hasSourceLocation(3, 76) // second takeUnless
+        assertThat(findings[1]).hasSourceLocation(3, 51) // first takeUnless
+    }
+
+    @Test
     fun `reports function with 'not' in the name`() {
         val code = """
             import kotlin.random.Random
