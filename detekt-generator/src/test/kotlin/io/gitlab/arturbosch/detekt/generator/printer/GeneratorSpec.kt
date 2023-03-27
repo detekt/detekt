@@ -4,15 +4,13 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import java.io.File
 import kotlin.io.path.Path
 import kotlin.io.path.readText
 
 class GeneratorSpec {
-    private val configPath = "/src/main/resources/config/config.yml"
-
-    private val rulePath1: File = Path("../detekt-generator/src/test/resources/ruleset1").toFile()
-    private val rulePath2: File = Path("../detekt-generator/src/test/resources/ruleset2").toFile()
+    private val configPath = "src/main/resources/config/config.yml"
+    private val rulePath1 = "src/test/resources/ruleset1"
+    private val rulePath2 = "src/test/resources/ruleset2"
 
     @BeforeAll
     fun init() {
@@ -26,24 +24,24 @@ class GeneratorSpec {
 
     @Test
     fun `config files generated successfully`() {
-        assertThat(Path(rulePath1.toString(), configPath)).exists()
-        assertThat(Path(rulePath2.toString(), configPath)).exists()
+        assertThat(Path(rulePath1, configPath)).exists()
+        assertThat(Path(rulePath2, configPath)).exists()
     }
 
     @Test
     fun `config files have their own content`() {
-        assertThat(Path(rulePath1.toString(), configPath).readText())
+        assertThat(Path(rulePath1, configPath).readText())
             .contains("complexity:")
             .doesNotContain("coroutines:")
 
-        assertThat(Path(rulePath2.toString(), configPath).readText())
+        assertThat(Path(rulePath2, configPath).readText())
             .contains("coroutines:")
             .doesNotContain("complexity:")
     }
 
     @AfterAll
     fun tearDown() {
-        Path(rulePath1.toString(), configPath).toFile().delete()
-        Path(rulePath2.toString(), configPath).toFile().delete()
+        Path(rulePath1, configPath).toFile().delete()
+        Path(rulePath2, configPath).toFile().delete()
     }
 }
