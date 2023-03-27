@@ -28,7 +28,7 @@ class DoubleNegativeLambdaSpec {
         val code = """
             import kotlin.random.Random
             fun Int.isEven() = this % 2 == 0
-            val rand = kotlin.random.Random.Default.nextInt().takeUnless { it > 0 && !it.isEven() }
+            val rand = Random.Default.nextInt().takeUnless { it > 0 && !it.isEven() }
         """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -39,7 +39,7 @@ class DoubleNegativeLambdaSpec {
         val code = """
             import kotlin.random.Random
             fun Int.isEven() = this % 2 == 0
-            val rand = kotlin.random.Random.Default.nextInt().takeUnless { !(it == 0 || it.isEven()) }
+            val rand = Random.Default.nextInt().takeUnless { !(it == 0 || it.isEven()) }
         """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -50,7 +50,7 @@ class DoubleNegativeLambdaSpec {
         val code = """
             import kotlin.random.Random
             fun Int.isEven() = this % 2 == 0
-            val rand = kotlin.random.Random.Default.nextInt().takeUnless { it.isEven().takeIf { i -> !i } }
+            val rand = Random.Default.nextInt().takeUnless { it.isEven().takeIf { i -> !i } ?: false }
         """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).hasSize(1)
@@ -61,13 +61,13 @@ class DoubleNegativeLambdaSpec {
         val code = """
             import kotlin.random.Random
             fun Int.isEven() = this % 2 == 0
-            val rand = kotlin.random.Random.Default.nextInt().takeUnless { it.isEven().takeUnless { i -> !i } }
+            val rand = Random.Default.nextInt().takeUnless { it.isEven().takeUnless { i -> !i } ?: false }
         """.trimIndent()
 
         val findings = subject.compileAndLint(code)
         assertThat(findings).hasSize(2)
-        assertThat(findings[0]).hasSourceLocation(3, 76) // second takeUnless
-        assertThat(findings[1]).hasSourceLocation(3, 51) // first takeUnless
+        assertThat(findings[0]).hasSourceLocation(3, 62) // second takeUnless
+        assertThat(findings[1]).hasSourceLocation(3, 37) // first takeUnless
     }
 
     @Test
@@ -75,7 +75,7 @@ class DoubleNegativeLambdaSpec {
         val code = """
             import kotlin.random.Random
             fun Int.isNotZero() = this != 0
-            val rand = kotlin.random.Random.Default.nextInt().takeUnless { it.isNotZero() }
+            val rand = Random.Default.nextInt().takeUnless { it.isNotZero() }
         """.trimIndent()
 
         assertThat(subject.compileAndLint(code)).hasSize(1)
