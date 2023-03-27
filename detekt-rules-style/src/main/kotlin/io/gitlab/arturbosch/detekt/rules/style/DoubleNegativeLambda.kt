@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.valuesWithReason
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -49,34 +50,42 @@ class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
         KtTokens.NOT_IS,
     )
 
-    @Configuration("Function names expressed in the negative that can form double negatives with their lambda blocks.")
-    private val negativeFunctions: Set<String> by config(listOf("takeUnless")) { it.toSet() }
+    @Configuration(
+        "Function names expressed in the negative that can form double negatives with their lambda blocks. " +
+            "These are grouped together with the positive counterpart of the function, or `null` if this is unknown."
+    )
+    private val negativeFunctions: List<NegativeFunction> by config(
+        valuesWithReason(
+            "takeUnless" to "takeIf",
+        )
+    ) { list ->
+        list.map { NegativeFunction(name = it.value, positiveCounterpart = it.reason) }
+    }
 
     @Configuration(
-        "Function name parts to look for in the lambda block when deciding if the lambda contains a negative."
+        "Function name parts to look for in the lambda block when deciding " +
+            "if the lambda contains a negative."
     )
     private val negativeFunctionNameParts: Set<String> by config(listOf("not", "non")) { it.toSet() }
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         val calleeExpression = expression.calleeExpression?.text ?: return
+        val forbiddenFunction = negativeFunctions.firstOrNull { it.name == calleeExpression } ?: return
+        val lambdaExpression = expression.lambdaArguments.firstOrNull() ?: return
 
-        if (calleeExpression in negativeFunctions) {
-            val lambdaExpression = expression.lambdaArguments.firstOrNull() ?: return
-            val forbiddenChildren = lambdaExpression.collectDescendantsOfType<KtExpression> {
-                it.isForbiddenNegation()
-            }
+        val forbiddenChildren = lambdaExpression.collectDescendantsOfType<KtExpression> {
+            it.isForbiddenNegation()
+        }
 
-            if (forbiddenChildren.isNotEmpty()) {
-                report(
-                    CodeSmell(
-                        issue,
-                        Entity.from(expression),
-                        "Double negative through using ${forbiddenChildren.joinInBackTicks()} inside a " +
-                            "`$calleeExpression` lambda. Rewrite in the positive."
-                    )
+        if (forbiddenChildren.isNotEmpty()) {
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.from(expression),
+                    formatMessage(forbiddenChildren, forbiddenFunction)
                 )
-            }
+            )
         }
     }
 
@@ -90,7 +99,29 @@ class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
         }
     }
 
+    private fun formatMessage(
+        forbiddenChildren: List<KtExpression>,
+        negativeFunction: NegativeFunction,
+    ) = buildString {
+        append("Double negative through using ${forbiddenChildren.joinInBackTicks()} inside a ")
+        append("`${negativeFunction.name}` lambda. ")
+        append("Rewrite in the positive")
+        if (negativeFunction.positiveCounterpart != null) {
+            append(" with `${negativeFunction.positiveCounterpart}`.")
+        } else {
+            append(".")
+        }
+    }
+
     private fun List<KtExpression>.joinInBackTicks() = joinToString { "`${it.text}`" }
+
+    /**
+     * A function that can form a double negative with its lambda.
+     */
+    private data class NegativeFunction(
+        val name: String,
+        val positiveCounterpart: String?,
+    )
 
     companion object {
         const val NEGATIVE_FUNCTIONS = "negativeFunctions"

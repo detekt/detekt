@@ -1,9 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.ValueWithReason
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.toConfig
 import org.junit.jupiter.api.Test
 
 class DoubleNegativeLambdaSpec {
@@ -135,7 +137,13 @@ class DoubleNegativeLambdaSpec {
 
     @Test
     fun `reports negative function name from config`() {
-        val config = TestConfig(DoubleNegativeLambda.NEGATIVE_FUNCTIONS to listOf("none", "filterNot"))
+        val config =
+            TestConfig(
+                DoubleNegativeLambda.NEGATIVE_FUNCTIONS to listOf(
+                    ValueWithReason(value = "none", reason = "any").toConfig(),
+                    ValueWithReason(value = "filterNot", reason = "filter").toConfig(),
+                )
+            )
         val code = """
             fun Int.isEven() = this % 2 == 0
             val isValid = listOf(1, 2, 3).filterNot { !it.isEven() }.none { it != 0 }
@@ -169,7 +177,26 @@ class DoubleNegativeLambdaSpec {
         assertThat(findings).hasStartSourceLocation(3, 37)
         assertThat(findings).hasEndSourceLocation(3, 74)
         assertThat(findings[0]).hasMessage(
-            "Double negative through using `!in`, `!=` inside a `takeUnless` lambda. Rewrite in the positive."
+            "Double negative through using `!in`, `!=` inside a `takeUnless` lambda. Rewrite in the positive with `takeIf`."
+        )
+    }
+
+    @Test
+    fun `report for negative function with no positive counterpart`() {
+        val config =
+            TestConfig(
+                DoubleNegativeLambda.NEGATIVE_FUNCTIONS to listOf(
+                    ValueWithReason(value = "none", reason = null).toConfig(),
+                )
+            )
+        val code = """
+            val list = listOf(1, 2, 3)
+            val result = list.none { it != 0 }
+        """.trimIndent()
+
+        val findings = DoubleNegativeLambda(config).compileAndLint(code)
+        assertThat(findings[0]).hasMessage(
+            "Double negative through using `!=` inside a `none` lambda. Rewrite in the positive."
         )
     }
 }

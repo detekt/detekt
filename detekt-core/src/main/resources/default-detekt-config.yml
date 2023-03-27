@@ -527,7 +527,8 @@ style:
   DoubleNegativeLambda:
     active: false
     negativeFunctions:
-      - 'takeUnless'
+      - reason: 'takeIf'
+        value: 'takeUnless'
     negativeFunctionNameParts:
       - 'not'
       - 'non'
