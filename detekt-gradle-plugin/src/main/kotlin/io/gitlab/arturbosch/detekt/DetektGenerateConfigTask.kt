@@ -15,7 +15,6 @@ import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.services.BuildService
 import org.gradle.api.services.BuildServiceParameters
 import org.gradle.api.tasks.CacheableTask
-import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
@@ -30,18 +29,12 @@ abstract class DetektGenerateConfigTask @Inject constructor(
     objects: ObjectFactory,
     private val workerExecutor: WorkerExecutor,
     private val providers: ProviderFactory,
-) : DefaultTask() {
+) : DefaultTask(), DetektTask {
 
     init {
         description = "Generate a detekt configuration file inside your project."
         group = LifecycleBasePlugin.VERIFICATION_GROUP
     }
-
-    @get:Classpath
-    abstract val detektClasspath: ConfigurableFileCollection
-
-    @get:Classpath
-    abstract val pluginClasspath: ConfigurableFileCollection
 
     @get:OutputFile
     val configFile: RegularFileProperty = objects.fileProperty().convention { configurationToUse }

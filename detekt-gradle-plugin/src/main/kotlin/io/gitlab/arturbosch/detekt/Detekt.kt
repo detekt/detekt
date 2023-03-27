@@ -59,7 +59,7 @@ abstract class Detekt @Inject constructor(
     private val objects: ObjectFactory,
     private val workerExecutor: WorkerExecutor,
     private val providers: ProviderFactory,
-) : DetektBaseSourceTask(), VerificationTask {
+) : DetektSourceTask(), VerificationTask {
 
     @get:InputFile
     @get:Optional

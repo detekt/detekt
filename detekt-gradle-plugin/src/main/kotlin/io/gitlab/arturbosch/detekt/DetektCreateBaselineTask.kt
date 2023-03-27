@@ -39,7 +39,7 @@ import javax.inject.Inject
 abstract class DetektCreateBaselineTask @Inject constructor(
     private val workerExecutor: WorkerExecutor,
     private val providers: ProviderFactory,
-) : DetektBaseSourceTask() {
+) : DetektSourceTask() {
 
     init {
         description = "Creates a detekt baseline on the given --baseline path."

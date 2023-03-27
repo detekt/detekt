@@ -13,14 +13,10 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SourceTask
 import org.gradle.language.base.plugins.LifecycleBasePlugin
+import org.gradle.work.DisableCachingByDefault
 
-abstract class DetektBaseSourceTask : SourceTask() {
-    @get:Classpath
-    abstract val detektClasspath: ConfigurableFileCollection
-
-    @get:Classpath
-    abstract val pluginClasspath: ConfigurableFileCollection
-
+@DisableCachingByDefault(because = "Abstract super-class, not to be instantiated directly")
+abstract class DetektSourceTask : SourceTask(), DetektTask {
     @get:Classpath
     @get:Optional
     abstract val classpath: ConfigurableFileCollection
