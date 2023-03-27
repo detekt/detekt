@@ -35,6 +35,17 @@ class DoubleNegativeLambdaSpec {
     }
 
     @Test
+    fun `reports logical not prefixing brackets`() {
+        val code = """
+            import kotlin.random.Random
+            fun Int.isEven() = this % 2 == 0
+            val rand = kotlin.random.Random.Default.nextInt().takeUnless { !(it == 0 || it.isEven()) }
+        """.trimIndent()
+
+        assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
+
+    @Test
     fun `reports function with 'not' in the name`() {
         val code = """
             import kotlin.random.Random
