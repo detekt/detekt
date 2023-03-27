@@ -71,7 +71,7 @@ class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         val calleeExpression = expression.calleeExpression?.text ?: return
-        val forbiddenFunction = negativeFunctions.firstOrNull { it.name == calleeExpression } ?: return
+        val negativeFunction = negativeFunctions.firstOrNull { it.name == calleeExpression } ?: return
         val lambdaExpression = expression.lambdaArguments.firstOrNull() ?: return
 
         val forbiddenChildren = lambdaExpression.collectDescendantsOfType<KtExpression> {
@@ -83,7 +83,7 @@ class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
                 CodeSmell(
                     issue,
                     Entity.from(expression),
-                    formatMessage(forbiddenChildren, forbiddenFunction)
+                    formatMessage(forbiddenChildren, negativeFunction)
                 )
             )
         }
