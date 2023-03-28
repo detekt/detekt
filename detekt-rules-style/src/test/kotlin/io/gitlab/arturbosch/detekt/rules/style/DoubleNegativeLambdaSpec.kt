@@ -213,7 +213,7 @@ class DoubleNegativeLambdaSpec {
         assertThat(findings).hasStartSourceLocation(3, 37)
         assertThat(findings).hasEndSourceLocation(3, 74)
         assertThat(findings[0]).hasMessage(
-            "Double negative through using `!in`, `!=` inside a `takeUnless` lambda. Rewrite in the positive with `takeIf`."
+            "Double negative through using `!in`, `!=` inside a `takeUnless` lambda. Use `takeIf` instead."
         )
     }
 

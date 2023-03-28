@@ -52,14 +52,15 @@ class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
 
     @Configuration(
         "Function names expressed in the negative that can form double negatives with their lambda blocks. " +
-            "These are grouped together with the positive counterpart of the function, or `null` if this is unknown."
+            "These are grouped together with a recommendation to use a positive counterpart, or `null` if this is " +
+            "unknown."
     )
     private val negativeFunctions: List<NegativeFunction> by config(
         valuesWithReason(
-            "takeUnless" to "takeIf",
+            "takeUnless" to "Use `takeIf` instead.",
         )
     ) { list ->
-        list.map { NegativeFunction(simpleName = it.value, positiveCounterpart = it.reason) }
+        list.map { NegativeFunction(simpleName = it.value, recommendation = it.reason) }
     }
 
     @Configuration(
@@ -105,11 +106,10 @@ class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
     ) = buildString {
         append("Double negative through using ${forbiddenChildren.joinInBackTicks()} inside a ")
         append("`${negativeFunction.simpleName}` lambda. ")
-        append("Rewrite in the positive")
-        if (negativeFunction.positiveCounterpart != null) {
-            append(" with `${negativeFunction.positiveCounterpart}`.")
+        if (negativeFunction.recommendation != null) {
+            append(negativeFunction.recommendation)
         } else {
-            append(".")
+            append("Rewrite in the positive.")
         }
     }
 
@@ -120,7 +120,7 @@ class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
      */
     private data class NegativeFunction(
         val simpleName: String,
-        val positiveCounterpart: String?,
+        val recommendation: String?,
     )
 
     companion object {
