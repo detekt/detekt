@@ -395,7 +395,7 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
 
         private fun List<KtWhenCondition>.evaluateSubjectWhenExpression(
             expression: KtWhenExpression,
-            subjectDescriptor: List<CallableDescriptor>,
+            subjectDescriptors: List<CallableDescriptor>,
         ) {
             var isNonNullChecked = false
             var isNullChecked = false
@@ -422,7 +422,7 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                     isNullChecked = true
                 }
             }
-            subjectDescriptor.forEach { callableDescriptor ->
+            subjectDescriptors.forEach { callableDescriptor ->
                 nullableParams[callableDescriptor]?.let {
                     if (isNullChecked) it.isNullChecked = true
                     if (isNonNullChecked) it.isNonNullChecked = true
