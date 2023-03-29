@@ -23,7 +23,6 @@ jacoco.toolVersion = versionCatalog.findVersion("jacoco").get().requiredVersion
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
-    // https://docs.gradle.org/8.0/userguide/performance.html#execute_tests_in_parallel
     maxParallelForks = if (System.getenv("CI") != null) {
         Runtime.getRuntime().availableProcessors()
     } else {
