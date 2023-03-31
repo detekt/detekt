@@ -159,7 +159,7 @@ private fun Project.javaCompileDestination(variant: BaseVariant): DirectoryPrope
     val javaCompile = variant.javaCompileProvider.orNull
     if (javaCompile == null) {
         logger.warn(
-            "Unable to find Java compiler on variant '{}'. Detekt analysis can show false negatives.",
+            "Unable to find Java compiler on variant '{}'. detekt analysis can show false negatives.",
             variant.name,
         )
     }

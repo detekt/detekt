@@ -14,7 +14,7 @@ Relevant rule sets and their configuration options for Compose styles & usage. T
 
 See [FunctionNaming](/docs/rules/naming#functionnaming).
 
-`@Composable` functions that return `Unit` are named using `PascalCase`. Detekt may see this as a violation:
+`@Composable` functions that return `Unit` are named using `PascalCase`. detekt may see this as a violation:
 
 ```kotlin
 @Composable
@@ -87,7 +87,7 @@ class Foo {
 
 See [UnusedPrivateMember](/docs/rules/style#unusedprivatemember).
 
-Detekt may see composable preview functions, i.e. those marked with `@Preview`, as unused.
+detekt may see composable preview functions, i.e. those marked with `@Preview`, as unused.
 
 ``` kotlin
 @Preview

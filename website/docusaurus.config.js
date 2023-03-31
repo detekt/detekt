@@ -86,9 +86,9 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'Detekt',
+        title: 'detekt',
         logo: {
-          alt: 'Detekt Logo',
+          alt: 'detekt Logo',
           src: 'img/favicon.svg',
         },
         items: [
@@ -184,7 +184,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Detekt team - Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} detekt team - Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,

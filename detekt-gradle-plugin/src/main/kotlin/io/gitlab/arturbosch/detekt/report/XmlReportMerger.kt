@@ -52,7 +52,7 @@ object XmlReportMerger {
         return mergedDocument
     }
 
-    /** A list of checkstyle xml files written by Detekt */
+    /** A list of checkstyle xml files written by detekt. */
     private class DetektCheckstyleReports(private val files: Collection<File>) {
 
         /**

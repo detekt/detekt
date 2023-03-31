@@ -2,7 +2,7 @@
 //bin/true; exec kotlinc -script "$0" -- "$@"
 
 /**
- * Script to prepare release notes for the upcoming Detekt release
+ * Script to prepare release notes for the upcoming detekt release.
  *
  * You need kotlin 1.3.70+ installed on your machine
  */

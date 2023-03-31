@@ -1,6 +1,6 @@
 ---
 id: configurations
-title: "Detekt Configuration File"
+title: "detekt Configuration File"
 keywords: [config, configuration, yaml]
 permalink: configurations.html
 sidebar_position: 3

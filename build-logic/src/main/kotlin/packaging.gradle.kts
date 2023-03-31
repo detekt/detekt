@@ -47,8 +47,8 @@ publishing {
                 }
                 developers {
                     developer {
-                        id.set("Detekt Developers")
-                        name.set("Detekt Developers")
+                        id.set("detekt Developers")
+                        name.set("detekt Developers")
                         email.set("info@detekt.dev")
                     }
                 }

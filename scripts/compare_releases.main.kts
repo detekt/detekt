@@ -54,7 +54,7 @@ class CompareReleases : CliktCommand() {
         val diff2 = Files.createTempFile("detekt", "compare")
         javaExec(jar1, diff1)
         javaExec(jar2, diff2)
-        println("Detekt txt results are saved at:\n$diff1\n$diff2")
+        println("detekt txt results are saved at:\n$diff1\n$diff2")
 
         performDiff(diff1, diff2)
     }
