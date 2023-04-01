@@ -31,7 +31,7 @@ if (functionalChanges.edited && !testChanges.edited) {
 
 // Handle PRs for new Detekt rules.
 if (rulesChanges.created) {
-  message("Thanks for adding a new rule to Detekt :heart:");
+  message("Thanks for adding a new rule to detekt :heart:");
   if (!ruleTestChanges.edited) {
     warn(
       "It looks like your new rule doesn't comes with tests. Make sure you include them."
@@ -71,6 +71,6 @@ if (docsChanges.edited) {
 // Warn if the PR has been accepted but has no milestone set.
 if (!milestone && prReviews.some((review) => review.state === "APPROVED")) {
   warn(
-    "This PR is approved with no milestone set. If merged, it won't appear in the Detekt release notes."
+    "This PR is approved with no milestone set. If merged, it won't appear in the detekt release notes."
   );
 }

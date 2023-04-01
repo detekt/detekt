@@ -2,9 +2,9 @@
  * ADD YOUR REPOSITORY TO THE DETEKT MARKETPLACE
  *
  * We're allowing third-party repositories that contain rulesets,
- * custom processors, custom reporters and external plugins that work with Detekt.
+ * custom processors, custom reporters and external plugins that work with detekt.
  *
- * You can read more about how to extend Detekt here:
+ * You can read more about how to extend detekt here:
  * https://detekt.dev/docs/introduction/extensions
  *
  * Instructions for adding your repository:
@@ -22,7 +22,7 @@
 export const tagTypes = {
   ruleset: {
     color: "#39ca30",
-    description: "A collection of custom rules for Detekt",
+    description: "A collection of custom rules for detekt",
     communityUrls: [
       "https://github.com/topics/detekt-rules",
       "https://github.com/search?q=%22io.gitlab.arturbosch.detekt.api.RuleSetProvider%22+-org%3Adetekt&type=code",
@@ -30,14 +30,14 @@ export const tagTypes = {
   },
   processor: {
     color: "#e9669e",
-    description: "A custom processor for Detekt",
+    description: "A custom processor for detekt",
     communityUrls: [
       "https://github.com/search?q=%22io.gitlab.arturbosch.detekt.api.FileProcessListener%22+-org%3Adetekt&type=code",
     ],
   },
   reporter: {
     color: "#fe6829",
-    description: "A custom reporter for Detekt",
+    description: "A custom reporter for detekt",
     communityUrls: [
       "https://github.com/search?q=%22io.gitlab.arturbosch.detekt.api.OutputReport%22+-org%3Adetekt&type=code",
       "https://github.com/search?q=%22io.gitlab.arturbosch.detekt.api.ConsoleReport%22+-org%3Adetekt&type=code",
@@ -45,14 +45,14 @@ export const tagTypes = {
   },
   configvalidator: {
     color: "#53dbb7",
-    description: "A custom config validator for Detekt",
+    description: "A custom config validator for detekt",
     communityUrls: [
       "https://github.com/search?q=%22io.gitlab.arturbosch.detekt.api.ConfigValidator%22+-org%3Adetekt&type=code",
     ],
   },
   plugin: {
     color: "#a44fb7",
-    description: "A plugin or a tool built on top of Detekt",
+    description: "A plugin or a tool built on top of detekt",
     communityUrls: [
       "https://github.com/topics/detekt-plugin"
     ],
@@ -77,7 +77,7 @@ export const extensions = [
   {
     title: "Compose by appKODE",
     description:
-      "A set of Detekt rules to help prevent common errors in projects using Jetpack Compose.",
+      "A set of detekt rules to help prevent common errors in projects using Jetpack Compose.",
     repo: "https://github.com/appKODE/detekt-rules-compose",
     ruleset: "compose",
     rules: [
@@ -159,7 +159,7 @@ export const extensions = [
   {
     title: "GitLab Report",
     description:
-      "A reporter to export Detekt findings to GitLab Code Quality (and other code climate compatible tools).\nThis is designed for use with GitLab, but should also work fine with everything else that accepts the code climate format.",
+      "A reporter to export detekt findings to GitLab Code Quality (and other code climate compatible tools).\nThis is designed for use with GitLab, but should also work fine with everything else that accepts the code climate format.",
     repo: "https://gitlab.com/cromefire/detekt-gitlab-report",
     tags: ["reporter"],
   },

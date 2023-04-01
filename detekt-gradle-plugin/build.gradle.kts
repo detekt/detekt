@@ -11,7 +11,7 @@ plugins {
     `java-test-fixtures`
     idea
     alias(libs.plugins.pluginPublishing)
-    // We use this published version of the Detekt plugin to self analyse this project.
+    // We use this published version of the detekt plugin to self analyse this project.
     id("io.gitlab.arturbosch.detekt") version "1.22.0"
 }
 
@@ -128,7 +128,7 @@ tasks.validatePlugins {
 
 tasks {
     val writeDetektVersionProperties by registering(WriteProperties::class) {
-        description = "Write the properties file with the Detekt version to be used by the plugin"
+        description = "Write the properties file with the detekt version to be used by the plugin."
         encoding = "UTF-8"
         outputFile = file("$buildDir/versions.properties")
         property("detektVersion", project.version)
@@ -191,8 +191,8 @@ publishing {
             }
             developers {
                 developer {
-                    id.set("Detekt Developers")
-                    name.set("Detekt Developers")
+                    id.set("detekt Developers")
+                    name.set("detekt Developers")
                     email.set("info@detekt.dev")
                 }
             }

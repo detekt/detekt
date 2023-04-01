@@ -2,7 +2,7 @@
   "name": "@detekt/bots",
   "version": "1.0.0",
   "private": true,
-  "description": "Bots and automation for Detekt",
+  "description": "Bots and automation for detekt",
   "type": "module",
   "main": "index.js",
   "license": "MIT",
