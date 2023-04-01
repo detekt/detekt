@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://detekt.dev/blog</id>
-    <title>Detekt Blog</title>
+    <title>detekt Blog</title>
     <updated>2020-09-27T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://detekt.dev/blog"/>
-    <subtitle>Detekt Blog</subtitle>
+    <subtitle>detekt Blog</subtitle>
     <icon>https://detekt.dev/img/favicon.svg</icon>
     <entry>
         <title type="html"><![CDATA[Recipe: diff your detekt config with the default one]]></title>
