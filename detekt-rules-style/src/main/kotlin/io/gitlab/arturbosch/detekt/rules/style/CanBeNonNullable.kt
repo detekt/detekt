@@ -233,8 +233,8 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         }
 
         override fun visitWhenExpression(expression: KtWhenExpression) {
-            val nullCheckedDescriptor = expression.subjectExpression?
-                .collectDescendantsOfType<KtNameReferenceExpression>()
+            val nullCheckedDescriptor = expression.subjectExpression
+                ?.collectDescendantsOfType<KtNameReferenceExpression>()
                 .orEmpty()
                 .mapNotNull { it.getResolvedCall(bindingContext) }
                 .filter { callDescriptor -> callDescriptor.getReturnType().isNullable() }
