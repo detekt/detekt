@@ -236,6 +236,20 @@ class UndocumentedPublicClassSpec {
     }
 
     @Test
+    fun `should report for uncommented interface`() {
+        val code = """
+            fun interface Interface {
+                /**
+                * This method has a comment but
+                * the parent interface does not
+                */
+                fun abstractMethod()
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
+
+    @Test
     fun `does not report protected class by default`() {
         val code = """
             protected class Test {
