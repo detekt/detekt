@@ -7,7 +7,7 @@ const detektVersionReplace = require('./src/remark/detektVersionReplace');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Detekt',
+  title: 'detekt',
   tagline: 'A static code analyzer for Kotlin',
   url: 'https://detekt.dev/',
   baseUrl: '/',
@@ -88,7 +88,7 @@ const config = {
       navbar: {
         title: 'detekt',
         logo: {
-          alt: 'detekt Logo',
+          alt: 'detekt logo',
           src: 'img/favicon.svg',
         },
         items: [
