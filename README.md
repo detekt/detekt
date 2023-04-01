@@ -126,7 +126,7 @@ dependencies {
 }
 ```
 
-Similarly, there are extra rule sets available for Detekt from Detekt:
+Similarly, there are extra rule sets available for detekt from detekt:
 ```kotlin
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:[version]")

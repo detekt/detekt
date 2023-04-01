@@ -8,7 +8,7 @@ summary:
 sidebar_position: 2
 ---
 
-Detekt requires **Gradle 6.8.3** or higher. We, however, recommend using the version of Gradle that is [listed in this table](/docs/introduction/compatibility).
+detekt requires **Gradle 6.8.3** or higher. We, however, recommend using the version of Gradle that is [listed in this table](/docs/introduction/compatibility).
 
 ## <a name="tasks">Available plugin tasks</a>
 
@@ -49,7 +49,7 @@ If both, a `detekt-main.xml` and a `detekt.xml` baseline file exists in place, t
 takes precedence when the `detektMain` task is executed, likewise for Android variant-specific baseline files.
 
 _NOTE:_ When analyzing Android projects that make use of specific code generators, such as Data Binding, Kotlin synthetic
-view accessors or else, you might see warnings output while Detekt runs. This is due to the inability to gather the
+view accessors or else, you might see warnings output while detekt runs. This is due to the inability to gather the
 complete compile classpath from the Android Gradle Plugin ([upstream ticket](https://issuetracker.google.com/issues/158777988))
 and can safely be ignored.
 
@@ -186,7 +186,7 @@ repositories {
 
 ```groovy
 detekt {
-    // Version of Detekt that will be used. When unspecified the latest detekt
+    // Version of detekt that will be used. When unspecified the latest detekt
     // version found will be used. Override to stay on the same version.
     toolVersion = "[detekt_version]"
     
@@ -244,7 +244,7 @@ detekt {
 
 ```kotlin
 detekt {
-    // Version of Detekt that will be used. When unspecified the latest detekt
+    // Version of detekt that will be used. When unspecified the latest detekt
     // version found will be used. Override to stay on the same version.
     toolVersion = "[detekt_version]"
     
@@ -459,7 +459,7 @@ tasks.register<io.gitlab.arturbosch.detekt.Detekt>("myDetekt") {
 
 ### <a name="check-lifecycle">Disabling detekt from the check task</a>
 
-Detekt tasks by default are verification tasks. They get executed whenever the Gradle check task gets executed.
+detekt tasks by default are verification tasks. They get executed whenever the Gradle check task gets executed.
 This aligns with the behavior of other code analysis plugins for Gradle.
 
 If you are adding detekt to an already long running project you may want to increase the code quality incrementally and therefore

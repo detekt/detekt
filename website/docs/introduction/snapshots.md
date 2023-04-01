@@ -2,7 +2,7 @@
 id: snapshots
 title: "Using Snapshots"
 keywords: [snapshot, releases]
-summary: This page explains how you can setup snapshots for your Detekt build to test the latest unreleased features. 
+summary: This page explains how you can setup snapshots for your detekt build to test the latest unreleased features. 
 sidebar_position: 10
 ---
 

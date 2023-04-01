@@ -29,7 +29,7 @@ if (functionalChanges.edited && !testChanges.edited) {
   );
 }
 
-// Handle PRs for new Detekt rules.
+// Handle PRs for new detekt rules.
 if (rulesChanges.created) {
   message("Thanks for adding a new rule to detekt :heart:");
   if (!ruleTestChanges.edited) {
