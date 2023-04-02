@@ -47,7 +47,7 @@ jobs:
         working-directory: website/
         run: yarn build
 
-      - name: Deploy Github Pages (only on main)
+      - name: Deploy GitHub Pages (only on main)
         uses: JamesIves/github-pages-deploy-action@ba1486788b0490a235422264426c45848eac35c6 # tag=v4
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
