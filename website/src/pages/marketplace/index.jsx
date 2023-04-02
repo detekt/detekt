@@ -39,7 +39,7 @@ function MarketplaceHeader() {
         )}
         href="#unpublished"
       >
-        Find more on Github
+        Find more on GitHub
       </Link>
     </section>
   );

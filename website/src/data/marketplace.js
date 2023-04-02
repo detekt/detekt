@@ -166,7 +166,7 @@ export const extensions = [
   {
     title: "Hint",
     description:
-      "A ruleset to implement detection of violation of programming principles. detekt-hint offers also instructions on how to integrate with Danger and Github Actions",
+      "A ruleset to implement detection of violation of programming principles. detekt-hint offers also instructions on how to integrate with Danger and GitHub Actions",
     repo: "https://github.com/mkohm/detekt-hint",
     docs: "https://mkohm.github.io/detekt-hint/",
     tags: ["plugin", "ruleset"],

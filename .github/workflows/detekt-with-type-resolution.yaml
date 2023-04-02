@@ -36,7 +36,7 @@ jobs:
           gradle-home-cache-cleanup: true
           arguments: :detekt-cli:runWithArgsFile
 
-      - name: Upload SARIF to Github using the upload-sarif action
+      - name: Upload SARIF to GitHub using the upload-sarif action
         uses: github/codeql-action/upload-sarif@04df1262e6247151b5ac09cd2c303ac36ad3f62b # v2
         if: success() || failure()
         with:
@@ -64,7 +64,7 @@ jobs:
           gradle-home-cache-cleanup: true
           arguments: detektMain detektTest detektFunctionalTest detektTestFixtures detektReportMergeSarif --continue
 
-      - name: Upload SARIF to Github using the upload-sarif action
+      - name: Upload SARIF to GitHub using the upload-sarif action
         uses: github/codeql-action/upload-sarif@04df1262e6247151b5ac09cd2c303ac36ad3f62b # v2
         if: success() || failure()
         with:
