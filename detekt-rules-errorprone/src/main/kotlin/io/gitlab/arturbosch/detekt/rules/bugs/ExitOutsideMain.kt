@@ -16,7 +16,8 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
- * Reports use of `System.exit()` and Kotlin's `exitProcess()` when used outside the `main` function.
+ * Reports the usage of `System.exit()`, `Runtime.exit()`, `Runtime.halt()` and Kotlin's `exitProcess()`
+ * when used outside the `main` function.
  * This makes code more difficult to test, causes unexpected behaviour on Android, and is a poor way to signal a
  * failure in the program. In almost all cases it is more appropriate to throw an exception.
  *
@@ -59,8 +60,17 @@ class ExitOutsideMain(config: Config = Config.empty) : Rule(config) {
         if (expression.getStrictParentOfType<KtNamedFunction>()?.isMainFunction() == true) return
         val fqName = expression.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() ?: return
 
-        if (fqName.asString() in setOf("kotlin.system.exitProcess", "java.lang.System.exit")) {
+        if (fqName.asString() in exitCalls) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
+    }
+
+    companion object {
+        val exitCalls = setOf(
+            "kotlin.system.exitProcess",
+            "java.lang.System.exit",
+            "java.lang.Runtime.exit",
+            "java.lang.Runtime.halt"
+        )
     }
 }
