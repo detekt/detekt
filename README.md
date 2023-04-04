@@ -57,6 +57,8 @@ You can find [other ways to install detekt here](https://detekt.dev/cli.html)
 #### with Gradle
 
 ```kotlin
+import io.gitlab.arturbosch.detekt.*
+
 plugins {
     id("io.gitlab.arturbosch.detekt").version("[version]")
 }
