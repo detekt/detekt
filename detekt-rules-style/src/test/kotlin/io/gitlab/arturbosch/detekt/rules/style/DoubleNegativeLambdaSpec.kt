@@ -172,20 +172,28 @@ class DoubleNegativeLambdaSpec {
     }
 
     @Test
+    fun `reports double negatives with none by default`() {
+        val code = """
+            val isAllEven = listOf(1, 2, 3).none { it % 2 != 0 }
+        """.trimIndent()
+
+        assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
+
+    @Test
     fun `reports negative function name from config`() {
         val config =
             TestConfig(
                 DoubleNegativeLambda.NEGATIVE_FUNCTIONS to listOf(
-                    ValueWithReason(value = "none", reason = "any").toConfig(),
-                    ValueWithReason(value = "filterNot", reason = "filter").toConfig(),
+                    ValueWithReason(value = "filterNot", reason = "Use `filter` instead.").toConfig(),
                 )
             )
         val code = """
             fun Int.isEven() = this % 2 == 0
-            val isValid = listOf(1, 2, 3).filterNot { !it.isEven() }.none { it != 0 }
+            val isValid = listOf(1, 2, 3).filterNot { !it.isEven() }
         """.trimIndent()
 
-        assertThat(DoubleNegativeLambda(config).compileAndLint(code)).hasSize(2)
+        assertThat(DoubleNegativeLambda(config).compileAndLint(code)).hasSize(1)
     }
 
     @Test
@@ -222,17 +230,18 @@ class DoubleNegativeLambdaSpec {
         val config =
             TestConfig(
                 DoubleNegativeLambda.NEGATIVE_FUNCTIONS to listOf(
-                    ValueWithReason(value = "none", reason = null).toConfig(),
+                    ValueWithReason(value = "never", reason = null).toConfig(),
                 )
             )
         val code = """
+            fun <T> List<T>.never(predicate: (T) -> Boolean) = this.none(predicate)
             val list = listOf(1, 2, 3)
-            val result = list.none { it != 0 }
+            val result = list.never { it != 0 }
         """.trimIndent()
 
         val findings = DoubleNegativeLambda(config).compileAndLint(code)
         assertThat(findings[0]).hasMessage(
-            "Double negative through using `!=` inside a `none` lambda. Rewrite in the positive."
+            "Double negative through using `!=` inside a `never` lambda. Rewrite in the positive."
         )
     }
 }
