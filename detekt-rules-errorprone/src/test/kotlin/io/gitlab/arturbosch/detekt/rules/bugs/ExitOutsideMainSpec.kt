@@ -32,6 +32,26 @@ class ExitOutsideMainSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `reports Runtime_exit used outside main()`() {
+        val code = """
+            fun f() {
+                Runtime.getRuntime().exit(0)
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports Runtime_halt used outside main()`() {
+        val code = """
+            fun f() {
+                Runtime.getRuntime().halt(0)
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
     fun `does not report exitProcess used in main()`() {
         val code = """
             import kotlin.system.exitProcess

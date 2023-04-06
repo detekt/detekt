@@ -9,7 +9,7 @@ import styles from "./styles.module.css";
 
 const TITLE = "Detekt 3rd-party Marketplace";
 const DESCRIPTION =
-  "List of Detekt Rules that have been built by the community 🎉";
+  "List of detekt rules that have been built by the community 🎉";
 const SUBMIT_URL =
   "https://github.com/detekt/detekt/blob/main/website/src/data/marketplace.js";
 const DOCS_URL = "https://detekt.dev/docs/introduction/extensions/";
@@ -39,7 +39,7 @@ function MarketplaceHeader() {
         )}
         href="#unpublished"
       >
-        Find more on Github
+        Find more on GitHub
       </Link>
     </section>
   );

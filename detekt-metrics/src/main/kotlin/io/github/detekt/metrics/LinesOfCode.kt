@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION") // FIXME remove PsiCoreCommentImpl in IntelliJ 2020.3
-
 package io.github.detekt.metrics
 
 import io.github.detekt.psi.getLineAndColumnInPsiFile
@@ -9,7 +7,6 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.PsiCommentImpl
-import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.PsiCoreCommentImpl
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc
 import org.jetbrains.kotlin.kdoc.psi.api.KDocElement
@@ -51,7 +48,6 @@ private val comments: Set<Class<out PsiElement>> = setOf(
     PsiWhiteSpaceImpl::class.java,
     PsiComment::class.java,
     PsiCommentImpl::class.java,
-    PsiCoreCommentImpl::class.java,
     KDoc::class.java,
     KDocImpl::class.java,
     KDocElementImpl::class.java,

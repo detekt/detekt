@@ -2,7 +2,7 @@
 id: snapshots
 title: "Using Snapshots"
 keywords: [snapshot, releases]
-summary: This page explains how you can setup snapshots for your Detekt build to test the latest unreleased features. 
+summary: This page explains how you can setup snapshots for your detekt build to test the latest unreleased features. 
 sidebar_position: 10
 ---
 
@@ -10,7 +10,7 @@ This page explains how you can use our **latest snapshots** to test upcoming unr
 
 ## Where to download snapshots
 
-You can find the latest snapshot on [sonatype](https://oss.sonatype.org/#view-repositories;snapshots~browsestorage~io/gitlab/arturbosch/detekt). A new snapshot is published after every merge to `main` from the [Deploy Snapshot](https://github.com/detekt/detekt/actions?query=workflow%3A%22Deploy+Snapshot%22) Github Action workflow. 
+You can find the latest snapshot on [sonatype](https://oss.sonatype.org/#view-repositories;snapshots~browsestorage~io/gitlab/arturbosch/detekt). A new snapshot is published after every merge to `main` from the [Deploy Snapshot](https://github.com/detekt/detekt/actions?query=workflow%3A%22Deploy+Snapshot%22) GitHub Action workflow. 
 
 ## Gradle setup with Buildscript
 

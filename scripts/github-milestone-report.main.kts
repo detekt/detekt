@@ -2,7 +2,7 @@
 //bin/true; exec kotlinc -script "$0" -- "$@"
 
 /**
- * Script to prepare release notes for the upcoming Detekt release
+ * Script to prepare release notes for the upcoming detekt release.
  *
  * You need kotlin 1.3.70+ installed on your machine
  */
@@ -29,8 +29,8 @@ import java.time.format.DateTimeFormatter
 
 class GithubMilestoneReport : CliktCommand() {
 
-    private val user: String by option("-u", help = "Github user or organization. Default: detekt").default("detekt")
-    private val project: String by option("-p", help = "Github project. Default: detekt").default("detekt")
+    private val user: String by option("-u", help = "GitHub user or organization. Default: detekt").default("detekt")
+    private val project: String by option("-p", help = "GitHub project. Default: detekt").default("detekt")
     private val milestone: Int? by option("-m", help = "Milestone number. Default: latest milestone.").int()
     private val filterExisting: Boolean by option(
         "-f",

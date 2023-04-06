@@ -11,7 +11,7 @@ plugins {
     `java-test-fixtures`
     idea
     alias(libs.plugins.pluginPublishing)
-    // We use this published version of the Detekt plugin to self analyse this project.
+    // We use this published version of the detekt plugin to self analyse this project.
     id("io.gitlab.arturbosch.detekt") version "1.22.0"
 }
 
@@ -43,6 +43,7 @@ testing {
             useJUnitJupiter(libs.versions.junit.get())
 
             dependencies {
+                compileOnly("org.jetbrains:annotations:24.0.1")
                 implementation(libs.assertj)
                 implementation(testFixtures(project(":")))
             }
@@ -68,7 +69,10 @@ dependencies {
     compileOnly(libs.android.gradle.minSupported)
     compileOnly(libs.kotlin.gradle)
     compileOnly(libs.kotlin.gradlePluginApi)
-    implementation(libs.sarif4k)
+    testFixturesCompileOnly("org.jetbrains:annotations:24.0.1")
+    implementation(libs.sarif4k) {
+        exclude("org.jetbrains.kotlin")
+    }
     compileOnly("io.gitlab.arturbosch.detekt:detekt-cli:1.22.0")
 
     testKitRuntimeOnly(libs.kotlin.gradle)
@@ -128,7 +132,7 @@ tasks.validatePlugins {
 
 tasks {
     val writeDetektVersionProperties by registering(WriteProperties::class) {
-        description = "Write the properties file with the Detekt version to be used by the plugin"
+        description = "Write the properties file with the detekt version to be used by the plugin."
         encoding = "UTF-8"
         outputFile = file("$buildDir/versions.properties")
         property("detektVersion", project.version)
@@ -191,8 +195,8 @@ publishing {
             }
             developers {
                 developer {
-                    id.set("Detekt Developers")
-                    name.set("Detekt Developers")
+                    id.set("detekt Developers")
+                    name.set("detekt Developers")
                     email.set("info@detekt.dev")
                 }
             }

@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.UnnecessaryParenthesesBeforeTrailingLambda
-import org.assertj.core.api.Assertions.assertThat
+import io.gitlab.arturbosch.detekt.test.assertThat
 import org.junit.jupiter.api.Test
 
 /**

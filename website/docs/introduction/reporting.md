@@ -8,7 +8,7 @@ sidebar_position: 4
 
 ## Formats
 
-In addition to the CLI output, Detekt supports 4 different types of output reporting formats.
+In addition to the CLI output, detekt supports 4 different types of output reporting formats.
 You can refer to [CLI](/docs/gettingstarted/cli) or [Gradle](/docs/gettingstarted/gradle) to find
 out how to configure these report formats.
 
@@ -79,7 +79,7 @@ namely XML and SARIF.
 ## Merging reports
 
 The machine-readable report formats support report merging.
-Detekt Gradle plugin is not opinionated in how merging is set up and respects each project's build logic, especially 
+Detekt Gradle Plugin is not opinionated in how merging is set up and respects each project's build logic, especially 
 the merging makes most sense in a multi-module project. In this spirit, only Gradle tasks are provided.
 
 At the moment, merging XML and SARIF are supported. You can refer to the sample build script below and 
@@ -130,8 +130,8 @@ subprojects {
 }
 ```
 
-## Integration with Github Code Scanning
-If your repository is hosted on Github, you can enable SARIF output in your repository.
+## Integration with GitHub Code Scanning
+If your repository is hosted on GitHub, you can enable SARIF output in your repository.
 You can follow to the [official documentation](https://docs.github.com/en/github/finding-security-vulnerabilities-and-errors-in-your-code/uploading-a-sarif-file-to-github).
 
 To change the severity level to fail your GitHub Action build configure it in [GitHub Settings](https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#defining-the-severities-causing-pull-request-check-failure).
@@ -157,7 +157,7 @@ jobs:
 
       # Make sure we always run this upload task,
       # because the previous step may fail if there are findings.
-      - name: Upload SARIF to Github using the upload-sarif action
+      - name: Upload SARIF to GitHub using the upload-sarif action
         uses: github/codeql-action/upload-sarif@v2
         if: success() || failure()
         with:

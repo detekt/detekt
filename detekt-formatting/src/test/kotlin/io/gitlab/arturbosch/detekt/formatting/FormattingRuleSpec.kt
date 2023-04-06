@@ -3,11 +3,12 @@ package io.gitlab.arturbosch.detekt.formatting
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakBeforeAssignment
 import io.gitlab.arturbosch.detekt.test.assertThat
-import org.assertj.core.api.Assertions.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
+import org.assertj.core.api.Assertions.assertThat as assertJThat
 
 class FormattingRuleSpec {
 
@@ -22,8 +23,8 @@ class FormattingRuleSpec {
     inner class `formatting rules can be suppressed` {
 
         @Test
-        fun `does support suppression only on file level`() {
-            val findings = subject.lint(
+        fun `does support suppression on file level`() {
+            val findings = subject.compileAndLint(
                 """
                     @file:Suppress("NoLineBreakBeforeAssignment")
                     fun main()
@@ -35,8 +36,8 @@ class FormattingRuleSpec {
         }
 
         @Test
-        fun `does not support suppression on node level`() {
-            val findings = subject.lint(
+        fun `support suppression on node level`() {
+            val findings = subject.compileAndLint(
                 """
                     @Suppress("NoLineBreakBeforeAssignment")
                     fun main()
@@ -44,7 +45,7 @@ class FormattingRuleSpec {
                 """.trimIndent()
             )
 
-            assertThat(findings).hasSize(1)
+            assertThat(findings).isEmpty()
         }
     }
 
@@ -52,20 +53,20 @@ class FormattingRuleSpec {
     inner class `formatting rules have a signature` {
 
         @Test
-        fun `has no package name`() {
-            val findings = subject.lint(
+        fun `in a file without package name`() {
+            val findings = subject.compileAndLint(
                 """
                     fun main()
                     = Unit
                 """.trimIndent()
             )
 
-            assertThat(findings.first().signature).isEqualTo("Test.kt:1")
+            assertJThat(findings.first().signature).isEqualTo("Test.kt\$=")
         }
 
         @Test
-        fun `has a package name`() {
-            val findings = subject.lint(
+        fun `with a file with package name`() {
+            val findings = subject.compileAndLint(
                 """
                     package test.test.test
                     fun main()
@@ -73,7 +74,7 @@ class FormattingRuleSpec {
                 """.trimIndent()
             )
 
-            assertThat(findings.first().signature).isEqualTo("test.test.test.Test.kt:2")
+            assertJThat(findings.first().signature).isEqualTo("Test.kt\$=")
         }
     }
 
@@ -89,6 +90,6 @@ class FormattingRuleSpec {
             expectedPath
         )
 
-        assertThat(findings.first().location.filePath.absolutePath.toString()).isEqualTo(expectedPath)
+        assertJThat(findings.first().location.filePath.absolutePath.toString()).isEqualTo(expectedPath)
     }
 }

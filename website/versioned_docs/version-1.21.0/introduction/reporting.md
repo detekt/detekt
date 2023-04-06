@@ -79,7 +79,7 @@ namely XML and SARIF.
 ## Merging reports
 
 The machine-readable report formats support report merging.
-Detekt Gradle plugin is not opinionated in how merging is set up and respects each project's build logic, especially 
+Detekt Gradle Plugin is not opinionated in how merging is set up and respects each project's build logic, especially 
 the merging makes most sense in a multi-module project. In this spirit, only Gradle tasks are provided.
 
 At the moment, merging XML and SARIF are supported. You can refer to the sample build script below and 

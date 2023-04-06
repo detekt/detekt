@@ -79,7 +79,7 @@ namely XML and SARIF.
 ## Merging reports
 
 The machine-readable report formats support report merging.
-Detekt Gradle plugin is not opinionated in how merging is set up and respects each project's build logic, especially 
+Detekt Gradle Plugin is not opinionated in how merging is set up and respects each project's build logic, especially 
 the merging makes most sense in a multi-module project. In this spirit, only Gradle tasks are provided.
 
 At the moment, merging XML and SARIF are supported. You can refer to the sample build script below and 
@@ -92,9 +92,11 @@ tasks.register("reportMerge", io.gitlab.arturbosch.detekt.report.ReportMergeTask
 }
 
 subprojects {
-  detekt {
-    reports.xml.required.set(true)
-    // reports.sarif.required.set(true)
+  tasks.named("detekt").configure {
+    reports {
+      xml.required.set(true)
+      // sarif.required.set(true)
+    }
   }
 
   plugins.withType(io.gitlab.arturbosch.detekt.DetektPlugin) {
@@ -117,9 +119,11 @@ val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMe
 }
 
 subprojects {
-  detekt {
-    reports.xml.required.set(true)
-    // reports.sarif.required.set(true)
+  tasks.named("detekt").configure {
+    reports {
+      xml.required.set(true)
+      // sarif.required.set(true)
+    }
   }
 
   plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {

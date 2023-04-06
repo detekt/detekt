@@ -30,7 +30,7 @@ export default function Home() {
   return (
     <Layout
       title={`Hello from ${siteConfig.title}`}
-      description="The official website of Detekt - A static analyzer for Kotlin">
+      description="The official website of detekt - A static analyzer for Kotlin">
       <HomepageHeader />
       <main>
         <HomepageFeatures />

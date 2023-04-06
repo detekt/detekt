@@ -12,10 +12,10 @@ import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import org.jetbrains.kotlin.com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
-import org.jetbrains.kotlin.utils.addToStdlib.flattenTo
 import java.util.IdentityHashMap
 
 /**
@@ -81,17 +81,10 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
         functionToBodyLinesCache[function] = bodyEntity?.linesOfCode() ?: 0
         parentMethods?.let { nestedFunctionTracking.getOrPut(it) { HashSet() }.add(function) }
         super.visitNamedFunction(function)
-        findAllNestedFunctions(function)
+
+        PsiTreeUtil.findChildrenOfType(function, KtNamedFunction::class.java)
             .fold(0) { acc, next -> acc + (functionToLinesCache[next] ?: 0) }
             .takeIf { it > 0 }
             ?.let { functionToLinesCache[function] = lines - it }
-    }
-
-    private fun findAllNestedFunctions(startFunction: KtNamedFunction): Sequence<KtNamedFunction> = sequence {
-        var nestedFunctions = nestedFunctionTracking[startFunction]
-        while (!nestedFunctions.isNullOrEmpty()) {
-            yieldAll(nestedFunctions)
-            nestedFunctions = nestedFunctions.mapNotNull { nestedFunctionTracking[it] }.flattenTo(HashSet())
-        }
     }
 }

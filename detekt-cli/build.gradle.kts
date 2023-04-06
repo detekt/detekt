@@ -50,6 +50,13 @@ tasks {
         mergeServiceFiles()
     }
 
+    shadowDistZip {
+        archiveBaseName.set("detekt-cli")
+    }
+    shadowDistTar { enabled = false }
+    distZip { enabled = false }
+    distTar { enabled = false }
+
     processTestResources {
         filter(ReplaceTokens::class, "tokens" to mapOf("kotlinVersion" to libs.versions.kotlin.get()))
         filteringCharset = "UTF-8"
@@ -68,6 +75,13 @@ tasks {
         classpath = files(shadowJar)
         workingDir = rootDir
         args = listOf("@./config/detekt/argsfile", "-p", pluginsJar.files.joinToString(",") { it.path })
+    }
+
+    withType<Jar>().configureEach {
+        manifest {
+            // Workaround for https://github.com/detekt/detekt/issues/5576
+            attributes(mapOf("Add-Opens" to "java.base/java.lang"))
+        }
     }
 
     check {
