@@ -529,6 +529,8 @@ style:
     negativeFunctions:
       - reason: 'Use `takeIf` instead.'
         value: 'takeUnless'
+      - reason: 'Use `all` instead.'
+        value: 'none'
     negativeFunctionNameParts:
       - 'not'
       - 'non'

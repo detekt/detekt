@@ -58,6 +58,7 @@ class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
     private val negativeFunctions: List<NegativeFunction> by config(
         valuesWithReason(
             "takeUnless" to "Use `takeIf` instead.",
+            "none" to "Use `all` instead.",
         )
     ) { list ->
         list.map { NegativeFunction(simpleName = it.value, recommendation = it.reason) }
