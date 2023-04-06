@@ -28,6 +28,11 @@ consumeGeneratedConfig(
     fromConfiguration = "generatedFormattingConfig",
     forTask = "sourcesJar"
 )
+consumeGeneratedConfig(
+    fromProject = projects.detektGenerator,
+    fromConfiguration = "generatedFormattingConfig",
+    forTask = "processResources"
+)
 
 val depsToPackage = setOf(
     "org.ec4j.core",
