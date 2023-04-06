@@ -43,7 +43,7 @@ testing {
             useJUnitJupiter(libs.versions.junit.get())
 
             dependencies {
-                compileOnly("org.jetbrains:annotations:13.0")
+                compileOnly("org.jetbrains:annotations:24.0.1")
                 implementation(libs.assertj)
                 implementation(testFixtures(project(":")))
             }
@@ -69,7 +69,7 @@ dependencies {
     compileOnly(libs.android.gradle.minSupported)
     compileOnly(libs.kotlin.gradle)
     compileOnly(libs.kotlin.gradlePluginApi)
-    testFixturesCompileOnly("org.jetbrains:annotations:13.0")
+    testFixturesCompileOnly("org.jetbrains:annotations:24.0.1")
     implementation(libs.sarif4k) {
         exclude("org.jetbrains.kotlin")
     }
