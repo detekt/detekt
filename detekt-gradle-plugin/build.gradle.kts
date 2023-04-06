@@ -43,6 +43,7 @@ testing {
             useJUnitJupiter(libs.versions.junit.get())
 
             dependencies {
+                compileOnly("org.jetbrains:annotations:13.0")
                 implementation(libs.assertj)
                 implementation(testFixtures(project(":")))
             }
@@ -68,7 +69,10 @@ dependencies {
     compileOnly(libs.android.gradle.minSupported)
     compileOnly(libs.kotlin.gradle)
     compileOnly(libs.kotlin.gradlePluginApi)
-    implementation(libs.sarif4k)
+    testFixturesCompileOnly("org.jetbrains:annotations:13.0")
+    implementation(libs.sarif4k) {
+        exclude("org.jetbrains.kotlin")
+    }
     compileOnly("io.gitlab.arturbosch.detekt:detekt-cli:1.22.0")
 
     testKitRuntimeOnly(libs.kotlin.gradle)
