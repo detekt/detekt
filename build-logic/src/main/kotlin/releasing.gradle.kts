@@ -78,7 +78,7 @@ tasks {
 tasks.register("publishToMavenLocal") {
     description = "Publish all the projects to Maven Local"
     subprojects {
-        if (this.plugins.hasPlugin("publishing")) {
+        if (this.plugins.hasPlugin("packaging")) {
             dependsOn(tasks.named("publishToMavenLocal"))
         }
     }
