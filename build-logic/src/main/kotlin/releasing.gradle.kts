@@ -16,6 +16,8 @@ nexusPublishing {
     }
 }
 
+val version = Versions.currentOrSnapshot()
+
 githubRelease {
     token(providers.gradleProperty("github.token"))
     owner.set("detekt")
@@ -23,11 +25,12 @@ githubRelease {
     overwrite.set(true)
     dryRun.set(false)
     draft.set(true)
+    prerelease.set(true)
     targetCommitish.set("main")
     body(
         provider {
             var changelog = project.file("website/src/pages/changelog.md").readText()
-            val nextNonBetaVersion = project.version.toString()
+            val nextNonBetaVersion = version
             val sectionStart = "#### $nextNonBetaVersion"
             changelog = changelog.substring(changelog.indexOf(sectionStart))
             changelog = changelog.substring(0, changelog.indexOf("#### 1.", changelog.indexOf(sectionStart) + 1))
@@ -36,14 +39,14 @@ githubRelease {
     )
     val cliBuildDir = project(":detekt-cli").buildDir
     releaseAssets.setFrom(
-        cliBuildDir.resolve("libs/detekt-cli-${project.version}-all.jar"),
-        cliBuildDir.resolve("distributions/detekt-cli-${project.version}.zip"),
-        project(":detekt-formatting").buildDir.resolve("libs/detekt-formatting-${project.version}.jar"),
-        project(":detekt-generator").buildDir.resolve("libs/detekt-generator-${project.version}-all.jar"),
+        cliBuildDir.resolve("libs/detekt-cli-${version}-all.jar"),
+        cliBuildDir.resolve("distributions/detekt-cli-${version}.zip"),
+        project(":detekt-formatting").buildDir.resolve("libs/detekt-formatting-${version}.jar"),
+        project(":detekt-generator").buildDir.resolve("libs/detekt-generator-${version}-all.jar"),
         project(":detekt-rules-libraries").buildDir
-            .resolve("libs/detekt-rules-libraries-${project.version}.jar"),
+            .resolve("libs/detekt-rules-libraries-${version}.jar"),
         project(":detekt-rules-ruleauthors").buildDir
-            .resolve("libs/detekt-rules-ruleauthors-${project.version}.jar")
+            .resolve("libs/detekt-rules-ruleauthors-${version}.jar")
     )
 }
 
