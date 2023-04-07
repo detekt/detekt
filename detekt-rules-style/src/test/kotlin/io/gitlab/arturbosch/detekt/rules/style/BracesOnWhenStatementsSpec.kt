@@ -44,12 +44,46 @@ class BracesOnWhenStatementsSpec {
 
     @Nested
     inner class specialTestCases {
+        @TestFactory
+        fun `special when conditions`() = flag(
+            """
+                when (0) {
+                    1, 2 -> { println() }
+                    in 3..4 -> { println() }
+                    is Int -> { println() }
+                    5, 6, in 7..8, is Number -> { println() }
+                    else -> { println() }
+                }
+            """.trimIndent(),
+            "->"(1),
+            "->"(2),
+            "->"(3),
+            "->"(4),
+            "->"(5),
+        )
 
         private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
             testCombinations(BracePolicy.Never.config, BracePolicy.Always.config, code, *locations)
 
         @TestFactory
-        fun `nested when inside when case block`() = listOf(
+        fun `extra line break between branches`() =
+            flag(
+                """
+                    when (1) {
+
+                        1 -> println()
+
+                        2 -> println()
+
+                        else -> println()
+
+                    }
+                """.trimIndent(),
+                *NOTHING
+            )
+
+        @TestFactory
+        fun `nested when inside when case block`() =
             flag(
                 """
                     when (1) {
@@ -62,11 +96,10 @@ class BracesOnWhenStatementsSpec {
                 """.trimIndent(),
                 "->"(3),
                 "->"(4),
-            ),
-        )
+            )
 
         @TestFactory
-        fun `nested when inside when subject`() = listOf(
+        fun `nested when inside when subject`() =
             flag(
                 """
                     when (when (2) { 1 -> { 1 }; else -> { 2 } }) {
@@ -80,11 +113,10 @@ class BracesOnWhenStatementsSpec {
                 "->"(1),
                 "->"(2),
                 "->"(4),
-            ),
-        )
+            )
 
         @TestFactory
-        fun `nested when inside when condition`() = listOf(
+        fun `nested when inside when condition`() =
             flag(
                 """
                     fun f(s: String?) {
@@ -103,11 +135,10 @@ class BracesOnWhenStatementsSpec {
                 "->"(5),
                 "->"(6),
                 "->"(7),
-            ),
-        )
+            )
 
         @TestFactory
-        fun `weird curly formatting for multiline whens`() = listOf(
+        fun `weird curly formatting for multiline whens`() =
             flag(
                 """
                     when (1) {
@@ -124,8 +155,7 @@ class BracesOnWhenStatementsSpec {
                     }
                 """.trimIndent(),
                 *NOTHING,
-            ),
-        )
+            )
     }
 
     @Nested
@@ -138,7 +168,7 @@ class BracesOnWhenStatementsSpec {
                 testCombinations(BracePolicy.Always.config, NOT_RELEVANT, code, *locations)
 
             @TestFactory
-            fun `missing braces are flagged`() = listOf(
+            fun `missing braces are flagged`() =
                 flag(
                     """
                         when (1) {
@@ -147,11 +177,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(1),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `existing braces are accepted`() = listOf(
+            fun `existing braces are accepted`() =
                 flag(
                     """
                         when (1) {
@@ -161,11 +190,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     *NOTHING,
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partially missing braces are flagged (first branch)`() = listOf(
+            fun `partially missing braces are flagged (first branch)`() =
                 flag(
                     """
                         when (1) {
@@ -175,11 +203,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(1),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partially missing braces are flagged (last branch)`() = listOf(
+            fun `partially missing braces are flagged (last branch)`() =
                 flag(
                     """
                         when (1) {
@@ -189,11 +216,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(3),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partially missing braces are flagged (middle branches)`() = listOf(
+            fun `partially missing braces are flagged (middle branches)`() =
                 flag(
                     """
                         when (1) {
@@ -203,8 +229,7 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(2),
-                ),
-            )
+                )
         }
 
         @Nested
@@ -213,7 +238,7 @@ class BracesOnWhenStatementsSpec {
             private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
                 testCombinations(BracePolicy.Never.config, NOT_RELEVANT, code, *locations)
 
-            @TestFactory fun `no braces are accepted`() = listOf(
+            @TestFactory fun `no braces are accepted`() =
                 flag(
                     """
                         when (1) {
@@ -223,11 +248,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     *NOTHING,
-                ),
-            )
+                )
 
             @TestFactory
-            fun `existing braces are flagged`() = listOf(
+            fun `existing braces are flagged`() =
                 flag(
                     """
                         when (1) {
@@ -239,11 +263,10 @@ class BracesOnWhenStatementsSpec {
                     "->"(1),
                     "->"(2),
                     "->"(3),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partially extra braces are flagged (first branch)`() = listOf(
+            fun `partially extra braces are flagged (first branch)`() =
                 flag(
                     """
                         when (1) {
@@ -253,11 +276,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(1),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partially extra braces are flagged (last branch)`() = listOf(
+            fun `partially extra braces are flagged (last branch)`() =
                 flag(
                     """
                         when (1) {
@@ -267,11 +289,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(3),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partially extra braces are flagged (middle branches)`() = listOf(
+            fun `partially extra braces are flagged (middle branches)`() =
                 flag(
                     """
                         when (1) {
@@ -281,8 +302,7 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(2),
-                ),
-            )
+                )
         }
 
         @Nested
@@ -292,7 +312,7 @@ class BracesOnWhenStatementsSpec {
                 testCombinations(BracePolicy.Necessary.config, NOT_RELEVANT, code, *locations)
 
             @TestFactory
-            fun `no braces are accepted`() = listOf(
+            fun `no braces are accepted`() =
                 flag(
                     """
                         when (1) {
@@ -302,11 +322,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     *NOTHING,
-                ),
-            )
+                )
 
             @TestFactory
-            fun `existing braces are flagged`() = listOf(
+            fun `existing braces are flagged`() =
                 flag(
                     """
                         when (1) {
@@ -318,11 +337,10 @@ class BracesOnWhenStatementsSpec {
                     "->"(1),
                     "->"(2),
                     "->"(3),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partially extra braces are flagged (first branch)`() = listOf(
+            fun `partially extra braces are flagged (first branch)`() =
                 flag(
                     """
                         when (1) {
@@ -332,11 +350,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(1),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partially extra braces are flagged (last branch)`() = listOf(
+            fun `partially extra braces are flagged (last branch)`() =
                 flag(
                     """
                         when (1) {
@@ -346,11 +363,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(3),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partially extra braces are flagged (middle branches)`() = listOf(
+            fun `partially extra braces are flagged (middle branches)`() =
                 flag(
                     """
                         when (1) {
@@ -360,8 +376,7 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(2),
-                ),
-            )
+                )
         }
 
         @Nested
@@ -371,7 +386,7 @@ class BracesOnWhenStatementsSpec {
                 testCombinations(BracePolicy.Consistent.config, NOT_RELEVANT, code, *locations)
 
             @TestFactory
-            fun `no braces are accepted`() = listOf(
+            fun `no braces are accepted`() =
                 flag(
                     """
                         when (1) {
@@ -381,11 +396,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     *NOTHING,
-                ),
-            )
+                )
 
             @TestFactory
-            fun `existing braces are accepted`() = listOf(
+            fun `existing braces are accepted`() =
                 flag(
                     """
                         when (1) {
@@ -395,11 +409,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     *NOTHING,
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partial braces are flagged (first branch)`() = listOf(
+            fun `partial braces are flagged (first branch)`() =
                 flag(
                     """
                         when (1) {
@@ -409,11 +422,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "when"(1),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partial braces are flagged (last branch)`() = listOf(
+            fun `partial braces are flagged (last branch)`() =
                 flag(
                     """
                         when (1) {
@@ -423,11 +435,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "when"(1),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partial braces are flagged (middle branches)`() = listOf(
+            fun `partial braces are flagged (middle branches)`() =
                 flag(
                     """
                         when (1) {
@@ -437,8 +448,7 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "when"(1),
-                ),
-            )
+                )
         }
     }
 
@@ -452,7 +462,7 @@ class BracesOnWhenStatementsSpec {
                 testCombinations(NOT_RELEVANT, BracePolicy.Always.config, code, *locations)
 
             @TestFactory
-            fun `missing braces are flagged`() = listOf(
+            fun `missing braces are flagged`() =
                 flag(
                     """
                         when (1) {
@@ -466,11 +476,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(1),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `existing braces are accepted`() = listOf(
+            fun `existing braces are accepted`() =
                 flag(
                     """
                         when (1) {
@@ -485,11 +494,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     *NOTHING,
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partially missing braces are flagged (first branch)`() = listOf(
+            fun `partially missing braces are flagged (first branch)`() =
                 flag(
                     """
                         when (1) {
@@ -504,11 +512,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(2),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partially missing braces are flagged (last branch)`() = listOf(
+            fun `partially missing braces are flagged (last branch)`() =
                 flag(
                     """
                         when (1) {
@@ -524,11 +531,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(3),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partially missing braces are flagged (middle branches)`() = listOf(
+            fun `partially missing braces are flagged (middle branches)`() =
                 flag(
                     """
                         when (1) {
@@ -544,8 +550,7 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(2),
-                ),
-            )
+                )
         }
 
         @Nested
@@ -555,7 +560,7 @@ class BracesOnWhenStatementsSpec {
                 testCombinations(NOT_RELEVANT, BracePolicy.Never.config, code, *locations)
 
             @TestFactory
-            fun `no braces are accepted`() = listOf(
+            fun `no braces are accepted`() =
                 flag(
                     """
                         when (1) {
@@ -568,11 +573,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     *NOTHING,
-                ),
-            )
+                )
 
             @TestFactory
-            fun `existing braces are flagged`() = listOf(
+            fun `existing braces are flagged`() =
                 flag(
                     """
                         when (1) {
@@ -590,11 +594,10 @@ class BracesOnWhenStatementsSpec {
                     "->"(1),
                     "->"(2),
                     "->"(3),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partially extra braces are flagged (first branch)`() = listOf(
+            fun `partially extra braces are flagged (first branch)`() =
                 flag(
                     """
                         when (1) {
@@ -609,11 +612,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(1),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partially extra braces are flagged (last branch)`() = listOf(
+            fun `partially extra braces are flagged (last branch)`() =
                 flag(
                     """
                         when (1) {
@@ -628,11 +630,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(3),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partially extra braces are flagged (middle branches)`() = listOf(
+            fun `partially extra braces are flagged (middle branches)`() =
                 flag(
                     """
                         when (1) {
@@ -649,8 +650,7 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(2),
-                ),
-            )
+                )
         }
 
         @Nested
@@ -660,7 +660,7 @@ class BracesOnWhenStatementsSpec {
                 testCombinations(NOT_RELEVANT, BracePolicy.Necessary.config, code, *locations)
 
             @TestFactory
-            fun `no braces are accepted`() = listOf(
+            fun `no braces are accepted`() =
                 flag(
                     """
                         when (1) {
@@ -673,11 +673,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     *NOTHING,
-                ),
-            )
+                )
 
             @TestFactory
-            fun `existing braces are flagged`() = listOf(
+            fun `existing braces are flagged`() =
                 flag(
                     """
                         when (1) {
@@ -695,11 +694,10 @@ class BracesOnWhenStatementsSpec {
                     "->"(1),
                     "->"(2),
                     "->"(3),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partially extra braces are flagged (first branch)`() = listOf(
+            fun `partially extra braces are flagged (first branch)`() =
                 flag(
                     """
                         when (1) {
@@ -717,11 +715,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(1),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partially extra braces are flagged (last branch)`() = listOf(
+            fun `partially extra braces are flagged (last branch)`() =
                 flag(
                     """
                         when (1) {
@@ -739,11 +736,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(3),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partially extra braces are flagged (middle branches)`() = listOf(
+            fun `partially extra braces are flagged (middle branches)`() =
                 flag(
                     """
                         when (1) {
@@ -760,11 +756,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "->"(2),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `existing braces are not flagged when necessary`() = listOf(
+            fun `existing braces are not flagged when necessary`() =
                 flag(
                     """
                         when (1) {
@@ -783,8 +778,7 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     *NOTHING,
-                ),
-            )
+                )
         }
 
         @Nested
@@ -794,7 +788,7 @@ class BracesOnWhenStatementsSpec {
                 testCombinations(NOT_RELEVANT, BracePolicy.Consistent.config, code, *locations)
 
             @TestFactory
-            fun `no braces are accepted`() = listOf(
+            fun `no braces are accepted`() =
                 flag(
                     """
                         when (1) {
@@ -807,11 +801,28 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     *NOTHING,
-                ),
-            )
+                )
 
             @TestFactory
-            fun `existing braces are flagged`() = listOf(
+            fun `existing braces are accepted`() =
+                flag(
+                    """
+                        when (1) {
+                            1 -> { 
+                                println()
+                            }
+                            2 -> { println() }
+                            else -> {
+                                println()
+                                println()
+                            }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
+                )
+
+            @TestFactory
+            fun `inconsistent braces are flagged`() =
                 flag(
                     """
                         when (1) {
@@ -826,11 +837,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "when"(1),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partial braces are flagged (first branch)`() = listOf(
+            fun `inconsistent braces are flagged (first branch)`() =
                 flag(
                     """
                         when (1) {
@@ -844,11 +854,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "when"(1),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partial braces are flagged (last branch)`() = listOf(
+            fun `inconsistent braces are flagged (last branch)`() =
                 flag(
                     """
                         when (1) {
@@ -863,11 +872,10 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "when"(1),
-                ),
-            )
+                )
 
             @TestFactory
-            fun `partial braces are flagged (middle branches)`() = listOf(
+            fun `inconsistent braces are flagged (middle branches)`() =
                 flag(
                     """
                         when (1) {
@@ -881,8 +889,7 @@ class BracesOnWhenStatementsSpec {
                         }
                     """.trimIndent(),
                     "when"(1),
-                ),
-            )
+                )
         }
     }
 

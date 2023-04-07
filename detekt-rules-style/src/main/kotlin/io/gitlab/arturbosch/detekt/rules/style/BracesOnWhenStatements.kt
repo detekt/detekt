@@ -48,13 +48,15 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  *  }
  *  // singleLine = 'necessary'
  *  when (a) {
- *      1 -> { f1() }
+ *      1 -> { f1() } // unnecessary braces
+ *      2 -> f2()
  *  }
  *  // multiLine = 'necessary'
  *  when (a) {
- *      1 -> {
+ *      1 -> { // unnecessary braces
  *          f1()
  *      }
+ *      2 -> f2()
  *  }
  *
  *  // singleLine = 'consistent'
@@ -104,13 +106,13 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  *  // singleLine = 'necessary'
  *  when (a) {
  *      1 -> f1()
- *      2 -> f2()
+ *      2 -> { f2(); f3() } // necessary braces because of multiple statements
  *  }
  *  // multiLine = 'necessary'
  *  when (a) {
  *      1 ->
  *          f1()
- *      2 -> {
+ *      2 -> { // // necessary braces because of multiple statements
  *          f2()
  *          f3()
  *      }
@@ -204,7 +206,7 @@ class BracesOnWhenStatements(config: Config = Config.empty) : Rule(config) {
     private fun KtWhenEntry.hasBraces(): Boolean = expression is KtBlockExpression
 
     private fun KtWhenEntry.isMultiStatement(): Boolean =
-        expression.let { (it is KtBlockExpression) && (it.statements.size > 1) }
+        expression.let { it is KtBlockExpression && it.statements.size > 1 }
 
     private fun policy(expression: KtWhenExpression): BracePolicy {
         val isMultiLine = expression.entries.any { branch ->
@@ -220,23 +222,19 @@ class BracesOnWhenStatements(config: Config = Config.empty) : Rule(config) {
         val parent = violator.parent as KtWhenExpression
         val reported = when {
             violator in parent.entries && policy == BracePolicy.Consistent -> parent.whenKeyword
-            violator in parent.entries -> violator.arrow
+            violator in parent.entries -> requireNotNull(violator.arrow) {
+                "When branch ${violator.text} has no arrow!"
+            }
             else -> error("Violating element (${violator.text}) is not part of this 'when' (${parent.text})")
-        } ?: return
-        val message = when (policy) {
-            BracePolicy.Always -> "Missing braces on this branch, add them."
-            BracePolicy.Consistent -> "Inconsistent braces, make sure all branches either have or don't have braces."
-            BracePolicy.Necessary -> "Extra braces exist on this branch, remove them."
-            BracePolicy.Never -> "Extra braces exist on this branch, remove them."
         }
-        report(CodeSmell(issue, Entity.from(reported), message))
+        report(CodeSmell(issue, Entity.from(reported), policy.message))
     }
 
-    enum class BracePolicy(val config: String) {
-        Always("always"),
-        Consistent("consistent"),
-        Necessary("necessary"),
-        Never("never");
+    enum class BracePolicy(val config: String, val message: String) {
+        Always("always", "Missing braces on this branch, add them."),
+        Consistent("consistent", "Inconsistent braces, make sure all branches either have or don't have braces."),
+        Necessary("necessary", "Extra braces exist on this branch, remove them."),
+        Never("never", "Extra braces exist on this branch, remove them.");
 
         companion object {
             fun getValue(arg: String): BracePolicy =
