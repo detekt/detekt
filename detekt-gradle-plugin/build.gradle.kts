@@ -106,6 +106,8 @@ gradlePlugin {
         create("detektCompilerPlugin") {
             id = "io.github.detekt.gradle.compiler-plugin"
             implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
+            displayName = "Static code analysis for Kotlin"
+            description = "Static code analysis for Kotlin"
             tags.set(listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android"))
         }
     }
@@ -177,33 +179,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
         // Note: Currently there are warnings for detekt-gradle-plugin that seemingly can't be fixed
         //       until Gradle releases an update (https://github.com/gradle/gradle/issues/16345)
         allWarningsAsErrors.set(false)
-    }
-}
-
-publishing {
-    publications.withType<MavenPublication> {
-        pom {
-            description.set("The official Detekt Gradle Plugin")
-            name.set("detekt-gradle-plugin")
-            url.set("https://detekt.dev")
-            licenses {
-                license {
-                    name.set("The Apache Software License, Version 2.0")
-                    url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-                    distribution.set("repo")
-                }
-            }
-            developers {
-                developer {
-                    id.set("detekt Developers")
-                    name.set("detekt Developers")
-                    email.set("info@detekt.dev")
-                }
-            }
-            scm {
-                url.set("https://github.com/detekt/detekt")
-            }
-        }
     }
 }
 
