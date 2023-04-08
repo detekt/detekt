@@ -1,12 +1,11 @@
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ProjectDependency
 import org.gradle.api.tasks.PathSensitivity
-import org.gradle.kotlin.dsl.creating
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getValue
 
 fun Project.consumeGeneratedConfig(fromProject: ProjectDependency, fromConfiguration: String, forTask: String) {
-    val generatedConfig by configurations.creating {
+    val configurationName = "generatedConfigFor${forTask.replaceFirstChar { it.titlecase() }}"
+    val generatedConfig = configurations.create(configurationName).apply {
         isCanBeConsumed = false
         isCanBeResolved = true
     }

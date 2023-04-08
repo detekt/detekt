@@ -6,8 +6,6 @@ plugins {
 dependencies {
     implementation(projects.detektParser)
     implementation(projects.detektApi)
-    implementation(projects.detektRulesEmpty)
-    implementation(projects.detektFormatting)
     implementation(projects.detektCli)
     implementation(projects.detektUtils)
     implementation(libs.jcommander)
