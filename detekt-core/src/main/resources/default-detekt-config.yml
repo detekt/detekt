@@ -431,9 +431,6 @@ potential-bugs:
     active: false
   ExplicitGarbageCollectionCall:
     active: true
-  ExplicitlyDefineReturn:
-    active: false
-    allowOmitUnit: true
   HasPlatformType:
     active: true
   IgnoredReturnValue:

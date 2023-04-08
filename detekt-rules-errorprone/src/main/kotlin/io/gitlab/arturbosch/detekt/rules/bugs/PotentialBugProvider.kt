@@ -26,7 +26,6 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             EqualsWithHashCodeExist(config),
             ExitOutsideMain(config),
             ExplicitGarbageCollectionCall(config),
-            ExplicitlyDefineReturn(config),
             HasPlatformType(config),
             ImplicitDefaultLocale(config),
             InvalidRange(config),

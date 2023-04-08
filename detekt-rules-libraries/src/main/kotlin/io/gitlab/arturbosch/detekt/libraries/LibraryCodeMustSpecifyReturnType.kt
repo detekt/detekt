@@ -7,8 +7,12 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.hasImplicitUnitReturnType
+import io.gitlab.arturbosch.detekt.rules.isUnitExpression
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
@@ -53,6 +57,9 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
         Debt.FIVE_MINS
     )
 
+    @Configuration("if functions with `Unit` return type should be allowed without return type declaration")
+    private val allowOmitUnit: Boolean by config(false)
+
     override fun visitProperty(property: KtProperty) {
         if (property.explicitReturnTypeRequired()) {
             report(
@@ -70,7 +77,7 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
         if (bindingContext == BindingContext.EMPTY) {
             return
         }
-        if (function.explicitReturnTypeRequired()) {
+        if (function.explicitReturnTypeRequired() && !function.isUnitOmissionAllowed()) {
             report(
                 CodeSmell(
                     issue,
@@ -80,6 +87,16 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
             )
         }
         super.visitNamedFunction(function)
+    }
+
+    private fun KtNamedFunction.isUnitOmissionAllowed(): Boolean {
+        val bodyExpression = this.bodyExpression
+        if (bodyExpression == null || bodyExpression.isUnitExpression()) {
+            return true
+        }
+        return allowOmitUnit && this.hasImplicitUnitReturnType(
+            bindingContext
+        )
     }
 
     private fun KtCallableDeclaration.explicitReturnTypeRequired(): Boolean =
