@@ -28,6 +28,11 @@ consumeGeneratedConfig(
     fromConfiguration = "generatedFormattingConfig",
     forTask = "sourcesJar"
 )
+consumeGeneratedConfig(
+    fromProject = projects.detektGenerator,
+    fromConfiguration = "generatedFormattingConfig",
+    forTask = "processResources"
+)
 
 val depsToPackage = setOf(
     "org.ec4j.core",
@@ -44,4 +49,10 @@ tasks.jar {
             .map { if (it.isDirectory) it else zipTree(it) },
         extraDepsToPackage.map { zipTree(it) },
     )
+}
+
+tasks.test {
+    if (javaVersion.isJava9Compatible) {
+        jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
+    }
 }

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 /**
- * Tests that run the Detekt Gradle Plugins tasks multiple times to check for correct
+ * Tests that run the Detekt Gradle Plugin's tasks multiple times to check for correct
  * UP-TO-DATE states and correct build caching.
  */
 class PluginTaskBehaviorSpec {

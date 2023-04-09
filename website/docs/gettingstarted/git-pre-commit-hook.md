@@ -8,7 +8,7 @@ summary:
 sidebar_position: 6
 ---
 
-Detekt can be integrated into your development workflow by using a Git pre-commit hook.
+detekt can be integrated into your development workflow by using a Git pre-commit hook.
 For that reason Git supports to run custom scripts automatically, when a specific action occurs.
 The mentioned pre-commit hook can be setup locally on your dev-machine.
 The following client-side detekt hook is triggered by a commit operation, and checks all files via the gradle task.
@@ -23,7 +23,7 @@ if [ $EXIT_CODE -ne 0 ]; then
   cat $OUTPUT
   rm $OUTPUT
   echo "***********************************************"
-  echo "                 Detekt failed                 "
+  echo "                 detekt failed                 "
   echo " Please fix the above issues before committing "
   echo "***********************************************"
   exit $EXIT_CODE
@@ -74,7 +74,7 @@ EXIT_CODE=$?
 if [ $EXIT_CODE -ne 0 ]; then
   echo $OUTPUT
   echo "***********************************************"
-  echo "                 Detekt failed                 "
+  echo "                 detekt failed                 "
   echo " Please fix the above issues before committing "
   echo "***********************************************"
   exit $EXIT_CODE

@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.core.config.valueOrDefaultInternal
 
 @Suppress("UNCHECKED_CAST")
 open class TestConfig
-@Deprecated("Use Detekt instead TestConfig(vararg Pair<String, Any>) instead")
+@Deprecated("Use TestConfig(vararg Pair<String, Any>) instead.")
 constructor(
     private val values: Map<String, Any> = mutableMapOf()
 ) : Config {

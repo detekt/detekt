@@ -11,12 +11,16 @@ import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.descriptors.PackageViewDescriptor
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
+import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
+import org.jetbrains.kotlin.psi.psiUtil.getStartOffsetIn
 import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
@@ -87,11 +91,29 @@ class MaxChainedCallsOnSameLine(config: Config = Config.empty) : Rule(config) {
         val receiver = receiverExpression
         val selector = selectorExpression ?: return false
 
-        val receiverEnd = receiver.startOffsetInParent + receiver.textLength
+        val receiverEnd = getReceiverEndPosition(receiver)
         val selectorStart = selector.startOffsetInParent
 
         return text
-            .subSequence(startIndex = receiverEnd, endIndex = selectorStart)
+            .subSequence(startIndex = receiverEnd, endIndex = selectorStart + 1)
             .contains('\n')
+    }
+
+    private fun getReceiverEndPosition(receiver: KtExpression): Int {
+        fun indexOfReceiverEnd() = receiver.startOffsetInParent + receiver.textLength - 1
+        var receiverDotQualifiedExpressionPassed = false
+        val callExpression = receiver.findDescendantOfType<KtCallExpression>(
+            canGoInside = {
+                val canGoInside =
+                    it == receiver || (receiverDotQualifiedExpressionPassed.not() || it !is KtDotQualifiedExpression)
+                if (it is KtDotQualifiedExpression) {
+                    receiverDotQualifiedExpressionPassed = true
+                }
+                canGoInside
+            }
+        )
+        return callExpression?.calleeExpression?.let {
+            it.getStartOffsetIn(receiver.parent) + it.textLength - 1
+        } ?: indexOfReceiverEnd()
     }
 }

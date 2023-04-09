@@ -1,7 +1,7 @@
 [versions]
 dokka = "1.8.10"
-jacoco = "0.8.8"
-kotlin = "1.8.10"
+jacoco = "0.8.9"
+kotlin = "1.8.20"
 ktlint = "0.48.2"
 junit = "5.9.2"
 contester = "0.2.0"
@@ -53,5 +53,5 @@ binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibilit
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 download = { id = "de.undercouch.download", version = "5.4.0" }
 gradleVersions = { id = "com.github.ben-manes.versions", version = "0.46.0" }
-pluginPublishing = { id = "com.gradle.plugin-publish", version = "1.1.0" }
+pluginPublishing = { id = "com.gradle.plugin-publish", version = "1.2.0" }
 shadow = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }

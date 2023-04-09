@@ -11,7 +11,7 @@ plugins {
     `java-test-fixtures`
     idea
     alias(libs.plugins.pluginPublishing)
-    // We use this published version of the Detekt plugin to self analyse this project.
+    // We use this published version of the detekt plugin to self analyse this project.
     id("io.gitlab.arturbosch.detekt") version "1.22.0"
 }
 
@@ -43,6 +43,7 @@ testing {
             useJUnitJupiter(libs.versions.junit.get())
 
             dependencies {
+                compileOnly("org.jetbrains:annotations:24.0.1")
                 implementation(libs.assertj)
                 implementation(testFixtures(project(":")))
             }
@@ -68,7 +69,10 @@ dependencies {
     compileOnly(libs.android.gradle.minSupported)
     compileOnly(libs.kotlin.gradle)
     compileOnly(libs.kotlin.gradlePluginApi)
-    implementation(libs.sarif4k)
+    testFixturesCompileOnly("org.jetbrains:annotations:24.0.1")
+    implementation(libs.sarif4k) {
+        exclude("org.jetbrains.kotlin")
+    }
     compileOnly("io.gitlab.arturbosch.detekt:detekt-cli:1.22.0")
 
     testKitRuntimeOnly(libs.kotlin.gradle)
@@ -102,6 +106,8 @@ gradlePlugin {
         create("detektCompilerPlugin") {
             id = "io.github.detekt.gradle.compiler-plugin"
             implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
+            displayName = "Static code analysis for Kotlin"
+            description = "Static code analysis for Kotlin"
             tags.set(listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android"))
         }
     }
@@ -128,7 +134,7 @@ tasks.validatePlugins {
 
 tasks {
     val writeDetektVersionProperties by registering(WriteProperties::class) {
-        description = "Write the properties file with the Detekt version to be used by the plugin"
+        description = "Write the properties file with the detekt version to be used by the plugin."
         encoding = "UTF-8"
         outputFile = file("$buildDir/versions.properties")
         property("detektVersion", project.version)
@@ -173,33 +179,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
         // Note: Currently there are warnings for detekt-gradle-plugin that seemingly can't be fixed
         //       until Gradle releases an update (https://github.com/gradle/gradle/issues/16345)
         allWarningsAsErrors.set(false)
-    }
-}
-
-publishing {
-    publications.withType<MavenPublication> {
-        pom {
-            description.set("The official Detekt Gradle Plugin")
-            name.set("detekt-gradle-plugin")
-            url.set("https://detekt.dev")
-            licenses {
-                license {
-                    name.set("The Apache Software License, Version 2.0")
-                    url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-                    distribution.set("repo")
-                }
-            }
-            developers {
-                developer {
-                    id.set("Detekt Developers")
-                    name.set("Detekt Developers")
-                    email.set("info@detekt.dev")
-                }
-            }
-            scm {
-                url.set("https://github.com/detekt/detekt")
-            }
-        }
     }
 }
 

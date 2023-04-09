@@ -30,6 +30,11 @@ tasks.withType<Test>().configureEach {
             languageVersion.set(JavaLanguageVersion.of(testJavaVersion))
         }
     )
+    maxParallelForks = if (System.getenv("CI") != null) {
+        Runtime.getRuntime().availableProcessors()
+    } else {
+        (Runtime.getRuntime().availableProcessors() / 2).takeIf { it > 0 } ?: 1
+    }
     systemProperty("junit.jupiter.testinstance.lifecycle.default", "per_class")
     val compileTestSnippets = providers.gradleProperty("compile-test-snippets").orNull.toBoolean()
     systemProperty("compile-test-snippets", compileTestSnippets)
@@ -61,10 +66,6 @@ testing {
             useJUnitJupiter(versionCatalog.findVersion("junit").get().requiredVersion)
         }
     }
-}
-
-dependencies {
-    compileOnly(kotlin("stdlib-jdk8"))
 }
 
 java {

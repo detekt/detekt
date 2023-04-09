@@ -12,20 +12,20 @@ This page describes how to use detekt's **type resolution** feature.
 
 :::caution
 
-Please note that type resolution is still an **experimental feature** of Detekt. We expect it to be stable with the upcoming release of Detekt (2.x)
+Please note that type resolution is still an **experimental feature** of detekt. We expect it to be stable with the upcoming release of detekt (2.x)
 
 :::
 
 ## What is type resolution
 
-Type resolution is a feature that allows Detekt to perform more **advanced** static analysis on your Kotlin source code. 
+Type resolution is a feature that allows detekt to perform more **advanced** static analysis on your Kotlin source code. 
 
-Normally, Detekt doesn't have access to the types and symbols that are available to the compiler during the compilation. This restricts the inspection capability.
-By enabling type resolution, you provide to Detekt all the information to understand types and symbols in your code needed to perform more accurate analysis. This extends Detekt's inspection capability to ones of the Kotlin **compiler**.
+Normally, detekt doesn't have access to the types and symbols that are available to the compiler during the compilation. This restricts the inspection capability.
+By enabling type resolution, you provide to detekt all the information to understand types and symbols in your code needed to perform more accurate analysis. This extends detekt's inspection capability to ones of the Kotlin **compiler**.
 
 ### An example
 
-Detekt has a rule called [MagicNumber](/docs/rules/style#magicnumber) to detect usages of magic numbers in your code. 
+detekt has a rule called [MagicNumber](/docs/rules/style#magicnumber) to detect usages of magic numbers in your code. 
 
 In the following code:
 
@@ -33,23 +33,23 @@ In the following code:
 val user = getUserById(42)?.toString()
 ```
 
-Detekt is able to report the usage of the number `42` as a magic number, **without** type resolution. All the information needed to run this inspection is already available in the source code.
+detekt is able to report the usage of the number `42` as a magic number, **without** type resolution. All the information needed to run this inspection is already available in the source code.
 
-Similarly, Detekt has another rule called [UnnecessarySafeCall](/docs/rules/potential-bugs#unnecessarysafecall) to detect unnecessary usages of safe call operators (`?.`).
+Similarly, detekt has another rule called [UnnecessarySafeCall](/docs/rules/potential-bugs#unnecessarysafecall) to detect unnecessary usages of safe call operators (`?.`).
 
-In the previous example, Detekt is able to determine if the safe call in `getUserById(42)?.toString()` is required **only with** type resolution. 
+In the previous example, detekt is able to determine if the safe call in `getUserById(42)?.toString()` is required **only with** type resolution. 
 
-This is because Detekt needs to know what is the **return type** of `getUserById()` in order to correctly perform the inspection. If the return type is a nullable type, then the code is valid. If the return type is a non-nullable type, Detekt will report an `UnnecessarySafeCall` as the `?.` is actually not needed.
+This is because detekt needs to know what is the **return type** of `getUserById()` in order to correctly perform the inspection. If the return type is a nullable type, then the code is valid. If the return type is a non-nullable type, detekt will report an `UnnecessarySafeCall` as the `?.` is actually not needed.
 
-With type resolution, Detekt has access to all the symbols and types of your codebase. Type resolution can be enabled by providing the **classpath** that is used during compilation. This will give Detekt access to all the code used to compile your project (both first and third party code) and will allow more advanced analysis.
+With type resolution, detekt has access to all the symbols and types of your codebase. Type resolution can be enabled by providing the **classpath** that is used during compilation. This will give detekt access to all the code used to compile your project (both first and third party code) and will allow more advanced analysis.
 
 ## Is my rule using type resolution?
 
-If you're running Detekt **without** type resolution, all the rules that require type resolution **will not run**.
+If you're running detekt **without** type resolution, all the rules that require type resolution **will not run**.
 
 All the rules that require type resolution are annotated with [`@RequiresTypeResolution`](https://github.com/detekt/detekt/search?q=%40RequiresTypeResolution). 
 
-Moreover, their official documentation in the Detekt website will mention _Requires Type Resolution_ ([like here](/docs/rules/potential-bugs#unnecessarysafecall)).
+Moreover, their official documentation in the detekt website will mention _Requires Type Resolution_ ([like here](/docs/rules/potential-bugs#unnecessarysafecall)).
 
 :::caution
 
@@ -63,13 +63,13 @@ Issues and proposals for rules that require type resolution are labelled with [n
 
 ## Enabling on a JVM project
 
-The easiest way to use type resolution is to use the Detekt Gradle plugin. On a JVM project, the following tasks will be created:
+The easiest way to use type resolution is to use the Detekt Gradle Plugin. On a JVM project, the following tasks will be created:
 
 - `detekt` - Runs detekt WITHOUT type resolution
 - `detektMain` - Runs detekt with type resolution on the `main` source set
 - `detektTest` - Runs detekt with type resolution on the `test` source set
 
-Moreover, you can use `detektBaselineMain` and `detektBaselineTest` to create baselines starting from runs of Detekt with type resolution enabled.
+Moreover, you can use `detektBaselineMain` and `detektBaselineTest` to create baselines starting from runs of detekt with type resolution enabled.
 
 Alternatively, you can create a **custom detekt task**, making sure to specify the `classpath` and `jvmTarget` properties correctly. See the [Run detekt using the Detekt Gradle Plugin](/docs/gettingstarted/gradle) and the [Run detekt using Gradle Task](/docs/gettingstarted/gradletask) for further readings on this.
 
@@ -78,7 +78,7 @@ Alternatively, you can create a **custom detekt task**, making sure to specify t
 Other than the aforementioned tasks for JVM projects, you can use the following Android-specific gradle tasks:
 
 - `detekt<Variant>` - Runs detekt with type resolution on the specific build variant
-- `detektBaseline<Variant>` - Creates a detekt baselines starting from a run of Detekt with type resolution enabled on the specific build variant.
+- `detektBaseline<Variant>` - Creates a detekt baselines starting from a run of detekt with type resolution enabled on the specific build variant.
 
 Alternatively, you can create a **custom detekt task**, making sure to specify the `classpath` and `jvmTarget` properties correctly.
 Doing this on Android is more complicated due to build types/flavors (see [#2259](https://github.com/detekt/detekt/issues/2259) for further context).
@@ -89,12 +89,12 @@ Gradle plugins from configuring Android-specific gradle tasks.
 
 ## Enabling on Detekt CLI
 
-If you're using [Detekt via CLI](/docs/gettingstarted/cli), type resolution will be enabled only if you provide the `--classpath` and
+If you're using [detekt via CLI](/docs/gettingstarted/cli), type resolution will be enabled only if you provide the `--classpath` and
 `--jvm-target` flags. See the list of [CLI options](/docs/gettingstarted/cli#use-the-cli) for details.
 
 ## Writing a rule that uses type resolution
 
-If you're [writing a custom rule](/docs/introduction/extensions) or if you're willing to write a rule to contribute to Detekt, you might want to leverage type resolution.
+If you're [writing a custom rule](/docs/introduction/extensions) or if you're willing to write a rule to contribute to detekt, you might want to leverage type resolution.
 
 Rules that are using type resolution, access the [bindingContext](https://github.com/JetBrains/kotlin/blob/master/compiler/frontend/src/org/jetbrains/kotlin/resolve/BindingContext.java) from the `BaseRule` class ([source](https://github.com/detekt/detekt/blob/cd659ce8737fb177caf140f46f73a1a86b22be56/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/internal/BaseRule.kt#L30)).
 

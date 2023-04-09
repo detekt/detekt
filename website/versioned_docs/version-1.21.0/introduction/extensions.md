@@ -220,7 +220,7 @@ Mention your `jar` with the `--plugins` flag when calling the cli fatjar:
 detekt --input ... --plugins /path/to/my/jar
 ```
 
-##### Integrate your extension with the detekt gradle plugin 
+##### Integrate your extension with the Detekt Gradle Plugin 
 
 For example `detekt` itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as a 
 custom `formatting` rule set.
