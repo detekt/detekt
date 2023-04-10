@@ -88,6 +88,10 @@ public final class io/gitlab/arturbosch/detekt/rules/KtCallExpressionKt {
 	public static final fun isCallingWithNonNullCheckArgument (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/name/FqName;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 }
 
+public final class io/gitlab/arturbosch/detekt/rules/KtExpressionKt {
+	public static final fun isUnitExpression (Lorg/jetbrains/kotlin/psi/KtExpression;)Z
+}
+
 public final class io/gitlab/arturbosch/detekt/rules/KtIfExpressionKt {
 	public static final fun isElseIf (Lorg/jetbrains/kotlin/psi/KtIfExpression;)Z
 }
@@ -123,6 +127,7 @@ public final class io/gitlab/arturbosch/detekt/rules/KtValueArgumentKt {
 public final class io/gitlab/arturbosch/detekt/rules/MethodSignatureKt {
 	public static final fun extractMethodNameAndParams (Ljava/lang/String;)Lkotlin/Pair;
 	public static final fun hasCorrectEqualsParameter (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
+	public static final fun hasImplicitUnitReturnType (Lorg/jetbrains/kotlin/psi/KtNamedFunction;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 	public static final fun isEqualsFunction (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
 	public static final fun isHashCodeFunction (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
 	public static final fun isJvmFinalizeFunction (Lorg/jetbrains/kotlin/psi/KtNamedFunction;)Z
