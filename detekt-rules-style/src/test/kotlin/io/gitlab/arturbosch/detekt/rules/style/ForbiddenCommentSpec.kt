@@ -1,3 +1,5 @@
+@file:Suppress("ClassName")
+
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 private const val VALUES = "values"
+private const val VALUES_PATTERNS = "valuePatterns"
 private const val ALLOWED_PATTERNS = "allowedPatterns"
 private const val MESSAGE = "customMessage"
 
@@ -233,6 +236,55 @@ class ForbiddenCommentSpec {
             val expectedMessage = String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, "Comment")
             assertThat(findings).hasSize(1)
             assertThat(findings.first().message).isEqualTo(expectedMessage)
+        }
+    }
+
+    @Nested
+    inner class `custom value pattern is configured` {
+        private val patternStr = """^(?i)REVIEW\b"""
+        private val messageConfig = TestConfig(
+            VALUES_PATTERNS to listOf("STOPSHIP", patternStr),
+        )
+
+        @Test
+        fun `should not report a finding when review doesn't match the pattern`() {
+            val comment = "// to express in the preview that it's not a normal TextView."
+            val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should report a finding when STOPSHIP is present`() {
+            val comment = "// STOPSHIP to express in the preview that it's not a normal TextView."
+            val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+            io.gitlab.arturbosch.detekt.test.assertThat(findings[0])
+                .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, "STOPSHIP"))
+        }
+
+        @Test
+        fun `should report a finding when review pattern is matched with comment with leading space`() {
+            val comment = "// REVIEW foo -> flag"
+            val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+            io.gitlab.arturbosch.detekt.test.assertThat(findings[0])
+                .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, patternStr))
+        }
+
+        @Test
+        fun `should report a finding when review pattern is matched with comment with out leading space`() {
+            val comment = "//REVIEW foo -> flag"
+            val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+            io.gitlab.arturbosch.detekt.test.assertThat(findings[0])
+                .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, patternStr))
+        }
+
+        @Test
+        fun `should report a finding matching two patterns`() {
+            val comment = "// REVIEW foo -> flag STOPSHIP"
+            val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
+            assertThat(findings).hasSize(2)
         }
     }
 }
