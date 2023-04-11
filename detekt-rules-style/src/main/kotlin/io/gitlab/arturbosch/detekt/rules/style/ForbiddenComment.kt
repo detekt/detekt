@@ -40,9 +40,8 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
     @Configuration("forbidden comment strings")
     private val values: List<String> by config(listOf("FIXME:", "STOPSHIP:", "TODO:"))
 
-    @Suppress("ExplicitItLambdaParameter")
     @Configuration("forbidden comment string patterns")
-    private val valuePatterns: List<Regex> by config(emptyList()) { it: List<String> ->
+    private val valuePatterns: List<Regex> by config(emptyList<String>()) {
         it.map(String::toRegex)
     }
 
@@ -81,11 +80,7 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
             }
         }
 
-        val strippedText = if (text.startsWith("// ")) {
-            text.substring(COMMENT_START_INDEX)
-        } else {
-            text.substring(COMMENT_START_INDEX - 1)
-        }
+        val strippedText = text.removePrefix("//").removePrefix(" ")
         valuePatterns.forEach {
             if (it.containsMatchIn(strippedText)) {
                 report(
@@ -105,6 +100,5 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
     companion object {
         const val DEFAULT_ERROR_MESSAGE = "This comment contains '%s' " +
             "that has been defined as forbidden in detekt."
-        const val COMMENT_START_INDEX = 3
     }
 }
