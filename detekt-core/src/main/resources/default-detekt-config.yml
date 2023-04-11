@@ -566,7 +566,7 @@ style:
         value: 'java.lang.annotation.Inherited'
   ForbiddenComment:
     active: true
-    values:
+    valuePatterns:
       - 'FIXME:'
       - 'STOPSHIP:'
       - 'TODO:'

@@ -38,10 +38,11 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("forbidden comment strings")
-    private val values: List<String> by config(listOf("FIXME:", "STOPSHIP:", "TODO:"))
+    @Deprecated("Use `valuePatterns` instead")
+    private val values: List<String> by config(emptyList())
 
     @Configuration("forbidden comment string patterns")
-    private val valuePatterns: List<Regex> by config(emptyList<String>()) {
+    private val valuePatterns: List<Regex> by config(listOf("FIXME:", "STOPSHIP:", "TODO:")) {
         it.map(String::toRegex)
     }
 
@@ -68,6 +69,7 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
     private fun checkForbiddenComment(text: String, comment: PsiElement) {
         if (allowedPatterns.pattern.isNotEmpty() && allowedPatterns.containsMatchIn(text)) return
 
+        @Suppress("DEPRECATION")
         values.forEach {
             if (text.contains(it, ignoreCase = true)) {
                 report(

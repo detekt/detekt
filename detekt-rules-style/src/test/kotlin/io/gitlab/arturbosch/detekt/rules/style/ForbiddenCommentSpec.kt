@@ -79,6 +79,15 @@ class ForbiddenCommentSpec {
         }
 
         @Test
+        fun `should report violation in single line block comment`() {
+            val code = """
+                /*TODO: I need to fix this.*/
+            """.trimIndent()
+            val findings = ForbiddenComment().compileAndLint(code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
         fun `should report violation in KDoc`() {
             val code = """
                 /**
@@ -101,7 +110,7 @@ class ForbiddenCommentSpec {
 
         @Nested
         inner class `when given Banana` {
-            val config = TestConfig(VALUES to "Banana")
+            val config = TestConfig(VALUES_PATTERNS to "Banana")
 
             @Test
             @DisplayName("should not report TODO: usages")
@@ -141,7 +150,7 @@ class ForbiddenCommentSpec {
         @Nested
         @DisplayName("when given listOf(\"banana\")")
         inner class ListOfBanana {
-            val config = TestConfig(VALUES to listOf("Banana"))
+            val config = TestConfig(VALUES_PATTERNS to listOf("Banana"))
 
             @Test
             @DisplayName("should not report TODO: usages")
