@@ -53,7 +53,7 @@ class YamlConfig internal constructor(
         private const val YAML_DOC_LIMIT = 102_400 // limit the YAML size to 100 kB
 
         // limit the anchors/aliases for collections to prevent attacks from for untrusted sources
-        private const val ALIASES_LIMIT = 10
+        private const val ALIASES_LIMIT = 100
 
         /**
          * Factory method to load a yaml configuration. Given path must exist and point to a readable file.
