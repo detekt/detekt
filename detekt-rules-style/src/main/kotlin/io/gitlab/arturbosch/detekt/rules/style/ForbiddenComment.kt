@@ -82,9 +82,8 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
             }
         }
 
-        val strippedText = text.removePrefix("//").removePrefix(" ")
         valuePatterns.forEach {
-            if (it.containsMatchIn(strippedText)) {
+            if (it.containsMatchIn(text)) {
                 report(
                     CodeSmell(
                         issue,

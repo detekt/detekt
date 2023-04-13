@@ -250,7 +250,7 @@ class ForbiddenCommentSpec {
 
     @Nested
     inner class `custom value pattern is configured` {
-        private val patternStr = """^(?i)REVIEW\b"""
+        private val patternStr = """^//( )?(?i)REVIEW\b"""
         private val messageConfig = TestConfig(
             VALUES_PATTERNS to listOf("STOPSHIP", patternStr),
         )
