@@ -36,24 +36,24 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  *  <noncompliant>
  *  // singleLine = 'never'
  *  when (a) {
- *      1 -> { f1() }
+ *      1 -> { f1() } // Not allowed.
  *      2 -> f2()
  *  }
  *  // multiLine = 'never'
  *  when (a) {
- *      1 -> {
+ *      1 -> { // Not allowed.
  *          f1()
  *      }
  *      2 -> f2()
  *  }
  *  // singleLine = 'necessary'
  *  when (a) {
- *      1 -> { f1() } // unnecessary braces
+ *      1 -> { f1() } // Unnecessary braces.
  *      2 -> f2()
  *  }
  *  // multiLine = 'necessary'
  *  when (a) {
- *      1 -> { // unnecessary braces
+ *      1 -> { // Unnecessary braces.
  *          f1()
  *      }
  *      2 -> f2()
@@ -67,7 +67,7 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  *  // multiLine = 'consistent'
  *  when (a) {
  *      1 ->
- *          f1()
+ *          f1() // Missing braces.
  *      2 -> {
  *          f2()
  *          f3()
@@ -77,12 +77,12 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  *  // singleLine = 'always'
  *  when (a) {
  *      1 -> { f1() }
- *      2 -> f2()
+ *      2 -> f2() // Missing braces.
  *  }
  *  // multiLine = 'always'
  *  when (a) {
  *      1 ->
- *          f1()
+ *          f1() // Missing braces.
  *      2 -> {
  *          f2()
  *          f3()
@@ -106,13 +106,13 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  *  // singleLine = 'necessary'
  *  when (a) {
  *      1 -> f1()
- *      2 -> { f2(); f3() } // necessary braces because of multiple statements
+ *      2 -> { f2(); f3() } // Necessary braces because of multiple statements.
  *  }
  *  // multiLine = 'necessary'
  *  when (a) {
  *      1 ->
  *          f1()
- *      2 -> { // // necessary braces because of multiple statements
+ *      2 -> { // // Necessary braces because of multiple statements.
  *          f2()
  *          f3()
  *      }
@@ -210,22 +210,19 @@ class BracesOnWhenStatements(config: Config = Config.empty) : Rule(config) {
 
     private fun policy(expression: KtWhenExpression): BracePolicy {
         val isMultiLine = expression.entries.any { branch ->
-            branch.arrow
-                ?.siblings(forward = true, withItself = false)
-                ?.any { it.textContains('\n') }
-                ?: false
+            requireNotNull(branch.arrow) { "When branch ${branch.text} has no arrow!" }
+                .siblings(forward = true, withItself = false)
+                .any { it.textContains('\n') }
         }
         return if (isMultiLine) multiLine else singleLine
     }
 
     private fun report(violator: KtWhenEntry, policy: BracePolicy) {
-        val parent = violator.parent as KtWhenExpression
-        val reported = when {
-            violator in parent.entries && policy == BracePolicy.Consistent -> parent.whenKeyword
-            violator in parent.entries -> requireNotNull(violator.arrow) {
-                "When branch ${violator.text} has no arrow!"
-            }
-            else -> error("Violating element (${violator.text}) is not part of this 'when' (${parent.text})")
+        val reported = when (policy) {
+            BracePolicy.Consistent -> (violator.parent as KtWhenExpression).whenKeyword
+            BracePolicy.Always,
+            BracePolicy.Necessary,
+            BracePolicy.Never -> requireNotNull(violator.arrow) { "When branch ${violator.text} has no arrow!" }
         }
         report(CodeSmell(issue, Entity.from(reported), policy.message))
     }
