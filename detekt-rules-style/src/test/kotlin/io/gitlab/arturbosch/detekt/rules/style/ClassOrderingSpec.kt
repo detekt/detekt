@@ -55,6 +55,39 @@ class ClassOrderingSpec {
     }
 
     @Test
+    fun `does not report when class is empty with empty body`() {
+        val code = """
+            class InOrder {
+
+            }
+        """.trimIndent()
+
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report when class is empty with out body`() {
+        val code = """
+            class InOrder
+        """.trimIndent()
+
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report when class has some order multiple properties`() {
+        val code = """
+            class InOrder {
+                val y1 = 1
+                val y2 = 2
+                val y3 = 3
+            }
+        """.trimIndent()
+
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
     fun `reports when class initializer block is out of order`() {
         val code = """
             class OutOfOrder(private val x: String) {
@@ -102,12 +135,9 @@ class ClassOrderingSpec {
         """.trimIndent()
 
         val findings = subject.compileAndLint(code)
-        assertThat(findings).hasSize(2)
+        assertThat(findings).hasSize(1)
         assertThat(findings[0].message).isEqualTo(
-            "property `y` should be declared before secondary constructors."
-        )
-        assertThat(findings[1].message).isEqualTo(
-            "initializer blocks should be declared before secondary constructors."
+            "secondary constructor should be declared before method declarations."
         )
     }
 
@@ -132,13 +162,9 @@ class ClassOrderingSpec {
         """.trimIndent()
 
         val findings = subject.compileAndLint(code)
-        assertThat(findings).hasSize(3)
+        assertThat(findings).hasSize(1)
         assertThat(findings[0].message)
-            .isEqualTo("property `y` should be declared before method declarations.")
-        assertThat(findings[1].message)
-            .isEqualTo("initializer blocks should be declared before method declarations.")
-        assertThat(findings[2].message)
-            .isEqualTo("secondary constructor should be declared before method declarations.")
+            .isEqualTo("method `returnX()` should be declared before companion object.")
     }
 
     @Test
@@ -268,5 +294,32 @@ class ClassOrderingSpec {
             .isEqualTo("secondary constructor should be declared before companion object.")
         assertThat(findings[2].message)
             .isEqualTo("property `y` should be declared before companion object.")
+    }
+
+    @Test
+    fun `does report before issue when loweset sections comes after longest change`() {
+        val code = """
+            class SingleMisorderAtFirst(private val x: String) {
+                companion object {
+                    const val IMPORTANT_VALUE = 3
+                }
+
+                val y = x
+
+                init {
+                    println(y)
+                }
+
+                constructor(z: Int): this(z.toString())
+
+
+                fun returnX() = x
+            }
+        """.trimIndent()
+
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings[0].message)
+            .isEqualTo("companion object should be declared after method declarations.")
     }
 }
