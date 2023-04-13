@@ -112,7 +112,7 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  *  when (a) {
  *      1 ->
  *          f1()
- *      2 -> { // // Necessary braces because of multiple statements.
+ *      2 -> { // Necessary braces because of multiple statements.
  *          f2()
  *          f3()
  *      }
