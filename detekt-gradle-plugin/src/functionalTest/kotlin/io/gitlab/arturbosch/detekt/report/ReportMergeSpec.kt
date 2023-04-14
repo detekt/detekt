@@ -10,7 +10,7 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.EnabledForJreRange
 import org.junit.jupiter.api.condition.EnabledIf
-import org.junit.jupiter.api.condition.JRE.JAVA_11
+import org.junit.jupiter.api.condition.JRE.JAVA_17
 
 class ReportMergeSpec {
 
@@ -90,7 +90,7 @@ class ReportMergeSpec {
 
     @Suppress("LongMethod")
     @Test
-    @EnabledForJreRange(min = JAVA_11, disabledReason = "Android Gradle Plugin 7.0+ requires JDK 11 or newer")
+    @EnabledForJreRange(min = JAVA_17, disabledReason = "Android Gradle Plugin 8.0+ requires JDK 17 or newer")
     @EnabledIf("io.gitlab.arturbosch.detekt.DetektAndroidSpecKt#isAndroidSdkInstalled")
     fun `for android detekt`() {
         val builder = DslTestBuilder.kotlin()

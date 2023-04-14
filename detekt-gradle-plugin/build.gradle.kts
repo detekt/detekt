@@ -63,7 +63,7 @@ testing {
 }
 
 val testKitRuntimeOnly: Configuration by configurations.creating
-val testKitJava11RuntimeOnly: Configuration by configurations.creating
+val testKitJava17RuntimeOnly: Configuration by configurations.creating
 
 dependencies {
     compileOnly(libs.android.gradle.minSupported)
@@ -76,7 +76,7 @@ dependencies {
     compileOnly("io.gitlab.arturbosch.detekt:detekt-cli:1.22.0")
 
     testKitRuntimeOnly(libs.kotlin.gradle)
-    testKitJava11RuntimeOnly(libs.android.gradle.maxSupported)
+    testKitJava17RuntimeOnly(libs.android.gradle.maxSupported)
 
     // We use this published version of the detekt-formatting to self analyse this project.
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
@@ -123,8 +123,8 @@ kotlin.target.compilations.getByName("functionalTest") {
 tasks.pluginUnderTestMetadata {
     pluginClasspath.from(testKitRuntimeOnly)
 
-    if (tasks.named<Test>("functionalTest").get().javaVersion.isJava11Compatible) {
-        pluginClasspath.from(testKitJava11RuntimeOnly)
+    if (tasks.named<Test>("functionalTest").get().javaVersion.isCompatibleWith(JavaVersion.VERSION_17)) {
+        pluginClasspath.from(testKitJava17RuntimeOnly)
     }
 }
 
