@@ -4,10 +4,6 @@ plugins {
     signing
 }
 
-tasks.withType<Sign>().configureEach {
-    notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13470")
-}
-
 publishing {
     repositories {
         maven {
@@ -58,6 +54,12 @@ publishing {
                 url.set("https://github.com/detekt/detekt")
             }
         }
+    }
+}
+
+tasks.withType<GenerateMavenPom> {
+    if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
+        notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/24765")
     }
 }
 
