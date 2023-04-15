@@ -11,6 +11,9 @@ import io.gitlab.arturbosch.detekt.core.config.validation.validateConfig
 class CompositeConfig(private val lookFirst: Config, private val lookSecond: Config) :
     Config, ValidatableConfiguration {
 
+    override val parentPath: String?
+        get() = lookFirst.parentPath ?: lookSecond.parentPath
+
     override fun subConfig(key: String): Config =
         CompositeConfig(lookFirst.subConfig(key), lookSecond.subConfig(key))
 
