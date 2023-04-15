@@ -37,7 +37,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build detekt
-        uses: gradle/gradle-build-action@5056fa9d50478a14af3c9925c12ca02318659d3e # v2
+        uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2
         with:
           gradle-home-cache-cleanup: true
           arguments: build -x detekt publishToMavenLocal -PenablePTS=${{ github.event_name == 'pull_request' }}
@@ -61,7 +61,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Verify Generated Detekt Config File
-        uses: gradle/gradle-build-action@5056fa9d50478a14af3c9925c12ca02318659d3e # v2
+        uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2
         with:
           gradle-home-cache-cleanup: true
           arguments: verifyGeneratorOutput
@@ -79,7 +79,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build and compile test snippets
-        uses: gradle/gradle-build-action@5056fa9d50478a14af3c9925c12ca02318659d3e # v2
+        uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2
         with:
           gradle-home-cache-cleanup: true
           arguments: test -Pcompile-test-snippets=true
@@ -97,7 +97,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Run with allWarningsAsErrors
-        uses: gradle/gradle-build-action@5056fa9d50478a14af3c9925c12ca02318659d3e # v2
+        uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2
         with:
           gradle-home-cache-cleanup: true
           arguments: compileKotlin compileTestKotlin compileTestFixturesKotlin -PwarningsAsErrors=true
