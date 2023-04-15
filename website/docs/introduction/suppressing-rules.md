@@ -8,9 +8,7 @@ sidebar_position: 6
 _detekt_ supports the Java (`@SuppressWarnings`) and Kotlin (`@Suppress`) style suppression. 
 If both annotations are present, Kotlin's annotation is favored! 
 
-To suppress an issue, the id of the issue must be written inside the values field of the annotation.
-Furthermore, the ruleset plus rulename can be used to suppress issues (e.g. `@Suppress("LongMethod", "complexity.LongParameterList", ...)`).
-The issue-id is also exactly the id of the reporting rule.
+To suppress an issue, the id of the rule must be written inside the values field of the annotation (e.g. `@Suppress("LongMethod")`).
 
 If a `LargeClass` is reported, but that is totally fine for you codebase, then just annotate it:
 
@@ -21,7 +19,17 @@ object Constants {
 }
 ```
 
-Some rules like `TooManyFunctions` can be suppressed by using a file level annotation `@file:Suppress("TooManyFunctions")`.
+It is also possible to prefix the rule id with either `detekt` and/or the ruleset id such as `@Suppress("detekt:LongMethod")` or `@Suppress("complexity:LongParameterList")`. 
+
+The following table shows the various supported suppression formats.
+
+| Example Suppression                                                                                                     | Description                                               | Notes                                        |
+|-------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------|----------------------------------------------|
+| ~~`all`~~, ~~`detekt:all`~~, ~~`detekt.all`~~                                                                           | Suppresses all detekt findings.                           | These suppressions are deprecated.           |
+| `style`, `detekt:style`, ~~`detekt.style`~~                                                                             | Suppresses all findings from rules in the style rule set. | Support for the `.` separator is deprecated. |
+| `MagicNumber`, `style:MagicNumber`, ~~`style.MagicNumber`~~, `detekt:style:MagicNumber`, ~~`detekt.style.MagicNumber`~~ | Suppresses all MagicNumber rule findings.                 | Support for the `.` separator is deprecated. |
+
+Some rules like `TooManyFunctions` can only be suppressed by using a file level annotation `@file:Suppress("TooManyFunctions")`.
 
 **Formatting rules suppression**
 
