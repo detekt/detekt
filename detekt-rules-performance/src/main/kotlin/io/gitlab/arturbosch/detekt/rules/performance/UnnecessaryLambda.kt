@@ -55,7 +55,7 @@ import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
  * penalty when compared to directly passing lambda variable.
  *
  * <noncompliant>
- * inline fun test1(lambda: () -> Unit) {
+ * inline fun test(lambda: () -> Unit) {
  *     thread {
  *         // no compliant
  *         lambda()
