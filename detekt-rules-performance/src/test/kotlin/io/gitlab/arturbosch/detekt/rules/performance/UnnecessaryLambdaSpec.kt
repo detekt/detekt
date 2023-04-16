@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
@@ -161,6 +162,7 @@ class UnnecessaryLambdaSpec(private val env: KotlinCoreEnvironment) {
 
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
+        assertMessage(findings[0], "lambda()")
     }
 
     @Test
@@ -177,6 +179,7 @@ class UnnecessaryLambdaSpec(private val env: KotlinCoreEnvironment) {
 
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
+        assertMessage(findings[0], "lambda()")
     }
 
     @Test
@@ -193,6 +196,7 @@ class UnnecessaryLambdaSpec(private val env: KotlinCoreEnvironment) {
 
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
+        assertMessage(findings[0], "lambda().toString()")
     }
 
     @Nested
@@ -211,6 +215,7 @@ class UnnecessaryLambdaSpec(private val env: KotlinCoreEnvironment) {
 
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
+                assertMessage(findings[0], "it.toDomain()")
             }
 
             @Test
@@ -271,6 +276,7 @@ class UnnecessaryLambdaSpec(private val env: KotlinCoreEnvironment) {
 
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
+                assertMessage(findings[0], "toDomain(it)")
             }
 
             @Test
@@ -317,6 +323,7 @@ class UnnecessaryLambdaSpec(private val env: KotlinCoreEnvironment) {
 
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
+                assertMessage(findings[0], "add(a, b)")
             }
 
             @Test
@@ -366,6 +373,7 @@ class UnnecessaryLambdaSpec(private val env: KotlinCoreEnvironment) {
                 """.trimIndent()
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
+                assertMessage(findings[0], "`super`(it)")
             }
 
             @Test
@@ -952,6 +960,7 @@ class UnnecessaryLambdaSpec(private val env: KotlinCoreEnvironment) {
 
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
+            assertMessage(findings[0], "C()")
         }
 
         @Test
@@ -968,6 +977,7 @@ class UnnecessaryLambdaSpec(private val env: KotlinCoreEnvironment) {
 
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
+            assertMessage(findings[0], "C(it)")
         }
 
         @Test
@@ -985,6 +995,7 @@ class UnnecessaryLambdaSpec(private val env: KotlinCoreEnvironment) {
 
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
+            assertMessage(findings[0], "A.B()")
         }
 
         @Test
@@ -1105,6 +1116,7 @@ class UnnecessaryLambdaSpec(private val env: KotlinCoreEnvironment) {
 
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
+            assertMessage(findings[0], "C.foo(s)")
         }
 
         @Test
@@ -1129,6 +1141,7 @@ class UnnecessaryLambdaSpec(private val env: KotlinCoreEnvironment) {
 
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
+            assertMessage(findings[0], "foo(y = x, x = y)")
         }
 
         @Test
@@ -1222,6 +1235,14 @@ class UnnecessaryLambdaSpec(private val env: KotlinCoreEnvironment) {
 
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
+            assertMessage(findings[0], "action()")
         }
+    }
+
+    private fun assertMessage(finding: Finding, expressionStr: String) {
+        assertThat(finding).hasMessage(
+            "Use the function reference instead of calling " +
+                "$expressionStr method directly in a new lambda. This may result in a performance penalty."
+        )
     }
 }

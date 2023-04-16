@@ -57,17 +57,14 @@ import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
  * <noncompliant>
  * inline fun test(lambda: () -> Unit) {
  *     thread {
- *         // no compliant
  *         lambda()
  *     }.start()
  * }
  *
- * // no compliant
  * val a: (Int) -> String = { it.toString() }
  *
  * fun toDomain(i: Int) = i.toString()
  * fun test() {
- *     // no compliant
  *     listOf(1).map { toDomain(it) }
  * }
  * </noncompliant>
@@ -80,12 +77,10 @@ import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
  * val a: (Int) -> String = Int::toString
  *
  * fun toDomain(i: Int) = i.toString()
- * // compliant
  * listOf(1).map { toDomain(it) }
  *
  * fun toDomain(i: Int) = i.toString()
  * fun test() {
- *     // compliant
  *     listOf(1).map(::toDomain)
  * }
  * </compliant>
@@ -130,7 +125,8 @@ class UnnecessaryLambda(config: Config = Config.empty) : Rule(config) {
                 CodeSmell(
                     issue,
                     Entity.from(errorExpression),
-                    "Xc"
+                    "Use the function reference instead of calling ${(errorExpression as KtExpression).text} " +
+                        "method directly in a new lambda. This may result in a performance penalty."
                 )
             )
         }
