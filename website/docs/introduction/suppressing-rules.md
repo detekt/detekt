@@ -19,15 +19,15 @@ object Constants {
 }
 ```
 
-It is also possible to prefix the rule id with either `detekt` and/or the ruleset id such as `@Suppress("detekt:LongMethod")` or `@Suppress("complexity:LongParameterList")`. 
+It is also possible to prefix the rule id with `detekt` and/or the ruleset id such as `@Suppress("detekt:LongMethod")` or `@Suppress("complexity:LongParameterList")`. 
 
 The following table shows the various supported suppression formats.
 
-| Example Suppression                                                                                                     | Description                                               | Notes                                        |
-|-------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------|----------------------------------------------|
-| ~~`all`~~, ~~`detekt:all`~~, ~~`detekt.all`~~                                                                           | Suppresses all detekt findings.                           | These suppressions are deprecated.           |
-| `style`, `detekt:style`, ~~`detekt.style`~~                                                                             | Suppresses all findings from rules in the style rule set. | Support for the `.` separator is deprecated. |
-| `MagicNumber`, `style:MagicNumber`, ~~`style.MagicNumber`~~, `detekt:style:MagicNumber`, ~~`detekt.style.MagicNumber`~~ | Suppresses all MagicNumber rule findings.                 | Support for the `.` separator is deprecated. |
+| Example Suppression                                                                                             | Description                                               |
+|-----------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------|
+| `all`, `detekt:all`, `detekt.all`                                                                               | Suppresses all detekt findings.                           |
+| `style`, `detekt:style`, `detekt.style`                                                                         | Suppresses all findings from rules in the style rule set. |
+| `MagicNumber`, `style:MagicNumber`, `style.MagicNumber`, `detekt:style:MagicNumber`, `detekt.style.MagicNumber` | Suppresses all MagicNumber rule findings.                 |
 
 Some rules like `TooManyFunctions` can only be suppressed by using a file level annotation `@file:Suppress("TooManyFunctions")`.
 
