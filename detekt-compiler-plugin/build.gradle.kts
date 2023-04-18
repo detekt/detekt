@@ -19,7 +19,7 @@ plugins {
 }
 
 dependencies {
-    compileOnly(libs.kotlin.compiler)
+    compileOnly(libs.kotlin.compilerEmbeddable)
 
     implementation(projects.detektApi)
     implementation(projects.detektTooling)
