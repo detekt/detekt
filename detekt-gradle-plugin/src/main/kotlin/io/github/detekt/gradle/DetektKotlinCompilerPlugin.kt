@@ -124,7 +124,7 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
         val distinctVersions = this::class
             .java
             .classLoader
-            .getResources("detekt/versions.properties")
+            .getResources("detekt-versions.properties")
             .toList()
             .mapNotNull { versions ->
                 Properties().run {
