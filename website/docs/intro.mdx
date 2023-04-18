@@ -48,7 +48,7 @@ slim down the configuration file to only the changes from the default configurat
 ```kotlin
 detekt {
     toolVersion = "[detekt_version]"
-    config = files("config/detekt/detekt.yml")
+    config = setFrom(files("config/detekt/detekt.yml"))
     buildUponDefaultConfig = true
 }
 ```
