@@ -31,7 +31,6 @@ publishing {
     }
     publications.withType<MavenPublication> {
         artifactId = project.name
-        version = Versions.currentOrSnapshot()
         pom {
             description.set("Static code analysis for Kotlin")
             name.set("detekt")
