@@ -19,7 +19,7 @@ kotlin-mainKts = { module = "org.jetbrains.kotlin:kotlin-main-kts", version.ref 
 kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlin-reflection = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 
-kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.8.0"
+kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.8.1"
 kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
 
 # This represents the the oldest AGP version that is supported by detekt.
