@@ -129,7 +129,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
 internal fun loadDetektVersion(classLoader: ClassLoader): String {
     // Other Gradle plugins can also have a versions.properties.
     val distinctVersions = classLoader
-        .getResources("versions.properties")
+        .getResources("detekt-versions.properties")
         .toList()
         .mapNotNull { versions ->
             Properties().run {
