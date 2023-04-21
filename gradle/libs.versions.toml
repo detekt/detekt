@@ -30,9 +30,7 @@ android-gradle-minSupported = "com.android.tools.build:gradle:7.0.0"
 # Gradle plugin remains compatible.
 android-gradle-maxSupported = "com.android.tools.build:gradle:8.0.0"
 
-ktlint-core = { module = "com.pinterest.ktlint:ktlint-core", version.ref = "ktlint" }
-ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint" }
-ktlint-rulesetExperimental = { module = "com.pinterest.ktlint:ktlint-ruleset-experimental", version.ref = "ktlint" }
+ktlintRulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint"  }
 slf4j-nop = { module = "org.slf4j:slf4j-nop", version = "1.7.36" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "1.7.36" }
 
