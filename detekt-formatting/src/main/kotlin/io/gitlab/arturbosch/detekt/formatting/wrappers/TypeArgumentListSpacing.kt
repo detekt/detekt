@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
-import com.pinterest.ktlint.ruleset.experimental.TypeArgumentListSpacingRule
+import com.pinterest.ktlint.ruleset.standard.rules.TypeArgumentListSpacingRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule

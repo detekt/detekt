@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
-import com.pinterest.ktlint.ruleset.standard.ChainWrappingRule
+import com.pinterest.ktlint.ruleset.standard.rules.ChainWrappingRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
