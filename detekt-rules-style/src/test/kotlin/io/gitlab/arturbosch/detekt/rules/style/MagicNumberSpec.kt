@@ -629,7 +629,7 @@ class MagicNumberSpec {
                 )
                 
                 var model = Model(someVal = $numberString)
-            """.trimIndent()
+                """.trimIndent()
 
             @Test
             fun `should not ignore int`() {
@@ -693,7 +693,7 @@ class MagicNumberSpec {
                 )
                 
                 var model = Model($numberString)
-            """.trimIndent()
+                """.trimIndent()
 
             @Test
             fun `should detect the argument by default`() {
@@ -707,7 +707,7 @@ class MagicNumberSpec {
                 fun tested(someVal: Int, other: String = "default")
                 
                 val t = tested(someVal = $number)
-            """.trimIndent()
+                """.trimIndent()
 
             @Test
             fun `should ignore int by default`() {
