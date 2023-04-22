@@ -4,17 +4,11 @@ complexity:
 
 naming:
   ClassNaming:
-    excludes: ["**/*Spec.kt"]
+    ignoreAnnotated: ['org.junit.jupiter.api.Nested']
   FunctionNaming:
     active: true
-    excludes:
-      - "**/test/**"
-      - "**/androidTest/**"
-      - "**/commonTest/**"
-      - "**/functionalTest/**"
-      - "**/jvmTest/**"
-      - "**/jsTest/**"
-      - "**/iosTest/**"
+    excludes: []
+    ignoreAnnotated: ['Test', 'ParameterizedTest', 'RepeatedTest', 'TestFactory']
 
 performance:
   SpreadOperator:
