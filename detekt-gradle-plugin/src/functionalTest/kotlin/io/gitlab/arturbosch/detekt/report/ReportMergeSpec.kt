@@ -193,8 +193,8 @@ class ReportMergeSpec {
         )
 
         gradleRunner.setupProject()
-        gradleRunner.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent())
-        gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+        gradleRunner.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent)
+        gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent)
         gradleRunner.runTasksAndCheckResult("detektMain", "reportMerge", "--continue") { result ->
             projectLayout.submodules.forEach { submodule ->
                 assertThat(result.task(":${submodule.name}:detektMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)

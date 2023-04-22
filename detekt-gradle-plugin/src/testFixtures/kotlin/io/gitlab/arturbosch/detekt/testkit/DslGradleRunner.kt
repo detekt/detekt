@@ -1,3 +1,5 @@
+@file:Suppress("Indentation") // https://github.com/pinterest/ktlint/issues/1971
+
 package io.gitlab.arturbosch.detekt.testkit
 
 import org.gradle.api.Project
