@@ -5,6 +5,7 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.MAX_LINE_LENGTH_PR
 import com.pinterest.ktlint.ruleset.standard.rules.FunctionReturnTypeSpacingRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.configWithAndroidVariants
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
@@ -13,6 +14,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#function-return-type-spacing) for
  * documentation.
  */
+@ActiveByDefault(since = "1.23.0")
 @AutoCorrectable(since = "1.22.0")
 class FunctionReturnTypeSpacing(config: Config) : FormattingRule(config) {
 

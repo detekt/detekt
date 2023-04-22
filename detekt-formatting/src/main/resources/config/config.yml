@@ -15,7 +15,7 @@ formatting:
     indentSize: 4
     maxLineLength: 120
   BlockCommentInitialStarAlignment:
-    active: false
+    active: true
     autoCorrect: true
   ChainWrapping:
     active: true
@@ -25,7 +25,7 @@ formatting:
     active: true
     autoCorrect: true
   CommentWrapping:
-    active: false
+    active: true
     autoCorrect: true
     indentSize: 4
   ContextReceiverMapping:
@@ -46,10 +46,10 @@ formatting:
     autoCorrect: true
     insertFinalNewLine: true
   FunKeywordSpacing:
-    active: false
+    active: true
     autoCorrect: true
   FunctionReturnTypeSpacing:
-    active: false
+    active: true
     autoCorrect: true
     maxLineLength: 120
   FunctionSignature:
@@ -60,10 +60,10 @@ formatting:
     maxLineLength: 120
     indentSize: 4
   FunctionStartOfBodySpacing:
-    active: false
+    active: true
     autoCorrect: true
   FunctionTypeReferenceSpacing:
-    active: false
+    active: true
     autoCorrect: true
   ImportOrdering:
     active: true
@@ -74,7 +74,7 @@ formatting:
     autoCorrect: true
     indentSize: 4
   KdocWrapping:
-    active: false
+    active: true
     autoCorrect: true
     indentSize: 4
   MaximumLineLength:
@@ -82,7 +82,7 @@ formatting:
     maxLineLength: 120
     ignoreBackTickedIdentifier: false
   ModifierListSpacing:
-    active: false
+    active: true
     autoCorrect: true
   ModifierOrdering:
     active: true
@@ -131,7 +131,7 @@ formatting:
     active: true
     packagesToUseImportOnDemandProperty: 'java.util.*,kotlinx.android.synthetic.**'
   NullableTypeSpacing:
-    active: false
+    active: true
     autoCorrect: true
   PackageName:
     active: true
@@ -184,7 +184,7 @@ formatting:
     active: true
     autoCorrect: true
   SpacingBetweenFunctionNameAndOpeningParenthesis:
-    active: false
+    active: true
     autoCorrect: true
   StringTemplate:
     active: true
@@ -206,7 +206,7 @@ formatting:
     autoCorrect: true
     indentSize: 4
   UnnecessaryParenthesesBeforeTrailingLambda:
-    active: false
+    active: true
     autoCorrect: true
   Wrapping:
     active: true
