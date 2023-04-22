@@ -51,7 +51,7 @@ class MissingUseCall(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         javaClass.simpleName,
         Severity.Warning,
-        "Usage of `Closeable` detected with `use` call. Using `Closeable` without `use` can be problematic " +
+        "Usage of `Closeable` detected without `use` call. Using `Closeable` without `use` can be problematic " +
             "as closing `Closeable` may throw exception.",
         Debt.FIVE_MINS
     )
@@ -59,7 +59,7 @@ class MissingUseCall(config: Config = Config.empty) : Rule(config) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         val calleeReturnType = expression.getResolvedCall(bindingContext)?.getReturnType() ?: return
-        val isCloseable = isChildOfAutoCloseable(calleeReturnType)
+        val isCloseable = isChildOfCloseable(calleeReturnType)
         if (isCloseable.not()) return
         if (shouldReport(expression)) {
             report(
@@ -72,7 +72,7 @@ class MissingUseCall(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun isChildOfAutoCloseable(calleeReturnType: KotlinType): Boolean {
+    private fun isChildOfCloseable(calleeReturnType: KotlinType): Boolean {
         val isCloseable = calleeReturnType.supertypes()
             .map {
                 it.fqNameOrNull()
@@ -86,7 +86,7 @@ class MissingUseCall(config: Config = Config.empty) : Rule(config) {
     override fun visitObjectLiteralExpression(expression: KtObjectLiteralExpression) {
         super.visitObjectLiteralExpression(expression)
         val expressionType = expression.getType(bindingContext) ?: return
-        val isCloseable = isChildOfAutoCloseable(expressionType)
+        val isCloseable = isChildOfCloseable(expressionType)
         if (isCloseable.not()) return
         if (shouldReport(expression)) {
             report(
