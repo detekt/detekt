@@ -84,6 +84,32 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
+
+            @Test
+            fun `chained call`() {
+                val code = """
+                    class A {
+                        val t: String? = ""
+                    }
+                    fun test() {
+                        val a = A()
+                        if (a.t == null || a.t.length == 0) return
+                    }
+                """.trimIndent()
+                val findings = subject.compileAndLintWithContext(env, code)
+                assertThat(findings).hasSize(1)
+            }
+
+            @Test
+            fun `chained call with package string`() {
+                val code = """
+                    fun test() {
+                        if (java.io.File.separator == null || java.io.File.separator.length == 0) return
+                    }
+                """.trimIndent()
+                val findings = subject.compileAndLintWithContext(env, code)
+                assertThat(findings).hasSize(1)
+            }
         }
 
         @Nested
