@@ -218,8 +218,6 @@ style:
     active: true
     excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
     excludeCommentStatements: true
-  MultilineRawStringIndentation:
-    active: true
   NestedClassesVisibility:
     active: true
   ObjectLiteralToLambda:
