@@ -30,6 +30,6 @@ interface DetektProvider {
         ): DetektProvider =
             ServiceLoader.load(DetektProvider::class.java, classLoader)
                 .maxByOrNull { it.priority }
-                ?: error("No implemention of DetektProvider found.")
+                ?: error("No implementation of DetektProvider found.")
     }
 }
