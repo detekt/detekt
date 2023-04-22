@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.js.translate.callTranslator.getReturnType
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -23,8 +22,8 @@ import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
 
 /**
- * Prefer using `use` function with `Closeable` or `AutoCloseable`. As `use` function closes it resource correctly
- * whether an exception is thrown or not.
+ * Prefer using the `use` function with `Closeable` or `AutoCloseable`. As `use` function ensures proper closure of
+ * `Closable`. It also properly handles exceptions if raised while closing the resource
  *
  * <noncompliant>
  * val myCloseable = MyCloseable()
@@ -58,7 +57,7 @@ class MissingUseCall(config: Config = Config.empty) : Rule(config) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        val calleeReturnType = expression.getResolvedCall(bindingContext)?.getReturnType() ?: return
+        val calleeReturnType = expression.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType ?: return
         val isCloseable = isChildOfCloseable(calleeReturnType)
         if (isCloseable.not()) return
         if (shouldReport(expression)) {

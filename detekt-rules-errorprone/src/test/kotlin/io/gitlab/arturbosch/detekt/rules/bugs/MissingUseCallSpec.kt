@@ -2,13 +2,13 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
+    private val subject = MissingUseCall()
 
     @Test
     fun `does not report when use is used`() {
@@ -25,7 +25,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 MyCloseable().use { /*no-op*/ }
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -45,7 +45,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 val myCloseable = MyCloseable()
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).hasSize(1)
     }
@@ -65,7 +65,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 val myCloseable = MyCloseable()
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).hasSize(1)
     }
@@ -85,7 +85,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 val myCloseable = MyCloseable().use { /*no-op*/ }
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -107,7 +107,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).hasSize(2)
     }
@@ -133,7 +133,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).hasSize(2)
     }
@@ -157,7 +157,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -182,7 +182,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 return bar
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -207,7 +207,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 return this
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -223,7 +223,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 FileReader("some_file.txt")
             )
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).hasSize(2)
     }
@@ -251,9 +251,9 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 )
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
-        assertThat(findings).hasSize(1)
+        assertThat(findings).hasSize(2)
     }
 
     @Test
@@ -276,7 +276,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 getSomeValueButGenerateException()
             ).use { /*no-op*/ }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).hasSize(1)
     }
@@ -304,7 +304,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 ).use { myClosable -> whatever(myClosable) }
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -322,7 +322,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 val myCloseable = Closeable()
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -340,7 +340,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 val myCloseable = AutoCloseable()
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -354,7 +354,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 val myCloseable = Closeable { /*no-op*/ }
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).hasSize(1)
     }
@@ -368,7 +368,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 val myCloseable = Closeable { /*no-op*/ }.use { /*no-op*/ }
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -382,7 +382,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 val myCloseable = java.io.Closeable { /*no-op*/ }.use { /*no-op*/ }
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -396,7 +396,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 val myCloseable = java.io.Closeable { /*no-op*/ }.use { mutableListOf<Int>() }.also { it.add(0) }
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -410,7 +410,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 val myCloseable = java.io.Closeable { /*no-op*/ }.use { 1 } + 2
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -424,7 +424,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 val myCloseable = java.io.Closeable { /*no-op*/ }
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).hasSize(1)
     }
@@ -441,7 +441,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).hasSize(1)
     }
@@ -458,7 +458,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             }.use { /*no-op*/ }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -483,7 +483,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 }.use { /*no-op*/ }
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -508,7 +508,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).hasSize(1)
     }
@@ -534,7 +534,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 functionThatReturnsClosable().doStuff()
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).hasSize(2)
     }
@@ -560,48 +560,8 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 functionThatReturnsClosable().use { it.doStuff() }
             }
         """.trimIndent()
-        val findings = MissingUseCall().compileAndLintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).hasSize(1)
-    }
-
-    @Test
-    fun `does not report when use is used without binding context`() {
-        val code = """
-            import java.io.Closeable
-
-            class MyCloseable : Closeable {
-                override fun close() {
-                    // closing the closeable
-                }
-            }
-
-            fun test() {
-                MyCloseable().use { /*no-op*/ }
-            }
-        """.trimIndent()
-        val findings = MissingUseCall().compileAndLint(code)
-
-        assertThat(findings).isEmpty()
-    }
-
-    @Test
-    fun `does not report when use is not used without binding context`() {
-        val code = """
-            import java.io.Closeable
-
-            class MyCloseable : Closeable {
-                override fun close() {
-                    // closing the closeable
-                }
-            }
-
-            fun test() {
-                val myCloseable = MyCloseable()
-            }
-        """.trimIndent()
-        val findings = MissingUseCall().compileAndLint(code)
-
-        assertThat(findings).isEmpty()
     }
 }
