@@ -24,7 +24,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
     inner class AnnotationSuppressorFactory {
         @Test
         fun `Factory returns null if ignoreAnnotated is not set`() {
-            val suppressor = annotationSuppressorFactory(buildConfigAware(/* empty */), BindingContext.EMPTY)
+            val suppressor = annotationSuppressorFactory(buildConfigAware(), BindingContext.EMPTY)
 
             assertThat(suppressor).isNull()
         }

@@ -78,7 +78,7 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
                 report(CodeSmell(issue, Entity.from(ktElement, location), issue.description))
             }
 
-            offset += 1 /* '\n' */
+            offset += 1 // '\n'
         }
     }
 
