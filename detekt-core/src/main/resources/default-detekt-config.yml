@@ -705,6 +705,8 @@ style:
     active: true
   UnnecessaryBackticks:
     active: false
+  UnnecessaryBracesAroundTrailingLambda:
+    active: false
   UnnecessaryFilter:
     active: true
   UnnecessaryInheritance:
