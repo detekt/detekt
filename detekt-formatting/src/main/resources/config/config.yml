@@ -39,6 +39,10 @@ formatting:
   EnumEntryNameCase:
     active: true
     autoCorrect: true
+  EnumWrapping:
+    active: false
+    autoCorrect: true
+    indentSize: 4
   Filename:
     active: true
   FinalNewline:
@@ -65,6 +69,14 @@ formatting:
   FunctionTypeReferenceSpacing:
     active: true
     autoCorrect: true
+  IfElseBracing:
+    active: false
+    autoCorrect: true
+    indentSize: 4
+  IfElseWrapping:
+    active: false
+    autoCorrect: true
+    indentSize: 4
   ImportOrdering:
     active: true
     autoCorrect: true
@@ -91,8 +103,15 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
+  MultilineExpressionWrapping:
+    active: false
+    autoCorrect: true
+    indentSize: 4
   NoBlankLineBeforeRbrace:
     active: true
+    autoCorrect: true
+  NoBlankLineInList:
+    active: false
     autoCorrect: true
   NoBlankLinesInChainedMethodCalls:
     active: true
@@ -100,9 +119,15 @@ formatting:
   NoConsecutiveBlankLines:
     active: true
     autoCorrect: true
+  NoConsecutiveComments:
+    active: false
   NoEmptyClassBody:
     active: true
     autoCorrect: true
+  NoEmptyFirstLineInClassBody:
+    active: false
+    autoCorrect: true
+    indentSize: 4
   NoEmptyFirstLineInMethodBlock:
     active: true
     autoCorrect: true
@@ -144,6 +169,16 @@ formatting:
     autoCorrect: true
     maxLineLength: 120
     indentSize: 4
+  ParameterWrapping:
+    active: true
+    autoCorrect: true
+    indentSize: 4
+    maxLineLength: 120
+  PropertyWrapping:
+    active: true
+    autoCorrect: true
+    indentSize: 4
+    maxLineLength: 120
   SpacingAroundAngleBrackets:
     active: true
     autoCorrect: true
@@ -189,6 +224,10 @@ formatting:
   StringTemplate:
     active: true
     autoCorrect: true
+  StringTemplateIndent:
+    active: false
+    autoCorrect: true
+    indentSize: 4
   TrailingCommaOnCallSite:
     active: false
     autoCorrect: true
@@ -197,6 +236,10 @@ formatting:
     active: false
     autoCorrect: true
     useTrailingCommaOnDeclarationSite: true
+  TryCatchFinallySpacing:
+    active: false
+    autoCorrect: true
+    indentSize: 4
   TypeArgumentListSpacing:
     active: false
     autoCorrect: true
