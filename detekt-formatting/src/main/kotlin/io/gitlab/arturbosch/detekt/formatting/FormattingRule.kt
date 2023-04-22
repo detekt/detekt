@@ -4,6 +4,7 @@ import com.pinterest.ktlint.rule.engine.core.api.Rule.VisitorModifier.RunAsLateA
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.CODE_STYLE_PROPERTY
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfig
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
+import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_STYLE_PROPERTY
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
@@ -59,8 +60,12 @@ abstract class FormattingRule(config: Config) : Rule(config) {
             ?: mutableMapOf()
 
         if (isAndroid) {
-            usesEditorConfigProperties[CODE_STYLE_PROPERTY] = "android"
+            usesEditorConfigProperties[CODE_STYLE_PROPERTY] = "android_studio"
+        } else {
+            usesEditorConfigProperties[CODE_STYLE_PROPERTY] = "intellij_idea"
         }
+
+        usesEditorConfigProperties[INDENT_STYLE_PROPERTY] = "space"
 
         val properties = buildMap {
             usesEditorConfigProperties.forEach { (editorConfigProperty, defaultValue) ->

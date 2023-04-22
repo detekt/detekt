@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
+import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPERTY
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.MAX_LINE_LENGTH_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.ParameterListWrappingRule
 import io.gitlab.arturbosch.detekt.api.Config
@@ -25,12 +26,11 @@ class ParameterListWrapping(config: Config) : FormattingRule(config) {
     private val maxLineLength: Int by configWithAndroidVariants(120, 100)
 
     @Configuration("indentation size")
-    @Deprecated("`indentSize` is ignored by KtLint and will have no effect")
-    @Suppress("UnusedPrivateMember")
     private val indentSize by config(4)
 
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
         mapOf(
+            INDENT_SIZE_PROPERTY to indentSize.toString(),
             MAX_LINE_LENGTH_PROPERTY to maxLineLength.toString()
         )
 }

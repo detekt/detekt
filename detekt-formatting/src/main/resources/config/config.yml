@@ -5,6 +5,7 @@ formatting:
   AnnotationOnSeparateLine:
     active: true
     autoCorrect: true
+    indentSize: 4
   AnnotationSpacing:
     active: true
     autoCorrect: true
@@ -19,6 +20,7 @@ formatting:
   ChainWrapping:
     active: true
     autoCorrect: true
+    indentSize: 4
   CommentSpacing:
     active: true
     autoCorrect: true
@@ -49,6 +51,7 @@ formatting:
   FunctionReturnTypeSpacing:
     active: false
     autoCorrect: true
+    maxLineLength: 120
   FunctionSignature:
     active: false
     autoCorrect: true
@@ -87,6 +90,7 @@ formatting:
   MultiLineIfElse:
     active: true
     autoCorrect: true
+    indentSize: 4
   NoBlankLineBeforeRbrace:
     active: true
     autoCorrect: true
@@ -139,6 +143,7 @@ formatting:
     active: true
     autoCorrect: true
     maxLineLength: 120
+    indentSize: 4
   SpacingAroundAngleBrackets:
     active: true
     autoCorrect: true
@@ -195,9 +200,11 @@ formatting:
   TypeArgumentListSpacing:
     active: false
     autoCorrect: true
+    indentSize: 4
   TypeParameterListSpacing:
     active: false
     autoCorrect: true
+    indentSize: 4
   UnnecessaryParenthesesBeforeTrailingLambda:
     active: false
     autoCorrect: true
@@ -205,3 +212,4 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
+    maxLineLength: 120
