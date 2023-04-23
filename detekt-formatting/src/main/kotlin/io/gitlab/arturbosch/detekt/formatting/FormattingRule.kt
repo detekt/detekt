@@ -1,9 +1,10 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.pinterest.ktlint.core.Rule.VisitorModifier.RunAsLateAsPossible
-import com.pinterest.ktlint.core.api.EditorConfigProperties
-import com.pinterest.ktlint.core.api.editorconfig.CODE_STYLE_PROPERTY
-import com.pinterest.ktlint.core.api.editorconfig.EditorConfigProperty
+import com.pinterest.ktlint.rule.engine.core.api.Rule.VisitorModifier.RunAsLateAsPossible
+import com.pinterest.ktlint.rule.engine.core.api.editorconfig.CODE_STYLE_PROPERTY
+import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfig
+import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
+import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_STYLE_PROPERTY
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
@@ -24,7 +25,7 @@ import org.jetbrains.kotlin.psi.KtFile
  */
 abstract class FormattingRule(config: Config) : Rule(config) {
 
-    abstract val wrapping: com.pinterest.ktlint.core.Rule
+    abstract val wrapping: com.pinterest.ktlint.rule.engine.core.api.Rule
 
     /**
      * Should the android style guide be enforced?
@@ -54,15 +55,19 @@ abstract class FormattingRule(config: Config) : Rule(config) {
 
     open fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String>? = null
 
-    private fun computeEditorConfigProperties(): EditorConfigProperties {
+    private fun computeEditorConfigProperties(): EditorConfig {
         val usesEditorConfigProperties = overrideEditorConfigProperties()?.toMutableMap()
             ?: mutableMapOf()
 
         if (isAndroid) {
-            usesEditorConfigProperties[CODE_STYLE_PROPERTY] = "android"
+            usesEditorConfigProperties[CODE_STYLE_PROPERTY] = "android_studio"
+        } else {
+            usesEditorConfigProperties[CODE_STYLE_PROPERTY] = "intellij_idea"
         }
 
-        return buildMap {
+        usesEditorConfigProperties[INDENT_STYLE_PROPERTY] = "space"
+
+        val properties = buildMap {
             usesEditorConfigProperties.forEach { (editorConfigProperty, defaultValue) ->
                 put(
                     key = editorConfigProperty.type.name,
@@ -74,6 +79,8 @@ abstract class FormattingRule(config: Config) : Rule(config) {
                 )
             }
         }
+
+        return EditorConfig(properties)
     }
 
     private fun emitFinding(message: String, canBeAutoCorrected: Boolean, node: ASTNode) {

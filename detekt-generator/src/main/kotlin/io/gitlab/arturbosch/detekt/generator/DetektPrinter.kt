@@ -67,6 +67,6 @@ class DetektPrinter(private val arguments: GeneratorArgs) {
             toc: true
             folder: documentation
             ---
-        """.trimIndent()
+            """.trimIndent()
     }
 }

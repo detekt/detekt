@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
-import com.pinterest.ktlint.core.api.editorconfig.EditorConfigProperty
-import com.pinterest.ktlint.ruleset.standard.TrailingCommaOnDeclarationSiteRule
+import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
+import com.pinterest.ktlint.ruleset.standard.rules.TrailingCommaOnDeclarationSiteRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.configWithAndroidVariants
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable

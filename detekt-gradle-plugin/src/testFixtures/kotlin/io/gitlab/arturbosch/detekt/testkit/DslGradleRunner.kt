@@ -1,3 +1,5 @@
+@file:Suppress("Indentation") // https://github.com/pinterest/ktlint/issues/1971
+
 package io.gitlab.arturbosch.detekt.testkit
 
 import org.gradle.api.Project
@@ -10,7 +12,8 @@ import java.nio.file.Files
 import java.util.UUID
 
 @Suppress("TooManyFunctions", "ClassOrdering")
-class DslGradleRunner @Suppress("LongParameterList")
+class DslGradleRunner
+@Suppress("LongParameterList")
 constructor(
     val projectLayout: ProjectLayout,
     val buildFileName: String,
@@ -60,7 +63,7 @@ constructor(
             val smellyConstant: Int = ${if (withCodeSmell) "11" else "0"}
         }
         
-    """.trimIndent() // Last line to prevent NewLineAtEndOfFile.
+        """.trimIndent() // Last line to prevent NewLineAtEndOfFile.
 
     fun setupProject() {
         writeProjectFile(buildFileName, mainBuildFileContent)

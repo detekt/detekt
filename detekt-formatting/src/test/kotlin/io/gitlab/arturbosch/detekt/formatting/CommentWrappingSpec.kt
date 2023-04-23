@@ -12,9 +12,9 @@ import org.junit.jupiter.api.Test
  */
 class CommentWrappingSpec {
     @Test
-    fun `Given a single line block comment that start starts and end on a separate line then report no error`() {
+    fun `Given a single documentation comment that start starts and end on a separate line then report no error`() {
         val code = """
-            /* Some comment */
+            /** Some comment */
         """.trimIndent()
         assertThat(CommentWrapping(Config.empty).lint(code)).isEmpty()
     }

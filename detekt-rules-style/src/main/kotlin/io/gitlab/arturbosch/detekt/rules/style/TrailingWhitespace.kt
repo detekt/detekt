@@ -47,7 +47,7 @@ class TrailingWhitespace(config: Config = Config.empty) : Rule(config) {
                     report(CodeSmell(issue, entity, createMessage(index)))
                 }
             }
-            offset += 1 /* '\n' */
+            offset += 1 // '\n'
         }
     }
 

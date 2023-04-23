@@ -171,10 +171,10 @@ internal class RuleVisitor : DetektVisitor() {
             // which needs detekt-formatting.jar,
             // which needs :detekt-formatting:processResources task output,
             // which needs output of this class.
-            /*io.gitlab.arturbosch.detekt.api.Rule*/ "Rule",
-            /*io.gitlab.arturbosch.detekt.formatting.FormattingRule*/ "FormattingRule",
-            /*io.gitlab.arturbosch.detekt.api.ThresholdRule*/ "ThresholdRule",
-            /*io.gitlab.arturbosch.detekt.rules.empty.EmptyRule*/ "EmptyRule",
+            "Rule", // io.gitlab.arturbosch.detekt.api.Rule
+            "FormattingRule", // io.gitlab.arturbosch.detekt.formatting.FormattingRule
+            "ThresholdRule", // io.gitlab.arturbosch.detekt.api.ThresholdRule
+            "EmptyRule", // io.gitlab.arturbosch.detekt.rules.empty.EmptyRule
         )
 
         private const val ISSUE_ARGUMENT_SIZE = 4

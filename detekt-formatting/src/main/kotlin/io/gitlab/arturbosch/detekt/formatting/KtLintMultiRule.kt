@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ContextReceiverMapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.DiscouragedCommentLocation
 import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumEntryNameCase
+import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Filename
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FinalNewline
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunKeywordSpacing
@@ -19,6 +20,8 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionReturnTypeSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionSignature
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionStartOfBodySpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionTypeReferenceSpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.IfElseBracing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.IfElseWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ImportOrdering
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Indentation
 import io.gitlab.arturbosch.detekt.formatting.wrappers.KdocWrapping
@@ -26,10 +29,14 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.MaximumLineLength
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ModifierListSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ModifierOrdering
 import io.gitlab.arturbosch.detekt.formatting.wrappers.MultiLineIfElse
+import io.gitlab.arturbosch.detekt.formatting.wrappers.MultilineExpressionWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoBlankLineBeforeRbrace
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoBlankLineInList
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoBlankLinesInChainedMethodCalls
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoConsecutiveBlankLines
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoConsecutiveComments
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyClassBody
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyFirstLineInClassBody
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyFirstLineInMethodBlock
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakAfterElse
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakBeforeAssignment
@@ -43,6 +50,8 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.NullableTypeSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.PackageName
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ParameterListSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ParameterListWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ParameterWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.PropertyWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundAngleBrackets
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundColon
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundComma
@@ -58,8 +67,10 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclaration
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithComments
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenFunctionNameAndOpeningParenthesis
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplate
+import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplateIndent
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TrailingCommaOnCallSite
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TrailingCommaOnDeclarationSite
+import io.gitlab.arturbosch.detekt.formatting.wrappers.TryCatchFinallySpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TypeArgumentListSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TypeParameterListSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.UnnecessaryParenthesesBeforeTrailingLambda
@@ -79,14 +90,22 @@ class KtLintMultiRule(config: Config = Config.empty) :
         AnnotationOnSeparateLine(config),
         AnnotationSpacing(config),
         ArgumentListWrapping(config),
+        BlockCommentInitialStarAlignment(config),
         ChainWrapping(config),
         CommentSpacing(config),
+        CommentWrapping(config),
         EnumEntryNameCase(config),
         Filename(config),
         FinalNewline(config),
+        FunKeywordSpacing(config),
+        FunctionReturnTypeSpacing(config),
+        FunctionStartOfBodySpacing(config),
+        FunctionTypeReferenceSpacing(config),
         ImportOrdering(config),
         Indentation(config),
+        KdocWrapping(config),
         MaximumLineLength(config),
+        ModifierListSpacing(config),
         ModifierOrdering(config),
         MultiLineIfElse(config),
         NoBlankLineBeforeRbrace(config),
@@ -102,8 +121,11 @@ class KtLintMultiRule(config: Config = Config.empty) :
         NoUnitReturn(config),
         NoUnusedImports(config),
         NoWildcardImports(config),
+        NullableTypeSpacing(config),
         PackageName(config),
         ParameterListWrapping(config),
+        ParameterWrapping(config),
+        PropertyWrapping(config),
         SpacingAroundAngleBrackets(config),
         SpacingAroundColon(config),
         SpacingAroundComma(config),
@@ -117,29 +139,29 @@ class KtLintMultiRule(config: Config = Config.empty) :
         SpacingAroundUnaryOperator(config),
         SpacingBetweenDeclarationsWithAnnotations(config),
         SpacingBetweenDeclarationsWithComments(config),
+        SpacingBetweenFunctionNameAndOpeningParenthesis(config),
         StringTemplate(config),
         TrailingCommaOnCallSite(config), // in standard ruleset but not enabled by default
         TrailingCommaOnDeclarationSite(config), // in standard ruleset but not enabled by default
+        UnnecessaryParenthesesBeforeTrailingLambda(config),
         Wrapping(config),
 
         // Wrappers for ktlint-ruleset-experimental rules. Disabled by default.
-        BlockCommentInitialStarAlignment(config),
-        CommentWrapping(config),
         ContextReceiverMapping(config),
         DiscouragedCommentLocation(config),
-        FunctionReturnTypeSpacing(config),
-        FunKeywordSpacing(config),
+        EnumWrapping(config),
         FunctionSignature(config),
-        FunctionStartOfBodySpacing(config),
-        FunctionTypeReferenceSpacing(config),
-        KdocWrapping(config),
-        ModifierListSpacing(config),
-        NullableTypeSpacing(config),
+        IfElseBracing(config),
+        IfElseWrapping(config),
+        MultilineExpressionWrapping(config),
+        NoBlankLineInList(config),
+        NoConsecutiveComments(config),
+        NoEmptyFirstLineInClassBody(config),
         ParameterListSpacing(config),
-        SpacingBetweenFunctionNameAndOpeningParenthesis(config),
+        StringTemplateIndent(config),
+        TryCatchFinallySpacing(config),
         TypeArgumentListSpacing(config),
         TypeParameterListSpacing(config),
-        UnnecessaryParenthesesBeforeTrailingLambda(config),
     )
 
     override fun visit(root: KtFile) {

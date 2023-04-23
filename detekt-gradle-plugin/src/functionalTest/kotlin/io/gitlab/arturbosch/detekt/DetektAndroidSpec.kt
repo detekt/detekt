@@ -51,7 +51,7 @@ class DetektAndroidSpec {
             )
         }
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
-            it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent())
+            it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent)
         }
 
         @Test
@@ -127,7 +127,7 @@ class DetektAndroidSpec {
         }
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
             it.writeProjectFile("gradle.properties", "detekt.android.disabled=true")
-            it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent())
+            it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent)
         }
 
         @Test
@@ -177,7 +177,7 @@ class DetektAndroidSpec {
             )
         }
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
-            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent)
         }
 
         @Test
@@ -271,7 +271,7 @@ class DetektAndroidSpec {
             )
         }
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
-            it.writeProjectFile("android_lib/src/main/AndroidManifest.xml", manifestContent())
+            it.writeProjectFile("android_lib/src/main/AndroidManifest.xml", manifestContent)
         }
 
         @Test
@@ -338,7 +338,7 @@ class DetektAndroidSpec {
             )
         }
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
-            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent)
         }
 
         @Test
@@ -393,7 +393,7 @@ class DetektAndroidSpec {
             )
         }
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
-            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent)
         }
 
         @Test
@@ -450,7 +450,7 @@ class DetektAndroidSpec {
             )
         }
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
-            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent)
         }
 
         @Test
@@ -507,7 +507,7 @@ class DetektAndroidSpec {
             )
         }
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
-            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent)
         }
 
         @Test
@@ -561,7 +561,7 @@ class DetektAndroidSpec {
             val gradleRunner = createGradleRunnerAndSetupProject(projectLayout, dryRun = false).also {
                 it.projectFile("app/src/main/java").mkdirs()
                 it.projectFile("app/src/main/res/layout").mkdirs()
-                it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent())
+                it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent)
                 it.writeProjectFile("app/src/main/res/layout/activity_sample.xml", SAMPLE_ACTIVITY_LAYOUT)
                 it.writeProjectFile("app/src/main/java/SampleActivity.kt", SAMPLE_ACTIVITY_USING_VIEW_BINDING)
             }
@@ -593,7 +593,7 @@ internal fun isAndroidSdkInstalled() =
     System.getenv("ANDROID_SDK_ROOT") != null || System.getenv("ANDROID_HOME") != null
 
 @Language("xml")
-internal fun manifestContent() = """
+internal val manifestContent = """
     <!--suppress XmlUnusedNamespaceDeclaration -->
     <manifest xmlns:android="http://schemas.android.com/apk/res/android"/>
 """.trimIndent()
