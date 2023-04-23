@@ -37,6 +37,7 @@ class GithubMilestoneReport : CliktCommand() {
         help = "Filter issues that are already in the changelog. Default: false."
     ).flag(default = false)
 
+    @Suppress("LongMethod")
     override fun run() {
         // connect to GitHub
         val github: GitHub = GitHub.connectAnonymously()
@@ -50,6 +51,7 @@ class GithubMilestoneReport : CliktCommand() {
         val ghMilestone: GHMilestone = ghRepository.getMilestone(milestoneId)
         var ghIssues: List<GHIssue> = ghRepository.getIssues(GHIssueState.CLOSED, ghMilestone)
             .filter { it.pullRequest != null }
+        val ghContributors = ghIssues.map { it.user.login }.distinct().sorted()
 
         if (filterExisting) {
             val changeLogContent = File("./website/src/pages/changelog.md").readText()
@@ -94,6 +96,11 @@ class GithubMilestoneReport : CliktCommand() {
             append("\n")
             append(formatIssues(housekeepingChanges))
             append("\n")
+            append(section("Contributors"))
+            append("\n")
+            append(formatContributors(ghContributors))
+            append("\n")
+            append("\n")
             append(footer(milestoneTitle, ghMilestone.htmlUrl))
         }.toString()
 
@@ -105,6 +112,14 @@ class GithubMilestoneReport : CliktCommand() {
         tempFile.writeText(content)
 
         println("\nContent saved to ${tempFile.path}")
+    }
+
+    private fun formatContributors(ghContributors: List<String>): String {
+        val formattedContributors = ghContributors
+            .filterNot { it == "renovate[bot]" }
+            .joinToString(", ") { "@$it" }
+        return "We would like to thank the following contributors that " +
+            "made this release possible: $formattedContributors"
     }
 
     // formatting helpers
