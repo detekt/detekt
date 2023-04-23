@@ -6,13 +6,14 @@ keywords: [changelog, release-notes, migration]
 
 # Changelog and Migration Guide
 
-#### 1.23.0-RC1 - 2023-04-06
+#### 1.23.0-RC2 - 2023-04-23
 
 ##### Notable Changes
 
-- This is the first version of Detekt that ships with the `detekt-compiler-plugin`. From now on the compiler plugin will follow the same versioning schema as Detekt. While still experimental, we invite you to try it and provide feedback till we stabilize it. - [#5492](https://github.com/detekt/detekt/pull/5492)
-- We added **8** new Rules to detekt
+- This is the first version of Detekt that ships with the `detekt-compiler-plugin`. The Detekt Compiler plugin is still experimental but we're moving it closer to Detekt to make it easier to integrate. From now on the compiler plugin will follow the same versioning schema as Detekt. We invite you to try it and provide feedback till we stabilize it. - [#5492](https://github.com/detekt/detekt/pull/5492)
+- We added **20** new Rules to detekt
   - `BracesOnIfStatements` - [#5700](https://github.com/detekt/detekt/pull/5700)
+  - `BracesOnWhenStatements` - [#5838](https://github.com/detekt/detekt/pull/5838)
   - `CastNullableToNonNullableType` - [#5653](https://github.com/detekt/detekt/pull/5653)
   - `DoubleNegativeLambda` - [#5937](https://github.com/detekt/detekt/pull/5937)
   - `ForbiddenAnnotation` - [#5515](https://github.com/detekt/detekt/pull/5515)
@@ -20,6 +21,18 @@ keywords: [changelog, release-notes, migration]
   - `SuspendFunSwallowedCancellation` - [#5666](https://github.com/detekt/detekt/pull/5666)
   - `UnusedParameter` - [#5722](https://github.com/detekt/detekt/pull/5722)
   - `UnusedPrivateProperty` - [#5722](https://github.com/detekt/detekt/pull/5722)
+  - Plus the bump to KtLint 0.49.0 added the following rules to the `detekt-formatting` ruleset:
+    - `EnumWrapping` - [#6028](https://github.com/detekt/detekt/pull/6028)
+    - `IfElseBracing` - [#6028](https://github.com/detekt/detekt/pull/6028)
+    - `IfElseWrapping` - [#6028](https://github.com/detekt/detekt/pull/6028) 
+    - `MultilineExpressionWrapping` - [#6028](https://github.com/detekt/detekt/pull/6028) 
+    - `NoBlankLineInList` - [#6028](https://github.com/detekt/detekt/pull/6028) 
+    - `NoConsecutiveComments` - [#6028](https://github.com/detekt/detekt/pull/6028) 
+    - `NoEmptyFirstLineInClassBody` - [#6028](https://github.com/detekt/detekt/pull/6028) 
+    - `ParameterWrapping` - [#6028](https://github.com/detekt/detekt/pull/6028)
+    - `PropertyWrapping` - [#6028](https://github.com/detekt/detekt/pull/6028) 
+    - `StringTemplateIndent` - [#6028](https://github.com/detekt/detekt/pull/6028) 
+    - `TryCatchFinallySpacing` - [#6028](https://github.com/detekt/detekt/pull/6028) 
 - Notable changes to existing rules:
   - `UnnecessaryAbstractClass` now only runs with type resolution - [#5829](https://github.com/detekt/detekt/pull/5829) 
   - `UnusedPrivateMember` has been refactored with some of its logic moved to `UnusedParameter` and `UnusedPrivateProperty` - [#5722](https://github.com/detekt/detekt/pull/5722)
@@ -28,14 +41,29 @@ keywords: [changelog, release-notes, migration]
   - Added `allowOperators` to rule `DataClassContainsFunctions` - [#5658](https://github.com/detekt/detekt/pull/5658)
   - `MandatoryBracesIfStatements` has been removed in favor of `BracesOnIfStatements` - [#5700](https://github.com/detekt/detekt/pull/5700)
   - Added `ignoreWhenContainingVariableDeclaration` to `UseIfInsteadOfWhen` to ignore captured variables - [#5681](https://github.com/detekt/detekt/pull/5681)
+  - Several rules in the `detekt-formatting` ruleset now accepts an `indentSize` parameter (see the [full list here](https://github.com/detekt/detekt/pull/6028/files#diff-2486d56e6f1bbfcb160b923d15266691f5776948cf5bb31c8fc102bd3cf9513d)).
+  - We followed the KtLint decisions on turning on some rules by default, so several rules in the `detekt-formatting` ruleset are now turned on by default (see the [full list here](https://github.com/detekt/detekt/pull/6028/files#diff-2486d56e6f1bbfcb160b923d15266691f5776948cf5bb31c8fc102bd3cf9513d)).
 - We added support for Gradle's Worker API inside Detekt Gradle Plugin, for faster execution on bigger projects. - [#4128](https://github.com/detekt/detekt/pull/4128)
 - We fixed the `includes`/`excludes` logic on the config file as they were overriding each other - [#5782](https://github.com/detekt/detekt/pull/5782)
 - We fully removed support for Spek from `detekt-test-utils`. The recommended testing framework is JUnit - [#5785](https://github.com/detekt/detekt/pull/5785)
 - The minimum supported Gradle version is now `v6.8.3` - [#5616](https://github.com/detekt/detekt/pull/5616)
-- This version of detekt is built with Gradle `v8.0.2`, AGP `7.4.2`, Kotlin `1.8.20` and KtLint `0.48.2` (see [#5893](https://github.com/detekt/detekt/pull/5893) [#5723](https://github.com/detekt/detekt/pull/5723) [#5877](https://github.com/detekt/detekt/pull/5877))
+- This version of detekt is built with Gradle `v8.0.2`, AGP `7.4.2`, Kotlin `1.8.20` and KtLint `0.49.0` (see [#5893](https://github.com/detekt/detekt/pull/5893) [#5723](https://github.com/detekt/detekt/pull/5723) [#5877](https://github.com/detekt/detekt/pull/5877) [#6028](https://github.com/detekt/detekt/pull/6028))
 
 ##### Changelog
 
+- UseIsNullOrEmpty: fix false negative with chained call - [#6027](https://github.com/detekt/detekt/pull/6027)
+- Create docs for Gradle Worker API - [#6016](https://github.com/detekt/detekt/pull/6016)
+- Compile compiler plugin against kotlin-compiler-embeddable - [#6012](https://github.com/detekt/detekt/pull/6012)
+- Update intro.mdx to use setFrom() on detekt config - [#6010](https://github.com/detekt/detekt/pull/6010)
+- Use `detekt-versions.properties` instead of `versions.properties` - [#6006](https://github.com/detekt/detekt/pull/6006)
+- Implement parentPath accessor in concrete config implementations - [#6002](https://github.com/detekt/detekt/pull/6002)
+- Increase ALIASES_LIMIT to 100 for YamlConfig - [#5986](https://github.com/detekt/detekt/pull/5986)
+- Fix elvis to +/- case in case UnnecessaryParentheses when precedence is unclear - [#5983](https://github.com/detekt/detekt/pull/5983)
+- jdkHome as @Internal - [#5978](https://github.com/detekt/detekt/pull/5978)
+- Fix broken POM file for detetk-compiler-plugin - [#5971](https://github.com/detekt/detekt/pull/5971)
+- Fix broken publishToMavenLocal - [#5970](https://github.com/detekt/detekt/pull/5970)
+- Add `allowOmitUnit` to rule `LibraryCodeMustSpecifyReturnType` - [#5861](https://github.com/detekt/detekt/pull/5861)
+- Remove dependency that creates a cycle. - [#5777](https://github.com/detekt/detekt/pull/5777)
 - Update dependency org.jetbrains:annotations to v24 - [#5969](https://github.com/detekt/detekt/pull/5969)
 - Update github/codeql-action digest to 8c8d71d - [#5966](https://github.com/detekt/detekt/pull/5966)
 - Add functions to ExitOutsideMain rule - [#5963](https://github.com/detekt/detekt/pull/5963)
@@ -112,6 +140,7 @@ keywords: [changelog, release-notes, migration]
 
 ##### Dependency Updates
 
+- Update plugin pluginPublishing to v1.2.0 - [#5975](https://github.com/detekt/detekt/pull/5975)
 - Update ktlint to v0.48.1 - [#5661](https://github.com/detekt/detekt/pull/5661)
 - Update dependency com.android.tools.build:gradle to v7.4.0 - [#5693](https://github.com/detekt/detekt/pull/5693)
 - JaCoCo 0.8.9 - [#5959](https://github.com/detekt/detekt/pull/5959)
@@ -126,6 +155,8 @@ keywords: [changelog, release-notes, migration]
 
 ##### Housekeeping & Refactorings
 
+- Improve our configuration of `ClassNaming` and `FunctionNaming` - [#6019](https://github.com/detekt/detekt/pull/6019)
+- Comment text in the Issue/PR Template - [#5992](https://github.com/detekt/detekt/pull/5992)
 - Fix typo: Github -> GitHub - [#5956](https://github.com/detekt/detekt/pull/5956)
 - Review all Detekt and Detekt Gradle Plugin usages. - [#5955](https://github.com/detekt/detekt/pull/5955)
 - Review all Detekt and Detekt Gradle Plugin usages. - [#5953](https://github.com/detekt/detekt/pull/5953)

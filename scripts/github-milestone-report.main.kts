@@ -49,6 +49,7 @@ class GithubMilestoneReport : CliktCommand() {
 
         val ghMilestone: GHMilestone = ghRepository.getMilestone(milestoneId)
         var ghIssues: List<GHIssue> = ghRepository.getIssues(GHIssueState.CLOSED, ghMilestone)
+            .filter { it.pullRequest != null }
 
         if (filterExisting) {
             val changeLogContent = File("./website/src/pages/changelog.md").readText()
