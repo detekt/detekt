@@ -41,7 +41,6 @@ jobs:
         if: success() || failure()
         with:
           sarif_file: build/detekt-report.sarif
-          token: ${{ secrets.DETEKT_CI_GITHUB_USER_TOKEN }}
 
 
   gradle:
@@ -70,4 +69,3 @@ jobs:
         if: success() || failure()
         with:
           sarif_file: build/reports/detekt/merge.sarif
-          token: ${{ secrets.DETEKT_CI_GITHUB_USER_TOKEN }}
