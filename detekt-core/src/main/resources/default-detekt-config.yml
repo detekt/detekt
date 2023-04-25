@@ -309,7 +309,8 @@ naming:
     active: false
     allowedPattern: '^(is|has|are)'
   ClassNaming:
-    active: false
+    active: true
+    classPattern: '[A-Z][a-zA-Z0-9]*'
   ConstructorParameterNaming:
     active: true
     parameterPattern: '[a-z][A-Za-z0-9]*'
