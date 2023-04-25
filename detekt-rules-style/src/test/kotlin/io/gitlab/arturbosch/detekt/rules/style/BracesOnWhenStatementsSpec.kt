@@ -303,6 +303,48 @@ class BracesOnWhenStatementsSpec {
                     """.trimIndent(),
                     "->"(2),
                 )
+
+            @TestFactory fun `empty blocks are accepted`() =
+                flag(
+                    """
+                        fun test(i: Int) {
+                            when {
+                                i == 1 -> println(1)
+                                i == 2 -> {}
+                                i == 3 -> {}
+                                else -> println(4)
+                            }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
+                )
+
+            @TestFactory fun `necessary braces for lambda expression are accepted`() =
+                flag(
+                    """
+                        fun test(bool: Boolean) {
+                            val f: () -> Int = when {
+                                bool -> { { 1 } }
+                                else -> { { 2 } }
+                            }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
+                )
+
+            @TestFactory fun `unnecessary braces for lambda expression are flagged`() =
+                flag(
+                    """
+                        fun test(bool: Boolean) {
+                            val f: () -> Int = when {
+                                bool -> { { -> 1 } }
+                                else -> { { -> 2 } }
+                            }
+                        }
+                    """.trimIndent(),
+                    "->"(2),
+                    "->"(4),
+                )
         }
 
         @Nested
@@ -377,6 +419,48 @@ class BracesOnWhenStatementsSpec {
                     """.trimIndent(),
                     "->"(2),
                 )
+
+            @TestFactory fun `empty blocks are accepted`() =
+                flag(
+                    """
+                        fun test(i: Int) {
+                            when {
+                                i == 1 -> println(1)
+                                i == 2 -> {}
+                                i == 3 -> {}
+                                else -> println(4)
+                            }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
+                )
+
+            @TestFactory fun `necessary braces for lambda expression are accepted`() =
+                flag(
+                    """
+                        fun test(bool: Boolean) {
+                            val f: () -> Int = when {
+                                bool -> { { 1 } }
+                                else -> { { 2 } }
+                            }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
+                )
+
+            @TestFactory fun `unnecessary braces for lambda expression are flagged`() =
+                flag(
+                    """
+                        fun test(bool: Boolean) {
+                            val f: () -> Int = when {
+                                bool -> { { -> 1 } }
+                                else -> { { -> 2 } }
+                            }
+                        }
+                    """.trimIndent(),
+                    "->"(2),
+                    "->"(4),
+                )
         }
 
         @Nested
@@ -445,6 +529,47 @@ class BracesOnWhenStatementsSpec {
                             1 -> { println() }
                             2 -> println()
                             else -> { println() }
+                        }
+                    """.trimIndent(),
+                    "when"(1),
+                )
+
+            @TestFactory fun `empty blocks are accepted`() =
+                flag(
+                    """
+                        fun test(i: Int) {
+                            when {
+                                i == 1 -> println(1)
+                                i == 2 -> {}
+                                i == 3 -> {}
+                                else -> println(4)
+                            }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
+                )
+
+            @TestFactory fun `necessary braces for lambda expression are accepted`() =
+                flag(
+                    """
+                        fun test(bool: Boolean) {
+                            val f: () -> Int = when {
+                                bool -> { { 1 } }
+                                else -> { -> 2 }
+                            }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
+                )
+
+            @TestFactory fun `unnecessary braces for lambda expression are flagged`() =
+                flag(
+                    """
+                        fun test(bool: Boolean) {
+                            val f: () -> Int = when {
+                                bool -> { -> 1 }
+                                else -> { { -> 2 } }
+                            }
                         }
                     """.trimIndent(),
                     "when"(1),
@@ -651,6 +776,60 @@ class BracesOnWhenStatementsSpec {
                     """.trimIndent(),
                     "->"(2),
                 )
+
+            @TestFactory fun `empty blocks are accepted`() =
+                flag(
+                    """
+                        fun test(i: Int) {
+                            when {
+                                i == 1 -> 
+                                    println(1)
+                                i == 2 -> {
+                                }
+                                i == 3 -> {
+                                }
+                                else ->
+                                    println(4)
+                            }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
+                )
+
+            @TestFactory fun `necessary braces for lambda expression are accepted`() =
+                flag(
+                    """
+                        fun test(bool: Boolean) {
+                            val f: () -> Int = when {
+                                bool -> {
+                                    { 1 }
+                                }
+                                else -> {
+                                    { 2 }
+                                }
+                            }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
+                )
+
+            @TestFactory fun `unnecessary braces for lambda expression are flagged`() =
+                flag(
+                    """
+                        fun test(bool: Boolean) {
+                            val f: () -> Int = when {
+                                bool -> {
+                                    { -> 1 }
+                                }
+                                else -> {
+                                    { -> 2 }
+                                }
+                            }
+                        }
+                    """.trimIndent(),
+                    "->"(2),
+                    "->"(4),
+                )
         }
 
         @Nested
@@ -779,6 +958,60 @@ class BracesOnWhenStatementsSpec {
                     """.trimIndent(),
                     *NOTHING,
                 )
+
+            @TestFactory fun `empty blocks are accepted`() =
+                flag(
+                    """
+                        fun test(i: Int) {
+                            when {
+                                i == 1 -> 
+                                    println(1)
+                                i == 2 -> {
+                                }
+                                i == 3 -> {
+                                }
+                                else ->
+                                    println(4)
+                            }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
+                )
+
+            @TestFactory fun `necessary braces for lambda expression are accepted`() =
+                flag(
+                    """
+                        fun test(bool: Boolean) {
+                            val f: () -> Int = when {
+                                bool -> {
+                                    { 1 }
+                                }
+                                else -> {
+                                    { 2 }
+                                }
+                            }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
+                )
+
+            @TestFactory fun `unnecessary braces for lambda expression are flagged`() =
+                flag(
+                    """
+                        fun test(bool: Boolean) {
+                            val f: () -> Int = when {
+                                bool -> {
+                                    { -> 1 }
+                                }
+                                else -> {
+                                    { -> 2 }
+                                }
+                            }
+                        }
+                    """.trimIndent(),
+                    "->"(2),
+                    "->"(4),
+                )
         }
 
         @Nested
@@ -885,6 +1118,57 @@ class BracesOnWhenStatementsSpec {
                             2 -> println()
                             else -> {
                                 println()
+                            }
+                        }
+                    """.trimIndent(),
+                    "when"(1),
+                )
+
+            @TestFactory fun `empty blocks are accepted`() =
+                flag(
+                    """
+                        fun test(i: Int) {
+                            when {
+                                i == 1 -> 
+                                    println(1)
+                                i == 2 -> {
+                                }
+                                i == 3 -> {
+                                }
+                                else -> 
+                                    println(4)
+                            }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
+                )
+
+            @TestFactory fun `necessary braces for lambda expression are accepted`() =
+                flag(
+                    """
+                        fun test(bool: Boolean) {
+                            val f: () -> Int = when {
+                                bool -> { 
+                                    { 1 }
+                                }
+                                else ->
+                                    { -> 2 }
+                            }
+                        }
+                    """.trimIndent(),
+                    *NOTHING,
+                )
+
+            @TestFactory fun `unnecessary braces for lambda expression are flagged`() =
+                flag(
+                    """
+                        fun test(bool: Boolean) {
+                            val f: () -> Int = when {
+                                bool ->
+                                    { -> 1 }
+                                else -> {
+                                    { -> 2 }
+                                }
                             }
                         }
                     """.trimIndent(),

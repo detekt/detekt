@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.siblings
@@ -179,20 +180,20 @@ class BracesOnWhenStatements(config: Config = Config.empty) : Rule(config) {
     private fun validate(branches: List<KtWhenEntry>, policy: BracePolicy) {
         val violators = when (policy) {
             BracePolicy.Always -> {
-                branches.filter { !it.hasBraces() }
+                branches.filter { it.hasNoBraces() }
             }
 
             BracePolicy.Necessary -> {
-                branches.filter { !it.isMultiStatement() && it.hasBraces() }
+                branches.filter { !it.isMultiStatement() && it.hasUnnecessaryBraces() }
             }
 
             BracePolicy.Never -> {
-                branches.filter { it.hasBraces() }
+                branches.filter { it.hasUnnecessaryBraces() }
             }
 
             BracePolicy.Consistent -> {
-                val braces = branches.count { it.hasBraces() }
-                val noBraces = branches.count { !it.hasBraces() }
+                val braces = branches.count { it.hasUnnecessaryBraces() }
+                val noBraces = branches.count { it.hasNoBraces() }
                 if (braces != 0 && noBraces != 0) {
                     branches.take(1)
                 } else {
@@ -203,7 +204,18 @@ class BracesOnWhenStatements(config: Config = Config.empty) : Rule(config) {
         violators.forEach { report(it, policy) }
     }
 
-    private fun KtWhenEntry.hasBraces(): Boolean = expression is KtBlockExpression
+    private fun KtWhenEntry.hasNoBraces(): Boolean = expression !is KtBlockExpression
+
+    @Suppress("ReturnCount")
+    private fun KtWhenEntry.hasUnnecessaryBraces(): Boolean {
+        val expression = this.expression
+
+        if (expression !is KtBlockExpression) return false
+        val statements = expression.statements.ifEmpty { return false }
+
+        val singleLambda = statements.singleOrNull() as? KtLambdaExpression
+        return singleLambda == null || singleLambda.functionLiteral.arrow != null
+    }
 
     private fun KtWhenEntry.isMultiStatement(): Boolean =
         expression.let { it is KtBlockExpression && it.statements.size > 1 }
