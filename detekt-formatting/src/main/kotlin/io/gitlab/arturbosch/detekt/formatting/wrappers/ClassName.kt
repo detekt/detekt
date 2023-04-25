@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#classobject-naming) for
  * documentation.
  */
-class ClassNaming(config: Config) : FormattingRule(config) {
+class ClassName(config: Config) : FormattingRule(config) {
     override val wrapping = ClassNamingRule()
     override val issue =
         issueFor("Class or object name should start with an uppercase letter and use camel case.")

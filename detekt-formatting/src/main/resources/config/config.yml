@@ -21,7 +21,7 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
-  ClassNaming:
+  ClassName:
     active: false
   CommentSpacing:
     active: true

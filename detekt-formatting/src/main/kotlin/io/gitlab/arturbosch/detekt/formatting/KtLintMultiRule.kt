@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ArgumentListWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BlockCommentInitialStarAlignment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
-import io.gitlab.arturbosch.detekt.formatting.wrappers.ClassNaming
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ClassName
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ContextReceiverMapping
@@ -95,7 +95,7 @@ class KtLintMultiRule(config: Config = Config.empty) :
         ArgumentListWrapping(config),
         BlockCommentInitialStarAlignment(config),
         ChainWrapping(config),
-        ClassNaming(config),
+        ClassName(config),
         CommentSpacing(config),
         CommentWrapping(config),
         EnumEntryNameCase(config),
