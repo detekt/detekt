@@ -79,7 +79,8 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
 
     var allRules: Boolean = DEFAULT_ALL_RULES_VALUE
 
-    var isEnforceCheck: Boolean = DEFAULT_IS_ENFORCE_CHECK
+    val isEnforceCheck: Property<Boolean> =
+        objects.property(Boolean::class.java).convention(DEFAULT_IS_ENFORCE_CHECK)
 
     var buildUponDefaultConfig: Boolean = DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE
 

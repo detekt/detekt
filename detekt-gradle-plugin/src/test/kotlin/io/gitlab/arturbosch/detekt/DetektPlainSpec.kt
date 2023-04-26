@@ -103,7 +103,7 @@ class DetektPlainSpec {
                 }
 
                 configure<DetektExtension> {
-                    isEnforceCheck = true
+                    isEnforceCheck.set(true)
                 }
             },
         ).also { it.setupProject() }
@@ -132,7 +132,7 @@ class DetektPlainSpec {
                 }
 
                 configure<DetektExtension> {
-                    isEnforceCheck = false
+                    isEnforceCheck.set(false)
                 }
             },
         ).also { it.setupProject() }
