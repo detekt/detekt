@@ -5,6 +5,8 @@ import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import io.gitlab.arturbosch.detekt.testkit.dependenciesAsPaths
 import org.assertj.core.api.Assertions.assertThat
+import org.gradle.api.Task
+import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
@@ -76,5 +78,76 @@ class DetektPlainSpec {
             assertThat(argumentString).doesNotContain("--report txt:")
             assertThat(argumentString).doesNotContain("--classpath")
         }
+
+        @Test
+        fun `check task depends on detekt task by default`() {
+            val project = gradleRunner.buildProject()
+
+            val detektTask = project.tasks.getByName("detekt") as Detekt
+            val checkTask = project.tasks.getByName("check") as Task
+            assertThat(mapToTaskClass(checkTask.dependsOn)).contains(detektTask)
+        }
+    }
+
+    @Nested
+    inner class `When applying detekt in a project with isEnforceCheck is true` {
+        private val gradleRunner = DslGradleRunner(
+            projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
+            buildFileName = "build.gradle.kts",
+            projectScript = {
+                apply<KotlinPluginWrapper>() // org.jetbrains.kotlin.jvm
+                apply<DetektPlugin>()
+
+                repositories {
+                    mavenCentral()
+                }
+
+                configure<DetektExtension> {
+                    isEnforceCheck = true
+                }
+            },
+        ).also { it.setupProject() }
+
+        @Test
+        fun `check task depends on detekt task`() {
+            val project = gradleRunner.buildProject()
+
+            val detektTask = project.tasks.getByName("detekt") as Detekt
+            val checkTask = project.tasks.getByName("check") as Task
+            assertThat(mapToTaskClass(checkTask.dependsOn)).contains(detektTask)
+        }
+    }
+
+    @Nested
+    inner class `When applying detekt in a project with isEnforceCheck is false` {
+        private val gradleRunner = DslGradleRunner(
+            projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
+            buildFileName = "build.gradle.kts",
+            projectScript = {
+                apply<KotlinPluginWrapper>() // org.jetbrains.kotlin.jvm
+                apply<DetektPlugin>()
+
+                repositories {
+                    mavenCentral()
+                }
+
+                configure<DetektExtension> {
+                    isEnforceCheck = false
+                }
+            },
+        ).also { it.setupProject() }
+
+        @Test
+        fun `check task does not depend on detekt task`() {
+            val project = gradleRunner.buildProject()
+
+            val detektTask = project.tasks.getByName("detekt") as Detekt
+            val checkTask = project.tasks.getByName("check") as Task
+            assertThat(checkTask.dependsOn).doesNotContain(detektTask)
+        }
+    }
+
+    private fun mapToTaskClass(setOfDependency: MutableSet<Any>): List<Task> {
+        return setOfDependency.mapNotNull { it as? Provider<*> }.map { it.get() }.filterIsInstance<Task>()
     }
 }
