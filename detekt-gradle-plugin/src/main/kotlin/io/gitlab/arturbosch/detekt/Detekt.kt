@@ -142,6 +142,10 @@ abstract class Detekt @Inject constructor(
     @get:Internal
     internal abstract val ignoreFailuresProp: Property<Boolean>
 
+    @get:Input
+    @get:Optional
+    abstract val enforceCheck: Property<Boolean>
+
     @get:Internal
     internal abstract val autoCorrectProp: Property<Boolean>
 

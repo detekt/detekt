@@ -67,6 +67,7 @@ internal fun Project.registerDetektTask(
         it.ignoreFailuresProp.convention(project.provider { extension.ignoreFailures })
         it.basePathProp.convention(extension.basePath)
         it.allRulesProp.convention(provider { extension.allRules })
+        it.enforceCheck.convention(provider { extension.isEnforceCheck })
         configuration(it)
     }
 

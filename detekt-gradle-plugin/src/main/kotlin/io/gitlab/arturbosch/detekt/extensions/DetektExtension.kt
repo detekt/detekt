@@ -79,6 +79,8 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
 
     var allRules: Boolean = DEFAULT_ALL_RULES_VALUE
 
+    var isEnforceCheck: Boolean = DEFAULT_IS_ENFORCE_CHECK
+
     var buildUponDefaultConfig: Boolean = DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE
 
     var disableDefaultRuleSets: Boolean = DEFAULT_DISABLE_RULESETS_VALUE
@@ -119,6 +121,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
         const val DEFAULT_DISABLE_RULESETS_VALUE = false
         const val DEFAULT_REPORT_ENABLED_VALUE = true
         const val DEFAULT_ALL_RULES_VALUE = false
+        const val DEFAULT_IS_ENFORCE_CHECK = true
         const val DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE = false
 
         // This flag is ignored unless the compiler plugin is applied to the project
