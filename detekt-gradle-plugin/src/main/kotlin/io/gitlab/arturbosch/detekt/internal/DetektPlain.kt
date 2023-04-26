@@ -26,7 +26,9 @@ internal class DetektPlain(private val project: Project) {
         }
 
         tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {
-            it.dependsOn(detektTaskProvider)
+            if (extension.isEnforceCheck) {
+                it.dependsOn(detektTaskProvider)
+            }
         }
     }
 
@@ -39,6 +41,6 @@ internal class DetektPlain(private val project: Project) {
 
     private fun existingInputDirectoriesProvider(
         project: Project,
-        extension: DetektExtension
+        extension: DetektExtension,
     ): Provider<FileCollection> = project.provider { extension.source.filter { it.exists() } }
 }
