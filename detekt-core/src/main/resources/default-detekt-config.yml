@@ -67,7 +67,7 @@ comments:
     endOfSentenceFormat: '([.?!][ \t\n\r\f<])|([.?!:]$)'
   KDocReferencesNonPublicProperty:
     active: false
-    excludes: ['**/*test*/**', '**/*Test*/**']
+    excludes: ['**/*test*/**', '**/*Test/**']
   OutdatedDocumentation:
     active: false
     matchTypeParameters: true
@@ -75,7 +75,7 @@ comments:
     allowParamOnConstructorProperties: false
   UndocumentedPublicClass:
     active: false
-    excludes: ['**/*test*/**', '**/*Test*/**']
+    excludes: ['**/*test*/**', '**/*Test/**']
     searchInNestedClass: true
     searchInInnerClass: true
     searchInInnerObject: true
@@ -83,11 +83,11 @@ comments:
     searchInProtectedClass: false
   UndocumentedPublicFunction:
     active: false
-    excludes: ['**/*test*/**', '**/*Test*/**']
+    excludes: ['**/*test*/**', '**/*Test/**']
     searchProtectedFunction: false
   UndocumentedPublicProperty:
     active: false
-    excludes: ['**/*test*/**', '**/*Test*/**']
+    excludes: ['**/*test*/**', '**/*Test/**']
     searchProtectedProperty: false
 
 complexity:
@@ -159,14 +159,14 @@ complexity:
     active: false
   StringLiteralDuplication:
     active: false
-    excludes: ['**/*test*/**', '**/*Test*/**']
+    excludes: ['**/*test*/**', '**/*Test/**']
     threshold: 3
     ignoreAnnotation: true
     excludeStringsWithLessThan5Characters: true
     ignoreStringsRegex: '$^'
   TooManyFunctions:
     active: true
-    excludes: ['**/*test*/**', '**/*Test*/**']
+    excludes: ['**/*test*/**', '**/*Test/**']
     thresholdInFiles: 11
     thresholdInClasses: 11
     thresholdInInterfaces: 11
@@ -243,7 +243,7 @@ exceptions:
       - 'toString'
   InstanceOfCheckForException:
     active: true
-    excludes: ['**/*test*/**', '**/*Test*/**']
+    excludes: ['**/*test*/**', '**/*Test/**']
   NotImplementedDeclaration:
     active: false
   ObjectExtendsThrowable:
@@ -269,7 +269,7 @@ exceptions:
     active: false
   ThrowingExceptionsWithoutMessageOrCause:
     active: true
-    excludes: ['**/*test*/**', '**/*Test*/**']
+    excludes: ['**/*test*/**', '**/*Test/**']
     exceptions:
       - 'ArrayIndexOutOfBoundsException'
       - 'Exception'
@@ -284,7 +284,7 @@ exceptions:
     active: true
   TooGenericExceptionCaught:
     active: true
-    excludes: ['**/*test*/**', '**/*Test*/**']
+    excludes: ['**/*test*/**', '**/*Test/**']
     exceptionNames:
       - 'ArrayIndexOutOfBoundsException'
       - 'Error'
@@ -330,7 +330,7 @@ naming:
     minimumFunctionNameLength: 3
   FunctionNaming:
     active: true
-    excludes: ['**/*test*/**', '**/*Test*/**']
+    excludes: ['**/*test*/**', '**/*Test/**']
     functionPattern: '[a-z][a-zA-Z0-9]*'
     excludeClassPattern: '$^'
   FunctionParameterNaming:
@@ -388,10 +388,10 @@ performance:
     threshold: 3
   ForEachOnRange:
     active: true
-    excludes: ['**/*test*/**', '**/*Test*/**']
+    excludes: ['**/*test*/**', '**/*Test/**']
   SpreadOperator:
     active: true
-    excludes: ['**/*test*/**', '**/*Test*/**']
+    excludes: ['**/*test*/**', '**/*Test/**']
   UnnecessaryPartOfBinaryExpression:
     active: false
   UnnecessaryTemporaryInstantiation:
@@ -464,7 +464,7 @@ potential-bugs:
     active: true
   LateinitUsage:
     active: false
-    excludes: ['**/*test*/**', '**/*Test*/**']
+    excludes: ['**/*test*/**', '**/*Test/**']
     ignoreOnClassesPattern: ''
   MapGetWithNotNullAssertionOperator:
     active: true
@@ -489,7 +489,7 @@ potential-bugs:
     active: true
   UnsafeCallOnNullableType:
     active: true
-    excludes: ['**/*test*/**', '**/*Test*/**']
+    excludes: ['**/*test*/**', '**/*Test/**']
   UnsafeCast:
     active: true
   UnusedUnaryOperator:
@@ -604,7 +604,7 @@ style:
     maxJumpCount: 1
   MagicNumber:
     active: true
-    excludes: ['**/*test*/**', '**/*Test*/**']
+    excludes: ['**/*test*/**', '**/*Test/**']
     ignoreNumbers:
       - '-1'
       - '0'
