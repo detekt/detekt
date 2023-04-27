@@ -26,7 +26,7 @@ internal class DetektPlain(private val project: Project) {
         }
 
         tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {
-            if (extension.isEnforceCheck.getOrElse(DetektExtension.DEFAULT_IS_ENFORCE_CHECK)) {
+            if (extension.isEnforceCheck.get()) {
                 it.dependsOn(detektTaskProvider)
             }
         }
