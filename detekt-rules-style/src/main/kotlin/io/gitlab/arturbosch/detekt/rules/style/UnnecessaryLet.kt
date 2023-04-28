@@ -74,7 +74,9 @@ class UnnecessaryLet(config: Config) : Rule(config) {
                 }
             }
         } else {
-            report(expression, "let expression can be omitted")
+            if (referenceCount == 0 || canBeReplacedWithCall(lambdaExpr) || !expression.inCallChains()) {
+                report(expression, "let expression can be omitted")
+            }
         }
     }
 
@@ -85,6 +87,11 @@ class UnnecessaryLet(config: Config) : Rule(config) {
     companion object {
         private val letFqName = FqName("kotlin.let")
     }
+}
+
+private fun KtCallExpression.inCallChains(): Boolean {
+    val qualified = parent as? KtQualifiedExpression ?: return false
+    return qualified.parent is KtQualifiedExpression || qualified.receiverExpression is KtQualifiedExpression
 }
 
 private fun canBeReplacedWithCall(lambdaExpr: KtLambdaExpression?): Boolean {
