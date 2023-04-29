@@ -151,6 +151,105 @@ class OutdatedDocumentationSpec {
             """.trimIndent()
             assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).hasSize(1)
         }
+
+        @Test
+        fun `should not report when only public property is documented in internal constructor`() {
+            val incorrectDeclarationsOrder = """
+                /**
+                 * Exception thrown from MyLibrary that can not be created outside of the library.
+                 * @property errorCode Description of param 
+                 */
+                class MyLibraryException internal constructor(
+                    val errorCode: String,
+                    cause: Throwable?,
+                ) : Exception(cause)
+            """.trimIndent()
+            assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when only public property is documented in private constructor`() {
+            val incorrectDeclarationsOrder = """
+                /**
+                 * Exception thrown from MyLibrary that can not be created outside of the library.
+                 * @property errorCode Description of param 
+                 */
+                class MyLibraryException private constructor(
+                    val errorCode: String,
+                    cause: Throwable?,
+                ) : Exception(cause)
+            """.trimIndent()
+            assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when only public param is documented`() {
+            val incorrectDeclarationsOrder = """
+                /**
+                 * Exception thrown from MyLibrary that can not be created outside of the library.
+                 * @param errorCode Description of param 
+                 */
+                class MyLibraryException internal constructor(
+                    val errorCode: String,
+                    cause: Throwable?,
+                ) : Exception(cause)
+            """.trimIndent()
+            assertThat(
+                OutdatedDocumentation(
+                    TestConfig("allowParamOnConstructorProperties" to "true")
+                ).compileAndLint(incorrectDeclarationsOrder)
+            ).isEmpty()
+        }
+
+        @Test
+        fun `should report when all public property is not documented`() {
+            val incorrectDeclarationsOrder = """
+                /**
+                 * Exception thrown from MyLibrary that can not be created outside of the library.
+                 * @param errorCode Description of param 
+                 */
+                class MyLibraryException internal constructor(
+                    val errorCode: String,
+                    val seed: Int,
+                    cause: Throwable?,
+                ) : Exception(cause)
+            """.trimIndent()
+            assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).hasSize(1)
+        }
+
+        @Test
+        fun `should report when all public property doc mismatch class property list order`() {
+            val incorrectDeclarationsOrder = """
+                /**
+                 * Exception thrown from MyLibrary that can not be created outside of the library.
+                 * @param seed some seed value
+                 * @param errorCode Description of param 
+                 */
+                class MyLibraryException internal constructor(
+                    val errorCode: String,
+                    val seed: Int,
+                    cause: Throwable?,
+                ) : Exception(cause)
+            """.trimIndent()
+            assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).hasSize(1)
+        }
+
+        @Test
+        fun `should report when only public property and param is documented with missing param`() {
+            val incorrectDeclarationsOrder = """
+                /**
+                 * Exception thrown from MyLibrary that can not be created outside of the library.
+                 * @property errorCode Description of param
+                 * @param seed Some seed 
+                 */
+                class MyLibraryException internal constructor(
+                    val errorCode: String,
+                    seed: Int,
+                    cause: Throwable?,
+                ) : Exception(cause)
+            """.trimIndent()
+            assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).hasSize(1)
+        }
     }
 
     @Nested

@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.rules.isInternal
 import org.jetbrains.kotlin.kdoc.parser.KDocKnownTag
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
@@ -21,6 +22,7 @@ import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.psi.psiUtil.PsiChildRange
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
+import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 
 /**
@@ -169,19 +171,39 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
 
     private fun reportIfDocumentationIsOutdated(
         element: KtNamedDeclaration,
-        elementDeclarationsProvider: () -> List<Declaration>
+        elementDeclarationsProvider: () -> List<Declaration>,
     ) {
         val doc = element.docComment ?: return
         val docDeclarations = getDocDeclarations(doc)
         if (docDeclarations.isNotEmpty()) {
             val elementDeclarations = elementDeclarationsProvider()
-            if (!declarationsMatch(docDeclarations, elementDeclarations)) {
+            val isInternalPrimaryConstructor = element is KtClass && isInternalOrPrivate(element.primaryConstructor)
+            if (!declarationsMatch(docDeclarations, elementDeclarations, isInternalPrimaryConstructor)) {
                 reportCodeSmell(element)
             }
         }
     }
 
-    private fun declarationsMatch(doc: List<Declaration>, element: List<Declaration>): Boolean {
+    private fun isInternalOrPrivate(primaryConstructor: KtPrimaryConstructor?): Boolean {
+        primaryConstructor ?: return false
+        return primaryConstructor.isInternal() || primaryConstructor.isPrivate()
+    }
+
+    private fun declarationsMatch(
+        doc: List<Declaration>,
+        element: List<Declaration>,
+        shouldAllowOnlyPropertyDoc: Boolean,
+    ): Boolean {
+        // checking if only property is documented
+        if (shouldAllowOnlyPropertyDoc && declarationsMatch(
+                doc,
+                element.filterNot { it.type == DeclarationType.PARAM },
+                false
+            )
+        ) {
+            return true
+        }
+
         if (doc.size != element.size) {
             return false
         }
@@ -215,7 +237,7 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
 
     data class Declaration(
         val name: String,
-        val type: DeclarationType
+        val type: DeclarationType,
     )
 
     enum class DeclarationType {
