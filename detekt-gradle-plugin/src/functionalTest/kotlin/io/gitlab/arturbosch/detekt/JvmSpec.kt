@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt
 
+import io.gitlab.arturbosch.detekt.testkit.loadTestDetektVersion
 import io.gitlab.arturbosch.detekt.testkit.withResourceDir
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.GradleRunner
@@ -11,7 +12,7 @@ class JvmSpec {
         val result = GradleRunner.create()
             .withResourceDir("jvm")
             .withPluginClasspath()
-            .withArguments("detektMain")
+            .withArguments("detektMain", "-Pdetekt.internal.tool.version.override=${loadTestDetektVersion()}")
             .buildAndFail()
 
         assertThat(result.output).contains("failed with 3 weighted issues.")

@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.testkit
 
+import io.gitlab.arturbosch.detekt.DetektPlugin
+import io.gitlab.arturbosch.detekt.internal.loadDetektVersion
 import org.gradle.api.Task
 import org.intellij.lang.annotations.Language
 
@@ -30,3 +32,10 @@ fun String.reIndent(level: Int = 0, baseIndent: Int = 3): String =
 
 fun joinGradleBlocks(@Language("gradle.kts") vararg blocks: String): String =
     blocks.joinToString(separator = "\n\n")
+
+fun loadTestDetektVersion(): String =
+    loadDetektVersion(
+        DetektPlugin::class.java.classLoader,
+        "detekt-test-versions.properties",
+        "detektTestVersion"
+    )

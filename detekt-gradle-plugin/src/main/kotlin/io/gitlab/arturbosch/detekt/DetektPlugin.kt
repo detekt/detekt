@@ -96,7 +96,12 @@ class DetektPlugin : Plugin<Project> {
             configuration.isCanBeConsumed = false
 
             configuration.defaultDependencies { dependencySet ->
-                val version = extension.toolVersion
+                val versionOverride = (project.findProperty(DETEKT_INTERNAL_TEST_VERSION) as? String)
+                val version = if ((versionOverride)?.isNotBlank() == true) {
+                    versionOverride
+                } else {
+                    extension.toolVersion
+                }
                 dependencySet.add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
             }
         }
@@ -131,6 +136,7 @@ class DetektPlugin : Plugin<Project> {
 
         internal const val DETEKT_ANDROID_DISABLED_PROPERTY = "detekt.android.disabled"
         internal const val DETEKT_MULTIPLATFORM_DISABLED_PROPERTY = "detekt.multiplatform.disabled"
+        internal const val DETEKT_INTERNAL_TEST_VERSION = "detekt.internal.tool.version.override"
     }
 }
 

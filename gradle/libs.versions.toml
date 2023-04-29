@@ -5,6 +5,8 @@ kotlin = "1.8.21"
 ktlint = "0.49.0"
 junit = "5.9.3"
 contester = "0.2.0"
+# Version used to self-inpsect and format the Gradle Plugin.
+detekt-self-inspection = "1.22.0"
 
 [libraries]
 githubRelease-gradle = "com.github.breadmoirai:github-release:2.4.1"
@@ -53,3 +55,4 @@ download = { id = "de.undercouch.download", version = "5.4.0" }
 gradleVersions = { id = "com.github.ben-manes.versions", version = "0.46.0" }
 pluginPublishing = { id = "com.gradle.plugin-publish", version = "1.2.0" }
 shadow = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }
+detekt-self-inspection  = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt-self-inspection" }

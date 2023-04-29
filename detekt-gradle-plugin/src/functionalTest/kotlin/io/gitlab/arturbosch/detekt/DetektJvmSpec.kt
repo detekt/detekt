@@ -20,7 +20,6 @@ class DetektJvmSpec {
                 }
                 repositories {
                     mavenCentral()
-                    mavenLocal()
                 }
                 detekt {
                     reports {
@@ -59,7 +58,6 @@ class DetektJvmSpec {
                 }
                 repositories {
                     mavenCentral()
-                    mavenLocal()
                 }
                 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                     reports {

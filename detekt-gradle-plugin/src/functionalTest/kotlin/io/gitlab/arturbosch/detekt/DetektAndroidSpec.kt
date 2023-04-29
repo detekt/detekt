@@ -739,7 +739,6 @@ private fun createGradleRunnerAndSetupProject(
             repositories {
                 mavenCentral()
                 google()
-                mavenLocal()
             }
         }
     """.trimIndent(),
