@@ -428,6 +428,47 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
         )
         assertThat(findings).isEmpty()
     }
+
+    @Test
+    fun `does not report when let call in call chains`() {
+        val findings = subject.compileAndLintWithContext(
+            env,
+            """
+                fun test(list: List<Any?>) {
+                    list
+                        .filterNotNull()
+                        .let { @Suppress("UNCHECKED_CAST") (it as List<String>) }
+                        .single()
+
+                    list
+                        .let { @Suppress("UNCHECKED_CAST") (it as List<String?>) }
+                        .single()
+
+                    list
+                        .filterNotNull()
+                        .let { println(it) }
+                }
+            """.trimIndent()
+        )
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `reports when let call in call chains`() {
+        val findings = subject.compileAndLintWithContext(
+            env,
+            """
+                fun test(list: List<String?>) {
+                    list
+                        .filterNotNull()
+                        .let { it.toInt() }
+                }
+                
+                fun List<String>.toInt(): List<Int> = mapNotNull { it.toIntOrNull() }
+            """.trimIndent()
+        )
+        assertThat(findings).hasSize(1)
+    }
 }
 
 private const val MESSAGE_OMIT_LET = "let expression can be omitted"
