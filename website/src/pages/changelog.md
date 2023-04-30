@@ -6,7 +6,7 @@ keywords: [changelog, release-notes, migration]
 
 # Changelog and Migration Guide
 
-#### 1.23.0-RC2 - 2023-04-23
+#### 1.23.0-RC3 - 2023-04-29
 
 ##### Notable Changes
 
@@ -47,10 +47,14 @@ keywords: [changelog, release-notes, migration]
 - We fixed the `includes`/`excludes` logic on the config file as they were overriding each other - [#5782](https://github.com/detekt/detekt/pull/5782)
 - We fully removed support for Spek from `detekt-test-utils`. The recommended testing framework is JUnit - [#5785](https://github.com/detekt/detekt/pull/5785)
 - The minimum supported Gradle version is now `v6.8.3` - [#5616](https://github.com/detekt/detekt/pull/5616)
-- This version of detekt is built with Gradle `v8.0.2`, AGP `7.4.2`, Kotlin `1.8.20` and KtLint `0.49.0` (see [#5893](https://github.com/detekt/detekt/pull/5893) [#5723](https://github.com/detekt/detekt/pull/5723) [#5877](https://github.com/detekt/detekt/pull/5877) [#6028](https://github.com/detekt/detekt/pull/6028))
+- This version of detekt is built with Gradle `v8.0.2`, AGP `8.0.0`, Kotlin `1.8.21` and KtLint `0.49.0` (see [#5893](https://github.com/detekt/detekt/pull/5893) [#5723](https://github.com/detekt/detekt/pull/5723) [#5877](https://github.com/detekt/detekt/pull/5877) [#6028](https://github.com/detekt/detekt/pull/6028) [#6043](https://github.com/detekt/detekt/pull/6043) [#5995](https://github.com/detekt/detekt/pull/5995))
+- We now added a [Code of Conduct](https://github.com/detekt/detekt/blob/main/.github/CODE_OF_CONDUCT.md) to our repo. Please read it and follow it when interacting with our community on our channels.
 
 ##### Changelog
 
+- Fix incomplete `requireRootInDeclaration` check in `InvalidPackageDeclaration` - [#6045](https://github.com/detekt/detekt/pull/6045)
+- BracesOnWhenStatements: fix false positive for necessary braces - [#6042](https://github.com/detekt/detekt/pull/6042)
+- Fix redundant ClassOrdering violations using maximum increasing section - [#6003](https://github.com/detekt/detekt/pull/6003)
 - UseIsNullOrEmpty: fix false negative with chained call - [#6027](https://github.com/detekt/detekt/pull/6027)
 - Create docs for Gradle Worker API - [#6016](https://github.com/detekt/detekt/pull/6016)
 - Compile compiler plugin against kotlin-compiler-embeddable - [#6012](https://github.com/detekt/detekt/pull/6012)
@@ -140,6 +144,7 @@ keywords: [changelog, release-notes, migration]
 
 ##### Dependency Updates
 
+- Update JaCoCo to v0.8.10 - [#6044](https://github.com/detekt/detekt/pull/6044)
 - Update plugin pluginPublishing to v1.2.0 - [#5975](https://github.com/detekt/detekt/pull/5975)
 - Update ktlint to v0.48.1 - [#5661](https://github.com/detekt/detekt/pull/5661)
 - Update dependency com.android.tools.build:gradle to v7.4.0 - [#5693](https://github.com/detekt/detekt/pull/5693)
@@ -155,6 +160,7 @@ keywords: [changelog, release-notes, migration]
 
 ##### Housekeeping & Refactorings
 
+- Reduce eager POM task creation - [#6041](https://github.com/detekt/detekt/pull/6041)
 - Improve our configuration of `ClassNaming` and `FunctionNaming` - [#6019](https://github.com/detekt/detekt/pull/6019)
 - Comment text in the Issue/PR Template - [#5992](https://github.com/detekt/detekt/pull/5992)
 - Fix typo: Github -> GitHub - [#5956](https://github.com/detekt/detekt/pull/5956)
@@ -182,6 +188,12 @@ keywords: [changelog, release-notes, migration]
 - Remove redundant build config - [#5617](https://github.com/detekt/detekt/pull/5617)
 - Migrate to AGP namespaces - [#5569](https://github.com/detekt/detekt/pull/5569)
 - Fix typo - [#5557](https://github.com/detekt/detekt/pull/5557)
+
+##### Contributors
+
+We would like to thank the following contributors that made this release possible: @3flex, @BeBAKE, @BraisGabin, @Goooler, @SaumyaBhushan, @TWiStErRob, @VitalyVPinchuk, @adef145, @asomov, @atulgpt, @chao2zhang, @cketti, @cortinico, @drawers, @dzirbel, @igorwojda, @lexa-diky, @luanpotter, @marschwar, @mjovanc, @mmorozkov, @ncteisen, @osipxd, @ov7a, @schalkms, @t-kameyama
+
+See all issues at: [1.23.0](https://github.com/detekt/detekt/milestone/88)
 
 #### 1.22.0 - 2022-11-20
 
