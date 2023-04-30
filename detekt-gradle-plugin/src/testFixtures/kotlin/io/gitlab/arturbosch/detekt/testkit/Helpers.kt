@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.testkit
 import org.gradle.api.Task
 import org.intellij.lang.annotations.Language
 
-fun Task.dependenciesAsNames() = this.taskDependencies.getDependencies(this).map { it.name }
 fun Task.dependenciesAsPaths() = this.taskDependencies.getDependencies(this).map { it.path }
 
 /**
