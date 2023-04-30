@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.psi.psiUtil.PsiChildRange
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
+import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 
 /**
  * This rule will report any class, function or constructor with KDoc that does not match the declaration signature.
@@ -83,17 +84,35 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
 
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
-        reportIfDocumentationIsOutdated(klass) { getClassDeclarations(klass) }
+        val classDeclarations = getClassDeclarations(klass)
+        (
+            isDocumentationOutdated(klass) { classDeclarations } &&
+                (
+                    // checking below only if constructor in internal or private
+                    isInternalOrPrivate(klass.primaryConstructor).not() ||
+                        isDocumentationOutdated(klass) {
+                            // case when only property can be documented
+                            classDeclarations.filterNot { it.type == DeclarationType.PARAM }
+                        }
+                    )
+            )
+            .ifTrue {
+                reportCodeSmell(klass)
+            }
     }
 
     override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
         super.visitSecondaryConstructor(constructor)
-        reportIfDocumentationIsOutdated(constructor) { getSecondaryConstructorDeclarations(constructor) }
+        isDocumentationOutdated(constructor) { getSecondaryConstructorDeclarations(constructor) }.ifTrue {
+            reportCodeSmell(constructor)
+        }
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
-        reportIfDocumentationIsOutdated(function) { getFunctionDeclarations(function) }
+        isDocumentationOutdated(function) { getFunctionDeclarations(function) }.ifTrue {
+            reportCodeSmell(function)
+        }
     }
 
     private fun getClassDeclarations(klass: KtClass): List<Declaration> {
@@ -169,18 +188,17 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun reportIfDocumentationIsOutdated(
+    private fun isDocumentationOutdated(
         element: KtNamedDeclaration,
         elementDeclarationsProvider: () -> List<Declaration>,
-    ) {
-        val doc = element.docComment ?: return
+    ): Boolean {
+        val doc = element.docComment ?: return false
         val docDeclarations = getDocDeclarations(doc)
-        if (docDeclarations.isNotEmpty()) {
+        return if (docDeclarations.isNotEmpty()) {
             val elementDeclarations = elementDeclarationsProvider()
-            val isInternalPrimaryConstructor = element is KtClass && isInternalOrPrivate(element.primaryConstructor)
-            if (!declarationsMatch(docDeclarations, elementDeclarations, isInternalPrimaryConstructor)) {
-                reportCodeSmell(element)
-            }
+            !declarationsMatch(docDeclarations, elementDeclarations)
+        } else {
+            false
         }
     }
 
@@ -192,18 +210,7 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     private fun declarationsMatch(
         doc: List<Declaration>,
         element: List<Declaration>,
-        shouldAllowOnlyPropertyDoc: Boolean,
     ): Boolean {
-        // checking if only property is documented
-        if (shouldAllowOnlyPropertyDoc && declarationsMatch(
-                doc,
-                element.filterNot { it.type == DeclarationType.PARAM },
-                false
-            )
-        ) {
-            return true
-        }
-
         if (doc.size != element.size) {
             return false
         }
