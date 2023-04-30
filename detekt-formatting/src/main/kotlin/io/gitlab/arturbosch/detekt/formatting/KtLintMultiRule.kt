@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ArgumentListWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BlockCommentInitialStarAlignment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ClassName
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ContextReceiverMapping
@@ -16,6 +17,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Filename
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FinalNewline
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunKeywordSpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionName
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionReturnTypeSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionSignature
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionStartOfBodySpacing
@@ -51,6 +53,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.PackageName
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ParameterListSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ParameterListWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ParameterWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.PropertyName
 import io.gitlab.arturbosch.detekt.formatting.wrappers.PropertyWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundAngleBrackets
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundColon
@@ -92,11 +95,13 @@ class KtLintMultiRule(config: Config = Config.empty) :
         ArgumentListWrapping(config),
         BlockCommentInitialStarAlignment(config),
         ChainWrapping(config),
+        ClassName(config),
         CommentSpacing(config),
         CommentWrapping(config),
         EnumEntryNameCase(config),
         Filename(config),
         FinalNewline(config),
+        FunctionName(config),
         FunKeywordSpacing(config),
         FunctionReturnTypeSpacing(config),
         FunctionStartOfBodySpacing(config),
@@ -125,6 +130,7 @@ class KtLintMultiRule(config: Config = Config.empty) :
         PackageName(config),
         ParameterListWrapping(config),
         ParameterWrapping(config),
+        PropertyName(config),
         PropertyWrapping(config),
         SpacingAroundAngleBrackets(config),
         SpacingAroundColon(config),
