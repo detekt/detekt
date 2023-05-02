@@ -22,7 +22,7 @@ jobs:
           stale-pr-label: stale
           exempt-issue-labels: help wanted, good first issue, never gets stale, blocked
           exempt-pr-labels: help wanted, good first issue, never gets stale, blocked
-          exempt-milestones: Future Breaking Changes in Major Versions
+          exempt-milestones: 2.0.0
       - uses: actions/stale@1160a2240286f5da8ec72b1c0816ce2481aabf84 # v8
         with:
           repo-token: ${{ secrets.DETEKT_CI_GITHUB_USER_TOKEN }}
