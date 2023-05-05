@@ -768,7 +768,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 }
 
                 @Test
-                fun `does report when the parameter is only checked on non-nullity with multiple clauses`() {
+                fun `does report when the parameter is only checked on non-nullity with and condition`() {
                     val code = """
                         fun foo(a: Int?) {
                             when {
@@ -777,6 +777,42 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         }
                     """.trimIndent()
                     assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                }
+
+                @Test
+                fun `does not report when the parameter is checked on non-nullity with or condition`() {
+                    val code = """
+                        fun foo(a: Int?, other: Int) {
+                            when {
+                                a != null || other % 2 == 0 -> println(2 + other)
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                @Test
+                fun `does not report when the parameter is checked on non-nullity inside braces with or condition`() {
+                    val code = """
+                        fun foo(a: Int?, other: Int) {
+                            when {
+                                (a != null) || other % 2 == 0 -> println(2 + other)
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                }
+
+                @Test
+                fun `doesn't report when the parameter is checked on non null with or condition nested 1 lvl deep`() {
+                    val code = """
+                        fun foo(a: Int?, other: Int, other1: Int) {
+                            when {
+                                other1 % 3 == 0 && (a != null || other % 2 == 0) -> println(2 + other)
+                            }
+                        }
+                    """.trimIndent()
+                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -841,41 +877,6 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             when {
                                 !b != a -> {
                                     println("handles b is null/non-null case")
-                                }
-                            }
-                        }
-                    """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-                }
-
-                @Test
-                fun `does not report when parameter handles for nullability with dec operator with && clause`() {
-                    val code = """
-                        operator fun A?.not() = this
-                        class A
-                        
-                        fun test(a: A, b: A?) {
-                            when {
-                                (b != null) && !b != a -> {
-                                    println("doesn't handle null")
-                                }
-                            }
-                        }
-                    """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-                }
-
-                @Test
-                fun `does not report when parameter handles for null with dec operator with _and_ and _or_ clause`() {
-                    val code = """
-                        operator fun A?.not() = this
-                        class A
-
-                        var c = 10
-                        fun test(a: A, b: A?) {
-                            when {
-                                (c > 10 || (b != null && !b != a)) -> {
-                                    println("doesn't handle null")
                                 }
                             }
                         }
