@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 private const val VALUES = "values"
-private const val VALUES_PATTERNS = "valuePatterns"
+private const val COMMENTS = "comments"
 private const val ALLOWED_PATTERNS = "allowedPatterns"
 private const val MESSAGE = "customMessage"
 
@@ -110,7 +110,7 @@ class ForbiddenCommentSpec {
 
         @Nested
         inner class `when given Banana` {
-            val config = TestConfig(VALUES_PATTERNS to "Banana")
+            val config = TestConfig(COMMENTS to "Banana")
 
             @Test
             @DisplayName("should not report TODO: usages")
@@ -150,7 +150,7 @@ class ForbiddenCommentSpec {
         @Nested
         @DisplayName("when given listOf(\"banana\")")
         inner class ListOfBanana {
-            val config = TestConfig(VALUES_PATTERNS to listOf("Banana"))
+            val config = TestConfig(COMMENTS to listOf("Banana"))
 
             @Test
             @DisplayName("should not report TODO: usages")
@@ -252,7 +252,7 @@ class ForbiddenCommentSpec {
     inner class `custom value pattern is configured` {
         private val patternStr = """^//( )?(?i)REVIEW\b"""
         private val messageConfig = TestConfig(
-            VALUES_PATTERNS to listOf("STOPSHIP", patternStr),
+            COMMENTS to listOf("STOPSHIP", patternStr),
         )
 
         @Test
@@ -294,6 +294,13 @@ class ForbiddenCommentSpec {
             val comment = "// REVIEW foo -> flag STOPSHIP"
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(2)
+        }
+
+        @Test
+        fun `should report a finding matching a pattern contained in the comment`() {
+            val comment = "// foo STOPSHIP bar"
+            val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
         }
     }
 }

@@ -38,11 +38,11 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("forbidden comment strings")
-    @Deprecated("Use `valuePatterns` instead, make sure you escape your text for Regular Expressions.")
+    @Deprecated("Use `comments` instead, make sure you escape your text for Regular Expressions.")
     private val values: List<String> by config(emptyList())
 
     @Configuration("forbidden comment string patterns")
-    private val valuePatterns: List<Regex> by config(listOf("FIXME:", "STOPSHIP:", "TODO:")) {
+    private val comments: List<Regex> by config(listOf("FIXME:", "STOPSHIP:", "TODO:")) {
         it.map(String::toRegex)
     }
 
@@ -82,7 +82,7 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
             }
         }
 
-        valuePatterns.forEach {
+        comments.forEach {
             if (it.containsMatchIn(text)) {
                 report(
                     CodeSmell(
