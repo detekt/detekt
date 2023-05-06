@@ -3,6 +3,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
@@ -267,7 +268,7 @@ class ForbiddenCommentSpec {
             val comment = "// STOPSHIP to express in the preview that it's not a normal TextView."
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
-            io.gitlab.arturbosch.detekt.test.assertThat(findings[0])
+            assertThat(findings[0])
                 .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, "STOPSHIP"))
         }
 
@@ -276,7 +277,7 @@ class ForbiddenCommentSpec {
             val comment = "// REVIEW foo -> flag"
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
-            io.gitlab.arturbosch.detekt.test.assertThat(findings[0])
+            assertThat(findings[0])
                 .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, patternStr))
         }
 
@@ -285,7 +286,7 @@ class ForbiddenCommentSpec {
             val comment = "//REVIEW foo -> flag"
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
-            io.gitlab.arturbosch.detekt.test.assertThat(findings[0])
+            assertThat(findings[0])
                 .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, patternStr))
         }
 
