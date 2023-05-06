@@ -38,7 +38,7 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("forbidden comment strings")
-    @Deprecated("Use `valuePatterns` instead")
+    @Deprecated("Use `valuePatterns` instead, make sure you escape your text for Regular Expressions.")
     private val values: List<String> by config(emptyList())
 
     @Configuration("forbidden comment string patterns")
