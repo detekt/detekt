@@ -19,7 +19,6 @@ class UnnamedParameterUseSpec(private val env: KotlinCoreEnvironment) {
                 println("f called")
             }
 
-
             fun test() {
                 f()
             }
@@ -33,7 +32,6 @@ class UnnamedParameterUseSpec(private val env: KotlinCoreEnvironment) {
             fun f(enabled: Boolean) {
                 println(enabled)
             }
-
 
             fun test() {
                 f(true)
@@ -49,7 +47,6 @@ class UnnamedParameterUseSpec(private val env: KotlinCoreEnvironment) {
                 println(enabled)
             }
 
-
             fun test() {
                 f(true)
             }
@@ -63,7 +60,6 @@ class UnnamedParameterUseSpec(private val env: KotlinCoreEnvironment) {
             fun f(enabled: Boolean) {
                 println(enabled)
             }
-
 
             fun test() {
                 f(true)
@@ -84,7 +80,6 @@ class UnnamedParameterUseSpec(private val env: KotlinCoreEnvironment) {
                 if (shouldLog) println(enabled)
             }
 
-
             fun test() {
                 f(false, true)
             }
@@ -100,7 +95,6 @@ class UnnamedParameterUseSpec(private val env: KotlinCoreEnvironment) {
             fun f(enabled: Boolean, shouldLog: Boolean) {
                 if (shouldLog) println(enabled)
             }
-
 
             fun test() {
                 f(true, true)
@@ -118,7 +112,6 @@ class UnnamedParameterUseSpec(private val env: KotlinCoreEnvironment) {
                 if (shouldLog) println(tag + enabled.toString())
             }
 
-
             fun test() {
                 f(true, "", true)
             }
@@ -134,7 +127,6 @@ class UnnamedParameterUseSpec(private val env: KotlinCoreEnvironment) {
             fun f(enabled: Boolean, tag: String, shouldLog: Boolean) {
                 if (shouldLog) println(tag + enabled.toString())
             }
-
 
             fun test() {
                 f(true, "", true)
@@ -169,7 +161,6 @@ class UnnamedParameterUseSpec(private val env: KotlinCoreEnvironment) {
                 if (shouldLog) println(tag + enabled.toString())
             }
 
-
             fun test() {
                 f("", enabled = true, true)
             }
@@ -185,7 +176,6 @@ class UnnamedParameterUseSpec(private val env: KotlinCoreEnvironment) {
             fun f(tag: String, enabled: Boolean, shouldLog: Boolean) {
                 if (shouldLog) println(tag + enabled.toString())
             }
-
 
             fun test() {
                 f("", enabled = true, true)
