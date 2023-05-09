@@ -475,6 +475,8 @@ potential-bugs:
     active: false
   NullableToStringCall:
     active: false
+  PropertyUsedBeforeDeclaration:
+    active: false
   UnconditionalJumpStatementInLoop:
     active: false
   UnnecessaryNotNullCheck:
@@ -710,6 +712,8 @@ style:
   UnnecessaryApply:
     active: true
   UnnecessaryBackticks:
+    active: false
+  UnnecessaryBracesAroundTrailingLambda:
     active: false
   UnnecessaryFilter:
     active: true
