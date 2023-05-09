@@ -10,8 +10,9 @@ class FormattingProviderSpec {
     fun `preferred ktlint rule ordering is applied`() {
         val subject: RuleSet = FormattingProvider().instance(Config.empty)
 
-        val indexOfFirstLateRule = subject.rules.indexOfFirst { (it as FormattingRule).runAsLateAsPossible }
-        val indexOfLastRegularRule = subject.rules.indexOfLast { (it as FormattingRule).runAsLateAsPossible.not() }
+        val formattingRules = subject.rules.map { it as FormattingRule }
+        val indexOfFirstLateRule = formattingRules.indexOfFirst { it.runAsLateAsPossible }
+        val indexOfLastRegularRule = formattingRules.indexOfLast { it.runAsLateAsPossible.not() }
 
         assertThat(indexOfFirstLateRule).isGreaterThan(indexOfLastRegularRule)
     }
