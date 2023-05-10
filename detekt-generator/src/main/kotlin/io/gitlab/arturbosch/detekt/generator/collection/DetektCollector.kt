@@ -20,6 +20,7 @@ class DetektCollector : Collector<RuleSetPage> {
     private fun buildRuleSetPages(): List<RuleSetPage> {
         val multiRules = multiRuleCollector.items
         val rules = ruleCollector.items
+        // TODO: associate rules from formatting rulset?
         val multiRuleNameToRules = multiRules.associateBy({ it.name }, { it.rules })
         val ruleSets = ruleSetProviderCollector.items
 

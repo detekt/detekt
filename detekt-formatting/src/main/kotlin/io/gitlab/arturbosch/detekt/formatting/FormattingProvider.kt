@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -108,20 +107,6 @@ class FormattingProvider : RuleSetProvider {
             TypeParameterListSpacing(config),
         ).sortedWith(FormattingRuleComparator)
     )
-
-    /**
-     * This serves as weak heuristic to order the wrapped rules according to their visitor modifiers.
-     * Currently only RunAsLateAsPossible is supported.
-     */
-    private object FormattingRuleComparator : Comparator<FormattingRule> {
-        override fun compare(o1: FormattingRule, o2: FormattingRule): Int {
-            if (o1.runAsLateAsPossible == o2.runAsLateAsPossible) {
-                return 0
-            }
-            return if (o1.runAsLateAsPossible) 1 else -1
-        }
-
-    }
 
     companion object {
         @Configuration("if android style guides should be preferred")

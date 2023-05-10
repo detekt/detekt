@@ -3,13 +3,7 @@ package io.gitlab.arturbosch.detekt.generator.collection
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.rules.isOverride
-import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtClassOrObject
-import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtReferenceExpression
-import org.jetbrains.kotlin.psi.KtSuperTypeList
-import org.jetbrains.kotlin.psi.KtValueArgumentList
+import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
@@ -24,6 +18,7 @@ data class MultiRule(
 @Suppress("DEPRECATION")
 private val multiRule = io.gitlab.arturbosch.detekt.api.MultiRule::class.simpleName.orEmpty()
 
+// TODO: "Remove with this PR
 class MultiRuleCollector : Collector<MultiRule> {
     override val items = mutableListOf<MultiRule>()
 
