@@ -64,11 +64,13 @@ private class RuleSetProviderVisitor : DetektVisitor() {
     }
 
     override fun visitSuperTypeList(list: KtSuperTypeList) {
-        val superTypes = list.entries
-            ?.mapNotNull { it.typeAsUserType?.referencedName }
-            ?.toSet()
-            .orEmpty()
-        containsRuleSetProvider = SUPPORTED_PROVIDERS.any { it in superTypes }
+        if (!containsRuleSetProvider) {
+            val superTypes = list.entries
+                ?.mapNotNull { it.typeAsUserType?.referencedName }
+                ?.toSet()
+                .orEmpty()
+            containsRuleSetProvider = SUPPORTED_PROVIDERS.any { it in superTypes }
+        }
         super.visitSuperTypeList(list)
     }
 
