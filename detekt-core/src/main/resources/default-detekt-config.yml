@@ -581,7 +581,6 @@ style:
   ForbiddenImport:
     active: false
     imports: []
-    forbiddenPatterns: ''
   ForbiddenMethodCall:
     active: false
     methods:
