@@ -39,8 +39,10 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
         list.map { Forbidden(it.value.simplePatternToRegex(), it.reason) }
     }
 
-    @Deprecated("Use `imports` instead. As both config properties serve the same purpose, and the " +
-        "forbiddenPatterns config property is poorly named and less flexible, it will be removed in the future.")
+    @Deprecated(
+        "Use `imports` instead. As both config properties serve the same purpose, and the " +
+            "forbiddenPatterns config property is poorly named and less flexible, it will be removed in the future."
+    )
     @Configuration("reports imports which match the specified regular expression. For example `net.*R`.")
     private val forbiddenPatterns: Regex by config("", String::toRegex)
 
