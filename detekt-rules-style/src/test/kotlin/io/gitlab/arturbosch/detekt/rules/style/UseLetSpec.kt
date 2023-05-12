@@ -24,10 +24,10 @@ class UseLetSpec {
         )
 
         val exprs = listOf(
-            Pair("1", false),
-            Pair("null", true),
-            Pair("{ 1 }", false),
-            Pair("{ null }", true)
+            "1" to false,
+            "null" to true,
+            "{ 1 }" to false,
+            "{ null }" to true,
         )
 
         return conditions.flatMap { (condition, isNonNullCheck, isNullCheck) ->
