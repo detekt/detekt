@@ -20,7 +20,7 @@ kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", versio
 kotlin-reflection = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 
 kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.8.1"
-kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0"
+kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1"
 
 # This represents the the oldest AGP version that is supported by detekt.
 # This should only be updated when updating the minimum version supported by detekt's Gradle plugin.
