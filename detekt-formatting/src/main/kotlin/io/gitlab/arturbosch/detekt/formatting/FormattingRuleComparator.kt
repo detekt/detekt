@@ -11,5 +11,4 @@ internal object FormattingRuleComparator : Comparator<FormattingRule> {
         }
         return if (o1.runAsLateAsPossible) 1 else -1
     }
-
 }

@@ -5,7 +5,14 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.rules.isOverride
-import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.KtAnnotatedExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.jetbrains.kotlin.psi.KtSuperTypeList
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
@@ -128,7 +135,8 @@ private class RuleSetProviderVisitor : DetektVisitor() {
                 .mapNotNull { it.getArgumentExpression() }
                 .firstNotNullOfOrNull {
                     it.findDescendantOfType<KtNameReferenceExpression> { exp -> exp.text == "listOf" }?.parent
-                } ?: throw InvalidDocumentationException("RuleSetProvider $name doesn't provide list of rules.")
+                }
+                ?: throw InvalidDocumentationException("RuleSetProvider $name doesn't provide list of rules.")
 
             val ruleArgumentNames = (ruleListExpression as? KtCallExpression)
                 ?.valueArguments
