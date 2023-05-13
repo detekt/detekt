@@ -71,6 +71,7 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
         return "The import `$forbiddenImport` has been forbidden in the detekt config."
     }
 
+    @Suppress("DEPRECATION")
     private fun containsForbiddenPattern(import: String): Boolean =
         forbiddenPatterns.pattern.isNotEmpty() && forbiddenPatterns.containsMatchIn(import)
 }
