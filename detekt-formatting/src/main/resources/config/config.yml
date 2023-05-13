@@ -1,6 +1,7 @@
 formatting:
   active: true
   android: false
+  autoCorrect: true
   AnnotationOnSeparateLine:
     active: true
     autoCorrect: true
