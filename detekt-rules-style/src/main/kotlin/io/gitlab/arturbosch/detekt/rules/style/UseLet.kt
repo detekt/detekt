@@ -10,10 +10,11 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
 import io.gitlab.arturbosch.detekt.rules.isNullCheck
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
-import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
 
 /**
  * `if` expressions that either check for not-null and return `null` in the false case or check for `null` and returns
@@ -40,9 +41,13 @@ class UseLet(
     )
 
     private fun isExpressionNull(branch: KtExpression?): Boolean {
-        return branch?.let {
-            KtPsiUtil.isNullConstant(it.lastBlockStatementOrThis())
-        } ?: false
+        val statement = when (branch) {
+            is KtBlockExpression -> if (branch.statements.size == 1) branch.statements.first() else null
+            is KtConstantExpression -> branch
+            else -> null
+        }
+
+        return statement?.let { KtPsiUtil.isNullConstant(it) } ?: return false
     }
 
     override fun visitIfExpression(expression: KtIfExpression) {

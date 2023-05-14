@@ -50,6 +50,24 @@ class UseLetSpec {
     }
 
     @Test
+    fun `do not capture blocks that have multiple expressions`() {
+        val findings = subject.compileAndLint(
+            """
+                fun testCallToCreateTempFile(s: String?) {
+                    val x = if (s == null) {
+                        println("foo")
+                        null
+                    } else {
+                        "x"
+                    }
+                }
+            """.trimIndent()
+        )
+
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
     fun `it allows the following expressions (currently)`() {
         val findings = subject.compileAndLint(
             """
