@@ -16,7 +16,7 @@ dependencies {
     testImplementation(libs.reflections)
 }
 
-val tempDocDir = "$buildDir/docs"
+val tempDocDir = "$buildDir/docs/rules"
 val documentationDir = "$rootDir/website/docs/rules"
 val configDir = "$rootDir/detekt-core/src/main/resources"
 val cliOptionsFile = "$rootDir/website/docs/gettingstarted/_cli-options.md"
