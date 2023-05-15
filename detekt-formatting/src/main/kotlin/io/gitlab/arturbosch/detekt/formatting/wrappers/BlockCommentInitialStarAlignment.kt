@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#block-comment-initial-star-alignment) for
+ * See [ktlint docs](https://pinterest.github.io/ktlint/__KTLINT_VERSION__/rules/experimental/#block-comment-initial-star-alignment) for
  * documentation.
  */
 @ActiveByDefault(since = "1.23.0")

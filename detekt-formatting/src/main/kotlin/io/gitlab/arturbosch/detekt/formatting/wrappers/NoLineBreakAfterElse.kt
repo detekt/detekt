@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#no-line-break-after-else) for documentation.
+ * See [ktlint docs](https://pinterest.github.io/ktlint/__KTLINT_VERSION__/rules/standard/#no-line-break-after-else) for documentation.
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")

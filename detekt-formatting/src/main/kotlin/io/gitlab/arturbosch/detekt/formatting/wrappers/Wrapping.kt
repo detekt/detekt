@@ -13,7 +13,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#wrapping) for documentation.
+ * See [ktlint docs](https://pinterest.github.io/ktlint/__KTLINT_VERSION__/rules/standard/#wrapping) for documentation.
  */
 @ActiveByDefault(since = "1.20.0")
 @AutoCorrectable(since = "1.20.0")

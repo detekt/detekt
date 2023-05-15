@@ -16,6 +16,7 @@ dependencies {
     testImplementation(libs.reflections)
 }
 
+val tempDocDir = "$buildDir/docs"
 val documentationDir = "$rootDir/website/docs/rules"
 val configDir = "$rootDir/detekt-core/src/main/resources"
 val cliOptionsFile = "$rootDir/website/docs/gettingstarted/_cli-options.md"
@@ -32,13 +33,17 @@ tasks.register("generateWebsite") {
     )
 }
 
-val generateDocumentation by tasks.registering(JavaExec::class) {
+val generateDocumentation by tasks.registering {
+    dependsOn(copyRuleDocsToWebsite)
+    description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
+    group = "documentation"
+}
+
+val doGenerateDocumentation by tasks.registering(JavaExec::class) {
     dependsOn(
         ":detekt-rules-libraries:sourcesJar",
         ":detekt-rules-ruleauthors:sourcesJar",
     )
-    description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
-    group = "documentation"
 
     val ruleModules = rootProject.subprojects.asSequence()
         .filter { "rules" in it.name || it.name == "detekt-formatting" }
@@ -50,7 +55,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     inputs.files(ruleModules)
 
     outputs.files(
-        fileTree(documentationDir),
+        fileTree(tempDocDir),
         file(defaultConfigFile),
         file(formattingConfigFile),
         file(librariesConfigFile),
@@ -69,12 +74,24 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         "--input",
         ruleModules.joinToString(","),
         "--documentation",
-        documentationDir,
+        tempDocDir,
         "--config",
         configDir,
         "--cli-options",
         cliOptionsFile,
     )
+}
+
+val copyRuleDocsToWebsite by tasks.registering(CopyDirTask::class) {
+    dependsOn(doGenerateDocumentation)
+
+    inputs.files(fileTree(tempDocDir))
+    outputs.files(fileTree(documentationDir))
+
+    source.set(file(tempDocDir))
+    target.set(file(documentationDir))
+    placeholderName.set("__KTLINT_VERSION__")
+    placeholderValue.set(libs.versions.ktlint)
 }
 
 val generatedFormattingConfig: Configuration by configurations.creating {
@@ -99,19 +116,19 @@ val generatedCoreConfig: Configuration by configurations.creating {
 
 artifacts {
     add(generatedFormattingConfig.name, file(formattingConfigFile)) {
-        builtBy(generateDocumentation)
+        builtBy(doGenerateDocumentation)
     }
     add(generatedLibrariesConfig.name, file(librariesConfigFile)) {
-        builtBy(generateDocumentation)
+        builtBy(doGenerateDocumentation)
     }
     add(generatedRuleauthorsConfig.name, file(ruleauthorsConfigFile)) {
-        builtBy(generateDocumentation)
+        builtBy(doGenerateDocumentation)
     }
     add(generatedCoreConfig.name, file(defaultConfigFile)) {
-        builtBy(generateDocumentation)
+        builtBy(doGenerateDocumentation)
     }
     add(generatedCoreConfig.name, file(deprecationFile)) {
-        builtBy(generateDocumentation)
+        builtBy(doGenerateDocumentation)
     }
 }
 
@@ -134,8 +151,8 @@ val verifyGeneratorOutput by tasks.registering(Exec::class) {
         if (executionResult.get().exitValue == 1) {
             throw GradleException(
                 "At least one generated configuration file is not up-to-date. " +
-                    "You can execute the generateDocumentation Gradle task " +
-                    "to update generated files then commit the changes."
+                        "You can execute the generateDocumentation Gradle task " +
+                        "to update generated files then commit the changes."
             )
         }
     }
