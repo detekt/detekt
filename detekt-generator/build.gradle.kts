@@ -151,8 +151,8 @@ val verifyGeneratorOutput by tasks.registering(Exec::class) {
         if (executionResult.get().exitValue == 1) {
             throw GradleException(
                 "At least one generated configuration file is not up-to-date. " +
-                        "You can execute the generateDocumentation Gradle task " +
-                        "to update generated files then commit the changes."
+                    "You can execute the generateDocumentation Gradle task " +
+                    "to update generated files then commit the changes."
             )
         }
     }
