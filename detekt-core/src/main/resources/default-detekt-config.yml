@@ -567,11 +567,13 @@ style:
   ForbiddenComment:
     active: true
     comments:
-      - 'FIXME:'
-      - 'STOPSHIP:'
-      - 'TODO:'
+      - reason: 'some fixes are pending.'
+        value: 'FIXME:'
+      - reason: 'some changes are present which needs to be addressed before ship.'
+        value: 'STOPSHIP:'
+      - reason: 'some changes are pending.'
+        value: 'TODO:'
     allowedPatterns: ''
-    customMessage: ''
   ForbiddenImport:
     active: false
     imports: []

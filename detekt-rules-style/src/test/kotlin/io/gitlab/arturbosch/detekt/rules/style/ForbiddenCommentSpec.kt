@@ -9,6 +9,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 
 private const val VALUES = "values"
 private const val COMMENTS = "comments"
@@ -34,6 +38,9 @@ class ForbiddenCommentSpec {
         fun reportTodoColon() {
             val findings = ForbiddenComment().compileAndLint(todoColon)
             assertThat(findings).hasSize(1)
+            assertThat(findings[0]).hasMessage(
+                String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, "TODO:", "some changes are pending.")
+            )
         }
 
         @Test
@@ -60,6 +67,13 @@ class ForbiddenCommentSpec {
         fun reportStopShipColon() {
             val findings = ForbiddenComment().compileAndLint(stopShipColon)
             assertThat(findings).hasSize(1)
+            assertThat(findings[0]).hasMessage(
+                String.format(
+                    ForbiddenComment.DEFAULT_ERROR_MESSAGE,
+                    "STOPSHIP:",
+                    "some changes are present which needs to be addressed before ship."
+                )
+            )
         }
 
         @Test
@@ -103,6 +117,34 @@ class ForbiddenCommentSpec {
             val findings = ForbiddenComment().compileAndLint(code)
             assertThat(findings).hasSize(2)
         }
+
+        @Test
+        fun `should report violation in KDoc 1`() {
+            @Suppress("MultilineRawStringIndentation")
+            val code = """
+                /**
+                 * TODO: I need to fix this.
+* left shifted asterik
+                            * right shifted astrik
+                 *      with space astrik
+                 *with 0 space astrik
+                 * with 1 space astrik
+                 *  with 2 space astrik
+                 *   with 3 space astrik
+                 *    with 4 space astrik
+                 *     with 5 space astrik
+                 *      with 6 space astrik
+                 *       with 7 space astrik
+                 */
+                class A {
+                    /**
+                     * TODO: I need to fix this.
+                     */
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment().compileAndLint(code)
+            assertThat(findings).hasSize(2)
+        }
     }
 
     @Nested
@@ -111,7 +153,7 @@ class ForbiddenCommentSpec {
 
         @Nested
         inner class `when given Banana` {
-            val config = TestConfig(COMMENTS to "Banana")
+            val config = TestConfig(COMMENTS to listOf("Banana"))
 
             @Test
             @DisplayName("should not report TODO: usages")
@@ -243,7 +285,7 @@ class ForbiddenCommentSpec {
         fun `should report a Finding with default Message`() {
             val comment = "// Comment"
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
-            val expectedMessage = String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, "Comment")
+            val expectedMessage = String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE_WITH_NO_REASON, "Comment")
             assertThat(findings).hasSize(1)
             assertThat(findings.first().message).isEqualTo(expectedMessage)
         }
@@ -251,7 +293,7 @@ class ForbiddenCommentSpec {
 
     @Nested
     inner class `custom value pattern is configured` {
-        private val patternStr = """^//( )?(?i)REVIEW\b"""
+        private val patternStr = """^(?i)REVIEW\b"""
         private val messageConfig = TestConfig(
             COMMENTS to listOf("STOPSHIP", patternStr),
         )
@@ -269,7 +311,7 @@ class ForbiddenCommentSpec {
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
             assertThat(findings[0])
-                .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, "STOPSHIP"))
+                .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE_WITH_NO_REASON, "STOPSHIP"))
         }
 
         @Test
@@ -278,7 +320,7 @@ class ForbiddenCommentSpec {
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
             assertThat(findings[0])
-                .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, patternStr))
+                .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE_WITH_NO_REASON, patternStr))
         }
 
         @Test
@@ -287,7 +329,7 @@ class ForbiddenCommentSpec {
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
             assertThat(findings[0])
-                .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, patternStr))
+                .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE_WITH_NO_REASON, patternStr))
         }
 
         @Test
@@ -302,6 +344,120 @@ class ForbiddenCommentSpec {
             val comment = "// foo STOPSHIP bar"
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
+        }
+    }
+
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @Nested
+    inner class `comment getContent` {
+
+        @Suppress("LongMethod", "UnusedPrivateMember")
+        private fun getCommentsContentArguments() = listOf(
+            Arguments.of("// comment", "comment"),
+            Arguments.of("//  comment", " comment"),
+            Arguments.of("//comment", "comment"),
+            Arguments.of("/* comment */", "comment"),
+            Arguments.of("/*  comment  */", " comment "),
+            Arguments.of("/*comment*/", "comment"),
+            Arguments.of("/*** comment ***/", "** comment **"),
+            Arguments.of(
+                """
+                    /*
+                    *bad
+                    * good
+                    */
+                """.trimIndent(),
+                """
+                    
+                    bad
+                    good
+                    
+                """.trimIndent()
+            ),
+            Arguments.of(
+                """
+                    /*
+                    *bad
+                    *   good
+                    */
+                """.trimIndent(),
+                """
+                    
+                    bad
+                      good
+                    
+                """.trimIndent()
+            ),
+            Arguments.of(
+                """
+                    /*
+                    comment
+                    * a
+                    * b
+                    * c*/
+                """.trimIndent(),
+                """
+                    
+                    comment
+                    a
+                    b
+                    c
+                """.trimIndent()
+            ),
+            Arguments.of(
+                """
+                    /*comment
+                    * a
+                    * b
+                    * c*/
+                """.trimIndent(),
+                """
+                    comment
+                    a
+                    b
+                    c
+                """.trimIndent()
+            ),
+            Arguments.of(
+                """
+                    /*
+                    a
+                    b
+                    c
+                    */
+                """.trimIndent(),
+                """
+                    
+                    a
+                    b
+                    c
+                    
+                """.trimIndent()
+            ),
+            Arguments.of(
+                """
+                    /*
+                    a
+                    b
+
+                    c
+                    */
+                """.trimIndent(),
+                """
+                    
+                    a
+                    b
+
+                    c
+                    
+                """.trimIndent()
+            ),
+        )
+
+        @ParameterizedTest(name = "Given {0} comment, getContent return {1}")
+        @MethodSource("getCommentsContentArguments")
+        fun test(comment: String, content: String) {
+            assertThat(comment.getCommentContent()).isEqualTo(content)
         }
     }
 }
