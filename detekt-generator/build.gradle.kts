@@ -82,16 +82,20 @@ val doGenerateDocumentation by tasks.registering(JavaExec::class) {
     )
 }
 
-val copyRuleDocsToWebsite by tasks.registering(CopyDirTask::class) {
+val copyRuleDocsToWebsite by tasks.registering(Sync::class) {
     dependsOn(doGenerateDocumentation)
 
-    inputs.files(fileTree(tempDocDir))
-    outputs.files(fileTree(documentationDir))
+    from(tempDocDir)
+    into(documentationDir)
 
-    source.set(file(tempDocDir))
-    target.set(file(documentationDir))
-    placeholderName.set("__KTLINT_VERSION__")
-    placeholderValue.set(libs.versions.ktlint)
+    val replacements = mapOf(
+        "KTLINT_VERSION" to libs.versions.ktlint.get(),
+    )
+    // For up to date checks, see https://github.com/gradle/gradle/issues/861.
+    replacements.forEach { (name, value) -> inputs.property(name, value) }
+    filesMatching("**/*.md") {
+        filter(mapOf("tokens" to replacements), org.apache.tools.ant.filters.ReplaceTokens::class.java)
+    }
 }
 
 val generatedFormattingConfig: Configuration by configurations.creating {
