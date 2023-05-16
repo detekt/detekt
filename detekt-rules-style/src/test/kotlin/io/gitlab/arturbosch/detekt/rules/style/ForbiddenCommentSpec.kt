@@ -119,31 +119,15 @@ class ForbiddenCommentSpec {
         }
 
         @Test
-        fun `should report violation in KDoc 1`() {
-            @Suppress("MultilineRawStringIndentation")
+        fun `should report violation in star aligned comment`() {
             val code = """
-                /**
+                /*
                  * TODO: I need to fix this.
-* left shifted asterik
-                            * right shifted astrik
-                 *      with space astrik
-                 *with 0 space astrik
-                 * with 1 space astrik
-                 *  with 2 space astrik
-                 *   with 3 space astrik
-                 *    with 4 space astrik
-                 *     with 5 space astrik
-                 *      with 6 space astrik
-                 *       with 7 space astrik
                  */
-                class A {
-                    /**
-                     * TODO: I need to fix this.
-                     */
-                }
+                class A
             """.trimIndent()
             val findings = ForbiddenComment().compileAndLint(code)
-            assertThat(findings).hasSize(2)
+            assertThat(findings).hasSize(1)
         }
     }
 
@@ -345,6 +329,120 @@ class ForbiddenCommentSpec {
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
         }
+
+        @Test
+        fun `should report a finding matching a pattern contained in multiple single line comments`() {
+            val comment = """
+                // foo STOPSHIP bar
+                // foo STOPSHIP bar
+                // foo STOPSHIP bar
+            """.trimIndent()
+            val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
+            assertThat(findings).hasSize(3)
+        }
+
+        @Test
+        fun `should report a finding when whole comment is not allowed`() {
+            val comment = """
+                class A {
+                    // stopship
+                    val a = 0
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment(
+                TestConfig(COMMENTS to listOf("stopship"))
+            ).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+        }
+    }
+
+    @Nested
+    inner class `leading space is not allowed` {
+        private val patternStr = "^ "
+        private val messageConfig = TestConfig(
+            COMMENTS to listOf(patternStr),
+        )
+
+        @Test
+        fun `should report a finding when leading extra space is not allowed`() {
+            val comment = """
+                class A {
+                    //  comment
+                    val a = 0
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should not report a finding when leading extra space is not allowed with no leading space`() {
+            val comment = """
+                class A {
+                    // comment with space in between
+                    val a = 0
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should not report a finding when leading extra space is not allowed in multiline comment`() {
+            val comment = """
+                class A {
+                    /*
+                    * comment with space in between
+                    * comment with space in between
+                    */
+                    val a = 0
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should report a finding when leading extra space is not allowed in multiline comment with leading space`() {
+            val comment = """
+                class A {
+                    /*
+                    *  comment
+                    */
+                    val a = 0
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should not report a finding when leading extra space is not allowed in star aligned comment`() {
+            val comment = """
+                class A {
+                    /*
+                     * comment
+                     */
+                    val a = 0
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should report a finding when leading space is not allowed in star aligned comment with leading space`() {
+            val comment = """
+                class A {
+                    /*
+                     *  comment
+                     */
+                    val a = 0
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+        }
     }
 
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -356,10 +454,27 @@ class ForbiddenCommentSpec {
             Arguments.of("// comment", "comment"),
             Arguments.of("//  comment", " comment"),
             Arguments.of("//comment", "comment"),
+            Arguments.of("// ", ""),
+            Arguments.of("//  ", " "),
             Arguments.of("/* comment */", "comment"),
             Arguments.of("/*  comment  */", " comment "),
+            Arguments.of("/* */", ""),
+            Arguments.of("/*  */", ""),
             Arguments.of("/*comment*/", "comment"),
             Arguments.of("/*** comment ***/", "** comment **"),
+            Arguments.of(
+                """
+                    /*
+                    * good
+                    * good
+                    */
+                """.trimIndent(),
+                """
+                    good
+                    good
+                    
+                """.trimIndent()
+            ),
             Arguments.of(
                 """
                     /*
@@ -368,7 +483,6 @@ class ForbiddenCommentSpec {
                     */
                 """.trimIndent(),
                 """
-                    
                     bad
                     good
                     
@@ -382,7 +496,6 @@ class ForbiddenCommentSpec {
                     */
                 """.trimIndent(),
                 """
-                    
                     bad
                       good
                     
@@ -397,7 +510,6 @@ class ForbiddenCommentSpec {
                     * c*/
                 """.trimIndent(),
                 """
-                    
                     comment
                     a
                     b
@@ -421,13 +533,80 @@ class ForbiddenCommentSpec {
             Arguments.of(
                 """
                     /*
+                     * good
+                     * good
+                     */
+                """.trimIndent(),
+                """
+                    good
+                    good
+                    
+                """.trimIndent()
+            ),
+            Arguments.of(
+                """
+                    /*
+                     *bad
+                     * good
+                     */
+                """.trimIndent(),
+                """
+                    bad
+                    good
+                    
+                """.trimIndent()
+            ),
+            Arguments.of(
+                """
+                    /*
+                     *bad
+                     *   good
+                     */
+                """.trimIndent(),
+                """
+                    bad
+                      good
+                    
+                """.trimIndent()
+            ),
+            Arguments.of(
+                """
+                    /*
+                       comment
+                     * a
+                     * b
+                     * c*/
+                """.trimIndent(),
+                """
+                      comment
+                    a
+                    b
+                    c
+                """.trimIndent()
+            ),
+            Arguments.of(
+                """
+                    /*comment
+                     * a
+                     * b
+                     * c*/
+                """.trimIndent(),
+                """
+                    comment
+                    a
+                    b
+                    c
+                """.trimIndent()
+            ),
+            Arguments.of(
+                """
+                    /*
                     a
                     b
                     c
                     */
                 """.trimIndent(),
                 """
-                    
                     a
                     b
                     c
@@ -444,13 +623,60 @@ class ForbiddenCommentSpec {
                     */
                 """.trimIndent(),
                 """
-                    
                     a
                     b
 
                     c
                     
                 """.trimIndent()
+            ),
+            Arguments.of(
+                """
+                    /*
+                    
+                    
+                    */
+                """.trimIndent(),
+                "".trimIndent()
+            ),
+            Arguments.of(
+                """
+                    /*
+                    
+                    a
+                    
+                    */
+                """.trimIndent(),
+                "a\n\n"
+            ),
+            Arguments.of(
+                """
+                    /*
+                    
+                    
+                     */
+                """.trimIndent(),
+                "".trimIndent()
+            ),
+            Arguments.of(
+                """
+                    /*
+                    
+                      a
+                    
+                     */
+                """.trimIndent(),
+                " a\n\n"
+            ),
+            Arguments.of(
+                """
+                    /*
+                    
+                     * a
+                    
+                     */
+                """.trimIndent(),
+                "a\n\n"
             ),
         )
 

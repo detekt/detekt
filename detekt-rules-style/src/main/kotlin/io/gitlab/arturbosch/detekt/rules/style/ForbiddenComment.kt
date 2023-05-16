@@ -132,32 +132,34 @@ internal fun String.getCommentContent(): String {
     return if (this.startsWith("//")) {
         this.removePrefix("//").removePrefix(" ")
     } else {
-        this.split("\n").joinToString("\n") {
-            var hasStartCommentMarker = false
-            var hasEndCommentMarker = false
-            it.run {
-                if (this.startsWith("/*")) {
-                    hasStartCommentMarker = true
-                    this.removePrefix("/*")
+        val indentedComment = if (this.contains('\n').not()) {
+            this
+        } else {
+            val lines = this.lines()
+            lines.first() + "\n" + lines.drop(1).joinToString("\n").trimIndent()
+        }
+        indentedComment.split("\n").joinToString("\n") {
+            it.let { fullLine ->
+                if (fullLine.startsWith("/*")) {
+                    fullLine.removePrefix("/*")
+                        .removePrefix(" ")
+                } else if (fullLine.startsWith(" *") && fullLine.startsWith(" */").not()) {
+                    fullLine.removePrefix(" *")
+                        .removePrefix(" ")
+                } else if (fullLine.startsWith("*") && fullLine.startsWith("*/").not()) {
+                    fullLine.removePrefix("*")
                         .removePrefix(" ")
                 } else {
-                    this
+                    fullLine
                 }
-            }.run {
-                if (this.endsWith("*/")) {
-                    hasEndCommentMarker = this.startsWith("*").not()
-                    this.removeSuffix("*/")
+            }.let { lineWithoutStartMarker ->
+                if (lineWithoutStartMarker.endsWith("*/")) {
+                    lineWithoutStartMarker.removeSuffix("*/")
                         .removeSuffix(" ")
                 } else {
-                    this
-                }
-            }.run {
-                if (hasStartCommentMarker.not() && hasEndCommentMarker.not()) {
-                    this.removePrefix("*").removePrefix(" ")
-                } else {
-                    this
+                    lineWithoutStartMarker
                 }
             }
-        }
+        }.trimStart('\n')
     }
 }
