@@ -47,7 +47,7 @@ class UseLet(
             else -> null
         }
 
-        return statement?.let { KtPsiUtil.isNullConstant(it) } ?: return false
+        return statement?.let { KtPsiUtil.isNullConstant(it) } ?: false
     }
 
     override fun visitIfExpression(expression: KtIfExpression) {
