@@ -110,6 +110,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             AlsoCouldBeApply(config),
             UseSumOfInsteadOfFlatMapSize(config),
             DoubleNegativeLambda(config),
+            UseLet(config),
         )
     )
 }
