@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/@KTLINT_VERSION@/rules/experimental/#spacing-between-function-name-and-opening-parenthesis) for
+ * See [ktlint docs](https://pinterest.github.io/ktlint/@KTLINT_VERSION@/rules/standard/#spacing-between-function-name-and-opening-parenthesis) for
  * documentation.
  */
 @ActiveByDefault(since = "1.23.0")
