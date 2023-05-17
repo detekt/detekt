@@ -259,6 +259,8 @@ style:
     active: true
   UseIsNullOrEmpty:
     active: true
+  UseLet:
+    active: true
   UseOrEmpty:
     active: true
   UseRequire:
