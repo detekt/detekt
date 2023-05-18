@@ -1,7 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
-import io.github.detekt.test.utils.compileForTest
-import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.test.TestConfig
@@ -156,6 +154,62 @@ class EmptyCodeSpec {
 
 private fun test(block: () -> Rule) {
     val rule = block()
-    rule.lint(compileForTest(resourceAsPath("Empty.kt")))
+    rule.lint(
+        """
+            class Empty : Runnable {
+            
+                init {
+            
+                }
+            
+                constructor() {
+            
+                }
+            
+                override fun run() {
+            
+                }
+            
+                fun stuff() {
+                    try {
+            
+                    } catch (e: Exception) {
+            
+                    } catch (e: Exception) {
+                        //no-op
+                    } catch (e: Exception) {
+                        println()
+                    } catch (ignored: Exception) {
+            
+                    } catch (expected: Exception) {
+            
+                    } catch (_: Exception) {
+            
+                    } finally {
+            
+                    }
+                    if (true) {
+            
+                    } else {
+            
+                    }
+                    when (true) {
+            
+                    }
+                    for (i in 1..10) {
+            
+                    }
+                    while (true) {
+            
+                    }
+                    do {
+            
+                    } while (true)
+                }
+            }
+            
+            class EmptyClass() {}
+        """.trimIndent()
+    )
     assertThat(rule.findings).hasSize(1)
 }
