@@ -20,23 +20,13 @@ private const val ALLOWED_PATTERNS = "allowedPatterns"
 private const val MESSAGE = "customMessage"
 
 class ForbiddenCommentSpec {
-
-    val todoColon = "// TODO: I need to fix this."
-    val todo = "// TODO I need to fix this."
-
-    val fixmeColon = "// FIXME: I need to fix this."
-    val fixme = "// FIXME I need to fix this."
-
-    val stopShipColon = "// STOPSHIP: I need to fix this."
-    val stopShip = "// STOPSHIP I need to fix this."
-
     @Nested
     inner class `the default values are configured` {
 
         @Test
         @DisplayName("should report TODO: usages")
         fun reportTodoColon() {
-            val findings = ForbiddenComment().compileAndLint(todoColon)
+            val findings = ForbiddenComment().compileAndLint("// TODO: I need to fix this.")
             assertThat(findings).hasSize(1)
             assertThat(findings[0]).hasMessage(
                 String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, "TODO:", "some changes are pending.")
@@ -45,27 +35,27 @@ class ForbiddenCommentSpec {
 
         @Test
         fun `should not report TODO usages`() {
-            val findings = ForbiddenComment().compileAndLint(todo)
+            val findings = ForbiddenComment().compileAndLint("// TODO I need to fix this.")
             assertThat(findings).isEmpty()
         }
 
         @Test
         @DisplayName("should report FIXME: usages")
         fun reportFixMe() {
-            val findings = ForbiddenComment().compileAndLint(fixmeColon)
+            val findings = ForbiddenComment().compileAndLint("// FIXME: I need to fix this.")
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `should not report FIXME usages`() {
-            val findings = ForbiddenComment().compileAndLint(fixme)
+            val findings = ForbiddenComment().compileAndLint("// FIXME I need to fix this.")
             assertThat(findings).isEmpty()
         }
 
         @Test
         @DisplayName("should report STOPSHIP: usages")
         fun reportStopShipColon() {
-            val findings = ForbiddenComment().compileAndLint(stopShipColon)
+            val findings = ForbiddenComment().compileAndLint("// STOPSHIP: I need to fix this.")
             assertThat(findings).hasSize(1)
             assertThat(findings[0]).hasMessage(
                 String.format(
@@ -78,7 +68,7 @@ class ForbiddenCommentSpec {
 
         @Test
         fun `should not report STOPSHIP usages`() {
-            val findings = ForbiddenComment().compileAndLint(stopShip)
+            val findings = ForbiddenComment().compileAndLint("// STOPSHIP I need to fix this.")
             assertThat(findings).isEmpty()
         }
 
@@ -142,21 +132,21 @@ class ForbiddenCommentSpec {
             @Test
             @DisplayName("should not report TODO: usages")
             fun todoColon() {
-                val findings = ForbiddenComment(config).compileAndLint(todoColon)
+                val findings = ForbiddenComment(config).compileAndLint("// TODO: I need to fix this.")
                 assertThat(findings).isEmpty()
             }
 
             @Test
             @DisplayName("should not report FIXME: usages")
             fun fixmeColon() {
-                val findings = ForbiddenComment(config).compileAndLint(fixmeColon)
+                val findings = ForbiddenComment(config).compileAndLint("// FIXME: I need to fix this.")
                 assertThat(findings).isEmpty()
             }
 
             @Test
             @DisplayName("should not report STOPME: usages")
             fun stopShipColon() {
-                val findings = ForbiddenComment(config).compileAndLint(stopShipColon)
+                val findings = ForbiddenComment(config).compileAndLint("// STOPSHIP: I need to fix this.")
                 assertThat(findings).isEmpty()
             }
 
@@ -182,21 +172,21 @@ class ForbiddenCommentSpec {
             @Test
             @DisplayName("should not report TODO: usages")
             fun todoColon() {
-                val findings = ForbiddenComment(config).compileAndLint(todoColon)
+                val findings = ForbiddenComment(config).compileAndLint("// TODO: I need to fix this.")
                 assertThat(findings).isEmpty()
             }
 
             @Test
             @DisplayName("should not report FIXME: usages")
             fun fixmeColon() {
-                val findings = ForbiddenComment(config).compileAndLint(fixmeColon)
+                val findings = ForbiddenComment(config).compileAndLint("// FIXME: I need to fix this.")
                 assertThat(findings).isEmpty()
             }
 
             @Test
             @DisplayName("should not report STOPME: usages")
             fun stopShipColon() {
-                val findings = ForbiddenComment(config).compileAndLint(stopShipColon)
+                val findings = ForbiddenComment(config).compileAndLint("// STOPSHIP: I need to fix this.")
                 assertThat(findings).isEmpty()
             }
 
@@ -340,24 +330,10 @@ class ForbiddenCommentSpec {
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(3)
         }
-
-        @Test
-        fun `should report a finding when whole comment is not allowed`() {
-            val comment = """
-                class A {
-                    // stopship
-                    val a = 0
-                }
-            """.trimIndent()
-            val findings = ForbiddenComment(
-                TestConfig(COMMENTS to listOf("stopship"))
-            ).compileAndLint(comment)
-            assertThat(findings).hasSize(1)
-        }
     }
 
     @Nested
-    inner class `leading space is not allowed` {
+    inner class `comment on indented code` {
         private val patternStr = "^ "
         private val messageConfig = TestConfig(
             COMMENTS to listOf(patternStr),
@@ -441,6 +417,92 @@ class ForbiddenCommentSpec {
                 }
             """.trimIndent()
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should report a finding when leading space is not allowed in multiline block comment with leading space`() {
+            val comment = """
+                class A {
+                    /*
+                         comment
+                     */
+                    val a = 0
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment(
+                TestConfig(
+                    COMMENTS to listOf("^    comment"),
+                )
+            ).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should report a finding when -ve leading space is not allowed in multiline block comment with leading space`() {
+            val comment = """
+                class A {
+                    /*
+                  comment
+                     */
+                    val a = 0
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment(
+                TestConfig(
+                    COMMENTS to listOf("^comment"),
+                )
+            ).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should report a finding start space contained in multiple single line comments`() {
+            val comment = """
+                class a {
+                    fun test() {
+                        //  foo
+                        val a = 0
+                    }
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment(
+                TestConfig(
+                    COMMENTS to listOf("^ foo"),
+                )
+            ).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should not report when not finding start contained in multiple single line comments`() {
+            val comment = """
+                class a {
+                    fun test() {
+                        // foo
+                        val a = 0
+                    }
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment(
+                TestConfig(
+                    COMMENTS to listOf("^ foo"),
+                )
+            ).compileAndLint(comment)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should report a finding when whole comment is not allowed`() {
+            val comment = """
+                class A {
+                    // stopship
+                    val a = 0
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment(
+                TestConfig(COMMENTS to listOf("stopship"))
+            ).compileAndLint(comment)
             assertThat(findings).hasSize(1)
         }
     }
@@ -528,6 +590,20 @@ class ForbiddenCommentSpec {
                     a
                     b
                     c
+                """.trimIndent()
+            ),
+            Arguments.of(
+                """
+                    /*  comment
+                    * a
+                    * b
+                    * c  */
+                """.trimIndent(),
+                """
+                     comment
+                    a
+                    b
+                    c 
                 """.trimIndent()
             ),
             Arguments.of(
@@ -670,6 +746,21 @@ class ForbiddenCommentSpec {
             ),
             Arguments.of(
                 """
+                     /*
+                    a
+                      b
+                        c
+                      */
+                """.trimIndent(),
+                """
+                    a
+                      b
+                        c
+                     
+                """.trimIndent()
+            ),
+            Arguments.of(
+                """
                     /*
                     
                      * a
@@ -677,6 +768,64 @@ class ForbiddenCommentSpec {
                      */
                 """.trimIndent(),
                 "a\n\n"
+            ),
+            Arguments.of(
+                """
+                    /*
+                     * foo
+                     * bar
+                     * baz
+                    */
+                """.trimIndent(),
+                """
+                    foo
+                    bar
+                    baz
+                    
+                """.trimIndent()
+            ),
+            Arguments.of(
+                """
+                    /*
+                     * foo
+                    * bar
+                     * baz
+                     */
+                """.trimIndent(),
+                """
+                    foo
+                    bar
+                    baz
+                    
+                """.trimIndent()
+            ),
+            Arguments.of(
+                """
+                      /*
+
+                    a
+                     b
+                      c
+                       d
+                       *e
+                       * f
+                       *  g
+                         * h
+                        *   i
+                       */
+                """.trimIndent(),
+                """
+                    a
+                     b
+                      c
+                       d
+                    e
+                    f
+                     g
+                    h
+                      i
+                      
+                """.trimIndent()
             ),
         )
 

@@ -129,34 +129,44 @@ internal fun String.getCommentContent(): String {
     return if (this.startsWith("//")) {
         this.removePrefix("//").removePrefix(" ")
     } else {
-        val indentedComment = if (this.contains('\n').not()) {
-            this
-        } else {
-            val lines = this.lines()
-            lines.first() + "\n" + lines.drop(1).joinToString("\n").trimIndent()
-        }
-        indentedComment.split("\n").joinToString("\n") {
-            it.let { fullLine ->
-                if (fullLine.startsWith("/*")) {
-                    fullLine.removePrefix("/*")
-                        .removePrefix(" ")
-                } else if (fullLine.startsWith(" *") && fullLine.startsWith(" */").not()) {
-                    fullLine.removePrefix(" *")
-                        .removePrefix(" ")
-                } else if (fullLine.startsWith("*") && fullLine.startsWith("*/").not()) {
-                    fullLine.removePrefix("*")
-                        .removePrefix(" ")
-                } else {
-                    fullLine
-                }
-            }.let { lineWithoutStartMarker ->
-                if (lineWithoutStartMarker.endsWith("*/")) {
-                    lineWithoutStartMarker.removeSuffix("*/")
-                        .removeSuffix(" ")
-                } else {
-                    lineWithoutStartMarker
-                }
+        this
+            .trimIndentIgnoringFirstLine()
+            // Process line by line.
+            .lineSequence()
+            // Remove starting, aligning and ending markers.
+            .map {
+                it
+                    .let { fullLine ->
+                        val trimmedStartFullLine = fullLine.trimStart()
+                        if (trimmedStartFullLine.startsWith("/*")) {
+                            trimmedStartFullLine.removePrefix("/*").removePrefix(" ")
+                        } else if (trimmedStartFullLine.startsWith("*") && trimmedStartFullLine.startsWith("*/")
+                                .not()
+                        ) {
+                            trimmedStartFullLine.removePrefix("*").removePrefix(" ")
+                        } else {
+                            fullLine
+                        }
+                    }
+                    .let { lineWithoutStartMarker ->
+                        if (lineWithoutStartMarker.endsWith("*/")) {
+                            lineWithoutStartMarker.removeSuffix("*/").removeSuffix(" ")
+                        } else {
+                            lineWithoutStartMarker
+                        }
+                    }
             }
-        }.trimStart('\n')
+            // Trim trailing empty lines.
+            .dropWhile(String::isEmpty)
+            // Reconstruct the comment contents.
+            .joinToString("\n")
     }
 }
+
+private fun String.trimIndentIgnoringFirstLine(): String =
+    if ('\n' !in this) {
+        this
+    } else {
+        val lines = this.lineSequence()
+        lines.first() + "\n" + lines.drop(1).joinToString("\n").trimIndent()
+    }
