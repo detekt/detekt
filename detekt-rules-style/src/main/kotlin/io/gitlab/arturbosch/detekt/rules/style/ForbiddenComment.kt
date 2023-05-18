@@ -105,13 +105,10 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 
     private fun PsiComment.getContent(): String = text.getCommentContent()
 
-    private fun getErrorMessage(comment: Comment): String {
-        return comment.reason?.let { reason ->
-            String.format(DEFAULT_ERROR_MESSAGE, comment.value.pattern, reason)
-        } ?: run {
-            String.format(DEFAULT_ERROR_MESSAGE_WITH_NO_REASON, comment.value.pattern)
-        }
-    }
+    private fun getErrorMessage(comment: Comment): String =
+        comment.reason
+            ?.let { reason -> String.format(DEFAULT_ERROR_MESSAGE, comment.value.pattern, reason) }
+            ?: String.format(DEFAULT_ERROR_MESSAGE_WITH_NO_REASON, comment.value.pattern)
 
     @Suppress("DEPRECATION")
     private fun getErrorMessage(value: String): String =
