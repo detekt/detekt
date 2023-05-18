@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
@@ -12,12 +11,104 @@ class EqualsAlwaysReturnsTrueOrFalseSpec {
 
     @Test
     fun `reports equals() methods`() {
-        assertThat(subject.lint(resourceAsPath("EqualsAlwaysReturnsTrueOrFalsePositive.kt"))).hasSize(6)
+        @Suppress("EqualsOrHashCode")
+        val code = """
+            // reports 1 for every equals method
+            class EqualsReturnsTrue {
+            
+                override fun equals(other: Any?): Boolean {
+                    return true
+                }
+            }
+            
+            class EqualsReturnsFalse {
+            
+                override fun equals(other: Any?): Boolean {
+                    return false
+                }
+            }
+            
+            class EqualsReturnsFalseWithUnreachableReturnStatement {
+            
+                override fun equals(other: Any?): Boolean {
+                    return false
+                    return true
+                }
+            }
+            
+            class EqualsReturnsFalseWithUnreachableCode {
+            
+                override fun equals(other: Any?): Boolean {
+                    return false
+                    val i = 0
+                }
+            }
+            
+            class EqualsReturnsConstantExpression {
+            
+                override fun equals(other: Any?) = false
+            }
+            
+            class EqualsWithTwoReturnExpressions {
+            
+                override fun equals(other: Any?): Boolean {
+                    if (other is Int) {
+                        return true
+                    }
+                    return true
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.lint(code)).hasSize(6)
     }
 
     @Test
     fun `does not report equals() methods`() {
-        assertThat(subject.lint(resourceAsPath("EqualsAlwaysReturnsTrueOrFalseNegative.kt"))).isEmpty()
+        @Suppress("EqualsOrHashCode")
+        val code = """
+            class EqualsReturnsTrueOrFalse {
+            
+                override fun equals(other: Any?): Boolean {
+                    if (other is Int) {
+                        return true
+                    }
+                    return false
+                }
+            }
+            
+            class CorrectEquals {
+            
+                override fun equals(other: Any?): Boolean {
+                    return this.toString() == other.toString()
+                }
+            }
+            
+            class ReferentialEquality {
+            
+                override fun equals(other: Any?): Boolean {
+                    return this === other
+                }
+            }
+            
+            fun equals(other: Any?): Boolean {
+                return false
+            }
+            
+            class NotOverridingEquals {
+            
+                fun equal(other: Any?): Boolean {
+                    return true
+                }
+            }
+            
+            class WrongEqualsParameterList {
+            
+                fun equals(other: Any, i: Int): Boolean {
+                    return true
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
