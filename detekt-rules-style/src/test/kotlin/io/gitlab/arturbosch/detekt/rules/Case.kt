@@ -13,8 +13,7 @@ enum class Case(val file: String) {
     MaxLineLengthWithLongComments("/MaxLineLengthWithLongComments.kt"),
     UtilityClassesPositive("/UtilityClassesPositive.kt"),
     UtilityClassesNegative("/UtilityClassesNegative.kt"),
-    NoTabsNegative("/NoTabsNegative.kt"),
-    NoTabsPositive("/NoTabsPositive.kt");
+    ;
 
     fun path(): Path = resourceAsPath(file)
 }
