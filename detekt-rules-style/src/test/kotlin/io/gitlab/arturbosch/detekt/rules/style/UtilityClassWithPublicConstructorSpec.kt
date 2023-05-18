@@ -94,6 +94,7 @@ class UtilityClassWithPublicConstructorSpec {
     @Nested
     inner class `several classes which adhere to the UtilityClassWithPublicConstructor rule` {
 
+        @Suppress("LongMethod") // TODO split this up into multiple test case functions.
         @Test
         fun `does not report given classes`() {
             val findings = subject.lint(

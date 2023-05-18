@@ -152,6 +152,8 @@ class EmptyCodeSpec {
     }
 }
 
+// Each Empty* Rule is tested on the same code to make sure they're all detecting distinct problems.
+@Suppress("LongMethod")
 private fun test(block: () -> Rule) {
     val rule = block()
     rule.lint(

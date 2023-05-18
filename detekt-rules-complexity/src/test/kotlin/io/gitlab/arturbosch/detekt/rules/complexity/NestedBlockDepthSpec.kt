@@ -15,11 +15,9 @@ class NestedBlockDepthSpec {
     val subject = NestedBlockDepth(defaultConfig)
 
     @Test
-    fun `should detect only the nested large class`() {
+    fun `should ignore class nesting levels`() {
         val code = """
             class NestedClasses {
-            
-                private val i = 0
             
                 class InnerClass {
             
@@ -51,73 +49,12 @@ class NestedBlockDepthSpec {
             
                             fun nestedLocalMethod() {
                                 println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
                             }
                             nestedLocalMethod()
                         }
                     }
                 }
-            
             }
-            
-            /**
-             * Top level members must be skipped for LargeClass rule
-             */
-            val aTopLevelPropertyOfNestedClasses = 0
         """.trimIndent()
         subject.lint(code)
         assertThat(subject.findings).hasSize(1)

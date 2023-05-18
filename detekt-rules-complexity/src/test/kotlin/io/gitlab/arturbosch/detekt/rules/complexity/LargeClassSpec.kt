@@ -12,7 +12,7 @@ private fun subject(threshold: Int) = LargeClass(TestConfig("threshold" to thres
 class LargeClassSpec {
 
     @Test
-    fun `should detect only the nested large class which exceeds threshold 70`() {
+    fun `should detect only the nested large class which exceeds the threshold`() {
         val code = """
             class NestedClasses {
             
@@ -22,86 +22,8 @@ class LargeClassSpec {
             
                     class NestedInnerClass {
             
-                        fun nestedLongMethod() {
-                            if (true) {
-                                if (true) {
-                                    if (true) {
-                                        5.run {
-                                            this.let {
-                                                listOf(1, 2, 3).map { it * 2 }
-                                                    .groupBy(Int::toString, Int::toString)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-            
-                            try {
-                                for (i in 1..5) {
-                                    when (i) {
-                                        1 -> print(1)
-                                    }
-                                }
-                            } finally {
-            
-                            }
-            
+                        fun nestedMethod() {
                             fun nestedLocalMethod() {
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
-                                println()
                                 println()
                             }
                             nestedLocalMethod()
@@ -115,7 +37,7 @@ class LargeClassSpec {
              */
             val aTopLevelPropertyOfNestedClasses = 0
         """.trimIndent()
-        val findings = subject(threshold = 70).lint(code)
+        val findings = subject(threshold = 4).lint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocations(SourceLocation(7, 15))
     }
