@@ -66,13 +66,13 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  *
  *       - reason: 'Use @androidx.annotation.VisibleForTesting(otherwise = VisibleForTesting.PRIVATE) instead.'
  *         value: '^private$'
- *         # Non-compliant: /​*private*​/ fun f() { }
+ *         # Non-compliant: /*private*/ fun f() { }
  *
  *       - reason: 'KDoc tag should have a value.'
  *         value: '^\s*@(?!suppress|hide)\w+\s*$'
  *         # Explanation: full line with optional leading and trailing space, and an at @ character followed by a word,
  *         #              but not @suppress or @hide because those don't need content afterwards.
- *         # Non-compliant: /​** ... @see *​/
+ *         # Non-compliant: /** ... @see */
  *
  *       - reason: 'include an issue link at the beginning preceded by a space'
  *         value: 'BUG:(?! https://github\.com/company/repo/issues/\d+).*'
