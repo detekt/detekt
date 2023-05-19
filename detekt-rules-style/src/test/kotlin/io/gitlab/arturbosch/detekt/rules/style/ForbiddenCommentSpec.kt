@@ -439,7 +439,7 @@ class ForbiddenCommentSpec {
         }
 
         @Test
-        fun `should report a finding when -ve leading space is not allowed in multiline block comment with leading space`() {
+        fun `should report a finding when negative leading space is not allowed in multiline block comment with leading space`() {
             val comment = """
                 class A {
                     /*
@@ -457,7 +457,7 @@ class ForbiddenCommentSpec {
         }
 
         @Test
-        fun `should report a finding start space contained in multiple single line comments`() {
+        fun `should report a finding start space contained in a single line comment`() {
             val comment = """
                 class a {
                     fun test() {
@@ -475,7 +475,7 @@ class ForbiddenCommentSpec {
         }
 
         @Test
-        fun `should not report when not finding start contained in multiple single line comments`() {
+        fun `should not report when not finding start contained in a single line comment`() {
             val comment = """
                 class a {
                     fun test() {
