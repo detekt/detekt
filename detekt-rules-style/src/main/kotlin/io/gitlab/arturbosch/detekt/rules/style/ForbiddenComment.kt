@@ -17,15 +17,75 @@ import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
+// Note: ​ (zero-width-space) is used to prevent the Kotlin parser getting confused by talking about comments in a comment.
 /**
  * This rule allows to set a list of comments which are forbidden in the codebase and should only be used during
  * development. Offending code comments will then be reported.
  *
+ * The regular expressions in `comments` list will have the following behaviors while matching the comments:
+ *  * Each comment will be handled individually as a whole.
+ *    * single line comments are always separate, conjoint lines are not merged.
+ *    * multi line comments are not split up, the regex will be applied to the whole comment.
+ *    * KDoc comments are not split up, the regex will be applied to the whole comment.
+ *  * The comment markers (`//`, `/​*`, `/​**`, `*` aligners, `*​/`) are removed before applying the regex.
+ *    One leading space is removed from each line of the comment, after starting markers and aligners.
+ *  * The regex is applied as a multiline regex,
+ *    see [Anchors](https://www.regular-expressions.info/anchors.html) for more info.
+ *    To match the start and end of each line, use `^` and `$`.
+ *    To match the start and end of the whole comment, use `\A` and `\Z`.
+ *    To turn off multiline, use `(?-m)` at the start of your regex.
+ *  * The regex is applied with dotall semantics, meaning `.` will match any character including newlines,
+ *    this is to ensure that freeform line-wrapping doesn't mess with simple regexes.
+ *    To turn off this behavior, use `(?-s)` at the start of your regex, or use `[^\r\n]*` instead of `.*`.
+ *  * The regex will be searched using "contains" semantics not "matches",
+ *    so partial comment matches will flag forbidden comments.
+ *
+ * The rule can be configured to add extra comments to the list of forbidden comments, here are some examples:
+ * ```yaml
+ *   ForbiddenComment:
+ *     comments:
+ *       # Repeat the default configuration if it's still needed.
+ *       - reason: 'some fixes are pending.'
+ *         value: 'FIXME:'
+ *       - reason: 'some changes are present which needs to be addressed before ship.'
+ *         value: 'STOPSHIP:'
+ *       - reason: 'some changes are pending.'
+ *         value: 'TODO:'
+ *       # Add additional patterns to the list.
+ *
+ *       - reason: 'Authors are not recorded in KDoc.'
+ *         value: '@author'
+ *
+ *       - reason: 'REVIEW markers are not allowed in production code, only use before PR is merged.'
+ *         value: '^\s*(?i)REVIEW\b'
+ *         # Explanation: at the beginning of the line, optional leading space,
+ *         #              case insensitive (e.g. REVIEW, review, Review), and REVIEW only as a full word.
+ *         # Non-compliant: // REVIEW this code before merging.
+ *         # Compliant: // Preview will show up here.
+ *
+ *       - reason: 'Use @androidx.annotation.VisibleForTesting(otherwise = VisibleForTesting.PRIVATE) instead.'
+ *         value: '^private$'
+ *         # Non-compliant: /​*private*​/ fun f() { }
+ *
+ *       - reason: 'KDoc tag should have a value.'
+ *         value: '^\s*@(?!suppress|hide)\w+\s*$'
+ *         # Explanation: full line with optional leading and trailing space, and an at @ character followed by a word,
+ *         #              but not @suppress or @hide because those don't need content afterwards.
+ *         # Non-compliant: /​** ... @see *​/
+ *
+ *       - reason: 'include an issue link at the beginning preceded by a space'
+ *         value: 'BUG:(?! https://github\.com/company/repo/issues/\d+).*'
+ * ```
+ *
+ * By default the commonly used todo markers are forbidden: `TODO:`, `FIXME:` and `STOPSHIP:`.
+ *
  * <noncompliant>
  * val a = "" // TODO: remove please
- * // FIXME: this is a hack
+ * /**
+ *  * FIXME: this is a hack
+ *  */
  * fun foo() { }
- * // STOPSHIP:
+ * /* STOPSHIP: */
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.0.0")
@@ -50,7 +110,7 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
             "TODO:" to "some changes are pending.",
         )
     ) { list ->
-        list.map { Comment(it.value.toRegex(), it.reason) }
+        list.map { Comment(it.value.toRegex(setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE)), it.reason) }
     }
 
     @Configuration("ignores comments which match the specified regular expression. For example `Ticket|Task`.")

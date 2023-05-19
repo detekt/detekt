@@ -588,6 +588,111 @@ class ForbiddenCommentSpec {
         }
     }
 
+    @Nested
+    inner class `regex semantics for comments` {
+
+        @Test
+        fun `should report a finding at the beginning of lines`() {
+            val comment = """
+                /*
+                 * foo bar
+                 * baz qux
+                 */
+            """.trimIndent()
+            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("^baz"))).compileAndLint(comment)).hasSize(1)
+        }
+
+        @Test
+        fun `should not report a finding at the beginning of lines when the flag is off`() {
+            val comment = """
+                /*
+                 * foo bar
+                 * baz qux
+                 */
+            """.trimIndent()
+            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("(?-m)^baz"))).compileAndLint(comment)).isEmpty()
+        }
+
+        @Test
+        fun `should report a finding at the end of lines`() {
+            val comment = """
+                /*
+                 * foo bar
+                 * baz qux
+                 */
+            """.trimIndent()
+            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("bar$"))).compileAndLint(comment)).hasSize(1)
+        }
+
+        @Test
+        fun `should not report a finding at the end of lines when flag is off`() {
+            val comment = """
+                /*
+                 * foo bar
+                 * baz qux
+                 */
+            """.trimIndent()
+            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("(?-m)bar$"))).compileAndLint(comment)).isEmpty()
+        }
+
+        @Test
+        fun `should report a finding at the beginning of a comment`() {
+            val comment = """
+                /*
+                 * foo bar
+                 * baz qux
+                 */
+            """.trimIndent()
+            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("^foo"))).compileAndLint(comment)).hasSize(1)
+            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("\\Afoo"))).compileAndLint(comment)).hasSize(1)
+        }
+
+        @Test
+        fun `should report a finding at the end of a comment`() {
+            val comment = """
+                /*
+                 * foo bar
+                 * baz qux
+                 */
+            """.trimIndent()
+            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("qux$"))).compileAndLint(comment)).hasSize(1)
+            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("qux\\Z"))).compileAndLint(comment)).hasSize(1)
+        }
+
+        @Test
+        fun `should report a finding across lines`() {
+            val comment = """
+                /*
+                 * foo bar
+                 * baz qux
+                 */
+            """.trimIndent()
+            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("^foo.*qux$"))).compileAndLint(comment)).hasSize(1)
+        }
+
+        @Test
+        fun `should not report a finding across lines when the flag is off`() {
+            val comment = """
+                /*
+                 * foo bar
+                 * baz qux
+                 */
+            """.trimIndent()
+            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("(?-s)^foo.*qux$"))).compileAndLint(comment)).isEmpty()
+        }
+
+        @Test
+        fun `should report all separate findings at once`() {
+            val comment = """
+                /*
+                 * foo baz
+                 * bar qux
+                 */
+            """.trimIndent()
+            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("^foo", "^bar"))).compileAndLint(comment)).hasSize(2)
+        }
+    }
+
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested
     inner class `comment getContent` {
