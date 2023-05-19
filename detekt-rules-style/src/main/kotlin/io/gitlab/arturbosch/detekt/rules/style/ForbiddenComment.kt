@@ -177,7 +177,7 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 
     companion object {
         const val DEFAULT_ERROR_MESSAGE = "This comment contains '%s' " +
-            "that has been defined as forbidden in detekt."
+            "that has been defined as forbidden."
     }
 }
 
