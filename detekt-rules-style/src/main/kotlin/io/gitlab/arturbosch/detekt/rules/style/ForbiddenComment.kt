@@ -166,23 +166,18 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
     private fun PsiComment.getContent(): String = text.getCommentContent()
 
     private fun getErrorMessage(comment: Comment): String =
-        comment.reason
-            ?.let { reason -> String.format(DEFAULT_ERROR_MESSAGE, comment.value.pattern, reason) }
-            ?: String.format(DEFAULT_ERROR_MESSAGE_WITH_NO_REASON, comment.value.pattern)
+        comment.reason ?: String.format(DEFAULT_ERROR_MESSAGE, comment.value.pattern)
 
     @Suppress("DEPRECATION")
     private fun getErrorMessage(value: String): String =
         customMessage.takeUnless { it.isEmpty() }
-            ?: String.format(DEFAULT_ERROR_MESSAGE_WITH_NO_REASON, value)
+            ?: String.format(DEFAULT_ERROR_MESSAGE, value)
 
     private data class Comment(val value: Regex, val reason: String?)
 
     companion object {
-        const val DEFAULT_ERROR_MESSAGE_WITH_NO_REASON = "This comment contains '%s' " +
-            "that has been defined as forbidden in detekt."
-
         const val DEFAULT_ERROR_MESSAGE = "This comment contains '%s' " +
-            "that has been forbidden: %s"
+            "that has been defined as forbidden in detekt."
     }
 }
 

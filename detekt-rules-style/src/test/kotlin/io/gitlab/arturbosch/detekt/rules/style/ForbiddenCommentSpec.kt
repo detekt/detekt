@@ -2,6 +2,7 @@
 
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.ValueWithReason
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
@@ -28,13 +29,7 @@ class ForbiddenCommentSpec {
         fun reportTodoColon() {
             val findings = ForbiddenComment().compileAndLint("// TODO: I need to fix this.")
             assertThat(findings).hasSize(1)
-            assertThat(findings[0]).hasMessage(
-                String.format(
-                    ForbiddenComment.DEFAULT_ERROR_MESSAGE,
-                    "TODO:",
-                    "Forbidden TODO todo marker in comment, please do the changes."
-                )
-            )
+            assertThat(findings[0]).hasMessage("Forbidden TODO todo marker in comment, please do the changes.")
         }
 
         @Test
@@ -62,11 +57,7 @@ class ForbiddenCommentSpec {
             val findings = ForbiddenComment().compileAndLint("// STOPSHIP: I need to fix this.")
             assertThat(findings).hasSize(1)
             assertThat(findings[0]).hasMessage(
-                String.format(
-                    ForbiddenComment.DEFAULT_ERROR_MESSAGE,
-                    "STOPSHIP:",
-                    "Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code."
-                )
+                "Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code."
             )
         }
 
@@ -258,14 +249,25 @@ class ForbiddenCommentSpec {
     @Nested
     inner class `custom message is not configured` {
         private val messageConfig = TestConfig(VALUES to "Comment")
+        private val messageConfigWithReason = ForbiddenComment(
+            ValueWithReason("Comment", "Comment is disallowed")
+        )
 
         @Test
         fun `should report a Finding with default Message`() {
             val comment = "// Comment"
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
-            val expectedMessage = String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE_WITH_NO_REASON, "Comment")
+            val expectedMessage = String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, "Comment")
             assertThat(findings).hasSize(1)
             assertThat(findings.first().message).isEqualTo(expectedMessage)
+        }
+
+        @Test
+        fun `should report a Finding with reason`() {
+            val comment = "// Comment"
+            val findings = ForbiddenComment(messageConfigWithReason).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+            assertThat(findings.first().message).isEqualTo("Comment is disallowed")
         }
     }
 
@@ -289,7 +291,7 @@ class ForbiddenCommentSpec {
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
             assertThat(findings[0])
-                .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE_WITH_NO_REASON, "STOPSHIP"))
+                .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, "STOPSHIP"))
         }
 
         @Test
@@ -298,7 +300,7 @@ class ForbiddenCommentSpec {
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
             assertThat(findings[0])
-                .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE_WITH_NO_REASON, patternStr))
+                .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, patternStr))
         }
 
         @Test
@@ -307,7 +309,7 @@ class ForbiddenCommentSpec {
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
             assertThat(findings[0])
-                .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE_WITH_NO_REASON, patternStr))
+                .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, patternStr))
         }
 
         @Test
@@ -1023,3 +1025,7 @@ class ForbiddenCommentSpec {
 @Suppress("TestFunctionName") // This is a factory function for ForbiddenComment
 private fun ForbiddenComment(vararg comments: String): ForbiddenComment =
     ForbiddenComment(TestConfig(COMMENTS to comments.toList()))
+
+@Suppress("TestFunctionName")
+private fun ForbiddenComment(vararg comments: ValueWithReason): ForbiddenComment =
+    ForbiddenComment(TestConfig(COMMENTS to comments.map { mapOf("value" to it.value, "reason" to it.reason) }))
