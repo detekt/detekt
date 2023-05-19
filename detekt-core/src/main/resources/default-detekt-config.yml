@@ -567,11 +567,11 @@ style:
   ForbiddenComment:
     active: true
     comments:
-      - reason: 'some fixes are pending.'
+      - reason: 'Forbidden FIXME todo marker in comment, please fix the problem.'
         value: 'FIXME:'
-      - reason: 'some changes are present which needs to be addressed before ship.'
+      - reason: 'Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code.'
         value: 'STOPSHIP:'
-      - reason: 'some changes are pending.'
+      - reason: 'Forbidden TODO todo marker in comment, please do the changes.'
         value: 'TODO:'
     allowedPatterns: ''
   ForbiddenImport:

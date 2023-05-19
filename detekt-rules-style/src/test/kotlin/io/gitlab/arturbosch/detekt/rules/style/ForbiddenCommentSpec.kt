@@ -29,7 +29,11 @@ class ForbiddenCommentSpec {
             val findings = ForbiddenComment().compileAndLint("// TODO: I need to fix this.")
             assertThat(findings).hasSize(1)
             assertThat(findings[0]).hasMessage(
-                String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, "TODO:", "some changes are pending.")
+                String.format(
+                    ForbiddenComment.DEFAULT_ERROR_MESSAGE,
+                    "TODO:",
+                    "Forbidden TODO todo marker in comment, please do the changes."
+                )
             )
         }
 
@@ -61,7 +65,7 @@ class ForbiddenCommentSpec {
                 String.format(
                     ForbiddenComment.DEFAULT_ERROR_MESSAGE,
                     "STOPSHIP:",
-                    "some changes are present which needs to be addressed before ship."
+                    "Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code."
                 )
             )
         }

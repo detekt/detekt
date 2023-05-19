@@ -106,7 +106,8 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
     private val comments: List<Comment> by config(
         valuesWithReason(
             "FIXME:" to "Forbidden FIXME todo marker in comment, please fix the problem.",
-            "STOPSHIP:" to "Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code.",
+            "STOPSHIP:" to "Forbidden STOPSHIP todo marker in comment, please address the problem before shipping " +
+                "the code.",
             "TODO:" to "Forbidden TODO todo marker in comment, please do the changes.",
         )
     ) { list ->
