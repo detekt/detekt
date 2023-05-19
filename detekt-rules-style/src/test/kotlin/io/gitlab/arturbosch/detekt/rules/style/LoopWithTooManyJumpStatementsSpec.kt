@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 private const val MAX_JUMP_COUNT = "maxJumpCount"
@@ -22,7 +22,7 @@ class LoopWithTooManyJumpStatementsSpec {
                 }
             }
         """.trimIndent()
-        assertThat(LoopWithTooManyJumpStatements().compileAndLint(code)).hasSize(1)
+        assertThat(LoopWithTooManyJumpStatements().compileAndLint(code)).hasTextLocations(20 to 23)
     }
 
     @Test
@@ -34,7 +34,7 @@ class LoopWithTooManyJumpStatementsSpec {
                 }
             }
         """.trimIndent()
-        assertThat(LoopWithTooManyJumpStatements().compileAndLint(code)).hasSize(1)
+        assertThat(LoopWithTooManyJumpStatements().compileAndLint(code)).hasTextLocations(20 to 25)
     }
 
     @Test
@@ -46,7 +46,7 @@ class LoopWithTooManyJumpStatementsSpec {
                 } while (i < 1)
             }
         """.trimIndent()
-        assertThat(LoopWithTooManyJumpStatements().compileAndLint(code)).hasSize(1)
+        assertThat(LoopWithTooManyJumpStatements().compileAndLint(code)).hasTextLocations(20 to 22)
     }
 
     @Test

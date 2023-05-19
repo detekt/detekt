@@ -11,11 +11,17 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBreakExpression
 import org.jetbrains.kotlin.psi.KtContinueExpression
+import org.jetbrains.kotlin.psi.KtDoWhileExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtForExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
+import org.jetbrains.kotlin.psi.KtPsiUtil
+import org.jetbrains.kotlin.psi.KtWhileExpression
 
 /**
  * Loops which contain multiple `break` or `continue` statements are hard to read and understand.
@@ -48,7 +54,7 @@ class LoopWithTooManyJumpStatements(config: Config = Config.empty) : Rule(config
 
     override fun visitLoopExpression(loopExpression: KtLoopExpression) {
         if (countBreakAndReturnStatements(loopExpression.body) > maxJumpCount) {
-            report(CodeSmell(issue, Entity.from(loopExpression), issue.description))
+            report(CodeSmell(issue, Entity.from(loopExpression.keyword ?: loopExpression), issue.description))
         }
         super.visitLoopExpression(loopExpression)
     }
@@ -71,3 +77,22 @@ class LoopWithTooManyJumpStatements(config: Config = Config.empty) : Rule(config
         return count
     }
 }
+
+/**
+ * For some reason not all keyword properties are exposed on [KtLoopExpression] subclasses, so we have to do it manually.
+ */
+@Suppress("CommentOverPrivateProperty")
+private val KtLoopExpression.keyword: PsiElement?
+    get() =
+        when (this) {
+            is KtForExpression -> this.forKeyword
+            is KtWhileExpression -> this.whileKeyword
+            is KtDoWhileExpression -> this.doKeyword
+            else -> null
+        }
+
+private val KtDoWhileExpression.doKeyword: PsiElement?
+    get() = KtPsiUtil.findChildByType(this, KtTokens.DO_KEYWORD)
+
+private val KtWhileExpression.whileKeyword: PsiElement?
+    get() = KtPsiUtil.findChildByType(this, KtTokens.WHILE_KEYWORD)
