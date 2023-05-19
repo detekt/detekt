@@ -27,8 +27,8 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  *    * single line comments are always separate, conjoint lines are not merged.
  *    * multi line comments are not split up, the regex will be applied to the whole comment.
  *    * KDoc comments are not split up, the regex will be applied to the whole comment.
- *  * The comment markers (`//`, `/​*`, `/​**`, `*` aligners, `*​/`) are removed before applying the regex.
- *    One leading space is removed from each line of the comment, after starting markers and aligners.
+ *  * The following comment delimiters (and indentation before them) are removed before applying the regex:
+ *    `//`, `// `, `/​*`, `/​* `, `/​**`, `*` aligners, `*​/`, ` *​/`
  *  * The regex is applied as a multiline regex,
  *    see [Anchors](https://www.regular-expressions.info/anchors.html) for more info.
  *    To match the start and end of each line, use `^` and `$`.
