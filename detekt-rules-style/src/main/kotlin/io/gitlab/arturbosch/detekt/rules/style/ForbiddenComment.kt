@@ -140,27 +140,25 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
         @Suppress("DEPRECATION")
         values.forEach {
             if (text.contains(it, ignoreCase = true)) {
-                report(
-                    CodeSmell(
-                        issue,
-                        Entity.from(comment),
-                        getErrorMessage(it)
-                    )
-                )
+                reportIssue(comment, getErrorMessage(it))
             }
         }
 
         comments.forEach {
             if (it.value.containsMatchIn(text)) {
-                report(
-                    CodeSmell(
-                        issue,
-                        Entity.from(comment),
-                        getErrorMessage(it)
-                    )
-                )
+                reportIssue(comment, getErrorMessage(it))
             }
         }
+    }
+
+    private fun reportIssue(comment: PsiElement, msg: String) {
+        report(
+            CodeSmell(
+                issue,
+                Entity.from(comment),
+                msg
+            )
+        )
     }
 
     private fun PsiComment.getContent(): String = text.getCommentContent()
