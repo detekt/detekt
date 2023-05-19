@@ -137,13 +137,11 @@ internal fun String.getCommentContent(): String {
             .map {
                 it
                     .let { fullLine ->
-                        val trimmedStartFullLine = fullLine.trimStart()
-                        if (trimmedStartFullLine.startsWith("/*")) {
-                            trimmedStartFullLine.removePrefix("/*").removePrefix(" ")
-                        } else if (trimmedStartFullLine.startsWith("*") && trimmedStartFullLine.startsWith("*/")
-                                .not()
-                        ) {
-                            trimmedStartFullLine.removePrefix("*").removePrefix(" ")
+                        val trimmedStartLine = fullLine.trimStart()
+                        if (trimmedStartLine.startsWith("/*")) {
+                            trimmedStartLine.removePrefix("/*").removePrefix(" ")
+                        } else if (trimmedStartLine.startsWith("*") && trimmedStartLine.startsWith("*/").not()) {
+                            trimmedStartLine.removePrefix("*").removePrefix(" ")
                         } else {
                             fullLine
                         }
