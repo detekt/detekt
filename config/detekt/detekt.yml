@@ -171,11 +171,11 @@ style:
     active: true
     comments:
       - value: 'FIXME:'
-        reason: 'Some fixes are pending, please complete them.'
+        reason: 'Forbidden FIXME todo marker in comment, please fix the problem.'
       - value: 'STOPSHIP:'
-        reason: 'Some changes are present which need to be addressed before release.'
+        reason: 'Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code.'
       - value: 'TODO:'
-        reason: 'Some changes are pending, please complete them.'
+        reason: 'Forbidden TODO todo marker in comment, please do the changes.'
       - value: '@author'
         reason: 'Authors are not recorded in KDoc.'
       - value: '@requiresTypeResolution'
