@@ -117,7 +117,7 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
     private val allowedPatterns: Regex by config("", String::toRegex)
 
     @Configuration("error message which overrides the default one")
-    @Deprecated("Use `comments` and provide `reason` against each `value`")
+    @Deprecated("Use `comments` and provide `reason` against each `value`.")
     private val customMessage: String by config("")
 
     override fun visitComment(comment: PsiComment) {
