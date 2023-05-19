@@ -430,11 +430,7 @@ class ForbiddenCommentSpec {
                     val a = 0
                 }
             """.trimIndent()
-            val findings = ForbiddenComment(
-                TestConfig(
-                    COMMENTS to listOf("^    comment"),
-                )
-            ).compileAndLint(comment)
+            val findings = ForbiddenComment("^    comment").compileAndLint(comment)
             assertThat(findings).hasSize(1)
         }
 
@@ -448,11 +444,7 @@ class ForbiddenCommentSpec {
                     val a = 0
                 }
             """.trimIndent()
-            val findings = ForbiddenComment(
-                TestConfig(
-                    COMMENTS to listOf("^comment"),
-                )
-            ).compileAndLint(comment)
+            val findings = ForbiddenComment("^comment").compileAndLint(comment)
             assertThat(findings).hasSize(1)
         }
 
@@ -466,11 +458,7 @@ class ForbiddenCommentSpec {
                     }
                 }
             """.trimIndent()
-            val findings = ForbiddenComment(
-                TestConfig(
-                    COMMENTS to listOf("^ foo"),
-                )
-            ).compileAndLint(comment)
+            val findings = ForbiddenComment("^ foo").compileAndLint(comment)
             assertThat(findings).hasSize(1)
         }
 
@@ -484,11 +472,7 @@ class ForbiddenCommentSpec {
                     }
                 }
             """.trimIndent()
-            val findings = ForbiddenComment(
-                TestConfig(
-                    COMMENTS to listOf("^ foo"),
-                )
-            ).compileAndLint(comment)
+            val findings = ForbiddenComment("^ foo").compileAndLint(comment)
             assertThat(findings).isEmpty()
         }
 
@@ -500,9 +484,7 @@ class ForbiddenCommentSpec {
                     val a = 0
                 }
             """.trimIndent()
-            val findings = ForbiddenComment(
-                TestConfig(COMMENTS to listOf("stopship"))
-            ).compileAndLint(comment)
+            val findings = ForbiddenComment("stopship").compileAndLint(comment)
             assertThat(findings).hasSize(1)
         }
     }
@@ -515,7 +497,7 @@ class ForbiddenCommentSpec {
             val comment = """
                 fun f() {} // TODO implement
             """.trimIndent()
-            val findings = ForbiddenComment(TestConfig(COMMENTS to listOf("TODO"))).compileAndLint(comment)
+            val findings = ForbiddenComment("TODO").compileAndLint(comment)
             assertThat(findings).hasSize(1)
         }
 
@@ -526,7 +508,7 @@ class ForbiddenCommentSpec {
                     /*public*/ fun f() {}
                 }
             """.trimIndent()
-            val findings = ForbiddenComment(TestConfig(COMMENTS to listOf("public"))).compileAndLint(comment)
+            val findings = ForbiddenComment("public").compileAndLint(comment)
             assertThat(findings).hasSize(1)
         }
 
@@ -537,7 +519,7 @@ class ForbiddenCommentSpec {
                     fun f() /*: String*/ {}
                 }
             """.trimIndent()
-            val findings = ForbiddenComment(TestConfig(COMMENTS to listOf("^: .+$"))).compileAndLint(comment)
+            val findings = ForbiddenComment("^: .+$").compileAndLint(comment)
             assertThat(findings).hasSize(1)
         }
 
@@ -549,7 +531,7 @@ class ForbiddenCommentSpec {
                         TODO()
                 }
             """.trimIndent()
-            val findings = ForbiddenComment(TestConfig(COMMENTS to listOf("^error"))).compileAndLint(comment)
+            val findings = ForbiddenComment("^error").compileAndLint(comment)
             assertThat(findings).hasSize(1)
         }
 
@@ -560,7 +542,7 @@ class ForbiddenCommentSpec {
                     /**public*/ fun f() {}
                 }
             """.trimIndent()
-            val findings = ForbiddenComment(TestConfig(COMMENTS to listOf("public"))).compileAndLint(comment)
+            val findings = ForbiddenComment("public").compileAndLint(comment)
             assertThat(findings).hasSize(1)
         }
 
@@ -571,7 +553,7 @@ class ForbiddenCommentSpec {
                     fun f() /**: String*/ {}
                 }
             """.trimIndent()
-            val findings = ForbiddenComment(TestConfig(COMMENTS to listOf("^: .+$"))).compileAndLint(comment)
+            val findings = ForbiddenComment("^: .+$").compileAndLint(comment)
             assertThat(findings).hasSize(1)
         }
 
@@ -583,7 +565,7 @@ class ForbiddenCommentSpec {
                         TODO()
                 }
             """.trimIndent()
-            val findings = ForbiddenComment(TestConfig(COMMENTS to listOf("^error"))).compileAndLint(comment)
+            val findings = ForbiddenComment("^error").compileAndLint(comment)
             assertThat(findings).hasSize(1)
         }
     }
@@ -599,7 +581,8 @@ class ForbiddenCommentSpec {
                  * baz qux
                  */
             """.trimIndent()
-            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("^baz"))).compileAndLint(comment)).hasSize(1)
+            val findings = ForbiddenComment("^baz").compileAndLint(comment)
+            assertThat(findings).hasSize(1)
         }
 
         @Test
@@ -610,7 +593,8 @@ class ForbiddenCommentSpec {
                  * baz qux
                  */
             """.trimIndent()
-            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("(?-m)^baz"))).compileAndLint(comment)).isEmpty()
+            val findings = ForbiddenComment("(?-m)^baz").compileAndLint(comment)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -621,7 +605,8 @@ class ForbiddenCommentSpec {
                  * baz qux
                  */
             """.trimIndent()
-            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("bar$"))).compileAndLint(comment)).hasSize(1)
+            val findings = ForbiddenComment("bar$").compileAndLint(comment)
+            assertThat(findings).hasSize(1)
         }
 
         @Test
@@ -632,7 +617,8 @@ class ForbiddenCommentSpec {
                  * baz qux
                  */
             """.trimIndent()
-            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("(?-m)bar$"))).compileAndLint(comment)).isEmpty()
+            val findings = ForbiddenComment("(?-m)bar$").compileAndLint(comment)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -643,8 +629,10 @@ class ForbiddenCommentSpec {
                  * baz qux
                  */
             """.trimIndent()
-            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("^foo"))).compileAndLint(comment)).hasSize(1)
-            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("\\Afoo"))).compileAndLint(comment)).hasSize(1)
+            val findings1 = ForbiddenComment("^foo").compileAndLint(comment)
+            assertThat(findings1).hasSize(1)
+            val findings2 = ForbiddenComment("\\Afoo").compileAndLint(comment)
+            assertThat(findings2).hasSize(1)
         }
 
         @Test
@@ -655,8 +643,10 @@ class ForbiddenCommentSpec {
                  * baz qux
                  */
             """.trimIndent()
-            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("qux$"))).compileAndLint(comment)).hasSize(1)
-            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("qux\\Z"))).compileAndLint(comment)).hasSize(1)
+            val findings1 = ForbiddenComment("qux$").compileAndLint(comment)
+            assertThat(findings1).hasSize(1)
+            val findings2 = ForbiddenComment("qux\\Z").compileAndLint(comment)
+            assertThat(findings2).hasSize(1)
         }
 
         @Test
@@ -667,7 +657,8 @@ class ForbiddenCommentSpec {
                  * baz qux
                  */
             """.trimIndent()
-            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("^foo.*qux$"))).compileAndLint(comment)).hasSize(1)
+            val findings = ForbiddenComment("^foo.*qux$").compileAndLint(comment)
+            assertThat(findings).hasSize(1)
         }
 
         @Test
@@ -678,7 +669,8 @@ class ForbiddenCommentSpec {
                  * baz qux
                  */
             """.trimIndent()
-            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("(?-s)^foo.*qux$"))).compileAndLint(comment)).isEmpty()
+            val findings = ForbiddenComment("(?-s)^foo.*qux$").compileAndLint(comment)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -689,7 +681,8 @@ class ForbiddenCommentSpec {
                  * bar qux
                  */
             """.trimIndent()
-            assertThat(ForbiddenComment(TestConfig(COMMENTS to listOf("^foo", "^bar"))).compileAndLint(comment)).hasSize(2)
+            val findings = ForbiddenComment("^foo", "^bar").compileAndLint(comment)
+            assertThat(findings).hasSize(2)
         }
     }
 
@@ -1022,3 +1015,7 @@ class ForbiddenCommentSpec {
         }
     }
 }
+
+@Suppress("TestFunctionName") // This is a factory function for ForbiddenComment
+private fun ForbiddenComment(vararg comments: String): ForbiddenComment =
+    ForbiddenComment(TestConfig(COMMENTS to comments.toList()))
