@@ -507,6 +507,87 @@ class ForbiddenCommentSpec {
         }
     }
 
+    @Nested
+    inner class `mixed code and comment lines` {
+
+        @Test
+        fun `should report a finding in trailing single line comment`() {
+            val comment = """
+                fun f() {} // TODO implement
+            """.trimIndent()
+            val findings = ForbiddenComment(TestConfig(COMMENTS to listOf("TODO"))).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should report a finding when multiline comment exists before code`() {
+            val comment = """
+                class A {
+                    /*public*/ fun f() {}
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment(TestConfig(COMMENTS to listOf("public"))).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should report a finding when multiline comment exists inside code`() {
+            val comment = """
+                class A {
+                    fun f() /*: String*/ {}
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment(TestConfig(COMMENTS to listOf("^: .+$"))).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should report a finding when multiline comment exists after code`() {
+            val comment = """
+                class A {
+                    fun f() = /*error("foo")*/
+                        TODO()
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment(TestConfig(COMMENTS to listOf("^error"))).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should report a finding when kdoc comment exists before code`() {
+            val comment = """
+                class A {
+                    /**public*/ fun f() {}
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment(TestConfig(COMMENTS to listOf("public"))).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should report a finding when kdoc comment exists inside code`() {
+            val comment = """
+                class A {
+                    fun f() /**: String*/ {}
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment(TestConfig(COMMENTS to listOf("^: .+$"))).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should report a finding when kdoc comment exists after code`() {
+            val comment = """
+                class A {
+                    fun f() = /**error("foo")*/
+                        TODO()
+                }
+            """.trimIndent()
+            val findings = ForbiddenComment(TestConfig(COMMENTS to listOf("^error"))).compileAndLint(comment)
+            assertThat(findings).hasSize(1)
+        }
+    }
+
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested
     inner class `comment getContent` {
