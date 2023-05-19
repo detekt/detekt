@@ -112,7 +112,8 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 
     @Suppress("DEPRECATION")
     private fun getErrorMessage(value: String): String =
-        customMessage.takeUnless { it.isEmpty() } ?: String.format(DEFAULT_ERROR_MESSAGE_WITH_NO_REASON, value)
+        customMessage.takeUnless { it.isEmpty() }
+            ?: String.format(DEFAULT_ERROR_MESSAGE_WITH_NO_REASON, value)
 
     private data class Comment(val value: Regex, val reason: String?)
 
