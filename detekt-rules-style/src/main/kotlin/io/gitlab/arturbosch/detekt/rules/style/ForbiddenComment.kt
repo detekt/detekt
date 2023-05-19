@@ -105,9 +105,9 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
     @Configuration("forbidden comment string patterns")
     private val comments: List<Comment> by config(
         valuesWithReason(
-            "FIXME:" to "some fixes are pending.",
-            "STOPSHIP:" to "some changes are present which needs to be addressed before ship.",
-            "TODO:" to "some changes are pending.",
+            "FIXME:" to "Forbidden FIXME todo marker in comment, please fix the problem.",
+            "STOPSHIP:" to "Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code.",
+            "TODO:" to "Forbidden TODO todo marker in comment, please do the changes.",
         )
     ) { list ->
         list.map { Comment(it.value.toRegex(setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE)), it.reason) }
@@ -182,7 +182,7 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
             "that has been defined as forbidden in detekt."
 
         const val DEFAULT_ERROR_MESSAGE = "This comment contains '%s' " +
-            "that has been forbidden: %s."
+            "that has been forbidden: %s"
     }
 }
 
