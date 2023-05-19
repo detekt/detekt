@@ -39,6 +39,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  *    To turn off this behavior, use `(?-s)` at the start of your regex, or use `[^\r\n]*` instead of `.*`.
  *  * The regex will be searched using "contains" semantics not "matches",
  *    so partial comment matches will flag forbidden comments.
+ *    In practice this means there's no need to start and end the regex with `.*`.
  *
  * The rule can be configured to add extra comments to the list of forbidden comments, here are some examples:
  * ```yaml
