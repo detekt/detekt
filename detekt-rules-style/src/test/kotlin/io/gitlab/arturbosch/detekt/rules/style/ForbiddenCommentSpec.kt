@@ -527,7 +527,7 @@ class ForbiddenCommentSpec {
         fun `should report a finding when multiline comment exists after code`() {
             val comment = """
                 class A {
-                    fun f() = /*error("foo")*/
+                    fun f(): String = /*error("foo")*/
                         TODO()
                 }
             """.trimIndent()
@@ -561,7 +561,7 @@ class ForbiddenCommentSpec {
         fun `should report a finding when kdoc comment exists after code`() {
             val comment = """
                 class A {
-                    fun f() = /**error("foo")*/
+                    fun f(): String = /**error("foo")*/
                         TODO()
                 }
             """.trimIndent()
