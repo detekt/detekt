@@ -169,12 +169,17 @@ style:
     active: true
   ForbiddenComment:
     active: true
-    values:
-      - 'TODO:'
-      - 'FIXME:'
-      - 'STOPSHIP:'
-      - '@author'
-      - '@requiresTypeResolution'
+    comments:
+      - value: 'FIXME:'
+        reason: 'Some fixes are pending, please complete them.'
+      - value: 'STOPSHIP:'
+        reason: 'Some changes are present which need to be addressed before release.'
+      - value: 'TODO:'
+        reason: 'Some changes are pending, please complete them.'
+      - value: '@author'
+        reason: 'Authors are not recorded in KDoc.'
+      - value: '@requiresTypeResolution'
+        reason: 'Use @RequiresTypeResolution annotation on the class instead.'
     excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
   ForbiddenImport:
     active: true
