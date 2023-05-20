@@ -97,12 +97,12 @@ export const extensions = [
     tags: ["ruleset"],
   },
   {
-    title: "Compose by Twitter",
+    title: "Jetpack Compose Rules",
     description:
       "Static checks to aid with a healthy adoption of Jetpack Compose.",
-    repo: "https://github.com/mrmans0n/compose-rules",
+    repo: "https://github.com/mrmans0n/compose-rules/",
     docs: "https://mrmans0n.github.io/compose-rules/",
-    ruleset: "TwitterCompose",
+    ruleset: "Compose",
     rules: [
       "CompositionLocalAllowlist",
       "ContentEmitterReturningValues",
