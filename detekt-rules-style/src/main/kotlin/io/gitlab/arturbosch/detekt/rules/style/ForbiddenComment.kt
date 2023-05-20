@@ -23,21 +23,21 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  * development. Offending code comments will then be reported.
  *
  * The regular expressions in `comments` list will have the following behaviors while matching the comments:
- *  * Each comment will be handled individually as a whole.
- *    * single line comments are always separate, conjoint lines are not merged.
+ *  * **Each comment will be handled individually.**
+ *    * single line comments are always separate, consecutive lines are not merged.
  *    * multi line comments are not split up, the regex will be applied to the whole comment.
  *    * KDoc comments are not split up, the regex will be applied to the whole comment.
- *  * The following comment delimiters (and indentation before them) are removed before applying the regex:
+ *  * **The following comment delimiters (and indentation before them) are removed** before applying the regex:
  *    `//`, `// `, `/​*`, `/​* `, `/​**`, `*` aligners, `*​/`, ` *​/`
- *  * The regex is applied as a multiline regex,
+ *  * **The regex is applied as a multiline regex**,
  *    see [Anchors](https://www.regular-expressions.info/anchors.html) for more info.
  *    To match the start and end of each line, use `^` and `$`.
  *    To match the start and end of the whole comment, use `\A` and `\Z`.
  *    To turn off multiline, use `(?-m)` at the start of your regex.
- *  * The regex is applied with dotall semantics, meaning `.` will match any character including newlines,
+ *  * **The regex is applied with dotall semantics**, meaning `.` will match any character including newlines,
  *    this is to ensure that freeform line-wrapping doesn't mess with simple regexes.
  *    To turn off this behavior, use `(?-s)` at the start of your regex, or use `[^\r\n]*` instead of `.*`.
- *  * The regex will be searched using "contains" semantics not "matches",
+ *  * **The regex will be searched using "contains" semantics** not "matches",
  *    so partial comment matches will flag forbidden comments.
  *    In practice this means there's no need to start and end the regex with `.*`.
  *
@@ -46,11 +46,11 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  *   ForbiddenComment:
  *     comments:
  *       # Repeat the default configuration if it's still needed.
- *       - reason: 'some fixes are pending.'
+ *       - reason: 'Forbidden FIXME todo marker in comment, please fix the problem.'
  *         value: 'FIXME:'
- *       - reason: 'some changes are present which needs to be addressed before ship.'
+ *       - reason: 'Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code.'
  *         value: 'STOPSHIP:'
- *       - reason: 'some changes are pending.'
+ *       - reason: 'Forbidden TODO todo marker in comment, please do the changes.'
  *         value: 'TODO:'
  *       # Add additional patterns to the list.
  *
@@ -59,8 +59,6 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  *
  *       - reason: 'REVIEW markers are not allowed in production code, only use before PR is merged.'
  *         value: '^\s*(?i)REVIEW\b'
- *         # Explanation: at the beginning of the line, optional leading space,
- *         #              case insensitive (e.g. REVIEW, review, Review), and REVIEW only as a full word.
  *         # Non-compliant: // REVIEW this code before merging.
  *         # Compliant: // Preview will show up here.
  *
@@ -70,9 +68,8 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  *
  *       - reason: 'KDoc tag should have a value.'
  *         value: '^\s*@(?!suppress|hide)\w+\s*$'
- *         # Explanation: full line with optional leading and trailing space, and an at @ character followed by a word,
- *         #              but not @suppress or @hide because those don't need content afterwards.
  *         # Non-compliant: /** ... @see */
+ *         # Compliant: /** ... @throws IOException when there's a network problem */
  *
  *       - reason: 'include an issue link at the beginning preceded by a space'
  *         value: 'BUG:(?! https://github\.com/company/repo/issues/\d+).*'
@@ -107,8 +104,8 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
     private val comments: List<Comment> by config(
         valuesWithReason(
             "FIXME:" to "Forbidden FIXME todo marker in comment, please fix the problem.",
-            "STOPSHIP:" to "Forbidden STOPSHIP todo marker in comment, please address the problem before shipping " +
-                "the code.",
+            "STOPSHIP:" to "Forbidden STOPSHIP todo marker in comment, " +
+                "please address the problem before shipping the code.",
             "TODO:" to "Forbidden TODO todo marker in comment, please do the changes.",
         )
     ) { list ->
@@ -176,8 +173,7 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
     private data class Comment(val value: Regex, val reason: String?)
 
     companion object {
-        const val DEFAULT_ERROR_MESSAGE = "This comment contains '%s' " +
-            "that has been defined as forbidden."
+        const val DEFAULT_ERROR_MESSAGE = "This comment contains '%s' that has been defined as forbidden."
     }
 }
 
