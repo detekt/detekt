@@ -82,15 +82,13 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
     }
 
     private fun reportFinding(finding: SerialVersionUIDFindings) {
-        if (finding.isValid.not()) {
-            report(
-                CodeSmell(
-                    issue,
-                    Entity.atName(finding.violatingElement),
-                    finding.issueMsg
-                )
+        report(
+            CodeSmell(
+                issue,
+                Entity.atName(finding.violatingElement),
+                finding.issueMsg
             )
-        }
+        )
     }
 
     private fun isImplementingSerializable(classOrObject: KtClassOrObject) =
@@ -102,7 +100,6 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
     ): SerialVersionUIDFindings? {
         val property = declaration.body?.properties?.firstOrNull { it.name == "serialVersionUID" }
             ?: return SerialVersionUIDFindings(
-                false,
                 parentDeclaration,
                 parentDeclaration.getIssueMessage(
                     if (parentDeclaration is KtClass) "class" else "object"
@@ -112,7 +109,6 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
             null
         } else {
             SerialVersionUIDFindings(
-                false,
                 property,
                 "The property `serialVersionUID` signature is not correct. `serialVersionUID` should be " +
                     "`private` and `constant` and its type should be `Long`"
@@ -137,7 +133,6 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
     }
 
     private data class SerialVersionUIDFindings(
-        val isValid: Boolean,
         val violatingElement: KtNamedDeclaration,
         val issueMsg: String,
     )
