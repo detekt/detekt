@@ -44,6 +44,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakAfterElse
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakBeforeAssignment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoMultipleSpaces
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoSemicolons
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoSingleLineBlockComment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoTrailingSpaces
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoUnitReturn
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoUnusedImports
@@ -163,6 +164,7 @@ class KtLintMultiRule(config: Config = Config.empty) :
         NoBlankLineInList(config),
         NoConsecutiveComments(config),
         NoEmptyFirstLineInClassBody(config),
+        NoSingleLineBlockComment(config),
         ParameterListSpacing(config),
         StringTemplateIndent(config),
         TryCatchFinallySpacing(config),
