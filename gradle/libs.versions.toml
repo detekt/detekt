@@ -36,7 +36,7 @@ slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "1.7.36" }
 
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 
-sarif4k = "io.github.detekt.sarif4k:sarif4k:0.2.0"
+sarif4k = "io.github.detekt.sarif4k:sarif4k:0.4.0"
 assertj = "org.assertj:assertj-core:3.24.2"
 reflections = "org.reflections:reflections:0.10.2"
 mockk = "io.mockk:mockk:1.13.5"
