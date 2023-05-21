@@ -22,12 +22,9 @@ object SarifReportMerger {
     }
 }
 
-private var JsonObject.runs: List<JsonObject>
+private val JsonObject.runs: List<JsonObject>
     @Suppress("UNCHECKED_CAST")
     get() = this["runs"] as List<JsonObject>
-    set(value) {
-        this["runs"] = value
-    }
 
 private var JsonObject.results: List<JsonObject>
     @Suppress("UNCHECKED_CAST")
