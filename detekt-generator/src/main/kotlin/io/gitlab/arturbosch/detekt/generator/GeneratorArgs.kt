@@ -54,7 +54,7 @@ class GeneratorArgs {
     @DynamicParameter(
         names = ["--replace", "-r"],
         required = false,
-        description = "A key and value pair that is used to replace placeholders " +
+        description = "Any number of key and value pairs that are used to replace placeholders " +
             "during data collection and output generation. Key and value are separated by '='. " +
             "The property may be used multiple times."
     )
