@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class GeneratorArgsTest {
+class GeneratorArgsSpec {
     @Nested
     inner class TextReplacements {
 
@@ -25,7 +25,7 @@ class GeneratorArgsTest {
 
         @Test
         fun simpleReplacement() {
-            val options = parse("--replace", "foo:bar")
+            val options = parse("--replace", "foo=bar")
 
             val expected = mapOf("foo" to "bar")
             assertThat(options.textReplacements).containsExactlyEntriesOf(expected)
@@ -33,7 +33,7 @@ class GeneratorArgsTest {
 
         @Test
         fun simpleReplacementShortcut() {
-            val options = parse("-r", "foo:bar")
+            val options = parse("-r", "foo=bar")
 
             val expected = mapOf("foo" to "bar")
             assertThat(options.textReplacements).containsExactlyEntriesOf(expected)
@@ -41,7 +41,7 @@ class GeneratorArgsTest {
 
         @Test
         fun emptyReplacementValue() {
-            val options = parse("--replace", "foo:")
+            val options = parse("--replace", "foo=")
 
             val expected = mapOf("foo" to "")
             assertThat(options.textReplacements).containsExactlyEntriesOf(expected)
@@ -49,7 +49,7 @@ class GeneratorArgsTest {
 
         @Test
         fun multipleReplacements() {
-            val options = parse("--replace", "foo:bar", "--replace", "faz:baz")
+            val options = parse("--replace", "foo=bar", "--replace", "faz=baz")
 
             val expected = mapOf(
                 "foo" to "bar",

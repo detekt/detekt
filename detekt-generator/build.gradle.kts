@@ -75,7 +75,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         "--cli-options",
         cliOptionsFile,
         "--replace",
-        "<ktlintVersion/>:${libs.versions.ktlint.get()}"
+        "<ktlintVersion/>=${libs.versions.ktlint.get()}"
     )
 }
 
