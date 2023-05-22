@@ -70,9 +70,6 @@ dependencies {
     compileOnly(libs.kotlin.gradle)
     compileOnly(libs.kotlin.gradlePluginApi)
     testFixturesCompileOnly("org.jetbrains:annotations:24.0.1")
-    implementation(libs.sarif4k) {
-        exclude("org.jetbrains.kotlin")
-    }
     compileOnly("io.gitlab.arturbosch.detekt:detekt-cli:1.22.0")
 
     testKitRuntimeOnly(libs.kotlin.gradle)
