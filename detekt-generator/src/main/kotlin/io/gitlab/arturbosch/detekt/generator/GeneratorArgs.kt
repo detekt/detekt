@@ -50,6 +50,15 @@ class GeneratorArgs {
     )
     var generateCustomRuleConfig: Boolean = false
 
+    @Parameter(
+        names = ["--replace", "-r"],
+        required = false,
+        variableArity = true,
+        description = "Any number of key value pairs that is used to replace strings " +
+            "during data collection and output generation. Key and value are separated by colon."
+    )
+    private var replace: List<String> = emptyList()
+
     val inputPath: List<Path> by lazy {
         checkNotNull(input) { "Input parameter was not initialized by jcommander!" }
             .splitToSequence(",", ";")
@@ -75,4 +84,9 @@ class GeneratorArgs {
                 "Cli options output path was not initialized by jcommander!"
             }
         )
+
+    val textReplacements: Map<String, String>
+        get() = replace
+            .map { it.split(':') }
+            .associate { it[0] to it[1] }
 }

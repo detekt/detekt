@@ -16,7 +16,6 @@ dependencies {
     testImplementation(libs.reflections)
 }
 
-val tempDocDir = "$buildDir/docs/rules"
 val documentationDir = "$rootDir/website/docs/rules"
 val configDir = "$rootDir/detekt-core/src/main/resources"
 val cliOptionsFile = "$rootDir/website/docs/gettingstarted/_cli-options.md"
@@ -33,17 +32,13 @@ tasks.register("generateWebsite") {
     )
 }
 
-val generateDocumentation by tasks.registering {
-    dependsOn(copyRuleDocsToWebsite)
-    description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
-    group = "documentation"
-}
-
-val doGenerateDocumentation by tasks.registering(JavaExec::class) {
+val generateDocumentation by tasks.registering(JavaExec::class) {
     dependsOn(
         ":detekt-rules-libraries:sourcesJar",
         ":detekt-rules-ruleauthors:sourcesJar",
     )
+    description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
+    group = "documentation"
 
     val ruleModules = rootProject.subprojects.asSequence()
         .filter { "rules" in it.name || it.name == "detekt-formatting" }
@@ -55,7 +50,7 @@ val doGenerateDocumentation by tasks.registering(JavaExec::class) {
     inputs.files(ruleModules)
 
     outputs.files(
-        fileTree(tempDocDir),
+        fileTree(documentationDir),
         file(defaultConfigFile),
         file(formattingConfigFile),
         file(librariesConfigFile),
@@ -74,28 +69,14 @@ val doGenerateDocumentation by tasks.registering(JavaExec::class) {
         "--input",
         ruleModules.joinToString(","),
         "--documentation",
-        tempDocDir,
+        documentationDir,
         "--config",
         configDir,
         "--cli-options",
         cliOptionsFile,
+        "--replace",
+        "<ktlintVersion/>:${libs.versions.ktlint.get()}"
     )
-}
-
-val copyRuleDocsToWebsite by tasks.registering(Sync::class) {
-    dependsOn(doGenerateDocumentation)
-
-    from(tempDocDir)
-    into(documentationDir)
-
-    val replacements = mapOf(
-        "KTLINT_VERSION" to libs.versions.ktlint.get(),
-    )
-    // For up to date checks, see https://github.com/gradle/gradle/issues/861.
-    replacements.forEach { (name, value) -> inputs.property(name, value) }
-    filesMatching("**/*.md") {
-        filter(mapOf("tokens" to replacements), org.apache.tools.ant.filters.ReplaceTokens::class.java)
-    }
 }
 
 val generatedFormattingConfig: Configuration by configurations.creating {
@@ -120,19 +101,19 @@ val generatedCoreConfig: Configuration by configurations.creating {
 
 artifacts {
     add(generatedFormattingConfig.name, file(formattingConfigFile)) {
-        builtBy(doGenerateDocumentation)
+        builtBy(generateDocumentation)
     }
     add(generatedLibrariesConfig.name, file(librariesConfigFile)) {
-        builtBy(doGenerateDocumentation)
+        builtBy(generateDocumentation)
     }
     add(generatedRuleauthorsConfig.name, file(ruleauthorsConfigFile)) {
-        builtBy(doGenerateDocumentation)
+        builtBy(generateDocumentation)
     }
     add(generatedCoreConfig.name, file(defaultConfigFile)) {
-        builtBy(doGenerateDocumentation)
+        builtBy(generateDocumentation)
     }
     add(generatedCoreConfig.name, file(deprecationFile)) {
-        builtBy(doGenerateDocumentation)
+        builtBy(generateDocumentation)
     }
 }
 

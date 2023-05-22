@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/@KTLINT_VERSION@/rules/experimental/#string-template-indent) for documentation.
+ * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/experimental/#string-template-indent) for documentation.
  */
 @AutoCorrectable(since = "1.23.0")
 class StringTemplateIndent(config: Config) : FormattingRule(config) {
