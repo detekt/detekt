@@ -1,5 +1,9 @@
 package io.gitlab.arturbosch.detekt.api
 
+import io.gitlab.arturbosch.detekt.api.ValueFormat.GLOB
+import io.gitlab.arturbosch.detekt.api.ValueFormat.REGEX
+import io.gitlab.arturbosch.detekt.api.ValueFormat.STRING
+
 /**
  * This factory method can be used by rule authors to specify one or many configuration values along with an
  * explanation for each value. For example:
@@ -38,5 +42,30 @@ data class ValuesWithReason internal constructor(private val values: List<ValueW
  * A ValueWithReason represents a single configuration value that may have an explanation as to why it is used.
  * @property value the actual value that is configured
  * @property reason an optional explanation for the configured value
+ * @property format the format the value should be interpreted as. Supported values are [string, regex, glob]
  */
-data class ValueWithReason(val value: String, val reason: String? = null)
+data class ValueWithReason(val value: String, val reason: String? = null, val format: ValueFormat = STRING) {
+    fun getValueAsRegex(): Regex {
+        return when (format) {
+            STRING -> "^${Regex.escape(value)}$".toRegex()
+            REGEX -> value.toRegex()
+            GLOB -> value.simplePatternToRegex() // TODO: This is not correct as it does not match the entire string
+        }
+    }
+}
+
+enum class ValueFormat {
+    STRING, REGEX, GLOB;
+
+    companion object {
+        fun from(stringOrNull: String?): ValueFormat? {
+            if (stringOrNull.isNullOrBlank()) {
+                return null
+            }
+            val value = stringOrNull.lowercase()
+            return requireNotNull(values().first { it.name.lowercase() == value }) {
+                "$value is not a supported value format. Use one of ${values().toList()}."
+            }
+        }
+    }
+}

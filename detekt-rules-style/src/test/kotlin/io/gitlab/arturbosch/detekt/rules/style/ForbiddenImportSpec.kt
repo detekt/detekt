@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.ValueFormat.GLOB
 import io.gitlab.arturbosch.detekt.api.ValueWithReason
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
@@ -37,14 +38,25 @@ class ForbiddenImportSpec {
 
     @Test
     fun `should report nothing when imports do not match`() {
-        val findings = ForbiddenImport(TestConfig(IMPORTS to listOf("org.*"))).lint(code)
+        val config = TestConfig(
+            IMPORTS to listOf(
+                ValueWithReason(value = "something.very.Specific").toConfig(),
+                ValueWithReason(value = "org.*", format = GLOB).toConfig()
+            )
+        )
+        val findings = ForbiddenImport(config).lint(code)
         assertThat(findings).isEmpty()
     }
 
     @Test
     @DisplayName("should report kotlin.* when imports are kotlin.*")
     fun reportKotlinWildcardImports() {
-        val findings = ForbiddenImport(TestConfig(IMPORTS to listOf("kotlin.*"))).lint(code)
+        val config = TestConfig(
+            IMPORTS to listOf(
+                ValueWithReason(value = "kotlin.*", format = GLOB).toConfig()
+            )
+        )
+        val findings = ForbiddenImport(config).lint(code)
         assertThat(findings)
             .extracting("message")
             .containsExactlyInAnyOrder(
@@ -56,7 +68,11 @@ class ForbiddenImportSpec {
     @Test
     @DisplayName("should report kotlin.* when imports are kotlin.* with reasons")
     fun reportKotlinWildcardImports2() {
-        val config = TestConfig(IMPORTS to listOf(ValueWithReason("kotlin.*", "I'm just joking!").toConfig()))
+        val config = TestConfig(
+            IMPORTS to listOf(
+                ValueWithReason("kotlin.*", "I'm just joking!", format = GLOB).toConfig()
+            )
+        )
         val findings = ForbiddenImport(config).lint(code)
         assertThat(findings).hasSize(2)
         assertThat(findings[0].message)
@@ -68,16 +84,16 @@ class ForbiddenImportSpec {
     @Test
     @DisplayName("should report kotlin.SinceKotlin when specified via fully qualified name")
     fun reportKotlinSinceKotlinWhenFqdnSpecified() {
-        val findings = ForbiddenImport(TestConfig(IMPORTS to listOf("kotlin.SinceKotlin"))).lint(code)
-        assertThat(findings)
-            .hasSize(1)
+        val config = TestConfig(IMPORTS to listOf("kotlin.SinceKotlin"))
+        val findings = ForbiddenImport(config).lint(code)
+        assertThat(findings).hasSize(1)
     }
 
     @Test
     @DisplayName("should report kotlin.SinceKotlin and kotlin.jvm.JvmField when specified via fully qualified names")
     fun reportMultipleConfiguredImportsCommaSeparated() {
-        val findings =
-            ForbiddenImport(TestConfig(IMPORTS to listOf("kotlin.SinceKotlin", "kotlin.jvm.JvmField"))).lint(code)
+        val config = TestConfig(IMPORTS to listOf("kotlin.SinceKotlin", "kotlin.jvm.JvmField"))
+        val findings = ForbiddenImport(config).lint(code)
         assertThat(findings).hasSize(2)
     }
 
@@ -86,49 +102,59 @@ class ForbiddenImportSpec {
         "should report kotlin.SinceKotlin and kotlin.jvm.JvmField when specified via fully qualified names list"
     )
     fun reportMultipleConfiguredImportsInList() {
-        val findings = ForbiddenImport(
-            TestConfig(IMPORTS to listOf("kotlin.SinceKotlin", "kotlin.jvm.JvmField"))
-        ).lint(code)
+        val config = TestConfig(IMPORTS to listOf("kotlin.SinceKotlin", "kotlin.jvm.JvmField"))
+        val findings = ForbiddenImport(config).lint(code)
         assertThat(findings).hasSize(2)
     }
 
     @Test
     @DisplayName("should report kotlin.SinceKotlin when specified via kotlin.Since*")
     fun reportsKotlinSinceKotlinWhenSpecifiedWithWildcard() {
-        val findings = ForbiddenImport(TestConfig(IMPORTS to listOf("kotlin.Since*"))).lint(code)
+        val config = TestConfig(
+            IMPORTS to listOf(
+                ValueWithReason(value = "kotlin.Since*", format = GLOB).toConfig()
+            )
+        )
+        val findings = ForbiddenImport(config).lint(code)
         assertThat(findings).hasSize(1)
     }
 
     @Test
     @DisplayName("should report all of com.example.R.string, net.example.R.dimen, and net.example.R.dimension")
     fun preAndPostWildcard() {
-        val findings = ForbiddenImport(TestConfig(IMPORTS to listOf("*.R.*"))).lint(code)
+        val config = TestConfig(
+            IMPORTS to listOf(
+                ValueWithReason(value = "*.R.*", format = GLOB).toConfig()
+            )
+        )
+        val findings = ForbiddenImport(config).lint(code)
         assertThat(findings).hasSize(3)
     }
 
     @Test
     @DisplayName("should report net.example.R.dimen but not net.example.R.dimension")
     fun doNotReportSubstringOfFqdn() {
-        val findings =
-            ForbiddenImport(TestConfig(IMPORTS to listOf("net.example.R.dimen"))).lint(code)
+        val config = TestConfig(IMPORTS to listOf("net.example.R.dimen"))
+        val findings = ForbiddenImport(config).lint(code)
         assertThat(findings).hasSize(1)
     }
 
     @Test
     fun `should not report import when it does not match any pattern`() {
-        val findings =
-            ForbiddenImport(TestConfig(FORBIDDEN_PATTERNS to "nets.*R")).lint(code)
+        val config = TestConfig(FORBIDDEN_PATTERNS to "nets.*R")
+        val findings = ForbiddenImport(config).lint(code)
         assertThat(findings).isEmpty()
     }
 
     @Test
     fun `should report import when it matches the forbidden pattern`() {
-        val findings =
-            ForbiddenImport(TestConfig(FORBIDDEN_PATTERNS to "net.*R|com.*expiremental")).lint(code)
-        assertThat(findings).hasSize(2)
-        assertThat(findings[0].message)
-            .isEqualTo("The import `net.example.R.dimen` has been forbidden in the detekt config.")
-        assertThat(findings[1].message)
-            .isEqualTo("The import `net.example.R.dimension` has been forbidden in the detekt config.")
+        val config = TestConfig(FORBIDDEN_PATTERNS to "net.*R|com.*expiremental")
+        val findings = ForbiddenImport(config).lint(code)
+        assertThat(findings)
+            .extracting("message")
+            .containsExactlyInAnyOrder(
+                "The import `net.example.R.dimen` has been forbidden in the detekt config.",
+                "The import `net.example.R.dimension` has been forbidden in the detekt config."
+            )
     }
 }

@@ -185,6 +185,7 @@ style:
       #- value: 'org.junit.jupiter.api.assertTimeout'
       #- value: 'org.junit.jupiter.api.assertTimeoutPreemptively'
       - value: 'java.util.stream.*'
+        format: glob
         reason: "Use Kotlin's sequences instead."
   ForbiddenMethodCall:
     active: true

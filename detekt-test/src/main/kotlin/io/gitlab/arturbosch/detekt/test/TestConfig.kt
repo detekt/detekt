@@ -65,5 +65,5 @@ constructor(
 }
 
 fun ValueWithReason.toConfig(): Map<String, String?> {
-    return mapOf("value" to value, "reason" to reason)
+    return mapOf("value" to value, "reason" to reason, "format" to format.name)
 }

@@ -116,6 +116,7 @@ private fun <T : Any> getValueOrDefault(configAware: ConfigAware, propertyName: 
         is String,
         is Boolean,
         is Int -> configAware.valueOrDefault(propertyName, defaultValue)
+
         else -> error(
             "${defaultValue.javaClass} is not supported for delegated config property '$propertyName'. " +
                 "Use one of String, Boolean, Int or List<String> instead."
@@ -149,8 +150,11 @@ private fun ConfigAware.getValuesWithReasonOrDefault(
                     try {
                         ValueWithReason(
                             value = dict["value"] as String,
-                            reason = dict["reason"] as String?
+                            reason = dict["reason"] as String?,
+                            format = ValueFormat.from(dict["format"] as String?) ?: ValueFormat.STRING
                         )
+                    } catch (e: IllegalArgumentException) {
+                        throw Config.InvalidConfigurationError(e)
                     } catch (e: ClassCastException) {
                         throw Config.InvalidConfigurationError(e)
                     } catch (@Suppress("TooGenericExceptionCaught") e: NullPointerException) {

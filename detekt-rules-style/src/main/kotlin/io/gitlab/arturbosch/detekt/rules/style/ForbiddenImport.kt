@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
 import io.gitlab.arturbosch.detekt.api.valuesWithReason
 import org.jetbrains.kotlin.psi.KtImportDirective
 
@@ -36,7 +35,7 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
 
     @Configuration("imports which should not be used")
     private val imports: List<Forbidden> by config(valuesWithReason()) { list ->
-        list.map { Forbidden(it.value.simplePatternToRegex(), it.reason) }
+        list.map { Forbidden(it.getValueAsRegex(), it.reason) }
     }
 
     @Configuration("reports imports which match the specified regular expression. For example `net.*R`.")

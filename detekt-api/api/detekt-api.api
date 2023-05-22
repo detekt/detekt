@@ -618,16 +618,32 @@ public abstract interface annotation class io/gitlab/arturbosch/detekt/api/Unsta
 	public abstract fun reason ()Ljava/lang/String;
 }
 
+public final class io/gitlab/arturbosch/detekt/api/ValueFormat : java/lang/Enum {
+	public static final field Companion Lio/gitlab/arturbosch/detekt/api/ValueFormat$Companion;
+	public static final field GLOB Lio/gitlab/arturbosch/detekt/api/ValueFormat;
+	public static final field REGEX Lio/gitlab/arturbosch/detekt/api/ValueFormat;
+	public static final field STRING Lio/gitlab/arturbosch/detekt/api/ValueFormat;
+	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/ValueFormat;
+	public static fun values ()[Lio/gitlab/arturbosch/detekt/api/ValueFormat;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/ValueFormat$Companion {
+	public final fun from (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/ValueFormat;
+}
+
 public final class io/gitlab/arturbosch/detekt/api/ValueWithReason {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/ValueFormat;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/ValueFormat;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/ValueWithReason;
-	public static synthetic fun copy$default (Lio/gitlab/arturbosch/detekt/api/ValueWithReason;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/ValueWithReason;
+	public final fun component3 ()Lio/gitlab/arturbosch/detekt/api/ValueFormat;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/ValueFormat;)Lio/gitlab/arturbosch/detekt/api/ValueWithReason;
+	public static synthetic fun copy$default (Lio/gitlab/arturbosch/detekt/api/ValueWithReason;Ljava/lang/String;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/ValueFormat;ILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/ValueWithReason;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFormat ()Lio/gitlab/arturbosch/detekt/api/ValueFormat;
 	public final fun getReason ()Ljava/lang/String;
 	public final fun getValue ()Ljava/lang/String;
+	public final fun getValueAsRegex ()Lkotlin/text/Regex;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
