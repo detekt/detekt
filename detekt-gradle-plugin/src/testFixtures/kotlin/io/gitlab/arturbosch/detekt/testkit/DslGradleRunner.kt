@@ -24,6 +24,7 @@ constructor(
     val gradleVersionOrNone: String? = null,
     val dryRun: Boolean = false,
     val jvmArgs: String = "-Xmx2g -XX:MaxMetaspaceSize=1g",
+    val customArgs: String = "",
     val projectScript: Project.() -> Unit = {}
 ) {
 
@@ -138,6 +139,10 @@ constructor(
             add("-Dorg.gradle.jvmargs=$jvmArgs")
             if (dryRun) {
                 add("-Pdetekt-dry-run=true")
+            }
+            add("-Pdetekt.internal.tool.version.override=${loadTestDetektVersion()}")
+            if (customArgs.isNotBlank()) {
+                add(customArgs)
             }
             addAll(tasks.toList())
         }

@@ -12,7 +12,6 @@ abstract class DslTestBuilder {
     @Language("gradle.kts")
     val gradleRepositories = """
         repositories {
-            mavenLocal()
             mavenCentral()
         }
     """.trimIndent()
@@ -23,6 +22,7 @@ abstract class DslTestBuilder {
     private var baselineFile: String? = null
     private var configFile: String? = null
     private var gradleVersion: String? = null
+    private var customArgs: String = ""
     private var dryRun: Boolean = false
 
     fun withDetektConfig(@Language("gradle.kts") config: String): DslTestBuilder {
@@ -50,6 +50,11 @@ abstract class DslTestBuilder {
         return this
     }
 
+    fun withCustomArgs(args: String): DslTestBuilder {
+        customArgs = args
+        return this
+    }
+
     fun dryRun(): DslTestBuilder {
         dryRun = true
         return this
@@ -63,6 +68,7 @@ abstract class DslTestBuilder {
             configFileOrNone = configFile,
             baselineFiles = baselineFile?.let { listOf(it) }.orEmpty(),
             gradleVersionOrNone = gradleVersion,
+            customArgs = customArgs,
             dryRun = dryRun,
         )
         runner.setupProject()

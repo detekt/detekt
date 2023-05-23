@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
-import io.gitlab.arturbosch.detekt.extensions.loadDetektVersion
+import io.gitlab.arturbosch.detekt.internal.loadDetektVersion
 import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
@@ -530,7 +530,11 @@ class DetektTaskDslSpec {
             }
         """.trimIndent()
         private val builder = kotlin().dryRun()
-        private val gradleRunner = builder.withDetektConfig(config).build()
+        private val gradleRunner = builder
+            .withDetektConfig(config)
+            // For this specific test we want to make sure that the version used is the one from the DSL we provide.
+            .withCustomArgs("-Pdetekt.internal.tool.version.override=")
+            .build()
         private val result = gradleRunner.runTasks("dependencies", "--offline", "--configuration", "detekt")
 
         @Test

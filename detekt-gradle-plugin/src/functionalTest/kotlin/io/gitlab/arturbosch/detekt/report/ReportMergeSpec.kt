@@ -157,7 +157,6 @@ class ReportMergeSpec {
                 repositories {
                     mavenCentral()
                     google()
-                    mavenLocal()
                 }
             }
             
