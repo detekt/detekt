@@ -40,7 +40,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
             # LongParameterList: 1
             # style: 1
             # comments: 1
-        """.trimIndent()
+    """.trimIndent()
 
     private fun defaultConfigConfiguration(): String = """
         config:
@@ -49,7 +49,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
           checkExhaustiveness: false
           # when writing own rules with new properties, exclude the property path e.g.: 'my_rule_set,.*>.*>[my_property]'
           excludes: ''
-        """.trimIndent()
+    """.trimIndent()
 
     private fun defaultProcessorsConfiguration(): String = """
         processors:
@@ -68,7 +68,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
           # - 'ProjectLOCProcessor'
           # - 'ProjectSLOCProcessor'
           # - 'LicenseHeaderLoaderExtension'
-        """.trimIndent()
+    """.trimIndent()
 
     private fun defaultConsoleReportsConfiguration(): String = """
         console-reports:
@@ -80,7 +80,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
              - 'FindingsReport'
              - 'FileBasedFindingsReport'
           #  - 'LiteFindingsReport'
-        """.trimIndent()
+    """.trimIndent()
 
     private fun defaultOutputReportsConfiguration(): String = """
         output-reports:
@@ -91,5 +91,5 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
           # - 'HtmlOutputReport'
           # - 'MdOutputReport'
           # - 'SarifOutputReport'
-        """.trimIndent()
+    """.trimIndent()
 }

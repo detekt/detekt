@@ -12,7 +12,6 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isPublicInherited
 import io.gitlab.arturbosch.detekt.rules.isPublicNotOverridden
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
-import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
@@ -54,16 +53,19 @@ class UndocumentedPublicProperty(config: Config = Config.empty) : Rule(config) {
         super.visitProperty(property)
     }
 
-    private fun KtParameter.isUndocumented(comment: String?) =
+    private fun KtNamedDeclaration.isUndocumented(comment: String?) =
         comment == null || isNotReferenced(comment)
 
-    private fun KtParameter.isNotReferenced(comment: String): Boolean {
+    private fun KtNamedDeclaration.isNotReferenced(comment: String): Boolean {
         val name = nameAsSafeName
         return !comment.contains("[$name]") && !comment.contains("@property $name") && !comment.contains("@param $name")
     }
 
     private fun KtProperty.shouldBeDocumented() =
-        docComment == null && isTopLevelOrInPublicClass() && isPublicNotOverridden(searchProtectedProperty)
+        docComment == null &&
+            isTopLevelOrInPublicClass() &&
+            isPublicNotOverridden(searchProtectedProperty) &&
+            this.isUndocumented(this.containingClassOrObject?.docComment?.text)
 
     private fun KtProperty.isTopLevelOrInPublicClass() = isTopLevel || containingClassOrObject?.isPublic == true
 

@@ -21,6 +21,8 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
+  ClassName:
+    active: false
   CommentSpacing:
     active: true
     autoCorrect: true
@@ -52,6 +54,8 @@ formatting:
   FunKeywordSpacing:
     active: true
     autoCorrect: true
+  FunctionName:
+    active: false
   FunctionReturnTypeSpacing:
     active: true
     autoCorrect: true
@@ -143,6 +147,10 @@ formatting:
   NoSemicolons:
     active: true
     autoCorrect: true
+  NoSingleLineBlockComment:
+    active: false
+    autoCorrect: true
+    indentSize: 4
   NoTrailingSpaces:
     active: true
     autoCorrect: true
@@ -174,6 +182,8 @@ formatting:
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120
+  PropertyName:
+    active: false
   PropertyWrapping:
     active: true
     autoCorrect: true
