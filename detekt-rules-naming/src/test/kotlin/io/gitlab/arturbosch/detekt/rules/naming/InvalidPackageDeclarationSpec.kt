@@ -32,6 +32,7 @@ class InvalidPackageDeclarationSpec {
     fun `should ignore the issue by alias suppression`() {
         val source = """
             @file:Suppress("PackageDirectoryMismatch")
+            
             package foo
             
             class C
