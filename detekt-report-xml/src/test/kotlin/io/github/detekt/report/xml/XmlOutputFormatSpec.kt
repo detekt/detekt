@@ -1,5 +1,3 @@
-@file:Suppress("MaxLineLength")
-
 package io.github.detekt.report.xml
 
 import io.github.detekt.psi.FilePath
