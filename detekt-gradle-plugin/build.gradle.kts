@@ -12,7 +12,7 @@ plugins {
     idea
     alias(libs.plugins.pluginPublishing)
     // We use this published version of the detekt plugin to self analyse this project.
-    id("io.gitlab.arturbosch.detekt") version "1.22.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.0"
 }
 
 repositories {
