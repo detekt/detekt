@@ -475,6 +475,8 @@ potential-bugs:
     active: false
   NullableToStringCall:
     active: false
+  PropertyUsedBeforeDeclaration:
+    active: false
   UnconditionalJumpStatementInLoop:
     active: false
   UnnecessaryNotNullCheck:
@@ -570,12 +572,14 @@ style:
         value: 'java.lang.annotation.Inherited'
   ForbiddenComment:
     active: true
-    values:
-      - 'FIXME:'
-      - 'STOPSHIP:'
-      - 'TODO:'
+    comments:
+      - reason: 'Forbidden FIXME todo marker in comment, please fix the problem.'
+        value: 'FIXME:'
+      - reason: 'Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code.'
+        value: 'STOPSHIP:'
+      - reason: 'Forbidden TODO todo marker in comment, please do the changes.'
+        value: 'TODO:'
     allowedPatterns: ''
-    customMessage: ''
   ForbiddenImport:
     active: false
     imports: []
@@ -641,6 +645,9 @@ style:
   MultilineRawStringIndentation:
     active: false
     indentSize: 4
+    trimmingMethods:
+      - 'trimIndent'
+      - 'trimMargin'
   NestedClassesVisibility:
     active: true
   NewLineAtEndOfFile:
@@ -693,6 +700,9 @@ style:
     active: false
   TrimMultilineRawString:
     active: false
+    trimmingMethods:
+      - 'trimIndent'
+      - 'trimMargin'
   UnderscoresInNumericLiterals:
     active: false
     acceptableLength: 4
@@ -704,6 +714,8 @@ style:
   UnnecessaryApply:
     active: true
   UnnecessaryBackticks:
+    active: false
+  UnnecessaryBracesAroundTrailingLambda:
     active: false
   UnnecessaryFilter:
     active: true
@@ -751,6 +763,8 @@ style:
     ignoreWhenContainingVariableDeclaration: false
   UseIsNullOrEmpty:
     active: true
+  UseLet:
+    active: false
   UseOrEmpty:
     active: true
   UseRequire:

@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfig
+import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -181,7 +182,7 @@ class AbsentOrWrongFileLicenseSpec {
 }
 
 @OptIn(UnstableApi::class)
-private fun checkLicence(content: String, isRegexLicense: Boolean = false): List<Finding> {
+private fun checkLicence(@Language("kotlin") content: String, isRegexLicense: Boolean = false): List<Finding> {
     val file = compileContentForTest(content.trimIndent())
 
     val configFileName = if (isRegexLicense) "license-config-regex.yml" else "license-config.yml"

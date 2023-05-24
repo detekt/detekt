@@ -155,12 +155,17 @@ style:
     active: true
   ForbiddenComment:
     active: true
-    values:
-      - 'TODO:'
-      - 'FIXME:'
-      - 'STOPSHIP:'
-      - '@author'
-      - '@requiresTypeResolution'
+    comments:
+      - value: 'FIXME:'
+        reason: 'Forbidden FIXME todo marker in comment, please fix the problem.'
+      - value: 'STOPSHIP:'
+        reason: 'Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code.'
+      - value: 'TODO:'
+        reason: 'Forbidden TODO todo marker in comment, please do the changes.'
+      - value: '@author'
+        reason: 'Authors are not recorded in KDoc.'
+      - value: '@requiresTypeResolution'
+        reason: 'Use @RequiresTypeResolution annotation on the class instead.'
     excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
   ForbiddenImport:
     active: true
@@ -258,6 +263,8 @@ style:
   UseIfEmptyOrIfBlank:
     active: true
   UseIsNullOrEmpty:
+    active: true
+  UseLet:
     active: true
   UseOrEmpty:
     active: true

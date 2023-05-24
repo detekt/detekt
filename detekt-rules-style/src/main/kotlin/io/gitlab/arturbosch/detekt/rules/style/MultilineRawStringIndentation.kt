@@ -62,10 +62,13 @@ class MultilineRawStringIndentation(config: Config) : Rule(config) {
     @Configuration("indentation size")
     private val indentSize by config(4)
 
+    @Configuration("allows to provide a list of multiline string trimming methods")
+    private val trimmingMethods: List<String> by config(listOf("trimIndent", "trimMargin"))
+
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
         super.visitStringTemplateExpression(expression)
 
-        if (!expression.isRawStringWithLineBreak() || !expression.isTrimmed()) return
+        if (!expression.isRawStringWithLineBreak() || !expression.isTrimmed(trimmingMethods)) return
 
         if (!expression.isSurroundedByLineBreaks()) {
             report(

@@ -151,6 +151,104 @@ class OutdatedDocumentationSpec {
             """.trimIndent()
             assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).hasSize(1)
         }
+
+        @Test
+        fun `should not report when only public property is documented in internal constructor`() {
+            val incorrectDeclarationsOrder = """
+                /**
+                 * Doc
+                 * @property b desc
+                 */
+                class A internal constructor(val b: String)
+            """.trimIndent()
+            assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when only public property is documented in private constructor`() {
+            val incorrectDeclarationsOrder = """
+                /**
+                 * Doc
+                 * @property b desc
+                 */
+                class A private constructor(val b: String)
+            """.trimIndent()
+            assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when only public param is documented`() {
+            val incorrectDeclarationsOrder = """
+                /**
+                 * Doc
+                 * @param b desc
+                 */
+                class A internal constructor(val b: String)
+            """.trimIndent()
+            assertThat(
+                OutdatedDocumentation(
+                    TestConfig("allowParamOnConstructorProperties" to "true")
+                ).compileAndLint(incorrectDeclarationsOrder)
+            ).isEmpty()
+        }
+
+        @Test
+        fun `should report when all public property is not documented`() {
+            val incorrectDeclarationsOrder = """
+                /**
+                 * Doc
+                 * @property a desc
+                 */
+                class A internal constructor(val a: String, val b: String)
+            """.trimIndent()
+            assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).hasSize(1)
+        }
+
+        @Test
+        fun `should report when all public property doc mismatch class property list order`() {
+            val incorrectDeclarationsOrder = """
+                /**
+                 * Doc
+                 * @property b desc
+                 * @property a desc
+                 */
+                class A internal constructor(val a: String, val b: String)
+            """.trimIndent()
+            assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).hasSize(1)
+        }
+
+        @Test
+        fun `should report when only public property and param is documented with missing param`() {
+            val incorrectDeclarationsOrder = """
+                /**
+                 * Doc
+                 * @property a desc
+                 * @param b desc
+                 */
+                class A internal constructor(
+                    val a: String,
+                    b: Int,
+                    c: Int,
+                )
+            """.trimIndent()
+            assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).hasSize(1)
+        }
+
+        @Test
+        fun `should report when only param is not documented for non internal or private constructor`() {
+            val incorrectDeclarationsOrder = """
+                /**
+                 * Doc
+                 * @property a desc
+                 */
+                class A(
+                    val a: String,
+                    b: Int,
+                    c: Int,
+                )
+            """.trimIndent()
+            assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).hasSize(1)
+        }
     }
 
     @Nested

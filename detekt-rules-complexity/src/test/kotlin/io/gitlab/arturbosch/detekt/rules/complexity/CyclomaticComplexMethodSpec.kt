@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -117,7 +116,56 @@ class CyclomaticComplexMethodSpec {
     @Nested
     inner class `several complex methods` {
 
-        val path = resourceAsPath("ComplexMethods.kt")
+        val code = """
+            // reports 1 - only if ignoreSingleWhenExpression = false
+            fun complexMethodWithSingleWhen1(i: Int) =
+                when (i) {
+                    1 -> print("one")
+                    2 -> print("two")
+                    3 -> print("three")
+                    else -> print(i)
+                }
+            
+            // reports 1 - only if ignoreSingleWhenExpression = false
+            fun complexMethodWithSingleWhen2(i: Int) {
+                when (i) {
+                    1 -> print("one")
+                    2 -> print("two")
+                    3 -> print("three")
+                    else -> print(i)
+                }
+            }
+            
+            // reports 1 - only if ignoreSingleWhenExpression = false
+            fun complexMethodWithSingleWhen3(i: Int): String {
+                return when (i) {
+                    1 -> "one"
+                    2 -> "two"
+                    3 -> "three"
+                    else -> ""
+                }
+            }
+            
+            // reports 1 - only if ignoreSingleWhenExpression = false
+            fun complexMethodWithSingleWhen4(i: Int) = when (i) {
+                1 -> "one"
+                2 -> "two"
+                3 -> "three"
+                else -> ""
+            }
+            
+            // reports 1
+            fun complexMethodWith2Statements(i: Int) {
+                when (i) {
+                    1 -> print("one")
+                    2 -> print("two")
+                    3 -> print("three")
+                    else -> print(i)
+                }
+                if (i == 1) {
+                }
+            }
+        """.trimIndent()
 
         @Test
         fun `does not report complex methods with a single when expression`() {
@@ -127,7 +175,7 @@ class CyclomaticComplexMethodSpec {
             )
             val subject = CyclomaticComplexMethod(config)
 
-            assertThat(subject.lint(path)).hasStartSourceLocations(SourceLocation(43, 5))
+            assertThat(subject.lint(code)).hasStartSourceLocations(SourceLocation(39, 5))
         }
 
         @Test
@@ -135,12 +183,12 @@ class CyclomaticComplexMethodSpec {
             val config = TestConfig("threshold" to "4")
             val subject = CyclomaticComplexMethod(config)
 
-            assertThat(subject.lint(path)).hasStartSourceLocations(
-                SourceLocation(6, 5),
-                SourceLocation(15, 5),
-                SourceLocation(25, 5),
-                SourceLocation(35, 5),
-                SourceLocation(43, 5)
+            assertThat(subject.lint(code)).hasStartSourceLocations(
+                SourceLocation(2, 5),
+                SourceLocation(11, 5),
+                SourceLocation(21, 5),
+                SourceLocation(31, 5),
+                SourceLocation(39, 5)
             )
         }
 

@@ -145,4 +145,36 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
+
+    @Test
+    fun `does not report when value is casted to nullable type parameter`() {
+        val code = """
+            fun <T> combine(
+                value: T,
+                array: List<*>,
+            ) {
+                array[0] as T
+            }
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does report when value is casted to non-nullable type parameter`() {
+        val code = """
+            fun <T: Any> combine(
+                value: T,
+                array: List<*>,
+            ) {
+                array[0] as T
+            }
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings[0]).hasMessage(
+            "Use separate `null` assertion and type cast like " +
+                "('(array[0] ?: error(\"null assertion message\")) as T') instead of 'array[0] as T'."
+        )
+    }
 }

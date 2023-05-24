@@ -57,8 +57,8 @@ publishing {
     }
 }
 
-tasks.withType<GenerateMavenPom> {
-    if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
+if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
+    tasks.withType<GenerateMavenPom>().configureEach {
         notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/24765")
     }
 }
