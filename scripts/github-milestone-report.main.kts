@@ -7,8 +7,7 @@
  * You need kotlin 1.3.70+ installed on your machine
  */
 
-// for the exec line
-@file:Suppress("detekt.CommentSpacing")
+@file:Suppress("detekt.CommentSpacing") // For the polyglot exec command in line 2.
 @file:DependsOn("org.kohsuke:github-api:1.314")
 @file:DependsOn("com.github.ajalt:clikt:2.8.0")
 
