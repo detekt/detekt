@@ -2,7 +2,5 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>ImplicitUnitReturnType:LicenceHeaderLoaderExtensionSpec.kt$LicenceHeaderLoaderExtensionSpec.&lt;no name provided>$override fun register(key: String, value: Any)</ID>
-    <ID>ImplicitUnitReturnType:ProcessingSettingsFactory.kt$DirectExecutor$override fun shutdown()</ID>
   </CurrentIssues>
 </SmellBaseline>

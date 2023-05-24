@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -20,7 +19,63 @@ class UtilityClassWithPublicConstructorSpec {
 
         @BeforeEach
         fun beforeEachTest() {
-            findings = subject.lint(Case.UtilityClassesPositive.path())
+            findings = subject.lint(
+                """
+                    class UtilityClassWithDefaultConstructor { // violation
+                        companion object {
+                            val C = 0
+                        }
+                    }
+                    
+                    class UtilityClassWithPrimaryConstructor1 constructor() { // violation
+                        companion object {
+                            val C = 0
+                        }
+                    }
+                    
+                    class UtilityClassWithPrimaryConstructor2() { // violation
+                        companion object {
+                            val C = 0
+                        }
+                    }
+                    
+                    @Suppress("ConvertSecondaryConstructorToPrimary", "RedundantSuppression")
+                    class UtilityClassWithSecondaryConstructor { // violation
+                        constructor()
+                    
+                        companion object {
+                            val C = 0
+                        }
+                    }
+                    
+                    class UtilityClassWithEmptyCompanionObj { // violation
+                        companion object
+                    }
+                    
+                    @Suppress("ConvertSecondaryConstructorToPrimary", "RedundantSuppression")
+                    open class OpenUtilityClass { // violation - utility class should be final
+                        internal constructor()
+                    
+                        companion object {
+                            val C = 0
+                        }
+                    }
+                    
+                    sealed class SealedParent {
+                        companion object {
+                            fun create(foo: Int?, bar: String?): SealedParent? =
+                                when {
+                                    foo != null -> FooChild(foo)
+                                    bar != null -> BarChild(bar)
+                                    else -> null
+                                }
+                        }
+                    }
+                    
+                    data class FooChild(val foo: Int) : SealedParent()
+                    data class BarChild(val bar: String) : SealedParent()
+                """.trimIndent()
+            )
         }
 
         @Test
@@ -39,9 +94,116 @@ class UtilityClassWithPublicConstructorSpec {
     @Nested
     inner class `several classes which adhere to the UtilityClassWithPublicConstructor rule` {
 
+        @Suppress("LongMethod") // TODO split this up into multiple test case functions.
         @Test
         fun `does not report given classes`() {
-            val findings = subject.lint(Case.UtilityClassesNegative.path())
+            val findings = subject.lint(
+                """
+                    class UtilityClassWithPrimaryPrivateConstructorOk private constructor() {
+                        companion object {
+                            val C = 0
+                        }
+                    }
+                    
+                    class UtilityClassWithPrimaryInternalConstructorOk internal constructor() {
+                        companion object {
+                            val C = 0
+                        }
+                    }
+                    
+                    @Suppress("ConvertSecondaryConstructorToPrimary", "RedundantSuppression")
+                    class UtilityClassWithSecondaryConstructorOk {
+                        private constructor()
+                    
+                        companion object {
+                            val C = 0
+                        }
+                    }
+                    
+                    @Suppress("ConvertSecondaryConstructorToPrimary", "RedundantSuppression")
+                    class NoUtilityClassBecauseOfInterface : InterfaceWithCompanionObject {
+                        constructor()
+                    
+                        companion object {
+                            val C = 0
+                        }
+                    }
+                    
+                    open class UtilityClassesNegativeParent(val i: Int)
+                    @Suppress("ConvertSecondaryConstructorToPrimary", "RedundantSuppression")
+                    class NoUtilityClassBecauseOfInheritance : UtilityClassesNegativeParent {
+                        constructor(i: Int) : super(i)
+                    
+                        companion object {
+                            val C = 0
+                        }
+                    }
+                    
+                    class NoUtilityClasses {
+                        private val i = 0
+                    
+                        class EmptyClass1 {}
+                        class EmptyClass2
+                    
+                        @Suppress("ConvertSecondaryConstructorToPrimary", "RedundantSuppression")
+                        class ClassWithSecondaryConstructor {
+                            constructor()
+                        }
+                    
+                        class ClassWithInstanceFunc {
+                    
+                            fun f() {}
+                    
+                            companion object {
+                                val C = 0
+                            }
+                        }
+                    
+                        class ClassWithPrimaryConstructorParameter1(val i: Int) {
+                    
+                            companion object {
+                                val C = 0
+                            }
+                        }
+                    
+                        class ClassWithPrimaryConstructorParameter2 constructor(val i: Int) {
+                    
+                            companion object {
+                                val C = 0
+                            }
+                        }
+                    
+                        @Suppress("ConvertSecondaryConstructorToPrimary", "RedundantSuppression")
+                        class ClassWithSecondaryConstructorParameter {
+                    
+                            constructor(i: Int)
+                    
+                            companion object {
+                                val C = 0
+                            }
+                        }
+                    
+                        companion object {
+                            val C = 0
+                        }
+                    }
+                    
+                    interface InterfaceWithCompanionObject {
+                        companion object {
+                            val C = 0
+                        }
+                    }
+                    
+                    interface SomeInterface
+                    class SomeImplementation : SomeInterface
+                    class NotUtilityClass : SomeInterface by SomeImplementation() {
+                        // Issue#682 - Class with delegate is no utility class
+                        companion object {
+                            val C = 0
+                        }
+                    }
+                """.trimIndent()
+            )
             assertThat(findings).isEmpty()
         }
     }
