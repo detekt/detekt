@@ -77,12 +77,8 @@ class YamlConfig internal constructor(
                 @Suppress("UNCHECKED_CAST")
                 createYamlLoad().loadFromReader(bufferedReader) as Map<String, *>?
             }.getOrElse { throw Config.InvalidConfigurationError(it) }
-            if (map == null) {
-                YamlConfig(emptyMap())
-            } else {
-                @Suppress("UNCHECKED_CAST")
-                YamlConfig(map as Map<String, Any>)
-            }
+            @Suppress("UNCHECKED_CAST")
+            YamlConfig(map.orEmpty() as Map<String, Any>)
         }
 
         private fun createYamlLoad() = Load(
