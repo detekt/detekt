@@ -14,6 +14,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isActual
 import io.gitlab.arturbosch.detekt.rules.isExpect
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
@@ -108,9 +109,15 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
         constructor.valueParameters
             .filter {
                 (it.isPrivate() || (!it.hasValOrVar() && !constructor.isActual())) &&
-                    it.containingClassOrObject?.isExpect() == false
+                    it.containingClassOrObject?.isExpect() == false &&
+                    isConstructorForDataOrValueClass(constructor).not()
             }
             .forEach { maybeAddUnusedProperty(it) }
+    }
+
+    private fun isConstructorForDataOrValueClass(constructor: PsiElement): Boolean {
+        val parent = constructor.parent as? KtClass ?: return false
+        return parent.isData() || parent.isValue() || parent.isInline()
     }
 
     override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
