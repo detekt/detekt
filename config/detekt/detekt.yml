@@ -230,7 +230,7 @@ style:
   ReturnCount:
     active: true
     excludeGuardClauses: true
-  SpacingBetweenPackageAndImports:
+  SpacingAfterPackageDeclaration:
     active: true
   TrimMultilineRawString:
     active: true
