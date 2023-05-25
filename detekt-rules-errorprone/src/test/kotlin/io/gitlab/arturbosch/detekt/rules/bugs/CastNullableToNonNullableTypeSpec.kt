@@ -58,13 +58,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(5, 38)
-        assertThat(findings[0]).hasMessage(
-            "Use separate `null` assertion and type cast like " +
-                "('(javaClass.simpleName ?: error(\"null assertion message\")) as String') instead of " +
-                "'javaClass.simpleName as String'."
-        )
+        assertThat(findings).isEmpty()
     }
 
     @Test

@@ -63,7 +63,7 @@ class CastNullableToNonNullableType(config: Config = Config.empty) : Rule(config
             bindingContext,
             compilerResourcesNonNull.languageVersionSettings,
             compilerResourcesNonNull.dataFlowValueFactory,
-            shouldConsiderPlatformTypeAsNullable = true,
+            shouldConsiderPlatformTypeAsNullable = false,
         ).ifFalse { return }
 
         val message =
