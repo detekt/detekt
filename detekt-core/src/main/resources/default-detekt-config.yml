@@ -405,6 +405,7 @@ potential-bugs:
       - 'kotlin.String'
   CastNullableToNonNullableType:
     active: false
+    ignorePlatformTypes: true
   CastToNullableType:
     active: false
   Deprecation:
