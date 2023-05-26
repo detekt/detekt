@@ -366,6 +366,70 @@ class StringShouldBeRawStringSpec {
         assertThat(subject.findings).isEmpty()
     }
 
+    @Test
+    fun `does not report when replaceIndent is used - #6145`() {
+        val code = """
+            fun test() {    
+                val x = ""${'"'}
+                    ...
+                ""${'"'}.replaceIndent("\t\t\t\t")
+            }
+        """.trimIndent()
+        val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 0))
+        subject.compileAndLint(code)
+        assertThat(subject.findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report when replaceIndent is used but report other expression inside it`() {
+        val code = """
+            fun test() {    
+                val x = ""${'"'}
+                    ...
+                ""${'"'}.replaceIndent("\t\t\t\t".also { 
+                        "\t a \n" 
+                    }
+                )
+            }
+        """.trimIndent()
+        val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 0))
+        subject.compileAndLint(code)
+        assertThat(subject.findings).hasSize(1)
+        assertThat(subject.findings[0]).hasSourceLocation(5, 13)
+    }
+
+    @Test
+    fun `does not report when prependIndent is used - #6145`() {
+        val code = """
+            fun test() {    
+                val x = ""${'"'}
+                    ...
+                ""${'"'}.trimIndent()
+                val usage = ""${'"'}
+                    ...
+                    ${'$'}{x.prependIndent("\t\t\t\t")}
+                ""${'"'}
+            }
+        """.trimIndent()
+        val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 0))
+        subject.compileAndLint(code)
+        assertThat(subject.findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report when only quotes is present - #6145`() {
+        val code = """
+            fun test() {    
+                val triplet = "\"\"\""
+                val sextuple = "\"\"\"\"\"\""
+                val quadrupleQuintuplePair = "\"\"\"\"" + "\"\"\"\"\""
+            }
+        """.trimIndent()
+        val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 0))
+        subject.compileAndLint(code)
+        assertThat(subject.findings).isEmpty()
+    }
+
     companion object {
         private const val MAX_ESCAPED_CHARACTER_COUNT = "maxEscapedCharacterCount"
         private const val IGNORED_CHARACTERS = "ignoredCharacters"
