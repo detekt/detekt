@@ -11,6 +11,7 @@ import java.util.regex.PatternSyntaxException
 private const val IGNORE_ANNOTATION = "ignoreAnnotation"
 private const val EXCLUDE_SHORT_STRING = "excludeStringsWithLessThan5Characters"
 private const val IGNORE_STRINGS_REGEX = "ignoreStringsRegex"
+private const val EXCLUDE_STRINGS_WITH_LESS_THAN_THRESHOLD = "excludeStringsWithLessThanThreshold"
 
 class StringLiteralDuplicationSpec {
 
@@ -75,8 +76,32 @@ class StringLiteralDuplicationSpec {
 
         @Test
         fun `reports string with 4 characters`() {
-            val config = TestConfig(EXCLUDE_SHORT_STRING to "false", "allowedDuplications" to 2)
+            val config = TestConfig(
+                EXCLUDE_SHORT_STRING to "false",
+                EXCLUDE_STRINGS_WITH_LESS_THAN_THRESHOLD to 0,
+                "allowedDuplications" to 2
+            )
             assertFindingWithConfig(code, config, 1)
+        }
+    }
+
+    @Nested
+    inner class `strings with excludeStringsWithLessThanThreshold configured` {
+        private val code = """val str = "amet" + "amet" + "amet""""
+
+        @Test
+        fun `reports string with 4 characters`() {
+            val config = TestConfig(
+                EXCLUDE_STRINGS_WITH_LESS_THAN_THRESHOLD to 4,
+                EXCLUDE_SHORT_STRING to false
+            )
+            assertFindingWithConfig(code, config, 1)
+        }
+
+        @Test
+        fun `does not report string with 4 characters with excludeStringsWithLessThanThreshold 4`() {
+            val config = TestConfig(EXCLUDE_STRINGS_WITH_LESS_THAN_THRESHOLD to 5)
+            assertFindingWithConfig(code, config, 0)
         }
     }
 
