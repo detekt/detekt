@@ -111,6 +111,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseSumOfInsteadOfFlatMapSize(config),
             DoubleNegativeLambda(config),
             UseLet(config),
+            EnumEntryOrder(config),
         )
     )
 }

@@ -542,6 +542,10 @@ style:
     negativeFunctionNameParts:
       - 'not'
       - 'non'
+  EnumEntryOrder:
+    active: false
+    includeAnnotations:
+      - 'io.gitlab.arturbosch.detekt.annotations.Alphabetical'
   EqualsNullCall:
     active: true
   EqualsOnSignatureLine:
