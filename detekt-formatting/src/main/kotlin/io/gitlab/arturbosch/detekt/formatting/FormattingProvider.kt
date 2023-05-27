@@ -184,7 +184,7 @@ class FormattingProvider : RuleSetProvider {
             TryCatchFinallySpacing(config),
             TypeArgumentListSpacing(config),
             TypeParameterListSpacing(config),
-        ).sortedWith(FormattingRuleComparator)
+        ).sorted()
     )
 
     companion object {

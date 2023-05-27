@@ -34,9 +34,6 @@ abstract class FormattingRule(config: Config) : Rule(config) {
     protected val isAndroid
         get() = FormattingProvider.android.value(ruleSetConfig)
 
-    val runAsLateAsPossible
-        get() = RunAsLateAsPossible in wrapping.visitorModifiers
-
     private var positionByOffset: (offset: Int) -> Pair<Int, Int> by SingleAssign()
     private var root: KtFile by SingleAssign()
 
