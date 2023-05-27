@@ -747,6 +747,37 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
         }
+
+        @Test
+        fun `does not report unused private property in data class - #6142`() {
+            val code = """
+                data class Foo(
+                    private val foo: Int,
+                    private val bar: String,
+                )
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report unused private property in data class with named constructor`() {
+            val code = """
+                data class Foo constructor(
+                    private val foo: Int,
+                    private val bar: String,
+                )
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report unused private property in value or inline class`() {
+            val code = """
+                @JvmInline value class Foo(private val value: String)
+                inline class Bar(private val value: String)
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
     }
 
     @Nested
