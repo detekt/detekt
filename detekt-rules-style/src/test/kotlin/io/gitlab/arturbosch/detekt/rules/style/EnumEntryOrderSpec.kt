@@ -127,7 +127,7 @@ class EnumEntryOrderSpec(private val env: KotlinCoreEnvironment) {
 
         @Test
         fun `reports names in backticks out of order`() {
-            @Suppress("EnumEntryName", "RemoveRedundantBackticks")
+            @Suppress("EnumEntryName")
             val code = """
                 package com.example
     
