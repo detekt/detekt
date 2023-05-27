@@ -147,6 +147,10 @@ formatting:
   NoSemicolons:
     active: true
     autoCorrect: true
+  NoSingleLineBlockComment:
+    active: false
+    autoCorrect: true
+    indentSize: 4
   NoTrailingSpaces:
     active: true
     autoCorrect: true

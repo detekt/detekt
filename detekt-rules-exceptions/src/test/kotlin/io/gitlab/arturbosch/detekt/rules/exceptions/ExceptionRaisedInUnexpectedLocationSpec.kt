@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
-import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
@@ -12,14 +11,82 @@ class ExceptionRaisedInUnexpectedLocationSpec {
 
     @Test
     fun `reports methods raising an unexpected exception`() {
-        val path = resourceAsPath("ExceptionRaisedInMethodsPositive.kt")
-        assertThat(subject.lint(path)).hasSize(5)
+        val code = """
+            open class ExceptionRaisedInMethods {
+            
+                // reports 1 - method should not throw an exception
+                override fun toString(): String {
+                    throw IllegalStateException()
+                }
+            
+                // reports 1 - method should not throw an exception
+                override fun hashCode(): Int {
+                    throw IllegalStateException()
+                }
+            
+                // reports 1 - method should not throw an exception
+                override fun equals(other: Any?): Boolean {
+                    throw IllegalStateException()
+                }
+            
+                // reports 1 - method should not throw an exception
+                @Suppress("ConstantConditionIf", "RedundantSuppression")
+                protected fun finalize() {
+                    if (true) {
+                        throw IllegalStateException()
+                    }
+                }
+            }
+            
+            @Suppress("EqualsOrHashCode", "RedundantSuppression")
+            object ExceptionRaisedInMethodsObject {
+            
+                // reports 1 - method should not throw an exception
+                override fun equals(other: Any?): Boolean {
+                    throw IllegalStateException()
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.lint(code)).hasSize(5)
     }
 
     @Test
     fun `does not report methods raising no exception`() {
-        val path = resourceAsPath("ExceptionRaisedInMethodsNegative.kt")
-        assertThat(subject.lint(path)).isEmpty()
+        val code = """
+            @Suppress("RedundantOverride", "RedundantSuppression")
+            open class NoExceptionRaisedInMethods {
+            
+                init {
+                    throw IllegalStateException()
+                }
+            
+                override fun toString(): String {
+                    return super.toString()
+                }
+            
+                override fun hashCode(): Int {
+                    return super.hashCode()
+                }
+            
+                override fun equals(other: Any?): Boolean {
+                    return super.equals(other)
+                }
+            
+                companion object {
+                    init {
+                        throw IllegalStateException()
+                    }
+                }
+            
+                fun doSomeEqualsComparison() {
+                    throw IllegalStateException()
+                }
+            
+                protected fun finalize() {
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test

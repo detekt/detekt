@@ -48,6 +48,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakAfterElse
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakBeforeAssignment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoMultipleSpaces
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoSemicolons
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoSingleLineBlockComment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoTrailingSpaces
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoUnitReturn
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoUnusedImports
@@ -136,6 +137,7 @@ class FormattingProvider : RuleSetProvider {
             NoLineBreakBeforeAssignment(config),
             NoMultipleSpaces(config),
             NoSemicolons(config),
+            NoSingleLineBlockComment(config),
             NoTrailingSpaces(config),
             NoUnitReturn(config),
             NoUnusedImports(config),
