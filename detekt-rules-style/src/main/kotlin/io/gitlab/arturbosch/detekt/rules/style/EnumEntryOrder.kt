@@ -90,13 +90,13 @@ class EnumEntryOrder(config: Config = Config.empty) : Rule(config) {
         val classWithAnnotation =
             classDescriptor.breadthFirstSearchInSuperInterfaces { it.anyIncludeAnnotations() } ?: return
 
-        val zipped = enumEntries.sortedBy { it.identifierName() }
+        val zipped = enumEntries.sortedBy { it.nameAsSafeName }
             .zip(enumEntries) { expected: KtEnumEntry, actual: KtEnumEntry ->
                 EntryPair(expected, actual)
             }
 
         val firstOutOfOrder =
-            zipped.firstOrNull { it.expected.identifierName() != it.actual.identifierName() } ?: return
+            zipped.firstOrNull { it.expected.nameAsSafeName != it.actual.nameAsSafeName } ?: return
 
         report(
             CodeSmell(
