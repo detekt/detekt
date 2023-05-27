@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.identifierName
@@ -60,7 +59,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.getSuperInterfaces
  *  </noncompliant>
  */
 @RequiresTypeResolution
-@ActiveByDefault(since = "1.24.0")
 class EnumEntryOrder(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
