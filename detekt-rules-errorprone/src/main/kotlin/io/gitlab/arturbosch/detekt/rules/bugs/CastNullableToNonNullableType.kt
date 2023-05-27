@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isNullable
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -48,6 +50,9 @@ class CastNullableToNonNullableType(config: Config = Config.empty) : Rule(config
         Debt.FIVE_MINS
     )
 
+    @Configuration("Whether platform types should be considered as non-nullable and ignored by this rule")
+    private val ignorePlatformTypes: Boolean by config(true)
+
     @Suppress("ReturnCount")
     override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
         super.visitBinaryWithTypeRHSExpression(expression)
@@ -63,7 +68,7 @@ class CastNullableToNonNullableType(config: Config = Config.empty) : Rule(config
             bindingContext,
             compilerResourcesNonNull.languageVersionSettings,
             compilerResourcesNonNull.dataFlowValueFactory,
-            shouldConsiderPlatformTypeAsNullable = true,
+            shouldConsiderPlatformTypeAsNullable = ignorePlatformTypes.not(),
         ).ifFalse { return }
 
         val message =
