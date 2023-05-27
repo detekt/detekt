@@ -136,7 +136,7 @@ class EnumEntryOrderSpec(private val env: KotlinCoreEnvironment) {
                 @Alphabetical
                 enum class Fruit {
                     apple,
-                    `apple`,
+                    ` apple`,
                 }         
             """.trimIndent()
 
@@ -144,7 +144,7 @@ class EnumEntryOrderSpec(private val env: KotlinCoreEnvironment) {
             assertThat(findings).hasSize(1)
             assertThat(findings[0]).hasMessage(
                 "Entries for enum `Fruit` are not declared in alphabetical order. " +
-                    "Reorder so that ``apple`` is before `apple`."
+                    "Reorder so that ``apple`` is before ` apple`."
             )
         }
 
@@ -195,10 +195,6 @@ class EnumEntryOrderSpec(private val env: KotlinCoreEnvironment) {
             
                     fun eatAll() {
                         println("Eating all the fruit!")
-                    }
-
-                    fun eat() {
-                        println("Eating a fruit!")
                     }
                 }         
             """.trimIndent()
