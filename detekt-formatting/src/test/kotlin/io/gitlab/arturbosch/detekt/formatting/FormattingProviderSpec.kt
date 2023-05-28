@@ -9,6 +9,14 @@ import org.junit.jupiter.api.Test
 class FormattingProviderSpec {
 
     @Test
+    fun `list is unique`() {
+        val subject: RuleSet = FormattingProvider().instance(Config.empty)
+        subject.rules.groupBy { it.ruleId }.forEach {
+            assertThat(it.value).hasSize(1)
+        }
+    }
+
+    @Test
     fun `run as late as possible is observed`() {
         val subject: RuleSet = FormattingProvider().instance(Config.empty)
         val formattingRules = subject.rules.map { it as FormattingRule }
@@ -30,8 +38,8 @@ class FormattingProviderSpec {
                 .visitorModifiers
                 .filterIsInstance<Rule.VisitorModifier.RunAfterRule>()
                 .forEach { runAfterRule ->
-                    assertThat(ruleIdToIndices[formattingRule.ktlintRuleId])
-                        .describedAs("${formattingRule.ktlintRuleId} should run after ${runAfterRule.ruleId}")
+                    assertThat(ruleIdToIndices[formattingRule.wrappingRuleId])
+                        .describedAs("${formattingRule.wrappingRuleId} should run after ${runAfterRule.ruleId}")
                         .isGreaterThan(ruleIdToIndices[runAfterRule.ruleId])
                 }
         }
