@@ -7,6 +7,7 @@ import com.pinterest.ktlint.rule.engine.core.api.RuleId
  * Return a list of [FormattingRule] that respects
  * [Rule.VisitorModifier.RunAsLateAsPossible] and [Rule.VisitorModifier.RunAfterRule]
  */
+@Suppress("CyclomaticComplexMethod")
 internal fun List<FormattingRule>.sorted(): List<FormattingRule> {
     // Initialize adjacent list graph
     data class AdjacentListNode(
