@@ -1,5 +1,3 @@
-@file:Suppress("Indentation") // https://github.com/pinterest/ktlint/issues/1971
-
 package io.gitlab.arturbosch.detekt.testkit
 
 import org.gradle.api.Project
@@ -56,14 +54,15 @@ constructor(
      * Each generated file is different so the artifacts are not cached in between test runs
      */
     @Language("kotlin")
-    private fun ktFileContent(className: String, withCodeSmell: Boolean = false) = """
-        internal class $className(
-            val randomDefaultValue: String = "$randomString"
-        ) {
-            val smellyConstant: Int = ${if (withCodeSmell) "11" else "0"}
-        }
-        
-        """.trimIndent() // Last line to prevent NewLineAtEndOfFile.
+    private fun ktFileContent(className: String, withCodeSmell: Boolean = false): String =
+        """
+            internal class $className(
+                val randomDefaultValue: String = "$randomString"
+            ) {
+                val smellyConstant: Int = ${if (withCodeSmell) "11" else "0"}
+            }
+            
+        """.trimIndent() // Last line empty to prevent NewLineAtEndOfFile.
 
     fun setupProject() {
         writeProjectFile(buildFileName, mainBuildFileContent)

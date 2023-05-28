@@ -1,5 +1,3 @@
-@file:Suppress("detekt.MaxLineLength")
-
 package io.gitlab.arturbosch.detekt.core.config
 
 import io.github.detekt.test.utils.resourceAsPath
