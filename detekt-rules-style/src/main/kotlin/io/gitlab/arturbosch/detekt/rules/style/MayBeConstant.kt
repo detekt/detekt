@@ -36,7 +36,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class MayBeConst(config: Config = Config.empty) : Rule(config) {
+class MayBeConstant(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
@@ -80,7 +80,7 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
             .mapNotNull { it.name }
         companionObjectConstants.addAll(constProperties)
         super.visitObjectDeclaration(declaration)
-        companionObjectConstants.removeAll(constProperties)
+        companionObjectConstants.removeAll(constProperties.toSet())
     }
 
     override fun visitProperty(property: KtProperty) {

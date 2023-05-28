@@ -77,7 +77,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UnnecessaryBracesAroundTrailingLambda(config),
             UnnecessaryFilter(config),
             UnnecessaryLet(config),
-            MayBeConst(config),
+            MayBeConstant(config),
             PreferToOverPairSyntax(config),
             BracesOnIfStatements(config),
             BracesOnWhenStatements(config),

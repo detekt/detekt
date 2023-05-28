@@ -7,9 +7,9 @@ import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class MayBeConstSpec {
+class MayBeConstantSpec {
 
-    val subject = MayBeConst()
+    val subject = MayBeConstant()
 
     @Nested
     inner class `some valid constants` {
