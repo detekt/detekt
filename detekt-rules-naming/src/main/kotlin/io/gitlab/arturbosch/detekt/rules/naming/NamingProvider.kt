@@ -31,7 +31,7 @@ class NamingProvider : DefaultRuleSetProvider {
             ObjectPropertyNaming(config),
             FunctionParameterNaming(config),
             FunctionNaming(config),
-            FunctionMinLength(config),
+            FunctionNameMinLength(config),
             FunctionMaxLength(config),
             VariableMaxLength(config),
             VariableMinLength(config),
