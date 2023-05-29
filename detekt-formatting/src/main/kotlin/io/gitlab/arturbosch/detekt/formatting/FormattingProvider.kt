@@ -1,5 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting
 
+import com.pinterest.ktlint.rule.engine.core.api.Rule
+import com.pinterest.ktlint.rule.engine.core.api.RuleId
+import com.pinterest.ktlint.rule.engine.core.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
@@ -195,3 +198,67 @@ class FormattingProvider : RuleSetProvider {
         val autoCorrect by ruleSetConfig(true)
     }
 }
+
+/**
+ * Return a list of [FormattingRule] that respects
+ * [Rule.VisitorModifier.RunAsLateAsPossible] and [Rule.VisitorModifier.RunAfterRule].
+ * Algorithm is based on [com.pinterest.ktlint.rule.engine.internal.RuleProviderSorter].
+ */
+internal fun List<FormattingRule>.sorted(): List<FormattingRule> {
+    val sortedRules = mutableListOf<FormattingRule>()
+    val sortedRuleIds = mutableSetOf<RuleId>()
+    val unprocessedRules = this
+        .sortedWith(defaultRuleOrderComparator())
+        .toMutableList()
+
+    // Initially the list only contains the rules not depending on another rule.
+    unprocessedRules
+        .filter { !it.runAsLateAsPossible && it.hasNoRunAfterRules() }
+        .forEach { formattingRule ->
+            sortedRules.add(formattingRule)
+            sortedRuleIds.add(formattingRule.wrappingRuleId)
+        }
+    unprocessedRules.removeAll(sortedRules)
+    while (unprocessedRules.isNotEmpty()) {
+        val formattingRule =
+            checkNotNull(
+                unprocessedRules
+                    .firstOrNull { formattingRule ->
+                        formattingRule
+                            .runAfterRules()
+                            .all { it.ruleId in sortedRuleIds }
+                    }
+            ) {
+                "Can not complete sorting of rule providers as next item can not be determined."
+            }
+        sortedRuleIds.add(formattingRule.wrappingRuleId)
+        sortedRules.add(formattingRule)
+        unprocessedRules.remove(formattingRule)
+    }
+
+    return sortedRules
+}
+
+private fun defaultRuleOrderComparator() =
+// The sort order below should guarantee a stable order of the rule between multiple invocations of KtLint given
+    // the same set of input parameters. There should be no dependency on data ordering outside this class.
+    compareBy<FormattingRule> {
+        if (it.runAsLateAsPossible) 1 else 0
+    }.thenBy {
+        if (it.wrappingRuleId.ruleSetId == RuleSetId.STANDARD) 0 else 1
+    }.thenBy { it.wrappingRuleId.value }
+
+internal val FormattingRule.wrappingRuleId
+    get() = wrapping.ruleId
+
+internal val FormattingRule.visitorModifiers
+    get() = wrapping.visitorModifiers
+
+internal val FormattingRule.runAsLateAsPossible
+    get() = Rule.VisitorModifier.RunAsLateAsPossible in visitorModifiers
+
+private fun FormattingRule.runAfterRules() =
+    visitorModifiers.filterIsInstance<Rule.VisitorModifier.RunAfterRule>()
+
+private fun FormattingRule.hasNoRunAfterRules() =
+    visitorModifiers.filterIsInstance<Rule.VisitorModifier.RunAfterRule>().isEmpty()

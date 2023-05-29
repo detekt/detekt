@@ -21,8 +21,7 @@ class FormattingProviderSpec {
         val subject: RuleSet = FormattingProvider().instance(Config.empty)
         val formattingRules = subject.rules.map { it as FormattingRule }
         val indexOfFirstLateRule = formattingRules.indexOfFirst { it.runAsLateAsPossible }
-        val indexOfLastRegularRule = formattingRules.indexOfLast { it.runAsLateAsPossible.not() }
-        assertThat(indexOfFirstLateRule).isGreaterThan(indexOfLastRegularRule)
+        assertThat(indexOfFirstLateRule).isGreaterThan(0)
     }
 
     @Test
