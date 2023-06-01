@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.CreateBaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.DebugArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
+import io.gitlab.arturbosch.detekt.invoke.DetektWorkAction
 import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
@@ -20,13 +21,12 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileTree
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
-import org.gradle.api.provider.Provider
+import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Console
 import org.gradle.api.tasks.IgnoreEmptyDirectories
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
@@ -37,9 +37,14 @@ import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
+import org.gradle.workers.WorkerExecutor
+import javax.inject.Inject
 
 @CacheableTask
-abstract class DetektCreateBaselineTask : SourceTask() {
+abstract class DetektCreateBaselineTask @Inject constructor(
+    private val workerExecutor: WorkerExecutor,
+    private val providers: ProviderFactory,
+) : SourceTask() {
 
     init {
         description = "Creates a detekt baseline on the given --baseline path."
@@ -109,14 +114,12 @@ abstract class DetektCreateBaselineTask : SourceTask() {
         get() = jvmTargetProp.get()
         set(value) = jvmTargetProp.set(value)
 
-    @get:InputDirectory
-    @get:PathSensitive(PathSensitivity.ABSOLUTE)
-    @get:Optional
+    @get:Internal
     abstract val jdkHome: DirectoryProperty
 
     @get:Internal
-    internal val arguments: Provider<List<String>> = project.provider {
-        listOf(
+    internal val arguments
+        get() = listOf(
             CreateBaselineArgument,
             ClasspathArgument(classpath),
             JvmTargetArgument(jvmTargetProp.orNull),
@@ -131,7 +134,6 @@ abstract class DetektCreateBaselineTask : SourceTask() {
             BasePathArgument(basePathProp.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
         ).flatMap(CliArgument::toArgument)
-    }
 
     @InputFiles
     @SkipWhenEmpty
@@ -141,11 +143,26 @@ abstract class DetektCreateBaselineTask : SourceTask() {
 
     @TaskAction
     fun baseline() {
-        DetektInvoker.create(task = this).invokeCli(
-            arguments = arguments.get(),
-            ignoreFailures = ignoreFailures.getOrElse(false),
-            classpath = detektClasspath.plus(pluginClasspath),
-            taskName = name
-        )
+        if (providers.gradleProperty(USE_WORKER_API).getOrElse("false") == "true") {
+            logger.info("Executing $name using Worker API")
+            val workQueue = workerExecutor.processIsolation { workerSpec ->
+                workerSpec.classpath.from(detektClasspath)
+                workerSpec.classpath.from(pluginClasspath)
+            }
+
+            workQueue.submit(DetektWorkAction::class.java) { workParameters ->
+                workParameters.arguments.set(arguments)
+                workParameters.ignoreFailures.set(ignoreFailures)
+                workParameters.taskName.set(name)
+            }
+        } else {
+            logger.info("Executing $name using DetektInvoker")
+            DetektInvoker.create().invokeCli(
+                arguments = arguments,
+                ignoreFailures = ignoreFailures.getOrElse(false),
+                classpath = detektClasspath.plus(pluginClasspath),
+                taskName = name
+            )
+        }
     }
 }

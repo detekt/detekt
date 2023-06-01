@@ -25,10 +25,8 @@ When implementing a new rule, do not forget to perform the following steps:
 - Run `./gradlew generateDocumentation` to add your rule and its config options to the `default-detekt-config.yml`.
 - Run `./gradlew build`. This will execute tests locally.
 
-The following remarks might help you during the implementation:
-- To print the AST of sources, you can pass the `--print-ast` flag to the CLI. This will print each
-  Kotlin files AST. This can be helpful when implementing and debugging rules.
-- To view the AST (PSI) of your source code, you can use the [PSI Viewer plugin](https://plugins.jetbrains.com/plugin/227-psiviewer) for IntelliJ.
+To view the AST (PSI) of your source code, you can use the [PSI Viewer plugin](https://plugins.jetbrains.com/plugin/227-psiviewer) for IntelliJ.
+This can be helpful when implementing and debugging rules.
 
 The general policy regarding contributed rules is as follows:
 - PRs will stay open for at least two days so that other users can give feedback.
@@ -97,7 +95,7 @@ types of descriptions:
    underneath the issue description. Built-in console reports such as
    `LiteFindingsReport` use these messages to display identified code smells to
    the user.
-   
+
 It is important that you provide a documentation string, an issue description,
 and a message for each code smell that the new rule generates. When authoring
 these descriptions, you should keep two different target audiences in mind:
@@ -171,7 +169,7 @@ guidelines:
    [Markdown][4]):
    - :heavy_check_mark:: ``Reports referential equality checks for types such as `String` and `List`.``
    - :x:: `Reports referential equality checks for types such as String and List.`
- 
+
 #### General remarks on issue descriptions and code smell messages
 
 Adhere to the following guidelines when authoring an issue description or code
@@ -299,7 +297,7 @@ Check the [README.md inside website/](https://github.com/detekt/detekt/blob/main
 
 ## Gradle Enterprise Access
 
-We do have access to a managed [Gradle Enterprise instance](6) that is publishing
+We do have access to a managed [Gradle Enterprise instance][6] that is publishing
 build scans for all the builds executed on CI (not from forks).
 
 This is extremely helpful to debug build failures and have access to remote build cache.

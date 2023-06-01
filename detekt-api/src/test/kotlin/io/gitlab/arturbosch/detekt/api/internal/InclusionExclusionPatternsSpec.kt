@@ -15,13 +15,14 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.isRegularFile
 
 class InclusionExclusionPatternsSpec {
 
     @Nested
     inner class `rule should only run on library file specified by 'includes' pattern` {
 
-        private val config = TestConfig(mapOf(Config.INCLUDES_KEY to "**/library/*.kt"))
+        private val config = TestConfig(Config.INCLUDES_KEY to "**/library/*.kt")
 
         @Test
         fun `should run`() {
@@ -41,7 +42,7 @@ class InclusionExclusionPatternsSpec {
     @Nested
     inner class `rule should only run on library file not matching the specified 'excludes' pattern` {
 
-        private val config = TestConfig(mapOf(Config.EXCLUDES_KEY to "glob:**/Default.kt"))
+        private val config = TestConfig(Config.EXCLUDES_KEY to "glob:**/Default.kt")
 
         @Test
         fun `should run`() {
@@ -82,15 +83,13 @@ class InclusionExclusionPatternsSpec {
         @Test
         fun `should only run on dummies`() {
             val config = TestConfig(
-                mapOf(
-                    Config.INCLUDES_KEY to "**Dummy*.kt",
-                    Config.EXCLUDES_KEY to "**/library/**"
-                )
+                Config.INCLUDES_KEY to "**/library/**",
+                Config.EXCLUDES_KEY to "**Library.kt",
             )
 
             OnlyLibraryTrackingRule(config).apply {
                 Files.walk(resourceAsPath("library/Library.kt").parent)
-                    .filter { Files.isRegularFile(it) }
+                    .filter { it.isRegularFile() }
                     .forEach { this.lint(it) }
                 assertOnlyLibraryFileVisited(false)
                 assertCounterWasCalledTimes(2)
@@ -100,15 +99,13 @@ class InclusionExclusionPatternsSpec {
         @Test
         fun `should only run on library file`() {
             val config = TestConfig(
-                mapOf(
-                    Config.INCLUDES_KEY to "**Library.kt",
-                    Config.EXCLUDES_KEY to "**/library/**"
-                )
+                Config.INCLUDES_KEY to "**/library/**",
+                Config.EXCLUDES_KEY to "**Dummy*.kt",
             )
 
             OnlyLibraryTrackingRule(config).apply {
                 Files.walk(resourceAsPath("library/Library.kt").parent)
-                    .filter { Files.isRegularFile(it) }
+                    .filter { it.isRegularFile() }
                     .forEach { this.lint(it) }
                 assertOnlyLibraryFileVisited(true)
                 assertCounterWasCalledTimes(0)

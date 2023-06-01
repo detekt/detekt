@@ -47,8 +47,11 @@ class NullableBooleanCheck(config: Config = Config.empty) : Rule(config) {
             expression.left?.getType(bindingContext)?.isBooleanOrNullableBoolean() == true
         ) {
             val messageSuffix =
-                if (expression.right?.text == "true") "`!= false` rather than `?: true`"
-                else "`== true` rather than `?: false`"
+                if (expression.right?.text == "true") {
+                    "`!= false` rather than `?: true`"
+                } else {
+                    "`== true` rather than `?: false`"
+                }
             report(
                 CodeSmell(
                     issue = issue,

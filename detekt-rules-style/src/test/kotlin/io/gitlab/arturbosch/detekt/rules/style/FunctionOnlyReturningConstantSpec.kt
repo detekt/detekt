@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
@@ -20,15 +19,44 @@ class FunctionOnlyReturningConstantSpec {
     @Nested
     inner class `FunctionOnlyReturningConstant rule - positive cases` {
 
-        val path = Case.FunctionReturningConstantPositive.path()
+        private val code = """
+            fun functionReturningConstantString() = "1" // reports 1
+            
+            fun functionReturningConstantString(str: String) = "str: ${'$'}${'$'}" // reports 1
+            
+            fun functionReturningConstantEscapedString(str: String) = "str: \${'$'}str" // reports 1
+            
+            fun functionReturningConstantChar() = '1' // reports 1
+            
+            fun functionReturningConstantInt(): Int { // reports 1
+                return 1
+            }
+            
+            @Suppress("EqualsOrHashCode", "RedundantSuppression")
+            open class FunctionReturningConstant {
+            
+                open fun f() = 1 // reports 1
+                override fun hashCode() = 1 // reports 1
+            }
+            
+            interface InterfaceFunctionReturningConstant {
+            
+                fun interfaceFunctionWithImplementation() = 1 // reports 1
+            
+                class NestedClassFunctionReturningConstant {
+            
+                    fun interfaceFunctionWithImplementation() = 1 // reports 1
+                }
+            }
+        """.trimIndent()
 
-        val actualFunctionCode = """
+        private val actualFunctionCode = """
             actual class ActualFunctionReturningConstant {
                 actual fun f() = 1
             }
         """.trimIndent()
 
-        val code = """
+        private val sinceKotlinCode = """
             import kotlin.SinceKotlin
             class Test {
                 @SinceKotlin("1.0.0")
@@ -40,14 +68,14 @@ class FunctionOnlyReturningConstantSpec {
 
         @Test
         fun `reports functions which return constants`() {
-            assertThat(subject.lint(path)).hasSize(6)
+            assertThat(subject.lint(code)).hasSize(6)
         }
 
         @Test
         fun `reports overridden functions which return constants`() {
-            val config = TestConfig(mapOf(IGNORE_OVERRIDABLE_FUNCTION to "false"))
+            val config = TestConfig(IGNORE_OVERRIDABLE_FUNCTION to "false")
             val rule = FunctionOnlyReturningConstant(config)
-            assertThat(rule.lint(path)).hasSize(9)
+            assertThat(rule.lint(code)).hasSize(9)
         }
 
         @Test
@@ -57,7 +85,7 @@ class FunctionOnlyReturningConstantSpec {
 
         @Test
         fun `reports actual functions which return constants`() {
-            val config = TestConfig(mapOf(IGNORE_ACTUAL_FUNCTION to "false"))
+            val config = TestConfig(IGNORE_ACTUAL_FUNCTION to "false")
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.lint(actualFunctionCode)).hasSize(1)
         }
@@ -65,7 +93,7 @@ class FunctionOnlyReturningConstantSpec {
         @Test
         fun `does not report excluded function which returns a constant (with string configuration)`() {
             val code = "fun f() = 1"
-            val config = TestConfig(mapOf(EXCLUDED_FUNCTIONS to "f"))
+            val config = TestConfig(EXCLUDED_FUNCTIONS to "f")
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
@@ -73,7 +101,7 @@ class FunctionOnlyReturningConstantSpec {
         @Test
         fun `does not report excluded function which returns a constant`() {
             val code = "fun f() = 1"
-            val config = TestConfig(mapOf(EXCLUDED_FUNCTIONS to listOf("f")))
+            val config = TestConfig(EXCLUDED_FUNCTIONS to listOf("f"))
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
@@ -81,7 +109,7 @@ class FunctionOnlyReturningConstantSpec {
         @Test
         fun `does not report wildcard excluded function which returns a constant`() {
             val code = "fun function() = 1"
-            val config = TestConfig(mapOf(EXCLUDED_FUNCTIONS to listOf("f*ion")))
+            val config = TestConfig(EXCLUDED_FUNCTIONS to listOf("f*ion"))
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
@@ -91,9 +119,9 @@ class FunctionOnlyReturningConstantSpec {
             "does not report excluded annotated function which returns a constant when given \"kotlin.SinceKotlin\""
         )
         fun ignoreAnnotatedFunctionWhichReturnsConstantWhenGivenKotlinSinceKotlin() {
-            val config = TestConfig(mapOf(EXCLUDE_ANNOTATED_FUNCTION to "kotlin.SinceKotlin"))
+            val config = TestConfig(EXCLUDE_ANNOTATED_FUNCTION to "kotlin.SinceKotlin")
             val rule = FunctionOnlyReturningConstant(config)
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.compileAndLint(sinceKotlinCode)).isEmpty()
         }
 
         @Test
@@ -101,9 +129,9 @@ class FunctionOnlyReturningConstantSpec {
             "does not report excluded annotated function which returns a constant when given listOf(\"kotlin.SinceKotlin\")"
         )
         fun ignoreAnnotatedFunctionWhichReturnsConstantWhenGivenListOfKotlinSinceKotlin() {
-            val config = TestConfig(mapOf(EXCLUDE_ANNOTATED_FUNCTION to listOf("kotlin.SinceKotlin")))
+            val config = TestConfig(EXCLUDE_ANNOTATED_FUNCTION to listOf("kotlin.SinceKotlin"))
             val rule = FunctionOnlyReturningConstant(config)
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.compileAndLint(sinceKotlinCode)).isEmpty()
         }
     }
 
@@ -112,8 +140,16 @@ class FunctionOnlyReturningConstantSpec {
 
         @Test
         fun `does not report functions which do not return constants`() {
-            val path = Case.FunctionReturningConstantNegative.path()
-            assertThat(subject.lint(path)).isEmpty()
+            val code = """
+                fun functionNotReturningConstant1() = 1 + 1
+                
+                fun functionNotReturningConstant2(): Int {
+                    return 1 + 1
+                }
+                
+                fun functionNotReturningConstantString1(str: String) = "str: ${'$'}str"
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 }

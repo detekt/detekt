@@ -9,13 +9,27 @@ class ThrowingExceptionInMainSpec {
     val subject = ThrowingExceptionInMain()
 
     @Test
-    fun `reports a runnable main function which throws an exception`() {
+    fun `reports a runnable main function without args which throws an exception`() {
         val code = """
-            fun main(args: Array<String>) { throw IllegalArgumentException() }
-            fun main(vararg args: String) { throw IllegalArgumentException() }
             fun main() { throw IllegalArgumentException() }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(3)
+        assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports a runnable main function with array args which throws an exception`() {
+        val code = """
+            fun main(args: Array<String>) { throw IllegalArgumentException() }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports a runnable main function with vararg args which throws an exception`() {
+        val code = """
+            fun main(vararg args: String) { throw IllegalArgumentException() }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
     @Test
@@ -78,13 +92,13 @@ class ThrowingExceptionInMainSpec {
     @Test
     fun `does not report main functions with no @JvmStatic annotation inside a class`() {
         val code = """
-        class A {
-            fun main(args: Array<String>) { throw IllegalArgumentException() }
-            
-            companion object {
+            class A {
                 fun main(args: Array<String>) { throw IllegalArgumentException() }
+                
+                companion object {
+                    fun main(args: Array<String>) { throw IllegalArgumentException() }
+                }
             }
-        }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }

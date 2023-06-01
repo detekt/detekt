@@ -28,9 +28,9 @@ class SuppressorsSpec {
             compileContentForTest(
                 """
                     @file:Composable
-
+                    
                     import androidx.compose.runtime.Composable
-
+                    
                     fun foo() = Unit
                 """.trimIndent()
             )
@@ -57,7 +57,7 @@ class SuppressorsSpec {
     }
 
     @Nested
-    inner class `MultiRule` {
+    inner class MultiRule {
         @Test
         fun `A finding that should be suppressed`() {
             val rule = AMultiRule(TestConfig("ignoreAnnotated" to listOf("Composable")))

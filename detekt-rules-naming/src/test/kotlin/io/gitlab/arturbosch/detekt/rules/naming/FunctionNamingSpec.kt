@@ -14,8 +14,8 @@ class FunctionNamingSpec {
     @Test
     fun `allows FunctionName as alias for suppressing`() {
         val code = """
-        @Suppress("FunctionName")
-        fun MY_FUN() {}
+            @Suppress("FunctionName")
+            fun MY_FUN() {}
         """.trimIndent()
         assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
     }
@@ -23,9 +23,9 @@ class FunctionNamingSpec {
     @Test
     fun `allows anonymous functions`() {
         val code = """
-        val f: (Int) -> Int = fun(i: Int): Int {
-            return i + i
-        }
+            val f: (Int) -> Int = fun(i: Int): Int {
+                return i + i
+            }
         """.trimIndent()
         assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
     }
@@ -33,34 +33,34 @@ class FunctionNamingSpec {
     @Test
     fun `ignores functions in classes matching excludeClassPattern`() {
         val code = """
-        class WhateverTest {
-            fun SHOULD_NOT_BE_FLAGGED() {}
-        }
+            class WhateverTest {
+                fun SHOULD_NOT_BE_FLAGGED() {}
+            }
         """.trimIndent()
-        val config = TestConfig(mapOf(FunctionNaming.EXCLUDE_CLASS_PATTERN to ".*Test$"))
+        val config = TestConfig(FunctionNaming.EXCLUDE_CLASS_PATTERN to ".*Test$")
         assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
     }
 
     @Test
     fun `flags functions inside functions`() {
         val code = """
-        class C : I {
-            override fun shouldNotBeFlagged() {
-                fun SHOULD_BE_FLAGGED() { }
+            class C : I {
+                override fun shouldNotBeFlagged() {
+                    fun SHOULD_BE_FLAGGED() { }
+                }
             }
-        }
-        interface I { fun shouldNotBeFlagged() }
+            interface I { fun shouldNotBeFlagged() }
         """.trimIndent()
         assertThat(FunctionNaming().compileAndLint(code)).hasStartSourceLocation(3, 13)
     }
 
     @Test
-    fun `ignores overridden functions by default`() {
+    fun `ignores overridden functions`() {
         val code = """
-        class C : I {
-            override fun SHOULD_NOT_BE_FLAGGED() {}
-        }
-        interface I { @Suppress("FunctionNaming") fun SHOULD_NOT_BE_FLAGGED() }
+            class C : I {
+                override fun SHOULD_NOT_BE_FLAGGED() {}
+            }
+            interface I { @Suppress("FunctionNaming") fun SHOULD_NOT_BE_FLAGGED() }
         """.trimIndent()
         assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
     }
@@ -68,41 +68,25 @@ class FunctionNamingSpec {
     @Test
     fun `does not report when the function name is identical to the type of the result`() {
         val code = """
-        interface Foo
-        private class FooImpl : Foo
-
-        fun Foo(): Foo = FooImpl()
+            interface Foo
+            private class FooImpl : Foo
+            
+            fun Foo(): Foo = FooImpl()
         """.trimIndent()
-        val config = TestConfig(mapOf(FunctionNaming.IGNORE_OVERRIDDEN to "false"))
-        assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
+        assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
     }
 
     @Test
     fun `flags functions with bad names inside overridden functions by default`() {
         val code = """
-        class C : I {
-            override fun SHOULD_BE_FLAGGED() {
-                fun SHOULD_BE_FLAGGED() {}
+            class C : I {
+                override fun SHOULD_BE_FLAGGED() {
+                    fun SHOULD_BE_FLAGGED() {}
+                }
             }
-        }
-        interface I { @Suppress("FunctionNaming") fun SHOULD_BE_FLAGGED() }
+            interface I { @Suppress("FunctionNaming") fun SHOULD_BE_FLAGGED() }
         """.trimIndent()
         assertThat(FunctionNaming().compileAndLint(code)).hasStartSourceLocation(3, 13)
-    }
-
-    @Test
-    fun `doesn't ignore overridden functions if ignoreOverridden is false`() {
-        val code = """
-        class C : I {
-            override fun SHOULD_BE_FLAGGED() {}
-        }
-        interface I { fun SHOULD_BE_FLAGGED() }
-        """.trimIndent()
-        val config = TestConfig(mapOf(FunctionNaming.IGNORE_OVERRIDDEN to "false"))
-        assertThat(FunctionNaming(config).compileAndLint(code)).hasStartSourceLocations(
-            SourceLocation(2, 18),
-            SourceLocation(4, 19)
-        )
     }
 
     @Test
@@ -115,32 +99,28 @@ class FunctionNamingSpec {
 
     @Test
     fun `should use custom name for method`() {
-        val config = TestConfig(mapOf(FunctionNaming.FUNCTION_PATTERN to "^`.+`$"))
-        assertThat(
-            FunctionNaming(config).compileAndLint(
-                """
-        class Foo {
-            fun `name with back ticks`(){
-              
+        val code = """
+            class Foo {
+                fun `name with back ticks`() {
+                }
             }
-        }
-                """.trimIndent()
-            )
-        ).isEmpty()
+        """.trimIndent()
+        val config = TestConfig(FunctionNaming.FUNCTION_PATTERN to "^`.+`$")
+        assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
     }
 
     @Test
     fun shouldExcludeClassesFromFunctionNaming() {
         val code = """
-        class Bar {
-            fun MYFun() {}
-        }
-
-        object Foo {
-            fun MYFun() {}
-        }
+            class Bar {
+                fun MYFun() {}
+            }
+            
+            object Foo {
+                fun MYFun() {}
+            }
         """.trimIndent()
-        val config = TestConfig(mapOf(FunctionNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar"))
+        val config = TestConfig(FunctionNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar")
         assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
     }
 
@@ -158,7 +138,7 @@ class FunctionNamingSpec {
             class Bar {
                 fun MYFun() {}
             }
-
+            
             object Foo {
                 fun MYFun() {}
             }
@@ -166,7 +146,7 @@ class FunctionNamingSpec {
 
         @Test
         fun shouldFailWithInvalidRegexFunctionNaming() {
-            val config = TestConfig(mapOf(FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo"))
+            val config = TestConfig(FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo")
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
                 FunctionNaming(config).compileAndLint(excludeClassPatternFunctionRegexCode)
             }
@@ -174,11 +154,10 @@ class FunctionNamingSpec {
 
         @Test
         fun shouldNotFailWithInvalidRegexWhenDisabledFunctionNaming() {
-            val configRules = mapOf(
+            val config = TestConfig(
                 "active" to "false",
-                FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo"
+                FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo",
             )
-            val config = TestConfig(configRules)
             assertThat(FunctionNaming(config).compileAndLint(excludeClassPatternFunctionRegexCode)).isEmpty()
         }
     }

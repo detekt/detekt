@@ -7,38 +7,26 @@ class DetektCollector : Collector<RuleSetPage> {
 
     private val ruleSetProviderCollector = RuleSetProviderCollector()
     private val ruleCollector = RuleCollector()
-    private val multiRuleCollector = MultiRuleCollector()
 
     private val collectors = listOf(
         ruleSetProviderCollector,
-        multiRuleCollector,
         ruleCollector
     )
     override val items: List<RuleSetPage>
         get() = buildRuleSetPages()
 
     private fun buildRuleSetPages(): List<RuleSetPage> {
-        val multiRules = multiRuleCollector.items
-        val rules = resolveMultiRuleRelations(ruleCollector.items, multiRules)
-        val multiRuleNameToRules = multiRules.associateBy({ it.name }, { it.rules })
+        val rules = ruleCollector.items
         val ruleSets = ruleSetProviderCollector.items
 
         return ruleSets.map { ruleSet ->
-            val consolidatedRules = ruleSet.rules
-                .flatMap { ruleName -> multiRuleNameToRules[ruleName] ?: listOf(ruleName) }
+            val sortedRules = ruleSet.rules
                 .map { rules.findRuleByName(it) }
                 .sortedBy { rule -> rule.name }
 
-            consolidatedRules.resolveParentRule(rules)
-            RuleSetPage(ruleSet, consolidatedRules)
+            sortedRules.resolveParentRule(rules)
+            RuleSetPage(ruleSet, sortedRules)
         }
-    }
-
-    private fun resolveMultiRuleRelations(
-        rules: List<Rule>,
-        multiRules: List<MultiRule>
-    ): List<Rule> = rules.onEach { rule ->
-        multiRules.find { rule.name in it }?.apply { rule.inMultiRule = this.name }
     }
 
     private fun List<Rule>.findRuleByName(ruleName: String): Rule {

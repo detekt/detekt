@@ -6,12 +6,13 @@ import io.github.detekt.tooling.api.FindingId
 import io.github.detekt.tooling.api.FindingsIdList
 import io.gitlab.arturbosch.detekt.api.Finding
 import org.xml.sax.SAXParseException
-import java.nio.file.Files
 import java.nio.file.Path
 import javax.xml.XMLConstants
 import javax.xml.parsers.SAXParserFactory
 import javax.xml.stream.XMLStreamException
 import javax.xml.stream.XMLStreamWriter
+import kotlin.io.path.bufferedWriter
+import kotlin.io.path.inputStream
 
 internal class BaselineFormat : BaselineProvider {
 
@@ -27,7 +28,7 @@ internal class BaselineFormat : BaselineProvider {
 
     override fun read(sourcePath: Path): DefaultBaseline {
         try {
-            Files.newInputStream(sourcePath).use {
+            sourcePath.inputStream().use {
                 val reader = SAXParserFactory.newInstance()
                     .apply {
                         setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true)
@@ -45,7 +46,7 @@ internal class BaselineFormat : BaselineProvider {
 
     override fun write(targetPath: Path, baseline: Baseline) {
         try {
-            Files.newBufferedWriter(targetPath).addFinalNewLine().use {
+            targetPath.bufferedWriter().addFinalNewLine().use {
                 it.streamXml().prettyPrinter().save(baseline)
             }
         } catch (error: XMLStreamException) {

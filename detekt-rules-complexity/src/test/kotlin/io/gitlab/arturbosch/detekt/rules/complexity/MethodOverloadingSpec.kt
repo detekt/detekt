@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class MethodOverloadingSpec {
     val defaultThreshold = 3
-    val defaultConfig = TestConfig(mapOf("threshold" to defaultThreshold))
+    val defaultConfig = TestConfig("threshold" to defaultThreshold)
 
     val subject = MethodOverloading(defaultConfig)
 
@@ -43,10 +43,10 @@ class MethodOverloadingSpec {
         fun `does not report overloaded methods which do not exceed the threshold`() {
             subject.compileAndLint(
                 """
-            class Test {
-                fun x() { }
-                fun x(i: Int) { }
-            }
+                    class Test {
+                        fun x() { }
+                        fun x(i: Int) { }
+                    }
                 """.trimIndent()
             )
             assertThat(subject.findings.size).isZero()
@@ -60,9 +60,9 @@ class MethodOverloadingSpec {
         fun `does not report extension methods with a different receiver`() {
             subject.compileAndLint(
                 """
-            fun Boolean.foo() {}
-            fun Int.foo() {}
-            fun Long.foo() {}
+                    fun Boolean.foo() {}
+                    fun Int.foo() {}
+                    fun Long.foo() {}
                 """.trimIndent()
             )
             assertThat(subject.findings.size).isZero()
@@ -72,9 +72,9 @@ class MethodOverloadingSpec {
         fun `reports extension methods with the same receiver`() {
             subject.compileAndLint(
                 """
-            fun Int.foo() {}
-            fun Int.foo(i: Int) {}
-            fun Int.foo(i: String) {}
+                    fun Int.foo() {}
+                    fun Int.foo(i: Int) {}
+                    fun Int.foo(i: String) {}
                 """.trimIndent()
             )
             assertThat(subject.findings.size).isEqualTo(1)
@@ -102,9 +102,9 @@ class MethodOverloadingSpec {
         fun `does not report nested overloaded methods which do not exceed the threshold`() {
             val code = """
                 class Outer {
-
+                
                     fun f() {}
-
+                
                     internal class Inner {
                         fun f(i: Int) {}
                         fun f(i: Int, j: Int) {}
@@ -172,9 +172,9 @@ class MethodOverloadingSpec {
         fun `does not report overloaded methods in classes or objects that do not exceed the threshold`() {
             val code = """
                 class Test {
-
+                
                     fun f() {}
-
+                
                     companion object {
                         fun f() {}
                         fun f(i: Int) {}
@@ -188,7 +188,6 @@ class MethodOverloadingSpec {
         fun `reports overloaded methods inside an anonymous object expression`() {
             val code = """
                 class A {
-                
                     fun f() {
                         object : Runnable {
                             override fun run() {}
@@ -218,7 +217,7 @@ class MethodOverloadingSpec {
                     E3 {
                         override fun f() {}
                     };
-
+                
                     abstract fun f()
                 }
             """.trimIndent()

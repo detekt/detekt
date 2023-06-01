@@ -14,7 +14,7 @@ class TooGenericExceptionThrownSpec {
     @ParameterizedTest
     @ValueSource(strings = ["Error", "Exception", "Throwable", "RuntimeException"])
     fun `should report $exceptionName`(exceptionName: String) {
-        val config = TestConfig(mapOf(EXCEPTION_NAMES to "[$exceptionName]"))
+        val config = TestConfig(EXCEPTION_NAMES to "[$exceptionName]")
         val rule = TooGenericExceptionThrown(config)
 
         val findings = rule.compileAndLint(tooGenericExceptionCode)
@@ -24,7 +24,7 @@ class TooGenericExceptionThrownSpec {
 
     @Test
     fun `should not report thrown exceptions`() {
-        val config = TestConfig(mapOf(EXCEPTION_NAMES to "['MyException', Bar]"))
+        val config = TestConfig(EXCEPTION_NAMES to "['MyException', Bar]")
         val rule = TooGenericExceptionThrown(config)
 
         val findings = rule.compileAndLint(tooGenericExceptionCode)
@@ -34,7 +34,7 @@ class TooGenericExceptionThrownSpec {
 
     @Test
     fun `should not report caught exceptions`() {
-        val config = TestConfig(mapOf(EXCEPTION_NAMES to "['Exception']"))
+        val config = TestConfig(EXCEPTION_NAMES to "['Exception']")
         val rule = TooGenericExceptionThrown(config)
 
         val code = """
@@ -53,7 +53,7 @@ class TooGenericExceptionThrownSpec {
 
     @Test
     fun `should not report initialize exceptions`() {
-        val config = TestConfig(mapOf(EXCEPTION_NAMES to "['Exception']"))
+        val config = TestConfig(EXCEPTION_NAMES to "['Exception']")
         val rule = TooGenericExceptionThrown(config)
 
         val code = """fun f() { val ex = Exception() }"""

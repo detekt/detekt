@@ -5,6 +5,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.gitlab.arturbosch.detekt/detekt-cli?label=MavenCentral&logo=apache-maven)](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli)
 [![Gradle Plugin](https://img.shields.io/maven-central/v/io.gitlab.arturbosch.detekt/detekt-gradle-plugin?label=Gradle&logo=gradle)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 [![Revved up by Gradle Enterprise](https://img.shields.io/badge/Revved%20up%20by-Gradle%20Enterprise-06A0CE?logo=Gradle&labelColor=02303A)](https://ge.detekt.dev/scans)
+[![License](https://img.shields.io/github/license/detekt/detekt.svg)](LICENSE)
 
 ![Pre Merge Checks](https://github.com/detekt/detekt/workflows/Pre%20Merge%20Checks/badge.svg?branch=main)
 [![Codecov](https://codecov.io/gh/detekt/detekt/branch/main/graph/badge.svg)](https://codecov.io/gh/detekt/detekt)
@@ -18,12 +19,12 @@ Visit [the project website](https://detekt.dev/) for installation guides, rule d
 
 ### Features
 
-- Code smell analysis for your [Kotlin projects](https://kotlinlang.org/).
+- Code smell analysis for your [Kotlin](https://kotlinlang.org/) projects.
 - Highly configurable rule sets.
-- Code Smell baseline and suppression for legacy projects.
-- Suppression of findings with `@Suppress` annotations.
-- Support for different report formats: html, markdown, [SARIF](https://sarifweb.azurewebsites.net/) and xml (checkstyle). Is it not enough? You can extend detekt and create your own reports. 
-- Extensibility by enabling incorporation of personal rule sets, `FileProcessListener's` and `OutputReport's`.
+- Generate baselines to suppress existing issues for legacy projects while making sure no new issues are introduced.
+- Suppress issues in source files using `@Suppress` annotations.
+- Support for different report formats: HTML, Markdown, [SARIF](https://sarifweb.azurewebsites.net/), XML (Checkstyle) and custom reports.
+- [Extend detekt](https://detekt.dev/docs/introduction/extensions) with custom rule sets and reports.
 - Complexity reports based on lines of code, cyclomatic complexity and number of code smells.
 - First party integration with Gradle with our [Gradle plugin](#with-gradle).
 - A community of [third party plugins](https://github.com/topics/detekt-plugin) that adds more rules and features to detekt.
@@ -33,7 +34,7 @@ Visit [the project website](https://detekt.dev/) for installation guides, rule d
 - [Changelog and migration guides](https://detekt.dev/changelog.html)
 - [Available CLI options](https://detekt.dev/cli.html)
 - [Rule set and rule descriptions](https://detekt.dev/complexity.html)
-- [Writing custom rules and extending detekt](https://detekt.dev/extensions.html)
+- [Writing custom rules and extending detekt](https://detekt.dev/docs/introduction/extensions/)
 - [Suppressing issues in code](https://detekt.dev/suppressing-rules.html)
 - [Suppressing issues via baseline file](https://detekt.dev/baseline.html)
 - [Configuring detekt](https://detekt.dev/configurations.html)
@@ -67,7 +68,7 @@ repositories {
 detekt {
     buildUponDefaultConfig = true // preconfigure defaults
     allRules = false // activate all available (even unstable) rules.
-    config = files("$projectDir/config/detekt.yml") // point to your custom config defining rules to run, overwriting default behavior
+    config.setFrom("$projectDir/config/detekt.yml") // point to your custom config defining rules to run, overwriting default behavior
     baseline = file("$projectDir/config/baseline.xml") // a way of suppressing issues before introducing detekt
 }
 
@@ -76,7 +77,7 @@ tasks.withType<Detekt>().configureEach {
         html.required.set(true) // observe findings in your browser with structure and code snippets
         xml.required.set(true) // checkstyle like format mainly for integrations like Jenkins
         txt.required.set(true) // similar to the console output, contains issue signature to manually edit baseline files
-        sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with Github Code Scanning
+        sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with GitHub Code Scanning
         md.required.set(true) // simple Markdown format
     }
 }
@@ -109,8 +110,8 @@ If you want to use a SNAPSHOT version, you can find more info on [this documenta
 Gradle 6.7.1+ is the minimum requirement. However, the recommended versions together with the other tools recommended versions are:
 
 | Detekt Version | Gradle  | Kotlin   | AGP     | Java Target Level | JDK Max Version |
-| -------------- | ------- | -------- | ------- | ----------------- | --------------- |
-| `1.21.0`       | `7.5` | `1.6.21` | `7.2.1` | `1.8`             | `17`            |
+|----------------|---------|----------|---------|-------------------|-----------------|
+| `1.22.0`       | `7.5.1` | `1.7.21` | `7.3.1` | `1.8`             | `17`            |
 
 The list of [recommended versions for previous detekt version is listed here](https://detekt.dev/compatibility.html).
 
@@ -125,7 +126,16 @@ dependencies {
 }
 ```
 
-Likewise custom [extensions](https://detekt.dev/extensions.html) can be added to detekt.
+Similarly, there are extra rule sets available for detekt from detekt:
+```kotlin
+dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:[version]")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-ruleauthors:[version]")
+}
+```
+For more info visit the [Detekt Marketplace](https://detekt.dev/marketplace).
+
+Likewise custom [extensions](https://detekt.dev/docs/introduction/extensions/) can be added to detekt.
 
 ### Contributing
 
@@ -133,9 +143,7 @@ See [CONTRIBUTING](.github/CONTRIBUTING.md)
 
 Thanks to all the people who contributed to detekt!
 
-<a href="https://github.com/detekt/detekt/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=detekt/detekt" />
-</a>
+[![Profile images of all the contributors](https://contrib.rocks/image?repo=detekt/detekt)](https://github.com/detekt/detekt/graphs/contributors)
 
 ### Mentions
 

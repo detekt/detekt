@@ -8,7 +8,12 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtPrimaryConstructor
+import org.jetbrains.kotlin.psi.psiUtil.containingClass
 
 /**
  * This rule detects annotations which use the arrayOf(...) syntax instead of the array literal [...] syntax.
@@ -34,14 +39,39 @@ class UseArrayLiteralsInAnnotations(config: Config = Config.empty) : Rule(config
 
     override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry) {
         for (argument in annotationEntry.valueArguments) {
-            val expr = argument.getArgumentExpression()?.text ?: continue
-            if (expr.startsWith(LONG_ANNOTATION_LITERAL_FORM)) {
+            if (argument.getArgumentExpression().isArrayOfFunctionCall()) {
                 report(CodeSmell(issue, Entity.from(argument.asElement()), issue.description))
             }
         }
     }
 
+    override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
+        if (constructor.containingClass()?.isAnnotation() != true) return
+        for (parameter in constructor.valueParameters) {
+            val defaultValue = parameter.defaultValue ?: continue
+            if (defaultValue.isArrayOfFunctionCall()) {
+                report(CodeSmell(issue, Entity.from(defaultValue), issue.description))
+            }
+        }
+    }
+
+    private fun KtExpression?.isArrayOfFunctionCall(): Boolean =
+        this?.safeAs<KtCallExpression>()?.calleeExpression?.text in arrayOfFunctions
+
     companion object {
-        const val LONG_ANNOTATION_LITERAL_FORM = "arrayOf("
+        private val arrayOfFunctions = listOf(
+            "boolean",
+            "char",
+            "byte",
+            "short",
+            "int",
+            "long",
+            "float",
+            "double",
+            "ubyte",
+            "ushort",
+            "uint",
+            "ulong",
+        ).map { "${it}ArrayOf" }.toSet() + "arrayOf"
     }
 }

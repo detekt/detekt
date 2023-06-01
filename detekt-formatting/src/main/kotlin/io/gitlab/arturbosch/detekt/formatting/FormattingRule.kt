@@ -1,36 +1,31 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.pinterest.ktlint.core.KtLint
-import com.pinterest.ktlint.core.Rule.VisitorModifier.RunAsLateAsPossible
-import com.pinterest.ktlint.core.Rule.VisitorModifier.RunOnRootNodeOnly
-import com.pinterest.ktlint.core.api.DefaultEditorConfigProperties.codeStyleSetProperty
-import com.pinterest.ktlint.core.api.UsesEditorConfigProperties
-import io.github.detekt.psi.fileName
-import io.github.detekt.psi.toFilePath
+import com.pinterest.ktlint.rule.engine.core.api.Rule.VisitorModifier.RunAsLateAsPossible
+import com.pinterest.ktlint.rule.engine.core.api.editorconfig.CODE_STYLE_PROPERTY
+import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfig
+import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
+import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_STYLE_PROPERTY
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SingleAssign
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.ec4j.core.model.Property
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
-import org.jetbrains.kotlin.com.intellij.lang.FileASTNode
+import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyElement
+import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyHolder
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.psiUtil.endOffset
 
 /**
  * Rule to detect formatting violations.
  */
 abstract class FormattingRule(config: Config) : Rule(config) {
 
-    abstract val wrapping: com.pinterest.ktlint.core.Rule
+    abstract val wrapping: com.pinterest.ktlint.rule.engine.core.api.Rule
 
     /**
      * Should the android style guide be enforced?
@@ -39,17 +34,11 @@ abstract class FormattingRule(config: Config) : Rule(config) {
     protected val isAndroid
         get() = FormattingProvider.android.value(ruleSetConfig)
 
-    val runOnRootNodeOnly
-        get() = RunOnRootNodeOnly in wrapping.visitorModifiers
-
     val runAsLateAsPossible
         get() = RunAsLateAsPossible in wrapping.visitorModifiers
 
     private var positionByOffset: (offset: Int) -> Pair<Int, Int> by SingleAssign()
     private var root: KtFile by SingleAssign()
-
-    // KtLint has rules which prompts the user to manually correct issues e.g. Filename and PackageName.
-    protected open fun canBeCorrectedByKtLint(message: String): Boolean = true
 
     protected fun issueFor(description: String) =
         Issue(javaClass.simpleName, Severity.Style, description, Debt.FIVE_MINS)
@@ -59,65 +48,77 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         positionByOffset = KtLintLineColCalculator
             .calculateLineColByOffset(KtLintLineColCalculator.normalizeText(root.text))
 
-        val editorConfigProperties = overrideEditorConfigProperties()?.toMutableMap()
+        wrapping.beforeFirstNode(computeEditorConfigProperties())
+        root.node.visitASTNodes()
+        wrapping.afterLastNode()
+    }
+
+    open fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String>? = null
+
+    private fun computeEditorConfigProperties(): EditorConfig {
+        val usesEditorConfigProperties = overrideEditorConfigProperties()?.toMutableMap()
             ?: mutableMapOf()
 
         if (isAndroid) {
-            editorConfigProperties[codeStyleSetProperty] = "android"
+            usesEditorConfigProperties[CODE_STYLE_PROPERTY] = "android_studio"
+        } else {
+            usesEditorConfigProperties[CODE_STYLE_PROPERTY] = "intellij_idea"
         }
 
-        if (editorConfigProperties.isNotEmpty()) {
-            val userData = (root.node.getUserData(KtLint.EDITOR_CONFIG_PROPERTIES_USER_DATA_KEY).orEmpty())
-                .toMutableMap()
+        usesEditorConfigProperties[INDENT_STYLE_PROPERTY] = "space"
 
-            editorConfigProperties.forEach { (editorConfigProperty, defaultValue) ->
-                userData[editorConfigProperty.type.name] = Property.builder()
-                    .name(editorConfigProperty.type.name)
-                    .type(editorConfigProperty.type)
-                    .value(defaultValue)
-                    .build()
+        val properties = buildMap {
+            usesEditorConfigProperties.forEach { (editorConfigProperty, defaultValue) ->
+                put(
+                    key = editorConfigProperty.type.name,
+                    value = Property.builder()
+                        .name(editorConfigProperty.type.name)
+                        .type(editorConfigProperty.type)
+                        .value(defaultValue)
+                        .build()
+                )
             }
-            root.node.putUserData(KtLint.EDITOR_CONFIG_PROPERTIES_USER_DATA_KEY, userData)
         }
-        root.node.putUserData(KtLint.FILE_PATH_USER_DATA_KEY, root.name)
+
+        return EditorConfig(properties)
     }
 
-    open fun overrideEditorConfigProperties(): Map<UsesEditorConfigProperties.EditorConfigProperty<*>, String>? = null
+    private fun emitFinding(message: String, canBeAutoCorrected: Boolean, node: ASTNode) {
+        val entity = Entity.from(node.psi)
 
-    fun apply(node: ASTNode) {
-        if (ruleShouldOnlyRunOnFileNode(node)) {
-            return
-        }
-
-        wrapping.visit(node, autoCorrect) { offset, message, _ ->
-            val (line, column) = positionByOffset(offset)
-            val location = Location(
-                SourceLocation(line, column),
-                getTextLocationForViolation(node, offset),
-                root.toFilePath()
-            )
-
-            // Nodes reported by 'NoConsecutiveBlankLines' are dangling whitespace nodes which means they have
-            // no direct parent which we can use to get the containing file needed to baseline or suppress findings.
-            // For these reasons we do not report a KtElement which may lead to crashes when postprocessing it
-            // e.g. reports (html), baseline etc.
-            val packageName = root.packageFqName.asString()
-                .takeIf { it.isNotEmpty() }
-                ?.plus(".")
-                .orEmpty()
-            val entity = Entity("", "$packageName${root.fileName}:$line", location, root)
-
-            if (canBeCorrectedByKtLint(message)) {
-                report(CorrectableCodeSmell(issue, entity, message, autoCorrectEnabled = autoCorrect))
-            } else {
-                report(CodeSmell(issue, entity, message))
-            }
+        if (canBeAutoCorrected) {
+            report(CorrectableCodeSmell(issue, entity, message, autoCorrectEnabled = autoCorrect))
+        } else {
+            report(CodeSmell(issue, entity, message))
         }
     }
 
-    open fun getTextLocationForViolation(node: ASTNode, offset: Int) =
-        TextLocation(node.startOffset, node.psi.endOffset)
+    private fun beforeVisitChildNodes(node: ASTNode) {
+        wrapping.beforeVisitChildNodes(node, autoCorrect) { _, errorMessage, canBeAutoCorrected ->
+            emitFinding(errorMessage, canBeAutoCorrected, node)
+        }
+    }
 
-    private fun ruleShouldOnlyRunOnFileNode(node: ASTNode) =
-        runOnRootNodeOnly && node !is FileASTNode
+    private fun afterVisitChildNodes(node: ASTNode) {
+        wrapping.afterVisitChildNodes(node, autoCorrect) { _, errorMessage, canBeAutoCorrected ->
+            emitFinding(errorMessage, canBeAutoCorrected, node)
+        }
+    }
+
+    private fun ASTNode.visitASTNodes() {
+        if (isNotDummyElement()) {
+            beforeVisitChildNodes(this)
+        }
+        getChildren(null).forEach {
+            it.visitASTNodes()
+        }
+        if (isNotDummyElement()) {
+            afterVisitChildNodes(this)
+        }
+    }
+
+    private fun ASTNode.isNotDummyElement(): Boolean {
+        val parent = this.psi?.parent
+        return parent !is JavaDummyHolder && parent !is JavaDummyElement
+    }
 }

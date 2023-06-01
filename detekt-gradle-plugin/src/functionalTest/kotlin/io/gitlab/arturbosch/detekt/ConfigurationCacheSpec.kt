@@ -11,35 +11,38 @@ class ConfigurationCacheSpec {
         val gradleRunner = DslTestBuilder.kotlin().build()
 
         // First run primes the cache
-        gradleRunner.runTasks("--configuration-cache", "detekt")
+        val storeCacheResult = gradleRunner.runTasks("--configuration-cache", "detekt")
+
+        assertThat(storeCacheResult.output).contains("Configuration cache entry stored.")
 
         // Second run reuses the cache
-        val result = gradleRunner.runTasks("--configuration-cache", "detekt")
+        val reuseCacheResult = gradleRunner.runTasks("--configuration-cache", "detekt")
 
-        assertThat(result.output).contains("Reusing configuration cache.")
+        assertThat(reuseCacheResult.output).contains("Reusing configuration cache.")
     }
 
     @Nested
     inner class `Create baseline task` {
         @Test
         fun `can be loaded from the configuration cache`() {
-            @Suppress("TrimMultilineRawString")
             val detektConfig = """
-                |detekt {
-                |   baseline = file("build/baseline.xml")
-                |}
-            """
+                detekt {
+                    baseline = file("build/baseline.xml")
+                }
+            """.trimIndent()
             val gradleRunner = DslTestBuilder.kotlin()
                 .withDetektConfig(detektConfig)
                 .build()
 
             // First run primes the cache
-            gradleRunner.runTasks("--configuration-cache", "detektBaseline")
+            val storeCacheResult = gradleRunner.runTasks("--configuration-cache", "detektBaseline")
+
+            assertThat(storeCacheResult.output).contains("Configuration cache entry stored.")
 
             // Second run reuses the cache
-            val result = gradleRunner.runTasks("--configuration-cache", "detektBaseline")
+            val reuseCacheResult = gradleRunner.runTasks("--configuration-cache", "detektBaseline")
 
-            assertThat(result.output).contains("Reusing configuration cache.")
+            assertThat(reuseCacheResult.output).contains("Reusing configuration cache.")
         }
     }
 
@@ -50,13 +53,20 @@ class ConfigurationCacheSpec {
             val gradleRunner = DslTestBuilder.kotlin()
                 .build()
 
-            // First run primes the cache
-            gradleRunner.runTasks("--configuration-cache", "detektGenerateConfig")
+            // First run generates file
+            val generateConfigResult = gradleRunner.runTasks("--configuration-cache", "detektGenerateConfig")
 
-            // Second run reuses the cache
-            val result = gradleRunner.runTasks("--configuration-cache", "detektGenerateConfig")
+            assertThat(generateConfigResult.output).contains("Configuration cache entry stored.")
 
-            assertThat(result.output).contains("Reusing configuration cache.")
+            // Second run primes the cache based on the generated file
+            val storeCacheResult = gradleRunner.runTasks("--configuration-cache", "detektGenerateConfig")
+
+            assertThat(storeCacheResult.output).contains("Configuration cache entry stored.")
+
+            // Third run reuses the cache
+            val reuseCacheResult = gradleRunner.runTasks("--configuration-cache", "detektGenerateConfig")
+
+            assertThat(reuseCacheResult.output).contains("Reusing configuration cache.")
         }
     }
 }

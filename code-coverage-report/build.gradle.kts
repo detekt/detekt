@@ -16,6 +16,7 @@ jacoco.toolVersion = libs.versions.jacoco.get()
 dependencies {
     jacocoAggregation(projects.detektApi)
     jacocoAggregation(projects.detektCli)
+    jacocoAggregation(projects.detektCompilerPlugin)
     jacocoAggregation(projects.detektCore)
     jacocoAggregation(projects.detektFormatting)
     jacocoAggregation(projects.detektGenerator)
@@ -27,43 +28,22 @@ dependencies {
     jacocoAggregation(projects.detektReportTxt)
     jacocoAggregation(projects.detektReportXml)
     jacocoAggregation(projects.detektReportMd)
-    jacocoAggregation(projects.detektRules)
     jacocoAggregation(projects.detektRulesComplexity)
     jacocoAggregation(projects.detektRulesCoroutines)
     jacocoAggregation(projects.detektRulesDocumentation)
     jacocoAggregation(projects.detektRulesEmpty)
     jacocoAggregation(projects.detektRulesErrorprone)
     jacocoAggregation(projects.detektRulesExceptions)
+    jacocoAggregation(projects.detektRulesLibraries)
     jacocoAggregation(projects.detektRulesNaming)
     jacocoAggregation(projects.detektRulesPerformance)
+    jacocoAggregation(projects.detektRulesRuleauthors)
     jacocoAggregation(projects.detektRulesStyle)
+    jacocoAggregation(projects.detektTestUtils)
     jacocoAggregation(projects.detektTooling)
+    jacocoAggregation(projects.detektUtils)
 }
 
-tasks.check {
-    dependsOn(tasks.named("jacocoMergedReport"))
-}
-
-// The `allCodeCoverageReportClassDirectories` configuration provided by the jacoco-report-aggregation plugin actually
-// resolves JARs and not class directories as the name suggests. Because the detekt-formatting JAR bundles ktlint and
-// other dependencies in its JAR, they are incorrectly displayed on the coverage report even though they're external
-// dependencies.
-configurations.allCodeCoverageReportClassDirectories.get().attributes {
-    attributes.attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category::class, Category.LIBRARY))
-    attributes.attribute(
-        LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE,
-        objects.named(LibraryElements::class, LibraryElements.CLASSES)
-    )
-}
-
-val customClassDirectories = configurations.allCodeCoverageReportClassDirectories.get().incoming.artifactView {
-    componentFilter {
-        it is ProjectComponentIdentifier
-    }
-    lenient(true)
-}
-
-tasks.named("jacocoMergedReport", JacocoReport::class).configure {
-    this.classDirectories.setFrom(customClassDirectories.files)
-    mustRunAfter(rootProject.project("detekt-generator").tasks.named("generateDocumentation"))
+tasks.withType<JacocoReport>().configureEach {
+    dependsOn(":detekt-generator:generateDocumentation")
 }

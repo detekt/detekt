@@ -20,7 +20,7 @@ class AnnotationExcluderSpec(private val env: KotlinCoreEnvironment) {
     private val annotationsKtFile = compileContentForTest(
         """
             package dagger
-
+            
             annotation class Component {
                 annotation class Factory
             }
@@ -79,7 +79,9 @@ class AnnotationExcluderSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `should exclude when the annotation was found with SplitPattern`() {
             val (file, ktAnnotation) = createKtFile("@SinceKotlin")
-            val excluder = @Suppress("DEPRECATION") AnnotationExcluder(file, SplitPattern("SinceKotlin"))
+
+            @Suppress("DEPRECATION")
+            val excluder = AnnotationExcluder(file, SplitPattern("SinceKotlin"))
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
         }
@@ -87,7 +89,9 @@ class AnnotationExcluderSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `should exclude when the annotation was found with List of Strings`() {
             val (file, ktAnnotation) = createKtFile("@SinceKotlin")
-            val excluder = @Suppress("DEPRECATION") AnnotationExcluder(file, listOf("SinceKo*"))
+
+            @Suppress("DEPRECATION")
+            val excluder = AnnotationExcluder(file, listOf("SinceKo*"))
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
         }
@@ -122,16 +126,16 @@ class AnnotationExcluderSpec(private val env: KotlinCoreEnvironment) {
             val helloWorldAnnotationsKtFile = compileContentForTest(
                 """
                     package com.Hello
-
+                    
                     annotation class World
                 """.trimIndent()
             )
             val file = compileContentForTest(
                 """
                     package foo
-
+                    
                     import com.Hello.World
-
+                    
                     @World
                     fun function() = Unit
                 """.trimIndent()
@@ -160,16 +164,16 @@ class AnnotationExcluderSpec(private val env: KotlinCoreEnvironment) {
             val helloWorldAnnotationsKtFile = compileContentForTest(
                 """
                     package com.hello
-
+                    
                     annotation class World
                 """.trimIndent()
             )
             val file = compileContentForTest(
                 """
                     package foo
-
+                    
                     import com.hello.*
-
+                    
                     @World
                     fun function() = Unit
                 """.trimIndent()
@@ -206,10 +210,10 @@ private fun createKtFile(annotation: String): Pair<KtFile, KtAnnotationEntry> {
     val file = compileContentForTest(
         """
             package foo
-
+            
             import dagger.Component
             import dagger.Component.Factory
-
+            
             $annotation
             fun function() = Unit
         """.trimIndent()

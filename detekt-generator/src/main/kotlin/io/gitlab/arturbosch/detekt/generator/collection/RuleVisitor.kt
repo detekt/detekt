@@ -5,11 +5,9 @@ import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidAliasesDeclaration
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidIssueDeclaration
-import io.gitlab.arturbosch.detekt.rules.empty.EmptyRule
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -35,13 +33,14 @@ internal class RuleVisitor : DetektVisitor() {
     private var parent = ""
     private val configurationCollector = ConfigurationCollector()
     private val classesMap = mutableMapOf<String, Boolean>()
+    private var deprecationMessage: String? = null
 
     fun getRule(): Rule {
         if (documentationCollector.description.isEmpty()) {
             throw InvalidDocumentationException("Rule $name is missing a description in its KDoc.")
         }
 
-        val configurationByAnnotation = configurationCollector.getConfiguration()
+        val configurationsByAnnotation = configurationCollector.getConfigurations()
 
         return Rule(
             name = name,
@@ -53,8 +52,9 @@ internal class RuleVisitor : DetektVisitor() {
             debt = debt,
             aliases = aliases,
             parent = parent,
-            configuration = configurationByAnnotation,
+            configurations = configurationsByAnnotation,
             autoCorrect = autoCorrect,
+            deprecationMessage = deprecationMessage,
             requiresTypeResolution = requiresTypeResolution
         )
     }
@@ -105,6 +105,7 @@ internal class RuleVisitor : DetektVisitor() {
 
         autoCorrect = classOrObject.isAnnotatedWith(AutoCorrectable::class)
         requiresTypeResolution = classOrObject.isAnnotatedWith(RequiresTypeResolution::class)
+        deprecationMessage = classOrObject.firstAnnotationParameterOrNull(Deprecated::class)
 
         documentationCollector.setClass(classOrObject)
     }
@@ -164,12 +165,16 @@ internal class RuleVisitor : DetektVisitor() {
     }
 
     companion object {
-        @Suppress("DEPRECATION")
         private val ruleClasses = listOf(
-            io.gitlab.arturbosch.detekt.api.Rule::class.simpleName,
-            FormattingRule::class.simpleName,
-            io.gitlab.arturbosch.detekt.api.ThresholdRule::class.simpleName,
-            EmptyRule::class.simpleName
+            // These references are stringly-typed to prevent dependency cycle:
+            // This class requires FormattingRule,
+            // which needs detekt-formatting.jar,
+            // which needs :detekt-formatting:processResources task output,
+            // which needs output of this class.
+            "Rule", // io.gitlab.arturbosch.detekt.api.Rule
+            "FormattingRule", // io.gitlab.arturbosch.detekt.formatting.FormattingRule
+            "ThresholdRule", // io.gitlab.arturbosch.detekt.api.ThresholdRule
+            "EmptyRule", // io.gitlab.arturbosch.detekt.rules.empty.EmptyRule
         )
 
         private const val ISSUE_ARGUMENT_SIZE = 4

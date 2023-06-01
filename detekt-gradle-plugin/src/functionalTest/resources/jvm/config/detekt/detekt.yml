@@ -1,3 +1,9 @@
 potential-bugs:
   ExitOutsideMain:
     active: true
+
+style:
+  ForbiddenMethodCall:
+    active: true
+    methods:
+      - 'jvm.src.main.kotlin.Callee.forbiddenMethod'

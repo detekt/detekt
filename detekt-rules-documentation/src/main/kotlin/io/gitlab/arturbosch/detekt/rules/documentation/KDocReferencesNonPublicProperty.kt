@@ -3,13 +3,16 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.getTopmostParentOfType
@@ -53,18 +56,56 @@ class KDocReferencesNonPublicProperty(config: Config = Config.empty) : Rule(conf
         Debt.FIVE_MINS
     )
 
-    override fun visitProperty(property: KtProperty) {
-        super.visitProperty(property)
+    private val publicPropertiesByClass = mutableMapOf<KtClass, MutableSet<KtNamedDeclaration>>()
+    private val privatePropertiesByClass = mutableMapOf<KtClass, MutableSet<KtNamedDeclaration>>()
 
-        val enclosingClass = property.getTopmostParentOfType<KtClass>()
-        val comment = enclosingClass?.docComment?.text ?: return
+    override fun visitClass(klass: KtClass) {
+        super.visitClass(klass)
 
-        if (property.isNonPublicInherited() && property.isReferencedInherited(comment)) {
-            report(property)
+        val comment = klass.docComment?.text ?: return
+
+        klass.primaryConstructor?.accept(
+            object : DetektVisitor() {
+                override fun visitParameter(parameter: KtParameter) {
+                    super.visitParameter(parameter)
+                    klass.registerProperty(parameter)
+                }
+            }
+        )
+
+        val privateProperties = privatePropertiesByClass.remove(klass)
+        val publicPropertyNames = publicPropertiesByClass.remove(klass)
+            ?.mapTo(mutableSetOf()) { it.qualifiedName() }
+            .orEmpty()
+
+        for (privateProperty in privateProperties.orEmpty()) {
+            val qualifiedName = privateProperty.qualifiedName()
+            val matchesPublicProperty = publicPropertyNames.contains(qualifiedName)
+            if (!matchesPublicProperty && comment.contains("[$qualifiedName]")) {
+                report(privateProperty)
+            }
         }
     }
 
-    private fun KtProperty.isNonPublicInherited(): Boolean {
+    override fun visitProperty(property: KtProperty) {
+        super.visitProperty(property)
+
+        property.getTopmostParentOfType<KtClass>()?.registerProperty(property)
+    }
+
+    private fun KtClass.registerProperty(declaration: KtNamedDeclaration) {
+        if (declaration.isNonPublicInherited()) {
+            // only consider property declarations (not constructor parameters) as private properties which cannot be
+            // referenced in kdoc
+            if (declaration is KtProperty) {
+                privatePropertiesByClass.getOrPut(this) { mutableSetOf() }.add(declaration)
+            }
+        } else {
+            publicPropertiesByClass.getOrPut(this) { mutableSetOf() }.add(declaration)
+        }
+    }
+
+    private fun KtDeclaration.isNonPublicInherited(): Boolean {
         if (!isPublic && !isProtected()) {
             return true
         }
@@ -78,14 +119,14 @@ class KDocReferencesNonPublicProperty(config: Config = Config.empty) : Rule(conf
         return false
     }
 
-    private fun KtProperty.isReferencedInherited(comment: String): Boolean {
+    private fun KtNamedDeclaration.qualifiedName(): String {
         var qualifiedName = nameAsSafeName.asString()
         var classOrObject = containingClassOrObject
         while (classOrObject is KtObjectDeclaration) {
             qualifiedName = "${classOrObject.nameAsSafeName.asString()}.$qualifiedName"
             classOrObject = classOrObject.containingClassOrObject
         }
-        return comment.contains("[$qualifiedName]")
+        return qualifiedName
     }
 
     private fun report(property: KtNamedDeclaration) {

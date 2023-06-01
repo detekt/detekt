@@ -10,10 +10,10 @@ class NotImplementedDeclarationSpec {
     @Test
     fun `reports NotImplementedErrors`() {
         val code = """
-        fun f() {
-            if (1 == 1) throw NotImplementedError()
-            throw NotImplementedError()
-        }
+            fun f() {
+                if (1 == 1) throw NotImplementedError()
+                throw NotImplementedError()
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(2)
     }
@@ -21,10 +21,10 @@ class NotImplementedDeclarationSpec {
     @Test
     fun `reports TODO method calls`() {
         val code = """
-        fun f() {
-            TODO("not implemented")
-            TODO()
-        }
+            fun f() {
+                TODO("not implemented")
+                TODO()
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(2)
     }
@@ -32,9 +32,9 @@ class NotImplementedDeclarationSpec {
     @Test
     fun `does not report TODO comments`() {
         val code = """
-        fun f() {
-            // TODO
-        }
+            fun f() {
+                // TODO
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }

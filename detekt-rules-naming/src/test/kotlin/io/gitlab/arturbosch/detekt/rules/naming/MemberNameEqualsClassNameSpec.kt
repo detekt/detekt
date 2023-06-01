@@ -15,17 +15,10 @@ private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
 
 @KotlinCoreEnvironmentTest
 class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
-    val subject = MemberNameEqualsClassName(Config.empty)
-
-    val noIgnoreOverridden =
-        TestConfig(
-            mapOf(
-                IGNORE_OVERRIDDEN to "false"
-            )
-        )
 
     @Nested
     inner class `some classes with methods which don't have the same name` {
+        private val subject = MemberNameEqualsClassName(Config.empty)
 
         @Test
         fun `does not report a nested function with the same name as the class`() {
@@ -66,6 +59,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
 
     @Nested
     inner class `some classes with members which have the same name` {
+        private val noIgnoreOverridden = TestConfig(IGNORE_OVERRIDDEN to "false")
 
         @Test
         fun `reports a method which is named after the class`() {
@@ -201,7 +195,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
         fun `reports a function which has no return type`() {
             val code = """
                 class WrongFactoryClass1 {
-
+                
                     companion object {
                         fun wrongFactoryClass1() {}
                     }
@@ -214,7 +208,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
         fun `reports a function which has the wrong return type`() {
             val code = """
                 class WrongFactoryClass2 {
-
+                
                     companion object {
                         fun wrongFactoryClass2(): Int {
                             return 0
@@ -284,7 +278,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                 }
                 
                 class B: A()
-
+                
                 class C: A()
             """.trimIndent()
 

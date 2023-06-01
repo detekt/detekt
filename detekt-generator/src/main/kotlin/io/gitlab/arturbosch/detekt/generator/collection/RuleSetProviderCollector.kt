@@ -5,13 +5,16 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.rules.isOverride
+import org.jetbrains.kotlin.psi.KtAnnotatedExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtSuperTypeList
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
+import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 import io.gitlab.arturbosch.detekt.api.internal.Configuration as ConfigAnnotation
 
@@ -21,7 +24,11 @@ data class RuleSetProvider(
     val defaultActivationStatus: DefaultActivationStatus,
     val rules: List<String> = emptyList(),
     val configuration: List<Configuration> = emptyList()
-)
+) {
+    init {
+        require(name.length > 1) { "Rule set name must be not empty or less than two symbols." }
+    }
+}
 
 class RuleSetProviderCollector : Collector<RuleSetProvider> {
     override val items = mutableListOf<RuleSetProvider>()
@@ -38,10 +45,12 @@ class RuleSetProviderCollector : Collector<RuleSetProvider> {
 
 private const val PROPERTY_RULE_SET_ID = "ruleSetId"
 
-private val SUPPORTED_PROVIDERS =
-    setOf(RuleSetProvider::class.simpleName, DefaultRuleSetProvider::class.simpleName)
+private val SUPPORTED_PROVIDERS = setOf(
+    io.gitlab.arturbosch.detekt.api.RuleSetProvider::class.simpleName,
+    DefaultRuleSetProvider::class.simpleName,
+)
 
-class RuleSetProviderVisitor : DetektVisitor() {
+private class RuleSetProviderVisitor : DetektVisitor() {
     var containsRuleSetProvider = false
     private var name: String = ""
     private var description: String = ""
@@ -62,11 +71,13 @@ class RuleSetProviderVisitor : DetektVisitor() {
     }
 
     override fun visitSuperTypeList(list: KtSuperTypeList) {
-        val superTypes = list.entries
-            ?.map { it.typeAsUserType?.referencedName }
-            ?.toSet()
-            .orEmpty()
-        containsRuleSetProvider = SUPPORTED_PROVIDERS.any { it in superTypes }
+        if (!containsRuleSetProvider) {
+            val superTypes = list.entries
+                ?.mapNotNull { it.typeAsUserType?.referencedName }
+                ?.toSet()
+                .orEmpty()
+            containsRuleSetProvider = SUPPORTED_PROVIDERS.any { it in superTypes }
+        }
         super.visitSuperTypeList(list)
     }
 
@@ -121,13 +132,16 @@ class RuleSetProviderVisitor : DetektVisitor() {
 
         if (expression.calleeExpression?.text == "RuleSet") {
             val ruleListExpression = expression.valueArguments
-                .map { it.getArgumentExpression() }
-                .firstOrNull { it?.referenceExpression()?.text == "listOf" }
+                .mapNotNull { it.getArgumentExpression() }
+                .firstNotNullOfOrNull {
+                    it.findDescendantOfType<KtNameReferenceExpression> { exp -> exp.text == "listOf" }?.parent
+                }
                 ?: throw InvalidDocumentationException("RuleSetProvider $name doesn't provide list of rules.")
 
             val ruleArgumentNames = (ruleListExpression as? KtCallExpression)
                 ?.valueArguments
                 ?.mapNotNull { it.getArgumentExpression() }
+                ?.map { if (it is KtAnnotatedExpression) it.lastChild as KtCallExpression else it }
                 ?.mapNotNull { it.referenceExpression()?.text }
                 .orEmpty()
 

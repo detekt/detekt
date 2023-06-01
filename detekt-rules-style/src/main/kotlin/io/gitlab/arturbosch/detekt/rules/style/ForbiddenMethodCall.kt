@@ -29,9 +29,10 @@ import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
 /**
- * This rule allows to set a list of forbidden methods or constructors. This can be used to discourage the use
+ * Reports all method or constructor invocations that are forbidden.
+ *
+ * This rule allows to set a list of forbidden [methods] or constructors. This can be used to discourage the use
  * of unstable, experimental or deprecated methods, especially for methods imported from external libraries.
- * Detekt will then report all method or constructor invocations that are forbidden.
  *
  * <noncompliant>
  * import java.lang.System
@@ -58,10 +59,13 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
             "Methods can be defined without full signature (i.e. `java.time.LocalDate.now`) which will report " +
             "calls of all methods with this name or with full signature " +
             "(i.e. `java.time.LocalDate(java.time.Clock)`) which would report only call " +
-            "with this concrete signature. If you want to forbid an extension function like" +
+            "with this concrete signature. If you want to forbid an extension function like " +
             "`fun String.hello(a: Int)` you should add the receiver parameter as the first parameter like this: " +
             "`hello(kotlin.String, kotlin.Int)`. To forbid constructor calls you need to define them with `<init>`, " +
-            " for example `java.util.Date.<init>`."
+            "for example `java.util.Date.<init>`. To forbid calls involving type parameters, omit them, for example " +
+            "`fun hello(args: Array<Any>)` is referred to as simply `hello(kotlin.Array)` (also the signature for " +
+            "vararg parameters). To forbid methods from the companion object reference the Companion class, for " +
+            "example as `TestClass.Companion.hello()` (even if it is marked `@JvmStatic`)."
     )
     private val methods: List<Forbidden> by config(
         valuesWithReason(

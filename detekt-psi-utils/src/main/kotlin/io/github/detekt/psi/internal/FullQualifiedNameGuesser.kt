@@ -10,12 +10,12 @@ class FullQualifiedNameGuesser internal constructor(
     imports: List<KtImportDirective>,
 ) {
 
+    @Suppress("ClassOrdering")
     constructor(root: KtFile) : this(
         packageName = root.packageDirective?.qualifiedName?.ifBlank { null },
         imports = root.importList?.imports.orEmpty(),
     )
 
-    @Suppress("ClassOrdering")
     private val resolvedNames: Map<String, String> by lazy(NONE) {
         imports
             .asSequence()
@@ -28,7 +28,6 @@ class FullQualifiedNameGuesser internal constructor(
             .toMap()
     }
 
-    @Suppress("ClassOrdering")
     private val starImports: List<String> by lazy(NONE) {
         imports
             .asSequence()

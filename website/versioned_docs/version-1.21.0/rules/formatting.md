@@ -94,7 +94,7 @@ See [ktlint-readme](https://github.com/pinterest/ktlint#standard-rules) for docu
 
 See [ktlint-readme](https://github.com/pinterest/ktlint#standard-rules) for documentation.
 
-This rules overlaps with [naming&gt;MatchingDeclarationName](https://detekt.dev/naming.html#matchingdeclarationname)
+This rules overlaps with [naming&gt;MatchingDeclarationName](https://detekt.dev/docs/rules/naming/#matchingdeclarationname)
 from the standard rules, make sure to enable just one.
 
 **Active by default**: Yes - Since v1.0.0
@@ -103,7 +103,7 @@ from the standard rules, make sure to enable just one.
 
 See [ktlint-readme](https://github.com/pinterest/ktlint#standard-rules) for documentation.
 
-This rules overlaps with [style&gt;NewLineAtEndOfFile](https://detekt.dev/style.html#newlineatendoffile)
+This rules overlaps with [style&gt;NewLineAtEndOfFile](https://detekt.dev/docs/rules/style/#newlineatendoffile)
 from the standard rules, make sure to enable just one. The pro of this rule is that it can auto-correct the issue.
 
 **Active by default**: Yes - Since v1.0.0
@@ -174,7 +174,7 @@ See [ktlint-readme](https://github.com/pinterest/ktlint#experimental-rules) for 
 
 See [ktlint-readme](https://github.com/pinterest/ktlint#standard-rules) for documentation.
 
-This rules overlaps with [style&gt;MaxLineLength](https://detekt.dev/style.html#maxlinelength)
+This rules overlaps with [style&gt;MaxLineLength](https://detekt.dev/docs/rules/style/#maxlinelength)
 from the standard rules, make sure to enable just one or keep them aligned. The pro of this rule is that it can
 auto-correct the issue.
 
@@ -200,7 +200,7 @@ See [ktlint-readme](https://github.com/pinterest/ktlint#experimental-rules) for 
 
 See [ktlint-readme](https://github.com/pinterest/ktlint#standard-rules) for documentation.
 
-This rules overlaps with [style&gt;ModifierOrder](https://detekt.dev/style.html#modifierorder)
+This rules overlaps with [style&gt;ModifierOrder](https://detekt.dev/docs/rules/style/#modifierorder)
 from the standard rules, make sure to enable just one. The pro of this rule is that it can auto-correct the issue.
 
 **Active by default**: Yes - Since v1.0.0
@@ -226,6 +226,9 @@ See [ktlint-readme](https://github.com/pinterest/ktlint#standard-rules) for docu
 ### NoEmptyClassBody
 
 See [ktlint-readme](https://github.com/pinterest/ktlint#standard-rules) for documentation.
+
+This rules overlaps with [empty-blocks&gt;EmptyClassBlock](https://detekt.dev/docs/rules/empty-blocks/#emptyclassblock)
+from the standard rules, make sure to enable just one. The pro of this rule is that it can auto-correct the issue.
 
 **Active by default**: Yes - Since v1.0.0
 

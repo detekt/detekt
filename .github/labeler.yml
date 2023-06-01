@@ -26,8 +26,11 @@ documentation:
 formatting:
   - "detekt-formatting/src/**/*"
 
-gradle:
+gradle-plugin:
   - "detekt-gradle-plugin/src/**/*"
+
+compiler-plugin:
+  - "detekt-compiler-plugin/src/**/*"
 
 reports:
   - "detekt-core/src/main/kotlin/io/gitlab/arturbosch/detekt/core/reporting/**/*"
@@ -43,3 +46,6 @@ rules:
   - "detekt-rules-naming/src/**/*"
   - "detekt-rules-performance/src/**/*"
   - "detekt-rules-style/src/**/*"
+
+suppressors:
+  - "detekt-core/src/main/kotlin/io/gitlab/arturbosch/detekt/core/suppressors/**/*"

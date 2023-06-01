@@ -6,9 +6,14 @@ import io.gitlab.arturbosch.detekt.core.config.tryParseBasedOnDefault
 import io.gitlab.arturbosch.detekt.core.config.valueOrDefaultInternal
 
 @Suppress("UNCHECKED_CAST")
-open class TestConfig(
+open class TestConfig
+@Deprecated("Use TestConfig(vararg Pair<String, Any>) instead.")
+constructor(
     private val values: Map<String, Any> = mutableMapOf()
 ) : Config {
+
+    @Suppress("DEPRECATION")
+    constructor() : this(emptyMap())
 
     override fun subConfig(key: String) = this
 
@@ -29,8 +34,11 @@ open class TestConfig(
     }
 
     override fun <T : Any> valueOrNull(key: String): T? =
-        if (key == Config.ACTIVE_KEY) (values[Config.ACTIVE_KEY] ?: true) as T?
-        else values[key] as? T
+        if (key == Config.ACTIVE_KEY) {
+            (values[Config.ACTIVE_KEY] ?: true) as T?
+        } else {
+            values[key] as? T
+        }
 
     private fun tryParseBasedOnDefaultRespectingCollections(result: String, defaultResult: Any): Any =
         when (defaultResult) {
@@ -51,6 +59,7 @@ open class TestConfig(
     }
 
     companion object {
+        @Suppress("DEPRECATION")
         operator fun invoke(vararg pairs: Pair<String, Any>) = TestConfig(mapOf(*pairs))
     }
 }

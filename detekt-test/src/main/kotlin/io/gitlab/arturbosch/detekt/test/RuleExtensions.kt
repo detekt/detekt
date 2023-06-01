@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 import java.nio.file.Path
 
 private val shouldCompileTestSnippets: Boolean =
-    System.getProperty("compile-snippet-tests", "false")!!.toBoolean()
+    System.getProperty("compile-test-snippets", "false")!!.toBoolean()
 
 fun BaseRule.compileAndLint(@Language("kotlin") content: String): List<Finding> {
     if (shouldCompileTestSnippets) {
@@ -46,7 +46,6 @@ fun BaseRule.lintWithContext(
     val bindingContext = environment.getContextForPaths(listOf(ktFile) + additionalKtFiles)
     val languageVersionSettings = environment.configuration.languageVersionSettings
 
-    @Suppress("DEPRECATION")
     val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
     val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
     return findingsAfterVisit(ktFile, bindingContext, compilerResources)

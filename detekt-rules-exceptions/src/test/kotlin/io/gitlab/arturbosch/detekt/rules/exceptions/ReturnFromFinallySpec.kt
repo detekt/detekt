@@ -92,7 +92,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
     inner class `a finally block with a return as labelled expression` {
         val code = """
             fun x() {
-                label@{ 
+                label@{
                     try {
                     } finally {
                         return@label
@@ -109,7 +109,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
 
         @Test
         fun `should not report when ignoreLabeled is true`() {
-            val config = TestConfig(mapOf("ignoreLabeled" to "true"))
+            val config = TestConfig("ignoreLabeled" to "true")
             val findings = ReturnFromFinally(config).compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
@@ -186,7 +186,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                     "try"
                 } catch (e: Exception) {
                     "exception"
-                } 
+                }
             """.trimIndent()
 
             val finding = subject.compileAndLintWithContext(env, code)
@@ -219,15 +219,15 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `shouldn't report`() {
             val code = """
-               fun expression() {
-                   try {
-                       "try"
-                   } catch (e: Exception) {
-                       "exception"
-                   } finally {
-                       "finally"
-                   }
-               }
+                fun expression() {
+                    try {
+                        "try"
+                    } catch (e: Exception) {
+                        "exception"
+                    } finally {
+                        "finally"
+                    }
+                }
             """.trimIndent()
 
             val finding = subject.compileAndLintWithContext(env, code)

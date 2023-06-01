@@ -47,7 +47,7 @@ class PreferToOverPairSyntaxSpec(val env: KotlinCoreEnvironment) {
             val pair1 = Pair(1, 2)
             val pair2: Pair<Int, Int> = Pair(1, 2)
             val pair3 = Pair(Pair(1, 2), Pair(3, 4))
-
+            
             data class Pair<T, Z>(val int1: T, val int2: Z)
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()

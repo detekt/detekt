@@ -31,9 +31,9 @@ class YamlSpec {
             val given = listOf("value")
             val result = yaml { list("key", given) }
             val expected = """
-                |key:
-                |  - 'value'
-            """.trimMargin()
+                key:
+                  - 'value'
+            """.trimIndent()
             assertThat(result).isEqualTo(expected)
         }
 
@@ -42,10 +42,10 @@ class YamlSpec {
             val given = listOf("value 1", "value 2")
             val result = yaml { list("key", given) }
             val expected = """
-                |key:
-                |  - 'value 1'
-                |  - 'value 2'
-            """.trimMargin()
+                key:
+                  - 'value 1'
+                  - 'value 2'
+            """.trimIndent()
             assertThat(result).isEqualTo(expected)
         }
 
@@ -54,11 +54,11 @@ class YamlSpec {
             val given = listOf("val*ue1", "val|ue2", "val\$ue3")
             val result = yaml { list("key", given) }
             val expected = """
-                |key:
-                |  - 'val*ue1'
-                |  - 'val|ue2'
-                |  - 'val${"$"}ue3'
-            """.trimMargin()
+                key:
+                  - 'val*ue1'
+                  - 'val|ue2'
+                  - 'val${"$"}ue3'
+            """.trimIndent()
             assertThat(result).isEqualTo(expected)
         }
 
@@ -67,9 +67,9 @@ class YamlSpec {
             val given = listOf("   ")
             val result = yaml { list("key", given) }
             val expected = """
-                |key:
-                |  - '   '
-            """.trimMargin()
+                key:
+                  - '   '
+            """.trimIndent()
             assertThat(result).isEqualTo(expected)
         }
 
@@ -78,12 +78,12 @@ class YamlSpec {
             val given = listOf("'val*ue1'", "\"val|ue2\"", "\"\"", "''")
             val result = yaml { list("key", given) }
             val expected = """
-                |key:
-                |  - 'val*ue1'
-                |  - "val|ue2"
-                |  - ""
-                |  - ''
-            """.trimMargin()
+                key:
+                  - 'val*ue1'
+                  - "val|ue2"
+                  - ""
+                  - ''
+            """.trimIndent()
             assertThat(result).isEqualTo(expected)
         }
     }
@@ -112,9 +112,9 @@ class YamlSpec {
             val given = listOf(mapOf("name" to "value"))
             val result = yaml { listOfMaps("key", given) }
             val expected = """
-                |key:
-                |  - name: 'value'
-            """.trimMargin()
+                key:
+                  - name: 'value'
+            """.trimIndent()
             assertThat(result).isEqualTo(expected)
         }
 
@@ -129,11 +129,11 @@ class YamlSpec {
             )
             val result = yaml { listOfMaps("key", given) }
             val expected = """
-                |key:
-                |  - name1: 'value 1'
-                |    name2: 'value 2'
-                |    name3: 'value 3'
-            """.trimMargin()
+                key:
+                  - name1: 'value 1'
+                    name2: 'value 2'
+                    name3: 'value 3'
+            """.trimIndent()
             assertThat(result).isEqualTo(expected)
         }
 
@@ -155,13 +155,13 @@ class YamlSpec {
             )
             val result = yaml { listOfMaps("key", given) }
             val expected = """
-                |key:
-                |  - name1: 'value 1'
-                |    name2: 'value 2'
-                |  - name3: 'value 3'
-                |  - name4: 'value 4'
-                |    name5: 'value 5'
-            """.trimMargin()
+                key:
+                  - name1: 'value 1'
+                    name2: 'value 2'
+                  - name3: 'value 3'
+                  - name4: 'value 4'
+                    name5: 'value 5'
+            """.trimIndent()
             assertThat(result).isEqualTo(expected)
         }
 
@@ -177,12 +177,12 @@ class YamlSpec {
             )
             val result = yaml { listOfMaps("key", given) }
             val expected = """
-                |key:
-                |  - a: 'value'
-                |    b: 'value'
-                |    x: 'value'
-                |    z: 'value'
-            """.trimMargin()
+                key:
+                  - a: 'value'
+                    b: 'value'
+                    x: 'value'
+                    z: 'value'
+            """.trimIndent()
             assertThat(result).isEqualTo(expected)
         }
 
@@ -197,10 +197,10 @@ class YamlSpec {
             )
             val result = yaml { listOfMaps("key", given) }
             val expected = """
-                |key:
-                |  - a: 'value'
-                |    c: 'value'
-            """.trimMargin()
+                key:
+                  - a: 'value'
+                    c: 'value'
+            """.trimIndent()
             assertThat(result).isEqualTo(expected)
         }
 
@@ -215,11 +215,11 @@ class YamlSpec {
             )
             val result = yaml { listOfMaps("key", given) }
             val expected = """
-                |key:
-                |  - name1: 'already quoted'
-                |    name2: "also quoted"
-                |    name3: 'should be quoted'
-            """.trimMargin()
+                key:
+                  - name1: 'already quoted'
+                    name2: "also quoted"
+                    name3: 'should be quoted'
+            """.trimIndent()
             assertThat(result).isEqualTo(expected)
         }
     }

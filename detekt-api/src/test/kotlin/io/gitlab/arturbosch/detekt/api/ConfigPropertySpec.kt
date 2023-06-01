@@ -254,7 +254,7 @@ class ConfigPropertySpec {
             }
 
             @Test
-            fun `throws`() {
+            fun throws() {
                 assertThatThrownBy { subject.prop }
                     .isInstanceOf(IllegalStateException::class.java)
                     .hasMessageContaining("is not supported")
@@ -269,7 +269,7 @@ class ConfigPropertySpec {
             }
 
             @Test
-            fun `throws`() {
+            fun throws() {
                 assertThatThrownBy { subject.prop }
                     .isInstanceOf(IllegalStateException::class.java)
                     .hasMessageContaining("is not supported")
@@ -284,7 +284,7 @@ class ConfigPropertySpec {
             }
 
             @Test
-            fun `throws`() {
+            fun throws() {
                 assertThatThrownBy { subject.prop }
                     .isInstanceOf(IllegalStateException::class.java)
                     .hasMessageContaining("is not supported")
@@ -299,7 +299,7 @@ class ConfigPropertySpec {
             }
 
             @Test
-            fun `throws`() {
+            fun throws() {
                 assertThatThrownBy { subject.prop }
                     .isInstanceOf(IllegalStateException::class.java)
                     .hasMessageContaining("lists of strings are supported")
@@ -308,9 +308,9 @@ class ConfigPropertySpec {
     }
 
     @Nested
-    inner class `transform` {
+    inner class Transform {
         @Nested
-        inner class `primitive` {
+        inner class Primitive {
             @Nested
             inner class `String property is transformed to regex` {
                 private val defaultValue = ".*"
@@ -428,7 +428,7 @@ class ConfigPropertySpec {
         }
 
         @Nested
-        inner class `memoization` {
+        inner class Memoization {
             private val subject = object : TestConfigAware() {
                 val counter = AtomicInteger(0)
                 val prop: String by config(1) {
@@ -453,9 +453,9 @@ class ConfigPropertySpec {
 
     @OptIn(UnstableApi::class)
     @Nested
-    inner class `configWithFallback` {
+    inner class ConfigWithFallback {
         @Nested
-        inner class `primitive` {
+        inner class Primitive {
             private val configValue = 99
             private val defaultValue = 0
             private val fallbackValue = -1
@@ -526,5 +526,5 @@ private open class TestConfigAware(private vararg val data: Pair<String, Any>) :
     override val ruleId: RuleId
         get() = "test"
     override val ruleSetConfig: Config
-        get() = TestConfig(data.toMap())
+        get() = TestConfig(*data)
 }

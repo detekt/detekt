@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 /**
  * Specifies a position within a source code fragment.
@@ -27,7 +27,7 @@ constructor(
         )
     )
     val file: String,
-    val filePath: FilePath = FilePath.fromAbsolute(Paths.get(file))
+    val filePath: FilePath = FilePath.fromAbsolute(Path(file))
 ) : Compactable {
     var endSource: SourceLocation = source
         private set

@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
+import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
 import java.nio.file.Path
@@ -51,6 +52,10 @@ internal object KtTestCompiler : KtCompiler() {
         val configuration = CompilerConfiguration()
         configuration.put(CommonConfigurationKeys.MODULE_NAME, "test_module")
         configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
+
+        if (System.getenv("JAVA_HOME") != null) {
+            configuration.put(JVMConfigurationKeys.JDK_HOME, File(System.getenv("JAVA_HOME")))
+        }
 
         // Get the runtime locations of both the stdlib and kotlinx coroutines core jars and pass
         // to the compiler so it's available to generate the BindingContext for rules under test.

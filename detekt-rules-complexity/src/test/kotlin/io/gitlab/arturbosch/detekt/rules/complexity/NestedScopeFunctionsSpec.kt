@@ -12,10 +12,8 @@ import org.junit.jupiter.api.Test
 class NestedScopeFunctionsSpec(private val env: KotlinCoreEnvironment) {
 
     private val defaultConfig = TestConfig(
-        mapOf(
-            "threshold" to 1,
-            "functions" to listOf("kotlin.run", "kotlin.with")
-        )
+        "threshold" to 1,
+        "functions" to listOf("kotlin.run", "kotlin.with")
     )
     private val subject = NestedScopeFunctions(defaultConfig)
 

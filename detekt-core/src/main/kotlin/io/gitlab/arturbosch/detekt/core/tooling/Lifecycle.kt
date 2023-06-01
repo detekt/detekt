@@ -63,7 +63,7 @@ internal class DefaultLifecycle(
     override val settings: ProcessingSettings,
     override val parsingStrategy: ParsingStrategy,
     override val bindingProvider: (files: List<KtFile>) -> BindingContext =
-        { generateBindingContext(settings.environment, settings.classpath, it, settings::debug, settings::info) },
+        { generateBindingContext(settings.environment, settings.classpath, it, settings::debug) },
     override val processorsProvider: () -> List<FileProcessListener> =
         { FileProcessorLocator(settings).load() },
     override val ruleSetsProvider: () -> List<RuleSetProvider> =

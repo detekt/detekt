@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.generator
 
 import com.beust.jcommander.Parameter
-import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
+import kotlin.io.path.Path
+import kotlin.io.path.exists
 
 class GeneratorArgs {
 
@@ -55,22 +55,22 @@ class GeneratorArgs {
             .splitToSequence(",", ";")
             .map(String::trim)
             .filter { it.isNotEmpty() }
-            .map { first -> Paths.get(first) }
-            .onEach { require(Files.exists(it)) { "Input path must exist!" } }
+            .map { first -> Path(first) }
+            .onEach { require(it.exists()) { "Input path must exist!" } }
             .toList()
     }
     val documentationPath: Path
-        get() = Paths.get(
+        get() = Path(
             checkNotNull(documentation) {
                 "Documentation output path was not initialized by jcommander!"
             }
         )
 
     val configPath: Path
-        get() = Paths.get(checkNotNull(config) { "Configuration output path was not initialized by jcommander!" })
+        get() = Path(checkNotNull(config) { "Configuration output path was not initialized by jcommander!" })
 
     val cliOptionsPath: Path
-        get() = Paths.get(
+        get() = Path(
             checkNotNull(cliOptions) {
                 "Cli options output path was not initialized by jcommander!"
             }

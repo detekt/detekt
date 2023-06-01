@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfig
+import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -22,8 +23,8 @@ class AbsentOrWrongFileLicenseSpec {
     fun `file with correct license header reports nothing`() {
         val findings = checkLicence(
             """
-            /* LICENSE */
-            package cases
+                /* LICENSE */
+                package cases
             """.trimIndent()
         )
 
@@ -34,8 +35,8 @@ class AbsentOrWrongFileLicenseSpec {
     fun `file with incorrect license header reports missed license header`() {
         val findings = checkLicence(
             """
-            /* WRONG LICENSE */
-            package cases
+                /* WRONG LICENSE */
+                package cases
             """.trimIndent()
         )
 
@@ -46,7 +47,7 @@ class AbsentOrWrongFileLicenseSpec {
     fun `file with absent license header reports missed license header`() {
         val findings = checkLicence(
             """
-            package cases
+                package cases
             """.trimIndent()
         )
 
@@ -181,7 +182,7 @@ class AbsentOrWrongFileLicenseSpec {
 }
 
 @OptIn(UnstableApi::class)
-private fun checkLicence(content: String, isRegexLicense: Boolean = false): List<Finding> {
+private fun checkLicence(@Language("kotlin") content: String, isRegexLicense: Boolean = false): List<Finding> {
     val file = compileContentForTest(content.trimIndent())
 
     val configFileName = if (isRegexLicense) "license-config-regex.yml" else "license-config.yml"

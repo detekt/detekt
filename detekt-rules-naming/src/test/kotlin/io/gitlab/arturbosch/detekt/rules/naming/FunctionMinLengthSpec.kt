@@ -17,7 +17,7 @@ class FunctionMinLengthSpec {
     fun `should report a function name that is too short base on config`() {
         val code = "fun four() = 3"
         assertThat(
-            FunctionMinLength(TestConfig(mapOf("minimumFunctionNameLength" to 5)))
+            FunctionMinLength(TestConfig("minimumFunctionNameLength" to 5))
                 .compileAndLint(code)
         ).hasSize(1)
     }
@@ -26,5 +26,35 @@ class FunctionMinLengthSpec {
     fun `should not report a function name that is okay`() {
         val code = "fun three() = 3"
         assertThat(FunctionMinLength().compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `should not report an overridden function name that is too short`() {
+        val code = """
+            class C : I {
+                override fun tooShortButShouldNotBeReportedByDefault() {}
+            }
+            interface I { @Suppress("FunctionMinLength") fun tooShortButShouldNotBeReportedByDefault() }
+        """.trimIndent()
+        assertThat(
+            FunctionMinLength(
+                TestConfig("minimumFunctionNameLength" to 50)
+            ).compileAndLint(code)
+        ).isEmpty()
+    }
+
+    @Test
+    fun `should not report an operator function`() {
+        val code = """
+            data class Point2D(var x: Int = 0, var y: Int = 0) {
+                operator fun plus(another: Point2D): Point2D =
+                    Point2D(x = x + another.x, y = y + another.y)
+            }
+        """.trimIndent()
+        assertThat(
+            FunctionMinLength(
+                TestConfig("minimumFunctionNameLength" to 5)
+            ).compileAndLint(code)
+        ).isEmpty()
     }
 }

@@ -7,7 +7,8 @@ import io.gitlab.arturbosch.detekt.test.createFinding
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
-import java.nio.file.Files
+import kotlin.io.path.copyTo
+import kotlin.io.path.deleteIfExists
 
 class BaselineFacadeSpec {
 
@@ -16,7 +17,7 @@ class BaselineFacadeSpec {
 
     @AfterEach
     fun tearDown() {
-        Files.deleteIfExists(baselineFile)
+        baselineFile.deleteIfExists()
     }
 
     @Test
@@ -43,7 +44,7 @@ class BaselineFacadeSpec {
 
     @Test
     fun `creates on top of an existing a baseline file without findings`() {
-        Files.copy(validBaseline, baselineFile)
+        validBaseline.copyTo(baselineFile)
 
         BaselineFacade().createOrUpdate(baselineFile, emptyList())
 
@@ -63,7 +64,7 @@ class BaselineFacadeSpec {
 
     @Test
     fun `creates on top of an existing a baseline file with findings`() {
-        Files.copy(validBaseline, baselineFile)
+        validBaseline.copyTo(baselineFile)
 
         BaselineFacade().createOrUpdate(baselineFile, listOf(createFinding()))
 

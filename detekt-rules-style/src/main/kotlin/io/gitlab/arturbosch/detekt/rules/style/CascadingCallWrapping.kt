@@ -1,12 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.psi.toFilePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -14,6 +17,8 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
+import org.jetbrains.kotlin.psi.psiUtil.endOffset
+import org.jetbrains.kotlin.psi.psiUtil.startOffset
 
 /**
  * Requires that all chained calls are placed on a new line if a preceding one is.
@@ -62,7 +67,7 @@ class CascadingCallWrapping(config: Config = Config.empty) : Rule(config) {
             report(
                 CodeSmell(
                     issue = issue,
-                    entity = Entity.from(expression),
+                    entity = expression.toErrorReportEntity(),
                     message = "Chained call$callTextOrEmpty should be wrapped to a new line since preceding calls were."
                 )
             )
@@ -104,6 +109,23 @@ class CascadingCallWrapping(config: Config = Config.empty) : Rule(config) {
             is KtQualifiedExpression -> lhs.containsNewline()
             is KtUnaryExpression -> (lhs.baseExpression as? KtQualifiedExpression)?.containsNewline() == true
             else -> false
+        }
+    }
+
+    private fun KtExpression.toErrorReportEntity(): Entity {
+        return when (this) {
+            is KtQualifiedExpression -> Entity.from(this.selectorExpression ?: this)
+            is KtBinaryExpression -> {
+                val rhs = this.right ?: return Entity.from(this)
+                val operationSourceLocation = Location.from(operationReference).source
+                val rhsSourceLocation = Location.from(rhs).endSource
+                val textLocation = TextLocation(operationReference.startOffset, rhs.endOffset)
+                Entity.from(
+                    this,
+                    Location(operationSourceLocation, rhsSourceLocation, textLocation, containingFile.toFilePath())
+                )
+            }
+            else -> Entity.from(this)
         }
     }
 }

@@ -15,7 +15,7 @@ class ReplaceSafeCallChainWithRunSpec(val env: KotlinCoreEnvironment) {
     fun `reports long chain of unnecessary safe qualified expressions`() {
         val code = """
             val x: String? = "string"
-
+            
             val y = x
                 ?.asSequence()
                 ?.map { it }
@@ -31,7 +31,7 @@ class ReplaceSafeCallChainWithRunSpec(val env: KotlinCoreEnvironment) {
     fun `reports short chain of unnecessary safe qualified expressions`() {
         val code = """
             val x: String? = "string"
-
+            
             val y = x
                 ?.asSequence()
                 ?.map { it }
@@ -44,7 +44,7 @@ class ReplaceSafeCallChainWithRunSpec(val env: KotlinCoreEnvironment) {
     fun `does not report a safe call chain which is too short to benefit`() {
         val code = """
             val x: String? = "string"
-
+            
             val y = x
                 ?.asSequence()
         """.trimIndent()
@@ -58,11 +58,11 @@ class ReplaceSafeCallChainWithRunSpec(val env: KotlinCoreEnvironment) {
             class Something {
                 var element: Element? = null
             }
-
+            
             class Element(var list: List<String>?)
-
+            
             val z: Something? = Something()
-
+            
             fun modifyList() {
                 z?.element?.list = listOf("strings")
             }

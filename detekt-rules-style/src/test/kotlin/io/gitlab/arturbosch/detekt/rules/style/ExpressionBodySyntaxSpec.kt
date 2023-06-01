@@ -20,12 +20,41 @@ class ExpressionBodySyntaxSpec {
             assertThat(
                 subject.compileAndLint(
                     """
-                fun stuff(): Int {
-                    return 5
-                }
+                        fun stuff(): Int {
+                            return 5
+                        }
                     """.trimIndent()
                 )
             ).hasSize(1)
+        }
+
+        @Test
+        fun `reports return statements in property getter and setter`() {
+            val code = """
+                class Test {
+                    var b: Boolean
+                        get() {
+                            return true
+                        }
+                        set(value) {
+                            return
+                        }
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).hasSize(2)
+        }
+
+        @Test
+        fun `does not report properties with no getter or setter body`() {
+            val code = """
+                class Test {
+                    var b1: Boolean = false
+                        get
+                        set
+                    var b2: Boolean = false
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -33,9 +62,9 @@ class ExpressionBodySyntaxSpec {
             assertThat(
                 subject.compileAndLint(
                     """
-                fun stuff(): String {
-                    return StringBuilder().append(0).toString()
-                }
+                        fun stuff(): String {
+                            return StringBuilder().append(0).toString()
+                        }
                     """.trimIndent()
                 )
             ).hasSize(1)
@@ -46,12 +75,12 @@ class ExpressionBodySyntaxSpec {
             assertThat(
                 subject.compileAndLint(
                     """
-                fun stuff(): Int {
-                    return if (true) return 5 else return 3
-                }
-                fun stuff(): Int {
-                    return try { return 5 } catch (e: Exception) { return 3 }
-                }
+                        fun stuff(): Int {
+                            return if (true) return 5 else return 3
+                        }
+                        fun stuff2(): Int {
+                            return try { return 5 } catch (e: Exception) { return 3 }
+                        }
                     """.trimIndent()
                 )
             ).hasSize(2)
@@ -62,10 +91,10 @@ class ExpressionBodySyntaxSpec {
             assertThat(
                 subject.compileAndLint(
                     """
-                fun stuff(): Boolean {
-                    if (true) return true
-                    return false
-                }
+                        fun stuff(): Boolean {
+                            if (true) return true
+                            return false
+                        }
                     """.trimIndent()
                 )
             ).isEmpty()
@@ -76,11 +105,11 @@ class ExpressionBodySyntaxSpec {
             assertThat(
                 subject.compileAndLint(
                     """
-                fun caller(): String {
-                    return callee("" as String? ?: return "")
-                }
-
-                fun callee(a: String): String = ""
+                        fun caller(): String {
+                            return callee("" as String? ?: return "")
+                        }
+                        
+                        fun callee(a: String): String = ""
                     """.trimIndent()
                 )
             ).isEmpty()
@@ -105,7 +134,7 @@ class ExpressionBodySyntaxSpec {
 
         @Test
         fun `reports with includeLineWrapping = true configuration`() {
-            val config = TestConfig(mapOf(INCLUDE_LINE_WRAPPING to "true"))
+            val config = TestConfig(INCLUDE_LINE_WRAPPING to "true")
             assertThat(ExpressionBodySyntax(config).compileAndLint(code)).hasSize(1)
         }
     }
@@ -129,7 +158,7 @@ class ExpressionBodySyntaxSpec {
 
         @Test
         fun `reports with includeLineWrapping = true configuration`() {
-            val config = TestConfig(mapOf(INCLUDE_LINE_WRAPPING to "true"))
+            val config = TestConfig(INCLUDE_LINE_WRAPPING to "true")
             assertThat(ExpressionBodySyntax(config).compileAndLint(code)).hasSize(1)
         }
     }
@@ -151,7 +180,7 @@ class ExpressionBodySyntaxSpec {
 
         @Test
         fun `reports with includeLineWrapping = true configuration`() {
-            val config = TestConfig(mapOf(INCLUDE_LINE_WRAPPING to "true"))
+            val config = TestConfig(INCLUDE_LINE_WRAPPING to "true")
             assertThat(ExpressionBodySyntax(config).compileAndLint(code)).hasSize(1)
         }
     }

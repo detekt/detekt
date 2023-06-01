@@ -9,11 +9,12 @@ import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
-import java.nio.file.Paths
+import kotlin.io.path.Path
+import kotlin.io.path.absolute
 
 internal class CliArgsSpec {
 
-    private val projectPath: Path = resourceAsPath("/").parent.parent.parent.parent.toAbsolutePath()
+    private val projectPath: Path = resourceAsPath("/").parent.parent.parent.parent.absolute()
 
     @Nested
     inner class `Parsing the input path` {
@@ -22,23 +23,23 @@ internal class CliArgsSpec {
         fun `the current working directory is used if parameter is not set`() {
             val cli = parseArguments(emptyArray())
             assertThat(cli.inputPaths).hasSize(1)
-            assertThat(cli.inputPaths.first()).isEqualTo(Paths.get(System.getProperty("user.dir")))
+            assertThat(cli.inputPaths.first()).isEqualTo(Path(System.getProperty("user.dir")))
         }
 
         @Test
         fun `a single value is converted to a path`() {
             val cli = parseArguments(arrayOf("--input", "$projectPath"))
             assertThat(cli.inputPaths).hasSize(1)
-            assertThat(cli.inputPaths.first().toAbsolutePath()).isEqualTo(projectPath)
+            assertThat(cli.inputPaths.first().absolute()).isEqualTo(projectPath)
         }
 
         @Test
         fun `multiple input paths can be separated by comma`() {
-            val mainPath = projectPath.resolve("src/main").toAbsolutePath()
-            val testPath = projectPath.resolve("src/test").toAbsolutePath()
+            val mainPath = projectPath.resolve("src/main").absolute()
+            val testPath = projectPath.resolve("src/test").absolute()
             val cli = parseArguments(arrayOf("--input", "$mainPath,$testPath"))
             assertThat(cli.inputPaths).hasSize(2)
-            assertThat(cli.inputPaths.map(Path::toAbsolutePath)).containsExactlyInAnyOrder(mainPath, testPath)
+            assertThat(cli.inputPaths.map(Path::absolute)).containsExactlyInAnyOrder(mainPath, testPath)
         }
 
         @Test

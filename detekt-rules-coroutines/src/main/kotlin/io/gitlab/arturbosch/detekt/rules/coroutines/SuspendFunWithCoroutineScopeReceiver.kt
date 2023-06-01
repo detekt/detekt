@@ -59,6 +59,8 @@ class SuspendFunWithCoroutineScopeReceiver(config: Config) : Rule(config) {
         debt = Debt.TEN_MINS
     )
 
+    override val defaultRuleIdAliases = setOf("SuspendFunctionOnCoroutineScope")
+
     override fun visitNamedFunction(function: KtNamedFunction) {
         checkReceiver(function)
     }

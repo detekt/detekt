@@ -10,14 +10,10 @@ function MarketplaceCard(input) {
     <li key={extension.title} className="card shadow--md">
       <div className="card__body">
         <div className={styles.marketplaceCardHeader}>
-          <h3 className={styles.marketplaceCardTitle}>
-            {extension.title}
-          </h3>
+          <h3 className={styles.marketplaceCardTitle}>{extension.title}</h3>
           <ul className={styles.tagContainer}>
             {extension.tags.map((tag) => (
-              <li>
-                <MarketplaceCardTag tag={tag} />
-              </li>
+              <MarketplaceCardTag tag={tag} />
             ))}
           </ul>
           <Link
@@ -33,7 +29,7 @@ function MarketplaceCard(input) {
           </Link>
         </div>
         <div className={styles.marketplaceCardBody}>
-          <Link href={extension.repo}>{extension.repo}</Link>
+          <Link href={extension.docs ?? extension.repo}>{extension.docs ?? extension.repo}</Link>
           <p>{extension.description}</p>
           {extension.rules && (
             <p>
@@ -42,7 +38,7 @@ function MarketplaceCard(input) {
                 Uses type resolution:{" "}
                 <strong>{extension.usesTypeResolution.toString()}</strong>
               </p>
-              <p>
+              <p className={styles.marketplaceCardRules}>
                 <ul>
                   {extension.rules.map((rule) => (
                     <li>

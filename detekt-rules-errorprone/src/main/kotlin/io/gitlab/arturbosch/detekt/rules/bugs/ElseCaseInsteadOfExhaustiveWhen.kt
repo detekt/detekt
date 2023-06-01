@@ -7,7 +7,10 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.cfg.WhenChecker
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.resolve.calls.util.getType
@@ -59,6 +62,12 @@ class ElseCaseInsteadOfExhaustiveWhen(config: Config = Config.empty) : Rule(conf
         Debt.FIVE_MINS
     )
 
+    @Configuration(
+        "List of fully qualified types which should be ignored for when expressions with a subject. " +
+            "Example `kotlinx.serialization.json.JsonObject`"
+    )
+    private val ignoredSubjectTypes: List<String> by config(emptyList())
+
     override fun visitWhenExpression(whenExpression: KtWhenExpression) {
         super.visitWhenExpression(whenExpression)
 
@@ -70,6 +79,10 @@ class ElseCaseInsteadOfExhaustiveWhen(config: Config = Config.empty) : Rule(conf
         if (whenExpression.elseExpression == null) return
 
         val subjectType = subjectExpression.getType(bindingContext)
+        if (ignoredSubjectTypes.contains(subjectType?.fqNameOrNull()?.toString())) {
+            return
+        }
+
         val isEnumSubject = WhenChecker.getClassDescriptorOfTypeIfEnum(subjectType) != null
         val isSealedSubject = isNonExpectedSealedClass(subjectType)
         val isBooleanSubject = subjectType?.isBooleanOrNullableBoolean() == true

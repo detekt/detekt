@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
-import com.pinterest.ktlint.ruleset.standard.EnumEntryNameCaseRule
+import com.pinterest.ktlint.ruleset.standard.rules.EnumEntryNameCaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
@@ -15,6 +15,4 @@ class EnumEntryNameCase(config: Config) : FormattingRule(config) {
 
     override val wrapping = EnumEntryNameCaseRule()
     override val issue = issueFor("Reports enum entries with names that don't meet standard conventions.")
-
-    override fun canBeCorrectedByKtLint(message: String): Boolean = false
 }

@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.core.config.validation
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import java.util.ServiceLoader
@@ -20,7 +19,7 @@ internal class MissingRulesConfigValidator(
         if (!settings.checkExhaustiveness) {
             return emptyList()
         }
-        return defaultRuleSetNames.flatMap { ruleSet -> validateRuleSet(ruleSet, configToValidate) }
+        return ruleSetNames.flatMap { ruleSet -> validateRuleSet(ruleSet, configToValidate) }
     }
 
     private fun validateRuleSet(
@@ -68,13 +67,12 @@ internal class MissingRulesConfigValidator(
 
     companion object {
 
-        private val defaultRuleSetNames: List<String> by lazy(Companion::loadDefaultRuleSets)
-        private fun loadDefaultRuleSets(): List<String> {
+        private val ruleSetNames: List<String> by lazy(Companion::loadRuleSets)
+        private fun loadRuleSets(): List<String> {
             return ServiceLoader.load(
                 RuleSetProvider::class.java,
                 MissingRulesConfigValidator::class.java.classLoader
             )
-                .filterIsInstance<DefaultRuleSetProvider>()
                 .map { it.ruleSetId }
         }
     }

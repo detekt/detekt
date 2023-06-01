@@ -2,14 +2,16 @@ package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
+import io.gitlab.arturbosch.detekt.testkit.joinGradleBlocks
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.BuildResult
+import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.EnabledForJreRange
 import org.junit.jupiter.api.condition.EnabledIf
 import org.junit.jupiter.api.condition.EnabledOnOs
-import org.junit.jupiter.api.condition.JRE.JAVA_11
+import org.junit.jupiter.api.condition.JRE.JAVA_17
 import org.junit.jupiter.api.condition.OS.MAC
 import java.util.concurrent.TimeUnit
 
@@ -24,13 +26,15 @@ class DetektMultiplatformSpec {
                     "shared",
                     1,
                     1,
-                    buildFileContent = """
-                        $KMM_PLUGIN_BLOCK
-                        kotlin {
-                            jvm()
-                        }
-                        $DETEKT_BLOCK
-                    """.trimIndent(),
+                    buildFileContent = joinGradleBlocks(
+                        KMM_PLUGIN_BLOCK,
+                        """
+                            kotlin {
+                                jvm()
+                            }
+                        """.trimIndent(),
+                        DETEKT_BLOCK,
+                    ),
                     srcDirs = listOf("src/commonMain/kotlin", "src/commonTest/kotlin"),
                     baselineFiles = listOf("detekt-baseline.xml", "detekt-baseline-metadataMain.xml")
                 )
@@ -59,13 +63,15 @@ class DetektMultiplatformSpec {
                     "shared",
                     1,
                     1,
-                    buildFileContent = """
-                        $KMM_PLUGIN_BLOCK
-                        kotlin {
-                            jvm()
-                        }
-                        $DETEKT_BLOCK
-                    """.trimIndent(),
+                    buildFileContent = joinGradleBlocks(
+                        KMM_PLUGIN_BLOCK,
+                        """
+                            kotlin {
+                                jvm()
+                            }
+                        """.trimIndent(),
+                        DETEKT_BLOCK,
+                    ),
                     srcDirs = listOf("src/commonMain/kotlin", "src/commonTest/kotlin")
                 )
             }
@@ -73,14 +79,14 @@ class DetektMultiplatformSpec {
         @Test
         fun `does not configure baseline task`() {
             gradleRunner.runTasksAndExpectFailure(":shared:detektBaselineMetadataMain") { result ->
-                assertThat(result.output).contains("Task 'detektBaselineMetadataMain' not found in project")
+                assertThat(result.output).containsIgnoringCase("Task 'detektBaselineMetadataMain' not found in project")
             }
         }
 
         @Test
         fun `does not configure detekt task`() {
             gradleRunner.runTasksAndExpectFailure(":shared:detektMetadataMain") { result ->
-                assertThat(result.output).contains("Task 'detektMetadataMain' not found in project")
+                assertThat(result.output).containsIgnoringCase("Task 'detektMetadataMain' not found in project")
             }
         }
     }
@@ -93,14 +99,20 @@ class DetektMultiplatformSpec {
                     "shared",
                     1,
                     1,
-                    buildFileContent = """
-                        $KMM_PLUGIN_BLOCK
-                        kotlin {
-                            jvm("jvmBackend")
-                            jvm("jvmEmbedded")
-                        }
-                        $DETEKT_BLOCK
-                    """.trimIndent(),
+                    buildFileContent = joinGradleBlocks(
+                        KMM_PLUGIN_BLOCK,
+                        """
+                            val targetType = Attribute.of("com.example.target.type", String::class.java)
+                            
+                            kotlin {
+                                jvm("jvmBackend") {
+                                    attributes.attribute(targetType, "jvmBackend")
+                                }
+                                jvm("jvmEmbedded")
+                            }
+                        """.trimIndent(),
+                        DETEKT_BLOCK,
+                    ),
                     srcDirs = listOf(
                         "src/commonMain/kotlin",
                         "src/commonTest/kotlin",
@@ -137,7 +149,7 @@ class DetektMultiplatformSpec {
     }
 
     @Nested
-    @EnabledForJreRange(min = JAVA_11, disabledReason = "Android Gradle Plugin 7.0+ requires JDK 11 or newer")
+    @EnabledForJreRange(min = JAVA_17, disabledReason = "Android Gradle Plugin 8.0+ requires JDK 17 or newer")
     @EnabledIf("io.gitlab.arturbosch.detekt.DetektAndroidSpecKt#isAndroidSdkInstalled")
     inner class `multiplatform projects - Android target` {
         val gradleRunner =
@@ -146,27 +158,34 @@ class DetektMultiplatformSpec {
                     "shared",
                     1,
                     1,
-                    buildFileContent = """
-                        plugins {
-                            kotlin("multiplatform")
-                            id("com.android.library")
-                            id("io.gitlab.arturbosch.detekt")
-                        }
-                        android {
-                            compileSdk = 30
-                            sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-                            buildTypes {
-                                release {
-                                }
-                                debug {
+                    buildFileContent = joinGradleBlocks(
+                        """
+                            plugins {
+                                kotlin("multiplatform")
+                                id("com.android.library")
+                                id("io.gitlab.arturbosch.detekt")
+                            }
+                            android {
+                                compileSdk = 30
+                                namespace = "io.gitlab.arturbosch.detekt.app"
+                                sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+                                buildTypes {
+                                    release {
+                                    }
+                                    debug {
+                                    }
                                 }
                             }
-                        }
-                        kotlin {
-                            android()
-                        }
-                        $DETEKT_BLOCK
-                    """.trimIndent(),
+                            kotlin {
+                                android {
+                                    compilations.all {
+                                        kotlinOptions.jvmTarget = "1.8"
+                                    }
+                                }
+                            }
+                        """.trimIndent(),
+                        DETEKT_BLOCK,
+                    ),
                     srcDirs = listOf(
                         "src/debug/kotlin",
                         "src/release/kotlin",
@@ -217,15 +236,17 @@ class DetektMultiplatformSpec {
                     "shared",
                     1,
                     1,
-                    buildFileContent = """
-                    $KMM_PLUGIN_BLOCK
-                    kotlin {
-                        js {
-                            browser()
-                        }
-                    }
-                    $DETEKT_BLOCK
-                    """.trimIndent(),
+                    buildFileContent = joinGradleBlocks(
+                        KMM_PLUGIN_BLOCK,
+                        """
+                            kotlin {
+                                js(IR) {
+                                    browser()
+                                }
+                            }
+                        """.trimIndent(),
+                        DETEKT_BLOCK,
+                    ),
                     srcDirs = listOf(
                         "src/commonMain/kotlin",
                         "src/commonTest/kotlin",
@@ -268,13 +289,15 @@ class DetektMultiplatformSpec {
                     "shared",
                     1,
                     1,
-                    buildFileContent = """
-                    $KMM_PLUGIN_BLOCK
-                    kotlin {
-                        ios()
-                    }
-                    $DETEKT_BLOCK
-                    """.trimIndent(),
+                    buildFileContent = joinGradleBlocks(
+                        KMM_PLUGIN_BLOCK,
+                        """
+                            kotlin {
+                                ios()
+                            }
+                        """.trimIndent(),
+                        DETEKT_BLOCK,
+                    ),
                     srcDirs = listOf(
                         "src/commonMain/kotlin",
                         "src/commonTest/kotlin",
@@ -339,9 +362,9 @@ private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGrad
 
 private fun setupAndroidProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGradleRunner {
     val gradleRunner = setupProject { projectLayoutAction() }
-    gradleRunner.writeProjectFile("shared/src/androidMain/AndroidManifest.xml", manifestContent())
-    gradleRunner.writeProjectFile("shared/src/debug/AndroidManifest.xml", manifestContent())
-    gradleRunner.writeProjectFile("shared/src/release/AndroidManifest.xml", manifestContent())
+    gradleRunner.writeProjectFile("shared/src/androidMain/AndroidManifest.xml", manifestContent)
+    gradleRunner.writeProjectFile("shared/src/debug/AndroidManifest.xml", manifestContent)
+    gradleRunner.writeProjectFile("shared/src/release/AndroidManifest.xml", manifestContent)
     return gradleRunner
 }
 
@@ -363,6 +386,7 @@ private fun assertDetektWithClasspath(buildResult: BuildResult) {
     assertThat(buildResult.output).contains("--classpath")
 }
 
+@Language("gradle.kts")
 private val KMM_PLUGIN_BLOCK = """
     plugins {
         kotlin("multiplatform")
@@ -370,6 +394,7 @@ private val KMM_PLUGIN_BLOCK = """
     }
 """.trimIndent()
 
+@Language("gradle.kts")
 private val DETEKT_BLOCK = """
     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
         reports.txt.enabled = false

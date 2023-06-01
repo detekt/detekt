@@ -141,7 +141,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
             report(
                 ThresholdedCodeSmell(
                     issue,
-                    Entity.from(declaration.nameIdentifier ?: declaration),
+                    Entity.atName(declaration),
                     Metric("SIZE", amount, thresholdInObjects),
                     "Object '${declaration.name}' with '$amount' functions detected. " +
                         "Defined threshold inside objects is set to '$thresholdInObjects'"

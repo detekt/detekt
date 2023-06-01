@@ -13,7 +13,7 @@ dependencies {
     testImplementation(libs.assertj)
 }
 
-tasks.withType<Test> {
+tasks.withType<Test>().configureEach {
     systemProperty("kotlinVersion", getKotlinPluginVersion())
 
     doFirst {

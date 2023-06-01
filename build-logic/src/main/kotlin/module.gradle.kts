@@ -9,10 +9,11 @@ plugins {
     jacoco
 }
 
-// bundle detekt's version for all jars to use it at runtime
+// Add attributes to JAR manifest, to be used at runtime
 tasks.withType<Jar>().configureEach {
     manifest {
         attributes(mapOf("DetektVersion" to Versions.DETEKT))
+        attributes(mapOf("KotlinImplementationVersion" to versionCatalog.findVersion("kotlin").get().requiredVersion))
     }
 }
 
@@ -20,19 +21,16 @@ val versionCatalog = project.extensions.getByType<VersionCatalogsExtension>().na
 
 jacoco.toolVersion = versionCatalog.findVersion("jacoco").get().requiredVersion
 
-tasks.withType<PublishToMavenRepository>().configureEach {
-    notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13468")
-}
-
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
-    systemProperty("junit.jupiter.testinstance.lifecycle.default", "per_class")
-    val compileSnippetText: Boolean = if (project.hasProperty("compile-test-snippets")) {
-        (project.property("compile-test-snippets") as String).toBoolean()
+    maxParallelForks = if (System.getenv("CI") != null) {
+        Runtime.getRuntime().availableProcessors()
     } else {
-        false
+        (Runtime.getRuntime().availableProcessors() / 2).takeIf { it > 0 } ?: 1
     }
-    systemProperty("compile-snippet-tests", compileSnippetText)
+    systemProperty("junit.jupiter.testinstance.lifecycle.default", "per_class")
+    val compileTestSnippets = providers.gradleProperty("compile-test-snippets").orNull.toBoolean()
+    systemProperty("compile-test-snippets", compileTestSnippets)
     testLogging {
         // set options for log level LIFECYCLE
         events = setOf(
@@ -49,12 +47,10 @@ tasks.withType<Test>().configureEach {
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = Versions.JVM_TARGET
-        freeCompilerArgs += listOf(
-            "-progressive",
-        )
-        allWarningsAsErrors = project.findProperty("warningsAsErrors") == "true"
+    compilerOptions {
+        jvmTarget.set(Versions.JVM_TARGET)
+        freeCompilerArgs.add("-progressive")
+        allWarningsAsErrors.set(providers.gradleProperty("warningsAsErrors").orNull.toBoolean())
     }
 }
 
@@ -66,13 +62,12 @@ testing {
     }
 }
 
-dependencies {
-    compileOnly(kotlin("stdlib-jdk8"))
-}
-
 java {
     withSourcesJar()
     withJavadocJar()
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+    consistentResolution {
+        useCompileClasspathVersions()
+    }
 }

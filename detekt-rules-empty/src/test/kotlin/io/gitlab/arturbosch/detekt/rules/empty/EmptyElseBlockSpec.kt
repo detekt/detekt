@@ -17,7 +17,7 @@ class EmptyElseBlockSpec {
                 if (i == 0) {
                     println(i)
                 } else {
-                    
+            
                 }
             }
         """.trimIndent()

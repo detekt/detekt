@@ -1,12 +1,18 @@
+// Gradle test suite limitations mean we have to reference "functionalTest" in many places.
+// https://github.com/gradle/gradle/issues/21285
+@file:Suppress("StringLiteralDuplication")
+
+import com.gradle.enterprise.gradleplugin.testretry.retry
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+
 plugins {
     id("module")
     `java-gradle-plugin`
     `java-test-fixtures`
     idea
     alias(libs.plugins.pluginPublishing)
-    // We use this published version of the Detekt plugin to self analyse this project.
-    id("io.gitlab.arturbosch.detekt") version "1.21.0"
-    id("org.gradle.test-retry") version "1.4.1"
+    // We use this published version of the detekt plugin to self analyse this project.
+    id("io.gitlab.arturbosch.detekt") version "1.23.0"
 }
 
 repositories {
@@ -21,7 +27,7 @@ detekt {
     source.from("src/functionalTest/kotlin")
     buildUponDefaultConfig = true
     baseline = file("config/gradle-plugin-baseline.xml")
-    config = files("config/gradle-plugin-detekt.yml")
+    config.setFrom("config/gradle-plugin-detekt.yml")
 }
 
 testing {
@@ -37,7 +43,9 @@ testing {
             useJUnitJupiter(libs.versions.junit.get())
 
             dependencies {
+                compileOnly("org.jetbrains:annotations:24.0.1")
                 implementation(libs.assertj)
+                implementation(testFixtures(project(":")))
             }
 
             targets {
@@ -54,37 +62,33 @@ testing {
     }
 }
 
-val pluginCompileOnly: Configuration by configurations.creating
-val functionalTestImplementation: Configuration by configurations.getting
-
-configurations.compileOnly { extendsFrom(pluginCompileOnly) }
-
-pluginCompileOnly.attributes {
-    attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category::class.java, "library"))
-}
+val testKitRuntimeOnly: Configuration by configurations.creating
+val testKitJava17RuntimeOnly: Configuration by configurations.creating
 
 dependencies {
+    compileOnly(libs.android.gradle.minSupported)
+    compileOnly(libs.kotlin.gradle)
     compileOnly(libs.kotlin.gradlePluginApi)
-    implementation(libs.sarif4k)
+    testFixturesCompileOnly("org.jetbrains:annotations:24.0.1")
+    compileOnly("io.gitlab.arturbosch.detekt:detekt-cli:1.23.0")
 
-    // Migrate to `implementation(testFixtures(project))` in test suite configuration when this issue is fixed:
-    // https://github.com/gradle/gradle/pull/19472
-    functionalTestImplementation(testFixtures(project))
-
-    pluginCompileOnly(libs.android.gradle)
-    pluginCompileOnly(libs.kotlin.gradle)
+    testKitRuntimeOnly(libs.kotlin.gradle)
+    testKitJava17RuntimeOnly(libs.android.gradle.maxSupported)
 
     // We use this published version of the detekt-formatting to self analyse this project.
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.21.0")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.0")
 }
 
 gradlePlugin {
+    website.set("https://detekt.dev")
+    vcsUrl.set("https://github.com/detekt/detekt")
     plugins {
         create("detektPlugin") {
             id = "io.gitlab.arturbosch.detekt"
             implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
             displayName = "Static code analysis for Kotlin"
             description = "Static code analysis for Kotlin"
+            tags.set(listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android"))
         }
     }
     // Source sets that require the Gradle TestKit dependency
@@ -92,6 +96,18 @@ gradlePlugin {
         sourceSets["testFixtures"],
         sourceSets["functionalTest"],
     )
+}
+
+gradlePlugin {
+    plugins {
+        create("detektCompilerPlugin") {
+            id = "io.github.detekt.gradle.compiler-plugin"
+            implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
+            displayName = "Static code analysis for Kotlin"
+            description = "Static code analysis for Kotlin"
+            tags.set(listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android"))
+        }
+    }
 }
 
 // Some functional tests reference internal functions in the Gradle plugin. This should become unnecessary as further
@@ -102,25 +118,24 @@ kotlin.target.compilations.getByName("functionalTest") {
 
 // Manually inject dependency to gradle-testkit since the default injected plugin classpath is from `main.runtime`.
 tasks.pluginUnderTestMetadata {
-    pluginClasspath.from(pluginCompileOnly)
+    pluginClasspath.from(testKitRuntimeOnly)
+
+    if (tasks.named<Test>("functionalTest").get().javaVersion.isCompatibleWith(JavaVersion.VERSION_17)) {
+        pluginClasspath.from(testKitJava17RuntimeOnly)
+    }
 }
 
 tasks.validatePlugins {
     enableStricterValidation.set(true)
 }
 
-pluginBundle {
-    website = "https://detekt.dev"
-    vcsUrl = "https://github.com/detekt/detekt"
-    tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
-}
-
 tasks {
     val writeDetektVersionProperties by registering(WriteProperties::class) {
-        description = "Write the properties file with the Detekt version to be used by the plugin"
+        description = "Write the properties file with the detekt version to be used by the plugin."
         encoding = "UTF-8"
-        outputFile = file("$buildDir/versions.properties")
+        destinationFile.set(file("$buildDir/detekt-versions.properties"))
         property("detektVersion", project.version)
+        property("detektCompilerPluginVersion", project.version)
     }
 
     processResources {
@@ -150,48 +165,14 @@ with(components["java"] as AdhocComponentWithVariants) {
     withVariantsFromConfiguration(configurations["testFixturesRuntimeElements"]) { skip() }
 }
 
-tasks.withType<Sign>().configureEach {
-    notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13470")
-}
-
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions {
-        apiVersion = "1.4"
-        freeCompilerArgs += listOf(
-            "-Xsuppress-version-warnings",
-        )
+    compilerOptions {
+        @Suppress("DEPRECATION")
+        apiVersion.set(KotlinVersion.KOTLIN_1_4)
+        freeCompilerArgs.add("-Xsuppress-version-warnings")
         // Note: Currently there are warnings for detekt-gradle-plugin that seemingly can't be fixed
         //       until Gradle releases an update (https://github.com/gradle/gradle/issues/16345)
-        allWarningsAsErrors = false
-    }
-}
-
-afterEvaluate {
-    publishing {
-        publications.filterIsInstance<MavenPublication>().forEach {
-            it.pom {
-                description.set("The official Detekt Gradle Plugin")
-                name.set("detekt-gradle-plugin")
-                url.set("https://detekt.dev")
-                licenses {
-                    license {
-                        name.set("The Apache Software License, Version 2.0")
-                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-                        distribution.set("repo")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("Detekt Developers")
-                        name.set("Detekt Developers")
-                        email.set("info@detekt.dev")
-                    }
-                }
-                scm {
-                    url.set("https://github.com/detekt/detekt")
-                }
-            }
-        }
+        allWarningsAsErrors.set(false)
     }
 }
 

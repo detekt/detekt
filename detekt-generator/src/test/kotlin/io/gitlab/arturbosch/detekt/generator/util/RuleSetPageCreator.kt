@@ -68,7 +68,7 @@ internal fun createRules(): List<Rule> {
         debt = "10min",
         aliases = "alias1, alias2",
         parent = "",
-        configuration = listOf(
+        configurations = listOf(
             Configuration("conf1", "a config option", of("foo"), null, null),
             Configuration("conf2", "deprecated config", of(false), null, "use conf1 instead"),
             Configuration("conf3", "list config", of(listOf("a", "b")), null, null),
@@ -86,7 +86,7 @@ internal fun createRules(): List<Rule> {
         debt = "",
         aliases = null,
         parent = "WildcardImport",
-        configuration = emptyList()
+        configurations = emptyList()
     )
     val rule3 = Rule(
         name = "NoUnitKeyword",
@@ -98,9 +98,21 @@ internal fun createRules(): List<Rule> {
         debt = "5m",
         aliases = null,
         parent = "",
-        configuration = emptyList(),
+        configurations = emptyList(),
         autoCorrect = true,
         requiresTypeResolution = true
     )
-    return listOf(rule1, rule2, rule3)
+    val rule4 = Rule(
+        name = "DuplicateCaseInWhenExpression",
+        description = "Duplicated `case` statements in a `when` expression detected.",
+        nonCompliantCodeExample = "fun stuff(): Unit {}",
+        compliantCodeExample = "fun stuff() {}",
+        defaultActivationStatus = Active(since = "1.16.0"),
+        severity = "",
+        debt = "5m",
+        aliases = null,
+        parent = "",
+        deprecationMessage = "is deprecated"
+    )
+    return listOf(rule1, rule2, rule3, rule4)
 }

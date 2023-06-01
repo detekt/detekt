@@ -28,7 +28,7 @@ class ObjectLiteralToLambdaSpec {
                     val a = object : Sam {
                         override fun foo() {
                         }
-                    }   
+                    }
                 """.trimIndent()
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -86,7 +86,7 @@ class ObjectLiteralToLambdaSpec {
                         override fun foo(): Int {
                             return 1
                         }
-                    }   
+                    }
                 """.trimIndent()
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -104,7 +104,7 @@ class ObjectLiteralToLambdaSpec {
                     val a = object : Sam {
                         override fun foo() {
                         }
-                    }   
+                    }
                 """.trimIndent()
                 subject.compileAndLintWithContext(env, code)
                     .assert()
@@ -119,7 +119,7 @@ class ObjectLiteralToLambdaSpec {
                         fun foo()
                     }
                     fun interface Second: First
-        
+                    
                     fun bar() {
                         object : Second {
                             override fun foo(){
@@ -246,7 +246,7 @@ class ObjectLiteralToLambdaSpec {
                         fun foo()
                     }
                     interface Second
-        
+                    
                     val a: First = object : First, Second {
                         override fun foo() {
                         }
@@ -264,7 +264,7 @@ class ObjectLiteralToLambdaSpec {
                     fun interface Second {
                         fun foo()
                     }
-        
+                    
                     val a: First = object : First(), Second {
                         override fun foo() {
                         }
@@ -329,7 +329,7 @@ class ObjectLiteralToLambdaSpec {
             @Test
             fun `is convertible`() {
                 val code = """
-                    val a = object : Runnable { 
+                    val a = object : Runnable {
                         override fun run(){
                         }
                     }
@@ -376,7 +376,7 @@ class ObjectLiteralToLambdaSpec {
                         override fun hasMoreElements(): Boolean {
                             return true
                         }
-        
+                    
                         override fun nextElement(): Int {
                             return 1
                         }
@@ -394,7 +394,7 @@ class ObjectLiteralToLambdaSpec {
                     fun interface Sam {
                         fun foo()
                     }
-                
+                    
                     fun aa() {
                         object : Sam {
                             override fun foo() {
@@ -412,9 +412,9 @@ class ObjectLiteralToLambdaSpec {
                     fun interface Sam {
                         fun foo()
                     }
-        
+                    
                     fun Sam.bar() {}
-                
+                    
                     fun aa() {
                         object : Sam {
                             override fun foo() {
@@ -432,7 +432,7 @@ class ObjectLiteralToLambdaSpec {
                     fun interface Sam {
                         fun foo()
                     }
-                
+                    
                     fun aa() {
                         object : Sam {
                             override fun foo() {
@@ -450,7 +450,7 @@ class ObjectLiteralToLambdaSpec {
                     fun interface Sam {
                         fun foo()
                     }
-                
+                    
                     fun aa() {
                         object : Sam {
                             override fun foo() {
@@ -475,7 +475,7 @@ class ObjectLiteralToLambdaSpec {
                     fun interface Sam {
                         fun foo()
                     }
-                
+                    
                     class Target {
                         init {
                             object : Sam {
@@ -498,7 +498,7 @@ class ObjectLiteralToLambdaSpec {
                     fun interface Sam {
                         fun foo()
                     }
-                
+                    
                     fun a() {
                         object : Sam {
                             override fun foo() {
@@ -520,14 +520,14 @@ class ObjectLiteralToLambdaSpec {
                     fun interface Sam {
                         fun foo()
                     }
-        
+                    
                     fun newObject() = object : Sam {
                         override fun foo() {
                         }
                     }
-        
+                    
                     fun lambda() = Sam {}
-        
+                    
                     val a = newObject() === newObject() // false
                     val b = lambda() === lambda() // true
                 """.trimIndent()
@@ -554,7 +554,7 @@ class ObjectLiteralToLambdaSpec {
                             println()
                         }
                     }
-                } 
+                }
             """.trimIndent()
 
             subject.lintWithContext(env, code).assert().hasSize(1)
@@ -568,7 +568,7 @@ class ObjectLiteralToLambdaSpec {
                 fun main() {
                     val x = object : OnlyDefaultMethods {
                     }
-                } 
+                }
             """.trimIndent()
             subject.lintWithContext(env, code).assert().isEmpty()
         }
@@ -584,7 +584,7 @@ class ObjectLiteralToLambdaSpec {
                             println()
                         }
                     }
-                } 
+                }
             """.trimIndent()
             subject.lintWithContext(env, code).assert().isEmpty()
         }

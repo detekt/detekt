@@ -4,7 +4,10 @@ import org.gradle.api.Action
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.quality.CodeQualityExtension
+import org.gradle.api.provider.Property
 import java.io.File
+import java.io.InputStream
+import java.net.URL
 import java.util.Properties
 import javax.inject.Inject
 
@@ -31,12 +34,15 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
     val reports: DetektReports = objects.newInstance(DetektReports::class.java)
 
     @Deprecated(message = "Please use the source property instead.", replaceWith = ReplaceWith("source"))
+    @Suppress("DoubleMutabilityForCollection")
     var input: ConfigurableFileCollection
         get() = source
         set(value) {
+            @Suppress("DEPRECATION")
             source = value
         }
 
+    @Suppress("DoubleMutabilityForCollection")
     var source: ConfigurableFileCollection = objects.fileCollection()
         .from(
             DEFAULT_SRC_DIR_JAVA,
@@ -44,6 +50,10 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
             DEFAULT_SRC_DIR_KOTLIN,
             DEFAULT_TEST_SRC_DIR_KOTLIN,
         )
+        @Deprecated("Setter will be removed in a future release. Use `from` or `setFrom` instead.")
+        set(value) {
+            field = value
+        }
 
     var baseline: File? = objects
         .fileProperty()
@@ -53,7 +63,15 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
 
     var basePath: String? = null
 
+    val enableCompilerPlugin: Property<Boolean> =
+        objects.property(Boolean::class.java).convention(DEFAULT_COMPILER_PLUGIN_ENABLED)
+
+    @Suppress("DoubleMutabilityForCollection")
     var config: ConfigurableFileCollection = objects.fileCollection()
+        @Deprecated("Setter will be removed in a future release. Use `from` or `setFrom` instead.")
+        set(value) {
+            field = value
+        }
 
     var debug: Boolean = DEFAULT_DEBUG_VALUE
 
@@ -100,32 +118,43 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
         const val DEFAULT_AUTO_CORRECT_VALUE = false
         const val DEFAULT_DISABLE_RULESETS_VALUE = false
         const val DEFAULT_REPORT_ENABLED_VALUE = true
-        const val DEFAULT_FAIL_FAST_VALUE = false
         const val DEFAULT_ALL_RULES_VALUE = false
         const val DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE = false
+
+        // This flag is ignored unless the compiler plugin is applied to the project
+        const val DEFAULT_COMPILER_PLUGIN_ENABLED = true
     }
 }
 
 internal fun loadDetektVersion(classLoader: ClassLoader): String {
     // Other Gradle plugins can also have a versions.properties.
-    val distinctVersions = classLoader.getResources("versions.properties").toList().mapNotNull { versions ->
-        Properties().run {
-            val inputStream = versions.openConnection()
-                /*
-                 * Due to https://bugs.openjdk.java.net/browse/JDK-6947916 and https://bugs.openjdk.java.net/browse/JDK-8155607,
-                 * it is necessary to disallow caches to maintain stability on JDK 8 and 11 (and possibly more).
-                 * Otherwise, simultaneous invocations of Detekt in the same VM can fail spuriously. A similar bug is referenced in
-                 * https://github.com/detekt/detekt/issues/3396. The performance regression is likely unnoticeable.
-                 * Due to https://github.com/detekt/detekt/issues/4332 it is included for all JDKs.
-                 */
-                .apply { useCaches = false }
-                .getInputStream()
-            load(inputStream)
-            getProperty("detektVersion")
+    val distinctVersions = classLoader
+        .getResources("detekt-versions.properties")
+        .toList()
+        .mapNotNull { versions ->
+            Properties().run {
+                load(versions.openSafeStream())
+                getProperty("detektVersion")
+            }
         }
-    }.distinct()
+        .distinct()
     return distinctVersions.singleOrNull() ?: error(
-        "You're importing two Detekt plugins which have different versions. " +
+        "You're importing two detekt plugins which have different versions. " +
             "(${distinctVersions.joinToString()}) Make sure to align the versions."
     )
+}
+
+// Copy-paste from io.github.detekt.utils.openSafeStream in Resources.kt.
+// Can't use that function, because gradle-plugin is minimising dependencies: see #4748.
+private fun URL.openSafeStream(): InputStream {
+    return openConnection()
+        /*
+         * Due to https://bugs.openjdk.java.net/browse/JDK-6947916 and https://bugs.openjdk.java.net/browse/JDK-8155607,
+         * it is necessary to disallow caches to maintain stability on JDK 8 and 11 (and possibly more).
+         * Otherwise, simultaneous invocations of detekt in the same VM can fail spuriously. A similar bug is referenced in
+         * https://github.com/detekt/detekt/issues/3396. The performance regression is likely unnoticeable.
+         * Due to https://github.com/detekt/detekt/issues/4332 it is included for all JDKs.
+         */
+        .apply { useCaches = false }
+        .getInputStream()
 }

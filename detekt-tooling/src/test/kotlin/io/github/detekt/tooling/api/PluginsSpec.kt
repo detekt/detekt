@@ -4,7 +4,7 @@ import io.github.detekt.tooling.dsl.ExtensionsSpecBuilder
 import io.github.detekt.tooling.internal.PluginsHolder
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Test
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 class PluginsSpec {
 
@@ -33,7 +33,7 @@ class PluginsSpec {
 
     @Test
     fun `plugins from paths must exist`() {
-        assertThatCode { PluginsHolder(listOf(Paths.get("/does/not/exist")), null) }
+        assertThatCode { PluginsHolder(listOf(Path("/does/not/exist")), null) }
             .isInstanceOf(IllegalArgumentException::class.java)
     }
 }

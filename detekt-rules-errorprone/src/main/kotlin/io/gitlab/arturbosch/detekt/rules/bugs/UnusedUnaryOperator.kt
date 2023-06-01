@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
 /**
- * This rule detects unused unary operators.
+ * Detects unused unary operators.
  *
  * <noncompliant>
  * val x = 1 + 2
@@ -56,9 +56,11 @@ class UnusedUnaryOperator(config: Config = Config.empty) : Rule(config) {
         if (operationToken != KtTokens.PLUS && operationToken != KtTokens.MINUS) return
 
         if (expression.node.leaves(forward = false)
-            .takeWhile { it is PsiWhiteSpace || it is PsiComment }
-            .none { it is PsiWhiteSpace && it.textContains('\n') }
-        ) return
+                .takeWhile { it is PsiWhiteSpace || it is PsiComment }
+                .none { it is PsiWhiteSpace && it.textContains('\n') }
+        ) {
+            return
+        }
 
         val parentOrSelf = expression.parentBinaryExpressionOrThis()
         if (parentOrSelf.isUsedAsExpression(bindingContext)) return

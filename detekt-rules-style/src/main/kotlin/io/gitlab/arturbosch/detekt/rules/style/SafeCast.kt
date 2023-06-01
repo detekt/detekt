@@ -8,7 +8,9 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.KtNodeTypes
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
@@ -61,12 +63,18 @@ class SafeCast(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun isIfElseNull(thenClause: KtExpression?, elseClause: KtExpression?, identifier: String): Boolean {
-        val hasIdentifier = thenClause?.children?.firstOrNull()?.text == identifier
-        val elseStatement = elseClause?.children?.firstOrNull()
-        val hasNull = elseStatement is KtConstantExpression && elseStatement.node.elementType == KtNodeTypes.NULL
-        return hasIdentifier && hasNull
+    private fun isIfElseNull(thenClause: KtExpression?, elseClause: KtExpression?, identifier: String): Boolean =
+        thenClause.isIdentifier(identifier) && elseClause.isNullConstant()
+
+    private fun KtExpression?.isIdentifier(identifier: String): Boolean = singleExpression()?.text == identifier
+
+    private fun KtExpression?.isNullConstant(): Boolean {
+        val singleExpression = singleExpression() ?: return false
+        return singleExpression is KtConstantExpression && singleExpression.node.elementType == KtNodeTypes.NULL
     }
+
+    private fun KtExpression?.singleExpression(): KtExpression? =
+        if (this is KtBlockExpression) children.singleOrNull()?.safeAs() else this
 
     private fun addReport(expression: KtIfExpression) {
         report(CodeSmell(issue, Entity.from(expression), "This cast should be replaced with a safe cast: as?"))

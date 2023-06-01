@@ -5,7 +5,6 @@ package io.gitlab.arturbosch.detekt.cli
 import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.resourceAsPath
-import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.cli.runners.VersionPrinter
@@ -28,7 +27,6 @@ class MainSpec {
             return listOf(
                 arguments(arrayOf("--generate-config"), ConfigExporter::class),
                 arguments(arrayOf("--run-rule", "RuleSet:Rule"), Runner::class),
-                arguments(arrayOf("--print-ast"), AstPrinter::class),
                 arguments(arrayOf("--version"), VersionPrinter::class),
                 arguments(emptyArray<String>(), Runner::class),
             )
@@ -36,7 +34,7 @@ class MainSpec {
 
         @ParameterizedTest
         @MethodSource("runnerConfigs")
-        fun `builds correct runnner`(args: Array<String>, expectedRunnerClass: KClass<*>) {
+        fun `builds correct runner`(args: Array<String>, expectedRunnerClass: KClass<*>) {
             val runner = buildRunner(args, NullPrintStream(), NullPrintStream())
 
             assertThat(runner).isExactlyInstanceOf(expectedRunnerClass.java)

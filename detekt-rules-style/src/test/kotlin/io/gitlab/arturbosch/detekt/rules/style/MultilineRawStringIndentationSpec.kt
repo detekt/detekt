@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.Nested
@@ -149,7 +150,7 @@ class MultilineRawStringIndentationSpec {
         @Test
         fun `raise multiline raw string without indentation`() {
             val code = """
-                val a = 
+                val a =
                     $TQ
                     Hello world!
                     $TQ.trimIndent()
@@ -164,7 +165,7 @@ class MultilineRawStringIndentationSpec {
         @Test
         fun `raise multiline raw strings without indentation`() {
             val code = """
-                val a = 
+                val a =
                     $TQ
                     Hello world!
                     How are you?
@@ -178,7 +179,7 @@ class MultilineRawStringIndentationSpec {
         @Test
         fun `raise multiline raw strings without right indentation`() {
             val code = """
-                val a = 
+                val a =
                     $TQ
                      Hello world!
                         How are you?
@@ -211,7 +212,7 @@ class MultilineRawStringIndentationSpec {
         @Test
         fun `don't raise multiline raw strings if one has correct indentation and the other more`() {
             val code = """
-                val a = 
+                val a =
                     $TQ
                           Hello world!
                         How are you?
@@ -225,7 +226,7 @@ class MultilineRawStringIndentationSpec {
         @Test
         fun `don't raise multiline raw strings if all have the correct indentation`() {
             val code = """
-                val a = 
+                val a =
                     $TQ
                         Hello world!
                         How are you?
@@ -239,7 +240,7 @@ class MultilineRawStringIndentationSpec {
         @Test
         fun `raise multiline raw strings with too much indentation on closing`() {
             val code = """
-                val a = 
+                val a =
                     $TQ
                         Hello world!
                         How are you?
@@ -255,7 +256,7 @@ class MultilineRawStringIndentationSpec {
         @Test
         fun `raise multiline raw strings with too little indentation on closing`() {
             val code = """
-                val a = 
+                val a =
                     $TQ
                         Hello world!
                         How are you?
@@ -309,6 +310,39 @@ class MultilineRawStringIndentationSpec {
             subject.compileAndLint(code)
             assertThat(subject.findings)
                 .isEmpty()
+        }
+
+        @Test
+        fun `don't raise if it has no line breaks`() {
+            val code = """
+                val a = ${TQ}Hello world!$TQ.trimIndent()
+            """.trimIndent()
+            subject.compileAndLint(code)
+            assertThat(subject.findings)
+                .isEmpty()
+        }
+
+        @Test
+        fun `don't raise multiline raw strings if all have the correct indentation - tabs`() {
+            val code = """
+                fun respond(content: String, status: Int) {}
+                fun redirect(accessToken: String, refreshToken: String) {
+                ${TAB}respond(
+                $TAB${TAB}content = $TQ
+                $TAB$TAB$TAB{
+                $TAB$TAB$TAB    "access_token": "${'$'}{accessToken}",
+                $TAB$TAB$TAB    "token_type": "fake_token_type",
+                $TAB$TAB$TAB    "expires_in": 3600,
+                $TAB$TAB$TAB    "refresh_token": "${'$'}{refreshToken}"
+                $TAB$TAB$TAB}
+                $TAB$TAB$TQ.trimIndent(),
+                $TAB${TAB}status = 302
+                $TAB)
+                }
+            """.trimIndent()
+            val subject = MultilineRawStringIndentation(TestConfig("indentSize" to 1))
+            subject.compileAndLint(code)
+            assertThat(subject.findings).isEmpty()
         }
     }
 
@@ -366,3 +400,4 @@ class MultilineRawStringIndentationSpec {
 }
 
 private const val TQ = "\"\"\""
+private const val TAB = "\t"

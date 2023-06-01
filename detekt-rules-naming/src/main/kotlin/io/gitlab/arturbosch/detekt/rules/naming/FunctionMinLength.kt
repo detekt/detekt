@@ -10,6 +10,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.identifierName
+import io.gitlab.arturbosch.detekt.rules.isOperator
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -31,6 +33,10 @@ class FunctionMinLength(config: Config = Config.empty) : Rule(config) {
     private val minimumFunctionNameLength: Int by config(3)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
+        if (function.isOverride() || function.isOperator()) {
+            return
+        }
+
         if (function.identifierName().length < minimumFunctionNameLength) {
             report(
                 CodeSmell(

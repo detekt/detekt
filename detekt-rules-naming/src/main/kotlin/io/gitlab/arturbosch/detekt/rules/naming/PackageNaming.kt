@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
 @ActiveByDefault(since = "1.0.0")
 class PackageNaming(config: Config = Config.empty) : Rule(config) {
 
-    override val defaultRuleIdAliases: Set<String> = setOf("PackageDirectoryMismatch")
+    override val defaultRuleIdAliases: Set<String> = setOf("PackageName", "PackageDirectoryMismatch")
 
     override val issue = Issue(
         javaClass.simpleName,

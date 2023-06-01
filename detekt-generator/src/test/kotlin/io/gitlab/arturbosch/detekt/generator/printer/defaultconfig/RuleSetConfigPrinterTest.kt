@@ -195,11 +195,11 @@ internal class RuleSetConfigPrinterTest {
                 val given = configurationTemplate.copy(defaultValue = DefaultValue.of(listOf("a", "b", "c")))
                 val actual = yaml { printConfiguration(given) }
                 val expected = """
-                    |name:
-                    |  - 'a'
-                    |  - 'b'
-                    |  - 'c'
-                """.trimMargin()
+                    name:
+                      - 'a'
+                      - 'b'
+                      - 'c'
+                """.trimIndent()
                 assertThat(actual).isEqualTo(expected)
             }
 
@@ -223,13 +223,13 @@ internal class RuleSetConfigPrinterTest {
                 )
                 val actual = yaml { printConfiguration(given) }
                 val expected = """
-                    |name:
-                    |  - reason: 'reason a'
-                    |    value: 'a'
-                    |  - value: 'b'
-                    |  - reason: 'reason c'
-                    |    value: 'c'
-                """.trimMargin()
+                    name:
+                      - reason: 'reason a'
+                        value: 'a'
+                      - value: 'b'
+                      - reason: 'reason c'
+                        value: 'c'
+                """.trimIndent()
                 assertThat(actual).isEqualTo(expected)
             }
         }

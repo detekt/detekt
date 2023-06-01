@@ -1,5 +1,3 @@
-@file:Suppress("detekt.MaxLineLength")
-
 package io.gitlab.arturbosch.detekt.core.config
 
 import io.github.detekt.test.utils.resourceAsPath
@@ -13,8 +11,8 @@ import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.yaml.snakeyaml.parser.ParserException
-import java.nio.file.Paths
+import org.snakeyaml.engine.v2.exceptions.ParserException
+import kotlin.io.path.Path
 
 class YamlConfigSpec {
 
@@ -60,6 +58,14 @@ class YamlConfigSpec {
                 .withMessage(
                     "Value \"{WildcardImport={active=true}, NoElseInWhenExpression={active=true}, MagicNumber={active=true, ignoreNumbers=[-1, 0, 1, 2]}}\" set for config parameter \"style\" is not of required type String."
                 )
+        }
+
+        @Test
+        fun `parent path of ruleset config is ruleset id`() {
+            val rulesetId = "style"
+            val subject = config.subConfig(rulesetId)
+            val actual = subject.parentPath
+            assertThat(actual).isEqualTo(rulesetId)
         }
     }
 
@@ -174,7 +180,7 @@ class YamlConfigSpec {
 
         @Test
         fun `throws an exception on an non-existing file`() {
-            val path = Paths.get("doesNotExist.yml")
+            val path = Path("doesNotExist.yml")
             assertThatIllegalArgumentException()
                 .isThrownBy { YamlConfig.load(path) }
                 .withMessageStartingWith("Configuration does not exist")

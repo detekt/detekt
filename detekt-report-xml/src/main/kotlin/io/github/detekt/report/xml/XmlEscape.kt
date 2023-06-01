@@ -21,9 +21,6 @@
 
 package io.github.detekt.report.xml
 
-import java.util.ArrayList
-import java.util.Arrays
-
 /**
  * Adapted from Unbescape - https://github.com/unbescape/unbescape/
  *
@@ -72,7 +69,7 @@ object XmlEscape {
             /*
              * Shortcut: most characters will be ASCII/Alphanumeric, and we won't need to do anything at
              * all for them
-            */
+             */
             if (codepoint <= Xml10EscapeSymbolsInitializer.XmlEscapeSymbols.LEVELS_LEN - 2 &&
                 level < symbols.ESCAPE_LEVELS[codepoint] &&
                 codepointValid
@@ -130,7 +127,7 @@ object XmlEscape {
              * -----------------------------------------------------------------------------------------
              */
             // We will try to use a CER
-            val codepointIndex = Arrays.binarySearch(symbols.SORTED_CODEPOINTS, codepoint)
+            val codepointIndex = symbols.SORTED_CODEPOINTS.binarySearch(codepoint)
             if (codepointIndex >= 0) {
                 // CER found! just write it and go for the next char
                 strBuilder.append(symbols.SORTED_CERS_BY_CODEPOINT[codepointIndex])
@@ -216,7 +213,7 @@ private object Xml10EscapeSymbolsInitializer {
         /*
          * Everything is level 3 unless contrary indication.
          */
-        Arrays.fill(escapeLevels, 3.toByte())
+        escapeLevels.fill(3.toByte())
         /*
          * Everything non-ASCII is level 2 unless contrary indication.
          */
@@ -305,10 +302,10 @@ private object Xml10EscapeSymbolsInitializer {
         references: References,
         escapeLevels: ByteArray,
         /*
-        * This object will be in charge of validating each codepoint in input, in order to determine
-        * whether such codepoint will be allowed in escaped output (escaped or not). Invalid codepoints
-        * will be simply discarded.
-        */
+         * This object will be in charge of validating each codepoint in input, in order to determine
+         * whether such codepoint will be allowed in escaped output (escaped or not). Invalid codepoints
+         * will be simply discarded.
+         */
         val CODEPOINT_VALIDATOR: XmlCodepointValidator
     ) {
 
@@ -397,7 +394,7 @@ private object Xml10EscapeSymbolsInitializer {
                 val cer = cersOrdered[i]
                 SORTED_CERS[i] = cer
                 for (j in 0 until structureLen) {
-                    if (Arrays.equals(cer, cers[j])) {
+                    if (cer.contentEquals(cers[j])) {
                         SORTED_CODEPOINTS_BY_CER[i] = codepoints[j]
                         break
                     }

@@ -68,7 +68,7 @@ class NestedClassesVisibilitySpec {
         val code = """
             internal class Outer {
                 public companion object C
-            } 
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
@@ -78,7 +78,7 @@ class NestedClassesVisibilitySpec {
         val code = """
             internal class Outer {
                 companion object C
-            } 
+            }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }

@@ -22,12 +22,11 @@ class GenerateConfigTaskSpec {
     fun `chooses the last config file when configured`() {
         val builder = DslTestBuilder.kotlin()
         val gradleRunner = builder.withDetektConfig(
-            @Suppress("TrimMultilineRawString")
             """
-                |detekt {
-                |   config = files("config/detekt/detekt.yml", "config/other/detekt.yml")
-                |}
-            """
+                detekt {
+                   config = files("config/detekt/detekt.yml", "config/other/detekt.yml")
+                }
+            """.trimIndent()
         ).withConfigFile("config/detekt/detekt.yml").build()
         gradleRunner.writeProjectFile("config/other/detekt.yml", content = "")
 
@@ -41,17 +40,16 @@ class GenerateConfigTaskSpec {
     fun `setting configFile property overrides extension & task configs`() {
         val builder = DslTestBuilder.kotlin()
         val gradleRunner = builder.withDetektConfig(
-            @Suppress("TrimMultilineRawString")
             """
-                |detekt {
-                |   config = files("config/wrongpath1/detekt.yml", "config/wrongpath2/detekt.yml")
-                |}
-                |
-                |tasks.detektGenerateConfig {
-                |   config.setFrom("config/wrongpath3/detekt.yml")
-                |   configFile.set(file("config/correctpath/detekt.yml"))
-                |}
-            """
+                detekt {
+                   config = files("config/wrongpath1/detekt.yml", "config/wrongpath2/detekt.yml")
+                }
+                
+                tasks.detektGenerateConfig {
+                   config.setFrom("config/wrongpath3/detekt.yml")
+                   configFile.set(file("config/correctpath/detekt.yml"))
+                }
+            """.trimIndent()
         ).withConfigFile("config/detekt/detekt.yml").build()
         gradleRunner.writeProjectFile("config/other/detekt.yml", content = "")
 

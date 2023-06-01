@@ -14,7 +14,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
     @Nested
     inner class `report UseIsNullOrEmpty rule` {
         @Nested
-        inner class `List` {
+        inner class List {
             @Test
             fun `null or isEmpty()`() {
                 val code = """
@@ -84,10 +84,36 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
+
+            @Test
+            fun `chained call`() {
+                val code = """
+                    class A {
+                        val t: String? = ""
+                    }
+                    fun test() {
+                        val a = A()
+                        if (a.t == null || a.t.length == 0) return
+                    }
+                """.trimIndent()
+                val findings = subject.compileAndLintWithContext(env, code)
+                assertThat(findings).hasSize(1)
+            }
+
+            @Test
+            fun `chained call with package string`() {
+                val code = """
+                    fun test() {
+                        if (java.io.File.separator == null || java.io.File.separator.length == 0) return
+                    }
+                """.trimIndent()
+                val findings = subject.compileAndLintWithContext(env, code)
+                assertThat(findings).hasSize(1)
+            }
         }
 
         @Nested
-        inner class `Set` {
+        inner class Set {
             @Test
             fun `null or isEmpty()`() {
                 val code = """
@@ -123,7 +149,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Nested
-        inner class `Collection` {
+        inner class Collection {
             @Test
             fun `null or isEmpty()`() {
                 val code = """
@@ -159,7 +185,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Nested
-        inner class `Map` {
+        inner class Map {
             @Test
             fun `null or isEmpty()`() {
                 val code = """
@@ -195,7 +221,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Nested
-        inner class `Array` {
+        inner class Array {
             @Test
             fun `null or isEmpty()`() {
                 val code = """
@@ -231,7 +257,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Nested
-        inner class `String` {
+        inner class String {
             @Test
             fun `null or isEmpty()`() {
                 val code = """
@@ -278,7 +304,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Nested
-        inner class `MutableList` {
+        inner class MutableList {
             @Test
             fun `null or isEmpty()`() {
                 val code = """
@@ -292,7 +318,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Nested
-        inner class `MutableSet` {
+        inner class MutableSet {
             @Test
             fun `null or isEmpty()`() {
                 val code = """
@@ -306,7 +332,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Nested
-        inner class `MutableCollection` {
+        inner class MutableCollection {
             @Test
             fun `null or isEmpty()`() {
                 val code = """
@@ -320,7 +346,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Nested
-        inner class `MutableMap` {
+        inner class MutableMap {
             @Test
             fun `null or isEmpty()`() {
                 val code = """
@@ -337,7 +363,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
     @Nested
     inner class `does not report UseIsNullOrEmpty rule` {
         @Nested
-        inner class `IntArray` {
+        inner class IntArray {
             @Test
             fun `null or isEmpty()`() {
                 val code = """
@@ -373,13 +399,13 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Nested
-        inner class `Sequence` {
+        inner class Sequence {
             @Test
             fun `null or count() == 0`() {
                 val code = """
-                fun test(x: Sequence<Int>?) {
-                    if (x == null || x.count() == 0) return
-                }
+                    fun test(x: Sequence<Int>?) {
+                        if (x == null || x.count() == 0) return
+                    }
                 """.trimIndent()
                 val findings = subject.compileAndLintWithContext(env, code)
                 assertThat(findings).isEmpty()

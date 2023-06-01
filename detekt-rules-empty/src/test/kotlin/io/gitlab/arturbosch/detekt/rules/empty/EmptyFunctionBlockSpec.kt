@@ -59,21 +59,21 @@ class EmptyFunctionBlockSpec {
 
         val code = """
             fun empty() {}
-
+            
             open class Base {
                 open fun stuff() {}
             }
-
+            
             class A : Base() {
                 override fun stuff() {}
             }
-
+            
             class B : Base() {
                 override fun stuff() {
                     TODO("Implement this")
                 }
             }
-
+            
             class C : Base() {
                 override fun stuff() {
                     // this is necessary...
@@ -88,7 +88,7 @@ class EmptyFunctionBlockSpec {
 
         @Test
         fun `should not flag overridden functions`() {
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN_FUNCTIONS to "true"))
+            val config = TestConfig(IGNORE_OVERRIDDEN_FUNCTIONS to "true")
             assertThat(EmptyFunctionBlock(config).compileAndLint(code)).hasStartSourceLocation(1, 13)
         }
     }
@@ -98,17 +98,17 @@ class EmptyFunctionBlockSpec {
         val code = """
             private interface Listener {
                 fun listenThis()
-
+            
                 fun listenThat()
             }
-
+            
             private class AnimationEndListener : Listener {
                 override fun listenThis() {
                     // no-op
                 }
-
+            
                 override fun listenThat() {
-
+            
                 }
             }
         """.trimIndent()
@@ -120,7 +120,7 @@ class EmptyFunctionBlockSpec {
 
         @Test
         fun `should not flag overridden functions with ignoreOverridden`() {
-            val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "true"))
+            val config = TestConfig(IGNORE_OVERRIDDEN to "true")
             assertThat(EmptyFunctionBlock(config).compileAndLint(code)).isEmpty()
         }
     }

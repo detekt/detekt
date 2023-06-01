@@ -4,25 +4,25 @@ import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
+import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 /**
- * Tests that run the Detekt Gradle Plugins tasks multiple times to check for correct
+ * Tests that run the Detekt Gradle Plugin's tasks multiple times to check for correct
  * UP-TO-DATE states and correct build caching.
  */
 class PluginTaskBehaviorSpec {
 
-    val configFileName = "config.yml"
-    val baselineFileName = "baseline.xml"
+    private val configFileName = "config.yml"
+    private val baselineFileName = "baseline.xml"
 
-    @Suppress("TrimMultilineRawString")
-    val detektConfig = """
-        |detekt {
-        |    config = files("$configFileName")
-        |    baseline = file("$baselineFileName")
-        |}
-    """
+    private val detektConfig = """
+        detekt {
+            config = files("$configFileName")
+            baseline = file("$baselineFileName")
+        }
+    """.trimIndent()
 
     lateinit var gradleRunner: DslGradleRunner
 
@@ -72,10 +72,11 @@ class PluginTaskBehaviorSpec {
 
     @Test
     fun `should run again after changing config`() {
+        @Language("yaml")
         val configFileWithCommentsDisabled = """
-                        |comments:
-                        |  active: false
-        """.trimMargin()
+            comments:
+              active: false
+        """.trimIndent()
 
         gradleRunner.runDetektTaskAndCheckResult { result ->
             assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
@@ -91,12 +92,13 @@ class PluginTaskBehaviorSpec {
 
     @Test
     fun `should run again after changing baseline`() {
+        @Language("xml")
         val changedBaselineContent = """
-                        |<some>
-                        |    <more/>
-                        |    <xml/>
-                        |</some>
-        """.trimMargin()
+            <some>
+                <more/>
+                <xml/>
+            </some>
+        """.trimIndent()
 
         gradleRunner.runDetektTaskAndCheckResult { result ->
             assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)

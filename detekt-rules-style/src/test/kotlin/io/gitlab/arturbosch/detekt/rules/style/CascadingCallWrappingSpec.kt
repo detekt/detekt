@@ -19,7 +19,7 @@ class CascadingCallWrappingSpec {
 
         assertThat(subject.compileAndLint(code))
             .hasSize(1)
-            .hasTextLocations(8 to 30)
+            .hasTextLocations(23 to 30)
             .first()
             .hasMessage("Chained call `plus(0)` should be wrapped to a new line since preceding calls were.")
     }
@@ -80,7 +80,7 @@ class CascadingCallWrappingSpec {
         val code = """
             val a = ""
                 .plus("").length
-
+            
             val b = ""
                 .length.plus(0)
         """.trimIndent()
@@ -97,7 +97,7 @@ class CascadingCallWrappingSpec {
                     .plus(
                         0
                     )
-                    .let { 
+                    .let {
                         0
                     }
             """.trimIndent()
@@ -112,14 +112,16 @@ class CascadingCallWrappingSpec {
                     .plus(
                         0
                     )
-                    .let { 
+                    .let {
                         0
                     }.plus(
                         0
                     )
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code))
+                .hasTextLocations(64 to 85)
+                .hasSize(1)
         }
 
         @Test
@@ -149,8 +151,8 @@ class CascadingCallWrappingSpec {
 
     @Nested
     inner class `with elvis operators` {
-        private val subjectIncludingElvis = CascadingCallWrapping(TestConfig(mapOf("includeElvis" to true)))
-        private val subjectExcludingElvis = CascadingCallWrapping(TestConfig(mapOf("includeElvis" to false)))
+        private val subjectIncludingElvis = CascadingCallWrapping(TestConfig("includeElvis" to true))
+        private val subjectExcludingElvis = CascadingCallWrapping(TestConfig("includeElvis" to false))
 
         @Test
         fun `does not report with wrapping`() {
@@ -168,10 +170,27 @@ class CascadingCallWrappingSpec {
         fun `reports missing wrapping`() {
             val code = """
                 val a = 0
-                    .plus(0) ?: 0
+                    .plus(0) ?: 42
             """.trimIndent()
 
-            assertThat(subjectIncludingElvis.compileAndLint(code)).hasSize(1)
+            assertThat(subjectIncludingElvis.compileAndLint(code))
+                .hasTextLocations(23 to 28)
+                .hasSize(1)
+            assertThat(subjectExcludingElvis.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `reports missing wrapping multiline call`() {
+            val code = """
+                val a = 0
+                    .plus(0) ?: let {
+                  42
+                }
+            """.trimIndent()
+
+            assertThat(subjectIncludingElvis.compileAndLint(code))
+                .hasTextLocations(23 to 38)
+                .hasSize(1)
             assertThat(subjectExcludingElvis.compileAndLint(code)).isEmpty()
         }
     }

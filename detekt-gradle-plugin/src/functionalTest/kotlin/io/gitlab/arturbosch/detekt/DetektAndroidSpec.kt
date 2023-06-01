@@ -2,7 +2,9 @@ package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
+import io.gitlab.arturbosch.detekt.testkit.joinGradleBlocks
 import org.assertj.core.api.Assertions.assertThat
+import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -10,7 +12,7 @@ import org.junit.jupiter.api.condition.EnabledForJreRange
 import org.junit.jupiter.api.condition.EnabledIf
 import org.junit.jupiter.api.condition.JRE
 
-@EnabledForJreRange(min = JRE.JAVA_11, disabledReason = "Android Gradle Plugin 7.0+ requires JDK 11 or newer")
+@EnabledForJreRange(min = JRE.JAVA_17, disabledReason = "Android Gradle Plugin 8.0+ requires JDK 17 or newer")
 @EnabledIf("io.gitlab.arturbosch.detekt.DetektAndroidSpecKt#isAndroidSdkInstalled")
 class DetektAndroidSpec {
 
@@ -23,11 +25,11 @@ class DetektAndroidSpec {
                 name = "app",
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfCodeSmells = 1,
-                buildFileContent = """
-                    $APP_PLUGIN_BLOCK
-                    $ANDROID_BLOCK
-                    $DETEKT_REPORTS_BLOCK
-                """.trimIndent(),
+                buildFileContent = joinGradleBlocks(
+                    APP_PLUGIN_BLOCK,
+                    ANDROID_BLOCK,
+                    DETEKT_REPORTS_BLOCK,
+                ),
                 srcDirs = listOf(
                     "src/main/java",
                     "src/debug/java",
@@ -49,7 +51,7 @@ class DetektAndroidSpec {
             )
         }
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
-            it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent())
+            it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent)
         }
 
         @Test
@@ -115,17 +117,17 @@ class DetektAndroidSpec {
                 name = "app",
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfCodeSmells = 1,
-                buildFileContent = """
-                    $APP_PLUGIN_BLOCK
-                    $ANDROID_BLOCK
-                    $DETEKT_REPORTS_BLOCK
-                """.trimIndent(),
+                buildFileContent = joinGradleBlocks(
+                    APP_PLUGIN_BLOCK,
+                    ANDROID_BLOCK,
+                    DETEKT_REPORTS_BLOCK,
+                ),
                 srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
             )
         }
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
             it.writeProjectFile("gradle.properties", "detekt.android.disabled=true")
-            it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent())
+            it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent)
         }
 
         @Test
@@ -138,7 +140,7 @@ class DetektAndroidSpec {
         @DisplayName("task :app:detektMain")
         fun appDetektMain() {
             gradleRunner.runTasksAndExpectFailure(":app:detektMain") { result ->
-                assertThat(result.output).contains("Task 'detektMain' not found in project")
+                assertThat(result.output).containsIgnoringCase("Task 'detektMain' not found in project")
             }
         }
 
@@ -146,7 +148,7 @@ class DetektAndroidSpec {
         @DisplayName("task :app:detektTest")
         fun appDetektTest() {
             gradleRunner.runTasksAndExpectFailure(":app:detektTest") { result ->
-                assertThat(result.output).contains("Task 'detektTest' not found in project")
+                assertThat(result.output).containsIgnoringCase("Task 'detektTest' not found in project")
             }
         }
     }
@@ -158,11 +160,11 @@ class DetektAndroidSpec {
                 name = "lib",
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfCodeSmells = 1,
-                buildFileContent = """
-                    $LIB_PLUGIN_BLOCK
-                    $ANDROID_BLOCK
-                    $DETEKT_REPORTS_BLOCK
-                """.trimIndent(),
+                buildFileContent = joinGradleBlocks(
+                    LIB_PLUGIN_BLOCK,
+                    ANDROID_BLOCK,
+                    DETEKT_REPORTS_BLOCK,
+                ),
                 srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
                 baselineFiles = listOf(
                     "detekt-baseline.xml",
@@ -175,7 +177,7 @@ class DetektAndroidSpec {
             )
         }
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
-            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent)
         }
 
         @Test
@@ -229,10 +231,10 @@ class DetektAndroidSpec {
                 name = "kotlin_only_lib",
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfCodeSmells = 1,
-                buildFileContent = """
-                    $KOTLIN_ONLY_LIB_PLUGIN_BLOCK
-                    $DETEKT_REPORTS_BLOCK
-                """.trimIndent(),
+                buildFileContent = joinGradleBlocks(
+                    KOTLIN_ONLY_LIB_PLUGIN_BLOCK,
+                    DETEKT_REPORTS_BLOCK,
+                ),
                 srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
                 baselineFiles = listOf(
                     "detekt-baseline.xml",
@@ -247,15 +249,16 @@ class DetektAndroidSpec {
                 name = "android_lib",
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfCodeSmells = 1,
-                buildFileContent = """
-                    $LIB_PLUGIN_BLOCK
-                    $ANDROID_BLOCK
-                    $DETEKT_REPORTS_BLOCK
-                    
-                    dependencies {
-                        implementation(project(":kotlin_only_lib"))
-                    }
-                """.trimIndent(),
+                buildFileContent = joinGradleBlocks(
+                    LIB_PLUGIN_BLOCK,
+                    ANDROID_BLOCK,
+                    DETEKT_REPORTS_BLOCK,
+                    """
+                        dependencies {
+                            implementation(project(":kotlin_only_lib"))
+                        }
+                    """.trimIndent()
+                ),
                 srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
                 baselineFiles = listOf(
                     "detekt-baseline.xml",
@@ -268,7 +271,7 @@ class DetektAndroidSpec {
             )
         }
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
-            it.writeProjectFile("android_lib/src/main/AndroidManifest.xml", manifestContent())
+            it.writeProjectFile("android_lib/src/main/AndroidManifest.xml", manifestContent)
         }
 
         @Test
@@ -326,16 +329,16 @@ class DetektAndroidSpec {
                 name = "lib",
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfCodeSmells = 1,
-                buildFileContent = """
-                    $LIB_PLUGIN_BLOCK
-                    $ANDROID_BLOCK_WITH_FLAVOR
-                    $DETEKT_REPORTS_BLOCK
-                """.trimIndent(),
+                buildFileContent = joinGradleBlocks(
+                    LIB_PLUGIN_BLOCK,
+                    ANDROID_BLOCK_WITH_FLAVOR,
+                    DETEKT_REPORTS_BLOCK,
+                ),
                 srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
             )
         }
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
-            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent)
         }
 
         @Test
@@ -377,18 +380,20 @@ class DetektAndroidSpec {
                 name = "lib",
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfCodeSmells = 1,
-                buildFileContent = """
-                    $LIB_PLUGIN_BLOCK
-                    $ANDROID_BLOCK_WITH_FLAVOR
-                    detekt {
-                        ignoredBuildTypes = listOf("release")
-                    }
-                """.trimIndent(),
+                buildFileContent = joinGradleBlocks(
+                    LIB_PLUGIN_BLOCK,
+                    ANDROID_BLOCK_WITH_FLAVOR,
+                    """
+                        detekt {
+                            ignoredBuildTypes = listOf("release")
+                        }
+                    """.trimIndent(),
+                ),
                 srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
             )
         }
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
-            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent)
         }
 
         @Test
@@ -432,18 +437,20 @@ class DetektAndroidSpec {
                 name = "lib",
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfCodeSmells = 1,
-                buildFileContent = """
-                    $LIB_PLUGIN_BLOCK
-                    $ANDROID_BLOCK_WITH_FLAVOR
-                    detekt {
-                        ignoredVariants = listOf("youngHarryDebug", "oldHarryRelease")
-                    }
-                """.trimIndent(),
+                buildFileContent = joinGradleBlocks(
+                    LIB_PLUGIN_BLOCK,
+                    ANDROID_BLOCK_WITH_FLAVOR,
+                    """
+                        detekt {
+                            ignoredVariants = listOf("youngHarryDebug", "oldHarryRelease")
+                        }
+                    """.trimIndent(),
+                ),
                 srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
             )
         }
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
-            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent)
         }
 
         @Test
@@ -487,18 +494,20 @@ class DetektAndroidSpec {
                 name = "lib",
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfCodeSmells = 1,
-                buildFileContent = """
-                    $LIB_PLUGIN_BLOCK
-                    $ANDROID_BLOCK_WITH_FLAVOR
-                    detekt {
-                        ignoredFlavors = listOf("youngHarry")
-                    }
-                """.trimIndent(),
+                buildFileContent = joinGradleBlocks(
+                    LIB_PLUGIN_BLOCK,
+                    ANDROID_BLOCK_WITH_FLAVOR,
+                    """
+                        detekt {
+                            ignoredFlavors = listOf("youngHarry")
+                        }
+                    """.trimIndent(),
+                ),
                 srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
             )
         }
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
-            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent)
         }
 
         @Test
@@ -542,25 +551,19 @@ class DetektAndroidSpec {
                     name = "app",
                     numberOfSourceFilesPerSourceDir = 0,
                     numberOfCodeSmells = 0,
-                    buildFileContent = """
-                        $APP_PLUGIN_BLOCK
-                        $ANDROID_BLOCK_WITH_VIEW_BINDING
-                    """.trimIndent(),
+                    buildFileContent = joinGradleBlocks(
+                        APP_PLUGIN_BLOCK,
+                        ANDROID_BLOCK_WITH_VIEW_BINDING,
+                    ),
                     srcDirs = listOf("src/main/java"),
                 )
             }
             val gradleRunner = createGradleRunnerAndSetupProject(projectLayout, dryRun = false).also {
                 it.projectFile("app/src/main/java").mkdirs()
                 it.projectFile("app/src/main/res/layout").mkdirs()
-                it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent())
-                it.writeProjectFile(
-                    "app/src/main/res/layout/activity_sample.xml",
-                    SAMPLE_ACTIVITY_LAYOUT
-                )
-                it.writeProjectFile(
-                    "app/src/main/java/SampleActivity.kt",
-                    SAMPLE_ACTIVITY_USING_VIEW_BINDING
-                )
+                it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent)
+                it.writeProjectFile("app/src/main/res/layout/activity_sample.xml", SAMPLE_ACTIVITY_LAYOUT)
+                it.writeProjectFile("app/src/main/java/SampleActivity.kt", SAMPLE_ACTIVITY_USING_VIEW_BINDING)
             }
 
             @Test
@@ -589,11 +592,13 @@ class DetektAndroidSpec {
 internal fun isAndroidSdkInstalled() =
     System.getenv("ANDROID_SDK_ROOT") != null || System.getenv("ANDROID_HOME") != null
 
-internal fun manifestContent(packageName: String = "io.gitlab.arturbosch.detekt.app") = """
-    <manifest package="$packageName"
-        xmlns:android="http://schemas.android.com/apk/res/android"/>
+@Language("xml")
+internal val manifestContent = """
+    <!--suppress XmlUnusedNamespaceDeclaration -->
+    <manifest xmlns:android="http://schemas.android.com/apk/res/android"/>
 """.trimIndent()
 
+@Language("gradle.kts")
 private val APP_PLUGIN_BLOCK = """
     plugins {
         id("com.android.application")
@@ -602,6 +607,7 @@ private val APP_PLUGIN_BLOCK = """
     }
 """.trimIndent()
 
+@Language("gradle.kts")
 private val LIB_PLUGIN_BLOCK = """
     plugins {
         id("com.android.library")
@@ -610,6 +616,7 @@ private val LIB_PLUGIN_BLOCK = """
     }
 """.trimIndent()
 
+@Language("gradle.kts")
 private val KOTLIN_ONLY_LIB_PLUGIN_BLOCK = """
     plugins {
         kotlin("jvm")
@@ -617,33 +624,53 @@ private val KOTLIN_ONLY_LIB_PLUGIN_BLOCK = """
     }
 """.trimIndent()
 
+@Language("gradle.kts")
 private val ANDROID_BLOCK = """
     android {
-       compileSdk = 30
-    }
-""".trimIndent()
-
-private val ANDROID_BLOCK_WITH_FLAVOR = """
-    android {
         compileSdk = 30
-        flavorDimensions("age", "name")
-        productFlavors {
-           create("harry") {
-             dimension = "name"
-           }
-           create("young") {
-             dimension = "age"
-           }
-           create("old") {
-             dimension = "age"
-           }
+        namespace = "io.gitlab.arturbosch.detekt.app"
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+        }
+        kotlinOptions {
+            jvmTarget = "1.8"
         }
     }
 """.trimIndent()
 
+@Language("gradle.kts")
+private val ANDROID_BLOCK_WITH_FLAVOR = """
+    android {
+        compileSdk = 30
+        namespace = "io.gitlab.arturbosch.detekt.app"
+        flavorDimensions("age", "name")
+        productFlavors {
+            create("harry") {
+                dimension = "name"
+            }
+            create("young") {
+                dimension = "age"
+            }
+            create("old") {
+                dimension = "age"
+            }
+        }
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+        }
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+""".trimIndent()
+
+@Language("gradle.kts")
 private val ANDROID_BLOCK_WITH_VIEW_BINDING = """
     android {
         compileSdk = 30
+        namespace = "io.gitlab.arturbosch.detekt.app"
         defaultConfig {
             applicationId = "io.gitlab.arturbosch.detekt.app"
             minSdk = 24
@@ -651,9 +678,17 @@ private val ANDROID_BLOCK_WITH_VIEW_BINDING = """
         buildFeatures {
             viewBinding = true
         }
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+        }
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
     }
 """.trimIndent()
 
+@Language("gradle.kts")
 private val DETEKT_REPORTS_BLOCK = """
     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
         reports {
@@ -662,6 +697,7 @@ private val DETEKT_REPORTS_BLOCK = """
     }
 """.trimIndent()
 
+@Language("xml")
 private val SAMPLE_ACTIVITY_LAYOUT = """
     <?xml version="1.0" encoding="utf-8"?>
     <View
@@ -672,7 +708,8 @@ private val SAMPLE_ACTIVITY_LAYOUT = """
         />
 """.trimIndent()
 
-private val SAMPLE_ACTIVITY_USING_VIEW_BINDING = """    
+@Language("kotlin")
+private val SAMPLE_ACTIVITY_USING_VIEW_BINDING = """
     import android.app.Activity
     import android.os.Bundle
     import android.view.LayoutInflater
@@ -688,7 +725,8 @@ private val SAMPLE_ACTIVITY_USING_VIEW_BINDING = """
             setContentView(binding.root)
         }
     }
-""".trimIndent() + "\n" // new line at end of file rule
+    
+""".trimIndent() // Last line to prevent NewLineAtEndOfFile.
 
 private fun createGradleRunnerAndSetupProject(
     projectLayout: ProjectLayout,

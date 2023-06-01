@@ -5,5 +5,5 @@ import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 
 class DefaultVersionProvider : VersionProvider {
 
-    override fun current(): String = checkNotNull(whichDetekt()) { "No version packaged. Invalid jar." }
+    override fun current(): String = whichDetekt()
 }

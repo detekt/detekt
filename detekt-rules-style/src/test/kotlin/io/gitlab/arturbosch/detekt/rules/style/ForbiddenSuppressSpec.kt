@@ -64,7 +64,7 @@ internal class ForbiddenSuppressSpec {
         fun `reports line-level suppression of forbidden rule`() {
             val code = """
                 package config
-
+                
                 fun foo() {
                     @Suppress("ARule")
                     println("bar")

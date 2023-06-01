@@ -1,0 +1,12 @@
+libraries:
+  active: true
+  ForbiddenPublicDataClass:
+    active: true
+    ignorePackages:
+      - '*.internal'
+      - '*.internal.*'
+  LibraryCodeMustSpecifyReturnType:
+    active: true
+    allowOmitUnit: false
+  LibraryEntitiesShouldNotBePublic:
+    active: true

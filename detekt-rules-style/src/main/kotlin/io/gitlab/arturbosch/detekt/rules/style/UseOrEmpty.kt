@@ -49,7 +49,7 @@ class UseOrEmpty(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UseOrEmpty",
         Severity.Style,
-        "Use `orEmpty()` call instead of `?: emptyList()`",
+        "Use `orEmpty()` call instead of `?:` with empty collection factory methods",
         Debt.FIVE_MINS
     )
 
@@ -69,7 +69,9 @@ class UseOrEmpty(config: Config = Config.empty) : Rule(config) {
             if (functionDescriptor != null &&
                 functionDescriptor.isOperator &&
                 functionDescriptor.typeParameters.isNotEmpty()
-            ) return
+            ) {
+                return
+            }
         }
 
         val rightType = right.getType(bindingContext) ?: return

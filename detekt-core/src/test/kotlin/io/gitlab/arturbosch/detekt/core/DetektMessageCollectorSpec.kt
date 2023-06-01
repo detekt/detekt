@@ -14,17 +14,14 @@ import org.junit.jupiter.api.Test
 class DetektMessageCollectorSpec {
 
     private lateinit var debugPrinter: (() -> String) -> Unit
-    private lateinit var warningPrinter: ((String) -> Unit)
     private lateinit var subject: DetektMessageCollector
 
     @BeforeEach
     fun setupMocksAndSubject() {
         debugPrinter = mockk { every { this@mockk.invoke(any()) } returns Unit }
-        warningPrinter = mockk { every { this@mockk.invoke(any()) } returns Unit }
         subject = DetektMessageCollector(
             minSeverity = CompilerMessageSeverity.INFO,
             debugPrinter = debugPrinter,
-            warningPrinter = warningPrinter,
         )
     }
 
@@ -41,18 +38,6 @@ class DetektMessageCollectorSpec {
             verify { debugPrinter.invoke(capture(slot)) }
             assertThat(slot.captured()).isEqualTo("info: message")
         }
-
-        @Test
-        fun `adds up to the message count`() {
-            subject.printIssuesCountIfAny()
-
-            verify {
-                warningPrinter(
-                    "The BindingContext was created with 1 issues. " +
-                        "Run detekt CLI with --debug or set `detekt { debug = true }` in Gradle to see the error messages."
-                )
-            }
-        }
     }
 
     @Nested
@@ -68,18 +53,6 @@ class DetektMessageCollectorSpec {
             verify { debugPrinter.invoke(capture(slot)) }
             assertThat(slot.captured()).isEqualTo("warning: message")
         }
-
-        @Test
-        fun `adds up to the message count`() {
-            subject.printIssuesCountIfAny()
-
-            verify {
-                warningPrinter(
-                    "The BindingContext was created with 1 issues. " +
-                        "Run detekt CLI with --debug or set `detekt { debug = true }` in Gradle to see the error messages."
-                )
-            }
-        }
     }
 
     @Nested
@@ -92,13 +65,6 @@ class DetektMessageCollectorSpec {
         @Test
         fun `ignores the message`() {
             verify { debugPrinter wasNot Called }
-        }
-
-        @Test
-        fun `doesn't add up to the message count`() {
-            subject.printIssuesCountIfAny()
-
-            verify { warningPrinter wasNot Called }
         }
     }
 }

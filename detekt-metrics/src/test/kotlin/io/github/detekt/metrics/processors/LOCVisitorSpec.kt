@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class LOCVisitorSpec {
 
     @Test
-    fun `defaultClass`() {
+    fun defaultClass() {
         val file = compileContentForTest(default)
         val loc = with(file) {
             accept(LOCVisitor())

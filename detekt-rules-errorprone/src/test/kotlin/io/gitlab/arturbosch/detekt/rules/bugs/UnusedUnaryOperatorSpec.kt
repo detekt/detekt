@@ -117,7 +117,7 @@ class UnusedUnaryOperatorSpec(private val env: KotlinCoreEnvironment) {
             fun test() {
                 val p = Foo(1) + Foo(2)
                     - Foo(3)
-            } 
+            }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()

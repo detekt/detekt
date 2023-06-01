@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.core.baseline
 
-import java.util.Stack
 import javax.xml.stream.XMLStreamWriter
 
 @Suppress("TooManyFunctions")
@@ -10,12 +9,12 @@ internal class IndentingXMLStreamWriter(
 ) : XMLStreamWriter by writer {
 
     private var currentState = NOTHING
-    private val stateStack = Stack<Any>()
+    private val stateStack = ArrayDeque<Any>()
 
     private var indentationDepth = 0
 
     private fun onStartTag() {
-        stateStack.push(TAG)
+        stateStack.addFirst(TAG)
         currentState = NOTHING
         writeNL()
         writeIndent()
@@ -28,7 +27,7 @@ internal class IndentingXMLStreamWriter(
             writer.writeCharacters("\n")
             writeIndent()
         }
-        currentState = stateStack.pop()
+        currentState = stateStack.removeFirst()
     }
 
     private fun onEmptyTag() {

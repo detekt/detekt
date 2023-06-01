@@ -12,8 +12,8 @@ class UnnecessaryInheritanceSpec {
     fun `has unnecessary super type declarations`() {
         val findings = subject.lint(
             """
-            class A : Any()
-            class B : Object()
+                class A : Any()
+                class B : Object()
             """.trimIndent()
         )
         assertThat(findings).hasSize(2)

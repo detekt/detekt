@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 
 class ClassCountVisitorSpec {
     @Test
-    fun `twoClassesInSeparateFile`() {
+    fun twoClassesInSeparateFile() {
         val files = arrayOf(
             compileContentForTest(default),
             compileContentForTest(classWithFields)
@@ -17,14 +17,14 @@ class ClassCountVisitorSpec {
     }
 
     @Test
-    fun `oneClassWithOneNestedClass`() {
+    fun oneClassWithOneNestedClass() {
         val file = compileContentForTest(complexClass)
         val count = getClassCount(arrayOf(file))
         assertThat(count).isEqualTo(2)
     }
 
     @Test
-    fun `testEnumAndInterface`() {
+    fun testEnumAndInterface() {
         val files = arrayOf(
             compileContentForTest(emptyEnum),
             compileContentForTest(emptyInterface)

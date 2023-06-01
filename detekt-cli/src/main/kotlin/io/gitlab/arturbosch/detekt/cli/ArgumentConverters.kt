@@ -3,17 +3,16 @@ package io.gitlab.arturbosch.detekt.cli
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.ParameterException
 import org.jetbrains.kotlin.config.LanguageVersion
-import java.io.File
 import java.net.URL
-import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
+import kotlin.io.path.Path
+import kotlin.io.path.notExists
 
 class ExistingPathConverter : IStringConverter<Path> {
     override fun convert(value: String): Path {
         require(value.isNotBlank()) { "Provided path '$value' is empty." }
-        val config = File(value).toPath()
-        if (Files.notExists(config)) {
+        val config = Path(value)
+        if (config.notExists()) {
             throw ParameterException("Provided path '$value' does not exist!")
         }
         return config
@@ -21,9 +20,7 @@ class ExistingPathConverter : IStringConverter<Path> {
 }
 
 class PathConverter : IStringConverter<Path> {
-    override fun convert(value: String): Path {
-        return Paths.get(value)
-    }
+    override fun convert(value: String) = Path(value)
 }
 
 interface DetektInputPathConverter<T> : IStringConverter<List<T>> {

@@ -17,7 +17,7 @@ class PathFilters internal constructor(
 
     /**
      * - If [includes] and [excludes] are not specified,
-     *   always return true.
+     *   return false.
      * - If [includes] is specified but [excludes] is not,
      *   return false iff [path] matches any [includes].
      * - If [includes] is not specified but [excludes] is,
@@ -26,10 +26,10 @@ class PathFilters internal constructor(
      *   return false iff [path] matches any [includes] and [path] does not match any [excludes].
      */
     fun isIgnored(path: Path): Boolean {
-        fun isIncluded() = includes?.any { it.matches(path) }
-        fun isExcluded() = excludes?.any { it.matches(path) }
+        fun isIncluded() = includes?.any { it.matches(path) } ?: true
+        fun isExcluded() = excludes?.any { it.matches(path) } ?: false
 
-        return isIncluded()?.not() ?: isExcluded() ?: true
+        return !(isIncluded() && !isExcluded())
     }
 
     /**

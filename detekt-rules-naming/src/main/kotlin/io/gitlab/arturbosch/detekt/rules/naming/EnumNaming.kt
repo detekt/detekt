@@ -34,7 +34,7 @@ class EnumNaming(config: Config = Config.empty) : Rule(config) {
             report(
                 CodeSmell(
                     issue,
-                    Entity.from(enumEntry.nameIdentifier ?: enumEntry),
+                    Entity.atName(enumEntry),
                     message = "Enum entry names should match the pattern: $enumEntryPattern"
                 )
             )

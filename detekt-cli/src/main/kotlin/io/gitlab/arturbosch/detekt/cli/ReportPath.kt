@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import java.nio.file.Path
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 data class ReportPath(val kind: String, val path: Path) {
 
@@ -24,7 +24,7 @@ data class ReportPath(val kind: String, val path: Path) {
             val kind = parts[0]
             require(kind.isNotEmpty()) { "The kind of report must not be empty (path - $path)" }
             require(path.isNotEmpty()) { "The path of the report must not be empty (kind - $kind)" }
-            return ReportPath(kind, Paths.get(path))
+            return ReportPath(kind, Path(path))
         }
     }
 }

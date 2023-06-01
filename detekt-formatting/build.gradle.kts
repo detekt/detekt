@@ -6,13 +6,7 @@ val extraDepsToPackage: Configuration by configurations.creating
 
 dependencies {
     compileOnly(projects.detektApi)
-    implementation(libs.ktlint.rulesetStandard) {
-        exclude(group = "org.jetbrains.kotlin")
-    }
-    implementation(libs.ktlint.core) {
-        exclude(group = "org.jetbrains.kotlin")
-    }
-    implementation(libs.ktlint.rulesetExperimental) {
+    implementation(libs.ktlintRulesetStandard) {
         exclude(group = "org.jetbrains.kotlin")
     }
 
@@ -23,7 +17,16 @@ dependencies {
     extraDepsToPackage(libs.slf4j.nop)
 }
 
-tasks.build { finalizedBy(":detekt-generator:generateDocumentation") }
+consumeGeneratedConfig(
+    fromProject = projects.detektGenerator,
+    fromConfiguration = "generatedFormattingConfig",
+    forTask = "sourcesJar"
+)
+consumeGeneratedConfig(
+    fromProject = projects.detektGenerator,
+    fromConfiguration = "generatedFormattingConfig",
+    forTask = "processResources"
+)
 
 val depsToPackage = setOf(
     "org.ec4j.core",
@@ -40,4 +43,10 @@ tasks.jar {
             .map { if (it.isDirectory) it else zipTree(it) },
         extraDepsToPackage.map { zipTree(it) },
     )
+}
+
+tasks.test {
+    if (javaVersion.isJava9Compatible) {
+        jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
+    }
 }

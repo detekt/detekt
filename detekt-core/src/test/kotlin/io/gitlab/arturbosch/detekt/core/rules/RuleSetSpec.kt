@@ -46,12 +46,12 @@ class RuleSetSpec {
         }
 
         @Test
-        fun `should analyze file as it's path is first excluded but then included`() {
+        fun `should not analyze file as its path is both included and excluded`() {
             val config = TestConfig(
                 Config.EXCLUDES_KEY to "**/*.kt",
                 Config.INCLUDES_KEY to "**/*.kt"
             )
-            assertThat(config.subConfig("comments").shouldAnalyzeFile(file)).isTrue()
+            assertThat(config.subConfig("comments").shouldAnalyzeFile(file)).isFalse()
         }
     }
 }

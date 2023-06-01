@@ -17,14 +17,14 @@ class WildcardImportSpec {
         val code = """
             import io.gitlab.arturbosch.detekt.*
             import io.mockk.*
-
+            
             class Test {
             }
         """.trimIndent()
 
         @Test
         fun `should not report anything when the rule is turned off`() {
-            val rule = WildcardImport(TestConfig(mapOf(Config.ACTIVE_KEY to "false")))
+            val rule = WildcardImport(TestConfig(Config.ACTIVE_KEY to "false"))
 
             val findings = rule.compileAndLint(code)
             assertThat(findings).isEmpty()
@@ -40,7 +40,7 @@ class WildcardImportSpec {
 
         @Test
         fun `should not report excluded wildcard imports`() {
-            val rule = WildcardImport(TestConfig(mapOf(EXCLUDED_IMPORTS to listOf("io.mockk.*"))))
+            val rule = WildcardImport(TestConfig(EXCLUDED_IMPORTS to listOf("io.mockk.*")))
 
             val findings = rule.compileAndLint(code)
             assertThat(findings).hasSize(1)
@@ -50,11 +50,9 @@ class WildcardImportSpec {
         fun `should not report excluded wildcard imports when multiple are excluded`() {
             val rule = WildcardImport(
                 TestConfig(
-                    mapOf(
-                        EXCLUDED_IMPORTS to listOf(
-                            "io.mockk.*",
-                            "io.gitlab.arturbosch.detekt"
-                        )
+                    EXCLUDED_IMPORTS to listOf(
+                        "io.mockk.*",
+                        "io.gitlab.arturbosch.detekt"
                     )
                 )
             )
@@ -66,7 +64,7 @@ class WildcardImportSpec {
         @Test
         fun `should not report excluded wildcard imports when multiple are excluded using config string`() {
             val rule =
-                WildcardImport(TestConfig(mapOf(EXCLUDED_IMPORTS to "io.mockk.*, io.gitlab.arturbosch.detekt")))
+                WildcardImport(TestConfig(EXCLUDED_IMPORTS to "io.mockk.*, io.gitlab.arturbosch.detekt"))
 
             val findings = rule.compileAndLint(code)
             assertThat(findings).isEmpty()
@@ -74,7 +72,7 @@ class WildcardImportSpec {
 
         @Test
         fun `ignores excludes that are not matching`() {
-            val rule = WildcardImport(TestConfig(mapOf(EXCLUDED_IMPORTS to listOf("other.test.*"))))
+            val rule = WildcardImport(TestConfig(EXCLUDED_IMPORTS to listOf("other.test.*")))
 
             val findings = rule.compileAndLint(code)
             assertThat(findings).hasSize(2)
@@ -94,12 +92,12 @@ class WildcardImportSpec {
     @Nested
     inner class `a kt file with no wildcard imports` {
         val code = """
-        package org
-
-        import io.mockk.mockk
-
-        class Test {
-        }
+            package org
+            
+            import io.mockk.mockk
+            
+            class Test {
+            }
         """.trimIndent()
 
         @Test

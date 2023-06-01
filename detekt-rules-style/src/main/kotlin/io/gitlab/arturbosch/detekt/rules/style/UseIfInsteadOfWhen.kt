@@ -7,6 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
 /**
@@ -34,8 +37,13 @@ class UseIfInsteadOfWhen(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    @Configuration("ignores when statements with a variable declaration used in the subject")
+    private val ignoreWhenContainingVariableDeclaration: Boolean by config(false)
+
     override fun visitWhenExpression(expression: KtWhenExpression) {
         super.visitWhenExpression(expression)
+
+        if (ignoreWhenContainingVariableDeclaration && expression.subjectExpression is KtProperty) return
 
         if (expression.entries.size == 2 &&
             expression.elseExpression != null &&

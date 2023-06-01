@@ -23,7 +23,7 @@ complexity:
     threshold: 10
     includeStaticDeclarations: false
     includePrivateDeclarations: false
-  ComplexMethod:
+  CyclomaticComplexMethod:
     active: true
     ignoreSingleWhenExpression: true
   LargeClass:
@@ -69,36 +69,24 @@ formatting:
   active: true
   android: false
   autoCorrect: true
+  ContextReceiverMapping:
+    active: true
   Filename:
     active: false
-  FunctionReturnTypeSpacing:
-    active: true
-  FunctionStartOfBodySpacing:
-    active: true
   MaximumLineLength:
     active: false
-  NullableTypeSpacing:
-    active: true
   ParameterListSpacing:
-    active: true
-  SpacingBetweenFunctionNameAndOpeningParenthesis:
     active: true
   TypeParameterListSpacing:
     active: true
 
 naming:
   ClassNaming:
-    excludes: ['**/*Spec.kt']
+    ignoreAnnotated: ['org.junit.jupiter.api.Nested']
   FunctionNaming:
     active: true
-    excludes:
-      - '**/test/**'
-      - '**/androidTest/**'
-      - '**/commonTest/**'
-      - '**/functionalTest/**'
-      - '**/jvmTest/**'
-      - '**/jsTest/**'
-      - '**/iosTest/**'
+    excludes: []
+    ignoreAnnotated: ['Test', 'ParameterizedTest', 'RepeatedTest', 'TestFactory']
   TopLevelPropertyNaming:
     constantPattern: '[a-z][_A-Za-z0-9]*|[A-Z][_A-Z0-9]*'
   InvalidPackageDeclaration:
@@ -122,8 +110,6 @@ potential-bugs:
     active: true
   DontDowncastCollectionTypes:
     active: true
-  DoubleMutabilityForCollection:
-    active: false
   ElseCaseInsteadOfExhaustiveWhen:
     active: true
   ExitOutsideMain:
@@ -147,6 +133,10 @@ potential-bugs:
     active: true
 
 style:
+  BracesOnIfStatements:
+    active: true
+    singleLine: 'consistent'
+    multiLine: 'consistent'
   CanBeNonNullable:
     active: true
   CascadingCallWrapping:
@@ -165,12 +155,17 @@ style:
     active: true
   ForbiddenComment:
     active: true
-    values:
-      - 'TODO:'
-      - 'FIXME:'
-      - 'STOPSHIP:'
-      - '@author'
-      - '@requiresTypeResolution'
+    comments:
+      - value: 'FIXME:'
+        reason: 'Forbidden FIXME todo marker in comment, please fix the problem.'
+      - value: 'STOPSHIP:'
+        reason: 'Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code.'
+      - value: 'TODO:'
+        reason: 'Forbidden TODO todo marker in comment, please do the changes.'
+      - value: '@author'
+        reason: 'Authors are not recorded in KDoc.'
+      - value: '@requiresTypeResolution'
+        reason: 'Use @RequiresTypeResolution annotation on the class instead.'
     excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
   ForbiddenImport:
     active: true
@@ -179,6 +174,18 @@ style:
         reason: 'Import Assertions.assertThat instead.'
       - value: 'org.junit.jupiter.api.Assertions*'
         reason: 'Use AssertJ assertions instead.'
+      - value: 'org.junit.jupiter.api.assertAll'
+        reason: 'Use AssertJ assertSoftly instead.'
+      - value: 'org.junit.jupiter.api.assertThrows'
+        reason: 'Use AssertJ assertThatCode { }.isInstanceOf() or assertThatExceptionOfType().isThrownBy { } instead.'
+      - value: 'org.junit.jupiter.api.assertDoesNotThrow'
+        reason: 'Use AssertJ assertThatCode { }.doesNotThrowAnyException() instead.'
+      # These don't have AssertJ alternatives, so just allow them:
+      #- value: 'org.junit.jupiter.api.fail'
+      #- value: 'org.junit.jupiter.api.assertTimeout'
+      #- value: 'org.junit.jupiter.api.assertTimeoutPreemptively'
+      - value: 'java.util.stream.*'
+        reason: "Use Kotlin's sequences instead."
   ForbiddenMethodCall:
     active: true
     methods:
@@ -190,10 +197,6 @@ style:
       - 'org.jetbrains.kotlin.diagnostics.DiagnosticUtils.getLineAndColumnInPsiFile'
   ForbiddenVoid:
     active: true
-  LibraryCodeMustSpecifyReturnType:
-    active: true
-    excludes: ['**/*.kt']
-    includes: ['**/detekt-api/src/main/**/api/*.kt']
   MagicNumber:
     excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
     ignorePropertyDeclaration: true
@@ -235,6 +238,8 @@ style:
     active: true
   UnnecessaryAnnotationUseSiteTarget:
     active: true
+  UnnecessaryBackticks:
+    active: true
   UnnecessaryFilter:
     active: true
   UnnecessaryLet:
@@ -259,6 +264,8 @@ style:
     active: true
   UseIsNullOrEmpty:
     active: true
+  UseLet:
+    active: true
   UseOrEmpty:
     active: true
   UseRequire:
@@ -271,3 +278,18 @@ style:
   WildcardImport:
     active: true
     excludeImports: []
+
+libraries:
+  ForbiddenPublicDataClass:
+    active: false
+  LibraryEntitiesShouldNotBePublic:
+    active: false
+  LibraryCodeMustSpecifyReturnType:
+    active: true
+    excludes: ['**/*.kt']
+    includes: ['**/detekt-api/src/main/**/api/*.kt']
+
+ruleauthors:
+  ViolatesTypeResolutionRequirements:
+    active: true
+    excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']

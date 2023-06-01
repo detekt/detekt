@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import java.io.File
+import java.io.PrintStream
 import java.net.URLClassLoader
 import java.nio.file.Path
 
@@ -30,15 +31,31 @@ import java.nio.file.Path
  * Creates an environment instance which can be used to compile source code to KtFile's.
  * This environment also allows to modify the resulting AST files.
  */
+@Deprecated(
+    "You should pass a printStream",
+    ReplaceWith("createKotlinCoreEnvironment(configuration, disposable, System.err)")
+)
 fun createKotlinCoreEnvironment(
     configuration: CompilerConfiguration = CompilerConfiguration(),
     disposable: Disposable = Disposer.newDisposable()
+): KotlinCoreEnvironment {
+    return createKotlinCoreEnvironment(configuration, disposable, System.err)
+}
+
+/**
+ * Creates an environment instance which can be used to compile source code to KtFile's.
+ * This environment also allows to modify the resulting AST files.
+ */
+fun createKotlinCoreEnvironment(
+    configuration: CompilerConfiguration = CompilerConfiguration(),
+    disposable: Disposable = Disposer.newDisposable(),
+    printStream: PrintStream,
 ): KotlinCoreEnvironment {
     // https://github.com/JetBrains/kotlin/commit/2568804eaa2c8f6b10b735777218c81af62919c1
     setIdeaIoUseFallback()
     configuration.put(
         CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
-        PrintingMessageCollector(System.err, MessageRenderer.PLAIN_FULL_PATHS, false)
+        PrintingMessageCollector(printStream, MessageRenderer.PLAIN_FULL_PATHS, false)
     )
     configuration.put(CommonConfigurationKeys.MODULE_NAME, "detekt")
 

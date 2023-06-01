@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
  * Exempt from this rule are imports resulting from references to elements within KDoc and
  * from destructuring declarations (componentN imports).
  */
+@Suppress("ViolatesTypeResolutionRequirements")
 class UnusedImports(config: Config) : Rule(config) {
 
     override val issue = Issue(
@@ -80,7 +81,6 @@ class UnusedImports(config: Config) : Rule(config) {
             fun KtImportDirective.isFromSamePackage() =
                 importedFqName?.parent() == currentPackage && alias == null
 
-            @Suppress("ReturnCount")
             fun KtImportDirective.isNotUsed(): Boolean {
                 if (aliasName in (namedReferencesInKDoc + namedReferencesAsString)) return false
                 val identifier = identifier()

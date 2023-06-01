@@ -1,8 +1,8 @@
 package io.github.detekt.tooling.internal
 
 import io.github.detekt.tooling.api.spec.ExtensionsSpec
-import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.exists
 
 internal data class PluginsHolder(
     override val paths: Collection<Path>?,
@@ -11,6 +11,6 @@ internal data class PluginsHolder(
 
     init {
         require(paths == null || loader == null) { "Either paths or loader must be specified, not both." }
-        paths?.forEach { require(Files.exists(it)) { "Plugin jar '$it' does not exist." } }
+        paths?.forEach { require(it.exists()) { "Plugin jar '$it' does not exist." } }
     }
 }

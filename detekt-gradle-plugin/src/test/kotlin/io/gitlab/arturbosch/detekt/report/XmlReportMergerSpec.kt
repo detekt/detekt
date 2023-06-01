@@ -13,24 +13,24 @@ class XmlReportMergerSpec {
         val file1 = File.createTempFile("detekt1", "xml").apply {
             writeText(
                 """
-                <?xml version="1.0" encoding="utf-8"?>
-                <checkstyle version="4.3">
-                <file name="Sample1.kt">
-                $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_a" />
-                </file>
-                </checkstyle>
+                    <?xml version="1.0" encoding="utf-8"?>
+                    <checkstyle version="4.3">
+                    <file name="Sample1.kt">
+                    $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_a" />
+                    </file>
+                    </checkstyle>
                 """.trimIndent()
             )
         }
         val file2 = File.createTempFile("detekt2", "xml").apply {
             writeText(
                 """
-                <?xml version="1.0" encoding="utf-8"?>
-                <checkstyle version="4.3">
-                <file name="Sample2.kt">
-                $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_b" />
-                </file>
-                </checkstyle>
+                    <?xml version="1.0" encoding="utf-8"?>
+                    <checkstyle version="4.3">
+                    <file name="Sample2.kt">
+                    $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_b" />
+                    </file>
+                    </checkstyle>
                 """.trimIndent()
             )
         }
@@ -84,27 +84,27 @@ class XmlReportMergerSpec {
         val file1 = File.createTempFile("detekt1", "xml").apply {
             writeText(
                 """
-                <?xml version="1.0" encoding="utf-8"?>
-                <checkstyle version="4.3">
-                <file name="Sample1.kt">
-                $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_a" />
-                </file>
-                <file name="Sample2.kt">
-                $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_b" />
-                </file>
-                </checkstyle>
+                    <?xml version="1.0" encoding="utf-8"?>
+                    <checkstyle version="4.3">
+                    <file name="Sample1.kt">
+                    $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_a" />
+                    </file>
+                    <file name="Sample2.kt">
+                    $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_b" />
+                    </file>
+                    </checkstyle>
                 """.trimIndent()
             )
         }
         val file2 = File.createTempFile("detekt2", "xml").apply {
             writeText(
                 """
-                <?xml version="1.0" encoding="utf-8"?>
-                <checkstyle version="4.3">
-                <file name="Sample2.kt">
-                $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_b" />
-                </file>
-                </checkstyle>
+                    <?xml version="1.0" encoding="utf-8"?>
+                    <checkstyle version="4.3">
+                    <file name="Sample2.kt">
+                    $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_b" />
+                    </file>
+                    </checkstyle>
                 """.trimIndent()
             )
         }

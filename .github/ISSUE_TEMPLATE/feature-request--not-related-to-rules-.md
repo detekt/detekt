@@ -4,8 +4,8 @@ about: Suggest new features/changes to detekt
 labels: feature
 ---
 
-Your feature request may already be reported!
-Please search in the [issues](https://github.com/detekt/detekt/issues) before creating a new one.
+<!-- Your feature request may already be reported! -->
+<!-- Please search in the [issues](https://github.com/detekt/detekt/issues) before creating a new one. -->
 
 ## Expected Behavior
 <!--- If you're suggesting a change/improvement, tell us how it should work -->

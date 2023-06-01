@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 
 /**
- * Turn on this rule to flag usages of the lateinit modifier.
+ * Reports usages of the lateinit modifier.
  *
  * Using lateinit for property initialization can be error-prone and the actual initialization is not
  * guaranteed. Try using constructor injection or delegation to initialize properties.
@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * }
  * </noncompliant>
  */
+@Suppress("ViolatesTypeResolutionRequirements")
 class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
@@ -47,7 +48,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
     @Configuration("Allows you to disable the rule for a list of classes")
     private val ignoreOnClassesPattern: Regex by config("", String::toRegex)
 
-    private var properties = mutableListOf<KtProperty>()
+    private val properties = mutableListOf<KtProperty>()
 
     override fun visitProperty(property: KtProperty) {
         if (property.isLateinit()) {
@@ -56,7 +57,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visit(root: KtFile) {
-        properties = mutableListOf()
+        properties.clear()
 
         super.visit(root)
 

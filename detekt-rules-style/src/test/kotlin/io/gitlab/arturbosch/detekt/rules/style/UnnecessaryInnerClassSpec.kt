@@ -19,14 +19,14 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
             
             class A {
                 val foo = "BAR"
-                
+            
                 fun printFoo() {
                     println(foo)
                 }
-                
+            
                 inner class B {
                     val fizz = "BUZZ"
-                    
+            
                     fun printFizz() {
                         println(fileFoo)
                         println(fizz)
@@ -45,7 +45,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class A {
                     val foo = "BAR"
-
+                
                     inner class B(val fizz: String = foo)
                 }
             """.trimIndent()
@@ -58,7 +58,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class A {
                     val foo = "BAR"
-
+                
                     inner class B {
                         val fizz = foo
                     }
@@ -75,7 +75,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 val code = """
                     class A {
                         var foo = "BAR"
-
+                    
                         inner class B {
                             val fizz = "BUZZ"
                             init {
@@ -93,7 +93,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 val code = """
                     class A {
                         val foo = "BAR"
-
+                    
                         inner class B {
                             val fizz: String
                             init {
@@ -111,7 +111,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 val code = """
                     class A {
                         val foo = "BAR"
-
+                    
                         inner class B {
                             val fizz: String
                             init {
@@ -131,7 +131,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
             fun `where the outer-class variable is the only expression`() {
                 val code = """
                     class A(val foo: Boolean) {
-                        
+                    
                         inner class B {
                             fun printFoo() {
                                 if (foo) {
@@ -150,7 +150,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 val code = """
                     class A {
                         val foo = "BAR"
-                        
+                    
                         inner class B {
                             fun printFoo() {
                                 if (foo == "BAR") {
@@ -169,7 +169,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 val code = """
                     class A {
                         val foo = "BAR"
-                        
+                    
                         inner class B {
                             fun printFoo() {
                                 if ("BAR" == foo) {
@@ -188,7 +188,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 val code = """
                     class A {
                         val foo = "BAR"
-                        
+                    
                         inner class B {
                             val fizz = "BUZZ"
                             fun printFoo() {
@@ -211,7 +211,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                     fun printFoo() {
                         println("FOO")
                     }
-                    
+                
                     inner class B {
                         fun printFizz() = printFoo()
                     }
@@ -228,7 +228,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                     fun printFoo() {
                         println("FOO")
                     }
-                    
+                
                     inner class B {
                         fun printFizz() {
                             printFoo()
@@ -245,7 +245,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class A {
                     val foo = "BAR"
-                    
+                
                     inner class B {
                         fun printFizz() {
                             println(foo)
@@ -262,7 +262,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class A {
                     val foo = "BAR"
-                    
+                
                     inner class B {
                         fun printFizz(fizzVal: String = foo) {
                             println(fizzVal)
@@ -279,7 +279,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class A {
                     var foo: String? = null
-
+                
                     inner class B {
                         fun fooLength() {
                             foo?.length
@@ -302,7 +302,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 
                 class A {
                     val foo = FooClass()
-                    
+                
                     inner class B {
                         fun printFizz() {
                             foo.printFoo()
@@ -319,7 +319,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class A {
                     val foo: () -> Unit = {}
-                    
+                
                     inner class B {
                         fun bar() {
                             foo()
@@ -340,7 +340,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class A {
                     val foo = "BAR"
-                    
+                
                     inner class B {
                         val fizz = foo
                         inner class C {
@@ -360,7 +360,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class A {
                     val foo = "BAR"
-                    
+                
                     inner class B {
                         inner class C {
                             fun printFoo() {
@@ -398,12 +398,12 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
             interface FooInterface {
                 fun doFoo()
             }
-
+            
             class Foo {
                 fun runFoo(fi: FooInterface) {
                     fi.doFoo()
                 }
-                
+            
                 fun run() {
                     runFoo(object : FooInterface {
                         override fun doFoo() {

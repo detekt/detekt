@@ -17,20 +17,18 @@ class ForbiddenClassNameSpec {
             class TestHolder
         """.trimIndent()
         assertThat(
-            ForbiddenClassName(TestConfig(mapOf(FORBIDDEN_NAME to listOf("Manager", "Provider"))))
+            ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("Manager", "Provider")))
                 .compileAndLint(code)
-        )
-            .hasSize(2)
+        ).hasSize(2)
     }
 
     @Test
     fun `should report a class that starts with a forbidden name`() {
         val code = "class TestProvider {}"
         assertThat(
-            ForbiddenClassName(TestConfig(mapOf(FORBIDDEN_NAME to listOf("test"))))
+            ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("test")))
                 .compileAndLint(code)
-        )
-            .hasSize(1)
+        ).hasSize(1)
     }
 
     @Test
@@ -41,10 +39,9 @@ class ForbiddenClassNameSpec {
             class TestHolder
         """.trimIndent()
         assertThat(
-            ForbiddenClassName(TestConfig(mapOf(FORBIDDEN_NAME to "Manager, Provider")))
+            ForbiddenClassName(TestConfig(FORBIDDEN_NAME to "Manager, Provider"))
                 .compileAndLint(code)
-        )
-            .hasSize(2)
+        ).hasSize(2)
     }
 
     @Test
@@ -55,10 +52,9 @@ class ForbiddenClassNameSpec {
             class TestHolder
         """.trimIndent()
         assertThat(
-            ForbiddenClassName(TestConfig(mapOf(FORBIDDEN_NAME to "*Manager*, *Provider*")))
+            ForbiddenClassName(TestConfig(FORBIDDEN_NAME to "*Manager*, *Provider*"))
                 .compileAndLint(code)
-        )
-            .hasSize(2)
+        ).hasSize(2)
     }
 
     @Test
@@ -66,7 +62,7 @@ class ForbiddenClassNameSpec {
         val code = """
             class TestManager {}
         """.trimIndent()
-        val actual = ForbiddenClassName(TestConfig(mapOf(FORBIDDEN_NAME to "Test, Manager, Provider")))
+        val actual = ForbiddenClassName(TestConfig(FORBIDDEN_NAME to "Test, Manager, Provider"))
             .compileAndLint(code)
         assertThat(actual.first().message)
             .isEqualTo("Class name TestManager is forbidden as it contains: Test, Manager")

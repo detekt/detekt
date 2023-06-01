@@ -1,7 +1,6 @@
 package io.github.detekt.report.html
 
 import io.github.detekt.metrics.ComplexityReportGenerator
-import io.github.detekt.psi.toUnifiedString
 import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
@@ -30,6 +29,7 @@ import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.io.path.invariantSeparatorsPathString
 
 private const val DEFAULT_TEMPLATE = "default-html-report-template.html"
 private const val PLACEHOLDER_METRICS = "@@@metrics@@@"
@@ -61,7 +61,7 @@ class HtmlOutputReport : OutputReport() {
             .replace(PLACEHOLDER_COMPLEXITY_REPORT, renderComplexity(getComplexityMetrics(detektion)))
             .replace(PLACEHOLDER_FINDINGS, renderFindings(detektion.findings))
 
-    private fun renderVersion(): String = whichDetekt() ?: "unknown"
+    private fun renderVersion(): String = whichDetekt()
 
     private fun renderDate(): String {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -141,8 +141,11 @@ class HtmlOutputReport : OutputReport() {
 
     private fun FlowContent.renderFinding(finding: Finding) {
         val filePath = finding.location.filePath.relativePath ?: finding.location.filePath.absolutePath
+        val pathString = filePath.invariantSeparatorsPathString
         span("location") {
-            text("${filePath.toUnifiedString()}:${finding.location.source.line}:${finding.location.source.column}")
+            text(
+                "$pathString:${finding.location.source.line}:${finding.location.source.column}"
+            )
         }
 
         if (finding.message.isNotEmpty()) {

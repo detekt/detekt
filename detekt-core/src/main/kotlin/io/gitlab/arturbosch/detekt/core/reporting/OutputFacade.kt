@@ -40,7 +40,7 @@ class OutputFacade(
             val filePath = reports[defaultReportMapping(report.id)]?.path
             if (filePath != null) {
                 report.write(filePath, result)
-                result.add(SimpleNotification("Successfully generated ${report.name} at $filePath"))
+                result.add(SimpleNotification("Successfully generated ${report.name} at ${filePath.toUri()}"))
             }
         }
     }

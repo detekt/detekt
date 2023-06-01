@@ -22,8 +22,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtElement
 import org.junit.jupiter.api.Test
-import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.writeText
 
 class HtmlOutputReportSpec {
 
@@ -175,7 +175,7 @@ class HtmlOutputReportSpec {
         result = generatedRegex.replace(result, replacement)
 
         val actual = createTempFileForTest("actual-report", ".html")
-        Files.write(actual, result.toByteArray())
+        actual.writeText(result)
 
         assertThat(actual).hasSameTextualContentAs(expected)
     }
@@ -294,6 +294,6 @@ private fun createReportWithFindings(findings: Array<Pair<String, List<Finding>>
     var result = htmlReport.render(detektion)
     result = generatedRegex.replace(result, replacement)
     val reportPath = createTempFileForTest("report", ".html")
-    Files.write(reportPath, result.toByteArray())
+    reportPath.writeText(result)
     return reportPath
 }

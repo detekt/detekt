@@ -54,7 +54,6 @@ class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
     @Configuration("ignore void types as generic arguments")
     private val ignoreUsageInGenerics: Boolean by config(false)
 
-    @Suppress("ReturnCount")
     override fun visitTypeReference(typeReference: KtTypeReference) {
         val kotlinType = typeReference.getAbbreviatedTypeOrType(bindingContext) ?: return
 

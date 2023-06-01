@@ -56,7 +56,7 @@ class WrongEqualsTypeParameterSpec {
                 override fun equals(other: Any?, i: Int): Boolean {
                     return super.equals(other)
                 }
-                
+            
                 override fun equals() = true
             }
         """.trimIndent()

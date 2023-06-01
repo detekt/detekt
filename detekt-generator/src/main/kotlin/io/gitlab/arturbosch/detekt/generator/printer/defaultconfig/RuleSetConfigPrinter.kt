@@ -30,6 +30,8 @@ internal fun YamlNode.printRuleSet(ruleSet: RuleSetProvider, rules: List<Rule>) 
 }
 
 internal fun YamlNode.printRule(rule: Rule) {
+    if (rule.isDeprecated()) return
+
     node(rule.name) {
         keyValue { Config.ACTIVE_KEY to "${rule.defaultActivationStatus.active}" }
         if (rule.autoCorrect) {
@@ -39,7 +41,7 @@ internal fun YamlNode.printRule(rule: Rule) {
         if (ruleExclusion != null) {
             keyValue { Config.EXCLUDES_KEY to ruleExclusion.pattern }
         }
-        rule.configuration.forEach(::printConfiguration)
+        rule.configurations.forEach(::printConfiguration)
     }
 }
 

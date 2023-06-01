@@ -1,6 +1,5 @@
 package io.github.detekt.report.sarif
 
-import io.github.detekt.psi.toUnifiedString
 import io.github.detekt.sarif4k.ArtifactLocation
 import io.github.detekt.sarif4k.Level
 import io.github.detekt.sarif4k.Message
@@ -11,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.SeverityLevel
+import kotlin.io.path.invariantSeparatorsPathString
 
 internal fun toResults(detektion: Detektion): List<io.github.detekt.sarif4k.Result> =
     detektion.findings.flatMap { (ruleSetId, findings) ->
@@ -54,11 +54,11 @@ private fun Location.toLocation(code: String?): io.github.detekt.sarif4k.Locatio
             ),
             artifactLocation = if (filePath.relativePath != null) {
                 ArtifactLocation(
-                    uri = filePath.relativePath?.toUnifiedString(),
+                    uri = filePath.relativePath?.invariantSeparatorsPathString,
                     uriBaseID = SRCROOT
                 )
             } else {
-                ArtifactLocation(uri = filePath.absolutePath.toUnifiedString())
+                ArtifactLocation(uri = filePath.absolutePath.invariantSeparatorsPathString)
             }
         )
     )

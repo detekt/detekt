@@ -11,7 +11,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.jetbrains.kotlin.psi.KtElement
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 fun createFinding(ruleName: String = "TestSmell", fileName: String = "TestFile.kt") =
     CodeSmell(createIssue(ruleName), createEntity(fileName), "TestMessage")
@@ -41,7 +41,7 @@ fun createFindingForRelativePath(
         location = Location(
             source = SourceLocation(1, 1),
             text = TextLocation(0, 0),
-            filePath = FilePath.fromRelative(Paths.get(basePath), Paths.get(relativePath))
+            filePath = FilePath.fromRelative(Path(basePath), Path(relativePath))
         ),
         ktElement = null
     ),
@@ -67,8 +67,8 @@ fun createEntity(
     location = Location(
         source = SourceLocation(position.first, position.second),
         text = TextLocation(text.first, text.last),
-        filePath = basePath?.let { FilePath.fromRelative(Paths.get(it), Paths.get(path)) }
-            ?: FilePath.fromAbsolute(Paths.get(path))
+        filePath = basePath?.let { FilePath.fromRelative(Path(it), Path(path)) }
+            ?: FilePath.fromAbsolute(Path(path))
     ),
     ktElement = ktElement
 )

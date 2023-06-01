@@ -22,12 +22,12 @@ class StringLiteralDuplicationSpec {
         @Test
         fun `reports 3 equal hardcoded strings`() {
             val code = """
-            class Duplication {
-                var s1 = "lorem"
-                fun f(s: String = "lorem") {
-                    s1.equals("lorem")
+                class Duplication {
+                    var s1 = "lorem"
+                    fun f(s: String = "lorem") {
+                        s1.equals("lorem")
+                    }
                 }
-            }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
@@ -58,7 +58,7 @@ class StringLiteralDuplicationSpec {
 
         @Test
         fun `reports strings in annotations according to config`() {
-            val config = TestConfig(mapOf(IGNORE_ANNOTATION to "false"))
+            val config = TestConfig(IGNORE_ANNOTATION to "false")
             assertFindingWithConfig(code, config, 1)
         }
     }
@@ -66,7 +66,7 @@ class StringLiteralDuplicationSpec {
     @Nested
     inner class `strings with less than 5 characters` {
 
-        val code = """val str = "amet" + "amet" + "amet""""
+        private val code = """val str = "amet" + "amet" + "amet""""
 
         @Test
         fun `does not report strings with 4 characters`() {
@@ -75,7 +75,7 @@ class StringLiteralDuplicationSpec {
 
         @Test
         fun `reports string with 4 characters`() {
-            val config = TestConfig(mapOf(EXCLUDE_SHORT_STRING to "false"))
+            val config = TestConfig(EXCLUDE_SHORT_STRING to "false")
             assertFindingWithConfig(code, config, 1)
         }
     }
@@ -83,7 +83,7 @@ class StringLiteralDuplicationSpec {
     @Nested
     inner class `strings with values to match for the regex` {
 
-        val regexTestingCode = """
+        private val regexTestingCode = """
             val str1 = "lorem" + "lorem" + "lorem"
             val str2 = "ipsum" + "ipsum" + "ipsum"
         """.trimIndent()
@@ -94,23 +94,22 @@ class StringLiteralDuplicationSpec {
                 val str1 = "lorem" + "lorem" + "lorem"
                 val str2 = "ipsum" + "ipsum" + "ipsum"
             """.trimIndent()
-            val config = TestConfig(mapOf(IGNORE_STRINGS_REGEX to "(lorem|ipsum)"))
+            val config = TestConfig(IGNORE_STRINGS_REGEX to "(lorem|ipsum)")
             assertFindingWithConfig(code, config, 0)
         }
 
         @Test
         fun `should not fail with invalid regex when disabled`() {
-            val configValues = mapOf(
+            val config = TestConfig(
                 "active" to "false",
-                IGNORE_STRINGS_REGEX to "*lorem"
+                IGNORE_STRINGS_REGEX to "*lorem",
             )
-            val config = TestConfig(configValues)
             assertFindingWithConfig(regexTestingCode, config, 0)
         }
 
         @Test
         fun `should fail with invalid regex`() {
-            val config = TestConfig(mapOf(IGNORE_STRINGS_REGEX to "*lorem"))
+            val config = TestConfig(IGNORE_STRINGS_REGEX to "*lorem")
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
                 StringLiteralDuplication(config).compileAndLint(regexTestingCode)
             }
@@ -123,12 +122,12 @@ class StringLiteralDuplicationSpec {
         @Test
         fun `reports 3 locations for 'lorem'`() {
             val code = """
-            class Duplication {
-                var s1 = "lorem"
-                fun f(s: String = "lorem") {
-                    s1.equals("lorem")
+                class Duplication {
+                    var s1 = "lorem"
+                    fun f(s: String = "lorem") {
+                        s1.equals("lorem")
+                    }
                 }
-            }
             """.trimIndent()
             val finding = subject.compileAndLint(code)[0]
             val locations = finding.references.map { it.location } + finding.entity.location

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class CLOCVisitorSpec {
 
     @Test
-    fun `commentCases`() {
+    fun commentCases() {
         val file = compileContentForTest(commentsClass)
         val commentLines = with(file) {
             accept(CLOCVisitor())

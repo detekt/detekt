@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.testkit
 
+import org.intellij.lang.annotations.Language
+
 class ProjectLayout(
     val numberOfSourceFilesInRootPerSourceDir: Int,
     val numberOfCodeSmellsInRootPerSourceDir: Int = 0,
@@ -15,6 +17,7 @@ class ProjectLayout(
         name: String,
         numberOfSourceFilesPerSourceDir: Int,
         numberOfCodeSmells: Int = 0,
+        @Language("gradle.kts")
         buildFileContent: String? = null,
         srcDirs: List<String> = this.srcDirs,
         baselineFiles: List<String> = emptyList(),
@@ -35,6 +38,7 @@ data class Submodule(
     val name: String,
     val numberOfSourceFilesPerSourceDir: Int,
     val numberOfCodeSmells: Int,
+    @Language("gradle.kts")
     val buildFileContent: String?,
     val srcDirs: List<String>,
     val baselineFiles: List<String>,

@@ -32,7 +32,7 @@ class ProcessingSettings(
     Closeable,
     LoggingAware by LoggingFacade(spec.loggingSpec),
     PropertiesAware by PropertiesFacade(),
-    EnvironmentAware by EnvironmentFacade(spec.projectSpec, spec.compilerSpec),
+    EnvironmentAware by EnvironmentFacade(spec.projectSpec, spec.compilerSpec, spec.loggingSpec),
     ClassloaderAware by ExtensionFacade(spec.extensionsSpec.plugins),
     SetupContext {
 

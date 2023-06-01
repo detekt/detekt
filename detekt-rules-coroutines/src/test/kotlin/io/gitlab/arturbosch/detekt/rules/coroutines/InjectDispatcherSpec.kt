@@ -23,7 +23,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
                 import kotlinx.coroutines.launch
                 import kotlinx.coroutines.runBlocking
                 import kotlinx.coroutines.Dispatchers
-
+                
                 fun useDispatchers() {
                     runBlocking {
                         launch(Dispatchers.IO) { }
@@ -40,7 +40,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
                 import kotlinx.coroutines.runBlocking
                 import kotlinx.coroutines.CoroutineDispatcher
                 import kotlinx.coroutines.Dispatchers
-
+                
                 fun useDispatchers(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
                     runBlocking {
                         launch(dispatcher) { }
@@ -55,7 +55,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 import kotlinx.coroutines.CoroutineDispatcher
                 import kotlinx.coroutines.Dispatchers
-
+                
                 class MyRepository(dispatcher: CoroutineDispatcher = Dispatchers.IO)
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -66,7 +66,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 import kotlinx.coroutines.CoroutineDispatcher
                 import kotlinx.coroutines.Dispatchers
-
+                
                 class MyRepository(dispatcher: CoroutineDispatcher) {
                     constructor() : this(Dispatchers.IO)
                 }
@@ -79,7 +79,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 import kotlinx.coroutines.CoroutineDispatcher
                 import kotlinx.coroutines.Dispatchers
-
+                
                 class MyRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO)
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -91,7 +91,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
                 import kotlinx.coroutines.launch
                 import kotlinx.coroutines.runBlocking
                 import kotlinx.coroutines.Dispatchers
-
+                
                 fun useDispatchers() {
                     runBlocking {
                         launch(Dispatchers.Main) { }
@@ -113,7 +113,7 @@ class InjectDispatcherSpec(val env: KotlinCoreEnvironment) {
                 import kotlinx.coroutines.launch
                 import kotlinx.coroutines.runBlocking
                 import kotlinx.coroutines.Dispatchers
-
+                
                 fun useDispatchers() {
                     runBlocking {
                         launch(Dispatchers.Main) { }

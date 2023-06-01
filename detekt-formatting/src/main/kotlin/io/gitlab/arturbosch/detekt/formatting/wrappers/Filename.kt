@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
-import com.pinterest.ktlint.ruleset.standard.FilenameRule
+import com.pinterest.ktlint.ruleset.standard.rules.FilenameRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
@@ -16,6 +16,4 @@ class Filename(config: Config) : FormattingRule(config) {
 
     override val wrapping = FilenameRule()
     override val issue = issueFor("Checks if top level class matches the filename")
-
-    override fun canBeCorrectedByKtLint(message: String): Boolean = false
 }

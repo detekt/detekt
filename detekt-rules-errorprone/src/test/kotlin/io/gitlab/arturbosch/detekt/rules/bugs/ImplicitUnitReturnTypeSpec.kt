@@ -47,7 +47,7 @@ class ImplicitUnitReturnTypeSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does not report for block statements`() {
         val code = """
-            fun blockUnitReturn() { 
+            fun blockUnitReturn() {
                 println("Hello Unit")
             }
         """.trimIndent()

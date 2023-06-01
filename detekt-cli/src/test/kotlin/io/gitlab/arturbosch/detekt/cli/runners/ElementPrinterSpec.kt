@@ -19,22 +19,22 @@ class ElementPrinterSpec {
 }
 
 private val expected = """
-0: KtFile
-  1: KtPackageDirective
-    1: KtNameReferenceExpression
-    1: KtImportList
-    3: KtClass
-      3: KtClassBody
-        5: KtProperty
-          5: KtTypeReference
-          5: KtUserType
-          5: KtNameReferenceExpression
-          5: KtStringTemplateExpression
-          5: KtLiteralStringTemplateEntry
-        6: KtNamedFunction
-          6: KtParameterList
-          6: KtStringTemplateExpression
-          6: KtLiteralStringTemplateEntry
-          6: KtSimpleNameStringTemplateEntry
-          6: KtNameReferenceExpression
+    0: KtFile
+      1: KtPackageDirective
+        1: KtNameReferenceExpression
+        1: KtImportList
+        3: KtClass
+          3: KtClassBody
+            5: KtProperty
+              5: KtTypeReference
+              5: KtUserType
+              5: KtNameReferenceExpression
+              5: KtStringTemplateExpression
+              5: KtLiteralStringTemplateEntry
+            6: KtNamedFunction
+              6: KtParameterList
+              6: KtStringTemplateExpression
+              6: KtLiteralStringTemplateEntry
+              6: KtSimpleNameStringTemplateEntry
+              6: KtNameReferenceExpression
 """.trimIndent()

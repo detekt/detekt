@@ -1,8 +1,8 @@
+rootProject.name = "detekt-gradle-plugin"
+
 pluginManagement {
     includeBuild("../build-logic")
 }
-
-includeBuild("..")
 
 dependencyResolutionManagement {
     versionCatalogs {
@@ -10,4 +10,8 @@ dependencyResolutionManagement {
             from(files("../gradle/libs.versions.toml"))
         }
     }
+}
+
+plugins {
+    id("com.gradle.enterprise") version "3.13.3"
 }

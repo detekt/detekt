@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class KtFileCountVisitorSpec {
 
     @Test
-    fun `twoFiles`() {
+    fun twoFiles() {
         val files = arrayOf(
             compileContentForTest(default),
             compileContentForTest(complexClass)

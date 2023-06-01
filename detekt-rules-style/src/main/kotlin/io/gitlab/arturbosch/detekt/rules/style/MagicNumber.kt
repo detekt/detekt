@@ -186,15 +186,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtConstantExpression.isNamedArgument(): Boolean {
-        /**
-         * The information we need is in the enclosing [KtValueArgument]. When the number being evaluated is
-         * negative, there will be a [KtPrefixExpression] in between the receiver and the [KtValueArgument].
-         */
-        val valueArgument = when (parent) {
-            is KtPrefixExpression -> parent.parent
-            else -> parent
-        } as? KtValueArgument
-
+        val valueArgument = this.getNonStrictParentOfType<KtValueArgument>()
         return valueArgument?.isNamed() == true && isPartOf<KtCallElement>()
     }
 

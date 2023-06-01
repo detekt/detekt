@@ -77,6 +77,9 @@ class ConfigAssert(
     private fun getRuleClassesInPackage(): List<Class<out Rule>> {
         return Reflections(packageName)
             .getSubTypesOf(Rule::class.java)
-            .filter { !Modifier.isAbstract(it.modifiers) }
+            .filter { rule ->
+                !Modifier.isAbstract(rule.modifiers) &&
+                    rule.annotations.none { it.annotationClass == Deprecated::class }
+            }
     }
 }

@@ -122,4 +122,22 @@ class LambdaParameterNamingSpec {
         assertThat(LambdaParameterNaming().compileAndLint(code))
             .isEmpty()
     }
+
+    @Test
+    fun `Doesn't report invalid class constructor parameters`() {
+        val code = """
+            data class C(val _invalid: String)
+        """.trimIndent()
+        assertThat(LambdaParameterNaming().compileAndLint(code))
+            .isEmpty()
+    }
+
+    @Test
+    fun `Doesn't report invalid function parameters`() {
+        val code = """
+            fun f(_invalid: String) = Unit
+        """.trimIndent()
+        assertThat(LambdaParameterNaming().compileAndLint(code))
+            .isEmpty()
+    }
 }

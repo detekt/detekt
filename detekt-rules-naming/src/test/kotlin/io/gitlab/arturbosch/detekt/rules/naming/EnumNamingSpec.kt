@@ -9,13 +9,13 @@ class EnumNamingSpec {
 
     @Test
     fun `should use custom name for enum`() {
-        val rule = EnumNaming(TestConfig(mapOf(EnumNaming.ENUM_PATTERN to "^(enum1)|(enum2)$")))
+        val rule = EnumNaming(TestConfig(EnumNaming.ENUM_PATTERN to "^(enum1)|(enum2)$"))
         assertThat(
             rule.compileAndLint(
                 """
-        enum class aBbD {
-            enum1, enum2
-        }
+                    enum class aBbD {
+                        enum1, enum2
+                    }
                 """.trimIndent()
             )
         ).isEmpty()
@@ -25,9 +25,9 @@ class EnumNamingSpec {
     fun `should detect no violation`() {
         val findings = EnumNaming().compileAndLint(
             """
-            enum class WorkFlow {
-                ACTIVE, NOT_ACTIVE, Unknown, Number1
-            }
+                enum class WorkFlow {
+                    ACTIVE, NOT_ACTIVE, Unknown, Number1
+                }
             """.trimIndent()
         )
         assertThat(findings).isEmpty()

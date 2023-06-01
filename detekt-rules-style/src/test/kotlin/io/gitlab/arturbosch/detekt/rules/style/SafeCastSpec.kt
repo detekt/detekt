@@ -36,6 +36,26 @@ class SafeCastSpec {
     }
 
     @Test
+    fun `reports negated expression with no braces`() {
+        val code = """
+            fun test(element: Int) {
+                val cast = if (element !is Number) null else element
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports expression with no braces`() {
+        val code = """
+            fun test(element: Int) {
+                val cast = if (element is Number) element else null
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
+
+    @Test
     fun `does not report wrong condition`() {
         val code = """
             fun test(element: Int) {

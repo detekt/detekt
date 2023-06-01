@@ -14,7 +14,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
     @Nested
     inner class `report UseOrEmptySpec rule` {
         @Test
-        fun `emptyList`() {
+        fun emptyList() {
             val code = """
                 fun test(x: List<Int>?) {
                     val a = x ?: emptyList()
@@ -27,7 +27,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `emptySet`() {
+        fun emptySet() {
             val code = """
                 fun test(x: Set<Int>?) {
                     val a = x ?: emptySet()
@@ -38,7 +38,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `emptyMap`() {
+        fun emptyMap() {
             val code = """
                 fun test(x: Map<Int, String>?) {
                     val a = x ?: emptyMap()
@@ -49,7 +49,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `emptySequence`() {
+        fun emptySequence() {
             val code = """
                 fun test(x: Sequence<Int>?) {
                     val a = x ?: emptySequence()
@@ -60,7 +60,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `emptyArray`() {
+        fun emptyArray() {
             val code = """
                 fun test(x: Array<Int>?) {
                     val a = x ?: emptyArray()
@@ -71,7 +71,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `listOf`() {
+        fun listOf() {
             val code = """
                 fun test(x: List<Int>?) {
                     val a = x ?: listOf()
@@ -82,7 +82,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `setOf`() {
+        fun setOf() {
             val code = """
                 fun test(x: Set<Int>?) {
                     val a = x ?: setOf()
@@ -93,7 +93,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `mapOf`() {
+        fun mapOf() {
             val code = """
                 fun test(x: Map<Int, String>?) {
                     val a = x ?: mapOf()
@@ -104,7 +104,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `sequenceOf`() {
+        fun sequenceOf() {
             val code = """
                 fun test(x: Sequence<Int>?) {
                     val a = x ?: sequenceOf()
@@ -115,7 +115,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `arrayOf`() {
+        fun arrayOf() {
             val code = """
                 fun test(x: Array<Int>?) {
                     val a = x ?: arrayOf()
@@ -201,7 +201,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `mutableListOf`() {
+        fun mutableListOf() {
             val code = """
                 fun test(x: MutableList<Int>?) {
                     val a = x ?: mutableListOf()
@@ -212,7 +212,7 @@ class UseOrEmptySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `intArrayOf`() {
+        fun intArrayOf() {
             val code = """
                 fun test(x: IntArray?) {
                     val a = x ?: intArrayOf()

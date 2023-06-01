@@ -3,7 +3,7 @@
 package io.gitlab.arturbosch.detekt.generator
 
 import com.beust.jcommander.JCommander
-import java.nio.file.Files
+import kotlin.io.path.isDirectory
 import kotlin.system.exitProcess
 
 @Suppress("detekt.SpreadOperator")
@@ -22,8 +22,8 @@ fun main(args: Array<String>) {
         return
     }
 
-    require(Files.isDirectory(options.documentationPath)) { "Documentation path must be a directory." }
-    require(Files.isDirectory(options.configPath)) { "Config path must be a directory." }
+    require(options.documentationPath.isDirectory()) { "Documentation path must be a directory." }
+    require(options.configPath.isDirectory()) { "Config path must be a directory." }
 
     Generator(options).execute()
 }

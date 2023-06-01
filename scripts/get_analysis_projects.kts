@@ -55,8 +55,8 @@ fun downloadAnalysisProjects(basePath: Path) {
 if (args.size != 1) {
     println(
         """
-        Usage: ./get_analysis_projects.kts [/path/to/storing/folder]
-        or kotlinc -script get_analysis_projects.kts [/path/to/storing/folder]
+            Usage: ./get_analysis_projects.kts [/path/to/storing/folder]
+            or kotlinc -script get_analysis_projects.kts [/path/to/storing/folder]
         """.trimIndent()
     )
     System.exit(1)

@@ -5,12 +5,12 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
-import java.nio.file.Paths
+import kotlin.io.path.Path
 
 class PathMatchersSpec {
 
-    private val expectedMatch: Path = Paths.get("/detekt/api/Issue.kt")
-    private val nonMatchingPath: Path = Paths.get("/detekt/cli/Issue.kt")
+    private val expectedMatch: Path = Path("/detekt/api/Issue.kt")
+    private val nonMatchingPath: Path = Path("/detekt/cli/Issue.kt")
 
     @Nested
     inner class `supports globbing` {
@@ -30,7 +30,7 @@ class PathMatchersSpec {
 
         @Test
         fun `should work with windows like paths`() {
-            assertThat(matcher.matches(Paths.get("C:/detekt/api/Issue.kt"))).isTrue()
+            assertThat(matcher.matches(Path("C:/detekt/api/Issue.kt"))).isTrue()
         }
     }
 

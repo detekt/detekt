@@ -59,7 +59,7 @@ class EmptyClassBlockSpec {
     fun `does not report the object if it is of an anonymous class`() {
         val code = """
             open class Open
-
+            
             fun f() {
                  object : Open() {}
             }

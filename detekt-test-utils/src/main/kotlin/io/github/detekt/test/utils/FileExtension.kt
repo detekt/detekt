@@ -1,7 +1,8 @@
 package io.github.detekt.test.utils
 
-import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.createTempDirectory
+import kotlin.io.path.createTempFile
 
 /**
  * Creates an empty file in the default temporary-file directory, using
@@ -9,7 +10,7 @@ import java.nio.file.Path
  * The resulting file in the returned path is automatically deleted on JVM exit.
  */
 fun createTempFileForTest(prefix: String, suffix: String): Path {
-    val path = Files.createTempFile(prefix, suffix)
+    val path = createTempFile(prefix, suffix)
     path.toFile().deleteOnExit()
     return path
 }
@@ -20,7 +21,7 @@ fun createTempFileForTest(prefix: String, suffix: String): Path {
  * The resulting directory in the returned path is automatically deleted on JVM exit.
  */
 fun createTempDirectoryForTest(prefix: String): Path {
-    val dir = Files.createTempDirectory(prefix)
+    val dir = createTempDirectory(prefix)
     dir.toFile().deleteOnExit()
     return dir
 }

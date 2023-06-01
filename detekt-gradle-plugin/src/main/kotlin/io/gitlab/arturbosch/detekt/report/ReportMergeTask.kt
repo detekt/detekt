@@ -27,13 +27,13 @@ abstract class ReportMergeTask : DefaultTask() {
         logger.info(input.files.joinToString(separator = "\n") { it.absolutePath })
         logger.info("Output = ${output.get().asFile.absolutePath}")
         val existingFiles = input.files.filter { it.exists() }
-        fun isXmlReport(file: File): Boolean = file.name.endsWith(".xml")
+        fun isXmlReport(file: File): Boolean = file.extension == "xml"
         if (existingFiles.any(::isXmlReport)) {
             XmlReportMerger.merge(existingFiles.filter(::isXmlReport), output.get().asFile)
             logger.lifecycle("Merged XML output to ${output.get().asFile.absolutePath}")
         }
 
-        fun isSarifReport(file: File): Boolean = file.name.endsWith(".sarif") ||
+        fun isSarifReport(file: File): Boolean = file.extension == "sarif" ||
             file.name.endsWith(".sarif.json")
         if (existingFiles.any(::isSarifReport)) {
             SarifReportMerger.merge(existingFiles.filter(::isSarifReport), output.get().asFile)

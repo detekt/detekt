@@ -6,4 +6,4 @@ gradle publishAllToMavenCentral --max-workers 1
 gradle :detekt-gradle-plugin:publishPlugins
 gradle githubRelease
 gradle applyDocVersion
-gradle closeAndReleaseRepository
+gradle closeAndReleaseSonatypeStagingRepository

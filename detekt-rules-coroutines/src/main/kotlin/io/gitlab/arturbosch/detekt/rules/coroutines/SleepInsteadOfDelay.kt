@@ -9,13 +9,20 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import org.jetbrains.kotlin.builtins.isSuspendFunctionType
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFunctionLiteral
+import org.jetbrains.kotlin.psi.KtLambdaArgument
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtQualifiedExpression
-import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
-import org.jetbrains.kotlin.psi.psiUtil.hasSuspendModifier
+import org.jetbrains.kotlin.psi.KtValueArgument
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypes
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.util.getParameterForArgument
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
@@ -48,44 +55,89 @@ class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    override fun visitNamedFunction(function: KtNamedFunction) {
-        if (function.modifierList?.hasSuspendModifier() == true) {
-            function.checkDescendants(SUSPEND_FUN_MESSAGE)
-        }
-        super.visitNamedFunction(function)
+    override fun visitCallExpression(expression: KtCallExpression) {
+        super.visitCallExpression(expression)
+        checkAndReport(expression)
     }
 
-    override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
-        val fqName = expression.getResolvedCall(bindingContext)
-            ?.resultingDescriptor
-            ?.fqNameOrNull()
-            ?.asString()
-        if (fqName in COROUTINE_NAMES) {
-            expression.checkDescendants(COROUTINE_MESSAGE)
-        }
-        super.visitQualifiedExpression(expression)
+    override fun visitCallableReferenceExpression(expression: KtCallableReferenceExpression) {
+        super.visitCallableReferenceExpression(expression)
+        checkAndReport(expression)
     }
 
-    private fun PsiElement.checkDescendants(message: String) {
-        forEachDescendantOfType<KtCallExpression> { it.verifyExpression(message) }
+    private fun checkAndReport(expression: KtExpression) {
+        if (expression.isThreadSleepFunction() && expression.isInSuspendBlock()) {
+            report(CodeSmell(issue, Entity.from(expression), SUSPEND_FUN_MESSAGE))
+        }
     }
 
-    private fun KtExpression.verifyExpression(message: String) {
-        val fqName = getResolvedCall(bindingContext)
-            ?.resultingDescriptor
-            ?.fqNameOrNull()
-            ?.asString()
-        if (fqName == FQ_NAME) {
-            report(CodeSmell(issue, Entity.from(this), message))
+    private fun KtExpression.isThreadSleepFunction(): Boolean {
+        fun KtCallableReferenceExpression.isSleepCallableRef(): Boolean {
+            return if (this.parent is KtValueArgument) {
+                // Only checking if this is used as for invocation
+                this.callableReference.isThreadSleepFunction()
+            } else {
+                false
+            }
         }
+        return if (this is KtCallableReferenceExpression) {
+            this.isSleepCallableRef()
+        } else {
+            getResolvedCall(bindingContext)
+                ?.resultingDescriptor
+                ?.fqNameOrNull()
+                ?.asString() == FQ_NAME
+        }
+    }
+
+    private fun PsiElement.isSuspendingBlock(): Boolean {
+        return when (this) {
+            is KtFunctionLiteral -> {
+                val psiParent = this.parent.parent
+                if (psiParent is KtLambdaArgument) {
+                    psiParent.isSuspendAllowedLambdaArgument()
+                } else {
+                    this.isSuspendScope()
+                }
+            }
+            is KtNamedFunction -> {
+                this.isSuspendScope()
+            }
+            else -> {
+                false
+            }
+        }
+    }
+
+    private fun KtLambdaArgument.isSuspendAllowedLambdaArgument(): Boolean {
+        val callDescriptor = getParentOfType<KtCallExpression>(true)?.getResolvedCall(bindingContext) ?: return false
+        val functionDescriptor = callDescriptor.resultingDescriptor as? FunctionDescriptor ?: return false
+        val valueParameterDescriptor = callDescriptor.getParameterForArgument(this) ?: return false
+
+        return (
+            functionDescriptor.isInline &&
+                (valueParameterDescriptor.isNoinline.not() && valueParameterDescriptor.isCrossinline.not())
+            ) || valueParameterDescriptor.returnType?.isSuspendFunctionType == true
+    }
+
+    private fun PsiElement.isSuspendScope(): Boolean {
+        val functionDescriptor = bindingContext[BindingContext.FUNCTION, this] ?: return false
+        return functionDescriptor.isSuspend
+    }
+
+    private fun KtExpression.isInSuspendBlock(): Boolean {
+        val containingBlockExpression =
+            this.getParentOfTypes<PsiElement>(
+                true,
+                KtNamedFunction::class.java,
+                KtFunctionLiteral::class.java
+            ) ?: return false
+        return containingBlockExpression.isSuspendingBlock()
     }
 
     companion object {
         private const val SUSPEND_FUN_MESSAGE =
             "This use of Thread.sleep() inside a suspend function should be replaced by delay()."
-        private const val COROUTINE_MESSAGE =
-            "This use of Thread.sleep() inside a coroutine should be replaced by delay()."
         private const val FQ_NAME = "java.lang.Thread.sleep"
-        private val COROUTINE_NAMES = listOf("kotlinx.coroutines.launch", "kotlinx.coroutines.async")
     }
 }

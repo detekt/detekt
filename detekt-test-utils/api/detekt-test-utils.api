@@ -50,8 +50,3 @@ public abstract interface annotation class io/gitlab/arturbosch/detekt/rules/Kot
 	public abstract fun additionalJavaSourcePaths ()[Ljava/lang/String;
 }
 
-public final class io/gitlab/arturbosch/detekt/rules/KotlinEnvironmentTestSetupKt {
-	public static final fun setupKotlinEnvironment (Lorg/spekframework/spek2/dsl/Root;Ljava/nio/file/Path;)V
-	public static synthetic fun setupKotlinEnvironment$default (Lorg/spekframework/spek2/dsl/Root;Ljava/nio/file/Path;ILjava/lang/Object;)V
-}
-
