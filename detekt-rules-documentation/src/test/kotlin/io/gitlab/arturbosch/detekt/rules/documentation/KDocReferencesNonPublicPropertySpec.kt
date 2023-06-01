@@ -210,12 +210,12 @@ class KDocReferencesNonPublicPropertySpec {
                 private var innerPeek: Int = 0
                 private var objectPeek: Int = 0
                 private var companionPeek: Int = 0
-                fun peek() = System.currentTimeMillis()
+                fun peek() = 0
                 inner class Inner {
-                    fun innerPeek() = System.currentTimeMillis()
+                    fun innerPeek() = 0
                 }
                 object Object {
-                    fun objectPeek() = System.currentTimeMillis()
+                    fun objectPeek() = 0
                 }
             }
         """.trimIndent()
