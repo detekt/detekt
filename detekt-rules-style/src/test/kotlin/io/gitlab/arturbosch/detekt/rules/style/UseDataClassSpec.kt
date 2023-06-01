@@ -36,6 +36,16 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
+        fun `does not report a class with non-property parameters`() {
+            val code = """
+                class NoDataClassCandidate(val a: Int, b: Int) {
+                    val c = 2 * b
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
         fun `does not report a candidate class with additional method`() {
             val code = """
                 class NoDataClassCandidateWithAdditionalMethod(val i: Int) {

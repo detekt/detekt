@@ -94,8 +94,10 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
             val containsPropertyOrPropertyParameters = properties.isNotEmpty() || propertyParameters.isNotEmpty()
             val containsVars = properties.any { it.isVar } || propertyParameters.any { it.isMutable }
             val containsDelegatedProperty = properties.any { it.hasDelegate() }
+            val containsNonPropertyParameter = klass.extractConstructorNonPropertyParameters().isNotEmpty()
+            val containsOnlyPropertyParameters = containsPropertyOrPropertyParameters && !containsNonPropertyParameter
 
-            if (containsFunctions && containsPropertyOrPropertyParameters && !containsDelegatedProperty) {
+            if (containsFunctions && !containsDelegatedProperty && containsOnlyPropertyParameters) {
                 if (allowVars && containsVars) {
                     return
                 }
@@ -141,6 +143,12 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
         getPrimaryConstructorParameterList()
             ?.parameters
             ?.filter { it.isPropertyParameter() }
+            .orEmpty()
+
+    private fun KtClass.extractConstructorNonPropertyParameters(): List<KtParameter> =
+        getPrimaryConstructorParameterList()
+            ?.parameters
+            ?.filter { !it.isPropertyParameter() }
             .orEmpty()
 
     private fun KtNamedFunction.isDefaultFunction(
