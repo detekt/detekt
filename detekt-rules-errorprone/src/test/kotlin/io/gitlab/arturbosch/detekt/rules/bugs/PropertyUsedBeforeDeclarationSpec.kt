@@ -86,4 +86,44 @@ class PropertyUsedBeforeDeclarationSpec(private val env: KotlinCoreEnvironment) 
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
+
+    @Test
+    fun `used before declaration in nested object`() {
+        val code = """
+            object Outer {
+                object O {
+                    val inner = outer1
+                }
+            
+                class C {
+                    val inner = outer2
+                }
+            
+                annotation class Ann(val value: String)
+                interface I {
+                    fun f(@Ann(outer3) namedProp: String)
+                }
+            
+                val outer1 = "value1"
+                val outer2 = "value2"
+                const val outer3 = "value3"
+            }
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `used before declaration in inner class`() {
+        val code = """
+            class A {
+                inner class B {
+                    val inner = outer
+                }
+                val outer = "value"
+            }
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
 }
