@@ -61,27 +61,8 @@
     <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">RuleSetProvider</a></div><p class="paragraph">A rule set provider, as the name states, is responsible for creating rule sets.</p><p class="paragraph">When writing own rule set providers make sure to register them according the ServiceLoader documentation. http://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html</p><h4 class="">Inheritors</h4><div class="table"><div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../../io.gitlab.arturbosch.detekt.api.internal/-default-rule-set-provider/index.html">DefaultRuleSetProvider</a></div></span></div><div></div></div></div></div></div></div>
   </div>
   <div class="tabbedcontent">
-    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY">Members</button></div>
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
-      <div data-togglable="FUNCTION">
-        <h2 class="">Functions</h2>
-        <div class="table"><a data-name="1941837391%2FFunctions%2F-193512625" anchor-label="instance" id="1941837391%2FFunctions%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="instance.html"><span><span>instance</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1941837391%2FFunctions%2F-193512625"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="instance.html"><span class="token function">instance</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">config<span class="token operator">: </span><a href="../-config/index.html">Config</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-rule-set/index.html">RuleSet</a></div><div class="brief "><p class="paragraph">This function must be implemented to provide custom rule sets. Make sure to pass the configuration to each rule to allow rules to be self configurable.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       <div data-togglable="PROPERTY">
         <h2 class="">Properties</h2>
         <div class="table"><a data-name="-829643900%2FProperties%2F-193512625" anchor-label="ruleSetId" id="-829643900%2FProperties%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
@@ -95,6 +76,25 @@
               <div>
                 <div class="title">
                   <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="rule-set-id.html">ruleSetId</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Every rule set must be pre-configured with an ID to validate if this rule set must be created for current analysis.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="1941837391%2FFunctions%2F-193512625" anchor-label="instance" id="1941837391%2FFunctions%2F-193512625" data-filterable-set=":detekt-api:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api:dokkaHtml/main" data-filterable-set=":detekt-api:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="instance.html"><span><span>instance</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1941837391%2FFunctions%2F-193512625"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="instance.html"><span class="token function">instance</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">config<span class="token operator">: </span><a href="../-config/index.html">Config</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-rule-set/index.html">RuleSet</a></div><div class="brief "><p class="paragraph">This function must be implemented to provide custom rule sets. Make sure to pass the configuration to each rule to allow rules to be self configurable.</p></div></div></div>
                 </div>
               </div>
             </div>

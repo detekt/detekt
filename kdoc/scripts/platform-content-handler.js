@@ -322,8 +322,8 @@ function refreshFiltering() {
     document.querySelectorAll("[data-filterable-set]")
         .forEach(
             elem => {
-                let platformList = elem.getAttribute("data-filterable-set").split(' ').filter(v => -1 !== sourcesetList.indexOf(v))
-                elem.setAttribute("data-filterable-current", platformList.join(' '))
+                let platformList = elem.getAttribute("data-filterable-set").split(',').filter(v => -1 !== sourcesetList.indexOf(v))
+                elem.setAttribute("data-filterable-current", platformList.join(','))
             }
         )
     refreshFilterButtons()
