@@ -8,17 +8,19 @@ import org.junit.jupiter.api.Test
 
 class LongMethodSpec {
 
-    val subject = LongMethod(TestConfig("threshold" to 5))
+    val subject = LongMethod(TestConfig("allowedLines" to 5))
 
     @Test
     fun `should find two long methods`() {
         val code = """
-            fun longMethod() { // 5 lines
+            fun longMethod() { // 6 lines
+                println()
                 println()
                 println()
                 println()
             
-                fun nestedLongMethod() { // 5 lines
+                fun nestedLongMethod() { // 6 lines
+                    println()
                     println()
                     println()
                     println()
@@ -65,7 +67,8 @@ class LongMethodSpec {
         val code = """
             fun longMethodWithParams(
                 param1: String
-            ) { // 5 lines
+            ) { // 6 lines
+                println()
                 println()
                 println()
                 println()
@@ -75,7 +78,7 @@ class LongMethodSpec {
         val findings = subject.compileAndLint(code)
 
         assertThat(findings).hasSize(1)
-        assertThat(findings[0] as ThresholdedCodeSmell).hasValue(5)
+        assertThat(findings[0] as ThresholdedCodeSmell).hasValue(6)
     }
 
     @Test
@@ -107,14 +110,16 @@ class LongMethodSpec {
         val code = """
             fun longMethod(
                 param1: String
-            ) { // 5 lines
+            ) { // 6 lines
+                println()
                 println()
                 println()
                 println()
             
                 fun nestedLongMethod(
                     param1: String
-                ) { // 5 lines
+                ) { // 6 lines
+                    println()
                     println()
                     println()
                     println()
@@ -133,13 +138,15 @@ class LongMethodSpec {
         val code = """
             fun longMethod(
                 param1: String
-            ) { // 4 lines
+            ) { // 5 lines
+                println()
                 println()
                 println()
             
                 fun nestedLongMethod(
                     param1: String
-                ) { // 5 lines
+                ) { // 6 lines
+                    println()
                     println()
                     println()
                     println()
@@ -151,6 +158,6 @@ class LongMethodSpec {
 
         assertThat(findings).hasSize(1)
         assertThat(findings).hasTextLocations("nestedLongMethod")
-        assertThat(findings[0] as ThresholdedCodeSmell).hasValue(5)
+        assertThat(findings[0] as ThresholdedCodeSmell).hasValue(6)
     }
 }
