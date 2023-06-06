@@ -51,8 +51,8 @@ class ComplexCondition(
         Debt.TWENTY_MINS
     )
 
-    @Configuration("the number of conditions which will trigger the rule")
-    private val threshold: Int by config(defaultValue = 4)
+    @Configuration("Maximum allowed complexity for conditions.")
+    private val allowedComplexity: Int by config(defaultValue = 4)
 
     override fun visitIfExpression(expression: KtIfExpression) {
         val condition = expression.condition
@@ -81,14 +81,14 @@ class ComplexCondition(
             }
             val conditionString = longestBinExpr.text
             val count = frequency(conditionString, "&&") + frequency(conditionString, "||") + 1
-            if (count >= threshold) {
+            if (count > allowedComplexity) {
                 report(
                     ThresholdedCodeSmell(
                         issue,
                         Entity.from(condition),
-                        Metric("SIZE", count, threshold),
+                        Metric("SIZE", count, allowedComplexity),
                         "This condition is too complex ($count). " +
-                            "Defined complexity threshold for conditions is set to '$threshold'"
+                            "The defined maximum complexity for conditions is set to '$allowedComplexity'"
                     )
                 )
             }
