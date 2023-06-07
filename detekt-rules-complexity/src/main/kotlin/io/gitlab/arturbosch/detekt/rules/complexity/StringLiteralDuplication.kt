@@ -59,12 +59,8 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
     @Configuration("if values in Annotations should be ignored")
     private val ignoreAnnotation: Boolean by config(true)
 
-    @Deprecated("Use `excludeStringsWithLessThanThreshold` instead")
-    @Configuration("if short strings should be excluded")
-    private val excludeStringsWithLessThan5Characters: Boolean by config(true)
-
     @Configuration("if strings is less than the specified length should be excluded")
-    private val excludeStringsWithLessThanThreshold: Int by config(5)
+    private val allowStringWithLength: Int by config(5)
 
     @Configuration("RegEx of Strings that should be ignored")
     private val ignoreStringsRegex: Regex by config("$^", String::toRegex)
@@ -106,11 +102,9 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
 
         override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
             val text = expression.plainContent
-            @Suppress("DEPRECATION")
             when {
                 ignoreAnnotation && expression.isPartOf<KtAnnotationEntry>() -> pass
-                excludeStringsWithLessThan5Characters && text.length < STRING_EXCLUSION_LENGTH -> pass
-                text.length < excludeStringsWithLessThanThreshold -> pass
+                text.length < allowStringWithLength -> pass
                 text.matches(ignoreStringsRegex) -> pass
                 else -> add(expression)
             }
@@ -124,9 +118,5 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
                 entries ?: mutableListOf(str)
             }
         }
-    }
-
-    companion object {
-        private const val STRING_EXCLUSION_LENGTH = 5
     }
 }
