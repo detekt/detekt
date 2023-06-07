@@ -23,11 +23,6 @@ class Indentation(config: Config) : FormattingRule(config) {
     @Configuration("indentation size")
     private val indentSize by config(4)
 
-    @Configuration("continuation indentation size")
-    @Deprecated("`continuationIndentSize` is ignored by KtLint and will have no effect")
-    @Suppress("UnusedPrivateMember")
-    private val continuationIndentSize by config(4)
-
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
         mapOf(
             INDENT_SIZE_PROPERTY to indentSize.toString(),
