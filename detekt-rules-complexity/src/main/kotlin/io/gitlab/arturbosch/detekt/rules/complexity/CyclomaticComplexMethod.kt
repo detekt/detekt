@@ -49,8 +49,8 @@ class CyclomaticComplexMethod(config: Config = Config.empty) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("ComplexMethod")
 
-    @Configuration("McCabe's Cyclomatic Complexity (MCC) number for a method.")
-    private val threshold: Int by config(defaultValue = 15)
+    @Configuration("The maximum allowed McCabe's Cyclomatic Complexity (MCC) for a method.")
+    private val allowedComplexity: Int by config(defaultValue = 15)
 
     @Configuration("Ignores a complex method if it only contains a single when expression.")
     private val ignoreSingleWhenExpression: Boolean by config(false)
@@ -75,15 +75,15 @@ class CyclomaticComplexMethod(config: Config = Config.empty) : Rule(config) {
             this.nestingFunctions = this@CyclomaticComplexMethod.nestingFunctions
         }
 
-        if (complexity >= threshold) {
+        if (complexity > allowedComplexity) {
             report(
                 ThresholdedCodeSmell(
                     issue,
                     Entity.atName(function),
-                    Metric("MCC", complexity, threshold),
+                    Metric("MCC", complexity, allowedComplexity),
                     "The function ${function.nameAsSafeName} appears to be too complex " +
                         "based on Cyclomatic Complexity (complexity: $complexity). " +
-                        "Defined complexity threshold for methods is set to '$threshold'"
+                        "The maximum allowed complexity for methods is set to '$allowedComplexity'"
                 )
             )
         }
