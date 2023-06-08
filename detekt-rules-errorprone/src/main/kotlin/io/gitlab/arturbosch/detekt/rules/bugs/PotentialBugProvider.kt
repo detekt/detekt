@@ -34,7 +34,6 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             MapGetWithNotNullAssertionOperator(config),
             MissingPackageDeclaration(config),
             NullCheckOnMutableProperty(config),
-            @Suppress("DEPRECATION") RedundantElseInWhen(config),
             UnconditionalJumpStatementInLoop(config),
             UnnecessaryNotNullOperator(config),
             UnnecessaryNotNullCheck(config),
