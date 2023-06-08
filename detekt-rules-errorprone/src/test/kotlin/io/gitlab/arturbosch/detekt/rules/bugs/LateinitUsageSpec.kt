@@ -26,43 +26,6 @@ class LateinitUsageSpec {
     }
 
     @Test
-    @DisplayName("should only report lateinit property with no @SinceKotlin annotation")
-    fun `should only report lateinit property with no SinceKotlin annotation`() {
-        val findings =
-            LateinitUsage(TestConfig(EXCLUDE_ANNOTATED_PROPERTIES to listOf("SinceKotlin"))).compileAndLint(code)
-        assertThat(findings).hasSize(1)
-    }
-
-    @Test
-    @DisplayName("should only report lateinit properties not matching kotlin.*")
-    fun `should only report lateinit properties not matching any kotlin annotation`() {
-        val findings =
-            LateinitUsage(TestConfig(EXCLUDE_ANNOTATED_PROPERTIES to listOf("kotlin.*"))).compileAndLint(code)
-        assertThat(findings).hasSize(1)
-    }
-
-    @Test
-    fun `should only report lateinit properties matching kotlin_SinceKotlin`() {
-        val config = TestConfig(EXCLUDE_ANNOTATED_PROPERTIES to listOf("kotlin.SinceKotlin"))
-        val findings = LateinitUsage(config).compileAndLint(code)
-        assertThat(findings).hasSize(1)
-    }
-
-    @Test
-    fun `should only report lateinit property with no @SinceKotlin annotation with config string`() {
-        val findings =
-            LateinitUsage(TestConfig(EXCLUDE_ANNOTATED_PROPERTIES to "SinceKotlin")).compileAndLint(code)
-        assertThat(findings).hasSize(1)
-    }
-
-    @Test
-    fun `should only report lateinit property with no @SinceKotlin annotation containing whitespaces with config string`() {
-        val findings =
-            LateinitUsage(TestConfig(EXCLUDE_ANNOTATED_PROPERTIES to " SinceKotlin ")).compileAndLint(code)
-        assertThat(findings).hasSize(1)
-    }
-
-    @Test
     fun `should report lateinit properties not matching the exclude pattern`() {
         val findings =
             LateinitUsage(TestConfig(EXCLUDE_ANNOTATED_PROPERTIES to "IgnoreThis")).compileAndLint(code)

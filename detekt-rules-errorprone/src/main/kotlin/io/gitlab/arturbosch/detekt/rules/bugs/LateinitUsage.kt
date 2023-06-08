@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -39,12 +38,6 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    @Configuration("Allows you to provide a list of annotations that disable this check.")
-    @Deprecated("Use `ignoreAnnotated` instead")
-    private val excludeAnnotatedProperties: List<Regex> by config(emptyList<String>()) { list ->
-        list.map { it.replace(".", "\\.").replace("*", ".*").toRegex() }
-    }
-
     @Configuration("Allows you to disable the rule for a list of classes")
     private val ignoreOnClassesPattern: Regex by config("", String::toRegex)
 
@@ -61,13 +54,8 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
         super.visit(root)
 
-        val annotationExcluder = AnnotationExcluder(
-            root,
-            @Suppress("DEPRECATION") excludeAnnotatedProperties,
-            bindingContext,
-        )
 
-        properties.filterNot { annotationExcluder.shouldExclude(it.annotationEntries) }
+        properties
             .filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) == true }
             .forEach {
                 report(CodeSmell(issue, Entity.from(it), "Usages of lateinit should be avoided."))
