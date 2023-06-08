@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -55,32 +54,19 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Configuration("allows to provide a list of annotations that disable this check")
-    @Deprecated("Use `ignoreAnnotated` instead")
-    private val excludeAnnotatedClasses: List<Regex> by config(emptyList<String>()) { list ->
-        list.map { it.replace(".", "\\.").replace("*", ".*").toRegex() }
-    }
-
     @Configuration("allows to relax this rule in order to exclude classes that contains one (or more) vars")
     private val allowVars: Boolean by config(false)
 
     override fun visit(root: KtFile) {
         super.visit(root)
-        val annotationExcluder = AnnotationExcluder(
-            root,
-            @Suppress("DEPRECATION") excludeAnnotatedClasses,
-            bindingContext,
-        )
-        root.forEachDescendantOfType<KtClass> { visitKlass(it, annotationExcluder) }
+        root.forEachDescendantOfType<KtClass> { visitKlass(it) }
     }
 
-    private fun visitKlass(klass: KtClass, annotationExcluder: AnnotationExcluder) {
+    private fun visitKlass(klass: KtClass) {
         if (isIncorrectClassType(klass) || hasOnlyPrivateConstructors(klass)) {
             return
         }
-        if (klass.isClosedForExtension() && klass.onlyExtendsSimpleInterfaces() &&
-            !annotationExcluder.shouldExclude(klass.annotationEntries)
-        ) {
+        if (klass.isClosedForExtension() && klass.onlyExtendsSimpleInterfaces()) {
             val declarations = klass.body?.declarations.orEmpty()
             val properties = declarations.filterIsInstance<KtProperty>()
             val functions = declarations.filterIsInstance<KtNamedFunction>()
@@ -153,7 +139,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
     private fun KtNamedFunction.isDefaultFunction(
         classType: KotlinType?,
-        primaryConstructorParameterTypes: List<KotlinType>
+        primaryConstructorParameterTypes: List<KotlinType>,
     ): Boolean {
         return when (name) {
             !in DEFAULT_FUNCTION_NAMES -> false
@@ -169,6 +155,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
                     true
                 }
             }
+
             else -> true
         }
     }

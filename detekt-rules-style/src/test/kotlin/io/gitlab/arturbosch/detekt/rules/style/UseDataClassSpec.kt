@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 private const val ALLOW_VARS = "allowVars"
-private const val EXCLUDE_ANNOTATED_CLASSES = "excludeAnnotatedClasses"
 
 @KotlinCoreEnvironmentTest
 class UseDataClassSpec(val env: KotlinCoreEnvironment) {
@@ -378,18 +377,6 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
             value class A(val x: Int)
         """.trimIndent()
         assertThat(subject.lint(code)).isEmpty()
-    }
-
-    @Test
-    fun `does not report a class which has an ignored annotation`() {
-        val code = """
-            import kotlin.SinceKotlin
-            
-            @SinceKotlin("1.0.0")
-            class AnnotatedClass(val i: Int) {}
-        """.trimIndent()
-        val config = TestConfig(EXCLUDE_ANNOTATED_CLASSES to "kotlin.*")
-        assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
     }
 
     @Test
