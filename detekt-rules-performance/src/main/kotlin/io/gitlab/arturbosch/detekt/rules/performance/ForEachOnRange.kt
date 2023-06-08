@@ -52,7 +52,7 @@ class ForEachOnRange(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    private val rangeOperators = setOf("..", "downTo", "until")
+    private val rangeOperators = setOf("..", "rangeTo", "downTo", "until", "..<")
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
