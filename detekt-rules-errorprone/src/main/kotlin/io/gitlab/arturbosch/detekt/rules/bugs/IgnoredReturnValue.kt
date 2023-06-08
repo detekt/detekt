@@ -53,14 +53,8 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    @Configuration("if the rule should check only annotated methods")
-    @Deprecated("Use `restrictToConfig` instead")
-    private val restrictToAnnotatedMethods: Boolean by config(defaultValue = true)
-
-    @Suppress("DEPRECATION")
-    @OptIn(UnstableApi::class)
     @Configuration("If the rule should check only methods matching to configuration, or all methods")
-    private val restrictToConfig: Boolean by configWithFallback(::restrictToAnnotatedMethods, defaultValue = true)
+    private val restrictToConfig: Boolean by config(true)
 
     @Configuration("List of glob patterns to be used as inspection annotation")
     private val returnValueAnnotations: List<Regex> by config(
