@@ -15,10 +15,8 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 
-private const val VALUES = "values"
 private const val COMMENTS = "comments"
 private const val ALLOWED_PATTERNS = "allowedPatterns"
-private const val MESSAGE = "customMessage"
 
 class ForbiddenCommentSpec {
     @Nested
@@ -153,7 +151,7 @@ class ForbiddenCommentSpec {
 
             @Test
             fun `should report Banana usages regardless of case sensitive`() {
-                val forbiddenComment = ForbiddenComment(TestConfig(VALUES to "bAnAnA"))
+                val forbiddenComment = ForbiddenComment(TestConfig(COMMENTS to listOf("bAnAnA")))
                 val findings = forbiddenComment.compileAndLint(banana)
                 assertThat(findings).hasSize(1)
             }
@@ -193,7 +191,7 @@ class ForbiddenCommentSpec {
 
             @Test
             fun `should report Banana usages regardless of case sensitive`() {
-                val forbiddenComment = ForbiddenComment(TestConfig(VALUES to "bAnAnA"))
+                val forbiddenComment = ForbiddenComment(TestConfig(COMMENTS to listOf("bAnAnA")))
                 val findings = forbiddenComment.compileAndLint(banana)
                 assertThat(findings).hasSize(1)
             }
@@ -204,7 +202,7 @@ class ForbiddenCommentSpec {
     inner class `custom default values with allowed patterns are configured` {
 
         private val patternsConfig = TestConfig(
-            VALUES to "Comment",
+            COMMENTS to listOf("Comment"),
             ALLOWED_PATTERNS to "Ticket|Task",
         )
 
@@ -227,47 +225,6 @@ class ForbiddenCommentSpec {
             val comment = "// Comment Ticket:123 Task:456 comment."
             val findings = ForbiddenComment(patternsConfig).compileAndLint(comment)
             assertThat(findings).isEmpty()
-        }
-    }
-
-    @Nested
-    inner class `custom message is configured` {
-        private val messageConfig = TestConfig(
-            VALUES to "Comment",
-            MESSAGE to "Custom Message",
-        )
-
-        @Test
-        fun `should report a Finding with message 'Custom Message'`() {
-            val comment = "// Comment"
-            val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
-            assertThat(findings).hasSize(1)
-            assertThat(findings.first().message).isEqualTo("Custom Message")
-        }
-    }
-
-    @Nested
-    inner class `custom message is not configured` {
-        private val messageConfig = TestConfig(VALUES to "Comment")
-        private val messageConfigWithReason = ForbiddenComment(
-            ValueWithReason("Comment", "Comment is disallowed")
-        )
-
-        @Test
-        fun `should report a Finding with default Message`() {
-            val comment = "// Comment"
-            val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
-            val expectedMessage = String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, "Comment")
-            assertThat(findings).hasSize(1)
-            assertThat(findings.first().message).isEqualTo(expectedMessage)
-        }
-
-        @Test
-        fun `should report a Finding with reason`() {
-            val comment = "// Comment"
-            val findings = ForbiddenComment(messageConfigWithReason).compileAndLint(comment)
-            assertThat(findings).hasSize(1)
-            assertThat(findings.first().message).isEqualTo("Comment is disallowed")
         }
     }
 

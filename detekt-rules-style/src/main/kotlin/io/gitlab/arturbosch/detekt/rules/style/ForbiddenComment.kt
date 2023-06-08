@@ -16,6 +16,9 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import kotlin.text.RegexOption.DOT_MATCHES_ALL
+import kotlin.text.RegexOption.IGNORE_CASE
+import kotlin.text.RegexOption.MULTILINE
 
 // Note: ​ (zero-width-space) is used to prevent the Kotlin parser getting confused by talking about comments in a comment.
 /**
@@ -96,10 +99,6 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
         Debt.TEN_MINS
     )
 
-    @Configuration("forbidden comment strings")
-    @Deprecated("Use `comments` instead, make sure you escape your text for Regular Expressions.")
-    private val values: List<String> by config(emptyList())
-
     @Configuration("forbidden comment string patterns")
     private val comments: List<Comment> by config(
         valuesWithReason(
@@ -109,15 +108,11 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
             "TODO:" to "Forbidden TODO todo marker in comment, please do the changes.",
         )
     ) { list ->
-        list.map { Comment(it.value.toRegex(setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE)), it.reason) }
+        list.map { Comment(it.value.toRegex(setOf(DOT_MATCHES_ALL, MULTILINE, IGNORE_CASE)), it.reason) }
     }
 
     @Configuration("ignores comments which match the specified regular expression. For example `Ticket|Task`.")
     private val allowedPatterns: Regex by config("", String::toRegex)
-
-    @Configuration("error message which overrides the default one")
-    @Deprecated("Use `comments` and provide `reason` against each `value`.")
-    private val customMessage: String by config("")
 
     override fun visitComment(comment: PsiComment) {
         super.visitComment(comment)
@@ -135,13 +130,6 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 
     private fun checkForbiddenComment(text: String, comment: PsiElement) {
         if (allowedPatterns.pattern.isNotEmpty() && allowedPatterns.containsMatchIn(text)) return
-
-        @Suppress("DEPRECATION")
-        values.forEach {
-            if (text.contains(it, ignoreCase = true)) {
-                reportIssue(comment, getErrorMessage(it))
-            }
-        }
 
         comments.forEach {
             if (it.value.containsMatchIn(text)) {
@@ -164,11 +152,6 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 
     private fun getErrorMessage(comment: Comment): String =
         comment.reason ?: String.format(DEFAULT_ERROR_MESSAGE, comment.value.pattern)
-
-    @Suppress("DEPRECATION")
-    private fun getErrorMessage(value: String): String =
-        customMessage.takeUnless { it.isEmpty() }
-            ?: String.format(DEFAULT_ERROR_MESSAGE, value)
 
     private data class Comment(val value: Regex, val reason: String?)
 
