@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -8,9 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isInternal
@@ -20,7 +17,6 @@ import org.jetbrains.kotlin.descriptors.MemberDescriptor
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyClassMemberScope
@@ -72,23 +68,6 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
             Debt.FIVE_MINS
         )
 
-    @Configuration("Allows you to provide a list of annotations that disable this check.")
-    @Deprecated("Use `ignoreAnnotated` instead")
-    private val excludeAnnotatedClasses: List<Regex> by config(emptyList<String>()) { list ->
-        list.map { it.replace(".", "\\.").replace("*", ".*").toRegex() }
-    }
-
-    private lateinit var annotationExcluder: AnnotationExcluder
-
-    override fun visitKtFile(file: KtFile) {
-        annotationExcluder = AnnotationExcluder(
-            file,
-            @Suppress("DEPRECATION") excludeAnnotatedClasses,
-            bindingContext,
-        )
-        super.visitKtFile(file)
-    }
-
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
         klass.check()
@@ -96,13 +75,14 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 
     private fun KtClass.check() {
         val nameIdentifier = this.nameIdentifier ?: return
-        if (annotationExcluder.shouldExclude(annotationEntries) || isInterface() || !isAbstract()) return
+        if (isInterface() || !isAbstract()) return
         val members = members()
         when {
             members.isNotEmpty() -> checkMembers(members, nameIdentifier)
             hasInheritedMember(true) && isAnyParentAbstract() -> return
             !hasConstructorParameter() ->
                 report(CodeSmell(issue, Entity.from(nameIdentifier), noConcreteMember))
+
             else ->
                 report(CodeSmell(issue, Entity.from(nameIdentifier), noAbstractMember))
         }
@@ -110,14 +90,16 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 
     private fun KtClass.checkMembers(
         members: List<KtCallableDeclaration>,
-        nameIdentifier: PsiElement
+        nameIdentifier: PsiElement,
     ) {
         val (abstractMembers, concreteMembers) = members.partition { it.isAbstract() }
         when {
             abstractMembers.isEmpty() && !hasInheritedMember(true) ->
                 report(CodeSmell(issue, Entity.from(nameIdentifier), noAbstractMember))
+
             abstractMembers.any { it.isInternal() || it.isProtected() } || hasConstructorParameter() ->
                 Unit
+
             concreteMembers.isEmpty() && !hasInheritedMember(false) ->
                 report(CodeSmell(issue, Entity.from(nameIdentifier), noConcreteMember))
         }
