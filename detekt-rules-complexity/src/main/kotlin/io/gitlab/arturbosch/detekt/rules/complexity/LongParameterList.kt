@@ -40,19 +40,20 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    @Deprecated("Use `functionThreshold` and `constructorThreshold` instead")
+    @Deprecated("Use `allowedFunctionParameters` and `allowedConstructorParameters` instead")
     @Configuration("number of parameters required to trigger the rule")
-    private val threshold: Int by config(DEFAULT_FUNCTION_THRESHOLD)
+    private val threshold: Int by config(DEFAULT_ALLOWED_FUNCTION_PARAMETERS)
 
     @Suppress("DEPRECATION")
     @OptIn(UnstableApi::class)
     @Configuration("number of function parameters required to trigger the rule")
-    private val functionThreshold: Int by configWithFallback(::threshold, DEFAULT_FUNCTION_THRESHOLD)
+    private val allowedFunctionParameters: Int by configWithFallback(::threshold, DEFAULT_ALLOWED_FUNCTION_PARAMETERS)
 
     @Suppress("DEPRECATION")
     @OptIn(UnstableApi::class)
     @Configuration("number of constructor parameters required to trigger the rule")
-    private val constructorThreshold: Int by configWithFallback(::threshold, DEFAULT_CONSTRUCTOR_THRESHOLD)
+    private val allowedConstructorParameters: Int
+        by configWithFallback(::threshold, DEFAULT_ALLOWED_CONSTRUCTOR_PARAMETERS)
 
     @Configuration("ignore parameters that have a default value")
     private val ignoreDefaultParameters: Boolean by config(false)
@@ -75,7 +76,7 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        checkLongParameterList(function, functionThreshold, "function ${function.nameAsSafeName}")
+        checkLongParameterList(function, allowedFunctionParameters, "function ${function.nameAsSafeName}")
     }
 
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
@@ -95,17 +96,17 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
         if (owner is KtClass && owner.isDataClassOrIgnored()) {
             return
         }
-        checkLongParameterList(constructor, constructorThreshold, "constructor")
+        checkLongParameterList(constructor, allowedConstructorParameters, "constructor")
     }
 
     private fun KtClass.isDataClassOrIgnored() = ignoreDataClasses && isData()
 
-    private fun checkLongParameterList(function: KtFunction, threshold: Int, identifier: String) {
+    private fun checkLongParameterList(function: KtFunction, maximumAllowedParameter: Int, identifier: String) {
         if (function.isOverride()) return
         val parameterList = function.valueParameterList ?: return
         val parameterNumber = parameterList.parameterCount()
 
-        if (parameterNumber >= threshold) {
+        if (parameterNumber > maximumAllowedParameter) {
             val parameterPrint = function.valueParameters.joinToString(separator = ", ") {
                 it.nameAsSafeName.identifier + ": " + it.typeReference?.text
             }
@@ -114,9 +115,9 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
                 ThresholdedCodeSmell(
                     issue,
                     Entity.from(parameterList),
-                    Metric("SIZE", parameterNumber, threshold),
+                    Metric("SIZE", parameterNumber, maximumAllowedParameter),
                     "The $identifier($parameterPrint) has too many parameters. " +
-                        "The current threshold is set to $threshold."
+                        "The current maximum allowed parameters are $maximumAllowedParameter."
                 )
             )
         }
@@ -132,7 +133,7 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     }
 
     companion object {
-        private const val DEFAULT_FUNCTION_THRESHOLD = 6
-        private const val DEFAULT_CONSTRUCTOR_THRESHOLD = 7
+        private const val DEFAULT_ALLOWED_FUNCTION_PARAMETERS = 6
+        private const val DEFAULT_ALLOWED_CONSTRUCTOR_PARAMETERS = 7
     }
 }
