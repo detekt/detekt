@@ -16,6 +16,13 @@ class ForEachOnRangeSpec {
                 (1..10).forEach {
                     println(it)
                 }
+                (1.rangeTo(10)).forEach {
+                    println(it)
+                }
+                @OptIn(ExperimentalStdlibApi::class)
+                (1..<10).forEach {
+                    println(it)
+                }
                 (1 until 10).forEach {
                     println(it)
                 }
@@ -58,7 +65,7 @@ class ForEachOnRangeSpec {
         @Test
         fun `should report the forEach usage`() {
             val findings = subject.compileAndLint(code)
-            assertThat(findings).hasSize(13)
+            assertThat(findings).hasSize(15)
         }
 
         @Test
