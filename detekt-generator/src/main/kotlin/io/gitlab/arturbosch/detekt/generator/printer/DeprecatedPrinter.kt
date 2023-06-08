@@ -39,6 +39,5 @@ private fun writeProperty(ruleSet: RuleSetPage, rule: Rule, configuration: Confi
 
 @Suppress("MaxLineLength")
 internal fun migratedRules() = listOf(
-    "style>LibraryEntitiesShouldNotBePublic=Rule migrated to `libraries` ruleset plugin",
     "style>MandatoryBracesIfStatements=Use `BracesOnIfStatements` with `always` configuration instead",
 )
