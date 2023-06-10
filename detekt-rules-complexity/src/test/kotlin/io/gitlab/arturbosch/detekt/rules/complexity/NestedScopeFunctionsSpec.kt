@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 class NestedScopeFunctionsSpec(private val env: KotlinCoreEnvironment) {
 
     private val defaultConfig = TestConfig(
-        "threshold" to 1,
+        "allowedDepth" to 1,
         "functions" to listOf("kotlin.run", "kotlin.with")
     )
     private val subject = NestedScopeFunctions(defaultConfig)
@@ -91,6 +91,18 @@ class NestedScopeFunctionsSpec(private val env: KotlinCoreEnvironment) {
         expectNoFindings()
     }
 
+    @Test
+    fun `should not report scope functions that have exactly the allowed depth`() {
+        givenCode = """
+            fun f() {
+                1.run {
+                }
+            }
+        """.trimIndent()
+        whenLintRuns()
+        expectNoFindings()
+    }
+
     private fun whenLintRuns() {
         actual = subject.compileAndLintWithContext(env, givenCode)
     }
@@ -101,7 +113,7 @@ class NestedScopeFunctionsSpec(private val env: KotlinCoreEnvironment) {
 
     private fun expectFunctionInMsg(scopeFunction: String) {
         val expected = "The scope function '$scopeFunction' is nested too deeply ('2'). " +
-            "Complexity threshold is set to '1'."
+            "The maximum allowed depth is set to '1'."
         assertThat(actual[0]).hasMessage(expected)
     }
 
