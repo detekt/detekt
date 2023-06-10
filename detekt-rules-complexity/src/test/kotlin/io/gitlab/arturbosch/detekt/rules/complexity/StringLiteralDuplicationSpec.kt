@@ -14,7 +14,7 @@ private const val IGNORE_STRINGS_REGEX = "ignoreStringsRegex"
 
 class StringLiteralDuplicationSpec {
 
-    val subject = StringLiteralDuplication()
+    val subject = StringLiteralDuplication(TestConfig("allowedDuplications" to 2))
 
     @Nested
     inner class `many hardcoded strings` {
@@ -58,7 +58,7 @@ class StringLiteralDuplicationSpec {
 
         @Test
         fun `reports strings in annotations according to config`() {
-            val config = TestConfig(IGNORE_ANNOTATION to "false")
+            val config = TestConfig(IGNORE_ANNOTATION to "false", "allowedDuplications" to 2)
             assertFindingWithConfig(code, config, 1)
         }
     }
@@ -75,7 +75,7 @@ class StringLiteralDuplicationSpec {
 
         @Test
         fun `reports string with 4 characters`() {
-            val config = TestConfig(EXCLUDE_SHORT_STRING to "false")
+            val config = TestConfig(EXCLUDE_SHORT_STRING to "false", "allowedDuplications" to 2)
             assertFindingWithConfig(code, config, 1)
         }
     }

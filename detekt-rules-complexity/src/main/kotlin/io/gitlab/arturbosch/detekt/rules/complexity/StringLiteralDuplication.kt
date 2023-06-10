@@ -53,8 +53,8 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Configuration("amount of duplications to trigger rule")
-    private val threshold: Int by config(defaultValue = 3)
+    @Configuration("The maximum allowed amount of duplications.")
+    private val allowedDuplications: Int by config(defaultValue = 3)
 
     @Configuration("if values in Annotations should be ignored")
     private val ignoreAnnotation: Boolean by config(true)
@@ -75,7 +75,7 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
                 ThresholdedCodeSmell(
                     issue,
                     main,
-                    Metric(type + name, value, threshold),
+                    Metric(type + name, value, allowedDuplications),
                     issue.description,
                     references
                 )
@@ -89,7 +89,7 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
         private val literalReferences = HashMap<String, MutableList<KtStringTemplateExpression>>()
         private val pass: Unit = Unit
 
-        fun getLiteralsOverThreshold(): Map<String, Int> = literals.filterValues { it >= threshold }
+        fun getLiteralsOverThreshold(): Map<String, Int> = literals.filterValues { it > allowedDuplications }
         fun entitiesForLiteral(literal: String): Pair<Entity, List<Entity>> {
             val references = literalReferences[literal]
             if (references != null && references.isNotEmpty()) {
