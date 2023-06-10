@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test
 
 class NestedBlockDepthSpec {
 
-    val defaultThreshold = 4
-    val defaultConfig = TestConfig("threshold" to defaultThreshold)
-    val subject = NestedBlockDepth(defaultConfig)
+    private val defaultAllowedDepth = 3
+    private val defaultConfig = TestConfig("allowedDepth" to defaultAllowedDepth)
+    private val subject = NestedBlockDepth(defaultConfig)
 
     @Test
     fun `should ignore class nesting levels`() {
