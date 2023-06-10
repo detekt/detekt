@@ -37,20 +37,20 @@ class MethodOverloading(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    @Configuration("number of overloads which will trigger the rule")
-    private val threshold: Int by config(defaultValue = 6)
+    @Configuration("The allowed number of overloads for a method.")
+    private val allowedOverloads: Int by config(defaultValue = 6)
 
     override fun visitKtFile(file: KtFile) {
         val visitor = OverloadedMethodVisitor()
         file.getChildrenOfType<KtNamedFunction>().forEach { visitor.visitMethod(it) }
-        visitor.reportIfThresholdExceeded(Entity.atPackageOrFirstDecl(file))
+        visitor.reportIfAllowedNumberExceeded(Entity.atPackageOrFirstDecl(file))
         super.visitKtFile(file)
     }
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         val visitor = OverloadedMethodVisitor()
         classOrObject.accept(visitor)
-        visitor.reportIfThresholdExceeded(Entity.atName(classOrObject))
+        visitor.reportIfAllowedNumberExceeded(Entity.atName(classOrObject))
         super.visitClassOrObject(classOrObject)
     }
 
@@ -58,13 +58,13 @@ class MethodOverloading(config: Config = Config.empty) : Rule(config) {
 
         private val methods = HashMap<String, Int>()
 
-        fun reportIfThresholdExceeded(entity: Entity) {
-            for ((name, value) in methods.filterValues { it >= threshold }) {
+        fun reportIfAllowedNumberExceeded(entity: Entity) {
+            for ((name, value) in methods.filterValues { it > allowedOverloads }) {
                 report(
                     ThresholdedCodeSmell(
                         issue,
                         entity,
-                        Metric("OVERLOAD SIZE: ", value, threshold),
+                        Metric("OVERLOAD SIZE: ", value, allowedOverloads),
                         message = "The method '$name' is overloaded $value times."
                     )
                 )
