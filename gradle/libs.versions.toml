@@ -1,7 +1,7 @@
 [versions]
-dokka = "1.8.10"
+dokka = "1.8.20"
 jacoco = "0.8.10"
-kotlin = "1.8.21"
+kotlin = "1.8.22"
 ktlint = "0.49.1"
 junit = "5.9.3"
 contester = "0.2.0"
@@ -47,9 +47,9 @@ contester-driver = { module = "io.github.davidburstrom.contester:contester-drive
 kotlinCompileTesting = { module = "com.github.tschuchortdev:kotlin-compile-testing", version = "1.5.0" }
 
 [plugins]
-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.13.1" }
+binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.13.2" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 download = { id = "de.undercouch.download", version = "5.4.0" }
-gradleVersions = { id = "com.github.ben-manes.versions", version = "0.46.0" }
+gradleVersions = { id = "com.github.ben-manes.versions", version = "0.47.0" }
 pluginPublishing = { id = "com.gradle.plugin-publish", version = "1.2.0" }
 shadow = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }

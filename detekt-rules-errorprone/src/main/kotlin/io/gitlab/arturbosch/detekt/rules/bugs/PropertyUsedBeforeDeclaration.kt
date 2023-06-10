@@ -62,7 +62,7 @@ class PropertyUsedBeforeDeclaration(config: Config = Config.empty) : Rule(config
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         super.visitClassOrObject(classOrObject)
 
-        val classMembers = classOrObject.body?.children ?: return
+        val classMembers = classOrObject.body?.children?.filterNot { it is KtClassOrObject } ?: return
 
         val allProperties = classMembers.filterIsInstance<KtProperty>().mapNotNull {
             val name = it.name ?: return@mapNotNull null

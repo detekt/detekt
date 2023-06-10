@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * Reports when very long function names are used.
  */
-class FunctionMaxLength(config: Config = Config.empty) : Rule(config) {
+class FunctionNameMaxLength(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
@@ -30,7 +30,7 @@ class FunctionMaxLength(config: Config = Config.empty) : Rule(config) {
         get() = setOf("FunctionMaxNameLength")
 
     @Configuration("maximum name length")
-    private val maximumFunctionNameLength: Int by config(30)
+    private val maximumFunctionNameLength: Int by config(DEFAULT_MAXIMUM_FUNCTION_NAME_LENGTH)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.isOverride() || function.isOperator()) {
@@ -49,6 +49,6 @@ class FunctionMaxLength(config: Config = Config.empty) : Rule(config) {
     }
 
     companion object {
-        const val MAXIMUM_FUNCTION_NAME_LENGTH = "maximumFunctionNameLength"
+        const val DEFAULT_MAXIMUM_FUNCTION_NAME_LENGTH = 30
     }
 }

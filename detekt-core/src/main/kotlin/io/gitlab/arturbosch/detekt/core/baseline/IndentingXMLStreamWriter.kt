@@ -44,7 +44,9 @@ internal class IndentingXMLStreamWriter(
 
     private fun writeIndent() {
         if (indentationDepth > 0) {
-            (0 until indentationDepth).forEach { _ -> writer.writeCharacters(indent) }
+            repeat(indentationDepth) {
+                writer.writeCharacters(indent)
+            }
         }
     }
 

@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class MethodOverloadingSpec {
-    val defaultThreshold = 3
-    val defaultConfig = TestConfig("threshold" to defaultThreshold)
+    private val defaultAllowedOverloads = 2
+    private val defaultConfig = TestConfig("allowedOverloads" to defaultAllowedOverloads)
 
     val subject = MethodOverloading(defaultConfig)
 
@@ -257,6 +257,19 @@ class MethodOverloadingSpec {
     fun `does not report a class without a body`() {
         val code = "class A"
         assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report a method that has exactly the allowed overloads`() {
+        val code = """
+             class Test {              
+                 fun f(i: Int) {}
+                 fun f(i: Int, j: Int) {}
+             }
+        """.trimIndent()
+        val actual = subject.compileAndLint(code)
+
+        assertThat(actual).isEmpty()
     }
 
     @Test

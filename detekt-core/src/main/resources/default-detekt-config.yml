@@ -128,7 +128,7 @@ complexity:
     threshold: 600
   LongMethod:
     active: true
-    threshold: 60
+    allowedLines: 60
   LongParameterList:
     active: true
     functionThreshold: 6
@@ -138,14 +138,14 @@ complexity:
     ignoreAnnotatedParameter: []
   MethodOverloading:
     active: false
-    threshold: 6
+    allowedOverloads: 6
   NamedArguments:
     active: false
-    threshold: 3
+    allowedArguments: 3
     ignoreArgumentsMatchingNames: false
   NestedBlockDepth:
     active: true
-    threshold: 4
+    allowedDepth: 4
   NestedScopeFunctions:
     active: false
     threshold: 1
@@ -322,7 +322,7 @@ naming:
   ForbiddenClassName:
     active: false
     forbiddenName: []
-  FunctionMaxLength:
+  FunctionNameMaxLength:
     active: false
     maximumFunctionNameLength: 30
   FunctionNameMinLength:

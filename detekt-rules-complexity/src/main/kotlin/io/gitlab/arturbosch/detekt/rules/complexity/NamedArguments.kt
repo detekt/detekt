@@ -41,17 +41,17 @@ class NamedArguments(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Configuration("number of arguments that triggers this inspection")
-    private val threshold: Int by config(defaultValue = 3)
+    @Configuration("The allowed number of arguments for a function.")
+    private val allowedArguments: Int by config(defaultValue = 3)
 
     @Configuration("ignores when argument values are the same as the parameter names")
     private val ignoreArgumentsMatchingNames: Boolean by config(defaultValue = false)
 
     override fun visitCallExpression(expression: KtCallExpression) {
         val valueArguments = expression.valueArguments.filterNot { it is KtLambdaArgument }
-        if (valueArguments.size > threshold && expression.canNameArguments()) {
+        if (valueArguments.size > allowedArguments && expression.canNameArguments()) {
             val message = "This function call has ${valueArguments.size} arguments. To call a function with more " +
-                "than $threshold arguments you should set the name of each argument."
+                "than $allowedArguments arguments you should set the name of each argument."
             report(CodeSmell(issue, Entity.from(expression), message))
         } else {
             super.visitCallExpression(expression)
