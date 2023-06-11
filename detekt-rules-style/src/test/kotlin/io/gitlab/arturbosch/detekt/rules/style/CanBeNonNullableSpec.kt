@@ -143,6 +143,11 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     private fun buzz(bizz: Int): Int? {
                         return if (bizz % 2 == 0) null else bizz
                     }
+
+                    fun baz() {
+                        g = null
+                    }
+                    private var g: Int? = 0
                 }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
