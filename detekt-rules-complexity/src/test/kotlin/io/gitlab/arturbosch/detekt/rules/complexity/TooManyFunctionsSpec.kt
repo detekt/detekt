@@ -6,11 +6,11 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-private const val THRESHOLD_IN_FILES = "thresholdInFiles"
-private const val THRESHOLD_IN_CLASSES = "thresholdInClasses"
-private const val THRESHOLD_IN_INTERFACES = "thresholdInInterfaces"
-private const val THRESHOLD_IN_OBJECTS = "thresholdInObjects"
-private const val THRESHOLD_IN_ENUMS = "thresholdInEnums"
+private const val ALLOWED_FUNCTIONS_IN_FILES = "allowedFunctionsInFiles"
+private const val ALLOWED_FUNCTIONS_IN_CLASSES = "allowedFunctionsInClasses"
+private const val ALLOWED_FUNCTIONS_IN_INTERFACES = "allowedFunctionsInInterfaces"
+private const val ALLOWED_FUNCTIONS_IN_OBJECTS = "allowedFunctionsInObjects"
+private const val ALLOWED_FUNCTIONS_IN_ENUMS = "allowedFunctionsInEnums"
 private const val IGNORE_DEPRECATED = "ignoreDeprecated"
 private const val IGNORE_PRIVATE = "ignorePrivate"
 private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
@@ -18,11 +18,11 @@ private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
 class TooManyFunctionsSpec {
     val rule = TooManyFunctions(
         TestConfig(
-            THRESHOLD_IN_CLASSES to "1",
-            THRESHOLD_IN_ENUMS to "1",
-            THRESHOLD_IN_FILES to "1",
-            THRESHOLD_IN_INTERFACES to "1",
-            THRESHOLD_IN_OBJECTS to "1",
+            ALLOWED_FUNCTIONS_IN_CLASSES to "0",
+            ALLOWED_FUNCTIONS_IN_ENUMS to "0",
+            ALLOWED_FUNCTIONS_IN_FILES to "0",
+            ALLOWED_FUNCTIONS_IN_INTERFACES to "0",
+            ALLOWED_FUNCTIONS_IN_OBJECTS to "0",
         )
     )
 
@@ -139,8 +139,8 @@ class TooManyFunctionsSpec {
         fun `finds no deprecated functions`() {
             val configuredRule = TooManyFunctions(
                 TestConfig(
-                    THRESHOLD_IN_CLASSES to "1",
-                    THRESHOLD_IN_FILES to "1",
+                    ALLOWED_FUNCTIONS_IN_CLASSES to "1",
+                    ALLOWED_FUNCTIONS_IN_FILES to "1",
                     IGNORE_DEPRECATED to "true",
                 )
             )
@@ -166,8 +166,8 @@ class TooManyFunctionsSpec {
         fun `finds no private functions`() {
             val configuredRule = TooManyFunctions(
                 TestConfig(
-                    THRESHOLD_IN_CLASSES to "1",
-                    THRESHOLD_IN_FILES to "1",
+                    ALLOWED_FUNCTIONS_IN_CLASSES to "1",
+                    ALLOWED_FUNCTIONS_IN_FILES to "1",
                     IGNORE_PRIVATE to "true",
                 )
             )
@@ -200,8 +200,8 @@ class TooManyFunctionsSpec {
             """.trimIndent()
             val configuredRule = TooManyFunctions(
                 TestConfig(
-                    THRESHOLD_IN_CLASSES to "1",
-                    THRESHOLD_IN_FILES to "1",
+                    ALLOWED_FUNCTIONS_IN_CLASSES to "1",
+                    ALLOWED_FUNCTIONS_IN_FILES to "1",
                     IGNORE_PRIVATE to "true",
                     IGNORE_DEPRECATED to "true",
                     IGNORE_OVERRIDDEN to "true",
@@ -230,8 +230,8 @@ class TooManyFunctionsSpec {
         fun `should not report class with overridden functions, if ignoreOverridden is enabled`() {
             val configuredRule = TooManyFunctions(
                 TestConfig(
-                    THRESHOLD_IN_CLASSES to "1",
-                    THRESHOLD_IN_FILES to "1",
+                    ALLOWED_FUNCTIONS_IN_CLASSES to "1",
+                    ALLOWED_FUNCTIONS_IN_FILES to "1",
                     IGNORE_OVERRIDDEN to "true",
                 )
             )
@@ -242,8 +242,8 @@ class TooManyFunctionsSpec {
         fun `should count overridden functions, if ignoreOverridden is disabled`() {
             val configuredRule = TooManyFunctions(
                 TestConfig(
-                    THRESHOLD_IN_CLASSES to "1",
-                    THRESHOLD_IN_FILES to "1",
+                    ALLOWED_FUNCTIONS_IN_CLASSES to "1",
+                    ALLOWED_FUNCTIONS_IN_FILES to "1",
                     IGNORE_OVERRIDDEN to "false",
                 )
             )

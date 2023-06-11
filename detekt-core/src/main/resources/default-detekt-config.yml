@@ -167,11 +167,11 @@ complexity:
   TooManyFunctions:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
-    thresholdInFiles: 11
-    thresholdInClasses: 11
-    thresholdInInterfaces: 11
-    thresholdInObjects: 11
-    thresholdInEnums: 11
+    allowedFunctionsInFiles: 11
+    allowedFunctionsInClasses: 11
+    allowedFunctionsInInterfaces: 11
+    allowedFunctionsInObjects: 11
+    allowedFunctionsInEnums: 11
     ignoreDeprecated: false
     ignorePrivate: false
     ignoreOverridden: false
