@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class CouldBeSequenceSpec(val env: KotlinCoreEnvironment) {
-    val subject = CouldBeSequence(TestConfig("threshold" to 3))
+    private val subject = CouldBeSequence(TestConfig("allowedOperations" to 2))
 
     @Test
     fun `long collection chain should be sequence`() {
@@ -24,6 +24,19 @@ class CouldBeSequenceSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `does not report issue for amount of operations that are exactly the allowed number`() {
+        val code = """
+            val myCollection = listOf(1, 2, 3, 4, 5, 6, 7, 8)
+            val processed = myCollection.filter {
+                it % 2 == 0
+            }.map {
+                it*2
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
