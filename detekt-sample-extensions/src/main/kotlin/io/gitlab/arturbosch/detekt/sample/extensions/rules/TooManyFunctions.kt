@@ -26,13 +26,13 @@ class TooManyFunctions(config: Config) : Rule(config) {
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
-        if (amount > THRESHOLD) {
+        if (amount > ALLOWED_FUNCTIONS) {
             report(
                 CodeSmell(
                     issue,
                     Entity.atPackageOrFirstDecl(file),
                     message = "The file ${file.name} has $amount function declarations. " +
-                        "Threshold is specified with $THRESHOLD."
+                        "The maximum number of allowed functions is specified with $ALLOWED_FUNCTIONS."
                 )
             )
         }
@@ -45,6 +45,6 @@ class TooManyFunctions(config: Config) : Rule(config) {
     }
 
     companion object {
-        private const val THRESHOLD = 10
+        private const val ALLOWED_FUNCTIONS = 10
     }
 }
