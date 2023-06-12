@@ -52,7 +52,7 @@ class ComplexCondition(
     )
 
     @Configuration("Maximum allowed number of conditions.")
-    private val allowedConditions: Int by config(defaultValue = 4)
+    private val allowedConditions: Int by config(defaultValue = 3)
 
     override fun visitIfExpression(expression: KtIfExpression) {
         val condition = expression.condition

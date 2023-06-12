@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class ComplexConditionSpec {
 
-    private val testConfig = TestConfig("allowedComplexity" to 4)
+    private val testConfig = TestConfig("allowedConditions" to 4)
 
     @Test
     fun `should report complex conditions exceeding allowed complexity`() {
