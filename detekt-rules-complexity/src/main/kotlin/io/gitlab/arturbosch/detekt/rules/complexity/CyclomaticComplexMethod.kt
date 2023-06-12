@@ -50,7 +50,7 @@ class CyclomaticComplexMethod(config: Config = Config.empty) : Rule(config) {
     override val defaultRuleIdAliases: Set<String> = setOf("ComplexMethod")
 
     @Configuration("The maximum allowed McCabe's Cyclomatic Complexity (MCC) for a method.")
-    private val allowedComplexity: Int by config(defaultValue = 15)
+    private val allowedComplexity: Int by config(defaultValue = 14)
 
     @Configuration("Ignores a complex method if it only contains a single when expression.")
     private val ignoreSingleWhenExpression: Boolean by config(false)
