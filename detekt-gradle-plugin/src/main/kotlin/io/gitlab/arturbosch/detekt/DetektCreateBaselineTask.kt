@@ -69,27 +69,63 @@ abstract class DetektCreateBaselineTask @Inject constructor(
     @get:Optional
     abstract val classpath: ConfigurableFileCollection
 
-    @get:Console
-    abstract val debug: Property<Boolean>
+    @get:Input
+    @get:Optional
+    internal abstract val languageVersionProp: Property<String>
+    var languageVersion: String
+        @Internal
+        get() = languageVersionProp.get()
+        set(value) = languageVersionProp.set(value)
+
+    @get:Input
+    @get:Optional
+    internal abstract val jvmTargetProp: Property<String>
+    var jvmTarget: String
+        @Internal
+        get() = jvmTargetProp.get()
+        set(value) = jvmTargetProp.set(value)
 
     @get:Internal
-    abstract val parallel: Property<Boolean>
+    abstract val jdkHome: DirectoryProperty
 
-    @get:Input
-    @get:Optional
-    abstract val disableDefaultRuleSets: Property<Boolean>
+    @get:Internal
+    internal abstract val debugProp: Property<Boolean>
+    var debug: Boolean
+        @Console
+        get() = debugProp.getOrElse(false)
+        set(value) = debugProp.set(value)
 
-    @get:Input
-    @get:Optional
-    abstract val buildUponDefaultConfig: Property<Boolean>
+    @get:Internal
+    internal abstract val parallelProp: Property<Boolean>
+    var parallel: Boolean
+        @Internal
+        get() = parallelProp.getOrElse(false)
+        set(value) = parallelProp.set(value)
+
+    @get:Internal
+    internal abstract val disableDefaultRuleSetsProp: Property<Boolean>
+    var disableDefaultRuleSets: Boolean
+        @Input
+        get() = disableDefaultRuleSetsProp.getOrElse(false)
+        set(value) = disableDefaultRuleSetsProp.set(value)
+
+    @get:Internal
+    internal abstract val buildUponDefaultConfigProp: Property<Boolean>
+    var buildUponDefaultConfig: Boolean
+        @Input
+        get() = buildUponDefaultConfigProp.getOrElse(false)
+        set(value) = buildUponDefaultConfigProp.set(value)
+
+    @get:Internal
+    internal abstract val allRulesProp: Property<Boolean>
+    var allRules: Boolean
+        @Input
+        get() = allRulesProp.getOrElse(false)
+        set(value) = allRulesProp.set(value)
 
     @get:Input
     @get:Optional
     abstract val ignoreFailures: Property<Boolean>
-
-    @get:Input
-    @get:Optional
-    abstract val allRules: Property<Boolean>
 
     @get:Input
     @get:Optional
@@ -106,33 +142,24 @@ abstract class DetektCreateBaselineTask @Inject constructor(
         get() = basePathProp.get()
         set(value) = basePathProp.set(value)
 
-    @get:Input
-    @get:Optional
-    internal abstract val jvmTargetProp: Property<String>
-    var jvmTarget: String
-        @Internal
-        get() = jvmTargetProp.get()
-        set(value) = jvmTargetProp.set(value)
-
-    @get:Internal
-    abstract val jdkHome: DirectoryProperty
-
     @get:Internal
     internal val arguments
         get() = listOf(
             CreateBaselineArgument,
-            ClasspathArgument(classpath),
-            JvmTargetArgument(jvmTargetProp.orNull),
-            BaselineArgument(baseline.get()),
             InputArgument(source),
+            ClasspathArgument(classpath),
+            LanguageVersionArgument(languageVersionProp.orNull),
+            JvmTargetArgument(jvmTargetProp.orNull),
+            JdkHomeArgument(jdkHome),
             ConfigArgument(config),
-            DebugArgument(debug.getOrElse(false)),
-            ParallelArgument(parallel.getOrElse(false)),
-            BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
-            AutoCorrectArgument(autoCorrect.getOrElse(false)),
-            AllRulesArgument(allRules.getOrElse(false)),
+            BaselineArgument(baseline.get()),
+            DebugArgument(debugProp.getOrElse(false)),
+            ParallelArgument(parallelProp.getOrElse(false)),
+            BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
+            AllRulesArgument(allRulesProp.getOrElse(false)),
+            AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
             BasePathArgument(basePathProp.orNull),
-            DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
+            DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
         ).flatMap(CliArgument::toArgument)
 
     @InputFiles
