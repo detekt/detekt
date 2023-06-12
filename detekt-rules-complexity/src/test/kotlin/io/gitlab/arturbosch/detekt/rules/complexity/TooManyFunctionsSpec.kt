@@ -6,11 +6,11 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-private const val ALLOWED_FUNCTIONS_IN_FILES = "allowedFunctionsInFiles"
-private const val ALLOWED_FUNCTIONS_IN_CLASSES = "allowedFunctionsInClasses"
-private const val ALLOWED_FUNCTIONS_IN_INTERFACES = "allowedFunctionsInInterfaces"
-private const val ALLOWED_FUNCTIONS_IN_OBJECTS = "allowedFunctionsInObjects"
-private const val ALLOWED_FUNCTIONS_IN_ENUMS = "allowedFunctionsInEnums"
+private const val ALLOWED_FUNCTIONS_PER_FILE = "allowedFunctionsPerFile"
+private const val ALLOWED_FUNCTIONS_PER_CLASS = "allowedFunctionsPerClass"
+private const val ALLOWED_FUNCTIONS_PER_INTERFACE = "allowedFunctionsPerInterface"
+private const val ALLOWED_FUNCTIONS_PER_OBJECT = "allowedFunctionsPerObject"
+private const val ALLOWED_FUNCTIONS_PER_ENUM = "allowedFunctionsPerEnum"
 private const val IGNORE_DEPRECATED = "ignoreDeprecated"
 private const val IGNORE_PRIVATE = "ignorePrivate"
 private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
@@ -18,19 +18,20 @@ private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
 class TooManyFunctionsSpec {
     val rule = TooManyFunctions(
         TestConfig(
-            ALLOWED_FUNCTIONS_IN_CLASSES to "0",
-            ALLOWED_FUNCTIONS_IN_ENUMS to "0",
-            ALLOWED_FUNCTIONS_IN_FILES to "0",
-            ALLOWED_FUNCTIONS_IN_INTERFACES to "0",
-            ALLOWED_FUNCTIONS_IN_OBJECTS to "0",
+            ALLOWED_FUNCTIONS_PER_CLASS to "1",
+            ALLOWED_FUNCTIONS_PER_ENUM to "1",
+            ALLOWED_FUNCTIONS_PER_FILE to "1",
+            ALLOWED_FUNCTIONS_PER_INTERFACE to "1",
+            ALLOWED_FUNCTIONS_PER_OBJECT to "1",
         )
     )
 
     @Test
-    fun `finds one function in class`() {
+    fun `finds two functions in class`() {
         val code = """
             class A {
                 fun a() = Unit
+                fun b() = Unit
             }
         """.trimIndent()
 
@@ -40,10 +41,11 @@ class TooManyFunctionsSpec {
     }
 
     @Test
-    fun `finds one function in object`() {
+    fun `finds two functions in object`() {
         val code = """
             object O {
                 fun o() = Unit
+                fun p() = Unit
             }
         """.trimIndent()
 
@@ -53,10 +55,11 @@ class TooManyFunctionsSpec {
     }
 
     @Test
-    fun `finds one function in interface`() {
+    fun `finds two functions in interface`() {
         val code = """
             interface I {
                 fun i()
+                fun j()
             }
         """.trimIndent()
 
@@ -66,11 +69,12 @@ class TooManyFunctionsSpec {
     }
 
     @Test
-    fun `finds one function in enum`() {
+    fun `finds two functions in enum`() {
         val code = """
             enum class E {
                 A;
                 fun e() {}
+                fun f() {}
             }
         """.trimIndent()
 
@@ -80,8 +84,11 @@ class TooManyFunctionsSpec {
     }
 
     @Test
-    fun `finds one function in file`() {
-        val code = "fun f() = Unit"
+    fun `finds two functions in file`() {
+        val code = """
+            fun f() = Unit
+            fun g() = Unit
+        """.trimIndent()
 
         assertThat(rule.compileAndLint(code)).hasSize(1)
     }
@@ -102,11 +109,12 @@ class TooManyFunctionsSpec {
     }
 
     @Test
-    fun `finds one function in nested class`() {
+    fun `finds two functions in nested class`() {
         val code = """
             class A {
                 class B {
                     fun a() = Unit
+                    fun b() = Unit
                 }
             }
         """.trimIndent()
@@ -122,10 +130,16 @@ class TooManyFunctionsSpec {
             @Deprecated("")
             fun f() {
             }
+            @Deprecated("")
+            fun g() {
+            }
             
             class A {
                 @Deprecated("")
                 fun f() {
+                }
+                @Deprecated("")
+                fun g() {
                 }
             }
         """.trimIndent()
@@ -139,8 +153,8 @@ class TooManyFunctionsSpec {
         fun `finds no deprecated functions`() {
             val configuredRule = TooManyFunctions(
                 TestConfig(
-                    ALLOWED_FUNCTIONS_IN_CLASSES to "1",
-                    ALLOWED_FUNCTIONS_IN_FILES to "1",
+                    ALLOWED_FUNCTIONS_PER_CLASS to "1",
+                    ALLOWED_FUNCTIONS_PER_FILE to "1",
                     IGNORE_DEPRECATED to "true",
                 )
             )
@@ -154,6 +168,7 @@ class TooManyFunctionsSpec {
         val code = """
             class A {
                 private fun f() {}
+                private fun g() {}
             }
         """.trimIndent()
 
@@ -166,8 +181,8 @@ class TooManyFunctionsSpec {
         fun `finds no private functions`() {
             val configuredRule = TooManyFunctions(
                 TestConfig(
-                    ALLOWED_FUNCTIONS_IN_CLASSES to "1",
-                    ALLOWED_FUNCTIONS_IN_FILES to "1",
+                    ALLOWED_FUNCTIONS_PER_CLASS to "1",
+                    ALLOWED_FUNCTIONS_PER_FILE to "1",
                     IGNORE_PRIVATE to "true",
                 )
             )
@@ -200,8 +215,8 @@ class TooManyFunctionsSpec {
             """.trimIndent()
             val configuredRule = TooManyFunctions(
                 TestConfig(
-                    ALLOWED_FUNCTIONS_IN_CLASSES to "1",
-                    ALLOWED_FUNCTIONS_IN_FILES to "1",
+                    ALLOWED_FUNCTIONS_PER_CLASS to "1",
+                    ALLOWED_FUNCTIONS_PER_FILE to "1",
                     IGNORE_PRIVATE to "true",
                     IGNORE_DEPRECATED to "true",
                     IGNORE_OVERRIDDEN to "true",
@@ -230,8 +245,8 @@ class TooManyFunctionsSpec {
         fun `should not report class with overridden functions, if ignoreOverridden is enabled`() {
             val configuredRule = TooManyFunctions(
                 TestConfig(
-                    ALLOWED_FUNCTIONS_IN_CLASSES to "1",
-                    ALLOWED_FUNCTIONS_IN_FILES to "1",
+                    ALLOWED_FUNCTIONS_PER_CLASS to "1",
+                    ALLOWED_FUNCTIONS_PER_FILE to "1",
                     IGNORE_OVERRIDDEN to "true",
                 )
             )
@@ -242,8 +257,8 @@ class TooManyFunctionsSpec {
         fun `should count overridden functions, if ignoreOverridden is disabled`() {
             val configuredRule = TooManyFunctions(
                 TestConfig(
-                    ALLOWED_FUNCTIONS_IN_CLASSES to "1",
-                    ALLOWED_FUNCTIONS_IN_FILES to "1",
+                    ALLOWED_FUNCTIONS_PER_CLASS to "1",
+                    ALLOWED_FUNCTIONS_PER_FILE to "1",
                     IGNORE_OVERRIDDEN to "false",
                 )
             )

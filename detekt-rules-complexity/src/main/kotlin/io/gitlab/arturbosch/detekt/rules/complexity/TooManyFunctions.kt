@@ -39,20 +39,20 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    @Configuration("The maximum allowed functions in files")
-    private val allowedFunctionsInFiles: Int by config(DEFAULT_THRESHOLD)
+    @Configuration("The maximum allowed functions per file")
+    private val allowedFunctionsPerFile: Int by config(DEFAULT_THRESHOLD)
 
-    @Configuration("The maximum allowed functions in classes")
-    private val allowedFunctionsInClasses: Int by config(DEFAULT_THRESHOLD)
+    @Configuration("The maximum allowed functions per class")
+    private val allowedFunctionsPerClass: Int by config(DEFAULT_THRESHOLD)
 
-    @Configuration("The maximum allowed functions in interfaces")
-    private val allowedFunctionsInInterfaces: Int by config(DEFAULT_THRESHOLD)
+    @Configuration("The maximum allowed functions per interface")
+    private val allowedFunctionsPerInterface: Int by config(DEFAULT_THRESHOLD)
 
-    @Configuration("The maximum allowed functions in objects")
-    private val allowedFunctionsInObjects: Int by config(DEFAULT_THRESHOLD)
+    @Configuration("The maximum allowed function per object")
+    private val allowedFunctionsPerObject: Int by config(DEFAULT_THRESHOLD)
 
     @Configuration("The maximum allowed functions in enums")
-    private val allowedFunctionsInEnums: Int by config(DEFAULT_THRESHOLD)
+    private val allowedFunctionsPerEnum: Int by config(DEFAULT_THRESHOLD)
 
     @Configuration("ignore deprecated functions")
     private val ignoreDeprecated: Boolean by config(false)
@@ -67,14 +67,14 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
-        if (amountOfTopLevelFunctions > allowedFunctionsInFiles) {
+        if (amountOfTopLevelFunctions > allowedFunctionsPerFile) {
             report(
                 ThresholdedCodeSmell(
                     issue,
                     Entity.atPackageOrFirstDecl(file),
-                    Metric("SIZE", amountOfTopLevelFunctions, allowedFunctionsInFiles),
+                    Metric("SIZE", amountOfTopLevelFunctions, allowedFunctionsPerFile),
                     "File '${file.name}' with '$amountOfTopLevelFunctions' functions detected. " +
-                        "The maximum allowed functions inside files is set to '$allowedFunctionsInFiles'"
+                        "The maximum allowed functions per file is set to '$allowedFunctionsPerFile'"
                 )
             )
         }
@@ -91,42 +91,42 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
         val amount = calcFunctions(klass)
         when {
             klass.isInterface() -> {
-                if (amount > allowedFunctionsInInterfaces) {
+                if (amount > allowedFunctionsPerInterface) {
                     report(
                         ThresholdedCodeSmell(
                             issue,
                             Entity.atName(klass),
-                            Metric("SIZE", amount, allowedFunctionsInInterfaces),
+                            Metric("SIZE", amount, allowedFunctionsPerInterface),
                             "Interface '${klass.name}' with '$amount' functions detected. " +
-                                "The maximum allowed functions inside interfaces is set to " +
-                                "'$allowedFunctionsInInterfaces'"
+                                "The maximum allowed functions per interface is set to " +
+                                "'$allowedFunctionsPerInterface'"
                         )
                     )
                 }
             }
             klass.isEnum() -> {
-                if (amount > allowedFunctionsInEnums) {
+                if (amount > allowedFunctionsPerEnum) {
                     report(
                         ThresholdedCodeSmell(
                             issue,
                             Entity.atName(klass),
-                            Metric("SIZE", amount, allowedFunctionsInEnums),
+                            Metric("SIZE", amount, allowedFunctionsPerEnum),
                             "Enum class '${klass.name}' with '$amount' functions detected. " +
-                                "The maximum allowed functions inside enum classes is set to " +
-                                "'$allowedFunctionsInEnums'"
+                                "The maximum allowed functions per enum class is set to " +
+                                "'$allowedFunctionsPerEnum'"
                         )
                     )
                 }
             }
             else -> {
-                if (amount > allowedFunctionsInClasses) {
+                if (amount > allowedFunctionsPerClass) {
                     report(
                         ThresholdedCodeSmell(
                             issue,
                             Entity.atName(klass),
-                            Metric("SIZE", amount, allowedFunctionsInClasses),
+                            Metric("SIZE", amount, allowedFunctionsPerClass),
                             "Class '${klass.name}' with '$amount' functions detected. " +
-                                "The maximum allowed functions inside classes is set to '$allowedFunctionsInClasses'"
+                                "The maximum allowed functions per class is set to '$allowedFunctionsPerClass'"
                         )
                     )
                 }
@@ -137,14 +137,14 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
         val amount = calcFunctions(declaration)
-        if (amount > allowedFunctionsInObjects) {
+        if (amount > allowedFunctionsPerObject) {
             report(
                 ThresholdedCodeSmell(
                     issue,
                     Entity.atName(declaration),
-                    Metric("SIZE", amount, allowedFunctionsInObjects),
+                    Metric("SIZE", amount, allowedFunctionsPerObject),
                     "Object '${declaration.name}' with '$amount' functions detected. " +
-                        "The maximum allowed functions inside objects is set to '$allowedFunctionsInObjects'"
+                        "The maximum allowed functions per object is set to '$allowedFunctionsPerObject'"
                 )
             )
         }
