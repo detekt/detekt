@@ -35,17 +35,17 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  *
  * <noncompliant>
  * class Foo {
- *   private val unused = "unused"
+ *     private val unused = "unused"
  * }
  * </noncompliant>
  *
  * <compliant>
  * class Foo {
- *   private val used = "used"
+ *     private val used = "used"
  *
- *   fun greet() {
- *     println(used)
- *   }
+ *     fun greet() {
+ *         println(used)
+ *     }
  * }
  * </compliant>
  */
