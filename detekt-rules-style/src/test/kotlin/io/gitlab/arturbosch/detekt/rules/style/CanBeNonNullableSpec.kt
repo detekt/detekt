@@ -1,10 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.assertj.core.api.Assertions.assertThat
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
@@ -116,6 +117,35 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
+        fun `reports when class-level name shadowed vars are never assigned nullable values`() {
+            val code = """
+                class A {
+                    fun baz() {
+                        val r = object: Runnable {
+                            var g: Int? = null
+                            override fun run() { g = null }
+                        }
+                    }
+                    private var g: Int? = 0 // never assigned
+                }
+                
+                class B {
+                    fun baz() {
+                        var g: Int? = null
+                        g = null
+                    }
+                    private var g: Int? = 0 // never assigned
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLintWithContext(env, code))
+                .hasSize(2)
+                .hasStartSourceLocations(
+                    SourceLocation(8, 5),
+                    SourceLocation(16, 5)
+                )
+        }
+
+        @Test
         fun `does not report when class-level vars are assigned nullable values`() {
             val code = """
                 import kotlin.random.Random
@@ -143,9 +173,23 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     private fun buzz(bizz: Int): Int? {
                         return if (bizz % 2 == 0) null else bizz
                     }
-
+                }
+                class B {
                     fun baz() {
                         g = null
+                    }
+                    private var g: Int? = 0
+                }
+                class C {
+                    fun baz(a: Int?) {
+                        g = a
+                    }
+                    private var g: Int? = 0
+                }
+                class D {
+                    fun baz(a: Int?) {
+                        g = a?.also { println("assigning baz a to g") }
+                        if (a != null) println(1) else println(2)
                     }
                     private var g: Int? = 0
                 }
