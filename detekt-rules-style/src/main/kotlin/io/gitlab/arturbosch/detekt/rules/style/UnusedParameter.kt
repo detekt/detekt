@@ -34,13 +34,13 @@ import org.jetbrains.kotlin.psi.psiUtil.isProtected
  *
  * <noncompliant>
  * fun foo(unused: String) {
- *   println()
+ *     println()
  * }
  * </noncompliant>
  *
  * <compliant>
  * fun foo(used: String) {
- *   println(used)
+ *     println(used)
  * }
  * </compliant>
  */

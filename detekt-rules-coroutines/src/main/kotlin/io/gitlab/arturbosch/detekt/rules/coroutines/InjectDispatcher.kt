@@ -27,13 +27,13 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  *
  * <noncompliant>
  * fun myFunc() {
- *  coroutineScope(Dispatchers.IO)
+ *     coroutineScope(Dispatchers.IO)
  * }
  * </noncompliant>
  *
  * <compliant>
  * fun myFunc(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
- *  coroutineScope(dispatcher)
+ *     coroutineScope(dispatcher)
  * }
  *
  * class MyRepository(dispatchers: CoroutineDispatcher = Dispatchers.IO)
