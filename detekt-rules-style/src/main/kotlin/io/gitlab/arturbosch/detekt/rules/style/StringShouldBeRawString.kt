@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import io.gitlab.arturbosch.detekt.rules.getParentExpressionAfterParenthesis
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtElement
@@ -142,9 +143,6 @@ class StringShouldBeRawString(config: Config) : Rule(
             it.text
         }
     }
-
-    private fun KtExpression.getParentExpressionAfterParenthesis(): PsiElement? =
-        this.getParentOfTypesAndPredicate(true, PsiElement::class.java) { it !is KtParenthesizedExpression }
 
     private fun KtElement.getRootExpression(): KtElement? {
         return this.getParentOfTypesAndPredicate(

@@ -1,9 +1,12 @@
+@file:Suppress("ClassName")
+
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
@@ -11,7 +14,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     private val subject = MissingUseCall()
 
     @Test
-    fun `does not report when use is used`() {
+    fun `does not report when _use_ is used`() {
         val code = """
             import java.io.Closeable
 
@@ -26,12 +29,11 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).isEmpty()
     }
 
     @Test
-    fun `does report when use is not used`() {
+    fun `does report when _use_ is not used`() {
         val code = """
             import java.io.Closeable
 
@@ -46,8 +48,8 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).hasSize(1)
+        assertThat(findings[0]).hasSourceLocation(10, 23)
     }
 
     @Test
@@ -66,7 +68,6 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).hasSize(1)
     }
 
@@ -86,56 +87,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).isEmpty()
-    }
-
-    @Test
-    fun `does report when _use_ is not immediately used with _Closeable_ returned from if else expression`() {
-        val code = """
-            import java.io.Closeable
-
-            class MyCloseable(private val i: Int) : Closeable {
-                override fun close() {
-                    println("Closing ${'$'}i")
-                }
-            }
-
-            fun test() {
-                (if (System.currentTimeMillis() % 2 == 0L) MyCloseable(0) else MyCloseable(1)).use { 
-                    /*no-op*/
-                }
-            }
-        """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
-
-        assertThat(findings).hasSize(2)
-    }
-
-    @Test
-    fun `does report when _use_ is not used immediately with _Closeable_ returned from multiline if else`() {
-        val code = """
-            import java.io.Closeable
-
-            class MyCloseable(private val i: Int) : Closeable {
-                override fun close() {
-                    println("Closing ${'$'}i")
-                }
-            }
-
-            fun test() {
-                if (System.currentTimeMillis() % 2 == 0L) {
-                    MyCloseable(0) 
-                } else {
-                    MyCloseable(1)
-                }.use { 
-                    /*no-op*/
-                }
-            }
-        """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
-
-        assertThat(findings).hasSize(2)
     }
 
     @Test
@@ -153,13 +105,41 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 MyCloseable(
                     if (System.currentTimeMillis() % 2 == 0L) 0 else 1
                 ).use { 
-                    /*no-op*/
+                    /* no-op */
                 }
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does report when _use_ is used later on the chain`() {
+        val code = """
+            import java.io.Closeable
+
+            class MyCloseable(private val i: Int) : Closeable {
+                override fun close() {
+                    println("Closing ${'$'}i")
+                }
+            }
+
+            fun test() {
+                MyCloseable(0).also { 
+                    println("closed is accessed here")
+                }.use { 
+                    /* no-op */
+                }
+
+                MyCloseable(0).apply { 
+                    println("closed is accessed here")
+                }.use { 
+                    /* no-op */
+                }
+            }
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(2)
     }
 
     @Test
@@ -183,7 +163,6 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).isEmpty()
     }
 
@@ -198,7 +177,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 }
 
                 fun makeSound() {
-                    println("🐱 woof")
+                    println("🐱 meow")
                 }
             }
 
@@ -208,7 +187,6 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).isEmpty()
     }
 
@@ -224,7 +202,6 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             )
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).hasSize(2)
     }
 
@@ -252,7 +229,6 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).hasSize(2)
     }
 
@@ -274,10 +250,9 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             val whatever = MyCloseable(
                 FileReader("some_file.txt"),
                 getSomeValueButGenerateException()
-            ).use { /*no-op*/ }
+            ).use { /* no-op */ }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).hasSize(1)
     }
 
@@ -297,7 +272,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
 
-            val whatever = FileReader("somefile.txt").use { fileReader ->
+            val whatever = FileReader("some_file.txt").use { fileReader ->
                 MyCloseable(
                     fileReader,
                     getSomeValueButGenerateException()
@@ -305,12 +280,11 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).isEmpty()
     }
 
     @Test
-    fun `does not report with custom _Closeable_ class is used`() {
+    fun `does not report with custom class with same name is used`() {
         val code = """
             class Closeable {
                 fun close() {
@@ -318,18 +292,6 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
 
-            fun test() {
-                val myCloseable = Closeable()
-            }
-        """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
-
-        assertThat(findings).isEmpty()
-    }
-
-    @Test
-    fun `does not report with custom _AutoCloseable_ class is used`() {
-        val code = """
             class AutoCloseable {
                 fun close() {
                     // closing the closeable
@@ -337,11 +299,11 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             }
 
             fun test() {
+                val myCloseable = Closeable()
                 val myCloseable = AutoCloseable()
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).isEmpty()
     }
 
@@ -351,11 +313,10 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             import java.io.Closeable
 
             fun test() {
-                val myCloseable = Closeable { /*no-op*/ }
+                val myCloseable = Closeable { /* no-op */ }
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).hasSize(1)
     }
 
@@ -365,11 +326,10 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             import java.io.Closeable
 
             fun test() {
-                val myCloseable = Closeable { /*no-op*/ }.use { /*no-op*/ }
+                val myCloseable = Closeable { /* no-op */ }.use { /* no-op */ }
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).isEmpty()
     }
 
@@ -379,11 +339,10 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             import java.io.Closeable
 
             fun test() {
-                val myCloseable = java.io.Closeable { /*no-op*/ }.use { /*no-op*/ }
+                val myCloseable = java.io.Closeable { /* no-op */ }.use { /* no-op */ }
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).isEmpty()
     }
 
@@ -393,11 +352,10 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             import java.io.Closeable
 
             fun test() {
-                val myCloseable = java.io.Closeable { /*no-op*/ }.use { mutableListOf<Int>() }.also { it.add(0) }
+                val myCloseable = java.io.Closeable { /* no-op */ }.use { mutableListOf<Int>() }.also { it.add(0) }
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).isEmpty()
     }
 
@@ -407,11 +365,10 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             import java.io.Closeable
 
             fun test() {
-                val myCloseable = java.io.Closeable { /*no-op*/ }.use { 1 } + 2
+                val myCloseable = java.io.Closeable { /* no-op */ }.use { 1 } + 2
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).isEmpty()
     }
 
@@ -421,11 +378,10 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             import java.io.Closeable
 
             fun test() {
-                val myCloseable = java.io.Closeable { /*no-op*/ }
+                val myCloseable = java.io.Closeable { /* no-op */ }
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).hasSize(1)
     }
 
@@ -434,15 +390,13 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         val code = """
             import java.io.Closeable
 
-            @Suppress("ObjectLiteralToLambda")
             val myCloseable = object : Closeable {
                 override fun close() {
-                    /*no-op*/
+                    /* no-op */
                 }
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).hasSize(1)
     }
 
@@ -451,15 +405,13 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         val code = """
             import java.io.Closeable
 
-            @Suppress("ObjectLiteralToLambda")
             val myCloseable = object : Closeable {
                 override fun close() {
-                    /*no-op*/
+                    /* no-op */
                 }
-            }.use { /*no-op*/ }
+            }.use { /* no-op */ }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).isEmpty()
     }
 
@@ -475,21 +427,19 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             }
 
             fun test() {
-                @Suppress("ObjectLiteralToLambda")
                 val myCloseable = object : MyCloseable() {
                     override fun close() {
-                        /*no-op*/
+                        /* no-op */
                     }
-                }.use { /*no-op*/ }
+                }.use { /* no-op */ }
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).isEmpty()
     }
 
     @Test
-    fun `does report _Closeable_ child class anonymous object is used with out _use_`() {
+    fun `does report _Closeable_ child class anonymous object is used without _use_`() {
         val code = """
             import java.io.Closeable
 
@@ -500,68 +450,546 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             }
 
             fun test() {
-                @Suppress("ObjectLiteralToLambda")
                 val myCloseable = object : MyCloseable() {
                     override fun close() {
-                        /*no-op*/
+                        /* no-op */
                     }
                 }
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
         assertThat(findings).hasSize(1)
     }
 
     @Test
-    fun `does report function returning _Closeable_ use it with out _use_`() {
+    fun `does not report function returning nullable _Closeable_ used with _use_`() {
         val code = """
             import java.io.Closeable
-
-            open class MyCloseable : Closeable {
-                override fun close() {
-                    // closing the closeable
-                }
-
-                fun doStuff() {
-
-                }
-            }
-
-            fun functionThatReturnsClosable() = MyCloseable()
-
-            fun test() {
-                functionThatReturnsClosable().doStuff()
+            fun foo(): Closeable? = null
+            fun test() { 
+                foo()?.use { /* no-op */ }
+                foo()!!.use { /* no-op */ }
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-
-        assertThat(findings).hasSize(2)
+        assertThat(findings).isEmpty()
     }
 
     @Test
-    fun `does not report function returning _Closeable_ use it with _use_`() {
+    fun `does not report nullable instance function returning _Closeable_ used with _use_`() {
         val code = """
             import java.io.Closeable
-
-            open class MyCloseable : Closeable {
-                override fun close() {
-                    // closing the closeable
-                }
-
-                fun doStuff() {
-
-                }
+            class Bar {
+                fun foo(): Closeable? = null
             }
-
-            fun functionThatReturnsClosable() = MyCloseable()
-
-            fun test() {
-                functionThatReturnsClosable().use { it.doStuff() }
+            fun test(bar: Bar?) {
+                bar?.foo()?.use { /* no-op */ }
+                bar?.foo()!!.use { /* no-op */ }
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
 
-        assertThat(findings).hasSize(1)
+    @Nested
+    inner class `Given if else expression` {
+        @Test
+        fun `does not report when _use_ is used on _Closeable_ returned from multiline if else expression`() {
+            val code = """
+                import java.io.Closeable
+
+                class MyCloseable(private val i: Int) : Closeable {
+                    override fun close() {
+                        println("Closing ${'$'}i")
+                    }
+                }
+
+                fun test() {
+                    if (System.currentTimeMillis() % 2 == 0L) {
+                        MyCloseable(0) 
+                    } else {
+                        MyCloseable(1)
+                    }.use { 
+                        /* no-op */
+                    }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when _use_ is used on _Closeable_ inside braces returned from multiline if else expression`() {
+            val code = """
+                import java.io.Closeable
+
+                class MyCloseable(private val i: Int) : Closeable {
+                    override fun close() {
+                        println("Closing ${'$'}i")
+                    }
+                }
+
+                fun test() {
+                    // with braces in Closeables
+                    if (System.currentTimeMillis() % 2 == 0L) {
+                        (MyCloseable(0)) 
+                    } else {
+                        (MyCloseable(1))
+                    }.use { 
+                        /* no-op */
+                    }
+
+                    // with braces in if else
+                    (if (System.currentTimeMillis() % 2 == 0L) {
+                        (MyCloseable(0)) 
+                    } else {
+                        (MyCloseable(1))
+                    }).use { 
+                        /* no-op */
+                    }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when _use_ is used on _Closeable_ inside braces returned from multiline if expression and else returning null`() {
+            val code = """
+                import java.io.Closeable
+
+                class MyCloseable(private val i: Int) : Closeable {
+                    override fun close() {
+                        println("Closing ${'$'}i")
+                    }
+                }
+
+                fun test() {
+                    if (System.currentTimeMillis() % 2 == 0L) {
+                        MyCloseable(0) 
+                    } else {
+                        null
+                    }?.use { 
+                        /* no-op */
+                    }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when _use_ is used on _Closeable_ returned from single line if else expression`() {
+            val code = """
+                import java.io.Closeable
+
+                class MyCloseable(private val i: Int) : Closeable {
+                    override fun close() {
+                        println("Closing ${'$'}i")
+                    }
+                }
+
+                fun test() {
+                    (if (System.currentTimeMillis() % 2 == 0L) MyCloseable(0) else MyCloseable(1)).use { 
+                        /* no-op */
+                    }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when _use_ is used on _Closeable_ returned from single line if expression and else returning null`() {
+            val code = """
+                import java.io.Closeable
+
+                class MyCloseable(private val i: Int) : Closeable {
+                    override fun close() {
+                        println("Closing ${'$'}i")
+                    }
+                }
+
+                fun test() {
+                    (if (System.currentTimeMillis() % 2 == 0L) MyCloseable(0) else null)?.use { 
+                        /* no-op */
+                    }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when _use_ is used on _Closeable_ inside braces returned from single line if else expression`() {
+            val code = """
+                import java.io.Closeable
+
+                class MyCloseable(private val i: Int) : Closeable {
+                    override fun close() {
+                        println("Closing ${'$'}i")
+                    }
+                }
+
+                fun test() {
+                    // with braces in Closeables
+                    (if (System.currentTimeMillis() % 2 == 0L) (MyCloseable(0)) else (MyCloseable(1))).use { 
+                        /* no-op */
+                    }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when _use_ is used in next line on _Closeable_ from if else expression`() {
+            val code = """
+                import java.io.Closeable
+
+                class MyCloseable(private val i: Int) : Closeable {
+                    override fun close() {
+                        println("Closing ${'$'}i")
+                    }
+                }
+
+                fun test() {
+                    val closable1 = if (System.currentTimeMillis() % 2 == 0L) { 
+                        MyCloseable(0) 
+                    } else { 
+                        MyCloseable(1)
+                    }
+                    closable1.use { /* no-op */ }
+
+                    val closable2 = if (System.currentTimeMillis() % 2 == 0L) { MyCloseable(0) } else { MyCloseable(1) }
+                    closable2.use { /* no-op */ }
+
+                    val closeable3 = if (System.currentTimeMillis() % 2 == 0L) MyCloseable(0) else MyCloseable(1)
+                    closeable3.use { /* no-op */ }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when _use_ is used after few lines on _Closeable_ from if else expression`() {
+            val code = """
+                import java.io.Closeable
+
+                class MyCloseable(private val i: Int) : Closeable {
+                    override fun close() {
+                        println("Closing ${'$'}i")
+                    }
+                }
+
+                fun test() {
+                    val closable = if (System.currentTimeMillis() % 2 == 0L) { 
+                        MyCloseable(0)
+                    } else { 
+                        MyCloseable(1)
+                    }
+                    println("Processing code")
+                    closable.use { /* no-op */ }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when _use_ is used in next line on _Closeable_ from if expression and else returning null`() {
+            val code = """
+                import java.io.Closeable
+
+                class MyCloseable(private val i: Int) : Closeable {
+                    override fun close() {
+                        println("Closing ${'$'}i")
+                    }
+                }
+
+                fun test() {
+                    val closable1 = if (System.currentTimeMillis() % 2 == 0L) { 
+                        MyCloseable(0) 
+                    } else { 
+                        null
+                    }
+                    closable1?.use { /* no-op */ }
+
+                    val closable2 = if (System.currentTimeMillis() % 2 == 0L) { MyCloseable(0) } else { null }
+                    closable2?.use { /* no-op */ }
+
+                    val closeable3 = if (System.currentTimeMillis() % 2 == 0L) MyCloseable(0) else null
+                    closeable3?.use { /* no-op */ }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does report when _use_ is used not immediately after if else`() {
+            val code = """
+                import java.io.Closeable
+
+                class MyCloseable(private val i: Int) : Closeable {
+                    override fun close() {
+                        println("Closing ${'$'}i")
+                    }
+                }
+
+                fun test() {
+                    val closable = if (System.currentTimeMillis() % 2 == 0L) { MyCloseable(0) } else { MyCloseable(1) }
+                    if (Random.nextBoolean()) { closable.use { /* no-op */ } }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(2)
+        }
+
+        @Test
+        fun `does report when _Closeable_ is used inside if expression in multiline if else`() {
+            val code = """
+                import java.io.Closeable
+
+                class MyCloseable(private val i: Int) : Closeable {
+                    override fun close() {
+                        println("Closing ${'$'}i")
+                    }
+                }
+
+                fun test() {
+                    val closable = if (System.currentTimeMillis() % 2 == 0L) { 
+                        MyCloseable(0).let { 
+                            // closeable is used
+                        }
+                    } else {
+                        MyCloseable(1)
+                    }
+                    closable.use { /* no-op */ }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `does report when _Closeable_ is used inside else expression inside multiline if else`() {
+            val code = """
+                import java.io.Closeable
+
+                class MyCloseable(private val i: Int) : Closeable {
+                    override fun close() {
+                        println("Closing ${'$'}i")
+                    }
+                }
+
+                fun test() {
+                    val closable = if (System.currentTimeMillis() % 2 == 0L) { 
+                        MyCloseable(0)
+                    } else {
+                        MyCloseable(1).let { 
+                            // closeable is used
+                        }
+                    }
+                    closable.use { /* no-op */ }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `does report when _Closeable_ is used inside else expression inside single line if else`() {
+            val code = """
+                import java.io.Closeable
+
+                class MyCloseable(private val i: Int) : Closeable {
+                    override fun close() {
+                        println("Closing ${'$'}i")
+                    }
+                }
+
+                fun test() {
+                    val closable = if (System.currentTimeMillis() % 2 == 0L) MyCloseable(0) else MyCloseable(1).let { /* closeable is used */ }
+                    closable.use { /* no-op */ }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+    }
+
+    @Nested
+    inner class `Given function returning _Closeable_` {
+        @Test
+        fun `does report function returning _Closeable_ use it without _use_`() {
+            val code = """
+                import java.io.Closeable
+
+                open class MyCloseable : Closeable {
+                    override fun close() {
+                        // closing the closeable
+                    }
+
+                    fun doStuff() {
+
+                    }
+                }
+
+                fun functionThatReturnsClosable() = MyCloseable()
+
+                fun test() {
+                    functionThatReturnsClosable().doStuff()
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `does not report function returning _Closeable_ use it with _use_`() {
+            val code = """
+                import java.io.Closeable
+
+                open class MyCloseable : Closeable {
+                    override fun close() {
+                        // closing the closeable
+                    }
+                }
+
+                fun functionThatReturnsClosable1() = MyCloseable()
+
+                fun functionThatReturnsClosable2(): MyCloseable {
+                    return MyCloseable()
+                }
+
+                fun functionThatReturnsClosable3(): Closeable {
+                    return MyCloseable()
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does report local function accessing _Closeable_ without _use_ inside outer function returning _Closeable_`() {
+            val code = """
+                import java.io.Closeable
+
+                open class MyCloseable : Closeable {
+                    override fun close() {
+                        // closing the closeable
+                    }
+                }
+
+                fun functionThatReturnsClosable1(): MyCloseable {
+                    fun localFun() {
+                        MyCloseable()
+                    }
+                    return MyCloseable()
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `does report use of _Closeable_ without _use_ inside lambda inside function returning _Closeable_`() {
+            val code = """
+                import java.io.Closeable
+
+                open class MyCloseable : Closeable {
+                    override fun close() {
+                        // closing the closeable
+                    }
+                }
+
+                fun functionThatReturnsClosable1(): MyCloseable {
+                    val r = Runnable { MyCloseable() }
+                    return MyCloseable()
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `does report use of _Closeable_ without _use_ inside object inside function returning _Closeable_`() {
+            val code = """
+                import java.io.Closeable
+
+                open class MyCloseable : Closeable {
+                    override fun close() {
+                        // closing the closeable
+                    }
+                }
+
+                fun functionThatReturnsClosable1(): MyCloseable {
+                    val r = object : Runnable { 
+                        override fun run() {
+                            MyCloseable()
+                        }
+                    }
+                    return MyCloseable()
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `does report use of _Closeable_ without _use_ inside init inside function returning _Closeable_`() {
+            val code = """
+                import java.io.Closeable
+
+                open class MyCloseable : Closeable {
+                    override fun close() {
+                        // closing the closeable
+                    }
+                }
+
+                fun functionThatReturnsClosable1(): MyCloseable {
+                    val r = object : Runnable { 
+                        override fun run() {
+                            /* no-op */
+                        }
+
+                        init {
+                            MyCloseable()
+                        }
+                    }
+                    return MyCloseable()
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `does report use of _Closeable_ without _use_ inside class inside function returning _Closeable_`() {
+            val code = """
+                import java.io.Closeable
+
+                open class MyCloseable : Closeable {
+                    override fun close() {
+                        // closing the closeable
+                    }
+                }
+
+                fun functionThatReturnsClosable1(): MyCloseable {
+                    val r = object : Runnable { 
+                        override fun run() {
+                            /* no-op */
+                        }
+
+                        val closeable = MyCloseable()
+                    }
+                    return MyCloseable()
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
     }
 }

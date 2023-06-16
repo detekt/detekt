@@ -9,12 +9,27 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
+import io.gitlab.arturbosch.detekt.rules.getParentExpressionAfterParenthesis
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtClassBody
+import org.jetbrains.kotlin.psi.KtClassInitializer
+import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtIfExpression
+import org.jetbrains.kotlin.psi.KtLambdaExpression
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
+import org.jetbrains.kotlin.psi.KtPostfixExpression
+import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypes
+import org.jetbrains.kotlin.psi.psiUtil.siblings
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
@@ -46,6 +61,7 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * </compliant>
  */
 @RequiresTypeResolution
+@Suppress("TooManyFunctions")
 class MissingUseCall(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         javaClass.simpleName,
@@ -57,8 +73,16 @@ class MissingUseCall(config: Config = Config.empty) : Rule(config) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        val calleeReturnType = expression.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType ?: return
-        val isCloseable = isChildOfCloseable(calleeReturnType)
+        checkAndReport(expression)
+    }
+
+    override fun visitObjectLiteralExpression(expression: KtObjectLiteralExpression) {
+        super.visitObjectLiteralExpression(expression)
+        checkAndReport(expression)
+    }
+
+    private fun checkAndReport(expression: KtExpression) {
+        val isCloseable = isChildOfCloseable(expression)
         if (isCloseable.not()) return
         if (shouldReport(expression)) {
             report(
@@ -71,8 +95,13 @@ class MissingUseCall(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun isChildOfCloseable(calleeReturnType: KotlinType): Boolean {
-        val isCloseable = calleeReturnType.supertypes()
+    private fun isChildOfCloseable(expression: KtExpression): Boolean {
+        val expressionType = expression.getType(bindingContext) ?: return false
+        return isChildOfCloseable(expressionType)
+    }
+
+    private fun isChildOfCloseable(type: KotlinType): Boolean {
+        val isCloseable = type.supertypes()
             .map {
                 it.fqNameOrNull()
             }
@@ -82,40 +111,110 @@ class MissingUseCall(config: Config = Config.empty) : Rule(config) {
         return isCloseable
     }
 
-    override fun visitObjectLiteralExpression(expression: KtObjectLiteralExpression) {
-        super.visitObjectLiteralExpression(expression)
-        val expressionType = expression.getType(bindingContext) ?: return
-        val isCloseable = isChildOfCloseable(expressionType)
-        if (isCloseable.not()) return
-        if (shouldReport(expression)) {
-            report(
-                CodeSmell(
-                    issue,
-                    Entity.from(expression),
-                    "${expression.text} doesn't call `use` to access the `Closeable`"
-                )
-            )
-        }
-    }
-
     private fun shouldReport(expression: KtExpression): Boolean {
         val expressionParent = getParentExpression(expression)
-        return if (expressionParent !is KtDotQualifiedExpression) {
-            true
-        } else {
-            expressionParent
-                .selectorExpression
-                .getResolvedCall(bindingContext)
-                ?.resultingDescriptor
-                ?.fqNameOrNull() !in useFqNames
+        return when {
+            expressionParent is KtQualifiedExpression -> {
+                expressionParent.doesEndWithUse().not()
+            }
+
+            isPartOfIfElseExpressionReturningCloseable(expression) -> {
+                isExpressionUsedOnSameOrNextLine(expression).not()
+            }
+
+            isParentFunctionReturnsCloseable(expression) -> {
+                false
+            }
+
+            else -> {
+                true
+            }
         }
     }
 
+    private fun isParentFunctionReturnsCloseable(expression: KtExpression): Boolean {
+        val parent = expression.getParentOfType<KtNamedFunction>(
+            true,
+            KtLambdaExpression::class.java,
+            KtClassInitializer::class.java,
+            KtClassBody::class.java,
+        ) ?: return false
+        val functionReturnType =
+            bindingContext[BindingContext.FUNCTION, parent]?.returnType ?: return false
+        return isChildOfCloseable(functionReturnType)
+    }
+
+    private fun KtQualifiedExpression.doesEndWithUse() = selectorExpression
+        .getResolvedCall(bindingContext)
+        ?.resultingDescriptor
+        ?.fqNameOrNull() in useFqNames
+
+    private fun isExpressionUsedOnSameOrNextLine(expression: KtExpression): Boolean {
+        val parent = expression.getParentOfTypes(
+            true,
+            KtQualifiedExpression::class.java,
+            KtProperty::class.java
+        )
+
+        return when (parent) {
+            is KtQualifiedExpression -> {
+                parent.doesEndWithUse()
+            }
+
+            is KtProperty -> {
+                parent.siblings(forward = true, withItself = false).filter {
+                    it.text.isNotBlank()
+                }.mapNotNull {
+                    it.getParentExpressionAfterParenthesis(false) as? KtQualifiedExpression
+                }.filter {
+                    it.doesEndWithUse()
+                }.any {
+                    it.receiverExpression.text == parent.name
+                }
+            }
+
+            else -> {
+                false
+            }
+        }
+    }
+
+    @Suppress("ReturnCount")
+    private fun isPartOfIfElseExpressionReturningCloseable(expression: KtExpression): Boolean {
+        val expressionAfterParens = expression.getParentExpressionAfterParenthesis() ?: return false
+        val (ifExpression, containerExpression) =
+            @Suppress("BracesOnIfStatements")
+            if (expressionAfterParens is KtContainerNodeForControlStructureBody) {
+                expressionAfterParens.parent to expressionAfterParens.expression
+            } else if (expressionAfterParens.parent is KtContainerNodeForControlStructureBody) {
+                expressionAfterParens.parent.parent to
+                    (expressionAfterParens.parent as KtContainerNodeForControlStructureBody).expression
+            } else {
+                null
+            } ?: return false
+        if (ifExpression !is KtIfExpression) return false
+        val containerExpressionLastExpression =
+            if (containerExpression is KtBlockExpression) {
+                containerExpression.statements.lastOrNull()
+            } else {
+                containerExpression
+            }
+        containerExpressionLastExpression ?: return false
+        return isChildOfCloseable(containerExpressionLastExpression)
+    }
+
+    @Suppress("ComplexCondition")
     private fun getParentExpression(closeableExpression: KtExpression): PsiElement? {
         var expression: PsiElement? = closeableExpression
         do {
             expression = expression?.parent
-        } while (expression is KtDotQualifiedExpression && expression.selectorExpression == closeableExpression)
+        } while (
+            (
+                expression is KtQualifiedExpression &&
+                    expression.selectorExpression == closeableExpression
+                ) ||
+            (expression is KtPostfixExpression && expression.operationToken == KtTokens.EXCLEXCL)
+        )
         return expression
     }
 
