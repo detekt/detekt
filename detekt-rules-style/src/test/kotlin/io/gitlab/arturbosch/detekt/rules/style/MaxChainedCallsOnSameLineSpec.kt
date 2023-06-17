@@ -154,6 +154,25 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `does not count class references as chained calls`() {
+        val code = """
+            sealed class Nav {
+              object List : Nav() {
+                sealed interface Params {
+                  object Groups : Params {
+                    enum class Source {
+                      Profiles
+                    }
+                  }
+                }
+              }
+            }
+            val x = Nav.List.Params.Groups.Source.Profiles
+        """.trimIndent()
+        assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
     fun `does not count package references as chained calls`() {
         val code = """
             val x = kotlin.math.floor(1.0).plus(1).plus(1)
