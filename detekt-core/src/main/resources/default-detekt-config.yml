@@ -322,12 +322,12 @@ naming:
   ForbiddenClassName:
     active: false
     forbiddenName: []
-  FunctionMinLength:
-    active: false
-    minimumFunctionNameLength: 3
   FunctionNameMaxLength:
     active: false
     maximumFunctionNameLength: 30
+  FunctionNameMinLength:
+    active: false
+    minimumFunctionNameLength: 3
   FunctionNaming:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']

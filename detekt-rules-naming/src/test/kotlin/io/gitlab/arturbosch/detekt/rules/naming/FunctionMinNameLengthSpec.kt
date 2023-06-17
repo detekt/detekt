@@ -5,19 +5,19 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FunctionMinLengthSpec {
+class FunctionMinNameLengthSpec {
 
     @Test
     fun `should report a function name that is too short`() {
         val code = "fun a() = 3"
-        assertThat(FunctionMinLength().compileAndLint(code)).hasSize(1)
+        assertThat(FunctionNameMinLength().compileAndLint(code)).hasSize(1)
     }
 
     @Test
     fun `should report a function name that is too short base on config`() {
         val code = "fun four() = 3"
         assertThat(
-            FunctionMinLength(TestConfig("minimumFunctionNameLength" to 5))
+            FunctionNameMinLength(TestConfig("minimumFunctionNameLength" to 5))
                 .compileAndLint(code)
         ).hasSize(1)
     }
@@ -25,7 +25,7 @@ class FunctionMinLengthSpec {
     @Test
     fun `should not report a function name that is okay`() {
         val code = "fun three() = 3"
-        assertThat(FunctionMinLength().compileAndLint(code)).isEmpty()
+        assertThat(FunctionNameMinLength().compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -34,10 +34,10 @@ class FunctionMinLengthSpec {
             class C : I {
                 override fun tooShortButShouldNotBeReportedByDefault() {}
             }
-            interface I { @Suppress("FunctionMinLength") fun tooShortButShouldNotBeReportedByDefault() }
+            interface I { @Suppress("FunctionNameMinLength") fun tooShortButShouldNotBeReportedByDefault() }
         """.trimIndent()
         assertThat(
-            FunctionMinLength(
+            FunctionNameMinLength(
                 TestConfig("minimumFunctionNameLength" to 50)
             ).compileAndLint(code)
         ).isEmpty()
@@ -52,7 +52,7 @@ class FunctionMinLengthSpec {
             }
         """.trimIndent()
         assertThat(
-            FunctionMinLength(
+            FunctionNameMinLength(
                 TestConfig("minimumFunctionNameLength" to 5)
             ).compileAndLint(code)
         ).isEmpty()
