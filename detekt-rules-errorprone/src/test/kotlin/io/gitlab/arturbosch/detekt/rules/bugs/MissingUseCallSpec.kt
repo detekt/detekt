@@ -299,8 +299,8 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             }
 
             fun test() {
-                val myCloseable = Closeable()
-                val myCloseable = AutoCloseable()
+                val myCloseable1 = Closeable()
+                val myCloseable2 = AutoCloseable()
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
@@ -731,6 +731,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         fun `does report when _use_ is used not immediately after if else`() {
             val code = """
                 import java.io.Closeable
+                import kotlin.random.Random
 
                 class MyCloseable(private val i: Int) : Closeable {
                     override fun close() {
@@ -740,7 +741,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
 
                 fun test() {
                     val closable = if (System.currentTimeMillis() % 2 == 0L) { MyCloseable(0) } else { MyCloseable(1) }
-                    if (Random.nextBoolean()) { closable.use { /* no-op */ } }
+                    if (Random(0L).nextBoolean()) { closable.use { /* no-op */ } }
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
@@ -760,7 +761,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
 
                 fun test() {
                     val closable = if (System.currentTimeMillis() % 2 == 0L) { 
-                        MyCloseable(0).let { 
+                        MyCloseable(0).also { 
                             // closeable is used
                         }
                     } else {
@@ -770,7 +771,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1)
+            assertThat(findings).hasSize(2)
         }
 
         @Test
@@ -788,7 +789,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                     val closable = if (System.currentTimeMillis() % 2 == 0L) { 
                         MyCloseable(0)
                     } else {
-                        MyCloseable(1).let { 
+                        MyCloseable(1).also { 
                             // closeable is used
                         }
                     }
@@ -796,7 +797,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1)
+            assertThat(findings).hasSize(2)
         }
 
         @Test
@@ -811,12 +812,12 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 }
 
                 fun test() {
-                    val closable = if (System.currentTimeMillis() % 2 == 0L) MyCloseable(0) else MyCloseable(1).let { /* closeable is used */ }
+                    val closable = if (System.currentTimeMillis() % 2 == 0L) MyCloseable(0) else MyCloseable(1).also { /* closeable is used */ }
                     closable.use { /* no-op */ }
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1)
+            assertThat(findings).hasSize(2)
         }
     }
 
