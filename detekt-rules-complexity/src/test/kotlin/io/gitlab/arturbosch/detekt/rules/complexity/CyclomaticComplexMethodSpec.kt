@@ -211,7 +211,7 @@ class CyclomaticComplexMethodSpec {
                     if (i == 1) {
                     }
                 }
-            """.trimMargin()
+            """.trimIndent()
 
             val findings = subject.lint(code)
 
