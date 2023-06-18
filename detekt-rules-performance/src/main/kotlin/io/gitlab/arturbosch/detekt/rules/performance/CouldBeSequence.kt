@@ -42,7 +42,7 @@ class CouldBeSequence(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("The maximum number of allowed chained collection operations.")
-    private val allowedOperations: Int by config(defaultValue = 3)
+    private val allowedOperations: Int by config(defaultValue = 2)
 
     private val visitedCallExpressions = mutableListOf<KtExpression>()
 

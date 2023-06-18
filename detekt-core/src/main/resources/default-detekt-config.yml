@@ -385,7 +385,7 @@ performance:
     active: true
   CouldBeSequence:
     active: false
-    allowedOperations: 3
+    allowedOperations: 2
   ForEachOnRange:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
