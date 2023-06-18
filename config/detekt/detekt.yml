@@ -20,7 +20,7 @@ complexity:
     ignoreStringsRegex: '$^'
   ComplexInterface:
     active: true
-    threshold: 10
+    allowedDefinitions: 10
     includeStaticDeclarations: false
     includePrivateDeclarations: false
   CyclomaticComplexMethod:
