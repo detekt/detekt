@@ -24,7 +24,8 @@ class CognitiveComplexMethod(config: Config = Config.empty) : Rule(config) {
     @Configuration("Maximum Cognitive Complexity allowed for a method.")
     private val allowedComplexity: Int by config(defaultValue = 15)
 
+    @SuppressWarnings("EmptyFunctionBlock")
     override fun visitNamedFunction(function: KtNamedFunction) {
-        println(allowedComplexity)
+        // This is just for testing purpose
     }
 }
