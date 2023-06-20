@@ -7,9 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
@@ -68,7 +66,6 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
         "Either rename the member or change it to a constructor."
     private val objectMessage = "A member is named after the object. " +
         "This might result in confusion. Please rename the member."
-
 
     @Configuration("if overridden functions and properties should be ignored")
     private val ignoreOverridden: Boolean by config(true)

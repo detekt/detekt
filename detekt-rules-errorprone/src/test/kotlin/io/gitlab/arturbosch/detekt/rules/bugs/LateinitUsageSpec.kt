@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import java.util.regex.PatternSyntaxException
 

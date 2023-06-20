@@ -54,7 +54,6 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
         super.visit(root)
 
-
         properties
             .filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) == true }
             .forEach {

@@ -170,7 +170,7 @@ style:
         reason: 'Authors are not recorded in KDoc.'
       - value: '@requiresTypeResolution'
         reason: 'Use @RequiresTypeResolution annotation on the class instead.'
-    excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
+    excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt', '**/detekt-rules-ruleauthors/**/ViolatesTypeResolutionRequirements.kt']
   ForbiddenImport:
     active: true
     imports:

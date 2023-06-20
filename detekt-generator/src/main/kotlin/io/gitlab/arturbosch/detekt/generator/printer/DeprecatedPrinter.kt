@@ -37,7 +37,4 @@ private fun writeProperty(ruleSet: RuleSetPage, rule: Rule, configuration: Confi
     return "${ruleSet.ruleSet.name}>${rule.name}>${configuration.name}=${configuration.deprecated!!}"
 }
 
-@Suppress("MaxLineLength")
-internal fun migratedRules() = listOf(
-    "style>MandatoryBracesIfStatements=Use `BracesOnIfStatements` with `always` configuration instead",
-)
+internal fun migratedRules() = listOf<String>()

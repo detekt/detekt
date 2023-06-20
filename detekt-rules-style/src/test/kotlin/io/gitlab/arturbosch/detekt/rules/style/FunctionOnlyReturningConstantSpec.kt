@@ -54,16 +54,6 @@ class FunctionOnlyReturningConstantSpec {
             }
         """.trimIndent()
 
-        private val sinceKotlinCode = """
-            import kotlin.SinceKotlin
-            class Test {
-                @SinceKotlin("1.0.0")
-                fun someIgnoredFun(): String {
-                    return "I am a constant"
-                }
-            }
-        """.trimIndent()
-
         @Test
         fun `reports functions which return constants`() {
             assertThat(subject.lint(code)).hasSize(6)

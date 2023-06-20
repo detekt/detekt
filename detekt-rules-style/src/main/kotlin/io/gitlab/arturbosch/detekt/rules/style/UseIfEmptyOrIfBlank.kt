@@ -55,7 +55,7 @@ class UseIfEmptyOrIfBlank(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Suppress("ReturnCount")
+    @Suppress("ReturnCount", "CyclomaticComplexMethod")
     override fun visitIfExpression(expression: KtIfExpression) {
         super.visitIfExpression(expression)
 
