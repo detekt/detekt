@@ -37,4 +37,4 @@ private fun writeProperty(ruleSet: RuleSetPage, rule: Rule, configuration: Confi
     return "${ruleSet.ruleSet.name}>${rule.name}>${configuration.name}=${configuration.deprecated!!}"
 }
 
-internal fun migratedRules() = listOf<String>()
+internal fun migratedRules() = emptyList<String>()
