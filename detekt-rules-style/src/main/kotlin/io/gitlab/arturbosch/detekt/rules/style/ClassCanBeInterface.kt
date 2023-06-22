@@ -37,6 +37,20 @@ import org.jetbrains.kotlin.types.typeUtil.isInterface
  *     abstract fun f()
  * }
  * </noncompliant>
+ * <compliant>
+ * interface Interface {
+ *     val i: Int
+ *     fun f()
+ * }
+ * </compliant>
+ * <compliant>
+ * abstract class NonAbstractMembersInAbstractClass {
+ *
+ *     abstract val i: Int
+ *     fun f() {
+ *     }
+ * }
+ * </compliant>
  */
 @ActiveByDefault(since = "1.23.0")
 @RequiresTypeResolution
