@@ -46,9 +46,9 @@ class ClassCanBeInterface(config: Config = Config.empty) : Rule(config) {
 
     override val issue =
         Issue(
-            "UnnecessaryAbstractClass",
+            "ClassCanBeInterface",
             Severity.Style,
-            "An abstract class is unnecessary. May be refactored to an interface or to a concrete class.",
+            "An abstract class is unnecessary. May be refactored to an interface.",
             Debt.FIVE_MINS
         )
 
