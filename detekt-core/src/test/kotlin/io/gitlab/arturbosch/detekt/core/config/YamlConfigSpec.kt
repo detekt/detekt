@@ -1,5 +1,3 @@
-@file:Suppress("detekt.MaxLineLength")
-
 package io.gitlab.arturbosch.detekt.core.config
 
 import io.github.detekt.test.utils.resourceAsPath
@@ -60,6 +58,14 @@ class YamlConfigSpec {
                 .withMessage(
                     "Value \"{WildcardImport={active=true}, NoElseInWhenExpression={active=true}, MagicNumber={active=true, ignoreNumbers=[-1, 0, 1, 2]}}\" set for config parameter \"style\" is not of required type String."
                 )
+        }
+
+        @Test
+        fun `parent path of ruleset config is ruleset id`() {
+            val rulesetId = "style"
+            val subject = config.subConfig(rulesetId)
+            val actual = subject.parentPath
+            assertThat(actual).isEqualTo(rulesetId)
         }
     }
 

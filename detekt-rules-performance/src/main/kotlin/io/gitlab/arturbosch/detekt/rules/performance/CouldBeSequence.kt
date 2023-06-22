@@ -44,7 +44,7 @@ class CouldBeSequence(config: Config = Config.empty) : Rule(config) {
     @Configuration("the number of chained collection operations required to trigger rule")
     private val threshold: Int by config(defaultValue = 3)
 
-    private var visitedCallExpressions = mutableListOf<KtExpression>()
+    private val visitedCallExpressions = mutableListOf<KtExpression>()
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

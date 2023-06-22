@@ -7,11 +7,14 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isNullable
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
-import org.jetbrains.kotlin.psi.KtNullableType
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.types.isNullable
 import org.jetbrains.kotlin.utils.addToStdlib.ifFalse
 import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 
@@ -47,6 +50,9 @@ class CastNullableToNonNullableType(config: Config = Config.empty) : Rule(config
         Debt.FIVE_MINS
     )
 
+    @Configuration("Whether platform types should be considered as non-nullable and ignored by this rule")
+    private val ignorePlatformTypes: Boolean by config(true)
+
     @Suppress("ReturnCount")
     override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
         super.visitBinaryWithTypeRHSExpression(expression)
@@ -54,19 +60,20 @@ class CastNullableToNonNullableType(config: Config = Config.empty) : Rule(config
         val operationReference = expression.operationReference
         if (operationReference.getReferencedNameElementType() != KtTokens.AS_KEYWORD) return
         if (expression.left.text == KtTokens.NULL_KEYWORD.value) return
-        val typeElement = expression.right?.typeElement ?: return
-        (typeElement is KtNullableType).ifTrue { return }
+        val typeRef = expression.right ?: return
+        val simpleType = bindingContext[BindingContext.TYPE, typeRef] ?: return
+        simpleType.isNullable().ifTrue { return }
         val compilerResourcesNonNull = compilerResources ?: return
         expression.left.isNullable(
             bindingContext,
             compilerResourcesNonNull.languageVersionSettings,
             compilerResourcesNonNull.dataFlowValueFactory,
-            shouldConsiderPlatformTypeAsNullable = true,
+            shouldConsiderPlatformTypeAsNullable = ignorePlatformTypes.not(),
         ).ifFalse { return }
 
         val message =
             "Use separate `null` assertion and type cast like ('(${expression.left.text} ?: " +
-                "error(\"null assertion message\")) as ${typeElement.text}') instead of '${expression.text}'."
+                "error(\"null assertion message\")) as ${typeRef.text}') instead of '${expression.text}'."
         report(CodeSmell(issue, Entity.from(operationReference), message))
     }
 }

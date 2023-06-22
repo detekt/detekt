@@ -43,8 +43,8 @@ class ComplexInterface(
         Debt.TWENTY_MINS
     )
 
-    @Configuration("the amount of definitions in an interface to trigger the rule")
-    private val threshold: Int by config(defaultValue = 10)
+    @Configuration("The amount of allowed definitions in an interface.")
+    private val allowedDefinitions: Int by config(defaultValue = 10)
 
     @Configuration("whether static declarations should be included")
     private val includeStaticDeclarations: Boolean by config(defaultValue = false)
@@ -62,12 +62,12 @@ class ComplexInterface(
             if (includeStaticDeclarations) {
                 size += countStaticDeclarations(klass.companionObject())
             }
-            if (size >= threshold) {
+            if (size > allowedDefinitions) {
                 report(
                     ThresholdedCodeSmell(
                         issue,
                         Entity.atName(klass),
-                        Metric("SIZE: ", size, threshold),
+                        Metric("SIZE: ", size, allowedDefinitions),
                         "The interface ${klass.name} is too complex. Consider splitting it up."
                     )
                 )

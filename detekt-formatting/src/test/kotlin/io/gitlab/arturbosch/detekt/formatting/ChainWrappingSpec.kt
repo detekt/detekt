@@ -2,8 +2,9 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
-import org.assertj.core.api.Assertions.assertThat
+import io.gitlab.arturbosch.detekt.test.assertThat
 import org.junit.jupiter.api.Test
+import org.assertj.core.api.Assertions.assertThat as assertJThat
 
 class ChainWrappingSpec {
 
@@ -14,7 +15,7 @@ class ChainWrappingSpec {
 
         val findings = ChainWrapping(Config.empty).lint(subject.text)
 
-        assertThat(findings).isNotEmpty
-        assertThat(subject.text).isEqualTo(expected)
+        assertThat(findings).isNotEmpty()
+        assertJThat(subject.text).isEqualTo(expected)
     }
 }

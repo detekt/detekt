@@ -14,9 +14,12 @@ import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
 import io.gitlab.arturbosch.detekt.rules.isNullCheck
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
+import org.jetbrains.kotlin.com.intellij.psi.tree.IElementType
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
+import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
+import org.jetbrains.kotlin.js.translate.callTranslator.getReturnType
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -25,6 +28,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtIfExpression
@@ -49,6 +53,7 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.isFirstStatement
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
+import org.jetbrains.kotlin.psi2ir.deparenthesize
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.getKotlinTypeForComparison
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
@@ -231,13 +236,15 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         }
 
         override fun visitWhenExpression(expression: KtWhenExpression) {
-            val subjectDescriptor = expression.subjectExpression
-                ?.let { it as? KtNameReferenceExpression }
-                ?.getResolvedCall(bindingContext)
-                ?.resultingDescriptor
+            val nullCheckedDescriptor = expression.subjectExpression
+                ?.collectDescendantsOfType<KtNameReferenceExpression>()
+                .orEmpty()
+                .mapNotNull { it.getResolvedCall(bindingContext) }
+                .filter { callDescriptor -> callDescriptor.getReturnType().isNullable() }
+                .mapNotNull { callDescriptor -> callDescriptor.resultingDescriptor as? ValueParameterDescriptor }
             val whenConditions = expression.entries.flatMap { it.conditions.asList() }
-            if (subjectDescriptor != null) {
-                whenConditions.evaluateSubjectWhenExpression(expression, subjectDescriptor)
+            if (nullCheckedDescriptor.isNotEmpty()) {
+                whenConditions.evaluateSubjectWhenExpression(expression, nullCheckedDescriptor)
             } else {
                 whenConditions.forEach { whenCondition ->
                     if (whenCondition is KtWhenConditionWithExpression) {
@@ -324,16 +331,16 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
             }
         }
 
-        private fun KtExpression?.getNonNullChecks(): List<CallableDescriptor>? {
+        private fun KtElement?.getNonNullChecks(parentOperatorToken: IElementType?): List<CallableDescriptor>? {
             return when (this) {
-                is KtBinaryExpression -> evaluateBinaryExpression()
+                is KtBinaryExpression -> evaluateBinaryExpression(parentOperatorToken)
                 is KtIsExpression -> evaluateIsExpression()
                 else -> null
             }
         }
 
         private fun KtExpression?.evaluateCheckStatement(elseExpression: KtExpression?) {
-            this.getNonNullChecks()?.let { nonNullChecks ->
+            this.getNonNullChecks(null)?.let { nonNullChecks ->
                 val nullableParamCallback = if (elseExpression.isValidElseExpression()) {
                     { nullableParam: NullableParam ->
                         nullableParam.isNonNullChecked = true
@@ -342,32 +349,35 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                 } else {
                     { nullableParam -> nullableParam.isNonNullChecked = true }
                 }
-                nonNullChecks.forEach { nullableParams[it]?.let(nullableParamCallback) }
+                nonNullChecks.forEach {
+                    nullableParams[it]?.let(nullableParamCallback)
+                }
             }
         }
 
         // Helper function for if- and when-statements that will recursively check for whether
         // any function params have been checked for being a non-nullable type.
-        private fun KtBinaryExpression.evaluateBinaryExpression(): List<CallableDescriptor> {
-            val leftExpression = left
-            val rightExpression = right
+        private fun KtBinaryExpression.evaluateBinaryExpression(
+            parentOperatorToken: IElementType?,
+        ): List<CallableDescriptor> {
+            val leftExpression = left?.deparenthesize()
+            val rightExpression = right?.deparenthesize()
             val nonNullChecks = mutableListOf<CallableDescriptor>()
 
             if (isNullCheck()) {
                 getDescriptor(leftExpression, rightExpression)
                     ?.let { nullableParams[it] }
                     ?.let { it.isNullChecked = true }
-            } else if (isNonNullCheck()) {
+            } else if (isNonNullCheck() && parentOperatorToken != KtTokens.OROR) {
                 getDescriptor(leftExpression, rightExpression)?.let(nonNullChecks::add)
             }
 
-            // Recursively iterate into the if-check if possible
-            leftExpression.getNonNullChecks()?.let(nonNullChecks::addAll)
-            rightExpression.getNonNullChecks()?.let(nonNullChecks::addAll)
+            leftExpression.getNonNullChecks(operationToken)?.let(nonNullChecks::addAll)
+            rightExpression.getNonNullChecks(operationToken)?.let(nonNullChecks::addAll)
             return nonNullChecks
         }
 
-        private fun getDescriptor(leftExpression: KtExpression?, rightExpression: KtExpression?): CallableDescriptor? {
+        private fun getDescriptor(leftExpression: KtElement?, rightExpression: KtElement?): CallableDescriptor? {
             return when {
                 leftExpression is KtNameReferenceExpression -> leftExpression
                 rightExpression is KtNameReferenceExpression -> rightExpression
@@ -389,7 +399,7 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
 
         private fun List<KtWhenCondition>.evaluateSubjectWhenExpression(
             expression: KtWhenExpression,
-            subjectDescriptor: CallableDescriptor
+            subjectDescriptors: List<CallableDescriptor>,
         ) {
             var isNonNullChecked = false
             var isNullChecked = false
@@ -416,9 +426,11 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
                     isNullChecked = true
                 }
             }
-            nullableParams[subjectDescriptor]?.let {
-                if (isNullChecked) it.isNullChecked = true
-                if (isNonNullChecked) it.isNonNullChecked = true
+            subjectDescriptors.forEach { callableDescriptor ->
+                nullableParams[callableDescriptor]?.let {
+                    if (isNullChecked) it.isNullChecked = true
+                    if (isNonNullChecked) it.isNonNullChecked = true
+                }
             }
         }
 

@@ -747,6 +747,37 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
         }
+
+        @Test
+        fun `does not report unused private property in data class - #6142`() {
+            val code = """
+                data class Foo(
+                    private val foo: Int,
+                    private val bar: String,
+                )
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report unused private property in data class with named constructor`() {
+            val code = """
+                data class Foo constructor(
+                    private val foo: Int,
+                    private val bar: String,
+                )
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report unused private property in value or inline class`() {
+            val code = """
+                @JvmInline value class Foo(private val value: String)
+                inline class Bar(private val value: String)
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
     }
 
     @Nested
@@ -806,6 +837,43 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             assertThat(subject.lint(code)).hasSize(1)
+        }
+    }
+
+    @Nested
+    inner class `irrelevant references are ignored` {
+        @Test
+        fun `package declarations are ignored`() {
+            val code = """
+                package org.detekt
+                fun main() {
+                    val org = 1
+                    val detekt = 1
+                    println("foo")
+                }
+            """.trimIndent()
+
+            val results = subject.lint(code)
+            assertThat(results).hasSize(2)
+            assertThat(results).anyMatch { it.message == "Private property `org` is unused." }
+            assertThat(results).anyMatch { it.message == "Private property `detekt` is unused." }
+        }
+
+        @Test
+        fun `import declarations are ignored`() {
+            val code = """
+                import org.detekt.Foo
+                fun main() {
+                    val org = 1
+                    val detekt = 1
+                    println("foo")
+                }
+            """.trimIndent()
+
+            val results = subject.lint(code)
+            assertThat(results).hasSize(2)
+            assertThat(results).anyMatch { it.message == "Private property `org` is unused." }
+            assertThat(results).anyMatch { it.message == "Private property `detekt` is unused." }
         }
     }
 }

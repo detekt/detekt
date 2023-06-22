@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test
 
 class CognitiveComplexMethodSpec {
 
-    private val testConfig = TestConfig("threshold" to "1")
+    private val testConfig = TestConfig("allowedComplexity" to "1")
 
     @Test
-    fun `should report complex function`() {
+    fun `should report complex function exceeding the allowed complexity`() {
         val code = """
             fun sumOfPrimes(max: Int): Int { // total cognitive complexity is 7
                 var total = 0
@@ -35,7 +35,21 @@ class CognitiveComplexMethodSpec {
     }
 
     @Test
-    fun `should not report simple function`() {
+    fun `should not report function that has exactly the allowed complexity`() {
+        val code = """
+            fun divide(a: Int, b: Int): Int { // total cognitive complexity is 1
+                if(b != 0) {
+                    return a / b
+                }
+                return 0
+            }
+        """.trimIndent()
+        val findings = CognitiveComplexMethod(testConfig).compileAndLint(code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `should not report function that has less than the allowed complexity`() {
         val code = """
             fun add(a: Int, b: Int): Int { // total cognitive complexity is 0
                 return a + b

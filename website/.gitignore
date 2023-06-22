@@ -18,3 +18,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Avoid committing generated documentation to the repo
+/docs/rules/*.md
+/docs/gettingstarted/_cli-options.md
+/static/kdoc

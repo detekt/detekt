@@ -2,14 +2,13 @@
 //bin/true; exec kotlinc -script "$0" -- "$@"
 
 /**
- * Script to prepare release notes for the upcoming Detekt release
+ * Script to prepare release notes for the upcoming detekt release.
  *
  * You need kotlin 1.3.70+ installed on your machine
  */
 
-// for the exec line
-@file:Suppress("detekt.CommentSpacing")
-@file:DependsOn("org.kohsuke:github-api:1.314")
+@file:Suppress("detekt.CommentSpacing") // For the polyglot exec command in line 2.
+@file:DependsOn("org.kohsuke:github-api:1.315")
 @file:DependsOn("com.github.ajalt:clikt:2.8.0")
 
 import com.github.ajalt.clikt.core.CliktCommand
@@ -29,14 +28,15 @@ import java.time.format.DateTimeFormatter
 
 class GithubMilestoneReport : CliktCommand() {
 
-    private val user: String by option("-u", help = "Github user or organization. Default: detekt").default("detekt")
-    private val project: String by option("-p", help = "Github project. Default: detekt").default("detekt")
+    private val user: String by option("-u", help = "GitHub user or organization. Default: detekt").default("detekt")
+    private val project: String by option("-p", help = "GitHub project. Default: detekt").default("detekt")
     private val milestone: Int? by option("-m", help = "Milestone number. Default: latest milestone.").int()
     private val filterExisting: Boolean by option(
         "-f",
         help = "Filter issues that are already in the changelog. Default: false."
     ).flag(default = false)
 
+    @Suppress("LongMethod")
     override fun run() {
         // connect to GitHub
         val github: GitHub = GitHub.connectAnonymously()
@@ -49,6 +49,8 @@ class GithubMilestoneReport : CliktCommand() {
 
         val ghMilestone: GHMilestone = ghRepository.getMilestone(milestoneId)
         var ghIssues: List<GHIssue> = ghRepository.getIssues(GHIssueState.CLOSED, ghMilestone)
+            .filter { it.pullRequest != null }
+        val ghContributors = ghIssues.map { it.user.login }.distinct().sorted()
 
         if (filterExisting) {
             val changeLogContent = File("./website/src/pages/changelog.md").readText()
@@ -93,6 +95,11 @@ class GithubMilestoneReport : CliktCommand() {
             append("\n")
             append(formatIssues(housekeepingChanges))
             append("\n")
+            append(section("Contributors"))
+            append("\n")
+            append(formatContributors(ghContributors))
+            append("\n")
+            append("\n")
             append(footer(milestoneTitle, ghMilestone.htmlUrl))
         }.toString()
 
@@ -104,6 +111,14 @@ class GithubMilestoneReport : CliktCommand() {
         tempFile.writeText(content)
 
         println("\nContent saved to ${tempFile.path}")
+    }
+
+    private fun formatContributors(ghContributors: List<String>): String {
+        val formattedContributors = ghContributors
+            .filterNot { it == "renovate[bot]" }
+            .joinToString(", ") { "@$it" }
+        return "We would like to thank the following contributors that " +
+            "made this release possible: $formattedContributors"
     }
 
     // formatting helpers

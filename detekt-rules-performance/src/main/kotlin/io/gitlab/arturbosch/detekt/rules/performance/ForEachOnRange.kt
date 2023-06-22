@@ -8,13 +8,13 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.rules.getIntValueForPsiElement
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtParenthesizedExpression
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
+import org.jetbrains.kotlin.psi2ir.deparenthesize
 
 /**
  * Using the forEach method on ranges has a heavy performance cost. Prefer using simple for loops.
@@ -52,8 +52,7 @@ class ForEachOnRange(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    private val minimumRangeSize = 3
-    private val rangeOperators = setOf("..", "downTo", "until", "step")
+    private val rangeOperators = setOf("..", "rangeTo", "downTo", "until", "..<")
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -62,32 +61,50 @@ class ForEachOnRange(config: Config = Config.empty) : Rule(config) {
             if (!it.textMatches("forEach")) {
                 return
             }
-            val parenthesizedExpression = it.getReceiverExpression() as? KtParenthesizedExpression
-            val binaryExpression = parenthesizedExpression?.expression as? KtBinaryExpression
-            if (binaryExpression != null && isRangeOperator(binaryExpression)) {
-                report(CodeSmell(issue, Entity.from(expression), issue.description))
+            val forExpression = it.getReceiverExpression()?.deparenthesize()
+            if (forExpression != null && isRangeOperatorsChainCall(forExpression)) {
+                report(CodeSmell(issue, Entity.from(forExpression), issue.description))
             }
         }
     }
 
-    private fun isRangeOperator(binaryExpression: KtBinaryExpression): Boolean {
-        val range = binaryExpression.children
-        if (range.size >= minimumRangeSize) {
-            val hasCorrectLowerValue = hasCorrectLowerValue(range[0])
-            val hasCorrectUpperValue = getIntValueForPsiElement(range[2]) != null
-            return hasCorrectLowerValue && hasCorrectUpperValue && rangeOperators.contains(range[1].text)
-        }
-        return false
-    }
+    private fun isRangeOperatorsChainCall(expression: KtElement): Boolean {
+        return if (isRangeOperator(expression)) {
+            true
+        } else {
+            when (expression) {
+                is KtBinaryExpression -> {
+                    val receiverExpression = expression.left?.deparenthesize() ?: return false
+                    isRangeOperatorsChainCall(receiverExpression)
+                }
 
-    private fun hasCorrectLowerValue(element: PsiElement): Boolean {
-        var lowerValue = getIntValueForPsiElement(element) != null
-        if (!lowerValue) {
-            val expression = element as? KtBinaryExpression
-            if (expression != null) {
-                lowerValue = isRangeOperator(expression)
+                is KtDotQualifiedExpression -> {
+                    val receiverExpression = expression.receiverExpression.deparenthesize()
+                    isRangeOperatorsChainCall(receiverExpression)
+                }
+
+                else -> {
+                    false
+                }
             }
         }
-        return lowerValue
+    }
+
+    private fun isRangeOperator(expression: KtElement): Boolean {
+        val operator = when (expression) {
+            is KtBinaryExpression -> {
+                expression.operationReference.text
+            }
+
+            is KtDotQualifiedExpression -> {
+                (expression.selectorExpression as? KtCallExpression)?.calleeExpression?.text
+            }
+
+            else -> {
+                null
+            }
+        }
+
+        return operator in rangeOperators
     }
 }

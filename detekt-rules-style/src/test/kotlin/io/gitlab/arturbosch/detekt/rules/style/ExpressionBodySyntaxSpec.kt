@@ -29,6 +29,35 @@ class ExpressionBodySyntaxSpec {
         }
 
         @Test
+        fun `reports return statements in property getter and setter`() {
+            val code = """
+                class Test {
+                    var b: Boolean
+                        get() {
+                            return true
+                        }
+                        set(value) {
+                            return
+                        }
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).hasSize(2)
+        }
+
+        @Test
+        fun `does not report properties with no getter or setter body`() {
+            val code = """
+                class Test {
+                    var b1: Boolean = false
+                        get
+                        set
+                    var b2: Boolean = false
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
         fun `reports return statement with method chain`() {
             assertThat(
                 subject.compileAndLint(

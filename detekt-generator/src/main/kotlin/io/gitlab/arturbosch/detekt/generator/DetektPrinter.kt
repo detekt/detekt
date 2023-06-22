@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.generator.printer.DeprecatedPrinter
 import io.gitlab.arturbosch.detekt.generator.printer.RuleSetPagePrinter
 import io.gitlab.arturbosch.detekt.generator.printer.defaultconfig.ConfigPrinter
 import io.gitlab.arturbosch.detekt.generator.printer.defaultconfig.printRuleSetPage
+import java.nio.file.Path
 import kotlin.io.path.Path
 
 class DetektPrinter(private val arguments: GeneratorArgs) {
@@ -50,20 +51,19 @@ class DetektPrinter(private val arguments: GeneratorArgs) {
         }
     }
 
-    fun printCustomRuleConfig(pages: List<RuleSetPage>, folder: String) {
-        yamlWriter.write(Path(folder), "config") {
+    fun printCustomRuleConfig(pages: List<RuleSetPage>, folder: Path) {
+        yamlWriter.write(folder, "config") {
             ConfigPrinter.printCustomRuleConfig(pages)
         }
     }
 
-    private fun markdownHeader(ruleSet: String): String {
-        check(ruleSet.length > 1) { "Rule set name must be not empty or less than two symbols." }
+    private fun markdownHeader(ruleSetName: String): String {
         return """
             ---
-            title: ${ruleSet[0].uppercaseChar()}${ruleSet.substring(1)} Rule Set
+            title: ${ruleSetName[0].uppercaseChar()}${ruleSetName.substring(1)} Rule Set
             sidebar: home_sidebar
-            keywords: [rules, $ruleSet]
-            permalink: $ruleSet.html
+            keywords: [rules, $ruleSetName]
+            permalink: $ruleSetName.html
             toc: true
             folder: documentation
             ---

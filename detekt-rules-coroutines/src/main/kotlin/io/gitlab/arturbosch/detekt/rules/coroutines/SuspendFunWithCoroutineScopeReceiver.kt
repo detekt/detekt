@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * <noncompliant>
  * suspend fun CoroutineScope.foo() {
  *     launch {
- *       delay(1.seconds)
+ *         delay(1.seconds)
  *     }
  * }
  * </noncompliant>
@@ -34,14 +34,14 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * <compliant>
  * fun CoroutineScope.foo() {
  *     launch {
- *       delay(1.seconds)
+ *         delay(1.seconds)
  *     }
  * }
  *
  * // Alternative
  * suspend fun foo() = coroutineScope {
  *     launch {
- *       delay(1.seconds)
+ *         delay(1.seconds)
  *     }
  * }
  * </compliant>
@@ -58,6 +58,8 @@ class SuspendFunWithCoroutineScopeReceiver(config: Config) : Rule(config) {
             "functions and use coroutineScope { } instead.",
         debt = Debt.TEN_MINS
     )
+
+    override val defaultRuleIdAliases = setOf("SuspendFunctionOnCoroutineScope")
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         checkReceiver(function)

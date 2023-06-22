@@ -304,9 +304,50 @@ class UnnecessaryParenthesesSpec {
             
             val d1 = null ?: (1 in 2) // parens required
             val d2 = (null ?: 1) in 2
+
+            val x: Int? = if (System.currentTimeMillis() % 2 == 1L) 1 else null
+            val y = 10
+            val e1 = (x ?: 0) + y // parens required
+            val e2 = x ?: (0 + y)
+
+            val f1 = (x ?: 0) * y // parens required
+            val f2 = x ?: (0 * y)
+
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 4)
+        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 6)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `Elvis and to operator when precedence is unclear #4495`(testCase: RuleTestCase) {
+        val code = """
+            fun test() {
+                val (adjustedFromItem, fromFragment) =
+                    listOf(true to true)
+                        .firstOrNull { (from, frag) -> from && frag }
+                        ?: (null to null)
+            }
+        """.trimIndent()
+
+        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 1)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `Elvis and dic operator when precedence is unclear #4495`(testCase: RuleTestCase) {
+        val code = """
+            fun string(id: String) = 0f
+            fun floatOrNull(id: String) = id.toFloatOrNull()
+            fun test() {
+                val index = 0
+                val segments = intArrayOf()
+                string("id") to (floatOrNull("progress") ?: (index.toFloat() / (segments.size - 1)))
+                val progress = floatOrNull("progress") ?: (index.toFloat() / (segments.size - 1))
+            }
+        """.trimIndent()
+
+        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 2)
     }
 
     @ParameterizedTest

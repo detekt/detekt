@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.EnabledForJreRange
 import org.junit.jupiter.api.condition.EnabledIf
 import org.junit.jupiter.api.condition.EnabledOnOs
-import org.junit.jupiter.api.condition.JRE.JAVA_11
+import org.junit.jupiter.api.condition.JRE.JAVA_17
 import org.junit.jupiter.api.condition.OS.MAC
 import java.util.concurrent.TimeUnit
 
@@ -149,7 +149,7 @@ class DetektMultiplatformSpec {
     }
 
     @Nested
-    @EnabledForJreRange(min = JAVA_11, disabledReason = "Android Gradle Plugin 7.0+ requires JDK 11 or newer")
+    @EnabledForJreRange(min = JAVA_17, disabledReason = "Android Gradle Plugin 8.0+ requires JDK 17 or newer")
     @EnabledIf("io.gitlab.arturbosch.detekt.DetektAndroidSpecKt#isAndroidSdkInstalled")
     inner class `multiplatform projects - Android target` {
         val gradleRunner =
@@ -362,9 +362,9 @@ private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGrad
 
 private fun setupAndroidProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGradleRunner {
     val gradleRunner = setupProject { projectLayoutAction() }
-    gradleRunner.writeProjectFile("shared/src/androidMain/AndroidManifest.xml", manifestContent())
-    gradleRunner.writeProjectFile("shared/src/debug/AndroidManifest.xml", manifestContent())
-    gradleRunner.writeProjectFile("shared/src/release/AndroidManifest.xml", manifestContent())
+    gradleRunner.writeProjectFile("shared/src/androidMain/AndroidManifest.xml", manifestContent)
+    gradleRunner.writeProjectFile("shared/src/debug/AndroidManifest.xml", manifestContent)
+    gradleRunner.writeProjectFile("shared/src/release/AndroidManifest.xml", manifestContent)
     return gradleRunner
 }
 

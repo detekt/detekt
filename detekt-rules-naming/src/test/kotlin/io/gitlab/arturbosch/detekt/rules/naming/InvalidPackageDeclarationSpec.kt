@@ -32,6 +32,7 @@ class InvalidPackageDeclarationSpec {
     fun `should ignore the issue by alias suppression`() {
         val source = """
             @file:Suppress("PackageDirectoryMismatch")
+            
             package foo
             
             class C
@@ -163,6 +164,20 @@ class InvalidPackageDeclarationSpec {
             """.trimIndent()
 
             val ktFile = compileContentForTest(source, createPath("src/foo/bar/File.kt"))
+            val findings = InvalidPackageDeclaration(config).lint(ktFile)
+
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should report if declaration only shares a prefix with root package`() {
+            val source = """
+                package com.example_extra
+                
+                class C
+            """.trimIndent()
+
+            val ktFile = compileContentForTest(source, createPath("src/com/example_extra/File.kt"))
             val findings = InvalidPackageDeclaration(config).lint(ktFile)
 
             assertThat(findings).hasSize(1)

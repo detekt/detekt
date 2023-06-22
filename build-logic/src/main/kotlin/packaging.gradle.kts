@@ -4,10 +4,6 @@ plugins {
     signing
 }
 
-tasks.withType<Sign>().configureEach {
-    notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13470")
-}
-
 publishing {
     repositories {
         maven {
@@ -30,33 +26,40 @@ publishing {
     // We don't need to configure publishing for the Gradle plugin.
     if (project.name != "detekt-gradle-plugin") {
         publications.register<MavenPublication>(DETEKT_PUBLICATION) {
-            groupId = "io.gitlab.arturbosch.detekt"
-            artifactId = project.name
             from(components["java"])
-            version = Versions.currentOrSnapshot()
-            pom {
-                description.set("Static code analysis for Kotlin")
-                name.set("detekt")
-                url.set("https://detekt.dev")
-                licenses {
-                    license {
-                        name.set("The Apache Software License, Version 2.0")
-                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-                        distribution.set("repo")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("Detekt Developers")
-                        name.set("Detekt Developers")
-                        email.set("info@detekt.dev")
-                    }
-                }
-                scm {
-                    url.set("https://github.com/detekt/detekt")
+        }
+    }
+    publications.withType<MavenPublication> {
+        artifactId = project.name
+        version = Versions.currentOrSnapshot()
+        pom {
+            description.set("Static code analysis for Kotlin")
+            name.set("detekt")
+            url.set("https://detekt.dev")
+            licenses {
+                license {
+                    name.set("The Apache Software License, Version 2.0")
+                    url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                    distribution.set("repo")
                 }
             }
+            developers {
+                developer {
+                    id.set("detekt Developers")
+                    name.set("detekt Developers")
+                    email.set("info@detekt.dev")
+                }
+            }
+            scm {
+                url.set("https://github.com/detekt/detekt")
+            }
         }
+    }
+}
+
+if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
+    tasks.withType<GenerateMavenPom>().configureEach {
+        notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/24765")
     }
 }
 

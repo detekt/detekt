@@ -10,7 +10,8 @@ import java.nio.file.Files
 import java.util.UUID
 
 @Suppress("TooManyFunctions", "ClassOrdering")
-class DslGradleRunner @Suppress("LongParameterList")
+class DslGradleRunner
+@Suppress("LongParameterList")
 constructor(
     val projectLayout: ProjectLayout,
     val buildFileName: String,
@@ -53,14 +54,15 @@ constructor(
      * Each generated file is different so the artifacts are not cached in between test runs
      */
     @Language("kotlin")
-    private fun ktFileContent(className: String, withCodeSmell: Boolean = false) = """
-        internal class $className(
-            val randomDefaultValue: String = "$randomString"
-        ) {
-            val smellyConstant: Int = ${if (withCodeSmell) "11" else "0"}
-        }
-        
-    """.trimIndent() // Last line to prevent NewLineAtEndOfFile.
+    private fun ktFileContent(className: String, withCodeSmell: Boolean = false): String =
+        """
+            internal class $className(
+                val randomDefaultValue: String = "$randomString"
+            ) {
+                val smellyConstant: Int = ${if (withCodeSmell) "11" else "0"}
+            }
+            
+        """.trimIndent() // Last line empty to prevent NewLineAtEndOfFile.
 
     fun setupProject() {
         writeProjectFile(buildFileName, mainBuildFileContent)

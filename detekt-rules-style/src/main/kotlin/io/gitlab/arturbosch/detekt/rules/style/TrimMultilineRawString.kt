@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.config
+import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isConstant
 import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
@@ -54,10 +56,16 @@ class TrimMultilineRawString(val config: Config) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    @Configuration("allows to provide a list of multiline string trimming methods")
+    private val trimmingMethods: List<String> by config(listOf("trimIndent", "trimMargin"))
+
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
         super.visitStringTemplateExpression(expression)
 
-        if (expression.isRawStringWithLineBreak() && !expression.isTrimmed() && !expression.isExpectedAsConstant()) {
+        if (expression.isRawStringWithLineBreak() &&
+            !expression.isTrimmed(trimmingMethods) &&
+            !expression.isExpectedAsConstant()
+        ) {
             report(
                 CodeSmell(
                     issue,
@@ -75,14 +83,14 @@ fun KtStringTemplateExpression.isRawStringWithLineBreak(): Boolean =
         literalText != null && "\n" in literalText
     }
 
-fun KtStringTemplateExpression.isTrimmed(): Boolean {
+fun KtStringTemplateExpression.isTrimmed(trimmingMethods: List<String>): Boolean {
     val nextCall = getQualifiedExpressionForReceiver()
         ?.selectorExpression
         ?.safeAs<KtCallExpression>()
         ?.calleeExpression
         ?.text
 
-    return nextCall in trimFunctions
+    return nextCall in trimmingMethods
 }
 
 @Suppress("ReturnCount")
@@ -103,5 +111,3 @@ private fun KtStringTemplateExpression.isExpectedAsConstant(): Boolean {
 
     return false
 }
-
-private val trimFunctions = listOf("trimIndent", "trimMargin")

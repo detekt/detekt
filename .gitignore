@@ -161,8 +161,3 @@ target/
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
-
-# Avoid committing generated documentation to the repo
-/website/docs/rules/*.md
-/website/static/kdoc
-/website/docs/gettingstarted/_cli-options.md

@@ -17,7 +17,7 @@ abstract class Exclusions {
     open val ruleSets: Set<String> = emptySet()
     abstract val rules: Set<String>
 
-    fun isExcluded(rule: Rule) = rule.name in rules || rule.inMultiRule in rules
+    fun isExcluded(rule: Rule) = rule.name in rules
 
     companion object {
         internal val testFolders = listOf(

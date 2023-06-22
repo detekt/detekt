@@ -94,19 +94,19 @@ complexity:
   active: true
   CognitiveComplexMethod:
     active: false
-    threshold: 15
+    allowedComplexity: 15
   ComplexCondition:
     active: true
     threshold: 4
   ComplexInterface:
     active: false
-    threshold: 10
+    allowedDefinitions: 10
     includeStaticDeclarations: false
     includePrivateDeclarations: false
     ignoreOverloaded: false
   CyclomaticComplexMethod:
     active: true
-    threshold: 15
+    allowedComplexity: 14
     ignoreSingleWhenExpression: false
     ignoreSimpleWhenEntries: false
     ignoreNestingFunctions: false
@@ -125,10 +125,10 @@ complexity:
     ignoredLabels: []
   LargeClass:
     active: true
-    threshold: 600
+    allowedLines: 600
   LongMethod:
     active: true
-    threshold: 60
+    allowedLines: 60
   LongParameterList:
     active: true
     functionThreshold: 6
@@ -138,17 +138,17 @@ complexity:
     ignoreAnnotatedParameter: []
   MethodOverloading:
     active: false
-    threshold: 6
+    allowedOverloads: 6
   NamedArguments:
     active: false
-    threshold: 3
+    allowedArguments: 3
     ignoreArgumentsMatchingNames: false
   NestedBlockDepth:
     active: true
-    threshold: 4
+    allowedDepth: 4
   NestedScopeFunctions:
     active: false
-    threshold: 1
+    allowedDepth: 1
     functions:
       - 'kotlin.apply'
       - 'kotlin.run'
@@ -190,6 +190,8 @@ coroutines:
     active: true
   SleepInsteadOfDelay:
     active: true
+  SuspendFunSwallowedCancellation:
+    active: false
   SuspendFunWithCoroutineScopeReceiver:
     active: false
   SuspendFunWithFlowReturnType:
@@ -320,10 +322,10 @@ naming:
   ForbiddenClassName:
     active: false
     forbiddenName: []
-  FunctionMaxLength:
+  FunctionNameMaxLength:
     active: false
     maximumFunctionNameLength: 30
-  FunctionMinLength:
+  FunctionNameMinLength:
     active: false
     minimumFunctionNameLength: 3
   FunctionNaming:
@@ -403,6 +405,7 @@ potential-bugs:
       - 'kotlin.String'
   CastNullableToNonNullableType:
     active: false
+    ignorePlatformTypes: true
   CastToNullableType:
     active: false
   Deprecation:
@@ -473,6 +476,8 @@ potential-bugs:
     active: false
   NullableToStringCall:
     active: false
+  PropertyUsedBeforeDeclaration:
+    active: false
   UnconditionalJumpStatementInLoop:
     active: false
   UnnecessaryNotNullCheck:
@@ -505,6 +510,10 @@ style:
     active: false
     singleLine: 'never'
     multiLine: 'always'
+  BracesOnWhenStatements:
+    active: false
+    singleLine: 'necessary'
+    multiLine: 'consistent'
   CanBeNonNullable:
     active: false
   CascadingCallWrapping:
@@ -526,6 +535,16 @@ style:
   DestructuringDeclarationWithTooManyEntries:
     active: true
     maxDestructuringEntries: 3
+  DoubleNegativeLambda:
+    active: false
+    negativeFunctions:
+      - reason: 'Use `takeIf` instead.'
+        value: 'takeUnless'
+      - reason: 'Use `all` instead.'
+        value: 'none'
+    negativeFunctionNameParts:
+      - 'not'
+      - 'non'
   EqualsNullCall:
     active: true
   EqualsOnSignatureLine:
@@ -556,12 +575,14 @@ style:
         value: 'java.lang.annotation.Inherited'
   ForbiddenComment:
     active: true
-    values:
-      - 'FIXME:'
-      - 'STOPSHIP:'
-      - 'TODO:'
+    comments:
+      - reason: 'Forbidden FIXME todo marker in comment, please fix the problem.'
+        value: 'FIXME:'
+      - reason: 'Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code.'
+        value: 'STOPSHIP:'
+      - reason: 'Forbidden TODO todo marker in comment, please do the changes.'
+        value: 'TODO:'
     allowedPatterns: ''
-    customMessage: ''
   ForbiddenImport:
     active: false
     imports: []
@@ -618,7 +639,7 @@ style:
     excludeImportStatements: true
     excludeCommentStatements: false
     excludeRawStrings: true
-  MayBeConst:
+  MayBeConstant:
     active: true
   ModifierOrder:
     active: true
@@ -627,6 +648,9 @@ style:
   MultilineRawStringIndentation:
     active: false
     indentSize: 4
+    trimmingMethods:
+      - 'trimIndent'
+      - 'trimMargin'
   NestedClassesVisibility:
     active: true
   NewLineAtEndOfFile:
@@ -665,7 +689,7 @@ style:
     active: true
   SerialVersionUIDInSerializableClass:
     active: true
-  SpacingBetweenPackageAndImports:
+  SpacingAfterPackageDeclaration:
     active: false
   StringShouldBeRawString:
     active: false
@@ -679,6 +703,9 @@ style:
     active: false
   TrimMultilineRawString:
     active: false
+    trimmingMethods:
+      - 'trimIndent'
+      - 'trimMargin'
   UnderscoresInNumericLiterals:
     active: false
     acceptableLength: 4
@@ -690,6 +717,8 @@ style:
   UnnecessaryApply:
     active: true
   UnnecessaryBackticks:
+    active: false
+  UnnecessaryBracesAroundTrailingLambda:
     active: false
   UnnecessaryFilter:
     active: true
@@ -737,6 +766,8 @@ style:
     ignoreWhenContainingVariableDeclaration: false
   UseIsNullOrEmpty:
     active: true
+  UseLet:
+    active: false
   UseOrEmpty:
     active: true
   UseRequire:

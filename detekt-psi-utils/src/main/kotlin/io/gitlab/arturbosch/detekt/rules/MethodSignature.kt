@@ -4,6 +4,9 @@ import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
+import org.jetbrains.kotlin.types.typeUtil.isUnit
 
 fun KtFunction.isEqualsFunction() =
     this.name == "equals" && this.isOverride() && hasCorrectEqualsParameter()
@@ -54,3 +57,6 @@ private fun KtNamedFunction.isMainInsideObject() =
         this.isPublicNotOverridden() &&
         this.parent?.parent is KtObjectDeclaration &&
         this.hasAnnotation("JvmStatic", "kotlin.jvm.JvmStatic")
+
+fun KtNamedFunction.hasImplicitUnitReturnType(bindingContext: BindingContext) =
+    bodyExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType?.isUnit() == true

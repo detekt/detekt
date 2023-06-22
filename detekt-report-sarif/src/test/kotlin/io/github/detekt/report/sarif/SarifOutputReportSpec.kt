@@ -67,7 +67,7 @@ class SarifOutputReportSpec {
 
         val expectedReport = readResourceContent("relative_path.sarif.json")
 
-        // Note: Github CI uses D: drive, but it could be any drive for local development
+        // Note: GitHub CI uses D: drive, but it could be any drive for local development
         val systemAwareExpectedReport = if (whichOS().startsWith("windows", ignoreCase = true)) {
             val winRoot = Path("/").absolutePathString().replace("\\", "/")
             expectedReport.replace("file:///", "file://$winRoot")

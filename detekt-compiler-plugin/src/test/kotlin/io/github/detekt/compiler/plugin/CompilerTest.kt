@@ -30,7 +30,6 @@ class CompilerTest {
     fun `with a source file that contains local suppression`() {
         val result = compile(
             """
-                @file:Suppress("NewLineAtEndOfFile")
                 class KClass {
                     fun foo() {
                         @Suppress("MagicNumber")

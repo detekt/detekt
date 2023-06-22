@@ -3,13 +3,17 @@ package io.gitlab.arturbosch.detekt.core.config
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class CompositeConfigSpec {
 
-    private val second = yamlConfig("composite-test.yml")
-    private val first = yamlConfig("detekt.yml")
-    private val compositeConfig = CompositeConfig(second, first)
+    private val overrideConfig = yamlConfig("composite-test.yml")
+    private val defaultConfig = yamlConfig("detekt.yml")
+    private val compositeConfig = CompositeConfig(
+        lookFirst = overrideConfig,
+        lookSecond = defaultConfig
+    )
 
     @Test
     fun `should have style sub config with active false which is overridden in second config regardless of default value`() {
@@ -19,9 +23,9 @@ class CompositeConfigSpec {
     }
 
     @Test
-    fun `should have code smell sub config with LongMethod threshold 20 from _first_ config`() {
+    fun `should have code smell sub config with LongMethod allowedLines 20 from _default_ config`() {
         val codeSmellConfig = compositeConfig.subConfig("code-smell").subConfig("LongMethod")
-        assertThat(codeSmellConfig.valueOrDefault("threshold", -1)).isEqualTo(20)
+        assertThat(codeSmellConfig.valueOrDefault("allowedLines", -1)).isEqualTo(20)
     }
 
     @Test
@@ -47,5 +51,23 @@ class CompositeConfigSpec {
             config.valueOrDefault("active", true)
         }.isInstanceOf(IllegalStateException::class.java)
             .hasMessageContaining(expectedErrorMessage)
+    }
+
+    @Nested
+    inner class ParentPath {
+
+        @Test
+        fun `is derived from the _override_ config if available`() {
+            val subject = compositeConfig.subConfig("style")
+            val actual = subject.parentPath
+            assertThat(actual).isEqualTo("style")
+        }
+
+        @Test
+        fun `is derived from the default config if unavailable in original config`() {
+            val subject = compositeConfig.subConfig("code-smell")
+            val actual = subject.parentPath
+            assertThat(actual).isEqualTo("code-smell")
+        }
     }
 }

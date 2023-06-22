@@ -54,7 +54,7 @@ class Generator(
                     }
                     printer.printCustomRuleConfig(
                         collector.items,
-                        folder.resolve("src/main/resources/config/").toString()
+                        folder.resolve("src/main/resources/config/")
                     )
                 }
         }

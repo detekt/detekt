@@ -319,6 +319,38 @@ class RuleSetProviderCollectorSpec {
     }
 
     @Nested
+    inner class `a correct RuleSetProvider class with sorted rules` {
+        private val description = "This is a description"
+        private val ruleSetId = "test"
+        private val ruleName = "TestRule"
+        private val secondRuleName = "SecondRule"
+        private val code = """
+            package foo
+            
+            /**
+             * $description
+             */
+            @ActiveByDefault("1.0.0")
+            class TestProvider: RuleSetProvider {
+                override val ruleSetId: String = "$ruleSetId"
+            
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, listOf(
+                            $ruleName(config),
+                            $secondRuleName(config)
+                    ).sortedBy(SomeComparator))
+                }
+            }
+        """.trimIndent()
+
+        @Test
+        fun `collects multiple rules`() {
+            val items = subject.run(code)
+            assertThat(items[0].rules).containsExactly(ruleName, secondRuleName)
+        }
+    }
+
+    @Nested
     inner class `a RuleSetProvider with configurations in kdoc` {
         private val code = """
             package foo

@@ -1,8 +1,7 @@
-@file:Suppress("StringTemplate")
-
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -13,53 +12,81 @@ class TrimMultilineRawStringSpec {
     @Test
     fun `raises multiline raw strings without trim`() {
         val code = """
-            val a = ${TQ}
+            val a = $TQ
             Hello world!
-            ${TQ}
+            $TQ
         """.trimIndent()
         subject.compileAndLint(code)
         assertThat(subject.findings).hasSize(1)
     }
 
     @Test
-    fun `raises multiline raw strings with lenght`() {
+    fun `doesn't raise multiline raw strings with custom default configured trimIndent method`() {
+        fun String.trimIndent() = this
         val code = """
-            val a = ${TQ}
+            val a = $TQ
             Hello world!
-            ${TQ}.length
-        """.trimIndent()
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(1)
-    }
-
-    @Test
-    fun `doesn't raise multiline raw strings without trimIndent`() {
-        val code = """
-            val a = ${TQ}
-            Hello world!
-            ${TQ}.trimIndent()
+            $TQ.trimIndent()
         """.trimIndent()
         subject.compileAndLint(code)
         assertThat(subject.findings).isEmpty()
     }
 
     @Test
-    fun `doesn't raise multiline raw strings without trimMargin`() {
+    fun `doesn't raise multiline raw strings with custom configured customTrim method`() {
         val code = """
-            val a = ${TQ}
+            fun String.customTrim() = this
+            val a = $TQ
+            Hello world!
+            $TQ.customTrim()
+        """.trimIndent()
+        val findings = TrimMultilineRawString(
+            TestConfig(
+                "trimmingMethods" to "customTrim"
+            )
+        ).compileAndLint(code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `raises multiline raw strings with length`() {
+        val code = """
+            val a = $TQ
+            Hello world!
+            $TQ.length
+        """.trimIndent()
+        subject.compileAndLint(code)
+        assertThat(subject.findings).hasSize(1)
+    }
+
+    @Test
+    fun `doesn't raise multiline raw strings with trimIndent`() {
+        val code = """
+            val a = $TQ
+            Hello world!
+            $TQ.trimIndent()
+        """.trimIndent()
+        subject.compileAndLint(code)
+        assertThat(subject.findings).isEmpty()
+    }
+
+    @Test
+    fun `doesn't raise multiline raw strings with trimMargin`() {
+        val code = """
+            val a = $TQ
             |Hello world!
-            ${TQ}.trimMargin()
+            $TQ.trimMargin()
         """.trimIndent()
         subject.compileAndLint(code)
         assertThat(subject.findings).isEmpty()
     }
 
     @Test
-    fun `doesn't raise multiline raw strings without trimMargin with parameter`() {
+    fun `doesn't raise multiline raw strings with trimMargin with parameter`() {
         val code = """
-            val a = ${TQ}
+            val a = $TQ
             >Hello world!
-            ${TQ}.trimMargin(">")
+            $TQ.trimMargin(">")
         """.trimIndent()
         subject.compileAndLint(code)
         assertThat(subject.findings).isEmpty()
@@ -68,7 +95,7 @@ class TrimMultilineRawStringSpec {
     @Test
     fun `don't raise one line raw strings`() {
         val code = """
-            val a = ${TQ}Hello world!${TQ}
+            val a = ${TQ}Hello world!$TQ
         """.trimIndent()
         subject.compileAndLint(code)
         assertThat(subject.findings).isEmpty()
@@ -99,11 +126,11 @@ class TrimMultilineRawStringSpec {
         val code = """
             object O {
                 const val s =
-                    ${TQ}
+                    $TQ
                         Given something
                         When something
                         Then something
-                    ${TQ}
+                    $TQ
             }
         """.trimIndent()
         subject.compileAndLint(code)
@@ -115,11 +142,11 @@ class TrimMultilineRawStringSpec {
         val code = """
             annotation class DisplayName(val s: String)
             @DisplayName(
-                ${TQ}
+                $TQ
                     Given something
                     When something
                     Then something
-                ${TQ}
+                $TQ
             )
             class Foo
         """.trimIndent()
@@ -132,11 +159,11 @@ class TrimMultilineRawStringSpec {
         val code = """
             annotation class DisplayName(
                 val s: String =
-                    ${TQ}
+                    $TQ
                         Given something
                         When something
                         Then something
-                    ${TQ}
+                    $TQ
             )
         """.trimIndent()
         subject.compileAndLint(code)
@@ -148,11 +175,11 @@ class TrimMultilineRawStringSpec {
         val code = """
             fun foo(s: String) {}
             val bar = foo(
-                ${TQ}
+                $TQ
                     Given something
                     When something
                     Then something
-                ${TQ}
+                $TQ
             )
             class Foo
         """.trimIndent()
@@ -165,11 +192,11 @@ class TrimMultilineRawStringSpec {
         val code = """
             class Foo(
                 val s: String =
-                    ${TQ}
+                    $TQ
                         Given something
                         When something
                         Then something
-                    ${TQ}
+                    $TQ
             )
         """.trimIndent()
         subject.compileAndLint(code)
