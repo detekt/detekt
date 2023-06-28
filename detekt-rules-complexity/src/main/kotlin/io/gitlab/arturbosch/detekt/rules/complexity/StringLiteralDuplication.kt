@@ -54,7 +54,7 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
     )
 
     @Configuration("The maximum allowed amount of duplications.")
-    private val allowedDuplications: Int by config(defaultValue = 3)
+    private val allowedDuplications: Int by config(defaultValue = 2)
 
     @Configuration("if values in Annotations should be ignored")
     private val ignoreAnnotation: Boolean by config(true)

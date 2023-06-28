@@ -14,7 +14,7 @@ complexity:
   StringLiteralDuplication:
     active: true
     excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
-    allowedDuplications: 5
+    allowedDuplications: 4
     ignoreAnnotation: true
     excludeStringsWithLessThan5Characters: true
     ignoreStringsRegex: '$^'
