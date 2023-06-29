@@ -2,7 +2,6 @@
 
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.ValueWithReason
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
@@ -982,7 +981,3 @@ class ForbiddenCommentSpec {
 @Suppress("TestFunctionName") // This is a factory function for ForbiddenComment
 private fun ForbiddenComment(vararg comments: String): ForbiddenComment =
     ForbiddenComment(TestConfig(COMMENTS to comments.toList()))
-
-@Suppress("TestFunctionName")
-private fun ForbiddenComment(vararg comments: ValueWithReason): ForbiddenComment =
-    ForbiddenComment(TestConfig(COMMENTS to comments.map { mapOf("value" to it.value, "reason" to it.reason) }))
