@@ -11,6 +11,7 @@ env:
   GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
   GRADLE_CACHE_USERNAME: ${{ secrets.GRADLE_CACHE_USERNAME }}
   GRADLE_CACHE_PASSWORD: ${{ secrets.GRADLE_CACHE_PASSWORD }}
+  ORG_GRADLE_PROJECT_enablePTS: ${{ github.ref_name != 'main' }}
 
 permissions:
   contents: read
@@ -40,7 +41,7 @@ jobs:
         uses: gradle/gradle-build-action@40b6781dcdec2762ad36556682ac74e31030cfe2 # v2
         with:
           gradle-home-cache-cleanup: true
-          arguments: build -x detekt publishToMavenLocal -PenablePTS=${{ github.event_name == 'pull_request' }}
+          arguments: build -x detekt publishToMavenLocal
 
       - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3
         with:
