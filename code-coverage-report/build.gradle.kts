@@ -1,5 +1,4 @@
 plugins {
-    id("base")
     id("jacoco-report-aggregation")
 }
 
