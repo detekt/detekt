@@ -6,6 +6,9 @@ on:
       - main
   pull_request:
 
+env:
+  ORG_GRADLE_PROJECT_enablePTS: false
+
 permissions:
   contents: read
 
