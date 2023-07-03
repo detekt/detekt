@@ -48,9 +48,9 @@ tasks.withType<Test>().configureEach {
 
 tasks.withType<KotlinCompile>().configureEach {
     compilerOptions {
-        jvmTarget.set(Versions.JVM_TARGET)
+        jvmTarget = Versions.JVM_TARGET
         freeCompilerArgs.add("-progressive")
-        allWarningsAsErrors.set(providers.gradleProperty("warningsAsErrors").orNull.toBoolean())
+        allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
     }
 }
 

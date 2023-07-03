@@ -7,7 +7,7 @@ plugins {
 }
 
 application {
-    mainClass.set("io.gitlab.arturbosch.detekt.cli.Main")
+    mainClass = "io.gitlab.arturbosch.detekt.cli.Main"
 }
 
 val pluginsJar: Configuration by configurations.creating {
@@ -51,7 +51,7 @@ tasks {
     }
 
     shadowDistZip {
-        archiveBaseName.set("detekt-cli")
+        archiveBaseName = "detekt-cli"
     }
     shadowDistTar { enabled = false }
     distZip { enabled = false }
