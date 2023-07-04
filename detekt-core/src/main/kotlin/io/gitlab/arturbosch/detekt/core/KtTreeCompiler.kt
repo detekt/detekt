@@ -44,7 +44,10 @@ class KtTreeCompiler(
             val service = settings.taskPool
             val tasks = kotlinFiles.map { path ->
                 service.task { compiler.compile(basePath, path) }
-                    .recover { settings.error("Could not compile '$path'.", it); null }
+                    .recover {
+                        settings.error("Could not compile '$path'.", it)
+                        null
+                    }
             }.toList()
             return awaitAll(tasks).filterNotNull()
         } else {

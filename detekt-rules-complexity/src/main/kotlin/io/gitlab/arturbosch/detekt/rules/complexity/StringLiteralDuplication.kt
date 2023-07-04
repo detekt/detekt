@@ -113,7 +113,10 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
         private fun add(str: KtStringTemplateExpression) {
             val text = str.plainContent
             literals.compute(text) { _, oldValue -> oldValue?.plus(1) ?: 1 }
-            literalReferences.compute(text) { _, entries -> entries?.add(str); entries ?: mutableListOf(str) }
+            literalReferences.compute(text) { _, entries ->
+                entries?.add(str)
+                entries ?: mutableListOf(str)
+            }
         }
     }
 
