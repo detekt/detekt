@@ -136,6 +136,8 @@ formatting:
   NoEmptyClassBody:
     active: true
     autoCorrect: true
+  NoEmptyFile:
+    active: false
   NoEmptyFirstLineInClassBody:
     active: false
     autoCorrect: true

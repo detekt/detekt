@@ -44,6 +44,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.NoBlankLinesInChainedMeth
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoConsecutiveBlankLines
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoConsecutiveComments
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyClassBody
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyFile
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyFirstLineInClassBody
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyFirstLineInMethodBlock
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakAfterElse
@@ -182,6 +183,7 @@ class FormattingProvider : RuleSetProvider {
             MultilineExpressionWrapping(config),
             NoBlankLineInList(config),
             NoConsecutiveComments(config),
+            NoEmptyFile(config),
             NoEmptyFirstLineInClassBody(config),
             ParameterListSpacing(config),
             StringTemplateIndent(config),
