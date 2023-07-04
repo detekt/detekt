@@ -14,8 +14,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#max-line-length) for documentation.
  *
  * This rules overlaps with [style>MaxLineLength](https://detekt.dev/style.html#maxlinelength)
- * from the standard rules, make sure to enable just one or keep them aligned. The pro of this rule is that it can
- * auto-correct the issue.
+ * from the standard rules, make sure to enable just one or keep them aligned.
  */
 @ActiveByDefault(since = "1.0.0")
 class MaximumLineLength(config: Config) : FormattingRule(config) {
