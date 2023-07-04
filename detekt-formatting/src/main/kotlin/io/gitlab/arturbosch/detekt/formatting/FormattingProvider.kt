@@ -77,6 +77,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundUnaryOperato
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithAnnotations
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithComments
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenFunctionNameAndOpeningParenthesis
+import io.gitlab.arturbosch.detekt.formatting.wrappers.StatementWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplate
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplateIndent
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TrailingCommaOnCallSite
@@ -186,6 +187,7 @@ class FormattingProvider : RuleSetProvider {
             NoEmptyFile(config),
             NoEmptyFirstLineInClassBody(config),
             ParameterListSpacing(config),
+            StatementWrapping(config),
             StringTemplateIndent(config),
             TryCatchFinallySpacing(config),
             TypeArgumentListSpacing(config),

@@ -241,6 +241,10 @@ formatting:
   SpacingBetweenFunctionNameAndOpeningParenthesis:
     active: true
     autoCorrect: true
+  StatementWrapping:
+    active: false
+    autoCorrect: true
+    indentSize: 4
   StringTemplate:
     active: true
     autoCorrect: true
