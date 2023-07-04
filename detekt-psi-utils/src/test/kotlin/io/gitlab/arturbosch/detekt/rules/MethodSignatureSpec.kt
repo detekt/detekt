@@ -88,7 +88,7 @@ class MethodSignatureSpec {
         }
 
         @Test
-        fun `should return false for overriden finalize function`() {
+        fun `should return false for overridden finalize function`() {
             val namedFunction = makeFunction("override fun finalize()")
             assertThat(namedFunction.isJvmFinalizeFunction()).isFalse()
         }
