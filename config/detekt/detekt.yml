@@ -79,6 +79,8 @@ formatting:
     active: false
   ParameterListSpacing:
     active: true
+  StatementWrapping:
+    active: true
   TypeParameterListSpacing:
     active: true
 
