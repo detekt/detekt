@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.internal.ruleSetConfig
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationOnSeparateLine
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ArgumentListWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.BinaryExpressionWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BlockCommentInitialStarAlignment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ClassName
@@ -169,6 +170,7 @@ class FormattingProvider : RuleSetProvider {
             Wrapping(config),
 
             // Wrappers for ktlint-ruleset-experimental rules. Disabled by default.
+            BinaryExpressionWrapping(config),
             ContextReceiverMapping(config),
             DiscouragedCommentLocation(config),
             EnumWrapping(config),

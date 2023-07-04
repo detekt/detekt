@@ -14,6 +14,11 @@ formatting:
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120
+  BinaryExpressionWrapping:
+    active: false
+    autoCorrect: true
+    maxLineLength: 120
+    indentSize: 4
   BlockCommentInitialStarAlignment:
     active: true
     autoCorrect: true
