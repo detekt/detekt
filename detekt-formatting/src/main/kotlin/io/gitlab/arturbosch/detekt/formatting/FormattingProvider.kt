@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationOnSeparateLine
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ArgumentListWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BinaryExpressionWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.BlankLineBeforeDeclaration
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BlockCommentInitialStarAlignment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ClassName
@@ -171,6 +172,7 @@ class FormattingProvider : RuleSetProvider {
 
             // Wrappers for ktlint-ruleset-experimental rules. Disabled by default.
             BinaryExpressionWrapping(config),
+            BlankLineBeforeDeclaration(config),
             ContextReceiverMapping(config),
             DiscouragedCommentLocation(config),
             EnumWrapping(config),

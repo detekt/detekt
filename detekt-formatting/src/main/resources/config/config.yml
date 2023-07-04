@@ -19,6 +19,9 @@ formatting:
     autoCorrect: true
     maxLineLength: 120
     indentSize: 4
+  BlankLineBeforeDeclaration:
+    active: false
+    autoCorrect: true
   BlockCommentInitialStarAlignment:
     active: true
     autoCorrect: true
