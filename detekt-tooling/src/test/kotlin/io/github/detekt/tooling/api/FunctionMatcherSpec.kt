@@ -51,8 +51,8 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
                 ),
             ),
             TestCase(
-                testDescription = "should return method name and params list for full signature method with multiple params " +
-                    "where method name has spaces and special characters",
+                testDescription = "should return method name and params list for full signature method with multiple " +
+                    "params where method name has spaces and special characters",
                 functionSignature = "io.gitlab.arturbosch.detekt.SomeClass.`some , method`(kotlin.String)",
                 expectedFunctionMatcher = FunctionMatcher.WithParameters(
                     "io.gitlab.arturbosch.detekt.SomeClass.some , method",
