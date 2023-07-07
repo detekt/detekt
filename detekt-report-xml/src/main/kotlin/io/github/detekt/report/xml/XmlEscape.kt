@@ -217,7 +217,7 @@ private object Xml10EscapeSymbolsInitializer {
         /*
          * Everything non-ASCII is level 2 unless contrary indication.
          */
-        for (c in 0x80 until XmlEscapeSymbols.LEVELS_LEN) {
+        for (c in 0x80..<XmlEscapeSymbols.LEVELS_LEN) {
             escapeLevels[c] = 2
         }
 
@@ -378,10 +378,10 @@ private object Xml10EscapeSymbolsInitializer {
             codepointsOrdered.sort()
 
             // Order the CODEPOINT -> CERs (escape)structures
-            for (i in 0 until structureLen) {
+            for (i in 0..<structureLen) {
                 val codepoint = codepointsOrdered[i]
                 SORTED_CODEPOINTS[i] = codepoint
-                for (j in 0 until structureLen) {
+                for (j in 0..<structureLen) {
                     if (codepoint == codepoints[j]) {
                         SORTED_CERS_BY_CODEPOINT[i] = cers[j]
                         break
@@ -390,10 +390,10 @@ private object Xml10EscapeSymbolsInitializer {
             }
 
             // Order the CERs -> CODEPOINT (unescape)structures
-            for (i in 0 until structureLen) {
+            for (i in 0..<structureLen) {
                 val cer = cersOrdered[i]
                 SORTED_CERS[i] = cer
-                for (j in 0 until structureLen) {
+                for (j in 0..<structureLen) {
                     if (cer.contentEquals(cers[j])) {
                         SORTED_CODEPOINTS_BY_CER[i] = codepoints[j]
                         break
