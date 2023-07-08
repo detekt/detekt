@@ -67,7 +67,7 @@ class InvalidRange(config: Config = Config.empty) : Rule(config) {
         return when (range[1].text) {
             ".." -> checkRangeTo(lowerValue, upperValue)
             "downTo" -> checkDownTo(lowerValue, upperValue)
-            "until" -> checkUntil(lowerValue, upperValue)
+            "until", "..<" -> checkUntil(lowerValue, upperValue)
             else -> false
         }
     }
