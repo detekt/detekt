@@ -13,7 +13,7 @@ dependencies {
     testImplementation(projects.detektCore)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj)
-    testImplementation(libs.reflections)
+    testImplementation(libs.classgraph)
 }
 
 val documentationDir = "$rootDir/website/docs/rules"

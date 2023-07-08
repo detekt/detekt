@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.core
 
+import io.github.classgraph.ClassGraph
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.junit.jupiter.api.Test
-import org.reflections.Reflections
 import java.lang.reflect.Modifier
 
 /**
@@ -35,8 +35,12 @@ class FileProcessorLocatorSpec {
     }
 }
 
-private fun getProcessorClasses(): List<Class<out FileProcessListener>> {
-    return Reflections("io.github.detekt.metrics.processors")
-        .getSubTypesOf(FileProcessListener::class.java)
-        .filter { !Modifier.isAbstract(it.modifiers) }
-}
+private fun getProcessorClasses(): List<Class<out FileProcessListener>> =
+    ClassGraph()
+        .acceptPackages("io.github.detekt.metrics.processors")
+        .scan()
+        .use { scanResult ->
+            scanResult.getClassesImplementing(FileProcessListener::class.java)
+                .loadClasses(FileProcessListener::class.java)
+                .filter { !Modifier.isAbstract(it.modifiers) }
+        }
