@@ -29,17 +29,17 @@ interface RulesSpec {
          * Marker that MaxIssuePolicy should be read from the config file when available.
          * Else it defaults to [NoneAllowed].
          */
-        object NonSpecified : MaxIssuePolicy()
+        data object NonSpecified : MaxIssuePolicy()
 
         /**
          * Always return exit code 0 on found issues.
          */
-        object AllowAny : MaxIssuePolicy()
+        data object AllowAny : MaxIssuePolicy()
 
         /**
          * Never return successfully (code 0) on issues in codebase.
          */
-        object NoneAllowed : MaxIssuePolicy()
+        data object NoneAllowed : MaxIssuePolicy()
 
         /**
          * Define a specific amount of issues which are allowed to find before returning non-zero exit code.
@@ -67,7 +67,7 @@ interface RulesSpec {
         /**
          * Run all loaded rules provided by [io.gitlab.arturbosch.detekt.api.RuleSetProvider]
          */
-        object NoRestrictions : RunPolicy()
+        data object NoRestrictions : RunPolicy()
 
         /**
          * Run a single rule.
