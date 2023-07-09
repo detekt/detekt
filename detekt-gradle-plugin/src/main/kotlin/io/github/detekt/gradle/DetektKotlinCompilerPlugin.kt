@@ -110,8 +110,8 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
         }
 
         taskExtension.baseline.getOrNull()?.let { options.add(SubpluginOption("baseline", it.toString())) }
-        if (taskExtension.config.any()) {
-            options.add(SubpluginOption("config", taskExtension.config.joinToString(",")))
+        taskExtension.config.forEach {
+            options.add(SubpluginOption("config", it.absolutePath))
         }
 
         return options
