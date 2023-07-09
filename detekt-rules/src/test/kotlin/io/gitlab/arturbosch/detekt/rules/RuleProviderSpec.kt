@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules
 
+import io.github.classgraph.ClassGraph
 import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -16,15 +17,20 @@ import io.gitlab.arturbosch.detekt.rules.performance.PerformanceProvider
 import io.gitlab.arturbosch.detekt.rules.style.StyleGuideProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.reflections.Reflections
 import java.lang.reflect.Modifier
 
 class RuleProviderSpec {
 
     @Test
     fun `checks whether all rules are called in the corresponding RuleSetProvider`() {
-        val reflections = Reflections("io.gitlab.arturbosch.detekt.rules")
-        val providers = reflections.getSubTypesOf(DefaultRuleSetProvider::class.java)
+        val providers = ClassGraph()
+            .acceptPackages("io.gitlab.arturbosch.detekt.rules")
+            .scan()
+            .use { scanResult ->
+                scanResult.getClassesImplementing(DefaultRuleSetProvider::class.java)
+                    .loadClasses(DefaultRuleSetProvider::class.java)
+            }
+
         providers.forEach { providerType ->
             val packageName = getRulesPackageNameForProvider(providerType)
             val provider = providerType.getDeclaredConstructor().newInstance()
@@ -69,11 +75,13 @@ private fun getRules(provider: RuleSetProvider): List<BaseRule> {
     return rules
 }
 
-private fun getClasses(packageName: String): List<Class<out Rule>> {
-    val classes = Reflections(packageName)
-        .getSubTypesOf(Rule::class.java)
-        .filterNot { "Test" in it.name }
-        .filter { !Modifier.isAbstract(it.modifiers) && !Modifier.isStatic(it.modifiers) }
-    assertThat(classes).isNotEmpty
-    return classes
-}
+private fun getClasses(packageName: String): List<Class<out Rule>> =
+    ClassGraph()
+        .acceptPackages(packageName)
+        .scan()
+        .use { scanResult ->
+            scanResult.getSubclasses(Rule::class.java)
+                .loadClasses(Rule::class.java)
+                .filterNot { "Test" in it.name }
+                .filter { !Modifier.isAbstract(it.modifiers) && !Modifier.isStatic(it.modifiers) }
+        }

@@ -38,7 +38,7 @@ junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "jun
 
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.4.0"
 assertj = "org.assertj:assertj-core:3.24.2"
-reflections = "org.reflections:reflections:0.10.2"
+classgraph = "io.github.classgraph:classgraph:4.8.161"
 mockk = "io.mockk:mockk:1.13.5"
 snakeyaml = "org.snakeyaml:snakeyaml-engine:2.6"
 jcommander = "com.beust:jcommander:1.82"
