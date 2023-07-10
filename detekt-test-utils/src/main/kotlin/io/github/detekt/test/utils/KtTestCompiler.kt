@@ -4,9 +4,11 @@ import io.github.detekt.parser.KtCompiler
 import kotlinx.coroutines.CoroutineScope
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
+import org.jetbrains.kotlin.cli.common.config.KotlinSourceRoot
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import org.jetbrains.kotlin.cli.jvm.compiler.createSourceFilesFromSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoot
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
@@ -20,20 +22,18 @@ import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
 import java.nio.file.Path
+import kotlin.io.path.absolutePathString
 
 /**
  * Test compiler extends kt compiler and adds ability to compile from text content.
  */
 internal object KtTestCompiler : KtCompiler() {
 
-    /*
-     * If tests are executed through Bazel, there is no File based resource path as all classpath elements
-     * are JAR files, which leads to crashes. By initializing the root on demand, it's at least possible to
-     * use String based input from Bazel.
-     */
-    private val root by lazy { resourceAsPath("/") }
-
-    fun compile(path: Path) = compile(root, path)
+    fun compile(path: Path): KtFile {
+        val sourceRoot = KotlinSourceRoot(path.absolutePathString(), isCommon = false, hmppModuleName = null)
+        return createSourceFilesFromSourceRoots(environment.configuration, environment.project, listOf(sourceRoot))
+            .single()
+    }
 
     fun compileFromContent(@Language("kotlin") content: String, filename: String = TEST_FILENAME): KtFile {
         require('/' !in filename && '\\' !in filename) {
