@@ -1,10 +1,11 @@
 package io.gitlab.arturbosch.detekt.core.tooling
 
 import io.github.detekt.parser.KtCompiler
-import io.gitlab.arturbosch.detekt.core.KtTreeCompiler
+import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
+import kotlin.io.path.Path
 
 typealias ParsingStrategy = (settings: ProcessingSettings) -> List<KtFile>
 
@@ -21,5 +22,17 @@ fun pathToKtFile(path: Path): ParsingStrategy = { settings ->
 }
 
 val inputPathsToKtFiles: ParsingStrategy = { settings ->
-    KtTreeCompiler(settings, settings.spec.projectSpec).compiler.environment.getSourceFiles()
+    val pathFilters: PathFilters? =
+        PathFilters.of(settings.spec.projectSpec.includes.toList(), settings.spec.projectSpec.excludes.toList())
+
+    fun isIgnored(path: Path): Boolean {
+        val ignored = pathFilters?.isIgnored(path)
+        if (ignored == true) {
+            settings.debug { "Ignoring file '$path'" }
+        }
+        return ignored ?: false
+    }
+
+    settings.environment.getSourceFiles()
+        .filter { !isIgnored(Path(it.virtualFilePath)) }
 }
