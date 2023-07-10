@@ -36,7 +36,7 @@ fun PsiFile.fileNameWithoutSuffix(): String {
     return fileName
 }
 
-fun PsiFile.absolutePath(): Path = Path(name)
+fun PsiFile.absolutePath(): Path = Path(virtualFile.path)
 
 fun PsiFile.relativePath(): Path? = getUserData(RELATIVE_PATH)?.let { Path(it) }
 
