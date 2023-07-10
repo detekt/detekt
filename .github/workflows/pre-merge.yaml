@@ -38,7 +38,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build detekt
-        uses: gradle/gradle-build-action@40b6781dcdec2762ad36556682ac74e31030cfe2 # v2
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2
         with:
           gradle-home-cache-cleanup: true
           arguments: build -x detekt publishToMavenLocal
@@ -62,7 +62,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Verify Generated Detekt Config File
-        uses: gradle/gradle-build-action@40b6781dcdec2762ad36556682ac74e31030cfe2 # v2
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2
         with:
           gradle-home-cache-cleanup: true
           arguments: verifyGeneratorOutput
@@ -80,7 +80,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build and compile test snippets
-        uses: gradle/gradle-build-action@40b6781dcdec2762ad36556682ac74e31030cfe2 # v2
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2
         with:
           gradle-home-cache-cleanup: true
           arguments: test -Pcompile-test-snippets=true
@@ -98,7 +98,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Run with allWarningsAsErrors
-        uses: gradle/gradle-build-action@40b6781dcdec2762ad36556682ac74e31030cfe2 # v2
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2
         with:
           gradle-home-cache-cleanup: true
           arguments: compileKotlin compileTestKotlin compileTestFixturesKotlin -PwarningsAsErrors=true
