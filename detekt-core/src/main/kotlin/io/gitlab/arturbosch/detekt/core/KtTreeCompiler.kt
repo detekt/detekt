@@ -15,7 +15,7 @@ import kotlin.streams.asSequence
 class KtTreeCompiler(
     private val settings: ProcessingSettings,
     projectSpec: ProjectSpec,
-    private val compiler: KtCompiler = KtCompiler(settings.environment)
+    internal val compiler: KtCompiler = KtCompiler(settings.environment)
 ) {
 
     private val basePath: Path? = projectSpec.basePath

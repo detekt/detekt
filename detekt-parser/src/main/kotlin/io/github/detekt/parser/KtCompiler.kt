@@ -13,7 +13,7 @@ import kotlin.io.path.isRegularFile
 import kotlin.io.path.readText
 
 open class KtCompiler(
-    protected val environment: KotlinCoreEnvironment = createKotlinCoreEnvironment(printStream = System.err)
+    val environment: KotlinCoreEnvironment = createKotlinCoreEnvironment(printStream = System.err)
 ) {
 
     protected val psiFileFactory = KtPsiFactory(environment.project, markGenerated = false)

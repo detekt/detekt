@@ -21,6 +21,5 @@ fun pathToKtFile(path: Path): ParsingStrategy = { settings ->
 }
 
 val inputPathsToKtFiles: ParsingStrategy = { settings ->
-    val compiler = KtTreeCompiler(settings, settings.spec.projectSpec)
-    settings.spec.projectSpec.inputPaths.flatMap(compiler::compile)
+    KtTreeCompiler(settings, settings.spec.projectSpec).compiler.environment.getSourceFiles()
 }
