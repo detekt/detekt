@@ -39,7 +39,6 @@ javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElement
 tasks.shadowJar.configure {
     relocate("org.jetbrains.kotlin.com.intellij", "com.intellij")
     relocate("org.snakeyaml.engine", "dev.detekt.shaded.snakeyaml")
-    relocate("io.github.davidburstrom.contester", "dev.detekt.shaded.contester")
     mergeServiceFiles()
     dependencies {
         include(dependency("io.gitlab.arturbosch.detekt:.*"))
