@@ -1,6 +1,6 @@
 class KClass {
     fun foo() {
-        val x = 3
-        println(x)
+        var myList = mutableListOf(1,2,3)
+        println(myList)
     }
 }
