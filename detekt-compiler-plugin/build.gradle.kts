@@ -36,19 +36,14 @@ javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElement
     skip()
 }
 
-tasks.test {
-    // https://github.com/detekt/detekt/issues/5646
-    enabled = false
-}
-
 tasks.shadowJar.configure {
     relocate("org.jetbrains.kotlin.com.intellij", "com.intellij")
+    relocate("org.snakeyaml.engine", "dev.detekt.shaded.snakeyaml")
     mergeServiceFiles()
     dependencies {
         include(dependency("io.gitlab.arturbosch.detekt:.*"))
         include(dependency("io.github.detekt:.*"))
         include(dependency("org.snakeyaml:snakeyaml-engine"))
-        include(dependency("io.github.davidburstrom.contester:contester-breakpoint"))
     }
 }
 

@@ -6,7 +6,7 @@ sealed class DefaultActivationStatus {
     abstract val active: Boolean
 }
 
-object Inactive : DefaultActivationStatus() {
+data object Inactive : DefaultActivationStatus() {
     override val active = false
 }
 

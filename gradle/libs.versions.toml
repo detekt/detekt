@@ -1,10 +1,9 @@
 [versions]
 dokka = "1.8.20"
 jacoco = "0.8.10"
-kotlin = "1.8.22"
-ktlint = "0.49.1"
+kotlin = "1.9.0"
+ktlint = "0.50.0"
 junit = "5.9.3"
-contester = "0.2.0"
 
 [libraries]
 githubRelease-gradle = "com.github.breadmoirai:github-release:2.4.1"
@@ -31,19 +30,17 @@ android-gradle-minSupported = "com.android.tools.build:gradle:7.0.0"
 android-gradle-maxSupported = "com.android.tools.build:gradle:8.0.2"
 
 ktlintRulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint"  }
-slf4j-nop = { module = "org.slf4j:slf4j-nop", version = "1.7.36" }
-slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "1.7.36" }
+slf4j-nop = { module = "org.slf4j:slf4j-nop", version = "2.0.7" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "2.0.7" }
 
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.4.0"
 assertj = "org.assertj:assertj-core:3.24.2"
-reflections = "org.reflections:reflections:0.10.2"
+classgraph = "io.github.classgraph:classgraph:4.8.161"
 mockk = "io.mockk:mockk:1.13.5"
 snakeyaml = "org.snakeyaml:snakeyaml-engine:2.6"
 jcommander = "com.beust:jcommander:1.82"
-contester-breakpoint = { module = "io.github.davidburstrom.contester:contester-breakpoint", version.ref = "contester" }
-contester-driver = { module = "io.github.davidburstrom.contester:contester-driver", version.ref = "contester" }
 kotlinCompileTesting = { module = "com.github.tschuchortdev:kotlin-compile-testing", version = "1.5.0" }
 
 [plugins]

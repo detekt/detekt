@@ -165,11 +165,11 @@ with(components["java"] as AdhocComponentWithVariants) {
     withVariantsFromConfiguration(configurations["testFixturesRuntimeElements"]) { skip() }
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+kotlin {
     compilerOptions {
         @Suppress("DEPRECATION")
         apiVersion = KotlinVersion.KOTLIN_1_4
-        freeCompilerArgs.add("-Xsuppress-version-warnings")
+        suppressWarnings = true
         // Note: Currently there are warnings for detekt-gradle-plugin that seemingly can't be fixed
         //       until Gradle releases an update (https://github.com/gradle/gradle/issues/16345)
         allWarningsAsErrors = false

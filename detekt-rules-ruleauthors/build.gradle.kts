@@ -15,6 +15,6 @@ consumeGeneratedConfig(
     forTask = "processResources"
 )
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+kotlin {
     compilerOptions.freeCompilerArgs.add("-Xcontext-receivers")
 }

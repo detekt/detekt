@@ -29,7 +29,9 @@ class ParameterListWrappingSpec {
     @Test
     fun `reports when max line length is exceeded`() {
         val code = """
-            fun f(a: Int, b: Int, c: Int) {}
+            
+            fun f(a: Int, b: Int, c: Int) {
+            }
         """.trimIndent()
         val config = TestConfig("maxLineLength" to "10")
         assertThat(ParameterListWrapping(config).lint(code)).hasSize(4)

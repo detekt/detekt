@@ -14,7 +14,9 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.valuesWithReason
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
+import org.jetbrains.kotlin.descriptors.SyntheticPropertyDescriptor
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
@@ -23,8 +25,6 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.psiUtil.isDotSelector
-import org.jetbrains.kotlin.psi2ir.unwrappedGetMethod
-import org.jetbrains.kotlin.psi2ir.unwrappedSetMethod
 import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
@@ -75,6 +75,12 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
     ) { list ->
         list.map { Forbidden(fromFunctionSignature(it.value), it.reason) }
     }
+
+    private val PropertyDescriptor.unwrappedGetMethod: FunctionDescriptor?
+        get() = if (this is SyntheticPropertyDescriptor) this.getMethod else getter
+
+    private val PropertyDescriptor.unwrappedSetMethod: FunctionDescriptor?
+        get() = if (this is SyntheticPropertyDescriptor) this.setMethod else setter
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

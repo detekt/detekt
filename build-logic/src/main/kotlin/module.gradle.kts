@@ -1,6 +1,5 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("packaging")
@@ -46,10 +45,10 @@ tasks.withType<Test>().configureEach {
     }
 }
 
-tasks.withType<KotlinCompile>().configureEach {
+kotlin {
     compilerOptions {
         jvmTarget = Versions.JVM_TARGET
-        freeCompilerArgs.add("-progressive")
+        progressiveMode = true
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
     }
 }

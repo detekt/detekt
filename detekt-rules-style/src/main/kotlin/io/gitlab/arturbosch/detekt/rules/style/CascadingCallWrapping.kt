@@ -95,7 +95,7 @@ class CascadingCallWrapping(config: Config = Config.empty) : Rule(config) {
         val receiverEnd = lhs.startOffsetInParent + lhs.textLength
         val selectorStart = rhs.startOffsetInParent
 
-        return (receiverEnd until selectorStart).any { text[it] == '\n' }
+        return (receiverEnd..<selectorStart).any { text[it] == '\n' }
     }
 
     private fun KtExpression.receiverContainsNewline(): Boolean {
