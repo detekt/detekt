@@ -5,7 +5,7 @@ plugins {
 reporting {
     reports {
         create("jacocoMergedReport", JacocoCoverageReport::class) {
-            testType.set(TestSuiteType.UNIT_TEST)
+            testType = TestSuiteType.UNIT_TEST
         }
     }
 }

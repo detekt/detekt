@@ -64,7 +64,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         configurations.compileClasspath.get(),
         sourceSets.main.get().output,
     )
-    mainClass.set("io.gitlab.arturbosch.detekt.generator.Main")
+    mainClass = "io.gitlab.arturbosch.detekt.generator.Main"
     args = listOf(
         "--input",
         ruleModules.joinToString(","),

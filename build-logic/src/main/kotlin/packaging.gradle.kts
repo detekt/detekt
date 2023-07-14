@@ -33,25 +33,25 @@ publishing {
         artifactId = project.name
         version = Versions.currentOrSnapshot()
         pom {
-            description.set("Static code analysis for Kotlin")
-            name.set("detekt")
-            url.set("https://detekt.dev")
+            description = "Static code analysis for Kotlin"
+            name = "detekt"
+            url = "https://detekt.dev"
             licenses {
                 license {
-                    name.set("The Apache Software License, Version 2.0")
-                    url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-                    distribution.set("repo")
+                    name = "The Apache Software License, Version 2.0"
+                    url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                    distribution = "repo"
                 }
             }
             developers {
                 developer {
-                    id.set("detekt Developers")
-                    name.set("detekt Developers")
-                    email.set("info@detekt.dev")
+                    id = "detekt Developers"
+                    name = "detekt Developers"
+                    email = "info@detekt.dev"
                 }
             }
             scm {
-                url.set("https://github.com/detekt/detekt")
+                url = "https://github.com/detekt/detekt"
             }
         }
     }

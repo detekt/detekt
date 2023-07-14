@@ -47,9 +47,9 @@ tasks.withType<Test>().configureEach {
 
 kotlin {
     compilerOptions {
-        jvmTarget.set(Versions.JVM_TARGET)
-        progressiveMode.set(true)
-        allWarningsAsErrors.set(providers.gradleProperty("warningsAsErrors").orNull.toBoolean())
+        jvmTarget = Versions.JVM_TARGET
+        progressiveMode = true
+        allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
     }
 }
 
