@@ -129,8 +129,8 @@ class EmptyCodeSpec {
     }
 
     @Test
-    fun `reports an empty kt file`() {
-        val rule = EmptyKtFile(Config.empty)
+    fun `reports an empty kotlin file`() {
+        val rule = EmptyKotlinFile(Config.empty)
         assertThat(rule.lint("")).hasSize(1)
     }
 

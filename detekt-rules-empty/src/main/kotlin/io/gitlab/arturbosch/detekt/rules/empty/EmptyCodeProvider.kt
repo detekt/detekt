@@ -27,7 +27,7 @@ class EmptyCodeProvider : DefaultRuleSetProvider {
             EmptyFunctionBlock(config),
             EmptyIfBlock(config),
             EmptyInitBlock(config),
-            EmptyKtFile(config),
+            EmptyKotlinFile(config),
             EmptySecondaryConstructor(config),
             EmptyTryBlock(config),
             EmptyWhenBlock(config),

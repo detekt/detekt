@@ -7,10 +7,10 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
- * Reports empty Kotlin (.kt) files. Empty blocks of code serve no purpose and should be removed.
+ * Reports empty Kotlin (.kt, .kts) files. Empty blocks of code serve no purpose and should be removed.
  */
 @ActiveByDefault(since = "1.0.0")
-class EmptyKtFile(config: Config) : EmptyRule(config) {
+class EmptyKotlinFile(config: Config) : EmptyRule(config) {
 
     override fun visitKtFile(file: KtFile) {
         if (file.text.isNullOrBlank()) {
