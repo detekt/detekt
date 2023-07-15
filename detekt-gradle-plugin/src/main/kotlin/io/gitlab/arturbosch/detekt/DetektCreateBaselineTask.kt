@@ -110,19 +110,15 @@ abstract class DetektCreateBaselineTask @Inject constructor(
 
     @get:Input
     @get:Optional
-    internal abstract val languageVersionProp: Property<String>
-    var languageVersion: String
-        @Internal
-        get() = languageVersionProp.get()
-        set(value) = languageVersionProp.set(value)
-
-    @get:Input
-    @get:Optional
     internal abstract val jvmTargetProp: Property<String>
     var jvmTarget: String
         @Internal
         get() = jvmTargetProp.get()
         set(value) = jvmTargetProp.set(value)
+
+    @get:Input
+    @get:Optional
+    abstract val languageVersion: Property<String>
 
     @get:Internal
     abstract val jdkHome: DirectoryProperty
@@ -132,7 +128,7 @@ abstract class DetektCreateBaselineTask @Inject constructor(
         get() = listOf(
             CreateBaselineArgument,
             ClasspathArgument(classpath),
-            LanguageVersionArgument(languageVersionProp.orNull),
+            LanguageVersionArgument(languageVersion.orNull),
             JvmTargetArgument(jvmTargetProp.orNull),
             JdkHomeArgument(jdkHome),
             BaselineArgument(baseline.get()),
