@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
-import io.github.detekt.test.utils.compileContentForTest
+import io.github.detekt.test.utils.compileForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -12,20 +12,8 @@ import kotlin.io.path.Path
 
 class EntitySpec {
 
-    private val path = Path("/full/path/to/Test.kt")
-    private val code = compileContentForTest(
-        """
-            package test
-            
-            class C : Any() {
-            
-                private fun memberFun(): Int = 5
-            }
-            
-            fun topLevelFun(number: Int) = Unit
-        """.trimIndent(),
-        path.toString()
-    )
+    private val path = Path("src/test/resources/EntitySpecFixture.kt").toAbsolutePath()
+    private val code = compileForTest(path)
 
     @Nested
     inner class `Named functions` {
@@ -37,7 +25,7 @@ class EntitySpec {
             val memberFunction = functions.first { it.name == "memberFun" }
 
             assertThat(Entity.atName(memberFunction).signature)
-                .isEqualTo("Test.kt\$C\$private fun memberFun(): Int")
+                .isEqualTo("EntitySpecFixture.kt\$C\$private fun memberFun(): Int")
         }
 
         @Test
@@ -45,7 +33,7 @@ class EntitySpec {
             val topLevelFunction = functions.first { it.name == "topLevelFun" }
 
             assertThat(Entity.atName(topLevelFunction).signature)
-                .isEqualTo("Test.kt\$fun topLevelFun(number: Int)")
+                .isEqualTo("EntitySpecFixture.kt\$fun topLevelFun(number: Int)")
         }
 
         @Test
@@ -63,7 +51,7 @@ class EntitySpec {
 
         @Test
         fun `includes full class signature`() {
-            assertThat(Entity.atName(clazz).signature).isEqualTo("Test.kt\$C : Any")
+            assertThat(Entity.atName(clazz).signature).isEqualTo("EntitySpecFixture.kt\$C : Any")
         }
 
         @Test
@@ -77,13 +65,15 @@ class EntitySpec {
 
         @Test
         fun `includes package and file name in entity signature`() {
-            assertThat(Entity.from(code).signature).isEqualTo("Test.kt\$test.Test.kt")
-            assertThat(Entity.atPackageOrFirstDecl(code).signature).isEqualTo("Test.kt\$test.Test.kt")
+            val expectedResult = "EntitySpecFixture.kt\$test.EntitySpecFixture.kt"
+
+            assertThat(Entity.from(code).signature).isEqualTo(expectedResult)
+            assertThat(Entity.atPackageOrFirstDecl(code).signature).isEqualTo(expectedResult)
         }
 
         @Test
         fun `includes file name in entity compact`() {
-            val expectedResult = "[Test.kt] at $path:1:1"
+            val expectedResult = "[EntitySpecFixture.kt] at $path:1:1"
 
             assertThat(Entity.from(code).compact()).isEqualTo(expectedResult)
             assertThat(Entity.atPackageOrFirstDecl(code).compact()).isEqualTo(expectedResult)
