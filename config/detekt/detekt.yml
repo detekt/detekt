@@ -69,6 +69,8 @@ formatting:
   active: true
   android: false
   autoCorrect: true
+  BinaryExpressionWrapping:
+    active: true
   ContextReceiverMapping:
     active: true
   Filename:
@@ -76,6 +78,8 @@ formatting:
   MaximumLineLength:
     active: false
   ParameterListSpacing:
+    active: true
+  StatementWrapping:
     active: true
   TypeParameterListSpacing:
     active: true
