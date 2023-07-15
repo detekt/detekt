@@ -412,17 +412,6 @@ public final class io/gitlab/arturbosch/detekt/api/MetricKt {
 	public static final field DEFAULT_FLOAT_CONVERSION_FACTOR I
 }
 
-public abstract class io/gitlab/arturbosch/detekt/api/MultiRule : io/gitlab/arturbosch/detekt/api/BaseRule {
-	public fun <init> ()V
-	public final fun getActiveRules ()Ljava/util/Set;
-	public abstract fun getRules ()Ljava/util/List;
-	protected fun postVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
-	protected fun preVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
-	public final fun runIfActive (Lio/gitlab/arturbosch/detekt/api/Rule;Lkotlin/jvm/functions/Function1;)V
-	public final fun setActiveRules (Ljava/util/Set;)V
-	public fun visitCondition (Lorg/jetbrains/kotlin/psi/KtFile;)Z
-}
-
 public abstract interface class io/gitlab/arturbosch/detekt/api/Notification {
 	public abstract fun getLevel ()Lio/gitlab/arturbosch/detekt/api/Notification$Level;
 	public abstract fun getMessage ()Ljava/lang/String;

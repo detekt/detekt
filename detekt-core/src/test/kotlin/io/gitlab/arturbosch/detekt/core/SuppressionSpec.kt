@@ -24,11 +24,8 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
 
 class SuppressionSpec {
 
@@ -278,30 +275,6 @@ class SuppressionSpec {
         fun `suppresses by combination of detekt prefix, rule set and rule id`() {
             assertCodeIsSuppressed("""@Suppress("detekt:complexity:LongParameterList")$code""", config)
         }
-
-        @Nested
-        inner class MultiRule {
-
-            @Suppress("DEPRECATION")
-            private lateinit var subject: io.gitlab.arturbosch.detekt.api.MultiRule
-
-            @BeforeEach
-            fun setupSubject() {
-                subject = AMultiRule(config)
-            }
-
-            @ParameterizedTest
-            @ValueSource(
-                strings = [
-                    "complexity",
-                    "LongParameterList",
-                    "detekt.complexity.LongParameterList"
-                ]
-            )
-            fun `is suppressed by rule id`(ruleId: String) {
-                assertThat(subject.lint("""@Suppress("$ruleId")$code""")).isEmpty()
-            }
-        }
     }
 }
 
@@ -318,12 +291,6 @@ private fun isSuppressedBy(annotation: String, argument: String): Boolean {
     val file = compileContentForTest(annotated)
     val annotatedClass = file.children.first { it is KtClass } as KtAnnotated
     return annotatedClass.isSuppressedBy("Test", setOf("alias"))
-}
-
-private class AMultiRule(config: Config) :
-    @Suppress("DEPRECATION")
-    io.gitlab.arturbosch.detekt.api.MultiRule() {
-    override val rules: List<Rule> = listOf(TestLPL(config))
 }
 
 private class TestRule(config: Config = Config.empty) : Rule(config) {

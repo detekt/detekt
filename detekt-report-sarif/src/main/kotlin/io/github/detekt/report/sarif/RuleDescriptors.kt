@@ -23,22 +23,12 @@ internal fun toReportingDescriptors(config: Config): List<ReportingDescriptor> {
     }
     val descriptors = mutableListOf<ReportingDescriptor>()
     ruleSetIdAndRules.forEach { (ruleSetId, rule) ->
-        @Suppress("DEPRECATION")
-        when (rule) {
-            is io.gitlab.arturbosch.detekt.api.MultiRule -> descriptors.addAll(
-                rule.toDescriptors(
-                    ruleSetId
-                )
-            )
-            is Rule -> descriptors.add(rule.toDescriptor(ruleSetId))
+        if (rule is Rule) {
+            descriptors.add(rule.toDescriptor(ruleSetId))
         }
     }
     return descriptors
 }
-
-@Suppress("DEPRECATION")
-private fun io.gitlab.arturbosch.detekt.api.MultiRule.toDescriptors(ruleSetId: RuleSetId): List<ReportingDescriptor> =
-    this.rules.map { it.toDescriptor(ruleSetId) }
 
 private fun Rule.toDescriptor(ruleSetId: RuleSetId): ReportingDescriptor {
     val formattedRuleSetId = ruleSetId.lowercase(Locale.US)
