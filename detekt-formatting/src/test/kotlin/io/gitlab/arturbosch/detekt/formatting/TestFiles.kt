@@ -10,6 +10,9 @@ import java.io.File
 import kotlin.io.path.toPath
 
 fun FormattingRule.lint(@Language("kotlin") content: String, fileName: String = "Test.kt"): List<Finding> {
+    require('/' !in fileName && '\\' !in fileName) {
+        "filename must be a file name only and not contain any path elements"
+    }
     val root = compileContentForTest(content, fileName)
     this.visit(root)
     return this.findings

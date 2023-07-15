@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting
 
+import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakBeforeAssignment
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
@@ -80,16 +82,14 @@ class FormattingRuleSpec {
 
     @Test
     fun `#3063_ formatting issues have an absolute path`() {
-        val expectedPath = Path("/root/kotlin/test.kt").toString()
+        val expectedPath = Path("src/test/resources/configTests/chain-wrapping-before.kt").toAbsolutePath()
 
-        val findings = subject.lint(
-            """
-                fun main()
-                = Unit
-            """.trimIndent(),
-            expectedPath
-        )
+        val rule = ChainWrapping(Config.empty)
+        rule.visitFile(compileForTest(expectedPath))
+        assertThat(rule.findings).isNotNull()
 
-        assertJThat(findings.first().location.filePath.absolutePath.toString()).isEqualTo(expectedPath)
+        val findings = rule.findings
+
+        assertJThat(findings.first().location.filePath.absolutePath.toString()).isEqualTo(expectedPath.toString())
     }
 }

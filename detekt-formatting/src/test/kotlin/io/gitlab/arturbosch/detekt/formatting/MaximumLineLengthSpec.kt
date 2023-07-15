@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import kotlin.io.path.Path
 import org.assertj.core.api.Assertions.assertThat as assertJThat
 
 class MaximumLineLengthSpec {
@@ -37,7 +36,7 @@ class MaximumLineLengthSpec {
         fun `reports issues with the filename in signature`() {
             val finding = subject.lint(
                 code,
-                Path("home", "test", "Test.kt").toString()
+                "Test.kt"
             ).first()
 
             assertJThat(finding.entity.signature).isEqualTo("Test.kt\$fun")
