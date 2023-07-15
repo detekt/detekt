@@ -14,7 +14,9 @@ import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.DetektWorkAction
 import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
+import io.gitlab.arturbosch.detekt.invoke.JdkHomeArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
+import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
@@ -114,6 +116,10 @@ abstract class DetektCreateBaselineTask @Inject constructor(
         get() = jvmTargetProp.get()
         set(value) = jvmTargetProp.set(value)
 
+    @get:Input
+    @get:Optional
+    abstract val languageVersion: Property<String>
+
     @get:Internal
     abstract val jdkHome: DirectoryProperty
 
@@ -122,7 +128,9 @@ abstract class DetektCreateBaselineTask @Inject constructor(
         get() = listOf(
             CreateBaselineArgument,
             ClasspathArgument(classpath),
+            LanguageVersionArgument(languageVersion.orNull),
             JvmTargetArgument(jvmTargetProp.orNull),
+            JdkHomeArgument(jdkHome),
             BaselineArgument(baseline.get()),
             InputArgument(source),
             ConfigArgument(config),
