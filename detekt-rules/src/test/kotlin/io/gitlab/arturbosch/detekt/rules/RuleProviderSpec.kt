@@ -68,9 +68,7 @@ private fun getRulesPackageNameForProvider(providerType: Class<out RuleSetProvid
 
 private fun getRules(provider: RuleSetProvider): List<BaseRule> {
     val ruleSet = provider.instance(Config.empty)
-
-    @Suppress("DEPRECATION")
-    val rules = ruleSet.rules.flatMap { (it as? io.gitlab.arturbosch.detekt.api.MultiRule)?.rules ?: listOf(it) }
+    val rules = ruleSet.rules
     assertThat(rules).isNotEmpty
     return rules
 }
