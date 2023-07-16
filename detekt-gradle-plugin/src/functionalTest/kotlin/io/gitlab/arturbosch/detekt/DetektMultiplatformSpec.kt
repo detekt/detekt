@@ -397,7 +397,7 @@ private val KMM_PLUGIN_BLOCK = """
 @Language("gradle.kts")
 private val DETEKT_BLOCK = """
     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-        reports.txt.enabled = false
+        reports.txt.required.set(false)
     }
 """.trimIndent()
 

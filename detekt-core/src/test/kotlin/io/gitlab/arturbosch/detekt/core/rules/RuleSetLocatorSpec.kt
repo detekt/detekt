@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.core.rules
 
+import io.github.classgraph.ClassGraph
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.junit.jupiter.api.Test
-import org.reflections.Reflections
 import java.lang.reflect.Modifier
 
 class RuleSetLocatorSpec {
@@ -34,6 +34,11 @@ class RuleSetLocatorSpec {
 }
 
 private fun getProviderClasses(): List<Class<out RuleSetProvider>> =
-    Reflections("io.gitlab.arturbosch.detekt.rules")
-        .getSubTypesOf(RuleSetProvider::class.java)
-        .filter { !Modifier.isAbstract(it.modifiers) }
+    ClassGraph()
+        .acceptPackages("io.gitlab.arturbosch.detekt.rules")
+        .scan()
+        .use { scanResult ->
+            scanResult.getClassesImplementing(RuleSetProvider::class.java)
+                .loadClasses(RuleSetProvider::class.java)
+                .filter { !Modifier.isAbstract(it.modifiers) }
+        }

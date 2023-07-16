@@ -105,7 +105,7 @@ class ClassOrdering(config: Config = Config.empty) : Rule(config) {
             return@IntArray it
         }
         for (i in dp.indices) {
-            for (j in 0 until i) {
+            for (j in 0..<i) {
                 if (declarationWithSectionList[i].second.priority >= declarationWithSectionList[j].second.priority &&
                     dp[i] < dp[j] + 1
                 ) {

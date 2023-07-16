@@ -6,12 +6,12 @@ plugins {
 }
 
 nexusPublishing {
-    packageGroup.set("io.gitlab.arturbosch")
+    packageGroup = "io.gitlab.arturbosch"
 
     repositories {
         create("sonatype") {
-            System.getenv("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")?.let { username.set(it) }
-            System.getenv("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")?.let { password.set(it) }
+            System.getenv("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")?.let { username = it }
+            System.getenv("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")?.let { password = it }
         }
     }
 }
@@ -20,13 +20,13 @@ val version = Versions.currentOrSnapshot()
 
 githubRelease {
     token(providers.gradleProperty("github.token"))
-    owner.set("detekt")
-    repo.set("detekt")
-    overwrite.set(true)
-    dryRun.set(false)
-    draft.set(true)
-    prerelease.set(true)
-    targetCommitish.set("main")
+    owner = "detekt"
+    repo = "detekt"
+    overwrite = true
+    dryRun = false
+    draft = true
+    prerelease = true
+    targetCommitish = "main"
     body(
         provider {
             var changelog = project.file("website/src/pages/changelog.md").readText()
@@ -72,9 +72,9 @@ tasks {
     register("incrementMajor") { doLast { updateVersion { it.nextMajor() } } }
 
     register<UpdateVersionInFileTask>("applyDocVersion") {
-        fileToUpdate.set(file("$rootDir/website/src/remark/detektVersionReplace.js"))
-        linePartToFind.set("const detektVersion = ")
-        lineTransformation.set("const detektVersion = \"${Versions.DETEKT}\";")
+        fileToUpdate = file("$rootDir/website/src/remark/detektVersionReplace.js")
+        linePartToFind = "const detektVersion = "
+        lineTransformation = "const detektVersion = \"${Versions.DETEKT}\";"
     }
 }
 

@@ -263,8 +263,8 @@ class BracesOnIfStatements(config: Config = Config.empty) : Rule(config) {
 
         companion object {
             fun getValue(arg: String): BracePolicy =
-                values().singleOrNull { it.config == arg }
-                    ?: error("Unknown value $arg, allowed values are: ${values().joinToString("|")}")
+                entries.singleOrNull { it.config == arg }
+                    ?: error("Unknown value $arg, allowed values are: ${entries.joinToString("|")}")
         }
     }
 }

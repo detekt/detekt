@@ -7,6 +7,7 @@ on:
 
 env:
   GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
+  ORG_GRADLE_PROJECT_enablePTS: false
 
 permissions:
   contents: read
@@ -26,13 +27,13 @@ jobs:
           distribution: "temurin"
 
       - name: Build detekt
-        uses: gradle/gradle-build-action@40b6781dcdec2762ad36556682ac74e31030cfe2 # v2
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2
         with:
           gradle-home-cache-cleanup: true
           arguments: build
 
       - name: Deploy Snapshot
-        uses: gradle/gradle-build-action@40b6781dcdec2762ad36556682ac74e31030cfe2 # v2
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2
         env:
           ORG_GRADLE_PROJECT_SIGNING_KEY: ${{ secrets.ORG_GRADLE_PROJECT_SIGNING_KEY }}
           ORG_GRADLE_PROJECT_SIGNING_PWD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNING_PWD }}

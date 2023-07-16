@@ -692,7 +692,7 @@ private val ANDROID_BLOCK_WITH_VIEW_BINDING = """
 private val DETEKT_REPORTS_BLOCK = """
     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
         reports {
-            txt.enabled = false
+            txt.required.set(false)
         }
     }
 """.trimIndent()

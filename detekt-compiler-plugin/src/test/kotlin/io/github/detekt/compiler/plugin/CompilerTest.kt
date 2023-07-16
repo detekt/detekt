@@ -37,6 +37,8 @@ class CompilerTest {
                         println(x)
                     }
                 }
+                
+                
             """.trimIndent()
         )
 
@@ -55,6 +57,8 @@ class CompilerTest {
                         println("Hello world :)")
                     }
                 }
+                
+                
             """.trimIndent()
         )
 

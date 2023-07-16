@@ -55,10 +55,6 @@ class ReportMergeSpec {
                 apply(plugin = "org.jetbrains.kotlin.jvm")
                 apply(plugin = "io.gitlab.arturbosch.detekt")
             
-                detekt {
-                    reports.xml.enabled = true
-                }
-            
                 plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
                     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                         finalizedBy(reportMerge)
@@ -169,10 +165,6 @@ class ReportMergeSpec {
             
             subprojects {
                 apply(plugin = "io.gitlab.arturbosch.detekt")
-            
-                detekt {
-                    reports.xml.enabled = true
-                }
             
                 plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
                     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {

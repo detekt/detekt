@@ -10,7 +10,7 @@ plugins {
 }
 
 val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {
-    output.set(layout.buildDirectory.file("reports/detekt/merge.sarif"))
+    output = layout.buildDirectory.file("reports/detekt/merge.sarif")
 }
 
 allprojects {
@@ -40,11 +40,11 @@ allprojects {
     tasks.withType<Detekt>().configureEach {
         jvmTarget = "1.8"
         reports {
-            xml.required.set(true)
-            html.required.set(true)
-            txt.required.set(true)
-            sarif.required.set(true)
-            md.required.set(true)
+            xml.required = true
+            html.required = true
+            txt.required = true
+            sarif.required = true
+            md.required = true
         }
         basePath = rootDir.absolutePath
         finalizedBy(detektReportMergeSarif)
@@ -62,12 +62,12 @@ subprojects {
         retry {
             @Suppress("MagicNumber")
             if (System.getenv().containsKey("CI")) {
-                maxRetries.set(3)
-                maxFailures.set(20)
+                maxRetries = 3
+                maxFailures = 20
             }
         }
         predictiveSelection {
-            enabled.set(providers.gradleProperty("enablePTS").map(String::toBooleanStrict))
+            enabled = providers.gradleProperty("enablePTS").map(String::toBooleanStrict)
         }
     }
 }

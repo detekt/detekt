@@ -27,14 +27,14 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Node
-        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3
+        uses: actions/setup-node@e33196f7422957bea03ed53f6fbb155025ffc7b8 # v3
         with:
           node-version: '16'
           cache: 'yarn'
           cache-dependency-path: 'website/yarn.lock'
 
       - name: Run generateWebsite
-        uses: gradle/gradle-build-action@40b6781dcdec2762ad36556682ac74e31030cfe2 # v2
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2
         with:
           gradle-home-cache-cleanup: true
           arguments: :detekt-generator:generateWebsite
@@ -48,7 +48,7 @@ jobs:
         run: yarn build
 
       - name: Deploy GitHub Pages (only on main)
-        uses: JamesIves/github-pages-deploy-action@22a6ee251d6f13c6ab1ecb200d974f1a6feb1b8d # v4
+        uses: JamesIves/github-pages-deploy-action@a1ea191d508feb8485aceba848389d49f80ca2dc # v4
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           branch: gh-pages

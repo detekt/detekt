@@ -10,8 +10,12 @@ import java.nio.file.Path
 fun compileContentForTest(
     @Language("kotlin") content: String,
     filename: String = TEST_FILENAME
-): KtFile =
-    KtTestCompiler.compileFromContent(content, filename)
+): KtFile {
+    require('/' !in filename && '\\' !in filename) {
+        "filename must be a file name only and not contain any path elements"
+    }
+    return KtTestCompiler.compileFromContent(content, filename)
+}
 
 /**
  * Use this method if you test a kt file/class in the test resources.

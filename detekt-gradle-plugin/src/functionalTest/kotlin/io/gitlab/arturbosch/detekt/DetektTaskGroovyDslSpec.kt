@@ -13,10 +13,10 @@ class DetektTaskGroovyDslSpec {
             detekt {
                 toolVersion = "1.0.0.RC8"
                 ignoreFailures = true
-                source = files("src/main/kotlin")
+                source.setFrom(file("src/main/kotlin"))
                 baseline = file("path/to/baseline.xml")
                 basePath = projectDir
-                config = files("config/detekt/detekt.yml")
+                config.setFrom("config/detekt/detekt.yml")
                 debug = true
                 parallel = true
                 allRules = true
@@ -59,16 +59,16 @@ class DetektTaskGroovyDslSpec {
                 basePath = projectDir
                 reports {
                     xml {
-                        enabled = true
-                        destination = file("build/reports/mydetekt.xml")
+                        required.set(true)
+                        outputLocation.set(file("build/reports/mydetekt.xml"))
                     }
-                    html.enabled = true
-                    html.destination = file("build/reports/mydetekt.html")
-                    txt.enabled = true
-                    txt.destination = file("build/reports/mydetekt.txt")
+                    html.required.set(true)
+                    html.outputLocation.set(file("build/reports/mydetekt.html"))
+                    txt.required.set(true)
+                    txt.outputLocation.set(file("build/reports/mydetekt.txt"))
                     sarif {
-                        enabled = true
-                        destination = file("build/reports/mydetekt.sarif")
+                        required.set(true)
+                        outputLocation.set(file("build/reports/mydetekt.sarif"))
                     }
                 }
                 reportsDir = file("config.yml")
@@ -115,7 +115,7 @@ class DetektTaskGroovyDslSpec {
         val config = """
             tasks.create("customDetektGenerateConfigTask", io.gitlab.arturbosch.detekt.DetektGenerateConfigTask) {
                 detektClasspath.setFrom(files("config.yml"))
-                config.setFrom(files("config.yml"))
+                configFile.set(file("config.yml"))
             }
         """.trimIndent()
         val groovyBuilder = DslTestBuilder.groovy()

@@ -28,7 +28,7 @@ listOf(configurations.testFixturesApiElements, configurations.testFixturesRuntim
 }
 
 tasks.withType<DokkaTask>().configureEach {
-    outputDirectory.set(rootDir.resolve("website/static/kdoc"))
+    outputDirectory = rootDir.resolve("website/static/kdoc")
 }
 
 tasks.dokkaHtml {

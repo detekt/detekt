@@ -437,6 +437,7 @@ public final class io/gitlab/arturbosch/detekt/api/Notification$Level : java/lan
 	public static final field Error Lio/gitlab/arturbosch/detekt/api/Notification$Level;
 	public static final field Info Lio/gitlab/arturbosch/detekt/api/Notification$Level;
 	public static final field Warning Lio/gitlab/arturbosch/detekt/api/Notification$Level;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Notification$Level;
 	public static fun values ()[Lio/gitlab/arturbosch/detekt/api/Notification$Level;
 }
@@ -538,6 +539,7 @@ public final class io/gitlab/arturbosch/detekt/api/Severity : java/lang/Enum {
 	public static final field Security Lio/gitlab/arturbosch/detekt/api/Severity;
 	public static final field Style Lio/gitlab/arturbosch/detekt/api/Severity;
 	public static final field Warning Lio/gitlab/arturbosch/detekt/api/Severity;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Severity;
 	public static fun values ()[Lio/gitlab/arturbosch/detekt/api/Severity;
 }
@@ -546,6 +548,7 @@ public final class io/gitlab/arturbosch/detekt/api/SeverityLevel : java/lang/Enu
 	public static final field ERROR Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
 	public static final field INFO Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
 	public static final field WARNING Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
 	public static fun values ()[Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
 }

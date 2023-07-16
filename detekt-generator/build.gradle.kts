@@ -13,7 +13,7 @@ dependencies {
     testImplementation(projects.detektCore)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj)
-    testImplementation(libs.reflections)
+    testImplementation(libs.classgraph)
 }
 
 val documentationDir = "$rootDir/website/docs/rules"
@@ -64,7 +64,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         configurations.compileClasspath.get(),
         sourceSets.main.get().output,
     )
-    mainClass.set("io.gitlab.arturbosch.detekt.generator.Main")
+    mainClass = "io.gitlab.arturbosch.detekt.generator.Main"
     args = listOf(
         "--input",
         ruleModules.joinToString(","),
