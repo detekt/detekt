@@ -227,12 +227,6 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/Metric/threshold/#/PointingToDec
 $dokka.location:io.gitlab.arturbosch.detekt.api/Metric/toString/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/to-string.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Metric/type/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/type.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Metric/value/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/value.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/MultiRule///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-multi-rule/index.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/MultiRule/MultiRule/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-multi-rule/-multi-rule.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/MultiRule/activeRules/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-multi-rule/active-rules.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/MultiRule/rules/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-multi-rule/rules.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/MultiRule/runIfActive/TypeParam(bounds=[io.gitlab.arturbosch.detekt.api.Rule])#kotlin.Function1[TypeParam(bounds=[io.gitlab.arturbosch.detekt.api.Rule]),kotlin.Unit]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-multi-rule/run-if-active.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/MultiRule/visitCondition/#org.jetbrains.kotlin.psi.KtFile/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-multi-rule/visit-condition.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Notification.Level.Error///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/-error/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Notification.Level.Info///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/-info/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Notification.Level.Warning///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/-warning/index.html
