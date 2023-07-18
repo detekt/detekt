@@ -27,13 +27,13 @@ jobs:
           distribution: "temurin"
 
       - name: Build detekt
-        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2
+        uses: gradle/gradle-build-action@915a66c096a03101667f9df2e56c9efef558b165 # v2
         with:
           gradle-home-cache-cleanup: true
           arguments: build
 
       - name: Deploy Snapshot
-        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2
+        uses: gradle/gradle-build-action@915a66c096a03101667f9df2e56c9efef558b165 # v2
         env:
           ORG_GRADLE_PROJECT_SIGNING_KEY: ${{ secrets.ORG_GRADLE_PROJECT_SIGNING_KEY }}
           ORG_GRADLE_PROJECT_SIGNING_PWD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNING_PWD }}
