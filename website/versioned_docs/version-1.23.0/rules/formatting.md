@@ -169,7 +169,7 @@ See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/experimental/#
 
 ### FunctionName
 
-See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/experimental/#function-return-type-spacing) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/experimental/#function-naming) for
 documentation.
 
 **Active by default**: No
