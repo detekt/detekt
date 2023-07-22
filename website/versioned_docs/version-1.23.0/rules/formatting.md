@@ -240,7 +240,7 @@ See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/experimental/#
 
 ### IfElseWrapping
 
-See [ktlint docs](hhttps://pinterest.github.io/ktlint/0.49.1/rules/experimental/#if-else-wrapping) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/experimental/#if-else-wrapping) for documentation.
 
 **Active by default**: No
 
