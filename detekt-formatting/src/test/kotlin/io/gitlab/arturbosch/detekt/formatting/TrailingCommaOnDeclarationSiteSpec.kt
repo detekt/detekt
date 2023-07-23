@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 /**
  * Some test cases were used directly from KtLint to verify the wrapper rule:
  *
- * https://github.com/pinterest/ktlint/blob/master/ktlint-ruleset-standard/src/test/kotlin/com/pinterest/ktlint/ruleset/standard/TrailingCommaOnDeclarationSiteRuleTest.kt
+ * https://github.com/pinterest/ktlint/blob/0.47.1/ktlint-ruleset-standard/src/test/kotlin/com/pinterest/ktlint/ruleset/standard/TrailingCommaOnDeclarationSiteRuleTest.kt
  */
 class TrailingCommaOnDeclarationSiteSpec {
 
