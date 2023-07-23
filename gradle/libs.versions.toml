@@ -3,7 +3,7 @@ dokka = "1.8.20"
 jacoco = "0.8.10"
 kotlin = "1.9.0"
 ktlint = "0.50.0"
-junit = "5.9.3"
+junit = "5.10.0"
 
 [libraries]
 githubRelease-gradle = "com.github.breadmoirai:github-release:2.4.1"
