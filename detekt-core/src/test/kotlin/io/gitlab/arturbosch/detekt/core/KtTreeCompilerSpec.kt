@@ -33,9 +33,24 @@ class KtTreeCompilerSpec {
             "**/Default.kt",
             "**/*Test*",
             "**/*Complex*",
-            "**/*KotlinScript*"
+            "**/*KotlinScript*",
+            "**/Some*.kt"
         ) { compile(path) }
         assertThat(ktFiles).isEmpty()
+    }
+
+    @Test
+    fun `skips entire subtrees`() {
+        val (ktFiles, output) = fixture("**/ignored/**", loggingDebug = true) { compile(path) }
+        assertThat(ktFiles.size)
+            .describedAs("It should compile at least three files, but did ${ktFiles.size}")
+            .isGreaterThanOrEqualTo(3)
+        assertThat(output)
+            .describedAs("File should not be ignored as entire subtree should be skipped")
+            .doesNotContainPattern("""Ignoring file.*Something\.kt""")
+            .describedAs("Ignored subtree should be skipped")
+            .containsPattern("""Ignoring subtree.*ignored[/\\]level1""")
+            .containsPattern("""Ignoring subtree.*ignored[/\\]levelA""")
     }
 
     @Test
