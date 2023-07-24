@@ -52,7 +52,7 @@ See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#argu
 
 ### BlockCommentInitialStarAlignment
 
-See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/experimental/#block-comment-initial-star-alignment)
+See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#block-comment-initial-star-alignment)
 for
 documentation.
 
@@ -85,7 +85,7 @@ See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#comm
 
 ### CommentWrapping
 
-See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/experimental/#comment-wrapping) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#comment-wrapping) for documentation.
 
 **Active by default**: Yes - Since v1.23.0
 
@@ -163,7 +163,7 @@ from the standard rules, make sure to enable just one. The pro of this rule is t
 
 ### FunKeywordSpacing
 
-See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/experimental/#fun-keyword-spacing) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#fun-keyword-spacing) for documentation.
 
 **Active by default**: Yes - Since v1.23.0
 
@@ -214,14 +214,14 @@ documentation.
 
 ### FunctionStartOfBodySpacing
 
-See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/experimental/#function-start-of-body-spacing) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#function-start-of-body-spacing) for
 documentation.
 
 **Active by default**: Yes - Since v1.23.0
 
 ### FunctionTypeReferenceSpacing
 
-See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/experimental/#function-type-reference-spacing) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#function-type-reference-spacing) for
 documentation.
 
 **Active by default**: Yes - Since v1.23.0
@@ -284,7 +284,7 @@ See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#inde
 
 ### KdocWrapping
 
-See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/experimental/#kdoc-wrapping) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#kdoc-wrapping) for documentation.
 
 **Active by default**: Yes - Since v1.23.0
 
@@ -316,7 +316,7 @@ auto-correct the issue.
 
 ### ModifierListSpacing
 
-See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/experimental/#modifier-list-spacing) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#modifier-list-spacing) for
 documentation.
 
 **Active by default**: Yes - Since v1.23.0
@@ -485,14 +485,14 @@ See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#no-w
 
 ### NullableTypeSpacing
 
-See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/experimental/#nullable-type-spacing) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#nullable-type-spacing) for
 documentation.
 
 **Active by default**: Yes - Since v1.23.0
 
 ### PackageName
 
-See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#no-underscores-in-package-names) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#package-name) for
 documentation.
 
 **Active by default**: Yes - Since v1.22.0
@@ -641,7 +641,7 @@ for documentation.
 
 ### SpacingBetweenFunctionNameAndOpeningParenthesis
 
-See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/experimental/#spacing-between-function-name-and-opening-parenthesis)
+See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#spacing-between-function-name-and-opening-parenthesis)
 for
 documentation.
 
@@ -668,7 +668,7 @@ documentation.
 
 ### TrailingCommaOnCallSite
 
-See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#trailing-comma-on-call-site) for documentation.
 
 The default config comes from ktlint and follows these conventions:
 - [Kotlin coding convention](https://kotlinlang.org/docs/coding-conventions.html#trailing-commas) recommends
@@ -687,7 +687,7 @@ trailing comma usage yet.
 
 ### TrailingCommaOnDeclarationSite
 
-See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#trailing-comma-on-declaration-site) for documentation.
 
 The default config comes from ktlint and follows these conventions:
 - [Kotlin coding convention](https://kotlinlang.org/docs/coding-conventions.html#trailing-commas) recommends
@@ -745,7 +745,7 @@ documentation.
 
 ### UnnecessaryParenthesesBeforeTrailingLambda
 
-See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/experimental/#unnecessary-parenthesis-before-trailing-lambda)
+See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#unnecessary-parenthesis-before-trailing-lambda)
 for documentation.
 
 **Active by default**: Yes - Since v1.23.0
