@@ -254,7 +254,8 @@ See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/experimental/#
 
 See [ktlint docs](https://pinterest.github.io/ktlint/0.49.1/rules/standard/#import-ordering) for documentation.
 
-For defining import layout patterns see the [KtLint Source Code](https://github.com/pinterest/ktlint/blob/0.50.0/ktlint-ruleset-standard/src/main/kotlin/com/pinterest/ktlint/ruleset/standard/rules/ImportOrderingRule.kt)
+For defining import layout patterns see
+the [KtLint Source Code](https://github.com/pinterest/ktlint/blob/0.49.1/ktlint-ruleset-standard/src/main/kotlin/com/pinterest/ktlint/ruleset/standard/rules/ImportOrderingRule.kt)
 
 **Active by default**: Yes - Since v1.19.0
 
