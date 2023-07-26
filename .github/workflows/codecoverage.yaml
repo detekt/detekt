@@ -26,7 +26,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Generate Coverage Report
-        uses: gradle/gradle-build-action@915a66c096a03101667f9df2e56c9efef558b165 # v2
+        uses: gradle/gradle-build-action@a4cf152f482c7ca97ef56ead29bf08bcd953284c # v2
         with:
           gradle-home-cache-cleanup: true
           arguments: jacocoMergedReport
