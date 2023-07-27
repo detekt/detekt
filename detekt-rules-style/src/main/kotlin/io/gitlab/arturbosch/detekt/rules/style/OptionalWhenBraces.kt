@@ -33,6 +33,7 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
  * }
  * </compliant>
  */
+@Deprecated("Same functionality is implemented in BracesOnWhenStatements")
 class OptionalWhenBraces(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
