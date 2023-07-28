@@ -42,9 +42,9 @@ instead.
 */
 fun PsiFile.absolutePath(): Path = absolutePath ?: Path(virtualFile.path)
 
-fun PsiFile.relativePath(): Path? = getUserData(RELATIVE_PATH)?.let { Path(it) }
+fun PsiFile.relativePath(): Path? = relativePath?.let { Path(it) }
 
-fun PsiFile.basePath(): Path? = getUserData(BASE_PATH)?.let { Path(it) }
+fun PsiFile.basePath(): Path? = basePath?.let { Path(it) }
 
 /**
  * Represents both absolute path and relative path if available.

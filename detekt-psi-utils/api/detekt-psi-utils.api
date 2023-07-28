@@ -21,9 +21,12 @@ public final class io/github/detekt/psi/FilePath$Companion {
 }
 
 public final class io/github/detekt/psi/KeysKt {
-	public static final fun getBASE_PATH ()Lorg/jetbrains/kotlin/com/intellij/openapi/util/Key;
-	public static final fun getLINE_SEPARATOR ()Lorg/jetbrains/kotlin/com/intellij/openapi/util/Key;
-	public static final fun getRELATIVE_PATH ()Lorg/jetbrains/kotlin/com/intellij/openapi/util/Key;
+	public static final fun getBasePath (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;)Ljava/lang/String;
+	public static final fun getLineSeparator (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;)Ljava/lang/String;
+	public static final fun getRelativePath (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;)Ljava/lang/String;
+	public static final fun setBasePath (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;Ljava/lang/String;)V
+	public static final fun setLineSeparator (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;Ljava/lang/String;)V
+	public static final fun setRelativePath (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;Ljava/lang/String;)V
 }
 
 public final class io/github/detekt/psi/KtFilesKt {
