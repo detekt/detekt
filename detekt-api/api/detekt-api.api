@@ -203,11 +203,9 @@ public class io/gitlab/arturbosch/detekt/api/DetektVisitor : org/jetbrains/kotli
 	public fun <init> ()V
 }
 
-public abstract interface class io/gitlab/arturbosch/detekt/api/Detektion {
+public abstract interface class io/gitlab/arturbosch/detekt/api/Detektion : org/jetbrains/kotlin/com/intellij/openapi/util/UserDataHolder {
 	public abstract fun add (Lio/gitlab/arturbosch/detekt/api/Notification;)V
 	public abstract fun add (Lio/gitlab/arturbosch/detekt/api/ProjectMetric;)V
-	public abstract fun addData (Lorg/jetbrains/kotlin/com/intellij/openapi/util/Key;Ljava/lang/Object;)V
-	public abstract fun getData (Lorg/jetbrains/kotlin/com/intellij/openapi/util/Key;)Ljava/lang/Object;
 	public abstract fun getFindings ()Ljava/util/Map;
 	public abstract fun getMetrics ()Ljava/util/Collection;
 	public abstract fun getNotifications ()Ljava/util/Collection;
