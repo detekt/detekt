@@ -42,10 +42,6 @@ instead.
 */
 fun PsiFile.absolutePath(): Path = absolutePath ?: Path(virtualFile.path)
 
-fun PsiFile.relativePath(): Path? = relativePath
-
-fun PsiFile.basePath(): Path? = basePath
-
 /**
  * Represents both absolute path and relative path if available.
  */
@@ -76,8 +72,6 @@ data class FilePath constructor(
 }
 
 fun PsiFile.toFilePath(): FilePath {
-    val relativePath = relativePath()
-    val basePath = basePath()
     return when {
         basePath != null && relativePath != null -> FilePath(
             absolutePath = absolutePath(),
