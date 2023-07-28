@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiErrorElement
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
 
 class KtCompilerSpec {
     @Nested
@@ -24,9 +25,9 @@ class KtCompilerSpec {
 
             assertThat(ktFile.lineSeparator).isEqualTo("\n")
             assertThat(ktFile.relativePath)
-                .isEqualTo("DefaultLf.kt")
+                .isEqualTo(Path("DefaultLf.kt"))
             assertThat(ktFile.basePath)
-                .endsWith("cases")
+                .endsWith(Path("cases"))
         }
 
         @Test
@@ -35,9 +36,9 @@ class KtCompilerSpec {
 
             assertThat(ktFile.lineSeparator).isEqualTo("\r\n")
             assertThat(ktFile.relativePath)
-                .isEqualTo("DefaultCrLf.kt")
+                .isEqualTo(Path("DefaultCrLf.kt"))
             assertThat(ktFile.basePath)
-                .endsWith("cases")
+                .endsWith(Path("cases"))
         }
 
         @Test

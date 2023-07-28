@@ -42,8 +42,8 @@ open class KtCompiler(
             this.lineSeparator = lineSeparator
             val normalizedBasePath = basePath?.absolute()?.normalize()
             normalizedBasePath?.relativize(normalizedAbsolutePath)?.let { relativePath ->
-                this.basePath = normalizedBasePath.absolute().toString()
-                this.relativePath = relativePath.toString()
+                this.basePath = normalizedBasePath.absolute()
+                this.relativePath = relativePath
             }
         }
     }
