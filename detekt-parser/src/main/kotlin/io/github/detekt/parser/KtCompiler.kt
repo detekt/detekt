@@ -3,6 +3,7 @@ package io.github.detekt.parser
 import io.github.detekt.psi.BASE_PATH
 import io.github.detekt.psi.LINE_SEPARATOR
 import io.github.detekt.psi.RELATIVE_PATH
+import io.github.detekt.psi.absolutePath
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.psi.KtFile
@@ -10,6 +11,7 @@ import org.jetbrains.kotlin.psi.KtPsiFactory
 import java.nio.file.Path
 import kotlin.io.path.absolute
 import kotlin.io.path.isRegularFile
+import kotlin.io.path.name
 import kotlin.io.path.readText
 
 open class KtCompiler(
@@ -31,11 +33,12 @@ open class KtCompiler(
         val lineSeparator = content.determineLineSeparator()
 
         val psiFile = psiFileFactory.createPhysicalFile(
-            normalizedAbsolutePath.toString(),
+            normalizedAbsolutePath.name,
             StringUtilRt.convertLineSeparators(content)
         )
 
         return psiFile.apply {
+            this.absolutePath = normalizedAbsolutePath
             putUserData(LINE_SEPARATOR, lineSeparator)
             val normalizedBasePath = basePath?.absolute()?.normalize()
             normalizedBasePath?.relativize(normalizedAbsolutePath)?.let { relativePath ->
