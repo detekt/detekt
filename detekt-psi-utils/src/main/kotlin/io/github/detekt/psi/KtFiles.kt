@@ -6,7 +6,6 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.psi.UserDataProperty
-import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.invariantSeparatorsPathString
@@ -21,15 +20,12 @@ private val KOTLIN_FILE_SUFFIXES = arrayOf(
     KOTLIN_SCRIPT_SUFFIX
 )
 
-val PsiFile.fileName: String
-    get() = name.substringAfterLast(File.separatorChar)
-
 /**
  * Removes kotlin specific file name suffixes, e.g. .kt.
  * Note, will not remove other possible/known file suffixes like '.java'
  */
 fun PsiFile.fileNameWithoutSuffix(): String {
-    val fileName = this.fileName
+    val fileName = this.name
     for (suffix in KOTLIN_FILE_SUFFIXES) {
         if (fileName.endsWith(suffix)) {
             return fileName.removeSuffix(suffix)
