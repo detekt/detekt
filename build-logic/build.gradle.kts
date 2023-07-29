@@ -19,4 +19,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
     if (isCiBuild) {
         compilerExecutionStrategy = org.jetbrains.kotlin.gradle.tasks.KotlinCompilerExecutionStrategy.OUT_OF_PROCESS
     }
+    compilerOptions {
+        allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
+    }
 }
