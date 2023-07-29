@@ -6,6 +6,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import kotlin.io.path.Path
 
 class KtTreeCompilerSpec {
@@ -39,9 +41,10 @@ class KtTreeCompilerSpec {
         assertThat(ktFiles).isEmpty()
     }
 
-    @Test
-    fun `skips entire subtrees`() {
-        val (ktFiles, output) = fixture("**/ignored/**", loggingDebug = true) { compile(path) }
+    @ParameterizedTest
+    @ValueSource(strings = ["**/ignored/**", "**/ignored", "**/cases/i*"])
+    fun `skips entire subtrees`(filter: String) {
+        val (ktFiles, output) = fixture(filter, loggingDebug = true) { compile(path) }
         assertThat(ktFiles.size)
             .describedAs("It should compile at least three files, but did ${ktFiles.size}")
             .isGreaterThanOrEqualTo(3)
@@ -49,8 +52,7 @@ class KtTreeCompilerSpec {
             .describedAs("File should not be ignored as entire subtree should be skipped")
             .doesNotContainPattern("""Ignoring file.*Something\.kt""")
             .describedAs("Ignored subtree should be skipped")
-            .containsPattern("""Ignoring subtree.*ignored[/\\]level1""")
-            .containsPattern("""Ignoring subtree.*ignored[/\\]levelA""")
+            .containsPattern("""Ignoring subtree.*ignored""")
     }
 
     @Test
