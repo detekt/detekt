@@ -408,6 +408,8 @@ potential-bugs:
     ignorePlatformTypes: true
   CastToNullableType:
     active: false
+  CharArrayToStringCall:
+    active: false
   Deprecation:
     active: false
   DontDowncastCollectionTypes:
