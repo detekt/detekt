@@ -55,7 +55,6 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UtilityClassWithPublicConstructor(config),
             ObjectLiteralToLambda(config),
             OptionalAbstractKeyword(config),
-            OptionalWhenBraces(config),
             OptionalUnit(config),
             ProtectedMemberInFinalClass(config),
             SerialVersionUIDInSerializableClass(config),
