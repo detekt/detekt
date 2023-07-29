@@ -107,7 +107,6 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/ConfigAware/ruleSetConfig/#/Poin
 $dokka.location:io.gitlab.arturbosch.detekt.api/ConfigAware/subConfig/#kotlin.String/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/sub-config.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/ConfigAware/valueOrDefault/#kotlin.String#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/value-or-default.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/ConfigAware/valueOrNull/#kotlin.String/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/value-or-null.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/ConfigAware/withAutoCorrect/#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-config-aware/with-auto-correct.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/ConfigValidator///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/ConfigValidator/validate/#io.gitlab.arturbosch.detekt.api.Config/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-config-validator/validate.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/ConsoleReport///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/index.html
