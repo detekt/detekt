@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.jetbrains.kotlin.resolve.calls.util.getType
 
 /**
- * Reports `CharArray.toString()` calls that do not return expected result.
+ * Reports `CharArray.toString()` calls that do not return the expected result.
  *
  * <noncompliant>
  * val s = ""
