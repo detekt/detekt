@@ -247,9 +247,3 @@ after your extension sub project is built.
 you created a pure kotlin module which has no Android dependencies. `apply plugin: "kotlin"` is enough to make it work.
 - Sometimes when you run detekt task, you may not see the violations detected by your custom rules. In this case open a terminal and run
 `./gradlew --stop` to stop gradle daemons and run the task again.
-
-#### autoCorrect property
-
-In detekt you can write custom rules which can manipulate your code base.
-For this a cli flag `--auto-correct` and the gradle plugin property `autoCorrect` exists.
-Only write auto correcting code within the `Rule#withAutoCorrect()`-function.

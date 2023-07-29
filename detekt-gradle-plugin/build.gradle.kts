@@ -133,7 +133,7 @@ tasks {
     val writeDetektVersionProperties by registering(WriteProperties::class) {
         description = "Write the properties file with the detekt version to be used by the plugin."
         encoding = "UTF-8"
-        destinationFile = file("$buildDir/detekt-versions.properties")
+        destinationFile = layout.buildDirectory.file("detekt-versions.properties")
         property("detektVersion", project.version)
         property("detektCompilerPluginVersion", project.version)
     }

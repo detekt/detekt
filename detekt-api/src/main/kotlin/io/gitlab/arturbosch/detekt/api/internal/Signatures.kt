@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
-import io.github.detekt.psi.fileName
 import org.jetbrains.kotlin.asJava.namedUnwrappedElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -59,7 +58,7 @@ internal fun PsiElement.buildFullSignature(): String {
         fullSignature = "$parentSignatures\$$fullSignature"
     }
 
-    val filename = this.containingFile.fileName
+    val filename = this.containingFile.name
     if (!fullSignature.startsWith(filename)) {
         fullSignature = "$filename\$$fullSignature"
     }
@@ -79,7 +78,7 @@ private fun PsiElement.searchSignature(): String {
     }.replace('\n', ' ').replace(multipleWhitespaces, " ")
 }
 
-private fun KtFile.fileSignature() = "${this.packageFqName.asString()}.${this.fileName}"
+private fun KtFile.fileSignature() = "${this.packageFqName.asString()}.${this.name}"
 
 private fun buildClassSignature(classOrObject: KtClassOrObject): String {
     var baseName = classOrObject.nameAsSafeName.asString()

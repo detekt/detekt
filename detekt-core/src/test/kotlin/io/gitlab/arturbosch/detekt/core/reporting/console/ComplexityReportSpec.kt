@@ -35,10 +35,10 @@ class ComplexityReportSpec {
 private fun createDetektion(): Detektion = DetektResult(mapOf("Key" to listOf(createFinding())))
 
 private fun addData(detektion: Detektion) {
-    detektion.addData(complexityKey, 2)
-    detektion.addData(CognitiveComplexity.KEY, 2)
-    detektion.addData(linesKey, 10)
-    detektion.addData(sourceLinesKey, 6)
-    detektion.addData(logicalLinesKey, 5)
-    detektion.addData(commentLinesKey, 4)
+    detektion.putUserData(complexityKey, 2)
+    detektion.putUserData(CognitiveComplexity.KEY, 2)
+    detektion.putUserData(linesKey, 10)
+    detektion.putUserData(sourceLinesKey, 6)
+    detektion.putUserData(logicalLinesKey, 5)
+    detektion.putUserData(commentLinesKey, 4)
 }

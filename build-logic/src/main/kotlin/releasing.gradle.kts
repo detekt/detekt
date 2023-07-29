@@ -37,16 +37,14 @@ githubRelease {
             changelog.trim()
         }
     )
-    val cliBuildDir = project(":detekt-cli").buildDir
+    val cliBuildDir = project(":detekt-cli").layout.buildDirectory
     releaseAssets.setFrom(
-        cliBuildDir.resolve("libs/detekt-cli-$version-all.jar"),
-        cliBuildDir.resolve("distributions/detekt-cli-$version.zip"),
-        project(":detekt-formatting").buildDir.resolve("libs/detekt-formatting-$version.jar"),
-        project(":detekt-generator").buildDir.resolve("libs/detekt-generator-$version-all.jar"),
-        project(":detekt-rules-libraries").buildDir
-            .resolve("libs/detekt-rules-libraries-$version.jar"),
-        project(":detekt-rules-ruleauthors").buildDir
-            .resolve("libs/detekt-rules-ruleauthors-$version.jar")
+        cliBuildDir.file("libs/detekt-cli-$version-all.jar"),
+        cliBuildDir.file("distributions/detekt-cli-$version.zip"),
+        project(":detekt-formatting").layout.buildDirectory.file("libs/detekt-formatting-$version.jar"),
+        project(":detekt-generator").layout.buildDirectory.file("libs/detekt-generator-$version-all.jar"),
+        project(":detekt-rules-libraries").layout.buildDirectory.file("libs/detekt-rules-libraries-$version.jar"),
+        project(":detekt-rules-ruleauthors").layout.buildDirectory.file("libs/detekt-rules-ruleauthors-$version.jar")
     )
 }
 

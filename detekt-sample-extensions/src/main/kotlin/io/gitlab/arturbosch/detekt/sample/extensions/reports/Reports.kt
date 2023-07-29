@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.sample.extensions.processors.fqNamesKey
 
 fun qualifiedNamesReport(detektion: Detektion): String? {
-    val fqNames = detektion.getData(fqNamesKey)
+    val fqNames = detektion.getUserData(fqNamesKey)
     if (fqNames.isNullOrEmpty()) return null
 
     return with(StringBuilder()) {

@@ -20,7 +20,7 @@ class RuleCollectorSpec {
 
     @BeforeEach
     fun createSubject() {
-        subject = RuleCollector()
+        subject = RuleCollector(emptyMap())
     }
 
     @Test
@@ -70,6 +70,18 @@ class RuleCollectorSpec {
         """.trimIndent()
         val items = subject.run(code)
         assertThat(items[0].description).isEqualTo(description)
+    }
+
+    @Test
+    fun `replaces text in the rule description`() {
+        val code = """
+            /**
+             * some <foo/> description with more <foo/>. 
+             */
+            class SomeRandomClass : Rule
+        """.trimIndent()
+        val items = RuleCollector(mapOf("<foo/>" to "bar")).run(code)
+        assertThat(items[0].description).isEqualTo("some bar description with more bar.")
     }
 
     @Test

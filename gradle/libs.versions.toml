@@ -3,7 +3,7 @@ dokka = "1.8.20"
 jacoco = "0.8.10"
 kotlin = "1.9.0"
 ktlint = "0.50.0"
-junit = "5.9.3"
+junit = "5.10.0"
 
 [libraries]
 githubRelease-gradle = "com.github.breadmoirai:github-release:2.4.1"
@@ -19,7 +19,7 @@ kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", versio
 kotlin-reflection = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 
 kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.9.1"
-kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2"
+kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
 
 # This represents the the oldest AGP version that is supported by detekt.
 # This should only be updated when updating the minimum version supported by detekt's Gradle plugin.
@@ -27,7 +27,7 @@ android-gradle-minSupported = "com.android.tools.build:gradle:7.0.0"
 
 # This version of AGP is used for testing and should be updated when new AGP versions are released to ensure detekt's
 # Gradle plugin remains compatible.
-android-gradle-maxSupported = "com.android.tools.build:gradle:8.0.2"
+android-gradle-maxSupported = "com.android.tools.build:gradle:8.1.0"
 
 ktlintRulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint"  }
 slf4j-nop = { module = "org.slf4j:slf4j-nop", version = "2.0.7" }

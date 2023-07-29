@@ -102,9 +102,13 @@ val testPluginKotlinc by tasks.registering(Task::class) {
     }
 
     doLast {
-        if (!kotlincExecution.standardError.asText.get().contains("warning: magicNumber:")) {
+        val stdErrOutput = kotlincExecution.standardError.asText.get()
+        if (!stdErrOutput.contains("warning: doubleMutabilityForCollection:")) {
             throw GradleException(
-                "kotlinc run with compiler plugin did not find MagicNumber issue as expected"
+                """
+                    kotlinc run with compiler plugin did not find DoubleMutabilityForCollection issue in output:
+                    $stdErrOutput
+                """.trimIndent()
             )
         }
     }
