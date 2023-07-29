@@ -62,7 +62,7 @@ internal class ComplexityReportGeneratorSpec {
             detektion.removeData(logicalLinesKey)
             assertThat(generateComplexityReport(detektion)).isNull()
 
-            detektion.addData(logicalLinesKey, 0)
+            detektion.putUserData(logicalLinesKey, 0)
             assertThat(generateComplexityReport(detektion)).isNull()
         }
 
@@ -71,7 +71,7 @@ internal class ComplexityReportGeneratorSpec {
             detektion.removeData(sourceLinesKey)
             assertThat(generateComplexityReport(detektion)).isNull()
 
-            detektion.addData(sourceLinesKey, 0)
+            detektion.putUserData(sourceLinesKey, 0)
             assertThat(generateComplexityReport(detektion)).isNull()
         }
 
@@ -84,12 +84,12 @@ internal class ComplexityReportGeneratorSpec {
 }
 
 private fun TestDetektion.withTestData(): TestDetektion {
-    addData(complexityKey, 2)
-    addData(CognitiveComplexity.KEY, 2)
-    addData(linesKey, 1000)
-    addData(sourceLinesKey, 6)
-    addData(logicalLinesKey, 5)
-    addData(commentLinesKey, 4)
+    putUserData(complexityKey, 2)
+    putUserData(CognitiveComplexity.KEY, 2)
+    putUserData(linesKey, 1000)
+    putUserData(sourceLinesKey, 6)
+    putUserData(logicalLinesKey, 5)
+    putUserData(commentLinesKey, 4)
     return this
 }
 

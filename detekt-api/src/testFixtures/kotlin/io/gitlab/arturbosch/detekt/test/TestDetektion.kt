@@ -5,26 +5,19 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
-import org.jetbrains.kotlin.com.intellij.util.keyFMap.KeyFMap
+import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
 
-open class TestDetektion(vararg findings: Finding) : Detektion {
+open class TestDetektion(vararg findings: Finding) : Detektion, UserDataHolderBase() {
 
     override val findings: Map<String, List<Finding>> = findings.groupBy { it.id }
     override val metrics: Collection<ProjectMetric> get() = _metrics
     override val notifications: List<Notification> get() = _notifications
 
-    private var userData = KeyFMap.EMPTY_MAP
     private val _metrics = mutableListOf<ProjectMetric>()
     private val _notifications = mutableListOf<Notification>()
 
-    override fun <V> getData(key: Key<V>): V? = userData.get(key)
-
-    override fun <V> addData(key: Key<V>, value: V) {
-        userData = userData.plus(key, requireNotNull(value))
-    }
-
     fun <V> removeData(key: Key<V>) {
-        userData = userData.minus(key)
+        putUserData(key, null)
     }
 
     override fun add(notification: Notification) {

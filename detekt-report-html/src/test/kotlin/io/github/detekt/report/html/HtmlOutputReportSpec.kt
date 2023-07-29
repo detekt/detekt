@@ -150,12 +150,12 @@ class HtmlOutputReportSpec {
     @Test
     fun `renders the complexity report correctly`() {
         val detektion = TestDetektion()
-        detektion.addData(complexityKey, 10)
-        detektion.addData(CognitiveComplexity.KEY, 10)
-        detektion.addData(sourceLinesKey, 20)
-        detektion.addData(logicalLinesKey, 10)
-        detektion.addData(commentLinesKey, 2)
-        detektion.addData(linesKey, 2222)
+        detektion.putUserData(complexityKey, 10)
+        detektion.putUserData(CognitiveComplexity.KEY, 10)
+        detektion.putUserData(sourceLinesKey, 20)
+        detektion.putUserData(logicalLinesKey, 10)
+        detektion.putUserData(commentLinesKey, 2)
+        detektion.putUserData(linesKey, 2222)
         val result = htmlReport.render(detektion)
         assertThat(result).contains("<li>2,222 lines of code (loc)</li>")
         assertThat(result).contains("<li>20 source lines of code (sloc)</li>")

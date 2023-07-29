@@ -1,9 +1,9 @@
 package io.github.detekt.parser
 
-import io.github.detekt.psi.BASE_PATH
-import io.github.detekt.psi.LINE_SEPARATOR
-import io.github.detekt.psi.RELATIVE_PATH
 import io.github.detekt.psi.absolutePath
+import io.github.detekt.psi.basePath
+import io.github.detekt.psi.lineSeparator
+import io.github.detekt.psi.relativePath
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.psi.KtFile
@@ -39,11 +39,11 @@ open class KtCompiler(
 
         return psiFile.apply {
             this.absolutePath = normalizedAbsolutePath
-            putUserData(LINE_SEPARATOR, lineSeparator)
+            this.lineSeparator = lineSeparator
             val normalizedBasePath = basePath?.absolute()?.normalize()
             normalizedBasePath?.relativize(normalizedAbsolutePath)?.let { relativePath ->
-                putUserData(BASE_PATH, normalizedBasePath.absolute().toString())
-                putUserData(RELATIVE_PATH, relativePath.toString())
+                this.basePath = normalizedBasePath.absolute()
+                this.relativePath = relativePath
             }
         }
     }

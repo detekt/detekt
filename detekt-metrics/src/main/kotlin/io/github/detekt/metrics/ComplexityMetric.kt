@@ -9,11 +9,11 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 
 class ComplexityMetric(detektion: Detektion) {
 
-    val mcc = detektion.getData(complexityKey)
-    val cognitiveComplexity = detektion.getData(CognitiveComplexity.KEY)
-    val loc = detektion.getData(linesKey)
-    val sloc = detektion.getData(sourceLinesKey)
-    val lloc = detektion.getData(logicalLinesKey)
-    val cloc = detektion.getData(commentLinesKey)
+    val mcc = detektion.getUserData(complexityKey)
+    val cognitiveComplexity = detektion.getUserData(CognitiveComplexity.KEY)
+    val loc = detektion.getUserData(linesKey)
+    val sloc = detektion.getUserData(sourceLinesKey)
+    val lloc = detektion.getUserData(logicalLinesKey)
+    val cloc = detektion.getUserData(commentLinesKey)
     val findings = detektion.findings.entries
 }
