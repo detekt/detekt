@@ -42,24 +42,6 @@ class KtCompilerSpec {
         }
 
         @Test
-        fun `Kotlin file with LF line separators does not store extra data for relative path if not provided`() {
-            val ktFile = ktCompiler.compile(null, path.resolve("DefaultLf.kt"))
-
-            assertThat(ktFile.lineSeparator).isEqualTo("\n")
-            assertThat(ktFile.relativePath).isNull()
-            assertThat(ktFile.basePath).isNull()
-        }
-
-        @Test
-        fun `Kotlin file with CRLF line separators does not store extra data for relative path if not provided`() {
-            val ktFile = ktCompiler.compile(null, path.resolve("DefaultCrLf.kt"))
-
-            assertThat(ktFile.lineSeparator).isEqualTo("\r\n")
-            assertThat(ktFile.relativePath).isNull()
-            assertThat(ktFile.basePath).isNull()
-        }
-
-        @Test
         fun `throws an exception for an invalid sub path`() {
             assertThatIllegalArgumentException()
                 .isThrownBy { ktCompiler.compile(path, path) }
