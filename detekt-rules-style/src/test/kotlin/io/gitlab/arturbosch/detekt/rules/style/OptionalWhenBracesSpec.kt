@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class OptionalWhenBracesSpec {
+    @Suppress("DEPRECATION")
     val subject = OptionalWhenBraces()
 
     @Test

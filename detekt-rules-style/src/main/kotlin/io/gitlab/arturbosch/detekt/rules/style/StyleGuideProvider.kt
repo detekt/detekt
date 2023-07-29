@@ -19,7 +19,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "style"
 
-    @Suppress("LongMethod")
+    @Suppress("LongMethod", "DEPRECATION")
     override fun instance(config: Config): RuleSet = RuleSet(
         ruleSetId,
         listOf(
