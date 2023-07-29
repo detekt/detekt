@@ -10,7 +10,6 @@ import java.nio.file.FileVisitor
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.attribute.BasicFileAttributes
-import kotlin.io.path.absolutePathString
 import kotlin.io.path.exists
 import kotlin.io.path.extension
 import kotlin.io.path.isDirectory
@@ -85,7 +84,7 @@ class KtTreeCompiler(
         }
 
         override fun visitFileFailed(file: Path, exc: IOException): FileVisitResult {
-            settings.error("Error visiting file ${file.absolutePathString()}.", exc)
+            settings.error("Error visiting file '$file'.", exc)
             return FileVisitResult.TERMINATE
         }
 
