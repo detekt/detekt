@@ -85,11 +85,11 @@ class KtTreeCompiler(
 
         override fun visitFileFailed(file: Path, exc: IOException): FileVisitResult {
             settings.error("Error visiting file '$file'.", exc)
-            return FileVisitResult.TERMINATE
+            throw exc
         }
 
         override fun postVisitDirectory(dir: Path, exc: IOException?): FileVisitResult {
-            return if (exc != null) FileVisitResult.TERMINATE else FileVisitResult.CONTINUE
+            return if (exc == null) FileVisitResult.CONTINUE else throw exc;
         }
 
         private fun Path.isIgnored(): Boolean {
