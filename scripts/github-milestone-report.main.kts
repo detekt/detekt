@@ -36,6 +36,10 @@ class GithubMilestoneReport : CliktCommand() {
         "-f",
         help = "Filter issues that are already in the changelog. Default: false."
     ).flag(default = false)
+    private val filterPickRequests: Boolean by option(
+        "-r",
+        help = "Filter issues only issues labeled with 'pick requests'. Default: false."
+    ).flag(default = false)
 
     @Suppress("LongMethod")
     override fun run() {
@@ -56,6 +60,10 @@ class GithubMilestoneReport : CliktCommand() {
         if (filterExisting) {
             val changeLogContent = File("./website/src/pages/changelog.md").readText()
             ghIssues = ghIssues.filter { "[#${it.number}]" !in changeLogContent }
+        }
+
+        if (filterPickRequests) {
+            ghIssues = ghIssues.filter { "pick request" in it.labels.map { it.name } }
         }
 
         val milestoneTitle = ghMilestone.title.trim()

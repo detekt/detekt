@@ -6,6 +6,43 @@ keywords: [changelog, release-notes, migration]
 
 # Changelog and Migration Guide
 
+#### 1.23.1 - 2023-07-30
+
+This is a point release for Detekt `1.23.0`, where we added support for Kotlin `1.9.0` and fixed several bugs that
+got reported by the community.
+
+##### Notable Changes
+
+- Bumped Kotlin to v1.9.0 - [#6258](https://github.com/detekt/detekt/pull/6258)
+- Bumped KtLint to v0.50.0 - [#6239](https://github.com/detekt/detekt/pull/6239)
+- Updated CLI to reflect Java 20 support - [#6277](https://github.com/detekt/detekt/pull/6277)
+
+##### Changelog
+
+- Add missing jdkHome and languageVersion properties to DetektCreateBaselineTask - [#6284](https://github.com/detekt/detekt/pull/6284)
+- Make InvalidRange aware of rangeUntil operator - [#6264](https://github.com/detekt/detekt/pull/6264)
+- MaxChainedCallsOnSameLine: don't count class references as chained calls - [#6224](https://github.com/detekt/detekt/pull/6224)
+- CanBeNonNullable: Fix false positive when property is defined after assignment - [#6210](https://github.com/detekt/detekt/pull/6210)
+- Add `..<` and `rangeTo` in the `ForEachOnRange` rule - [#6197](https://github.com/detekt/detekt/pull/6197)
+- Don't report `UseDataClass` if class contains non-property parameters - [#6173](https://github.com/detekt/detekt/pull/6173)
+- Allow documenting public fun name when same private variable is present - [#6165](https://github.com/detekt/detekt/pull/6165)
+- Find range call using recursion - [#6164](https://github.com/detekt/detekt/pull/6164)
+- StringShouldBeRawString: Ignore `replaceIndent` and `prependIndent` - [#6154](https://github.com/detekt/detekt/pull/6154)
+- UnusedPrivateProperty: Fix false postive by ignoring data classes - [#6151](https://github.com/detekt/detekt/pull/6151)
+- PropertyUsedBeforeDeclaration: fix false positive in nested/inner class - [#6139](https://github.com/detekt/detekt/pull/6139)
+
+##### Dependency Updates
+
+- Update dependency gradle to v8.2.1 - [#6274](https://github.com/detekt/detekt/pull/6274)
+- Switch to SLF4J 2.x - [#6266](https://github.com/detekt/detekt/pull/6266)
+- Update kotlin monorepo to v1.8.22 - [#6192](https://github.com/detekt/detekt/pull/6192)
+
+##### Contributors
+
+We would like to thank the following contributors that made this release possible: @3flex, @Goooler, @Hexcles, @PoisonedYouth, @TWiStErRob, @VirtualParticle, @atulgpt, @cortinico, @dzirbel, @eygraber, @marschwar, @rmarquis, @segunfamisa, @severn-everett, @t-kameyama
+
+[See all commit history here](https://github.com/detekt/detekt/compare/v1.23.0...v1.23.1)
+
 #### 1.23.0 - 2023-05-22
 
 ##### Notable Changes
