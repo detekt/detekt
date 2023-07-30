@@ -37,7 +37,7 @@ class GithubMilestoneReport : CliktCommand() {
     ).flag(default = false)
     private val filterPickRequests: Boolean by option(
         "-r",
-        help = "Filter issues only issues labeled with 'pick requests'. Default: false."
+        help = "Filter issues labeled with 'pick requests'. Default: false."
     ).flag(default = false)
 
     @Suppress("LongMethod")
