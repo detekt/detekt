@@ -20,13 +20,13 @@ open class KtCompiler(
 
     protected val psiFileFactory = KtPsiFactory(environment.project, markGenerated = false)
 
-    fun compile(basePath: Path?, path: Path): KtFile {
+    fun compile(basePath: Path, path: Path): KtFile {
         require(path.isRegularFile()) { "Given sub path ($path) should be a regular file!" }
         val content = path.readText()
         return createKtFile(content, basePath, path)
     }
 
-    fun createKtFile(content: String, basePath: Path?, path: Path): KtFile {
+    fun createKtFile(content: String, basePath: Path, path: Path): KtFile {
         require(path.isRegularFile()) { "Given sub path ($path) should be a regular file!" }
 
         val normalizedAbsolutePath = path.absolute().normalize()
@@ -40,11 +40,9 @@ open class KtCompiler(
         return psiFile.apply {
             this.absolutePath = normalizedAbsolutePath
             this.lineSeparator = lineSeparator
-            val normalizedBasePath = basePath?.absolute()?.normalize()
-            normalizedBasePath?.relativize(normalizedAbsolutePath)?.let { relativePath ->
-                this.basePath = normalizedBasePath.absolute()
-                this.relativePath = relativePath
-            }
+            val normalizedBasePath = basePath.absolute().normalize()
+            this.basePath = normalizedBasePath.absolute()
+            this.relativePath = normalizedBasePath.relativize(normalizedAbsolutePath)
         }
     }
 }

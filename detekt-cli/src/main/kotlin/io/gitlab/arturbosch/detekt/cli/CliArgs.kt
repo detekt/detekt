@@ -4,6 +4,7 @@ import com.beust.jcommander.Parameter
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.nio.file.Path
+import kotlin.io.path.Path
 
 class CliArgs {
 
@@ -92,7 +93,7 @@ class CliArgs {
             "File paths in console output and txt report are not affected and remain as absolute paths.",
         converter = PathConverter::class
     )
-    var basePath: Path? = null
+    var basePath: Path = Path(System.getProperty("user.dir"))
 
     @Parameter(
         names = ["--disable-default-rulesets", "-dd"],
