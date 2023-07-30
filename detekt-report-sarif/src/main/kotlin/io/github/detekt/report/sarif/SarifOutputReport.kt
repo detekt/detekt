@@ -61,7 +61,9 @@ class SarifOutputReport : OutputReport() {
                             version = version
                         )
                     ),
-                    originalURIBaseIDS = basePath?.let { mapOf(SRCROOT to ArtifactLocation(uri = "file://$basePath")) },
+                    originalURIBaseIDS = basePath?.let {
+                        mapOf(SRCROOT to ArtifactLocation(uri = "file:///$basePath"))
+                    },
                     results = toResults(detektion)
                 )
             )
