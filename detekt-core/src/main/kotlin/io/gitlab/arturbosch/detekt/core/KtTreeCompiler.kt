@@ -89,7 +89,7 @@ class KtTreeCompiler(
         }
 
         override fun postVisitDirectory(dir: Path, exc: IOException?): FileVisitResult {
-            return if (exc == null) FileVisitResult.CONTINUE else throw exc;
+            return if (exc == null) FileVisitResult.CONTINUE else throw exc
         }
 
         private fun Path.isIgnored(): Boolean {
