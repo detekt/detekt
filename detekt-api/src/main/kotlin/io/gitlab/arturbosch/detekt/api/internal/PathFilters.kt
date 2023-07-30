@@ -1,11 +1,14 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
 import io.github.detekt.psi.absolutePath
+import io.github.detekt.psi.basePath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import java.nio.file.PathMatcher
+import kotlin.io.path.Path
+import kotlin.io.path.relativeTo
 
 /**
  * Path filters to explicitly include and/or exclude paths for rules.
@@ -33,9 +36,15 @@ class PathFilters internal constructor(
     }
 
     /**
-     * Runs [isIgnored] against a [ktFile] based on its [absolutePath].
+     * Runs [isIgnored] against a [KtFile] based on its relative path, or based on its [absolutePath] if [basePath] is
+     * not set.
      */
-    fun isIgnored(ktFile: KtFile): Boolean = isIgnored(ktFile.absolutePath())
+    fun isIgnored(ktFile: KtFile): Boolean {
+        ktFile.basePath?.let {
+            return isIgnored(Path(".", ktFile.absolutePath().relativeTo(it).toString()))
+        }
+        return isIgnored(ktFile.absolutePath())
+    }
 
     companion object {
         fun of(includes: List<String>, excludes: List<String>): PathFilters? {
