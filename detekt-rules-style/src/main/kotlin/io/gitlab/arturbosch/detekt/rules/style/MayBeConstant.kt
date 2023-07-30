@@ -45,8 +45,6 @@ class MayBeConstant(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    override val defaultRuleIdAliases = setOf("MayBeConstant")
-
     private val binaryTokens = hashSetOf<KtSingleValueToken>(
         KtTokens.PLUS,
         KtTokens.MINUS,
