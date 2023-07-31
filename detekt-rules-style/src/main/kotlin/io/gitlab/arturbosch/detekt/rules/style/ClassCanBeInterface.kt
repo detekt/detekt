@@ -42,8 +42,7 @@ import org.jetbrains.kotlin.types.typeUtil.isInterface
  *     val i: Int
  *     fun f()
  * }
- * </compliant>
- * <compliant>
+ * 
  * abstract class NonAbstractMembersInAbstractClass {
  *
  *     abstract val i: Int
