@@ -196,4 +196,29 @@ class KDocReferencesNonPublicPropertySpec {
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
+
+    @Test
+    fun `does not report public function when same named private var is present - #6162`() {
+        val code = """
+            /**
+             * [peek] - public fun
+             * [Inner.innerPeek] - public fun
+             * [Object.objectPeek] - public fun
+             */
+            class Test {
+                private var peek: Int = 0
+                private var innerPeek: Int = 0
+                private var objectPeek: Int = 0
+                private var companionPeek: Int = 0
+                fun peek() = 0
+                inner class Inner {
+                    fun innerPeek() = 0
+                }
+                object Object {
+                    fun objectPeek() = 0
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
 }

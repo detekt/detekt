@@ -35,6 +35,18 @@ import org.jetbrains.kotlin.types.typeUtil.isInterface
  *     fun f() { }
  * }
  * </noncompliant>
+ *
+ * <compliant>
+ * interface OnlyAbstractMembersInInterface {
+ *     val i: Int
+ *     fun f()
+ * }
+ *
+ * class OnlyConcreteMembersInClass {
+ *     val i: Int = 0
+ *     fun f() { }
+ * }
+ * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
 @RequiresTypeResolution
@@ -68,8 +80,8 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitClass(klass: KtClass) {
-        klass.check()
         super.visitClass(klass)
+        klass.check()
     }
 
     private fun KtClass.check() {

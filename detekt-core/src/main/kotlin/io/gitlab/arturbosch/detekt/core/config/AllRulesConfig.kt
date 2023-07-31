@@ -10,6 +10,9 @@ internal data class AllRulesConfig(
     private val defaultConfig: Config
 ) : Config, ValidatableConfiguration {
 
+    override val parentPath: String?
+        get() = originalConfig.parentPath ?: defaultConfig.parentPath
+
     override fun subConfig(key: String) =
         AllRulesConfig(originalConfig.subConfig(key), defaultConfig.subConfig(key))
 

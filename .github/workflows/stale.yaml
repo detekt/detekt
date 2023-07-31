@@ -6,33 +6,34 @@ on:
 jobs:
   stale:
     runs-on: ubuntu-latest
+    if: github.repository == 'detekt/detekt'
     permissions:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/stale@6f05e4244c9a0b2ed3401882b05d701dd0a7289b # v7
+      - uses: actions/stale@1160a2240286f5da8ec72b1c0816ce2481aabf84 # v8
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.DETEKT_CI_GITHUB_USER_TOKEN }}
           days-before-stale: 90
-          stale-issue-message: 'This issue is stale because it has been open 90 days with no activity. Please comment or this will be closed in 7 days.'
-          stale-pr-message: 'This PR is stale because it has been open 90 days with no activity. Please comment or this will be closed in 7 days.'
-          close-issue-message: 'This issue was closed because it has been stalled for 7 days with no activity.'
-          close-pr-message: 'This PR was closed because it has been stalled for 7 days with no activity.'
+          stale-issue-message: "This issue is stale because it has been open 90 days with no activity. Please comment or this will be closed in 7 days."
+          stale-pr-message: "This PR is stale because it has been open 90 days with no activity. Please comment or this will be closed in 7 days."
+          close-issue-message: "This issue was closed because it has been stalled for 7 days with no activity."
+          close-pr-message: "This PR was closed because it has been stalled for 7 days with no activity."
           stale-issue-label: stale
           stale-pr-label: stale
           exempt-issue-labels: help wanted, good first issue, never gets stale, blocked
           exempt-pr-labels: help wanted, good first issue, never gets stale, blocked
-          exempt-milestones: Future Breaking Changes in Major Versions
-      - uses: actions/stale@6f05e4244c9a0b2ed3401882b05d701dd0a7289b # v7
+          exempt-milestones: 2.0.0
+      - uses: actions/stale@1160a2240286f5da8ec72b1c0816ce2481aabf84 # v8
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.DETEKT_CI_GITHUB_USER_TOKEN }}
           days-before-stale: 30
-          stale-issue-message: 'This issue is waiting for authors feedback since 30 days. Please comment providing the requested feedback or this issue will be closed in 7 days.'
-          stale-pr-message: 'This PR is waiting for authors feedback since 30 days. Please comment providing the requested feedback or this PR will be closed in 7 days.'
-          close-issue-message: 'This issue was closed because its author has not followed up after 7 days.'
-          close-pr-message: 'This PR was closed because its author has not followed up after 7 days.'
+          stale-issue-message: "This issue is waiting for authors feedback since 30 days. Please comment providing the requested feedback or this issue will be closed in 7 days."
+          stale-pr-message: "This PR is waiting for authors feedback since 30 days. Please comment providing the requested feedback or this PR will be closed in 7 days."
+          close-issue-message: "This issue was closed because its author has not followed up after 7 days."
+          close-pr-message: "This PR was closed because its author has not followed up after 7 days."
           stale-issue-label: stale
           stale-pr-label: stale
-          any-of-labels: waiting for feedback
+          any-of-labels: waiting for feedback, support
           exempt-issue-labels: never gets stale
           exempt-pr-labels: never gets stale

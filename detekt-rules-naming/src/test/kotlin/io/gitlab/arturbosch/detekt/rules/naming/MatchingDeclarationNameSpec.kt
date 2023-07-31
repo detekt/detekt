@@ -22,7 +22,11 @@ class MatchingDeclarationNameSpec {
         @Test
         fun `should pass for suppress`() {
             val ktFile = compileContentForTest(
-                """@file:Suppress("MatchingDeclarationName") object O""",
+                """
+                    @file:Suppress("MatchingDeclarationName")
+                    
+                    object O
+                """.trimIndent(),
                 filename = "Objects.kt"
             )
             val findings = MatchingDeclarationName().lint(ktFile)

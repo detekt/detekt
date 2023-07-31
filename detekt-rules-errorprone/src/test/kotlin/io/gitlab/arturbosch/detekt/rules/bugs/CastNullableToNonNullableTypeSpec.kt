@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -47,7 +48,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
     }
 
     @Test
-    fun `reports casting of platform type to NonNullable type`() {
+    fun `does not report casting of platform type to NonNullable type when ignorePlatformTypes by default`() {
         val code = """
             class Foo {
                 fun test() {
@@ -58,13 +59,45 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report casting of platform type to NonNullable type when ignorePlatformTypes is true`() {
+        val code = """
+            class Foo {
+                fun test() {
+                    // getSimpleName() is not annotated with nullability information in the JDK, so compiler treats
+                    // it as a platform type with unknown nullability.
+                    val y = javaClass.simpleName as String
+                }
+            }
+        """.trimIndent()
+        val findings = CastNullableToNonNullableType(
+            TestConfig(
+                IGNORE_PLATFORM_TYPES to true
+            )
+        ).compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `reports casting of platform type to NonNullable type when ignorePlatformTypes is false`() {
+        val code = """
+            class Foo {
+                fun test() {
+                    // getSimpleName() is not annotated with nullability information in the JDK, so compiler treats
+                    // it as a platform type with unknown nullability.
+                    val y = javaClass.simpleName as String
+                }
+            }
+        """.trimIndent()
+        val findings = CastNullableToNonNullableType(
+            TestConfig(
+                IGNORE_PLATFORM_TYPES to false
+            )
+        ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(5, 38)
-        assertThat(findings[0]).hasMessage(
-            "Use separate `null` assertion and type cast like " +
-                "('(javaClass.simpleName ?: error(\"null assertion message\")) as String') instead of " +
-                "'javaClass.simpleName as String'."
-        )
     }
 
     @Test
@@ -144,5 +177,41 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report when value is casted to nullable type parameter`() {
+        val code = """
+            fun <T> combine(
+                value: T,
+                array: List<*>,
+            ) {
+                array[0] as T
+            }
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does report when value is casted to non-nullable type parameter`() {
+        val code = """
+            fun <T: Any> combine(
+                value: T,
+                array: List<*>,
+            ) {
+                array[0] as T
+            }
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings[0]).hasMessage(
+            "Use separate `null` assertion and type cast like " +
+                "('(array[0] ?: error(\"null assertion message\")) as T') instead of 'array[0] as T'."
+        )
+    }
+
+    companion object {
+        private const val IGNORE_PLATFORM_TYPES = "ignorePlatformTypes"
     }
 }

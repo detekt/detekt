@@ -2,11 +2,12 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.loadRuleSet
 import io.gitlab.arturbosch.detekt.test.yamlConfig
-import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.api.Test
+import org.assertj.core.api.Assertions.assertThat as assertJThat
 
 class AutoCorrectLevelSpec {
 
@@ -16,8 +17,8 @@ class AutoCorrectLevelSpec {
 
         val (file, findings) = runRule(config)
 
-        assertThat(wasLinted(findings)).isTrue()
-        assertThat(wasFormatted(file)).isTrue()
+        assertThat(findings).isNotEmpty()
+        assertJThat(wasFormatted(file)).isTrue()
     }
 
     @Test
@@ -26,8 +27,8 @@ class AutoCorrectLevelSpec {
 
         val (file, findings) = runRule(config)
 
-        assertThat(wasLinted(findings)).isTrue()
-        assertThat(wasFormatted(file)).isFalse()
+        assertThat(findings).isNotEmpty()
+        assertJThat(wasFormatted(file)).isFalse()
     }
 
     @Test
@@ -36,8 +37,8 @@ class AutoCorrectLevelSpec {
 
         val (file, findings) = runRule(config)
 
-        assertThat(wasLinted(findings)).isTrue()
-        assertThat(wasFormatted(file)).isFalse()
+        assertThat(findings).isNotEmpty()
+        assertJThat(wasFormatted(file)).isFalse()
     }
 
     @Test
@@ -46,8 +47,8 @@ class AutoCorrectLevelSpec {
 
         val (file, findings) = runRule(config)
 
-        assertThat(wasLinted(findings)).isFalse()
-        assertThat(wasFormatted(file)).isFalse()
+        assertThat(findings).isEmpty()
+        assertJThat(wasFormatted(file)).isFalse()
     }
 }
 
@@ -58,5 +59,4 @@ private fun runRule(config: Config): Pair<KtFile, List<Finding>> {
     return testFile to ruleSet.rules.flatMap { it.findings }
 }
 
-private fun wasLinted(findings: List<Finding>) = findings.isNotEmpty()
 private fun wasFormatted(file: KtFile) = file.text == contentAfterChainWrapping

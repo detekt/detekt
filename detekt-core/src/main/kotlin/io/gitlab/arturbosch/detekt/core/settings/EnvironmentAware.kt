@@ -66,7 +66,7 @@ internal fun CompilerSpec.parseLanguageVersion(): LanguageVersion? {
 internal fun CompilerSpec.parseJvmTarget(): JvmTarget {
     return checkNotNull(JvmTarget.fromString(jvmTarget)) {
         "Invalid value ($jvmTarget) passed to --jvm-target," +
-            " must be one of ${JvmTarget.values().map(JvmTarget::description)}"
+            " must be one of ${JvmTarget.entries.map(JvmTarget::description)}"
     }
 }
 

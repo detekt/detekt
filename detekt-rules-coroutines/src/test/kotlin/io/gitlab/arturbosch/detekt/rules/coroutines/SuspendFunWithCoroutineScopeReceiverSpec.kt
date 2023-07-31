@@ -128,6 +128,20 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
+
+        @Test
+        fun `should ignore the issue by alias suppression`() {
+            val code = """
+                import kotlinx.coroutines.CoroutineScope
+                import kotlinx.coroutines.delay
+
+                @Suppress("SuspendFunctionOnCoroutineScope")
+                suspend fun CoroutineScope.foo() {
+                    delay(timeMillis = 1000)
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        }
     }
 
     @Nested

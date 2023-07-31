@@ -73,7 +73,10 @@ class MethodSignatureSpec {
             "'protected',true",
             "'private',false"
         )
-        fun `should return x for finalize function with y access modifier`(accessModifier: String, isFinalize: Boolean) {
+        fun `should return x for finalize function with y access modifier`(
+            accessModifier: String,
+            isFinalize: Boolean,
+        ) {
             val namedFunction = makeFunction("$accessModifier fun finalize() {}")
             assertThat(namedFunction.isJvmFinalizeFunction()).isEqualTo(isFinalize)
         }
@@ -85,7 +88,7 @@ class MethodSignatureSpec {
         }
 
         @Test
-        fun `should return false for overriden finalize function`() {
+        fun `should return false for overridden finalize function`() {
             val namedFunction = makeFunction("override fun finalize()")
             assertThat(namedFunction.isJvmFinalizeFunction()).isFalse()
         }

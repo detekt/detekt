@@ -3,16 +3,16 @@ package io.gitlab.arturbosch.detekt.formatting
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ImportOrdering
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import org.assertj.core.api.Assertions.assertThat
+import io.gitlab.arturbosch.detekt.test.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 /**
  * Some test cases were used directly from KtLint to verify the wrapper rule:
  *
- * https://github.com/pinterest/ktlint/blob/cdf871b6f015359f9a6f02e15ef1b85a6c442437/ktlint-ruleset-standard/src/test/kotlin/com/pinterest/ktlint/ruleset/standard/importordering/ImportOrderingRuleAsciiTest.kt
- * https://github.com/pinterest/ktlint/blob/6bdd345f204e6edcc3dec5e1b139c2d573227dad/ktlint-ruleset-standard/src/test/kotlin/com/pinterest/ktlint/ruleset/standard/importordering/ImportOrderingRuleCustomTest.kt
- * https://github.com/pinterest/ktlint/blob/cdf871b6f015359f9a6f02e15ef1b85a6c442437/ktlint-ruleset-standard/src/test/kotlin/com/pinterest/ktlint/ruleset/standard/importordering/ImportOrderingRuleIdeaTest.kt
+ * https://github.com/pinterest/ktlint/blob/0.37.0/ktlint-ruleset-standard/src/test/kotlin/com/pinterest/ktlint/ruleset/standard/importordering/ImportOrderingRuleAsciiTest.kt
+ * https://github.com/pinterest/ktlint/blob/0.37.0/ktlint-ruleset-standard/src/test/kotlin/com/pinterest/ktlint/ruleset/standard/importordering/ImportOrderingRuleCustomTest.kt
+ * https://github.com/pinterest/ktlint/blob/0.37.0/ktlint-ruleset-standard/src/test/kotlin/com/pinterest/ktlint/ruleset/standard/importordering/ImportOrderingRuleIdeaTest.kt
  */
 class ImportOrderingSpec {
 

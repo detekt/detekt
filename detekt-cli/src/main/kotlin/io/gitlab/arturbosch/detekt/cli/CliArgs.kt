@@ -4,6 +4,7 @@ import com.beust.jcommander.Parameter
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.nio.file.Path
+import kotlin.io.path.Path
 
 class CliArgs {
 
@@ -92,7 +93,7 @@ class CliArgs {
             "File paths in console output and txt report are not affected and remain as absolute paths.",
         converter = PathConverter::class
     )
-    var basePath: Path? = null
+    var basePath: Path = Path(System.getProperty("user.dir"))
 
     @Parameter(
         names = ["--disable-default-rulesets", "-dd"],
@@ -153,7 +154,7 @@ class CliArgs {
         The following @Parameters are used for type resolution. When additional parameters are required the
         names should mirror the names found in this file (e.g. "classpath", "language-version", "jvm-target"):
         https://github.com/JetBrains/kotlin/blob/master/compiler/cli/cli-common/src/org/jetbrains/kotlin/cli/common/arguments/K2JVMCompilerArguments.kt
-    */
+     */
     @Parameter(
         names = ["--classpath", "-cp"],
         description = "EXPERIMENTAL: Paths where to find user class files and depending jar files. " +
@@ -172,7 +173,7 @@ class CliArgs {
     @Parameter(
         names = ["--jvm-target"],
         description = "EXPERIMENTAL: Target version of the generated JVM bytecode that was generated during " +
-            "compilation and is now being used for type resolution (1.8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 or 19)"
+            "compilation and is now being used for type resolution (1.8, 9, 10, ..., 20)"
     )
     var jvmTarget: String = JvmTarget.DEFAULT.description
 

@@ -1,13 +1,13 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
-import com.pinterest.ktlint.ruleset.standard.EnumEntryNameCaseRule
+import com.pinterest.ktlint.ruleset.standard.rules.EnumEntryNameCaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#enum-entry) for documentation.
+ * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#enum-entry) for documentation.
  */
 @AutoCorrectable(since = "1.4.0")
 @ActiveByDefault(since = "1.22.0")

@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
+import io.gitlab.arturbosch.detekt.rules.style.movelambdaout.UnnecessaryBracesAroundTrailingLambda
 import io.gitlab.arturbosch.detekt.rules.style.optional.MandatoryBracesLoops
 import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalUnit
 import io.gitlab.arturbosch.detekt.rules.style.optional.PreferToOverPairSyntax
@@ -43,7 +44,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             ForbiddenMethodCall(config),
             ForbiddenSuppress(config),
             FunctionOnlyReturningConstant(config),
-            SpacingBetweenPackageAndImports(config),
+            SpacingAfterPackageDeclaration(config),
             LoopWithTooManyJumpStatements(config),
             SafeCast(config),
             UnnecessaryAbstractClass(config),
@@ -55,7 +56,6 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UtilityClassWithPublicConstructor(config),
             ObjectLiteralToLambda(config),
             OptionalAbstractKeyword(config),
-            OptionalWhenBraces(config),
             OptionalUnit(config),
             ProtectedMemberInFinalClass(config),
             SerialVersionUIDInSerializableClass(config),
@@ -74,11 +74,13 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             RedundantVisibilityModifierRule(config),
             UntilInsteadOfRangeTo(config),
             UnnecessaryApply(config),
+            UnnecessaryBracesAroundTrailingLambda(config),
             UnnecessaryFilter(config),
             UnnecessaryLet(config),
-            MayBeConst(config),
+            MayBeConstant(config),
             PreferToOverPairSyntax(config),
             BracesOnIfStatements(config),
+            BracesOnWhenStatements(config),
             MandatoryBracesLoops(config),
             NullableBooleanCheck(config),
             VarCouldBeVal(config),
@@ -107,6 +109,8 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             MaxChainedCallsOnSameLine(config),
             AlsoCouldBeApply(config),
             UseSumOfInsteadOfFlatMapSize(config),
+            DoubleNegativeLambda(config),
+            UseLet(config),
         )
     )
 }

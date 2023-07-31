@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
-import com.pinterest.ktlint.ruleset.experimental.ParameterListSpacingRule
+import com.pinterest.ktlint.ruleset.standard.rules.ParameterListSpacingRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#parameter-list-spacing) for
+ * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/experimental/#parameter-list-spacing) for
  * documentation.
  */
 @AutoCorrectable(since = "1.22.0")

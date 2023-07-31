@@ -204,12 +204,12 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
             createFinding(issueB, entity3, "")
         )
     ).also {
-        it.addData(complexityKey, 10)
-        it.addData(CognitiveComplexity.KEY, 10)
-        it.addData(sourceLinesKey, 20)
-        it.addData(logicalLinesKey, 10)
-        it.addData(commentLinesKey, 2)
-        it.addData(linesKey, 2222)
+        it.putUserData(complexityKey, 10)
+        it.putUserData(CognitiveComplexity.KEY, 10)
+        it.putUserData(sourceLinesKey, 20)
+        it.putUserData(logicalLinesKey, 10)
+        it.putUserData(commentLinesKey, 2)
+        it.putUserData(linesKey, 2222)
     }
 }
 

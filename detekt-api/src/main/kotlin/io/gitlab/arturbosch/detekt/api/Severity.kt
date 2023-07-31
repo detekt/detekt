@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
 /**
- * Note: This will be replaced by [SeverityLevel] in future versions of Detekt.
+ * Note: This will be replaced by [SeverityLevel] in future versions of detekt.
  *
  * Rules can classified into different severity grades. Maintainer can choose
  * a grade which is most harmful to their projects.

@@ -44,7 +44,7 @@ class MultipleExistingPathConverter : DetektInputPathConverter<Path> {
 
 class LanguageVersionConverter : IStringConverter<LanguageVersion> {
     override fun convert(value: String): LanguageVersion {
-        val validValues by lazy { LanguageVersion.values().joinToString { it.versionString } }
+        val validValues by lazy { LanguageVersion.entries.joinToString { it.versionString } }
         return requireNotNull(LanguageVersion.fromFullVersionString(value)) {
             "\"$value\" passed to --language-version, expected one of [$validValues]"
         }

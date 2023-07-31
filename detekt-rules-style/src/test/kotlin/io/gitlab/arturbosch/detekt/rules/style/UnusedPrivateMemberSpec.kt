@@ -354,6 +354,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         fun `does not report private functions in annotated file`() {
             val code = """
                 @file:Suppress("unused")
+                
                 class Test {
                     private fun foo(): String = ""
                     private fun bar(): String = ""

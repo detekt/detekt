@@ -6,44 +6,45 @@ plugins {
 }
 
 nexusPublishing {
-    packageGroup.set("io.gitlab.arturbosch")
+    packageGroup = "io.gitlab.arturbosch"
 
     repositories {
         create("sonatype") {
-            System.getenv("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")?.let { username.set(it) }
-            System.getenv("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")?.let { password.set(it) }
+            System.getenv("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")?.let { username = it }
+            System.getenv("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")?.let { password = it }
         }
     }
 }
 
+val version = Versions.currentOrSnapshot()
+
 githubRelease {
     token(providers.gradleProperty("github.token"))
-    owner.set("detekt")
-    repo.set("detekt")
-    overwrite.set(true)
-    dryRun.set(false)
-    draft.set(true)
-    targetCommitish.set("main")
+    owner = "detekt"
+    repo = "detekt"
+    overwrite = true
+    dryRun = false
+    draft = true
+    prerelease = true
+    targetCommitish = "main"
     body(
         provider {
             var changelog = project.file("website/src/pages/changelog.md").readText()
-            val nextNonBetaVersion = project.version.toString()
+            val nextNonBetaVersion = version
             val sectionStart = "#### $nextNonBetaVersion"
             changelog = changelog.substring(changelog.indexOf(sectionStart))
             changelog = changelog.substring(0, changelog.indexOf("#### 1.", changelog.indexOf(sectionStart) + 1))
             changelog.trim()
         }
     )
-    val cliBuildDir = project(":detekt-cli").buildDir
+    val cliBuildDir = project(":detekt-cli").layout.buildDirectory
     releaseAssets.setFrom(
-        cliBuildDir.resolve("libs/detekt-cli-${project.version}-all.jar"),
-        cliBuildDir.resolve("distributions/detekt-cli-${project.version}.zip"),
-        project(":detekt-formatting").buildDir.resolve("libs/detekt-formatting-${project.version}.jar"),
-        project(":detekt-generator").buildDir.resolve("libs/detekt-generator-${project.version}-all.jar"),
-        project(":detekt-rules-libraries").buildDir
-            .resolve("libs/detekt-rules-libraries-${project.version}.jar"),
-        project(":detekt-rules-ruleauthors").buildDir
-            .resolve("libs/detekt-rules-ruleauthors-${project.version}.jar")
+        cliBuildDir.file("libs/detekt-cli-$version-all.jar"),
+        cliBuildDir.file("distributions/detekt-cli-$version.zip"),
+        project(":detekt-formatting").layout.buildDirectory.file("libs/detekt-formatting-$version.jar"),
+        project(":detekt-generator").layout.buildDirectory.file("libs/detekt-generator-$version-all.jar"),
+        project(":detekt-rules-libraries").layout.buildDirectory.file("libs/detekt-rules-libraries-$version.jar"),
+        project(":detekt-rules-ruleauthors").layout.buildDirectory.file("libs/detekt-rules-ruleauthors-$version.jar")
     )
 }
 
@@ -69,16 +70,16 @@ tasks {
     register("incrementMajor") { doLast { updateVersion { it.nextMajor() } } }
 
     register<UpdateVersionInFileTask>("applyDocVersion") {
-        fileToUpdate.set(file("$rootDir/website/src/remark/detektVersionReplace.js"))
-        linePartToFind.set("const detektVersion = ")
-        lineTransformation.set("const detektVersion = \"${Versions.DETEKT}\";")
+        fileToUpdate = file("$rootDir/website/src/remark/detektVersionReplace.js")
+        linePartToFind = "const detektVersion = "
+        lineTransformation = "const detektVersion = \"${Versions.DETEKT}\";"
     }
 }
 
 tasks.register("publishToMavenLocal") {
     description = "Publish all the projects to Maven Local"
     subprojects {
-        if (this.plugins.hasPlugin("publishing")) {
+        if (this.plugins.hasPlugin("packaging")) {
             dependsOn(tasks.named("publishToMavenLocal"))
         }
     }

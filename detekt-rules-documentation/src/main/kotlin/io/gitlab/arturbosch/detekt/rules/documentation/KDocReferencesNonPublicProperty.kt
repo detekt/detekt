@@ -87,10 +87,9 @@ class KDocReferencesNonPublicProperty(config: Config = Config.empty) : Rule(conf
         }
     }
 
-    override fun visitProperty(property: KtProperty) {
-        super.visitProperty(property)
-
-        property.getTopmostParentOfType<KtClass>()?.registerProperty(property)
+    override fun visitNamedDeclaration(declaration: KtNamedDeclaration) {
+        super.visitNamedDeclaration(declaration)
+        declaration.getTopmostParentOfType<KtClass>()?.registerProperty(declaration)
     }
 
     private fun KtClass.registerProperty(declaration: KtNamedDeclaration) {

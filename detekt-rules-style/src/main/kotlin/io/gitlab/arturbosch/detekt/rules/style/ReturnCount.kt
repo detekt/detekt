@@ -20,7 +20,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 
 /**
- * Restrict the number of return methods allowed in methods.
+ * Restrict the number of returns allowed in methods.
  *
  * Having many exit points in a function can be confusing and impacts readability of the
  * code.

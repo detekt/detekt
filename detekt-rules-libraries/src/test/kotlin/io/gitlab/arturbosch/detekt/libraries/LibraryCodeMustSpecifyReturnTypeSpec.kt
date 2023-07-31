@@ -9,6 +9,8 @@ import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 @KotlinCoreEnvironmentTest
 class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
@@ -42,6 +44,31 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     env,
                     """
                         fun foo() = 5
+                    """.trimIndent()
+                )
+            ).hasSize(1)
+        }
+
+        @Test
+        fun `should report a top level function returning Unit with default allowOmitUnit value of false`() {
+            assertThat(
+                subject.compileAndLintWithContext(
+                    env,
+                    """
+                        fun foo() = println("")
+                    """.trimIndent()
+                )
+            ).hasSize(1)
+        }
+
+        @Test
+        fun `should report a top level function returning Unit when allowOmitUnit is false`() {
+            val subject = LibraryCodeMustSpecifyReturnType(TestConfig(ALLOW_OMIT_UNIT to false))
+            assertThat(
+                subject.compileAndLintWithContext(
+                    env,
+                    """
+                        fun foo() = println("")
                     """.trimIndent()
                 )
             ).hasSize(1)
@@ -119,6 +146,19 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
+        fun `should not report a top level function returning Unit when allowOmitUnit is true`() {
+            val subject = LibraryCodeMustSpecifyReturnType(TestConfig(ALLOW_OMIT_UNIT to true))
+            assertThat(
+                subject.compileAndLintWithContext(
+                    env,
+                    """
+                        fun foo() = println("")
+                    """.trimIndent()
+                )
+            ).isEmpty()
+        }
+
+        @Test
         fun `should not report a top level property`() {
             assertThat(
                 subject.compileAndLintWithContext(
@@ -143,6 +183,23 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     """.trimIndent()
                 )
             ).isEmpty()
+        }
+
+        @ParameterizedTest(
+            name = "should not report for implicit type Unit expression when allowOmitUnit is {0}",
+        )
+        @ValueSource(booleans = [true, false])
+        fun `does not report for Unit expression`(allowOmitUnit: Boolean) {
+            val code = """
+                fun foo() = Unit
+            """.trimIndent()
+            val subject = LibraryCodeMustSpecifyReturnType(
+                TestConfig(
+                    ALLOW_OMIT_UNIT to allowOmitUnit
+                )
+            )
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
         }
     }
 
@@ -207,5 +264,9 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                 )
             ).isEmpty()
         }
+    }
+
+    companion object {
+        private const val ALLOW_OMIT_UNIT = "allowOmitUnit"
     }
 }

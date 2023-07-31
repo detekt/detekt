@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.rules.isConstant
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtConstantExpression
+import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtProperty
@@ -54,46 +55,70 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
     )
 
     override fun visitClass(klass: KtClass) {
+        super.visitClass(klass)
         if (!klass.isInterface() && isImplementingSerializable(klass)) {
             val companionObject = klass.companionObject()
-            if (companionObject == null || !hasCorrectSerialVersionUUID(companionObject)) {
+            if (companionObject == null) {
                 report(
                     CodeSmell(
                         issue,
-                        Entity.from(klass),
-                        "The class ${klass.nameAsSafeName} implements" +
-                            " the `Serializable` interface and should thus define a `serialVersionUID`."
+                        Entity.atName(klass),
+                        klass.getIssueMessage("class")
                     )
                 )
+            } else {
+                val finding = searchSerialVersionUIDFinding(companionObject, klass) ?: return
+                reportFinding(finding)
             }
         }
-        super.visitClass(klass)
     }
 
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
-        if (!declaration.isCompanion() &&
-            isImplementingSerializable(declaration) &&
-            !hasCorrectSerialVersionUUID(declaration)
-        ) {
-            report(
-                CodeSmell(
-                    issue,
-                    Entity.from(declaration),
-                    "The object ${declaration.nameAsSafeName} " +
-                        "implements the `Serializable` interface and should thus define a `serialVersionUID`."
-                )
-            )
-        }
         super.visitObjectDeclaration(declaration)
+        if (!declaration.isCompanion() && isImplementingSerializable(declaration)) {
+            val finding = searchSerialVersionUIDFinding(declaration) ?: return
+            reportFinding(finding)
+        }
+    }
+
+    private fun reportFinding(finding: SerialVersionUIDFindings) {
+        report(
+            CodeSmell(
+                issue,
+                Entity.atName(finding.violatingElement),
+                finding.issueMsg
+            )
+        )
     }
 
     private fun isImplementingSerializable(classOrObject: KtClassOrObject) =
         classOrObject.superTypeListEntries.any { it.text == "Serializable" }
 
-    private fun hasCorrectSerialVersionUUID(declaration: KtObjectDeclaration): Boolean {
-        val property = declaration.body?.properties?.firstOrNull { it.name == "serialVersionUID" } ?: return false
-        return property.isConstant() && isLongProperty(property) && property.isPrivate()
+    private fun searchSerialVersionUIDFinding(
+        declaration: KtObjectDeclaration,
+        parentDeclaration: KtNamedDeclaration = declaration,
+    ): SerialVersionUIDFindings? {
+        val property = declaration.body?.properties?.firstOrNull { it.name == "serialVersionUID" }
+            ?: return SerialVersionUIDFindings(
+                parentDeclaration,
+                parentDeclaration.getIssueMessage(
+                    if (parentDeclaration is KtClass) "class" else "object"
+                )
+            )
+        return if (property.isConstant() && isLongProperty(property) && property.isPrivate()) {
+            null
+        } else {
+            SerialVersionUIDFindings(
+                property,
+                "The property `serialVersionUID` signature is not correct. `serialVersionUID` should be " +
+                    "`private` and `constant` and its type should be `Long`"
+            )
+        }
     }
+
+    private fun KtNamedDeclaration.getIssueMessage(typeOfDeclaration: String) =
+        "The $typeOfDeclaration ${this.nameAsSafeName} " +
+            "implements the `Serializable` interface and should thus define a `serialVersionUID`."
 
     private fun isLongProperty(property: KtProperty) = hasLongType(property) || hasLongAssignment(property)
 
@@ -106,4 +131,9 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
         return assignmentText != null && assignmentText.last() == 'L' &&
             assignmentText.substring(0, assignmentText.length - 1).toLongOrNull() != null
     }
+
+    private data class SerialVersionUIDFindings(
+        val violatingElement: KtNamedDeclaration,
+        val issueMsg: String,
+    )
 }

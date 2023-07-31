@@ -237,6 +237,36 @@ class UndocumentedPublicPropertySpec {
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
+    @Test
+    fun `does not report documented class property at header`() {
+        val code = """
+            /**
+             * Class description
+             *
+             * @property bar Property description
+             */
+            class Foo {
+                val bar = 2
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report documented object property at header`() {
+        val code = """
+            /**
+             * Class description
+             *
+             * @property bar Property description
+             */
+            object Foo {
+                val bar = 2
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
     @Nested
     inner class `public properties in nested classes` {
 
@@ -278,6 +308,46 @@ class UndocumentedPublicPropertySpec {
                 }
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports undocumented public properties in inner class when outer class property is documented`() {
+            val code = """
+                /**
+                 * Class description
+                 *
+                 * @property bar Property description
+                 */
+                class Foo {
+                    val bar: Int = 0
+                    class inner {
+                        val bar: Int = 0
+                    }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+            io.gitlab.arturbosch.detekt.test.assertThat(findings[0]).hasSourceLocation(9, 13)
+        }
+
+        @Test
+        fun `reports undocumented public properties in outer class when inner class property is documented`() {
+            val code = """
+                class Foo {
+                    val bar: Int = 0
+                    /**
+                     * Class description
+                     *
+                     * @property bar Property description
+                     */
+                    class inner {
+                        val bar: Int = 0
+                    }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+            io.gitlab.arturbosch.detekt.test.assertThat(findings[0]).hasSourceLocation(2, 9)
         }
 
         @Test

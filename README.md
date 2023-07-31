@@ -5,6 +5,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.gitlab.arturbosch.detekt/detekt-cli?label=MavenCentral&logo=apache-maven)](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli)
 [![Gradle Plugin](https://img.shields.io/maven-central/v/io.gitlab.arturbosch.detekt/detekt-gradle-plugin?label=Gradle&logo=gradle)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 [![Revved up by Gradle Enterprise](https://img.shields.io/badge/Revved%20up%20by-Gradle%20Enterprise-06A0CE?logo=Gradle&labelColor=02303A)](https://ge.detekt.dev/scans)
+[![License](https://img.shields.io/github/license/detekt/detekt.svg)](LICENSE)
 
 ![Pre Merge Checks](https://github.com/detekt/detekt/workflows/Pre%20Merge%20Checks/badge.svg?branch=main)
 [![Codecov](https://codecov.io/gh/detekt/detekt/branch/main/graph/badge.svg)](https://codecov.io/gh/detekt/detekt)
@@ -67,7 +68,7 @@ repositories {
 detekt {
     buildUponDefaultConfig = true // preconfigure defaults
     allRules = false // activate all available (even unstable) rules.
-    config = files("$projectDir/config/detekt.yml") // point to your custom config defining rules to run, overwriting default behavior
+    config.setFrom("$projectDir/config/detekt.yml") // point to your custom config defining rules to run, overwriting default behavior
     baseline = file("$projectDir/config/baseline.xml") // a way of suppressing issues before introducing detekt
 }
 
@@ -76,7 +77,7 @@ tasks.withType<Detekt>().configureEach {
         html.required.set(true) // observe findings in your browser with structure and code snippets
         xml.required.set(true) // checkstyle like format mainly for integrations like Jenkins
         txt.required.set(true) // similar to the console output, contains issue signature to manually edit baseline files
-        sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with Github Code Scanning
+        sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with GitHub Code Scanning
         md.required.set(true) // simple Markdown format
     }
 }
@@ -106,11 +107,11 @@ If you want to use a SNAPSHOT version, you can find more info on [this documenta
 
 #### Requirements
 
-Gradle 6.7.1+ is the minimum requirement. However, the recommended versions together with the other tools recommended versions are:
+Gradle 6.8.3+ is the minimum requirement. However, the recommended versions together with the other tools recommended versions are:
 
 | Detekt Version | Gradle  | Kotlin   | AGP     | Java Target Level | JDK Max Version |
 |----------------|---------|----------|---------|-------------------|-----------------|
-| `1.22.0`       | `7.5.1` | `1.7.21` | `7.3.1` | `1.8`             | `17`            |
+| `1.23.1`       | `8.2.1` | `1.9.0`  | `8.1.0` | `1.8`             | `17`            |
 
 The list of [recommended versions for previous detekt version is listed here](https://detekt.dev/compatibility.html).
 
@@ -125,7 +126,7 @@ dependencies {
 }
 ```
 
-Similarly, there are extra rule sets available for Detekt from Detekt:
+Similarly, there are extra rule sets available for detekt from detekt:
 ```kotlin
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:[version]")
@@ -151,7 +152,8 @@ Thanks to all the people who contributed to detekt!
 
 As mentioned in...
 
-- [driodcon London 2021 - Detekt - State of the Union](https://www.droidcon.com/2021/11/17/detekt-state-of-the-union-2/)
+- [To Detekt 2.0, and beyond!](https://www.youtube.com/watch?v=6EQd_SDR6n0)
+- [droidcon London 2021 - Detekt - State of the Union](https://www.droidcon.com/2021/11/17/detekt-state-of-the-union-2/)
 - [KotlinConf 2018 - Safe(r) Kotlin Code - Static Analysis Tools for Kotlin by Marvin Ramin](https://www.youtube.com/watch?v=yjhQiP0329M)
 - [droidcon NYC 2018 - Static Code Analysis For Kotlin](https://www.youtube.com/watch?v=LT6m5_LO2DQ)
 - Kotlin on Code Quality Tools - by @vanniktech [Slides](https://docs.google.com/presentation/d/1sUoQCRHTR01JfaS67Qkd7K1rdRLOhO6QGCelZZwxOKs/edit) [Presentation](https://www.youtube.com/watch?v=FKDNE6PPTTE)

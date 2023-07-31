@@ -14,13 +14,13 @@ complexity:
   StringLiteralDuplication:
     active: true
     excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
-    threshold: 5
+    allowedDuplications: 4
     ignoreAnnotation: true
     excludeStringsWithLessThan5Characters: true
     ignoreStringsRegex: '$^'
   ComplexInterface:
     active: true
-    threshold: 10
+    allowedDefinitions: 10
     includeStaticDeclarations: false
     includePrivateDeclarations: false
   CyclomaticComplexMethod:
@@ -69,38 +69,28 @@ formatting:
   active: true
   android: false
   autoCorrect: true
+  BinaryExpressionWrapping:
+    active: true
   ContextReceiverMapping:
     active: true
   Filename:
     active: false
-  FunctionReturnTypeSpacing:
-    active: true
-  FunctionStartOfBodySpacing:
-    active: true
   MaximumLineLength:
     active: false
-  NullableTypeSpacing:
-    active: true
   ParameterListSpacing:
     active: true
-  SpacingBetweenFunctionNameAndOpeningParenthesis:
+  StatementWrapping:
     active: true
   TypeParameterListSpacing:
     active: true
 
 naming:
   ClassNaming:
-    excludes: ['**/*Spec.kt']
+    ignoreAnnotated: ['org.junit.jupiter.api.Nested']
   FunctionNaming:
     active: true
-    excludes:
-      - '**/test/**'
-      - '**/androidTest/**'
-      - '**/commonTest/**'
-      - '**/functionalTest/**'
-      - '**/jvmTest/**'
-      - '**/jsTest/**'
-      - '**/iosTest/**'
+    excludes: []
+    ignoreAnnotated: ['Test', 'ParameterizedTest', 'RepeatedTest', 'TestFactory']
   TopLevelPropertyNaming:
     constantPattern: '[a-z][_A-Za-z0-9]*|[A-Z][_A-Z0-9]*'
   InvalidPackageDeclaration:
@@ -124,8 +114,6 @@ potential-bugs:
     active: true
   DontDowncastCollectionTypes:
     active: true
-  DoubleMutabilityForCollection:
-    active: false
   ElseCaseInsteadOfExhaustiveWhen:
     active: true
   ExitOutsideMain:
@@ -171,12 +159,17 @@ style:
     active: true
   ForbiddenComment:
     active: true
-    values:
-      - 'TODO:'
-      - 'FIXME:'
-      - 'STOPSHIP:'
-      - '@author'
-      - '@requiresTypeResolution'
+    comments:
+      - value: 'FIXME:'
+        reason: 'Forbidden FIXME todo marker in comment, please fix the problem.'
+      - value: 'STOPSHIP:'
+        reason: 'Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code.'
+      - value: 'TODO:'
+        reason: 'Forbidden TODO todo marker in comment, please do the changes.'
+      - value: '@author'
+        reason: 'Authors are not recorded in KDoc.'
+      - value: '@requiresTypeResolution'
+        reason: 'Use @RequiresTypeResolution annotation on the class instead.'
     excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
   ForbiddenImport:
     active: true
@@ -226,8 +219,6 @@ style:
     active: true
     excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
     excludeCommentStatements: true
-  MultilineRawStringIndentation:
-    active: true
   NestedClassesVisibility:
     active: true
   ObjectLiteralToLambda:
@@ -243,7 +234,7 @@ style:
   ReturnCount:
     active: true
     excludeGuardClauses: true
-  SpacingBetweenPackageAndImports:
+  SpacingAfterPackageDeclaration:
     active: true
   TrimMultilineRawString:
     active: true
@@ -276,6 +267,8 @@ style:
   UseIfEmptyOrIfBlank:
     active: true
   UseIsNullOrEmpty:
+    active: true
+  UseLet:
     active: true
   UseOrEmpty:
     active: true

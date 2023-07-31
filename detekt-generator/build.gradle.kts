@@ -6,8 +6,6 @@ plugins {
 dependencies {
     implementation(projects.detektParser)
     implementation(projects.detektApi)
-    implementation(projects.detektRulesEmpty)
-    implementation(projects.detektFormatting)
     implementation(projects.detektCli)
     implementation(projects.detektUtils)
     implementation(libs.jcommander)
@@ -15,7 +13,7 @@ dependencies {
     testImplementation(projects.detektCore)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj)
-    testImplementation(libs.reflections)
+    testImplementation(libs.classgraph)
 }
 
 val documentationDir = "$rootDir/website/docs/rules"
@@ -27,29 +25,29 @@ val formattingConfigFile = "$rootDir/detekt-formatting/src/main/resources/config
 val librariesConfigFile = "$rootDir/detekt-rules-libraries/src/main/resources/config/config.yml"
 val ruleauthorsConfigFile = "$rootDir/detekt-rules-ruleauthors/src/main/resources/config/config.yml"
 
-val ruleModules = rootProject.subprojects
-    .filter { "rules" in it.name }
-    .map { it.name }
-    .filterNot { it == "detekt-rules" }
-    .map { "$rootDir/$it/src/main/kotlin" }
+tasks.register("generateWebsite") {
+    dependsOn(
+        generateDocumentation,
+        ":detekt-api:dokkaHtml",
+    )
+}
 
 val generateDocumentation by tasks.registering(JavaExec::class) {
     dependsOn(
-        tasks.shadowJar,
-        ":detekt-api:dokkaHtml",
         ":detekt-rules-libraries:sourcesJar",
         ":detekt-rules-ruleauthors:sourcesJar",
     )
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
     group = "documentation"
 
-    inputs.files(
-        ruleModules.map { fileTree(it) },
-        fileTree("$rootDir/detekt-rules-libraries/src/main/kotlin"),
-        fileTree("$rootDir/detekt-rules-ruleauthors/src/main/kotlin"),
-        fileTree("$rootDir/detekt-formatting/src/main/kotlin"),
-        file("$rootDir/detekt-generator/build/libs/detekt-generator-${Versions.DETEKT}-all.jar"),
-    )
+    val ruleModules = rootProject.subprojects.asSequence()
+        .filter { "rules" in it.name || it.name == "detekt-formatting" }
+        .filterNot { it.name == "detekt-rules" }
+        .flatMap { it.sourceSets.main.get().kotlin.srcDirs }
+        .filter { it.exists() }
+        .toList()
+
+    inputs.files(ruleModules)
 
     outputs.files(
         fileTree(documentationDir),
@@ -66,20 +64,18 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         configurations.compileClasspath.get(),
         sourceSets.main.get().output,
     )
-    mainClass.set("io.gitlab.arturbosch.detekt.generator.Main")
+    mainClass = "io.gitlab.arturbosch.detekt.generator.Main"
     args = listOf(
         "--input",
-        ruleModules
-            .plus("$rootDir/detekt-rules-libraries/src/main/kotlin")
-            .plus("$rootDir/detekt-rules-ruleauthors/src/main/kotlin")
-            .plus("$rootDir/detekt-formatting/src/main/kotlin")
-            .joinToString(","),
+        ruleModules.joinToString(","),
         "--documentation",
         documentationDir,
         "--config",
         configDir,
         "--cli-options",
         cliOptionsFile,
+        "--replace",
+        "<ktlintVersion/>=${libs.versions.ktlint.get()}"
     )
 }
 

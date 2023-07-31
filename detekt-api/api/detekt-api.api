@@ -102,7 +102,6 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/ConfigAware : io
 	public abstract fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
 	public abstract fun valueOrDefault (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
 	public abstract fun valueOrNull (Ljava/lang/String;)Ljava/lang/Object;
-	public abstract fun withAutoCorrect (Lkotlin/jvm/functions/Function0;)V
 }
 
 public final class io/gitlab/arturbosch/detekt/api/ConfigAware$DefaultImpls {
@@ -112,7 +111,6 @@ public final class io/gitlab/arturbosch/detekt/api/ConfigAware$DefaultImpls {
 	public static fun subConfig (Lio/gitlab/arturbosch/detekt/api/ConfigAware;Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
 	public static fun valueOrDefault (Lio/gitlab/arturbosch/detekt/api/ConfigAware;Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
 	public static fun valueOrNull (Lio/gitlab/arturbosch/detekt/api/ConfigAware;Ljava/lang/String;)Ljava/lang/Object;
-	public static fun withAutoCorrect (Lio/gitlab/arturbosch/detekt/api/ConfigAware;Lkotlin/jvm/functions/Function0;)V
 }
 
 public final class io/gitlab/arturbosch/detekt/api/ConfigPropertyKt {
@@ -203,11 +201,9 @@ public class io/gitlab/arturbosch/detekt/api/DetektVisitor : org/jetbrains/kotli
 	public fun <init> ()V
 }
 
-public abstract interface class io/gitlab/arturbosch/detekt/api/Detektion {
+public abstract interface class io/gitlab/arturbosch/detekt/api/Detektion : org/jetbrains/kotlin/com/intellij/openapi/util/UserDataHolder {
 	public abstract fun add (Lio/gitlab/arturbosch/detekt/api/Notification;)V
 	public abstract fun add (Lio/gitlab/arturbosch/detekt/api/ProjectMetric;)V
-	public abstract fun addData (Lorg/jetbrains/kotlin/com/intellij/openapi/util/Key;Ljava/lang/Object;)V
-	public abstract fun getData (Lorg/jetbrains/kotlin/com/intellij/openapi/util/Key;)Ljava/lang/Object;
 	public abstract fun getFindings ()Ljava/util/Map;
 	public abstract fun getMetrics ()Ljava/util/Collection;
 	public abstract fun getNotifications ()Ljava/util/Collection;
@@ -412,17 +408,6 @@ public final class io/gitlab/arturbosch/detekt/api/MetricKt {
 	public static final field DEFAULT_FLOAT_CONVERSION_FACTOR I
 }
 
-public abstract class io/gitlab/arturbosch/detekt/api/MultiRule : io/gitlab/arturbosch/detekt/api/BaseRule {
-	public fun <init> ()V
-	public final fun getActiveRules ()Ljava/util/Set;
-	public abstract fun getRules ()Ljava/util/List;
-	protected fun postVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
-	protected fun preVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
-	public final fun runIfActive (Lio/gitlab/arturbosch/detekt/api/Rule;Lkotlin/jvm/functions/Function1;)V
-	public final fun setActiveRules (Ljava/util/Set;)V
-	public fun visitCondition (Lorg/jetbrains/kotlin/psi/KtFile;)Z
-}
-
 public abstract interface class io/gitlab/arturbosch/detekt/api/Notification {
 	public abstract fun getLevel ()Lio/gitlab/arturbosch/detekt/api/Notification$Level;
 	public abstract fun getMessage ()Ljava/lang/String;
@@ -437,6 +422,7 @@ public final class io/gitlab/arturbosch/detekt/api/Notification$Level : java/lan
 	public static final field Error Lio/gitlab/arturbosch/detekt/api/Notification$Level;
 	public static final field Info Lio/gitlab/arturbosch/detekt/api/Notification$Level;
 	public static final field Warning Lio/gitlab/arturbosch/detekt/api/Notification$Level;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Notification$Level;
 	public static fun values ()[Lio/gitlab/arturbosch/detekt/api/Notification$Level;
 }
@@ -504,7 +490,6 @@ public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosc
 	public fun valueOrDefault (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun valueOrNull (Ljava/lang/String;)Ljava/lang/Object;
 	public fun visitCondition (Lorg/jetbrains/kotlin/psi/KtFile;)Z
-	public fun withAutoCorrect (Lkotlin/jvm/functions/Function0;)V
 }
 
 public final class io/gitlab/arturbosch/detekt/api/RuleSet {
@@ -538,6 +523,7 @@ public final class io/gitlab/arturbosch/detekt/api/Severity : java/lang/Enum {
 	public static final field Security Lio/gitlab/arturbosch/detekt/api/Severity;
 	public static final field Style Lio/gitlab/arturbosch/detekt/api/Severity;
 	public static final field Warning Lio/gitlab/arturbosch/detekt/api/Severity;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Severity;
 	public static fun values ()[Lio/gitlab/arturbosch/detekt/api/Severity;
 }
@@ -546,6 +532,7 @@ public final class io/gitlab/arturbosch/detekt/api/SeverityLevel : java/lang/Enu
 	public static final field ERROR Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
 	public static final field INFO Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
 	public static final field WARNING Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
 	public static fun values ()[Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
 }

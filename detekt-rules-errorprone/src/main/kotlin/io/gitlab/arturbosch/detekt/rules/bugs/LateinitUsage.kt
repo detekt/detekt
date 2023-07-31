@@ -48,7 +48,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
     @Configuration("Allows you to disable the rule for a list of classes")
     private val ignoreOnClassesPattern: Regex by config("", String::toRegex)
 
-    private var properties = mutableListOf<KtProperty>()
+    private val properties = mutableListOf<KtProperty>()
 
     override fun visitProperty(property: KtProperty) {
         if (property.isLateinit()) {
@@ -57,7 +57,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visit(root: KtFile) {
-        properties = mutableListOf()
+        properties.clear()
 
         super.visit(root)
 

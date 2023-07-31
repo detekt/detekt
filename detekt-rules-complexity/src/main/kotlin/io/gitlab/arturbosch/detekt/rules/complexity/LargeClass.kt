@@ -12,10 +12,10 @@ import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import org.jetbrains.kotlin.com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
-import org.jetbrains.kotlin.utils.addToStdlib.flattenTo
 import java.util.IdentityHashMap
 
 /**
@@ -35,8 +35,8 @@ class LargeClass(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    @Configuration("the size of class required to trigger the rule")
-    private val threshold: Int by config(defaultValue = 600)
+    @Configuration("The maximum number of lines allowed per class.")
+    private val allowedLines: Int by config(defaultValue = 600)
 
     private val classToLinesCache = IdentityHashMap<KtClassOrObject, Int>()
     private val nestedClassTracking = IdentityHashMap<KtClassOrObject, HashSet<KtClassOrObject>>()
@@ -48,12 +48,12 @@ class LargeClass(config: Config = Config.empty) : Rule(config) {
 
     override fun postVisit(root: KtFile) {
         for ((clazz, lines) in classToLinesCache) {
-            if (lines >= threshold) {
+            if (lines > allowedLines) {
                 report(
                     ThresholdedCodeSmell(
                         issue,
                         Entity.atName(clazz),
-                        Metric("SIZE", lines, threshold),
+                        Metric("SIZE", lines, allowedLines),
                         "Class ${clazz.name} is too large. Consider splitting it into smaller pieces."
                     )
                 )
@@ -67,17 +67,10 @@ class LargeClass(config: Config = Config.empty) : Rule(config) {
         classOrObject.getStrictParentOfType<KtClassOrObject>()
             ?.let { nestedClassTracking.getOrPut(it) { HashSet() }.add(classOrObject) }
         super.visitClassOrObject(classOrObject)
-        findAllNestedClasses(classOrObject)
+
+        PsiTreeUtil.findChildrenOfType(classOrObject, KtClassOrObject::class.java)
             .fold(0) { acc, next -> acc + (classToLinesCache[next] ?: 0) }
             .takeIf { it > 0 }
             ?.let { classToLinesCache[classOrObject] = lines - it }
-    }
-
-    private fun findAllNestedClasses(startClass: KtClassOrObject): Sequence<KtClassOrObject> = sequence {
-        var nestedClasses = nestedClassTracking[startClass]
-        while (!nestedClasses.isNullOrEmpty()) {
-            yieldAll(nestedClasses)
-            nestedClasses = nestedClasses.mapNotNull { nestedClassTracking[it] }.flattenTo(HashSet())
-        }
     }
 }

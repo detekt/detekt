@@ -21,7 +21,8 @@ class CoroutinesProvider : DefaultRuleSetProvider {
             RedundantSuspendModifier(config),
             SleepInsteadOfDelay(config),
             SuspendFunWithFlowReturnType(config),
-            SuspendFunWithCoroutineScopeReceiver(config)
+            SuspendFunWithCoroutineScopeReceiver(config),
+            SuspendFunSwallowedCancellation(config),
         )
     )
 }

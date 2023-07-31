@@ -19,7 +19,7 @@ internal class DefaultClassLoaderCache : ClassLoaderCache {
         return classpathFilesHashWithLoaders.getOrPut(classpathHashCode) {
             URLClassLoader(
                 classpathFiles.map { it.toURI().toURL() }.toTypedArray(),
-                null /* isolate detekt environment */
+                null // isolate detekt environment
             )
         }
     }

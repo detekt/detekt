@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.formatting
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ParameterListWrapping
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import org.assertj.core.api.Assertions.assertThat
+import io.gitlab.arturbosch.detekt.test.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -29,7 +29,9 @@ class ParameterListWrappingSpec {
     @Test
     fun `reports when max line length is exceeded`() {
         val code = """
-            fun f(a: Int, b: Int, c: Int) {}
+            
+            fun f(a: Int, b: Int, c: Int) {
+            }
         """.trimIndent()
         val config = TestConfig("maxLineLength" to "10")
         assertThat(ParameterListWrapping(config).lint(code)).hasSize(4)

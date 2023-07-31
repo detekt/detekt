@@ -7,5 +7,6 @@ libraries:
       - '*.internal.*'
   LibraryCodeMustSpecifyReturnType:
     active: true
+    allowOmitUnit: false
   LibraryEntitiesShouldNotBePublic:
     active: true

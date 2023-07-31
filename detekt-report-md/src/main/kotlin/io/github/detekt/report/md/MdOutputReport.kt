@@ -134,13 +134,17 @@ private fun MarkdownContent.renderFinding(finding: Finding): String {
 
     val message = if (finding.message.isNotEmpty()) {
         codeBlock("") { finding.message }
-    } else { "" }
+    } else {
+        ""
+    }
 
     val psiFile = finding.entity.ktElement?.containingFile
     val snippet = if (psiFile != null) {
         val lineSequence = psiFile.text.splitToSequence('\n')
         snippetCode(lineSequence, finding.startPosition)
-    } else { "" }
+    } else {
+        ""
+    }
 
     return "$location\n$message\n$snippet"
 }

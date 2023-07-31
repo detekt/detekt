@@ -1,5 +1,3 @@
-@file:Suppress("ForbiddenComment")
-
 package io.gitlab.arturbosch.detekt.authors
 
 import io.gitlab.arturbosch.detekt.api.BaseRule

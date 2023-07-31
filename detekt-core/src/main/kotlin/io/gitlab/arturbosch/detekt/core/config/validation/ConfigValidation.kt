@@ -14,7 +14,7 @@ import io.gitlab.arturbosch.detekt.core.reporting.red
 import io.gitlab.arturbosch.detekt.core.reporting.yellow
 
 /**
- * Known existing properties on rule's which my be absent in the default-detekt-config.yml.
+ * Known existing properties on rules which may be absent in the default-detekt-config.yml.
  *
  * We need to predefine them as the user may not have already declared an 'config'-block
  * in the configuration and we want to validate the config by default.

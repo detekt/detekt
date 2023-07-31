@@ -8,13 +8,13 @@ import org.junit.jupiter.api.Test
 /**
  * Some test cases were used directly from KtLint to verify the [CommentWrapping] rule:
  *
- * https://github.com/pinterest/ktlint/blob/master/ktlint-ruleset-experimental/src/test/kotlin/com/pinterest/ktlint/ruleset/experimental/CommentWrappingRuleTest.kt
+ * https://github.com/pinterest/ktlint/blob/0.45.0/ktlint-ruleset-experimental/src/test/kotlin/com/pinterest/ktlint/ruleset/experimental/CommentWrappingRuleTest.kt
  */
 class CommentWrappingSpec {
     @Test
-    fun `Given a single line block comment that start starts and end on a separate line then report no error`() {
+    fun `Given a single documentation comment that start starts and end on a separate line then report no error`() {
         val code = """
-            /* Some comment */
+            /** Some comment */
         """.trimIndent()
         assertThat(CommentWrapping(Config.empty).lint(code)).isEmpty()
     }

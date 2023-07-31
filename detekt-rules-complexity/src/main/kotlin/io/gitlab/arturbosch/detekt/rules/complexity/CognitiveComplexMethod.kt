@@ -38,21 +38,21 @@ class CognitiveComplexMethod(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    @Configuration("Cognitive Complexity number for a method.")
-    private val threshold: Int by config(defaultValue = 15)
+    @Configuration("Maximum Cognitive Complexity allowed for a method.")
+    private val allowedComplexity: Int by config(defaultValue = 15)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         val complexity = CognitiveComplexity.calculate(function)
 
-        if (complexity >= threshold) {
+        if (complexity > allowedComplexity) {
             report(
                 ThresholdedCodeSmell(
                     issue,
                     Entity.atName(function),
-                    Metric("CC", complexity, threshold),
+                    Metric("CC", complexity, allowedComplexity),
                     "The function ${function.nameAsSafeName} appears to be too complex " +
                         "based on Cognitive Complexity (complexity: $complexity). " +
-                        "Defined complexity threshold for methods is set to '$threshold'"
+                        "Defined maximum allowed complexity for methods is set to '$allowedComplexity'"
                 )
             )
         }

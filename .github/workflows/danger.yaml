@@ -2,9 +2,7 @@ name: "Danger"
 
 on:
   pull_request_target:
-    types: [assigned, opened, synchronize, reopened]
-    branches:
-      - "**"
+    types: [ assigned, closed, opened, synchronize, reopened ]
 
 permissions:
   actions: write
@@ -16,15 +14,15 @@ permissions:
 
 jobs:
   danger:
-    if: ${{ github.event.sender != 'codecov' }}
+    if: github.event.sender != 'codecov' && github.repository == 'detekt/detekt'
     name: Danger JS
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3
 
       - name: Setup Node
-        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3
+        uses: actions/setup-node@e33196f7422957bea03ed53f6fbb155025ffc7b8 # v3
         with:
           node-version: "16"
           cache: "yarn"
@@ -38,4 +36,4 @@ jobs:
         working-directory: bots/
         run: yarn danger ci
         env:
-          DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.DETEKT_CI_GITHUB_USER_TOKEN }}

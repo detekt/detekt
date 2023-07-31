@@ -1,33 +1,18 @@
 package io.github.detekt.parser
 
-import io.github.davidburstrom.contester.ConTesterDriver
-import io.github.detekt.psi.BASE_PATH
-import io.github.detekt.psi.LINE_SEPARATOR
-import io.github.detekt.psi.RELATIVE_PATH
+import io.github.detekt.psi.basePath
+import io.github.detekt.psi.lineSeparator
+import io.github.detekt.psi.relativePath
 import io.github.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.jetbrains.kotlin.com.intellij.psi.PsiErrorElement
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
 
 class KtCompilerSpec {
-    @AfterEach
-    internal fun tearDown() {
-        ConTesterDriver.cleanUp()
-    }
-
-    @Test
-    fun `parallel construction of KtCompilers should be thread safe`() {
-        val thread1 = ConTesterDriver.thread { KtCompiler() }
-        val thread2 = ConTesterDriver.thread { KtCompiler() }
-        ConTesterDriver.runToBreakpoint(thread1, "DetektPomModel.registerExtensionPoint")
-        ConTesterDriver.runUntilBlockedOrTerminated(thread2)
-        ConTesterDriver.join(thread1)
-    }
-
     @Nested
     inner class `Kotlin Compiler` {
 
@@ -38,40 +23,22 @@ class KtCompilerSpec {
         fun `Kotlin file with LF line separators has extra user data`() {
             val ktFile = ktCompiler.compile(path, path.resolve("DefaultLf.kt"))
 
-            assertThat(ktFile.getUserData(LINE_SEPARATOR)).isEqualTo("\n")
-            assertThat(ktFile.getUserData(RELATIVE_PATH))
-                .isEqualTo("DefaultLf.kt")
-            assertThat(ktFile.getUserData(BASE_PATH))
-                .endsWith("cases")
+            assertThat(ktFile.lineSeparator).isEqualTo("\n")
+            assertThat(ktFile.relativePath)
+                .isEqualTo(Path("DefaultLf.kt"))
+            assertThat(ktFile.basePath)
+                .endsWith(Path("cases"))
         }
 
         @Test
         fun `Kotlin file with CRLF line separators has extra user data`() {
             val ktFile = ktCompiler.compile(path, path.resolve("DefaultCrLf.kt"))
 
-            assertThat(ktFile.getUserData(LINE_SEPARATOR)).isEqualTo("\r\n")
-            assertThat(ktFile.getUserData(RELATIVE_PATH))
-                .isEqualTo("DefaultCrLf.kt")
-            assertThat(ktFile.getUserData(BASE_PATH))
-                .endsWith("cases")
-        }
-
-        @Test
-        fun `Kotlin file with LF line separators does not store extra data for relative path if not provided`() {
-            val ktFile = ktCompiler.compile(null, path.resolve("DefaultLf.kt"))
-
-            assertThat(ktFile.getUserData(LINE_SEPARATOR)).isEqualTo("\n")
-            assertThat(ktFile.getUserData(RELATIVE_PATH)).isNull()
-            assertThat(ktFile.getUserData(BASE_PATH)).isNull()
-        }
-
-        @Test
-        fun `Kotlin file with CRLF line separators does not store extra data for relative path if not provided`() {
-            val ktFile = ktCompiler.compile(null, path.resolve("DefaultCrLf.kt"))
-
-            assertThat(ktFile.getUserData(LINE_SEPARATOR)).isEqualTo("\r\n")
-            assertThat(ktFile.getUserData(RELATIVE_PATH)).isNull()
-            assertThat(ktFile.getUserData(BASE_PATH)).isNull()
+            assertThat(ktFile.lineSeparator).isEqualTo("\r\n")
+            assertThat(ktFile.relativePath)
+                .isEqualTo(Path("DefaultCrLf.kt"))
+            assertThat(ktFile.basePath)
+                .endsWith(Path("cases"))
         }
 
         @Test

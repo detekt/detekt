@@ -10,7 +10,7 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.EnabledForJreRange
 import org.junit.jupiter.api.condition.EnabledIf
-import org.junit.jupiter.api.condition.JRE.JAVA_11
+import org.junit.jupiter.api.condition.JRE.JAVA_17
 
 class ReportMergeSpec {
 
@@ -55,10 +55,6 @@ class ReportMergeSpec {
                 apply(plugin = "org.jetbrains.kotlin.jvm")
                 apply(plugin = "io.gitlab.arturbosch.detekt")
             
-                detekt {
-                    reports.xml.enabled = true
-                }
-            
                 plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
                     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                         finalizedBy(reportMerge)
@@ -90,7 +86,7 @@ class ReportMergeSpec {
 
     @Suppress("LongMethod")
     @Test
-    @EnabledForJreRange(min = JAVA_11, disabledReason = "Android Gradle Plugin 7.0+ requires JDK 11 or newer")
+    @EnabledForJreRange(min = JAVA_17, disabledReason = "Android Gradle Plugin 8.0+ requires JDK 17 or newer")
     @EnabledIf("io.gitlab.arturbosch.detekt.DetektAndroidSpecKt#isAndroidSdkInstalled")
     fun `for android detekt`() {
         val builder = DslTestBuilder.kotlin()
@@ -170,10 +166,6 @@ class ReportMergeSpec {
             subprojects {
                 apply(plugin = "io.gitlab.arturbosch.detekt")
             
-                detekt {
-                    reports.xml.enabled = true
-                }
-            
                 plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
                     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                         finalizedBy(reportMerge)
@@ -193,8 +185,8 @@ class ReportMergeSpec {
         )
 
         gradleRunner.setupProject()
-        gradleRunner.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent())
-        gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent())
+        gradleRunner.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent)
+        gradleRunner.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent)
         gradleRunner.runTasksAndCheckResult("detektMain", "reportMerge", "--continue") { result ->
             projectLayout.submodules.forEach { submodule ->
                 assertThat(result.task(":${submodule.name}:detektMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)

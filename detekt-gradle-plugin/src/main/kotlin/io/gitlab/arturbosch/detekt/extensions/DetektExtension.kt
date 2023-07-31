@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.extensions
 
-import org.gradle.api.Action
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.quality.CodeQualityExtension
@@ -26,34 +25,13 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
             isIgnoreFailures = value
         }
 
-    @Deprecated("Use reportsDir which is equivalent", ReplaceWith("reportsDir"))
-    val customReportsDir: File?
-        get() = reportsDir
-
-    @Deprecated("Customise the reports on the Detekt task(s) instead.", level = DeprecationLevel.WARNING)
-    val reports: DetektReports = objects.newInstance(DetektReports::class.java)
-
-    @Deprecated(message = "Please use the source property instead.", replaceWith = ReplaceWith("source"))
-    @Suppress("DoubleMutabilityForCollection")
-    var input: ConfigurableFileCollection
-        get() = source
-        set(value) {
-            @Suppress("DEPRECATION")
-            source = value
-        }
-
-    @Suppress("DoubleMutabilityForCollection")
-    var source: ConfigurableFileCollection = objects.fileCollection()
+    val source: ConfigurableFileCollection = objects.fileCollection()
         .from(
             DEFAULT_SRC_DIR_JAVA,
             DEFAULT_TEST_SRC_DIR_JAVA,
             DEFAULT_SRC_DIR_KOTLIN,
             DEFAULT_TEST_SRC_DIR_KOTLIN,
         )
-        @Deprecated("Setter will be removed in a future release. Use `from` or `setFrom` instead.")
-        set(value) {
-            field = value
-        }
 
     var baseline: File? = objects
         .fileProperty()
@@ -66,12 +44,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
     val enableCompilerPlugin: Property<Boolean> =
         objects.property(Boolean::class.java).convention(DEFAULT_COMPILER_PLUGIN_ENABLED)
 
-    @Suppress("DoubleMutabilityForCollection")
-    var config: ConfigurableFileCollection = objects.fileCollection()
-        @Deprecated("Setter will be removed in a future release. Use `from` or `setFrom` instead.")
-        set(value) {
-            field = value
-        }
+    val config: ConfigurableFileCollection = objects.fileCollection()
 
     var debug: Boolean = DEFAULT_DEBUG_VALUE
 
@@ -102,12 +75,6 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
      */
     var ignoredFlavors: List<String> = emptyList()
 
-    @Suppress("DeprecatedCallableAddReplaceWith", "DEPRECATION")
-    @Deprecated("Customise the reports on the Detekt task(s) instead.", level = DeprecationLevel.WARNING)
-    fun reports(configure: Action<DetektReports>) {
-        configure.execute(reports)
-    }
-
     companion object {
         const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
         const val DEFAULT_TEST_SRC_DIR_JAVA = "src/test/java"
@@ -129,7 +96,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
 internal fun loadDetektVersion(classLoader: ClassLoader): String {
     // Other Gradle plugins can also have a versions.properties.
     val distinctVersions = classLoader
-        .getResources("versions.properties")
+        .getResources("detekt-versions.properties")
         .toList()
         .mapNotNull { versions ->
             Properties().run {
@@ -139,7 +106,7 @@ internal fun loadDetektVersion(classLoader: ClassLoader): String {
         }
         .distinct()
     return distinctVersions.singleOrNull() ?: error(
-        "You're importing two Detekt plugins which have different versions. " +
+        "You're importing two detekt plugins which have different versions. " +
             "(${distinctVersions.joinToString()}) Make sure to align the versions."
     )
 }
@@ -151,7 +118,7 @@ private fun URL.openSafeStream(): InputStream {
         /*
          * Due to https://bugs.openjdk.java.net/browse/JDK-6947916 and https://bugs.openjdk.java.net/browse/JDK-8155607,
          * it is necessary to disallow caches to maintain stability on JDK 8 and 11 (and possibly more).
-         * Otherwise, simultaneous invocations of Detekt in the same VM can fail spuriously. A similar bug is referenced in
+         * Otherwise, simultaneous invocations of detekt in the same VM can fail spuriously. A similar bug is referenced in
          * https://github.com/detekt/detekt/issues/3396. The performance regression is likely unnoticeable.
          * Due to https://github.com/detekt/detekt/issues/4332 it is included for all JDKs.
          */

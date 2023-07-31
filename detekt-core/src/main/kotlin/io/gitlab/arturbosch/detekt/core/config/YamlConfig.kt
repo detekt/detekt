@@ -1,5 +1,3 @@
-@file:Suppress("UNCHECKED_CAST")
-
 package io.gitlab.arturbosch.detekt.core.config
 
 import io.gitlab.arturbosch.detekt.api.Config
@@ -26,19 +24,22 @@ class YamlConfig internal constructor(
 ) : Config, ValidatableConfiguration {
 
     override fun subConfig(key: String): Config {
-        val subProperties = properties.getOrElse(key) { emptyMap<String, Any>() }
+        @Suppress("UNCHECKED_CAST")
+        val subProperties = properties.getOrElse(key) { emptyMap<String, Any>() } as Map<String, Any>
         return YamlConfig(
-            subProperties as Map<String, Any>,
+            subProperties,
             if (parentPath == null) key else "$parentPath $CONFIG_SEPARATOR $key"
         )
     }
 
     override fun <T : Any> valueOrDefault(key: String, default: T): T {
         val result = properties[key]
+        @Suppress("UNCHECKED_CAST")
         return valueOrDefaultInternal(key, result, default) as T
     }
 
     override fun <T : Any> valueOrNull(key: String): T? {
+        @Suppress("UNCHECKED_CAST")
         return properties[key] as? T?
     }
 
@@ -53,7 +54,7 @@ class YamlConfig internal constructor(
         private const val YAML_DOC_LIMIT = 102_400 // limit the YAML size to 100 kB
 
         // limit the anchors/aliases for collections to prevent attacks from for untrusted sources
-        private const val ALIASES_LIMIT = 10
+        private const val ALIASES_LIMIT = 100
 
         /**
          * Factory method to load a yaml configuration. Given path must exist and point to a readable file.
@@ -73,13 +74,11 @@ class YamlConfig internal constructor(
          */
         fun load(reader: Reader): Config = reader.buffered().use { bufferedReader ->
             val map: Map<*, *>? = runCatching {
+                @Suppress("UNCHECKED_CAST")
                 createYamlLoad().loadFromReader(bufferedReader) as Map<String, *>?
             }.getOrElse { throw Config.InvalidConfigurationError(it) }
-            if (map == null) {
-                YamlConfig(emptyMap())
-            } else {
-                YamlConfig(map as Map<String, Any>)
-            }
+            @Suppress("UNCHECKED_CAST")
+            YamlConfig(map.orEmpty() as Map<String, Any>)
         }
 
         private fun createYamlLoad() = Load(

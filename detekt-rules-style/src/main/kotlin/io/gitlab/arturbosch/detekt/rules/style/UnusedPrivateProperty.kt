@@ -13,8 +13,12 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isActual
 import io.gitlab.arturbosch.detekt.rules.isExpect
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
+import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
@@ -31,17 +35,17 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  *
  * <noncompliant>
  * class Foo {
- *   private val unused = "unused"
+ *     private val unused = "unused"
  * }
  * </noncompliant>
  *
  * <compliant>
  * class Foo {
- *   private val used = "used"
+ *     private val used = "used"
  *
- *   fun greet() {
- *     println(used)
- *   }
+ *     fun greet() {
+ *         println(used)
+ *     }
  * }
  * </compliant>
  */
@@ -105,9 +109,15 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
         constructor.valueParameters
             .filter {
                 (it.isPrivate() || (!it.hasValOrVar() && !constructor.isActual())) &&
-                    it.containingClassOrObject?.isExpect() == false
+                    it.containingClassOrObject?.isExpect() == false &&
+                    isConstructorForDataOrValueClass(constructor).not()
             }
             .forEach { maybeAddUnusedProperty(it) }
+    }
+
+    private fun isConstructorForDataOrValueClass(constructor: PsiElement): Boolean {
+        val parent = constructor.parent as? KtClass ?: return false
+        return parent.isData() || parent.isValue() || parent.isInline()
     }
 
     override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
@@ -131,7 +141,25 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
     private fun KtProperty.isMemberOrTopLevel() = isMember || isTopLevel
 
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
-        nameAccesses.add(expression.text.removeSurrounding("`"))
+        if (!skipNode(expression)) {
+            nameAccesses.add(expression.text.removeSurrounding("`"))
+        }
         super.visitReferenceExpression(expression)
     }
+
+    private fun skipNode(expression: KtReferenceExpression): Boolean {
+        return when {
+            expression.isPackageDirective() -> true
+            expression.isImportDirective() -> true
+            else -> false
+        }
+    }
+}
+
+private fun PsiElement.isPackageDirective(): Boolean {
+    return this is KtPackageDirective || parent?.isPackageDirective() == true
+}
+
+private fun PsiElement.isImportDirective(): Boolean {
+    return this is KtImportDirective || parent?.isImportDirective() == true
 }

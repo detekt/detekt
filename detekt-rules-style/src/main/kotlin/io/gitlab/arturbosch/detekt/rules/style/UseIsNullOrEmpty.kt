@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
@@ -64,22 +65,26 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
 
         val nullCheckedExpression = left.nullCheckedExpression() ?: return
         val sizeCheckedExpression = right.sizeCheckedExpression() ?: return
+        if (!nullCheckedExpression.isSimpleNameExpression() || !sizeCheckedExpression.isSimpleNameExpression()) return
         if (nullCheckedExpression.text != sizeCheckedExpression.text) return
 
         val message = "This '${expression.text}' can be replaced with 'isNullOrEmpty()' call"
         report(CodeSmell(issue, Entity.from(expression), message))
     }
 
-    private fun KtBinaryExpression.nullCheckedExpression(): KtSimpleNameExpression? {
+    private fun KtExpression.isSimpleNameExpression(): Boolean =
+        this is KtSimpleNameExpression || safeAs<KtQualifiedExpression>()?.selectorExpression is KtSimpleNameExpression
+
+    private fun KtBinaryExpression.nullCheckedExpression(): KtExpression? {
         if (operationToken != KtTokens.EQEQ) return null
         return when {
             right.isNullKeyword() -> left
             left.isNullKeyword() -> right
             else -> null
-        }?.safeAs<KtSimpleNameExpression>()?.takeIf { it.getType(bindingContext)?.isNullable() == true }
+        }?.takeIf { it.getType(bindingContext)?.isNullable() == true }
     }
 
-    private fun KtExpression.sizeCheckedExpression(): KtSimpleNameExpression? {
+    private fun KtExpression.sizeCheckedExpression(): KtExpression? {
         return when (this) {
             is KtDotQualifiedExpression -> sizeCheckedExpression()
             is KtBinaryExpression -> sizeCheckedExpression()
@@ -87,12 +92,12 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun KtDotQualifiedExpression.sizeCheckedExpression(): KtSimpleNameExpression? {
+    private fun KtDotQualifiedExpression.sizeCheckedExpression(): KtExpression? {
         if (!selectorExpression.isCalling(emptyCheckFunctions)) return null
-        return receiverExpression.safeAs<KtSimpleNameExpression>()?.takeIf { it.isCollectionOrArrayOrString() }
+        return receiverExpression.takeIf { it.isCollectionOrArrayOrString() }
     }
 
-    private fun KtBinaryExpression.sizeCheckedExpression(): KtSimpleNameExpression? {
+    private fun KtBinaryExpression.sizeCheckedExpression(): KtExpression? {
         if (operationToken != KtTokens.EQEQ) return null
         return when {
             right.isEmptyString() -> left?.sizeCheckedEmptyString()
@@ -103,14 +108,12 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun KtExpression.sizeCheckedEmptyString(): KtSimpleNameExpression? {
-        return safeAs<KtSimpleNameExpression>()?.takeIf { it.isString() }
-    }
+    private fun KtExpression.sizeCheckedEmptyString(): KtExpression? = takeIf { it.isString() }
 
     @Suppress("ReturnCount")
-    private fun KtExpression.sizeCheckedEqualToZero(): KtSimpleNameExpression? {
+    private fun KtExpression.sizeCheckedEqualToZero(): KtExpression? {
         if (this !is KtDotQualifiedExpression) return null
-        val receiver = receiverExpression as? KtSimpleNameExpression ?: return null
+        val receiver = receiverExpression
         val selector = selectorExpression ?: return null
         when {
             selector is KtCallExpression ->
@@ -137,19 +140,19 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
             callExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() in fqNames
     }
 
-    private fun KtSimpleNameExpression.classFqName() = getType(bindingContext)?.fqNameOrNull()
+    private fun KtExpression.classFqName() = getType(bindingContext)?.fqNameOrNull()
 
-    private fun KtSimpleNameExpression.isCollectionOrArrayOrString(): Boolean {
+    private fun KtExpression.isCollectionOrArrayOrString(): Boolean {
         val classFqName = classFqName() ?: return false
         return classFqName() in collectionClasses || classFqName == arrayClass || classFqName == stringClass
     }
 
-    private fun KtSimpleNameExpression.isCollectionOrArray(): Boolean {
+    private fun KtExpression.isCollectionOrArray(): Boolean {
         val classFqName = classFqName() ?: return false
         return classFqName() in collectionClasses || classFqName == arrayClass
     }
 
-    private fun KtSimpleNameExpression.isString() = classFqName() == stringClass
+    private fun KtExpression.isString() = classFqName() == stringClass
 
     companion object {
         private val collectionClasses = listOf(

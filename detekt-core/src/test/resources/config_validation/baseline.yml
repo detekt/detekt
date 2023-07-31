@@ -13,7 +13,7 @@ output-reports:
 complexity:
   LongMethod:
     active: true
-    threshold: 20
+    allowedLines: 20
   LongParameterList:
     active: false
     functionThreshold: 5

@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
-import com.pinterest.ktlint.core.api.editorconfig.EditorConfigProperty
-import com.pinterest.ktlint.ruleset.standard.ImportOrderingRule
-import com.pinterest.ktlint.ruleset.standard.ImportOrderingRule.Companion.IJ_KOTLIN_IMPORTS_LAYOUT_PROPERTY
+import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
+import com.pinterest.ktlint.ruleset.standard.rules.ImportOrderingRule
+import com.pinterest.ktlint.ruleset.standard.rules.ImportOrderingRule.Companion.IJ_KOTLIN_IMPORTS_LAYOUT_PROPERTY
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.configWithAndroidVariants
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -11,9 +11,9 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#import-ordering) for documentation.
+ * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#import-ordering) for documentation.
  *
- * For defining import layout patterns see the [KtLint Source Code](https://github.com/pinterest/ktlint/blob/a6ca5b2edf95cc70a138a9470cfb6c4fd5d9d3ce/ktlint-ruleset-standard/src/main/kotlin/com/pinterest/ktlint/ruleset/standard/ImportOrderingRule.kt)
+ * For defining import layout patterns see the [KtLint Source Code](https://github.com/pinterest/ktlint/blob/0.50.0/ktlint-ruleset-standard/src/main/kotlin/com/pinterest/ktlint/ruleset/standard/rules/ImportOrderingRule.kt)
  */
 @ActiveByDefault(since = "1.19.0")
 @AutoCorrectable(since = "1.0.0")

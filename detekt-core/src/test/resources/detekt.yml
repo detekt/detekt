@@ -1,7 +1,7 @@
 code-smell:
   LongMethod:
     active: true
-    threshold: 20
+    allowedLines: 20
   LongParameterList:
     active: false
     threshold: 5

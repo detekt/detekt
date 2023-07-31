@@ -18,7 +18,7 @@ class FunctionSuppressorSpec {
         @Test
         fun `Factory returns null if ignoreFunction is not set`() {
             val suppressor = functionSuppressorFactory(
-                buildConfigAware(/* empty */),
+                buildConfigAware(),
                 BindingContext.EMPTY,
             )
 

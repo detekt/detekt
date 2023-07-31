@@ -13,8 +13,8 @@ object EmptyContainer : Detektion {
     override val notifications: Collection<Notification> = emptyList()
     override val metrics: Collection<ProjectMetric> = emptyList()
 
-    override fun <V> getData(key: Key<V>): V? = throw UnsupportedOperationException()
-    override fun <V> addData(key: Key<V>, value: V) = throw UnsupportedOperationException()
+    override fun <V> getUserData(key: Key<V>): V? = throw UnsupportedOperationException()
+    override fun <V> putUserData(key: Key<V>, value: V?) = throw UnsupportedOperationException()
     override fun add(notification: Notification) = throw UnsupportedOperationException()
     override fun add(projectMetric: ProjectMetric) = throw UnsupportedOperationException()
 }

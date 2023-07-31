@@ -41,10 +41,10 @@ class CouldBeSequence(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Configuration("the number of chained collection operations required to trigger rule")
-    private val threshold: Int by config(defaultValue = 3)
+    @Configuration("The maximum number of allowed chained collection operations.")
+    private val allowedOperations: Int by config(defaultValue = 2)
 
-    private var visitedCallExpressions = mutableListOf<KtExpression>()
+    private val visitedCallExpressions = mutableListOf<KtExpression>()
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -55,7 +55,7 @@ class CouldBeSequence(config: Config = Config.empty) : Rule(config) {
 
         var counter = 1
         var nextCall = expression.nextChainedCall()
-        while (counter < threshold && nextCall != null) {
+        while (counter <= allowedOperations && nextCall != null) {
             visitedCallExpressions += nextCall
             if (!nextCall.isCalling(operationsFqNames)) {
                 break
@@ -65,7 +65,7 @@ class CouldBeSequence(config: Config = Config.empty) : Rule(config) {
             nextCall = nextCall.nextChainedCall()
         }
 
-        if (counter >= threshold) {
+        if (counter > allowedOperations) {
             val message = "${expression.text} could be .asSequence().${expression.text}"
             report(CodeSmell(issue, Entity.from(expression), message))
         }

@@ -47,17 +47,6 @@ interface ConfigAware : Config {
      */
     val active: Boolean get() = valueOrDefault(Config.ACTIVE_KEY, false)
 
-    /**
-     * If your rule supports to automatically correct the misbehaviour of underlying smell,
-     * specify your code inside this method call, to allow the user of your rule to trigger auto correction
-     * only when needed.
-     */
-    fun withAutoCorrect(block: () -> Unit) {
-        if (autoCorrect) {
-            block()
-        }
-    }
-
     override fun subConfig(key: String): Config =
         ruleConfig.subConfig(key)
 

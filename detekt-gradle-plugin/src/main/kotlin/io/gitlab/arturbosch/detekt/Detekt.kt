@@ -40,7 +40,6 @@ import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Console
 import org.gradle.api.tasks.IgnoreEmptyDirectories
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
@@ -102,9 +101,7 @@ abstract class Detekt @Inject constructor(
         get() = jvmTargetProp.get()
         set(value) = jvmTargetProp.set(value)
 
-    @get:InputDirectory
-    @get:PathSensitive(PathSensitivity.ABSOLUTE)
-    @get:Optional
+    @get:Internal
     abstract val jdkHome: DirectoryProperty
 
     @get:Internal

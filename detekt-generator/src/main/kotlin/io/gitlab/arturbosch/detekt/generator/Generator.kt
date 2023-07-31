@@ -15,7 +15,7 @@ class Generator(
     private val arguments: GeneratorArgs,
     private val outPrinter: PrintStream = System.out
 ) {
-    private val collector = DetektCollector()
+    private val collector = DetektCollector(arguments.textReplacements)
     private val printer = DetektPrinter(arguments)
     private val cliOptionsPrinter = CliOptionsPrinter()
 
@@ -48,13 +48,13 @@ class Generator(
             arguments.inputPath
                 .map { parseAll(parser, it.resolve("src/main/kotlin/")) to it }
                 .forEach { (list: Collection<KtFile>, folder: Path) ->
-                    val collector = DetektCollector()
+                    val collector = DetektCollector(arguments.textReplacements)
                     list.forEach { file ->
                         collector.visit(file)
                     }
                     printer.printCustomRuleConfig(
                         collector.items,
-                        folder.resolve("src/main/resources/config/").toString()
+                        folder.resolve("src/main/resources/config/")
                     )
                 }
         }

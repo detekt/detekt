@@ -39,11 +39,11 @@ class NestedBlockDepth(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    @Configuration("the nested depth required to trigger rule")
-    private val threshold: Int by config(defaultValue = 4)
+    @Configuration("The maximum allowed nested block depth for a function")
+    private val allowedDepth: Int by config(defaultValue = 4)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        val visitor = FunctionDepthVisitor(threshold)
+        val visitor = FunctionDepthVisitor(allowedDepth)
         visitor.visitNamedFunction(function)
         if (visitor.isTooDeep) {
             @Suppress("UnsafeCallOnNullableType")
@@ -51,21 +51,21 @@ class NestedBlockDepth(config: Config = Config.empty) : Rule(config) {
                 ThresholdedCodeSmell(
                     issue,
                     Entity.atName(function),
-                    Metric("SIZE", visitor.maxDepth, threshold),
+                    Metric("SIZE", visitor.maxDepth, allowedDepth),
                     "Function ${function.name} is nested too deeply."
                 )
             )
         }
     }
 
-    private class FunctionDepthVisitor(val threshold: Int) : DetektVisitor() {
+    private class FunctionDepthVisitor(val allowedDepth: Int) : DetektVisitor() {
 
         var depth = 0
         var maxDepth = 0
         var isTooDeep = false
         private fun inc() {
             depth++
-            if (depth >= threshold) {
+            if (depth > allowedDepth) {
                 isTooDeep = true
                 if (depth > maxDepth) maxDepth = depth
             }

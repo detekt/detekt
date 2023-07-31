@@ -61,7 +61,7 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    @Suppress("Detekt.TooManyFunctions")
+    @Suppress("TooManyFunctions")
     private class UnusedClassVisitor : DetektVisitor() {
 
         private val privateClasses = mutableSetOf<KtNamedDeclaration>()

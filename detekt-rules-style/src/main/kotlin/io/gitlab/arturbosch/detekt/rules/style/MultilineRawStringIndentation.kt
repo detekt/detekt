@@ -62,10 +62,13 @@ class MultilineRawStringIndentation(config: Config) : Rule(config) {
     @Configuration("indentation size")
     private val indentSize by config(4)
 
+    @Configuration("allows to provide a list of multiline string trimming methods")
+    private val trimmingMethods: List<String> by config(listOf("trimIndent", "trimMargin"))
+
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
         super.visitStringTemplateExpression(expression)
 
-        if (!expression.isRawStringWithLineBreak() || !expression.isTrimmed()) return
+        if (!expression.isRawStringWithLineBreak() || !expression.isTrimmed(trimmingMethods)) return
 
         if (!expression.isSurroundedByLineBreaks()) {
             report(
@@ -190,11 +193,11 @@ private fun PsiFile.getLine(line: Int): String {
 private fun PsiFile.getLocation(start: SourceLocation, end: SourceLocation): Location {
     val lines = this.text.lines()
     var startOffset = 0
-    for (i in 1 until start.line) {
+    for (i in 1..<start.line) {
         startOffset += lines[i - 1].length + 1
     }
     var endOffset = startOffset
-    for (i in start.line until end.line) {
+    for (i in start.line..<end.line) {
         endOffset += lines[i - 1].length + 1
     }
     this.text.lines()

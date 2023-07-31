@@ -14,7 +14,9 @@ import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.DetektWorkAction
 import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
+import io.gitlab.arturbosch.detekt.invoke.JdkHomeArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
+import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
@@ -27,7 +29,6 @@ import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Console
 import org.gradle.api.tasks.IgnoreEmptyDirectories
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
@@ -115,9 +116,11 @@ abstract class DetektCreateBaselineTask @Inject constructor(
         get() = jvmTargetProp.get()
         set(value) = jvmTargetProp.set(value)
 
-    @get:InputDirectory
-    @get:PathSensitive(PathSensitivity.ABSOLUTE)
+    @get:Input
     @get:Optional
+    abstract val languageVersion: Property<String>
+
+    @get:Internal
     abstract val jdkHome: DirectoryProperty
 
     @get:Internal
@@ -125,7 +128,9 @@ abstract class DetektCreateBaselineTask @Inject constructor(
         get() = listOf(
             CreateBaselineArgument,
             ClasspathArgument(classpath),
+            LanguageVersionArgument(languageVersion.orNull),
             JvmTargetArgument(jvmTargetProp.orNull),
+            JdkHomeArgument(jdkHome),
             BaselineArgument(baseline.get()),
             InputArgument(source),
             ConfigArgument(config),

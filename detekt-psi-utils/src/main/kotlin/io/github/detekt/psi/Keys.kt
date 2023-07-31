@@ -1,7 +1,10 @@
 package io.github.detekt.psi
 
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
+import org.jetbrains.kotlin.com.intellij.psi.PsiFile
+import org.jetbrains.kotlin.psi.UserDataProperty
+import java.nio.file.Path
 
-val RELATIVE_PATH: Key<String> = Key("relativePath")
-val BASE_PATH: Key<String> = Key("basePath")
-val LINE_SEPARATOR: Key<String> = Key("lineSeparator")
+var PsiFile.relativePath: Path? by UserDataProperty(Key("relativePath"))
+var PsiFile.basePath: Path? by UserDataProperty(Key("basePath"))
+var PsiFile.lineSeparator: String? by UserDataProperty(Key("lineSeparator"))

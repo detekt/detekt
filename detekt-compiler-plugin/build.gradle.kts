@@ -19,7 +19,7 @@ plugins {
 }
 
 dependencies {
-    compileOnly(libs.kotlin.compiler)
+    compileOnly(libs.kotlin.compilerEmbeddable)
 
     implementation(projects.detektApi)
     implementation(projects.detektTooling)
@@ -36,19 +36,14 @@ javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElement
     skip()
 }
 
-tasks.test {
-    // https://github.com/detekt/detekt/issues/5646
-    enabled = false
-}
-
 tasks.shadowJar.configure {
     relocate("org.jetbrains.kotlin.com.intellij", "com.intellij")
+    relocate("org.snakeyaml.engine", "dev.detekt.shaded.snakeyaml")
     mergeServiceFiles()
     dependencies {
         include(dependency("io.gitlab.arturbosch.detekt:.*"))
         include(dependency("io.github.detekt:.*"))
         include(dependency("org.snakeyaml:snakeyaml-engine"))
-        include(dependency("io.github.davidburstrom.contester:contester-breakpoint"))
     }
 }
 
@@ -107,9 +102,13 @@ val testPluginKotlinc by tasks.registering(Task::class) {
     }
 
     doLast {
-        if (!kotlincExecution.standardError.asText.get().contains("warning: magicNumber:")) {
+        val stdErrOutput = kotlincExecution.standardError.asText.get()
+        if (!stdErrOutput.contains("warning: doubleMutabilityForCollection:")) {
             throw GradleException(
-                "kotlinc run with compiler plugin did not find MagicNumber issue as expected"
+                """
+                    kotlinc run with compiler plugin did not find DoubleMutabilityForCollection issue in output:
+                    $stdErrOutput
+                """.trimIndent()
             )
         }
     }
