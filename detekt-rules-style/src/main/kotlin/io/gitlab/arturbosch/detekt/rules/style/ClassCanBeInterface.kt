@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.types.typeUtil.isInterface
 
 /**
  * This rule inspects `abstract` classes. In case an `abstract class` does not define any
- * `abstract` members, it should instead be refactored into concrete classes.
+ * `abstract` members, it should instead be refactored into an interface.
  *
  * <noncompliant>
  * abstract class OnlyAbstractMembersInAbstractClass { // violation: no concrete members
@@ -37,6 +37,19 @@ import org.jetbrains.kotlin.types.typeUtil.isInterface
  *     abstract fun f()
  * }
  * </noncompliant>
+ * <compliant>
+ * interface Interface {
+ *     val i: Int
+ *     fun f()
+ * }
+ * 
+ * abstract class NonAbstractMembersInAbstractClass {
+ *
+ *     abstract val i: Int
+ *     fun f() {
+ *     }
+ * }
+ * </compliant>
  */
 @ActiveByDefault(since = "1.23.0")
 @RequiresTypeResolution
