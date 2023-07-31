@@ -18,7 +18,8 @@ internal interface DetektInvoker {
         arguments: List<String>,
         classpath: FileCollection,
         taskName: String,
-        ignoreFailures: Boolean = false
+        ignoreFailures: Boolean = false,
+        invalidateClasspathCache: Boolean = false
     )
 
     companion object {
@@ -82,10 +83,15 @@ internal class DefaultCliInvoker(
         arguments: List<String>,
         classpath: FileCollection,
         taskName: String,
-        ignoreFailures: Boolean
+        ignoreFailures: Boolean,
+        invalidateClasspathCache: Boolean
     ) {
         try {
+            if (invalidateClasspathCache) {
+                classLoaderCache.invalidate(classpath)
+            }
             val loader = classLoaderCache.getOrCreate(classpath)
+            classpath.files.firstOrNull()?.toURI()?.toURL()?.openConnection()?.defaultUseCaches = false
             val clazz = loader.loadClass("io.gitlab.arturbosch.detekt.cli.Main")
             val runner = clazz.getMethod(
                 "buildRunner",
@@ -112,12 +118,14 @@ private class DryRunInvoker : DetektInvoker {
         arguments: List<String>,
         classpath: FileCollection,
         taskName: String,
-        ignoreFailures: Boolean
+        ignoreFailures: Boolean,
+        invalidateClasspathCache: Boolean
     ) {
         println("Invoking detekt with dry-run.")
         println("Task: $taskName")
         println("Arguments: ${arguments.joinToString(" ")}")
         println("Classpath: ${classpath.files}")
         println("Ignore failures: $ignoreFailures")
+        println("Invalidate Classpath Cache: $invalidateClasspathCache")
     }
 }

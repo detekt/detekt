@@ -54,6 +54,8 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
 import org.gradle.api.tasks.options.Option
 import org.gradle.language.base.plugins.LifecycleBasePlugin
+import org.gradle.work.Incremental
+import org.gradle.work.InputChanges
 import org.gradle.workers.WorkerExecutor
 import java.io.File
 import javax.inject.Inject
@@ -69,6 +71,7 @@ abstract class Detekt @Inject constructor(
     abstract val detektClasspath: ConfigurableFileCollection
 
     @get:Classpath
+    @get:Incremental
     abstract val pluginClasspath: ConfigurableFileCollection
 
     @get:InputFile
@@ -250,7 +253,8 @@ abstract class Detekt @Inject constructor(
     }
 
     @TaskAction
-    fun check() {
+    fun check(inputChange: InputChanges) {
+        val invalidateClasspathCache = inputChange.getFileChanges(pluginClasspath).any()
         if (providers.gradleProperty(USE_WORKER_API).getOrElse("false") == "true") {
             logger.info("Executing $name using Worker API")
             val workQueue = workerExecutor.processIsolation { workerSpec ->
@@ -264,13 +268,18 @@ abstract class Detekt @Inject constructor(
                 workParameters.dryRun.set(isDryRun.orNull.toBoolean())
                 workParameters.taskName.set(name)
             }
+
         } else {
             logger.info("Executing $name using DetektInvoker")
+            if (invalidateClasspathCache) {
+                logger.info("Invalidating cached classpath as one ore more files are changed")
+            }
             DetektInvoker.create(isDryRun = isDryRun.orNull.toBoolean()).invokeCli(
                 arguments = arguments,
                 ignoreFailures = ignoreFailures,
                 classpath = detektClasspath.plus(pluginClasspath),
-                taskName = name
+                taskName = name,
+                invalidateClasspathCache = invalidateClasspathCache
             )
         }
     }
