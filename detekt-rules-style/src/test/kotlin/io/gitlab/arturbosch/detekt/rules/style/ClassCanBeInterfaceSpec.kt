@@ -9,11 +9,10 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-private const val EXCLUDE_ANNOTATED_CLASSES = "excludeAnnotatedClasses"
 
 @KotlinCoreEnvironmentTest
 class ClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
-    val subject = ClassCanBeInterface(TestConfig(EXCLUDE_ANNOTATED_CLASSES to listOf("Deprecated")))
+    val subject = ClassCanBeInterface()
 
     @Nested
     inner class `abstract classes with no concrete members` {
@@ -79,8 +78,10 @@ class ClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
             @Test
             fun `that inherits from another abstract class`() {
                 val code = """
-                    @Deprecated("We don't care about this first class")
                     abstract class A {
+                        // Added non-abstract member to ensure this A class does not get reported
+                        val nonAbstractMember: Int = 2
+
                         abstract val i: Int
                     }
                     abstract class B : A()
@@ -93,8 +94,10 @@ class ClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                 val code = """
                     interface I
                     
-                    @Deprecated("We don't care about this first class")
                     abstract class A {
+                        // Added non-abstract member to ensure this A class does not get reported
+                        val nonAbstractMember: Int = 2
+
                         abstract val i: Int
                     }
                     abstract class B: A(), I
@@ -108,8 +111,10 @@ class ClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                 val code = """
                     interface I
                     
-                    @Deprecated("We don't care about this first class")
                     abstract class A {
+                        // Added non-abstract member to ensure this A class does not get reported
+                        val nonAbstractMember: Int = 2
+
                         abstract val i: Int
                     }
                     abstract class B: I, A()
@@ -283,22 +288,6 @@ class ClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                 
                 interface Interface {
                     fun f()
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report abstract classes with module annotation`() {
-            val code = """
-                @Deprecated("test")
-                abstract class A {
-                    abstract fun f()
-                }
-                
-                @kotlin.Deprecated("test")
-                abstract class B {
-                    abstract fun f()
                 }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()

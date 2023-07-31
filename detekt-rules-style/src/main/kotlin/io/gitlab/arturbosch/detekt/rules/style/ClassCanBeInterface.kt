@@ -42,7 +42,7 @@ import org.jetbrains.kotlin.types.typeUtil.isInterface
  *     val i: Int
  *     fun f()
  * }
- * 
+ *
  * abstract class NonAbstractMembersInAbstractClass {
  *
  *     abstract val i: Int
@@ -65,23 +65,6 @@ class ClassCanBeInterface(config: Config = Config.empty) : Rule(config) {
             Debt.FIVE_MINS
         )
 
-    @Configuration("Allows you to provide a list of annotations that disable this check.")
-    @Deprecated("Use `ignoreAnnotated` instead")
-    private val excludeAnnotatedClasses: List<Regex> by config(emptyList<String>()) { list ->
-        list.map { it.replace(".", "\\.").replace("*", ".*").toRegex() }
-    }
-
-    private lateinit var annotationExcluder: AnnotationExcluder
-
-    override fun visitKtFile(file: KtFile) {
-        annotationExcluder = AnnotationExcluder(
-            file,
-            @Suppress("DEPRECATION") excludeAnnotatedClasses,
-            bindingContext,
-        )
-        super.visitKtFile(file)
-    }
-
     override fun visitClass(klass: KtClass) {
         klass.check()
         super.visitClass(klass)
@@ -89,7 +72,7 @@ class ClassCanBeInterface(config: Config = Config.empty) : Rule(config) {
 
     private fun KtClass.check() {
         val nameIdentifier = this.nameIdentifier ?: return
-        if (annotationExcluder.shouldExclude(annotationEntries) || isInterface() || !isAbstract()) return
+        if (isInterface() || !isAbstract()) return
         val members = members()
         when {
             members.isNotEmpty() -> checkMembers(members, nameIdentifier)
