@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class InstanceOfCheckForExceptionSpec(val env: KotlinCoreEnvironment) {
+class InstanceOfCheckForExceptionSpec(private val env: KotlinCoreEnvironment) {
     val subject = InstanceOfCheckForException()
 
     @Test
