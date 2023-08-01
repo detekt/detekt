@@ -177,4 +177,36 @@ class NullableToStringCallSpec(private val env: KotlinCoreEnvironment) {
         val actual = subject.compileAndLintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
+
+    // https://github.com/detekt/detekt/issues/6349
+    @Test
+    fun `reports expressions in lambda`() {
+        val code = """
+            fun undetected1(): String = 1.let {
+                val x: String? = null
+                "hi ${'$'}x"
+            }
+            
+            fun undetected2(): String = 1.let {
+                val x: Any? = null
+                "hi ${'$'}{x.toString()}"
+            }
+            
+            fun undetected3(): String {
+                val x: String? = null
+                return 1.let {
+                    "hi ${'$'}x"
+                }
+            }
+            
+            fun undetected4(): String {
+                val x: String? = null
+                return x.let { y ->
+                    "hi ${'$'}y"
+                }
+            }
+        """.trimIndent()
+        val actual = subject.compileAndLintWithContext(env, code)
+        assertThat(actual).hasSize(4)
+    }
 }
