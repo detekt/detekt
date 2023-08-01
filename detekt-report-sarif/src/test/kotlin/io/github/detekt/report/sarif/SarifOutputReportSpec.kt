@@ -1,7 +1,6 @@
 package io.github.detekt.report.sarif
 
 import io.github.detekt.test.utils.readResourceContent
-import io.github.detekt.tooling.api.VersionProvider
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -180,8 +179,3 @@ class TestRule : Rule() {
 }
 
 private fun String.stripWhitespace() = replace(Regex("\\s"), "")
-
-internal class TestVersionProvider : VersionProvider {
-
-    override fun current(): String = "1.0.0"
-}
