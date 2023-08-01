@@ -10,8 +10,8 @@ nexusPublishing {
 
     repositories {
         create("sonatype") {
-            System.getenv("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")?.let { username = it }
-            System.getenv("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")?.let { password = it }
+            username = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")
+            password = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")
         }
     }
 }

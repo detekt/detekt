@@ -52,8 +52,8 @@ testing {
                 all {
                     testTask.configure {
                         // If `androidSdkInstalled` is false, skip running DetektAndroidSpec
-                        val isAndroidSdkInstalled = System.getenv("ANDROID_SDK_ROOT") != null ||
-                            System.getenv("ANDROID_HOME") != null
+                        val isAndroidSdkInstalled = providers.environmentVariable("ANDROID_SDK_ROOT").isPresent ||
+                            providers.environmentVariable("ANDROID_HOME").isPresent
                         inputs.property("isAndroidSdkInstalled", isAndroidSdkInstalled).optional(true)
                     }
                 }
@@ -179,7 +179,7 @@ kotlin {
 tasks.withType<Test>().configureEach {
     retry {
         @Suppress("MagicNumber")
-        if (System.getenv().containsKey("CI")) {
+        if (providers.environmentVariable("CI").isPresent) {
             maxRetries = 2
             maxFailures = 20
         }

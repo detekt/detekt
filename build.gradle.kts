@@ -61,7 +61,7 @@ subprojects {
     tasks.withType<Test>().configureEach {
         retry {
             @Suppress("MagicNumber")
-            if (System.getenv().containsKey("CI")) {
+            if (providers.environmentVariable("CI").isPresent) {
                 maxRetries = 3
                 maxFailures = 20
             }

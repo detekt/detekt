@@ -49,7 +49,7 @@ plugins {
     id("com.gradle.common-custom-user-data-gradle-plugin") version "1.11.1"
 }
 
-val isCiBuild = System.getenv("CI") != null
+val isCiBuild = providers.environmentVariable("CI").isPresent
 
 gradleEnterprise {
     buildScan {
@@ -79,8 +79,8 @@ buildCache {
         isEnabled = true
         url = uri("https://ge.detekt.dev/cache/")
         credentials {
-            username = System.getenv("GRADLE_CACHE_USERNAME")
-            password = System.getenv("GRADLE_CACHE_PASSWORD")
+            username = providers.environmentVariable("GRADLE_CACHE_USERNAME").orNull
+            password = providers.environmentVariable("GRADLE_CACHE_PASSWORD").orNull
         }
     }
 }
