@@ -85,16 +85,11 @@ private class UnusedFunctionVisitor(
             propertyDelegates.flatMap { it.resultingDescriptors() }
         }
         return functionDeclarations
-            .filterNot { (_, functions) ->
-                // Without a binding context we can't know if an operator is called. So we ignore it to avoid
-                // false positives. More context at #4242
-                bindingContext == BindingContext.EMPTY && functions.any { it.isOperator() }
-            }
             .flatMap { (functionName, functions) ->
                 val isOperator = functions.any { it.isOperator() }
                 val references = functionReferences[functionName].orEmpty()
                 val unusedFunctions = when {
-                    (functions.size > 1 || isOperator) && bindingContext != BindingContext.EMPTY -> {
+                    functions.size > 1 || isOperator -> {
                         val functionNameAsName = Name.identifier(functionName)
                         val operatorToken = OperatorConventions.getOperationSymbolForName(functionNameAsName)
                         val referencesViaOperator = if (
@@ -110,6 +105,7 @@ private class UnusedFunctionVisitor(
                                 KtTokens.DIV,
                                 KtTokens.PERC,
                                 -> operatorValue?.let { functionReferences["$it="] }.orEmpty()
+
                                 else -> emptyList()
                             }
                             val containingReferences = if (functionNameAsName == OperatorNameConventions.CONTAINS) {
@@ -139,6 +135,7 @@ private class UnusedFunctionVisitor(
                             bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, it] in referenceDescriptors
                         }
                     }
+
                     references.isEmpty() -> functions
                     else -> emptyList()
                 }
@@ -200,15 +197,14 @@ private class UnusedFunctionVisitor(
             is KtNameReferenceExpression -> expression.getReferencedName()
             is KtArrayAccessExpression -> ARRAY_GET_METHOD_NAME
             is KtCallExpression -> {
-                if (bindingContext != BindingContext.EMPTY) {
-                    val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
-                    val callableDescriptor = resolvedCall.resultingDescriptor
-                    if ((callableDescriptor.psiElement as? KtNamedFunction)?.isOperator() == true) {
-                        invokeOperatorReferences.getOrPut(callableDescriptor) { mutableListOf() }.add(expression)
-                    }
+                val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
+                val callableDescriptor = resolvedCall.resultingDescriptor
+                if ((callableDescriptor.psiElement as? KtNamedFunction)?.isOperator() == true) {
+                    invokeOperatorReferences.getOrPut(callableDescriptor) { mutableListOf() }.add(expression)
                 }
                 null
             }
+
             else -> null
         } ?: return
         functionReferences.getOrPut(name) { mutableListOf() }.add(expression)
