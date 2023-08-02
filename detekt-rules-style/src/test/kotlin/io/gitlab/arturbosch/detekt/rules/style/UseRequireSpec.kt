@@ -3,9 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import io.gitlab.arturbosch.detekt.test.lint
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -22,7 +20,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 doSomething()
             }
         """.trimIndent()
-        assertThat(subject.lint(code)).hasStartSourceLocation(2, 16)
+        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(2, 16)
     }
 
     @Test
@@ -36,7 +34,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
 
-        assertThat(subject.lint(code)).hasStartSourceLocation(3, 9)
+        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(3, 9)
     }
 
     @Test
@@ -47,7 +45,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 doSomething()
             }
         """.trimIndent()
-        assertThat(subject.lint(code)).hasStartSourceLocation(2, 16)
+        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(2, 16)
     }
 
     @Test
@@ -58,7 +56,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 doSomething()
             }
         """.trimIndent()
-        assertThat(subject.lint(code)).hasStartSourceLocation(2, 16)
+        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(2, 16)
     }
 
     @Test
@@ -69,7 +67,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 doSomething()
             }
         """.trimIndent()
-        assertThat(subject.lint(code)).hasStartSourceLocation(2, 16)
+        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(2, 16)
     }
 
     @Test
@@ -80,7 +78,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 doSomething()
             }
         """.trimIndent()
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -91,7 +89,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 throw IllegalArgumentException("message", cause)
             }
         """.trimIndent()
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -106,7 +104,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
 
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -115,19 +113,19 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
             fun unsafeRunSync(): A =
                 foo.fold({ throw IllegalArgumentException("message") }, ::identity)
         """.trimIndent()
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
     fun `does not report an issue if the exception thrown unconditionally`() {
         val code = """fun doThrow() = throw IllegalArgumentException("message")"""
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
     fun `does not report an issue if the exception thrown unconditionally in a function block`() {
         val code = """fun doThrow() { throw IllegalArgumentException("message") }"""
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -137,7 +135,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 if (throwable !is NumberFormatException) throw IllegalArgumentException(throwable)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -147,63 +145,18 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 if (throwable !is NumberFormatException) throw IllegalArgumentException("a", throwable)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
-    fun `does not report if the exception thrown has a non-String literal argument`() {
+    fun `reports if the exception thrown has a non-literal String argument`() {
         val code = """
-            fun test(throwable: Throwable) {
-                val s = ""
-                if (throwable !is NumberFormatException) throw IllegalArgumentException(s)
-            }
-        """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
-    }
-
-    @Nested
-    inner class `with binding context` {
-
-        @Test
-        fun `does not report if the exception thrown has a non-String argument`() {
-            val code = """
-                fun test(throwable: Throwable) {
-                    if (throwable !is NumberFormatException) throw IllegalArgumentException(throwable)
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report if the exception thrown has a String literal argument and a non-String argument`() {
-            val code = """
-                fun test(throwable: Throwable) {
-                    if (throwable !is NumberFormatException) throw IllegalArgumentException("a", throwable)
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-
-        @Test
-        fun `reports if the exception thrown has a non-String literal argument`() {
-            val code = """
                 fun test(throwable: Throwable) {
                     val s = ""
                     if (throwable !is NumberFormatException) throw IllegalArgumentException(s)
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
-
-        @Test
-        fun `reports if the exception thrown has a String literal argument`() {
-            val code = """
-                fun test(throwable: Throwable) {
-                    if (throwable !is NumberFormatException) throw IllegalArgumentException("a")
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
     @Nested
@@ -218,7 +171,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                     else -> throw IllegalArgumentException("Not supported List type")
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -234,7 +187,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                     throw IllegalArgumentException("Test was too big")
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -246,7 +199,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                     return subclass
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 }
