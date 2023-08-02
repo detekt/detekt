@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isPartOf
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
 import org.jetbrains.kotlin.name.FqName
@@ -28,7 +29,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
  * Exempt from this rule are imports resulting from references to elements within KDoc and
  * from destructuring declarations (componentN imports).
  */
-@Suppress("ViolatesTypeResolutionRequirements")
+@RequiresTypeResolution
 class UnusedImports(config: Config) : Rule(config) {
 
     override val issue = Issue(
@@ -85,14 +86,10 @@ class UnusedImports(config: Config) : Rule(config) {
                 if (aliasName in (namedReferencesInKDoc + namedReferencesAsString)) return false
                 val identifier = identifier()
                 if (identifier in namedReferencesInKDoc || identifier in staticReferencesAsString) return false
-                return if (bindingContext == BindingContext.EMPTY) {
-                    identifier !in namedReferencesAsString
-                } else {
-                    val fqNameUsed = importPath?.fqName?.let { it in fqNames } == true
-                    val unresolvedNameUsed = identifier in unresolvedNamedReferencesAsString
+                val fqNameUsed = importPath?.fqName?.let { it in fqNames } == true
+                val unresolvedNameUsed = identifier in unresolvedNamedReferencesAsString
 
-                    !fqNameUsed && !unresolvedNameUsed
-                }
+                return !fqNameUsed && !unresolvedNameUsed
             }
 
             return imports?.filter { it.isFromSamePackage() || it.isNotUsed() }.orEmpty()
