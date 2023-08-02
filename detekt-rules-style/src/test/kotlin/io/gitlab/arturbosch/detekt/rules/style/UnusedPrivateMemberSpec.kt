@@ -25,7 +25,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     fun unplug()
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -40,7 +40,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     fun baz(i: Int, s: String)
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -51,7 +51,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     fun baz(i: Int, s: String)
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -60,7 +60,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 expect fun bar(i: Int)
                 expect fun baz(i: Int, s: String)
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -69,7 +69,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 expect class Foo1(private val bar: String) {}
                 expect class Foo2(bar: String) {}
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -96,7 +96,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -128,7 +128,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     })
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -177,8 +177,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     }
                 
                     fun a() {
-                        Completable.timer(MY_CONST.toLong(), TimeUnit.MILLISECONDS)
-                                .subscribe()
+                        println("My const = " + MY_CONST.toLong())
                     }
                 }
             """.trimIndent()
@@ -194,7 +193,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 private fun unusedTopLevelFunction() = 5
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -206,7 +205,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     calledFromMain()
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -251,7 +250,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 private fun doSomethingElse() {}
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -262,7 +261,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         fun `reports the non called private function`() {
             val code = """
                 class Test {
-                    private fun unusedFunction(): Int {
+                    private fun unusedFunction() {
                         return someOtherUnusedFunction()
                     }
                 
@@ -304,7 +303,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 private fun foo(): String = ""
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -313,7 +312,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 private fun foo(): String = ""
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
             assertThat(findings[0].entity.signature).isEqualTo("Test.kt\$private fun foo(): String")
