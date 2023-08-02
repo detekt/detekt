@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.util.function.Function.identity
 
 @KotlinCoreEnvironmentTest
 class UseRequireSpec(val env: KotlinCoreEnvironment) {
@@ -153,11 +152,11 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `reports if the exception thrown has a non-literal String argument`() {
         val code = """
-                fun test(throwable: Throwable) {
-                    val s = ""
-                    if (throwable !is NumberFormatException) throw IllegalArgumentException(s)
-                }
-            """.trimIndent()
+            fun test(throwable: Throwable) {
+                val s = ""
+                if (throwable !is NumberFormatException) throw IllegalArgumentException(s)
+            }
+        """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
