@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns.isStringOrNullableString
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -42,8 +43,8 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
  * str.toLowerCase(Locale.US)
  * </compliant>
  */
-@Suppress("ViolatesTypeResolutionRequirements")
 @ActiveByDefault(since = "1.16.0")
+@RequiresTypeResolution
 class ImplicitDefaultLocale(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
