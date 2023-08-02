@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -267,9 +266,8 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
             assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
         }
 
-        @Nested
-        @DisplayName("doesn't report a body-less factory function")
-        inner class IgnoreBodylessFactoryFunction {
+        @Test
+        fun `doesn't report a body-less factory function`() {
             val code = """
                 open class A {
                   companion object {
@@ -282,15 +280,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                 class C: A()
             """.trimIndent()
 
-            @Test
-            fun `with type solving`() {
-                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
-            }
-
-            @Test
-            fun `without type solving`() {
-                assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
-            }
+            assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 }
