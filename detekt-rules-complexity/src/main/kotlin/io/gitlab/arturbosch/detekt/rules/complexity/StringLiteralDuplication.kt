@@ -59,8 +59,8 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
     @Configuration("if values in Annotations should be ignored")
     private val ignoreAnnotation: Boolean by config(true)
 
-    @Configuration("if strings is less than the specified length should be excluded")
-    private val allowStringWithLength: Int by config(5)
+    @Configuration("The maximum allowed string length")
+    private val allowedStringWithLength: Int by config(5)
 
     @Configuration("RegEx of Strings that should be ignored")
     private val ignoreStringsRegex: Regex by config("$^", String::toRegex)
@@ -104,7 +104,7 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
             val text = expression.plainContent
             when {
                 ignoreAnnotation && expression.isPartOf<KtAnnotationEntry>() -> pass
-                text.length < allowStringWithLength -> pass
+                text.length < allowedStringWithLength -> pass
                 text.matches(ignoreStringsRegex) -> pass
                 else -> add(expression)
             }
