@@ -3,7 +3,9 @@ package io.gitlab.arturbosch.detekt.rules
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
+import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypesAndPredicate
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
 
 /**
@@ -19,6 +21,12 @@ inline fun <reified T : KtElement, reified S : KtElement> KtElement.parentsOfTyp
             current = current.parent
         }
     }
+
+fun PsiElement.getParentExpressionRemovingParenthesis(strict: Boolean = true): PsiElement? =
+    this.getParentOfTypesAndPredicate(
+        strict,
+        PsiElement::class.java,
+    ) { it !is KtParenthesizedExpression }
 
 fun KtNamedDeclaration.isPublicInherited(): Boolean = isPublicInherited(false)
 
