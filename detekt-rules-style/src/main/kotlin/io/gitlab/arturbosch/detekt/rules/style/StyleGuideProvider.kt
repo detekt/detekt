@@ -71,7 +71,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             ExpressionBodySyntax(config),
             NestedClassesVisibility(config),
             RedundantVisibilityModifierRule(config),
-            UntilInsteadOfRangeTo(config),
+            RangeUntilInsteadOfRangeTo(config),
             UnnecessaryApply(config),
             UnnecessaryBracesAroundTrailingLambda(config),
             UnnecessaryFilter(config),

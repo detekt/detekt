@@ -6,8 +6,8 @@ import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-class UntilInsteadOfRangeToSpec {
-    val subject = UntilInsteadOfRangeTo(Config.empty)
+class RangeUntilInsteadOfRangeToSpec {
+    val subject = RangeUntilInsteadOfRangeTo(Config.empty)
 
     @Test
     @DisplayName("reports for '..'")
@@ -19,15 +19,14 @@ class UntilInsteadOfRangeToSpec {
         """.trimIndent()
         val findings = subject.lint(code)
         assertThat(findings).hasSize(1)
-        assertThat(findings[0]).hasMessage("'..' call can be replaced with 'until'")
+        assertThat(findings[0]).hasMessage("`..` call can be replaced with `..<`")
     }
 
     @Test
     fun `does not report if rangeTo not used`() {
         val code = """
             fun f() {
-                for (i in 0 until 10 - 1) {}
-                for (i in 10 downTo 2 - 1) {}
+                for (i in 0 ..< 10 - 1) {}
             }
         """.trimIndent()
         assertThat(subject.lint(code)).isEmpty()
@@ -72,6 +71,6 @@ class UntilInsteadOfRangeToSpec {
         val code = "val r = 0.rangeTo(10 - 1)"
         val findings = subject.lint(code)
         assertThat(findings).hasSize(1)
-        assertThat(findings[0]).hasMessage("'rangeTo' call can be replaced with 'until'")
+        assertThat(findings[0]).hasMessage("`rangeTo` call can be replaced with `..<`")
     }
 }

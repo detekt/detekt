@@ -225,6 +225,8 @@ style:
     active: true
   PreferToOverPairSyntax:
     active: true
+  RangeUntilInsteadOfRangeTo:
+    active: true
   RedundantExplicitType:
     active: true
   RedundantHigherOrderMapUsage:
