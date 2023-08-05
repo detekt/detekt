@@ -8,8 +8,8 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
-    val subject = UnusedImports(Config.empty)
+class UnusedImportSpec(val env: KotlinCoreEnvironment) {
+    val subject = UnusedImport(Config.empty)
 
     @Test
     fun `does not report infix operators`() {

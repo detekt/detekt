@@ -729,7 +729,7 @@ style:
     allowForUnclearPrecedence: false
   UntilInsteadOfRangeTo:
     active: false
-  UnusedImports:
+  UnusedImport:
     active: false
   UnusedParameter:
     active: true
