@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isPartOfString
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
@@ -36,7 +37,7 @@ class TrailingWhitespace(config: Config = Config.empty) : Rule(config) {
             if (trailingWhitespaces > 0) {
                 val file = fileContent.file
                 val ktElement = findFirstKtElementInParentsOrNull(file, offset, line)
-                if (ktElement == null || !ktElement.isPartOfString()) {
+                if (ktElement == null || ktElement.shouldReport(trailingWhitespaces)) {
                     val entity = Entity.from(file, offset - trailingWhitespaces).let { entity ->
                         entity.copy(
                             location = entity.location.copy(
@@ -49,6 +50,15 @@ class TrailingWhitespace(config: Config = Config.empty) : Rule(config) {
             }
             offset += 1 // '\n'
         }
+    }
+
+    private fun PsiElement.isKdocTrailingSpaces(trailingWhitespaces: Int): Boolean {
+        return this.parent is KDocSection && trailingWhitespaces == 2
+    }
+
+    private fun PsiElement.shouldReport(trailingWhitespacesCount: Int): Boolean {
+        return this.isPartOfString().not() && this.isKdocTrailingSpaces(trailingWhitespacesCount)
+            .not()
     }
 
     private fun countTrailingWhitespace(line: String): Int {

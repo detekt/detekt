@@ -38,6 +38,31 @@ class TrailingWhitespaceSpec {
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasTextLocations(22 to 23)
         }
+
+        @Test
+        fun `reports a trailing spaces in comments`() {
+            val code = """
+                /*
+                   This is comment 
+                */
+                val t = 1
+            """.trimIndent()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasStartSourceLocation(2, 19)
+        }
+
+        @Test
+        fun `reports a excessive trailing spaces in kdoc`() {
+            val code = """
+                /**
+                * a   
+                * b
+                */
+                val t = 1
+            """.trimIndent()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasStartSourceLocation(2, 4)
+        }
     }
 
     @Nested
@@ -66,6 +91,19 @@ class TrailingWhitespaceSpec {
                     
                     Should ignore indent on the previous line
                 ""${'"'}
+            """.trimIndent()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report trailing space in kdoc`() {
+            val code = """
+                /**
+                 * Something.  
+                 * Something else.
+                 */
+                fun f() {}
             """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).isEmpty()
