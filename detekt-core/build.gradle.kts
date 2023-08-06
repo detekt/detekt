@@ -29,5 +29,5 @@ dependencies {
 consumeGeneratedConfig(
     fromProject = projects.detektGenerator,
     fromConfiguration = "generatedCoreConfig",
-    forTask = "sourcesJar"
+    forTask = tasks.sourcesJar
 )

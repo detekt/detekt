@@ -12,7 +12,7 @@ dependencies {
 consumeGeneratedConfig(
     fromProject = projects.detektGenerator,
     fromConfiguration = "generatedRuleauthorsConfig",
-    forTask = "processResources"
+    forTask = tasks.processResources
 )
 
 kotlin {
