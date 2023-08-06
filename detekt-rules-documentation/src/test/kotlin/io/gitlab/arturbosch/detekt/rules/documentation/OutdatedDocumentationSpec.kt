@@ -265,6 +265,22 @@ class OutdatedDocumentationSpec {
         }
 
         @Test
+        fun `should not report internal or protected property is documented`() {
+            val code = """
+                /**
+                 * Doc
+                 * @property a desc
+                 * @property b desc
+                 */
+                open class A(
+                    internal val a: String,
+                    protected val b: String,
+                )
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
         fun `should not report when param which is private property is documented as param`() {
             val code = """
                 /**
@@ -550,6 +566,18 @@ class OutdatedDocumentationSpec {
                  * @param someProp Description of property
                  */
                 class MyClass(someParam: String, val someProp: String)
+            """.trimIndent()
+            assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when internal or protected property is documented as param`() {
+            val propertyAsParam = """
+                /**
+                 * @param a Description of param
+                 * @param b Description of property
+                 */
+                open class MyClass(internal val a: String, protected val b: String)
             """.trimIndent()
             assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
         }

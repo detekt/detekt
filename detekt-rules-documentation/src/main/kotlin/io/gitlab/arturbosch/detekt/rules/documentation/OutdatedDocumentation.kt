@@ -24,7 +24,6 @@ import org.jetbrains.kotlin.psi.psiUtil.PsiChildRange
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
-import org.jetbrains.kotlin.psi.psiUtil.isPublic
 import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 
 /**
@@ -148,7 +147,7 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     private fun getDeclarationsForValueParameters(valueParameters: List<KtParameter>): List<Declaration> {
         return valueParameters.mapNotNull {
             it.name?.let { name ->
-                val type = if (it.isPropertyParameter() && it.isPublic) {
+                val type = if (it.isPropertyParameter() && it.isPrivate().not()) {
                     if (allowParamOnConstructorProperties) {
                         DeclarationType.ANY
                     } else {
