@@ -10,7 +10,7 @@ fun Project.consumeGeneratedConfig(
     forTask: TaskProvider<*>,
 ) {
     val configurationName = "generatedConfigFor${forTask.name.replaceFirstChar { it.titlecase() }}"
-    val generatedConfig = configurations.create(configurationName).apply {
+    val generatedConfig = configurations.create(configurationName) {
         isCanBeConsumed = false
         isCanBeResolved = true
     }
