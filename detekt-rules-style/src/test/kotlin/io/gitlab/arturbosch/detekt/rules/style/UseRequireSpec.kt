@@ -3,9 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import io.gitlab.arturbosch.detekt.test.lint
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -19,10 +17,10 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
         val code = """
             fun x(a: Int) {
                 if (a < 0) throw IllegalArgumentException()
-                doSomething()
+                println("something")
             }
         """.trimIndent()
-        assertThat(subject.lint(code)).hasStartSourceLocation(2, 16)
+        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(2, 16)
     }
 
     @Test
@@ -32,11 +30,11 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 if (a < 0) {
                     throw IllegalArgumentException()
                 }
-                doSomething()
+                println("something")
             }
         """.trimIndent()
 
-        assertThat(subject.lint(code)).hasStartSourceLocation(3, 9)
+        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(3, 9)
     }
 
     @Test
@@ -44,10 +42,10 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
         val code = """
             fun x(a: Int) {
                 if (a < 0) throw IllegalArgumentException("More details")
-                doSomething()
+                println("something")
             }
         """.trimIndent()
-        assertThat(subject.lint(code)).hasStartSourceLocation(2, 16)
+        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(2, 16)
     }
 
     @Test
@@ -55,10 +53,10 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
         val code = """
             fun x(a: Int) {
                 if (a < 0) throw java.lang.IllegalArgumentException()
-                doSomething()
+                println("something")
             }
         """.trimIndent()
-        assertThat(subject.lint(code)).hasStartSourceLocation(2, 16)
+        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(2, 16)
     }
 
     @Test
@@ -66,32 +64,34 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
         val code = """
             fun x(a: Int) {
                 if (a < 0) throw kotlin.IllegalArgumentException()
-                doSomething()
+                println("something")
             }
         """.trimIndent()
-        assertThat(subject.lint(code)).hasStartSourceLocation(2, 16)
+        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(2, 16)
     }
 
     @Test
     fun `does not report if a precondition throws a different kind of exception`() {
         val code = """
+            class SomeBusinessException: Exception()
             fun x(a: Int) {
                 if (a < 0) throw SomeBusinessException()
-                doSomething()
+                println("something")
             }
         """.trimIndent()
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
     fun `does not report an issue if the exception thrown has a message and a cause`() {
         val code = """
-            private fun x(a: Int): Nothing {
-                doSomething()
-                throw IllegalArgumentException("message", cause)
+            fun x(a: Int, cause: Exception) {
+                if (a < 0) {
+                    throw IllegalArgumentException("message", cause)
+                }
             }
         """.trimIndent()
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -102,32 +102,31 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                     println("bang!")
                     throw IllegalArgumentException()
                 }
-                doSomething()
+                println("something")
             }
         """.trimIndent()
 
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
     fun `does not report an issue if the exception thrown as the only action in a block`() {
         val code = """
-            fun unsafeRunSync(): A =
-                foo.fold({ throw IllegalArgumentException("message") }, ::identity)
+            fun throwingFunction(): () -> Any = { throw IllegalArgumentException("message") }
         """.trimIndent()
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
     fun `does not report an issue if the exception thrown unconditionally`() {
-        val code = """fun doThrow() = throw IllegalArgumentException("message")"""
-        assertThat(subject.lint(code)).isEmpty()
+        val code = """fun doThrow(): Nothing = throw IllegalArgumentException("message")"""
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
     fun `does not report an issue if the exception thrown unconditionally in a function block`() {
         val code = """fun doThrow() { throw IllegalArgumentException("message") }"""
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -137,7 +136,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 if (throwable !is NumberFormatException) throw IllegalArgumentException(throwable)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -147,63 +146,18 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 if (throwable !is NumberFormatException) throw IllegalArgumentException("a", throwable)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
-    fun `does not report if the exception thrown has a non-String literal argument`() {
+    fun `reports if the exception thrown has a non-literal String argument`() {
         val code = """
             fun test(throwable: Throwable) {
                 val s = ""
                 if (throwable !is NumberFormatException) throw IllegalArgumentException(s)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
-    }
-
-    @Nested
-    inner class `with binding context` {
-
-        @Test
-        fun `does not report if the exception thrown has a non-String argument`() {
-            val code = """
-                fun test(throwable: Throwable) {
-                    if (throwable !is NumberFormatException) throw IllegalArgumentException(throwable)
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report if the exception thrown has a String literal argument and a non-String argument`() {
-            val code = """
-                fun test(throwable: Throwable) {
-                    if (throwable !is NumberFormatException) throw IllegalArgumentException("a", throwable)
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-
-        @Test
-        fun `reports if the exception thrown has a non-String literal argument`() {
-            val code = """
-                fun test(throwable: Throwable) {
-                    val s = ""
-                    if (throwable !is NumberFormatException) throw IllegalArgumentException(s)
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
-
-        @Test
-        fun `reports if the exception thrown has a String literal argument`() {
-            val code = """
-                fun test(throwable: Throwable) {
-                    if (throwable !is NumberFormatException) throw IllegalArgumentException("a")
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
     @Nested
@@ -212,13 +166,15 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report an issue if the exception is inside a when`() {
             val code = """
+                import java.util.LinkedList
+
                 fun whenOrThrow(item : List<*>) = when(item) {
                     is ArrayList<*> -> 1
                     is LinkedList<*> -> 2
                     else -> throw IllegalArgumentException("Not supported List type")
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -234,19 +190,21 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                     throw IllegalArgumentException("Test was too big")
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
         fun `does not report an issue if the exception is after a elvis operator`() {
             val code = """
+                import java.util.LinkedList
+
                 fun tryToCastOrThrow(list: List<*>) : LinkedList<*> {
                     val subclass = list as? LinkedList
                         ?: throw IllegalArgumentException("List is not a LinkedList")
                     return subclass
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 }
