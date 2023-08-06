@@ -46,6 +46,11 @@ publishing {
     }
 }
 
+private val generatedCliUsage: Configuration by configurations.creating {
+    isCanBeConsumed = true
+    isCanBeResolved = false
+}
+
 tasks {
     shadowJar {
         mergeServiceFiles()
@@ -88,28 +93,23 @@ tasks {
     check {
         dependsOn(runWithHelpFlag, runWithArgsFile)
     }
-}
 
-private val cliUsage by tasks.registering(JavaExec::class) {
-    val cliUsagesOutput = layout.buildDirectory.file("output/cli-usage.md")
-    outputs.file(cliUsagesOutput)
-    classpath = files(tasks.shadowJar)
-    args = listOf("--help")
-    doFirst {
-        standardOutput = ByteArrayOutputStream()
-    }
-    doLast {
-        cliUsagesOutput.get().asFile.apply {
-            writeText("```\n")
-            appendBytes((standardOutput as ByteArrayOutputStream).toByteArray())
-            appendText("```\n")
+    val cliUsage by registering(JavaExec::class) {
+        val cliUsagesOutput = layout.buildDirectory.file("output/cli-usage.md")
+        outputs.file(cliUsagesOutput)
+        classpath = files(shadowJar)
+        args = listOf("--help")
+        doFirst {
+            standardOutput = ByteArrayOutputStream()
+        }
+        doLast {
+            cliUsagesOutput.get().asFile.apply {
+                writeText("```\n")
+                appendBytes((standardOutput as ByteArrayOutputStream).toByteArray())
+                appendText("```\n")
+            }
         }
     }
-}
 
-private val generatedCliUsage: Configuration by configurations.creating {
-    isCanBeConsumed = true
-    isCanBeResolved = false
+    artifacts.add(generatedCliUsage.name, cliUsage)
 }
-
-artifacts.add(generatedCliUsage.name, cliUsage)
