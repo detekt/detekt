@@ -253,7 +253,7 @@ style:
     ignoreAnnotated: ['Nested']
   UntilInsteadOfRangeTo:
     active: true
-  UnusedImports:
+  UnusedImport:
     active: false # formatting already have this rule enabled
   UnusedPrivateMember:
     active: true

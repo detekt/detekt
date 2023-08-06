@@ -63,7 +63,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             DataClassContainsFunctions(config),
             DataClassShouldBeImmutable(config),
             UseDataClass(config),
-            UnusedImports(config),
+            UnusedImport(config),
             UnusedParameter(config),
             UnusedPrivateClass(config),
             UnusedPrivateMember(config),
