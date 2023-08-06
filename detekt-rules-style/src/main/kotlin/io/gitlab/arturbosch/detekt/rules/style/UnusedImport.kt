@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
  * from destructuring declarations (componentN imports).
  */
 @Suppress("ViolatesTypeResolutionRequirements")
-class UnusedImports(config: Config) : Rule(config) {
+class UnusedImport(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
@@ -39,7 +39,7 @@ class UnusedImports(config: Config) : Rule(config) {
     )
 
     override fun visit(root: KtFile) {
-        with(UnusedImportsVisitor(bindingContext)) {
+        with(UnusedImportVisitor(bindingContext)) {
             root.accept(this)
             unusedImports().forEach {
                 report(CodeSmell(issue, Entity.from(it), "The import '${it.importedFqName}' is unused."))
@@ -48,7 +48,7 @@ class UnusedImports(config: Config) : Rule(config) {
         super.visit(root)
     }
 
-    private class UnusedImportsVisitor(private val bindingContext: BindingContext) : DetektVisitor() {
+    private class UnusedImportVisitor(private val bindingContext: BindingContext) : DetektVisitor() {
         private var currentPackage: FqName? = null
         private var imports: List<KtImportDirective>? = null
         private val namedReferences = mutableSetOf<KtReferenceExpression>()
