@@ -12,5 +12,5 @@ dependencies {
 consumeGeneratedConfig(
     fromProject = projects.detektGenerator,
     fromConfiguration = "generatedLibrariesConfig",
-    forTask = "processResources"
+    forTask = tasks.processResources
 )
