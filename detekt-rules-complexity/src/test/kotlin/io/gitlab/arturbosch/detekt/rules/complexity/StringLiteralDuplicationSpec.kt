@@ -10,7 +10,7 @@ import java.util.regex.PatternSyntaxException
 
 private const val IGNORE_ANNOTATION = "ignoreAnnotation"
 private const val IGNORE_STRINGS_REGEX = "ignoreStringsRegex"
-private const val ALLOW_STRING_WITH_LENGTH = "allowedStringWithLength"
+private const val ALLOWED_WITH_LENGTH_LESS_THAN = "allowedWithLengthLessThan"
 
 class StringLiteralDuplicationSpec {
 
@@ -76,7 +76,7 @@ class StringLiteralDuplicationSpec {
         @Test
         fun `reports string with 4 characters`() {
             val config = TestConfig(
-                ALLOW_STRING_WITH_LENGTH to 0,
+                ALLOWED_WITH_LENGTH_LESS_THAN to 0,
                 "allowedDuplications" to 2
             )
             assertFindingWithConfig(code, config, 1)
@@ -84,20 +84,20 @@ class StringLiteralDuplicationSpec {
     }
 
     @Nested
-    inner class `strings with allowedStringWithLength configured` {
+    inner class `strings with allowedWithLengthLessThan configured` {
         private val code = """val str = "amet" + "amet" + "amet""""
 
         @Test
         fun `reports string with 4 characters`() {
             val config = TestConfig(
-                ALLOW_STRING_WITH_LENGTH to 4,
+                ALLOWED_WITH_LENGTH_LESS_THAN to 4,
             )
             assertFindingWithConfig(code, config, 1)
         }
 
         @Test
         fun `does not report string with 4 characters with allowStringWithLength 4`() {
-            val config = TestConfig(ALLOW_STRING_WITH_LENGTH to 5)
+            val config = TestConfig(ALLOWED_WITH_LENGTH_LESS_THAN to 5)
             assertFindingWithConfig(code, config, 0)
         }
     }
