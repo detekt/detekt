@@ -209,4 +209,20 @@ class NullableToStringCallSpec(private val env: KotlinCoreEnvironment) {
         val actual = subject.compileAndLintWithContext(env, code)
         assertThat(actual).hasSize(4)
     }
+
+    // https://github.com/detekt/detekt/issues/6378
+    @Test
+    fun `reports when toString is an argument`() {
+        val code = """
+            class Foo {
+                fun bar(value: String?) {}
+            }
+            
+            fun test(foo: Foo, x: Int?) {
+                foo.bar(x.toString())
+            }
+        """.trimIndent()
+        val actual = subject.compileAndLintWithContext(env, code)
+        assertThat(actual).hasSize(1)
+    }
 }
