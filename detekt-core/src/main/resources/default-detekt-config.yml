@@ -669,6 +669,8 @@ style:
     active: false
   ProtectedMemberInFinalClass:
     active: true
+  RangeUntilInsteadOfRangeTo:
+    active: false
   RedundantExplicitType:
     active: false
   RedundantHigherOrderMapUsage:
@@ -729,8 +731,6 @@ style:
   UnnecessaryParentheses:
     active: false
     allowForUnclearPrecedence: false
-  UntilInsteadOfRangeTo:
-    active: false
   UnusedImport:
     active: false
   UnusedParameter:

@@ -14,26 +14,27 @@ import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
 
 /**
- * Reports calls to '..' operator instead of calls to 'until'.
- * 'until' is applicable in cases where the upper range value is described as
- * some value subtracted by 1. 'until' helps to prevent off-by-one errors.
+ * Reports calls to `..` operator instead of calls to `..<`.
+ * `..<` is applicable in cases where the upper range value is described as
+ * open ended range(or in case of integral types some value subtracted by 1).
+ * `..<` helps to prevent off-by-one errors.
  *
  * <noncompliant>
- * for (i in 0 .. 10 - 1) {}
- * val range = 0 .. 10 - 1
+ * for (i in 0..10 - 1) {}
+ * val range = 0..10 - 1
  * </noncompliant>
  *
  * <compliant>
- * for (i in 0 until 10) {}
- * val range = 0 until 10
+ * for (i in 0..<10) {}
+ * val range = 0..<10
  * </compliant>
  */
-class UntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
+class RangeUntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
-        "A `..` call can be replaced with `until`.",
+        "A `..` call can be replaced with `..<`.",
         Debt.FIVE_MINS
     )
 
@@ -59,7 +60,13 @@ class UntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
         left != null && operationToken == KtTokens.MINUS && (right as? KtConstantExpression)?.text == "1"
 
     private fun report(expression: KtExpression, rangeTo: String) {
-        report(CodeSmell(issue, Entity.from(expression), "'$rangeTo' call can be replaced with 'until'"))
+        report(
+            CodeSmell(
+                issue,
+                Entity.from(expression),
+                "`$rangeTo` call can be replaced with `..<`"
+            )
+        )
     }
 
     companion object {
