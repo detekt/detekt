@@ -49,13 +49,13 @@ import org.jetbrains.kotlin.types.typeUtil.isInterface
  */
 @ActiveByDefault(since = "1.23.0")
 @RequiresTypeResolution
-class ClassCanBeInterface(config: Config = Config.empty) : Rule(config) {
+class AbstractClassCanBeInterface(config: Config = Config.empty) : Rule(config) {
 
     private val noConcreteMember = "An abstract class without a concrete member can be refactored to an interface."
 
     override val issue =
         Issue(
-            "ClassCanBeInterface",
+            "AbstractClassCanBeInterface",
             Severity.Style,
             "An abstract class is unnecessary. May be refactored to an interface.",
             Debt.FIVE_MINS
