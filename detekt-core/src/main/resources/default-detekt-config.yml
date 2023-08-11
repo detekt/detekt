@@ -504,6 +504,10 @@ potential-bugs:
 
 style:
   active: true
+  AbstractClassCanBeConcreteClass:
+    active: true
+  AbstractClassCanBeInterface:
+    active: true
   AlsoCouldBeApply:
     active: false
   BracesOnIfStatements:
@@ -519,8 +523,6 @@ style:
   CascadingCallWrapping:
     active: false
     includeElvis: true
-  ClassCanBeInterface:
-    active: true
   ClassOrdering:
     active: false
   CollapsibleIfStatements:
@@ -708,8 +710,6 @@ style:
     active: false
     acceptableLength: 4
     allowNonStandardGrouping: false
-  UnnecessaryAbstractClass:
-    active: true
   UnnecessaryAnnotationUseSiteTarget:
     active: false
   UnnecessaryApply:
