@@ -78,6 +78,6 @@ abstract class DetektGenerateConfigTask @Inject constructor(
         }
     }
 
-    @Suppress("UnnecessaryAbstractClass")
+    @Suppress("AbstractClassCanBeConcreteClass")
     abstract class SingleExecutionBuildService : BuildService<BuildServiceParameters.None>
 }
