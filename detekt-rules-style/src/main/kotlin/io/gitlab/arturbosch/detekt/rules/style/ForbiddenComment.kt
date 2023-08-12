@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import java.util.Locale
 
 // Note: ​ (zero-width-space) is used to prevent the Kotlin parser getting confused by talking about comments in a comment.
 /**
@@ -163,12 +164,12 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
     private fun PsiComment.getContent(): String = text.getCommentContent()
 
     private fun getErrorMessage(comment: Comment): String =
-        comment.reason ?: String.format(DEFAULT_ERROR_MESSAGE, comment.value.pattern)
+        comment.reason ?: String.format(Locale.ROOT, DEFAULT_ERROR_MESSAGE, comment.value.pattern)
 
     @Suppress("DEPRECATION")
     private fun getErrorMessage(value: String): String =
         customMessage.takeUnless { it.isEmpty() }
-            ?: String.format(DEFAULT_ERROR_MESSAGE, value)
+            ?: String.format(Locale.ROOT, DEFAULT_ERROR_MESSAGE, value)
 
     private data class Comment(val value: Regex, val reason: String?)
 
