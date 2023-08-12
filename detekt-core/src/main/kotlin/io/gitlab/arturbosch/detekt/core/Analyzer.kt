@@ -194,7 +194,16 @@ internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config = wi
 
     if (rulesSpec.activateAllRules) {
         val defaultConfig = getDefaultConfiguration()
-        declaredConfig = AllRulesConfig(declaredConfig ?: defaultConfig, defaultConfig)
+        declaredConfig = AllRulesConfig(
+            originalConfig = declaredConfig ?: defaultConfig,
+            defaultConfig = defaultConfig,
+            deprecatedRuleIds = setOf(
+                "style > OptionalWhenBraces",
+                "potential-bugs > DuplicateCaseInWhenExpression",
+                "potential-bugs > MissingWhenCase",
+                "potential-bugs > RedundantElseInWhen"
+            )
+        )
     }
 
     if (!rulesSpec.autoCorrect) {
