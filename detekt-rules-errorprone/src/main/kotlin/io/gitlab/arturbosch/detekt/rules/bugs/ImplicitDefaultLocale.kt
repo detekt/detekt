@@ -31,6 +31,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
  *
  * <noncompliant>
  * String.format("Timestamp: %d", System.currentTimeMillis())
+ * "Timestamp: %d".format(System.currentTimeMillis())
  *
  * val str: String = getString()
  * str.toUpperCase()
@@ -39,6 +40,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
  *
  * <compliant>
  * String.format(Locale.US, "Timestamp: %d", System.currentTimeMillis())
+ * "Timestamp: %d".format(Locale.US, System.currentTimeMillis())
  *
  * val str: String = getString()
  * str.toUpperCase(Locale.US)
