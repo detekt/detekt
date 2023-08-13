@@ -34,6 +34,38 @@ class ExplicitItLambdaParameterSpec {
             )
             assertThat(findings).hasSize(1)
         }
+
+        @Test
+        fun `does not report when parameter type is declared explicitly for un-inferrable lambda`() {
+            val findings = subject.compileAndLint(
+                """
+                    fun f1(): (Int) -> Int {
+                        return { it: Int -> it.inc() }::invoke
+                    }
+
+                    fun f2(): (Int) -> Int {
+                        return { value: Int -> value.inc() }::invoke
+                    }
+
+                    fun f3(): (((Int) -> Int) -> Unit) -> (Int) -> Int {
+                        return { it: Int -> it.inc() }::also
+                    }
+                """.trimIndent()
+            )
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when parameter type is declared explicitly for un-inferrable lambda wrapped in paren`() {
+            val findings = subject.compileAndLint(
+                """
+                    fun f(): (Int) -> Int {
+                        return ({ it: Int -> it.inc() })::invoke
+                    }
+                """.trimIndent()
+            )
+            assertThat(findings).isEmpty()
+        }
     }
 
     @Nested
@@ -77,6 +109,18 @@ class ExplicitItLambdaParameterSpec {
                 """.trimIndent()
             )
             assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `does not report when parameter type is declared explicitly for multi params un-inferrable lambda`() {
+            val findings = subject.compileAndLint(
+                """
+                    fun f(): (Int, Int) -> Int {
+                        return { it: Int, a: Int -> (it + a).inc() }::invoke
+                    }
+                """.trimIndent()
+            )
+            assertThat(findings).isEmpty()
         }
     }
 }

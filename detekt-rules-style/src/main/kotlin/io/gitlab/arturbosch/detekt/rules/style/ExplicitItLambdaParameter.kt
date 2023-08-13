@@ -9,6 +9,8 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
+import io.gitlab.arturbosch.detekt.rules.getParentExpressionRemovingParenthesis
+import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 
 /**
@@ -53,6 +55,7 @@ class ExplicitItLambdaParameter(val config: Config) : Rule(config) {
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
+        if (lambdaExpression.getParentExpressionRemovingParenthesis() is KtCallableReferenceExpression) return
         val parameterNames = lambdaExpression.valueParameters.map { it.name }
         if (IT_LITERAL in parameterNames) {
             val message = if (parameterNames.size == 1) {
