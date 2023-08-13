@@ -147,7 +147,7 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     private fun getDeclarationsForValueParameters(valueParameters: List<KtParameter>): List<Declaration> {
         return valueParameters.mapNotNull {
             it.name?.let { name ->
-                val type = if (it.isPropertyParameter()) {
+                val type = if (it.isPropertyParameter() && it.isPrivate().not()) {
                     if (allowParamOnConstructorProperties) {
                         DeclarationType.ANY
                     } else {
