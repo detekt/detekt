@@ -16,6 +16,7 @@ import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.core.config.AllRulesConfig
 import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
+import io.gitlab.arturbosch.detekt.core.config.validation.loadDeprecations
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
 import io.gitlab.arturbosch.detekt.core.rules.isActive
 import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
@@ -197,12 +198,7 @@ internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config = wi
         declaredConfig = AllRulesConfig(
             originalConfig = declaredConfig ?: defaultConfig,
             defaultConfig = defaultConfig,
-            deprecatedRuleIds = setOf(
-                "style > OptionalWhenBraces",
-                "potential-bugs > DuplicateCaseInWhenExpression",
-                "potential-bugs > MissingWhenCase",
-                "potential-bugs > RedundantElseInWhen"
-            )
+            deprecatedRuleIds = loadDeprecatedRuleIds()
         )
     }
 
@@ -211,4 +207,12 @@ internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config = wi
     }
 
     return declaredConfig ?: getDefaultConfiguration()
+}
+
+internal fun loadDeprecatedRuleIds(): Set<String> {
+    return loadDeprecations().keys
+        .map { it.split(">") }
+        .filter { it.size == 2 }
+        .map { it.joinToString(" > ") }
+        .toSet()
 }
