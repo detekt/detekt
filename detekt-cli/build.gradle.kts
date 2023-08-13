@@ -113,3 +113,9 @@ tasks {
 
     artifacts.add(generatedCliUsage.name, cliUsage)
 }
+
+val shadowDist: Configuration by configurations.creating {
+    isCanBeConsumed = true
+    isCanBeResolved = false
+}
+artifacts.add(shadowDist.name, tasks.shadowDistZip)

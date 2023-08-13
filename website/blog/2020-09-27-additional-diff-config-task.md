@@ -28,7 +28,7 @@ import io.gitlab.arturbosch.detekt.DetektGenerateConfigTask
 
 val createDetektConfigForDiff by tasks.registering(DetektGenerateConfigTask::class) {
     description = "Generate newest default detekt config"
-    config.setFrom(buildDir.resolve("detekt-diff.yaml"))
+    config.setFrom(layout.buildDirectory.file("detekt-diff.yaml"))
 
     doFirst {
       // optionally delete the old config diff file first 
