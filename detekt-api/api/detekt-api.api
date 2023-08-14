@@ -189,14 +189,6 @@ public final class io/gitlab/arturbosch/detekt/api/Debt$Companion {
 	public final fun getTWENTY_MINS ()Lio/gitlab/arturbosch/detekt/api/Debt;
 }
 
-public class io/gitlab/arturbosch/detekt/api/DefaultContext : io/gitlab/arturbosch/detekt/api/Context {
-	public fun <init> ()V
-	public final fun clearFindings ()V
-	public fun getFindings ()Ljava/util/List;
-	public fun report (Lio/gitlab/arturbosch/detekt/api/Finding;Ljava/util/Set;Ljava/lang/String;)V
-	public fun report (Ljava/util/List;Ljava/util/Set;Ljava/lang/String;)V
-}
-
 public class io/gitlab/arturbosch/detekt/api/DetektVisitor : org/jetbrains/kotlin/psi/KtTreeVisitorVoid {
 	public fun <init> ()V
 }
