@@ -19,7 +19,7 @@ class IssueExtensionSpec {
     )
 
     @Test
-    fun `compute weighted amount of issues`() {
+    fun `compute issue count`() {
         val detektion = object : TestDetektion() {
             override val findings: Map<String, List<Finding>> = issues
         }

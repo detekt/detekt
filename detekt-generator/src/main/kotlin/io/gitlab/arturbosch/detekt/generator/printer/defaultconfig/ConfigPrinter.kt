@@ -35,11 +35,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
         build:
           maxIssues: 0
           excludeCorrectable: false
-          weights:
-            # complexity: 2
-            # LongParameterList: 1
-            # style: 1
-            # comments: 1
     """.trimIndent()
 
     private fun defaultConfigConfiguration(): String = """
