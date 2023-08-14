@@ -15,7 +15,7 @@ dependencies {
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    val isCiBuild = System.getenv("CI") != null
+    val isCiBuild = providers.environmentVariable("CI").isPresent
     if (isCiBuild) {
         compilerExecutionStrategy = org.jetbrains.kotlin.gradle.tasks.KotlinCompilerExecutionStrategy.OUT_OF_PROCESS
     }
