@@ -54,6 +54,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             CastNullableToNonNullableType(config),
             UnusedUnaryOperator(config),
             PropertyUsedBeforeDeclaration(config),
+            CharArrayToStringCall(config),
         )
     )
 }

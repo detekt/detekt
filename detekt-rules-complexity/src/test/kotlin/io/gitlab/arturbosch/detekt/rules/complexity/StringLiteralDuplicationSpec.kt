@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Test
 import java.util.regex.PatternSyntaxException
 
 private const val IGNORE_ANNOTATION = "ignoreAnnotation"
-private const val EXCLUDE_SHORT_STRING = "excludeStringsWithLessThan5Characters"
 private const val IGNORE_STRINGS_REGEX = "ignoreStringsRegex"
+private const val ALLOWED_WITH_LENGTH_LESS_THAN = "allowedWithLengthLessThan"
 
 class StringLiteralDuplicationSpec {
 
-    val subject = StringLiteralDuplication()
+    val subject = StringLiteralDuplication(TestConfig("allowedDuplications" to 2))
 
     @Nested
     inner class `many hardcoded strings` {
@@ -58,7 +58,7 @@ class StringLiteralDuplicationSpec {
 
         @Test
         fun `reports strings in annotations according to config`() {
-            val config = TestConfig(IGNORE_ANNOTATION to "false")
+            val config = TestConfig(IGNORE_ANNOTATION to "false", "allowedDuplications" to 2)
             assertFindingWithConfig(code, config, 1)
         }
     }
@@ -75,8 +75,30 @@ class StringLiteralDuplicationSpec {
 
         @Test
         fun `reports string with 4 characters`() {
-            val config = TestConfig(EXCLUDE_SHORT_STRING to "false")
+            val config = TestConfig(
+                ALLOWED_WITH_LENGTH_LESS_THAN to 0,
+                "allowedDuplications" to 2
+            )
             assertFindingWithConfig(code, config, 1)
+        }
+    }
+
+    @Nested
+    inner class `strings with allowedWithLengthLessThan configured` {
+        private val code = """val str = "amet" + "amet" + "amet""""
+
+        @Test
+        fun `reports string with 4 characters`() {
+            val config = TestConfig(
+                ALLOWED_WITH_LENGTH_LESS_THAN to 4,
+            )
+            assertFindingWithConfig(code, config, 1)
+        }
+
+        @Test
+        fun `does not report string with 4 characters with allowStringWithLength 4`() {
+            val config = TestConfig(ALLOWED_WITH_LENGTH_LESS_THAN to 5)
+            assertFindingWithConfig(code, config, 0)
         }
     }
 

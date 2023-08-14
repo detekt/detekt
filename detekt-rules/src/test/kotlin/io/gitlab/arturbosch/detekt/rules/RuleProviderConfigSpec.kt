@@ -1,19 +1,24 @@
 package io.gitlab.arturbosch.detekt.rules
 
+import io.github.classgraph.ClassGraph
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.reflections.Reflections
 
 class RuleProviderConfigSpec {
 
     @Test
     fun `should test if the config has been passed to all rules`() {
         val config = TestConfig()
-        val reflections = Reflections("io.gitlab.arturbosch.detekt.rules")
-        val providers = reflections.getSubTypesOf(DefaultRuleSetProvider::class.java)
+        val providers = ClassGraph()
+            .acceptPackages("io.gitlab.arturbosch.detekt.rules")
+            .scan()
+            .use { scanResult ->
+                scanResult.getClassesImplementing(DefaultRuleSetProvider::class.java)
+                    .loadClasses(DefaultRuleSetProvider::class.java)
+            }
 
         providers.forEach {
             val provider = it.getDeclaredConstructor().newInstance()

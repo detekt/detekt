@@ -35,11 +35,15 @@ internal object KtTestCompiler : KtCompiler() {
 
     fun compile(path: Path) = compile(root, path)
 
-    fun compileFromContent(@Language("kotlin") content: String, filename: String = TEST_FILENAME): KtFile =
-        psiFileFactory.createPhysicalFile(
+    fun compileFromContent(@Language("kotlin") content: String, filename: String = TEST_FILENAME): KtFile {
+        require('/' !in filename && '\\' !in filename) {
+            "filename must be a file name only and not contain any path elements"
+        }
+        return psiFileFactory.createPhysicalFile(
             filename,
             StringUtilRt.convertLineSeparators(content)
         )
+    }
 
     /**
      * Not sure why but this function only works from this context.

@@ -193,11 +193,11 @@ private fun PsiFile.getLine(line: Int): String {
 private fun PsiFile.getLocation(start: SourceLocation, end: SourceLocation): Location {
     val lines = this.text.lines()
     var startOffset = 0
-    for (i in 1 until start.line) {
+    for (i in 1..<start.line) {
         startOffset += lines[i - 1].length + 1
     }
     var endOffset = startOffset
-    for (i in start.line until end.line) {
+    for (i in start.line..<end.line) {
         endOffset += lines[i - 1].length + 1
     }
     this.text.lines()

@@ -102,7 +102,6 @@ internal class Analyzer(
         @Suppress("DEPRECATION")
         fun isCorrectable(rule: BaseRule): Boolean = when (rule) {
             is Rule -> rule.autoCorrect
-            is io.gitlab.arturbosch.detekt.api.MultiRule -> rule.rules.any { it.autoCorrect }
             else -> error("No other rule type expected.")
         }
 

@@ -19,7 +19,7 @@ class PluginTaskBehaviorSpec {
 
     private val detektConfig = """
         detekt {
-            config = files("$configFileName")
+            config.setFrom("$configFileName")
             baseline = file("$baselineFileName")
         }
     """.trimIndent()

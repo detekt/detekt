@@ -25,5 +25,5 @@ dependencies {
     testImplementation(projects.detektRulesPerformance)
     testImplementation(projects.detektRulesStyle)
     testImplementation(libs.assertj)
-    testImplementation(libs.reflections)
+    testImplementation(libs.classgraph)
 }

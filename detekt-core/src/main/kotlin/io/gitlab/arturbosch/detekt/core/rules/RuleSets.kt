@@ -5,7 +5,6 @@ import io.github.detekt.tooling.api.spec.RulesSpec
 import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleId
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetId
@@ -33,13 +32,7 @@ fun RuleSet.visitFile(
     }
 
 fun associateRuleIdsToRuleSetIds(ruleSets: Sequence<RuleSet>): Map<RuleId, RuleSetId> {
-    fun extractIds(rule: BaseRule) =
-        @Suppress("DEPRECATION")
-        if (rule is io.gitlab.arturbosch.detekt.api.MultiRule) {
-            rule.rules.asSequence().map(Rule::ruleId)
-        } else {
-            sequenceOf(rule.ruleId)
-        }
+    fun extractIds(rule: BaseRule) = sequenceOf(rule.ruleId)
     return ruleSets.flatMap { ruleSet ->
         ruleSet.rules
             .asSequence()

@@ -3,10 +3,10 @@ package io.gitlab.arturbosch.detekt.generator.collection
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import org.jetbrains.kotlin.psi.KtFile
 
-class DetektCollector : Collector<RuleSetPage> {
+class DetektCollector(textReplacements: Map<String, String>) : Collector<RuleSetPage> {
 
     private val ruleSetProviderCollector = RuleSetProviderCollector()
-    private val ruleCollector = RuleCollector()
+    private val ruleCollector = RuleCollector(textReplacements)
 
     private val collectors = listOf(
         ruleSetProviderCollector,

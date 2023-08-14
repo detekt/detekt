@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 /**
  * Some test cases were used directly from KtLint to verify the [KdocWrapping] rule:
  *
- * https://github.com/pinterest/ktlint/blob/master/ktlint-ruleset-experimental/src/test/kotlin/com/pinterest/ktlint/ruleset/experimental/KdocWrappingRuleTest.kt
+ * https://github.com/pinterest/ktlint/blob/0.45.0/ktlint-ruleset-experimental/src/test/kotlin/com/pinterest/ktlint/ruleset/experimental/KdocWrappingRuleTest.kt
  */
 class KdocWrappingSpec {
     @Test

@@ -249,6 +249,50 @@ class OutdatedDocumentationSpec {
             """.trimIndent()
             assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).hasSize(1)
         }
+
+        @Test
+        fun `should report when param which is private property is documented as property`() {
+            val code = """
+                /**
+                 * Doc
+                 * @property a desc
+                 */
+                class A(
+                    private val a: String,
+                )
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `should not report internal or protected property is documented`() {
+            val code = """
+                /**
+                 * Doc
+                 * @property a desc
+                 * @property b desc
+                 */
+                open class A(
+                    internal val a: String,
+                    protected val b: String,
+                )
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when param which is private property is documented as param`() {
+            val code = """
+                /**
+                 * Doc
+                 * @param a desc
+                 */
+                class A(
+                    private val a: String,
+                )
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
     }
 
     @Nested
@@ -450,7 +494,8 @@ class OutdatedDocumentationSpec {
 
     @Nested
     inner class `configuration matchTypeParameters` {
-        private val configuredSubject = OutdatedDocumentation(TestConfig("matchTypeParameters" to "false"))
+        private val configuredSubject =
+            OutdatedDocumentation(TestConfig("matchTypeParameters" to "false"))
 
         @Test
         fun `should not report when class type parameters mismatch and configuration is off`() {
@@ -477,7 +522,8 @@ class OutdatedDocumentationSpec {
 
     @Nested
     inner class `configuration matchDeclarationsOrder` {
-        private val configuredSubject = OutdatedDocumentation(TestConfig("matchDeclarationsOrder" to "false"))
+        private val configuredSubject =
+            OutdatedDocumentation(TestConfig("matchDeclarationsOrder" to "false"))
 
         @Test
         fun `should not report when declarations order mismatch and configuration is off`() {
@@ -520,6 +566,18 @@ class OutdatedDocumentationSpec {
                  * @param someProp Description of property
                  */
                 class MyClass(someParam: String, val someProp: String)
+            """.trimIndent()
+            assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when internal or protected property is documented as param`() {
+            val propertyAsParam = """
+                /**
+                 * @param a Description of param
+                 * @param b Description of property
+                 */
+                open class MyClass(internal val a: String, protected val b: String)
             """.trimIndent()
             assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
         }
@@ -568,6 +626,20 @@ class OutdatedDocumentationSpec {
                 class MyClass(someParam: String, val someProp: String)
             """.trimIndent()
             assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
+        }
+
+        @Test
+        fun `should report when param which is private property is documented as property`() {
+            val code = """
+                /**
+                 * Doc
+                 * @property a desc
+                 */
+                class A(
+                    private val a: String,
+                )
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
     }
 }

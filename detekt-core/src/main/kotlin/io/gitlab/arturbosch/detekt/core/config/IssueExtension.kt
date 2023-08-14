@@ -14,7 +14,7 @@ private const val WEIGHTS = "weights"
 internal const val MAX_ISSUES_KEY: String = "maxIssues"
 
 internal fun Detektion.getOrComputeWeightedAmountOfIssues(config: Config): Int {
-    val maybeAmount = this.getData(WEIGHTED_ISSUES_COUNT_KEY)
+    val maybeAmount = this.getUserData(WEIGHTED_ISSUES_COUNT_KEY)
     if (maybeAmount != null) {
         return maybeAmount
     }
@@ -32,7 +32,7 @@ internal fun Detektion.getOrComputeWeightedAmountOfIssues(config: Config): Int {
     }
 
     val amount = smells.sumOf { it.weighted() }
-    this.addData(WEIGHTED_ISSUES_COUNT_KEY, amount)
+    this.putUserData(WEIGHTED_ISSUES_COUNT_KEY, amount)
     return amount
 }
 

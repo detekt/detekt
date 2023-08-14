@@ -21,10 +21,11 @@ class CognitiveComplexMethod(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    @Configuration("Cognitive Complexity number for a method.")
-    private val threshold: Int by config(defaultValue = 15)
+    @Configuration("Maximum Cognitive Complexity allowed for a method.")
+    private val allowedComplexity: Int by config(defaultValue = 15)
 
+    @SuppressWarnings("EmptyFunctionBlock")
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (false) println(threshold)
+        // This is just for testing purpose
     }
 }

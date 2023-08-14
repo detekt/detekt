@@ -71,7 +71,7 @@ fun createKotlinCoreEnvironment(
         "MockProject type expected, actual - ${projectCandidate.javaClass.simpleName}"
     }
 
-    project.registerService(PomModel::class.java, DetektPomModel(project))
+    project.registerService(PomModel::class.java, DetektPomModel)
 
     return environment
 }

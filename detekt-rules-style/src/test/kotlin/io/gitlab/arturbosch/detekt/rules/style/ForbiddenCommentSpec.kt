@@ -14,6 +14,7 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import java.util.Locale
 
 private const val VALUES = "values"
 private const val COMMENTS = "comments"
@@ -257,7 +258,7 @@ class ForbiddenCommentSpec {
         fun `should report a Finding with default Message`() {
             val comment = "// Comment"
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
-            val expectedMessage = String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, "Comment")
+            val expectedMessage = String.format(Locale.ROOT, ForbiddenComment.DEFAULT_ERROR_MESSAGE, "Comment")
             assertThat(findings).hasSize(1)
             assertThat(findings.first().message).isEqualTo(expectedMessage)
         }
@@ -291,7 +292,13 @@ class ForbiddenCommentSpec {
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
             assertThat(findings[0])
-                .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, "STOPSHIP"))
+                .hasMessage(
+                    String.format(
+                        Locale.ROOT,
+                        ForbiddenComment.DEFAULT_ERROR_MESSAGE,
+                        "STOPSHIP"
+                    )
+                )
         }
 
         @Test
@@ -300,7 +307,13 @@ class ForbiddenCommentSpec {
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
             assertThat(findings[0])
-                .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, patternStr))
+                .hasMessage(
+                    String.format(
+                        Locale.ROOT,
+                        ForbiddenComment.DEFAULT_ERROR_MESSAGE,
+                        patternStr
+                    )
+                )
         }
 
         @Test
@@ -309,7 +322,13 @@ class ForbiddenCommentSpec {
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
             assertThat(findings[0])
-                .hasMessage(String.format(ForbiddenComment.DEFAULT_ERROR_MESSAGE, patternStr))
+                .hasMessage(
+                    String.format(
+                        Locale.ROOT,
+                        ForbiddenComment.DEFAULT_ERROR_MESSAGE,
+                        patternStr
+                    )
+                )
         }
 
         @Test

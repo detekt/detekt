@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#multiline-expression-wrapping) for
+ * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/experimental/#multiline-expression-wrapping) for
  * documentation.
  */
 @AutoCorrectable(since = "1.23.0")

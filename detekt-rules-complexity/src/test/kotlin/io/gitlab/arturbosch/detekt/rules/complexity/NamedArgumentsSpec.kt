@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
-    val defaultThreshold = 2
-    val defaultConfig = TestConfig("threshold" to defaultThreshold)
+    private val defaultAllowedArguments = 2
+    private val defaultConfig = TestConfig("allowedArguments" to defaultAllowedArguments)
     val subject = NamedArguments(defaultConfig)
 
     @Test
@@ -215,7 +215,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
         @Nested
         inner class `ignoreArgumentsMatchingNames is true` {
             val subject =
-                NamedArguments(TestConfig("threshold" to 2, "ignoreArgumentsMatchingNames" to true))
+                NamedArguments(TestConfig("allowedArguments" to 2, "ignoreArgumentsMatchingNames" to true))
 
             @Test
             fun `all arguments are the same as the parameter names`() {

@@ -73,8 +73,9 @@ class DetektPlugin : Plugin<Project> {
         }
 
         tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
-            @Suppress("DEPRECATION") // Internal usage, might be rewired later.
-            it.config.setFrom(project.provider { extension.config })
+            it.configFile.convention {
+                extension.config.lastOrNull() ?: project.file("$rootDir/$CONFIG_DIR_NAME/$CONFIG_FILE")
+            }
             it.usesService(detektGenerateConfigSingleExecution)
         }
     }

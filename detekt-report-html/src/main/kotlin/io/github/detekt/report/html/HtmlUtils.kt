@@ -13,6 +13,7 @@ import kotlinx.html.span
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.net.URLEncoder
+import java.util.Locale
 import kotlin.math.max
 import kotlin.math.min
 
@@ -28,7 +29,7 @@ internal fun FlowContent.snippetCode(ruleName: String, lines: Sequence<String>, 
                     .drop(dropLineCount)
                     .take(takeLineCount)
                     .forEach { line ->
-                        span("lineno") { text("%1$4s ".format(currentLineNumber)) }
+                        span("lineno") { text("%1$4s ".format(Locale.ROOT, currentLineNumber)) }
                         if (currentLineNumber >= location.line && errorLength > 0) {
                             val column = if (currentLineNumber == location.line) location.column - 1 else 0
                             errorLength -= writeErrorLine(line, column, errorLength) + 1 // we need to consume the \n

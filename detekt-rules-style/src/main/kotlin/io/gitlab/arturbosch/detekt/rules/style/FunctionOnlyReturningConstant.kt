@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -17,7 +16,6 @@ import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -35,7 +33,6 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * const val constantString = "1"
  * </compliant>
  */
-@Suppress("ViolatesTypeResolutionRequirements")
 @ActiveByDefault(since = "1.2.0")
 class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config) {
 
@@ -54,23 +51,6 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 
     @Configuration("excluded functions")
     private val excludedFunctions: List<Regex> by config(emptyList<String>()) { it.map(String::simplePatternToRegex) }
-
-    @Configuration("allows to provide a list of annotations that disable this check")
-    @Deprecated("Use `ignoreAnnotated` instead")
-    private val excludeAnnotatedFunction: List<Regex> by config(emptyList<String>()) { list ->
-        list.map { it.replace(".", "\\.").replace("*", ".*").toRegex() }
-    }
-
-    private lateinit var annotationExcluder: AnnotationExcluder
-
-    override fun visit(root: KtFile) {
-        annotationExcluder = AnnotationExcluder(
-            root,
-            @Suppress("DEPRECATION") excludeAnnotatedFunction,
-            bindingContext,
-        )
-        super.visit(root)
-    }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (isNotIgnored(function) &&
@@ -111,7 +91,7 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
         }
 
     private fun isNotExcluded(function: KtNamedFunction) =
-        function.name !in excludedFunctions && !annotationExcluder.shouldExclude(function.annotationEntries)
+        function.name !in excludedFunctions
 
     private fun isReturningAConstant(function: KtNamedFunction) =
         isConstantExpression(function.bodyExpression) || returnsConstant(function)

@@ -33,6 +33,52 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `does not report custom String_format call`() {
+        val code = """
+            fun String.Companion.format(format: String, value: Int) = format + value.toString()
+
+            fun x() {
+                String.format("%d", 1)
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `reports format extension call with template but without explicit locale`() {
+        val code = """
+            fun x() {
+                "%d".format(1)
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `does not report format extension call with explicit locale`() {
+        val code = """
+            import java.util.Locale
+            fun x() {
+                "%d".format(Locale.US, 1)
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report for custom format extension call`() {
+        val code = """
+            fun String.format(value: Int): String {
+                return value.toString()
+            }
+            fun x() {
+                "%d".format(1)
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
     fun `reports String_toUpperCase() call without explicit locale`() {
         val code = """
             fun x() {

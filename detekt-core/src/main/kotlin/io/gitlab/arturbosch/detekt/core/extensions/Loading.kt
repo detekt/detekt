@@ -18,5 +18,8 @@ inline fun <reified T : Extension> loadExtensions(
         .filter(predicate)
         .sortedBy { it.priority }
         .asReversed()
-        .onEach { it.init(settings.config); it.init(settings) }
+        .onEach {
+            it.init(settings.config)
+            it.init(settings)
+        }
         .also { settings.debug { "Loaded extensions: $LIST_ITEM_SPACING${it.joinToString(LIST_ITEM_SPACING)}" } }

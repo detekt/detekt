@@ -19,7 +19,7 @@ class LiteFindingsReportSpec {
             subject
                 .render(
                     TestDetektion(
-                        createFinding("SpacingBetweenPackageAndImports"),
+                        createFinding("SpacingAfterPackageDeclaration"),
                         createFinding("UnnecessarySafeCall")
                     )
                 )

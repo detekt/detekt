@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtClass
@@ -52,7 +53,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * }
  * </compliant>
  */
-@Suppress("ViolatesTypeResolutionRequirements")
+@RequiresTypeResolution
 @ActiveByDefault(since = "1.2.0")
 class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 

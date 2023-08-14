@@ -7,12 +7,12 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
-private fun subject(threshold: Int) = LargeClass(TestConfig("threshold" to threshold))
+private fun subject(allowedLines: Int) = LargeClass(TestConfig("allowedLines" to allowedLines))
 
 class LargeClassSpec {
 
     @Test
-    fun `should detect only the nested large class which exceeds the threshold`() {
+    fun `should detect only the nested large class which exceeds the allowed lines`() {
         val code = """
             class NestedClasses {
             
@@ -37,7 +37,7 @@ class LargeClassSpec {
              */
             val aTopLevelPropertyOfNestedClasses = 0
         """.trimIndent()
-        val findings = subject(threshold = 4).lint(code)
+        val findings = subject(allowedLines = 4).lint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocations(SourceLocation(7, 15))
     }
@@ -52,7 +52,38 @@ class LargeClassSpec {
                 println()
             }
         """.trimIndent()
-        val rule = subject(threshold = 2)
+        val rule = subject(allowedLines = 2)
+        assertThat(rule.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `should not report a class that has exactly the allowed lines`() {
+        val code = """
+            class MyClass {
+                fun f() {
+                    println()
+                    println()
+                }
+            }
+        """.trimIndent()
+
+        val rule = subject(allowedLines = 6)
+
+        assertThat(rule.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `should not report a class that has less than the allowed lines`() {
+        val code = """
+            class MyClass {
+                fun f() {
+                    println()
+                }
+            }
+        """.trimIndent()
+
+        val rule = subject(allowedLines = 6)
+
         assertThat(rule.compileAndLint(code)).isEmpty()
     }
 }

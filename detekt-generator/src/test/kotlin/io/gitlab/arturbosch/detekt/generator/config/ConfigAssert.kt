@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.config
 
+import io.github.classgraph.ClassGraph
 import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -8,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
-import org.reflections.Reflections
 import java.lang.reflect.Modifier
 
 class ConfigAssert(
@@ -68,18 +68,28 @@ class ConfigAssert(
             .orEmpty()
     }
 
-    private fun getRuleSetProviderInPackageOrNull(): RuleSetProvider? = Reflections(packageName)
-        .getSubTypesOf(DefaultRuleSetProvider::class.java)
-        .firstOrNull()
-        ?.getDeclaredConstructor()
-        ?.newInstance()
-
-    private fun getRuleClassesInPackage(): List<Class<out Rule>> {
-        return Reflections(packageName)
-            .getSubTypesOf(Rule::class.java)
-            .filter { rule ->
-                !Modifier.isAbstract(rule.modifiers) &&
-                    rule.annotations.none { it.annotationClass == Deprecated::class }
+    private fun getRuleSetProviderInPackageOrNull(): RuleSetProvider? =
+        ClassGraph()
+            .acceptPackages(packageName)
+            .scan()
+            .use { scanResult ->
+                scanResult.getClassesImplementing(DefaultRuleSetProvider::class.java)
+                    .loadClasses(DefaultRuleSetProvider::class.java)
+                    .firstOrNull()
+                    ?.getDeclaredConstructor()
+                    ?.newInstance()
             }
-    }
+
+    private fun getRuleClassesInPackage(): List<Class<out Rule>> =
+        ClassGraph()
+            .acceptPackages(packageName)
+            .scan()
+            .use { scanResult ->
+                scanResult.getSubclasses(Rule::class.java)
+                    .loadClasses(Rule::class.java)
+                    .filter { rule ->
+                        !Modifier.isAbstract(rule.modifiers) &&
+                            rule.annotations.none { it.annotationClass == Deprecated::class }
+                    }
+            }
 }

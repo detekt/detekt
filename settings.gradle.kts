@@ -2,8 +2,10 @@ import com.gradle.enterprise.gradleplugin.internal.extension.BuildScanExtensionW
 
 rootProject.name = "detekt"
 
-includeBuild("build-logic")
-includeBuild("detekt-gradle-plugin")
+pluginManagement {
+    includeBuild("build-logic")
+    includeBuild("detekt-gradle-plugin")
+}
 
 include("code-coverage-report")
 include("detekt-api")
@@ -43,8 +45,8 @@ enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
 // build scan plugin can only be applied in settings file
 plugins {
-    id("com.gradle.enterprise") version "3.13.3"
-    id("com.gradle.common-custom-user-data-gradle-plugin") version "1.11"
+    id("com.gradle.enterprise") version "3.13.4"
+    id("com.gradle.common-custom-user-data-gradle-plugin") version "1.11.1"
 }
 
 val isCiBuild = System.getenv("CI") != null

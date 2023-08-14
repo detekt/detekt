@@ -21,7 +21,7 @@ dependencies {
     testImplementation(projects.detektTest)
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.mockk)
-    testImplementation(libs.reflections)
+    testImplementation(libs.classgraph)
     testImplementation(libs.assertj)
     testRuntimeOnly(libs.slf4j.simple)
 }
@@ -29,5 +29,5 @@ dependencies {
 consumeGeneratedConfig(
     fromProject = projects.detektGenerator,
     fromConfiguration = "generatedCoreConfig",
-    forTask = "sourcesJar"
+    forTask = tasks.sourcesJar
 )

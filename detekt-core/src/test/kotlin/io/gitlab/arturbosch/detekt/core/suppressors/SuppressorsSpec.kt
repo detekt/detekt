@@ -11,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class SuppressorsSpec {
@@ -55,33 +54,6 @@ class SuppressorsSpec {
 
         assertThat(suppress).isTrue()
     }
-
-    @Nested
-    inner class MultiRule {
-        @Test
-        fun `A finding that should be suppressed`() {
-            val rule = AMultiRule(TestConfig("ignoreAnnotated" to listOf("Composable")))
-            val suppress = getSuppressors(rule, BindingContext.EMPTY)
-                .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(noIgnorableCodeSmell) }
-
-            assertThat(suppress).isFalse()
-        }
-
-        @Test
-        fun `A finding that should not be suppressed`() {
-            val rule = AMultiRule(TestConfig("ignoreAnnotated" to listOf("Composable")))
-            val suppress = getSuppressors(rule, BindingContext.EMPTY)
-                .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(ignorableCodeSmell) }
-
-            assertThat(suppress).isTrue()
-        }
-    }
-}
-
-private class AMultiRule(config: Config) :
-    @Suppress("DEPRECATION")
-    io.gitlab.arturbosch.detekt.api.MultiRule() {
-    override val rules: List<Rule> = listOf(ARule(config))
 }
 
 private class ARule(config: Config = Config.empty) : Rule(config) {

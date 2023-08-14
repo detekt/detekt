@@ -53,14 +53,14 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Configuration("amount of duplications to trigger rule")
-    private val threshold: Int by config(defaultValue = 3)
+    @Configuration("The maximum allowed amount of duplications.")
+    private val allowedDuplications: Int by config(defaultValue = 2)
 
     @Configuration("if values in Annotations should be ignored")
     private val ignoreAnnotation: Boolean by config(true)
 
-    @Configuration("if short strings should be excluded")
-    private val excludeStringsWithLessThan5Characters: Boolean by config(true)
+    @Configuration("The maximum string length below which duplications are allowed")
+    private val allowedWithLengthLessThan: Int by config(5)
 
     @Configuration("RegEx of Strings that should be ignored")
     private val ignoreStringsRegex: Regex by config("$^", String::toRegex)
@@ -75,7 +75,7 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
                 ThresholdedCodeSmell(
                     issue,
                     main,
-                    Metric(type + name, value, threshold),
+                    Metric(type + name, value, allowedDuplications),
                     issue.description,
                     references
                 )
@@ -89,10 +89,10 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
         private val literalReferences = HashMap<String, MutableList<KtStringTemplateExpression>>()
         private val pass: Unit = Unit
 
-        fun getLiteralsOverThreshold(): Map<String, Int> = literals.filterValues { it >= threshold }
+        fun getLiteralsOverThreshold(): Map<String, Int> = literals.filterValues { it > allowedDuplications }
         fun entitiesForLiteral(literal: String): Pair<Entity, List<Entity>> {
             val references = literalReferences[literal]
-            if (references != null && references.isNotEmpty()) {
+            if (!references.isNullOrEmpty()) {
                 val mainEntity = references[0]
                 val referenceEntities = references.subList(1, references.size)
                 return Entity.from(mainEntity) to referenceEntities.map { Entity.from(it) }
@@ -104,7 +104,7 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
             val text = expression.plainContent
             when {
                 ignoreAnnotation && expression.isPartOf<KtAnnotationEntry>() -> pass
-                excludeStringsWithLessThan5Characters && text.length < STRING_EXCLUSION_LENGTH -> pass
+                text.length < allowedWithLengthLessThan -> pass
                 text.matches(ignoreStringsRegex) -> pass
                 else -> add(expression)
             }
@@ -113,11 +113,10 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
         private fun add(str: KtStringTemplateExpression) {
             val text = str.plainContent
             literals.compute(text) { _, oldValue -> oldValue?.plus(1) ?: 1 }
-            literalReferences.compute(text) { _, entries -> entries?.add(str); entries ?: mutableListOf(str) }
+            literalReferences.compute(text) { _, entries ->
+                entries?.add(str)
+                entries ?: mutableListOf(str)
+            }
         }
-    }
-
-    companion object {
-        private const val STRING_EXCLUSION_LENGTH = 5
     }
 }

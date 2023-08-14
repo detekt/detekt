@@ -53,8 +53,8 @@ class NestedScopeFunctions(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    @Configuration("Number of nested scope functions allowed.")
-    private val threshold: Int by config(defaultValue = 1)
+    @Configuration("The maximum allowed depth for nested scope functions.")
+    private val allowedDepth: Int by config(defaultValue = 1)
 
     @Configuration(
         "Set of scope function names which add complexity. " +
@@ -72,9 +72,9 @@ class NestedScopeFunctions(config: Config = Config.empty) : Rule(config) {
         val finding = ThresholdedCodeSmell(
             issue,
             Entity.from(element),
-            Metric("SIZE", depth, threshold),
+            Metric("SIZE", depth, allowedDepth),
             "The scope function '${element.calleeExpression?.text}' is nested too deeply ('$depth'). " +
-                "Complexity threshold is set to '$threshold'."
+                "The maximum allowed depth is set to '$allowedDepth'."
         )
         report(finding)
     }
@@ -112,7 +112,7 @@ class NestedScopeFunctions(config: Config = Config.empty) : Rule(config) {
         }
 
         private fun reportIfOverThreshold(expression: KtCallExpression) {
-            if (depth > threshold) {
+            if (depth > allowedDepth) {
                 report(expression, depth)
             }
         }

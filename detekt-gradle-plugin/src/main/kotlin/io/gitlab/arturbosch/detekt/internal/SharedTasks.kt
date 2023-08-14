@@ -16,34 +16,6 @@ internal fun Project.registerDetektTask(
     configuration: Detekt.() -> Unit
 ): TaskProvider<Detekt> =
     tasks.register(name, Detekt::class.java) {
-        @Suppress("DEPRECATION")
-        with(extension.reports) {
-            if (xml.outputLocation.isPresent) {
-                logger.warn(
-                    "XML report location set on detekt {} extension will be ignored for $name task. See " +
-                        "https://detekt.dev/gradle.html#reports"
-                )
-            }
-            if (sarif.outputLocation.isPresent) {
-                logger.warn(
-                    "SARIF report location set on detekt {} extension will be ignored for $name task. See " +
-                        "https://detekt.dev/gradle.html#reports"
-                )
-            }
-            if (txt.outputLocation.isPresent) {
-                logger.warn(
-                    "TXT report location set on detekt {} extension will be ignored for $name task. See " +
-                        "https://detekt.dev/gradle.html#reports"
-                )
-            }
-            if (html.outputLocation.isPresent) {
-                logger.warn(
-                    "HTML report location set on detekt {} extension will be ignored for $name task. See " +
-                        "https://detekt.dev/gradle.html#reports"
-                )
-            }
-        }
-
         project.plugins.withType(JavaBasePlugin::class.java) { _ ->
             val toolchain = project.extensions.getByType(JavaPluginExtension::class.java).toolchain
 

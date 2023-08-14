@@ -18,12 +18,12 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
 import java.lang.reflect.Modifier
 
-internal class RuleVisitor : DetektVisitor() {
+internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisitor() {
 
     val containsRule
         get() = classesMap.any { it.value }
     private var name = ""
-    private val documentationCollector = DocumentationCollector()
+    private val documentationCollector = DocumentationCollector(textReplacements)
     private var defaultActivationStatus: DefaultActivationStatus = Inactive
     private var autoCorrect = false
     private var requiresTypeResolution = false

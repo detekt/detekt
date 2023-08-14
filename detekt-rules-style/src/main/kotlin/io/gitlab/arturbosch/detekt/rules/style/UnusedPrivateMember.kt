@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isOperator
 import org.jetbrains.kotlin.backend.jvm.ir.psiElement
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
@@ -45,7 +46,7 @@ private const val ARRAY_GET_METHOD_NAME = "get"
  * If these private functions are unused they should be removed. Otherwise, this dead code
  * can lead to confusion and potential bugs.
  */
-@Suppress("ViolatesTypeResolutionRequirements")
+@RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
 class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 
@@ -85,16 +86,11 @@ private class UnusedFunctionVisitor(
             propertyDelegates.flatMap { it.resultingDescriptors() }
         }
         return functionDeclarations
-            .filterNot { (_, functions) ->
-                // Without a binding context we can't know if an operator is called. So we ignore it to avoid
-                // false positives. More context at #4242
-                bindingContext == BindingContext.EMPTY && functions.any { it.isOperator() }
-            }
             .flatMap { (functionName, functions) ->
                 val isOperator = functions.any { it.isOperator() }
                 val references = functionReferences[functionName].orEmpty()
                 val unusedFunctions = when {
-                    (functions.size > 1 || isOperator) && bindingContext != BindingContext.EMPTY -> {
+                    functions.size > 1 || isOperator -> {
                         val functionNameAsName = Name.identifier(functionName)
                         val operatorToken = OperatorConventions.getOperationSymbolForName(functionNameAsName)
                         val referencesViaOperator = if (
@@ -110,6 +106,7 @@ private class UnusedFunctionVisitor(
                                 KtTokens.DIV,
                                 KtTokens.PERC,
                                 -> operatorValue?.let { functionReferences["$it="] }.orEmpty()
+
                                 else -> emptyList()
                             }
                             val containingReferences = if (functionNameAsName == OperatorNameConventions.CONTAINS) {
@@ -139,6 +136,7 @@ private class UnusedFunctionVisitor(
                             bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, it] in referenceDescriptors
                         }
                     }
+
                     references.isEmpty() -> functions
                     else -> emptyList()
                 }
@@ -200,15 +198,14 @@ private class UnusedFunctionVisitor(
             is KtNameReferenceExpression -> expression.getReferencedName()
             is KtArrayAccessExpression -> ARRAY_GET_METHOD_NAME
             is KtCallExpression -> {
-                if (bindingContext != BindingContext.EMPTY) {
-                    val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
-                    val callableDescriptor = resolvedCall.resultingDescriptor
-                    if ((callableDescriptor.psiElement as? KtNamedFunction)?.isOperator() == true) {
-                        invokeOperatorReferences.getOrPut(callableDescriptor) { mutableListOf() }.add(expression)
-                    }
+                val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
+                val callableDescriptor = resolvedCall.resultingDescriptor
+                if ((callableDescriptor.psiElement as? KtNamedFunction)?.isOperator() == true) {
+                    invokeOperatorReferences.getOrPut(callableDescriptor) { mutableListOf() }.add(expression)
                 }
                 null
             }
+
             else -> null
         } ?: return
         functionReferences.getOrPut(name) { mutableListOf() }.add(expression)
