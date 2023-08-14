@@ -24,7 +24,7 @@ class IssueExtensionSpec {
             override val findings: Map<String, List<Finding>> = issues
         }
 
-        val amount = detektion.getOrComputeWeightedAmountOfIssues(Config.empty)
+        val amount = detektion.getOrComputeIssueCount(Config.empty)
         assertThat(amount).isEqualTo(3)
     }
 
