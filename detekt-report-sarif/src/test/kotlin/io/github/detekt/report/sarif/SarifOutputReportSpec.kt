@@ -91,8 +91,8 @@ class SarifOutputReportSpec {
 
         val refEntity = TestRule().compileAndLint(Snippet.code).first().entity
         val location = Location(
-            SourceLocation(startLine, startColumn),
-            TextLocation(
+            source = SourceLocation(startLine, startColumn),
+            text = TextLocation(
                 startLine + (startColumn - 1) * Snippet.lineLength,
                 endColumn + (endLine - 1) * Snippet.lineLength
             ),
@@ -128,8 +128,8 @@ class SarifOutputReportSpec {
 
         val refEntity = TestRule().compileAndLint(Snippet.code).first().entity
         val location = Location(
-            SourceLocation(startLine, startColumn),
-            TextLocation(
+            source = SourceLocation(startLine, startColumn),
+            text = TextLocation(
                 startLine + (startColumn - 1) * Snippet.lineLength,
                 endColumn + (endLine - 1) * Snippet.lineLength
             ),
