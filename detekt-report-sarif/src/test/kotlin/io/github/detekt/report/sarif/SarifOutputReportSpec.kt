@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
@@ -175,7 +174,7 @@ private fun constrainRegion(startLine: Int, startColumn: Int, endLine: Int, endC
 """.trimIndent()
 
 class TestRule : Rule() {
-    override val issue = Issue(javaClass.simpleName, Severity.Warning, "", Debt.FIVE_MINS)
+    override val issue = Issue(javaClass.simpleName, "", Debt.FIVE_MINS)
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         report(CodeSmell(issue, Entity.atName(classOrObject), message = "Error"))

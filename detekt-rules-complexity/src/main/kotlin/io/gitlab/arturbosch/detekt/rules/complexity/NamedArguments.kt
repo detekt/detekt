@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
@@ -36,7 +35,6 @@ class NamedArguments(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "NamedArguments",
-        Severity.Maintainability,
         "Named arguments are required for function calls with many arguments.",
         Debt.FIVE_MINS
     )

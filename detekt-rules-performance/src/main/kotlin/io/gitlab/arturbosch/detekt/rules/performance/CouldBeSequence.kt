@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
@@ -36,7 +35,6 @@ class CouldBeSequence(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
         "CouldBeSequence",
-        Severity.Performance,
         "Several chained collection operations that should be a sequence.",
         Debt.FIVE_MINS
     )

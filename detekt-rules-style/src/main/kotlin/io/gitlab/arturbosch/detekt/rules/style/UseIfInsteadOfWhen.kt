@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.psi.KtProperty
@@ -32,7 +31,6 @@ class UseIfInsteadOfWhen(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
         "UseIfInsteadOfWhen",
-        Severity.Style,
         "Binary expressions are better expressed using an `if` expression than a `when` expression.",
         Debt.FIVE_MINS
     )

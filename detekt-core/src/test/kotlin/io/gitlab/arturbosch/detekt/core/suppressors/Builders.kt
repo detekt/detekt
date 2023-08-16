@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.RuleId
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
@@ -18,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtElement
 import kotlin.io.path.Path
 
 internal fun buildFinding(element: KtElement?): Finding = CodeSmell(
-    issue = Issue("RuleName", Severity.CodeSmell, "", Debt.FIVE_MINS),
+    issue = Issue("RuleName", "", Debt.FIVE_MINS),
     entity = element?.let { Entity.from(element) } ?: buildEmptyEntity(),
     message = "",
 )

@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -46,7 +45,6 @@ class ComplexCondition(
 
     override val issue = Issue(
         "ComplexCondition",
-        Severity.Maintainability,
         "Complex conditions should be simplified and extracted into well-named methods if necessary.",
         Debt.TWENTY_MINS
     )

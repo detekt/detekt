@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.internal.validateIdentifier
  */
 data class Issue(
     val id: String,
-    val severity: Severity,
     val description: String,
     val debt: Debt
 ) {
@@ -17,6 +16,6 @@ data class Issue(
     }
 
     override fun toString(): String {
-        return "Issue(id='$id', severity=$severity, debt=$debt)"
+        return "Issue(id='$id', debt=$debt)"
     }
 }

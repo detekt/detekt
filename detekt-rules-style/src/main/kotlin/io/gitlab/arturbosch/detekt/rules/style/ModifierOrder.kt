@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.lexer.KtModifierKeywordToken
 import org.jetbrains.kotlin.lexer.KtTokens.ABSTRACT_KEYWORD
@@ -56,7 +55,6 @@ class ModifierOrder(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "Modifiers are not in the correct order. Consider to reorder these modifiers.",
         Debt.FIVE_MINS
     )
@@ -98,7 +96,6 @@ class ModifierOrder(config: Config = Config.empty) : Rule(config) {
                 CodeSmell(
                     Issue(
                         javaClass.simpleName,
-                        Severity.Style,
                         "Modifier order should be: $modifierString",
                         Debt(mins = 1)
                     ),

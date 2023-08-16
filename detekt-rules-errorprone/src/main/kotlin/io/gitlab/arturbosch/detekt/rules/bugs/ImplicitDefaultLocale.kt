@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns.isStringOrNullableString
@@ -57,7 +56,6 @@ class ImplicitDefaultLocale(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "ImplicitDefaultLocale",
-        Severity.CodeSmell,
         "Implicit default locale used for string processing. Consider using explicit locale.",
         Debt.FIVE_MINS
     )

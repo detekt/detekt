@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.safeAs
@@ -42,7 +41,6 @@ class DontDowncastCollectionTypes(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "DontDowncastCollectionTypes",
-        Severity.Warning,
         "Down-casting immutable collection types is breaking the collection contract.",
         Debt.TEN_MINS
     )

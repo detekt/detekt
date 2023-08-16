@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
@@ -54,7 +53,6 @@ class SpreadOperator(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
         "SpreadOperator",
-        Severity.Performance,
         "In most cases using a spread operator causes a full copy of the array to be created before calling a " +
             "method. This may result in a performance penalty.",
         Debt.TWENTY_MINS
