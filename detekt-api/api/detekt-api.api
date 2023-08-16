@@ -512,20 +512,6 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/SetupContext : i
 	public abstract fun getOutputChannel ()Ljava/lang/Appendable;
 }
 
-public final class io/gitlab/arturbosch/detekt/api/Severity : java/lang/Enum {
-	public static final field CodeSmell Lio/gitlab/arturbosch/detekt/api/Severity;
-	public static final field Defect Lio/gitlab/arturbosch/detekt/api/Severity;
-	public static final field Maintainability Lio/gitlab/arturbosch/detekt/api/Severity;
-	public static final field Minor Lio/gitlab/arturbosch/detekt/api/Severity;
-	public static final field Performance Lio/gitlab/arturbosch/detekt/api/Severity;
-	public static final field Security Lio/gitlab/arturbosch/detekt/api/Severity;
-	public static final field Style Lio/gitlab/arturbosch/detekt/api/Severity;
-	public static final field Warning Lio/gitlab/arturbosch/detekt/api/Severity;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Severity;
-	public static fun values ()[Lio/gitlab/arturbosch/detekt/api/Severity;
-}
-
 public final class io/gitlab/arturbosch/detekt/api/SeverityLevel : java/lang/Enum {
 	public static final field ERROR Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
 	public static final field INFO Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
