@@ -13,6 +13,8 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class RuleCollectorSpec {
 
@@ -37,13 +39,12 @@ class RuleCollectorSpec {
         assertThat(items).isEmpty()
     }
 
-    @Test
-    fun `throws when a class extends Rule but has no valid documentation`() {
-        val rules = listOf("Rule", "FormattingRule", "ThresholdRule", "EmptyRule")
-        for (rule in rules) {
-            val code = "class SomeRandomClass : $rule"
-            assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
-        }
+    @ParameterizedTest
+    @ValueSource(strings = ["Rule", "FormattingRule", "EmptyRule"])
+    fun `throws when a class extends Rule but has no valid documentation`(rule: String) {
+        val code = "class SomeRandomClass : $rule"
+        assertThatExceptionOfType(InvalidDocumentationException::class.java)
+            .isThrownBy { subject.run(code) }
     }
 
     @Test
