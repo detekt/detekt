@@ -18,21 +18,6 @@ data class Entity(
     val ktElement: KtElement? = null
 ) : Compactable {
 
-    @Deprecated(
-        "className property is not used and will be removed in the future. ",
-        ReplaceWith(
-            "Entity(name, signature, location, ktElement)",
-            "io.gitlab.arturbosch.detekt.api.Entity"
-        )
-    )
-    constructor(
-        name: String,
-        @Suppress("UNUSED_PARAMETER") className: String,
-        signature: String,
-        location: Location,
-        ktElement: KtElement? = null
-    ) : this(name, signature, location, ktElement)
-
     override fun compact(): String = "[$name] at ${location.compact()}"
 
     companion object {
