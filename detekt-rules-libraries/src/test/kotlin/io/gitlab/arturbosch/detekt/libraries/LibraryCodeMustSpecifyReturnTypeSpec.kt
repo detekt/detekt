@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.libraries
 
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -14,25 +13,6 @@ import org.junit.jupiter.params.provider.ValueSource
 
 @KotlinCoreEnvironmentTest
 class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
-
-    @Test
-    fun `should not report without explicit filters set`() {
-        val subject = LibraryCodeMustSpecifyReturnType(TestConfig(Config.EXCLUDES_KEY to "**"))
-        assertThat(
-            subject.compileAndLintWithContext(
-                env,
-                """
-                    fun foo() = 5
-                    val bar = 5
-                    class A {
-                        fun b() = 2
-                        val c = 2
-                    }
-                """.trimIndent()
-            )
-        ).isEmpty()
-    }
-
     @Nested
     inner class `positive cases` {
         val subject = LibraryCodeMustSpecifyReturnType()
