@@ -21,26 +21,6 @@ class AnnotationExcluder(
 
     private val fullQualifiedNameGuesser = FullQualifiedNameGuesser(root)
 
-    @Deprecated("Use AnnotationExcluder(List<Regex>, KtFile) instead")
-    constructor(root: KtFile, excludes: SplitPattern) : this(
-        root,
-        excludes.mapAll { it }
-            .map { it.replace(".", "\\.").replace("*", ".*").toRegex() },
-        BindingContext.EMPTY,
-    )
-
-    @Deprecated("Use AnnotationExcluder(List<Regex>, KtFile) instead")
-    constructor(
-        root: KtFile,
-        excludes: List<String>,
-    ) : this(
-        root,
-        excludes.map {
-            it.replace(".", "\\.").replace("*", ".*").toRegex()
-        },
-        BindingContext.EMPTY,
-    )
-
     /**
      * Is true if any given annotation name is declared in the SplitPattern
      * which basically describes entries to exclude.
