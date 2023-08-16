@@ -146,7 +146,6 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/Entity.Companion/from/#org.jetbr
 $dokka.location:io.gitlab.arturbosch.detekt.api/Entity.Companion/from/#org.jetbrains.kotlin.com.intellij.psi.PsiElement#kotlin.Int/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/-companion/from.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Entity///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Entity/Entity/#kotlin.String#kotlin.String#io.gitlab.arturbosch.detekt.api.Location#org.jetbrains.kotlin.psi.KtElement?/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/-entity.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/Entity/Entity/#kotlin.String#kotlin.String#kotlin.String#io.gitlab.arturbosch.detekt.api.Location#org.jetbrains.kotlin.psi.KtElement?/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/-entity.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Entity/compact/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/compact.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Entity/ktElement/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/kt-element.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Entity/location/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/location.html
@@ -185,9 +184,6 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/Issue/description/#/PointingToDe
 $dokka.location:io.gitlab.arturbosch.detekt.api/Issue/id/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/id.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Issue/severity/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/severity.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Issue/toString/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/to-string.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/LazyRegex///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-lazy-regex/index.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/LazyRegex/LazyRegex/#kotlin.String#kotlin.String/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-lazy-regex/-lazy-regex.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/LazyRegex/getValue/#io.gitlab.arturbosch.detekt.api.Rule#kotlin.reflect.KProperty[*]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-lazy-regex/get-value.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Location.Companion///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-location/-companion/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Location.Companion/from/#org.jetbrains.kotlin.com.intellij.psi.PsiElement#kotlin.Int/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-location/-companion/from.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Location.Companion/startLineAndColumn/#org.jetbrains.kotlin.com.intellij.psi.PsiElement#kotlin.Int/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-location/-companion/start-line-and-column.html
