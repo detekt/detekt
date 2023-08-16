@@ -584,11 +584,6 @@ public final class io/gitlab/arturbosch/detekt/api/TextLocation {
 	public fun toString ()Ljava/lang/String;
 }
 
-public abstract class io/gitlab/arturbosch/detekt/api/ThresholdRule : io/gitlab/arturbosch/detekt/api/Rule {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;I)V
-	protected final fun getThreshold ()I
-}
-
 public class io/gitlab/arturbosch/detekt/api/ThresholdedCodeSmell : io/gitlab/arturbosch/detekt/api/CodeSmell {
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Issue;Lio/gitlab/arturbosch/detekt/api/Entity;Lio/gitlab/arturbosch/detekt/api/Metric;Ljava/lang/String;Ljava/util/List;)V
 	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Issue;Lio/gitlab/arturbosch/detekt/api/Entity;Lio/gitlab/arturbosch/detekt/api/Metric;Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
