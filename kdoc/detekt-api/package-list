@@ -317,8 +317,6 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/TextLocation/TextLocation/#kotli
 $dokka.location:io.gitlab.arturbosch.detekt.api/TextLocation/end/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/end.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/TextLocation/start/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/start.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/TextLocation/toString/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/to-string.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/ThresholdRule///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-threshold-rule/index.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/ThresholdRule/ThresholdRule/#io.gitlab.arturbosch.detekt.api.Config#kotlin.Int/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-threshold-rule/-threshold-rule.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/ThresholdedCodeSmell///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/ThresholdedCodeSmell/ThresholdedCodeSmell/#io.gitlab.arturbosch.detekt.api.Issue#io.gitlab.arturbosch.detekt.api.Entity#io.gitlab.arturbosch.detekt.api.Metric#kotlin.String#kotlin.collections.List[io.gitlab.arturbosch.detekt.api.Entity]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/-thresholded-code-smell.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/ThresholdedCodeSmell/compact/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/compact.html
