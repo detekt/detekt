@@ -131,11 +131,6 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/Debt/hours/#/PointingToDeclarati
 $dokka.location:io.gitlab.arturbosch.detekt.api/Debt/mins/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/mins.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Debt/plus/#io.gitlab.arturbosch.detekt.api.Debt/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/plus.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Debt/toString/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/to-string.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/DefaultContext///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-default-context/index.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/DefaultContext/DefaultContext/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-default-context/-default-context.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/DefaultContext/clearFindings/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-default-context/clear-findings.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/DefaultContext/findings/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-default-context/findings.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/DefaultContext/report/#io.gitlab.arturbosch.detekt.api.Finding#kotlin.collections.Set[kotlin.String]#kotlin.String?/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-default-context/report.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/DetektVisitor///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-detekt-visitor/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/DetektVisitor/DetektVisitor/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-detekt-visitor/-detekt-visitor.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Detektion///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-detektion/index.html
