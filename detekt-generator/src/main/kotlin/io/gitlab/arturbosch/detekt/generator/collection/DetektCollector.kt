@@ -30,16 +30,16 @@ class DetektCollector(textReplacements: Map<String, String>) : Collector<RuleSet
     }
 
     private fun List<Rule>.findRuleByName(ruleName: String): Rule {
-        return find { it.name == ruleName }
-            ?: throw InvalidDocumentationException("Rule $ruleName was specified in a provider but it was not defined.")
+        return find { it.name == ruleName } ?: throw InvalidDocumentationException(
+            "Rule '$ruleName' was specified in a provider but it was not defined."
+        )
     }
 
     private fun List<Rule>.resolveParentRule(rules: List<Rule>) {
-        this.filter { it.debt.isEmpty() && it.severity.isEmpty() }
+        this.filter { it.debt.isEmpty() }
             .forEach {
                 val parentRule = rules.findRuleByName(it.parent)
                 it.debt = parentRule.debt
-                it.severity = parentRule.severity
             }
     }
 
