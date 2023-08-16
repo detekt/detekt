@@ -19,12 +19,12 @@ class IssueExtensionSpec {
     )
 
     @Test
-    fun `compute weighted amount of issues`() {
+    fun `compute issue count`() {
         val detektion = object : TestDetektion() {
             override val findings: Map<String, List<Finding>> = issues
         }
 
-        val amount = detektion.getOrComputeWeightedAmountOfIssues(Config.empty)
+        val amount = detektion.getOrComputeIssueCount(Config.empty)
         assertThat(amount).isEqualTo(3)
     }
 

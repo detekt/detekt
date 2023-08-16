@@ -12,7 +12,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.config.MaxIssueCheck
-import io.gitlab.arturbosch.detekt.core.config.getOrComputeWeightedAmountOfIssues
+import io.gitlab.arturbosch.detekt.core.config.getOrComputeIssueCount
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import java.nio.file.Path
@@ -62,7 +62,7 @@ class AnalysisFacade(
         }
 
         val error = runCatching {
-            val amount = result.getOrComputeWeightedAmountOfIssues(config)
+            val amount = result.getOrComputeIssueCount(config)
             MaxIssueCheck(spec.rulesSpec, config).check(amount)
         }.exceptionOrNull()
 
