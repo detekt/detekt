@@ -137,7 +137,6 @@ public abstract class io/gitlab/arturbosch/detekt/api/ConsoleReport : io/gitlab/
 	public fun getPriority ()I
 	public fun init (Lio/gitlab/arturbosch/detekt/api/Config;)V
 	public fun init (Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
-	public final fun print (Ljava/io/PrintStream;Lio/gitlab/arturbosch/detekt/api/Detektion;)V
 	public abstract fun render (Lio/gitlab/arturbosch/detekt/api/Detektion;)Ljava/lang/String;
 }
 
