@@ -39,7 +39,7 @@ public class io/gitlab/arturbosch/detekt/api/CodeSmell : io/gitlab/arturbosch/de
 	public fun getMessage ()Ljava/lang/String;
 	public fun getMetrics ()Ljava/util/List;
 	public fun getReferences ()Ljava/util/List;
-	public fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
+	public fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
 	public fun getSignature ()Ljava/lang/String;
 	public fun getStartPosition ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
 	public fun messageOrDescription ()Ljava/lang/String;
@@ -262,7 +262,7 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Finding : io/git
 	public abstract fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
 	public abstract fun getMessage ()Ljava/lang/String;
 	public abstract fun getReferences ()Ljava/util/List;
-	public abstract fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
+	public abstract fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
 	public abstract fun messageOrDescription ()Ljava/lang/String;
 }
 
@@ -271,7 +271,7 @@ public final class io/gitlab/arturbosch/detekt/api/Finding$DefaultImpls {
 	public static fun getCharPosition (Lio/gitlab/arturbosch/detekt/api/Finding;)Lio/gitlab/arturbosch/detekt/api/TextLocation;
 	public static fun getFile (Lio/gitlab/arturbosch/detekt/api/Finding;)Ljava/lang/String;
 	public static fun getLocation (Lio/gitlab/arturbosch/detekt/api/Finding;)Lio/gitlab/arturbosch/detekt/api/Location;
-	public static fun getSeverity (Lio/gitlab/arturbosch/detekt/api/Finding;)Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
+	public static fun getSeverity (Lio/gitlab/arturbosch/detekt/api/Finding;)Lio/gitlab/arturbosch/detekt/api/Severity;
 	public static fun getSignature (Lio/gitlab/arturbosch/detekt/api/Finding;)Ljava/lang/String;
 	public static fun getStartPosition (Lio/gitlab/arturbosch/detekt/api/Finding;)Lio/gitlab/arturbosch/detekt/api/SourceLocation;
 	public static fun metricByType (Lio/gitlab/arturbosch/detekt/api/Finding;Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Metric;
@@ -480,13 +480,13 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/SetupContext : i
 	public abstract fun getOutputChannel ()Ljava/lang/Appendable;
 }
 
-public final class io/gitlab/arturbosch/detekt/api/SeverityLevel : java/lang/Enum {
-	public static final field ERROR Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
-	public static final field INFO Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
-	public static final field WARNING Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
+public final class io/gitlab/arturbosch/detekt/api/Severity : java/lang/Enum {
+	public static final field ERROR Lio/gitlab/arturbosch/detekt/api/Severity;
+	public static final field INFO Lio/gitlab/arturbosch/detekt/api/Severity;
+	public static final field WARNING Lio/gitlab/arturbosch/detekt/api/Severity;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
-	public static fun values ()[Lio/gitlab/arturbosch/detekt/api/SeverityLevel;
+	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Severity;
+	public static fun values ()[Lio/gitlab/arturbosch/detekt/api/Severity;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/SingleAssign {

@@ -5,11 +5,10 @@ import io.github.detekt.tooling.api.VersionProvider
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.SeverityLevel
+import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.UnstableApi
@@ -17,9 +16,8 @@ import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.test.EmptySetupContext
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import io.gitlab.arturbosch.detekt.test.createEntity
+import io.gitlab.arturbosch.detekt.test.createFinding
 import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
-import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.junit.jupiter.api.Test
@@ -32,9 +30,9 @@ class SarifOutputReportSpec {
     @Test
     fun `renders multiple issues`() {
         val result = TestDetektion(
-            createFinding(ruleName = "TestSmellA", severity = SeverityLevel.ERROR),
-            createFinding(ruleName = "TestSmellB", severity = SeverityLevel.WARNING),
-            createFinding(ruleName = "TestSmellC", severity = SeverityLevel.INFO)
+            createFinding(ruleName = "TestSmellA", severity = Severity.ERROR),
+            createFinding(ruleName = "TestSmellB", severity = Severity.WARNING),
+            createFinding(ruleName = "TestSmellC", severity = Severity.INFO)
         )
 
         val report = SarifOutputReport()
@@ -102,7 +100,7 @@ class SarifOutputReportSpec {
             createFinding(
                 ruleName = "TestSmellB",
                 entity = refEntity.copy(location = location),
-                severity = SeverityLevel.WARNING
+                severity = Severity.WARNING
             )
         )
 
@@ -139,7 +137,7 @@ class SarifOutputReportSpec {
             createFinding(
                 ruleName = "TestSmellB",
                 entity = refEntity.copy(location = location),
-                severity = SeverityLevel.WARNING
+                severity = Severity.WARNING
             )
         )
 
@@ -178,17 +176,6 @@ class TestRule : Rule() {
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         report(CodeSmell(issue, Entity.atName(classOrObject), message = "Error"))
-    }
-}
-
-private fun createFinding(
-    ruleName: String,
-    severity: SeverityLevel,
-    entity: Entity = createEntity("TestFile.kt")
-): Finding {
-    return object : CodeSmell(createIssue(ruleName), entity, "TestMessage") {
-        override val severity: SeverityLevel
-            get() = severity
     }
 }
 

@@ -26,9 +26,9 @@ interface RulesSpec {
     sealed class FailurePolicy {
 
         /**
-         * No issues are allowed
+         * No issues with a severity of error is allowed.
          */
-        data object NoneAllowed : FailurePolicy()
+        data object FailOnError : FailurePolicy()
     }
 
     /**
