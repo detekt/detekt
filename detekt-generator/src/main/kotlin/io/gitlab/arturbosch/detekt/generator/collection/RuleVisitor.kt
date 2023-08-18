@@ -170,7 +170,6 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
             // which needs output of this class.
             "Rule", // io.gitlab.arturbosch.detekt.api.Rule
             "FormattingRule", // io.gitlab.arturbosch.detekt.formatting.FormattingRule
-            "ThresholdRule", // io.gitlab.arturbosch.detekt.api.ThresholdRule
             "EmptyRule", // io.gitlab.arturbosch.detekt.rules.empty.EmptyRule
         )
 

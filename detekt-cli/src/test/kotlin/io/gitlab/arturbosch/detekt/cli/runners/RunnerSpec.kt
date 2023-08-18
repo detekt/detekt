@@ -271,7 +271,7 @@ class RunnerSpec {
         fun `does fail via cli flag`() {
             assertThatThrownBy { executeDetekt("--input", inputPath.toString(), "--max-issues", "0") }
                 .isExactlyInstanceOf(MaxIssuesReached::class.java)
-                .hasMessage("Analysis failed with 1 weighted issues.")
+                .hasMessage("Analysis failed with 1 issues.")
         }
 
         @Test
@@ -286,7 +286,7 @@ class RunnerSpec {
                     "configs/max-issues--1.yml" // allow any
                 )
             }.isExactlyInstanceOf(MaxIssuesReached::class.java)
-                .hasMessage("Analysis failed with 1 weighted issues.")
+                .hasMessage("Analysis failed with 1 issues.")
         }
 
         @Test

@@ -6,9 +6,12 @@ import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 
 internal class InvalidPropertiesConfigValidator(
     private val baseline: YamlConfig,
-    private val deprecatedProperties: Set<String>,
+    deprecatedProperties: Set<DeprecatedProperty>,
     private val excludePatterns: Set<Regex>,
 ) : AbstractYamlConfigValidator() {
+    private val deprecatedPropertyPaths: Set<String> = deprecatedProperties
+        .map { "${it.ruleSetId}>${it.ruleId}>${it.propertyName}" }
+        .toSet()
 
     override fun validate(
         configToValidate: YamlConfig,
@@ -26,7 +29,7 @@ internal class InvalidPropertiesConfigValidator(
         for (prop in configToValidate.keys) {
             val propertyPath = "${if (parentPath == null) "" else "$parentPath>"}$prop"
             val isExcluded = excludePatterns.any { it.matches(propertyPath) }
-            val isDeprecated = deprecatedProperties.contains(propertyPath)
+            val isDeprecated = deprecatedPropertyPaths.contains(propertyPath)
             if (isExcluded || isDeprecated) {
                 continue
             }
@@ -61,10 +64,13 @@ internal class InvalidPropertiesConfigValidator(
         return when {
             next == null && nextBase != null ->
                 listOf(nestedConfigurationExpected(propertyPath))
+
             baseline.contains(propertyName) && next != null && nextBase == null ->
                 listOf(unexpectedNestedConfiguration(propertyPath))
+
             next != null && nextBase != null ->
                 testKeys(next, nextBase, propertyPath)
+
             else -> emptyList()
         }
     }

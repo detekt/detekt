@@ -7,8 +7,14 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 internal class DeprecatedPropertiesConfigValidatorSpec {
-    private val deprecatedProperties =
-        mapOf("naming>FunctionParameterNaming>ignoreOverriddenFunctions" to "Use `ignoreOverridden` instead")
+    private val deprecatedProperties = setOf(
+        DeprecatedProperty(
+            ruleSetId = "naming",
+            ruleId = "FunctionParameterNaming",
+            propertyName = "ignoreOverriddenFunctions",
+            description = "Use `ignoreOverridden` instead"
+        )
+    )
 
     private val subject = DeprecatedPropertiesConfigValidator(deprecatedProperties)
 

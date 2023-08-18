@@ -27,18 +27,18 @@ class XmlOutputFormatSpec {
         "Sample1",
         "",
         Location(
-            SourceLocation(11, 1),
-            TextLocation(0, 10),
-            FilePath.fromAbsolute(Path("src/main/com/sample/Sample1.kt"))
+            source = SourceLocation(11, 1),
+            text = TextLocation(0, 10),
+            filePath = FilePath.fromAbsolute(Path("src/main/com/sample/Sample1.kt"))
         )
     )
     private val entity2 = Entity(
         "Sample2",
         "",
         Location(
-            SourceLocation(22, 2),
-            TextLocation(0, 20),
-            FilePath.fromAbsolute(Path("src/main/com/sample/Sample2.kt"))
+            source = SourceLocation(22, 2),
+            text = TextLocation(0, 20),
+            filePath = FilePath.fromAbsolute(Path("src/main/com/sample/Sample2.kt"))
         )
     )
     private val outputFormat = XmlOutputReport()

@@ -37,7 +37,11 @@ class NewLineAtEndOfFile(config: Config = Config.empty) : Rule(config) {
             )
             val sourceLocation = SourceLocation(coords?.line ?: 0, coords?.column ?: 0)
             val textLocation = TextLocation(file.endOffset, file.endOffset)
-            val location = Location(sourceLocation, textLocation, file.containingFile.toFilePath())
+            val location = Location(
+                source = sourceLocation,
+                text = textLocation,
+                filePath = file.containingFile.toFilePath()
+            )
             report(
                 CodeSmell(
                     issue,
