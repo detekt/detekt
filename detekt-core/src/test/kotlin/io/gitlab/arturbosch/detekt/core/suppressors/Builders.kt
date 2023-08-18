@@ -26,7 +26,11 @@ internal fun buildFinding(element: KtElement?): Finding = CodeSmell(
 private fun buildEmptyEntity(): Entity = Entity(
     name = "",
     signature = "",
-    location = Location(SourceLocation(0, 0), TextLocation(0, 0), FilePath.fromAbsolute(Path("/"))),
+    location = Location(
+        source = SourceLocation(0, 0),
+        text = TextLocation(0, 0),
+        filePath = FilePath.fromAbsolute(Path("/"))
+    ),
     ktElement = null,
 )
 
