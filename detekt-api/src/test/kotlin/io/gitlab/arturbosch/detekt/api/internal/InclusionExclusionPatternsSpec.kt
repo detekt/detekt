@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
@@ -121,7 +120,7 @@ private fun Path.runWith(rule: DummyRule): DummyRule {
 
 private class OnlyLibraryTrackingRule(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue("test", Severity.CodeSmell, "", Debt.FIVE_MINS)
+    override val issue: Issue = Issue("test", "", Debt.FIVE_MINS)
     private var libraryFileVisited = false
     private var counter = 0
 
@@ -144,7 +143,7 @@ private class OnlyLibraryTrackingRule(config: Config) : Rule(config) {
 
 private class DummyRule(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("test", Severity.CodeSmell, "", Debt.FIVE_MINS)
+    override val issue = Issue("test", "", Debt.FIVE_MINS)
     private var isDirty: Boolean = false
 
     override fun visitKtFile(file: KtFile) {

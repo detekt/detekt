@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
@@ -67,7 +66,6 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
     override val issue =
         Issue(
             "UnnecessaryAbstractClass",
-            Severity.Style,
             "An abstract class is unnecessary. May be refactored to an interface or to a concrete class.",
             Debt.FIVE_MINS
         )

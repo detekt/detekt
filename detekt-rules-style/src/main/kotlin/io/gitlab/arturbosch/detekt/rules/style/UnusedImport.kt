@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isPartOf
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
@@ -34,7 +33,6 @@ class UnusedImport(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "Unused Imports are dead code and should be removed.",
         Debt.FIVE_MINS
     )

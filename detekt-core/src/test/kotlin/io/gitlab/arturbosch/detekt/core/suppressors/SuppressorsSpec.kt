@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -57,5 +56,5 @@ class SuppressorsSpec {
 }
 
 private class ARule(config: Config = Config.empty) : Rule(config) {
-    override val issue = Issue("IssueId", Severity.CodeSmell, "", Debt.TWENTY_MINS)
+    override val issue = Issue("IssueId", "", Debt.TWENTY_MINS)
 }

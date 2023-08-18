@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isCalling
 import io.gitlab.arturbosch.detekt.rules.isNullable
@@ -44,7 +43,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
 class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Defect,
         "`toString()` on nullable receiver may return the string \"null\"",
         Debt.FIVE_MINS
     )

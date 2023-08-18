@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -39,7 +38,6 @@ class SpacingAfterPackageDeclaration(config: Config = Config.empty) : Rule(confi
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "Violation of the package declaration style detected.",
         Debt.FIVE_MINS
     )

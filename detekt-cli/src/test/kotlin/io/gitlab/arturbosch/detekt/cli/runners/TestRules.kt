@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClass
 
 class TestProvider : RuleSetProvider {
@@ -17,7 +16,7 @@ class TestProvider : RuleSetProvider {
 }
 
 class TestRule : Rule() {
-    override val issue = Issue("test", Severity.Minor, "A failure", Debt.FIVE_MINS)
+    override val issue = Issue("test", "A failure", Debt.FIVE_MINS)
     override fun visitClass(klass: KtClass) {
         if (klass.name == "Poko") {
             report(CodeSmell(issue, Entity.from(klass), issue.description))

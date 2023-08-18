@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isPartOf
 import io.gitlab.arturbosch.detekt.rules.isPartOfString
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
@@ -23,7 +22,6 @@ class NoTabs(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "Checks if tabs are used in Kotlin files.",
         Debt.FIVE_MINS
     )

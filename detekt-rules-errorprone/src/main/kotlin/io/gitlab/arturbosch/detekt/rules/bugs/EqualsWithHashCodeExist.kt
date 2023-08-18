@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
 import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
@@ -49,7 +48,6 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "EqualsWithHashCodeExist",
-        Severity.Defect,
         "Always override hashCode when you override equals. " +
             "All hash-based collections depend on objects meeting the equals-contract. " +
             "Two equal objects must produce the same hashcode. When inheriting equals or hashcode, " +

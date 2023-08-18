@@ -304,18 +304,16 @@ public final class io/gitlab/arturbosch/detekt/api/HasMetrics$DefaultImpls {
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Issue {
-	public fun <init> (Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Severity;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Debt;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Debt;)V
 	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Lio/gitlab/arturbosch/detekt/api/Severity;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Lio/gitlab/arturbosch/detekt/api/Debt;
-	public final fun copy (Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Severity;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Debt;)Lio/gitlab/arturbosch/detekt/api/Issue;
-	public static synthetic fun copy$default (Lio/gitlab/arturbosch/detekt/api/Issue;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Severity;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Debt;ILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/Issue;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lio/gitlab/arturbosch/detekt/api/Debt;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Debt;)Lio/gitlab/arturbosch/detekt/api/Issue;
+	public static synthetic fun copy$default (Lio/gitlab/arturbosch/detekt/api/Issue;Ljava/lang/String;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Debt;ILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/Issue;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getDebt ()Lio/gitlab/arturbosch/detekt/api/Debt;
 	public final fun getDescription ()Ljava/lang/String;
 	public final fun getId ()Ljava/lang/String;
-	public final fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
@@ -480,20 +478,6 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/SetupContext : i
 	public abstract fun getConfigUris ()Ljava/util/Collection;
 	public abstract fun getErrorChannel ()Ljava/lang/Appendable;
 	public abstract fun getOutputChannel ()Ljava/lang/Appendable;
-}
-
-public final class io/gitlab/arturbosch/detekt/api/Severity : java/lang/Enum {
-	public static final field CodeSmell Lio/gitlab/arturbosch/detekt/api/Severity;
-	public static final field Defect Lio/gitlab/arturbosch/detekt/api/Severity;
-	public static final field Maintainability Lio/gitlab/arturbosch/detekt/api/Severity;
-	public static final field Minor Lio/gitlab/arturbosch/detekt/api/Severity;
-	public static final field Performance Lio/gitlab/arturbosch/detekt/api/Severity;
-	public static final field Security Lio/gitlab/arturbosch/detekt/api/Severity;
-	public static final field Style Lio/gitlab/arturbosch/detekt/api/Severity;
-	public static final field Warning Lio/gitlab/arturbosch/detekt/api/Severity;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Severity;
-	public static fun values ()[Lio/gitlab/arturbosch/detekt/api/Severity;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/SeverityLevel : java/lang/Enum {

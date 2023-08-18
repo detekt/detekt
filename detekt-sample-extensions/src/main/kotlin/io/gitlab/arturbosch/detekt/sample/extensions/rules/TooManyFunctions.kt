@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -17,7 +16,6 @@ class TooManyFunctions(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.CodeSmell,
         "This rule reports a file with an excessive function count.",
         Debt.TWENTY_MINS
     )

@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -41,7 +40,6 @@ class AlsoCouldBeApply(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "AlsoCouldBeApply",
-        Severity.Style,
         "When an `also` block contains only `it`-started expressions, simplify it to the `apply` block.",
         Debt.FIVE_MINS
     )

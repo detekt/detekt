@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
@@ -46,7 +45,6 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "ReturnFromFinally",
-        Severity.Defect,
         "Do not return within a finally statement. This can discard exceptions.",
         Debt.TWENTY_MINS
     )

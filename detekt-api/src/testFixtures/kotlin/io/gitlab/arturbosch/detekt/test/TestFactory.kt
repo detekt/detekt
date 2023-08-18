@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.jetbrains.kotlin.psi.KtElement
@@ -50,7 +49,6 @@ fun createFindingForRelativePath(
 
 fun createIssue(id: String) = Issue(
     id = id,
-    severity = Severity.CodeSmell,
     description = "Description $id",
     debt = Debt.FIVE_MINS
 )
