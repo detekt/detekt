@@ -2,7 +2,7 @@ package io.github.detekt.compiler.plugin.internal
 
 import io.github.detekt.tooling.api.DetektProvider
 import io.github.detekt.tooling.api.InvalidConfig
-import io.github.detekt.tooling.api.MaxIssuesReached
+import io.github.detekt.tooling.api.IssuesFound
 import io.github.detekt.tooling.api.UnexpectedError
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.UnstableApi
@@ -25,7 +25,7 @@ internal class DetektService(
         log.info("Success?: ${result.error == null}")
         when (val error = result.error) {
             is UnexpectedError -> throw error
-            is MaxIssuesReached -> log.warn(error.localizedMessage) // TODO: handle MaxIssuePolicy
+            is IssuesFound -> log.warn(error.localizedMessage) // TODO: handle MaxIssuePolicy
             is InvalidConfig -> log.warn(error.localizedMessage)
             null -> { } // nothing to do in this case
         }

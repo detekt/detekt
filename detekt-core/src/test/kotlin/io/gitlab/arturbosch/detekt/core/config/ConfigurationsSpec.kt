@@ -104,11 +104,5 @@ class ConfigurationsSpec {
                 .valueOrDefault("active", true)
             assertThat(actual).isFalse()
         }
-
-        @Test
-        fun `should be maxIssues=0 by default`() {
-            val actual = config.subConfig("build").valueOrDefault("maxIssues", -1)
-            assertThat(actual).isEqualTo(0)
-        }
     }
 }

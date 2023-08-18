@@ -1,6 +1,3 @@
-build:
-  maxIssues: 10
-
 config:
   validation: true
   excludes: 'test>.*'
