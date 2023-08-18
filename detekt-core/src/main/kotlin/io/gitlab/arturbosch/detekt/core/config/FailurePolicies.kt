@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.core.reporting.filterAutoCorrectedIssues
 internal fun RulesSpec.FailurePolicy.check(result: Detektion, config: Config) {
     val issueCount = result.computeIssueCount(config)
     if (issueCount > 0) {
-        throw IssuesFound("Analysis failed with ${result.findings.size} issues.")
+        throw IssuesFound("Analysis failed with $issueCount issues.")
     }
 }
 
