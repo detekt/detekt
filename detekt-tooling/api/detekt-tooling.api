@@ -301,10 +301,8 @@ public final class io/github/detekt/tooling/dsl/ExtensionsSpecBuilder : io/githu
 	public final fun fromClassloader (Lkotlin/jvm/functions/Function0;)V
 	public final fun fromPaths (Lkotlin/jvm/functions/Function0;)V
 	public final fun getDisableDefaultRuleSets ()Z
-	public final fun getDisabledExtensions ()Ljava/util/Set;
 	public final fun getPlugins ()Lio/github/detekt/tooling/api/spec/ExtensionsSpec$Plugins;
 	public final fun setDisableDefaultRuleSets (Z)V
-	public final fun setDisabledExtensions (Ljava/util/Set;)V
 	public final fun setPlugins (Lio/github/detekt/tooling/api/spec/ExtensionsSpec$Plugins;)V
 }
 

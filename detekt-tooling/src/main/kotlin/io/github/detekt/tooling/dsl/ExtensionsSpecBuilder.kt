@@ -12,11 +12,7 @@ class ExtensionsSpecBuilder : Builder<ExtensionsSpec> {
     var plugins: ExtensionsSpec.Plugins? = null
 
     @Suppress("DoubleMutabilityForCollection")
-    var disabledExtensions: MutableSet<ExtensionId> = mutableSetOf()
-        @Deprecated("This setter will be removed in a future version.")
-        set(value) {
-            field = value
-        }
+    private var disabledExtensions: MutableSet<ExtensionId> = mutableSetOf()
 
     override fun build(): ExtensionsSpec = ExtensionsModel(
         disableDefaultRuleSets,
