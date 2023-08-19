@@ -25,7 +25,7 @@ internal class DetektService(
         log.info("Success?: ${result.error == null}")
         when (val error = result.error) {
             is UnexpectedError -> throw error
-            is IssuesFound -> log.warn(error.localizedMessage) // TODO: handle MaxIssuePolicy
+            is IssuesFound -> log.warn(error.localizedMessage)
             is InvalidConfig -> log.warn(error.localizedMessage)
             null -> { } // nothing to do in this case
         }
