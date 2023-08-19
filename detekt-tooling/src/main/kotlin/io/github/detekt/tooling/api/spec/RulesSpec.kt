@@ -11,7 +11,7 @@ interface RulesSpec {
     val activateAllRules: Boolean
 
     /**
-     * Sets the policy for allowed max issues found during the analysis.
+     * Sets the policy to handle issues found during the analysis.
      */
     val failurePolicy: FailurePolicy
 
