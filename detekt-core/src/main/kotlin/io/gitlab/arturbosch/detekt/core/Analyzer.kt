@@ -209,10 +209,9 @@ internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config = wi
     return declaredConfig ?: getDefaultConfiguration()
 }
 
-internal fun loadDeprecatedRuleIds(): Set<String> {
-    return loadDeprecations().keys
+internal fun loadDeprecatedRuleIds(): Set<String> =
+    loadDeprecations().keys
         .map { it.split(">") }
         .filter { it.size == 2 }
         .map { it.joinToString(" > ") }
         .toSet()
-}
