@@ -37,7 +37,6 @@ class AllRulesConfigSpec {
         }
     }
 
-
     @Nested
     inner class DeactivateDeprecatedRule {
 
