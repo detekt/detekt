@@ -70,13 +70,12 @@ dependencies {
     compileOnly(libs.kotlin.gradle)
     compileOnly(libs.kotlin.gradlePluginApi)
     testFixturesCompileOnly("org.jetbrains:annotations:24.0.1")
-    compileOnly("io.gitlab.arturbosch.detekt:detekt-cli:1.23.1")
+    compileOnly(projects.detektCli)
 
     testKitRuntimeOnly(libs.kotlin.gradle)
     testKitJava17RuntimeOnly(libs.android.gradle.maxSupported)
 
-    // We use this published version of the detekt-formatting to self analyse this project.
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.1")
+    detektPlugins(projects.detektFormatting)
 }
 
 gradlePlugin {
