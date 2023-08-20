@@ -15,6 +15,12 @@ const ruleTestChanges = danger.git.fileMatch(
 const detektConfigFileChanges = danger.git.fileMatch(
   "**/default-detekt-config.yml"
 );
+const websiteUnversionedChanges = danger.git.fileMatch(
+    "website/docs/**/*.md",
+    "website/docs/**/*.mdx");
+const websiteVersionedChanges = danger.git.fileMatch(
+    "website/versioned_docs/**/*.md",
+    "website/versioned_docs/**/*.mdx");
 const milestone = danger.github.pr.milestone;
 const prReviews = danger.github.reviews;
 
@@ -72,5 +78,18 @@ if (docsChanges.edited) {
 if (!milestone && prReviews.some((review) => review.state === "APPROVED")) {
   warn(
     "This PR is approved with no milestone set. If merged, it won't appear in the detekt release notes."
+  );
+}
+
+// Warn if docs changes are either on the un-versioned copy or the versioned copy only.
+if (websiteUnversionedChanges.edited && !websiteVersionedChanges.edited) {
+  warn(
+    "It looks like you're editing the **un-versioned copy** of our website. This affects only users on the 'next' version of detekt, and it's correct only if you intend to document a **future change or feature**. " +
+      "If you intended to make a change also for the **current** version of detekt, please make sure you edit the equivalent file inside `website/versioned_docs/` as well."
+  );
+} else if (!websiteUnversionedChanges.edited && websiteVersionedChanges.edited) {
+  warn(
+    "It looks like you're editing the **versioned copy** of our website. This affects only users on the 'current' version of detekt, and it's correct only if you intend to fix the documentation for an **already released** version of detekt. " +
+      "Most of the time you want to update also the docs inside `website/docs/` as well, so this change will reflect also for documentation on **future versions** of detekt."
   );
 }
