@@ -2,6 +2,16 @@ complexity:
   TooManyFunctions:
     excludes: ["**/test/**", "**/functionalTest/**"]
 
+libraries:
+  ForbiddenPublicDataClass:
+    active: false
+  LibraryEntitiesShouldNotBePublic:
+    active: false
+  LibraryCodeMustSpecifyReturnType:
+    active: true
+    excludes: ['**/*.kt']
+    includes: ['**/detekt-api/src/main/**/api/*.kt']
+
 naming:
   ClassNaming:
     ignoreAnnotated: ['org.junit.jupiter.api.Nested']
