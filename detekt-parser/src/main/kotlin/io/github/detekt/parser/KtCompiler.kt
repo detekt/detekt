@@ -13,6 +13,7 @@ import kotlin.io.path.absolute
 import kotlin.io.path.isRegularFile
 import kotlin.io.path.name
 import kotlin.io.path.readText
+import kotlin.io.path.relativeTo
 
 open class KtCompiler(
     protected val environment: KotlinCoreEnvironment = createKotlinCoreEnvironment(printStream = System.err)
@@ -42,7 +43,7 @@ open class KtCompiler(
             this.lineSeparator = lineSeparator
             val normalizedBasePath = basePath.absolute().normalize()
             this.basePath = normalizedBasePath.absolute()
-            this.relativePath = normalizedBasePath.relativize(normalizedAbsolutePath)
+            this.relativePath = normalizedAbsolutePath.relativeTo(normalizedBasePath)
         }
     }
 }

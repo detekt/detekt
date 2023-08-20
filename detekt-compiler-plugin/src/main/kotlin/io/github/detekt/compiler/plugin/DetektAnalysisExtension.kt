@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisHandlerExtension
 import java.nio.file.FileSystems
 import java.nio.file.Path
 import kotlin.io.path.Path
+import kotlin.io.path.relativeTo
 
 class DetektAnalysisExtension(
     private val log: MessageCollector,
@@ -32,7 +33,7 @@ class DetektAnalysisExtension(
         }
         val matchers = excludes.map { FileSystems.getDefault().getPathMatcher("glob:$it") }
         val (includedFiles, excludedFiles) = files.partition { file ->
-            matchers.none { it.matches(rootPath.relativize(Path(file.virtualFilePath))) }
+            matchers.none { it.matches(Path(file.virtualFilePath).relativeTo(rootPath)) }
         }
         log.info("Running detekt on module '${module.name.asString()}'")
         excludedFiles.forEach { log.info("File excluded by filter: ${it.virtualFilePath}") }
