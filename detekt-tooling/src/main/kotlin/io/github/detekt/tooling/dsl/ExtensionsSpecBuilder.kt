@@ -11,8 +11,7 @@ class ExtensionsSpecBuilder : Builder<ExtensionsSpec> {
     var disableDefaultRuleSets: Boolean = false
     var plugins: ExtensionsSpec.Plugins? = null
 
-    @Suppress("DoubleMutabilityForCollection")
-    private var disabledExtensions: MutableSet<ExtensionId> = mutableSetOf()
+    private val disabledExtensions: MutableSet<ExtensionId> = mutableSetOf()
 
     override fun build(): ExtensionsSpec = ExtensionsModel(
         disableDefaultRuleSets,
