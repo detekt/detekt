@@ -8,7 +8,7 @@ repositories {
     exclusiveContent {
         forRepository {
             ivy {
-                url = uri("../../build/repo")
+                url = uri("${System.getenv("DGP_PROJECT_DEPS_REPO_PATH")}")
             }
         }
         filter {
