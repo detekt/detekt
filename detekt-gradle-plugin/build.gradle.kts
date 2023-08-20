@@ -80,11 +80,14 @@ testing {
                             "detekt-rules-style",
                             "detekt-tooling",
                             "detekt-utils",
-                        ).forEach {
-                            dependsOn(":${it}:publishIvyPublicationToGradlePluginFunctionalTestRepository")
+                        ).forEach { projectName ->
+                            dependsOn(":$projectName:publishIvyPublicationToGradlePluginFunctionalTestRepository")
                         }
 
-                        environment("DGP_PROJECT_DEPS_REPO_PATH", layout.buildDirectory.dir("repo").get().asFile.invariantSeparatorsPath)
+                        environment(
+                            "DGP_PROJECT_DEPS_REPO_PATH",
+                            layout.buildDirectory.dir("repo").get().asFile.invariantSeparatorsPath
+                        )
                     }
                 }
             }
