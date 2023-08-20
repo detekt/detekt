@@ -9,8 +9,6 @@ public final class io/gitlab/arturbosch/detekt/test/FindingsAssert : org/assertj
 	public fun <init> (Ljava/util/List;)V
 	public final fun hasEndSourceLocation (II)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
 	public final fun hasEndSourceLocations ([Lio/gitlab/arturbosch/detekt/api/SourceLocation;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
-	public final fun hasSourceLocation (II)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
-	public final fun hasSourceLocations ([Lio/gitlab/arturbosch/detekt/api/SourceLocation;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
 	public final fun hasStartSourceLocation (II)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
 	public final fun hasStartSourceLocations ([Lio/gitlab/arturbosch/detekt/api/SourceLocation;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
 	public final fun hasTextLocations ([Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
@@ -44,20 +42,13 @@ public final class io/gitlab/arturbosch/detekt/test/RuleExtensionsKt {
 }
 
 public class io/gitlab/arturbosch/detekt/test/TestConfig : io/gitlab/arturbosch/detekt/api/Config {
-	public static final field Companion Lio/gitlab/arturbosch/detekt/test/TestConfig$Companion;
-	public fun <init> ()V
-	public fun <init> (Ljava/util/Map;)V
-	public synthetic fun <init> (Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> ([Lkotlin/Pair;)V
 	public fun getParentPath ()Ljava/lang/String;
 	protected final fun parseList (Ljava/lang/String;)Ljava/util/List;
 	public synthetic fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
 	public fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/test/TestConfig;
 	public fun valueOrDefault (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun valueOrNull (Ljava/lang/String;)Ljava/lang/Object;
-}
-
-public final class io/gitlab/arturbosch/detekt/test/TestConfig$Companion {
-	public final fun invoke ([Lkotlin/Pair;)Lio/gitlab/arturbosch/detekt/test/TestConfig;
 }
 
 public final class io/gitlab/arturbosch/detekt/test/TestConfigKt {
