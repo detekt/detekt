@@ -5,7 +5,16 @@ plugins {
 
 repositories {
     mavenCentral()
-    mavenLocal()
+    exclusiveContent {
+        forRepository {
+            ivy {
+                url = uri("../../build/repo")
+            }
+        }
+        filter {
+            includeGroup("io.gitlab.arturbosch.detekt")
+        }
+    }
 }
 
 tasks.detektMain {

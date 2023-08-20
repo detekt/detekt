@@ -12,8 +12,17 @@ abstract class DslTestBuilder {
     @Language("gradle.kts")
     val gradleRepositories = """
         repositories {
-            mavenLocal()
             mavenCentral()
+            exclusiveContent {
+                forRepository {
+                    ivy {
+                        url = uri("${System.getenv("DGP_PROJECT_DEPS_REPO_PATH")}")
+                    }
+                }
+                filter {
+                    includeGroup("io.gitlab.arturbosch.detekt")
+                }
+            }
         }
     """.trimIndent()
 

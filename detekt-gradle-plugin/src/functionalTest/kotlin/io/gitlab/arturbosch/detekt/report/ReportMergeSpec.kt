@@ -153,7 +153,16 @@ class ReportMergeSpec {
                 repositories {
                     mavenCentral()
                     google()
-                    mavenLocal()
+                    exclusiveContent {
+                        forRepository {
+                            ivy {
+                                url = uri("${System.getenv("DGP_PROJECT_DEPS_REPO_PATH")}")
+                            }
+                        }
+                        filter {
+                            includeGroup("io.gitlab.arturbosch.detekt")
+                        }
+                    }
                 }
             }
             
