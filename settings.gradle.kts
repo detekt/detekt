@@ -4,10 +4,10 @@ rootProject.name = "detekt"
 
 pluginManagement {
     includeBuild("build-logic")
-    includeBuild("detekt-gradle-plugin")
     includeBuild("build-logic-internal-gradle-detekt-plugin")
 }
 
+include("detekt-gradle-plugin")
 include("code-coverage-report")
 include("detekt-api")
 include("detekt-cli")

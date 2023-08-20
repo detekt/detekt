@@ -104,7 +104,6 @@ tasks.register("publishToMavenLocal") {
             dependsOn(tasks.named("publishToMavenLocal"))
         }
     }
-    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishToMavenLocal"))
 }
 
 tasks.register("publishAllToSonatypeSnapshot") {
@@ -114,7 +113,6 @@ tasks.register("publishAllToSonatypeSnapshot") {
             dependsOn(tasks.named("publishAllPublicationsToSonatypeSnapshotRepository"))
         }
     }
-    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishAllPublicationsToSonatypeSnapshotRepository"))
 }
 
 tasks.register("publishAllToMavenCentral") {
@@ -124,5 +122,4 @@ tasks.register("publishAllToMavenCentral") {
             dependsOn(tasks.named("publishAllPublicationsToMavenCentralRepository"))
         }
     }
-    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishAllPublicationsToMavenCentralRepository"))
 }
