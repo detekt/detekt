@@ -80,14 +80,7 @@ naming:
 
 ## Build failure
 
-_Detekt_ supports the option to fail your build if a threshold of code smell issues is met.
-
-For this the following code must be inside the detekt config:
-
-```yaml
-build:
-    maxIssues: 10 # break the build if more than ten issues are found
-```
+_detekt_ will fail your build if there is at least one issue found.
 
 ## Console Reports
 

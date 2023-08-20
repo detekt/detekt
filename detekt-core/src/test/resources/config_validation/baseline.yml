@@ -1,5 +1,3 @@
-build:
-  maxIssues: 1
 config:
   warningsAsErrors: true
   checkExhaustiveness: false

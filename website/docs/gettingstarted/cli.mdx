@@ -55,12 +55,12 @@ nix-shell -I nixpkgs=channel:nixpkgs-unstable -p detekt
 
 detekt will exit with one of the following exit codes:
 
-| Exit code | Description                                                                    |
-| --------- | ------------------------------------------------------------------------------ |
-| 0         | detekt ran normally and maxIssues count was not reached in BuildFailureReport. |
-| 1         | An unexpected error occurred                                                   |
-| 2         | MaxIssues count was reached in BuildFailureReport.                             |
-| 3         | Invalid detekt configuration file detected.                                    |
+| Exit code | Description                                    |
+| --------- | ---------------------------------------------- |
+| 0         | detekt ran normally no issues were found.      |
+| 1         | An unexpected error occurred.                  |
+| 2         | At least one issues was found.                 |
+| 3         | Invalid detekt configuration file detected.    |
 
 The following parameters are shown when `--help` is entered.
 

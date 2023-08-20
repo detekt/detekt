@@ -3,7 +3,7 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.github.detekt.tooling.api.InvalidConfig
-import io.github.detekt.tooling.api.MaxIssuesReached
+import io.github.detekt.tooling.api.IssuesFound
 import io.github.detekt.tooling.api.UnexpectedError
 import io.github.detekt.tooling.api.exitCode
 import io.github.detekt.tooling.internal.NotApiButProbablyUsedByUsers
@@ -20,7 +20,7 @@ fun main(args: Array<String>) {
     val result = CliRunner().run(args)
     @Suppress("ForbiddenMethodCall")
     when (val error = result.error) {
-        is InvalidConfig, is MaxIssuesReached -> println(error.message)
+        is InvalidConfig, is IssuesFound -> println(error.message)
         is UnexpectedError -> {
             when (val cause = error.cause) {
                 is HelpRequest -> {
