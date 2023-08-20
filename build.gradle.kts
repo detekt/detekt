@@ -71,15 +71,3 @@ subprojects {
         }
     }
 }
-
-setOf(
-    "build",
-    "detektMain",
-    "detektTest",
-    "detektFunctionalTest",
-    "detektTestFixtures",
-).forEach { taskName ->
-    tasks.register(taskName) {
-        dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":$taskName"))
-    }
-}
