@@ -40,7 +40,6 @@ interface RulesSpec {
          * No issue at or above the specified severity is allowed.
          */
         data class FailOnSeverity(val minSeverity: Severity) : FailurePolicy()
-
     }
 
     /**

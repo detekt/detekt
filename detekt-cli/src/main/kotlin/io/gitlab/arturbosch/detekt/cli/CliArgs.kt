@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.Parameter
+import io.github.detekt.tooling.api.spec.RulesSpec
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.nio.file.Path
@@ -85,6 +86,15 @@ class CliArgs {
             "e.g. '-r txt:reports/detekt.txt -r xml:reports/detekt.xml'"
     )
     private var reports: List<String>? = null
+
+    @Parameter(
+        names = ["--fail-on"],
+        description = "Specifies the minimum severity that causes the build to fail. " +
+            "Allowed values are 'error', 'warning', 'info' and 'never'. " +
+            "When the value is set to 'never' the build will never fail regardless of the number " +
+            "of issues and their severities."
+    )
+    var failureSeverity: FailureSeverity? = null
 
     @Parameter(
         names = ["--base-path", "-bp"],
@@ -190,6 +200,25 @@ class CliArgs {
     val reportPaths: List<ReportPath> by lazy {
         reports?.map { ReportPath.from(it) }.orEmpty()
     }
+
+    val failurePolicy: RulesSpec.FailurePolicy
+        get() {
+            val minSeverity = failureSeverity
+            return when (minSeverity) {
+                null ->
+                    RulesSpec.FailurePolicy.DefaultFailurePolicy
+
+                FailureSeverity.NEVER ->
+                    RulesSpec.FailurePolicy.NeverFail
+
+                FailureSeverity.ERROR,
+                FailureSeverity.WARNING,
+                FailureSeverity.INFO ->
+                    RulesSpec.FailurePolicy.FailOnSeverity(
+                        minSeverity.toSeverity()
+                    )
+            }
+        }
 
     companion object {
         /**

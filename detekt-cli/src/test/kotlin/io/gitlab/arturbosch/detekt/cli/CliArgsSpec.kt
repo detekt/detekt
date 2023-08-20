@@ -2,12 +2,18 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.ParameterException
 import io.github.detekt.test.utils.resourceAsPath
+import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.DefaultFailurePolicy
+import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
+import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.NeverFail
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.absolute
@@ -135,6 +141,48 @@ internal class CliArgsSpec {
         fun `--language-version is accepted`() {
             val spec = parseArguments(arrayOf("--language-version", "1.6")).toSpec()
             assertThat(spec.compilerSpec.languageVersion).isEqualTo("1.6")
+        }
+    }
+
+    @Nested
+    inner class `Configuration of FailurePolicy` {
+        @Test
+        fun `not specified results in default policy`() {
+            val args = emptyArray<String>()
+
+            val actual = parseArguments(args)
+
+            assertThat(actual.failurePolicy).isEqualTo(DefaultFailurePolicy)
+        }
+
+        @Test
+        fun `--fail-on never specified results in never fail policy`() {
+            val args = arrayOf("--fail-on", "never")
+
+            val actual = parseArguments(args)
+
+            assertThat(actual.failurePolicy).isEqualTo(NeverFail)
+        }
+
+        @ParameterizedTest(name = "{0}")
+        @EnumSource(value = FailureSeverity::class, names = ["NEVER"], mode = EnumSource.Mode.EXCLUDE)
+        fun `--fail-on `(severity: FailureSeverity) {
+            val args = arrayOf("--fail-on", severity.name.lowercase())
+
+            val actual = parseArguments(args)
+
+            assertThat(actual.failurePolicy).isInstanceOf(FailOnSeverity::class.java)
+            assertThat((actual.failurePolicy as FailOnSeverity).minSeverity.name)
+                .isEqualToIgnoringCase(severity.name)
+        }
+
+        @Test
+        fun `invalid --fail-on parameter`() {
+            val args = arrayOf("--fail-on", "foo")
+
+            assertThatThrownBy {
+                parseArguments(args)
+            }.isInstanceOf(HandledArgumentViolation::class.java)
         }
     }
 }
