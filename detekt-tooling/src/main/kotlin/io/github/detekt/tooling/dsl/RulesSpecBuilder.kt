@@ -5,7 +5,7 @@ import io.github.detekt.tooling.api.spec.RulesSpec
 class RulesSpecBuilder : Builder<RulesSpec> {
 
     var activateAllRules: Boolean = false
-    var failurePolicy: RulesSpec.FailurePolicy = RulesSpec.FailurePolicy.FailOnError
+    var failurePolicy: RulesSpec.FailurePolicy = RulesSpec.FailurePolicy.DefaultFailurePolicy
     var excludeCorrectable: Boolean = false
     var autoCorrect: Boolean = false
     var runPolicy: RulesSpec.RunPolicy = RulesSpec.RunPolicy.NoRestrictions

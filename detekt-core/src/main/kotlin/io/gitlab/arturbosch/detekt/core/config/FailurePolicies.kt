@@ -9,18 +9,24 @@ import io.gitlab.arturbosch.detekt.core.reporting.filterAutoCorrectedIssues
 
 internal fun RulesSpec.FailurePolicy.check(result: Detektion, config: Config) {
     when (this) {
-        is RulesSpec.FailurePolicy.FailOnError -> {
-            val issueCount = result.computeIssueCount(config)
-            if (issueCount > 0) {
-                throw IssuesFound("Analysis failed with $issueCount issues.")
-            }
-        }
+        is RulesSpec.FailurePolicy.FailOnSeverity -> result.checkForIssuesWithSeverity(config, minSeverity)
+        RulesSpec.FailurePolicy.DefaultFailurePolicy -> result.checkForIssuesWithSeverity(config, Severity.ERROR)
+        RulesSpec.FailurePolicy.NeverFail -> Unit
     }
 }
 
-private fun Detektion.computeIssueCount(config: Config): Int {
+private fun Detektion.checkForIssuesWithSeverity(config: Config, minSeverity: Severity) {
+    val issueCount = computeIssueCount(config, minSeverity)
+    if (issueCount > 0) {
+        throw IssuesFound("Analysis failed with $issueCount issues.")
+    }
+}
+
+private fun Detektion.computeIssueCount(config: Config, minSeverity: Severity): Int {
     val smells = filterAutoCorrectedIssues(config)
         .flatMap { it.value }
-        .filter { it.severity == Severity.ERROR }
+        .filter { it.severity.isAtLeast(minSeverity) }
     return smells.count()
 }
+
+private fun Severity.isAtLeast(severity: Severity): Boolean = this.ordinal <= severity.ordinal

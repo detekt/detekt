@@ -196,8 +196,26 @@ public abstract interface class io/github/detekt/tooling/api/spec/RulesSpec {
 public abstract class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
 }
 
-public final class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnError : io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
-	public static final field INSTANCE Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnError;
+public final class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$DefaultFailurePolicy : io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
+	public static final field INSTANCE Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$DefaultFailurePolicy;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity : io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Severity;)V
+	public final fun component1 ()Lio/gitlab/arturbosch/detekt/api/Severity;
+	public final fun copy (Lio/gitlab/arturbosch/detekt/api/Severity;)Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity;
+	public static synthetic fun copy$default (Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity;Lio/gitlab/arturbosch/detekt/api/Severity;ILjava/lang/Object;)Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMinSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$NeverFail : io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
+	public static final field INSTANCE Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$NeverFail;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
