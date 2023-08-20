@@ -72,9 +72,6 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (bindingContext == BindingContext.EMPTY) {
-            return
-        }
         if (function.explicitReturnTypeRequired() && !function.isUnitOmissionAllowed()) {
             report(
                 CodeSmell(
