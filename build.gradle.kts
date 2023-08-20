@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
 plugins {
     id("releasing")
-    id("io.gitlab.arturbosch.detekt")
+    id("detekt-internal")
     alias(libs.plugins.gradleVersions)
 }
 
@@ -17,7 +17,7 @@ allprojects {
     group = "io.gitlab.arturbosch.detekt"
     version = Versions.currentOrSnapshot()
 
-    apply(plugin = "io.gitlab.arturbosch.detekt")
+    apply(plugin = "detekt-internal")
 
     detekt {
         source.setFrom(

@@ -45,7 +45,7 @@ testing {
             dependencies {
                 compileOnly("org.jetbrains:annotations:24.0.1")
                 implementation(libs.assertj)
-                implementation(testFixtures(project(":")))
+                implementation(testFixtures(project()))
             }
 
             targets {
