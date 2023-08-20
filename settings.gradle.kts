@@ -5,6 +5,7 @@ rootProject.name = "detekt"
 pluginManagement {
     includeBuild("build-logic")
     includeBuild("detekt-gradle-plugin")
+    includeBuild("build-logic-internal-gradle-detekt-plugin")
 }
 
 include("code-coverage-report")
