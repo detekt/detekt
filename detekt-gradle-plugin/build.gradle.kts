@@ -54,6 +54,37 @@ testing {
                         val isAndroidSdkInstalled = providers.environmentVariable("ANDROID_SDK_ROOT").isPresent ||
                             providers.environmentVariable("ANDROID_HOME").isPresent
                         inputs.property("isAndroidSdkInstalled", isAndroidSdkInstalled).optional(true)
+
+                        // Manually add all project runtime dependencies. This repo is referenced from functional tests.
+                        setOf(
+                            "detekt-api",
+                            "detekt-core",
+                            "detekt-cli",
+                            "detekt-metrics",
+                            "detekt-parser",
+                            "detekt-psi-utils",
+                            "detekt-report-html",
+                            "detekt-report-md",
+                            "detekt-report-sarif",
+                            "detekt-report-txt",
+                            "detekt-report-xml",
+                            "detekt-rules",
+                            "detekt-rules-complexity",
+                            "detekt-rules-coroutines",
+                            "detekt-rules-documentation",
+                            "detekt-rules-empty",
+                            "detekt-rules-errorprone",
+                            "detekt-rules-exceptions",
+                            "detekt-rules-naming",
+                            "detekt-rules-performance",
+                            "detekt-rules-style",
+                            "detekt-tooling",
+                            "detekt-utils",
+                        ).forEach {
+                            dependsOn(":${it}:publishIvyPublicationToGradlePluginFunctionalTestRepository")
+                        }
+
+                        environment("DGP_PROJECT_DEPS_REPO_PATH", layout.buildDirectory.dir("repo").get().asFile.invariantSeparatorsPath)
                     }
                 }
             }

@@ -6,6 +6,7 @@ plugins {
     kotlin("jvm")
     `maven-publish`
     jacoco
+    `ivy-publish`
 }
 
 // Add attributes to JAR manifest, to be used at runtime
@@ -68,5 +69,19 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
     consistentResolution {
         useCompileClasspathVersions()
+    }
+}
+
+publishing {
+    repositories {
+        ivy {
+            name = "gradlePluginFunctionalTest"
+            url = uri(rootProject.layout.projectDirectory.dir("detekt-gradle-plugin/build/repo"))
+        }
+    }
+    publications {
+        create<IvyPublication>("ivy") {
+            from(components["java"])
+        }
     }
 }
