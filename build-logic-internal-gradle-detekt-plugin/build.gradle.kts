@@ -30,12 +30,6 @@ gradlePlugin {
     }
 }
 
-kotlin {
-    compilerOptions {
-        allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
-    }
-}
-
 tasks {
     val writeDetektVersionProperties by registering(WriteProperties::class) {
         description = "Write the properties file with the detekt version to be used by the plugin."
