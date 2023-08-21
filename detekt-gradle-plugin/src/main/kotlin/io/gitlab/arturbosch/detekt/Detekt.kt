@@ -152,17 +152,12 @@ abstract class Detekt @Inject constructor(
         get() = autoCorrectProp.getOrElse(false)
         set(value) = autoCorrectProp.set(value)
 
-    @get:Internal
+    @get:Input
+    @get:Optional
     internal abstract val failOnSeverityProp: Property<String>
 
-    @set:Option(
-        option = "fail-on-severity",
-        description = "Change the minimum severity that fails the build. " +
-            "Supported values are 'error', 'warning', 'info' and 'never'."
-    )
     var failOnSeverity: String?
-        @Input
-        @Optional
+        @Internal
         get() = failOnSeverityProp.orNull
         set(value) = failOnSeverityProp.set(value)
 
