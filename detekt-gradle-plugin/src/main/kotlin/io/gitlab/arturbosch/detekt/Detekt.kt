@@ -18,6 +18,7 @@ import io.gitlab.arturbosch.detekt.invoke.DefaultReportArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.DetektWorkAction
 import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
+import io.gitlab.arturbosch.detekt.invoke.FailOnSeverityArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JdkHomeArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
@@ -151,6 +152,20 @@ abstract class Detekt @Inject constructor(
         get() = autoCorrectProp.getOrElse(false)
         set(value) = autoCorrectProp.set(value)
 
+    @get:Internal
+    internal abstract val failOnSeverityProp: Property<String>
+
+    @set:Option(
+        option = "fail-on-severity",
+        description = "Change the minimum severity that fails the build. " +
+            "Supported values are 'error', 'warning', 'info' and 'never'."
+    )
+    var failOnSeverity: String?
+        @Input
+        @Optional
+        get() = failOnSeverityProp.orNull
+        set(value) = failOnSeverityProp.set(value)
+
     /**
      * Respect only the file path for incremental build. Using @InputFile respects both file path and content.
      */
@@ -228,6 +243,7 @@ abstract class Detekt @Inject constructor(
             BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
             AllRulesArgument(allRulesProp.getOrElse(false)),
             AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
+            FailOnSeverityArgument(failOnSeverityProp.orNull),
             BasePathArgument(basePathProp.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
         ).plus(convertCustomReportsToArguments()).flatMap(CliArgument::toArgument)

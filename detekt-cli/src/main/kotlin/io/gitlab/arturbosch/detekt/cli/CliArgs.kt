@@ -88,13 +88,13 @@ class CliArgs {
     private var reports: List<String>? = null
 
     @Parameter(
-        names = ["--fail-on"],
+        names = ["--fail-on-severity"],
         description = "Specifies the minimum severity that causes the build to fail. " +
             "Allowed values are 'error', 'warning', 'info' and 'never'. " +
             "When the value is set to 'never' the build will never fail regardless of the number " +
             "of issues and their severities."
     )
-    var failureSeverity: FailureSeverity? = null
+    var failOnSeverity: FailureSeverity? = null
 
     @Parameter(
         names = ["--base-path", "-bp"],
@@ -203,7 +203,7 @@ class CliArgs {
 
     val failurePolicy: RulesSpec.FailurePolicy
         get() {
-            val minSeverity = failureSeverity
+            val minSeverity = failOnSeverity
             return when (minSeverity) {
                 null ->
                     RulesSpec.FailurePolicy.DefaultFailurePolicy

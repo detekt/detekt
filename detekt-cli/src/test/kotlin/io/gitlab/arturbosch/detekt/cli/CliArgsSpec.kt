@@ -156,8 +156,8 @@ internal class CliArgsSpec {
         }
 
         @Test
-        fun `--fail-on never specified results in never fail policy`() {
-            val args = arrayOf("--fail-on", "never")
+        fun `--fail-on-severity never specified results in never fail policy`() {
+            val args = arrayOf("--fail-on-severity", "never")
 
             val actual = parseArguments(args)
 
@@ -166,8 +166,8 @@ internal class CliArgsSpec {
 
         @ParameterizedTest(name = "{0}")
         @EnumSource(value = FailureSeverity::class, names = ["NEVER"], mode = EnumSource.Mode.EXCLUDE)
-        fun `--fail-on `(severity: FailureSeverity) {
-            val args = arrayOf("--fail-on", severity.name.lowercase())
+        fun `--fail-on-severity`(severity: FailureSeverity) {
+            val args = arrayOf("--fail-on-severity", severity.name.lowercase())
 
             val actual = parseArguments(args)
 
@@ -177,8 +177,8 @@ internal class CliArgsSpec {
         }
 
         @Test
-        fun `invalid --fail-on parameter`() {
-            val args = arrayOf("--fail-on", "foo")
+        fun `invalid --fail-on-severity parameter`() {
+            val args = arrayOf("--fail-on-severity", "foo")
 
             assertThatThrownBy {
                 parseArguments(args)

@@ -58,6 +58,8 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
 
     var autoCorrect: Boolean = DEFAULT_AUTO_CORRECT_VALUE
 
+    var failOnSeverity: String? = null
+
     /**
      * List of Android build variants for which no detekt task should be created.
      *

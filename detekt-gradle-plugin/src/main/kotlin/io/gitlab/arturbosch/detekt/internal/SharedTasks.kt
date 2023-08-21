@@ -35,6 +35,7 @@ internal fun Project.registerDetektTask(
         it.disableDefaultRuleSetsProp.convention(provider { extension.disableDefaultRuleSets })
         it.buildUponDefaultConfigProp.convention(provider { extension.buildUponDefaultConfig })
         it.autoCorrectProp.convention(provider { extension.autoCorrect })
+        it.failOnSeverityProp.convention(provider { extension.failOnSeverity })
         it.config.setFrom(provider { extension.config })
         it.ignoreFailuresProp.convention(project.provider { extension.ignoreFailures })
         it.basePathProp.convention(extension.basePath)
