@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isAbstract
@@ -56,7 +55,6 @@ class AbstractClassCanBeInterface(config: Config = Config.empty) : Rule(config) 
     override val issue =
         Issue(
             "AbstractClassCanBeInterface",
-            Severity.Style,
             "An abstract class is unnecessary. May be refactored to an interface.",
             Debt.FIVE_MINS
         )
