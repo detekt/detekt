@@ -2,18 +2,15 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-private const val EXCLUDE_ANNOTATED_CLASSES = "excludeAnnotatedClasses"
-
 @KotlinCoreEnvironmentTest
-class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
-    val subject = UnnecessaryAbstractClass(TestConfig(EXCLUDE_ANNOTATED_CLASSES to listOf("Deprecated")))
+class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
+    val subject = AbstractClassCanBeInterface()
 
     @Nested
     inner class `abstract classes with no concrete members` {
@@ -79,8 +76,10 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
             @Test
             fun `that inherits from another abstract class`() {
                 val code = """
-                    @Deprecated("We don't care about this first class")
                     abstract class A {
+                        // Added non-abstract member to ensure this A class does not get reported
+                        val nonAbstractMember: Int = 2
+
                         abstract val i: Int
                     }
                     abstract class B : A()
@@ -93,8 +92,10 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 val code = """
                     interface I
                     
-                    @Deprecated("We don't care about this first class")
                     abstract class A {
+                        // Added non-abstract member to ensure this A class does not get reported
+                        val nonAbstractMember: Int = 2
+
                         abstract val i: Int
                     }
                     abstract class B: A(), I
@@ -108,8 +109,10 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 val code = """
                     interface I
                     
-                    @Deprecated("We don't care about this first class")
                     abstract class A {
+                        // Added non-abstract member to ensure this A class does not get reported
+                        val nonAbstractMember: Int = 2
+
                         abstract val i: Int
                     }
                     abstract class B: I, A()
@@ -161,7 +164,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
         val message = "An abstract class without an abstract member can be refactored to a concrete class."
 
         @Test
-        fun `reports no abstract members in abstract class`() {
+        fun `does not report no abstract members in abstract class`() {
             val code = """
                 abstract class A {
                     val i: Int = 0
@@ -169,11 +172,11 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertFindingMessage(findings, message)
+            assertThat(findings).isEmpty()
         }
 
         @Test
-        fun `reports no abstract members in nested abstract class inside a concrete class`() {
+        fun `does not report no abstract members in nested abstract class inside a concrete class`() {
             val code = """
                 class Outer {
                     abstract class Inner {
@@ -182,11 +185,11 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertFindingMessage(findings, message)
+            assertThat(findings).isEmpty()
         }
 
         @Test
-        fun `reports no abstract members in nested abstract class inside an interface`() {
+        fun `does not report no abstract members in nested abstract class inside an interface`() {
             val code = """
                 interface Inner {
                     abstract class A {
@@ -195,34 +198,32 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertFindingMessage(findings, message)
+            assertThat(findings).isEmpty()
         }
 
         @Test
-        fun `reports no abstract members in an abstract class with just a constructor`() {
+        fun `does not report no abstract members in an abstract class with just a constructor`() {
             val code = "abstract class A(val i: Int)"
             val findings = subject.compileAndLintWithContext(env, code)
-            assertFindingMessage(findings, message)
-            assertThat(findings).hasStartSourceLocation(1, 16)
+            assertThat(findings).isEmpty()
         }
 
         @Test
-        fun `reports no abstract members in an abstract class with a body and a constructor`() {
+        fun `does not report no abstract members in an abstract class with a body and a constructor`() {
             val code = "abstract class A(val i: Int) {}"
             val findings = subject.compileAndLintWithContext(env, code)
-            assertFindingMessage(findings, message)
+            assertThat(findings).isEmpty()
         }
 
         @Test
-        fun `reports no abstract members in an abstract class with just a constructor parameter`() {
+        fun `does not report no abstract members in an abstract class with just a constructor parameter`() {
             val code = "abstract class A(i: Int)"
             val findings = subject.compileAndLintWithContext(env, code)
-            assertFindingMessage(findings, message)
-            assertThat(findings).hasStartSourceLocation(1, 16)
+            assertThat(findings).isEmpty()
         }
 
         @Test
-        fun `reports an abstract class with no abstract member derived from a class with abstract members`() {
+        fun `does not report an abstract class with no abstract member derived from a class with abstract members`() {
             val code = """
                 abstract class Base {
                     abstract val i: Int
@@ -240,7 +241,7 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertFindingMessage(findings, message)
+            assertThat(findings).isEmpty()
         }
     }
 
@@ -285,22 +286,6 @@ class UnnecessaryAbstractClassSpec(val env: KotlinCoreEnvironment) {
                 
                 interface Interface {
                     fun f()
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report abstract classes with module annotation`() {
-            val code = """
-                @Deprecated("test")
-                abstract class A {
-                    abstract fun f()
-                }
-                
-                @kotlin.Deprecated("test")
-                abstract class B {
-                    abstract fun f()
                 }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()

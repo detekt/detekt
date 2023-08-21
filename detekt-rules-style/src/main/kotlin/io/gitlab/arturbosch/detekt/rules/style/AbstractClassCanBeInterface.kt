@@ -1,15 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isInternal
@@ -19,16 +16,14 @@ import org.jetbrains.kotlin.descriptors.MemberDescriptor
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyClassMemberScope
 import org.jetbrains.kotlin.types.typeUtil.isInterface
 
 /**
- * This rule inspects `abstract` classes. In case an `abstract class` does not have any concrete members it should be
- * refactored into an interface. Abstract classes which do not define any `abstract` members should instead be
- * refactored into concrete classes.
+ * This rule inspects `abstract` classes. In case an `abstract class` does not define any
+ * `abstract` members, it should instead be refactored into an interface.
  *
  * <noncompliant>
  * abstract class OnlyAbstractMembersInAbstractClass { // violation: no concrete members
@@ -36,73 +31,48 @@ import org.jetbrains.kotlin.types.typeUtil.isInterface
  *     abstract val i: Int
  *     abstract fun f()
  * }
- *
- * abstract class OnlyConcreteMembersInAbstractClass { // violation: no abstract members
- *
- *     val i: Int = 0
- *     fun f() { }
- * }
  * </noncompliant>
- *
  * <compliant>
- * interface OnlyAbstractMembersInInterface {
+ * interface Interface {
  *     val i: Int
  *     fun f()
  * }
  *
- * class OnlyConcreteMembersInClass {
- *     val i: Int = 0
- *     fun f() { }
+ * abstract class NonAbstractMembersInAbstractClass {
+ *
+ *     abstract val i: Int
+ *     fun f() {
+ *     }
  * }
  * </compliant>
  */
-@ActiveByDefault(since = "1.2.0")
+@ActiveByDefault(since = "1.23.0")
 @RequiresTypeResolution
-class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
+class AbstractClassCanBeInterface(config: Config = Config.empty) : Rule(config) {
 
     private val noConcreteMember = "An abstract class without a concrete member can be refactored to an interface."
-    private val noAbstractMember = "An abstract class without an abstract member can be refactored to a concrete class."
 
     override val issue =
         Issue(
-            "UnnecessaryAbstractClass",
-            "An abstract class is unnecessary. May be refactored to an interface or to a concrete class.",
+            "AbstractClassCanBeInterface",
+            "An abstract class is unnecessary. May be refactored to an interface.",
             Debt.FIVE_MINS
         )
 
-    @Configuration("Allows you to provide a list of annotations that disable this check.")
-    @Deprecated("Use `ignoreAnnotated` instead")
-    private val excludeAnnotatedClasses: List<Regex> by config(emptyList<String>()) { list ->
-        list.map { it.replace(".", "\\.").replace("*", ".*").toRegex() }
-    }
-
-    private lateinit var annotationExcluder: AnnotationExcluder
-
-    override fun visitKtFile(file: KtFile) {
-        annotationExcluder = AnnotationExcluder(
-            file,
-            @Suppress("DEPRECATION") excludeAnnotatedClasses,
-            bindingContext,
-        )
-        super.visitKtFile(file)
-    }
-
     override fun visitClass(klass: KtClass) {
-        super.visitClass(klass)
         klass.check()
+        super.visitClass(klass)
     }
 
     private fun KtClass.check() {
         val nameIdentifier = this.nameIdentifier ?: return
-        if (annotationExcluder.shouldExclude(annotationEntries) || isInterface() || !isAbstract()) return
+        if (isInterface() || !isAbstract()) return
         val members = members()
         when {
             members.isNotEmpty() -> checkMembers(members, nameIdentifier)
             hasInheritedMember(true) && isAnyParentAbstract() -> return
             !hasConstructorParameter() ->
                 report(CodeSmell(issue, Entity.from(nameIdentifier), noConcreteMember))
-            else ->
-                report(CodeSmell(issue, Entity.from(nameIdentifier), noAbstractMember))
         }
     }
 
@@ -113,7 +83,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
         val (abstractMembers, concreteMembers) = members.partition { it.isAbstract() }
         when {
             abstractMembers.isEmpty() && !hasInheritedMember(true) ->
-                report(CodeSmell(issue, Entity.from(nameIdentifier), noAbstractMember))
+                Unit
             abstractMembers.any { it.isInternal() || it.isProtected() } || hasConstructorParameter() ->
                 Unit
             concreteMembers.isEmpty() && !hasInheritedMember(false) ->
