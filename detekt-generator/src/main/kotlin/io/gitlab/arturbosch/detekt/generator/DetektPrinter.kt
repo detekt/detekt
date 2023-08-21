@@ -12,7 +12,10 @@ import io.gitlab.arturbosch.detekt.generator.printer.defaultconfig.printRuleSetP
 import java.nio.file.Path
 import kotlin.io.path.Path
 
-class DetektPrinter(private val arguments: GeneratorArgs) {
+class DetektPrinter(
+    private val documentationPath: Path,
+    private val configPath: Path,
+) {
 
     private val markdownWriter = MarkdownWriter(System.out)
     private val yamlWriter = YamlWriter(System.out)
@@ -20,16 +23,16 @@ class DetektPrinter(private val arguments: GeneratorArgs) {
 
     fun print(pages: List<RuleSetPage>) {
         pages.forEach {
-            markdownWriter.write(arguments.documentationPath, it.ruleSet.name) {
+            markdownWriter.write(documentationPath, it.ruleSet.name) {
                 markdownHeader(it.ruleSet.name) + "\n" + RuleSetPagePrinter.print(it)
             }
         }
-        yamlWriter.write(arguments.configPath, "default-detekt-config") {
+        yamlWriter.write(configPath, "default-detekt-config") {
             ConfigPrinter.print(
                 pages.filterNot { it.ruleSet.name in listOf("formatting", "libraries", "ruleauthors") }
             )
         }
-        propertiesWriter.write(arguments.configPath, "deprecation") {
+        propertiesWriter.write(configPath, "deprecation") {
             // We intentionally not filter for "formatting" as we want to be able to deprecate
             // properties from that ruleset as well.
             DeprecatedPrinter.print(pages)

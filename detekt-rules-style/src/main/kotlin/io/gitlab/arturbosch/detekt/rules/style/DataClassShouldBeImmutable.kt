@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtClass
 
@@ -33,7 +32,6 @@ class DataClassShouldBeImmutable(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
         "DataClassShouldBeImmutable",
-        Severity.Style,
         "Data classes should mainly be immutable and should not have any side effects " +
             "(To copy an object altering some of its properties use the copy function).",
         Debt.TWENTY_MINS

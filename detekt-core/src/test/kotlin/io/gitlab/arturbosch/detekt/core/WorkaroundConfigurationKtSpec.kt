@@ -28,11 +28,6 @@ class WorkaroundConfigurationKtSpec {
         }
 
         @Test
-        fun `should override maxIssues to 0 by default`() {
-            assertThat(config.subConfig("build").valueOrDefault("maxIssues", -1)).isEqualTo(0)
-        }
-
-        @Test
         fun `should keep config from default`() {
             val actual = config.subConfig("style")
                 .subConfig("MaxLineLength")
@@ -65,11 +60,6 @@ class WorkaroundConfigurationKtSpec {
                 .subConfig("CommentOverPrivateMethod")
                 .valueOrDefault("active", true)
             assertThat(actual).isEqualTo(false)
-        }
-
-        @Test
-        fun `should override maxIssues when specified`() {
-            assertThat(config.subConfig("build").valueOrDefault("maxIssues", -1)).isEqualTo(1)
         }
     }
 

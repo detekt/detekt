@@ -5,14 +5,14 @@ import io.github.detekt.tooling.api.spec.RulesSpec
 class RulesSpecBuilder : Builder<RulesSpec> {
 
     var activateAllRules: Boolean = false
-    var maxIssuePolicy: RulesSpec.MaxIssuePolicy = RulesSpec.MaxIssuePolicy.NoneAllowed
+    var failurePolicy: RulesSpec.FailurePolicy = RulesSpec.FailurePolicy.NoneAllowed
     var excludeCorrectable: Boolean = false
     var autoCorrect: Boolean = false
     var runPolicy: RulesSpec.RunPolicy = RulesSpec.RunPolicy.NoRestrictions
 
     override fun build(): RulesSpec = RulesModel(
         activateAllRules,
-        maxIssuePolicy,
+        failurePolicy,
         excludeCorrectable,
         autoCorrect,
         runPolicy
@@ -21,7 +21,7 @@ class RulesSpecBuilder : Builder<RulesSpec> {
 
 private data class RulesModel(
     override val activateAllRules: Boolean,
-    override val maxIssuePolicy: RulesSpec.MaxIssuePolicy,
+    override val failurePolicy: RulesSpec.FailurePolicy,
     override val excludeCorrectable: Boolean,
     override val autoCorrect: Boolean,
     override val runPolicy: RulesSpec.RunPolicy

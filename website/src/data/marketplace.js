@@ -62,6 +62,25 @@ export const tagTypes = {
 // Add sites to this list
 export const extensions = [
   {
+    title: "Hbmartin's Ruleset",
+    description:
+      "A somewhat opinionated ruleset for Detekt, primarily intended to avoid crashes and bugs related to mutability.",
+    repo: "https://github.com/hbmartin/hbmartin-detekt-rules",
+    ruleset: "HbmartinRuleSet",
+    rules: [
+      "AvoidFirstOrLastOnList",
+      "AvoidMutableCollections",
+      "AvoidVarsExceptWithDelegate",
+      "DontForceCast",
+      "MutableTypeShouldBePrivate",
+      "NoNotNullOperator",
+      "NoVarsInConstructor",
+      "WhenBranchSingleLineOrBraces",
+    ],
+    usesTypeResolution: true,
+    tags: ["ruleset"],
+  },
+  {
     title: "Compiler",
     description:
       "A ruleset that wraps the warnings and info messages of the Kotlin compiler as detekt findings..",

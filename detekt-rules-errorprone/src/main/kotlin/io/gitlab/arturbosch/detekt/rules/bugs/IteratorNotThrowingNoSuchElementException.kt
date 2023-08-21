@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -49,7 +48,6 @@ class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) :
 
     override val issue = Issue(
         "IteratorNotThrowingNoSuchElementException",
-        Severity.Defect,
         "The `next()` method of an `Iterator` implementation should throw a `NoSuchElementException` " +
             "when there are no more elements to return.",
         Debt.TEN_MINS

@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtDeclaration
 
 /**
@@ -41,7 +40,6 @@ import org.jetbrains.kotlin.psi.KtDeclaration
 class DeprecatedBlockTag(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "DeprecatedBlockTag",
-        Severity.Defect,
         "Do not use the `@deprecated` block tag, which is not supported by KDoc. " +
             "Use the `@Deprecated` annotation instead.",
         Debt.FIVE_MINS

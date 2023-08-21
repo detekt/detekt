@@ -8,7 +8,6 @@ import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.psi.UserDataProperty
 import java.nio.file.Path
 import kotlin.io.path.Path
-import kotlin.io.path.invariantSeparatorsPathString
 
 const val KOTLIN_SUFFIX = ".kt"
 const val KOTLIN_SCRIPT_SUFFIX = ".kts"
@@ -91,12 +90,3 @@ fun getLineAndColumnInPsiFile(file: PsiFile, range: TextRange): PsiDiagnosticUti
         DiagnosticUtils.getLineAndColumnInPsiFile(file, range)
     }.getOrNull()
 }
-
-/**
- * Returns a system-independent string with UNIX system file separator.
- */
-@Deprecated(
-    "Use stdlib method",
-    ReplaceWith("invariantSeparatorsPathString", "kotlin.io.path.invariantSeparatorsPathString")
-)
-fun Path.toUnifiedString(): String = invariantSeparatorsPathString

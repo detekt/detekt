@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
@@ -40,7 +39,6 @@ class TooGenericExceptionThrown(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Defect,
         "The thrown exception is too generic. Prefer throwing project specific exceptions to handle error cases.",
         Debt.TWENTY_MINS
     )

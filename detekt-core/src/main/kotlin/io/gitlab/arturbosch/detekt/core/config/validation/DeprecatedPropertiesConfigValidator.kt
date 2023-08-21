@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 
 internal class DeprecatedPropertiesConfigValidator(
-    private val deprecatedProperties: Map<String, String>,
+    private val deprecatedProperties: Set<DeprecatedProperty>,
 ) : AbstractYamlConfigValidator() {
     override fun validate(
         configToValidate: YamlConfig,
@@ -13,32 +13,26 @@ internal class DeprecatedPropertiesConfigValidator(
     ): Collection<Notification> {
         val configAsMap = configToValidate.properties
         return deprecatedProperties
-            .map { (path, description) -> path.split(">") to description }
-            .filter { (path, _) -> configAsMap.hasValue(path) }
-            .map { (path, description) -> createNotification(path, description) }
+            .filter { hasValue(configAsMap, it) }
+            .map { createNotification(it) }
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun Map<String, Any>.hasValue(propertyPath: List<String>): Boolean {
-        if (propertyPath.isEmpty()) {
-            return false
-        }
-        if (propertyPath.size == 1) {
-            return this.containsKey(propertyPath.first())
-        }
-
-        val subMap = this[propertyPath.first()] as? Map<String, Any> ?: return false
-        return subMap.hasValue(propertyPath.drop(1))
+    private fun hasValue(configAsMap: Map<String, Any>, deprecatedProperty: DeprecatedProperty): Boolean {
+        val ruleSetSubMap = configAsMap[deprecatedProperty.ruleSetId] as? Map<String, Any> ?: return false
+        val ruleSubMap = ruleSetSubMap[deprecatedProperty.ruleId] as? Map<String, Any> ?: return false
+        return ruleSubMap.containsKey(deprecatedProperty.propertyName)
     }
 
     private fun createNotification(
-        propertyPath: List<String>,
-        deprecationDescription: String,
+        foundProperty: DeprecatedProperty
     ): Notification {
-        val prop = propertyPath.joinToString(">")
+        val propertyPath = foundProperty.asPath()
         return SimpleNotification(
-            "Property '$prop' is deprecated. $deprecationDescription.",
+            "Property '$propertyPath' is deprecated. ${foundProperty.description}.",
             Notification.Level.Warning,
         )
     }
+
+    private fun DeprecatedProperty.asPath() = "$ruleSetId>$ruleId>$propertyName"
 }

@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.companionObject
 import io.gitlab.arturbosch.detekt.rules.isConstant
@@ -48,7 +47,6 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Warning,
         "A class which implements the Serializable interface does not define a correct serialVersionUID field. " +
             "The serialVersionUID field should be a private constant long value inside a companion object.",
         Debt.FIVE_MINS

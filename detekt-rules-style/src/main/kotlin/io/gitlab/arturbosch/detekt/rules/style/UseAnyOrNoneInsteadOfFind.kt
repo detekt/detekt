@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isCalling
@@ -36,7 +35,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 class UseAnyOrNoneInsteadOfFind(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UseAnyOrNoneInsteadOfFind",
-        Severity.Style,
         "Use `any` or `none` instead of `find` and `null` checks.",
         Debt.FIVE_MINS
     )

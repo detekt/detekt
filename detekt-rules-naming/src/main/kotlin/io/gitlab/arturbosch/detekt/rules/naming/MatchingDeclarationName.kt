@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
@@ -52,7 +51,6 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "If a source file contains only a single non-private top-level class or object, " +
             "the file name should reflect the case-sensitive name plus the .kt extension.",
         Debt.FIVE_MINS

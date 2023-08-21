@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -29,7 +28,6 @@ class LargeClass(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "LargeClass",
-        Severity.Maintainability,
         "One class should have one responsibility. Large classes tend to handle many things at once. " +
             "Split up large classes into smaller classes that are easier to understand.",
         Debt.TWENTY_MINS

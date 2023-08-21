@@ -26,9 +26,6 @@ class FindingsAssert(actual: List<Finding>) :
     override fun toAssert(value: Finding?, description: String?): FindingAssert =
         FindingAssert(value).`as`(description)
 
-    @Deprecated("Use hasStartSourceLocations instead", ReplaceWith("hasStartSourceLocations(*expected)"))
-    fun hasSourceLocations(vararg expected: SourceLocation) = hasStartSourceLocations(*expected)
-
     fun hasStartSourceLocations(vararg expected: SourceLocation) = apply {
         val actualSources = actual.asSequence()
             .map { it.location.source }
@@ -58,9 +55,6 @@ class FindingsAssert(actual: List<Finding>) :
             )
         }
     }
-
-    @Deprecated("Use hasStartSourceLocation instead", ReplaceWith("hasStartSourceLocation(line, column)"))
-    fun hasSourceLocation(line: Int, column: Int) = hasStartSourceLocation(line, column)
 
     fun hasStartSourceLocation(line: Int, column: Int) = apply {
         hasStartSourceLocations(SourceLocation(line, column))

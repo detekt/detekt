@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.backend.common.peek
 import org.jetbrains.kotlin.backend.common.pop
@@ -47,7 +46,6 @@ class UnnecessaryInnerClass(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "The 'inner' qualifier is unnecessary.",
         Debt.FIVE_MINS
     )

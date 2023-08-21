@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -46,13 +45,12 @@ class ComplexCondition(
 
     override val issue = Issue(
         "ComplexCondition",
-        Severity.Maintainability,
         "Complex conditions should be simplified and extracted into well-named methods if necessary.",
         Debt.TWENTY_MINS
     )
 
-    @Configuration("the number of conditions which will trigger the rule")
-    private val threshold: Int by config(defaultValue = 4)
+    @Configuration("Maximum allowed number of conditions.")
+    private val allowedConditions: Int by config(defaultValue = 3)
 
     override fun visitIfExpression(expression: KtIfExpression) {
         val condition = expression.condition
@@ -81,14 +79,14 @@ class ComplexCondition(
             }
             val conditionString = longestBinExpr.text
             val count = frequency(conditionString, "&&") + frequency(conditionString, "||") + 1
-            if (count >= threshold) {
+            if (count > allowedConditions) {
                 report(
                     ThresholdedCodeSmell(
                         issue,
                         Entity.from(condition),
-                        Metric("SIZE", count, threshold),
+                        Metric("SIZE", count, allowedConditions),
                         "This condition is too complex ($count). " +
-                            "Defined complexity threshold for conditions is set to '$threshold'"
+                            "The defined maximum number of allowed conditions is set to '$allowedConditions'"
                     )
                 )
             }

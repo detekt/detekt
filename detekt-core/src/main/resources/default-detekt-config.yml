@@ -1,11 +1,5 @@
 build:
-  maxIssues: 0
   excludeCorrectable: false
-  weights:
-    # complexity: 2
-    # LongParameterList: 1
-    # style: 1
-    # comments: 1
 
 config:
   validation: true
@@ -97,7 +91,7 @@ complexity:
     allowedComplexity: 15
   ComplexCondition:
     active: true
-    threshold: 4
+    allowedConditions: 3
   ComplexInterface:
     active: false
     allowedDefinitions: 10
@@ -162,7 +156,7 @@ complexity:
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     allowedDuplications: 2
     ignoreAnnotation: true
-    excludeStringsWithLessThan5Characters: true
+    allowedWithLengthLessThan: 5
     ignoreStringsRegex: '$^'
   TooManyFunctions:
     active: true
@@ -407,6 +401,8 @@ potential-bugs:
     active: false
     ignorePlatformTypes: true
   CastToNullableType:
+    active: false
+  CharArrayToStringCall:
     active: false
   Deprecation:
     active: false
@@ -671,6 +667,8 @@ style:
     active: false
   ProtectedMemberInFinalClass:
     active: true
+  RangeUntilInsteadOfRangeTo:
+    active: false
   RedundantExplicitType:
     active: false
   RedundantHigherOrderMapUsage:
@@ -729,9 +727,7 @@ style:
   UnnecessaryParentheses:
     active: false
     allowForUnclearPrecedence: false
-  UntilInsteadOfRangeTo:
-    active: false
-  UnusedImports:
+  UnusedImport:
     active: false
   UnusedParameter:
     active: true

@@ -29,7 +29,6 @@ internal val DEFAULT_PROPERTY_EXCLUDES = setOf(
     ".*>.*>autoCorrect",
     ".*>severity",
     ".*>.*>severity",
-    "build>weights",
     ".*>.*>ignoreAnnotated",
     ".*>.*>ignoreFunction",
 ).joinToString(",")
@@ -84,13 +83,13 @@ private fun validateYamlConfig(
     baseline: YamlConfig,
     excludePatterns: Set<Regex>
 ): List<Notification> {
-    val deprecatedProperties = loadDeprecations()
+    val deprecatedProperties = loadDeprecations().filterIsInstance<DeprecatedProperty>().toSet()
     val warningsAsErrors = configToValidate
         .subConfig("config")
         .valueOrDefault("warningsAsErrors", false)
 
     val validators: List<ConfigValidator> = listOf(
-        InvalidPropertiesConfigValidator(baseline, deprecatedProperties.keys, excludePatterns),
+        InvalidPropertiesConfigValidator(baseline, deprecatedProperties, excludePatterns),
         DeprecatedPropertiesConfigValidator(deprecatedProperties),
         MissingRulesConfigValidator(baseline, excludePatterns)
     )

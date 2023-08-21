@@ -1,9 +1,3 @@
-build:
-  maxIssues: 10
-  weights:
-    complexity: 2
-    # style: 0
-
 config:
   validation: true
   excludes: 'test>.*'

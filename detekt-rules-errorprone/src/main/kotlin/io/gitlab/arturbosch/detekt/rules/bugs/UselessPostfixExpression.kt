@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.lexer.KtTokens.MINUSMINUS
 import org.jetbrains.kotlin.lexer.KtTokens.PLUSPLUS
@@ -59,7 +58,6 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
         "UselessPostfixExpression",
-        Severity.Defect,
         "The incremented or decremented value is unused. This value is replaced with the original value.",
         Debt.TWENTY_MINS
     )

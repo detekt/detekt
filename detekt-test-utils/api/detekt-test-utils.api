@@ -26,10 +26,6 @@ public final class io/github/detekt/test/utils/KotlinScriptEngine {
 	public final fun compile (Ljava/lang/String;)V
 }
 
-public final class io/github/detekt/test/utils/KotlinScriptException : java/lang/RuntimeException {
-	public fun <init> (Ljavax/script/ScriptException;)V
-}
-
 public final class io/github/detekt/test/utils/NullPrintStream : java/io/PrintStream {
 	public fun <init> ()V
 }

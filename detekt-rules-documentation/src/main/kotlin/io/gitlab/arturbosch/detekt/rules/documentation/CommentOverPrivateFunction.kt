@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -23,7 +22,6 @@ class CommentOverPrivateFunction(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "CommentOverPrivateFunction",
-        Severity.Maintainability,
         "Comments for private functions should be avoided. " +
             "Prefer giving the function an expressive name. " +
             "Split it up in smaller, self-explaining functions if necessary.",

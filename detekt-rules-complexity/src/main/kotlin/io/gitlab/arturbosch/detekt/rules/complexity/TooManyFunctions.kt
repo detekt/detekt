@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -32,7 +31,6 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "TooManyFunctions",
-        Severity.Maintainability,
         "Too many functions inside a/an file/class/object/interface always indicate a violation of " +
             "the single responsibility principle. Maybe the file/class/object/interface wants to manage too " +
             "many things at once. Extract functionality which clearly belongs together.",

@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.generator
 
 import io.github.detekt.parser.KtCompiler
 import io.gitlab.arturbosch.detekt.generator.collection.DetektCollector
-import io.gitlab.arturbosch.detekt.generator.printer.CliOptionsPrinter
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.PrintStream
 import java.nio.file.Files
@@ -12,31 +11,24 @@ import kotlin.streams.asSequence
 import kotlin.system.measureTimeMillis
 
 class Generator(
-    private val arguments: GeneratorArgs,
+    private val inputPaths: List<Path>,
+    private val textReplacements: Map<String, String>,
+    documentationPath: Path,
+    configPath: Path,
     private val outPrinter: PrintStream = System.out
 ) {
-    private val collector = DetektCollector(arguments.textReplacements)
-    private val printer = DetektPrinter(arguments)
-    private val cliOptionsPrinter = CliOptionsPrinter()
-
-    private fun parseAll(parser: KtCompiler, root: Path): Collection<KtFile> =
-        Files.walk(root)
-            .asSequence()
-            .filter { it.extension == "kt" }
-            .map { parser.compile(root, it) }
-            .toList()
+    private val collector = DetektCollector(textReplacements)
+    private val printer = DetektPrinter(documentationPath, configPath)
 
     fun execute() {
         val parser = KtCompiler()
         val time = measureTimeMillis {
-            val ktFiles = arguments.inputPath
+            val ktFiles = inputPaths
                 .flatMap { parseAll(parser, it) }
 
             ktFiles.forEach(collector::visit)
 
             printer.print(collector.items)
-
-            cliOptionsPrinter.print(arguments.cliOptionsPath)
         }
 
         outPrinter.println("\nGenerated all detekt documentation in $time ms.")
@@ -45,10 +37,10 @@ class Generator(
     fun executeCustomRuleConfig() {
         val parser = KtCompiler()
         val time = measureTimeMillis {
-            arguments.inputPath
+            inputPaths
                 .map { parseAll(parser, it.resolve("src/main/kotlin/")) to it }
                 .forEach { (list: Collection<KtFile>, folder: Path) ->
-                    val collector = DetektCollector(arguments.textReplacements)
+                    val collector = DetektCollector(textReplacements)
                     list.forEach { file ->
                         collector.visit(file)
                     }
@@ -62,3 +54,10 @@ class Generator(
         outPrinter.println("\nGenerated custom rules config in $time ms.")
     }
 }
+
+private fun parseAll(parser: KtCompiler, root: Path): Collection<KtFile> =
+    Files.walk(root)
+        .asSequence()
+        .filter { it.extension == "kt" }
+        .map { parser.compile(root, it) }
+        .toList()

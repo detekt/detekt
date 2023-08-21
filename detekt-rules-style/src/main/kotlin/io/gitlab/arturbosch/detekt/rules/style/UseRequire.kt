@@ -6,8 +6,8 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.arguments
 import io.gitlab.arturbosch.detekt.rules.isEmptyOrSingleStringArgument
 import io.gitlab.arturbosch.detekt.rules.isEnclosedByConditionalStatement
@@ -29,13 +29,12 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * require(value >= 0) { "value is $value but should be at least 0" }
  * </compliant>
  */
-@Suppress("ViolatesTypeResolutionRequirements")
+@RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
 class UseRequire(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "UseRequire",
-        Severity.Style,
         "Use require() instead of throwing an IllegalArgumentException.",
         Debt.FIVE_MINS
     )

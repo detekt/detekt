@@ -1,4 +1,5 @@
 import org.apache.tools.ant.filters.ReplaceTokens
+import java.io.ByteArrayOutputStream
 
 plugins {
     alias(libs.plugins.shadow)
@@ -45,6 +46,11 @@ publishing {
     }
 }
 
+private val generatedCliUsage: Configuration by configurations.creating {
+    isCanBeConsumed = true
+    isCanBeResolved = false
+}
+
 tasks {
     shadowJar {
         mergeServiceFiles()
@@ -87,4 +93,29 @@ tasks {
     check {
         dependsOn(runWithHelpFlag, runWithArgsFile)
     }
+
+    val cliUsage by registering(JavaExec::class) {
+        val cliUsagesOutput = layout.buildDirectory.file("output/cli-usage.md")
+        outputs.file(cliUsagesOutput)
+        classpath = files(shadowJar)
+        args = listOf("--help")
+        doFirst {
+            standardOutput = ByteArrayOutputStream()
+        }
+        doLast {
+            cliUsagesOutput.get().asFile.apply {
+                writeText("```\n")
+                appendBytes((standardOutput as ByteArrayOutputStream).toByteArray())
+                appendText("```\n")
+            }
+        }
+    }
+
+    artifacts.add(generatedCliUsage.name, cliUsage)
 }
+
+val shadowDist: Configuration by configurations.creating {
+    isCanBeConsumed = true
+    isCanBeResolved = false
+}
+artifacts.add(shadowDist.name, tasks.shadowDistZip)

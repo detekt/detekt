@@ -6,7 +6,6 @@ data class Rule(
     val nonCompliantCodeExample: String,
     val compliantCodeExample: String,
     val defaultActivationStatus: DefaultActivationStatus,
-    var severity: String,
     var debt: String,
     var aliases: String?,
     val parent: String,

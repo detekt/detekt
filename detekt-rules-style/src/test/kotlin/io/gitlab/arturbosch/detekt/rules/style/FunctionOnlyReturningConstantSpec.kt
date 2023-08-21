@@ -4,14 +4,12 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 private const val IGNORE_OVERRIDABLE_FUNCTION = "ignoreOverridableFunction"
 private const val IGNORE_ACTUAL_FUNCTION = "ignoreActualFunction"
 private const val EXCLUDED_FUNCTIONS = "excludedFunctions"
-private const val EXCLUDE_ANNOTATED_FUNCTION = "excludeAnnotatedFunction"
 
 class FunctionOnlyReturningConstantSpec {
     val subject = FunctionOnlyReturningConstant()
@@ -53,16 +51,6 @@ class FunctionOnlyReturningConstantSpec {
         private val actualFunctionCode = """
             actual class ActualFunctionReturningConstant {
                 actual fun f() = 1
-            }
-        """.trimIndent()
-
-        private val sinceKotlinCode = """
-            import kotlin.SinceKotlin
-            class Test {
-                @SinceKotlin("1.0.0")
-                fun someIgnoredFun(): String {
-                    return "I am a constant"
-                }
             }
         """.trimIndent()
 
@@ -112,26 +100,6 @@ class FunctionOnlyReturningConstantSpec {
             val config = TestConfig(EXCLUDED_FUNCTIONS to listOf("f*ion"))
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.compileAndLint(code)).isEmpty()
-        }
-
-        @Test
-        @DisplayName(
-            "does not report excluded annotated function which returns a constant when given \"kotlin.SinceKotlin\""
-        )
-        fun ignoreAnnotatedFunctionWhichReturnsConstantWhenGivenKotlinSinceKotlin() {
-            val config = TestConfig(EXCLUDE_ANNOTATED_FUNCTION to "kotlin.SinceKotlin")
-            val rule = FunctionOnlyReturningConstant(config)
-            assertThat(rule.compileAndLint(sinceKotlinCode)).isEmpty()
-        }
-
-        @Test
-        @DisplayName(
-            "does not report excluded annotated function which returns a constant when given listOf(\"kotlin.SinceKotlin\")"
-        )
-        fun ignoreAnnotatedFunctionWhichReturnsConstantWhenGivenListOfKotlinSinceKotlin() {
-            val config = TestConfig(EXCLUDE_ANNOTATED_FUNCTION to listOf("kotlin.SinceKotlin"))
-            val rule = FunctionOnlyReturningConstant(config)
-            assertThat(rule.compileAndLint(sinceKotlinCode)).isEmpty()
         }
     }
 

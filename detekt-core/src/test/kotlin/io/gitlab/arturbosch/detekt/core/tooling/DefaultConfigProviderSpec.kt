@@ -18,7 +18,6 @@ class DefaultConfigProviderSpec {
             val config = DefaultConfigProvider().apply { init(extensionsSpec) }.get()
 
             assertThat(config.parentPath).isNull()
-            assertThat(config.subConfig("build").valueOrNull<Int>("maxIssues")).isEqualTo(0)
             assertThat(config.valueOrNull<Any>("sample")).isNull()
         }
 
@@ -45,7 +44,6 @@ class DefaultConfigProviderSpec {
             val config = DefaultConfigProvider().apply { init(extensionsSpec) }.get()
 
             assertThat(config.parentPath).isNull()
-            assertThat(config.subConfig("build").valueOrNull<Int>("maxIssues")).isEqualTo(0)
             assertThat(config.valueOrNull<Any>("sample")).isNotNull()
         }
 

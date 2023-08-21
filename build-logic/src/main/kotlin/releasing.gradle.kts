@@ -10,10 +10,15 @@ nexusPublishing {
 
     repositories {
         create("sonatype") {
-            System.getenv("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")?.let { username = it }
-            System.getenv("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")?.let { password = it }
+            username = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")
+            password = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")
         }
     }
+}
+
+val releaseArtifacts: Configuration by configurations.creating {
+    isCanBeConsumed = false
+    isCanBeResolved = true
 }
 
 val version = Versions.currentOrSnapshot()
@@ -37,15 +42,31 @@ githubRelease {
             changelog.trim()
         }
     )
-    val cliBuildDir = project(":detekt-cli").layout.buildDirectory
-    releaseAssets.setFrom(
-        cliBuildDir.file("libs/detekt-cli-$version-all.jar"),
-        cliBuildDir.file("distributions/detekt-cli-$version.zip"),
-        project(":detekt-formatting").layout.buildDirectory.file("libs/detekt-formatting-$version.jar"),
-        project(":detekt-generator").layout.buildDirectory.file("libs/detekt-generator-$version-all.jar"),
-        project(":detekt-rules-libraries").layout.buildDirectory.file("libs/detekt-rules-libraries-$version.jar"),
-        project(":detekt-rules-ruleauthors").layout.buildDirectory.file("libs/detekt-rules-ruleauthors-$version.jar")
-    )
+    releaseAssets.setFrom(releaseArtifacts)
+}
+
+dependencies {
+    releaseArtifacts(project(":detekt-cli")) {
+        targetConfiguration = "shadow" // com.github.jengelman.gradle.plugins.shadow.ShadowBasePlugin.CONFIGURATION_NAME
+    }
+    releaseArtifacts(project(":detekt-cli")) {
+        targetConfiguration = "shadowDist"
+    }
+    releaseArtifacts(project(":detekt-generator")) {
+        targetConfiguration = "shadow" // com.github.jengelman.gradle.plugins.shadow.ShadowBasePlugin.CONFIGURATION_NAME
+    }
+    releaseArtifacts(project(":detekt-formatting")) {
+        targetConfiguration = Dependency.DEFAULT_CONFIGURATION
+        isTransitive = false
+    }
+    releaseArtifacts(project(":detekt-rules-libraries")) {
+        targetConfiguration = Dependency.DEFAULT_CONFIGURATION
+        isTransitive = false
+    }
+    releaseArtifacts(project(":detekt-rules-ruleauthors")) {
+        targetConfiguration = Dependency.DEFAULT_CONFIGURATION
+        isTransitive = false
+    }
 }
 
 fun updateVersion(increment: (Semver) -> Semver) {

@@ -27,7 +27,6 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
     private var defaultActivationStatus: DefaultActivationStatus = Inactive
     private var autoCorrect = false
     private var requiresTypeResolution = false
-    private var severity = ""
     private var debt = ""
     private var aliases: String? = null
     private var parent = ""
@@ -48,7 +47,6 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
             nonCompliantCodeExample = documentationCollector.nonCompliant,
             compliantCodeExample = documentationCollector.compliant,
             defaultActivationStatus = defaultActivationStatus,
-            severity = severity,
             debt = debt,
             aliases = aliases,
             parent = parent,
@@ -144,7 +142,6 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
             .orEmpty()
 
         if (arguments.size >= ISSUE_ARGUMENT_SIZE) {
-            severity = getArgument(arguments[1], "Severity")
             val debtName = getArgument(arguments[DEBT_ARGUMENT_INDEX], "Debt")
             val debtDeclarations = Debt::class.java.declaredFields.filter { Modifier.isStatic(it.modifiers) }
             val debtDeclaration = debtDeclarations.singleOrNull { it.name == debtName }
@@ -173,11 +170,10 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
             // which needs output of this class.
             "Rule", // io.gitlab.arturbosch.detekt.api.Rule
             "FormattingRule", // io.gitlab.arturbosch.detekt.formatting.FormattingRule
-            "ThresholdRule", // io.gitlab.arturbosch.detekt.api.ThresholdRule
             "EmptyRule", // io.gitlab.arturbosch.detekt.rules.empty.EmptyRule
         )
 
-        private const val ISSUE_ARGUMENT_SIZE = 4
-        private const val DEBT_ARGUMENT_INDEX = 3
+        private const val ISSUE_ARGUMENT_SIZE = 3
+        private const val DEBT_ARGUMENT_INDEX = 2
     }
 }

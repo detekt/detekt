@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.builtins.isSuspendFunctionType
@@ -15,12 +14,13 @@ import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.KtFunctionLiteral
-import org.jetbrains.kotlin.psi.KtLambdaArgument
+import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypes
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypesAndPredicate
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getParameterForArgument
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
@@ -50,7 +50,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Defect,
         "Usage of `Thread.sleep()` in coroutines can potentially halt multiple coroutines at once.",
         Debt.FIVE_MINS
     )
@@ -66,7 +65,7 @@ class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun checkAndReport(expression: KtExpression) {
-        if (expression.isThreadSleepFunction() && expression.isInSuspendBlock()) {
+        if (expression.isThreadSleepFunction() && shouldReport(expression)) {
             report(CodeSmell(issue, Entity.from(expression), SUSPEND_FUN_MESSAGE))
         }
     }
@@ -90,49 +89,88 @@ class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun PsiElement.isSuspendingBlock(): Boolean {
-        return when (this) {
-            is KtFunctionLiteral -> {
-                val psiParent = this.parent.parent
-                if (psiParent is KtLambdaArgument) {
-                    psiParent.isSuspendAllowedLambdaArgument()
-                } else {
-                    this.isSuspendScope()
+    @Suppress("ReturnCount")
+    private fun getNearestParentForSuspension(psiElement: PsiElement): PsiElement? {
+        fun KtValueArgument.isNearestParentForSuspension(): Boolean {
+            val parent = this.getParentOfTypes(true, KtCallExpression::class.java) ?: return false
+            val callDescriptor = parent.getResolvedCall(bindingContext)
+            val valueParameterDescriptor =
+                parent.getResolvedCall(bindingContext)
+                    ?.getParameterForArgument(this)
+                    ?: return false
+            val functionDescriptor = callDescriptor?.resultingDescriptor as? FunctionDescriptor ?: return false
+            return functionDescriptor.isInline.not() ||
+                (valueParameterDescriptor.isNoinline || valueParameterDescriptor.isCrossinline)
+        }
+        return psiElement.getParentOfTypesAndPredicate(
+            false,
+            KtNamedFunction::class.java,
+            KtValueArgument::class.java,
+            KtLambdaExpression::class.java,
+        ) {
+            when (it) {
+                is KtValueArgument -> {
+                    it.isNearestParentForSuspension()
+                }
+
+                is KtNamedFunction -> {
+                    true
+                }
+
+                is KtLambdaExpression -> {
+                    it.getParentOfType<KtProperty>(true, KtValueArgument::class.java) != null
+                }
+
+                else -> {
+                    false
                 }
             }
-            is KtNamedFunction -> {
-                this.isSuspendScope()
+        }
+    }
+
+    private fun PsiElement.isSuspendAllowed(): Boolean {
+        return when (this) {
+            is KtValueArgument -> {
+                this.isSuspendAllowed()
             }
+
+            is KtNamedFunction -> {
+                this.isSuspendAllowed()
+            }
+
+            is KtLambdaExpression -> {
+                this.isSuspendAllowed()
+            }
+
             else -> {
                 false
             }
         }
     }
 
-    private fun KtLambdaArgument.isSuspendAllowedLambdaArgument(): Boolean {
-        val callDescriptor = getParentOfType<KtCallExpression>(true)?.getResolvedCall(bindingContext) ?: return false
-        val functionDescriptor = callDescriptor.resultingDescriptor as? FunctionDescriptor ?: return false
-        val valueParameterDescriptor = callDescriptor.getParameterForArgument(this) ?: return false
-
-        return (
-            functionDescriptor.isInline &&
-                (valueParameterDescriptor.isNoinline.not() && valueParameterDescriptor.isCrossinline.not())
-            ) || valueParameterDescriptor.returnType?.isSuspendFunctionType == true
+    private fun KtValueArgument.isSuspendAllowed(): Boolean {
+        val parent = this.getParentOfTypes(true, KtCallExpression::class.java) ?: return false
+        val valueParameterDescriptor =
+            parent.getResolvedCall(bindingContext)
+                ?.getParameterForArgument(this)
+        return valueParameterDescriptor?.returnType?.isSuspendFunctionType == true
     }
 
-    private fun PsiElement.isSuspendScope(): Boolean {
+    private fun KtLambdaExpression.isSuspendAllowed(): Boolean {
+        val parent = this.getParentOfTypes(true, KtProperty::class.java)
+            ?: return false
+        val properDescriptor = bindingContext[BindingContext.VARIABLE, parent] ?: return false
+        return properDescriptor.returnType?.isSuspendFunctionType ?: false
+    }
+
+    private fun KtNamedFunction.isSuspendAllowed(): Boolean {
         val functionDescriptor = bindingContext[BindingContext.FUNCTION, this] ?: return false
         return functionDescriptor.isSuspend
     }
 
-    private fun KtExpression.isInSuspendBlock(): Boolean {
-        val containingBlockExpression =
-            this.getParentOfTypes<PsiElement>(
-                true,
-                KtNamedFunction::class.java,
-                KtFunctionLiteral::class.java
-            ) ?: return false
-        return containingBlockExpression.isSuspendingBlock()
+    private fun shouldReport(expression: KtExpression): Boolean {
+        val nearestParentForSuspension = getNearestParentForSuspension(expression) ?: return false
+        return nearestParentForSuspension.isSuspendAllowed()
     }
 
     companion object {

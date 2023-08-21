@@ -7,9 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
@@ -45,12 +45,11 @@ import org.jetbrains.kotlin.types.KotlinType
  * class A(val b: B) : I by b
  * </compliant>
  */
-@Suppress("ViolatesTypeResolutionRequirements")
+@RequiresTypeResolution
 class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
         "UseDataClass",
-        Severity.Style,
         "Classes that do nothing but hold data should be replaced with a data class.",
         Debt.FIVE_MINS
     )
