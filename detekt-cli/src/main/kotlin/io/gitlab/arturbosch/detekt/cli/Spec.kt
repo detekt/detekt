@@ -23,7 +23,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
         rules {
             autoCorrect = args.autoCorrect
             activateAllRules = args.allRules
-            failurePolicy = RulesSpec.FailurePolicy.DefaultFailurePolicy
+            failurePolicy = args.failurePolicy
             excludeCorrectable = false // not yet supported; loaded from config
             runPolicy = args.toRunPolicy()
         }
