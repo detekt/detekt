@@ -90,8 +90,7 @@ class CliArgs {
     @Parameter(
         names = ["--fail-on-severity"],
         description = "Specifies the minimum severity that causes the build to fail. " +
-            "Allowed values are 'error', 'warning', 'info' and 'never'. " +
-            "When the value is set to 'never' the build will never fail regardless of the number " +
+            "When the value is set to 'NEVER' detekt will not fail regardless of the number " +
             "of issues and their severities."
     )
     var failOnSeverity: FailureSeverity? = null
