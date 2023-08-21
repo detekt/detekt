@@ -16,6 +16,10 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
         toolVersion = loadDetektVersion(DetektExtension::class.java.classLoader)
     }
 
+    // TODO: We need to decide what to do with this property.
+    //   Currently we are using it to ignore build failures
+    //   which can also be done with 'failOnSeverity=never'
+    //   But this property is inherited from the CodeQualityExtension
     var ignoreFailures: Boolean
         @JvmName("ignoreFailures_")
         get() = isIgnoreFailures
