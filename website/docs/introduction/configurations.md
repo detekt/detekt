@@ -78,9 +78,32 @@ naming:
     excludes: *testFolders
 ```
 
+### Severity
+
+By default, all findings have a severity of `error` but is possible to configure the severity of each rule to fit
+your CI policy with respects to errors. You may specify the severity level in the config file at the rule or ruleSets
+level:
+
+```yaml
+empty-blocks:
+    active: true
+    severity: error
+    EmptyCatchBlock:
+        active: true
+        severity: info
+```
+
+The severity will be computed in the priority order:
+
+- Severity of the rule if exists
+- Severity of the parent ruleset if exists
+- Default severity: warning
+
 ## Build failure
 
-_detekt_ will fail your build if there is at least one issue found.
+_detekt_ will fail your build if there is at least one issue with a severity of error. You can lower that threshold
+or completely disable build failures by using the `failOnSeverity` setting. Details can be found in the
+[gradle](/docs/gettingstarted/gradle) and the [cli](/docs/gettingstarted/cli) sections.
 
 ## Console Reports
 

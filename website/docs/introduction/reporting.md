@@ -44,25 +44,6 @@ Markdown is a lightweight markup language for creating formatted text using a pl
 The output structure looks similar to HTML format.
 About [markdown](https://github.github.com/gfm/#what-is-markdown-) on GitHub.
 
-## Severity
-For machine-readable format, it is possible to configure the severity of each finding to fit
-your CI policy with respects to errors. You may specify the severity level in the config file
-for rule, or ruleSets:
-
-```yaml
-empty-blocks:
-  active: true
-  severity: error
-  EmptyCatchBlock:
-    active: true
-    severity: info
-```
-
-The severity will be computed in the priority order:
-- Severity of the rule if exists
-- Severity of the parent ruleset if exists
-- Default severity: warning
-
 ## Relative path
 In a shared codebase, it is often required to use relative path so that all developers and tooling
 have a consistent view. This can be enabled by CLI option `--base-path` or Gradle as the following:

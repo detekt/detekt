@@ -223,6 +223,11 @@ detekt {
     
     // If set to `true` the build does not fail when there are issues. Defaults to `false`.
     ignoreFailures = false
+
+    // The build to fails when there is at least one issue with this severity (or above).
+    // Allowed values are "error" (default), "warning", "info" and "never". If set to "never",
+    // the build will not fail regardless of the number of issues and their severities.
+    failOnSeverity = "never"
     
     // Android: Don't create tasks for the specified build types (e.g. "release")
     ignoredBuildTypes = ["release"]
@@ -278,6 +283,11 @@ detekt {
     // If set to `true` the build does not fail when there are issues. Defaults to `false`.
     ignoreFailures = false
     
+    // The build to fails when there is at least one issue with this severity (or above).
+    // Allowed values are "error" (default), "warning", "info" and "never". If set to "never",
+    // the build will not fail regardless of the number of issues and their severities.
+    failOnSeverity = "never"
+
     // Android: Don't create tasks for the specified build types (e.g. "release")
     ignoredBuildTypes = listOf("release")
     
@@ -489,7 +499,7 @@ tasks.named("check").configure {
 }
 ```
 
-Instead of disabling detekt for the check task, you may want to increase the build failure threshold in the [configuration file](/docs/introduction/configurations).
+Instead of disabling detekt for the check task, you may want to use the [baseline feature](/docs/introduction/baseline).
 
 ## <a name="idea">Integrating detekt inside your IntelliJ IDEA</a>
 
