@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtFinallySection
 import org.jetbrains.kotlin.psi.KtThrowExpression
@@ -31,7 +30,6 @@ class ThrowingExceptionFromFinally(config: Config = Config.empty) : Rule(config)
 
     override val issue = Issue(
         "ThrowingExceptionFromFinally",
-        Severity.Defect,
         "Do not throw an exception within a finally statement. This can discard exceptions and is confusing.",
         Debt.TWENTY_MINS
     )

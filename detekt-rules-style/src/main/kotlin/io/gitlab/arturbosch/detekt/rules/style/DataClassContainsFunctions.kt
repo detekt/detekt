@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isOperator
@@ -31,7 +30,6 @@ class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
         "DataClassContainsFunctions",
-        Severity.Style,
         "Data classes should mainly be used to store data and should not have any extra functions " +
             "(Compiler will automatically generate equals, toString and hashCode functions).",
         Debt.TWENTY_MINS

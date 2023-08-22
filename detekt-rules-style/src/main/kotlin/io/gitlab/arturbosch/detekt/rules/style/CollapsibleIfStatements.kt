@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
@@ -38,7 +37,6 @@ class CollapsibleIfStatements(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "CollapsibleIfStatements",
-        Severity.Style,
         "Two if statements which could be collapsed were detected. " +
             "These statements can be merged to improve readability.",
         Debt.FIVE_MINS

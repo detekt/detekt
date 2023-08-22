@@ -270,7 +270,7 @@ class ObjectPropertyNamingSpec {
     }
 }
 
-@Suppress("UnnecessaryAbstractClass")
+@Suppress("AbstractClassCanBeConcreteClass")
 abstract class NamingSnippet(private val isPrivate: Boolean, private val isConst: Boolean) {
 
     val negative = """

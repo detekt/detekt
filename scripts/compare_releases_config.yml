@@ -1,6 +1,4 @@
 build:
-  # analysis time is not printed on build failure
-  maxIssues: 9999999
 
 processors:
   active: true

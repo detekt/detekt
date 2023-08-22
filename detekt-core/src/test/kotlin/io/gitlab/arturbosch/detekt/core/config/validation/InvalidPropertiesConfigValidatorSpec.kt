@@ -16,7 +16,14 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 internal class InvalidPropertiesConfigValidatorSpec {
-    private val deprecatedProperties = setOf<String>("complexity>LongParameterList>threshold")
+    private val deprecatedProperties = setOf(
+        DeprecatedProperty(
+            ruleSetId = "complexity",
+            ruleId = "LongParameterList",
+            propertyName = "threshold",
+            description = "use xxx instead"
+        )
+    )
     private val baseline = yamlConfig("config_validation/baseline.yml") as YamlConfig
     private val defaultExcludePatterns = CommaSeparatedPattern(DEFAULT_PROPERTY_EXCLUDES).mapToRegex()
     private val subject = InvalidPropertiesConfigValidator(baseline, deprecatedProperties, defaultExcludePatterns)
@@ -64,12 +71,11 @@ internal class InvalidPropertiesConfigValidatorSpec {
     @Test
     fun `reports unexpected nested configs`() {
         // note that the baseline config is now the config to validate
-        val subject =
-            InvalidPropertiesConfigValidator(
-                yamlConfig("config_validation/no-value.yml") as YamlConfig,
-                deprecatedProperties,
-                defaultExcludePatterns
-            )
+        val subject = InvalidPropertiesConfigValidator(
+            yamlConfig("config_validation/no-value.yml") as YamlConfig,
+            deprecatedProperties,
+            defaultExcludePatterns
+        )
         val result = subject.validate(baseline)
         assertThat(result).contains(
             unexpectedNestedConfiguration("style"),

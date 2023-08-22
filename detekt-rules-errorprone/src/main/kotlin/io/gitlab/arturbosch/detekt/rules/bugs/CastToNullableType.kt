@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtNullableType
@@ -30,7 +29,6 @@ import org.jetbrains.kotlin.psi.KtNullableType
 class CastToNullableType(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         javaClass.simpleName,
-        Severity.Defect,
         "Use safe cast instead of unsafe cast to nullable types.",
         Debt.FIVE_MINS
     )

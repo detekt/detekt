@@ -4,7 +4,7 @@ import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.api.InvalidConfig
-import io.github.detekt.tooling.api.MaxIssuesReached
+import io.github.detekt.tooling.api.IssuesFound
 import io.gitlab.arturbosch.detekt.cli.executeDetekt
 import io.gitlab.arturbosch.detekt.cli.parseArguments
 import org.assertj.core.api.Assertions.assertThat
@@ -21,88 +21,20 @@ class RunnerSpec {
     val inputPath = resourceAsPath("cases/Poko.kt")
 
     @Nested
-    inner class `executes the runner with different maxIssues configurations` {
-
-        @Test
-        fun `should report one issue when maxIssues=2`() {
-            val tmpReport = createTempFileForTest("RunnerSpec", ".txt")
-
-            executeDetekt(
-                "--input",
-                inputPath.toString(),
-                "--report",
-                "txt:$tmpReport",
-                "--config-resource",
-                "/configs/max-issues-2.yml"
-            )
-
-            assertThat(tmpReport.readLines()).hasSize(1)
-        }
-
-        @Test
-        fun `should throw on maxIssues=0`() {
-            assertThatThrownBy {
-                executeDetekt(
-                    "--input",
-                    inputPath.toString(),
-                    "--config-resource",
-                    "/configs/max-issues-0.yml"
-                )
-            }.isExactlyInstanceOf(MaxIssuesReached::class.java)
-        }
-
-        @Test
-        fun `should never throw on maxIssues=-1`() {
-            val tmpReport = createTempFileForTest("RunnerSpec", ".txt")
-
-            executeDetekt(
-                "--input",
-                inputPath.toString(),
-                "--report",
-                "txt:$tmpReport",
-                "--config-resource",
-                "/configs/max-issues--1.yml"
-            )
-
-            assertThat(tmpReport.readLines()).hasSize(1)
-        }
-
-        @Nested
-        inner class `with additional baseline file` {
-
-            @Test
-            fun `should not throw on maxIssues=0 due to baseline`() {
-                val tmpReport = createTempFileForTest("RunnerSpec", ".txt")
-
-                executeDetekt(
-                    "--input",
-                    inputPath.toString(),
-                    "--report",
-                    "txt:$tmpReport",
-                    "--config-resource",
-                    "/configs/max-issues-0.yml",
-                    "--baseline",
-                    resourceAsPath("configs/baseline-with-two-excludes.xml").toString()
-                )
-
-                assertThat(tmpReport).isEmptyFile()
-            }
-        }
-    }
-
-    @Nested
     inner class `executes the runner with create baseline` {
 
         @Test
-        fun `should not throw on maxIssues=0`() {
+        fun `should not throw`() {
             val tmpReport = createTempFileForTest("RunnerSpec", ".txt")
 
             executeDetekt(
-                "--input", inputPath.toString(),
-                "--baseline", resourceAsPath("configs/baseline-empty.xml").toString(),
+                "--input",
+                inputPath.toString(),
+                "--baseline",
+                resourceAsPath("configs/baseline-empty.xml").toString(),
                 "--create-baseline",
-                "--report", "txt:$tmpReport",
-                "--config-resource", "/configs/max-issues-0.yml"
+                "--report",
+                "txt:$tmpReport",
             )
 
             assertThat(tmpReport).hasContent("")
@@ -116,7 +48,7 @@ class RunnerSpec {
         private val errPrintStream = StringPrintStream()
 
         @Nested
-        inner class `execute with default config which allows no issues` {
+        inner class `execute with default config without issues` {
 
             val path: Path = resourceAsPath("/cases/CleanPoko.kt")
 
@@ -129,7 +61,7 @@ class RunnerSpec {
 
             @Test
             fun `writes no build related output to output printer`() {
-                assertThat(outPrintStream.toString()).doesNotContain("test - [A failure]")
+                assertThat(outPrintStream.toString()).doesNotContain("A failure - [test]")
             }
 
             @Test
@@ -139,26 +71,24 @@ class RunnerSpec {
         }
 
         @Nested
-        inner class `execute with strict config` {
+        inner class `execute with default config with issues` {
 
             @BeforeEach
             fun setUp() {
                 val args = parseArguments(
                     arrayOf(
                         "--input",
-                        inputPath.toString(),
-                        "--config-resource",
-                        "/configs/max-issues-0.yml"
+                        inputPath.toString()
                     )
                 )
 
                 assertThatThrownBy { Runner(args, outPrintStream, errPrintStream).execute() }
-                    .isExactlyInstanceOf(MaxIssuesReached::class.java)
+                    .isExactlyInstanceOf(IssuesFound::class.java)
             }
 
             @Test
             fun `writes output to output printer`() {
-                assertThat(outPrintStream.toString()).contains("test - [A failure]")
+                assertThat(outPrintStream.toString()).contains("A failure [test]")
             }
 
             @Test
@@ -240,7 +170,7 @@ class RunnerSpec {
                     "--run-rule",
                     "test:test"
                 )
-            }.isExactlyInstanceOf(MaxIssuesReached::class.java)
+            }.isExactlyInstanceOf(IssuesFound::class.java)
             assertThat(tmp.readLines()).hasSize(1)
         }
 
@@ -264,42 +194,6 @@ class RunnerSpec {
         }
     }
 
-    @Nested
-    inner class `runner with maxIssuePolicy` {
-
-        @Test
-        fun `does fail via cli flag`() {
-            assertThatThrownBy { executeDetekt("--input", inputPath.toString(), "--max-issues", "0") }
-                .isExactlyInstanceOf(MaxIssuesReached::class.java)
-                .hasMessage("Analysis failed with 1 weighted issues.")
-        }
-
-        @Test
-        fun `does fail via cli flag even if config_maxIssues is specified`() {
-            assertThatThrownBy {
-                executeDetekt(
-                    "--input",
-                    inputPath.toString(),
-                    "--max-issues",
-                    "0",
-                    "--config-resource",
-                    "configs/max-issues--1.yml" // allow any
-                )
-            }.isExactlyInstanceOf(MaxIssuesReached::class.java)
-                .hasMessage("Analysis failed with 1 weighted issues.")
-        }
-
-        @Test
-        fun `does not fail when cli flag is negative`() {
-            executeDetekt("--input", inputPath.toString(), "--max-issues", "-1")
-        }
-
-        @Test
-        fun `does not fail when cli flag is positive`() {
-            executeDetekt("--input", inputPath.toString(), "--max-issues", "2")
-        }
-    }
-
     @Test
     fun `does not fail on rule property type change from comma separated string to list when YamlConfig is wrapped`() {
         assertThatCode {
@@ -308,10 +202,8 @@ class RunnerSpec {
                 "--input",
                 inputPath.toString(),
                 "--config-resource",
-                "configs/return-count-with-string-property.yml",
-                "--max-issues",
-                "-1"
+                "configs/return-count-with-string-property.yml"
             )
-        }.doesNotThrowAnyException()
+        }.isExactlyInstanceOf(IssuesFound::class.java)
     }
 }

@@ -31,21 +31,6 @@ import java.nio.file.Path
  * Creates an environment instance which can be used to compile source code to KtFile's.
  * This environment also allows to modify the resulting AST files.
  */
-@Deprecated(
-    "You should pass a printStream",
-    ReplaceWith("createKotlinCoreEnvironment(configuration, disposable, System.err)")
-)
-fun createKotlinCoreEnvironment(
-    configuration: CompilerConfiguration = CompilerConfiguration(),
-    disposable: Disposable = Disposer.newDisposable()
-): KotlinCoreEnvironment {
-    return createKotlinCoreEnvironment(configuration, disposable, System.err)
-}
-
-/**
- * Creates an environment instance which can be used to compile source code to KtFile's.
- * This environment also allows to modify the resulting AST files.
- */
 fun createKotlinCoreEnvironment(
     configuration: CompilerConfiguration = CompilerConfiguration(),
     disposable: Disposable = Disposer.newDisposable(),

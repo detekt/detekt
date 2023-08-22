@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
@@ -37,7 +36,6 @@ class DuplicateCaseInWhenExpression(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "DuplicateCaseInWhenExpression",
-        Severity.Warning,
         "Duplicated `case` statements in a `when` expression detected. Both cases should be merged.",
         Debt.TEN_MINS
     )

@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import java.nio.file.Path
 
@@ -28,7 +27,7 @@ class TestProvider2(override val ruleSetId: String = "Test2") : RuleSetProvider 
 }
 
 class FindName : Rule() {
-    override val issue: Issue = Issue(javaClass.simpleName, Severity.Minor, "", Debt.TWENTY_MINS)
+    override val issue: Issue = Issue(javaClass.simpleName, "", Debt.TWENTY_MINS)
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         report(CodeSmell(issue, Entity.atName(classOrObject), message = ""))
     }

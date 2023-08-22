@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
@@ -34,7 +33,6 @@ class UnnecessarySafeCall(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
         "UnnecessarySafeCall",
-        Severity.Defect,
         "Unnecessary safe call operator detected.",
         Debt.FIVE_MINS
     )

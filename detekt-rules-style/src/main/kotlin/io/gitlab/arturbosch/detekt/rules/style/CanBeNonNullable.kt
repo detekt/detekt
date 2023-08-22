@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
@@ -133,7 +132,6 @@ import org.jetbrains.kotlin.types.isNullable
 class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "Variable can be changed to non-nullable, as it is never set to null.",
         Debt.TEN_MINS
     )

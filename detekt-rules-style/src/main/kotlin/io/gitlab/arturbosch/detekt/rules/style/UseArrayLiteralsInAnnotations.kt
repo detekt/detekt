@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
@@ -32,7 +31,6 @@ class UseArrayLiteralsInAnnotations(config: Config = Config.empty) : Rule(config
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "Array literals [...] should be preferred as they are more readable than `arrayOf(...)` expressions.",
         Debt.FIVE_MINS
     )

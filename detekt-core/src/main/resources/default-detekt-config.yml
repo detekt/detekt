@@ -1,11 +1,5 @@
 build:
-  maxIssues: 0
   excludeCorrectable: false
-  weights:
-    # complexity: 2
-    # LongParameterList: 1
-    # style: 1
-    # comments: 1
 
 config:
   validation: true
@@ -162,7 +156,7 @@ complexity:
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     allowedDuplications: 2
     ignoreAnnotation: true
-    excludeStringsWithLessThan5Characters: true
+    allowedWithLengthLessThan: 5
     ignoreStringsRegex: '$^'
   TooManyFunctions:
     active: true
@@ -506,6 +500,10 @@ potential-bugs:
 
 style:
   active: true
+  AbstractClassCanBeConcreteClass:
+    active: true
+  AbstractClassCanBeInterface:
+    active: true
   AlsoCouldBeApply:
     active: false
   BracesOnIfStatements:
@@ -710,8 +708,6 @@ style:
     active: false
     acceptableLength: 4
     allowNonStandardGrouping: false
-  UnnecessaryAbstractClass:
-    active: true
   UnnecessaryAnnotationUseSiteTarget:
     active: false
   UnnecessaryApply:

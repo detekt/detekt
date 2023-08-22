@@ -22,7 +22,7 @@ jacoco.toolVersion = versionCatalog.findVersion("jacoco").get().requiredVersion
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
-    maxParallelForks = if (System.getenv("CI") != null) {
+    maxParallelForks = if (providers.environmentVariable("CI").isPresent) {
         Runtime.getRuntime().availableProcessors()
     } else {
         (Runtime.getRuntime().availableProcessors() / 2).takeIf { it > 0 } ?: 1

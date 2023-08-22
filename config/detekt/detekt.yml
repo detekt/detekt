@@ -16,7 +16,6 @@ complexity:
     excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
     allowedDuplications: 4
     ignoreAnnotation: true
-    excludeStringsWithLessThan5Characters: true
     ignoreStringsRegex: '$^'
   ComplexInterface:
     active: true

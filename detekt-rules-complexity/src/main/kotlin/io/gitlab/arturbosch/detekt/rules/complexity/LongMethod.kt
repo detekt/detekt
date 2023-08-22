@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -29,7 +28,6 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "LongMethod",
-        Severity.Maintainability,
         "One method should have one responsibility. Long methods tend to handle many things at once. " +
             "Prefer smaller methods to make them easier to understand.",
         Debt.TWENTY_MINS

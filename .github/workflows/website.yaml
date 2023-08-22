@@ -27,14 +27,14 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Node
-        uses: actions/setup-node@e33196f7422957bea03ed53f6fbb155025ffc7b8 # v3
+        uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3
         with:
           node-version: '16'
           cache: 'yarn'
           cache-dependency-path: 'website/yarn.lock'
 
       - name: Run generateWebsite
-        uses: gradle/gradle-build-action@a4cf152f482c7ca97ef56ead29bf08bcd953284c # v2
+        uses: gradle/gradle-build-action@243af859f8ca30903d9d7f7936897ca0358ba691 # v2
         with:
           gradle-home-cache-cleanup: true
           arguments: :detekt-generator:generateWebsite
