@@ -43,7 +43,7 @@ open class KtCompiler(
             this.lineSeparator = lineSeparator
             val normalizedBasePath = basePath.absolute().normalize()
             this.basePath = normalizedBasePath.absolute()
-            this.relativePath = normalizedBasePath.relativeTo(normalizedAbsolutePath)
+            this.relativePath = normalizedAbsolutePath.relativeTo(normalizedBasePath)
         }
     }
 }

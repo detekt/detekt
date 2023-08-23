@@ -33,7 +33,7 @@ class DetektAnalysisExtension(
         }
         val matchers = excludes.map { FileSystems.getDefault().getPathMatcher("glob:$it") }
         val (includedFiles, excludedFiles) = files.partition { file ->
-            matchers.none { it.matches(rootPath.relativeTo(Path(file.virtualFilePath))) }
+            matchers.none { it.matches(Path(file.virtualFilePath).relativeTo(rootPath)) }
         }
         log.info("Running detekt on module '${module.name.asString()}'")
         excludedFiles.forEach { log.info("File excluded by filter: ${it.virtualFilePath}") }
