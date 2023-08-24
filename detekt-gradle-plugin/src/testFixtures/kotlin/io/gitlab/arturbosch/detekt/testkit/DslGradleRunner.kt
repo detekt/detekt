@@ -43,8 +43,6 @@ constructor(
 
     @Language("yaml")
     private val configFileContent = """
-        build:
-          maxIssues: 5
         style:
           MagicNumber:
             active: true
