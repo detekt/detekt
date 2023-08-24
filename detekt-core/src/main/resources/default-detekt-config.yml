@@ -341,6 +341,7 @@ naming:
   MatchingDeclarationName:
     active: true
     mustBeFirst: true
+    multiplatformFileSuffixes: []
   MemberNameEqualsClassName:
     active: true
     ignoreOverridden: true

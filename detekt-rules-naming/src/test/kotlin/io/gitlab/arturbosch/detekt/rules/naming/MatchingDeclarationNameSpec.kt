@@ -134,6 +134,22 @@ class MatchingDeclarationNameSpec {
             val findings = MatchingDeclarationName().lint(ktFile)
             assertThat(findings).isEmpty()
         }
+
+        @Test
+        fun `should pass for class declaration and name with platform suffix`() {
+            val ktFile = compileContentForTest("actual class C", filename = "C.android.kt")
+            val findings = MatchingDeclarationName().lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should pass for class declaration and name with custom platform suffix`() {
+            val ktFile = compileContentForTest("actual class C", filename = "C.mySuffix.kt")
+            val findings = MatchingDeclarationName(
+                TestConfig("multiplatformFileSuffixes" to "mySuffix")
+            ).lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
     }
 
     @Nested
@@ -144,6 +160,13 @@ class MatchingDeclarationNameSpec {
             val ktFile = compileContentForTest("object O", filename = "Objects.kt")
             val findings = MatchingDeclarationName().lint(ktFile)
             assertThat(findings).hasStartSourceLocation(1, 8)
+        }
+
+        @Test
+        fun `should not pass for class declaration with name and unknown suffix`() {
+            val ktFile = compileContentForTest("class C", filename = "Object.mySuffix.kt")
+            val findings = MatchingDeclarationName().lint(ktFile)
+            assertThat(findings).hasStartSourceLocation(1, 7)
         }
 
         @Test

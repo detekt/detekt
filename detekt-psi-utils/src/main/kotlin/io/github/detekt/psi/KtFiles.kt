@@ -11,21 +11,32 @@ import kotlin.io.path.Path
 
 const val KOTLIN_SUFFIX = ".kt"
 const val KOTLIN_SCRIPT_SUFFIX = ".kts"
-private const val KOTLIN_KMP_COMMON_SUFFIX = ".common.kt"
-
-private val KOTLIN_FILE_SUFFIXES = arrayOf(
-    KOTLIN_KMP_COMMON_SUFFIX,
-    KOTLIN_SUFFIX,
-    KOTLIN_SCRIPT_SUFFIX
+private val KOTLIN_GENERIC_SUFFIXES = listOf(KOTLIN_SUFFIX, KOTLIN_SCRIPT_SUFFIX)
+private val KOTLIN_KMP_PLATFORM_SUFFIXES = listOf(
+    "common",
+    "ios",
+    "android",
+    "js",
+    "jvm",
+    "native",
+    "iosArm64",
+    "iosX64",
+    "macosX64",
+    "mingwX64",
+    "linuxX64"
 )
+
+private val GENERIC_KOTLIN_FILE_SUFFIXES =
+    buildPlatformSpecificSuffixes(KOTLIN_KMP_PLATFORM_SUFFIXES) + KOTLIN_GENERIC_SUFFIXES
 
 /**
  * Removes kotlin specific file name suffixes, e.g. .kt.
  * Note, will not remove other possible/known file suffixes like '.java'
  */
-fun PsiFile.fileNameWithoutSuffix(): String {
+fun PsiFile.fileNameWithoutSuffix(additionalSuffixes: List<String> = emptyList()): String {
     val fileName = this.name
-    for (suffix in KOTLIN_FILE_SUFFIXES) {
+    val suffixesToRemove = buildPlatformSpecificSuffixes(additionalSuffixes) + GENERIC_KOTLIN_FILE_SUFFIXES
+    for (suffix in suffixesToRemove) {
         if (fileName.endsWith(suffix)) {
             return fileName.removeSuffix(suffix)
         }
@@ -90,3 +101,6 @@ fun getLineAndColumnInPsiFile(file: PsiFile, range: TextRange): PsiDiagnosticUti
         DiagnosticUtils.getLineAndColumnInPsiFile(file, range)
     }.getOrNull()
 }
+
+private fun buildPlatformSpecificSuffixes(platforms: List<String>): List<String> =
+    platforms.map { platform -> ".$platform.kt" }
