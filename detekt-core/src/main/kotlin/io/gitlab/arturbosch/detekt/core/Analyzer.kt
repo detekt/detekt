@@ -16,6 +16,8 @@ import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.core.config.AllRulesConfig
 import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
+import io.gitlab.arturbosch.detekt.core.config.validation.DeprecatedRule
+import io.gitlab.arturbosch.detekt.core.config.validation.loadDeprecations
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
 import io.gitlab.arturbosch.detekt.core.rules.isActive
 import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
@@ -193,7 +195,12 @@ internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config = wi
 
     if (rulesSpec.activateAllRules) {
         val defaultConfig = getDefaultConfiguration()
-        declaredConfig = AllRulesConfig(declaredConfig ?: defaultConfig, defaultConfig)
+        val deprecatedRules = loadDeprecations().filterIsInstance<DeprecatedRule>().toSet()
+        declaredConfig = AllRulesConfig(
+            originalConfig = declaredConfig ?: defaultConfig,
+            defaultConfig = defaultConfig,
+            deprecatedRules = deprecatedRules
+        )
     }
 
     if (!rulesSpec.autoCorrect) {
