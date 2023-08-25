@@ -22,11 +22,9 @@ private fun Detektion.checkForIssuesWithSeverity(config: Config, minSeverity: Se
     }
 }
 
-private fun Detektion.computeIssueCount(config: Config, minSeverity: Severity): Int {
-    val smells = filterAutoCorrectedIssues(config)
+private fun Detektion.computeIssueCount(config: Config, minSeverity: Severity): Int =
+    filterAutoCorrectedIssues(config)
         .flatMap { it.value }
-        .filter { it.severity.isAtLeast(minSeverity) }
-    return smells.count()
-}
+        .count { it.severity.isAtLeast(minSeverity) }
 
 private fun Severity.isAtLeast(severity: Severity): Boolean = this.ordinal <= severity.ordinal
