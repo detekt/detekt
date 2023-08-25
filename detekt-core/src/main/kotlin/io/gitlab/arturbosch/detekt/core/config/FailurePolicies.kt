@@ -22,4 +22,3 @@ private fun Detektion.computeIssueCount(config: Config): Int =
     filterAutoCorrectedIssues(config)
         .flatMap { it.value }
         .count { it.severity == Severity.ERROR }
-
