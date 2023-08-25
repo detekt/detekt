@@ -62,6 +62,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
 
     var autoCorrect: Boolean = DEFAULT_AUTO_CORRECT_VALUE
 
+    // TODO: Add test to verify that setting is used from extension and task definition
     var failOnSeverity: String? = null
 
     /**
