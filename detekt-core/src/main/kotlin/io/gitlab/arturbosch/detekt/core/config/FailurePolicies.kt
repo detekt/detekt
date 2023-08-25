@@ -18,8 +18,8 @@ internal fun RulesSpec.FailurePolicy.check(result: Detektion, config: Config) {
     }
 }
 
-private fun Detektion.computeIssueCount(config: Config): Int {
-    return filterAutoCorrectedIssues(config)
+private fun Detektion.computeIssueCount(config: Config): Int =
+    filterAutoCorrectedIssues(config)
         .flatMap { it.value }
         .count { it.severity == Severity.ERROR }
-}
+
