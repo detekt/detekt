@@ -19,8 +19,7 @@ internal fun RulesSpec.FailurePolicy.check(result: Detektion, config: Config) {
 }
 
 private fun Detektion.computeIssueCount(config: Config): Int {
-    val smells = filterAutoCorrectedIssues(config)
+    return filterAutoCorrectedIssues(config)
         .flatMap { it.value }
-        .filter { it.severity == Severity.ERROR }
-    return smells.count()
+        .count { it.severity == Severity.ERROR }
 }
