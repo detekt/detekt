@@ -129,16 +129,16 @@ class CyclomaticComplexitySpec {
         fun `counts them by default`() {
             assertThat(
                 CyclomaticComplexity.calculate(code)
-            ).isEqualTo(defaultFunctionComplexity + 1)
+            ).isEqualTo(defaultFunctionComplexity + 2)
         }
 
         @Test
-        fun `does not count them when ignored`() {
+        fun `counts them as one when ignored`() {
             assertThat(
                 CyclomaticComplexity.calculate(code) {
                     ignoreLocalFunctions = true
                 }
-            ).isEqualTo(defaultFunctionComplexity)
+            ).isEqualTo(defaultFunctionComplexity + 1)
         }
     }
 

@@ -37,7 +37,7 @@ class CyclomaticComplexity(private val config: Config) : DetektVisitor() {
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (!isInsideObjectLiteral(function)) {
             complexity++
-            if (!isInsideNamedFunction(function) || config.ignoreLocalFunctions) {
+            if (!isInsideNamedFunction(function) || !config.ignoreLocalFunctions) {
                 super.visitNamedFunction(function)
             }
         }
