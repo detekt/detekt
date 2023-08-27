@@ -125,6 +125,7 @@ class CyclomaticComplexitySpec {
                 }
             """.trimIndent()
         )
+
         @Test
         fun `counts them by default`() {
             assertThat(
@@ -141,7 +142,6 @@ class CyclomaticComplexitySpec {
             ).isEqualTo(defaultFunctionComplexity + 1)
         }
     }
-
 
     @Nested
     inner class `ignoreSimpleWhenEntries is false` {
