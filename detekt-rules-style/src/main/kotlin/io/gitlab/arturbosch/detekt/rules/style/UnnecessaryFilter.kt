@@ -88,14 +88,44 @@ class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
         private val filterFqNames = listOf(
             FqName("kotlin.collections.filter"),
             FqName("kotlin.sequences.filter"),
+            FqName("kotlin.text.filter"),
         )
 
         private val secondCalls = listOf(
             SecondCall(FqName("kotlin.collections.List.size"), "count"),
-            SecondCall(FqName("kotlin.collections.List.isEmpty"), "any"),
-            SecondCall(FqName("kotlin.collections.isNotEmpty"), "none"),
+            SecondCall(FqName("kotlin.collections.List.isEmpty"), "none"),
+            SecondCall(FqName("kotlin.collections.isNotEmpty"), "any"),
             SecondCall(FqName("kotlin.collections.count")),
+            SecondCall(FqName("kotlin.collections.any")),
+            SecondCall(FqName("kotlin.collections.none")),
+            SecondCall(FqName("kotlin.collections.first")),
+            SecondCall(FqName("kotlin.collections.firstOrNull")),
+            SecondCall(FqName("kotlin.collections.last")),
+            SecondCall(FqName("kotlin.collections.lastOrNull")),
+            SecondCall(FqName("kotlin.collections.single")),
+            SecondCall(FqName("kotlin.collections.singleOrNull")),
+
             SecondCall(FqName("kotlin.sequences.count")),
+            SecondCall(FqName("kotlin.sequences.any")),
+            SecondCall(FqName("kotlin.sequences.none")),
+            SecondCall(FqName("kotlin.sequences.first")),
+            SecondCall(FqName("kotlin.sequences.firstOrNull")),
+            SecondCall(FqName("kotlin.sequences.last")),
+            SecondCall(FqName("kotlin.sequences.lastOrNull")),
+            SecondCall(FqName("kotlin.sequences.single")),
+            SecondCall(FqName("kotlin.sequences.singleOrNull")),
+
+            SecondCall(FqName("kotlin.text.isEmpty"), "none"),
+            SecondCall(FqName("kotlin.text.isNotEmpty"), "any"),
+            SecondCall(FqName("kotlin.text.count")),
+            SecondCall(FqName("kotlin.text.any")),
+            SecondCall(FqName("kotlin.text.none")),
+            SecondCall(FqName("kotlin.text.first")),
+            SecondCall(FqName("kotlin.text.firstOrNull")),
+            SecondCall(FqName("kotlin.text.last")),
+            SecondCall(FqName("kotlin.text.lastOrNull")),
+            SecondCall(FqName("kotlin.text.single")),
+            SecondCall(FqName("kotlin.text.singleOrNull")),
         )
     }
 }
