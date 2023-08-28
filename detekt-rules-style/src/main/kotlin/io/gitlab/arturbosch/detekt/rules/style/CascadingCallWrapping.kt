@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
@@ -39,7 +38,6 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
 class CascadingCallWrapping(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         id = javaClass.simpleName,
-        severity = Severity.Style,
         description = "If a chained call is wrapped to a new line, subsequent chained calls should be as well.",
         debt = Debt.FIVE_MINS,
     )
@@ -95,7 +93,7 @@ class CascadingCallWrapping(config: Config = Config.empty) : Rule(config) {
         val receiverEnd = lhs.startOffsetInParent + lhs.textLength
         val selectorStart = rhs.startOffsetInParent
 
-        return (receiverEnd until selectorStart).any { text[it] == '\n' }
+        return (receiverEnd..<selectorStart).any { text[it] == '\n' }
     }
 
     private fun KtExpression.receiverContainsNewline(): Boolean {

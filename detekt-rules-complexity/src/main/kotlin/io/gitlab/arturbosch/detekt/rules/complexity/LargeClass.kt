@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -29,14 +28,13 @@ class LargeClass(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "LargeClass",
-        Severity.Maintainability,
         "One class should have one responsibility. Large classes tend to handle many things at once. " +
             "Split up large classes into smaller classes that are easier to understand.",
         Debt.TWENTY_MINS
     )
 
-    @Configuration("the size of class required to trigger the rule")
-    private val threshold: Int by config(defaultValue = 600)
+    @Configuration("The maximum number of lines allowed per class.")
+    private val allowedLines: Int by config(defaultValue = 600)
 
     private val classToLinesCache = IdentityHashMap<KtClassOrObject, Int>()
     private val nestedClassTracking = IdentityHashMap<KtClassOrObject, HashSet<KtClassOrObject>>()
@@ -48,12 +46,12 @@ class LargeClass(config: Config = Config.empty) : Rule(config) {
 
     override fun postVisit(root: KtFile) {
         for ((clazz, lines) in classToLinesCache) {
-            if (lines >= threshold) {
+            if (lines > allowedLines) {
                 report(
                     ThresholdedCodeSmell(
                         issue,
                         Entity.atName(clazz),
-                        Metric("SIZE", lines, threshold),
+                        Metric("SIZE", lines, allowedLines),
                         "Class ${clazz.name} is too large. Consider splitting it into smaller pieces."
                     )
                 )

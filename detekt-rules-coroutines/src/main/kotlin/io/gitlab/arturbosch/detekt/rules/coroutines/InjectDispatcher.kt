@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
@@ -27,13 +26,13 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  *
  * <noncompliant>
  * fun myFunc() {
- *  coroutineScope(Dispatchers.IO)
+ *     coroutineScope(Dispatchers.IO)
  * }
  * </noncompliant>
  *
  * <compliant>
  * fun myFunc(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
- *  coroutineScope(dispatcher)
+ *     coroutineScope(dispatcher)
  * }
  *
  * class MyRepository(dispatchers: CoroutineDispatcher = Dispatchers.IO)
@@ -48,7 +47,6 @@ class InjectDispatcher(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "InjectDispatcher",
-        Severity.Defect,
         "Don't hardcode dispatchers when creating new coroutines or calling `withContext`. " +
             "Use dependency injection for dispatchers to make testing easier.",
         Debt.FIVE_MINS

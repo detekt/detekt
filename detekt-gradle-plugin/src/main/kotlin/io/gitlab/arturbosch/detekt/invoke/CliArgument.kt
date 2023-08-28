@@ -28,11 +28,11 @@ internal sealed class CliArgument {
     abstract fun toArgument(): List<String>
 }
 
-internal object CreateBaselineArgument : CliArgument() {
+internal data object CreateBaselineArgument : CliArgument() {
     override fun toArgument() = listOf(CREATE_BASELINE_PARAMETER)
 }
 
-internal object GenerateConfigArgument : CliArgument() {
+internal data object GenerateConfigArgument : CliArgument() {
     override fun toArgument() = listOf(GENERATE_CONFIG_PARAMETER)
 }
 

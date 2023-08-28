@@ -22,11 +22,17 @@ brew install detekt
 detekt [options]
 ```
 
-### Windows, with [Scoop](https://scoop.sh/)
+### Windows, with [Scoop](https://scoop.sh/):
 
 ```powershell
 scoop install detekt
 detekt [options]
+```
+
+### Unix-like OS, with [SDKMAN!](https://sdkman.io/):
+
+```sh
+sdk install detekt
 ```
 
 ### Any OS:
@@ -37,7 +43,7 @@ unzip detekt-cli-[detekt_version].zip
 ./detekt-cli-[detekt_version]/bin/detekt-cli --help
 ```
 
-### NixOS
+### NixOS:
 
 As a prerequisite, you have to add the unstable channel via `nix-channel` and then execute the following command.
 
@@ -49,12 +55,12 @@ nix-shell -I nixpkgs=channel:nixpkgs-unstable -p detekt
 
 detekt will exit with one of the following exit codes:
 
-| Exit code | Description                                                                    |
-| --------- | ------------------------------------------------------------------------------ |
-| 0         | detekt ran normally and maxIssues count was not reached in BuildFailureReport. |
-| 1         | An unexpected error occurred                                                   |
-| 2         | MaxIssues count was reached in BuildFailureReport.                             |
-| 3         | Invalid detekt configuration file detected.                                    |
+| Exit code | Description                                    |
+| --------- | ---------------------------------------------- |
+| 0         | detekt ran normally no issues were found.      |
+| 1         | An unexpected error occurred.                  |
+| 2         | At least one issues was found.                 |
+| 3         | Invalid detekt configuration file detected.    |
 
 The following parameters are shown when `--help` is entered.
 

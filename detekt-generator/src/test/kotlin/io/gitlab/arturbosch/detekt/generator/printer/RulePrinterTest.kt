@@ -14,7 +14,6 @@ internal class RulePrinterTest {
         nonCompliantCodeExample = "",
         compliantCodeExample = "",
         defaultActivationStatus = Inactive,
-        severity = "Defect",
         debt = "10min",
         aliases = "alias1, alias2",
         parent = "",

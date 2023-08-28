@@ -11,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SingleAssign
 import org.ec4j.core.model.Property
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
@@ -37,7 +36,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
     private var root: KtFile by SingleAssign()
 
     protected fun issueFor(description: String) =
-        Issue(javaClass.simpleName, Severity.Style, description, Debt.FIVE_MINS)
+        Issue(javaClass.simpleName, description, Debt.FIVE_MINS)
 
     override fun visit(root: KtFile) {
         this.root = root

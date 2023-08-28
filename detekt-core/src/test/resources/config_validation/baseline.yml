@@ -1,5 +1,3 @@
-build:
-  maxIssues: 1
 config:
   warningsAsErrors: true
   checkExhaustiveness: false
@@ -13,7 +11,7 @@ output-reports:
 complexity:
   LongMethod:
     active: true
-    threshold: 20
+    allowedLines: 20
   LongParameterList:
     active: false
     functionThreshold: 5

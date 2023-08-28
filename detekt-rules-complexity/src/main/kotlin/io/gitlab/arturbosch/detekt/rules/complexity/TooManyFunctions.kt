@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -32,27 +31,26 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "TooManyFunctions",
-        Severity.Maintainability,
         "Too many functions inside a/an file/class/object/interface always indicate a violation of " +
             "the single responsibility principle. Maybe the file/class/object/interface wants to manage too " +
             "many things at once. Extract functionality which clearly belongs together.",
         Debt.TWENTY_MINS
     )
 
-    @Configuration("threshold in files")
-    private val thresholdInFiles: Int by config(DEFAULT_THRESHOLD)
+    @Configuration("The maximum allowed functions per file")
+    private val allowedFunctionsPerFile: Int by config(DEFAULT_THRESHOLD)
 
-    @Configuration("threshold in classes")
-    private val thresholdInClasses: Int by config(DEFAULT_THRESHOLD)
+    @Configuration("The maximum allowed functions per class")
+    private val allowedFunctionsPerClass: Int by config(DEFAULT_THRESHOLD)
 
-    @Configuration("threshold in interfaces")
-    private val thresholdInInterfaces: Int by config(DEFAULT_THRESHOLD)
+    @Configuration("The maximum allowed functions per interface")
+    private val allowedFunctionsPerInterface: Int by config(DEFAULT_THRESHOLD)
 
-    @Configuration("threshold in objects")
-    private val thresholdInObjects: Int by config(DEFAULT_THRESHOLD)
+    @Configuration("The maximum allowed function per object")
+    private val allowedFunctionsPerObject: Int by config(DEFAULT_THRESHOLD)
 
-    @Configuration("threshold in enums")
-    private val thresholdInEnums: Int by config(DEFAULT_THRESHOLD)
+    @Configuration("The maximum allowed functions in enums")
+    private val allowedFunctionsPerEnum: Int by config(DEFAULT_THRESHOLD)
 
     @Configuration("ignore deprecated functions")
     private val ignoreDeprecated: Boolean by config(false)
@@ -67,14 +65,14 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
-        if (amountOfTopLevelFunctions >= thresholdInFiles) {
+        if (amountOfTopLevelFunctions > allowedFunctionsPerFile) {
             report(
                 ThresholdedCodeSmell(
                     issue,
                     Entity.atPackageOrFirstDecl(file),
-                    Metric("SIZE", amountOfTopLevelFunctions, thresholdInFiles),
+                    Metric("SIZE", amountOfTopLevelFunctions, allowedFunctionsPerFile),
                     "File '${file.name}' with '$amountOfTopLevelFunctions' functions detected. " +
-                        "Defined threshold inside files is set to '$thresholdInFiles'"
+                        "The maximum allowed functions per file is set to '$allowedFunctionsPerFile'"
                 )
             )
         }
@@ -91,42 +89,42 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
         val amount = calcFunctions(klass)
         when {
             klass.isInterface() -> {
-                if (amount >= thresholdInInterfaces) {
+                if (amount > allowedFunctionsPerInterface) {
                     report(
                         ThresholdedCodeSmell(
                             issue,
                             Entity.atName(klass),
-                            Metric("SIZE", amount, thresholdInInterfaces),
+                            Metric("SIZE", amount, allowedFunctionsPerInterface),
                             "Interface '${klass.name}' with '$amount' functions detected. " +
-                                "Defined threshold inside interfaces is set to " +
-                                "'$thresholdInInterfaces'"
+                                "The maximum allowed functions per interface is set to " +
+                                "'$allowedFunctionsPerInterface'"
                         )
                     )
                 }
             }
             klass.isEnum() -> {
-                if (amount >= thresholdInEnums) {
+                if (amount > allowedFunctionsPerEnum) {
                     report(
                         ThresholdedCodeSmell(
                             issue,
                             Entity.atName(klass),
-                            Metric("SIZE", amount, thresholdInEnums),
+                            Metric("SIZE", amount, allowedFunctionsPerEnum),
                             "Enum class '${klass.name}' with '$amount' functions detected. " +
-                                "Defined threshold inside enum classes is set to " +
-                                "'$thresholdInEnums'"
+                                "The maximum allowed functions per enum class is set to " +
+                                "'$allowedFunctionsPerEnum'"
                         )
                     )
                 }
             }
             else -> {
-                if (amount >= thresholdInClasses) {
+                if (amount > allowedFunctionsPerClass) {
                     report(
                         ThresholdedCodeSmell(
                             issue,
                             Entity.atName(klass),
-                            Metric("SIZE", amount, thresholdInClasses),
+                            Metric("SIZE", amount, allowedFunctionsPerClass),
                             "Class '${klass.name}' with '$amount' functions detected. " +
-                                "Defined threshold inside classes is set to '$thresholdInClasses'"
+                                "The maximum allowed functions per class is set to '$allowedFunctionsPerClass'"
                         )
                     )
                 }
@@ -137,14 +135,14 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
         val amount = calcFunctions(declaration)
-        if (amount >= thresholdInObjects) {
+        if (amount > allowedFunctionsPerObject) {
             report(
                 ThresholdedCodeSmell(
                     issue,
                     Entity.atName(declaration),
-                    Metric("SIZE", amount, thresholdInObjects),
+                    Metric("SIZE", amount, allowedFunctionsPerObject),
                     "Object '${declaration.name}' with '$amount' functions detected. " +
-                        "Defined threshold inside objects is set to '$thresholdInObjects'"
+                        "The maximum allowed functions per object is set to '$allowedFunctionsPerObject'"
                 )
             )
         }

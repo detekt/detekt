@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
@@ -27,7 +26,6 @@ class ThrowingExceptionInMain(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "ThrowingExceptionInMain",
-        Severity.CodeSmell,
         "The main method should not throw an exception.",
         Debt.TWENTY_MINS
     )

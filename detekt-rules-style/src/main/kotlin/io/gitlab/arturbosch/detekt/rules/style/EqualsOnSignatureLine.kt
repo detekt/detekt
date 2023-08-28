@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -35,7 +34,7 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  */
 class EqualsOnSignatureLine(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName, Severity.Style, MESSAGE, Debt.FIVE_MINS)
+    override val issue = Issue(javaClass.simpleName, MESSAGE, Debt.FIVE_MINS)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         val equalsToken = function.equalsToken ?: return

@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.builtins.StandardNames.COROUTINES_PACKAGE_FQ_NAME
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -95,7 +94,6 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 class SuspendFunSwallowedCancellation(config: Config) : Rule(config) {
     override val issue = Issue(
         id = javaClass.simpleName,
-        severity = Severity.Minor,
         description = "`runCatching` does not propagate `CancellationException`, don't use it with `suspend` lambda " +
             "blocks.",
         debt = Debt.TEN_MINS

@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
@@ -25,7 +24,6 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
@@ -51,6 +49,8 @@ import org.jetbrains.kotlin.psi.KtWhenConditionWithExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.containingClass
+import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.isFirstStatement
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi2ir.deparenthesize
@@ -132,7 +132,6 @@ import org.jetbrains.kotlin.types.isNullable
 class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "Variable can be changed to non-nullable, as it is never set to null.",
         Debt.TEN_MINS
     )
@@ -471,6 +470,7 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         private val candidateProps = mutableMapOf<FqName, KtProperty>()
 
         override fun visitKtFile(file: KtFile) {
+            file.collectCandidateProps()
             super.visitKtFile(file)
             // Any candidate properties that were not removed during the inspection
             // of the Kotlin file were never assigned nullable values in the code,
@@ -486,21 +486,13 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
             }
         }
 
-        override fun visitClass(klass: KtClass) {
-            if (!klass.isInterface()) {
-                super.visitClass(klass)
-            }
-        }
-
-        override fun visitProperty(property: KtProperty) {
-            val type = property.getKotlinTypeForComparison(bindingContext)
-            if (type?.isNullableAndCanBeNonNullable() == true) {
+        private fun KtFile.collectCandidateProps() {
+            forEachDescendantOfType<KtProperty> { property ->
                 val fqName = property.fqName
-                if (property.isCandidate() && fqName != null) {
+                if (fqName != null && property.isCandidate()) {
                     candidateProps[fqName] = property
                 }
             }
-            super.visitProperty(property)
         }
 
         override fun visitBinaryExpression(expression: KtBinaryExpression) {
@@ -539,7 +531,11 @@ class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
         }
 
         private fun KtProperty.isCandidate(): Boolean {
-            if (isOpen() || isAbstract()) return false
+            if (isOpen() || isAbstract() || containingClass()?.isInterface() == true) return false
+
+            val type = getKotlinTypeForComparison(bindingContext)
+            if (type?.isNullableAndCanBeNonNullable() != true) return false
+
             val isSetToNonNullable = initializer?.isNullableType() != true &&
                 getter?.isNullableType() != true &&
                 delegate?.returnsNullable() != true

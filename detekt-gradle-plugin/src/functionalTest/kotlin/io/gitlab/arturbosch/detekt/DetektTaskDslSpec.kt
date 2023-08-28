@@ -129,40 +129,6 @@ class DetektTaskDslSpec {
     }
 
     @Nested
-    @DisplayName("[deprecated] with custom input directories using input")
-    inner class CustomInputDirectoriesUsingInput {
-        val customSrc1 = "gensrc/kotlin"
-        val customSrc2 = "src/main/kotlin"
-        private val builder = kotlin().dryRun()
-
-        private val config = """
-            detekt {
-                input = files("$customSrc1", "$customSrc2", "folder_that_does_not_exist")
-            }
-        """.trimIndent()
-
-        val projectLayout = ProjectLayout(1, srcDirs = listOf(customSrc1, customSrc2))
-        private val gradleRunner = builder
-            .withProjectLayout(projectLayout)
-            .withDetektConfig(config)
-            .build()
-        private val result = gradleRunner.runDetektTask()
-
-        @Test
-        fun `sets input parameter to absolute filenames of all source files`() {
-            val file1 = gradleRunner.projectFile("$customSrc1/My0Root0Class.kt")
-            val file2 = gradleRunner.projectFile("$customSrc2/My1Root0Class.kt")
-            val expectedInputParam = "--input $file1,$file2"
-            assertThat(result.output).contains(expectedInputParam)
-        }
-
-        @Test
-        fun `ignores input directories that do not exist`() {
-            assertThat(result.output).doesNotContain("folder_that_does_not_exist")
-        }
-    }
-
-    @Nested
     inner class `with custom input directories` {
         val customSrc1 = "gensrc/kotlin"
         val customSrc2 = "src/main/kotlin"
@@ -170,7 +136,7 @@ class DetektTaskDslSpec {
 
         private val config = """
             detekt {
-                source = files("$customSrc1", "$customSrc2", "folder_that_does_not_exist")
+                source.setFrom(files("$customSrc1", "$customSrc2", "folder_that_does_not_exist"))
             }
         """.trimIndent()
 
@@ -240,7 +206,7 @@ class DetektTaskDslSpec {
             
             tasks.detekt {
                 reports {
-                    xml.destination = file("build/xml-reports/custom-detekt.xml")
+                    xml.outputLocation.set(file("build/xml-reports/custom-detekt.xml"))
                 }
             }
         """.trimIndent()
@@ -272,18 +238,18 @@ class DetektTaskDslSpec {
         private val config = """
             tasks.detekt {
                 reports {
-                    xml.enabled = false
+                    xml.required.set(false)
                     html {
-                        enabled = false
+                        required.set(false)
                     }
                     txt {
-                        enabled = false
+                        required.set(false)
                     }
                     sarif {
-                        enabled = false
+                        required.set(false)
                     }
                     md {
-                        enabled = false
+                        required.set(false)
                     }
                 }
             }
@@ -307,11 +273,11 @@ class DetektTaskDslSpec {
                     reports {
                         custom {
                            reportId = "customXml"
-                           destination = file("build/reports/custom.xml")
+                           outputLocation.set(file("build/reports/custom.xml"))
                        }
                         custom {
                            reportId = "customJson"
-                           destination = file("build/reports/custom.json")
+                           outputLocation.set(file("build/reports/custom.json"))
                        }
                     }
                 }
@@ -339,7 +305,7 @@ class DetektTaskDslSpec {
                 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                     reports {
                         custom {
-                           destination = file("build/reports/custom.xml")
+                           outputLocation.set(file("build/reports/custom.xml"))
                        }
                     }
                 }
@@ -388,7 +354,7 @@ class DetektTaskDslSpec {
                     reports {
                         custom {
                            reportId = "foo"
-                           destination = file("$aDirectory")
+                           outputLocation.set(file("$aDirectory"))
                        }
                     }
                 }
@@ -416,7 +382,7 @@ class DetektTaskDslSpec {
                         reports {
                             custom {
                                 reportId = "${wellKnownType.reportId}"
-                                destination = file("build/reports/custom.xml")
+                                outputLocation.set(file("build/reports/custom.xml"))
                             }
                         }
                     }
@@ -565,14 +531,14 @@ class DetektTaskDslSpec {
                 autoCorrect = false
                 reports {
                     xml {
-                        enabled = true
-                        destination = file("build/reports/mydetekt.xml")
+                        required.set(true)
+                        outputLocation.set(file("build/reports/mydetekt.xml"))
                     }
-                    html.destination = file("build/reports/mydetekt.html")
-                    txt.destination = file("build/reports/mydetekt.txt")
+                    html.outputLocation.set(file("build/reports/mydetekt.html"))
+                    txt.outputLocation.set(file("build/reports/mydetekt.txt"))
                     sarif {
-                        enabled = true
-                        destination = file("build/reports/mydetekt.sarif")
+                        required.set(true)
+                        outputLocation.set(file("build/reports/mydetekt.sarif"))
                     }
                 }
                 basePath = projectDir.toString()

@@ -6,10 +6,10 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.PackageViewDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -39,7 +39,6 @@ import org.jetbrains.kotlin.resolve.BindingContext
 class MaxChainedCallsOnSameLine(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         id = javaClass.simpleName,
-        severity = Severity.Style,
         description = "Chained calls beyond the maximum should be wrapped to a new line.",
         debt = Debt.FIVE_MINS,
     )
@@ -73,7 +72,7 @@ class MaxChainedCallsOnSameLine(config: Config = Config.empty) : Rule(config) {
     private fun KtExpression.countChainedCalls(): Int {
         return when (this) {
             is KtQualifiedExpression -> when {
-                receiverExpression.isReferenceToPackage() || callOnNewLine() -> 0
+                receiverExpression.isReferenceToPackageOrClass() || callOnNewLine() -> 0
                 else -> receiverExpression.countChainedCalls() + 1
             }
             is KtUnaryExpression -> baseExpression?.countChainedCalls() ?: 0
@@ -81,10 +80,11 @@ class MaxChainedCallsOnSameLine(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun KtExpression.isReferenceToPackage(): Boolean {
+    private fun KtExpression.isReferenceToPackageOrClass(): Boolean {
         val selectorOrThis = (this as? KtQualifiedExpression)?.selectorExpression ?: this
         if (selectorOrThis !is KtReferenceExpression) return false
-        return bindingContext[BindingContext.REFERENCE_TARGET, selectorOrThis] is PackageViewDescriptor
+        val descriptor = bindingContext[BindingContext.REFERENCE_TARGET, selectorOrThis]
+        return descriptor is PackageViewDescriptor || descriptor is ClassDescriptor
     }
 
     private fun KtQualifiedExpression.callOnNewLine(): Boolean {

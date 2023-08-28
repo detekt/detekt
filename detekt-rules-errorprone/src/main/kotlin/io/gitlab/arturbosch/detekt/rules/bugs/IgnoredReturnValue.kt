@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.configWithFallback
@@ -48,7 +47,6 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
         "IgnoredReturnValue",
-        Severity.Defect,
         "This call returns a value which is ignored",
         Debt.TWENTY_MINS
     )

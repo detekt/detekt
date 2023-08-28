@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPackageDirective
 
@@ -17,7 +16,6 @@ class MissingPackageDeclaration(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Maintainability,
         "Kotlin source files should define a package.",
         debt = Debt.FIVE_MINS
     )

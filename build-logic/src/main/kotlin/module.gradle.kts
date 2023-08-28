@@ -1,6 +1,5 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("packaging")
@@ -23,7 +22,7 @@ jacoco.toolVersion = versionCatalog.findVersion("jacoco").get().requiredVersion
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
-    maxParallelForks = if (System.getenv("CI") != null) {
+    maxParallelForks = if (providers.environmentVariable("CI").isPresent) {
         Runtime.getRuntime().availableProcessors()
     } else {
         (Runtime.getRuntime().availableProcessors() / 2).takeIf { it > 0 } ?: 1
@@ -46,11 +45,11 @@ tasks.withType<Test>().configureEach {
     }
 }
 
-tasks.withType<KotlinCompile>().configureEach {
+kotlin {
     compilerOptions {
-        jvmTarget.set(Versions.JVM_TARGET)
-        freeCompilerArgs.add("-progressive")
-        allWarningsAsErrors.set(providers.gradleProperty("warningsAsErrors").orNull.toBoolean())
+        jvmTarget = Versions.JVM_TARGET
+        progressiveMode = true
+        allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
     }
 }
 

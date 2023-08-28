@@ -1,5 +1,3 @@
-@file:Suppress("StringTemplate")
-
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
@@ -55,7 +53,7 @@ class TrimMultilineRawStringSpec {
         val code = """
             val a = $TQ
             Hello world!
-            ${TQ}.length
+            $TQ.length
         """.trimIndent()
         subject.compileAndLint(code)
         assertThat(subject.findings).hasSize(1)
@@ -66,7 +64,7 @@ class TrimMultilineRawStringSpec {
         val code = """
             val a = $TQ
             Hello world!
-            ${TQ}.trimIndent()
+            $TQ.trimIndent()
         """.trimIndent()
         subject.compileAndLint(code)
         assertThat(subject.findings).isEmpty()
@@ -77,7 +75,7 @@ class TrimMultilineRawStringSpec {
         val code = """
             val a = $TQ
             |Hello world!
-            ${TQ}.trimMargin()
+            $TQ.trimMargin()
         """.trimIndent()
         subject.compileAndLint(code)
         assertThat(subject.findings).isEmpty()
@@ -88,7 +86,7 @@ class TrimMultilineRawStringSpec {
         val code = """
             val a = $TQ
             >Hello world!
-            ${TQ}.trimMargin(">")
+            $TQ.trimMargin(">")
         """.trimIndent()
         subject.compileAndLint(code)
         assertThat(subject.findings).isEmpty()
@@ -97,7 +95,7 @@ class TrimMultilineRawStringSpec {
     @Test
     fun `don't raise one line raw strings`() {
         val code = """
-            val a = ${TQ}Hello world!${TQ}
+            val a = ${TQ}Hello world!$TQ
         """.trimIndent()
         subject.compileAndLint(code)
         assertThat(subject.findings).isEmpty()

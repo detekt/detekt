@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.generator.collection.DefaultValue.Companion.o
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidAliasesDeclaration
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidCodeExampleDocumentationException
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
-import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidIssueDeclaration
 import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
@@ -13,6 +12,8 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class RuleCollectorSpec {
 
@@ -20,7 +21,7 @@ class RuleCollectorSpec {
 
     @BeforeEach
     fun createSubject() {
-        subject = RuleCollector()
+        subject = RuleCollector(emptyMap())
     }
 
     @Test
@@ -37,13 +38,12 @@ class RuleCollectorSpec {
         assertThat(items).isEmpty()
     }
 
-    @Test
-    fun `throws when a class extends Rule but has no valid documentation`() {
-        val rules = listOf("Rule", "FormattingRule", "ThresholdRule", "EmptyRule")
-        for (rule in rules) {
-            val code = "class SomeRandomClass : $rule"
-            assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
-        }
+    @ParameterizedTest
+    @ValueSource(strings = ["Rule", "FormattingRule", "EmptyRule"])
+    fun `throws when a class extends Rule but has no valid documentation`(rule: String) {
+        val code = "class SomeRandomClass : $rule"
+        assertThatExceptionOfType(InvalidDocumentationException::class.java)
+            .isThrownBy { subject.run(code) }
     }
 
     @Test
@@ -70,6 +70,18 @@ class RuleCollectorSpec {
         """.trimIndent()
         val items = subject.run(code)
         assertThat(items[0].description).isEqualTo(description)
+    }
+
+    @Test
+    fun `replaces text in the rule description`() {
+        val code = """
+            /**
+             * some <foo/> description with more <foo/>. 
+             */
+            class SomeRandomClass : Rule
+        """.trimIndent()
+        val items = RuleCollector(mapOf("<foo/>" to "bar")).run(code)
+        assertThat(items[0].description).isEqualTo("some bar description with more bar.")
     }
 
     @Test
@@ -162,11 +174,10 @@ class RuleCollectorSpec {
              */
             class SomeRandomClass : Rule {
                 override val defaultRuleIdAliases = setOf("RULE", "RULE2")
-                override val issue = Issue(javaClass.simpleName, Severity.Style, "", Debt.TEN_MINS)
+                override val issue = Issue(javaClass.simpleName, "", Debt.TEN_MINS)
             }
         """.trimIndent()
         val items = subject.run(code)
-        assertThat(items[0].severity).isEqualTo("Style")
         assertThat(items[0].debt).isEqualTo("10min")
         assertThat(items[0].aliases).isEqualTo("RULE, RULE2")
     }
@@ -812,24 +823,6 @@ class RuleCollectorSpec {
     }
 
     @Test
-    fun `has wrong issue style property`() {
-        val code = """
-            /**
-             * description
-             */
-            class SomeRandomClass : Rule {
-            
-                val style = Severity.Style
-                override val issue = Issue(javaClass.simpleName,
-                        style,
-                        "",
-                        debt = Debt.TEN_MINS)
-            }
-        """.trimIndent()
-        assertThatExceptionOfType(InvalidIssueDeclaration::class.java).isThrownBy { subject.run(code) }
-    }
-
-    @Test
     fun `has wrong aliases property structure`() {
         val code = """
             /**
@@ -840,7 +833,6 @@ class RuleCollectorSpec {
                 val a = setOf("UNUSED_VARIABLE")
                 override val defaultRuleIdAliases = a
                 override val issue = Issue(javaClass.simpleName,
-                        Severity.Style,
                         "",
                         debt = Debt.TEN_MINS)
             }

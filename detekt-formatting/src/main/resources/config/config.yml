@@ -14,6 +14,14 @@ formatting:
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120
+  BinaryExpressionWrapping:
+    active: false
+    autoCorrect: true
+    maxLineLength: 120
+    indentSize: 4
+  BlankLineBeforeDeclaration:
+    active: false
+    autoCorrect: true
   BlockCommentInitialStarAlignment:
     active: true
     autoCorrect: true
@@ -128,6 +136,8 @@ formatting:
   NoEmptyClassBody:
     active: true
     autoCorrect: true
+  NoEmptyFile:
+    active: false
   NoEmptyFirstLineInClassBody:
     active: false
     autoCorrect: true
@@ -231,6 +241,10 @@ formatting:
   SpacingBetweenFunctionNameAndOpeningParenthesis:
     active: true
     autoCorrect: true
+  StatementWrapping:
+    active: false
+    autoCorrect: true
+    indentSize: 4
   StringTemplate:
     active: true
     autoCorrect: true

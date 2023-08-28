@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
@@ -35,7 +34,6 @@ class ComplexInterface(
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Maintainability,
         "An interface contains too many functions and properties. " +
             "Large classes tend to handle many things at once. " +
             "An interface should have one responsibility. " +
@@ -43,8 +41,8 @@ class ComplexInterface(
         Debt.TWENTY_MINS
     )
 
-    @Configuration("the amount of definitions in an interface to trigger the rule")
-    private val threshold: Int by config(defaultValue = 10)
+    @Configuration("The amount of allowed definitions in an interface.")
+    private val allowedDefinitions: Int by config(defaultValue = 10)
 
     @Configuration("whether static declarations should be included")
     private val includeStaticDeclarations: Boolean by config(defaultValue = false)
@@ -62,12 +60,12 @@ class ComplexInterface(
             if (includeStaticDeclarations) {
                 size += countStaticDeclarations(klass.companionObject())
             }
-            if (size >= threshold) {
+            if (size > allowedDefinitions) {
                 report(
                     ThresholdedCodeSmell(
                         issue,
                         Entity.atName(klass),
-                        Metric("SIZE: ", size, threshold),
+                        Metric("SIZE: ", size, allowedDefinitions),
                         "The interface ${klass.name} is too complex. Consider splitting it up."
                     )
                 )

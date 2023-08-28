@@ -26,10 +26,6 @@ class DetektReportMergeSpec {
             subprojects {
                 ${builder.gradleSubprojectsApplyPlugins.reIndent(1)}
             
-                detekt {
-                    reports.sarif.enabled = true
-                }
-            
                 tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class).configureEach {
                     finalizedBy(sarifReportMerge)
                 }
@@ -95,10 +91,6 @@ class DetektReportMergeSpec {
             
             subprojects {
                 ${builder.gradleSubprojectsApplyPlugins.reIndent(1)}
-            
-                detekt {
-                    reports.xml.enabled = true
-                }
             
                 tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class).configureEach {
                     finalizedBy(xmlReportMerge)

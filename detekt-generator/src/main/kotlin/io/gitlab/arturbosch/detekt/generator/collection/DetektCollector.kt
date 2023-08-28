@@ -3,10 +3,10 @@ package io.gitlab.arturbosch.detekt.generator.collection
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import org.jetbrains.kotlin.psi.KtFile
 
-class DetektCollector : Collector<RuleSetPage> {
+class DetektCollector(textReplacements: Map<String, String>) : Collector<RuleSetPage> {
 
     private val ruleSetProviderCollector = RuleSetProviderCollector()
-    private val ruleCollector = RuleCollector()
+    private val ruleCollector = RuleCollector(textReplacements)
 
     private val collectors = listOf(
         ruleSetProviderCollector,
@@ -30,16 +30,16 @@ class DetektCollector : Collector<RuleSetPage> {
     }
 
     private fun List<Rule>.findRuleByName(ruleName: String): Rule {
-        return find { it.name == ruleName }
-            ?: throw InvalidDocumentationException("Rule $ruleName was specified in a provider but it was not defined.")
+        return find { it.name == ruleName } ?: throw InvalidDocumentationException(
+            "Rule '$ruleName' was specified in a provider but it was not defined."
+        )
     }
 
     private fun List<Rule>.resolveParentRule(rules: List<Rule>) {
-        this.filter { it.debt.isEmpty() && it.severity.isEmpty() }
+        this.filter { it.debt.isEmpty() }
             .forEach {
                 val parentRule = rules.findRuleByName(it.parent)
                 it.debt = parentRule.debt
-                it.severity = parentRule.severity
             }
     }
 

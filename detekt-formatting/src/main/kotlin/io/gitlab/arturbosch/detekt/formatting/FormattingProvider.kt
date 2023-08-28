@@ -12,6 +12,8 @@ import io.gitlab.arturbosch.detekt.api.internal.ruleSetConfig
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationOnSeparateLine
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ArgumentListWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.BinaryExpressionWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.BlankLineBeforeDeclaration
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BlockCommentInitialStarAlignment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ClassName
@@ -45,6 +47,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.NoBlankLinesInChainedMeth
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoConsecutiveBlankLines
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoConsecutiveComments
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyClassBody
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyFile
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyFirstLineInClassBody
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyFirstLineInMethodBlock
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakAfterElse
@@ -77,6 +80,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundUnaryOperato
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithAnnotations
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithComments
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenFunctionNameAndOpeningParenthesis
+import io.gitlab.arturbosch.detekt.formatting.wrappers.StatementWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplate
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplateIndent
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TrailingCommaOnCallSite
@@ -172,6 +176,8 @@ class FormattingProvider : RuleSetProvider {
             Wrapping(config),
 
             // Wrappers for ktlint-ruleset-experimental rules. Disabled by default.
+            BinaryExpressionWrapping(config),
+            BlankLineBeforeDeclaration(config),
             ContextReceiverMapping(config),
             DiscouragedCommentLocation(config),
             EnumWrapping(config),
@@ -181,8 +187,10 @@ class FormattingProvider : RuleSetProvider {
             MultilineExpressionWrapping(config),
             NoBlankLineInList(config),
             NoConsecutiveComments(config),
+            NoEmptyFile(config),
             NoEmptyFirstLineInClassBody(config),
             ParameterListSpacing(config),
+            StatementWrapping(config),
             StringTemplateIndent(config),
             TryCatchFinallySpacing(config),
             TypeArgumentListSpacing(config),

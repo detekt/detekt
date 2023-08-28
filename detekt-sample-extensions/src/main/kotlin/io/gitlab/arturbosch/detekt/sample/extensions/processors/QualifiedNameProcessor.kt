@@ -23,7 +23,7 @@ class QualifiedNameProcessor : FileProcessListener {
         val fqNames = files
             .mapNotNull { it.getUserData(fqNamesKey) }
             .flatMapTo(HashSet()) { it }
-        result.addData(fqNamesKey, fqNames)
+        result.putUserData(fqNamesKey, fqNames)
     }
 
     class ClassNameVisitor : DetektVisitor() {

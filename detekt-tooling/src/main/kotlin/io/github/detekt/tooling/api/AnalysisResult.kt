@@ -17,7 +17,7 @@ interface AnalysisResult {
 @Suppress("detekt.MagicNumber")
 fun AnalysisResult.exitCode(): Int = when (error) {
     is UnexpectedError -> 1
-    is MaxIssuesReached -> 2
+    is IssuesFound -> 2
     is InvalidConfig -> 3
     null -> 0
 }

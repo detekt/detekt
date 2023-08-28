@@ -6,8 +6,8 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtPostfixExpression
@@ -43,14 +43,13 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
  * map.getOrElse("key", { "" })
  * </compliant>
  */
-@Suppress("ViolatesTypeResolutionRequirements")
+@RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
 class MapGetWithNotNullAssertionOperator(config: Config) : Rule(config) {
 
     override val issue: Issue =
         Issue(
             "MapGetWithNotNullAssertionOperator",
-            Severity.CodeSmell,
             "map.get() with not-null assertion operator (!!) can result in a NullPointerException. " +
                 "Consider usage of map.getValue(), map.getOrDefault() or map.getOrElse() instead.",
             Debt.FIVE_MINS

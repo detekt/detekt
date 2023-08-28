@@ -107,11 +107,11 @@ If you want to use a SNAPSHOT version, you can find more info on [this documenta
 
 #### Requirements
 
-Gradle 6.7.1+ is the minimum requirement. However, the recommended versions together with the other tools recommended versions are:
+Gradle 6.8.3+ is the minimum requirement. However, the recommended versions together with the other tools recommended versions are:
 
 | Detekt Version | Gradle  | Kotlin   | AGP     | Java Target Level | JDK Max Version |
 |----------------|---------|----------|---------|-------------------|-----------------|
-| `1.22.0`       | `7.5.1` | `1.7.21` | `7.3.1` | `1.8`             | `17`            |
+| `1.23.1`       | `8.2.1` | `1.9.0`  | `8.1.0` | `1.8`             | `17`            |
 
 The list of [recommended versions for previous detekt version is listed here](https://detekt.dev/compatibility.html).
 
@@ -152,7 +152,8 @@ Thanks to all the people who contributed to detekt!
 
 As mentioned in...
 
-- [driodcon London 2021 - Detekt - State of the Union](https://www.droidcon.com/2021/11/17/detekt-state-of-the-union-2/)
+- [To Detekt 2.0, and beyond!](https://www.youtube.com/watch?v=6EQd_SDR6n0)
+- [droidcon London 2021 - Detekt - State of the Union](https://www.droidcon.com/2021/11/17/detekt-state-of-the-union-2/)
 - [KotlinConf 2018 - Safe(r) Kotlin Code - Static Analysis Tools for Kotlin by Marvin Ramin](https://www.youtube.com/watch?v=yjhQiP0329M)
 - [droidcon NYC 2018 - Static Code Analysis For Kotlin](https://www.youtube.com/watch?v=LT6m5_LO2DQ)
 - Kotlin on Code Quality Tools - by @vanniktech [Slides](https://docs.google.com/presentation/d/1sUoQCRHTR01JfaS67Qkd7K1rdRLOhO6QGCelZZwxOKs/edit) [Presentation](https://www.youtube.com/watch?v=FKDNE6PPTTE)
@@ -166,6 +167,7 @@ Integrations:
 
 - [IntelliJ integration](https://github.com/detekt/detekt-intellij-plugin)
 - [SonarQube integration](https://github.com/detekt/sonar-kotlin)
+- [TCA(Tencent CodeAnalysis) integration](https://github.com/Tencent/CodeAnalysis/blob/main/client/tool/detekt.py)
 - [Codacy](https://www.codacy.com)
 - [Gradle plugin that configures Error Prone, Checkstyle, PMD, CPD, Lint, Detekt & Ktlint](https://github.com/vanniktech/gradle-code-quality-tools-plugin)
 - [Violations Lib](https://github.com/tomasbjerre/violations-lib) is a Java library for parsing report files like static code analysis.

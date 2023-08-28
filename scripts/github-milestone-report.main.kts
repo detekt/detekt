@@ -7,9 +7,8 @@
  * You need kotlin 1.3.70+ installed on your machine
  */
 
-// for the exec line
-@file:Suppress("detekt.CommentSpacing")
-@file:DependsOn("org.kohsuke:github-api:1.314")
+@file:Suppress("detekt.CommentSpacing") // For the polyglot exec command in line 2.
+@file:DependsOn("org.kohsuke:github-api:1.316")
 @file:DependsOn("com.github.ajalt:clikt:2.8.0")
 
 import com.github.ajalt.clikt.core.CliktCommand
@@ -36,6 +35,10 @@ class GithubMilestoneReport : CliktCommand() {
         "-f",
         help = "Filter issues that are already in the changelog. Default: false."
     ).flag(default = false)
+    private val filterPickRequests: Boolean by option(
+        "-r",
+        help = "Filter issues labeled with 'pick requests'. Default: false."
+    ).flag(default = false)
 
     @Suppress("LongMethod")
     override fun run() {
@@ -56,6 +59,10 @@ class GithubMilestoneReport : CliktCommand() {
         if (filterExisting) {
             val changeLogContent = File("./website/src/pages/changelog.md").readText()
             ghIssues = ghIssues.filter { "[#${it.number}]" !in changeLogContent }
+        }
+
+        if (filterPickRequests) {
+            ghIssues = ghIssues.filter { "pick request" in it.labels.map { it.name } }
         }
 
         val milestoneTitle = ghMilestone.title.trim()

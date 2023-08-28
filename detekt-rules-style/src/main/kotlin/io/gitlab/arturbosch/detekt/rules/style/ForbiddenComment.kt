@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
@@ -16,6 +15,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import java.util.Locale
 
 // Note: ​ (zero-width-space) is used to prevent the Kotlin parser getting confused by talking about comments in a comment.
 /**
@@ -91,7 +91,6 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "Flags a forbidden comment.",
         Debt.TEN_MINS
     )
@@ -163,12 +162,12 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
     private fun PsiComment.getContent(): String = text.getCommentContent()
 
     private fun getErrorMessage(comment: Comment): String =
-        comment.reason ?: String.format(DEFAULT_ERROR_MESSAGE, comment.value.pattern)
+        comment.reason ?: String.format(Locale.ROOT, DEFAULT_ERROR_MESSAGE, comment.value.pattern)
 
     @Suppress("DEPRECATION")
     private fun getErrorMessage(value: String): String =
         customMessage.takeUnless { it.isEmpty() }
-            ?: String.format(DEFAULT_ERROR_MESSAGE, value)
+            ?: String.format(Locale.ROOT, DEFAULT_ERROR_MESSAGE, value)
 
     private data class Comment(val value: Regex, val reason: String?)
 

@@ -3,30 +3,43 @@ plugins {
     id("module")
 }
 
+val generatedUsage: Configuration by configurations.creating {
+    isCanBeConsumed = false
+    isCanBeResolved = true
+}
+
 dependencies {
     implementation(projects.detektParser)
     implementation(projects.detektApi)
-    implementation(projects.detektCli)
+    generatedUsage(projects.detektCli) {
+        targetConfiguration = "generatedCliUsage"
+    }
     implementation(projects.detektUtils)
     implementation(libs.jcommander)
 
     testImplementation(projects.detektCore)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj)
-    testImplementation(libs.reflections)
+    testImplementation(libs.classgraph)
+    testRuntimeOnly(projects.detektRules)
 }
 
 val documentationDir = "$rootDir/website/docs/rules"
 val configDir = "$rootDir/detekt-core/src/main/resources"
-val cliOptionsFile = "$rootDir/website/docs/gettingstarted/_cli-options.md"
 val defaultConfigFile = "$configDir/default-detekt-config.yml"
 val deprecationFile = "$configDir/deprecation.properties"
 val formattingConfigFile = "$rootDir/detekt-formatting/src/main/resources/config/config.yml"
 val librariesConfigFile = "$rootDir/detekt-rules-libraries/src/main/resources/config/config.yml"
 val ruleauthorsConfigFile = "$rootDir/detekt-rules-ruleauthors/src/main/resources/config/config.yml"
 
+val copyDetektCliUsage by tasks.registering(Copy::class) {
+    from(generatedUsage) { rename { "_cli-options.md" } }
+    destinationDir = rootDir.resolve("website/docs/gettingstarted")
+}
+
 tasks.register("generateWebsite") {
     dependsOn(
+        copyDetektCliUsage,
         generateDocumentation,
         ":detekt-api:dokkaHtml",
     )
@@ -56,7 +69,6 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         file(librariesConfigFile),
         file(ruleauthorsConfigFile),
         file(deprecationFile),
-        file(cliOptionsFile),
     )
 
     classpath(
@@ -64,7 +76,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         configurations.compileClasspath.get(),
         sourceSets.main.get().output,
     )
-    mainClass.set("io.gitlab.arturbosch.detekt.generator.Main")
+    mainClass = "io.gitlab.arturbosch.detekt.generator.Main"
     args = listOf(
         "--input",
         ruleModules.joinToString(","),
@@ -72,8 +84,8 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         documentationDir,
         "--config",
         configDir,
-        "--cli-options",
-        cliOptionsFile,
+        "--replace",
+        "<ktlintVersion/>=${libs.versions.ktlint.get()}"
     )
 }
 

@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.config
@@ -54,7 +53,6 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 class MultilineRawStringIndentation(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "The indentation of the raw String should be consistent",
         Debt.FIVE_MINS
     )
@@ -193,11 +191,11 @@ private fun PsiFile.getLine(line: Int): String {
 private fun PsiFile.getLocation(start: SourceLocation, end: SourceLocation): Location {
     val lines = this.text.lines()
     var startOffset = 0
-    for (i in 1 until start.line) {
+    for (i in 1..<start.line) {
         startOffset += lines[i - 1].length + 1
     }
     var endOffset = startOffset
-    for (i in start.line until end.line) {
+    for (i in start.line..<end.line) {
         endOffset += lines[i - 1].length + 1
     }
     this.text.lines()

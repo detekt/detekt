@@ -4,6 +4,7 @@ import com.beust.jcommander.Parameter
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.nio.file.Path
+import kotlin.io.path.Path
 
 class CliArgs {
 
@@ -92,7 +93,7 @@ class CliArgs {
             "File paths in console output and txt report are not affected and remain as absolute paths.",
         converter = PathConverter::class
     )
-    var basePath: Path? = null
+    var basePath: Path = Path(System.getProperty("user.dir"))
 
     @Parameter(
         names = ["--disable-default-rulesets", "-dd"],
@@ -112,13 +113,6 @@ class CliArgs {
         description = "Activates all available (even unstable) rules."
     )
     var allRules: Boolean = false
-
-    // nullable for 1.x.x to prefer maxIssues from config file
-    @Parameter(
-        names = ["--max-issues"],
-        description = "Return exit code 0 only when found issues count does not exceed specified issues count."
-    )
-    var maxIssues: Int? = null
 
     @Parameter(
         names = ["--auto-correct", "-ac"],
@@ -172,7 +166,7 @@ class CliArgs {
     @Parameter(
         names = ["--jvm-target"],
         description = "EXPERIMENTAL: Target version of the generated JVM bytecode that was generated during " +
-            "compilation and is now being used for type resolution (1.8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 or 19)"
+            "compilation and is now being used for type resolution (1.8, 9, 10, ..., 20)"
     )
     var jvmTarget: String = JvmTarget.DEFAULT.description
 

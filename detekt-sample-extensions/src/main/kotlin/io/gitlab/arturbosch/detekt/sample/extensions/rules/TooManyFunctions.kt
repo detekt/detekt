@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -17,7 +16,6 @@ class TooManyFunctions(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.CodeSmell,
         "This rule reports a file with an excessive function count.",
         Debt.TWENTY_MINS
     )
@@ -26,13 +24,13 @@ class TooManyFunctions(config: Config) : Rule(config) {
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
-        if (amount > THRESHOLD) {
+        if (amount > ALLOWED_FUNCTIONS) {
             report(
                 CodeSmell(
                     issue,
                     Entity.atPackageOrFirstDecl(file),
                     message = "The file ${file.name} has $amount function declarations. " +
-                        "Threshold is specified with $THRESHOLD."
+                        "The maximum number of allowed functions is specified with $ALLOWED_FUNCTIONS."
                 )
             )
         }
@@ -45,6 +43,6 @@ class TooManyFunctions(config: Config) : Rule(config) {
     }
 
     companion object {
-        private const val THRESHOLD = 10
+        private const val ALLOWED_FUNCTIONS = 10
     }
 }

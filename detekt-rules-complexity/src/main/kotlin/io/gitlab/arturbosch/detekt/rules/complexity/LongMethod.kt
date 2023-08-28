@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -29,14 +28,13 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "LongMethod",
-        Severity.Maintainability,
         "One method should have one responsibility. Long methods tend to handle many things at once. " +
             "Prefer smaller methods to make them easier to understand.",
         Debt.TWENTY_MINS
     )
 
-    @Configuration("number of lines in a method to trigger the rule")
-    private val threshold: Int by config(defaultValue = 60)
+    @Configuration("number of lines in a method that are allowed at maximum")
+    private val allowedLines: Int by config(defaultValue = 60)
 
     private val functionToLinesCache = HashMap<KtNamedFunction, Int>()
     private val functionToBodyLinesCache = HashMap<KtNamedFunction, Int>()
@@ -59,14 +57,14 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
             }
         }
         for ((function, lines) in functionToLines) {
-            if (lines >= threshold) {
+            if (lines > allowedLines) {
                 report(
                     ThresholdedCodeSmell(
                         issue,
                         Entity.atName(function),
-                        Metric("SIZE", lines, threshold),
+                        Metric("SIZE", lines, allowedLines),
                         "The function ${function.nameAsSafeName} is too long ($lines). " +
-                            "The maximum length is $threshold."
+                            "The maximum length is $allowedLines."
                     )
                 )
             }

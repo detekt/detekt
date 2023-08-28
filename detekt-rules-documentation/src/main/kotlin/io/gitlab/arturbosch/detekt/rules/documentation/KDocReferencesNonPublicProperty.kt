@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
@@ -51,7 +50,6 @@ class KDocReferencesNonPublicProperty(config: Config = Config.empty) : Rule(conf
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Maintainability,
         "KDoc comments should not refer to non-public properties.",
         Debt.FIVE_MINS
     )
@@ -87,10 +85,9 @@ class KDocReferencesNonPublicProperty(config: Config = Config.empty) : Rule(conf
         }
     }
 
-    override fun visitProperty(property: KtProperty) {
-        super.visitProperty(property)
-
-        property.getTopmostParentOfType<KtClass>()?.registerProperty(property)
+    override fun visitNamedDeclaration(declaration: KtNamedDeclaration) {
+        super.visitNamedDeclaration(declaration)
+        declaration.getTopmostParentOfType<KtClass>()?.registerProperty(declaration)
     }
 
     private fun KtClass.registerProperty(declaration: KtNamedDeclaration) {

@@ -75,26 +75,6 @@ class AnnotationExcluderSpec(private val env: KotlinCoreEnvironment) {
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
         }
-
-        @Test
-        fun `should exclude when the annotation was found with SplitPattern`() {
-            val (file, ktAnnotation) = createKtFile("@SinceKotlin")
-
-            @Suppress("DEPRECATION")
-            val excluder = AnnotationExcluder(file, SplitPattern("SinceKotlin"))
-
-            assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
-        }
-
-        @Test
-        fun `should exclude when the annotation was found with List of Strings`() {
-            val (file, ktAnnotation) = createKtFile("@SinceKotlin")
-
-            @Suppress("DEPRECATION")
-            val excluder = AnnotationExcluder(file, listOf("SinceKo*"))
-
-            assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
-        }
     }
 
     @Nested

@@ -8,7 +8,7 @@ summary:
 sidebar_position: 7
 ---
 
-You can integrate detekt in your project using the Detekt Compiler Plugin instead of the classic [Detekt Gradle Plugin](/docs/gettingstarted/gradle). Detekt offers a compiler plugin for K1 which allows you to run detekt as part of the Kotlin compilation process. This allows you to run detekt on your code without having separate tasks to invoke and results in much faster execution of detekt, especially if you're using [type resolution](/docs/gettingstarted/type-resolution).
+You can integrate detekt in your project using the Detekt Compiler Plugin instead of the classic [Detekt Gradle Plugin](/docs/gettingstarted/gradle). Detekt offers a compiler plugin for K1 which allows you to run detekt as part of the Kotlin compilation process using [type resolution](/docs/gettingstarted/type-resolution). This allows you to run detekt on your code without having separate tasks to invoke and results in much faster execution of detekt, especially if you use type resolution with the Gradle plugin.
 
 :::caution
 
@@ -55,7 +55,7 @@ detekt {
     debug = false
 
     // Kill switch to turn off the Compiler Plugin execution entirely.
-    enableCompilerPlugin = true
+    enableCompilerPlugin.set(true)
 }
 ```
 
@@ -93,7 +93,7 @@ The compiler plugin will run during your `compileKotlin` tasks execution:
 $ ./gradlew compileKotlin
 
 > Task :example:compileKotlin
-w: Analysis failed with 1 weighted issues.
+w: Analysis failed with 1 issues.
 w: file:///.../example/src/main/java/Sample.kt:4:17 MagicNumber: This expression contains a magic number. Consider defining it to a well named constant.
 
 BUILD SUCCESSFUL in 1s
@@ -102,4 +102,4 @@ BUILD SUCCESSFUL in 1s
 
 ## Known Issues
 
-1. The rule `InvalidPackageDeckaration` is known to not be working well with the Compiler Plugin [#5747](https://github.com/detekt/detekt/issues/5747).
+1. The rule `InvalidPackageDeclaration` is known to not be working well with the Compiler Plugin [#5747](https://github.com/detekt/detekt/issues/5747).

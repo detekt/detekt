@@ -6,14 +6,14 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-private val defaultThreshold = "threshold" to 4
-private val staticDeclarationsConfig = TestConfig(defaultThreshold, "includeStaticDeclarations" to true)
-private val privateDeclarationsConfig = TestConfig(defaultThreshold, "includePrivateDeclarations" to true)
-private val ignoreOverloadedConfig = TestConfig(defaultThreshold, "ignoreOverloaded" to true)
+private val defaultAllowedDefinitions = "allowedDefinitions" to 3
+private val staticDeclarationsConfig = TestConfig(defaultAllowedDefinitions, "includeStaticDeclarations" to true)
+private val privateDeclarationsConfig = TestConfig(defaultAllowedDefinitions, "includePrivateDeclarations" to true)
+private val ignoreOverloadedConfig = TestConfig(defaultAllowedDefinitions, "ignoreOverloaded" to true)
 
 class ComplexInterfaceSpec {
 
-    private val subject = ComplexInterface(TestConfig(defaultThreshold))
+    private val subject = ComplexInterface(TestConfig(defaultAllowedDefinitions))
 
     @Nested
     inner class `ComplexInterface rule positives` {
@@ -227,6 +227,18 @@ class ComplexInterfaceSpec {
         @Test
         fun `does not report an empty interface`() {
             val code = "interface Empty"
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report an interface that has exactly the allowed definitions`() {
+            val code = """
+                interface MyInterface{
+                    fun func1()
+                    fun func2()
+                    fun func3()
+                }
+            """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

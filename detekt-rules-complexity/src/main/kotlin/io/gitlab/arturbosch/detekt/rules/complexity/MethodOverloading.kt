@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
@@ -30,27 +29,26 @@ class MethodOverloading(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "MethodOverloading",
-        Severity.Maintainability,
         "Methods which are overloaded often might be harder to maintain. " +
             "Furthermore, these methods are tightly coupled. " +
             "Refactor these methods and try to use optional parameters.",
         Debt.TWENTY_MINS
     )
 
-    @Configuration("number of overloads which will trigger the rule")
-    private val threshold: Int by config(defaultValue = 6)
+    @Configuration("The allowed number of overloads for a method.")
+    private val allowedOverloads: Int by config(defaultValue = 6)
 
     override fun visitKtFile(file: KtFile) {
         val visitor = OverloadedMethodVisitor()
         file.getChildrenOfType<KtNamedFunction>().forEach { visitor.visitMethod(it) }
-        visitor.reportIfThresholdExceeded(Entity.atPackageOrFirstDecl(file))
+        visitor.reportIfAllowedNumberExceeded(Entity.atPackageOrFirstDecl(file))
         super.visitKtFile(file)
     }
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         val visitor = OverloadedMethodVisitor()
         classOrObject.accept(visitor)
-        visitor.reportIfThresholdExceeded(Entity.atName(classOrObject))
+        visitor.reportIfAllowedNumberExceeded(Entity.atName(classOrObject))
         super.visitClassOrObject(classOrObject)
     }
 
@@ -58,13 +56,13 @@ class MethodOverloading(config: Config = Config.empty) : Rule(config) {
 
         private val methods = HashMap<String, Int>()
 
-        fun reportIfThresholdExceeded(entity: Entity) {
-            for ((name, value) in methods.filterValues { it >= threshold }) {
+        fun reportIfAllowedNumberExceeded(entity: Entity) {
+            for ((name, value) in methods.filterValues { it > allowedOverloads }) {
                 report(
                     ThresholdedCodeSmell(
                         issue,
                         entity,
-                        Metric("OVERLOAD SIZE: ", value, threshold),
+                        Metric("OVERLOAD SIZE: ", value, allowedOverloads),
                         message = "The method '$name' is overloaded $value times."
                     )
                 )

@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.Errors
@@ -21,7 +20,6 @@ class Deprecation(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "Deprecation",
-        Severity.Defect,
         "Deprecated elements should not be used.",
         Debt.TWENTY_MINS
     )

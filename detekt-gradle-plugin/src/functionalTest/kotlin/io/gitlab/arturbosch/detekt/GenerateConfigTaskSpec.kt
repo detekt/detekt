@@ -24,7 +24,7 @@ class GenerateConfigTaskSpec {
         val gradleRunner = builder.withDetektConfig(
             """
                 detekt {
-                   config = files("config/detekt/detekt.yml", "config/other/detekt.yml")
+                   config.setFrom("config/detekt/detekt.yml", "config/other/detekt.yml")
                 }
             """.trimIndent()
         ).withConfigFile("config/detekt/detekt.yml").build()
@@ -37,16 +37,15 @@ class GenerateConfigTaskSpec {
     }
 
     @Test
-    fun `setting configFile property overrides extension & task configs`() {
+    fun `setting configFile property overrides extension config`() {
         val builder = DslTestBuilder.kotlin()
         val gradleRunner = builder.withDetektConfig(
             """
                 detekt {
-                   config = files("config/wrongpath1/detekt.yml", "config/wrongpath2/detekt.yml")
+                   config.setFrom("config/wrongpath1/detekt.yml", "config/wrongpath2/detekt.yml")
                 }
                 
                 tasks.detektGenerateConfig {
-                   config.setFrom("config/wrongpath3/detekt.yml")
                    configFile.set(file("config/correctpath/detekt.yml"))
                 }
             """.trimIndent()

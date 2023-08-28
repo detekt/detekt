@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -54,7 +53,6 @@ import org.jetbrains.kotlin.utils.addIfNotNull
 class PropertyUsedBeforeDeclaration(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Defect,
         "Properties before declaration should not be used.",
         Debt.FIVE_MINS
     )
@@ -62,7 +60,7 @@ class PropertyUsedBeforeDeclaration(config: Config = Config.empty) : Rule(config
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         super.visitClassOrObject(classOrObject)
 
-        val classMembers = classOrObject.body?.children ?: return
+        val classMembers = classOrObject.body?.children?.filterNot { it is KtClassOrObject } ?: return
 
         val allProperties = classMembers.filterIsInstance<KtProperty>().mapNotNull {
             val name = it.name ?: return@mapNotNull null

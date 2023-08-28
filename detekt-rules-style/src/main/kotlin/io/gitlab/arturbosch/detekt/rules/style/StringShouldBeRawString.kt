@@ -6,15 +6,16 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypesAndPredicate
 import org.jetbrains.kotlin.psi2ir.deparenthesize
 
@@ -56,7 +57,6 @@ import org.jetbrains.kotlin.psi2ir.deparenthesize
 class StringShouldBeRawString(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "The string can be converted to raw string.",
         Debt.FIVE_MINS,
     )
@@ -81,6 +81,17 @@ class StringShouldBeRawString(config: Config) : Rule(config) {
 
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
         super.visitStringTemplateExpression(expression)
+
+        val callExpression = expression.getParentOfType<KtCallExpression>(strict = true)
+
+        if (callExpression?.calleeExpression?.text in listOfAllowedMethod) {
+            return
+        }
+
+        if (expression.text.matches(regexForOnlyQuotes)) {
+            return
+        }
+
         val expressionParent = expression.getParentExpressionAfterParenthesis()
         val rootElement = expression.getRootExpression()
         if (
@@ -153,5 +164,10 @@ class StringShouldBeRawString(config: Config) : Rule(config) {
 
     companion object {
         private val REGEX_FOR_ESCAPE_CHARS = """\\[t"\\n]""".toRegex()
+        private val listOfAllowedMethod = listOf(
+            "replaceIndent",
+            "prependIndent",
+        )
+        private val regexForOnlyQuotes = """"(?:\\")*"""".toRegex()
     }
 }

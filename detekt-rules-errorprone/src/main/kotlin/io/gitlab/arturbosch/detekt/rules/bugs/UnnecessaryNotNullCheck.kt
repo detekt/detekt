@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.getDataFlowAwareTypes
 import io.gitlab.arturbosch.detekt.rules.isCalling
@@ -32,7 +31,6 @@ class UnnecessaryNotNullCheck(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "UnnecessaryNotNullCheck",
-        Severity.Defect,
         "Remove unnecessary not-null checks on non-null types.",
         Debt.FIVE_MINS,
     )

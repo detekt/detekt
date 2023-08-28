@@ -1,7 +1,7 @@
 complexity:
   LongLongMethod:
     active: true
-    threshold: 20
+    allowedLines: 20
   LongParameterList:
     enabled: false
     threshold: 5

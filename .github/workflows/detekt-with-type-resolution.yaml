@@ -22,22 +22,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3
 
       - name: Setup Java
-        uses: actions/setup-java@5ffc13f4174014e2d4d4572b3d74c3fa61aeb2c2 # v3
+        uses: actions/setup-java@cd89f46ac9d01407894225f350157564c9c7cee2 # v3
         with:
           java-version: 17
           distribution: 'temurin'
 
       - name: Run detekt-cli with argsfile
-        uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2
+        uses: gradle/gradle-build-action@243af859f8ca30903d9d7f7936897ca0358ba691 # v2
         with:
           gradle-home-cache-cleanup: true
           arguments: :detekt-cli:runWithArgsFile
 
       - name: Upload SARIF to GitHub using the upload-sarif action
-        uses: github/codeql-action/upload-sarif@0225834cc549ee0ca93cb085b92954821a145866 # v2
+        uses: github/codeql-action/upload-sarif@a09933a12a80f87b87005513f0abb1494c27a716 # v2
         if: success() || failure()
         with:
           sarif_file: build/detekt-report.sarif
@@ -50,22 +50,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3
 
       - name: Setup Java
-        uses: actions/setup-java@5ffc13f4174014e2d4d4572b3d74c3fa61aeb2c2 # v3
+        uses: actions/setup-java@cd89f46ac9d01407894225f350157564c9c7cee2 # v3
         with:
           java-version: 17
           distribution: 'temurin'
 
       - name: Run analysis
-        uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629 # v2
+        uses: gradle/gradle-build-action@243af859f8ca30903d9d7f7936897ca0358ba691 # v2
         with:
           gradle-home-cache-cleanup: true
           arguments: detektMain detektTest detektFunctionalTest detektTestFixtures detektReportMergeSarif --continue
 
       - name: Upload SARIF to GitHub using the upload-sarif action
-        uses: github/codeql-action/upload-sarif@0225834cc549ee0ca93cb085b92954821a145866 # v2
+        uses: github/codeql-action/upload-sarif@a09933a12a80f87b87005513f0abb1494c27a716 # v2
         if: success() || failure()
         with:
           sarif_file: build/reports/detekt/merge.sarif

@@ -26,14 +26,13 @@ develop your own custom rules. Another option is to clone the provided [detekt/d
 Own rules have to extend the abstract _Rule_ class and override the `visitXXX()`-functions from the AST.  
 A `RuleSetProvider` must be implemented, which declares a `RuleSet` in the `instance()`-function.
 To leverage the configuration mechanism of detekt you must pass the Config object from your rule set provider to your rule.
-An `Issue` property defines what ID, severity and message should be printed on the console or on any other output format.
+An `Issue` property defines what ID and message should be printed on the console or on any other output format.
 
 Example of a custom rule:
 ```kotlin
 class TooManyFunctions(config: Config) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,
-        Severity.CodeSmell,
         "This rule reports a file with an excessive function count.",
         Debt.TWENTY_MINS)
 
@@ -62,7 +61,6 @@ class TooManyFunctions2(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.CodeSmell,
         "This rule reports a file with an excessive function count.",
         Debt.TWENTY_MINS
     )
@@ -247,9 +245,3 @@ after your extension sub project is built.
 you created a pure kotlin module which has no Android dependencies. `apply plugin: "kotlin"` is enough to make it work.
 - Sometimes when you run detekt task, you may not see the violations detected by your custom rules. In this case open a terminal and run
 `./gradlew --stop` to stop gradle daemons and run the task again.
-
-#### autoCorrect property
-
-In detekt you can write custom rules which can manipulate your code base.
-For this a cli flag `--auto-correct` and the gradle plugin property `autoCorrect` exists.
-Only write auto correcting code within the `Rule#withAutoCorrect()`-function.

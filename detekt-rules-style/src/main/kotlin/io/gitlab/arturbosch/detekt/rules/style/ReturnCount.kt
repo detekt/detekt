@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
@@ -20,7 +19,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 
 /**
- * Restrict the number of return methods allowed in methods.
+ * Restrict the number of returns allowed in methods.
  *
  * Having many exit points in a function can be confusing and impacts readability of the
  * code.
@@ -50,7 +49,6 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "Restrict the number of return statements in methods.",
         Debt.TEN_MINS
     )

@@ -3,11 +3,16 @@ package io.gitlab.arturbosch.detekt.generator.collection
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidCodeExampleDocumentationException
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
-class DocumentationCollector {
+class DocumentationCollector(private val textReplacements: Map<String, String>) {
 
     private var name: String = ""
     var description: String = ""
-        private set
+        private set(newValue) {
+            field = textReplacements.toList()
+                .fold(newValue) { acc, replacement ->
+                    acc.replace(replacement.first, replacement.second)
+                }
+        }
     var compliant: String = ""
         private set
     var nonCompliant: String = ""
@@ -30,9 +35,11 @@ class DocumentationCollector {
                 extractNonCompliantDocumentation(comment, nonCompliantIndex)
                 extractCompliantDocumentation(comment, compliantIndex)
             }
+
             compliantIndex != -1 -> throw InvalidCodeExampleDocumentationException(
                 "Rule $name contains a compliant without a noncompliant code definition"
             )
+
             else -> description = comment
         }
     }

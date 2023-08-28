@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
@@ -22,7 +21,6 @@ class SingleRuleProviderSpec {
                 val rule = object : Rule(config) {
                     override val issue = Issue(
                         "MagicNumber",
-                        Severity.CodeSmell,
                         "",
                         Debt.FIVE_MINS
                     )

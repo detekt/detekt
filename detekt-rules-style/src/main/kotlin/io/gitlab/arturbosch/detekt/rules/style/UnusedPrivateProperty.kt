@@ -7,13 +7,13 @@ import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isActual
 import io.gitlab.arturbosch.detekt.rules.isExpect
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
@@ -34,17 +34,17 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  *
  * <noncompliant>
  * class Foo {
- *   private val unused = "unused"
+ *     private val unused = "unused"
  * }
  * </noncompliant>
  *
  * <compliant>
  * class Foo {
- *   private val used = "used"
+ *     private val used = "used"
  *
- *   fun greet() {
- *     println(used)
- *   }
+ *     fun greet() {
+ *         println(used)
+ *     }
  * }
  * </compliant>
  */
@@ -55,7 +55,6 @@ class UnusedPrivateProperty(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
         "UnusedPrivateProperty",
-        Severity.Maintainability,
         "Property is unused and should be removed.",
         Debt.FIVE_MINS,
     )
@@ -108,9 +107,15 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
         constructor.valueParameters
             .filter {
                 (it.isPrivate() || (!it.hasValOrVar() && !constructor.isActual())) &&
-                    it.containingClassOrObject?.isExpect() == false
+                    it.containingClassOrObject?.isExpect() == false &&
+                    isConstructorForDataOrValueClass(constructor).not()
             }
             .forEach { maybeAddUnusedProperty(it) }
+    }
+
+    private fun isConstructorForDataOrValueClass(constructor: PsiElement): Boolean {
+        val parent = constructor.parent as? KtClass ?: return false
+        return parent.isData() || parent.isValue() || parent.isInline()
     }
 
     override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {

@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClassBody
 import org.jetbrains.kotlin.psi.KtClassInitializer
 import org.jetbrains.kotlin.psi.KtDeclaration
@@ -57,7 +56,6 @@ class ClassOrdering(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "Class contents should be in this order: Property declarations/initializer blocks; secondary constructors; " +
             "method declarations then companion objects.",
         Debt.FIVE_MINS
@@ -105,7 +103,7 @@ class ClassOrdering(config: Config = Config.empty) : Rule(config) {
             return@IntArray it
         }
         for (i in dp.indices) {
-            for (j in 0 until i) {
+            for (j in 0..<i) {
                 if (declarationWithSectionList[i].second.priority >= declarationWithSectionList[j].second.priority &&
                     dp[i] < dp[j] + 1
                 ) {

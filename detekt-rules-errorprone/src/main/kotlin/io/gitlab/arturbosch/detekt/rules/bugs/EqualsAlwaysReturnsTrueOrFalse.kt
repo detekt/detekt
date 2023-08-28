@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
 import org.jetbrains.kotlin.KtNodeTypes
@@ -42,7 +41,6 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
 
     override val issue = Issue(
         "EqualsAlwaysReturnsTrueOrFalse",
-        Severity.Defect,
         "Having an `equals()` method that always returns true or false is not a good idea. " +
             "It does not follow the contract of this method. " +
             "Consider a good default implementation (e.g. `this == other`).",

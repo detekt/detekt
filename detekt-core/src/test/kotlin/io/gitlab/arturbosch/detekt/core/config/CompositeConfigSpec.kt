@@ -23,9 +23,9 @@ class CompositeConfigSpec {
     }
 
     @Test
-    fun `should have code smell sub config with LongMethod threshold 20 from _default_ config`() {
+    fun `should have code smell sub config with LongMethod allowedLines 20 from _default_ config`() {
         val codeSmellConfig = compositeConfig.subConfig("code-smell").subConfig("LongMethod")
-        assertThat(codeSmellConfig.valueOrDefault("threshold", -1)).isEqualTo(20)
+        assertThat(codeSmellConfig.valueOrDefault("allowedLines", -1)).isEqualTo(20)
     }
 
     @Test

@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.getIntValueForPsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -37,7 +36,6 @@ class InvalidRange(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Defect,
         "If a for loops condition is false before the first iteration, the loop will never get executed.",
         Debt.TEN_MINS
     )
@@ -67,7 +65,7 @@ class InvalidRange(config: Config = Config.empty) : Rule(config) {
         return when (range[1].text) {
             ".." -> checkRangeTo(lowerValue, upperValue)
             "downTo" -> checkDownTo(lowerValue, upperValue)
-            "until" -> checkUntil(lowerValue, upperValue)
+            "until", "..<" -> checkUntil(lowerValue, upperValue)
             else -> false
         }
     }

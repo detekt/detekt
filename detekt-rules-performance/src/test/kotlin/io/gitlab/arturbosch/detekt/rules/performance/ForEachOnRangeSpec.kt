@@ -16,13 +16,47 @@ class ForEachOnRangeSpec {
                 (1..10).forEach {
                     println(it)
                 }
+                (1.rangeTo(10)).forEach {
+                    println(it)
+                }
+                @OptIn(ExperimentalStdlibApi::class)
+                (1..<10).forEach {
+                    println(it)
+                }
                 (1 until 10).forEach {
+                    println(it)
+                }
+                (1.until(10)).forEach {
+                    println(it)
+                }
+                ((1 until 10).reversed()).forEach {
                     println(it)
                 }
                 (10 downTo 1).forEach {
                     println(it)
                 }
+                (10.downTo(1)).forEach {
+                    println(it)
+                }
                 (10 downTo 1 step 2).forEach {
+                    println(it)
+                }
+                (10.downTo(1).step(2)).forEach {
+                    println(it)
+                }
+                (10.downTo(1).step(2).reversed()).forEach {
+                    println(it)
+                }
+                ((10 downTo 1 step 2).reversed()).forEach {
+                    println(it)
+                }
+                ((10 downTo 1 step 2).reversed() step 2).forEach {
+                    println(it)
+                }
+                (1..10).reversed().forEach { 
+                    println(it)
+                }
+                (1..10).reversed().step(2).forEach { 
                     println(it)
                 }
             }
@@ -31,7 +65,26 @@ class ForEachOnRangeSpec {
         @Test
         fun `should report the forEach usage`() {
             val findings = subject.compileAndLint(code)
-            assertThat(findings).hasSize(4)
+            assertThat(findings).hasSize(15)
+        }
+
+        @Test
+        fun `should report the forEach usage for other type ranges`() {
+            val code = """
+                fun test() {
+                    (1L..10L).forEach { 
+                        println(it)
+                    }
+                    (1U..10U).forEach { 
+                        println(it)
+                    }
+                    ('0'..'9').forEach { 
+                        println(it)
+                    }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(3)
         }
     }
 
@@ -55,6 +108,9 @@ class ForEachOnRangeSpec {
         val code = """
             fun test() {
                 listOf(1, 2, 3).forEach {
+                    println(it)
+                }
+                listOf(1, 2, 3).also { 1..10 }.forEach {
                     println(it)
                 }
             }

@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
@@ -36,13 +35,12 @@ class CouldBeSequence(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
         "CouldBeSequence",
-        Severity.Performance,
         "Several chained collection operations that should be a sequence.",
         Debt.FIVE_MINS
     )
 
-    @Configuration("the number of chained collection operations required to trigger rule")
-    private val threshold: Int by config(defaultValue = 3)
+    @Configuration("The maximum number of allowed chained collection operations.")
+    private val allowedOperations: Int by config(defaultValue = 2)
 
     private val visitedCallExpressions = mutableListOf<KtExpression>()
 
@@ -55,7 +53,7 @@ class CouldBeSequence(config: Config = Config.empty) : Rule(config) {
 
         var counter = 1
         var nextCall = expression.nextChainedCall()
-        while (counter < threshold && nextCall != null) {
+        while (counter <= allowedOperations && nextCall != null) {
             visitedCallExpressions += nextCall
             if (!nextCall.isCalling(operationsFqNames)) {
                 break
@@ -65,7 +63,7 @@ class CouldBeSequence(config: Config = Config.empty) : Rule(config) {
             nextCall = nextCall.nextChainedCall()
         }
 
-        if (counter >= threshold) {
+        if (counter > allowedOperations) {
             val message = "${expression.text} could be .asSequence().${expression.text}"
             report(CodeSmell(issue, Entity.from(expression), message))
         }

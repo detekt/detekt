@@ -6,8 +6,8 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.arguments
 import io.gitlab.arturbosch.detekt.rules.isEmptyOrSingleStringArgument
 import io.gitlab.arturbosch.detekt.rules.isIllegalStateException
@@ -37,13 +37,12 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * }
  * </compliant>
  */
-@Suppress("ViolatesTypeResolutionRequirements")
+@RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
 class UseCheckOrError(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "UseCheckOrError",
-        Severity.Style,
         "Use check() or error() instead of throwing an IllegalStateException.",
         Debt.FIVE_MINS
     )
