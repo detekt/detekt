@@ -129,13 +129,6 @@ class MatchingDeclarationNameSpec {
         }
 
         @Test
-        fun `should pass for class declaration and name with common suffix`() {
-            val ktFile = compileContentForTest("class C", filename = "C.common.kt")
-            val findings = MatchingDeclarationName().lint(ktFile)
-            assertThat(findings).isEmpty()
-        }
-
-        @Test
         fun `should pass for class declaration and name with platform suffix`() {
             val ktFile = compileContentForTest("actual class C", filename = "C.android.kt")
             val findings = MatchingDeclarationName().lint(ktFile)
@@ -146,7 +139,7 @@ class MatchingDeclarationNameSpec {
         fun `should pass for class declaration and name with custom platform suffix`() {
             val ktFile = compileContentForTest("actual class C", filename = "C.mySuffix.kt")
             val findings = MatchingDeclarationName(
-                TestConfig("multiplatformFileSuffixes" to "mySuffix")
+                TestConfig("multiplatformTargetFileSuffixes" to listOf("mySuffix"))
             ).lint(ktFile)
             assertThat(findings).isEmpty()
         }
@@ -246,6 +239,22 @@ class MatchingDeclarationNameSpec {
                 TestConfig("mustBeFirst" to "false")
             ).lint(ktFile)
             assertThat(findings).hasStartSourceLocation(3, 7)
+        }
+
+        @Test
+        fun `should not pass for class declaration and name with common suffix`() {
+            val ktFile = compileContentForTest("class C", filename = "C.common.kt")
+            val findings = MatchingDeclarationName().lint(ktFile)
+            assertThat(findings).hasStartSourceLocation(1, 7)
+        }
+
+        @Test
+        fun `should pass for class declaration and name with platform suffix if passed empty platform suffixes`() {
+            val ktFile = compileContentForTest("actual class C", filename = "C.jvm.kt")
+            val findings = MatchingDeclarationName(
+                TestConfig("multiplatformTargetFileSuffixes" to emptyList<String>())
+            ).lint(ktFile)
+            assertThat(findings).hasStartSourceLocation(1, 14)
         }
     }
 }
