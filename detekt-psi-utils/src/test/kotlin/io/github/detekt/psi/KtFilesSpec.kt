@@ -25,18 +25,6 @@ class KtFilesSpec {
         }
 
         @Test
-        fun `should remove common_kt suffix`() {
-            val filename = makeFile("C.common.kt").fileNameWithoutSuffix()
-            assertThat(filename).isEqualTo("C")
-        }
-
-        @Test
-        fun `should remove jvm_kt suffix`() {
-            val filename = makeFile("C.jvm.kt").fileNameWithoutSuffix()
-            assertThat(filename).isEqualTo("C")
-        }
-
-        @Test
         fun `should not remove non kotlin suffixes`() {
             val filename = makeFile("C.java").fileNameWithoutSuffix()
             assertThat(filename).isEqualTo("C.java")
