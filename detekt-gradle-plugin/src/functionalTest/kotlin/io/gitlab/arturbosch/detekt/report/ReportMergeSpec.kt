@@ -151,9 +151,9 @@ class ReportMergeSpec {
             
             allprojects {
                 repositories {
+                    mavenLocal()
                     mavenCentral()
                     google()
-                    mavenLocal()
                 }
             }
             
