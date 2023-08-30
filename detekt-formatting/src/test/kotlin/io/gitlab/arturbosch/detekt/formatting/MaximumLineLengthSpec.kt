@@ -63,7 +63,7 @@ class MaximumLineLengthSpec {
         // exceeded lines in block comments.
         assertThat(findings)
             .hasSize(2)
-            .hasStartSourceLocations(SourceLocation(7, 8), SourceLocation(13, 12))
+            .hasStartSourceLocations(SourceLocation(8, 1), SourceLocation(14, 1))
     }
 
     @Test
