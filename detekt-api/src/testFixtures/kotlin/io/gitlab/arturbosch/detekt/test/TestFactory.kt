@@ -7,26 +7,46 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
+import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.jetbrains.kotlin.psi.KtElement
 import kotlin.io.path.Path
 
-fun createFinding(ruleName: String = "TestSmell", fileName: String = "TestFile.kt") =
-    CodeSmell(createIssue(ruleName), createEntity(fileName), "TestMessage")
+fun createFinding(
+    ruleName: String = "TestSmell",
+    fileName: String = "TestFile.kt",
+    entity: Entity = createEntity(fileName),
+    severity: Severity = Severity.ERROR
+) = createFinding(createIssue(ruleName), entity, "TestMessage", severity)
 
-fun createCorrectableFinding(ruleName: String = "TestSmell", fileName: String = "TestFile.kt") =
-    CorrectableCodeSmell(createIssue(ruleName), createEntity(fileName), "TestMessage", autoCorrectEnabled = true)
+fun createCorrectableFinding(
+    ruleName: String = "TestSmell",
+    fileName: String = "TestFile.kt",
+    severity: Severity = Severity.ERROR
+) = object : CorrectableCodeSmell(
+    issue = createIssue(ruleName),
+    entity = createEntity(fileName),
+    message = "TestMessage",
+    autoCorrectEnabled = true
+) {
+    override val severity: Severity
+        get() = severity
+}
 
 fun createFinding(
     issue: Issue,
     entity: Entity,
     message: String = entity.signature,
-) = CodeSmell(
+    severity: Severity = Severity.ERROR
+) = object : CodeSmell(
     issue = issue,
     entity = entity,
     message = message
-)
+) {
+    override val severity: Severity
+        get() = severity
+}
 
 fun createFindingForRelativePath(
     ruleName: String = "TestSmell",

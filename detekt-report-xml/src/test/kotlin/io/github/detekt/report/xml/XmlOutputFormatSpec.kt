@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
-import io.gitlab.arturbosch.detekt.api.SeverityLevel
+import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.test.TestDetektion
@@ -67,7 +67,7 @@ class XmlOutputFormatSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
-                $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_a" />
+                $TAB<error line="11" column="1" severity="error" message="" source="detekt.id_a" />
                 </file>
                 </checkstyle>
             """.trimIndent()
@@ -86,8 +86,8 @@ class XmlOutputFormatSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
-                $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_a" />
-                $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_b" />
+                $TAB<error line="11" column="1" severity="error" message="" source="detekt.id_a" />
+                $TAB<error line="11" column="1" severity="error" message="" source="detekt.id_b" />
                 </file>
                 </checkstyle>
             """.trimIndent()
@@ -106,10 +106,10 @@ class XmlOutputFormatSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
-                $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_a" />
+                $TAB<error line="11" column="1" severity="error" message="" source="detekt.id_a" />
                 </file>
                 <file name="src/main/com/sample/Sample2.kt">
-                $TAB<error line="22" column="2" severity="warning" message="" source="detekt.id_a" />
+                $TAB<error line="22" column="2" severity="error" message="" source="detekt.id_a" />
                 </file>
                 </checkstyle>
             """.trimIndent()
@@ -136,10 +136,10 @@ class XmlOutputFormatSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="Sample1.kt">
-                $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_a" />
+                $TAB<error line="1" column="1" severity="error" message="TestMessage" source="detekt.id_a" />
                 </file>
                 <file name="Sample2.kt">
-                $TAB<error line="1" column="1" severity="warning" message="TestMessage" source="detekt.id_b" />
+                $TAB<error line="1" column="1" severity="error" message="TestMessage" source="detekt.id_b" />
                 </file>
                 </checkstyle>
             """.trimIndent()
@@ -167,12 +167,12 @@ class XmlOutputFormatSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
-                $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_a" />
-                $TAB<error line="11" column="1" severity="warning" message="" source="detekt.id_b" />
+                $TAB<error line="11" column="1" severity="error" message="" source="detekt.id_a" />
+                $TAB<error line="11" column="1" severity="error" message="" source="detekt.id_b" />
                 </file>
                 <file name="src/main/com/sample/Sample2.kt">
-                $TAB<error line="22" column="2" severity="warning" message="" source="detekt.id_a" />
-                $TAB<error line="22" column="2" severity="warning" message="" source="detekt.id_b" />
+                $TAB<error line="22" column="2" severity="error" message="" source="detekt.id_a" />
+                $TAB<error line="22" column="2" severity="error" message="" source="detekt.id_b" />
                 </file>
                 </checkstyle>
             """.trimIndent()
@@ -183,15 +183,15 @@ class XmlOutputFormatSpec {
     inner class `severity level conversion` {
 
         @ParameterizedTest
-        @EnumSource(SeverityLevel::class)
-        fun `renders detektion with severity as XML with severity`(severity: SeverityLevel) {
+        @EnumSource(Severity::class)
+        fun `renders detektion with severity as XML with severity`(severity: Severity) {
             val xmlSeverity = severity.name.lowercase(Locale.US)
             val finding = object : CodeSmell(
                 issue = Issue("issue_id", "issue description", Debt.FIVE_MINS),
                 entity = entity1,
                 message = "message"
             ) {
-                override val severity: SeverityLevel
+                override val severity: Severity
                     get() = severity
             }
 
