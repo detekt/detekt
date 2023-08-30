@@ -55,13 +55,13 @@ class DetektReportMergeSpec {
             assertThat(result.output).containsIgnoringWhitespaces(
                 """
                     Execution failed for task ':child1:detekt'.
-                    > Analysis failed with 2 weighted issues.
+                    > Analysis failed with 2 issues.
                 """.trimIndent()
             )
             assertThat(result.output).containsIgnoringWhitespaces(
                 """
                     Execution failed for task ':child2:detekt'.
-                    > Analysis failed with 4 weighted issues.
+                    > Analysis failed with 4 issues.
                 """.trimIndent()
             )
             assertThat(projectFile("build/reports/detekt/detekt.sarif")).doesNotExist()
@@ -121,13 +121,13 @@ class DetektReportMergeSpec {
             assertThat(result.output).containsIgnoringWhitespaces(
                 """
                     Execution failed for task ':child1:detekt'.
-                    > Analysis failed with 2 weighted issues.
+                    > Analysis failed with 2 issues.
                 """.trimIndent()
             )
             assertThat(result.output).containsIgnoringWhitespaces(
                 """
                     Execution failed for task ':child2:detekt'.
-                    > Analysis failed with 4 weighted issues.
+                    > Analysis failed with 4 issues.
                 """.trimIndent()
             )
             assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()

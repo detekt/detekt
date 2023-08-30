@@ -116,6 +116,34 @@ class CyclomaticComplexitySpec {
     }
 
     @Nested
+    inner class `counts local functions` {
+        private val code = compileContentForTest(
+            """
+                fun test(): String {
+                    fun local(flag: boolean) = if (flag) "a" else "b"
+                    return local(true)
+                }
+            """.trimIndent()
+        )
+
+        @Test
+        fun `counts them by default`() {
+            assertThat(
+                CyclomaticComplexity.calculate(code)
+            ).isEqualTo(defaultFunctionComplexity + 2)
+        }
+
+        @Test
+        fun `counts them as one when ignored`() {
+            assertThat(
+                CyclomaticComplexity.calculate(code) {
+                    ignoreLocalFunctions = true
+                }
+            ).isEqualTo(defaultFunctionComplexity + 1)
+        }
+    }
+
+    @Nested
     inner class `ignoreSimpleWhenEntries is false` {
 
         @Test
