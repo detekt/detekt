@@ -59,6 +59,9 @@ class CyclomaticComplexMethod(config: Config = Config.empty) : Rule(config) {
     @Configuration("Whether to ignore functions which are often used instead of an `if` or `for` statement.")
     private val ignoreNestingFunctions: Boolean by config(false)
 
+    @Configuration("Whether to ignore local functions and count them as one")
+    private val ignoreLocalFunctions: Boolean by config(false)
+
     @Configuration("Comma separated list of function names which add complexity.")
     private val nestingFunctions: Set<String> by config(DEFAULT_NESTING_FUNCTIONS) { it.toSet() }
 
@@ -70,6 +73,7 @@ class CyclomaticComplexMethod(config: Config = Config.empty) : Rule(config) {
         val complexity = CyclomaticComplexity.calculate(function) {
             this.ignoreSimpleWhenEntries = this@CyclomaticComplexMethod.ignoreSimpleWhenEntries
             this.ignoreNestingFunctions = this@CyclomaticComplexMethod.ignoreNestingFunctions
+            this.ignoreLocalFunctions = this@CyclomaticComplexMethod.ignoreLocalFunctions
             this.nestingFunctions = this@CyclomaticComplexMethod.nestingFunctions
         }
 
