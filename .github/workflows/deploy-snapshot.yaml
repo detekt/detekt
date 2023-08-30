@@ -26,6 +26,12 @@ jobs:
           java-version: 17
           distribution: "temurin"
 
+      - name: Assemble and publish artifacts to Maven Local
+        uses: gradle/gradle-build-action@ef76a971e2fa3f867b617efd72f2fbd72cf6f8bc # v2
+        with:
+          gradle-home-cache-cleanup: true
+          arguments: publishToMavenLocal
+
       - name: Build detekt
         uses: gradle/gradle-build-action@ef76a971e2fa3f867b617efd72f2fbd72cf6f8bc # v2
         with:
