@@ -37,11 +37,17 @@ jobs:
           java-version: ${{ matrix.jdk }}
           distribution: 'temurin'
 
+      - name: Assemble and publish artifacts to Maven Local
+        uses: gradle/gradle-build-action@243af859f8ca30903d9d7f7936897ca0358ba691 # v2
+        with:
+          gradle-home-cache-cleanup: true
+          arguments: publishToMavenLocal
+
       - name: Build detekt
         uses: gradle/gradle-build-action@243af859f8ca30903d9d7f7936897ca0358ba691 # v2
         with:
           gradle-home-cache-cleanup: true
-          arguments: build -x detekt publishToMavenLocal
+          arguments: build -x detekt
 
       - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3
         with:

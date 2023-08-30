@@ -14,7 +14,7 @@ class JvmSpec {
             .withArguments("detektMain")
             .buildAndFail()
 
-        assertThat(result.output).contains("failed with 3 weighted issues.")
+        assertThat(result.output).contains("failed with 3 issues.")
         assertThat(result.output).contains(
             "Do not directly exit the process outside the `main` function. Throw an exception(...)"
         )
