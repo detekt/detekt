@@ -238,7 +238,10 @@ abstract class Detekt @Inject constructor(
             BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
             AllRulesArgument(allRulesProp.getOrElse(false)),
             AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
-            FailOnSeverityArgument(failOnSeverityProp.getOrElse("error")),
+            FailOnSeverityArgument(
+                ignoreFailures = ignoreFailuresProp.getOrElse(false),
+                minSeverity = failOnSeverityProp.getOrElse("error")
+            ),
             BasePathArgument(basePathProp.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
         ).plus(convertCustomReportsToArguments()).flatMap(CliArgument::toArgument)

@@ -16,14 +16,9 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
         toolVersion = loadDetektVersion(DetektExtension::class.java.classLoader)
     }
 
-    // TODO: We need to decide what to do with this property.
-    //   Currently we are using it to ignore build failures
-    //   which can also be done with 'failOnSeverity=never'
-    //   But this property is inherited from the CodeQualityExtension
     var ignoreFailures: Boolean
         @JvmName("ignoreFailures_")
         get() = isIgnoreFailures
-
         @JvmName("ignoreFailures_")
         set(value) {
             isIgnoreFailures = value
@@ -115,7 +110,7 @@ internal fun loadDetektVersion(classLoader: ClassLoader): String {
         .distinct()
     return distinctVersions.singleOrNull() ?: error(
         "You're importing two detekt plugins which have different versions. " +
-            "(${distinctVersions.joinToString()}) Make sure to align the versions."
+                "(${distinctVersions.joinToString()}) Make sure to align the versions."
     )
 }
 

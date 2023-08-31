@@ -83,13 +83,19 @@ internal data class BasePathArgument(val basePath: String?) : CliArgument() {
     override fun toArgument() = basePath?.let { listOf(BASE_PATH_PARAMETER, it) }.orEmpty()
 }
 
-internal data class FailOnSeverityArgument(val minSeverity: String) : CliArgument() {
-    override fun toArgument() = minSeverity.let {
-        require(it.trim().toLowerCase(Locale.ROOT) in failOnSeverityOptions) {
-            "'$it' is not a valid option for failOnSeverity. Allowed values are $failOnSeverityOptions."
+internal data class FailOnSeverityArgument(val ignoreFailures: Boolean, val minSeverity: String) : CliArgument() {
+    // TODO: Test this
+    override fun toArgument(): List<String> {
+        if (ignoreFailures) {
+            return listOf(FAIL_ON_SEVERITY_PARAMETER, "never")
         }
-        listOf(FAIL_ON_SEVERITY_PARAMETER, it)
-    }.orEmpty()
+        return minSeverity.let {
+            require(it.trim().toLowerCase(Locale.ROOT) in failOnSeverityOptions) {
+                "'$it' is not a valid option for failOnSeverity. Allowed values are $failOnSeverityOptions."
+            }
+            listOf(FAIL_ON_SEVERITY_PARAMETER, it)
+        }
+    }
 }
 
 internal data class ConfigArgument(val files: Collection<File>) : CliArgument() {
