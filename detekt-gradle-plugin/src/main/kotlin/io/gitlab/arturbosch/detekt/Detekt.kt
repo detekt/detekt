@@ -156,9 +156,9 @@ abstract class Detekt @Inject constructor(
     @get:Optional
     internal abstract val failOnSeverityProp: Property<String>
 
-    var failOnSeverity: String?
+    var failOnSeverity: String
         @Internal
-        get() = failOnSeverityProp.orNull
+        get() = failOnSeverityProp.getOrElse("error")
         set(value) = failOnSeverityProp.set(value)
 
     /**
@@ -238,7 +238,7 @@ abstract class Detekt @Inject constructor(
             BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
             AllRulesArgument(allRulesProp.getOrElse(false)),
             AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
-            FailOnSeverityArgument(failOnSeverityProp.orNull),
+            FailOnSeverityArgument(failOnSeverityProp.getOrElse("error")),
             BasePathArgument(basePathProp.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
         ).plus(convertCustomReportsToArguments()).flatMap(CliArgument::toArgument)

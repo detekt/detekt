@@ -2,9 +2,9 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.ParameterException
 import io.github.detekt.test.utils.resourceAsPath
-import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.DefaultFailurePolicy
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.NeverFail
+import io.gitlab.arturbosch.detekt.api.Severity
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
@@ -147,12 +147,12 @@ internal class CliArgsSpec {
     @Nested
     inner class `Configuration of FailurePolicy` {
         @Test
-        fun `not specified results in default policy`() {
+        fun `not specified results in default value`() {
             val args = emptyArray<String>()
 
             val actual = parseArguments(args)
 
-            assertThat(actual.failurePolicy).isEqualTo(DefaultFailurePolicy)
+            assertThat(actual.failurePolicy).isEqualTo(FailOnSeverity(Severity.ERROR))
         }
 
         @Test

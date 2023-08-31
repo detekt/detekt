@@ -9,9 +9,8 @@ import io.gitlab.arturbosch.detekt.core.reporting.filterAutoCorrectedIssues
 
 internal fun RulesSpec.FailurePolicy.check(result: Detektion, config: Config) {
     when (this) {
-        is RulesSpec.FailurePolicy.FailOnSeverity -> result.checkForIssuesWithSeverity(config, minSeverity)
-        RulesSpec.FailurePolicy.DefaultFailurePolicy -> result.checkForIssuesWithSeverity(config, Severity.ERROR)
         RulesSpec.FailurePolicy.NeverFail -> Unit
+        is RulesSpec.FailurePolicy.FailOnSeverity -> result.checkForIssuesWithSeverity(config, minSeverity)
     }
 }
 

@@ -63,7 +63,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
     var autoCorrect: Boolean = DEFAULT_AUTO_CORRECT_VALUE
 
     // TODO: Add test to verify that setting is used from extension and task definition
-    var failOnSeverity: String? = null
+    var failOnSeverity: String = DEFAULT_FAIL_ON_SEVERITY
 
     /**
      * List of Android build variants for which no detekt task should be created.
@@ -90,6 +90,7 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
         const val DEFAULT_DEBUG_VALUE = false
         const val DEFAULT_PARALLEL_VALUE = false
         const val DEFAULT_AUTO_CORRECT_VALUE = false
+        const val DEFAULT_FAIL_ON_SEVERITY = "error"
         const val DEFAULT_DISABLE_RULESETS_VALUE = false
         const val DEFAULT_REPORT_ENABLED_VALUE = true
         const val DEFAULT_ALL_RULES_VALUE = false

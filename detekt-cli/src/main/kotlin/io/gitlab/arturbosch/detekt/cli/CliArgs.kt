@@ -2,6 +2,8 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.Parameter
 import io.github.detekt.tooling.api.spec.RulesSpec
+import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
+import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.NeverFail
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.nio.file.Path
@@ -91,9 +93,9 @@ class CliArgs {
         names = ["--fail-on-severity"],
         description = "Specifies the minimum severity that causes the build to fail. " +
             "When the value is set to 'NEVER' detekt will not fail regardless of the number " +
-            "of issues and their severities."
+                "of issues and their severities. Defaults for 'ERROR'."
     )
-    var failOnSeverity: FailureSeverity? = null
+    var failOnSeverity: FailureSeverity = FailureSeverity.ERROR
 
     @Parameter(
         names = ["--base-path", "-bp"],
@@ -204,18 +206,11 @@ class CliArgs {
         get() {
             val minSeverity = failOnSeverity
             return when (minSeverity) {
-                null ->
-                    RulesSpec.FailurePolicy.DefaultFailurePolicy
-
-                FailureSeverity.NEVER ->
-                    RulesSpec.FailurePolicy.NeverFail
+                FailureSeverity.NEVER -> NeverFail
 
                 FailureSeverity.ERROR,
                 FailureSeverity.WARNING,
-                FailureSeverity.INFO ->
-                    RulesSpec.FailurePolicy.FailOnSeverity(
-                        minSeverity.toSeverity()
-                    )
+                FailureSeverity.INFO -> FailOnSeverity(minSeverity.toSeverity())
             }
         }
 

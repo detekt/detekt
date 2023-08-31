@@ -27,11 +27,6 @@ interface RulesSpec {
     sealed class FailurePolicy {
 
         /**
-         * No issues with a severity of error is allowed.
-         */
-        data object DefaultFailurePolicy : FailurePolicy()
-
-        /**
          * Any number of issues is allowed. The build never fails due to detekt issues.
          */
         data object NeverFail : FailurePolicy()
