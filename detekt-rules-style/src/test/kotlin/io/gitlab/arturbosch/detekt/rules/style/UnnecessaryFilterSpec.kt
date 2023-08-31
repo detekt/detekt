@@ -323,5 +323,16 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
+
+        @Test
+        fun `Terminal function has an argument`() {
+            val code = """
+                val x = listOf(1, 2, 3).filter { it > 1 }.count { it > 2 }
+                val y = listOf(1, 2, 3).filter { it > 1 }.singleOrNull { it > 2 }
+            """.trimIndent()
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
     }
 }

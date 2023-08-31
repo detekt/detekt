@@ -66,6 +66,7 @@ class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
 
         val qualifiedOrCall = expression.getQualifiedExpressionForSelectorOrThis()
         val nextCall = qualifiedOrCall.nextCall() ?: return
+        if (nextCall is KtCallExpression && nextCall.valueArguments.size > 0) return
 
         secondCalls.firstOrNull { nextCall.isCalling(it.fqName) }?.let {
             val message = "'${expression.text}' can be replaced by '${it.correctOperator} $lambdaArgumentText'"
