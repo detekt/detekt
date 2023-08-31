@@ -56,7 +56,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
         fun `Filter with isNotEmpty`() {
             val code = """
                 val x = listOf(1, 2, 3).filter { it > 2 }.isNotEmpty()
-                val x = "abc".filter { it > 'a' }.isNotEmpty()
+                val y = "abc".filter { it > 'a' }.isNotEmpty()
             """.trimIndent()
 
             val findings = subject.compileAndLintWithContext(env, code)
