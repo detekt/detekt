@@ -352,4 +352,17 @@ class UnconditionalJumpStatementInLoopSpec {
 
         assertThat(findings).isEmpty()
     }
+
+    // https://github.com/detekt/detekt/issues/6442
+    @Test
+    fun `does not report a conditional break in a single body expression`() {
+        val code = """
+            import java.util.concurrent.BlockingQueue
+            
+            fun <T> BlockingQueue<T>.pollEach(action: (T) -> Unit) {
+                while (true) this.poll()?.let { action(it) } ?: break
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
 }
