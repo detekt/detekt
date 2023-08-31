@@ -18,9 +18,9 @@ open class CodeSmell(
     override val references: List<Entity> = emptyList()
 ) : Finding {
 
-    internal var internalSeverity: SeverityLevel = SeverityLevel.WARNING
-    override val severity: SeverityLevel
-        get() = internalSeverity
+    internal var internalSeverity: Severity? = null
+    override val severity: Severity
+        get() = internalSeverity ?: super.severity
 
     override val id: String = issue.id
 
