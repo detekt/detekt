@@ -196,8 +196,8 @@ public abstract interface class io/github/detekt/tooling/api/spec/RulesSpec {
 public abstract class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
 }
 
-public final class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$NoneAllowed : io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
-	public static final field INSTANCE Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$NoneAllowed;
+public final class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnError : io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
+	public static final field INSTANCE Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnError;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;

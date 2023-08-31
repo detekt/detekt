@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.RuleSetId
-import io.gitlab.arturbosch.detekt.api.SeverityLevel
+import io.gitlab.arturbosch.detekt.api.Severity
 import kotlin.io.path.invariantSeparatorsPathString
 
 internal fun toResults(detektion: Detektion): List<io.github.detekt.sarif4k.Result> =
@@ -17,10 +17,10 @@ internal fun toResults(detektion: Detektion): List<io.github.detekt.sarif4k.Resu
         findings.map { it.toResult(ruleSetId) }
     }
 
-private fun SeverityLevel.toResultLevel() = when (this) {
-    SeverityLevel.ERROR -> Level.Error
-    SeverityLevel.WARNING -> Level.Warning
-    SeverityLevel.INFO -> Level.Note
+private fun Severity.toResultLevel() = when (this) {
+    Severity.ERROR -> Level.Error
+    Severity.WARNING -> Level.Warning
+    Severity.INFO -> Level.Note
 }
 
 private fun Finding.toResult(ruleSetId: RuleSetId): io.github.detekt.sarif4k.Result {

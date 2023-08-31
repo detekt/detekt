@@ -5,14 +5,18 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.CODE_STYLE_PROPERT
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfig
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_STYLE_PROPERTY
+import io.github.detekt.psi.toFilePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.SingleAssign
+import io.gitlab.arturbosch.detekt.api.SourceLocation
+import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.ec4j.core.model.Property
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyElement
@@ -82,8 +86,17 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         return EditorConfig(properties)
     }
 
-    private fun emitFinding(message: String, canBeAutoCorrected: Boolean, node: ASTNode) {
-        val entity = Entity.from(node.psi)
+    private fun emitFinding(offset: Int, message: String, canBeAutoCorrected: Boolean, node: ASTNode) {
+        // Always convert KtLint offsets to lines/columns.
+        // The node used to report the finding may be not the same used for the offset (e.g. in NoUnusedImports).
+        val (line, column) = positionByOffset(offset)
+        val location = Location(
+            source = SourceLocation(line, column),
+            // Use offset + 1 since ktlint always reports a single location.
+            text = TextLocation(offset, offset + 1),
+            filePath = root.toFilePath()
+        )
+        val entity = Entity.from(node.psi, location)
 
         if (canBeAutoCorrected) {
             report(CorrectableCodeSmell(issue, entity, message, autoCorrectEnabled = autoCorrect))
@@ -93,14 +106,14 @@ abstract class FormattingRule(config: Config) : Rule(config) {
     }
 
     private fun beforeVisitChildNodes(node: ASTNode) {
-        wrapping.beforeVisitChildNodes(node, autoCorrect) { _, errorMessage, canBeAutoCorrected ->
-            emitFinding(errorMessage, canBeAutoCorrected, node)
+        wrapping.beforeVisitChildNodes(node, autoCorrect) { offset, errorMessage, canBeAutoCorrected ->
+            emitFinding(offset, errorMessage, canBeAutoCorrected, node)
         }
     }
 
     private fun afterVisitChildNodes(node: ASTNode) {
-        wrapping.afterVisitChildNodes(node, autoCorrect) { _, errorMessage, canBeAutoCorrected ->
-            emitFinding(errorMessage, canBeAutoCorrected, node)
+        wrapping.afterVisitChildNodes(node, autoCorrect) { offset, errorMessage, canBeAutoCorrected ->
+            emitFinding(offset, errorMessage, canBeAutoCorrected, node)
         }
     }
 
