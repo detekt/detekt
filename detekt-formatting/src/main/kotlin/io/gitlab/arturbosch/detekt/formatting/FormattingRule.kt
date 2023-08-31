@@ -91,10 +91,10 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         // The node used to report the finding may be not the same used for the offset (e.g. in NoUnusedImports).
         val (line, column) = positionByOffset(offset)
         val location = Location(
-            SourceLocation(line, column),
+            source = SourceLocation(line, column),
             // Use offset + 1 since ktlint always reports a single location.
-            TextLocation(offset, offset + 1),
-            root.toFilePath()
+            text = TextLocation(offset, offset + 1),
+            filePath = root.toFilePath()
         )
         val entity = Entity.from(node.psi, location)
 
