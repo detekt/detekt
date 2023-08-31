@@ -341,7 +341,7 @@ naming:
   MatchingDeclarationName:
     active: true
     mustBeFirst: true
-    multiplatformTargetFileSuffixes:
+    multiplatformTargets:
       - 'ios'
       - 'android'
       - 'js'

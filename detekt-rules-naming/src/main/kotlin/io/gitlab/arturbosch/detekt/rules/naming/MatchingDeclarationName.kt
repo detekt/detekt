@@ -59,8 +59,8 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
     @Configuration("name should only be checked if the file starts with a class or object")
     private val mustBeFirst: Boolean by config(true)
 
-    @Configuration("kotlin multiplatform target file suffixes")
-    private val multiplatformTargetFileSuffixes: List<String> by config(COMMON_KOTLIN_KMP_PLATFORM_TARGET_SUFFIXES)
+    @Configuration("kotlin multiplatform targets, used to allow file names like `MyClass.jvm.kt`")
+    private val multiplatformTargets: List<String> by config(COMMON_KOTLIN_KMP_PLATFORM_TARGET_SUFFIXES)
 
     override fun visitKtFile(file: KtFile) {
         val declarations = file.declarations
@@ -78,7 +78,7 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
         if (declarations.size == 1 && matchesFirstClassOrObjectCondition()) {
             val declaration = declarations.first()
             val declarationName = declaration.name
-            val filename = file.fileNameWithoutSuffix(multiplatformTargetFileSuffixes)
+            val filename = file.fileNameWithoutSuffix(multiplatformTargets)
             if (declarationName != filename && hasNoMatchingTypeAlias(filename)) {
                 val entity = Entity.atName(declaration).copy(ktElement = file)
                 report(

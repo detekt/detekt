@@ -139,7 +139,7 @@ class MatchingDeclarationNameSpec {
         fun `should pass for class declaration and name with custom platform suffix`() {
             val ktFile = compileContentForTest("actual class C", filename = "C.mySuffix.kt")
             val findings = MatchingDeclarationName(
-                TestConfig("multiplatformTargetFileSuffixes" to listOf("mySuffix"))
+                TestConfig("multiplatformTargets" to listOf("mySuffix"))
             ).lint(ktFile)
             assertThat(findings).isEmpty()
         }
@@ -252,7 +252,7 @@ class MatchingDeclarationNameSpec {
         fun `should pass for class declaration and name with platform suffix if passed empty platform suffixes`() {
             val ktFile = compileContentForTest("actual class C", filename = "C.jvm.kt")
             val findings = MatchingDeclarationName(
-                TestConfig("multiplatformTargetFileSuffixes" to emptyList<String>())
+                TestConfig("multiplatformTargets" to emptyList<String>())
             ).lint(ktFile)
             assertThat(findings).hasStartSourceLocation(1, 14)
         }
