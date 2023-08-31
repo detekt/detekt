@@ -40,6 +40,35 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
+        fun `Filter with return and count`() {
+            val code = """
+                fun test(list: List<Int>): Int {
+                    val x = list.map { it + 1 }.filter { it > 2 }
+                    return x.count()
+                }
+            """.trimIndent()
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0]).hasMessage("'filter { it > 2 }' can be replaced by 'count { it > 2 }'")
+        }
+
+        @Test
+        fun `Filter with assignment and count`() {
+            val code = """
+                fun test(list: List<Int>): Int {
+                    val x = list.map { it + 1 }.filter { it > 2 }
+                    val count = x.count()
+                    return count + 3
+                }
+            """.trimIndent()
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0]).hasMessage("'filter { it > 2 }' can be replaced by 'count { it > 2 }'")
+        }
+
+        @Test
         fun `Sequence with count`() {
             val code = """
                 val x = listOf(1, 2, 3)
@@ -63,6 +92,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
 
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
+            assertThat(findings[0]).hasMessage("'filter { it > 2 }' can be replaced by 'none { it > 2 }'")
         }
 
         @Test
@@ -75,6 +105,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
 
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
+            assertThat(findings[0]).hasMessage("'filter { it > 2 }' can be replaced by 'any { it > 2 }'")
         }
     }
 
@@ -129,6 +160,22 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 val x = listOf(1, 2, 3)
                     .count { it > 2 }
+            """.trimIndent()
+
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `Filter with assignment and count`() {
+            val code = """
+                fun test(list: List<Int>): Int {
+                    val x = list.map { it + 1 }.filter { it > 2 }
+                    foo(x)
+                    val count = x.count()
+                    return count + 3
+                }
+                fun foo(list: List<Int>) {}
             """.trimIndent()
 
             val findings = subject.compileAndLintWithContext(env, code)

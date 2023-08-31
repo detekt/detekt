@@ -104,6 +104,7 @@ complexity:
     ignoreSingleWhenExpression: false
     ignoreSimpleWhenEntries: false
     ignoreNestingFunctions: false
+    ignoreLocalFunctions: false
     nestingFunctions:
       - 'also'
       - 'apply'

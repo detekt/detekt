@@ -45,7 +45,7 @@ class DetektTaskSpec {
             .build()
 
         gradleRunner.runDetektTaskAndExpectFailure { result ->
-            assertThat(result.output).contains("Analysis failed with 15 weighted issues.")
+            assertThat(result.output).contains("Analysis failed with 15 issues.")
         }
     }
 }
