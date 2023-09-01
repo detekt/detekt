@@ -15,10 +15,20 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
+import io.gitlab.arturbosch.detekt.rules.isCalling
 import org.jetbrains.kotlin.backend.common.serialization.findPackage
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFunctionLiteral
+import org.jetbrains.kotlin.psi.KtLambdaExpression
+import org.jetbrains.kotlin.psi.KtReturnExpression
+import org.jetbrains.kotlin.psi.KtValueArgument
+import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
+import org.jetbrains.kotlin.resolve.BindingContext.FUNCTION
+import org.jetbrains.kotlin.resolve.bindingContextUtil.getTargetFunctionDescriptor
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.types.KotlinType
@@ -106,7 +116,7 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        if (expression.isUsedAsExpression(bindingContext)) return
+        if (isUsedAsExpression(expression)) return
 
         val resultingDescriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor ?: return
         if (resultingDescriptor.returnType?.isUnit() == true) return
@@ -137,11 +147,47 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         )
     }
 
+    private fun isUsedAsExpression(call: KtCallExpression): Boolean {
+        if (!call.isUsedAsExpression(bindingContext)) return false
+
+        val lambda = call.getStrictParentOfType<KtFunctionLiteral>()?.parent as? KtLambdaExpression
+        if (lambda != null && call.isLambdaResult(lambda)) {
+            val parentCall = (lambda.parent as? KtValueArgument)?.getStrictParentOfType<KtCallExpression>()
+            val isLambdaResultScopeFunction = parentCall?.isCalling(lambdaResultScopeFunctions, bindingContext) == true
+            val isUsedAsExpression = parentCall?.isUsedAsExpression(bindingContext) == true
+            if (isLambdaResultScopeFunction && !isUsedAsExpression) return false
+        }
+
+        return true
+    }
+
+    private fun KtExpression.isLambdaResult(lambda: KtLambdaExpression): Boolean {
+        val statement = getQualifiedExpressionForSelectorOrThis().let {
+            it.getStrictParentOfType<KtReturnExpression>() ?: it
+        }
+        return when (statement) {
+            is KtReturnExpression -> {
+                val lambdaDescriptor = bindingContext[FUNCTION, lambda.functionLiteral]
+                statement.getTargetFunctionDescriptor(bindingContext) == lambdaDescriptor
+            }
+
+            else -> {
+                val lastStatement = lambda.functionLiteral.bodyBlockExpression?.children?.lastOrNull()
+                statement == lastStatement
+            }
+        }
+    }
+
     private operator fun List<Regex>.contains(type: KotlinType?) = contains(type?.fqNameOrNull())
+
     private operator fun List<Regex>.contains(annotation: AnnotationDescriptor) = contains(annotation.fqName)
 
     private operator fun List<Regex>.contains(fqName: FqName?): Boolean {
         val name = fqName?.asString() ?: return false
         return any { it.matches(name) }
+    }
+
+    companion object {
+        private val lambdaResultScopeFunctions = listOf("with", "run", "let").map { FqName("kotlin.$it") }
     }
 }
