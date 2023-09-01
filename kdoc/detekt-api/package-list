@@ -207,6 +207,7 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/Notification.Level.Error///Point
 $dokka.location:io.gitlab.arturbosch.detekt.api/Notification.Level.Info///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/-info/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Notification.Level.Warning///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/-warning/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Notification.Level///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/index.html
+$dokka.location:io.gitlab.arturbosch.detekt.api/Notification.Level/entries/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/entries.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Notification.Level/valueOf/#kotlin.String/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/value-of.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Notification.Level/values/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/values.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Notification///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-notification/index.html
@@ -245,12 +246,14 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/Rule/report/#kotlin.collections.
 $dokka.location:io.gitlab.arturbosch.detekt.api/Rule/ruleId/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/rule-id.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Rule/ruleSetConfig/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/rule-set-config.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Rule/visitCondition/#org.jetbrains.kotlin.psi.KtFile/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-rule/visit-condition.html
+$dokka.location:io.gitlab.arturbosch.detekt.api/RuleId///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-id/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/RuleSet///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/RuleSet/RuleSet/#kotlin.String#kotlin.collections.List[io.gitlab.arturbosch.detekt.api.BaseRule]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set/-rule-set.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/RuleSet/accept/#org.jetbrains.kotlin.psi.KtFile#org.jetbrains.kotlin.resolve.BindingContext/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set/accept.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/RuleSet/id/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set/id.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/RuleSet/pathFilters/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set/path-filters.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/RuleSet/rules/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set/rules.html
+$dokka.location:io.gitlab.arturbosch.detekt.api/RuleSetId///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set-id/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/RuleSetProvider///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set-provider/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/RuleSetProvider/instance/#io.gitlab.arturbosch.detekt.api.Config/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set-provider/instance.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/RuleSetProvider/ruleSetId/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-rule-set-provider/rule-set-id.html
@@ -263,6 +266,7 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/Severity.ERROR///PointingToDecla
 $dokka.location:io.gitlab.arturbosch.detekt.api/Severity.INFO///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-i-n-f-o/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Severity.WARNING///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}detekt-api/io.gitlab.arturbosch.detekt.api/-severity/-w-a-r-n-i-n-g/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Severity///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/index.html
+$dokka.location:io.gitlab.arturbosch.detekt.api/Severity/entries/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/entries.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Severity/valueOf/#kotlin.String/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/value-of.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Severity/values/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/values.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/SingleAssign///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-single-assign/index.html
