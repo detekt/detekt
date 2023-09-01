@@ -126,8 +126,8 @@ complexity:
     allowedLines: 60
   LongParameterList:
     active: true
-    functionThreshold: 6
-    constructorThreshold: 7
+    allowedFunctionParameters: 5
+    allowedConstructorParameters: 6
     ignoreDefaultParameters: false
     ignoreDataClasses: true
     ignoreAnnotatedParameter: []
