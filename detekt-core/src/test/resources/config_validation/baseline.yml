@@ -16,7 +16,7 @@ complexity:
     allowedLines: 20
   LongParameterList:
     active: false
-    allowedFunctionParameters: 5
+    allowedFunctionParameters: 4
   LargeClass:
     active: false
     threshold: 70
