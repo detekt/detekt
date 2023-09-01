@@ -133,7 +133,7 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     }
 
     companion object {
-        private const val DEFAULT_ALLOWED_FUNCTION_PARAMETERS = 6
-        private const val DEFAULT_ALLOWED_CONSTRUCTOR_PARAMETERS = 7
+        private const val DEFAULT_ALLOWED_FUNCTION_PARAMETERS = 5
+        private const val DEFAULT_ALLOWED_CONSTRUCTOR_PARAMETERS = 6
     }
 }
