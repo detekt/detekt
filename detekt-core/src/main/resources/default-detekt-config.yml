@@ -348,6 +348,17 @@ naming:
   MatchingDeclarationName:
     active: true
     mustBeFirst: true
+    multiplatformTargets:
+      - 'ios'
+      - 'android'
+      - 'js'
+      - 'jvm'
+      - 'native'
+      - 'iosArm64'
+      - 'iosX64'
+      - 'macosX64'
+      - 'mingwX64'
+      - 'linuxX64'
   MemberNameEqualsClassName:
     active: true
     ignoreOverridden: true
