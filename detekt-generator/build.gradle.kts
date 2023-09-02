@@ -41,7 +41,7 @@ tasks.register("generateWebsite") {
     dependsOn(
         copyDetektCliUsage,
         generateDocumentation,
-        ":detekt-api:dokkaHtml",
+        ":dokkaHtmlMultiModule",
     )
 }
 

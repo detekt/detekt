@@ -1,4 +1,4 @@
-import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
 
 plugins {
     id("module")
@@ -33,11 +33,7 @@ listOf(configurations.testFixturesApiElements, configurations.testFixturesRuntim
     }
 }
 
-tasks.withType<DokkaTask>().configureEach {
-    outputDirectory = rootDir.resolve("website/static/kdoc")
-}
-
-tasks.dokkaHtml {
+tasks.withType<DokkaTaskPartial>().configureEach {
     notCompatibleWithConfigurationCache("https://github.com/Kotlin/dokka/issues/1217")
 }
 
