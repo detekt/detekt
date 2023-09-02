@@ -543,8 +543,6 @@ public class io/gitlab/arturbosch/detekt/api/ThresholdedCodeSmell : io/gitlab/ar
 	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Issue;Lio/gitlab/arturbosch/detekt/api/Entity;Lio/gitlab/arturbosch/detekt/api/Metric;Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun compact ()Ljava/lang/String;
 	public final fun getMetric ()Lio/gitlab/arturbosch/detekt/api/Metric;
-	public final fun getThreshold ()I
-	public final fun getValue ()I
 	public fun messageOrDescription ()Ljava/lang/String;
 }
 

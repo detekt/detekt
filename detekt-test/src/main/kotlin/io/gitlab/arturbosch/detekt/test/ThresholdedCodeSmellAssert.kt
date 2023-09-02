@@ -23,8 +23,8 @@ class ThresholdedCodeSmellAssert(actual: ThresholdedCodeSmell?) :
         isNotNull
 
         val smell = actual as ThresholdedCodeSmell
-        if (expected != smell.value) {
-            failWithMessage("Expected value to be <%s> but was <%s>", expected, smell.value)
+        if (expected != smell.metric.value) {
+            failWithMessage("Expected value to be <%s> but was <%s>", expected, smell.metric.value)
         }
     }
 
@@ -34,8 +34,8 @@ class ThresholdedCodeSmellAssert(actual: ThresholdedCodeSmell?) :
         isNotNull
 
         val smell = actual as ThresholdedCodeSmell
-        if (expected != smell.threshold) {
-            failWithMessage("Expected threshold to be <%s> but was <%s>", expected, smell.threshold)
+        if (expected != smell.metric.threshold) {
+            failWithMessage("Expected threshold to be <%s> but was <%s>", expected, smell.metric.threshold)
         }
     }
 }
