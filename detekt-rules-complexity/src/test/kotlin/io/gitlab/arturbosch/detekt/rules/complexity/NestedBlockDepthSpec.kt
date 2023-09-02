@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
@@ -57,7 +56,7 @@ class NestedBlockDepthSpec {
         """.trimIndent()
         subject.lint(code)
         assertThat(subject.findings).hasSize(1)
-        assertThat(subject.findings[0] as ThresholdedCodeSmell).hasValue(5)
+        assertThat(subject.findings[0]).isThresholded().hasValue(5)
     }
 
     @Test

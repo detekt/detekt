@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.api
+package io.gitlab.arturbosch.detekt.rules.complexity
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
