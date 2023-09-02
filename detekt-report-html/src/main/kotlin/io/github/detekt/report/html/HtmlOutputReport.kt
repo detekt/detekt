@@ -5,7 +5,6 @@ import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
-import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import kotlinx.html.CommonAttributeGroupFacadeFlowInteractiveContent
@@ -32,7 +31,6 @@ import java.util.Locale
 import kotlin.io.path.invariantSeparatorsPathString
 
 private const val DEFAULT_TEMPLATE = "default-html-report-template.html"
-private const val PLACEHOLDER_METRICS = "@@@metrics@@@"
 private const val PLACEHOLDER_FINDINGS = "@@@findings@@@"
 private const val PLACEHOLDER_COMPLEXITY_REPORT = "@@@complexity@@@"
 private const val PLACEHOLDER_VERSION = "@@@version@@@"
@@ -57,7 +55,6 @@ class HtmlOutputReport : OutputReport() {
             .use { it.readText() }
             .replace(PLACEHOLDER_VERSION, renderVersion())
             .replace(PLACEHOLDER_DATE, renderDate())
-            .replace(PLACEHOLDER_METRICS, renderMetrics(detektion.metrics))
             .replace(PLACEHOLDER_COMPLEXITY_REPORT, renderComplexity(getComplexityMetrics(detektion)))
             .replace(PLACEHOLDER_FINDINGS, renderFindings(detektion.findings))
 
@@ -66,14 +63,6 @@ class HtmlOutputReport : OutputReport() {
     private fun renderDate(): String {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         return "${OffsetDateTime.now(ZoneOffset.UTC).format(formatter)} UTC"
-    }
-
-    private fun renderMetrics(metrics: Collection<ProjectMetric>) = createHTML().div {
-        ul {
-            metrics.forEach {
-                li { text("%,d ${it.type}".format(Locale.US, it.value)) }
-            }
-        }
     }
 
     private fun renderComplexity(complexityReport: List<String>) = createHTML().div {

@@ -1,8 +1,3 @@
-io.github.detekt.metrics.processors.KtFileCountProcessor
-io.github.detekt.metrics.processors.PackageCountProcessor
-io.github.detekt.metrics.processors.ClassCountProcessor
-io.github.detekt.metrics.processors.FunctionCountProcessor
-io.github.detekt.metrics.processors.PropertyCountProcessor
 io.github.detekt.metrics.processors.ProjectComplexityProcessor
 io.github.detekt.metrics.processors.ProjectCognitiveComplexityProcessor
 io.github.detekt.metrics.processors.ProjectLLOCProcessor

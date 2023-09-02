@@ -184,9 +184,7 @@ public class io/gitlab/arturbosch/detekt/api/DetektVisitor : org/jetbrains/kotli
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/Detektion : org/jetbrains/kotlin/com/intellij/openapi/util/UserDataHolder {
 	public abstract fun add (Lio/gitlab/arturbosch/detekt/api/Notification;)V
-	public abstract fun add (Lio/gitlab/arturbosch/detekt/api/ProjectMetric;)V
 	public abstract fun getFindings ()Ljava/util/Map;
-	public abstract fun getMetrics ()Ljava/util/Collection;
 	public abstract fun getNotifications ()Ljava/util/Collection;
 }
 
@@ -356,17 +354,6 @@ public abstract class io/gitlab/arturbosch/detekt/api/OutputReport : io/gitlab/a
 	public fun init (Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
 	public abstract fun render (Lio/gitlab/arturbosch/detekt/api/Detektion;)Ljava/lang/String;
 	public final fun write (Ljava/nio/file/Path;Lio/gitlab/arturbosch/detekt/api/Detektion;)V
-}
-
-public class io/gitlab/arturbosch/detekt/api/ProjectMetric {
-	public fun <init> (Ljava/lang/String;IIZI)V
-	public synthetic fun <init> (Ljava/lang/String;IIZIILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getConversionFactor ()I
-	public final fun getPriority ()I
-	public final fun getType ()Ljava/lang/String;
-	public final fun getValue ()I
-	public final fun isDouble ()Z
-	public fun toString ()Ljava/lang/String;
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/PropertiesAware {

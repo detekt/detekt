@@ -14,7 +14,6 @@ import io.github.detekt.utils.paragraph
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
-import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import java.time.OffsetDateTime
@@ -41,9 +40,6 @@ class MdOutputReport : OutputReport() {
     override fun render(detektion: Detektion) = markdown {
         h1 { "detekt" }
 
-        h2 { "Metrics" }
-        renderMetrics(detektion.metrics)
-
         h2 { "Complexity Report" }
         renderComplexity(getComplexityMetrics(detektion))
 
@@ -65,12 +61,6 @@ class MdOutputReport : OutputReport() {
 
     private fun getComplexityMetrics(detektion: Detektion): List<String> {
         return ComplexityReportGenerator.create(detektion).generate().orEmpty()
-    }
-}
-
-private fun MarkdownContent.renderMetrics(metrics: Collection<ProjectMetric>) {
-    list {
-        metrics.forEach { item { "%,d ${it.type}".format(Locale.US, it.value) } }
     }
 }
 

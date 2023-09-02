@@ -10,7 +10,6 @@ import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createEntity
@@ -36,7 +35,6 @@ class HtmlOutputReportSpec {
         assertThat(result).startsWith("<!DOCTYPE html>\n<html lang=\"en\">")
         assertThat(result).endsWith("</html>\n")
 
-        assertThat(result).contains("<h2>Metrics</h2>")
         assertThat(result).contains("<h2>Complexity Report</h2>")
         assertThat(result).contains("<h2>Findings</h2>")
     }
@@ -132,19 +130,6 @@ class HtmlOutputReportSpec {
         assertThat(result).contains("<a href=\"https://detekt.dev/docs/rules/style#valcouldbevar\">Documentation</a>")
         assertThat(result).contains("<a href=\"https://detekt.dev/docs/rules/empty#emptybody\">Documentation</a>")
         assertThat(result).contains("<a href=\"https://detekt.dev/docs/rules/empty#emptyif\">Documentation</a>")
-    }
-
-    @Test
-    fun `renders a metric report correctly`() {
-        val detektion = object : TestDetektion() {
-            override val metrics: Collection<ProjectMetric> = listOf(
-                ProjectMetric("M1", 10_000),
-                ProjectMetric("M2", 2)
-            )
-        }
-        val result = htmlReport.render(detektion)
-        assertThat(result).contains("<li>10,000 M1</li>")
-        assertThat(result).contains("<li>2 M2</li>")
     }
 
     @Test

@@ -8,7 +8,6 @@ import io.github.detekt.metrics.processors.logicalLinesKey
 import io.github.detekt.metrics.processors.sourceLinesKey
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createEntity
@@ -55,7 +54,6 @@ class MdOutputReportSpec {
 
     @Test
     fun `renders Markdown structure correctly`() {
-        assertThat(result).contains("Metrics")
         assertThat(result).contains("Complexity Report")
         assertThat(result).contains("Findings")
     }
@@ -216,11 +214,6 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
 private fun createMdDetektion(vararg findingPairs: Pair<String, List<Finding>>): Detektion {
     return object : TestDetektion() {
         override val findings: Map<String, List<Finding>> = findingPairs.toMap()
-
-        override val metrics: Collection<ProjectMetric> = listOf(
-            ProjectMetric("M1", 10_000),
-            ProjectMetric("M2", 2)
-        )
     }
 }
 

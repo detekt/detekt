@@ -9,15 +9,9 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolder
 interface Detektion : UserDataHolder {
     val findings: Map<RuleSetId, List<Finding>>
     val notifications: Collection<Notification>
-    val metrics: Collection<ProjectMetric>
 
     /**
      * Stores a notification in the result.
      */
     fun add(notification: Notification)
-
-    /**
-     * Stores a metric calculated for the whole project in the result.
-     */
-    fun add(projectMetric: ProjectMetric)
 }

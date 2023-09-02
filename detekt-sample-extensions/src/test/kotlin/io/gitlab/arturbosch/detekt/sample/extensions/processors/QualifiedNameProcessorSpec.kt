@@ -4,7 +4,6 @@ import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Notification
-import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -32,13 +31,8 @@ private val result = object : Detektion, UserDataHolderBase() {
 
     override val findings: Map<String, List<Finding>> = emptyMap()
     override val notifications: Collection<Notification> = emptyList()
-    override val metrics: Collection<ProjectMetric> = emptyList()
 
     override fun add(notification: Notification) {
-        throw UnsupportedOperationException("not implemented")
-    }
-
-    override fun add(projectMetric: ProjectMetric) {
         throw UnsupportedOperationException("not implemented")
     }
 }
