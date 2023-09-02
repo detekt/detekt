@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.core.config.validation
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Notification
-import io.gitlab.arturbosch.detekt.api.internal.CommaSeparatedPattern
 import io.gitlab.arturbosch.detekt.core.config.CompositeConfig
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import io.gitlab.arturbosch.detekt.core.config.validation.InvalidPropertiesConfigValidator.Companion.nestedConfigurationExpected
@@ -146,7 +145,7 @@ internal class InvalidPropertiesConfigValidatorSpec {
     @Nested
     inner class `configure additional exclude paths` {
 
-        private fun patterns(str: String) = CommaSeparatedPattern(str).mapToRegex()
+        private fun patterns(str: String) = setOf(str.toRegex())
 
         @Test
         fun `does not report any complexity properties`() {
