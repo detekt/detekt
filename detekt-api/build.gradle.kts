@@ -2,9 +2,9 @@ import org.jetbrains.dokka.gradle.DokkaTask
 
 plugins {
     id("module")
+    id("public-api")
     alias(libs.plugins.dokka)
     `java-test-fixtures`
-    alias(libs.plugins.binaryCompatibilityValidator)
     alias(libs.plugins.poko)
 }
 

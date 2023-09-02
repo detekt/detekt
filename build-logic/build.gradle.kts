@@ -12,6 +12,7 @@ dependencies {
     implementation(libs.plugins.githubRelease.asDependency())
     implementation(libs.semver4j)
     implementation(libs.plugins.nexusPublish.asDependency())
+    implementation(libs.plugins.binaryCompatibilityValidator.asDependency())
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
