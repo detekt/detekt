@@ -1,9 +1,6 @@
-import org.jetbrains.dokka.gradle.DokkaTaskPartial
-
 plugins {
     id("module")
     id("public-api")
-    alias(libs.plugins.dokka)
     `java-test-fixtures`
     alias(libs.plugins.poko)
 }
@@ -31,10 +28,6 @@ listOf(configurations.testFixturesApiElements, configurations.testFixturesRuntim
             skip()
         }
     }
-}
-
-tasks.withType<DokkaTaskPartial>().configureEach {
-    notCompatibleWithConfigurationCache("https://github.com/Kotlin/dokka/issues/1217")
 }
 
 apiValidation {
