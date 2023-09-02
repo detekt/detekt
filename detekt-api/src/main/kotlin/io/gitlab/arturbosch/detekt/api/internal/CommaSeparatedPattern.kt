@@ -12,7 +12,7 @@ class CommaSeparatedPattern(
         .commaSeparatedPattern(*delimiters.toCharArray().map { it.toString() }.toTypedArray())
         .toList()
 
-    fun mapToRegex(): Set<Regex> = mapAll { it.toRegex() }.toSet()
+    fun mapToRegex(): Set<Regex> = excludes.map { it.toRegex() }.toSet()
 
     /**
      * Does any part contain given [value]?
@@ -38,9 +38,4 @@ class CommaSeparatedPattern(
      * Tests if any part starts with the given [value]
      */
     fun startWith(value: String?): Boolean = excludes.any { value?.startsWith(it) ?: false }
-
-    /**
-     * Transforms all parts by given [transform] function.
-     */
-    fun <T> mapAll(transform: (String) -> T): List<T> = excludes.map(transform)
 }
