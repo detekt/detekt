@@ -5,12 +5,11 @@ import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
-import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.core.reporting.filterEmptyIssues
 
 abstract class AbstractFindingsReport : ConsoleReport() {
 
-    private var config: Config by SingleAssign()
+    private lateinit var config: Config
 
     override val priority: Int = 40
 

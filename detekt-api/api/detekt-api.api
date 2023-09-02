@@ -442,12 +442,6 @@ public final class io/gitlab/arturbosch/detekt/api/Severity : java/lang/Enum {
 	public static fun values ()[Lio/gitlab/arturbosch/detekt/api/Severity;
 }
 
-public final class io/gitlab/arturbosch/detekt/api/SingleAssign {
-	public fun <init> ()V
-	public final fun getValue (Ljava/lang/Object;Lkotlin/reflect/KProperty;)Ljava/lang/Object;
-	public final fun setValue (Ljava/lang/Object;Lkotlin/reflect/KProperty;Ljava/lang/Object;)V
-}
-
 public final class io/gitlab/arturbosch/detekt/api/SourceLocation {
 	public fun <init> (II)V
 	public fun equals (Ljava/lang/Object;)Z
