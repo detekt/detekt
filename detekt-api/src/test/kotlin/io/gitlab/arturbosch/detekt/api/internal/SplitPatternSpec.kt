@@ -1,15 +1,15 @@
-package io.gitlab.arturbosch.detekt.api
+package io.gitlab.arturbosch.detekt.api.internal
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class SplitPatternSpec {
+class CommaSeparatedPatternSpec {
 
     @Nested
     inner class `an excludes rule with a single exclude` {
 
-        private val excludes = SplitPattern("test")
+        private val excludes = CommaSeparatedPattern("test")
 
         @Test
         fun `contains the _test_ parameter`() {
@@ -50,7 +50,7 @@ class SplitPatternSpec {
     @Nested
     inner class `an excludes rule with multiple excludes` {
 
-        private val excludes = SplitPattern("here.there.io, test.com")
+        private val excludes = CommaSeparatedPattern("here.there.io, test.com")
 
         @Test
         fun `contains the _test_ parameter`() {
@@ -120,7 +120,7 @@ class SplitPatternSpec {
     @Nested
     inner class `an excludes rule with lots of whitespace and an empty parameter` {
 
-        private val excludes = SplitPattern("    test,  ,       here.there       ")
+        private val excludes = CommaSeparatedPattern("    test,  ,       here.there       ")
 
         @Test
         fun `contains the _test_ parameter`() {
