@@ -36,7 +36,7 @@ class TooManyFunctionsTwo(config: Config) : Rule(config) {
                 ThresholdedCodeSmell(
                     issue,
                     entity = Entity.from(file),
-                    metric = Metric(type = "SIZE", value = amount, threshold = allowedFunctions),
+                    metric = Metric(value = amount, threshold = allowedFunctions),
                     message = "The file ${file.name} has $amount function declarations. " +
                         "The maximum number of allowed functions is specified with $allowedFunctions.",
                     references = emptyList()

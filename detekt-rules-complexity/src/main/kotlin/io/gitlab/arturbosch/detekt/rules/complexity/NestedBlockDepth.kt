@@ -49,7 +49,7 @@ class NestedBlockDepth(config: Config = Config.empty) : Rule(config) {
                 ThresholdedCodeSmell(
                     issue,
                     Entity.atName(function),
-                    Metric("SIZE", visitor.maxDepth, allowedDepth),
+                    Metric(visitor.maxDepth, allowedDepth),
                     "Function ${function.name} is nested too deeply."
                 )
             )
