@@ -31,7 +31,7 @@ internal val DEFAULT_PROPERTY_EXCLUDES = setOf(
     ".*>.*>severity",
     ".*>.*>ignoreAnnotated",
     ".*>.*>ignoreFunction",
-).joinToString(",")
+).map { it.toRegex() }
 
 internal fun checkConfiguration(settings: ProcessingSettings, baseline: Config) {
     var shouldValidate = settings.spec.configSpec.shouldValidateBeforeAnalysis

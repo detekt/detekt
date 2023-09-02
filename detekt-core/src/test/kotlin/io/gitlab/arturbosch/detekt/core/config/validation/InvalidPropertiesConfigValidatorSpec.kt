@@ -25,7 +25,7 @@ internal class InvalidPropertiesConfigValidatorSpec {
         )
     )
     private val baseline = yamlConfig("config_validation/baseline.yml") as YamlConfig
-    private val defaultExcludePatterns = CommaSeparatedPattern(DEFAULT_PROPERTY_EXCLUDES).mapToRegex()
+    private val defaultExcludePatterns = DEFAULT_PROPERTY_EXCLUDES.toSet()
     private val subject = InvalidPropertiesConfigValidator(baseline, deprecatedProperties, defaultExcludePatterns)
 
     @Test
