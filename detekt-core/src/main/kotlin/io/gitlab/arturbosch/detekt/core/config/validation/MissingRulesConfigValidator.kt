@@ -3,8 +3,8 @@ package io.gitlab.arturbosch.detekt.core.config.validation
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
+import io.gitlab.arturbosch.detekt.core.util.SimpleNotification
 import java.util.ServiceLoader
 
 internal class MissingRulesConfigValidator(

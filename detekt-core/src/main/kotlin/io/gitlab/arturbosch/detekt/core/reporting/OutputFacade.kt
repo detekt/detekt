@@ -4,8 +4,8 @@ import io.github.detekt.tooling.api.spec.ReportsSpec
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.getOrNull
-import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.core.util.SimpleNotification
 
 @OptIn(UnstableApi::class)
 class OutputFacade(
