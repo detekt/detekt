@@ -1,11 +1,5 @@
 package io.github.detekt.report.md
 
-import io.github.detekt.metrics.CognitiveComplexity
-import io.github.detekt.metrics.processors.commentLinesKey
-import io.github.detekt.metrics.processors.complexityKey
-import io.github.detekt.metrics.processors.linesKey
-import io.github.detekt.metrics.processors.logicalLinesKey
-import io.github.detekt.metrics.processors.sourceLinesKey
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
@@ -54,7 +48,6 @@ class MdOutputReportSpec {
 
     @Test
     fun `renders Markdown structure correctly`() {
-        assertThat(result).contains("Complexity Report")
         assertThat(result).contains("Findings")
     }
 
@@ -201,14 +194,7 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
         "Section-2" to listOf(
             createFinding(issueB, entity3, "")
         )
-    ).also {
-        it.putUserData(complexityKey, 10)
-        it.putUserData(CognitiveComplexity.KEY, 10)
-        it.putUserData(sourceLinesKey, 20)
-        it.putUserData(logicalLinesKey, 10)
-        it.putUserData(commentLinesKey, 2)
-        it.putUserData(linesKey, 2222)
-    }
+    )
 }
 
 private fun createMdDetektion(vararg findingPairs: Pair<String, List<Finding>>): Detektion {

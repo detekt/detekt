@@ -1,6 +1,5 @@
 package io.github.detekt.report.md
 
-import io.github.detekt.metrics.ComplexityReportGenerator
 import io.github.detekt.utils.MarkdownContent
 import io.github.detekt.utils.codeBlock
 import io.github.detekt.utils.emptyLine
@@ -40,9 +39,6 @@ class MdOutputReport : OutputReport() {
     override fun render(detektion: Detektion) = markdown {
         h1 { "detekt" }
 
-        h2 { "Complexity Report" }
-        renderComplexity(getComplexityMetrics(detektion))
-
         renderFindings(detektion.findings)
         emptyLine()
 
@@ -57,16 +53,6 @@ class MdOutputReport : OutputReport() {
     private fun renderDate(): String {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         return "${OffsetDateTime.now(ZoneOffset.UTC).format(formatter)} UTC"
-    }
-
-    private fun getComplexityMetrics(detektion: Detektion): List<String> {
-        return ComplexityReportGenerator.create(detektion).generate().orEmpty()
-    }
-}
-
-private fun MarkdownContent.renderComplexity(complexityReport: List<String>) {
-    list {
-        complexityReport.forEach { item { it.trim() } }
     }
 }
 

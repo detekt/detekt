@@ -1,6 +1,5 @@
 package io.github.detekt.report.html
 
-import io.github.detekt.metrics.ComplexityReportGenerator
 import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
@@ -32,7 +31,6 @@ import kotlin.io.path.invariantSeparatorsPathString
 
 private const val DEFAULT_TEMPLATE = "default-html-report-template.html"
 private const val PLACEHOLDER_FINDINGS = "@@@findings@@@"
-private const val PLACEHOLDER_COMPLEXITY_REPORT = "@@@complexity@@@"
 private const val PLACEHOLDER_VERSION = "@@@version@@@"
 private const val PLACEHOLDER_DATE = "@@@date@@@"
 
@@ -55,7 +53,6 @@ class HtmlOutputReport : OutputReport() {
             .use { it.readText() }
             .replace(PLACEHOLDER_VERSION, renderVersion())
             .replace(PLACEHOLDER_DATE, renderDate())
-            .replace(PLACEHOLDER_COMPLEXITY_REPORT, renderComplexity(getComplexityMetrics(detektion)))
             .replace(PLACEHOLDER_FINDINGS, renderFindings(detektion.findings))
 
     private fun renderVersion(): String = whichDetekt()
@@ -63,14 +60,6 @@ class HtmlOutputReport : OutputReport() {
     private fun renderDate(): String {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         return "${OffsetDateTime.now(ZoneOffset.UTC).format(formatter)} UTC"
-    }
-
-    private fun renderComplexity(complexityReport: List<String>) = createHTML().div {
-        ul {
-            complexityReport.forEach {
-                li { text(it.trim()) }
-            }
-        }
     }
 
     private fun renderFindings(findings: Map<String, List<Finding>>) = createHTML().div {
@@ -146,10 +135,6 @@ class HtmlOutputReport : OutputReport() {
             val lineSequence = psiFile.text.splitToSequence('\n')
             snippetCode(finding.id, lineSequence, finding.startPosition, finding.charPosition.length())
         }
-    }
-
-    private fun getComplexityMetrics(detektion: Detektion): List<String> {
-        return ComplexityReportGenerator.create(detektion).generate().orEmpty()
     }
 }
 

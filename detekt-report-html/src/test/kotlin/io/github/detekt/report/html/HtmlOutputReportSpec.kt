@@ -1,11 +1,5 @@
 package io.github.detekt.report.html
 
-import io.github.detekt.metrics.CognitiveComplexity
-import io.github.detekt.metrics.processors.commentLinesKey
-import io.github.detekt.metrics.processors.complexityKey
-import io.github.detekt.metrics.processors.linesKey
-import io.github.detekt.metrics.processors.logicalLinesKey
-import io.github.detekt.metrics.processors.sourceLinesKey
 import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Detektion
@@ -35,7 +29,6 @@ class HtmlOutputReportSpec {
         assertThat(result).startsWith("<!DOCTYPE html>\n<html lang=\"en\">")
         assertThat(result).endsWith("</html>\n")
 
-        assertThat(result).contains("<h2>Complexity Report</h2>")
         assertThat(result).contains("<h2>Findings</h2>")
     }
 
@@ -130,27 +123,6 @@ class HtmlOutputReportSpec {
         assertThat(result).contains("<a href=\"https://detekt.dev/docs/rules/style#valcouldbevar\">Documentation</a>")
         assertThat(result).contains("<a href=\"https://detekt.dev/docs/rules/empty#emptybody\">Documentation</a>")
         assertThat(result).contains("<a href=\"https://detekt.dev/docs/rules/empty#emptyif\">Documentation</a>")
-    }
-
-    @Test
-    fun `renders the complexity report correctly`() {
-        val detektion = TestDetektion()
-        detektion.putUserData(complexityKey, 10)
-        detektion.putUserData(CognitiveComplexity.KEY, 10)
-        detektion.putUserData(sourceLinesKey, 20)
-        detektion.putUserData(logicalLinesKey, 10)
-        detektion.putUserData(commentLinesKey, 2)
-        detektion.putUserData(linesKey, 2222)
-        val result = htmlReport.render(detektion)
-        assertThat(result).contains("<li>2,222 lines of code (loc)</li>")
-        assertThat(result).contains("<li>20 source lines of code (sloc)</li>")
-        assertThat(result).contains("<li>10 logical lines of code (lloc)</li>")
-    }
-
-    @Test
-    fun `renders a blank complexity report correctly`() {
-        val result = htmlReport.render(createTestDetektionWithMultipleSmells())
-        assertThat(result).contains("<h2>Complexity Report</h2>\n\n<div>\n  <ul></ul>\n</div>")
     }
 
     @Test
