@@ -63,15 +63,19 @@ abstract class Rule(
     private fun shouldRunOnGivenFile(root: KtFile) =
         filters?.isIgnored(root)?.not() ?: true
 
+    private fun Finding.updateWithComputedSeverity() {
+        (this as? CodeSmell)?.internalSeverity = computeSeverity()
+    }
+
     /**
      * Compute severity in the priority order:
      * - Severity of the rule
      * - Severity of the parent ruleset
-     * - Default severity: warning
+     * - Default severity
      */
-    private fun computeSeverity(): SeverityLevel {
+    private fun computeSeverity(): Severity {
         val configValue: String = valueOrNull(SEVERITY_KEY)
-            ?: ruleSetConfig.valueOrDefault(SEVERITY_KEY, "warning")
+            ?: ruleSetConfig.valueOrDefault(SEVERITY_KEY, Severity.DEFAULT.name)
         return enumValueOf(configValue.uppercase(Locale.US))
     }
 
@@ -79,7 +83,7 @@ abstract class Rule(
      * Simplified version of [Context.report] with rule defaults.
      */
     fun report(finding: Finding) {
-        (finding as? CodeSmell)?.internalSeverity = computeSeverity()
+        finding.updateWithComputedSeverity()
         report(finding, aliases, ruleSetId)
     }
 
@@ -88,13 +92,9 @@ abstract class Rule(
      */
     fun report(findings: List<Finding>) {
         findings.forEach {
-            (it as? CodeSmell)?.internalSeverity = computeSeverity()
+            it.updateWithComputedSeverity()
         }
-        report(
-            findings,
-            aliases,
-            ruleSetId
-        )
+        report(findings, aliases, ruleSetId)
     }
 }
 

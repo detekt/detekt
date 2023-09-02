@@ -8,22 +8,31 @@ import org.junit.jupiter.api.Test
 
 class LongParameterListSpec {
 
-    private val defaultThreshold = 2
+    private val defaultMaximumParameters = 2
     private val defaultConfig = TestConfig(
-        "functionThreshold" to defaultThreshold,
-        "constructorThreshold" to defaultThreshold,
+        "allowedFunctionParameters" to defaultMaximumParameters,
+        "allowedConstructorParameters" to defaultMaximumParameters,
     )
 
     private val subject = LongParameterList(defaultConfig)
 
-    private val reportMessageForFunction = "The function long(a: Int, b: Int) has too many parameters. " +
-        "The current threshold is set to $defaultThreshold."
-    private val reportMessageForConstructor = "The constructor(a: Int, b: Int) has too many parameters. " +
-        "The current threshold is set to $defaultThreshold."
+    private val reportMessageForFunction = "The function long(a: Int, b: Int, c: Int) has too many parameters. " +
+        "The current maximum allowed parameters are $defaultMaximumParameters."
+    private val reportMessageForConstructor = "The constructor(a: Int, b: Int, c: Int) has too many parameters. " +
+        "The current maximum allowed parameters are $defaultMaximumParameters."
+
+    @Test
+    fun `does not report function parameter list that has exactly the allowed amount`() {
+        val code = "fun long(a: Int, b: Int) {}"
+
+        val findings = subject.compileAndLint(code)
+
+        assertThat(findings).isEmpty()
+    }
 
     @Test
     fun `reports too long parameter list`() {
-        val code = "fun long(a: Int, b: Int) {}"
+        val code = "fun long(a: Int, b: Int, c: Int) {}"
         val findings = subject.compileAndLint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings.first().message).isEqualTo(reportMessageForFunction)
@@ -37,7 +46,7 @@ class LongParameterListSpec {
 
     @Test
     fun `reports too long parameter list event for parameters with defaults`() {
-        val code = "fun long(a: Int, b: Int = 1) {}"
+        val code = "fun long(a: Int, b: Int = 1, c: Int) {}"
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
@@ -51,7 +60,7 @@ class LongParameterListSpec {
 
     @Test
     fun `reports too long parameter list for primary constructors`() {
-        val code = "class LongCtor(a: Int, b: Int)"
+        val code = "class LongCtor(a: Int, b: Int, c: Int)"
         val findings = subject.compileAndLint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings.first().message).isEqualTo(reportMessageForConstructor)
@@ -65,7 +74,7 @@ class LongParameterListSpec {
 
     @Test
     fun `reports too long parameter list for secondary constructors`() {
-        val code = "class LongCtor() { constructor(a: Int, b: Int) : this() }"
+        val code = "class LongCtor() { constructor(a: Int, b: Int, c: Int) : this() }"
         val findings = subject.compileAndLint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings.first().message).isEqualTo(reportMessageForConstructor)
@@ -79,10 +88,19 @@ class LongParameterListSpec {
 
     @Test
     fun `reports long parameter list if custom threshold is set`() {
-        val config = TestConfig("constructorThreshold" to "1")
+        val config = TestConfig("allowedConstructorParameters" to "1")
         val rule = LongParameterList(config)
-        val code = "class LongCtor(a: Int)"
+        val code = "class LongCtor(a: Int, b: Int)"
         assertThat(rule.compileAndLint(code)).hasSize(1)
+    }
+
+    @Test
+    fun `does not report constructor parameter list that has exactly the allowed amount`() {
+        val code = "data class Data(val a: Int, val b: Int)"
+
+        val findings = subject.compileAndLint(code)
+
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -106,8 +124,8 @@ class LongParameterListSpec {
                 "kotlin.jvm.JvmName",
                 "kotlin.Suppress",
             ),
-            "functionThreshold" to 1,
-            "constructorThreshold" to 1,
+            "allowedFunctionParameters" to 1,
+            "allowedConstructorParameters" to 1,
         )
 
         private val rule = LongParameterList(config)
@@ -118,7 +136,7 @@ class LongParameterListSpec {
                 @Target(AnnotationTarget.VALUE_PARAMETER)
                 annotation class CustomAnnotation
                 
-                class Data constructor(@CustomAnnotation val a: Int)
+                class Data constructor(@CustomAnnotation val a: Int, @CustomAnnotation val b: Int)
             """.trimIndent()
             assertThat(rule.compileAndLint(code)).hasSize(1)
         }
@@ -129,7 +147,7 @@ class LongParameterListSpec {
                 @Target(AnnotationTarget.VALUE_PARAMETER)
                 annotation class CustomAnnotation
                 
-                class Data { fun foo(@CustomAnnotation a: Int) {} }
+                class Data { fun foo(@CustomAnnotation a: Int, @CustomAnnotation b: Int) {} }
             """.trimIndent()
             assertThat(rule.compileAndLint(code)).hasSize(1)
         }

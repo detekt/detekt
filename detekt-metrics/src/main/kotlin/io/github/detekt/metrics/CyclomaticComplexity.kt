@@ -27,6 +27,7 @@ class CyclomaticComplexity(private val config: Config) : DetektVisitor() {
     class Config(
         var ignoreSimpleWhenEntries: Boolean = false,
         var ignoreNestingFunctions: Boolean = false,
+        var ignoreLocalFunctions: Boolean = false,
         var nestingFunctions: Set<String> = DEFAULT_NESTING_FUNCTIONS
     )
 
@@ -36,12 +37,17 @@ class CyclomaticComplexity(private val config: Config) : DetektVisitor() {
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (!isInsideObjectLiteral(function)) {
             complexity++
-            super.visitNamedFunction(function)
+            if (!isInsideNamedFunction(function) || !config.ignoreLocalFunctions) {
+                super.visitNamedFunction(function)
+            }
         }
     }
 
     private fun isInsideObjectLiteral(function: KtNamedFunction) =
         function.getStrictParentOfType<KtObjectLiteralExpression>() != null
+
+    private fun isInsideNamedFunction(function: KtNamedFunction) =
+        function.getStrictParentOfType<KtNamedFunction>() != null
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         if (expression.operationToken in CONDITIONALS) {

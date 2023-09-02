@@ -737,9 +737,9 @@ private fun createGradleRunnerAndSetupProject(
     mainBuildFileContent = """
         subprojects {
             repositories {
+                mavenLocal()
                 mavenCentral()
                 google()
-                mavenLocal()
             }
         }
     """.trimIndent(),
