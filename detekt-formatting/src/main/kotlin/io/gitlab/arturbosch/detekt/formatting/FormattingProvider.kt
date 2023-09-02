@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.api.internal.ruleSetConfig
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationOnSeparateLine
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ArgumentListWrapping
