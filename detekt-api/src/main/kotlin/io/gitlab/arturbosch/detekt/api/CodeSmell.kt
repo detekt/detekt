@@ -14,7 +14,6 @@ open class CodeSmell(
     final override val issue: Issue,
     override val entity: Entity,
     override val message: String,
-    override val metrics: List<Metric> = emptyList(),
     override val references: List<Entity> = emptyList()
 ) : Finding {
 
@@ -32,7 +31,6 @@ open class CodeSmell(
         return "CodeSmell(issue=$issue, " +
             "entity=$entity, " +
             "message=$message, " +
-            "metrics=$metrics, " +
             "references=$references, " +
             "severity=$severity, " +
             "id='$id')"
@@ -50,14 +48,12 @@ open class CorrectableCodeSmell(
     issue: Issue,
     entity: Entity,
     message: String,
-    metrics: List<Metric> = emptyList(),
     references: List<Entity> = emptyList(),
     val autoCorrectEnabled: Boolean
 ) : CodeSmell(
     issue,
     entity,
     message,
-    metrics,
     references
 ) {
     override fun toString(): String {
@@ -66,7 +62,6 @@ open class CorrectableCodeSmell(
             "issue=$issue, " +
             "entity=$entity, " +
             "message=$message, " +
-            "metrics=$metrics, " +
             "references=$references, " +
             "severity=$severity, " +
             "id='$id')"
@@ -89,7 +84,6 @@ open class ThresholdedCodeSmell(
     issue,
     entity,
     message,
-    metrics = listOf(metric),
     references = references
 ) {
     override fun compact(): String = "$id - $metric - ${entity.compact()}"
