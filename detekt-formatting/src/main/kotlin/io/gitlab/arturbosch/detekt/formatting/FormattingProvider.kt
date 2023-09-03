@@ -219,7 +219,7 @@ internal fun List<FormattingRule>.sorted(): List<FormattingRule> {
         .sortedWith(defaultRuleOrderComparator())
         .toMutableList()
 
-    // Initially the list only contains the rules not depending on another rule.
+    // Initially the list only contains the rules without any VisitorModifiers
     unprocessedRules
         .filter { !it.runAsLateAsPossible && it.hasNoRunAfterRules() }
         .forEach { formattingRule ->
@@ -227,6 +227,9 @@ internal fun List<FormattingRule>.sorted(): List<FormattingRule> {
             sortedRuleIds.add(formattingRule.wrappingRuleId)
         }
     unprocessedRules.removeAll(sortedRules)
+
+    // Then we add the rules that have a RunAsLateAsPossible modifier
+    // and we obey the RunAfterRule modifiers as well.
     while (unprocessedRules.isNotEmpty()) {
         val formattingRule =
             checkNotNull(

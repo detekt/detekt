@@ -25,7 +25,7 @@ class FormattingProviderSpec {
     }
 
     @Test
-    fun `run as a as possible is observed`() {
+    fun `run after rule is observed`() {
         val subject: RuleSet = FormattingProvider().instance(Config.empty)
         val formattingRules = subject.rules.map { it as FormattingRule }
         val ruleIdToIndices = formattingRules
