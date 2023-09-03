@@ -291,8 +291,6 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/ThresholdedCodeSmell/Thresholded
 $dokka.location:io.gitlab.arturbosch.detekt.api/ThresholdedCodeSmell/compact/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/compact.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/ThresholdedCodeSmell/messageOrDescription/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/message-or-description.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/ThresholdedCodeSmell/metric/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/metric.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/ThresholdedCodeSmell/threshold/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/threshold.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/ThresholdedCodeSmell/value/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/value.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/UnstableApi///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-unstable-api/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/UnstableApi/reason/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-unstable-api/reason.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/ValueWithReason///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-value-with-reason/index.html
