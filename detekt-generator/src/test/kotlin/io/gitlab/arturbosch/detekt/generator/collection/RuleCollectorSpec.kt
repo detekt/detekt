@@ -178,7 +178,6 @@ class RuleCollectorSpec {
             }
         """.trimIndent()
         val items = subject.run(code)
-        assertThat(items[0].debt).isEqualTo("10min")
         assertThat(items[0].aliases).isEqualTo("RULE, RULE2")
     }
 

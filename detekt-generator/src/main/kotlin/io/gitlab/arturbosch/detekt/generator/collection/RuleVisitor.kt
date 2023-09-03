@@ -1,22 +1,18 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidAliasesDeclaration
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
-import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidIssueDeclaration
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtSuperTypeList
-import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
-import java.lang.reflect.Modifier
 
 internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisitor() {
 
@@ -27,7 +23,6 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
     private var defaultActivationStatus: DefaultActivationStatus = Inactive
     private var autoCorrect = false
     private var requiresTypeResolution = false
-    private var debt = ""
     private var aliases: String? = null
     private var parent = ""
     private val configurationCollector = ConfigurationCollector()
@@ -47,7 +42,6 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
             nonCompliantCodeExample = documentationCollector.nonCompliant,
             compliantCodeExample = documentationCollector.compliant,
             defaultActivationStatus = defaultActivationStatus,
-            debt = debt,
             aliases = aliases,
             parent = parent,
             configurations = configurationsByAnnotation,
@@ -69,7 +63,6 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
         if (containingClass != null && className != null && !classesMap.containsKey(className)) {
             classesMap[className] = isRule
             parent = containingClass.getSuperNames().firstOrNull { ruleClasses.contains(it) }.orEmpty()
-            extractIssueSeverityAndDebt(containingClass)
             extractAliases(containingClass)
         }
         super.visitSuperTypeList(list)
@@ -132,35 +125,6 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
         }
     }
 
-    private fun extractIssueSeverityAndDebt(klass: KtClass) {
-        val arguments = (
-            klass.getProperties()
-                .singleOrNull { it.name == "issue" }
-                ?.initializer as? KtCallExpression
-            )
-            ?.valueArguments
-            .orEmpty()
-
-        if (arguments.size >= ISSUE_ARGUMENT_SIZE) {
-            val debtName = getArgument(arguments[DEBT_ARGUMENT_INDEX], "Debt")
-            val debtDeclarations = Debt::class.java.declaredFields.filter { Modifier.isStatic(it.modifiers) }
-            val debtDeclaration = debtDeclarations.singleOrNull { it.name == debtName }
-            if (debtDeclaration != null) {
-                debtDeclaration.isAccessible = true
-                debt = debtDeclaration[Debt::class.java].toString()
-            }
-        }
-    }
-
-    private fun getArgument(argument: KtValueArgument, name: String): String {
-        val text = argument.text
-        val type = text.split('.')
-        if (text.startsWith(name, true) && type.size == 2) {
-            return type[1]
-        }
-        throw InvalidIssueDeclaration(name)
-    }
-
     companion object {
         private val ruleClasses = listOf(
             // These references are stringly-typed to prevent dependency cycle:
@@ -172,8 +136,5 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
             "FormattingRule", // io.gitlab.arturbosch.detekt.formatting.FormattingRule
             "EmptyRule", // io.gitlab.arturbosch.detekt.rules.empty.EmptyRule
         )
-
-        private const val ISSUE_ARGUMENT_SIZE = 3
-        private const val DEBT_ARGUMENT_INDEX = 2
     }
 }

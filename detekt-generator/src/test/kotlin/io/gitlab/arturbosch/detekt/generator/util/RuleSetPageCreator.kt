@@ -64,7 +64,6 @@ internal fun createRules(): List<Rule> {
         nonCompliantCodeExample = "import foo.*",
         compliantCodeExample = "import foo.bar",
         defaultActivationStatus = Active(since = "1.0.0"),
-        debt = "10min",
         aliases = "alias1, alias2",
         parent = "",
         configurations = listOf(
@@ -81,7 +80,6 @@ internal fun createRules(): List<Rule> {
         nonCompliantCodeExample = "",
         compliantCodeExample = "",
         defaultActivationStatus = Inactive,
-        debt = "",
         aliases = null,
         parent = "WildcardImport",
         configurations = emptyList()
@@ -92,7 +90,6 @@ internal fun createRules(): List<Rule> {
         nonCompliantCodeExample = "fun stuff(): Unit {}",
         compliantCodeExample = "fun stuff() {}",
         defaultActivationStatus = Active(since = "1.16.0"),
-        debt = "5m",
         aliases = null,
         parent = "",
         configurations = emptyList(),
@@ -105,7 +102,6 @@ internal fun createRules(): List<Rule> {
         nonCompliantCodeExample = "fun stuff(): Unit {}",
         compliantCodeExample = "fun stuff() {}",
         defaultActivationStatus = Active(since = "1.16.0"),
-        debt = "5m",
         aliases = null,
         parent = "",
         deprecationMessage = "is deprecated"
