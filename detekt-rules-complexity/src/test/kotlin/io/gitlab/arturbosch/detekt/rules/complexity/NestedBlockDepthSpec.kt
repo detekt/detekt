@@ -58,7 +58,7 @@ class NestedBlockDepthSpec {
         """.trimIndent()
         subject.lint(code)
         assertThat(subject.findings).hasSize(1)
-        assertThat((subject.findings[0] as ThresholdedCodeSmell).value).isEqualTo(5)
+        assertThat((subject.findings[0] as ThresholdedCodeSmell)).hasValue(5)
     }
 
     @Test
