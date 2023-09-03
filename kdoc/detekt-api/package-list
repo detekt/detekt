@@ -36,11 +36,6 @@ $dokka.location:io.gitlab.arturbosch.detekt.api.internal/RuleSetConfigProperty/R
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/RuleSetConfigProperty/defaultValue/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-rule-set-config-property/default-value.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/RuleSetConfigProperty/key/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-rule-set-config-property/key.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/RuleSetConfigProperty/value/#io.gitlab.arturbosch.detekt.api.Config/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-rule-set-config-property/value.html
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleNotification///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/index.html
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleNotification/SimpleNotification/#kotlin.String#io.gitlab.arturbosch.detekt.api.Notification.Level/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/-simple-notification.html
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleNotification/level/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/level.html
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleNotification/message/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/message.html
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal/SimpleNotification/toString/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-simple-notification/to-string.html
 $dokka.location:io.gitlab.arturbosch.detekt.api////PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api//DEFAULT_FLOAT_CONVERSION_FACTOR/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-d-e-f-a-u-l-t_-f-l-o-a-t_-c-o-n-v-e-r-s-i-o-n_-f-a-c-t-o-r.html
 $dokka.location:io.gitlab.arturbosch.detekt.api//commaSeparatedPattern/kotlin.String#kotlin.Array[kotlin.String]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/comma-separated-pattern.html
