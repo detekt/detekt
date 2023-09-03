@@ -5,13 +5,13 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConfigValidator
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.Notification.Level
-import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.core.NL
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import io.gitlab.arturbosch.detekt.core.extensions.loadExtensions
 import io.gitlab.arturbosch.detekt.core.reporting.red
 import io.gitlab.arturbosch.detekt.core.reporting.yellow
+import io.gitlab.arturbosch.detekt.core.util.SimpleNotification
 
 /**
  * Known existing properties on rules which may be absent in the default-detekt-config.yml.

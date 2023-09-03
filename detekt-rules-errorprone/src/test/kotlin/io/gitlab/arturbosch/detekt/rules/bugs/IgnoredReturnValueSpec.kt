@@ -707,6 +707,88 @@ class IgnoredReturnValueSpec {
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
+
+        @Test
+        fun `reports ignored return value in lambda of 'with' function`() {
+            val code = """
+                fun test(db: Database, sql: String) {
+                    with(db) {
+                        insert(sql) // Should be detected
+                    }
+                    with(db) {
+                        return@with insert(sql) // Should be detected
+                    }
+
+                    with(db) { insert(sql).execute() }
+                    with(db) { foo(insert(sql)) }
+                    with(db) { insert(sql) }.execute()
+                    val x = with(db) { insert(sql) }
+                }
+                
+                annotation class CheckResult
+                
+                class Database {
+                    @CheckResult
+                    fun insert(query: String): Insert = TODO()
+                }
+                
+                class Insert {
+                    fun execute(): Int = TODO()
+                }
+
+                fun foo(insert: Insert) {}
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(2)
+        }
+
+        @Test
+        fun `reports ignored return value in lambda of 'run' function`() {
+            val code = """
+                fun test(db: Database, sql: String) {
+                    db.run {
+                        insert(sql) // Should be detected
+                    }
+                }
+                
+                annotation class CheckResult
+                
+                class Database {
+                    @CheckResult
+                    fun insert(query: String): Insert = TODO()
+                }
+                
+                class Insert {
+                    fun execute(): Int = TODO()
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `reports ignored return value in lambda of 'let' function`() {
+            val code = """
+                 fun test(db: Database, sql: String) {
+                     db.let {
+                         it.insert(sql) // Should be detected
+                     }
+                 }
+                
+                 annotation class CheckResult
+                
+                 class Database {
+                     @CheckResult
+                     fun insert(query: String): Insert = TODO()
+                 }
+                
+                 class Insert {
+                     fun execute(): Int = TODO()
+                 }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
     }
 
     @Nested
