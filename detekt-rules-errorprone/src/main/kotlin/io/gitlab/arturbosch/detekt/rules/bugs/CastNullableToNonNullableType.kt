@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -45,7 +44,6 @@ class CastNullableToNonNullableType(config: Config = Config.empty) : Rule(config
         javaClass.simpleName,
         "Nullable type to non-null type cast is found. Consider using two assertions, " +
             "`null` assertions and type cast",
-        Debt.FIVE_MINS
     )
 
     @Configuration("Whether platform types should be considered as non-nullable and ignored by this rule")

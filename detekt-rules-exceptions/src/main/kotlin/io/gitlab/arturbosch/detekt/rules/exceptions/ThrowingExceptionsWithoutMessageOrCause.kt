@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -43,7 +42,6 @@ class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : R
         "A call to the default constructor of an exception was detected. " +
             "Instead one of the constructor overloads should be called. " +
             "This allows to provide more meaningful exceptions.",
-        Debt.FIVE_MINS
     )
 
     @Configuration("exceptions which should not be thrown without message or cause")

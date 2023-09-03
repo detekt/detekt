@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -59,7 +58,6 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "A member should not be given the same name as its parent class or object.",
-        Debt.FIVE_MINS
     )
 
     private val classMessage = "A member is named after the class. This might result in confusion. " +

@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.github.detekt.tooling.api.FunctionMatcher
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -58,7 +57,6 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "IgnoredReturnValue",
         "This call returns a value which is ignored",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("if the rule should check only annotated methods")

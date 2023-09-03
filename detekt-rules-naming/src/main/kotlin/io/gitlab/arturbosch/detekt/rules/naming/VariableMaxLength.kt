@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -20,7 +19,6 @@ class VariableMaxLength(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Variable names should not be longer than the maximum set in the configuration.",
-        debt = Debt.FIVE_MINS
     )
 
     @Configuration("maximum name length")

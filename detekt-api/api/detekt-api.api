@@ -157,24 +157,6 @@ public class io/gitlab/arturbosch/detekt/api/CorrectableCodeSmell : io/gitlab/ar
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/gitlab/arturbosch/detekt/api/Debt {
-	public static final field Companion Lio/gitlab/arturbosch/detekt/api/Debt$Companion;
-	public fun <init> ()V
-	public fun <init> (III)V
-	public synthetic fun <init> (IIIILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getDays ()I
-	public final fun getHours ()I
-	public final fun getMins ()I
-	public final fun plus (Lio/gitlab/arturbosch/detekt/api/Debt;)Lio/gitlab/arturbosch/detekt/api/Debt;
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class io/gitlab/arturbosch/detekt/api/Debt$Companion {
-	public final fun getFIVE_MINS ()Lio/gitlab/arturbosch/detekt/api/Debt;
-	public final fun getTEN_MINS ()Lio/gitlab/arturbosch/detekt/api/Debt;
-	public final fun getTWENTY_MINS ()Lio/gitlab/arturbosch/detekt/api/Debt;
-}
-
 public class io/gitlab/arturbosch/detekt/api/DetektVisitor : org/jetbrains/kotlin/psi/KtTreeVisitorVoid {
 	public fun <init> ()V
 }
@@ -274,8 +256,7 @@ public final class io/gitlab/arturbosch/detekt/api/HasEntity$DefaultImpls {
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Issue {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Debt;)V
-	public final fun getDebt ()Lio/gitlab/arturbosch/detekt/api/Debt;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
 	public final fun getDescription ()Ljava/lang/String;
 	public final fun getId ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;

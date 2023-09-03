@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.libraries
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -31,7 +30,6 @@ class LibraryEntitiesShouldNotBePublic(ruleSetConfig: Config = Config.empty) : R
     override val issue: Issue = Issue(
         javaClass.simpleName,
         "Library classes should not be public.",
-        Debt.FIVE_MINS
     )
 
     override fun visitClass(klass: KtClass) {

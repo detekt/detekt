@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.performance
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -29,7 +28,6 @@ class UnnecessaryTemporaryInstantiation(config: Config = Config.empty) : Rule(co
     override val issue: Issue = Issue(
         "UnnecessaryTemporaryInstantiation",
         "Avoid temporary objects when converting primitive types to `String`.",
-        Debt.FIVE_MINS
     )
 
     private val types: Set<String> = hashSetOf("Boolean", "Byte", "Short", "Integer", "Long", "Float", "Double")

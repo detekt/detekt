@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.test
 import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
@@ -70,7 +69,6 @@ fun createFindingForRelativePath(
 fun createIssue(id: String) = Issue(
     id = id,
     description = "Description $id",
-    debt = Debt.FIVE_MINS
 )
 
 fun createEntity(

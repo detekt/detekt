@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -58,7 +57,6 @@ class ClassOrdering(config: Config = Config.empty) : Rule(config) {
         javaClass.simpleName,
         "Class contents should be in this order: Property declarations/initializer blocks; secondary constructors; " +
             "method declarations then companion objects.",
-        Debt.FIVE_MINS
     )
 
     override fun visitClassBody(classBody: KtClassBody) {

@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -27,7 +26,6 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Public classes, interfaces and objects require documentation.",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("if nested classes should be searched")

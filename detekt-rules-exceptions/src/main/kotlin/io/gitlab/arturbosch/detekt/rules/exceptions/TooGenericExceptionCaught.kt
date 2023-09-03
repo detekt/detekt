@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -41,7 +40,6 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
         javaClass.simpleName,
         "The caught exception is too generic. " +
             "Prefer catching specific exceptions to the case that is currently handled.",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("exceptions which are too generic and should not be caught")

@@ -8,7 +8,6 @@ import io.github.detekt.psi.toFilePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
@@ -39,7 +38,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
     private lateinit var root: KtFile
 
     protected fun issueFor(description: String) =
-        Issue(javaClass.simpleName, description, Debt.FIVE_MINS)
+        Issue(javaClass.simpleName, description)
 
     override fun visit(root: KtFile) {
         this.root = root

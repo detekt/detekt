@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.coroutines
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -49,7 +48,6 @@ class InjectDispatcher(config: Config) : Rule(config) {
         "InjectDispatcher",
         "Don't hardcode dispatchers when creating new coroutines or calling `withContext`. " +
             "Use dependency injection for dispatchers to make testing easier.",
-        Debt.FIVE_MINS
     )
 
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {

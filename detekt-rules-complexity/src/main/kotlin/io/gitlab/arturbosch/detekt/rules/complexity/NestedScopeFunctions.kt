@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.tooling.api.FunctionMatcher
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -46,7 +45,6 @@ class NestedScopeFunctions(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Over-using scope functions makes code confusing, hard to read and bug prone.",
-        Debt.FIVE_MINS
     )
 
     @Configuration("The maximum allowed depth for nested scope functions.")

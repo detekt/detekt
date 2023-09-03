@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -66,7 +65,6 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "VarCouldBeVal",
         "Var declaration could be val.",
-        Debt.FIVE_MINS
     )
 
     @Configuration("Whether to ignore uninitialized lateinit vars")

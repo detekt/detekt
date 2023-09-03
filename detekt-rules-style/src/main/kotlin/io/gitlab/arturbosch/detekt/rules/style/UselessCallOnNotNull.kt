@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -53,7 +52,6 @@ class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
             "Some calls are intended to be called on nullable collection or text types (e.g. `String?`)." +
             "When this call is used on a reference to a non-null type " +
             "(e.g. `String`) it is redundant and will have no effect, so it can be removed.",
-        Debt.FIVE_MINS
     )
 
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {

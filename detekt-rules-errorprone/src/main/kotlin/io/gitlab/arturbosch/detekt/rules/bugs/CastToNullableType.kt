@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -30,7 +29,6 @@ class CastToNullableType(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         javaClass.simpleName,
         "Use safe cast instead of unsafe cast to nullable types.",
-        Debt.FIVE_MINS
     )
 
     @Suppress("ReturnCount")

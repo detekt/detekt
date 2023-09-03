@@ -4,7 +4,6 @@ import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -175,7 +174,7 @@ private class StyleRuleSetProvider(private val threshold: Int? = null) : RuleSet
 }
 
 private class MaxLineLength(config: Config, threshold: Int?) : Rule(config) {
-    override val issue = Issue(this::class.java.simpleName, "", Debt.FIVE_MINS)
+    override val issue = Issue(this::class.java.simpleName, "")
     private val lengthThreshold: Int = threshold ?: valueOrDefault("maxLineLength", 100)
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
@@ -189,7 +188,7 @@ private class MaxLineLength(config: Config, threshold: Int?) : Rule(config) {
 
 @RequiresTypeResolution
 private class RequiresTypeResolutionMaxLineLength(config: Config, threshold: Int?) : Rule(config) {
-    override val issue = Issue(this::class.java.simpleName, "", Debt.FIVE_MINS)
+    override val issue = Issue(this::class.java.simpleName, "")
     private val lengthThreshold: Int = threshold ?: valueOrDefault("maxLineLength", 100)
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
@@ -207,7 +206,7 @@ private class FaultyRuleSetProvider : RuleSetProvider {
 }
 
 private class FaultyRule(config: Config) : Rule(config) {
-    override val issue = Issue(this::class.java.simpleName, "", Debt.FIVE_MINS)
+    override val issue = Issue(this::class.java.simpleName, "")
     override fun visitKtFile(file: KtFile) {
         throw object : IllegalStateException("Deliberately triggered error.") {}
     }
@@ -219,7 +218,7 @@ private class FaultyRuleNoStackTraceSetProvider : RuleSetProvider {
 }
 
 private class FaultyRuleNoStackTrace(config: Config) : Rule(config) {
-    override val issue = Issue(this::class.java.simpleName, "", Debt.FIVE_MINS)
+    override val issue = Issue(this::class.java.simpleName, "")
     override fun visitKtFile(file: KtFile) {
         throw object : IllegalStateException("Deliberately triggered error without stack trace.") {
             init {

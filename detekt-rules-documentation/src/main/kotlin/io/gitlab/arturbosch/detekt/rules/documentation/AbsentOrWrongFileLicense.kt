@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -23,7 +22,6 @@ class AbsentOrWrongFileLicense(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         id = RULE_NAME,
         description = "License text is absent or incorrect.",
-        debt = Debt.FIVE_MINS
     )
 
     @Suppress("unused")

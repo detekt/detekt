@@ -6,7 +6,6 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.test.utils.resourceUrl
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -69,7 +68,7 @@ class TopLevelAutoCorrectSpec {
 }
 
 private class DeleteAnnotationsRule : Rule() {
-    override val issue = Issue("test-rule", "", Debt.FIVE_MINS)
+    override val issue = Issue("test-rule", "")
     override fun visitAnnotation(annotation: KtAnnotation) {
         annotation.delete()
     }

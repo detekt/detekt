@@ -4,7 +4,6 @@ import io.github.detekt.tooling.api.FunctionMatcher
 import io.github.detekt.tooling.api.FunctionMatcher.Companion.fromFunctionSignature
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -50,7 +49,6 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
         javaClass.simpleName,
         "Mark forbidden methods. A forbidden method could be an invocation of an unstable / experimental " +
             "method and hence you might want to mark it as forbidden in order to get warned about the usage.",
-        Debt.TEN_MINS
     )
 
     @Configuration(

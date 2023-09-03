@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.github.detekt.psi.toFilePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
@@ -39,7 +38,6 @@ class CascadingCallWrapping(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         id = javaClass.simpleName,
         description = "If a chained call is wrapped to a new line, subsequent chained calls should be as well.",
-        debt = Debt.FIVE_MINS,
     )
 
     @Configuration("require trailing elvis expressions to be wrapped on a new line")

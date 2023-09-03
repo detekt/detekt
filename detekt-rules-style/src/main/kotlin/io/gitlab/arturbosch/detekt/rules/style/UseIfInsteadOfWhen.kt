@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -32,7 +31,6 @@ class UseIfInsteadOfWhen(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UseIfInsteadOfWhen",
         "Binary expressions are better expressed using an `if` expression than a `when` expression.",
-        Debt.FIVE_MINS
     )
 
     @Configuration("ignores when statements with a variable declaration used in the subject")

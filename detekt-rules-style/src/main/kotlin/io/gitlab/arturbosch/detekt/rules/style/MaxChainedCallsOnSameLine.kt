@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -40,7 +39,6 @@ class MaxChainedCallsOnSameLine(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         id = javaClass.simpleName,
         description = "Chained calls beyond the maximum should be wrapped to a new line.",
-        debt = Debt.FIVE_MINS,
     )
 
     @Configuration("maximum chained calls allowed on a single line")

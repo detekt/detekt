@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -52,7 +51,6 @@ class DoubleMutabilityForCollection(config: Config = Config.empty) : Rule(config
         "DoubleMutabilityForCollection",
         "Using var with mutable collections or values leads to double mutability. " +
             "Consider using val or immutable collection or value types.",
-        Debt.FIVE_MINS
     )
 
     @Configuration("Define a list of mutable types to trigger on when defined with `var`.")

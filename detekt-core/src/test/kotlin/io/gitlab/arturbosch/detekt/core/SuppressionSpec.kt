@@ -5,7 +5,6 @@ import io.github.detekt.test.utils.compileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
@@ -293,7 +292,7 @@ private fun isSuppressedBy(annotation: String, argument: String): Boolean {
 }
 
 private class TestRule(config: Config = Config.empty) : Rule(config) {
-    override val issue = Issue("Test", "", Debt.TWENTY_MINS)
+    override val issue = Issue("Test", "")
     var expected: String? = "Test"
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         expected = null
@@ -301,7 +300,7 @@ private class TestRule(config: Config = Config.empty) : Rule(config) {
 }
 
 private class TestLM : Rule() {
-    override val issue = Issue("LongMethod", "", Debt.TWENTY_MINS)
+    override val issue = Issue("LongMethod", "")
     override fun visitNamedFunction(function: KtNamedFunction) {
         val start = Location.startLineAndColumn(function.funKeyword!!).line
         val end = Location.startLineAndColumn(function.lastBlockStatementOrThis()).line
@@ -311,7 +310,7 @@ private class TestLM : Rule() {
 }
 
 private class TestLPL(config: Config = Config.empty) : Rule(config) {
-    override val issue = Issue("LongParameterList", "", Debt.TWENTY_MINS)
+    override val issue = Issue("LongParameterList", "")
     override fun visitNamedFunction(function: KtNamedFunction) {
         val size = function.valueParameters.size
         if (size > 5) report(CodeSmell(issue, Entity.from(function), message = ""))

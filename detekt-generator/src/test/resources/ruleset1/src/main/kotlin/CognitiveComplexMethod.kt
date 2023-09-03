@@ -15,7 +15,6 @@ class CognitiveComplexMethod(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "CognitiveComplexMethod",
         "Prefer splitting up complex methods into smaller, easier to understand methods.",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("Maximum Cognitive Complexity allowed for a method.")

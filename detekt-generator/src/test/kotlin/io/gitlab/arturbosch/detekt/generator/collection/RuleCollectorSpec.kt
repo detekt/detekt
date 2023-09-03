@@ -174,7 +174,7 @@ class RuleCollectorSpec {
              */
             class SomeRandomClass : Rule {
                 override val defaultRuleIdAliases = setOf("RULE", "RULE2")
-                override val issue = Issue(javaClass.simpleName, "", Debt.TEN_MINS)
+                override val issue = Issue(javaClass.simpleName, "")
             }
         """.trimIndent()
         val items = subject.run(code)
@@ -832,8 +832,7 @@ class RuleCollectorSpec {
                 val a = setOf("UNUSED_VARIABLE")
                 override val defaultRuleIdAliases = a
                 override val issue = Issue(javaClass.simpleName,
-                        "",
-                        debt = Debt.TEN_MINS)
+                        "")
             }
         """.trimIndent()
         assertThatExceptionOfType(InvalidAliasesDeclaration::class.java).isThrownBy { subject.run(code) }

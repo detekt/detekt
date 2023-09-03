@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -43,7 +42,6 @@ class ReplaceSafeCallChainWithRun(config: Config = Config.empty) : Rule(config) 
     override val issue = Issue(
         javaClass.simpleName,
         "Chains of safe calls on non-nullable types can be surrounded with `run {}`.",
-        Debt.TEN_MINS
     )
 
     override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {

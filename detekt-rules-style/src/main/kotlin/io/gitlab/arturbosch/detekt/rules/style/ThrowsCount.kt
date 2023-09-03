@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -44,7 +43,6 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Restrict the number of throw statements in methods.",
-        Debt.TEN_MINS
     )
 
     @Configuration("maximum amount of throw statements in a method")

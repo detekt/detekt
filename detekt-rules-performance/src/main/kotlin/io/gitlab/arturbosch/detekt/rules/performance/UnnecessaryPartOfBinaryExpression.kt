@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.performance
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -38,7 +37,6 @@ class UnnecessaryPartOfBinaryExpression(config: Config = Config.empty) : Rule(co
     override val issue: Issue = Issue(
         "UnnecessaryPartOfBinaryExpression",
         "Detects duplicate condition into binary expression and recommends to remove unnecessary checks",
-        Debt.FIVE_MINS
     )
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
