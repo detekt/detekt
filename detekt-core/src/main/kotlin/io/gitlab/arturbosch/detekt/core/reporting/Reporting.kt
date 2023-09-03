@@ -39,7 +39,6 @@ internal fun printFindings(findings: Map<String, List<Finding>>): String {
         }
         val overallDebt = debtList.reduce { acc, d -> acc + d }
         append("\nOverall debt: $overallDebt\n")
-        toString()
     }
 }
 
