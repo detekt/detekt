@@ -13,13 +13,6 @@ interface ConfigSpec {
     val shouldValidateBeforeAnalysis: Boolean?
 
     /**
-     * Property patterns which should be excluded from validation.
-     *
-     * Nested yaml properties are separated with a '>': e.g. '.*>.*>excludeThisProp', 'customPart>.*'
-     */
-    val knownPatterns: Collection<String>
-
-    /**
      * Rely on detekt to configure meaningful defaults.
      *
      * Additional configuration overwrite single properties of the default file.
