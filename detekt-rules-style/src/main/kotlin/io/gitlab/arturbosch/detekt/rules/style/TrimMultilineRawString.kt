@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isConstant
-import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
@@ -77,14 +76,14 @@ class TrimMultilineRawString(val config: Config) : Rule(config) {
 
 fun KtStringTemplateExpression.isRawStringWithLineBreak(): Boolean =
     text.startsWith("\"\"\"") && text.endsWith("\"\"\"") && entries.any {
-        val literalText = it.safeAs<KtLiteralStringTemplateEntry>()?.text
+        val literalText = (it as? KtLiteralStringTemplateEntry)?.text
         literalText != null && "\n" in literalText
     }
 
 fun KtStringTemplateExpression.isTrimmed(trimmingMethods: List<String>): Boolean {
     val nextCall = getQualifiedExpressionForReceiver()
         ?.selectorExpression
-        ?.safeAs<KtCallExpression>()
+        ?.let { it as? KtCallExpression }
         ?.calleeExpression
         ?.text
 
@@ -104,7 +103,7 @@ private fun KtStringTemplateExpression.isExpectedAsConstant(): Boolean {
 
     val parameter = expression.getStrictParentOfType<KtParameter>()
         ?.takeIf { it.defaultValue == expression }
-    val primaryConstructor = parameter?.parent?.parent?.safeAs<KtPrimaryConstructor>()
+    val primaryConstructor = parameter?.parent?.parent as? KtPrimaryConstructor
     if (primaryConstructor?.containingClass()?.isAnnotation() == true) return true
 
     return false

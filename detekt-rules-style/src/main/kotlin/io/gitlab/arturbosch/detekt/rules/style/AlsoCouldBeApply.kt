@@ -7,8 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
-import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 
 /**
@@ -49,10 +49,10 @@ class AlsoCouldBeApply(config: Config = Config.empty) : Rule(config) {
 
         val callee = expression.calleeExpression?.takeIf { it.text == "also" } ?: return
         val lambda = expression.lambdaArguments.singleOrNull()?.getLambdaExpression()
-            ?: expression.valueArguments.singleOrNull()?.getArgumentExpression()?.safeAs()
+            ?: expression.valueArguments.singleOrNull()?.getArgumentExpression() as? KtLambdaExpression
             ?: return
         val statements = lambda.bodyExpression?.statements.orEmpty().ifEmpty { return }
-        if (statements.all { it.safeAs<KtQualifiedExpression>()?.receiverExpression?.text == IT_LITERAL }) {
+        if (statements.all { (it as? KtQualifiedExpression)?.receiverExpression?.text == IT_LITERAL }) {
             report(CodeSmell(issue, Entity.from(callee), issue.description))
         }
     }

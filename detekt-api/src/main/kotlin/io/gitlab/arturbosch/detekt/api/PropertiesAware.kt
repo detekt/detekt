@@ -1,7 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import io.gitlab.arturbosch.detekt.rules.safeAs
-
 /**
  * Properties holder. Allows to store and retrieve any data.
  */
@@ -26,7 +24,7 @@ interface PropertiesAware {
 inline fun <reified T : Any> PropertiesAware.getOrNull(key: String): T? {
     val value = properties[key]
     if (value != null) {
-        return value.safeAs() ?: error("No value of type ''${T::class} for key '$key'.")
+        return value as? T ?: error("No value of type ''${T::class} for key '$key'.")
     }
     return null
 }
