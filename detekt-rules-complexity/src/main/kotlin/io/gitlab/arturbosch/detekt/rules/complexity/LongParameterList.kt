@@ -9,9 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isOverride
@@ -40,19 +38,11 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    @Deprecated("Use `functionThreshold` and `constructorThreshold` instead")
-    @Configuration("number of parameters required to trigger the rule")
-    private val threshold: Int by config(DEFAULT_FUNCTION_THRESHOLD)
-
-    @Suppress("DEPRECATION")
-    @OptIn(UnstableApi::class)
     @Configuration("number of function parameters required to trigger the rule")
-    private val functionThreshold: Int by configWithFallback(::threshold, DEFAULT_FUNCTION_THRESHOLD)
+    private val functionThreshold: Int by config(DEFAULT_FUNCTION_THRESHOLD)
 
-    @Suppress("DEPRECATION")
-    @OptIn(UnstableApi::class)
     @Configuration("number of constructor parameters required to trigger the rule")
-    private val constructorThreshold: Int by configWithFallback(::threshold, DEFAULT_CONSTRUCTOR_THRESHOLD)
+    private val constructorThreshold: Int by config(DEFAULT_CONSTRUCTOR_THRESHOLD)
 
     @Configuration("ignore parameters that have a default value")
     private val ignoreDefaultParameters: Boolean by config(false)

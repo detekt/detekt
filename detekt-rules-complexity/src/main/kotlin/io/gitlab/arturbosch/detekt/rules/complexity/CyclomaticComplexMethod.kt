@@ -47,7 +47,7 @@ class CyclomaticComplexMethod(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    override val defaultRuleIdAliases: Set<String> = setOf("ComplexMethod")
+    override val defaultRuleIdAliases: Set<String> = emptySet()
 
     @Configuration("The maximum allowed McCabe's Cyclomatic Complexity (MCC) for a method.")
     private val allowedComplexity: Int by config(defaultValue = 14)

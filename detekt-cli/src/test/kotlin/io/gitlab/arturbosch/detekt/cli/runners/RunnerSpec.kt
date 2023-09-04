@@ -11,6 +11,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
@@ -212,6 +213,7 @@ class RunnerSpec {
         }
 
         @Test
+        @Disabled("We don't have deprecated properties at the moment")
         fun `should not throw on deprecation warnings`() {
             assertThatCode {
                 executeDetekt(
