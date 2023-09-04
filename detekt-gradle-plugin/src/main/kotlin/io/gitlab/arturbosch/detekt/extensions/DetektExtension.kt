@@ -110,7 +110,7 @@ internal fun loadDetektVersion(classLoader: ClassLoader): String {
         .distinct()
     return distinctVersions.singleOrNull() ?: error(
         "You're importing two detekt plugins which have different versions. " +
-                "(${distinctVersions.joinToString()}) Make sure to align the versions."
+            "(${distinctVersions.joinToString()}) Make sure to align the versions."
     )
 }
 
