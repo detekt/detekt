@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.pinterest.ktlint.rule.engine.core.api.Rule.VisitorModifier.RunAsLateAsPossible
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.CODE_STYLE_PROPERTY
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfig
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
@@ -36,9 +35,6 @@ abstract class FormattingRule(config: Config) : Rule(config) {
      */
     protected val isAndroid
         get() = FormattingProvider.android.value(ruleSetConfig)
-
-    val runAsLateAsPossible
-        get() = RunAsLateAsPossible in wrapping.visitorModifiers
 
     private var positionByOffset: (offset: Int) -> Pair<Int, Int> by SingleAssign()
     private var root: KtFile by SingleAssign()

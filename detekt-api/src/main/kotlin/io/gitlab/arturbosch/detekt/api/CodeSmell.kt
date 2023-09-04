@@ -92,12 +92,6 @@ open class ThresholdedCodeSmell(
     metrics = listOf(metric),
     references = references
 ) {
-
-    val value: Int
-        get() = metric.value
-    val threshold: Int
-        get() = metric.threshold
-
     override fun compact(): String = "$id - $metric - ${entity.compact()}"
 
     override fun messageOrDescription(): String = message.ifEmpty { issue.description }

@@ -80,7 +80,7 @@ fun KtExpression.isNullable(
     dataFlowValueFactory: DataFlowValueFactory,
     shouldConsiderPlatformTypeAsNullable: Boolean,
 ): Boolean {
-    val safeAccessOperation = safeAs<KtSafeQualifiedExpression>()?.operationTokenNode?.safeAs<PsiElement>()
+    val safeAccessOperation = (this as? KtSafeQualifiedExpression)?.operationTokenNode as? PsiElement
     if (safeAccessOperation != null) {
         return bindingContext.diagnostics.forElement(safeAccessOperation).none {
             it.factory == Errors.UNNECESSARY_SAFE_CALL

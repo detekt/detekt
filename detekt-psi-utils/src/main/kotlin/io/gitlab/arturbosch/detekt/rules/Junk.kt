@@ -37,8 +37,6 @@ fun getIntValueForPsiElement(element: PsiElement): Int? {
 
 fun KtClass.companionObject() = this.companionObjects.singleOrNull { it.isCompanion() }
 
-inline fun <reified T : Any> Any.safeAs(): T? = this as? T
-
 fun KtCallExpression.receiverIsUsed(context: BindingContext): Boolean =
     (parent as? KtQualifiedExpression)?.let {
         val scopeOfApplyCall = parent.parent
