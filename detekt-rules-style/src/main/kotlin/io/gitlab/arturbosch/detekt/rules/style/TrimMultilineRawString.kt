@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isConstant
-import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
@@ -84,7 +83,7 @@ fun KtStringTemplateExpression.isRawStringWithLineBreak(): Boolean =
 fun KtStringTemplateExpression.isTrimmed(trimmingMethods: List<String>): Boolean {
     val nextCall = getQualifiedExpressionForReceiver()
         ?.selectorExpression
-        ?.safeAs<KtCallExpression>()
+        ?.let { it as? KtCallExpression }
         ?.calleeExpression
         ?.text
 
