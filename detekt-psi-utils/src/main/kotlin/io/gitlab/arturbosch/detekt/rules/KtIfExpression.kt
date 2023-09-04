@@ -6,4 +6,4 @@ import org.jetbrains.kotlin.psi.KtIfExpression
 
 fun KtIfExpression.isElseIf(): Boolean =
     parent.node.elementType == KtNodeTypes.ELSE &&
-        parent.safeAs<KtContainerNodeForControlStructureBody>()?.expression == this
+        (parent as? KtContainerNodeForControlStructureBody)?.expression == this

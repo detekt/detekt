@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
-import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.builtins.StandardNames
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
@@ -71,7 +70,7 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtExpression.isSimpleNameExpression(): Boolean =
-        this is KtSimpleNameExpression || safeAs<KtQualifiedExpression>()?.selectorExpression is KtSimpleNameExpression
+        this is KtSimpleNameExpression || (this as? KtQualifiedExpression)?.selectorExpression is KtSimpleNameExpression
 
     private fun KtBinaryExpression.nullCheckedExpression(): KtExpression? {
         if (operationToken != KtTokens.EQEQ) return null
@@ -131,8 +130,8 @@ class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
     private fun KtExpression?.isEmptyString() = this?.text == "\"\""
 
     private fun KtExpression?.isCalling(fqNames: List<FqName>): Boolean {
-        val callExpression = this?.safeAs()
-            ?: safeAs<KtDotQualifiedExpression>()?.selectorExpression?.safeAs<KtCallExpression>()
+        val callExpression = this as? KtCallExpression
+            ?: (this as? KtDotQualifiedExpression)?.selectorExpression as? KtCallExpression
             ?: return false
         return callExpression.calleeExpression?.text in fqNames.map { it.shortName().asString() } &&
             callExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() in fqNames

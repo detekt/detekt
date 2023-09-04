@@ -13,7 +13,6 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
@@ -176,7 +175,7 @@ private fun KtStringTemplateExpression.isSurroundedByLineBreaks(): Boolean {
 }
 
 private fun KtStringTemplateEntry.isBlankOrLineBreak(): Boolean {
-    val text = safeAs<KtLiteralStringTemplateEntry>()?.text ?: return false
+    val text = (this as? KtLiteralStringTemplateEntry)?.text ?: return false
     return text.all { it.isTabChar() } || text == "\n"
 }
 
