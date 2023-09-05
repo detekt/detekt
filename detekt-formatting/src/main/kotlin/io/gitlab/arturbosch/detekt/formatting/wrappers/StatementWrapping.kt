@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.formatting.wrappers
 
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPERTY
-import com.pinterest.ktlint.ruleset.standard.rules.StatementWrapping
+import com.pinterest.ktlint.ruleset.standard.rules.StatementWrappingRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
@@ -16,7 +16,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "2.0.0")
 class StatementWrapping(config: Config) : FormattingRule(config) {
 
-    override val wrapping = StatementWrapping()
+    override val wrapping = StatementWrappingRule()
     override val issue =
         issueFor("Block body statements must be placed on a different line than the braces of the body block.")
 
