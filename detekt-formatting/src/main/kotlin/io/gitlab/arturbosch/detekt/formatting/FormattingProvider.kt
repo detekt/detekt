@@ -14,8 +14,10 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.ArgumentListWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BinaryExpressionWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BlankLineBeforeDeclaration
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BlockCommentInitialStarAlignment
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainMethodContinuation
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ClassName
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ClassSignature
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ContextReceiverMapping
@@ -25,10 +27,13 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Filename
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FinalNewline
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunKeywordSpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionExpressionBody
+import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionLiteral
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionName
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionReturnTypeSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionSignature
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionStartOfBodySpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionTypeModifierSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionTypeReferenceSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.IfElseBracing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.IfElseWrapping
@@ -177,10 +182,15 @@ class FormattingProvider : RuleSetProvider {
             // Wrappers for ktlint-ruleset-experimental rules. Disabled by default.
             BinaryExpressionWrapping(config),
             BlankLineBeforeDeclaration(config),
+            ChainMethodContinuation(config),
+            ClassSignature(config),
             ContextReceiverMapping(config),
             DiscouragedCommentLocation(config),
             EnumWrapping(config),
+            FunctionExpressionBody(config),
+            FunctionLiteral(config),
             FunctionSignature(config),
+            FunctionTypeModifierSpacing(config),
             IfElseBracing(config),
             IfElseWrapping(config),
             MultilineExpressionWrapping(config),

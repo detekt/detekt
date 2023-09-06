@@ -25,12 +25,22 @@ formatting:
   BlockCommentInitialStarAlignment:
     active: true
     autoCorrect: true
+  ChainMethodContinuation:
+    active: false
+    autoCorrect: true
+    indentSize: 4
+    maxLineLength: 120
   ChainWrapping:
     active: true
     autoCorrect: true
     indentSize: 4
   ClassName:
     active: false
+  ClassSignature:
+    active: false
+    autoCorrect: true
+    indentSize: 4
+    maxLineLength: 120
   CommentSpacing:
     active: true
     autoCorrect: true
@@ -62,6 +72,16 @@ formatting:
   FunKeywordSpacing:
     active: true
     autoCorrect: true
+  FunctionExpressionBody:
+    active: false
+    autoCorrect: true
+    indentSize: 4
+    maxLineLength: 120
+  FunctionLiteral:
+    active: false
+    autoCorrect: true
+    indentSize: 4
+    maxLineLength: 120
   FunctionName:
     active: false
   FunctionReturnTypeSpacing:
@@ -77,6 +97,9 @@ formatting:
     indentSize: 4
   FunctionStartOfBodySpacing:
     active: true
+    autoCorrect: true
+  FunctionTypeModifierSpacing:
+    active: false
     autoCorrect: true
   FunctionTypeReferenceSpacing:
     active: true
