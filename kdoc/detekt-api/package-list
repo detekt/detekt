@@ -15,9 +15,6 @@ $dokka.location:io.gitlab.arturbosch.detekt.api.internal/ActiveByDefault///Point
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/ActiveByDefault/since/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-active-by-default/since.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/AutoCorrectable///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-auto-correctable/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/AutoCorrectable/since/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-auto-correctable/since.html
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal/CommaSeparatedPattern///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-comma-separated-pattern/index.html
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal/CommaSeparatedPattern/CommaSeparatedPattern/#kotlin.String#kotlin.String/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-comma-separated-pattern/-comma-separated-pattern.html
-$dokka.location:io.gitlab.arturbosch.detekt.api.internal/CommaSeparatedPattern/mapToRegex/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-comma-separated-pattern/map-to-regex.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/CompilerResources///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/CompilerResources/CompilerResources/#org.jetbrains.kotlin.config.LanguageVersionSettings#org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/-compiler-resources.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/CompilerResources/dataFlowValueFactory/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-compiler-resources/data-flow-value-factory.html
@@ -273,14 +270,6 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/SourceLocation/SourceLocation/#k
 $dokka.location:io.gitlab.arturbosch.detekt.api/SourceLocation/column/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/column.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/SourceLocation/line/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/line.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/SourceLocation/toString/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/to-string.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/SplitPattern///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/index.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/SplitPattern/SplitPattern/#kotlin.String#kotlin.String#kotlin.Boolean/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/-split-pattern.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/SplitPattern/any/#kotlin.String?/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/any.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/SplitPattern/contains/#kotlin.String?/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/contains.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/SplitPattern/mapAll/#kotlin.Function1[kotlin.String,TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/map-all.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/SplitPattern/matches/#kotlin.String/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/matches.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/SplitPattern/none/#kotlin.String/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/none.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/SplitPattern/startWith/#kotlin.String?/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-split-pattern/start-with.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/TextLocation///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/TextLocation/TextLocation/#kotlin.Int#kotlin.Int/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/-text-location.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/TextLocation/end/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/end.html
