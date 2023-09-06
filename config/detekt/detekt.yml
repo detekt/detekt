@@ -70,9 +70,21 @@ formatting:
   autoCorrect: true
   BinaryExpressionWrapping:
     active: true
+  BlankLineBeforeDeclaration:
+    active: false
+  DiscouragedCommentLocation:
+    active: false
   Filename:
     active: false
+  FunctionSignature:
+    active: false
   MaximumLineLength:
+    active: false
+  MultilineExpressionWrapping:
+    active: false
+  NoEmptyFirstLineInClassBody:
+    active: false
+  StringTemplateIndent:
     active: false
 
 naming:
