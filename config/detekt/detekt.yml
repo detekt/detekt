@@ -70,18 +70,10 @@ formatting:
   autoCorrect: true
   BinaryExpressionWrapping:
     active: true
-  ContextReceiverMapping:
-    active: true
   Filename:
     active: false
   MaximumLineLength:
     active: false
-  ParameterListSpacing:
-    active: true
-  StatementWrapping:
-    active: true
-  TypeParameterListSpacing:
-    active: true
 
 naming:
   ClassNaming:
