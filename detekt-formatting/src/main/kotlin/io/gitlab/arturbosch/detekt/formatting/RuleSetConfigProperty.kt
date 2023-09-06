@@ -11,10 +11,10 @@ private class RuleSetConfigPropertyDelegate<T : Any>(
     val defaultValue: T
 ) : ReadOnlyProperty<Any?, RuleSetConfigProperty<T>> {
 
-    @Volatile private var _value: RuleSetConfigProperty<T>? = null
+    @Volatile private var value: RuleSetConfigProperty<T>? = null
 
     override fun getValue(thisRef: Any?, property: KProperty<*>): RuleSetConfigProperty<T> =
-        _value ?: RuleSetConfigProperty(property.name, defaultValue).also { _value = it }
+        value ?: RuleSetConfigProperty(property.name, defaultValue).also { value = it }
 }
 
 class RuleSetConfigProperty<T : Any>(val key: String, val defaultValue: T) {

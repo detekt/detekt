@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.types.isNullable
  * Rule adapted from Kotlin's IntelliJ plugin:
  * https://github.com/JetBrains/kotlin/blob/f5d0a38629e7d2e7017ee645dc4d4bee60614e93/idea/src/org/jetbrains/kotlin/idea/inspections/collections/UselessCallOnNotNullInspection.kt
  */
+
 /**
  * The Kotlin stdlib provides some functions that are designed to operate on references that may be null. These
  * functions can also be called on non-nullable references or on collections or sequences that are known to be empty -

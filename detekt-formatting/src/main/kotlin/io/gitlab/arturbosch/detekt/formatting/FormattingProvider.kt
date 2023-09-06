@@ -196,7 +196,6 @@ class FormattingProvider : RuleSetProvider {
             TypeParameterListSpacing(config),
             UnnecessaryParenthesesBeforeTrailingLambda(config),
             Wrapping(config),
-
             // Wrappers for ktlint-ruleset-experimental rules. Disabled by default.
             BinaryExpressionWrapping(config),
             ChainMethodContinuation(config),

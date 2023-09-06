@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
  * Based on code from Kotlin compiler:
  * https://github.com/JetBrains/kotlin/blob/v1.3.30/compiler/frontend/src/org/jetbrains/kotlin/cfg/ControlFlowInformationProvider.kt
  */
+
 /**
  * Turn on this rule to flag `when` expressions that do not check that all cases are covered when the subject is an enum
  * or sealed class and the `when` expression is used as a statement.

@@ -246,6 +246,8 @@ class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
     )
 
     enum class DeclarationType {
-        PARAM, PROPERTY, ANY
+        PARAM,
+        PROPERTY,
+        ANY
     }
 }
