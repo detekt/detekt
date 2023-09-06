@@ -5,6 +5,7 @@ kotlin = "1.9.10"
 ktlint = "1.0.1"
 junit = "5.10.0"
 poko = "0.15.0"
+slf4j = "2.0.9"
 
 [libraries]
 semver4j = "org.semver4j:semver4j:5.2.2"
@@ -29,8 +30,9 @@ android-gradle-minSupported = "com.android.tools.build:gradle:7.0.0"
 android-gradle-maxSupported = "com.android.tools.build:gradle:8.1.1"
 
 ktlintRulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint"  }
-slf4j-nop = { module = "org.slf4j:slf4j-nop", version = "2.0.9" }
-slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "2.0.9" }
+slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4j" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 
