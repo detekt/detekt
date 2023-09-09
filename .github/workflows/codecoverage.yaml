@@ -25,11 +25,13 @@ jobs:
           java-version: 17
           distribution: 'temurin'
 
-      - name: Generate Coverage Report
+      - name: Setup Gradle
         uses: gradle/gradle-build-action@ef76a971e2fa3f867b617efd72f2fbd72cf6f8bc # v2
         with:
           gradle-home-cache-cleanup: true
-          arguments: jacocoMergedReport
+
+      - name: Generate Coverage Report
+        run: ./gradlew jacocoMergedReport
         env:
           GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
 
