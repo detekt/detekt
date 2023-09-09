@@ -19,14 +19,14 @@ class CorrectableRulesFirstSpec {
         var actualLastRuleId = ""
 
         class First(config: Config) : Rule(config) {
-            override val issue: Issue = justAnIssue.copy(id = "NonCorrectable")
+            override val issue: Issue = Issue("NonCorrectable", justAnIssue.description, justAnIssue.debt)
             override fun visitClass(klass: KtClass) {
                 actualLastRuleId = issue.id
             }
         }
 
         class Last(config: Config) : Rule(config) {
-            override val issue: Issue = justAnIssue.copy(id = "Correctable")
+            override val issue: Issue = Issue("Correctable", justAnIssue.description, justAnIssue.debt)
             override fun visitClass(klass: KtClass) {
                 actualLastRuleId = issue.id
             }

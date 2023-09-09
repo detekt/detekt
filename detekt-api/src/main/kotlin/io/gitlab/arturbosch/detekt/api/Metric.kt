@@ -4,7 +4,7 @@ package io.gitlab.arturbosch.detekt.api
  * Metric type, can be an integer or double value. Internally it is stored as an integer,
  * but the conversion factor and is double attributes can be used to retrieve it as a double value.
  */
-data class Metric(
+class Metric(
     val value: Int,
     val threshold: Int,
     val isDouble: Boolean = false,

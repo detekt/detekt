@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
 /**
  * Specifies a position within a source code fragment.
  */
-data class Location(
+class Location(
     val source: SourceLocation,
     val endSource: SourceLocation = source,
     val text: TextLocation,
@@ -64,13 +64,13 @@ data class Location(
 /**
  * Stores line and column information of a location.
  */
-data class SourceLocation(val line: Int, val column: Int) {
+class SourceLocation(val line: Int, val column: Int) {
     override fun toString(): String = "$line:$column"
 }
 
 /**
  * Stores character start and end positions of a text file.
  */
-data class TextLocation(val start: Int, val end: Int) {
+class TextLocation(val start: Int, val end: Int) {
     override fun toString(): String = "$start:$end"
 }

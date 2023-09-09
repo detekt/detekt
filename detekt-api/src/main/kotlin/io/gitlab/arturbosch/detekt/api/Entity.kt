@@ -11,8 +11,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 /**
  * Stores information about a specific code fragment.
  */
-data class Entity(
-    private val name: String,
+class Entity(
+    val name: String,
     val signature: String,
     val location: Location,
     val ktElement: KtElement? = null

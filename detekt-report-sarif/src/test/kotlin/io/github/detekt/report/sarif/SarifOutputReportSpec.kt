@@ -99,7 +99,7 @@ class SarifOutputReportSpec {
         val result = TestDetektion(
             createFinding(
                 ruleName = "TestSmellB",
-                entity = refEntity.copy(location = location),
+                entity = Entity(refEntity.name, refEntity.signature, location, refEntity.ktElement),
                 severity = Severity.WARNING
             )
         )
@@ -136,7 +136,7 @@ class SarifOutputReportSpec {
         val result = TestDetektion(
             createFinding(
                 ruleName = "TestSmellB",
-                entity = refEntity.copy(location = location),
+                entity = Entity(refEntity.name, refEntity.signature, location, refEntity.ktElement),
                 severity = Severity.WARNING
             )
         )

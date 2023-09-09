@@ -31,7 +31,7 @@ fun valuesWithReason(values: List<ValueWithReason>): ValuesWithReason {
  * [ValuesWithReason] is essentially the same as [List] of [ValueWithReason]. Due to type erasure we cannot use the
  * list directly. Instances of this type should always created using the [valuesWithReason] factory method.
  */
-data class ValuesWithReason internal constructor(private val values: List<ValueWithReason>) :
+class ValuesWithReason internal constructor(private val values: List<ValueWithReason>) :
     Iterable<ValueWithReason> by values
 
 /**
@@ -39,4 +39,4 @@ data class ValuesWithReason internal constructor(private val values: List<ValueW
  * @property value the actual value that is configured
  * @property reason an optional explanation for the configured value
  */
-data class ValueWithReason(val value: String, val reason: String? = null)
+class ValueWithReason(val value: String, val reason: String? = null)
