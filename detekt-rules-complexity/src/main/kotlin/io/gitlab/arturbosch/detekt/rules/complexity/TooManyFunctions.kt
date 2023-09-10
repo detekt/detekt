@@ -70,7 +70,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
                 ThresholdedCodeSmell(
                     issue,
                     Entity.atPackageOrFirstDecl(file),
-                    Metric("SIZE", amountOfTopLevelFunctions, allowedFunctionsPerFile),
+                    Metric(amountOfTopLevelFunctions, allowedFunctionsPerFile),
                     "File '${file.name}' with '$amountOfTopLevelFunctions' functions detected. " +
                         "The maximum allowed functions per file is set to '$allowedFunctionsPerFile'"
                 )
@@ -94,7 +94,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
                         ThresholdedCodeSmell(
                             issue,
                             Entity.atName(klass),
-                            Metric("SIZE", amount, allowedFunctionsPerInterface),
+                            Metric(amount, allowedFunctionsPerInterface),
                             "Interface '${klass.name}' with '$amount' functions detected. " +
                                 "The maximum allowed functions per interface is set to " +
                                 "'$allowedFunctionsPerInterface'"
@@ -108,7 +108,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
                         ThresholdedCodeSmell(
                             issue,
                             Entity.atName(klass),
-                            Metric("SIZE", amount, allowedFunctionsPerEnum),
+                            Metric(amount, allowedFunctionsPerEnum),
                             "Enum class '${klass.name}' with '$amount' functions detected. " +
                                 "The maximum allowed functions per enum class is set to " +
                                 "'$allowedFunctionsPerEnum'"
@@ -122,7 +122,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
                         ThresholdedCodeSmell(
                             issue,
                             Entity.atName(klass),
-                            Metric("SIZE", amount, allowedFunctionsPerClass),
+                            Metric(amount, allowedFunctionsPerClass),
                             "Class '${klass.name}' with '$amount' functions detected. " +
                                 "The maximum allowed functions per class is set to '$allowedFunctionsPerClass'"
                         )
@@ -140,7 +140,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
                 ThresholdedCodeSmell(
                     issue,
                     Entity.atName(declaration),
-                    Metric("SIZE", amount, allowedFunctionsPerObject),
+                    Metric(amount, allowedFunctionsPerObject),
                     "Object '${declaration.name}' with '$amount' functions detected. " +
                         "The maximum allowed functions per object is set to '$allowedFunctionsPerObject'"
                 )

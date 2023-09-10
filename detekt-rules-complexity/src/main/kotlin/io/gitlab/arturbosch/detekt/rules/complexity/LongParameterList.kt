@@ -113,7 +113,7 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
                 ThresholdedCodeSmell(
                     issue,
                     Entity.from(parameterList),
-                    Metric("SIZE", parameterNumber, maximumAllowedParameter),
+                    Metric(parameterNumber, maximumAllowedParameter),
                     "The $identifier($parameterPrint) has too many parameters. " +
                         "The current maximum allowed parameters are $maximumAllowedParameter."
                 )
