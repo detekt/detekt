@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
+import dev.drewhamilton.poko.Poko
+
 /**
  * This factory method can be used by rule authors to specify one or many configuration values along with an
  * explanation for each value. For example:
@@ -31,6 +33,7 @@ fun valuesWithReason(values: List<ValueWithReason>): ValuesWithReason {
  * [ValuesWithReason] is essentially the same as [List] of [ValueWithReason]. Due to type erasure we cannot use the
  * list directly. Instances of this type should always created using the [valuesWithReason] factory method.
  */
+@Poko
 class ValuesWithReason internal constructor(private val values: List<ValueWithReason>) :
     Iterable<ValueWithReason> by values
 
@@ -39,4 +42,5 @@ class ValuesWithReason internal constructor(private val values: List<ValueWithRe
  * @property value the actual value that is configured
  * @property reason an optional explanation for the configured value
  */
+@Poko
 class ValueWithReason(val value: String, val reason: String? = null)

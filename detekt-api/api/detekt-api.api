@@ -450,8 +450,10 @@ public final class io/gitlab/arturbosch/detekt/api/SingleAssign {
 
 public final class io/gitlab/arturbosch/detekt/api/SourceLocation {
 	public fun <init> (II)V
+	public fun equals (Ljava/lang/Object;)Z
 	public final fun getColumn ()I
 	public final fun getLine ()I
+	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -463,8 +465,10 @@ public final class io/gitlab/arturbosch/detekt/api/SplitPatternKt {
 
 public final class io/gitlab/arturbosch/detekt/api/TextLocation {
 	public fun <init> (II)V
+	public fun equals (Ljava/lang/Object;)Z
 	public final fun getEnd ()I
 	public final fun getStart ()I
+	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -483,12 +487,18 @@ public abstract interface annotation class io/gitlab/arturbosch/detekt/api/Unsta
 public final class io/gitlab/arturbosch/detekt/api/ValueWithReason {
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun equals (Ljava/lang/Object;)Z
 	public final fun getReason ()Ljava/lang/String;
 	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/ValuesWithReason : java/lang/Iterable, kotlin/jvm/internal/markers/KMappedMarker {
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
 	public fun iterator ()Ljava/util/Iterator;
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/ValuesWithReasonKt {

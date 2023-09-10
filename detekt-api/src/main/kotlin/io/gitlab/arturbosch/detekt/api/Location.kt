@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
+import dev.drewhamilton.poko.Poko
 import io.github.detekt.psi.FilePath
 import io.github.detekt.psi.getLineAndColumnInPsiFile
 import io.github.detekt.psi.toFilePath
@@ -64,6 +65,7 @@ class Location(
 /**
  * Stores line and column information of a location.
  */
+@Poko
 class SourceLocation(val line: Int, val column: Int) {
     override fun toString(): String = "$line:$column"
 }
@@ -71,6 +73,7 @@ class SourceLocation(val line: Int, val column: Int) {
 /**
  * Stores character start and end positions of a text file.
  */
+@Poko
 class TextLocation(val start: Int, val end: Int) {
     override fun toString(): String = "$start:$end"
 }
