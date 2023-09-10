@@ -410,7 +410,6 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             TestConfig(METHODS to listOf("java.util.Comparator.reversed"))
         ).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-        String.CASE_INSENSITIVE_ORDER.reversed()
     }
 
     @Test
