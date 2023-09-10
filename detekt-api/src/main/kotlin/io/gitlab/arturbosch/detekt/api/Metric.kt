@@ -5,7 +5,6 @@ package io.gitlab.arturbosch.detekt.api
  * but the conversion factor and is double attributes can be used to retrieve it as a double value.
  */
 data class Metric(
-    val type: String,
     val value: Int,
     val threshold: Int,
     val isDouble: Boolean = false,
@@ -13,12 +12,10 @@ data class Metric(
 ) {
 
     constructor(
-        type: String,
         value: Double,
         threshold: Double,
         conversionFactor: Int = DEFAULT_FLOAT_CONVERSION_FACTOR
     ) : this(
-        type,
         value = (value * conversionFactor).toInt(),
         threshold = (threshold * conversionFactor).toInt(),
         isDouble = true,

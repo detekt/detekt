@@ -43,11 +43,6 @@ interface HasEntity {
  */
 interface HasMetrics {
     val metrics: List<Metric>
-
-    /**
-     * Finds the first metric matching given [type].
-     */
-    fun metricByType(type: String): Metric? = metrics.find { it.type == type }
 }
 
 /**

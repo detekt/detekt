@@ -84,7 +84,7 @@ class ComplexCondition(
                     ThresholdedCodeSmell(
                         issue,
                         Entity.from(condition),
-                        Metric("SIZE", count, allowedConditions),
+                        Metric(count, allowedConditions),
                         "This condition is too complex ($count). " +
                             "The defined maximum number of allowed conditions is set to '$allowedConditions'"
                     )

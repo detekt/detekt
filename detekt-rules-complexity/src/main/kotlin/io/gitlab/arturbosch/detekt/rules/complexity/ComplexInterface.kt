@@ -65,7 +65,7 @@ class ComplexInterface(
                     ThresholdedCodeSmell(
                         issue,
                         Entity.atName(klass),
-                        Metric("SIZE: ", size, allowedDefinitions),
+                        Metric(size, allowedDefinitions),
                         "The interface ${klass.name} is too complex. Consider splitting it up."
                     )
                 )
