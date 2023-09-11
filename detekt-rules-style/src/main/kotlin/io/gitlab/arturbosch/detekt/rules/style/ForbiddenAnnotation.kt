@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.ValueWithReason
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
@@ -90,10 +91,11 @@ class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
                 "The annotation `${forbidden.value}` has been forbidden in the detekt config."
             }
             val location = Location.from(element).let { location ->
-                location.copy(
-                    text = location.text.copy(
-                        end = element.children.firstOrNull()?.endOffset ?: location.text.end
-                    )
+                Location(
+                    location.source,
+                    location.endSource,
+                    TextLocation(location.text.start, element.children.firstOrNull()?.endOffset ?: location.text.end),
+                    location.filePath
                 )
             }
             report(CodeSmell(issue, Entity.from(element, location), message))

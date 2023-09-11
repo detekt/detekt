@@ -80,11 +80,11 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
             val declarationName = declaration.name
             val filename = file.fileNameWithoutSuffix(multiplatformTargets)
             if (declarationName != filename && hasNoMatchingTypeAlias(filename)) {
-                val entity = Entity.atName(declaration).copy(ktElement = file)
+                val entity = Entity.atName(declaration)
                 report(
                     CodeSmell(
                         issue,
-                        entity,
+                        Entity(entity.name, entity.signature, entity.location, file),
                         "The file name '$filename' " +
                             "does not match the name of the single top-level declaration '$declarationName'."
                     )
