@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.dokka)
     `java-test-fixtures`
     alias(libs.plugins.binaryCompatibilityValidator)
+    alias(libs.plugins.poko)
 }
 
 dependencies {
@@ -16,6 +17,11 @@ dependencies {
     testImplementation(libs.assertj)
 
     testFixturesApi(libs.kotlin.stdlibJdk8)
+    testFixturesCompileOnly(libs.poko.annotations)
+}
+
+detekt {
+    config.from("config/detekt.yml")
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants

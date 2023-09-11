@@ -5,7 +5,9 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.rules.isPartOfString
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtFile
@@ -36,9 +38,14 @@ class TrailingWhitespace(config: Config = Config.empty) : Rule(config) {
                 val ktElement = findFirstKtElementInParentsOrNull(file, offset, line)
                 if (ktElement == null || !ktElement.isPartOfString()) {
                     val entity = Entity.from(file, offset - trailingWhitespaces).let { entity ->
-                        entity.copy(
-                            location = entity.location.copy(
-                                text = entity.location.text.copy(end = offset)
+                        Entity(
+                            entity.name,
+                            entity.signature,
+                            location = Location(
+                                entity.location.source,
+                                entity.location.endSource,
+                                TextLocation(entity.location.text.start, offset),
+                                entity.location.filePath
                             )
                         )
                     }

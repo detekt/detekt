@@ -19,14 +19,14 @@ class CorrectableRulesFirstSpec {
         var actualLastRuleId = ""
 
         class First(config: Config) : Rule(config) {
-            override val issue: Issue = justAnIssue.copy(id = "NonCorrectable")
+            override val issue: Issue = Issue("NonCorrectable", "", Debt.FIVE_MINS)
             override fun visitClass(klass: KtClass) {
                 actualLastRuleId = issue.id
             }
         }
 
         class Last(config: Config) : Rule(config) {
-            override val issue: Issue = justAnIssue.copy(id = "Correctable")
+            override val issue: Issue = Issue("Correctable", "", Debt.FIVE_MINS)
             override fun visitClass(klass: KtClass) {
                 actualLastRuleId = issue.id
             }
@@ -48,9 +48,3 @@ class CorrectableRulesFirstSpec {
         assertThat(actualLastRuleId).isEqualTo("NonCorrectable")
     }
 }
-
-private val justAnIssue = Issue(
-    "JustAnIssue",
-    "",
-    Debt.FIVE_MINS
-)
