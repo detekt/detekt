@@ -48,9 +48,3 @@ class CorrectableRulesFirstSpec {
         assertThat(actualLastRuleId).isEqualTo("NonCorrectable")
     }
 }
-
-private val justAnIssue = Issue(
-    "JustAnIssue",
-    "",
-    Debt.FIVE_MINS
-)
