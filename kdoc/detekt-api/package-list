@@ -134,6 +134,7 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/Entity/Entity/#kotlin.String#kot
 $dokka.location:io.gitlab.arturbosch.detekt.api/Entity/compact/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/compact.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Entity/ktElement/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/kt-element.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Entity/location/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/location.html
+$dokka.location:io.gitlab.arturbosch.detekt.api/Entity/name/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/name.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Entity/signature/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-entity/signature.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Extension///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Extension/id/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-extension/id.html
