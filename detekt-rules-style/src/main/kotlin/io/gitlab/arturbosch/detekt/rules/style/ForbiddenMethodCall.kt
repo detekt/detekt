@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.valuesWithReason
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.descriptors.SyntheticPropertyDescriptor
@@ -113,20 +114,20 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun check(expression: KtExpression) {
-        val descriptors =
+        val descriptors: Set<CallableDescriptor> =
             expression.getResolvedCall(bindingContext)?.resultingDescriptor?.let { callableDescriptor ->
                 val foundDescriptors = if (callableDescriptor is PropertyDescriptor) {
-                    listOfNotNull(
+                    setOfNotNull(
                         callableDescriptor.unwrappedGetMethod,
                         callableDescriptor.unwrappedSetMethod
                     )
                 } else {
-                    listOf(callableDescriptor)
+                    setOf(callableDescriptor)
                 }
-                foundDescriptors.flatMap {
-                    it.overriddenTreeUniqueAsSequence(true).toList()
+                foundDescriptors.flatMapTo(mutableSetOf()) {
+                    it.overriddenTreeUniqueAsSequence(true).toSet()
                 }
-            }?.toSet() ?: return
+            } ?: return
 
         for (descriptor in descriptors) {
             methods.find { it.value.match(descriptor) }?.let { forbidden ->
