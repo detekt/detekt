@@ -25,7 +25,7 @@ const val SRCROOT = "%SRCROOT%"
 class SarifOutputReport : OutputReport() {
 
     override val ending: String = "sarif"
-    override val id: String = "sarif"
+    override val id: String = "Sarif"
     override val name = "SARIF: a standard format for the output of static analysis tools"
 
     private var config: Config by SingleAssign()

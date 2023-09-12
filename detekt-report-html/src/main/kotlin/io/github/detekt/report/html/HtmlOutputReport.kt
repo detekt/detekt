@@ -47,7 +47,7 @@ private const val DETEKT_WEBSITE_BASE_URL = "https://detekt.dev"
 class HtmlOutputReport : OutputReport() {
 
     override val ending = "html"
-
+    override val id: String = "Html"
     override val name = "HTML report"
 
     override fun render(detektion: Detektion) =

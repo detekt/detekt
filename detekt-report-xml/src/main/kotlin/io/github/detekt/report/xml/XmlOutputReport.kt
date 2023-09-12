@@ -13,7 +13,7 @@ import kotlin.io.path.invariantSeparatorsPathString
 class XmlOutputReport : OutputReport() {
 
     override val ending = "xml"
-
+    override val id: String = "Xml"
     override val name = "Checkstyle XML report"
 
     private val Finding.severityLabel: String
