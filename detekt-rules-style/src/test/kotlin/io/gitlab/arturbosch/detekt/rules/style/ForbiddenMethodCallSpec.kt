@@ -478,7 +478,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                 }
             }
             
-            fun foo(i: ComplexComparator) {
+            fun foo() {
                 val bar = ComplexComparator()
                 bar.reversed()
             }
