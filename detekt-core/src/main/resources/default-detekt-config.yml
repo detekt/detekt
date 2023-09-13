@@ -48,7 +48,7 @@ output-reports:
   # - 'XmlOutputReport'
   # - 'HtmlOutputReport'
   # - 'MdOutputReport'
-  # - 'SarifOutputReport'
+  # - 'sarif'
 
 comments:
   active: true

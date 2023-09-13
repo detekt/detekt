@@ -17,7 +17,7 @@ abstract class OutputReport : Extension {
     abstract val ending: String
 
     /**
-     * Name of the report. Is used to exclude this report in the yaml config.
+     * Human-readable name of the report.
      */
     open val name: String?
         get() = this::class.simpleName
