@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class NestedBlockDepthSpec {
@@ -58,7 +57,7 @@ class NestedBlockDepthSpec {
         """.trimIndent()
         subject.lint(code)
         assertThat(subject.findings).hasSize(1)
-        assertThat((subject.findings[0] as ThresholdedCodeSmell)).hasValue(5)
+        assertThat(subject.findings[0] as ThresholdedCodeSmell).hasValue(5)
     }
 
     @Test
