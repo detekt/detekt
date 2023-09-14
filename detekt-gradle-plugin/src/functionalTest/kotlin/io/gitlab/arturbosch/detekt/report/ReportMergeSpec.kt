@@ -24,7 +24,6 @@ class ReportMergeSpec {
                 numberOfSourceFilesPerSourceDir = 2,
                 buildFileContent = """
                     ${builder.gradleSubprojectsApplyPlugins.reIndent(baseIndent = 5)}
-                    plugins.apply("java-library")
                 """.trimIndent()
             )
             addSubmodule(
@@ -32,7 +31,6 @@ class ReportMergeSpec {
                 numberOfSourceFilesPerSourceDir = 2,
                 buildFileContent = """
                     ${builder.gradleSubprojectsApplyPlugins.reIndent(baseIndent = 5)}
-                    plugins.apply("java-library")
                 """.trimIndent()
             )
         }

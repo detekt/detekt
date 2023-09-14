@@ -89,7 +89,7 @@ private class GroovyBuilder : DslTestBuilder() {
     @Language("gradle")
     override val gradlePlugins = """
         plugins {
-            id 'java-library'
+            id 'org.jetbrains.kotlin.jvm'
             id "io.gitlab.arturbosch.detekt"
         }
     """.trimIndent()
@@ -118,7 +118,7 @@ private class KotlinBuilder : DslTestBuilder() {
     @Language("gradle.kts")
     override val gradlePlugins = """
         plugins {
-            `java-library`
+            kotlin("jvm")
             id("io.gitlab.arturbosch.detekt")
         }
     """.trimIndent()
