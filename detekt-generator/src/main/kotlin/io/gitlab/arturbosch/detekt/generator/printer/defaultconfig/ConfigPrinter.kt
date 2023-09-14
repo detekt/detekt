@@ -50,17 +50,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
           active: true
           exclude:
             - 'DetektProgressListener'
-          # - 'KtFileCountProcessor'
-          # - 'PackageCountProcessor'
-          # - 'ClassCountProcessor'
-          # - 'FunctionCountProcessor'
-          # - 'PropertyCountProcessor'
-          # - 'ProjectComplexityProcessor'
-          # - 'ProjectCognitiveComplexityProcessor'
-          # - 'ProjectLLOCProcessor'
-          # - 'ProjectCLOCProcessor'
-          # - 'ProjectLOCProcessor'
-          # - 'ProjectSLOCProcessor'
           # - 'LicenseHeaderLoaderExtension'
     """.trimIndent()
 
@@ -68,8 +57,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
         console-reports:
           active: true
           exclude:
-             - 'ProjectStatisticsReport'
-             - 'ComplexityReport'
              - 'NotificationReport'
              - 'FindingsReport'
              - 'FileBasedFindingsReport'
