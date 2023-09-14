@@ -13,7 +13,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.ec4j.core.model.Property
@@ -36,8 +35,8 @@ abstract class FormattingRule(config: Config) : Rule(config) {
     protected val isAndroid
         get() = FormattingProvider.android.value(ruleSetConfig)
 
-    private var positionByOffset: (offset: Int) -> Pair<Int, Int> by SingleAssign()
-    private var root: KtFile by SingleAssign()
+    private lateinit var positionByOffset: (offset: Int) -> Pair<Int, Int>
+    private lateinit var root: KtFile
 
     protected fun issueFor(description: String) =
         Issue(javaClass.simpleName, description, Debt.FIVE_MINS)

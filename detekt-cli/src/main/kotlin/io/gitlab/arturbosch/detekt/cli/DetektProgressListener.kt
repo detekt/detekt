@@ -3,14 +3,13 @@ package io.gitlab.arturbosch.detekt.cli
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.SetupContext
-import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
 class DetektProgressListener : FileProcessListener {
 
-    private var outPrinter: Appendable by SingleAssign()
+    private lateinit var outPrinter: Appendable
 
     @OptIn(UnstableApi::class)
     override fun init(context: SetupContext) {
