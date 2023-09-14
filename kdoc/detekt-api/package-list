@@ -254,10 +254,6 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/Severity///PointingToDeclaration
 $dokka.location:io.gitlab.arturbosch.detekt.api/Severity/entries/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/entries.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Severity/valueOf/#kotlin.String/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/value-of.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Severity/values/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-severity/values.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/SingleAssign///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-single-assign/index.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/SingleAssign/SingleAssign/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-single-assign/-single-assign.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/SingleAssign/getValue/#kotlin.Any?#kotlin.reflect.KProperty[*]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-single-assign/get-value.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/SingleAssign/setValue/#kotlin.Any?#kotlin.reflect.KProperty[*]#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-single-assign/set-value.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/SourceLocation///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/SourceLocation/SourceLocation/#kotlin.Int#kotlin.Int/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/-source-location.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/SourceLocation/column/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-source-location/column.html
