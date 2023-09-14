@@ -11,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.SetupContext
-import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.getOrNull
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
@@ -28,7 +27,7 @@ class SarifOutputReport : OutputReport() {
     override val id: String = "sarif"
     override val name = "SARIF: a standard format for the output of static analysis tools"
 
-    private var config: Config by SingleAssign()
+    private lateinit var config: Config
     private var basePath: String? = null
 
     @OptIn(UnstableApi::class)
