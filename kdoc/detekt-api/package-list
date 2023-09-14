@@ -52,7 +52,7 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/BaseRule/visit/#org.jetbrains.ko
 $dokka.location:io.gitlab.arturbosch.detekt.api/BaseRule/visitCondition/#org.jetbrains.kotlin.psi.KtFile/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-base-rule/visit-condition.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/BaseRule/visitFile/#org.jetbrains.kotlin.psi.KtFile#org.jetbrains.kotlin.resolve.BindingContext#io.gitlab.arturbosch.detekt.api.internal.CompilerResources?/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-base-rule/visit-file.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/CodeSmell///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/index.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/CodeSmell/CodeSmell/#io.gitlab.arturbosch.detekt.api.Issue#io.gitlab.arturbosch.detekt.api.Entity#kotlin.String#kotlin.collections.List[io.gitlab.arturbosch.detekt.api.Metric]#kotlin.collections.List[io.gitlab.arturbosch.detekt.api.Entity]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/-code-smell.html
+$dokka.location:io.gitlab.arturbosch.detekt.api/CodeSmell/CodeSmell/#io.gitlab.arturbosch.detekt.api.Issue#io.gitlab.arturbosch.detekt.api.Entity#kotlin.String#kotlin.collections.List[io.gitlab.arturbosch.detekt.api.Entity]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/-code-smell.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/CodeSmell/compact/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/compact.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/CodeSmell/compactWithSignature/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/compact-with-signature.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/CodeSmell/entity/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/entity.html
@@ -60,7 +60,6 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/CodeSmell/id/#/PointingToDeclara
 $dokka.location:io.gitlab.arturbosch.detekt.api/CodeSmell/issue/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/issue.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/CodeSmell/message/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/message.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/CodeSmell/messageOrDescription/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/message-or-description.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/CodeSmell/metrics/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/metrics.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/CodeSmell/references/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/references.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/CodeSmell/severity/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/severity.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/CodeSmell/toString/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-code-smell/to-string.html
@@ -102,7 +101,7 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/Context/findings/#/PointingToDec
 $dokka.location:io.gitlab.arturbosch.detekt.api/Context/report/#io.gitlab.arturbosch.detekt.api.Finding#kotlin.collections.Set[kotlin.String]#kotlin.String?/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-context/report.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Context/report/#kotlin.collections.List[io.gitlab.arturbosch.detekt.api.Finding]#kotlin.collections.Set[kotlin.String]#kotlin.String?/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-context/report.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/CorrectableCodeSmell///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/index.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/CorrectableCodeSmell/CorrectableCodeSmell/#io.gitlab.arturbosch.detekt.api.Issue#io.gitlab.arturbosch.detekt.api.Entity#kotlin.String#kotlin.collections.List[io.gitlab.arturbosch.detekt.api.Metric]#kotlin.collections.List[io.gitlab.arturbosch.detekt.api.Entity]#kotlin.Boolean/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/-correctable-code-smell.html
+$dokka.location:io.gitlab.arturbosch.detekt.api/CorrectableCodeSmell/CorrectableCodeSmell/#io.gitlab.arturbosch.detekt.api.Issue#io.gitlab.arturbosch.detekt.api.Entity#kotlin.String#kotlin.collections.List[io.gitlab.arturbosch.detekt.api.Entity]#kotlin.Boolean/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/-correctable-code-smell.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/CorrectableCodeSmell/autoCorrectEnabled/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/auto-correct-enabled.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/CorrectableCodeSmell/toString/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-correctable-code-smell/to-string.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Debt.Companion///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-debt/-companion/index.html
@@ -160,8 +159,6 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/HasEntity/file/#/PointingToDecla
 $dokka.location:io.gitlab.arturbosch.detekt.api/HasEntity/location/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-has-entity/location.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/HasEntity/signature/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-has-entity/signature.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/HasEntity/startPosition/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-has-entity/start-position.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/HasMetrics///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-has-metrics/index.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/HasMetrics/metrics/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-has-metrics/metrics.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Issue///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Issue/Issue/#kotlin.String#kotlin.String#io.gitlab.arturbosch.detekt.api.Debt/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/-issue.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Issue/debt/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-issue/debt.html
