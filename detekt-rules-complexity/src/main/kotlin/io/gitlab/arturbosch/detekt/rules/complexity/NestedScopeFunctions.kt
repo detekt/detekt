@@ -70,7 +70,7 @@ class NestedScopeFunctions(config: Config = Config.empty) : Rule(config) {
         val finding = ThresholdedCodeSmell(
             issue,
             Entity.from(element),
-            Metric("SIZE", depth, allowedDepth),
+            Metric(depth, allowedDepth),
             "The scope function '${element.calleeExpression?.text}' is nested too deeply ('$depth'). " +
                 "The maximum allowed depth is set to '$allowedDepth'."
         )

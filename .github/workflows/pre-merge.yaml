@@ -37,17 +37,16 @@ jobs:
           java-version: ${{ matrix.jdk }}
           distribution: 'temurin'
 
-      - name: Assemble and publish artifacts to Maven Local
+      - name: Setup Gradle
         uses: gradle/gradle-build-action@ef76a971e2fa3f867b617efd72f2fbd72cf6f8bc # v2
         with:
           gradle-home-cache-cleanup: true
-          arguments: publishToMavenLocal
+
+      - name: Assemble and publish artifacts to Maven Local
+        run: ./gradlew publishToMavenLocal
 
       - name: Build detekt
-        uses: gradle/gradle-build-action@ef76a971e2fa3f867b617efd72f2fbd72cf6f8bc # v2
-        with:
-          gradle-home-cache-cleanup: true
-          arguments: build -x detekt
+        run: ./gradlew build -x detekt
 
       - uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3
         with:
@@ -67,11 +66,13 @@ jobs:
           java-version: 17
           distribution: 'temurin'
 
-      - name: Verify Generated Detekt Config File
+      - name: Setup Gradle
         uses: gradle/gradle-build-action@ef76a971e2fa3f867b617efd72f2fbd72cf6f8bc # v2
         with:
           gradle-home-cache-cleanup: true
-          arguments: verifyGeneratorOutput
+
+      - name: Verify Generated Detekt Config File
+        run: ./gradlew verifyGeneratorOutput
 
   compile-test-snippets:
     runs-on: ubuntu-latest
@@ -85,11 +86,13 @@ jobs:
           java-version: 17
           distribution: 'temurin'
 
-      - name: Build and compile test snippets
+      - name: Setup Gradle
         uses: gradle/gradle-build-action@ef76a971e2fa3f867b617efd72f2fbd72cf6f8bc # v2
         with:
           gradle-home-cache-cleanup: true
-          arguments: test -Pcompile-test-snippets=true
+
+      - name: Build and compile test snippets
+        run: ./gradlew test -Pcompile-test-snippets=true
 
   warnings-as-errors:
     runs-on: ubuntu-latest
@@ -103,8 +106,10 @@ jobs:
           java-version: 17
           distribution: 'temurin'
 
-      - name: Run with allWarningsAsErrors
+      - name: Setup Gradle
         uses: gradle/gradle-build-action@ef76a971e2fa3f867b617efd72f2fbd72cf6f8bc # v2
         with:
           gradle-home-cache-cleanup: true
-          arguments: compileKotlin compileTestKotlin compileTestFixturesKotlin -PwarningsAsErrors=true
+
+      - name: Run with allWarningsAsErrors
+        run: ./gradlew compileKotlin compileTestKotlin compileTestFixturesKotlin -PwarningsAsErrors=true

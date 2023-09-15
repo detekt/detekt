@@ -47,7 +47,7 @@ class CognitiveComplexMethod(config: Config = Config.empty) : Rule(config) {
                 ThresholdedCodeSmell(
                     issue,
                     Entity.atName(function),
-                    Metric("CC", complexity, allowedComplexity),
+                    Metric(complexity, allowedComplexity),
                     "The function ${function.nameAsSafeName} appears to be too complex " +
                         "based on Cognitive Complexity (complexity: $complexity). " +
                         "Defined maximum allowed complexity for methods is set to '$allowedComplexity'"

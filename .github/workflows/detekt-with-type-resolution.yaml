@@ -30,14 +30,16 @@ jobs:
           java-version: 17
           distribution: 'temurin'
 
-      - name: Run detekt-cli with argsfile
+      - name: Setup Gradle
         uses: gradle/gradle-build-action@ef76a971e2fa3f867b617efd72f2fbd72cf6f8bc # v2
         with:
           gradle-home-cache-cleanup: true
-          arguments: :detekt-cli:runWithArgsFile
+
+      - name: Run detekt-cli with argsfile
+        run: ./gradlew :detekt-cli:runWithArgsFile
 
       - name: Upload SARIF to GitHub using the upload-sarif action
-        uses: github/codeql-action/upload-sarif@00e563ead9f72a8461b24876bee2d0c2e8bd2ee8 # v2
+        uses: github/codeql-action/upload-sarif@04daf014b50eaf774287bf3f0f1869d4b4c4b913 # v2
         if: success() || failure()
         with:
           sarif_file: build/detekt-report.sarif
@@ -58,14 +60,16 @@ jobs:
           java-version: 17
           distribution: 'temurin'
 
-      - name: Run analysis
+      - name: Setup Gradle
         uses: gradle/gradle-build-action@ef76a971e2fa3f867b617efd72f2fbd72cf6f8bc # v2
         with:
           gradle-home-cache-cleanup: true
-          arguments: detektMain detektTest detektFunctionalTest detektTestFixtures detektReportMergeSarif --continue
+
+      - name: Run analysis
+        run: ./gradlew detektMain detektTest detektFunctionalTest detektTestFixtures detektReportMergeSarif --continue
 
       - name: Upload SARIF to GitHub using the upload-sarif action
-        uses: github/codeql-action/upload-sarif@00e563ead9f72a8461b24876bee2d0c2e8bd2ee8 # v2
+        uses: github/codeql-action/upload-sarif@04daf014b50eaf774287bf3f0f1869d4b4c4b913 # v2
         if: success() || failure()
         with:
           sarif_file: build/reports/detekt/merge.sarif

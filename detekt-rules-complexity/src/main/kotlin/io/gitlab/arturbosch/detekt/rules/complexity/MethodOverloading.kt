@@ -62,7 +62,7 @@ class MethodOverloading(config: Config = Config.empty) : Rule(config) {
                     ThresholdedCodeSmell(
                         issue,
                         entity,
-                        Metric("OVERLOAD SIZE: ", value, allowedOverloads),
+                        Metric(value, allowedOverloads),
                         message = "The method '$name' is overloaded $value times."
                     )
                 )

@@ -82,7 +82,7 @@ class CyclomaticComplexMethod(config: Config = Config.empty) : Rule(config) {
                 ThresholdedCodeSmell(
                     issue,
                     Entity.atName(function),
-                    Metric("MCC", complexity, allowedComplexity),
+                    Metric(complexity, allowedComplexity),
                     "The function ${function.nameAsSafeName} appears to be too complex " +
                         "based on Cyclomatic Complexity (complexity: $complexity). " +
                         "The maximum allowed complexity for methods is set to '$allowedComplexity'"

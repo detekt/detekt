@@ -62,7 +62,7 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
                     ThresholdedCodeSmell(
                         issue,
                         Entity.atName(function),
-                        Metric("SIZE", lines, allowedLines),
+                        Metric(lines, allowedLines),
                         "The function ${function.nameAsSafeName} is too long ($lines). " +
                             "The maximum length is $allowedLines."
                     )
