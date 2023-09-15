@@ -701,6 +701,8 @@ style:
     active: true
   SpacingAfterPackageDeclaration:
     active: false
+  StatementCouldBeExpression:
+    active: false
   StringShouldBeRawString:
     active: false
     maxEscapedCharacterCount: 2
