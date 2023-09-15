@@ -79,7 +79,7 @@ internal class InvalidPropertiesConfigValidator(
 
         internal fun propertyDoesNotExists(prop: String): Notification =
             SimpleNotification(
-                "Property '$prop' is misspelled or does not exist." +
+                "Property '$prop' is misspelled or does not exist. " +
                     "This error may also indicate a detekt plugin is necessary to handle the '$prop' key."
             )
 
