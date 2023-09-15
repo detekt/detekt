@@ -78,7 +78,10 @@ internal class InvalidPropertiesConfigValidator(
     companion object {
 
         internal fun propertyDoesNotExists(prop: String): Notification =
-            SimpleNotification("Property '$prop' is misspelled or does not exist.")
+            SimpleNotification(
+                "Property '$prop' is misspelled or does not exist." +
+                    "This error may also indicate a detekt plugin is necessary to handle the '$prop' key."
+            )
 
         internal fun nestedConfigurationExpected(prop: String): Notification =
             SimpleNotification("Nested config expected for '$prop'.")
