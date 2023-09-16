@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import io.gitlab.arturbosch.detekt.extensions.loadDetektVersion
 import io.gitlab.arturbosch.detekt.internal.DetektAndroid
 import io.gitlab.arturbosch.detekt.internal.DetektJvm
 import io.gitlab.arturbosch.detekt.internal.DetektMultiplatform
@@ -20,8 +21,28 @@ class DetektPlugin : Plugin<Project> {
                 DetektExtension::class.java
             )
 
-        extension.reportsDir = project.extensions.getByType(ReportingExtension::class.java).file("detekt")
-        extension.basePath = project.rootProject.layout.projectDirectory.asFile.absolutePath
+        with(extension) {
+            toolVersion = loadDetektVersion(DetektExtension::class.java.classLoader)
+            source.setFrom(
+                DEFAULT_SRC_DIR_JAVA,
+                DEFAULT_TEST_SRC_DIR_JAVA,
+                DEFAULT_SRC_DIR_KOTLIN,
+                DEFAULT_TEST_SRC_DIR_KOTLIN,
+            )
+            baseline = project.file("detekt-baseline.xml")
+            enableCompilerPlugin.convention(DEFAULT_COMPILER_PLUGIN_ENABLED)
+            debug = DEFAULT_DEBUG_VALUE
+            parallel = DEFAULT_PARALLEL_VALUE
+            allRules = DEFAULT_ALL_RULES_VALUE
+            buildUponDefaultConfig = DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE
+            disableDefaultRuleSets = DEFAULT_DISABLE_RULESETS_VALUE
+            autoCorrect = DEFAULT_AUTO_CORRECT_VALUE
+            ignoredVariants = emptyList()
+            ignoredBuildTypes = emptyList()
+            ignoredFlavors = emptyList()
+            reportsDir = project.extensions.getByType(ReportingExtension::class.java).file("detekt")
+            basePath = project.rootProject.layout.projectDirectory.asFile.absolutePath
+        }
 
         val defaultConfigFile =
             project.file("${project.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
@@ -133,6 +154,21 @@ class DetektPlugin : Plugin<Project> {
 
         internal const val DETEKT_ANDROID_DISABLED_PROPERTY = "detekt.android.disabled"
         internal const val DETEKT_MULTIPLATFORM_DISABLED_PROPERTY = "detekt.multiplatform.disabled"
+
+        const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
+        const val DEFAULT_TEST_SRC_DIR_JAVA = "src/test/java"
+        const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"
+        const val DEFAULT_TEST_SRC_DIR_KOTLIN = "src/test/kotlin"
+        const val DEFAULT_DEBUG_VALUE = false
+        const val DEFAULT_PARALLEL_VALUE = false
+        const val DEFAULT_AUTO_CORRECT_VALUE = false
+        const val DEFAULT_DISABLE_RULESETS_VALUE = false
+        const val DEFAULT_REPORT_ENABLED_VALUE = true
+        const val DEFAULT_ALL_RULES_VALUE = false
+        const val DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE = false
+
+        // This flag is ignored unless the compiler plugin is applied to the project
+        const val DEFAULT_COMPILER_PLUGIN_ENABLED = true
     }
 }
 

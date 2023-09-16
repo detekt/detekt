@@ -1,20 +1,14 @@
 package io.gitlab.arturbosch.detekt.extensions
 
 import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.quality.CodeQualityExtension
 import org.gradle.api.provider.Property
 import java.io.File
 import java.io.InputStream
 import java.net.URL
 import java.util.Properties
-import javax.inject.Inject
 
-open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQualityExtension() {
-
-    init {
-        toolVersion = loadDetektVersion(DetektExtension::class.java.classLoader)
-    }
+abstract class DetektExtension : CodeQualityExtension() {
 
     var ignoreFailures: Boolean
         @JvmName("ignoreFailures_")
@@ -25,72 +19,44 @@ open class DetektExtension @Inject constructor(objects: ObjectFactory) : CodeQua
             isIgnoreFailures = value
         }
 
-    val source: ConfigurableFileCollection = objects.fileCollection()
-        .from(
-            DEFAULT_SRC_DIR_JAVA,
-            DEFAULT_TEST_SRC_DIR_JAVA,
-            DEFAULT_SRC_DIR_KOTLIN,
-            DEFAULT_TEST_SRC_DIR_KOTLIN,
-        )
+    abstract val source: ConfigurableFileCollection
 
-    var baseline: File? = objects
-        .fileProperty()
-        .fileValue(File("detekt-baseline.xml"))
-        .get()
-        .asFile
+    abstract var baseline: File?
 
-    var basePath: String? = null
+    abstract var basePath: String?
 
-    val enableCompilerPlugin: Property<Boolean> =
-        objects.property(Boolean::class.java).convention(DEFAULT_COMPILER_PLUGIN_ENABLED)
+    abstract val enableCompilerPlugin: Property<Boolean>
 
-    val config: ConfigurableFileCollection = objects.fileCollection()
+    abstract val config: ConfigurableFileCollection
 
-    var debug: Boolean = DEFAULT_DEBUG_VALUE
+    abstract var debug: Boolean
 
-    var parallel: Boolean = DEFAULT_PARALLEL_VALUE
+    abstract var parallel: Boolean
 
-    var allRules: Boolean = DEFAULT_ALL_RULES_VALUE
+    abstract var allRules: Boolean
 
-    var buildUponDefaultConfig: Boolean = DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE
+    abstract var buildUponDefaultConfig: Boolean
 
-    var disableDefaultRuleSets: Boolean = DEFAULT_DISABLE_RULESETS_VALUE
+    abstract var disableDefaultRuleSets: Boolean
 
-    var autoCorrect: Boolean = DEFAULT_AUTO_CORRECT_VALUE
+    abstract var autoCorrect: Boolean
 
     /**
      * List of Android build variants for which no detekt task should be created.
      *
      * This is a combination of build types and flavors, such as fooDebug or barRelease.
      */
-    var ignoredVariants: List<String> = emptyList()
+    abstract var ignoredVariants: List<String>
 
     /**
      * List of Android build types for which no detekt task should be created.
      */
-    var ignoredBuildTypes: List<String> = emptyList()
+    abstract var ignoredBuildTypes: List<String>
 
     /**
      * List of Android build flavors for which no detekt task should be created
      */
-    var ignoredFlavors: List<String> = emptyList()
-
-    companion object {
-        const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
-        const val DEFAULT_TEST_SRC_DIR_JAVA = "src/test/java"
-        const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"
-        const val DEFAULT_TEST_SRC_DIR_KOTLIN = "src/test/kotlin"
-        const val DEFAULT_DEBUG_VALUE = false
-        const val DEFAULT_PARALLEL_VALUE = false
-        const val DEFAULT_AUTO_CORRECT_VALUE = false
-        const val DEFAULT_DISABLE_RULESETS_VALUE = false
-        const val DEFAULT_REPORT_ENABLED_VALUE = true
-        const val DEFAULT_ALL_RULES_VALUE = false
-        const val DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE = false
-
-        // This flag is ignored unless the compiler plugin is applied to the project
-        const val DEFAULT_COMPILER_PLUGIN_ENABLED = true
-    }
+    abstract var ignoredFlavors: List<String>
 }
 
 internal fun loadDetektVersion(classLoader: ClassLoader): String {
