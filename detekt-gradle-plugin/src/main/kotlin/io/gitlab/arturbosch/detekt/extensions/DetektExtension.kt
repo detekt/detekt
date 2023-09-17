@@ -9,52 +9,52 @@ import java.io.InputStream
 import java.net.URL
 import java.util.Properties
 
-abstract class DetektExtension {
+interface DetektExtension {
 
-    abstract val toolVersion: Property<String>
+    val toolVersion: Property<String>
 
-    abstract val ignoreFailures: Property<Boolean>
+    val ignoreFailures: Property<Boolean>
 
-    abstract val reportsDir: DirectoryProperty
+    val reportsDir: DirectoryProperty
 
-    abstract val source: ConfigurableFileCollection
+    val source: ConfigurableFileCollection
 
-    abstract val baseline: RegularFileProperty
+    val baseline: RegularFileProperty
 
-    abstract val basePath: DirectoryProperty
+    val basePath: DirectoryProperty
 
-    abstract val enableCompilerPlugin: Property<Boolean>
+    val enableCompilerPlugin: Property<Boolean>
 
-    abstract val config: ConfigurableFileCollection
+    val config: ConfigurableFileCollection
 
-    abstract val debug: Property<Boolean>
+    val debug: Property<Boolean>
 
-    abstract val parallel: Property<Boolean>
+    val parallel: Property<Boolean>
 
-    abstract val allRules: Property<Boolean>
+    val allRules: Property<Boolean>
 
-    abstract val buildUponDefaultConfig: Property<Boolean>
+    val buildUponDefaultConfig: Property<Boolean>
 
-    abstract val disableDefaultRuleSets: Property<Boolean>
+    val disableDefaultRuleSets: Property<Boolean>
 
-    abstract val autoCorrect: Property<Boolean>
+    val autoCorrect: Property<Boolean>
 
     /**
      * List of Android build variants for which no detekt task should be created.
      *
      * This is a combination of build types and flavors, such as fooDebug or barRelease.
      */
-    abstract val ignoredVariants: ListProperty<String>
+    val ignoredVariants: ListProperty<String>
 
     /**
      * List of Android build types for which no detekt task should be created.
      */
-    abstract val ignoredBuildTypes: ListProperty<String>
+    val ignoredBuildTypes: ListProperty<String>
 
     /**
      * List of Android build flavors for which no detekt task should be created
      */
-    abstract val ignoredFlavors: ListProperty<String>
+    val ignoredFlavors: ListProperty<String>
 }
 
 internal fun loadDetektVersion(classLoader: ClassLoader): String {
