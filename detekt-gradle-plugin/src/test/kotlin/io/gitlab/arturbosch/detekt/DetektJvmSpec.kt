@@ -26,8 +26,8 @@ class DetektJvmSpec {
                 }
             }
             tasks.named("detektTest", Detekt::class.java) {
-                it.jvmTarget = "1.8"
-                it.languageVersion = "1.6"
+                it.jvmTarget.set("1.8")
+                it.languageVersion.set("1.6")
             }
         },
     ).also(DslGradleRunner::setupProject)
