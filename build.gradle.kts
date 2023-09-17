@@ -9,6 +9,10 @@ plugins {
     alias(libs.plugins.gradleVersions)
 }
 
+tasks.wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+}
+
 val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {
     output = layout.buildDirectory.file("reports/detekt/merge.sarif")
 }
