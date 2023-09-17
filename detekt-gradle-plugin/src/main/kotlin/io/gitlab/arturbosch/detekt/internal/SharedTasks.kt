@@ -37,7 +37,7 @@ internal fun Project.registerDetektTask(
         it.autoCorrectProp.convention(extension.autoCorrect)
         it.config.setFrom(provider { extension.config })
         it.ignoreFailuresProp.convention(extension.ignoreFailures)
-        it.basePathProp.convention(extension.basePath.map { basePath -> basePath.asFile.toRelativeString(projectDir) })
+        it.basePathProp.convention(extension.basePath.map { basePath -> basePath.asFile.absolutePath })
         it.allRulesProp.convention(extension.allRules)
         configuration(it)
     }
@@ -68,7 +68,7 @@ internal fun Project.registerCreateBaselineTask(
         it.disableDefaultRuleSets.convention(extension.disableDefaultRuleSets)
         it.buildUponDefaultConfig.convention(extension.buildUponDefaultConfig)
         it.autoCorrect.convention(extension.autoCorrect)
-        it.basePathProp.convention(extension.basePath.map { basePath -> basePath.asFile.toRelativeString(projectDir) })
+        it.basePathProp.convention(extension.basePath.map { basePath -> basePath.asFile.absolutePath })
         it.allRules.convention(extension.allRules)
         configuration(it)
     }
