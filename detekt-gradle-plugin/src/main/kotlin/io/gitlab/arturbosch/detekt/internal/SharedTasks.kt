@@ -30,15 +30,15 @@ internal fun Project.registerDetektTask(
             )
         }
 
-        it.debugProp.convention(provider { extension.debug })
-        it.parallelProp.convention(provider { extension.parallel })
-        it.disableDefaultRuleSetsProp.convention(provider { extension.disableDefaultRuleSets })
-        it.buildUponDefaultConfigProp.convention(provider { extension.buildUponDefaultConfig })
-        it.autoCorrectProp.convention(provider { extension.autoCorrect })
+        it.debugProp.convention(extension.debug)
+        it.parallelProp.convention(extension.parallel)
+        it.disableDefaultRuleSetsProp.convention(extension.disableDefaultRuleSets)
+        it.buildUponDefaultConfigProp.convention(extension.buildUponDefaultConfig)
+        it.autoCorrectProp.convention(extension.autoCorrect)
         it.config.setFrom(provider { extension.config })
-        it.ignoreFailuresProp.convention(project.provider { extension.ignoreFailures })
-        it.basePathProp.convention(extension.basePath)
-        it.allRulesProp.convention(provider { extension.allRules })
+        it.ignoreFailuresProp.convention(extension.ignoreFailures)
+        it.basePathProp.convention(extension.basePath.map { basePath -> basePath.asFile.absolutePath })
+        it.allRulesProp.convention(extension.allRules)
         configuration(it)
     }
 
@@ -63,12 +63,12 @@ internal fun Project.registerCreateBaselineTask(
         }
 
         it.config.setFrom(project.provider { extension.config })
-        it.debug.convention(project.provider { extension.debug })
-        it.parallel.convention(project.provider { extension.parallel })
-        it.disableDefaultRuleSets.convention(project.provider { extension.disableDefaultRuleSets })
-        it.buildUponDefaultConfig.convention(project.provider { extension.buildUponDefaultConfig })
-        it.autoCorrect.convention(project.provider { extension.autoCorrect })
-        it.basePathProp.convention(extension.basePath)
-        it.allRules.convention(provider { extension.allRules })
+        it.debug.convention(extension.debug)
+        it.parallel.convention(extension.parallel)
+        it.disableDefaultRuleSets.convention(extension.disableDefaultRuleSets)
+        it.buildUponDefaultConfig.convention(extension.buildUponDefaultConfig)
+        it.autoCorrect.convention(extension.autoCorrect)
+        it.basePathProp.convention(extension.basePath.map { basePath -> basePath.asFile.absolutePath })
+        it.allRules.convention(extension.allRules)
         configuration(it)
     }

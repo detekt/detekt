@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektReport
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
@@ -292,7 +291,7 @@ abstract class Detekt @Inject constructor(
     private fun getTargetFileProvider(
         report: DetektReport
     ): RegularFileProperty {
-        val isEnabled = report.required.getOrElse(DetektExtension.DEFAULT_REPORT_ENABLED_VALUE)
+        val isEnabled = report.required.getOrElse(DetektPlugin.DEFAULT_REPORT_ENABLED_VALUE)
         val provider = objects.fileProperty()
         if (isEnabled) {
             val destination = report.outputLocation.asFile.orNull ?: reportsDir.getOrElse(defaultReportsDir.asFile)

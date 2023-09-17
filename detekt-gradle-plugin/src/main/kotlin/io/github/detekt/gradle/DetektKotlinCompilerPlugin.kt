@@ -36,7 +36,9 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
                 DetektExtension::class.java
             )
 
-        extension.reportsDir = target.extensions.getByType(ReportingExtension::class.java).file("detekt")
+        extension.reportsDir.convention(
+            target.extensions.getByType(ReportingExtension::class.java).baseDirectory.dir("detekt")
+        )
 
         val defaultConfigFile =
             target.file("${target.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
@@ -53,12 +55,12 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
         target.tasks.withType(KotlinCompile::class.java).configureEach { task ->
             task.extensions.create(DETEKT_EXTENSION, KotlinCompileTaskDetektExtension::class.java, target).apply {
                 isEnabled.convention(extension.enableCompilerPlugin)
-                baseline.convention(target.layout.file(target.provider { extension.baseline }))
-                debug.convention(target.provider { extension.debug })
-                buildUponDefaultConfig.convention(target.provider { extension.buildUponDefaultConfig })
-                allRules.convention(target.provider { extension.allRules })
-                disableDefaultRuleSets.convention(target.provider { extension.disableDefaultRuleSets })
-                parallel.convention(target.provider { extension.parallel })
+                baseline.convention(extension.baseline)
+                debug.convention(extension.debug)
+                buildUponDefaultConfig.convention(extension.buildUponDefaultConfig)
+                allRules.convention(extension.allRules)
+                disableDefaultRuleSets.convention(extension.disableDefaultRuleSets)
+                parallel.convention(extension.parallel)
                 config.from(extension.config)
                 excludes.convention(DetektPlugin.defaultExcludes)
             }
@@ -91,11 +93,7 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
             taskExtension.reports.all { report ->
                 report.enabled.convention(true)
                 report.destination.convention(
-                    project.layout.projectDirectory.file(
-                        project.providers.provider {
-                            File(projectExtension.reportsDir, "${kotlinCompilation.name}.${report.name}").absolutePath
-                        }
-                    )
+                    projectExtension.reportsDir.file("${kotlinCompilation.name}.${report.name}")
                 )
 
                 if (report.enabled.get()) {

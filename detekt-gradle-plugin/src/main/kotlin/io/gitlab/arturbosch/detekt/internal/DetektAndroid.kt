@@ -106,9 +106,9 @@ internal class DetektAndroid(private val project: Project) {
     }
 
     private fun DetektExtension.matchesIgnoredConfiguration(variant: BaseVariant): Boolean =
-        ignoredVariants.contains(variant.name) ||
-            ignoredBuildTypes.contains(variant.buildType.name) ||
-            ignoredFlavors.contains(variant.flavorName)
+        ignoredVariants.get().contains(variant.name) ||
+            ignoredBuildTypes.get().contains(variant.buildType.name) ||
+            ignoredFlavors.get().contains(variant.flavorName)
 }
 
 internal fun Project.registerAndroidDetektTask(
@@ -128,7 +128,7 @@ internal fun Project.registerAndroidDetektTask(
         )
         // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
         // We try to find the configured baseline or alternatively a specific variant matching this task.
-        extension.baseline?.existingVariantOrBaseFile(variant.name)?.let { baselineFile ->
+        extension.baseline.asFile.orNull?.existingVariantOrBaseFile(variant.name)?.let { baselineFile ->
             baseline.convention(layout.file(project.provider { baselineFile }))
         }
         setReportOutputConventions(reports, extension, variant.name)
@@ -150,7 +150,7 @@ internal fun Project.registerAndroidCreateBaselineTask(
             bootClasspath,
             javaCompileDestination(variant),
         )
-        val variantBaselineFile = extension.baseline?.addVariantName(variant.name)
+        val variantBaselineFile = extension.baseline.asFile.orNull?.addVariantName(variant.name)
         baseline.convention(project.layout.file(project.provider { variantBaselineFile }))
         description = "EXPERIMENTAL: Creates detekt baseline for ${variant.name} classes with type resolution"
     }
