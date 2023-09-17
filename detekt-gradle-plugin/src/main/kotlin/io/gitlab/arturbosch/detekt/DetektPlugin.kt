@@ -29,19 +29,16 @@ class DetektPlugin : Plugin<Project> {
                 DEFAULT_SRC_DIR_KOTLIN,
                 DEFAULT_TEST_SRC_DIR_KOTLIN,
             )
-            baseline = project.file("detekt-baseline.xml")
+            baseline.convention(project.layout.projectDirectory.file("detekt-baseline.xml"))
             enableCompilerPlugin.convention(DEFAULT_COMPILER_PLUGIN_ENABLED)
-            debug = DEFAULT_DEBUG_VALUE
-            parallel = DEFAULT_PARALLEL_VALUE
-            allRules = DEFAULT_ALL_RULES_VALUE
-            buildUponDefaultConfig = DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE
-            disableDefaultRuleSets = DEFAULT_DISABLE_RULESETS_VALUE
-            autoCorrect = DEFAULT_AUTO_CORRECT_VALUE
-            ignoredVariants = emptyList()
-            ignoredBuildTypes = emptyList()
-            ignoredFlavors = emptyList()
+            debug.convention(DEFAULT_DEBUG_VALUE)
+            parallel.convention(DEFAULT_PARALLEL_VALUE)
+            allRules.convention(DEFAULT_ALL_RULES_VALUE)
+            buildUponDefaultConfig.convention(DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE)
+            disableDefaultRuleSets.convention(DEFAULT_DISABLE_RULESETS_VALUE)
+            autoCorrect.convention(DEFAULT_AUTO_CORRECT_VALUE)
             reportsDir = project.extensions.getByType(ReportingExtension::class.java).file("detekt")
-            basePath = project.rootProject.layout.projectDirectory.asFile.absolutePath
+            basePath.convention(project.rootProject.layout.projectDirectory)
         }
 
         val defaultConfigFile =

@@ -53,12 +53,12 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
         target.tasks.withType(KotlinCompile::class.java).configureEach { task ->
             task.extensions.create(DETEKT_EXTENSION, KotlinCompileTaskDetektExtension::class.java, target).apply {
                 isEnabled.convention(extension.enableCompilerPlugin)
-                baseline.convention(target.layout.file(target.provider { extension.baseline }))
-                debug.convention(target.provider { extension.debug })
-                buildUponDefaultConfig.convention(target.provider { extension.buildUponDefaultConfig })
-                allRules.convention(target.provider { extension.allRules })
-                disableDefaultRuleSets.convention(target.provider { extension.disableDefaultRuleSets })
-                parallel.convention(target.provider { extension.parallel })
+                baseline.convention(extension.baseline)
+                debug.convention(extension.debug)
+                buildUponDefaultConfig.convention(extension.buildUponDefaultConfig)
+                allRules.convention(extension.allRules)
+                disableDefaultRuleSets.convention(extension.disableDefaultRuleSets)
+                parallel.convention(extension.parallel)
                 config.from(extension.config)
                 excludes.convention(DetektPlugin.defaultExcludes)
             }

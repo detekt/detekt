@@ -1,9 +1,11 @@
 package io.gitlab.arturbosch.detekt.extensions
 
 import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.plugins.quality.CodeQualityExtension
+import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
-import java.io.File
 import java.io.InputStream
 import java.net.URL
 import java.util.Properties
@@ -21,42 +23,42 @@ abstract class DetektExtension : CodeQualityExtension() {
 
     abstract val source: ConfigurableFileCollection
 
-    abstract var baseline: File?
+    abstract val baseline: RegularFileProperty
 
-    abstract var basePath: String?
+    abstract val basePath: DirectoryProperty
 
     abstract val enableCompilerPlugin: Property<Boolean>
 
     abstract val config: ConfigurableFileCollection
 
-    abstract var debug: Boolean
+    abstract val debug: Property<Boolean>
 
-    abstract var parallel: Boolean
+    abstract val parallel: Property<Boolean>
 
-    abstract var allRules: Boolean
+    abstract val allRules: Property<Boolean>
 
-    abstract var buildUponDefaultConfig: Boolean
+    abstract val buildUponDefaultConfig: Property<Boolean>
 
-    abstract var disableDefaultRuleSets: Boolean
+    abstract val disableDefaultRuleSets: Property<Boolean>
 
-    abstract var autoCorrect: Boolean
+    abstract val autoCorrect: Property<Boolean>
 
     /**
      * List of Android build variants for which no detekt task should be created.
      *
      * This is a combination of build types and flavors, such as fooDebug or barRelease.
      */
-    abstract var ignoredVariants: List<String>
+    abstract val ignoredVariants: ListProperty<String>
 
     /**
      * List of Android build types for which no detekt task should be created.
      */
-    abstract var ignoredBuildTypes: List<String>
+    abstract val ignoredBuildTypes: ListProperty<String>
 
     /**
      * List of Android build flavors for which no detekt task should be created
      */
-    abstract var ignoredFlavors: List<String>
+    abstract val ignoredFlavors: ListProperty<String>
 }
 
 internal fun loadDetektVersion(classLoader: ClassLoader): String {

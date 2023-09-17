@@ -101,9 +101,9 @@ internal class DetektMultiplatform(private val project: Project) {
             // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
             // We try to find the configured baseline or alternatively a specific variant matching this task.
             if (runWithTypeResolution) {
-                extension.baseline?.existingVariantOrBaseFile(compilation.name)
+                extension.baseline.asFile.orNull?.existingVariantOrBaseFile(compilation.name)
             } else {
-                extension.baseline?.takeIf { it.exists() }
+                extension.baseline.asFile.orNull?.takeIf { it.exists() }
             }?.let { baselineFile ->
                 baseline.convention(layout.file(provider { baselineFile }))
             }
@@ -124,9 +124,9 @@ internal class DetektMultiplatform(private val project: Project) {
                 classpath.setFrom(compilation.output.classesDirs, compilation.compileDependencyFiles)
             }
             val variantBaselineFile = if (runWithTypeResolution) {
-                extension.baseline?.addVariantName(compilation.name)
+                extension.baseline.asFile.orNull?.addVariantName(compilation.name)
             } else {
-                extension.baseline
+                extension.baseline.get().asFile
             }
             baseline.convention(
                 layout.file(provider { variantBaselineFile })
