@@ -23,6 +23,7 @@ class DetektPlugin : Plugin<Project> {
 
         with(extension) {
             toolVersion.convention(loadDetektVersion(DetektExtension::class.java.classLoader))
+            ignoreFailures.convention(DEFAULT_IGNORE_FAILURES)
             source.setFrom(
                 DEFAULT_SRC_DIR_JAVA,
                 DEFAULT_TEST_SRC_DIR_JAVA,
@@ -159,6 +160,7 @@ class DetektPlugin : Plugin<Project> {
         const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"
         const val DEFAULT_TEST_SRC_DIR_KOTLIN = "src/test/kotlin"
         const val DEFAULT_DEBUG_VALUE = false
+        const val DEFAULT_IGNORE_FAILURES = false
         const val DEFAULT_PARALLEL_VALUE = false
         const val DEFAULT_AUTO_CORRECT_VALUE = false
         const val DEFAULT_DISABLE_RULESETS_VALUE = false
