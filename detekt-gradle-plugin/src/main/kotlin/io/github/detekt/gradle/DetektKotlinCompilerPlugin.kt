@@ -36,7 +36,9 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
                 DetektExtension::class.java
             )
 
-        extension.reportsDir = target.extensions.getByType(ReportingExtension::class.java).file("detekt")
+        extension.reportsDir.convention(
+            target.extensions.getByType(ReportingExtension::class.java).baseDirectory.dir("detekt")
+        )
 
         val defaultConfigFile =
             target.file("${target.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
@@ -91,11 +93,7 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
             taskExtension.reports.all { report ->
                 report.enabled.convention(true)
                 report.destination.convention(
-                    project.layout.projectDirectory.file(
-                        project.providers.provider {
-                            File(projectExtension.reportsDir, "${kotlinCompilation.name}.${report.name}").absolutePath
-                        }
-                    )
+                    projectExtension.reportsDir.file("${kotlinCompilation.name}.${report.name}")
                 )
 
                 if (report.enabled.get()) {

@@ -36,7 +36,7 @@ internal fun Project.registerDetektTask(
         it.buildUponDefaultConfigProp.convention(extension.buildUponDefaultConfig)
         it.autoCorrectProp.convention(extension.autoCorrect)
         it.config.setFrom(provider { extension.config })
-        it.ignoreFailuresProp.convention(project.provider { extension.ignoreFailures })
+        it.ignoreFailuresProp.convention(extension.ignoreFailures)
         it.basePathProp.convention(extension.basePath.map { basePath -> basePath.asFile.toRelativeString(projectDir) })
         it.allRulesProp.convention(extension.allRules)
         configuration(it)

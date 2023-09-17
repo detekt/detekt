@@ -14,7 +14,6 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.androidJvm
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.jvm
 import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmAndroidCompilation
-import java.io.File
 
 internal class DetektMultiplatform(private val project: Project) {
 
@@ -141,7 +140,7 @@ internal class DetektMultiplatform(private val project: Project) {
     }
 }
 
-internal fun Project.setReportOutputConventions(reports: DetektReports, extension: DetektExtension, name: String) {
+internal fun setReportOutputConventions(reports: DetektReports, extension: DetektExtension, name: String) {
     setReportOutputConvention(extension, reports.xml, name, "xml")
     setReportOutputConvention(extension, reports.html, name, "html")
     setReportOutputConvention(extension, reports.txt, name, "txt")
@@ -149,19 +148,13 @@ internal fun Project.setReportOutputConventions(reports: DetektReports, extensio
     setReportOutputConvention(extension, reports.md, name, "md")
 }
 
-private fun Project.setReportOutputConvention(
+private fun setReportOutputConvention(
     extension: DetektExtension,
     report: DetektReport,
     name: String,
     format: String
 ) {
-    report.outputLocation.convention(
-        layout.projectDirectory.file(
-            providers.provider {
-                File(extension.reportsDir, "$name.$format").absolutePath
-            }
-        )
-    )
+    report.outputLocation.convention(extension.reportsDir.file("$name.$format"))
 }
 
 // We currently run type resolution only for Jvm & Android targets as

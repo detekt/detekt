@@ -3,23 +3,19 @@ package io.gitlab.arturbosch.detekt.extensions
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.plugins.quality.CodeQualityExtension
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import java.io.InputStream
 import java.net.URL
 import java.util.Properties
 
-abstract class DetektExtension : CodeQualityExtension() {
+abstract class DetektExtension {
 
-    var ignoreFailures: Boolean
-        @JvmName("ignoreFailures_")
-        get() = isIgnoreFailures
+    abstract val toolVersion: Property<String>
 
-        @JvmName("ignoreFailures_")
-        set(value) {
-            isIgnoreFailures = value
-        }
+    abstract val ignoreFailures: Property<Boolean>
+
+    abstract val reportsDir: DirectoryProperty
 
     abstract val source: ConfigurableFileCollection
 

@@ -22,7 +22,7 @@ class DetektPlugin : Plugin<Project> {
             )
 
         with(extension) {
-            toolVersion = loadDetektVersion(DetektExtension::class.java.classLoader)
+            toolVersion.convention(loadDetektVersion(DetektExtension::class.java.classLoader))
             source.setFrom(
                 DEFAULT_SRC_DIR_JAVA,
                 DEFAULT_TEST_SRC_DIR_JAVA,
@@ -37,7 +37,9 @@ class DetektPlugin : Plugin<Project> {
             buildUponDefaultConfig.convention(DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE)
             disableDefaultRuleSets.convention(DEFAULT_DISABLE_RULESETS_VALUE)
             autoCorrect.convention(DEFAULT_AUTO_CORRECT_VALUE)
-            reportsDir = project.extensions.getByType(ReportingExtension::class.java).file("detekt")
+            reportsDir.convention(
+                project.extensions.getByType(ReportingExtension::class.java).baseDirectory.dir("detekt")
+            )
             basePath.convention(project.rootProject.layout.projectDirectory)
         }
 
@@ -116,7 +118,7 @@ class DetektPlugin : Plugin<Project> {
             configuration.isCanBeConsumed = false
 
             configuration.defaultDependencies { dependencySet ->
-                val version = extension.toolVersion
+                val version = extension.toolVersion.get()
                 dependencySet.add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
             }
         }
