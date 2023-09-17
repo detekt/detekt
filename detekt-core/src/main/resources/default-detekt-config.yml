@@ -616,6 +616,8 @@ style:
     ignoreOverridableFunction: true
     ignoreActualFunction: true
     excludedFunctions: []
+  IfStatementCouldBeExpression:
+    active: false
   LoopWithTooManyJumpStatements:
     active: true
     maxJumpCount: 1
@@ -700,8 +702,6 @@ style:
   SerialVersionUIDInSerializableClass:
     active: true
   SpacingAfterPackageDeclaration:
-    active: false
-  StatementCouldBeExpression:
     active: false
   StringShouldBeRawString:
     active: false
@@ -791,6 +791,8 @@ style:
   VarCouldBeVal:
     active: true
     ignoreLateinitVar: false
+  WhenStatementCouldBeExpression:
+    active: false
   WildcardImport:
     active: true
     excludeImports:
