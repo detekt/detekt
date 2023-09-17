@@ -58,7 +58,7 @@ class IfStatementCouldBeExpressionSpec {
         @Test
         fun `does not report an expression`() {
             val code = """
-                fun f(a: Int) {
+                fun f(var a: Int) {
                     a = if (a > 0) {
                             1
                         } else if (a == 0) {
@@ -74,7 +74,7 @@ class IfStatementCouldBeExpressionSpec {
         @Test
         fun `reports a statement`() {
             val code = """
-                fun f(a: Int) {
+                fun f(var a: Int) {
                     if (a > 0) {
                         a = 1
                     } else if (a == 0) {
@@ -90,7 +90,7 @@ class IfStatementCouldBeExpressionSpec {
         @Test
         fun `does not report a non exhaustive statement`() {
             val code = """
-                fun f(a: Int) {
+                fun f(var a: Int) {
                     if (a > 0) {
                         a = 1
                     }
@@ -102,7 +102,7 @@ class IfStatementCouldBeExpressionSpec {
         @Test
         fun `does not report a statement that cannot be converted to an expression`() {
             val code = """
-                fun f(a: Int, b: Int) {
+                fun f(var a: Int, var b: Int) {
                     if (a > 0) {
                         a = 1
                     } else {

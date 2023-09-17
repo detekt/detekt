@@ -59,7 +59,7 @@ class WhenStatementCouldBeExpressionSpec(private val env: KotlinCoreEnvironment)
         @Test
         fun `does not report an expression`() {
             val code = """
-                fun f(a: Int) {
+                fun f(var a: Int) {
                     a = when (a > 0) {
                         true -> 1
                         false -> -1
@@ -72,7 +72,7 @@ class WhenStatementCouldBeExpressionSpec(private val env: KotlinCoreEnvironment)
         @Test
         fun `reports a statement`() {
             val code = """
-                fun f(a: Int) {
+                fun f(var a: Int) {
                     when (a > 0) {
                         true -> a = 1
                         false  -> a = -1
@@ -85,7 +85,7 @@ class WhenStatementCouldBeExpressionSpec(private val env: KotlinCoreEnvironment)
         @Test
         fun `does not report a non exhaustive statement`() {
             val code = """
-                fun f(a: Int) {
+                fun f(var a: Int) {
                     when (a > 0) {
                         true -> a = 1
                     }
@@ -97,7 +97,7 @@ class WhenStatementCouldBeExpressionSpec(private val env: KotlinCoreEnvironment)
         @Test
         fun `does not report a statement that cannot be converted to an expression`() {
             val code = """
-                fun f(a: Int, b: Int) {
+                fun f(var a: Int, var b: Int) {
                     when (a > 0) {
                         true -> a = 1
                         false -> b = 1
