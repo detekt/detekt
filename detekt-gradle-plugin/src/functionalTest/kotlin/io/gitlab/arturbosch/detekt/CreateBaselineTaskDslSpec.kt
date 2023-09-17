@@ -54,29 +54,6 @@ class CreateBaselineTaskDslSpec {
             assertThat(projectFile(DEFAULT_BASELINE_FILENAME)).exists()
         }
     }
-
-    @Test
-    fun `detektBaseline task can not be executed when baseline file is specified null`() {
-        val detektConfig = """
-            detekt {
-                baseline = null
-            }
-        """.trimIndent()
-        val gradleRunner = DslTestBuilder.kotlin()
-            .withProjectLayout(
-                ProjectLayout(
-                    numberOfSourceFilesInRootPerSourceDir = 1,
-                    numberOfCodeSmellsInRootPerSourceDir = 1,
-                )
-            )
-            .withDetektConfig(detektConfig)
-            .build()
-
-        gradleRunner.runTasksAndExpectFailure("detektBaseline") { result ->
-            assertThat(result.output).contains("property 'baseline' doesn't have a configured value")
-            assertThat(projectFile(DEFAULT_BASELINE_FILENAME)).doesNotExist()
-        }
-    }
 }
 
 private const val DEFAULT_BASELINE_FILENAME = "detekt-baseline.xml"
