@@ -9,6 +9,7 @@ import java.io.InputStream
 import java.net.URL
 import java.util.Properties
 
+@Suppress("ComplexInterface")
 interface DetektExtension {
 
     val toolVersion: Property<String>
