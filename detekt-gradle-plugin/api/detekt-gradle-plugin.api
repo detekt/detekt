@@ -56,7 +56,7 @@ public abstract class io/gitlab/arturbosch/detekt/Detekt : org/gradle/api/tasks/
 	public abstract fun getParallel ()Lorg/gradle/api/provider/Property;
 	public abstract fun getPluginClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public final fun getReports ()Lio/gitlab/arturbosch/detekt/extensions/DetektReports;
-	public abstract fun getReportsDir ()Lorg/gradle/api/provider/Property;
+	public abstract fun getReportsDir ()Lorg/gradle/api/file/DirectoryProperty;
 	public final fun getSarifReportFile ()Lorg/gradle/api/provider/Provider;
 	public fun getSource ()Lorg/gradle/api/file/FileTree;
 	public final fun getTxtReportFile ()Lorg/gradle/api/provider/Provider;

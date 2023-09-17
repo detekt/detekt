@@ -53,7 +53,6 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.workers.WorkerExecutor
-import java.io.File
 import javax.inject.Inject
 
 @CacheableTask
@@ -127,7 +126,7 @@ abstract class Detekt @Inject constructor(
     var reports: DetektReports = objects.newInstance(DetektReports::class.java)
 
     @get:Internal
-    abstract val reportsDir: Property<File>
+    abstract val reportsDir: DirectoryProperty
 
     val xmlReportFile: Provider<RegularFile>
         @OutputFile
@@ -249,8 +248,8 @@ abstract class Detekt @Inject constructor(
         val isEnabled = report.required.getOrElse(DetektPlugin.DEFAULT_REPORT_ENABLED_VALUE)
         val provider = objects.fileProperty()
         if (isEnabled) {
-            val destination = report.outputLocation.asFile.orNull ?: reportsDir.getOrElse(defaultReportsDir.asFile)
-                .resolve("${DetektReport.DEFAULT_FILENAME}.${report.type.extension}")
+            val destination = report.outputLocation.orNull ?: reportsDir.getOrElse(defaultReportsDir)
+                .file("${DetektReport.DEFAULT_FILENAME}.${report.type.extension}")
             provider.set(destination)
         }
         return provider
