@@ -48,8 +48,6 @@ class HtmlOutputReport : OutputReport() {
 
     override val ending = "html"
 
-    override val name = "HTML report"
-
     override fun render(detektion: Detektion) =
         javaClass.getResource("/$DEFAULT_TEMPLATE")!!
             .openSafeStream()

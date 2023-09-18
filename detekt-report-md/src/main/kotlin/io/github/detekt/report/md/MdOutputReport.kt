@@ -36,8 +36,6 @@ private const val EXTRA_LINES_IN_SNIPPET = 3
 class MdOutputReport : OutputReport() {
     override val ending: String = "md"
 
-    override val name = "Markdown report"
-
     override fun render(detektion: Detektion) = markdown {
         h1 { "detekt" }
 
