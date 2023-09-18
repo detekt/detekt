@@ -21,10 +21,10 @@ allprojects {
 
     detekt {
         source.setFrom(
-            io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_SRC_DIR_JAVA,
-            io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_TEST_SRC_DIR_JAVA,
-            io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_SRC_DIR_KOTLIN,
-            io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_TEST_SRC_DIR_KOTLIN,
+            io.gitlab.arturbosch.detekt.DetektPlugin.DEFAULT_SRC_DIR_JAVA,
+            io.gitlab.arturbosch.detekt.DetektPlugin.DEFAULT_TEST_SRC_DIR_JAVA,
+            io.gitlab.arturbosch.detekt.DetektPlugin.DEFAULT_SRC_DIR_KOTLIN,
+            io.gitlab.arturbosch.detekt.DetektPlugin.DEFAULT_TEST_SRC_DIR_KOTLIN,
         )
         buildUponDefaultConfig = true
         baseline = file("$rootDir/config/detekt/baseline.xml")

@@ -22,7 +22,8 @@ class DetektCommandLineProcessor : CommandLineProcessor {
             Options.config,
             "<path|paths>",
             "Comma separated paths to detekt config files.",
-            false
+            false,
+            allowMultipleOccurrences = true,
         ),
         CliOption(
             Options.configDigest,
@@ -98,7 +99,7 @@ class DetektCommandLineProcessor : CommandLineProcessor {
     override fun processOption(option: AbstractCliOption, value: String, configuration: CompilerConfiguration) {
         when (option.optionName) {
             Options.baseline -> configuration.put(Keys.BASELINE, Path(value))
-            Options.config -> configuration.put(Keys.CONFIG, value.split(",;").map { Path(it) })
+            Options.config -> configuration.appendList(Keys.CONFIG, Path(value))
             Options.configDigest -> configuration.put(Keys.CONFIG_DIGEST, value)
             Options.debug -> configuration.put(Keys.DEBUG, value.toBoolean())
             Options.isEnabled -> configuration.put(Keys.IS_ENABLED, value.toBoolean())
