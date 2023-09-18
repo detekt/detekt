@@ -39,7 +39,7 @@ assertj = "org.assertj:assertj-core:3.24.2"
 classgraph = "io.github.classgraph:classgraph:4.8.162"
 mockk = "io.mockk:mockk:1.13.7"
 snakeyaml = "org.snakeyaml:snakeyaml-engine:2.7"
-jcommander = "com.beust:jcommander:1.82"
+jcommander = "org.jcommander:jcommander:1.83"
 kotlinCompileTesting = { module = "com.github.tschuchortdev:kotlin-compile-testing", version = "1.5.0" }
 poko-annotations = { module = "dev.drewhamilton.poko:poko-annotations", version.ref = "poko" }
 
