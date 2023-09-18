@@ -111,6 +111,8 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseSumOfInsteadOfFlatMapSize(config),
             DoubleNegativeLambda(config),
             UseLet(config),
+            IfStatementCouldBeExpression(config),
+            WhenStatementCouldBeExpression(config),
         )
     )
 }
