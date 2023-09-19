@@ -199,7 +199,6 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/Notification/message/#/PointingT
 $dokka.location:io.gitlab.arturbosch.detekt.api/OutputReport///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-output-report/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/OutputReport/OutputReport/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-output-report/-output-report.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/OutputReport/ending/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-output-report/ending.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/OutputReport/name/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-output-report/name.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/OutputReport/render/#io.gitlab.arturbosch.detekt.api.Detektion/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-output-report/render.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/OutputReport/write/#java.nio.file.Path#io.gitlab.arturbosch.detekt.api.Detektion/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-output-report/write.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/ProjectMetric///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-project-metric/index.html
