@@ -345,7 +345,6 @@ public abstract class io/gitlab/arturbosch/detekt/api/OutputReport : io/gitlab/a
 	public fun <init> ()V
 	public abstract fun getEnding ()Ljava/lang/String;
 	public fun getId ()Ljava/lang/String;
-	public fun getName ()Ljava/lang/String;
 	public fun getPriority ()I
 	public fun init (Lio/gitlab/arturbosch/detekt/api/Config;)V
 	public fun init (Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
