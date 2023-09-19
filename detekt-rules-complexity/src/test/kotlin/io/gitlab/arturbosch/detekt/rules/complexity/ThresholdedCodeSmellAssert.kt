@@ -1,6 +1,6 @@
-package io.gitlab.arturbosch.detekt.test
+package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.test.FindingAssert
 import org.assertj.core.api.AbstractAssert
 
 fun assertThat(thresholdedCodeSmell: ThresholdedCodeSmell) = ThresholdedCodeSmellAssert(thresholdedCodeSmell)
