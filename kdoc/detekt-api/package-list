@@ -28,7 +28,6 @@ $dokka.location:io.gitlab.arturbosch.detekt.api.internal/PathFilters/isIgnored/#
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/PathFilters/isIgnored/#org.jetbrains.kotlin.psi.KtFile/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-path-filters/is-ignored.html
 $dokka.location:io.gitlab.arturbosch.detekt.api.internal/RequiresTypeResolution///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api.internal/-requires-type-resolution/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api////PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/index.html
-$dokka.location:io.gitlab.arturbosch.detekt.api//DEFAULT_FLOAT_CONVERSION_FACTOR/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-d-e-f-a-u-l-t_-f-l-o-a-t_-c-o-n-v-e-r-s-i-o-n_-f-a-c-t-o-r.html
 $dokka.location:io.gitlab.arturbosch.detekt.api//commaSeparatedPattern/kotlin.String#kotlin.Array[kotlin.String]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/comma-separated-pattern.html
 $dokka.location:io.gitlab.arturbosch.detekt.api//config/#TypeParam(bounds=[kotlin.Any])#kotlin.Function1[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/config.html
 $dokka.location:io.gitlab.arturbosch.detekt.api//config/#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/config.html
@@ -175,16 +174,6 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/Location/endSource/#/PointingToD
 $dokka.location:io.gitlab.arturbosch.detekt.api/Location/filePath/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-location/file-path.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Location/source/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-location/source.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Location/text/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-location/text.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/Metric///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/index.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/Metric/Metric/#kotlin.Double#kotlin.Double#kotlin.Int/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/-metric.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/Metric/Metric/#kotlin.Int#kotlin.Int#kotlin.Boolean#kotlin.Int/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/-metric.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/Metric/conversionFactor/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/conversion-factor.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/Metric/doubleThreshold/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/double-threshold.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/Metric/doubleValue/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/double-value.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/Metric/isDouble/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/is-double.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/Metric/threshold/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/threshold.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/Metric/toString/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/to-string.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/Metric/value/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-metric/value.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Notification.Level.Error///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/-error/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Notification.Level.Info///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/-info/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/Notification.Level.Warning///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}detekt-api/io.gitlab.arturbosch.detekt.api/-notification/-level/-warning/index.html
@@ -260,11 +249,6 @@ $dokka.location:io.gitlab.arturbosch.detekt.api/TextLocation/TextLocation/#kotli
 $dokka.location:io.gitlab.arturbosch.detekt.api/TextLocation/end/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/end.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/TextLocation/start/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/start.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/TextLocation/toString/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-text-location/to-string.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/ThresholdedCodeSmell///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/index.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/ThresholdedCodeSmell/ThresholdedCodeSmell/#io.gitlab.arturbosch.detekt.api.Issue#io.gitlab.arturbosch.detekt.api.Entity#io.gitlab.arturbosch.detekt.api.Metric#kotlin.String#kotlin.collections.List[io.gitlab.arturbosch.detekt.api.Entity]/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/-thresholded-code-smell.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/ThresholdedCodeSmell/compact/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/compact.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/ThresholdedCodeSmell/messageOrDescription/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/message-or-description.html
-$dokka.location:io.gitlab.arturbosch.detekt.api/ThresholdedCodeSmell/metric/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-thresholded-code-smell/metric.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/UnstableApi///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-unstable-api/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/UnstableApi/reason/#/PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-unstable-api/reason.html
 $dokka.location:io.gitlab.arturbosch.detekt.api/ValueWithReason///PointingToDeclaration/detekt-api/io.gitlab.arturbosch.detekt.api/-value-with-reason/index.html
