@@ -37,7 +37,6 @@ class MdOutputReport : OutputReport() {
 
     override val id: String = "MdOutputReport"
     override val ending: String = "md"
-    override val name = "Markdown report"
 
     override fun render(detektion: Detektion) = markdown {
         h1 { "detekt" }

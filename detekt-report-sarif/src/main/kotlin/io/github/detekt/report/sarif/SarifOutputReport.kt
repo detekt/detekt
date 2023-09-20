@@ -25,7 +25,6 @@ class SarifOutputReport : OutputReport() {
 
     override val ending: String = "sarif"
     override val id: String = "sarif"
-    override val name = "SARIF: a standard format for the output of static analysis tools"
 
     private lateinit var config: Config
     private var basePath: String? = null

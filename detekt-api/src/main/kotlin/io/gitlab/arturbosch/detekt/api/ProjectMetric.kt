@@ -20,3 +20,5 @@ open class ProjectMetric(
         return "$type: $stringValue"
     }
 }
+
+private const val DEFAULT_FLOAT_CONVERSION_FACTOR = 100

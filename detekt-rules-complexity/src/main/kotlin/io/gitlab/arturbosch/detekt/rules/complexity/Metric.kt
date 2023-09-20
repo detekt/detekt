@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.api
+package io.gitlab.arturbosch.detekt.rules.complexity
 
 /**
  * Metric type, can be an integer or double value. Internally it is stored as an integer,
