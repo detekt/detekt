@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 class NotificationReport : ConsoleReport() {
 
     override val id: String = "NotificationReport"
+
     /**
      * Print notifications before the build failure report but after all other reports.
      * This allows to compute intermediate messages based on detekt results and do not rely on 'println'.
