@@ -8,6 +8,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 class ClassCountProcessor : AbstractProjectMetricProcessor() {
 
+    override val id: String = "ClassCountProcessor"
     override val visitor = ClassCountVisitor()
     override val key = numberOfClassesKey
 }

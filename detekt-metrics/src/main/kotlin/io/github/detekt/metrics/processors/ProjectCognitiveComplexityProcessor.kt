@@ -6,6 +6,8 @@ import org.jetbrains.kotlin.psi.KtFile
 
 class ProjectCognitiveComplexityProcessor : AbstractProcessor() {
 
+    override val id: String = "ProjectCognitiveComplexityProcessor"
+
     override val visitor = object : DetektVisitor() {
 
         override fun visitKtFile(file: KtFile) {

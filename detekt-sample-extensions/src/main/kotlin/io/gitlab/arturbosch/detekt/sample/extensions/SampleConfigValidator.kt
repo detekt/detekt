@@ -6,6 +6,8 @@ import io.gitlab.arturbosch.detekt.api.Notification
 
 class SampleConfigValidator : ConfigValidator {
 
+    override val id: String = "SampleConfigValidator"
+
     override fun validate(config: Config): Collection<Notification> {
         val result = mutableListOf<Notification>()
         runCatching {

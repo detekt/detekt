@@ -25,6 +25,8 @@ class LicenceHeaderLoaderExtension : FileProcessListener {
     private lateinit var config: Config
     private var configPath: Path? = null
 
+    override val id: String = "LicenceHeaderLoaderExtension"
+
     override fun init(context: SetupContext) {
         this.config = context.config
         this.configPath = context.configUris.lastOrNull()?.toPath()

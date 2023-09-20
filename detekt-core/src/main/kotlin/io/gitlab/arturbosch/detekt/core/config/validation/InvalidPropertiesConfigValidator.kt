@@ -9,9 +9,12 @@ internal class InvalidPropertiesConfigValidator(
     deprecatedProperties: Set<DeprecatedProperty>,
     private val excludePatterns: Set<Regex>,
 ) : AbstractYamlConfigValidator() {
+
     private val deprecatedPropertyPaths: Set<String> = deprecatedProperties
         .map { "${it.ruleSetId}>${it.ruleId}>${it.propertyName}" }
         .toSet()
+
+    override val id: String = "InvalidPropertiesConfigValidator"
 
     override fun validate(
         configToValidate: YamlConfig,

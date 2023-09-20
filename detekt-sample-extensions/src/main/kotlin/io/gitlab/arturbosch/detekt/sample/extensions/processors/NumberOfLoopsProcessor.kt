@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 
 class NumberOfLoopsProcessor : FileProcessListener {
 
+    override val id: String = "NumberOfLoopsProcessor"
     override fun onProcess(file: KtFile, bindingContext: BindingContext) {
         val visitor = LoopVisitor()
         file.accept(visitor)
