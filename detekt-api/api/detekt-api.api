@@ -123,7 +123,6 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/ConfigValidator 
 }
 
 public final class io/gitlab/arturbosch/detekt/api/ConfigValidator$DefaultImpls {
-	public static fun getId (Lio/gitlab/arturbosch/detekt/api/ConfigValidator;)Ljava/lang/String;
 	public static fun getPriority (Lio/gitlab/arturbosch/detekt/api/ConfigValidator;)I
 	public static fun init (Lio/gitlab/arturbosch/detekt/api/ConfigValidator;Lio/gitlab/arturbosch/detekt/api/Config;)V
 	public static fun init (Lio/gitlab/arturbosch/detekt/api/ConfigValidator;Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
@@ -131,7 +130,6 @@ public final class io/gitlab/arturbosch/detekt/api/ConfigValidator$DefaultImpls 
 
 public abstract class io/gitlab/arturbosch/detekt/api/ConsoleReport : io/gitlab/arturbosch/detekt/api/Extension {
 	public fun <init> ()V
-	public fun getId ()Ljava/lang/String;
 	public fun getPriority ()I
 	public fun init (Lio/gitlab/arturbosch/detekt/api/Config;)V
 	public fun init (Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
@@ -217,7 +215,6 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Extension {
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Extension$DefaultImpls {
-	public static fun getId (Lio/gitlab/arturbosch/detekt/api/Extension;)Ljava/lang/String;
 	public static fun getPriority (Lio/gitlab/arturbosch/detekt/api/Extension;)I
 	public static fun init (Lio/gitlab/arturbosch/detekt/api/Extension;Lio/gitlab/arturbosch/detekt/api/Config;)V
 	public static fun init (Lio/gitlab/arturbosch/detekt/api/Extension;Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
@@ -231,7 +228,6 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/FileProcessListe
 }
 
 public final class io/gitlab/arturbosch/detekt/api/FileProcessListener$DefaultImpls {
-	public static fun getId (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;)Ljava/lang/String;
 	public static fun getPriority (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;)I
 	public static fun init (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Lio/gitlab/arturbosch/detekt/api/Config;)V
 	public static fun init (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
@@ -326,7 +322,6 @@ public final class io/gitlab/arturbosch/detekt/api/Notification$Level : java/lan
 public abstract class io/gitlab/arturbosch/detekt/api/OutputReport : io/gitlab/arturbosch/detekt/api/Extension {
 	public fun <init> ()V
 	public abstract fun getEnding ()Ljava/lang/String;
-	public fun getId ()Ljava/lang/String;
 	public fun getPriority ()I
 	public fun init (Lio/gitlab/arturbosch/detekt/api/Config;)V
 	public fun init (Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
@@ -357,7 +352,6 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/ReportingExtensi
 }
 
 public final class io/gitlab/arturbosch/detekt/api/ReportingExtension$DefaultImpls {
-	public static fun getId (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;)Ljava/lang/String;
 	public static fun getPriority (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;)I
 	public static fun init (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Lio/gitlab/arturbosch/detekt/api/Config;)V
 	public static fun init (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
