@@ -13,8 +13,7 @@ fun interface Suppressor {
 }
 
 private fun buildSuppressors(rule: ConfigAware, bindingContext: BindingContext): List<Suppressor> {
-    return listOfNotNull(
-        annotationSuppressorFactory(rule, bindingContext),
+    return annotationSuppressorFactory(rule, bindingContext) + listOfNotNull(
         functionSuppressorFactory(rule, bindingContext),
     )
 }
