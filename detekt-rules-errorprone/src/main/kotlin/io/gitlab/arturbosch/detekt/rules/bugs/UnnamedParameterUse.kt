@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
@@ -79,9 +78,8 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
 class UnnamedParameterUse(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Maintainability,
         "Passing no named parameters can cause issue when parameters order change",
-        Debt.TEN_MINS
+        Debt.FIVE_MINS
     )
 
     @Configuration("Allow adjacent unnamed params when type of parameters can not be assigned to each other")
@@ -111,8 +109,9 @@ class UnnamedParameterUse(config: Config = Config.empty) : Rule(config) {
         }
 
         val namedArgumentList = valueArgumentList.arguments.map {
+            val isNamedOrVararg = it.isNamed() || paramDescriptorToArgumentMap[it]?.isVararg == true
             // No name parameter if it is vararg
-            (it.isNamed() || paramDescriptorToArgumentMap[it]?.isVararg == true) to it
+            isNamedOrVararg to it
         }
 
         if (allowAdjacentDifferentTypeParams && namedArgumentList.windowed(2)
