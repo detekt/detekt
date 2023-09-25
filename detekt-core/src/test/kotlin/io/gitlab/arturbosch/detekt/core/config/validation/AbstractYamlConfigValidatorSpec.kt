@@ -37,7 +37,11 @@ internal class AbstractYamlConfigValidatorSpec {
     }
 
     private class SettingsCapturingValidatorAbstract : AbstractYamlConfigValidator() {
+
+        override val id: String = "SettingsCapturingValidatorAbstract"
+
         lateinit var validationSettings: ValidationSettings
+
         override fun validate(
             configToValidate: YamlConfig,
             settings: ValidationSettings

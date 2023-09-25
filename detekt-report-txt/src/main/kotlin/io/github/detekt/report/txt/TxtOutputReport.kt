@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.OutputReport
  */
 class TxtOutputReport : OutputReport() {
 
+    override val id: String = "TxtOutputReport"
     override val ending: String = "txt"
 
     override fun render(detektion: Detektion): String {

@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.psi.KtFile
 
 class KtFileCountProcessor : AbstractProjectMetricProcessor() {
 
+    override val id: String = "KtFileCountProcessor"
     override val visitor = KtFileCountVisitor()
     override val key = numberOfFilesKey
 }

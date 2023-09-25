@@ -10,6 +10,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
 
 class QualifiedNameProcessor : FileProcessListener {
 
+    override val id: String = "QualifiedNameProcessor"
+
     override fun onProcess(file: KtFile, bindingContext: BindingContext) {
         val packageName = file.packageFqName.asString()
         val nameVisitor = ClassNameVisitor()
