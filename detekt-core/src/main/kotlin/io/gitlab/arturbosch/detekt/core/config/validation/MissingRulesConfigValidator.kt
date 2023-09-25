@@ -12,6 +12,8 @@ internal class MissingRulesConfigValidator(
     private val excludePatterns: Set<Regex>,
 ) : AbstractYamlConfigValidator() {
 
+    override val id: String = "MissingRulesConfigValidator"
+
     override fun validate(
         configToValidate: YamlConfig,
         settings: ValidationSettings

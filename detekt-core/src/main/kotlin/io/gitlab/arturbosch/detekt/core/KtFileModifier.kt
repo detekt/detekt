@@ -14,6 +14,8 @@ import kotlin.io.path.writeText
 
 class KtFileModifier : FileProcessListener {
 
+    override val id: String = "KtFileModifier"
+
     override fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
         files.filter { it.modificationStamp > 0 }
             .map { it.absolutePath() to it.unnormalizeContent() }

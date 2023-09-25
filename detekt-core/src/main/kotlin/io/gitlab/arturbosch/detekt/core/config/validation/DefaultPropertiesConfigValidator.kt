@@ -13,6 +13,8 @@ internal class DefaultPropertiesConfigValidator(
     private val baseline: Config,
 ) : ConfigValidator {
 
+    override val id: String = "DefaultPropertiesConfigValidator"
+
     override fun validate(config: Config): Collection<Notification> {
         fun patterns(): Set<Regex> {
             val pluginExcludes = RuleSetLocator(settings).load()

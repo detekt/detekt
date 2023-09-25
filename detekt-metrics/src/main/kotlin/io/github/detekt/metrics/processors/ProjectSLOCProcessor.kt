@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.psi.KtFile
 
 class ProjectSLOCProcessor : AbstractProcessor() {
 
+    override val id: String = "ProjectSLOCProcessor"
     override val visitor: DetektVisitor = SLOCVisitor()
     override val key: Key<Int> = sourceLinesKey
 }

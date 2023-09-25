@@ -13,7 +13,7 @@ interface Extension {
     /**
      * Name of the extension.
      */
-    val id: String get() = javaClass.simpleName
+    val id: String
 
     /**
      * Is used to run extensions in a specific order.

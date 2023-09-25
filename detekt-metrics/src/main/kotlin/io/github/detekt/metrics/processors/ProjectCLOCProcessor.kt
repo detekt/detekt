@@ -8,6 +8,7 @@ import org.jetbrains.kotlin.psi.KtFile
 
 class ProjectCLOCProcessor : AbstractProcessor() {
 
+    override val id: String = "ProjectCLOCProcessor"
     override val key = commentLinesKey
     override val visitor = CLOCVisitor()
 }

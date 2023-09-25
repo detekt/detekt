@@ -13,6 +13,8 @@ class PackageCountProcessor : FileProcessListener {
     private val visitor = PackageCountVisitor()
     private val key = numberOfPackagesKey
 
+    override val id: String = "PackageCountProcessor"
+
     override fun onProcess(file: KtFile, bindingContext: BindingContext) {
         file.accept(visitor)
     }

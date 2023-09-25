@@ -11,6 +11,8 @@ class DetektProgressListener : FileProcessListener {
 
     private lateinit var outPrinter: Appendable
 
+    override val id: String = "DetektProgressListener"
+
     @OptIn(UnstableApi::class)
     override fun init(context: SetupContext) {
         this.outPrinter = context.outputChannel
