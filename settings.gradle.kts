@@ -46,7 +46,7 @@ enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 // build scan plugin can only be applied in settings file
 plugins {
     id("com.gradle.enterprise") version "3.13.4"
-    id("com.gradle.common-custom-user-data-gradle-plugin") version "1.11.2"
+    id("com.gradle.common-custom-user-data-gradle-plugin") version "1.11.3"
 }
 
 val isCiBuild = providers.environmentVariable("CI").isPresent
