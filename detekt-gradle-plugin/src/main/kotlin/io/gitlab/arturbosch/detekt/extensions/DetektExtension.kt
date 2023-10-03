@@ -65,7 +65,7 @@ internal fun loadDetektVersion(classLoader: ClassLoader): String {
         .toList()
         .mapNotNull { versions ->
             Properties().run {
-                load(versions.openSafeStream())
+                versions.openSafeStream().use(::load)
                 getProperty("detektVersion")
             }
         }
