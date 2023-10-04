@@ -77,4 +77,11 @@ class DetektPlainSpec {
             assertThat(argumentString).doesNotContain("--classpath")
         }
     }
+
+    @Test
+    fun `resolves kotlin version from manifest`() {
+        val version = getSupportedKotlinVersion()
+
+        assertThat(version).isNotBlank()
+    }
 }

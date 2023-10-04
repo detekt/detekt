@@ -6,10 +6,13 @@ import io.gitlab.arturbosch.detekt.internal.DetektAndroid
 import io.gitlab.arturbosch.detekt.internal.DetektJvm
 import io.gitlab.arturbosch.detekt.internal.DetektMultiplatform
 import io.gitlab.arturbosch.detekt.internal.DetektPlain
+import org.gradle.api.Incubating
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
+import java.net.URL
+import java.util.jar.Manifest
 
 class DetektPlugin : Plugin<Project> {
 
@@ -176,3 +179,16 @@ class DetektPlugin : Plugin<Project> {
 const val CONFIGURATION_DETEKT = "detekt"
 const val CONFIGURATION_DETEKT_PLUGINS = "detektPlugins"
 const val USE_WORKER_API = "detekt.use.worker.api"
+
+@Incubating
+fun getSupportedKotlinVersion(): String {
+    return DetektPlugin::class.java.classLoader.getResources("META-INF/MANIFEST.MF")
+        .asSequence()
+        .mapNotNull { runCatching { readVersion(it) }.getOrNull() }
+        .first()
+}
+
+private fun readVersion(resource: URL): String? = resource.openConnection()
+    .apply { useCaches = false }
+    .getInputStream()
+    .use { Manifest(it).mainAttributes.getValue("KotlinImplementationVersion") }
