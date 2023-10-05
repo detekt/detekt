@@ -1,10 +1,7 @@
-import org.jetbrains.dokka.gradle.DokkaTask
-
 plugins {
     id("module")
-    alias(libs.plugins.dokka)
+    id("public-api")
     `java-test-fixtures`
-    alias(libs.plugins.binaryCompatibilityValidator)
     alias(libs.plugins.poko)
 }
 
@@ -31,14 +28,6 @@ listOf(configurations.testFixturesApiElements, configurations.testFixturesRuntim
             skip()
         }
     }
-}
-
-tasks.withType<DokkaTask>().configureEach {
-    outputDirectory = rootDir.resolve("website/static/kdoc")
-}
-
-tasks.dokkaHtml {
-    notCompatibleWithConfigurationCache("https://github.com/Kotlin/dokka/issues/1217")
 }
 
 apiValidation {
