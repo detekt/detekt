@@ -10,19 +10,19 @@ fun Project.consumeGeneratedConfig(
     forTask: TaskProvider<*>,
 ) {
     val configurationName = "generatedConfigFor${forTask.name.replaceFirstChar { it.titlecase() }}"
-    val generatedConfig = configurations.create(configurationName) {
-        isCanBeConsumed = false
-        isCanBeResolved = true
+    val generatedConfig = configurations.dependencyScope(configurationName)
+    val generatedConfigFiles = configurations.resolvable("${configurationName}Files") {
+        extendsFrom(generatedConfig.get())
     }
 
     dependencies {
-        generatedConfig(fromProject) {
+        generatedConfig.get()(fromProject) {
             targetConfiguration = fromConfiguration
         }
     }
 
     forTask.configure {
-        inputs.files(generatedConfig)
+        inputs.files(generatedConfigFiles)
             .withPropertyName(generatedConfig.name)
             .withPathSensitivity(PathSensitivity.RELATIVE)
     }
