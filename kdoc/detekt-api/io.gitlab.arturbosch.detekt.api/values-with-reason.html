@@ -1,10 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html class="no-js">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>valuesWithReason</title>
-    <link href="../../images/logo-icon.svg" rel="icon" type="image/svg">
-    <script>var pathToRoot = "../../";</script>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../";</script>
     <script>document.documentElement.classList.replace("no-js","js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
     if (storage == null) {
@@ -19,20 +18,19 @@
         }
     }
     </script>
-<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
-<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async="async"></script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
 <link href="../../styles/style.css" rel="Stylesheet">
 <link href="../../styles/main.css" rel="Stylesheet">
 <link href="../../styles/prism.css" rel="Stylesheet">
 <link href="../../styles/logo-styles.css" rel="Stylesheet">
 <link href="../../styles/font-jb-sans-auto.css" rel="Stylesheet">
-<script type="text/javascript" src="../../scripts/clipboard.js" async="async"></script>
-<script type="text/javascript" src="../../scripts/navigation-loader.js" async="async"></script>
-<script type="text/javascript" src="../../scripts/platform-content-handler.js" async="async"></script>
-<script type="text/javascript" src="../../scripts/main.js" defer="defer"></script>
-<script type="text/javascript" src="../../scripts/prism.js" async="async"></script>
-<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
-</head>
+<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
 <body>
     <div class="root">
 <nav class="navigation" id="navigation-wrapper">
@@ -40,15 +38,14 @@
         <div class="navigation-title">
             <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
             <div class="library-name">
-                    <a class="library-name--link" href="../../index.html">
-                            detekt-api
-                    </a>
+<a class="library-name--link" href="../../index.html">
+                            detekt
+                    </a>            </div>
+            <div class="library-version">1.23.1
             </div>
-            <div class="library-version">
-1.23.1            </div>
         </div>
         <div class="filter-section" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":detekt-api:dokkaHtml/main">jvm</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":detekt-api:dokkaHtmlPartial/main">jvm</button>
         </div>
     </div>
     <div class="navigation-controls">
@@ -61,20 +58,19 @@
                 <div class="sidebar--inner" id="sideMenu"></div>
             </div>
             <div id="main">
-<div class="main-content" data-page-type="member" id="content" pageIds="detekt-api::io.gitlab.arturbosch.detekt.api//valuesWithReason/#kotlin.Array[kotlin.Pair[kotlin.String,kotlin.String?]]/PointingToDeclaration//-193512625">
-  <div class="breadcrumbs"><a href="../../index.html">detekt-api</a><span class="delimiter">/</span><a href="index.html">io.gitlab.arturbosch.detekt.api</a><span class="delimiter">/</span><span class="current">valuesWithReason</span></div>
+<div class="main-content" data-page-type="member" id="content" pageids="detekt-api::io.gitlab.arturbosch.detekt.api//valuesWithReason/#kotlin.Array[kotlin.Pair[kotlin.String,kotlin.String?]]/PointingToDeclaration//581599712">
+  <div class="breadcrumbs"><a href="../index.html">detekt-api</a><span class="delimiter">/</span><a href="index.html">io.gitlab.arturbosch.detekt.api</a><span class="delimiter">/</span><span class="current">valuesWithReason</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>values</span><wbr></wbr><span>With</span><wbr></wbr><span><span>Reason</span></span></h1>
+    <h1 class="cover"><span>values</span><wbr><span>With</span><wbr><span><span>Reason</span></span></h1>
   </div>
-  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="values-with-reason.html"><span class="token function">valuesWithReason</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>values<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-values-with-reason/index.html">ValuesWithReason</a></div><p class="paragraph">This factory method can be used by rule authors to specify one or many configuration values along with an explanation for each value. For example:</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">@Configuration(&quot;imports which should not be used&quot;)<br>private val imports: ValuesWithReason by config(<br>    valuesWithReason(&quot;org.junit.Test&quot; to &quot;Do not use Junit4. Use org.junit.jupiter.api.Test instead.&quot;)<br>)</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Note that the <a href="config.html">config</a> property delegate only supports the factory methods when defining <a href="-values-with-reason/index.html">ValuesWithReason</a>.</p><hr><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="values-with-reason.html"><span class="token function">valuesWithReason</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">values<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-value-with-reason/index.html">ValueWithReason</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-values-with-reason/index.html">ValuesWithReason</a></div><p class="paragraph">This factory method can be used by rule authors to specify one or many configuration values along with an explanation for each value.</p><p class="paragraph">Note that the <a href="config.html">config</a> property delegate only supports the factory methods when defining <a href="-values-with-reason/index.html">ValuesWithReason</a>.</p></div></div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="values-with-reason.html"><span class="token function">valuesWithReason</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>values<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-values-with-reason/index.html">ValuesWithReason</a></div><p class="paragraph">This factory method can be used by rule authors to specify one or many configuration values along with an explanation for each value. For example:</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">@Configuration("imports which should not be used")<br>private val imports: ValuesWithReason by config(<br>    valuesWithReason("org.junit.Test" to "Do not use Junit4. Use org.junit.jupiter.api.Test instead.")<br>)</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Note that the <a href="config.html">config</a> property delegate only supports the factory methods when defining <a href="-values-with-reason/index.html">ValuesWithReason</a>.</p><hr><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="values-with-reason.html"><span class="token function">valuesWithReason</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">values<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-value-with-reason/index.html">ValueWithReason</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-values-with-reason/index.html">ValuesWithReason</a></div><p class="paragraph">This factory method can be used by rule authors to specify one or many configuration values along with an explanation for each value.</p><p class="paragraph">Note that the <a href="config.html">config</a> property delegate only supports the factory methods when defining <a href="-values-with-reason/index.html">ValuesWithReason</a>.</p></div></div>
 </div>
       <div class="footer">
-        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span
-                class="pull-right"><span>Generated by </span><a
-                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
       </div>
             </div>
         </div>
     </div>
 </body>
 </html>
+

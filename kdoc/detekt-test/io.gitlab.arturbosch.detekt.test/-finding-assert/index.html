@@ -1,0 +1,843 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>FindingAssert</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+<a class="library-name--link" href="../../../index.html">
+                            detekt
+                    </a>            </div>
+            <div class="library-version">1.23.1
+            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":detekt-test:dokkaHtmlPartial/main">jvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="detekt-test::io.gitlab.arturbosch.detekt.test/FindingAssert///PointingToDeclaration//-90423530">
+  <div class="breadcrumbs"><a href="../../index.html">detekt-test</a><span class="delimiter">/</span><a href="../index.html">io.gitlab.arturbosch.detekt.test</a><span class="delimiter">/</span><span class="current">FindingAssert</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Finding</span><wbr><span><span>Assert</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">FindingAssert</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>actual<span class="token operator">: </span><a href="../../../detekt-api/io.gitlab.arturbosch.detekt.api/-finding/index.html">Finding</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.assertj.core.api/AbstractAssert///PointingToDeclaration/">AbstractAssert</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">FindingAssert</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../../../detekt-api/io.gitlab.arturbosch.detekt.api/-finding/index.html">Finding</a><span class="token operator">&gt; </span></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="1700713707%2FConstructors%2F-90423530" anchor-label="FindingAssert" id="1700713707%2FConstructors%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-finding-assert.html"><span>Finding</span><wbr><span><span>Assert</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1700713707%2FConstructors%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">actual<span class="token operator">: </span><a href="../../../detekt-api/io.gitlab.arturbosch.detekt.api/-finding/index.html">Finding</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-41512083%2FProperties%2F-90423530" anchor-label="actual" id="-41512083%2FProperties%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="actual.html"><span><span>actual</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-41512083%2FProperties%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="actual.html">actual</a><span class="token operator">: </span><a href="../../../detekt-api/io.gitlab.arturbosch.detekt.api/-finding/index.html">Finding</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="256530264%2FProperties%2F-90423530" anchor-label="info" id="256530264%2FProperties%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#256530264%2FProperties%2F-90423530"><span><span>info</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="256530264%2FProperties%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="index.html#256530264%2FProperties%2F-90423530">info</a><span class="token operator">: </span><span data-unresolved-link="org.assertj.core.api/WritableAssertionInfo///PointingToDeclaration/">WritableAssertionInfo</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-216174753%2FFunctions%2F-90423530" anchor-label="as" id="-216174753%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#77470106%2FFunctions%2F-90423530"><span><span>as</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-216174753%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#77470106%2FFunctions%2F-90423530"><span class="token function">as</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">descriptionSupplier<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html">Supplier</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-1864084125%2FFunctions%2F-90423530"><span class="token function">as</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">description<span class="token operator">: </span><span data-unresolved-link="org.assertj.core.description/Description///PointingToDeclaration/">Description</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-406605218%2FFunctions%2F-90423530"><span class="token function">as</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">description<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">vararg </span>args<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-86111284%2FFunctions%2F-90423530" anchor-label="asInstanceOf" id="-86111284%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-86111284%2FFunctions%2F-90423530"><span>as</span><wbr><span>Instance</span><wbr><span><span>Of</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-86111284%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html#-86111284%2FFunctions%2F-90423530">ASSERT</a><span class="token operator"> : </span><span data-unresolved-link="org.assertj.core.api/AbstractAssert///PointingToDeclaration/">AbstractAssert</span><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="index.html#-86111284%2FFunctions%2F-90423530"><span class="token function">asInstanceOf</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">instanceOfAssertFactory<span class="token operator">: </span><span data-unresolved-link="org.assertj.core.api/InstanceOfAssertFactory///PointingToDeclaration/">InstanceOfAssertFactory</span><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="index.html#-86111284%2FFunctions%2F-90423530">ASSERT</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html#-86111284%2FFunctions%2F-90423530">ASSERT</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1738161130%2FFunctions%2F-90423530" anchor-label="asList" id="-1738161130%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1738161130%2FFunctions%2F-90423530"><span>as</span><wbr><span><span>List</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1738161130%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-1738161130%2FFunctions%2F-90423530"><span class="token function">asList</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.assertj.core.api/AbstractListAssert///PointingToDeclaration/">AbstractListAssert</span><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token punctuation">, </span><span class="token keyword"></span><span data-unresolved-link="org.assertj.core.api/ObjectAssert///PointingToDeclaration/">ObjectAssert</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1541252541%2FFunctions%2F-90423530" anchor-label="asString" id="-1541252541%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1541252541%2FFunctions%2F-90423530"><span>as</span><wbr><span><span>String</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1541252541%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-1541252541%2FFunctions%2F-90423530"><span class="token function">asString</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.assertj.core.api/AbstractStringAssert///PointingToDeclaration/">AbstractStringAssert</span><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-960730427%2FFunctions%2F-90423530" anchor-label="describedAs" id="-960730427%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1817367386%2FFunctions%2F-90423530"><span>described</span><wbr><span><span>As</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-960730427%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#1817367386%2FFunctions%2F-90423530"><span class="token function">describedAs</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">description<span class="token operator">: </span><span data-unresolved-link="org.assertj.core.description/Description///PointingToDeclaration/">Description</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-832688777%2FFunctions%2F-90423530"><span class="token function">describedAs</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">description<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">vararg </span>args<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1949056917%2FFunctions%2F-90423530" anchor-label="descriptionText" id="-1949056917%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1949056917%2FFunctions%2F-90423530"><span>description</span><wbr><span><span>Text</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1949056917%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-1949056917%2FFunctions%2F-90423530"><span class="token function">descriptionText</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="56388734%2FFunctions%2F-90423530" anchor-label="doesNotHave" id="56388734%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#56388734%2FFunctions%2F-90423530"><span>does</span><wbr><span>Not</span><wbr><span><span>Have</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="56388734%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#56388734%2FFunctions%2F-90423530"><span class="token function">doesNotHave</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">condition<span class="token operator">: </span><span data-unresolved-link="org.assertj.core.api/Condition///PointingToDeclaration/">Condition</span><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="../../../detekt-api/io.gitlab.arturbosch.detekt.api/-finding/index.html">Finding</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1349871803%2FFunctions%2F-90423530" anchor-label="doesNotHaveSameClassAs" id="-1349871803%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1349871803%2FFunctions%2F-90423530"><span>does</span><wbr><span>Not</span><wbr><span>Have</span><wbr><span>Same</span><wbr><span>Class</span><wbr><span><span>As</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1349871803%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-1349871803%2FFunctions%2F-90423530"><span class="token function">doesNotHaveSameClassAs</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1699561280%2FFunctions%2F-90423530" anchor-label="doesNotHaveSameHashCodeAs" id="1699561280%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1699561280%2FFunctions%2F-90423530"><span>does</span><wbr><span>Not</span><wbr><span>Have</span><wbr><span>Same</span><wbr><span>Hash</span><wbr><span>Code</span><wbr><span><span>As</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1699561280%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#1699561280%2FFunctions%2F-90423530"><span class="token function">doesNotHaveSameHashCodeAs</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="55457182%2FFunctions%2F-90423530" anchor-label="doesNotHaveToString" id="55457182%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#55457182%2FFunctions%2F-90423530"><span>does</span><wbr><span>Not</span><wbr><span>Have</span><wbr><span>To</span><wbr><span><span>String</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="55457182%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#55457182%2FFunctions%2F-90423530"><span class="token function">doesNotHaveToString</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">otherToString<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1930787451%2FFunctions%2F-90423530" anchor-label="equals" id="1930787451%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1930787451%2FFunctions%2F-90423530"><span><span>equals</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1930787451%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="index.html#1930787451%2FFunctions%2F-90423530"><span class="token function"><strike>equals</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1980742228%2FFunctions%2F-90423530" anchor-label="getWritableAssertionInfo" id="-1980742228%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1980742228%2FFunctions%2F-90423530"><span>get</span><wbr><span>Writable</span><wbr><span>Assertion</span><wbr><span><span>Info</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1980742228%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-1980742228%2FFunctions%2F-90423530"><span class="token function">getWritableAssertionInfo</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.assertj.core.api/WritableAssertionInfo///PointingToDeclaration/">WritableAssertionInfo</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1510903286%2FFunctions%2F-90423530" anchor-label="has" id="1510903286%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1510903286%2FFunctions%2F-90423530"><span><span>has</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1510903286%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#1510903286%2FFunctions%2F-90423530"><span class="token function">has</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">condition<span class="token operator">: </span><span data-unresolved-link="org.assertj.core.api/Condition///PointingToDeclaration/">Condition</span><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="../../../detekt-api/io.gitlab.arturbosch.detekt.api/-finding/index.html">Finding</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-452794357%2FFunctions%2F-90423530" anchor-label="hashCode" id="-452794357%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-452794357%2FFunctions%2F-90423530"><span>hash</span><wbr><span><span>Code</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-452794357%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-452794357%2FFunctions%2F-90423530"><span class="token function">hashCode</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-62125834%2FFunctions%2F-90423530" anchor-label="hasMessage" id="-62125834%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-message.html"><span>has</span><wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-62125834%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="has-message.html"><span class="token function">hasMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">expectedMessage<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1014987075%2FFunctions%2F-90423530" anchor-label="hasSameClassAs" id="-1014987075%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1014987075%2FFunctions%2F-90423530"><span>has</span><wbr><span>Same</span><wbr><span>Class</span><wbr><span><span>As</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1014987075%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-1014987075%2FFunctions%2F-90423530"><span class="token function">hasSameClassAs</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1041464520%2FFunctions%2F-90423530" anchor-label="hasSameHashCodeAs" id="1041464520%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1041464520%2FFunctions%2F-90423530"><span>has</span><wbr><span>Same</span><wbr><span>Hash</span><wbr><span>Code</span><wbr><span><span>As</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1041464520%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#1041464520%2FFunctions%2F-90423530"><span class="token function">hasSameHashCodeAs</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-106778742%2FFunctions%2F-90423530" anchor-label="hasSourceLocation" id="-106778742%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-source-location.html"><span>has</span><wbr><span>Source</span><wbr><span><span>Location</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-106778742%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="has-source-location.html"><span class="token function">hasSourceLocation</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">line<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">column<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="390341910%2FFunctions%2F-90423530" anchor-label="hasToString" id="390341910%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#390341910%2FFunctions%2F-90423530"><span>has</span><wbr><span>To</span><wbr><span><span>String</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="390341910%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#390341910%2FFunctions%2F-90423530"><span class="token function">hasToString</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">expectedToString<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2047467476%2FFunctions%2F-90423530" anchor-label="is" id="2047467476%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#2047467476%2FFunctions%2F-90423530"><span><span>is</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2047467476%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#2047467476%2FFunctions%2F-90423530"><span class="token function">is</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">condition<span class="token operator">: </span><span data-unresolved-link="org.assertj.core.api/Condition///PointingToDeclaration/">Condition</span><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="../../../detekt-api/io.gitlab.arturbosch.detekt.api/-finding/index.html">Finding</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-54353808%2FFunctions%2F-90423530" anchor-label="isEqualTo" id="-54353808%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-54353808%2FFunctions%2F-90423530"><span>is</span><wbr><span>Equal</span><wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-54353808%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-54353808%2FFunctions%2F-90423530"><span class="token function">isEqualTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">expected<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1450011196%2FFunctions%2F-90423530" anchor-label="isExactlyInstanceOf" id="1450011196%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1450011196%2FFunctions%2F-90423530"><span>is</span><wbr><span>Exactly</span><wbr><span>Instance</span><wbr><span><span>Of</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1450011196%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#1450011196%2FFunctions%2F-90423530"><span class="token function">isExactlyInstanceOf</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2131825483%2FFunctions%2F-90423530" anchor-label="isIn" id="2131825483%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#368161192%2FFunctions%2F-90423530"><span>is</span><wbr><span><span>In</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2131825483%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#368161192%2FFunctions%2F-90423530"><span class="token function">isIn</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>values<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#1389542191%2FFunctions%2F-90423530"><span class="token function">isIn</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">values<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-iterable/index.html">MutableIterable</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1044173562%2FFunctions%2F-90423530" anchor-label="isInstanceOf" id="-1044173562%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1044173562%2FFunctions%2F-90423530"><span>is</span><wbr><span>Instance</span><wbr><span><span>Of</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1044173562%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-1044173562%2FFunctions%2F-90423530"><span class="token function">isInstanceOf</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-824097446%2FFunctions%2F-90423530" anchor-label="isInstanceOfAny" id="-824097446%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-824097446%2FFunctions%2F-90423530"><span>is</span><wbr><span>Instance</span><wbr><span>Of</span><wbr><span><span>Any</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-824097446%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-824097446%2FFunctions%2F-90423530"><span class="token function">isInstanceOfAny</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>types<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1877146726%2FFunctions%2F-90423530" anchor-label="isInstanceOfSatisfying" id="1877146726%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1877146726%2FFunctions%2F-90423530"><span>is</span><wbr><span>Instance</span><wbr><span>Of</span><wbr><span><span>Satisfying</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1877146726%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html#1877146726%2FFunctions%2F-90423530">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="index.html#1877146726%2FFunctions%2F-90423530"><span class="token function">isInstanceOfSatisfying</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html#1877146726%2FFunctions%2F-90423530">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">requirements<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html">Consumer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html#1877146726%2FFunctions%2F-90423530">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1659131493%2FFunctions%2F-90423530" anchor-label="isNot" id="1659131493%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1659131493%2FFunctions%2F-90423530"><span>is</span><wbr><span><span>Not</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1659131493%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#1659131493%2FFunctions%2F-90423530"><span class="token function">isNot</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">condition<span class="token operator">: </span><span data-unresolved-link="org.assertj.core.api/Condition///PointingToDeclaration/">Condition</span><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="../../../detekt-api/io.gitlab.arturbosch.detekt.api/-finding/index.html">Finding</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-69345855%2FFunctions%2F-90423530" anchor-label="isNotEqualTo" id="-69345855%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-69345855%2FFunctions%2F-90423530"><span>is</span><wbr><span>Not</span><wbr><span>Equal</span><wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-69345855%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-69345855%2FFunctions%2F-90423530"><span class="token function">isNotEqualTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1862511283%2FFunctions%2F-90423530" anchor-label="isNotExactlyInstanceOf" id="-1862511283%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1862511283%2FFunctions%2F-90423530"><span>is</span><wbr><span>Not</span><wbr><span>Exactly</span><wbr><span>Instance</span><wbr><span><span>Of</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1862511283%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-1862511283%2FFunctions%2F-90423530"><span class="token function">isNotExactlyInstanceOf</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-728959243%2FFunctions%2F-90423530" anchor-label="isNotIn" id="-728959243%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1335369865%2FFunctions%2F-90423530"><span>is</span><wbr><span>Not</span><wbr><span><span>In</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-728959243%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-1335369865%2FFunctions%2F-90423530"><span class="token function">isNotIn</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>values<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-2031897152%2FFunctions%2F-90423530"><span class="token function">isNotIn</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">values<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-iterable/index.html">MutableIterable</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1754979563%2FFunctions%2F-90423530" anchor-label="isNotInstanceOf" id="-1754979563%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1754979563%2FFunctions%2F-90423530"><span>is</span><wbr><span>Not</span><wbr><span>Instance</span><wbr><span><span>Of</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1754979563%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-1754979563%2FFunctions%2F-90423530"><span class="token function">isNotInstanceOf</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2093592789%2FFunctions%2F-90423530" anchor-label="isNotInstanceOfAny" id="-2093592789%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-2093592789%2FFunctions%2F-90423530"><span>is</span><wbr><span>Not</span><wbr><span>Instance</span><wbr><span>Of</span><wbr><span><span>Any</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2093592789%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-2093592789%2FFunctions%2F-90423530"><span class="token function">isNotInstanceOfAny</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>types<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1649183844%2FFunctions%2F-90423530" anchor-label="isNotNull" id="1649183844%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1649183844%2FFunctions%2F-90423530"><span>is</span><wbr><span>Not</span><wbr><span><span>Null</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1649183844%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#1649183844%2FFunctions%2F-90423530"><span class="token function">isNotNull</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="417297823%2FFunctions%2F-90423530" anchor-label="isNotOfAnyClassIn" id="417297823%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#417297823%2FFunctions%2F-90423530"><span>is</span><wbr><span>Not</span><wbr><span>Of</span><wbr><span>Any</span><wbr><span>Class</span><wbr><span><span>In</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="417297823%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#417297823%2FFunctions%2F-90423530"><span class="token function">isNotOfAnyClassIn</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>types<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-159324268%2FFunctions%2F-90423530" anchor-label="isNotSameAs" id="-159324268%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-159324268%2FFunctions%2F-90423530"><span>is</span><wbr><span>Not</span><wbr><span>Same</span><wbr><span><span>As</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-159324268%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-159324268%2FFunctions%2F-90423530"><span class="token function">isNotSameAs</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1008081237%2FFunctions%2F-90423530" anchor-label="isNull" id="1008081237%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1008081237%2FFunctions%2F-90423530"><span>is</span><wbr><span><span>Null</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1008081237%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#1008081237%2FFunctions%2F-90423530"><span class="token function">isNull</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1342866032%2FFunctions%2F-90423530" anchor-label="isOfAnyClassIn" id="-1342866032%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1342866032%2FFunctions%2F-90423530"><span>is</span><wbr><span>Of</span><wbr><span>Any</span><wbr><span>Class</span><wbr><span><span>In</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1342866032%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-1342866032%2FFunctions%2F-90423530"><span class="token function">isOfAnyClassIn</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>types<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1682861307%2FFunctions%2F-90423530" anchor-label="isSameAs" id="-1682861307%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1682861307%2FFunctions%2F-90423530"><span>is</span><wbr><span>Same</span><wbr><span><span>As</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1682861307%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-1682861307%2FFunctions%2F-90423530"><span class="token function">isSameAs</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">expected<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1667651705%2FFunctions%2F-90423530" anchor-label="matches" id="-1667651705%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-750862076%2FFunctions%2F-90423530"><span><span>matches</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1667651705%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-750862076%2FFunctions%2F-90423530"><span class="token function">matches</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">predicate<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html">Predicate</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="../../../detekt-api/io.gitlab.arturbosch.detekt.api/-finding/index.html">Finding</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-1306785047%2FFunctions%2F-90423530"><span class="token function">matches</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">predicate<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html">Predicate</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="../../../detekt-api/io.gitlab.arturbosch.detekt.api/-finding/index.html">Finding</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">predicateDescription<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="620164112%2FFunctions%2F-90423530" anchor-label="overridingErrorMessage" id="620164112%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-973418714%2FFunctions%2F-90423530"><span>overriding</span><wbr><span>Error</span><wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="620164112%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-973418714%2FFunctions%2F-90423530"><span class="token function">overridingErrorMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">supplier<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html">Supplier</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#1301351914%2FFunctions%2F-90423530"><span class="token function">overridingErrorMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">newErrorMessage<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">vararg </span>args<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-439002404%2FFunctions%2F-90423530" anchor-label="satisfies" id="-439002404%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1255361399%2FFunctions%2F-90423530"><span><span>satisfies</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-439002404%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/SafeVarargs.html"><span class="token annotation builtin">SafeVarargs</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#1255361399%2FFunctions%2F-90423530"><span class="token function">satisfies</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>requirements<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html">Consumer</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="../../../detekt-api/io.gitlab.arturbosch.detekt.api/-finding/index.html">Finding</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/SafeVarargs.html"><span class="token annotation builtin">SafeVarargs</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-2021150462%2FFunctions%2F-90423530"><span class="token function">satisfies</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>assertions<span class="token operator">: </span><span data-unresolved-link="org.assertj.core.api/ThrowingConsumer///PointingToDeclaration/">ThrowingConsumer</span><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="../../../detekt-api/io.gitlab.arturbosch.detekt.api/-finding/index.html">Finding</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#944029917%2FFunctions%2F-90423530"><span class="token function">satisfies</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">condition<span class="token operator">: </span><span data-unresolved-link="org.assertj.core.api/Condition///PointingToDeclaration/">Condition</span><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="../../../detekt-api/io.gitlab.arturbosch.detekt.api/-finding/index.html">Finding</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-120448681%2FFunctions%2F-90423530" anchor-label="satisfiesAnyOf" id="-120448681%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1227635800%2FFunctions%2F-90423530"><span>satisfies</span><wbr><span>Any</span><wbr><span><span>Of</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-120448681%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/SafeVarargs.html"><span class="token annotation builtin">SafeVarargs</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-1227635800%2FFunctions%2F-90423530"><span class="token function">satisfiesAnyOf</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>assertions<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html">Consumer</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="../../../detekt-api/io.gitlab.arturbosch.detekt.api/-finding/index.html">Finding</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/SafeVarargs.html"><span class="token annotation builtin">SafeVarargs</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-1491574797%2FFunctions%2F-90423530"><span class="token function">satisfiesAnyOf</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>assertions<span class="token operator">: </span><span data-unresolved-link="org.assertj.core.api/ThrowingConsumer///PointingToDeclaration/">ThrowingConsumer</span><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="../../../detekt-api/io.gitlab.arturbosch.detekt.api/-finding/index.html">Finding</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1287371527%2FFunctions%2F-90423530" anchor-label="usingComparator" id="1287371527%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-546150912%2FFunctions%2F-90423530"><span>using</span><wbr><span><span>Comparator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1287371527%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-546150912%2FFunctions%2F-90423530"><span class="token function">usingComparator</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">customComparator<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html">Comparator</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="../../../detekt-api/io.gitlab.arturbosch.detekt.api/-finding/index.html">Finding</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-316848411%2FFunctions%2F-90423530"><span class="token function">usingComparator</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">customComparator<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html">Comparator</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="../../../detekt-api/io.gitlab.arturbosch.detekt.api/-finding/index.html">Finding</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">customComparatorDescription<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1873973651%2FFunctions%2F-90423530" anchor-label="usingDefaultComparator" id="1873973651%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1873973651%2FFunctions%2F-90423530"><span>using</span><wbr><span>Default</span><wbr><span><span>Comparator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1873973651%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#1873973651%2FFunctions%2F-90423530"><span class="token function">usingDefaultComparator</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-702176726%2FFunctions%2F-90423530" anchor-label="withFailMessage" id="-702176726%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1013137913%2FFunctions%2F-90423530"><span>with</span><wbr><span>Fail</span><wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-702176726%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#1013137913%2FFunctions%2F-90423530"><span class="token function">withFailMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">supplier<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html">Supplier</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#1139925565%2FFunctions%2F-90423530"><span class="token function">withFailMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">newErrorMessage<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">vararg </span>args<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2028895251%2FFunctions%2F-90423530" anchor-label="withRepresentation" id="-2028895251%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-2028895251%2FFunctions%2F-90423530"><span>with</span><wbr><span><span>Representation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2028895251%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-2028895251%2FFunctions%2F-90423530"><span class="token function">withRepresentation</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">representation<span class="token operator">: </span><span data-unresolved-link="org.assertj.core.presentation/Representation///PointingToDeclaration/">Representation</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1011238831%2FFunctions%2F-90423530" anchor-label="withThreadDumpOnError" id="1011238831%2FFunctions%2F-90423530" data-filterable-set=":detekt-test:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test:dokkaHtmlPartial/main" data-filterable-set=":detekt-test:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1011238831%2FFunctions%2F-90423530"><span>with</span><wbr><span>Thread</span><wbr><span>Dump</span><wbr><span>On</span><wbr><span><span>Error</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1011238831%2FFunctions%2F-90423530"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#1011238831%2FFunctions%2F-90423530"><span class="token function">withThreadDumpOnError</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">FindingAssert</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
