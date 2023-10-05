@@ -16,9 +16,9 @@ nexusPublishing {
     }
 }
 
-val releaseArtifacts: Configuration by configurations.creating {
-    isCanBeConsumed = false
-    isCanBeResolved = true
+val releaseArtifacts: Configuration by configurations.dependencyScope("releaseArtifacts")
+val releaseAssetFiles by configurations.resolvable("releaseAssetFiles") {
+    extendsFrom(releaseArtifacts)
 }
 
 val version = Versions.currentOrSnapshot()
@@ -42,7 +42,7 @@ githubRelease {
             changelog.trim()
         }
     )
-    releaseAssets.setFrom(releaseArtifacts)
+    releaseAssets.setFrom(releaseAssetFiles)
 }
 
 dependencies {
