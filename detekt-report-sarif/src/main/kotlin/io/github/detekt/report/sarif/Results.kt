@@ -58,7 +58,7 @@ private fun Location.toLocation(code: String?): io.github.detekt.sarif4k.Locatio
                     uriBaseID = SRCROOT
                 )
             } else {
-                ArtifactLocation(uri = "file:///${filePath.absolutePath.invariantSeparatorsPathString}")
+                ArtifactLocation(uri = filePath.absolutePath.toUri().toString())
             }
         )
     )

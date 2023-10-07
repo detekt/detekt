@@ -38,7 +38,10 @@ class SarifOutputReportSpec {
             .apply { init(EmptySetupContext()) }
             .render(result)
 
-        assertThat(report).isEqualToIgnoringWhitespace(readResourceContent("vanilla.sarif.json"))
+        val expectedReport = readResourceContent("vanilla.sarif.json")
+            .replace("<PREFIX>", Path(System.getProperty("user.dir")).toUri().toString())
+
+        assertThat(report).isEqualToIgnoringWhitespace(expectedReport)
     }
 
     @Test
