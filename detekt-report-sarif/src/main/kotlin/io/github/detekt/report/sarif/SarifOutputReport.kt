@@ -16,6 +16,7 @@ import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.getOrNull
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import java.nio.file.Path
+import kotlin.io.path.Path
 import kotlin.io.path.absolute
 import kotlin.io.path.invariantSeparatorsPathString
 
@@ -63,7 +64,9 @@ class SarifOutputReport : OutputReport() {
                             version = version
                         )
                     ),
-                    originalURIBaseIDS = basePath?.let { mapOf(SRCROOT to ArtifactLocation(uri = "file://$basePath")) },
+                    originalURIBaseIDS = basePath?.let {
+                        mapOf(SRCROOT to ArtifactLocation(uri = Path(it).toUri().toString()))
+                    },
                     results = toResults(detektion)
                 )
             )
