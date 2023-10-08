@@ -73,9 +73,6 @@ subprojects {
                 maxFailures = 20
             }
         }
-        predictiveSelection {
-            enabled = providers.gradleProperty("enablePTS").map(String::toBooleanStrict)
-        }
     }
 }
 

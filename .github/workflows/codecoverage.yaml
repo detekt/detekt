@@ -6,9 +6,6 @@ on:
       - main
   pull_request:
 
-env:
-  ORG_GRADLE_PROJECT_enablePTS: false
-
 permissions:
   contents: read
 
@@ -29,6 +26,7 @@ jobs:
         uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a # v2
         with:
           gradle-home-cache-cleanup: true
+          arguments: -Dpts.enabled=false
 
       - name: Generate Coverage Report
         run: ./gradlew jacocoMergedReport
