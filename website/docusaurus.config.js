@@ -104,7 +104,7 @@ const config = {
             position: 'left'
           },
           {
-            href: 'https://detekt.dev/kdoc/',
+            href: '/kdoc/',
             position: 'left',
             label: 'API',
           },
