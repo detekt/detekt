@@ -109,6 +109,11 @@ const config = {
             label: 'API',
           },
           {
+            href: '/kdoc/detekt-gradle-plugin/',
+            position: 'left',
+            label: 'Gradle Plugin API',
+          },
+          {
             to: "/marketplace",
             label: "Marketplace",
             position: "left",
