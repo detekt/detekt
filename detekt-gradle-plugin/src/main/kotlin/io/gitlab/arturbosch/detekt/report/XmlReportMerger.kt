@@ -13,7 +13,7 @@ import javax.xml.transform.stream.StreamResult
 /**
  * A naive implementation to merge xml assuming all input xml are written by detekt.
  */
-object XmlReportMerger {
+internal object XmlReportMerger {
 
     private val documentBuilder by lazy { DocumentBuilderFactory.newInstance().newDocumentBuilder() }
 

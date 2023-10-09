@@ -4,7 +4,7 @@ import org.gradle.api.file.FileCollection
 import java.net.URLClassLoader
 import java.util.concurrent.ConcurrentHashMap
 
-fun interface ClassLoaderCache {
+internal fun interface ClassLoaderCache {
 
     fun getOrCreate(classpath: FileCollection): URLClassLoader
 }
@@ -25,4 +25,4 @@ internal class DefaultClassLoaderCache : ClassLoaderCache {
     }
 }
 
-object GlobalClassLoaderCache : ClassLoaderCache by DefaultClassLoaderCache()
+internal object GlobalClassLoaderCache : ClassLoaderCache by DefaultClassLoaderCache()
