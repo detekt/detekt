@@ -1,4 +1,4 @@
-import com.vdurmont.semver4j.Semver
+import org.semver4j.Semver
 
 plugins {
     id("com.github.breadmoirai.github-release")
