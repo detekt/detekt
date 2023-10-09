@@ -7,7 +7,7 @@ junit = "5.10.0"
 poko = "0.15.0"
 
 [libraries]
-semver4j = "org.semver4j:semver4j:5.2.1"
+semver4j = "org.semver4j:semver4j:5.2.2"
 
 kotlin-compiler = { module = "org.jetbrains.kotlin:kotlin-compiler", version.ref = "kotlin" }
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
