@@ -18,6 +18,12 @@ plugins {
     alias(libs.plugins.download)
 }
 
+kotlin {
+    compilerOptions {
+        optIn.add("org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi")
+    }
+}
+
 dependencies {
     compileOnly(libs.kotlin.compilerEmbeddable)
 
