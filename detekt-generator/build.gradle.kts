@@ -42,6 +42,7 @@ tasks.register("generateWebsite") {
         copyDetektCliUsage,
         generateDocumentation,
         ":dokkaHtmlMultiModule",
+        gradle.includedBuild("detekt-gradle-plugin").task(":dokkaHtml"),
     )
 }
 

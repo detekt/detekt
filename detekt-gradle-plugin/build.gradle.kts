@@ -3,7 +3,9 @@
 @file:Suppress("StringLiteralDuplication")
 
 import com.gradle.enterprise.gradleplugin.testretry.retry
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import java.net.URL
 
 plugins {
     id("module")
@@ -13,6 +15,8 @@ plugins {
     alias(libs.plugins.pluginPublishing)
     // We use this published version of the detekt plugin to self analyse this project.
     id("io.gitlab.arturbosch.detekt") version "1.23.1"
+    alias(libs.plugins.binaryCompatibilityValidator)
+    alias(libs.plugins.dokka)
 }
 
 repositories {
@@ -144,6 +148,20 @@ tasks {
 
     processTestResources {
         from(writeDetektVersionProperties)
+    }
+
+    withType<DokkaTask>().configureEach {
+        suppressInheritedMembers = true
+        failOnWarning = true
+        outputDirectory = layout.projectDirectory.dir("../website/static/kdoc/detekt-gradle-plugin")
+        notCompatibleWithConfigurationCache("https://github.com/Kotlin/dokka/issues/1217")
+
+        dokkaSourceSets.configureEach {
+            apiVersion = "1.4"
+            externalDocumentationLink {
+                url = URL("https://docs.gradle.org/current/javadoc/")
+            }
+        }
     }
 
     check {

@@ -78,5 +78,5 @@ abstract class DetektGenerateConfigTask @Inject constructor(
         }
     }
 
-    interface SingleExecutionBuildService : BuildService<BuildServiceParameters.None>
+    internal interface SingleExecutionBuildService : BuildService<BuildServiceParameters.None>
 }

@@ -9,7 +9,7 @@ private typealias JsonObject = MutableMap<String, Any?>
 /**
  * A naive implementation to merge SARIF assuming all inputs are written by detekt.
  */
-object SarifReportMerger {
+internal object SarifReportMerger {
 
     fun merge(inputs: Collection<File>, output: File) {
         val sarifs = inputs.filter { it.exists() }.map {

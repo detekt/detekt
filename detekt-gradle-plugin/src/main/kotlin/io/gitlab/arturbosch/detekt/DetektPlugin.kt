@@ -145,40 +145,40 @@ class DetektPlugin : Plugin<Project> {
         }
     }
 
-    companion object {
-        const val DETEKT_TASK_NAME = "detekt"
-        const val BASELINE_TASK_NAME = "detektBaseline"
-        const val DETEKT_EXTENSION = "detekt"
+    internal companion object {
+        internal const val DETEKT_TASK_NAME = "detekt"
+        internal const val BASELINE_TASK_NAME = "detektBaseline"
+        internal const val DETEKT_EXTENSION = "detekt"
         private const val GENERATE_CONFIG = "detektGenerateConfig"
-        internal val defaultExcludes = listOf("build/")
-        internal val defaultIncludes = listOf("**/*.kt", "**/*.kts")
+        val defaultExcludes = listOf("build/")
+        val defaultIncludes = listOf("**/*.kt", "**/*.kts")
         internal const val CONFIG_DIR_NAME = "config/detekt"
         internal const val CONFIG_FILE = "detekt.yml"
 
         internal const val DETEKT_ANDROID_DISABLED_PROPERTY = "detekt.android.disabled"
         internal const val DETEKT_MULTIPLATFORM_DISABLED_PROPERTY = "detekt.multiplatform.disabled"
 
-        const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
-        const val DEFAULT_TEST_SRC_DIR_JAVA = "src/test/java"
-        const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"
-        const val DEFAULT_TEST_SRC_DIR_KOTLIN = "src/test/kotlin"
-        const val DEFAULT_DEBUG_VALUE = false
-        const val DEFAULT_IGNORE_FAILURES = false
-        const val DEFAULT_PARALLEL_VALUE = false
-        const val DEFAULT_AUTO_CORRECT_VALUE = false
-        const val DEFAULT_DISABLE_RULESETS_VALUE = false
-        const val DEFAULT_REPORT_ENABLED_VALUE = true
-        const val DEFAULT_ALL_RULES_VALUE = false
-        const val DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE = false
+        internal const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
+        internal const val DEFAULT_TEST_SRC_DIR_JAVA = "src/test/java"
+        internal const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"
+        internal const val DEFAULT_TEST_SRC_DIR_KOTLIN = "src/test/kotlin"
+        internal const val DEFAULT_DEBUG_VALUE = false
+        internal const val DEFAULT_IGNORE_FAILURES = false
+        internal const val DEFAULT_PARALLEL_VALUE = false
+        internal const val DEFAULT_AUTO_CORRECT_VALUE = false
+        internal const val DEFAULT_DISABLE_RULESETS_VALUE = false
+        internal const val DEFAULT_REPORT_ENABLED_VALUE = true
+        internal const val DEFAULT_ALL_RULES_VALUE = false
+        internal const val DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE = false
 
         // This flag is ignored unless the compiler plugin is applied to the project
-        const val DEFAULT_COMPILER_PLUGIN_ENABLED = true
+        internal const val DEFAULT_COMPILER_PLUGIN_ENABLED = true
     }
 }
 
-const val CONFIGURATION_DETEKT = "detekt"
-const val CONFIGURATION_DETEKT_PLUGINS = "detektPlugins"
-const val USE_WORKER_API = "detekt.use.worker.api"
+internal const val CONFIGURATION_DETEKT = "detekt"
+internal const val CONFIGURATION_DETEKT_PLUGINS = "detektPlugins"
+internal const val USE_WORKER_API = "detekt.use.worker.api"
 
 @Incubating
 fun getSupportedKotlinVersion(): String {
