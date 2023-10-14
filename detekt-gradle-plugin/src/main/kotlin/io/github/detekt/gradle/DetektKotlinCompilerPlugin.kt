@@ -1,17 +1,14 @@
 package io.github.detekt.gradle
 
 import dev.detekt.gradle.plugin.DetektBasePlugin
+import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.DETEKT_EXTENSION
 import io.github.detekt.gradle.extensions.KotlinCompileTaskDetektExtension
 import io.gitlab.arturbosch.detekt.CONFIGURATION_DETEKT_PLUGINS
 import io.gitlab.arturbosch.detekt.DetektPlugin
-import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.CONFIG_DIR_NAME
-import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.CONFIG_FILE
-import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.DETEKT_EXTENSION
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.provider.Provider
-import org.gradle.api.reporting.ReportingExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerPluginSupportPlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
@@ -30,21 +27,7 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
     override fun apply(target: Project) {
         target.pluginManager.apply(DetektBasePlugin::class.java)
 
-        val extension =
-            target.extensions.findByType(DetektExtension::class.java) ?: target.extensions.create(
-                DETEKT_EXTENSION,
-                DetektExtension::class.java
-            )
-
-        extension.reportsDir.convention(
-            target.extensions.getByType(ReportingExtension::class.java).baseDirectory.dir("detekt")
-        )
-
-        val defaultConfigFile =
-            target.file("${target.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
-        if (defaultConfigFile.exists()) {
-            extension.config.setFrom(target.files(defaultConfigFile))
-        }
+        val extension = target.extensions.getByType(DetektExtension::class.java)
 
         target.configurations.maybeCreate(CONFIGURATION_DETEKT_PLUGINS).apply {
             isVisible = false

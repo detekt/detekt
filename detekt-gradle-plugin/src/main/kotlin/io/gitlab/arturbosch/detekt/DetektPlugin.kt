@@ -1,8 +1,9 @@
 package io.gitlab.arturbosch.detekt
 
 import dev.detekt.gradle.plugin.DetektBasePlugin
+import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.CONFIG_DIR_NAME
+import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.CONFIG_FILE
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-import io.gitlab.arturbosch.detekt.extensions.loadDetektVersion
 import io.gitlab.arturbosch.detekt.internal.DetektAndroid
 import io.gitlab.arturbosch.detekt.internal.DetektJvm
 import io.gitlab.arturbosch.detekt.internal.DetektMultiplatform
@@ -17,40 +18,8 @@ class DetektPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         project.pluginManager.apply(DetektBasePlugin::class.java)
-        val extension =
-            project.extensions.findByType(DetektExtension::class.java) ?: project.extensions.create(
-                DETEKT_EXTENSION,
-                DetektExtension::class.java
-            )
 
-        with(extension) {
-            toolVersion.convention(loadDetektVersion(DetektExtension::class.java.classLoader))
-            ignoreFailures.convention(DEFAULT_IGNORE_FAILURES)
-            source.setFrom(
-                DEFAULT_SRC_DIR_JAVA,
-                DEFAULT_TEST_SRC_DIR_JAVA,
-                DEFAULT_SRC_DIR_KOTLIN,
-                DEFAULT_TEST_SRC_DIR_KOTLIN,
-            )
-            baseline.convention(project.layout.projectDirectory.file("detekt-baseline.xml"))
-            enableCompilerPlugin.convention(DEFAULT_COMPILER_PLUGIN_ENABLED)
-            debug.convention(DEFAULT_DEBUG_VALUE)
-            parallel.convention(DEFAULT_PARALLEL_VALUE)
-            allRules.convention(DEFAULT_ALL_RULES_VALUE)
-            buildUponDefaultConfig.convention(DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE)
-            disableDefaultRuleSets.convention(DEFAULT_DISABLE_RULESETS_VALUE)
-            autoCorrect.convention(DEFAULT_AUTO_CORRECT_VALUE)
-            reportsDir.convention(
-                project.extensions.getByType(ReportingExtension::class.java).baseDirectory.dir("detekt")
-            )
-            basePath.convention(project.rootProject.layout.projectDirectory)
-        }
-
-        val defaultConfigFile =
-            project.file("${project.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
-        if (defaultConfigFile.exists()) {
-            extension.config.setFrom(project.files(defaultConfigFile))
-        }
+        val extension = project.extensions.getByType(DetektExtension::class.java)
 
         configurePluginDependencies(project, extension)
         setTaskDefaults(project)
@@ -147,31 +116,14 @@ class DetektPlugin : Plugin<Project> {
     internal companion object {
         internal const val DETEKT_TASK_NAME = "detekt"
         internal const val BASELINE_TASK_NAME = "detektBaseline"
-        internal const val DETEKT_EXTENSION = "detekt"
         private const val GENERATE_CONFIG = "detektGenerateConfig"
         val defaultExcludes = listOf("build/")
         val defaultIncludes = listOf("**/*.kt", "**/*.kts")
-        internal const val CONFIG_DIR_NAME = "config/detekt"
-        internal const val CONFIG_FILE = "detekt.yml"
 
         internal const val DETEKT_ANDROID_DISABLED_PROPERTY = "detekt.android.disabled"
         internal const val DETEKT_MULTIPLATFORM_DISABLED_PROPERTY = "detekt.multiplatform.disabled"
 
-        internal const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
-        internal const val DEFAULT_TEST_SRC_DIR_JAVA = "src/test/java"
-        internal const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"
-        internal const val DEFAULT_TEST_SRC_DIR_KOTLIN = "src/test/kotlin"
-        internal const val DEFAULT_DEBUG_VALUE = false
-        internal const val DEFAULT_IGNORE_FAILURES = false
-        internal const val DEFAULT_PARALLEL_VALUE = false
-        internal const val DEFAULT_AUTO_CORRECT_VALUE = false
-        internal const val DEFAULT_DISABLE_RULESETS_VALUE = false
         internal const val DEFAULT_REPORT_ENABLED_VALUE = true
-        internal const val DEFAULT_ALL_RULES_VALUE = false
-        internal const val DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE = false
-
-        // This flag is ignored unless the compiler plugin is applied to the project
-        internal const val DEFAULT_COMPILER_PLUGIN_ENABLED = true
     }
 }
 
