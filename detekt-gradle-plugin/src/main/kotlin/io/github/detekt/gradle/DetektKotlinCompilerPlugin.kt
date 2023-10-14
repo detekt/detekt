@@ -1,5 +1,6 @@
 package io.github.detekt.gradle
 
+import dev.detekt.gradle.plugin.DetektBasePlugin
 import io.github.detekt.gradle.extensions.KotlinCompileTaskDetektExtension
 import io.gitlab.arturbosch.detekt.CONFIGURATION_DETEKT_PLUGINS
 import io.gitlab.arturbosch.detekt.DetektPlugin
@@ -28,6 +29,7 @@ import java.util.Properties
 class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
 
     override fun apply(target: Project) {
+        target.pluginManager.apply(DetektBasePlugin::class.java)
         target.pluginManager.apply(ReportingBasePlugin::class.java)
 
         val extension =

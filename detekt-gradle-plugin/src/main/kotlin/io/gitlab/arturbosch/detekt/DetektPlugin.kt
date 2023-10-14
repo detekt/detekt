@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt
 
+import dev.detekt.gradle.plugin.DetektBasePlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.extensions.loadDetektVersion
 import io.gitlab.arturbosch.detekt.internal.DetektAndroid
@@ -17,6 +18,7 @@ import java.util.jar.Manifest
 class DetektPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
+        project.pluginManager.apply(DetektBasePlugin::class.java)
         project.pluginManager.apply(ReportingBasePlugin::class.java)
         val extension =
             project.extensions.findByType(DetektExtension::class.java) ?: project.extensions.create(
