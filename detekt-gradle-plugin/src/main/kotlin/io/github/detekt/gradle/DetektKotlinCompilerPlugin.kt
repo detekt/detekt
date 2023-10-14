@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.DETEKT_EXTENSION
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
 import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.provider.Provider
 import org.gradle.api.reporting.ReportingExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
@@ -30,7 +29,6 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
 
     override fun apply(target: Project) {
         target.pluginManager.apply(DetektBasePlugin::class.java)
-        target.pluginManager.apply(ReportingBasePlugin::class.java)
 
         val extension =
             target.extensions.findByType(DetektExtension::class.java) ?: target.extensions.create(

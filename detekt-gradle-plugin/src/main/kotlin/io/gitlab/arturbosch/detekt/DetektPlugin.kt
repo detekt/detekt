@@ -10,8 +10,6 @@ import io.gitlab.arturbosch.detekt.internal.DetektPlain
 import org.gradle.api.Incubating
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.plugins.ReportingBasePlugin
-import org.gradle.api.reporting.ReportingExtension
 import java.net.URL
 import java.util.jar.Manifest
 
@@ -19,7 +17,6 @@ class DetektPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         project.pluginManager.apply(DetektBasePlugin::class.java)
-        project.pluginManager.apply(ReportingBasePlugin::class.java)
         val extension =
             project.extensions.findByType(DetektExtension::class.java) ?: project.extensions.create(
                 DETEKT_EXTENSION,
