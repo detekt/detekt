@@ -101,16 +101,6 @@ gradlePlugin {
             description = "Static code analysis for Kotlin"
             tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
         }
-    }
-    // Source sets that require the Gradle TestKit dependency
-    testSourceSets(
-        sourceSets["testFixtures"],
-        sourceSets["functionalTest"],
-    )
-}
-
-gradlePlugin {
-    plugins {
         create("detektCompilerPlugin") {
             id = "io.github.detekt.gradle.compiler-plugin"
             implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
@@ -119,6 +109,11 @@ gradlePlugin {
             tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
         }
     }
+    // Source sets that require the Gradle TestKit dependency
+    testSourceSets(
+        sourceSets["testFixtures"],
+        sourceSets["functionalTest"],
+    )
 }
 
 // Some functional tests reference internal functions in the Gradle plugin. This should become unnecessary as further
