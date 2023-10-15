@@ -1,9 +1,9 @@
 package io.github.detekt.gradle
 
+import dev.detekt.gradle.plugin.CONFIGURATION_DETEKT_PLUGINS
 import dev.detekt.gradle.plugin.DetektBasePlugin
 import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.DETEKT_EXTENSION
 import io.github.detekt.gradle.extensions.KotlinCompileTaskDetektExtension
-import io.gitlab.arturbosch.detekt.CONFIGURATION_DETEKT_PLUGINS
 import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
@@ -28,12 +28,6 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
         target.pluginManager.apply(DetektBasePlugin::class.java)
 
         val extension = target.extensions.getByType(DetektExtension::class.java)
-
-        target.configurations.maybeCreate(CONFIGURATION_DETEKT_PLUGINS).apply {
-            isVisible = false
-            isTransitive = true
-            description = "The $CONFIGURATION_DETEKT_PLUGINS libraries to be used for this project."
-        }
 
         target.tasks.withType(KotlinCompile::class.java).configureEach { task ->
             task.extensions.create(DETEKT_EXTENSION, KotlinCompileTaskDetektExtension::class.java, target).apply {

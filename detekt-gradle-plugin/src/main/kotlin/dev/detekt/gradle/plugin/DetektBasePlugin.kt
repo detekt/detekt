@@ -41,6 +41,14 @@ class DetektBasePlugin : Plugin<Project> {
         if (defaultConfigFile.exists()) {
             extension.config.setFrom(project.files(defaultConfigFile))
         }
+
+        project.configurations.create(CONFIGURATION_DETEKT_PLUGINS).let { configuration ->
+            configuration.isVisible = false
+            configuration.isTransitive = true
+            configuration.description = "The $CONFIGURATION_DETEKT_PLUGINS libraries to be used for this project."
+            configuration.isCanBeResolved = true
+            configuration.isCanBeConsumed = false
+        }
     }
 
     internal companion object {
@@ -64,3 +72,5 @@ class DetektBasePlugin : Plugin<Project> {
         internal const val DEFAULT_COMPILER_PLUGIN_ENABLED = true
     }
 }
+
+internal const val CONFIGURATION_DETEKT_PLUGINS = "detektPlugins"

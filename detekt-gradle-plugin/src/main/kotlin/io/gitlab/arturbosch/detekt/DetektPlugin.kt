@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt
 
+import dev.detekt.gradle.plugin.CONFIGURATION_DETEKT_PLUGINS
 import dev.detekt.gradle.plugin.DetektBasePlugin
 import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.CONFIG_DIR_NAME
 import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.CONFIG_FILE
@@ -74,14 +75,6 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
-        project.configurations.maybeCreate(CONFIGURATION_DETEKT_PLUGINS).let { configuration ->
-            configuration.isVisible = false
-            configuration.isTransitive = true
-            configuration.description = "The $CONFIGURATION_DETEKT_PLUGINS libraries to be used for this project."
-            configuration.isCanBeResolved = true
-            configuration.isCanBeConsumed = false
-        }
-
         project.configurations.create(CONFIGURATION_DETEKT) { configuration ->
             configuration.isVisible = false
             configuration.isTransitive = true
@@ -128,7 +121,6 @@ class DetektPlugin : Plugin<Project> {
 }
 
 internal const val CONFIGURATION_DETEKT = "detekt"
-internal const val CONFIGURATION_DETEKT_PLUGINS = "detektPlugins"
 internal const val USE_WORKER_API = "detekt.use.worker.api"
 
 @Incubating
