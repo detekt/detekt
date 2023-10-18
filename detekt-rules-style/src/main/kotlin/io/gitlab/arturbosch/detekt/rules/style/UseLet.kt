@@ -20,12 +20,12 @@ import org.jetbrains.kotlin.psi.KtPsiUtil
  * `null` in the truthy case are better represented as `?.let {}` blocks.
  *
  * <noncompliant>
- * if (x != null) { x.transform() } else null
+ * if (x != null) { transform(x) } else null
  * if (x == null) null else y
  * </noncompliant>
  *
  * <compliant>
- * x?.let { it.transform() }
+ * x?.let { transform(it) }
  * x?.let { y }
  * </compliant>
  */
