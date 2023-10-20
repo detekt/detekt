@@ -107,9 +107,9 @@ $dokka.location:io.gitlab.arturbosch.detekt/Detekt/config/#/PointingToDeclaratio
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/debug/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/debug.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/detektClasspath/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/detekt-classpath.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/disableDefaultRuleSets/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/disable-default-rule-sets.html
-$dokka.location:io.gitlab.arturbosch.detekt/Detekt/getIgnoreFailures/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/get-ignore-failures.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/getSource/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/get-source.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/htmlReportFile/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/html-report-file.html
+$dokka.location:io.gitlab.arturbosch.detekt/Detekt/ignoreFailures/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/ignore-failures.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/jdkHome/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/jdk-home.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/jvmTarget/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/jvm-target.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/languageVersion/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/language-version.html
@@ -120,7 +120,6 @@ $dokka.location:io.gitlab.arturbosch.detekt/Detekt/reports/#/PointingToDeclarati
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/reports/#org.gradle.api.Action[io.gitlab.arturbosch.detekt.extensions.DetektReports]/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/reports.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/reportsDir/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/reports-dir.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/sarifReportFile/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/sarif-report-file.html
-$dokka.location:io.gitlab.arturbosch.detekt/Detekt/setIgnoreFailures/#kotlin.Boolean/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/set-ignore-failures.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/txtReportFile/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/txt-report-file.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/xmlReportFile/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/xml-report-file.html
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask///PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/index.html
