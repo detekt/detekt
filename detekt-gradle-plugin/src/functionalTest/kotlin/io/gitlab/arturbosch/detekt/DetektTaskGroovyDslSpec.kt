@@ -56,7 +56,7 @@ class DetektTaskGroovyDslSpec {
                 buildUponDefaultConfig = true
                 allRules = false
                 autoCorrect = false
-                basePath = projectDir
+                basePath = projectDir.absolutePath
                 reports {
                     xml {
                         required.set(true)
@@ -101,7 +101,7 @@ class DetektTaskGroovyDslSpec {
                 buildUponDefaultConfig = true
                 allRules = false
                 autoCorrect = false
-                basePath = projectDir
+                basePath = projectDir.absolutePath
             }
         """.trimIndent()
         val groovyBuilder = DslTestBuilder.groovy()

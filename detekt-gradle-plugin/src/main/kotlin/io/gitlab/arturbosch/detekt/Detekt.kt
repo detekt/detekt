@@ -50,11 +50,9 @@ import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
-import org.gradle.api.tasks.VerificationTask
 import org.gradle.api.tasks.options.Option
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.workers.WorkerExecutor
-import java.io.File
 import javax.inject.Inject
 
 @CacheableTask
@@ -62,7 +60,7 @@ abstract class Detekt @Inject constructor(
     private val objects: ObjectFactory,
     private val workerExecutor: WorkerExecutor,
     private val providers: ProviderFactory,
-) : SourceTask(), VerificationTask {
+) : SourceTask() {
 
     @get:Classpath
     abstract val detektClasspath: ConfigurableFileCollection
@@ -86,86 +84,49 @@ abstract class Detekt @Inject constructor(
 
     @get:Input
     @get:Optional
-    internal abstract val languageVersionProp: Property<String>
-    var languageVersion: String
-        @Internal
-        get() = languageVersionProp.get()
-        set(value) = languageVersionProp.set(value)
+    abstract val languageVersion: Property<String>
 
     @get:Input
     @get:Optional
-    internal abstract val jvmTargetProp: Property<String>
-    var jvmTarget: String
-        @Internal
-        get() = jvmTargetProp.get()
-        set(value) = jvmTargetProp.set(value)
+    abstract val jvmTarget: Property<String>
 
     @get:Internal
     abstract val jdkHome: DirectoryProperty
 
-    @get:Internal
-    internal abstract val debugProp: Property<Boolean>
-    var debug: Boolean
-        @Console
-        get() = debugProp.getOrElse(false)
-        set(value) = debugProp.set(value)
+    @get:Console
+    abstract val debug: Property<Boolean>
 
     @get:Internal
-    internal abstract val parallelProp: Property<Boolean>
-    var parallel: Boolean
-        @Internal
-        get() = parallelProp.getOrElse(false)
-        set(value) = parallelProp.set(value)
+    abstract val parallel: Property<Boolean>
 
-    @get:Internal
-    internal abstract val disableDefaultRuleSetsProp: Property<Boolean>
-    var disableDefaultRuleSets: Boolean
-        @Input
-        get() = disableDefaultRuleSetsProp.getOrElse(false)
-        set(value) = disableDefaultRuleSetsProp.set(value)
+    @get:Input
+    abstract val disableDefaultRuleSets: Property<Boolean>
 
-    @get:Internal
-    internal abstract val buildUponDefaultConfigProp: Property<Boolean>
-    var buildUponDefaultConfig: Boolean
-        @Input
-        get() = buildUponDefaultConfigProp.getOrElse(false)
-        set(value) = buildUponDefaultConfigProp.set(value)
+    @get:Input
+    abstract val buildUponDefaultConfig: Property<Boolean>
 
-    @get:Internal
-    internal abstract val allRulesProp: Property<Boolean>
-    var allRules: Boolean
-        @Input
-        get() = allRulesProp.getOrElse(false)
-        set(value) = allRulesProp.set(value)
+    @get:Input
+    abstract val allRules: Property<Boolean>
 
-    @get:Internal
-    internal abstract val ignoreFailuresProp: Property<Boolean>
+    @get:Input
+    abstract val ignoreFailures: Property<Boolean>
 
-    @get:Internal
-    internal abstract val autoCorrectProp: Property<Boolean>
-
-    @set:Option(option = "auto-correct", description = "Allow rules to auto correct code if they support it")
-    var autoCorrect: Boolean
-        @Input
-        get() = autoCorrectProp.getOrElse(false)
-        set(value) = autoCorrectProp.set(value)
+    @get:Input
+    @get:Option(option = "auto-correct", description = "Allow rules to auto correct code if they support it")
+    abstract val autoCorrect: Property<Boolean>
 
     /**
      * Respect only the file path for incremental build. Using @InputFile respects both file path and content.
      */
     @get:Input
     @get:Optional
-    internal abstract val basePathProp: Property<String>
-    var basePath: String
-        @Internal
-        get() = basePathProp.getOrElse("")
-        set(value) = basePathProp.set(value)
+    abstract val basePath: Property<String>
 
     @get:Internal
     var reports: DetektReports = objects.newInstance(DetektReports::class.java)
 
     @get:Internal
-    abstract val reportsDir: Property<File>
+    abstract val reportsDir: DirectoryProperty
 
     val xmlReportFile: Provider<RegularFile>
         @OutputFile
@@ -212,8 +173,8 @@ abstract class Detekt @Inject constructor(
         get() = listOf(
             InputArgument(source),
             ClasspathArgument(classpath),
-            LanguageVersionArgument(languageVersionProp.orNull),
-            JvmTargetArgument(jvmTargetProp.orNull),
+            LanguageVersionArgument(languageVersion.orNull),
+            JvmTargetArgument(jvmTarget.orNull),
             JdkHomeArgument(jdkHome),
             ConfigArgument(config),
             BaselineArgument(baseline.orNull),
@@ -222,13 +183,13 @@ abstract class Detekt @Inject constructor(
             DefaultReportArgument(DetektReportType.TXT, txtReportFile.orNull),
             DefaultReportArgument(DetektReportType.SARIF, sarifReportFile.orNull),
             DefaultReportArgument(DetektReportType.MD, mdReportFile.orNull),
-            DebugArgument(debugProp.getOrElse(false)),
-            ParallelArgument(parallelProp.getOrElse(false)),
-            BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
-            AllRulesArgument(allRulesProp.getOrElse(false)),
-            AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
-            BasePathArgument(basePathProp.orNull),
-            DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
+            DebugArgument(debug.getOrElse(false)),
+            ParallelArgument(parallel.getOrElse(false)),
+            BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
+            AllRulesArgument(allRules.getOrElse(false)),
+            AutoCorrectArgument(autoCorrect.getOrElse(false)),
+            BasePathArgument(basePath.orNull),
+            DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
         ).plus(convertCustomReportsToArguments()).flatMap(CliArgument::toArgument)
 
     @InputFiles
@@ -236,13 +197,6 @@ abstract class Detekt @Inject constructor(
     @IgnoreEmptyDirectories
     @PathSensitive(PathSensitivity.RELATIVE)
     override fun getSource(): FileTree = super.getSource()
-
-    @Input
-    override fun getIgnoreFailures(): Boolean = ignoreFailuresProp.getOrElse(false)
-
-    override fun setIgnoreFailures(value: Boolean) {
-        ignoreFailuresProp.set(value)
-    }
 
     fun reports(configure: Action<DetektReports>) {
         configure.execute(reports)
@@ -267,7 +221,7 @@ abstract class Detekt @Inject constructor(
             logger.info("Executing $name using DetektInvoker")
             DetektInvoker.create(isDryRun = isDryRun.orNull.toBoolean()).invokeCli(
                 arguments = arguments,
-                ignoreFailures = ignoreFailures,
+                ignoreFailures = ignoreFailures.get(),
                 classpath = detektClasspath.plus(pluginClasspath),
                 taskName = name
             )
@@ -294,8 +248,8 @@ abstract class Detekt @Inject constructor(
         val isEnabled = report.required.getOrElse(DetektPlugin.DEFAULT_REPORT_ENABLED_VALUE)
         val provider = objects.fileProperty()
         if (isEnabled) {
-            val destination = report.outputLocation.asFile.orNull ?: reportsDir.getOrElse(defaultReportsDir.asFile)
-                .resolve("${DetektReport.DEFAULT_FILENAME}.${report.type.extension}")
+            val destination = report.outputLocation.orNull ?: reportsDir.getOrElse(defaultReportsDir)
+                .file("${DetektReport.DEFAULT_FILENAME}.${report.type.extension}")
             provider.set(destination)
         }
         return provider
