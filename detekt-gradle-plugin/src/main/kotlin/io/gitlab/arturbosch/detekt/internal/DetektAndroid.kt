@@ -8,7 +8,6 @@ import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.TestExtension
 import com.android.build.gradle.api.BaseVariant
 import com.android.build.gradle.internal.api.TestedVariant
-import com.android.build.gradle.internal.tasks.factory.dependsOn
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.DetektPlugin
@@ -79,18 +78,18 @@ internal class DetektAndroid(private val project: Project) {
                 ?.all { variant ->
                     project.registerAndroidDetektTask(bootClasspath, extension, variant)
                         .also { provider ->
-                            mainTaskProvider.dependsOn(provider)
+                            mainTaskProvider.configure { it.dependsOn(provider) }
                         }
                     project.registerAndroidCreateBaselineTask(bootClasspath, extension, variant)
                         .also { provider ->
-                            mainBaselineTaskProvider.dependsOn(provider)
+                            mainBaselineTaskProvider.configure { it.dependsOn(provider) }
                         }
                     variant.testVariants
                         .filter { !extension.matchesIgnoredConfiguration(it) }
                         .forEach { testVariant ->
                             project.registerAndroidDetektTask(bootClasspath, extension, testVariant)
                                 .also { provider ->
-                                    testTaskProvider.dependsOn(provider)
+                                    testTaskProvider.configure { it.dependsOn(provider) }
                                 }
                             project.registerAndroidCreateBaselineTask(
                                 bootClasspath,
@@ -98,7 +97,7 @@ internal class DetektAndroid(private val project: Project) {
                                 testVariant
                             )
                                 .also { provider ->
-                                    testBaselineTaskProvider.dependsOn(provider)
+                                    testBaselineTaskProvider.configure { it.dependsOn(provider) }
                                 }
                         }
                 }
