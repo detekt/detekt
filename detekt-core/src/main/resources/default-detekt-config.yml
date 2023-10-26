@@ -488,6 +488,10 @@ potential-bugs:
     active: false
   UnconditionalJumpStatementInLoop:
     active: false
+  UnnamedParameterUse:
+    active: false
+    allowAdjacentDifferentTypeParams: true
+    allowSingleParamUse: true
   UnnecessaryNotNullCheck:
     active: false
   UnnecessaryNotNullOperator:
