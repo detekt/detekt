@@ -142,6 +142,64 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `does not report KDoc references with companion method calls`() {
+        val main = """
+            package com.example
+
+            import android.text.TextWatcher.beforeTextChanged
+
+            class Test {
+                /**
+                 * [beforeTextChanged]
+                 */
+                fun test() {
+                    TODO()
+                }
+            }
+        """.trimIndent()
+        val additional = """
+            package android.text
+
+            object TextWatcher {
+                fun beforeTextChanged() {}
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
+    }
+
+    @Test
+    fun `does not report KDoc references with extension method calls`() {
+        val main = """
+            package com.example
+
+            import android.text.TextWatcher
+            import android.text.beforeTextChanged
+
+            class TestClass {
+                /**
+                 * [TextWatcher.beforeTextChanged]
+                 */
+                fun test() {
+                    TODO()
+                }
+            }
+        """.trimIndent()
+        val additional1 = """
+            package android.text
+
+            class TextWatcher {
+                fun beforeTextChanged() {}
+            }
+        """.trimIndent()
+        val additional2 = """
+            package android.text
+
+            fun TextWatcher.beforeTextChanged() {}
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, main, additional1, additional2)).isEmpty()
+    }
+
+    @Test
     fun `reports imports with different cases`() {
         val main = """
             import p.a
