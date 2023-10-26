@@ -16,6 +16,10 @@ tasks.withType<DokkaMultiModuleTask>().configureEach {
     outputDirectory = layout.projectDirectory.dir("website/static/kdoc")
 }
 
+tasks.wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+}
+
 val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {
     output = layout.buildDirectory.file("reports/detekt/merge.sarif")
 }
