@@ -16,7 +16,7 @@ tasks.withType<Jar>().configureEach {
     }
 }
 
-val versionCatalog = project.extensions.getByType<VersionCatalogsExtension>().named("libs")
+val versionCatalog = versionCatalogs.named("libs")
 
 jacoco.toolVersion = versionCatalog.findVersion("jacoco").get().requiredVersion
 
