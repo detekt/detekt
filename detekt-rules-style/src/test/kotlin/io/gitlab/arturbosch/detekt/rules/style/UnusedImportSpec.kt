@@ -187,9 +187,7 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
         val additional1 = """
             package android.text
 
-            class TextWatcher {
-                fun beforeTextChanged() {}
-            }
+            class TextWatcher
         """.trimIndent()
         val additional2 = """
             package android.text
@@ -197,6 +195,38 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
             fun TextWatcher.beforeTextChanged() {}
         """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional1, additional2)).isEmpty()
+    }
+
+    @Test
+    fun `does report imported extension method which is not used`() {
+        val main = """
+            package com.example
+
+            import android.text.TextWatcher
+            import android.text.beforeTextChanged
+            import android.text.afterTextChanged
+
+            class TestClass {
+                /**
+                 * [TextWatcher.beforeTextChanged]
+                 */
+                fun test() {
+                    TODO()
+                }
+            }
+        """.trimIndent()
+        val additional1 = """
+            package android.text
+
+            class TextWatcher
+        """.trimIndent()
+        val additional2 = """
+            package android.text
+
+            fun TextWatcher.beforeTextChanged() {}
+            fun TextWatcher.afterTextChanged() {}
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, main, additional1, additional2)).hasSize(1)
     }
 
     @Test

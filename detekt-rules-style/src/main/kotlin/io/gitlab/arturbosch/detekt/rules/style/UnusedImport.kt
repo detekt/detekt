@@ -143,8 +143,9 @@ class UnusedImport(config: Config) : Rule(config) {
             kotlinDocReferencesRegExp.findAll(content, 0)
                 .map { it.groupValues[1] }
                 .forEach {
-                    namedReferencesInKDoc.add(it.split(".")[0])
-                    namedReferencesInKDoc.add(it.split(".").last())
+                    val referenceNames = it.split(".")
+                    namedReferencesInKDoc.add(referenceNames[0])
+                    namedReferencesInKDoc.add(referenceNames.last())
                 }
             kotlinDocBlockTagReferenceRegExp.find(content)?.let {
                 val str = it.groupValues[2].split(whiteSpaceRegex)[0]
