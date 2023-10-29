@@ -367,11 +367,11 @@ tasks.withType(io.gitlab.arturbosch.detekt.DetektCreateBaselineTask).configureEa
 
 ```kotlin
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-    this.jvmTarget = "1.8"
+    jvmTarget.set("1.8")
     jdkHome.set(file("path/to/jdkHome"))
 }
 tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
-    this.jvmTarget = "1.8"
+    jvmTarget.set("1.8")
     jdkHome.set(file("path/to/jdkHome"))
 }
 ```
@@ -451,7 +451,7 @@ tasks.register<io.gitlab.arturbosch.detekt.Detekt>("myDetekt") {
     description = "Runs a custom detekt build."
     setSource(files("src/main/kotlin", "src/test/kotlin"))
     config.setFrom(files("$rootDir/config.yml"))
-    debug = true
+    debug.set(true)
     reports {
         xml {
             destination = file("build/reports/mydetekt.xml")
@@ -513,13 +513,13 @@ detekt was compiled with Kotlin 1.8.0 but is currently running with 1.7.0
 
 This happens when the version of `kotlin-compiler-embeddable` is overridden on detekt's classpath (in the `detekt`
 dependency configuration). This can happen when build scripts use things like this which override all dependency
-configurations:
+configurations (e.g. by [Spring Dependency Management Plugin](https://docs.spring.io/dependency-management-plugin/docs/current/reference/html/):
 
 ```kotlin
 configurations.all {
     resolutionStrategy.eachDependency {
         if (requested.group == "org.jetbrains.kotlin") {
-            useVersion("1.7.0")
+            useVersion(io.gitlab.arturbosch.detekt.getSupportedKotlinVersion())
         }
     }
 }

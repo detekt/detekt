@@ -25,7 +25,7 @@ class AnalysisResultSpec {
 
         @Test
         fun `returns two on MaxIssuesReached`() {
-            assertThat(DefaultAnalysisResult(null, MaxIssuesReached("")).exitCode()).isEqualTo(2)
+            assertThat(DefaultAnalysisResult(null, IssuesFound("")).exitCode()).isEqualTo(2)
         }
 
         @Test
@@ -48,7 +48,7 @@ class AnalysisResultSpec {
 
     @Test
     fun `partial results may have a container and an error additionally`() {
-        assertThatCode { DefaultAnalysisResult(EmptyContainer, MaxIssuesReached("")) }
+        assertThatCode { DefaultAnalysisResult(EmptyContainer, IssuesFound("")) }
             .doesNotThrowAnyException()
     }
 }

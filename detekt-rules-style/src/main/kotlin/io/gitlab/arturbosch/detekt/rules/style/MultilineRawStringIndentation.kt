@@ -9,12 +9,10 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
@@ -54,7 +52,6 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 class MultilineRawStringIndentation(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "The indentation of the raw String should be consistent",
         Debt.FIVE_MINS
     )
@@ -178,7 +175,7 @@ private fun KtStringTemplateExpression.isSurroundedByLineBreaks(): Boolean {
 }
 
 private fun KtStringTemplateEntry.isBlankOrLineBreak(): Boolean {
-    val text = safeAs<KtLiteralStringTemplateEntry>()?.text ?: return false
+    val text = (this as? KtLiteralStringTemplateEntry)?.text ?: return false
     return text.all { it.isTabChar() } || text == "\n"
 }
 

@@ -5,13 +5,13 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConfigValidator
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.Notification.Level
-import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.core.NL
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import io.gitlab.arturbosch.detekt.core.extensions.loadExtensions
 import io.gitlab.arturbosch.detekt.core.reporting.red
 import io.gitlab.arturbosch.detekt.core.reporting.yellow
+import io.gitlab.arturbosch.detekt.core.util.SimpleNotification
 
 /**
  * Known existing properties on rules which may be absent in the default-detekt-config.yml.
@@ -29,10 +29,9 @@ internal val DEFAULT_PROPERTY_EXCLUDES = setOf(
     ".*>.*>autoCorrect",
     ".*>severity",
     ".*>.*>severity",
-    "build>weights",
     ".*>.*>ignoreAnnotated",
     ".*>.*>ignoreFunction",
-).joinToString(",")
+).map { it.toRegex() }
 
 internal fun checkConfiguration(settings: ProcessingSettings, baseline: Config) {
     var shouldValidate = settings.spec.configSpec.shouldValidateBeforeAnalysis
@@ -84,13 +83,13 @@ private fun validateYamlConfig(
     baseline: YamlConfig,
     excludePatterns: Set<Regex>
 ): List<Notification> {
-    val deprecatedProperties = loadDeprecations()
+    val deprecatedProperties = loadDeprecations().filterIsInstance<DeprecatedProperty>().toSet()
     val warningsAsErrors = configToValidate
         .subConfig("config")
         .valueOrDefault("warningsAsErrors", false)
 
     val validators: List<ConfigValidator> = listOf(
-        InvalidPropertiesConfigValidator(baseline, deprecatedProperties.keys, excludePatterns),
+        InvalidPropertiesConfigValidator(baseline, deprecatedProperties, excludePatterns),
         DeprecatedPropertiesConfigValidator(deprecatedProperties),
         MissingRulesConfigValidator(baseline, excludePatterns)
     )

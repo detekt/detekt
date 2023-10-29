@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
+import dev.drewhamilton.poko.Poko
 import io.github.detekt.psi.FilePath
 import io.github.detekt.psi.getLineAndColumnInPsiFile
 import io.github.detekt.psi.toFilePath
@@ -9,60 +10,16 @@ import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
-import kotlin.io.path.Path
 
 /**
  * Specifies a position within a source code fragment.
  */
-data class Location
-@Deprecated("Consider relative path by passing a [FilePath]")
-@JvmOverloads
-constructor(
+class Location(
     val source: SourceLocation,
+    val endSource: SourceLocation = source,
     val text: TextLocation,
-    @Deprecated(
-        "Use filePath instead",
-        ReplaceWith(
-            "filePath.absolutePath.toString()"
-        )
-    )
-    val file: String,
-    val filePath: FilePath = FilePath.fromAbsolute(Path(file))
+    val filePath: FilePath
 ) : Compactable {
-    var endSource: SourceLocation = source
-        private set
-
-    @Suppress("DEPRECATION")
-    constructor(
-        source: SourceLocation,
-        text: TextLocation,
-        filePath: FilePath
-    ) : this(source, text, filePath.absolutePath.toString(), filePath)
-
-    @Suppress("DEPRECATION")
-    constructor(
-        source: SourceLocation,
-        endSource: SourceLocation,
-        text: TextLocation,
-        filePath: FilePath,
-    ) : this(source, text, filePath.absolutePath.toString(), filePath) {
-        this.endSource = endSource
-    }
-
-    @Suppress("DEPRECATION")
-    @Deprecated(
-        "locationString was removed and won't get passed to the main constructor. Use queries on 'ktElement' instead.",
-        ReplaceWith(
-            "Location(source, text, file)",
-            "io.gitlab.arturbosch.detekt.api.Location"
-        )
-    )
-    constructor(
-        source: SourceLocation,
-        text: TextLocation,
-        @Suppress("UNUSED_PARAMETER") locationString: String,
-        file: String
-    ) : this(source, text, file)
 
     override fun compact(): String = "${filePath.absolutePath}:$source"
 
@@ -108,13 +65,15 @@ constructor(
 /**
  * Stores line and column information of a location.
  */
-data class SourceLocation(val line: Int, val column: Int) {
+@Poko
+class SourceLocation(val line: Int, val column: Int) {
     override fun toString(): String = "$line:$column"
 }
 
 /**
  * Stores character start and end positions of a text file.
  */
-data class TextLocation(val start: Int, val end: Int) {
+@Poko
+class TextLocation(val start: Int, val end: Int) {
     override fun toString(): String = "$start:$end"
 }

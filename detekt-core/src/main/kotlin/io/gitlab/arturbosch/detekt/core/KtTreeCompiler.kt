@@ -4,13 +4,16 @@ import io.github.detekt.parser.KtCompiler
 import io.github.detekt.tooling.api.spec.ProjectSpec
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import org.jetbrains.kotlin.psi.KtFile
+import java.io.IOException
+import java.nio.file.FileVisitResult
+import java.nio.file.FileVisitor
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.attribute.BasicFileAttributes
 import kotlin.io.path.exists
 import kotlin.io.path.extension
 import kotlin.io.path.isDirectory
 import kotlin.io.path.isRegularFile
-import kotlin.streams.asSequence
 
 class KtTreeCompiler(
     private val settings: ProcessingSettings,
@@ -35,11 +38,9 @@ class KtTreeCompiler(
     }
 
     private fun compileProject(project: Path): List<KtFile> {
-        val kotlinFiles = Files.walk(project)
-            .asSequence()
-            .filter(Path::isRegularFile)
-            .filter { it.isKotlinFile() }
-            .filter { !isIgnored(it) }
+        val visitor = CollectingFileVisitor()
+        Files.walkFileTree(project, visitor)
+        val kotlinFiles = visitor.collected
         return if (settings.spec.executionSpec.parallelParsing) {
             val service = settings.taskPool
             val tasks = kotlinFiles.map { path ->
@@ -57,12 +58,43 @@ class KtTreeCompiler(
 
     private fun Path.isKotlinFile() = extension in KT_ENDINGS
 
-    private fun isIgnored(path: Path): Boolean {
-        val ignored = pathFilters?.isIgnored(path)
-        if (ignored == true) {
-            settings.debug { "Ignoring file '$path'" }
+    private inner class CollectingFileVisitor : FileVisitor<Path> {
+        private val _collected: MutableList<Path> = mutableListOf()
+        val collected: List<Path>
+            get() = _collected
+
+        override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
+            if (dir.isIgnored()) {
+                settings.debug { "Ignoring subtree '$dir'." }
+                return FileVisitResult.SKIP_SUBTREE
+            }
+            return FileVisitResult.CONTINUE
         }
-        return ignored ?: false
+
+        override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
+            if (!file.isKotlinFile()) {
+                return FileVisitResult.CONTINUE
+            }
+            if (file.isIgnored()) {
+                settings.debug { "Ignoring file '$file'" }
+            } else {
+                _collected.add(file)
+            }
+            return FileVisitResult.CONTINUE
+        }
+
+        override fun visitFileFailed(file: Path, exc: IOException): FileVisitResult {
+            settings.error("Error visiting file '$file'.", exc)
+            throw exc
+        }
+
+        override fun postVisitDirectory(dir: Path, exc: IOException?): FileVisitResult {
+            return if (exc == null) FileVisitResult.CONTINUE else throw exc
+        }
+
+        private fun Path.isIgnored(): Boolean {
+            return pathFilters?.isIgnored(this) ?: false
+        }
     }
 
     companion object {

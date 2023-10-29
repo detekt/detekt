@@ -27,7 +27,6 @@ internal class RuleSetConfigPrinterTest {
         nonCompliantCodeExample = "",
         compliantCodeExample = "",
         defaultActivationStatus = Inactive,
-        severity = "",
         debt = "",
         aliases = null,
         parent = ""

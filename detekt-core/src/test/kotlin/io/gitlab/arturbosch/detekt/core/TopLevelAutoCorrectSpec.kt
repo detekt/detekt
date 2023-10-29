@@ -13,7 +13,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.core.tooling.AnalysisFacade
 import io.gitlab.arturbosch.detekt.core.tooling.DefaultLifecycle
 import io.gitlab.arturbosch.detekt.core.tooling.inputPathsToKtFiles
@@ -47,6 +46,8 @@ class TopLevelAutoCorrectSpec {
         }
 
         val contentChangedListener = object : FileProcessListener {
+            override val id: String = "ContentChangedListener"
+
             override fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
                 assertThat(files).hasSize(1)
                 assertThat(files[0].text).isNotEqualToIgnoringWhitespace(fileContentBeforeAutoCorrect)
@@ -68,7 +69,7 @@ class TopLevelAutoCorrectSpec {
 }
 
 private class DeleteAnnotationsRule : Rule() {
-    override val issue = Issue("test-rule", Severity.CodeSmell, "", Debt.FIVE_MINS)
+    override val issue = Issue("test-rule", "", Debt.FIVE_MINS)
     override fun visitAnnotation(annotation: KtAnnotation) {
         annotation.delete()
     }

@@ -5,10 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
@@ -42,7 +39,6 @@ class CyclomaticComplexMethod(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "CyclomaticComplexMethod",
-        Severity.Maintainability,
         "Prefer splitting up complex methods into smaller, easier to test methods.",
         Debt.TWENTY_MINS
     )
@@ -61,6 +57,9 @@ class CyclomaticComplexMethod(config: Config = Config.empty) : Rule(config) {
     @Configuration("Whether to ignore functions which are often used instead of an `if` or `for` statement.")
     private val ignoreNestingFunctions: Boolean by config(false)
 
+    @Configuration("Whether to ignore local functions and count them as one")
+    private val ignoreLocalFunctions: Boolean by config(false)
+
     @Configuration("Comma separated list of function names which add complexity.")
     private val nestingFunctions: Set<String> by config(DEFAULT_NESTING_FUNCTIONS) { it.toSet() }
 
@@ -72,6 +71,7 @@ class CyclomaticComplexMethod(config: Config = Config.empty) : Rule(config) {
         val complexity = CyclomaticComplexity.calculate(function) {
             this.ignoreSimpleWhenEntries = this@CyclomaticComplexMethod.ignoreSimpleWhenEntries
             this.ignoreNestingFunctions = this@CyclomaticComplexMethod.ignoreNestingFunctions
+            this.ignoreLocalFunctions = this@CyclomaticComplexMethod.ignoreLocalFunctions
             this.nestingFunctions = this@CyclomaticComplexMethod.nestingFunctions
         }
 
@@ -80,7 +80,7 @@ class CyclomaticComplexMethod(config: Config = Config.empty) : Rule(config) {
                 ThresholdedCodeSmell(
                     issue,
                     Entity.atName(function),
-                    Metric("MCC", complexity, allowedComplexity),
+                    Metric(complexity, allowedComplexity),
                     "The function ${function.nameAsSafeName} appears to be too complex " +
                         "based on Cyclomatic Complexity (complexity: $complexity). " +
                         "The maximum allowed complexity for methods is set to '$allowedComplexity'"

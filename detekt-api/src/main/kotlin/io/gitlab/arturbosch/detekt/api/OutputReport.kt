@@ -17,19 +17,13 @@ abstract class OutputReport : Extension {
     abstract val ending: String
 
     /**
-     * Name of the report. Is used to exclude this report in the yaml config.
-     */
-    open val name: String?
-        get() = this::class.simpleName
-
-    /**
      * Renders result and writes it to the given [filePath].
      */
     fun write(filePath: Path, detektion: Detektion) {
         val reportData = render(detektion)
         if (reportData != null) {
             assert(filePath.extension == ending) {
-                "The $name needs to have a file ending of type .$ending, but was ${filePath.fileName}."
+                "The $id needs to have a file ending of type .$ending, but was ${filePath.fileName}."
             }
             filePath.parent?.createDirectories()
             filePath.writeText(reportData)

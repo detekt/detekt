@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.identifierName
@@ -42,7 +41,6 @@ class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(con
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Warning,
         "Only boolean property names can start with `is` prefix.",
         debt = Debt.FIVE_MINS
     )

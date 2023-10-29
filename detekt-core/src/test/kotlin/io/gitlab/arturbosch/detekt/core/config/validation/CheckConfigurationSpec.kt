@@ -7,10 +7,10 @@ import io.gitlab.arturbosch.detekt.api.ConfigValidator
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.createProcessingSettings
 import io.gitlab.arturbosch.detekt.core.tooling.getDefaultConfiguration
+import io.gitlab.arturbosch.detekt.core.util.SimpleNotification
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Test
@@ -120,6 +120,8 @@ class SampleRuleProvider : RuleSetProvider {
 }
 
 class SampleConfigValidator : ConfigValidator {
+
+    override val id: String = "SampleConfigValidator"
 
     override fun validate(config: Config): Collection<Notification> {
         val result = mutableListOf<Notification>()

@@ -348,9 +348,9 @@ private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGrad
         mainBuildFileContent = """
             subprojects {
                 repositories {
+                    mavenLocal()
                     mavenCentral()
                     google()
-                    mavenLocal()
                 }
             }
         """.trimIndent(),

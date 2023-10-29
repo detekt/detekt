@@ -90,7 +90,7 @@ public final class io/github/detekt/tooling/api/InvalidConfig : io/github/detekt
 	public fun <init> (Ljava/lang/String;)V
 }
 
-public final class io/github/detekt/tooling/api/MaxIssuesReached : io/github/detekt/tooling/api/DetektError {
+public final class io/github/detekt/tooling/api/IssuesFound : io/github/detekt/tooling/api/DetektError {
 	public fun <init> (Ljava/lang/String;)V
 }
 
@@ -123,7 +123,6 @@ public abstract interface class io/github/detekt/tooling/api/spec/CompilerSpec {
 
 public abstract interface class io/github/detekt/tooling/api/spec/ConfigSpec {
 	public abstract fun getConfigPaths ()Ljava/util/Collection;
-	public abstract fun getKnownPatterns ()Ljava/util/Collection;
 	public abstract fun getResources ()Ljava/util/Collection;
 	public abstract fun getShouldValidateBeforeAnalysis ()Ljava/lang/Boolean;
 	public abstract fun getUseDefaultConfig ()Z
@@ -189,34 +188,15 @@ public abstract interface class io/github/detekt/tooling/api/spec/RulesSpec {
 	public abstract fun getActivateAllRules ()Z
 	public abstract fun getAutoCorrect ()Z
 	public abstract fun getExcludeCorrectable ()Z
-	public abstract fun getMaxIssuePolicy ()Lio/github/detekt/tooling/api/spec/RulesSpec$MaxIssuePolicy;
+	public abstract fun getFailurePolicy ()Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy;
 	public abstract fun getRunPolicy ()Lio/github/detekt/tooling/api/spec/RulesSpec$RunPolicy;
 }
 
-public abstract class io/github/detekt/tooling/api/spec/RulesSpec$MaxIssuePolicy {
+public abstract class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
 }
 
-public final class io/github/detekt/tooling/api/spec/RulesSpec$MaxIssuePolicy$AllowAmount : io/github/detekt/tooling/api/spec/RulesSpec$MaxIssuePolicy {
-	public fun <init> (I)V
-	public final fun getAmount ()I
-}
-
-public final class io/github/detekt/tooling/api/spec/RulesSpec$MaxIssuePolicy$AllowAny : io/github/detekt/tooling/api/spec/RulesSpec$MaxIssuePolicy {
-	public static final field INSTANCE Lio/github/detekt/tooling/api/spec/RulesSpec$MaxIssuePolicy$AllowAny;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class io/github/detekt/tooling/api/spec/RulesSpec$MaxIssuePolicy$NonSpecified : io/github/detekt/tooling/api/spec/RulesSpec$MaxIssuePolicy {
-	public static final field INSTANCE Lio/github/detekt/tooling/api/spec/RulesSpec$MaxIssuePolicy$NonSpecified;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class io/github/detekt/tooling/api/spec/RulesSpec$MaxIssuePolicy$NoneAllowed : io/github/detekt/tooling/api/spec/RulesSpec$MaxIssuePolicy {
-	public static final field INSTANCE Lio/github/detekt/tooling/api/spec/RulesSpec$MaxIssuePolicy$NoneAllowed;
+public final class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnError : io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
+	public static final field INSTANCE Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnError;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -270,12 +250,10 @@ public final class io/github/detekt/tooling/dsl/ConfigSpecBuilder : io/github/de
 	public fun build ()Lio/github/detekt/tooling/api/spec/ConfigSpec;
 	public synthetic fun build ()Ljava/lang/Object;
 	public final fun getConfigPaths ()Ljava/util/Collection;
-	public final fun getKnownPatterns ()Ljava/util/Collection;
 	public final fun getResources ()Ljava/util/Collection;
 	public final fun getShouldValidateBeforeAnalysis ()Ljava/lang/Boolean;
 	public final fun getUseDefaultConfig ()Z
 	public final fun setConfigPaths (Ljava/util/Collection;)V
-	public final fun setKnownPatterns (Ljava/util/Collection;)V
 	public final fun setResources (Ljava/util/Collection;)V
 	public final fun setShouldValidateBeforeAnalysis (Ljava/lang/Boolean;)V
 	public final fun setUseDefaultConfig (Z)V
@@ -301,10 +279,8 @@ public final class io/github/detekt/tooling/dsl/ExtensionsSpecBuilder : io/githu
 	public final fun fromClassloader (Lkotlin/jvm/functions/Function0;)V
 	public final fun fromPaths (Lkotlin/jvm/functions/Function0;)V
 	public final fun getDisableDefaultRuleSets ()Z
-	public final fun getDisabledExtensions ()Ljava/util/Set;
 	public final fun getPlugins ()Lio/github/detekt/tooling/api/spec/ExtensionsSpec$Plugins;
 	public final fun setDisableDefaultRuleSets (Z)V
-	public final fun setDisabledExtensions (Ljava/util/Set;)V
 	public final fun setPlugins (Lio/github/detekt/tooling/api/spec/ExtensionsSpec$Plugins;)V
 }
 
@@ -368,12 +344,12 @@ public final class io/github/detekt/tooling/dsl/RulesSpecBuilder : io/github/det
 	public final fun getActivateAllRules ()Z
 	public final fun getAutoCorrect ()Z
 	public final fun getExcludeCorrectable ()Z
-	public final fun getMaxIssuePolicy ()Lio/github/detekt/tooling/api/spec/RulesSpec$MaxIssuePolicy;
+	public final fun getFailurePolicy ()Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy;
 	public final fun getRunPolicy ()Lio/github/detekt/tooling/api/spec/RulesSpec$RunPolicy;
 	public final fun setActivateAllRules (Z)V
 	public final fun setAutoCorrect (Z)V
 	public final fun setExcludeCorrectable (Z)V
-	public final fun setMaxIssuePolicy (Lio/github/detekt/tooling/api/spec/RulesSpec$MaxIssuePolicy;)V
+	public final fun setFailurePolicy (Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy;)V
 	public final fun setRunPolicy (Lio/github/detekt/tooling/api/spec/RulesSpec$RunPolicy;)V
 }
 

@@ -38,6 +38,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             NullCheckOnMutableProperty(config),
             @Suppress("DEPRECATION") RedundantElseInWhen(config),
             UnconditionalJumpStatementInLoop(config),
+            UnnamedParameterUse(config),
             UnnecessaryNotNullOperator(config),
             UnnecessaryNotNullCheck(config),
             UnnecessarySafeCall(config),
@@ -54,6 +55,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             CastNullableToNonNullableType(config),
             UnusedUnaryOperator(config),
             PropertyUsedBeforeDeclaration(config),
+            CharArrayToStringCall(config),
         )
     )
 }

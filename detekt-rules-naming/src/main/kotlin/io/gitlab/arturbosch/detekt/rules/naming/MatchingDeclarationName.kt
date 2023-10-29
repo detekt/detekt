@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
@@ -52,7 +51,6 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "If a source file contains only a single non-private top-level class or object, " +
             "the file name should reflect the case-sensitive name plus the .kt extension.",
         Debt.FIVE_MINS
@@ -60,6 +58,9 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
 
     @Configuration("name should only be checked if the file starts with a class or object")
     private val mustBeFirst: Boolean by config(true)
+
+    @Configuration("kotlin multiplatform targets, used to allow file names like `MyClass.jvm.kt`")
+    private val multiplatformTargets: List<String> by config(COMMON_KOTLIN_KMP_PLATFORM_TARGET_SUFFIXES)
 
     override fun visitKtFile(file: KtFile) {
         val declarations = file.declarations
@@ -77,18 +78,34 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
         if (declarations.size == 1 && matchesFirstClassOrObjectCondition()) {
             val declaration = declarations.first()
             val declarationName = declaration.name
-            val filename = file.fileNameWithoutSuffix()
+            val filename = file.fileNameWithoutSuffix(multiplatformTargets)
             if (declarationName != filename && hasNoMatchingTypeAlias(filename)) {
-                val entity = Entity.atName(declaration).copy(ktElement = file)
+                val entity = Entity.atName(declaration)
                 report(
                     CodeSmell(
                         issue,
-                        entity,
+                        Entity(entity.name, entity.signature, entity.location, file),
                         "The file name '$filename' " +
                             "does not match the name of the single top-level declaration '$declarationName'."
                     )
                 )
             }
         }
+    }
+
+    companion object {
+
+        private val COMMON_KOTLIN_KMP_PLATFORM_TARGET_SUFFIXES = listOf(
+            "ios",
+            "android",
+            "js",
+            "jvm",
+            "native",
+            "iosArm64",
+            "iosX64",
+            "macosX64",
+            "mingwX64",
+            "linuxX64"
+        )
     }
 }

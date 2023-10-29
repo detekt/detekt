@@ -6,10 +6,10 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtBreakExpression
 import org.jetbrains.kotlin.psi.KtContinueExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
@@ -36,7 +36,6 @@ class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(con
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Defect,
         "An unconditional jump statement in a loop is useless. " +
             "The loop itself is only executed once.",
         Debt.TEN_MINS
@@ -57,8 +56,13 @@ class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(con
         super.visitLoopExpression(loopExpression)
     }
 
-    private fun KtLoopExpression.hasJumpStatements(): Boolean =
-        body?.isJumpStatement() == true || body?.children?.any { it.isJumpStatement() } == true
+    private fun KtLoopExpression.hasJumpStatements(): Boolean {
+        val body = this.body ?: return false
+        return when (body) {
+            is KtBlockExpression -> body.children.any { it.isJumpStatement() }
+            else -> body.isJumpStatement()
+        }
+    }
 
     private fun PsiElement.isJumpStatement(): Boolean =
         this is KtReturnExpression && !isFollowedByElvisJump() && !isAfterConditionalJumpStatement() ||

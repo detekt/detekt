@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style.optional
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -17,7 +16,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
     val subject = OptionalUnit(Config.empty)
 
     @Test
-    fun `should report when a function has an explicit Unit return type with context`() {
+    fun `should report when a function has an explicit Unit return type`() {
         val code = """
             fun foo(): Unit { }
         """.trimIndent()
@@ -51,7 +50,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
 
         @BeforeEach
         fun beforeEachTest() {
-            findings = subject.compileAndLint(code)
+            findings = subject.compileAndLintWithContext(env, code)
         }
 
         @Test
@@ -82,7 +81,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     override fun returnsUnit() = Unit
                 }
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -109,7 +108,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
 
         @BeforeEach
         fun beforeEachTest() {
-            findings = subject.compileAndLint(code)
+            findings = subject.compileAndLintWithContext(env, code)
         }
 
         @Test
@@ -139,7 +138,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     val i: (Int) -> Unit = { _ -> }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -153,7 +152,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     fun method(i: Int) = Unit
                 }
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -369,15 +368,6 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
-        }
-
-        @Test
-        fun `should report on function initializers when there is no context`() {
-            val code = """
-                fun test(): Unit = throw UnsupportedOperationException()
-            """.trimIndent()
-            val findings = subject.compileAndLint(code)
-            assertThat(findings).hasSize(1)
         }
 
         @Test

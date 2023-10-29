@@ -6,10 +6,8 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtTryExpression
@@ -52,7 +50,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.isSubclassOf
 class UnreachableCatchBlock(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Warning,
         "Unreachable catch block detected.",
         Debt.FIVE_MINS
     )
@@ -71,7 +68,9 @@ class UnreachableCatchBlock(config: Config = Config.empty) : Rule(config) {
 
     private fun KtCatchClause.catchClassDescriptor(): ClassDescriptor? {
         val typeReference = catchParameter?.typeReference ?: return null
-        return bindingContext[BindingContext.TYPE, typeReference]?.constructor?.declarationDescriptor?.safeAs()
+        return bindingContext[BindingContext.TYPE, typeReference]
+            ?.constructor
+            ?.declarationDescriptor as? ClassDescriptor
     }
 
     private fun ClassDescriptor.isSubclassOf(catchClause: KtCatchClause): Boolean {

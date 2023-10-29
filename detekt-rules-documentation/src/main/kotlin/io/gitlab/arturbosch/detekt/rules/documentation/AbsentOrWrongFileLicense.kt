@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.psi.KtFile
@@ -23,7 +22,6 @@ class AbsentOrWrongFileLicense(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         id = RULE_NAME,
-        severity = Severity.Maintainability,
         description = "License text is absent or incorrect.",
         debt = Debt.FIVE_MINS
     )

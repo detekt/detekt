@@ -3,10 +3,17 @@ plugins {
     id("module")
 }
 
+val generatedUsage by configurations.dependencyScope("generatedUsage")
+val generatedUsageOutput by configurations.resolvable("generatedUsageOutput") {
+    extendsFrom(generatedUsage)
+}
+
 dependencies {
     implementation(projects.detektParser)
     implementation(projects.detektApi)
-    implementation(projects.detektCli)
+    generatedUsage(projects.detektCli) {
+        targetConfiguration = "generatedCliUsage"
+    }
     implementation(projects.detektUtils)
     implementation(libs.jcommander)
 
@@ -14,21 +21,28 @@ dependencies {
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj)
     testImplementation(libs.classgraph)
+    testRuntimeOnly(projects.detektRules)
 }
 
 val documentationDir = "$rootDir/website/docs/rules"
 val configDir = "$rootDir/detekt-core/src/main/resources"
-val cliOptionsFile = "$rootDir/website/docs/gettingstarted/_cli-options.md"
 val defaultConfigFile = "$configDir/default-detekt-config.yml"
 val deprecationFile = "$configDir/deprecation.properties"
 val formattingConfigFile = "$rootDir/detekt-formatting/src/main/resources/config/config.yml"
 val librariesConfigFile = "$rootDir/detekt-rules-libraries/src/main/resources/config/config.yml"
 val ruleauthorsConfigFile = "$rootDir/detekt-rules-ruleauthors/src/main/resources/config/config.yml"
 
+val copyDetektCliUsage by tasks.registering(Copy::class) {
+    from(generatedUsageOutput) { rename { "_cli-options.md" } }
+    destinationDir = rootDir.resolve("website/docs/gettingstarted")
+}
+
 tasks.register("generateWebsite") {
     dependsOn(
+        copyDetektCliUsage,
         generateDocumentation,
-        ":detekt-api:dokkaHtml",
+        ":dokkaHtmlMultiModule",
+        gradle.includedBuild("detekt-gradle-plugin").task(":dokkaHtml"),
     )
 }
 
@@ -56,7 +70,6 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         file(librariesConfigFile),
         file(ruleauthorsConfigFile),
         file(deprecationFile),
-        file(cliOptionsFile),
     )
 
     classpath(
@@ -72,32 +85,15 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         documentationDir,
         "--config",
         configDir,
-        "--cli-options",
-        cliOptionsFile,
         "--replace",
         "<ktlintVersion/>=${libs.versions.ktlint.get()}"
     )
 }
 
-val generatedFormattingConfig: Configuration by configurations.creating {
-    isCanBeConsumed = true
-    isCanBeResolved = false
-}
-
-val generatedLibrariesConfig: Configuration by configurations.creating {
-    isCanBeConsumed = true
-    isCanBeResolved = false
-}
-
-val generatedRuleauthorsConfig: Configuration by configurations.creating {
-    isCanBeConsumed = true
-    isCanBeResolved = false
-}
-
-val generatedCoreConfig: Configuration by configurations.creating {
-    isCanBeConsumed = true
-    isCanBeResolved = false
-}
+val generatedFormattingConfig by configurations.consumable("generatedFormattingConfig")
+val generatedLibrariesConfig by configurations.consumable("generatedLibrariesConfig")
+val generatedRuleauthorsConfig by configurations.consumable("generatedRuleauthorsConfig")
+val generatedCoreConfig by configurations.consumable("generatedCoreConfig")
 
 artifacts {
     add(generatedFormattingConfig.name, file(formattingConfigFile)) {

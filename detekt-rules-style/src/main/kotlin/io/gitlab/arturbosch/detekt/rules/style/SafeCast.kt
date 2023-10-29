@@ -6,9 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
@@ -39,7 +37,6 @@ class SafeCast(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "Prefer to use a safe cast instead of if-else-null.",
         Debt.FIVE_MINS
     )
@@ -74,7 +71,7 @@ class SafeCast(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtExpression?.singleExpression(): KtExpression? =
-        if (this is KtBlockExpression) children.singleOrNull()?.safeAs() else this
+        if (this is KtBlockExpression) children.singleOrNull() as? KtExpression else this
 
     private fun addReport(expression: KtIfExpression) {
         report(CodeSmell(issue, Entity.from(expression), "This cast should be replaced with a safe cast: as?"))

@@ -6,15 +6,12 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.ParameterDescriptor
-import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.KtValueArgumentList
-import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.CompileTimeConstantUtils
 import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.calls.components.isVararg
@@ -26,8 +23,8 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks
  *
  * The Kotlin compiler since v1.1.60 has an optimization that skips the array copy when an array constructor
- * function is used to create the arguments that are passed to the vararg parameter. When type resolution is enabled in
- * detekt this case will not be flagged by the rule since it doesn't suffer the performance penalty of an array copy.
+ * function is used to create the arguments that are passed to the vararg parameter. This case will not be flagged
+ * by the rule since it doesn't suffer the performance penalty of an array copy.
  *
  * <noncompliant>
  * val strs = arrayOf("value one", "value two")
@@ -50,13 +47,12 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * }
  * </compliant>
  */
-@Suppress("ViolatesTypeResolutionRequirements")
+@RequiresTypeResolution
 @ActiveByDefault(since = "1.0.0")
 class SpreadOperator(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
         "SpreadOperator",
-        Severity.Performance,
         "In most cases using a spread operator causes a full copy of the array to be created before calling a " +
             "method. This may result in a performance penalty.",
         Debt.TWENTY_MINS
@@ -70,37 +66,18 @@ class SpreadOperator(config: Config = Config.empty) : Rule(config) {
             .forEach { checkCanSkipArrayCopy(it, list) }
     }
 
-    // Check for non type resolution case if call vararg argument is exactly the vararg parameter.
-    // In this case Kotlin 1.1.60+ does not create an additional copy.
-    // Note: this does not check the control flow like the type solution case does.
-    // It will not report corner cases like shadowed variables.
-    // This is okay as our users are encouraged to use type resolution for better results.
-    private fun isSimplePassThroughVararg(arg: KtValueArgument): Boolean {
-        val argumentName = arg.getArgumentExpression()?.text
-        return arg.getStrictParentOfType<KtNamedFunction>()
-            ?.valueParameters
-            ?.any { it.isVarArg && it.name == argumentName } == true
-    }
-
     private fun checkCanSkipArrayCopy(arg: KtValueArgument, argsList: KtValueArgumentList) {
-        if (bindingContext == BindingContext.EMPTY) {
-            if (isSimplePassThroughVararg(arg)) {
-                return
-            }
-            report(CodeSmell(issue, Entity.from(argsList), issue.description))
-        } else {
-            if (arg.canSkipArrayCopyForSpreadArgument()) {
-                return
-            }
-            report(
-                CodeSmell(
-                    issue,
-                    Entity.from(argsList),
-                    "Used in this way a spread operator causes a full copy of the array to be created before " +
-                        "calling a method. This may result in a performance penalty."
-                )
-            )
+        if (arg.canSkipArrayCopyForSpreadArgument()) {
+            return
         }
+        report(
+            CodeSmell(
+                issue,
+                Entity.from(argsList),
+                "Used in this way a spread operator causes a full copy of the array to be created before " +
+                    "calling a method. This may result in a performance penalty."
+            )
+        )
     }
 
     /**

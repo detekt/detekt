@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
@@ -37,36 +36,4 @@ interface Context {
      * Normally this is done on every new [KtFile] analyzed and should be called by clients.
      */
     fun clearFindings()
-}
-
-/**
- * Default [Context] implementation.
- */
-@Deprecated("You should not use this class directly. Use or extend Context instead.")
-open class DefaultContext : Context {
-
-    /**
-     * Returns a copy of violations for this rule.
-     */
-    override val findings: List<Finding>
-        get() = _findings.toList()
-
-    private val _findings: MutableList<Finding> = mutableListOf()
-
-    /**
-     * Reports a single code smell finding.
-     *
-     * Before adding a finding, it is checked if it is not suppressed
-     * by @Suppress or @SuppressWarnings annotations.
-     */
-    override fun report(finding: Finding, aliases: Set<String>, ruleSetId: RuleSetId?) {
-        val ktElement = finding.entity.ktElement
-        if (ktElement == null || !ktElement.isSuppressedBy(finding.id, aliases, ruleSetId)) {
-            _findings.add(finding)
-        }
-    }
-
-    final override fun clearFindings() {
-        _findings.clear()
-    }
 }

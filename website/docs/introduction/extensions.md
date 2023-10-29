@@ -26,14 +26,13 @@ develop your own custom rules. Another option is to clone the provided [detekt/d
 Own rules have to extend the abstract _Rule_ class and override the `visitXXX()`-functions from the AST.  
 A `RuleSetProvider` must be implemented, which declares a `RuleSet` in the `instance()`-function.
 To leverage the configuration mechanism of detekt you must pass the Config object from your rule set provider to your rule.
-An `Issue` property defines what ID, severity and message should be printed on the console or on any other output format.
+An `Issue` property defines what ID and message should be printed on the console or on any other output format.
 
 Example of a custom rule:
 ```kotlin
 class TooManyFunctions(config: Config) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,
-        Severity.CodeSmell,
         "This rule reports a file with an excessive function count.",
         Debt.TWENTY_MINS)
 
@@ -62,7 +61,6 @@ class TooManyFunctions2(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.CodeSmell,
         "This rule reports a file with an excessive function count.",
         Debt.TWENTY_MINS
     )

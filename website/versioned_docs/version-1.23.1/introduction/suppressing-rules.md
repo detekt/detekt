@@ -39,6 +39,7 @@ Rules inside this ruleset are wrappers around KtLint rules, and we don't have th
 
 ```kotlin
 @file:Suppress("MaximumLineLength")
+
 package com.example
 
 object AClassWithLongLines {

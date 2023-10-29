@@ -1,10 +1,8 @@
 package io.github.detekt.metrics
 
 import io.github.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtNamed
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
 import org.junit.jupiter.api.Nested
@@ -110,6 +108,34 @@ class CyclomaticComplexitySpec {
             assertThat(
                 CyclomaticComplexity.calculate(code) {
                     nestingFunctions = setOf("forEach")
+                }
+            ).isEqualTo(defaultFunctionComplexity + 1)
+        }
+    }
+
+    @Nested
+    inner class `counts local functions` {
+        private val code = compileContentForTest(
+            """
+                fun test(): String {
+                    fun local(flag: boolean) = if (flag) "a" else "b"
+                    return local(true)
+                }
+            """.trimIndent()
+        )
+
+        @Test
+        fun `counts them by default`() {
+            assertThat(
+                CyclomaticComplexity.calculate(code)
+            ).isEqualTo(defaultFunctionComplexity + 2)
+        }
+
+        @Test
+        fun `counts them as one when ignored`() {
+            assertThat(
+                CyclomaticComplexity.calculate(code) {
+                    ignoreLocalFunctions = true
                 }
             ).isEqualTo(defaultFunctionComplexity + 1)
         }
@@ -245,7 +271,7 @@ class CyclomaticComplexitySpec {
 
 private fun KtElement.getFunctionByName(name: String): KtNamedFunction {
     val node = getChildOfType<KtNamedFunction>() ?: error("Expected node of type ${KtNamedFunction::class}")
-    val identifier = node.safeAs<KtNamed>()?.nameAsName?.identifier
+    val identifier = node.nameAsName?.identifier
 
     require(identifier == name) {
         "Node should be $name, but was $identifier"

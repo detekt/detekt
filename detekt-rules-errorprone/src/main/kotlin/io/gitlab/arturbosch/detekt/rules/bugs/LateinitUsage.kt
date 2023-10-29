@@ -1,13 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isLateinit
@@ -28,22 +26,14 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * }
  * </noncompliant>
  */
-@Suppress("ViolatesTypeResolutionRequirements")
 class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Defect,
         "Usage of `lateinit` detected. Using `lateinit` for property initialization " +
             "is error prone, try using constructor injection or delegation.",
         Debt.TWENTY_MINS
     )
-
-    @Configuration("Allows you to provide a list of annotations that disable this check.")
-    @Deprecated("Use `ignoreAnnotated` instead")
-    private val excludeAnnotatedProperties: List<Regex> by config(emptyList<String>()) { list ->
-        list.map { it.replace(".", "\\.").replace("*", ".*").toRegex() }
-    }
 
     @Configuration("Allows you to disable the rule for a list of classes")
     private val ignoreOnClassesPattern: Regex by config("", String::toRegex)
@@ -61,14 +51,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
         super.visit(root)
 
-        val annotationExcluder = AnnotationExcluder(
-            root,
-            @Suppress("DEPRECATION") excludeAnnotatedProperties,
-            bindingContext,
-        )
-
-        properties.filterNot { annotationExcluder.shouldExclude(it.annotationEntries) }
-            .filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) == true }
+        properties.filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) == true }
             .forEach {
                 report(CodeSmell(issue, Entity.from(it), "Usages of lateinit should be avoided."))
             }

@@ -18,27 +18,29 @@ jobs:
     if: github.repository == 'detekt/detekt'
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       - name: Setup Java
-        uses: actions/setup-java@cd89f46ac9d01407894225f350157564c9c7cee2 # v3
+        uses: actions/setup-java@0ab4596768b603586c0de567f2430c30f5b0d2b0 # v3
         with:
           java-version: 17
           distribution: "temurin"
 
-      - name: Build detekt
-        uses: gradle/gradle-build-action@a4cf152f482c7ca97ef56ead29bf08bcd953284c # v2
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a # v2
         with:
           gradle-home-cache-cleanup: true
-          arguments: build
+
+      - name: Assemble and publish artifacts to Maven Local
+        run: ./gradlew publishToMavenLocal
+
+      - name: Build detekt
+        run: ./gradlew build
 
       - name: Deploy Snapshot
-        uses: gradle/gradle-build-action@a4cf152f482c7ca97ef56ead29bf08bcd953284c # v2
         env:
           ORG_GRADLE_PROJECT_SIGNING_KEY: ${{ secrets.ORG_GRADLE_PROJECT_SIGNING_KEY }}
           ORG_GRADLE_PROJECT_SIGNING_PWD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNING_PWD }}
           ORG_GRADLE_PROJECT_SONATYPE_USERNAME: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPE_USERNAME }}
           ORG_GRADLE_PROJECT_SONATYPE_PASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPE_PASSWORD }}
-        with:
-          gradle-home-cache-cleanup: true
-          arguments: publishAllToSonatypeSnapshot -Dsnapshot=true --stacktrace
+        run: ./gradlew publishAllToSonatypeSnapshot -Dsnapshot=true --stacktrace

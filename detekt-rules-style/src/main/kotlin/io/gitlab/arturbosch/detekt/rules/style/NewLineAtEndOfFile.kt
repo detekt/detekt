@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -25,7 +24,6 @@ class NewLineAtEndOfFile(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "Checks whether files end with a line separator.",
         Debt.FIVE_MINS
     )
@@ -39,7 +37,11 @@ class NewLineAtEndOfFile(config: Config = Config.empty) : Rule(config) {
             )
             val sourceLocation = SourceLocation(coords?.line ?: 0, coords?.column ?: 0)
             val textLocation = TextLocation(file.endOffset, file.endOffset)
-            val location = Location(sourceLocation, textLocation, file.containingFile.toFilePath())
+            val location = Location(
+                source = sourceLocation,
+                text = textLocation,
+                filePath = file.containingFile.toFilePath()
+            )
             report(
                 CodeSmell(
                     issue,

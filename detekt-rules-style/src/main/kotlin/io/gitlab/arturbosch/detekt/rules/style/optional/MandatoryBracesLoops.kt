@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtDoWhileExpression
@@ -55,7 +54,6 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
 class MandatoryBracesLoops(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "MandatoryBracesLoops",
-        Severity.Style,
         "A multi-line loop was found that does not have braces. " +
             "These should be added to improve readability.",
         Debt.FIVE_MINS

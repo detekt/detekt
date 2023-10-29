@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
@@ -78,7 +77,7 @@ class LongMethodSpec {
         val findings = subject.compileAndLint(code)
 
         assertThat(findings).hasSize(1)
-        assertThat(findings[0] as ThresholdedCodeSmell).hasValue(6)
+        assertThat(findings[0]).isThresholded().hasValue(6)
     }
 
     @Test
@@ -102,7 +101,7 @@ class LongMethodSpec {
         val findings = subject.compileAndLint(code)
 
         assertThat(findings).hasSize(1)
-        assertThat(findings[0] as ThresholdedCodeSmell).hasValue(8)
+        assertThat(findings[0]).isThresholded().hasValue(8)
     }
 
     @Test
@@ -158,6 +157,6 @@ class LongMethodSpec {
 
         assertThat(findings).hasSize(1)
         assertThat(findings).hasTextLocations("nestedLongMethod")
-        assertThat(findings[0] as ThresholdedCodeSmell).hasValue(6)
+        assertThat(findings[0]).isThresholded().hasValue(6)
     }
 }

@@ -2886,14 +2886,14 @@ if (x.isNullOrEmpty()) return
 #### Noncompliant Code:
 
 ```kotlin
-if (x != null) { x.transform() } else null
+if (x != null) { transform(x) } else null
 if (x == null) null else y
 ```
 
 #### Compliant Code:
 
 ```kotlin
-x?.let { it.transform() }
+x?.let { transform(it) }
 x?.let { y }
 ```
 

@@ -23,22 +23,22 @@ internal fun Project.registerDetektTask(
             val service = project.extensions.getByType(JavaToolchainService::class.java)
             val defaultLauncher = service.launcherFor(toolchain)
             it.jdkHome.convention(defaultLauncher.map { launcher -> launcher.metadata.installationPath })
-            it.jvmTargetProp.convention(
+            it.jvmTarget.convention(
                 defaultLauncher.map { launcher ->
                     JavaVersion.toVersion(launcher.metadata.languageVersion.asInt()).toString()
                 }
             )
         }
 
-        it.debugProp.convention(provider { extension.debug })
-        it.parallelProp.convention(provider { extension.parallel })
-        it.disableDefaultRuleSetsProp.convention(provider { extension.disableDefaultRuleSets })
-        it.buildUponDefaultConfigProp.convention(provider { extension.buildUponDefaultConfig })
-        it.autoCorrectProp.convention(provider { extension.autoCorrect })
+        it.debug.convention(extension.debug)
+        it.parallel.convention(extension.parallel)
+        it.disableDefaultRuleSets.convention(extension.disableDefaultRuleSets)
+        it.buildUponDefaultConfig.convention(extension.buildUponDefaultConfig)
+        it.autoCorrect.convention(extension.autoCorrect)
         it.config.setFrom(provider { extension.config })
-        it.ignoreFailuresProp.convention(project.provider { extension.ignoreFailures })
-        it.basePathProp.convention(extension.basePath)
-        it.allRulesProp.convention(provider { extension.allRules })
+        it.ignoreFailures.convention(extension.ignoreFailures)
+        it.basePath.convention(extension.basePath.map { basePath -> basePath.asFile.absolutePath })
+        it.allRules.convention(extension.allRules)
         configuration(it)
     }
 
@@ -55,7 +55,7 @@ internal fun Project.registerCreateBaselineTask(
             val service = project.extensions.getByType(JavaToolchainService::class.java)
             val defaultLauncher = service.launcherFor(toolchain)
             it.jdkHome.convention(defaultLauncher.map { launcher -> launcher.metadata.installationPath })
-            it.jvmTargetProp.convention(
+            it.jvmTarget.convention(
                 defaultLauncher.map { launcher ->
                     JavaVersion.toVersion(launcher.metadata.languageVersion.asInt()).toString()
                 }
@@ -63,12 +63,12 @@ internal fun Project.registerCreateBaselineTask(
         }
 
         it.config.setFrom(project.provider { extension.config })
-        it.debug.convention(project.provider { extension.debug })
-        it.parallel.convention(project.provider { extension.parallel })
-        it.disableDefaultRuleSets.convention(project.provider { extension.disableDefaultRuleSets })
-        it.buildUponDefaultConfig.convention(project.provider { extension.buildUponDefaultConfig })
-        it.autoCorrect.convention(project.provider { extension.autoCorrect })
-        it.basePathProp.convention(extension.basePath)
-        it.allRules.convention(provider { extension.allRules })
+        it.debug.convention(extension.debug)
+        it.parallel.convention(extension.parallel)
+        it.disableDefaultRuleSets.convention(extension.disableDefaultRuleSets)
+        it.buildUponDefaultConfig.convention(extension.buildUponDefaultConfig)
+        it.autoCorrect.convention(extension.autoCorrect)
+        it.basePath.convention(extension.basePath.map { basePath -> basePath.asFile.absolutePath })
+        it.allRules.convention(extension.allRules)
         configuration(it)
     }

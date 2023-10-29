@@ -1,7 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import java.io.PrintStream
-
 /**
  * Extension point which describes how findings should be printed on the console.
  *
@@ -10,18 +8,6 @@ import java.io.PrintStream
  * in the 'console-reports' property of a detekt yaml config.
  */
 abstract class ConsoleReport : Extension {
-
-    /**
-     * Prints the rendered report to the given printer
-     * if anything was rendered at all.
-     */
-    @Deprecated("Use render to print the result to any Appendable.")
-    fun print(printer: PrintStream, detektion: Detektion) {
-        val output = render(detektion)
-        if (!output.isNullOrBlank()) {
-            printer.println(output)
-        }
-    }
 
     /**
      * Converts the given [detektion] into a string representation

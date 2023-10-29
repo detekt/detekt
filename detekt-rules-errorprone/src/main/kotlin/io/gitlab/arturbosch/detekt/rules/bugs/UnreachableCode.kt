@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.diagnostics.Errors
@@ -38,7 +37,6 @@ class UnreachableCode(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "UnreachableCode",
-        Severity.Warning,
         "Unreachable code detected. This code should be removed.",
         Debt.TEN_MINS
     )

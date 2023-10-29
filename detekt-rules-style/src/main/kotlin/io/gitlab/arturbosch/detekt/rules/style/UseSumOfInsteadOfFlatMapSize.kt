@@ -6,10 +6,8 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isCalling
-import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.builtins.DefaultBuiltIns
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.name.FqName
@@ -43,7 +41,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.isSubclassOf
 class UseSumOfInsteadOfFlatMapSize(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "Use `sumOf` instead of `flatMap` and `size/count` calls",
         Debt.FIVE_MINS
     )
@@ -58,7 +55,7 @@ class UseSumOfInsteadOfFlatMapSize(config: Config = Config.empty) : Rule(config)
         val selector = receiver.getQualifiedExpressionForReceiver()?.selectorExpression ?: return
         if (!selector.isSizeOrCount(receiver)) return
 
-        val selectorText = selector.safeAs<KtCallExpression>()?.calleeExpression?.text ?: selector.text
+        val selectorText = (selector as? KtCallExpression)?.calleeExpression?.text ?: selector.text
         val message = "Use 'sumOf' instead of '$calleeText' and '$selectorText'"
         report(CodeSmell(issue, Entity.from(expression), message))
     }
@@ -66,12 +63,12 @@ class UseSumOfInsteadOfFlatMapSize(config: Config = Config.empty) : Rule(config)
     private fun KtCallExpression.isFlatMapOrFlatten(): Boolean = isCalling(flatMapAndFlattenFqName, bindingContext)
 
     private fun KtExpression.isSizeOrCount(receiver: KtExpression): Boolean {
-        if (safeAs<KtNameReferenceExpression>()?.text == "size") {
+        if ((this as? KtNameReferenceExpression)?.text == "size") {
             val receiverType = receiver.getType(bindingContext) ?: return false
-            val descriptor = receiverType.constructor.declarationDescriptor?.safeAs<ClassDescriptor>() ?: return false
+            val descriptor = receiverType.constructor.declarationDescriptor as? ClassDescriptor ?: return false
             return descriptor.isSubclassOf(DefaultBuiltIns.Instance.list)
         }
-        return safeAs<KtCallExpression>()?.isCalling(countFqName, bindingContext) == true
+        return (this as? KtCallExpression)?.isCalling(countFqName, bindingContext) == true
     }
 
     companion object {

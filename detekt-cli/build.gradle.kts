@@ -1,4 +1,5 @@
 import org.apache.tools.ant.filters.ReplaceTokens
+import java.io.ByteArrayOutputStream
 
 plugins {
     alias(libs.plugins.shadow)
@@ -10,8 +11,12 @@ application {
     mainClass = "io.gitlab.arturbosch.detekt.cli.Main"
 }
 
-val pluginsJar: Configuration by configurations.creating {
+val pluginsJar by configurations.dependencyScope("pluginsJar") {
     isTransitive = false
+}
+
+val pluginsJarFiles by configurations.resolvable("pluginsJarFiles") {
+    extendsFrom(pluginsJar)
 }
 
 dependencies {
@@ -45,6 +50,8 @@ publishing {
     }
 }
 
+val generatedCliUsage: Configuration by configurations.consumable("generatedCliUsage")
+
 tasks {
     shadowJar {
         mergeServiceFiles()
@@ -70,11 +77,11 @@ tasks {
 
     val runWithArgsFile by registering(JavaExec::class) {
         // The task generating these jar files run first.
-        inputs.files(pluginsJar)
+        inputs.files(pluginsJarFiles)
         doNotTrackState("The entire root directory is read as the input source.")
         classpath = files(shadowJar)
         workingDir = rootDir
-        args = listOf("@./config/detekt/argsfile", "-p", pluginsJar.files.joinToString(",") { it.path })
+        args = listOf("@./config/detekt/argsfile", "-p", pluginsJarFiles.files.joinToString(",") { it.path })
     }
 
     withType<Jar>().configureEach {
@@ -87,4 +94,26 @@ tasks {
     check {
         dependsOn(runWithHelpFlag, runWithArgsFile)
     }
+
+    val cliUsage by registering(JavaExec::class) {
+        val cliUsagesOutput = layout.buildDirectory.file("output/cli-usage.md")
+        outputs.file(cliUsagesOutput)
+        classpath = files(shadowJar)
+        args = listOf("--help")
+        doFirst {
+            standardOutput = ByteArrayOutputStream()
+        }
+        doLast {
+            cliUsagesOutput.get().asFile.apply {
+                writeText("```\n")
+                appendBytes((standardOutput as ByteArrayOutputStream).toByteArray())
+                appendText("```\n")
+            }
+        }
+    }
+
+    artifacts.add(generatedCliUsage.name, cliUsage)
 }
+
+val shadowDist: Configuration by configurations.consumable("shadowDist")
+artifacts.add(shadowDist.name, tasks.shadowDistZip)

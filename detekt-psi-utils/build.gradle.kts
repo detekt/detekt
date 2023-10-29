@@ -1,6 +1,6 @@
 plugins {
     id("module")
-    alias(libs.plugins.binaryCompatibilityValidator)
+    id("public-api")
 }
 
 dependencies {
@@ -9,6 +9,10 @@ dependencies {
     testImplementation(libs.assertj)
     testImplementation(libs.mockk)
     testImplementation(projects.detektTest)
+}
+
+detekt {
+    config.from("config/detekt.yml")
 }
 
 apiValidation {

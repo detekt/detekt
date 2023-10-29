@@ -4,10 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.companionObject
@@ -35,7 +32,6 @@ class ComplexInterface(
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Maintainability,
         "An interface contains too many functions and properties. " +
             "Large classes tend to handle many things at once. " +
             "An interface should have one responsibility. " +
@@ -67,7 +63,7 @@ class ComplexInterface(
                     ThresholdedCodeSmell(
                         issue,
                         Entity.atName(klass),
-                        Metric("SIZE: ", size, allowedDefinitions),
+                        Metric(size, allowedDefinitions),
                         "The interface ${klass.name} is too complex. Consider splitting it up."
                     )
                 )

@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isInternal
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.config.AnalysisFlags
@@ -49,7 +48,6 @@ class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(conf
 
     override val issue: Issue = Issue(
         "RedundantVisibilityModifierRule",
-        Severity.Style,
         "Redundant visibility modifiers detected, which can be safely removed.",
         Debt.FIVE_MINS
     )

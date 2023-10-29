@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.core.config.validation
 
-import io.gitlab.arturbosch.detekt.api.internal.CommaSeparatedPattern
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
@@ -8,10 +7,7 @@ import org.junit.jupiter.api.Test
 
 internal class MissingRulesConfigValidatorSpec {
     private val baseline = yamlConfig("config_validation/baseline.yml") as YamlConfig
-    private val subject = MissingRulesConfigValidator(
-        baseline,
-        CommaSeparatedPattern(DEFAULT_PROPERTY_EXCLUDES).mapToRegex()
-    )
+    private val subject = MissingRulesConfigValidator(baseline, DEFAULT_PROPERTY_EXCLUDES.toSet())
 
     @Test
     fun `do not check for exhaustiveness if disabled by config`() {

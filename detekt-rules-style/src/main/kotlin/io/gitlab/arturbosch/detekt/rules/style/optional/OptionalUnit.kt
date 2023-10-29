@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.cfg.WhenChecker
 import org.jetbrains.kotlin.js.translate.callTranslator.getReturnType
@@ -18,7 +18,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.siblings
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
@@ -50,12 +49,11 @@ import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
  * override fun foo() = Unit
  * </compliant>
  */
-@Suppress("ViolatesTypeResolutionRequirements")
+@RequiresTypeResolution
 class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "Return type of `Unit` is unnecessary and can be safely removed.",
         Debt.FIVE_MINS
     )
@@ -77,7 +75,7 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
             .filter {
                 when {
                     it !is KtNameReferenceExpression || it.text != UNIT -> false
-                    it != lastStatement || bindingContext == BindingContext.EMPTY -> true
+                    it != lastStatement -> true
                     !it.isUsedAsExpression(bindingContext) -> true
                     else -> {
                         val prev =
@@ -104,8 +102,10 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
                 val elseExpression = `else`
                 if (elseExpression is KtIfExpression) elseExpression.canBeUsedAsValue() else elseExpression != null
             }
+
             is KtWhenExpression ->
                 entries.lastOrNull()?.elseKeyword != null || WhenChecker.getMissingCases(this, bindingContext).isEmpty()
+
             else ->
                 true
         }
@@ -131,7 +131,6 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
         "defines a return type of Unit. This is unnecessary and can safely be removed."
 
     private fun KtExpression.isGenericOrNothingType(): Boolean {
-        if (bindingContext == BindingContext.EMPTY) return false
         val isGenericType = getResolvedCall(bindingContext)?.getReturnType()?.isTypeParameter() == true
         val isNothingType = getType(bindingContext)?.isNothing() == true
         // Either the function initializer returns Nothing or it is a generic function

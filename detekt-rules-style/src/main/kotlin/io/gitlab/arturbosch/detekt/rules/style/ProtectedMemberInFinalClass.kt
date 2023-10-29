@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.isJvmFinalizeFunction
 import io.gitlab.arturbosch.detekt.rules.isOpen
@@ -39,7 +38,6 @@ class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) 
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Warning,
         "Member with protected visibility in final class is private. " +
             "Consider using private or internal as modifier.",
         Debt.FIVE_MINS

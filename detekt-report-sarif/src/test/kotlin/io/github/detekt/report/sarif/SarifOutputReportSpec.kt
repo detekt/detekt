@@ -1,16 +1,13 @@
 package io.github.detekt.report.sarif
 
 import io.github.detekt.test.utils.readResourceContent
-import io.github.detekt.tooling.api.VersionProvider
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.UnstableApi
@@ -18,9 +15,8 @@ import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.test.EmptySetupContext
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import io.gitlab.arturbosch.detekt.test.createEntity
+import io.gitlab.arturbosch.detekt.test.createFinding
 import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
-import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.junit.jupiter.api.Test
@@ -33,16 +29,19 @@ class SarifOutputReportSpec {
     @Test
     fun `renders multiple issues`() {
         val result = TestDetektion(
-            createFinding(ruleName = "TestSmellA", severity = SeverityLevel.ERROR),
-            createFinding(ruleName = "TestSmellB", severity = SeverityLevel.WARNING),
-            createFinding(ruleName = "TestSmellC", severity = SeverityLevel.INFO)
+            createFinding(ruleName = "TestSmellA", severity = Severity.ERROR),
+            createFinding(ruleName = "TestSmellB", severity = Severity.WARNING),
+            createFinding(ruleName = "TestSmellC", severity = Severity.INFO)
         )
 
         val report = SarifOutputReport()
             .apply { init(EmptySetupContext()) }
             .render(result)
 
-        assertThat(report).isEqualToIgnoringWhitespace(readResourceContent("vanilla.sarif.json"))
+        val expectedReport = readResourceContent("vanilla.sarif.json")
+            .replace("<PREFIX>", Path(System.getProperty("user.dir")).toUri().toString())
+
+        assertThat(report).isEqualToIgnoringWhitespace(expectedReport)
     }
 
     @Test
@@ -70,7 +69,7 @@ class SarifOutputReportSpec {
         // Note: GitHub CI uses D: drive, but it could be any drive for local development
         val systemAwareExpectedReport = if (whichOS().startsWith("windows", ignoreCase = true)) {
             val winRoot = Path("/").absolutePathString().replace("\\", "/")
-            expectedReport.replace("file:///", "file://$winRoot")
+            expectedReport.replace("file:///", "file:///$winRoot")
         } else {
             expectedReport
         }
@@ -91,8 +90,8 @@ class SarifOutputReportSpec {
 
         val refEntity = TestRule().compileAndLint(Snippet.code).first().entity
         val location = Location(
-            SourceLocation(startLine, startColumn),
-            TextLocation(
+            source = SourceLocation(startLine, startColumn),
+            text = TextLocation(
                 startLine + (startColumn - 1) * Snippet.lineLength,
                 endColumn + (endLine - 1) * Snippet.lineLength
             ),
@@ -102,8 +101,8 @@ class SarifOutputReportSpec {
         val result = TestDetektion(
             createFinding(
                 ruleName = "TestSmellB",
-                entity = refEntity.copy(location = location),
-                severity = SeverityLevel.WARNING
+                entity = Entity(refEntity.name, refEntity.signature, location, refEntity.ktElement),
+                severity = Severity.WARNING
             )
         )
 
@@ -128,8 +127,8 @@ class SarifOutputReportSpec {
 
         val refEntity = TestRule().compileAndLint(Snippet.code).first().entity
         val location = Location(
-            SourceLocation(startLine, startColumn),
-            TextLocation(
+            source = SourceLocation(startLine, startColumn),
+            text = TextLocation(
                 startLine + (startColumn - 1) * Snippet.lineLength,
                 endColumn + (endLine - 1) * Snippet.lineLength
             ),
@@ -139,8 +138,8 @@ class SarifOutputReportSpec {
         val result = TestDetektion(
             createFinding(
                 ruleName = "TestSmellB",
-                entity = refEntity.copy(location = location),
-                severity = SeverityLevel.WARNING
+                entity = Entity(refEntity.name, refEntity.signature, location, refEntity.ktElement),
+                severity = Severity.WARNING
             )
         )
 
@@ -175,27 +174,11 @@ private fun constrainRegion(startLine: Int, startColumn: Int, endLine: Int, endC
 """.trimIndent()
 
 class TestRule : Rule() {
-    override val issue = Issue(javaClass.simpleName, Severity.Warning, "", Debt.FIVE_MINS)
+    override val issue = Issue(javaClass.simpleName, "", Debt.FIVE_MINS)
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         report(CodeSmell(issue, Entity.atName(classOrObject), message = "Error"))
     }
 }
 
-private fun createFinding(
-    ruleName: String,
-    severity: SeverityLevel,
-    entity: Entity = createEntity("TestFile.kt")
-): Finding {
-    return object : CodeSmell(createIssue(ruleName), entity, "TestMessage") {
-        override val severity: SeverityLevel
-            get() = severity
-    }
-}
-
 private fun String.stripWhitespace() = replace(Regex("\\s"), "")
-
-internal class TestVersionProvider : VersionProvider {
-
-    override fun current(): String = "1.0.0"
-}

@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
@@ -60,7 +59,6 @@ class RedundantSuspendModifier(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "RedundantSuspendModifier",
-        Severity.Minor,
         "The `suspend` modifier is only needed for functions that contain suspending calls.",
         Debt.FIVE_MINS
     )

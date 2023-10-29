@@ -7,13 +7,13 @@ package io.gitlab.arturbosch.detekt.api
  * Basic behaviour of a finding is that is can be assigned to an id and a source code position described as
  * an entity. Metrics and entity references can also considered for deeper characterization.
  */
-interface Finding : Compactable, HasEntity, HasMetrics {
+interface Finding : Compactable, HasEntity {
     val id: String
     val issue: Issue
     val references: List<Entity>
     val message: String
-    val severity: SeverityLevel
-        get() = SeverityLevel.WARNING
+    val severity: Severity
+        get() = Severity.DEFAULT
 
     /**
      * Explanation why this finding was raised.
@@ -36,18 +36,6 @@ interface HasEntity {
         get() = location.filePath.absolutePath.toString()
     val signature: String
         get() = entity.signature
-}
-
-/**
- * Adds metric container behaviour.
- */
-interface HasMetrics {
-    val metrics: List<Metric>
-
-    /**
-     * Finds the first metric matching given [type].
-     */
-    fun metricByType(type: String): Metric? = metrics.find { it.type == type }
 }
 
 /**

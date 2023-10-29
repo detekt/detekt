@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
@@ -20,14 +19,14 @@ class CorrectableRulesFirstSpec {
         var actualLastRuleId = ""
 
         class First(config: Config) : Rule(config) {
-            override val issue: Issue = justAnIssue.copy(id = "NonCorrectable")
+            override val issue: Issue = Issue("NonCorrectable", "", Debt.FIVE_MINS)
             override fun visitClass(klass: KtClass) {
                 actualLastRuleId = issue.id
             }
         }
 
         class Last(config: Config) : Rule(config) {
-            override val issue: Issue = justAnIssue.copy(id = "Correctable")
+            override val issue: Issue = Issue("Correctable", "", Debt.FIVE_MINS)
             override fun visitClass(klass: KtClass) {
                 actualLastRuleId = issue.id
             }
@@ -49,10 +48,3 @@ class CorrectableRulesFirstSpec {
         assertThat(actualLastRuleId).isEqualTo("NonCorrectable")
     }
 }
-
-private val justAnIssue = Issue(
-    "JustAnIssue",
-    Severity.CodeSmell,
-    "",
-    Debt.FIVE_MINS
-)

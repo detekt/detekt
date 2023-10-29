@@ -11,7 +11,7 @@ fun KtAnnotated.hasAnnotation(
     val predicate: (KtAnnotationEntry) -> Boolean = {
         it.typeReference
             ?.typeElement
-            ?.safeAs<KtUserType>()
+            ?.let { ktTypeElement -> ktTypeElement as? KtUserType }
             ?.referencedName in names
     }
     return annotationEntries.any(predicate)

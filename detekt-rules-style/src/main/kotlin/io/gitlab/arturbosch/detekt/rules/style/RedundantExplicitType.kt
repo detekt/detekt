@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
@@ -49,7 +48,6 @@ class RedundantExplicitType(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "RedundantExplicitType",
-        Severity.Style,
         "Type does not need to be stated explicitly and can be removed.",
         Debt.FIVE_MINS
     )

@@ -10,6 +10,8 @@ import io.gitlab.arturbosch.detekt.core.reporting.printFindings
  */
 class FileBasedFindingsReport : AbstractFindingsReport() {
 
+    override val id: String = "FileBasedFindingsReport"
+
     override fun render(findings: Map<RuleSetId, List<Finding>>): String {
         val findingsPerFile = findings.values
             .flatten()

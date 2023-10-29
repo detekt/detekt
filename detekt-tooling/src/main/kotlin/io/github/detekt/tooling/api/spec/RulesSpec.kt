@@ -11,9 +11,9 @@ interface RulesSpec {
     val activateAllRules: Boolean
 
     /**
-     * Sets the policy for allowed max issues found during the analysis.
+     * Sets the policy to handle issues found during the analysis.
      */
-    val maxIssuePolicy: MaxIssuePolicy
+    val failurePolicy: FailurePolicy
 
     /**
      * Issues which were corrected should not be taken into account for calculating the max issue threshold.
@@ -21,30 +21,14 @@ interface RulesSpec {
     val excludeCorrectable: Boolean
 
     /**
-     * Policy on how many issues are allowed before detekt throws an error.
+     * Policy to decide if detekt throws an error.
      */
-    sealed class MaxIssuePolicy {
+    sealed class FailurePolicy {
 
         /**
-         * Marker that MaxIssuePolicy should be read from the config file when available.
-         * Else it defaults to [NoneAllowed].
+         * No issues with a severity of error is allowed.
          */
-        data object NonSpecified : MaxIssuePolicy()
-
-        /**
-         * Always return exit code 0 on found issues.
-         */
-        data object AllowAny : MaxIssuePolicy()
-
-        /**
-         * Never return successfully (code 0) on issues in codebase.
-         */
-        data object NoneAllowed : MaxIssuePolicy()
-
-        /**
-         * Define a specific amount of issues which are allowed to find before returning non-zero exit code.
-         */
-        class AllowAmount(val amount: Int) : MaxIssuePolicy()
+        data object FailOnError : FailurePolicy()
     }
 
     /**

@@ -32,7 +32,7 @@ internal interface DetektInvoker {
     }
 }
 
-interface DetektWorkParameters : WorkParameters {
+internal interface DetektWorkParameters : WorkParameters {
     val arguments: ListProperty<String>
     val ignoreFailures: Property<Boolean>
     val dryRun: Property<Boolean>
@@ -40,7 +40,7 @@ interface DetektWorkParameters : WorkParameters {
     val classpath: ConfigurableFileCollection
 }
 
-abstract class DetektWorkAction : WorkAction<DetektWorkParameters> {
+internal abstract class DetektWorkAction : WorkAction<DetektWorkParameters> {
     @Suppress("SwallowedException", "TooGenericExceptionCaught")
     override fun execute() {
         if (parameters.dryRun.getOrElse(false)) {

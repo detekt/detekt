@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtAnnotationUseSiteTarget
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
@@ -32,7 +32,6 @@ class UnnecessaryAnnotationUseSiteTarget(config: Config = Config.empty) : Rule(c
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "Unnecessary Annotation use-site Target. It can be removed.",
         Debt.FIVE_MINS
     )
@@ -60,7 +59,12 @@ class UnnecessaryAnnotationUseSiteTarget(config: Config = Config.empty) : Rule(c
 
     private fun report(useSite: KtAnnotationUseSiteTarget, message: String) {
         val location = Location.from(useSite).let { location ->
-            location.copy(text = location.text.copy(end = location.text.end + 1))
+            Location(
+                location.source,
+                location.endSource,
+                TextLocation(location.text.start, location.text.end + 1),
+                location.filePath
+            )
         }
         report(CodeSmell(issue, Entity.from(useSite, location), message))
     }

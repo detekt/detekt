@@ -5,12 +5,12 @@
     {
       "originalUriBaseIds": {
         "%SRCROOT%": {
-          "uri": "file:///Users/tester/detekt/"
+          "uri": "file:///Users/tester/detekt"
         }
       },
       "results": [
         {
-          "level": "warning",
+          "level": "error",
           "locations": [
             {
               "physicalLocation": {
@@ -31,7 +31,7 @@
           "ruleId": "detekt.TestSmellA.TestSmellA"
         },
         {
-          "level": "warning",
+          "level": "error",
           "locations": [
             {
               "physicalLocation": {
@@ -52,7 +52,7 @@
           "ruleId": "detekt.TestSmellB.TestSmellB"
         },
         {
-          "level": "warning",
+          "level": "error",
           "locations": [
             {
               "physicalLocation": {

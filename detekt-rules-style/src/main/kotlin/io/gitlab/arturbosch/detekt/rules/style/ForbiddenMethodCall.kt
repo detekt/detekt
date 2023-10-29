@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
@@ -27,6 +26,7 @@ import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.psiUtil.isDotSelector
 import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
+import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequence
 
 /**
  * Reports all method or constructor invocations that are forbidden.
@@ -48,7 +48,6 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "Mark forbidden methods. A forbidden method could be an invocation of an unstable / experimental " +
             "method and hence you might want to mark it as forbidden in order to get warned about the usage.",
         Debt.TEN_MINS
@@ -115,14 +114,20 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun check(expression: KtExpression) {
-        val descriptors = expression.getResolvedCall(bindingContext)?.resultingDescriptor?.let {
-            val foundDescriptors = if (it is PropertyDescriptor) {
-                listOfNotNull(it.unwrappedGetMethod, it.unwrappedSetMethod)
-            } else {
-                listOf(it)
-            }
-            foundDescriptors + foundDescriptors.flatMap(CallableDescriptor::getOverriddenDescriptors)
-        } ?: return
+        val descriptors: Set<CallableDescriptor> =
+            expression.getResolvedCall(bindingContext)?.resultingDescriptor?.let { callableDescriptor ->
+                val foundDescriptors = if (callableDescriptor is PropertyDescriptor) {
+                    setOfNotNull(
+                        callableDescriptor.unwrappedGetMethod,
+                        callableDescriptor.unwrappedSetMethod
+                    )
+                } else {
+                    setOf(callableDescriptor)
+                }
+                foundDescriptors.flatMapTo(mutableSetOf()) {
+                    it.overriddenTreeUniqueAsSequence(true).toSet()
+                }
+            } ?: return
 
         for (descriptor in descriptors) {
             methods.find { it.value.match(descriptor) }?.let { forbidden ->

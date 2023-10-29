@@ -9,6 +9,8 @@ import io.gitlab.arturbosch.detekt.api.RuleSetId
  */
 class LiteFindingsReport : AbstractFindingsReport() {
 
+    override val id: String = "LiteFindingsReport"
+
     override fun render(findings: Map<RuleSetId, List<Finding>>): String {
         return buildString {
             findings.values.flatten().forEach { finding ->

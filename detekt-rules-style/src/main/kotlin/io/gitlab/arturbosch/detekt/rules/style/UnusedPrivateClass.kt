@@ -7,9 +7,7 @@ import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -45,7 +43,6 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue(
         "UnusedPrivateClass",
-        Severity.Maintainability,
         "Private class is unused and should be removed.",
         Debt.FIVE_MINS
     )
@@ -161,7 +158,7 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
         override fun visitDoubleColonExpression(expression: KtDoubleColonExpression) {
             checkReceiverForClassUsage(expression.receiverExpression)
             if (expression.isEmptyLHS) {
-                expression.safeAs<KtCallableReferenceExpression>()
+                (expression as? KtCallableReferenceExpression)
                     ?.callableReference
                     ?.takeIf { looksLikeAClassName(it.getReferencedName()) }
                     ?.let { namedClasses.add(it.getReferencedName()) }

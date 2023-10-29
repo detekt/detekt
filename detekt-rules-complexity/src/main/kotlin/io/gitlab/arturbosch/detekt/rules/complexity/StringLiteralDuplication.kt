@@ -5,10 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isPartOf
@@ -47,7 +44,6 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Maintainability,
         "Multiple occurrences of the same string literal within a single file detected. " +
             "Prefer extracting the string literal into a property or constant.",
         Debt.FIVE_MINS
@@ -59,8 +55,8 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
     @Configuration("if values in Annotations should be ignored")
     private val ignoreAnnotation: Boolean by config(true)
 
-    @Configuration("if short strings should be excluded")
-    private val excludeStringsWithLessThan5Characters: Boolean by config(true)
+    @Configuration("The maximum string length below which duplications are allowed")
+    private val allowedWithLengthLessThan: Int by config(5)
 
     @Configuration("RegEx of Strings that should be ignored")
     private val ignoreStringsRegex: Regex by config("$^", String::toRegex)
@@ -68,14 +64,13 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
     override fun visitKtFile(file: KtFile) {
         val visitor = StringLiteralVisitor()
         file.accept(visitor)
-        val type = "SIZE: "
         for ((name, value) in visitor.getLiteralsOverThreshold()) {
             val (main, references) = visitor.entitiesForLiteral(name)
             report(
                 ThresholdedCodeSmell(
                     issue,
                     main,
-                    Metric(type + name, value, allowedDuplications),
+                    Metric(value, allowedDuplications),
                     issue.description,
                     references
                 )
@@ -92,7 +87,7 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
         fun getLiteralsOverThreshold(): Map<String, Int> = literals.filterValues { it > allowedDuplications }
         fun entitiesForLiteral(literal: String): Pair<Entity, List<Entity>> {
             val references = literalReferences[literal]
-            if (references != null && references.isNotEmpty()) {
+            if (!references.isNullOrEmpty()) {
                 val mainEntity = references[0]
                 val referenceEntities = references.subList(1, references.size)
                 return Entity.from(mainEntity) to referenceEntities.map { Entity.from(it) }
@@ -104,7 +99,7 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
             val text = expression.plainContent
             when {
                 ignoreAnnotation && expression.isPartOf<KtAnnotationEntry>() -> pass
-                excludeStringsWithLessThan5Characters && text.length < STRING_EXCLUSION_LENGTH -> pass
+                text.length < allowedWithLengthLessThan -> pass
                 text.matches(ignoreStringsRegex) -> pass
                 else -> add(expression)
             }
@@ -118,9 +113,5 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
                 entries ?: mutableListOf(str)
             }
         }
-    }
-
-    companion object {
-        private const val STRING_EXCLUSION_LENGTH = 5
     }
 }

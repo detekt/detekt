@@ -80,27 +80,7 @@ naming:
 
 ## Build failure
 
-_Detekt_ supports the option to fail your build if a threshold of code smell issues is met.
-
-For this the following code must be inside the detekt config:
-
-```yaml
-build:
-  maxIssues: 10 # break the build if more than ten weighted issues are found
-  weights:
-    complexity: 2 # every rule of the complexity rule set should count as if two issues were found...
-    LongParameterList: 1 # ...with the exception of the LongParameterList rule.
-    comments: 0 # comment rules are just a nice to know?!
-```
-
-Every rule and rule set can be attached with an integer value which is the weight of the finding.
-For example: If you have 5 findings of the category _complexity_, then your failThreshold of 10 is reached as
-5 x 2 = 10. 
-
-Weights are respected in the following priority order:
-- The specified weight for a rule
-- The specified weight for a rule set
-- By default, the weight is 1.
+_detekt_ will fail your build if there is at least one issue found.
 
 ## Console Reports
 

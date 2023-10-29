@@ -23,12 +23,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
         rules {
             autoCorrect = args.autoCorrect
             activateAllRules = args.allRules
-            maxIssuePolicy = when (val count = args.maxIssues) {
-                null -> RulesSpec.MaxIssuePolicy.NonSpecified // prefer to read from config
-                0 -> RulesSpec.MaxIssuePolicy.NoneAllowed
-                in -1 downTo Int.MIN_VALUE -> RulesSpec.MaxIssuePolicy.AllowAny
-                else -> RulesSpec.MaxIssuePolicy.AllowAmount(count)
-            }
+            failurePolicy = RulesSpec.FailurePolicy.FailOnError
             excludeCorrectable = false // not yet supported; loaded from config
             runPolicy = args.toRunPolicy()
         }
@@ -41,8 +36,6 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
         config {
             useDefaultConfig = args.buildUponDefaultConfig
             shouldValidateBeforeAnalysis = null
-            knownPatterns = emptyList()
-            // ^^ cli does not have these properties yet; specified in yaml config for now
             configPaths = config?.let { MultipleExistingPathConverter().convert(it) }.orEmpty()
             resources = configResource?.let { MultipleClasspathResourceConverter().convert(it) }.orEmpty()
         }

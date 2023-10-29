@@ -20,12 +20,12 @@ dependencies {
 consumeGeneratedConfig(
     fromProject = projects.detektGenerator,
     fromConfiguration = "generatedFormattingConfig",
-    forTask = "sourcesJar"
+    forTask = tasks.sourcesJar
 )
 consumeGeneratedConfig(
     fromProject = projects.detektGenerator,
     fromConfiguration = "generatedFormattingConfig",
-    forTask = "processResources"
+    forTask = tasks.processResources
 )
 
 val depsToPackage = setOf(

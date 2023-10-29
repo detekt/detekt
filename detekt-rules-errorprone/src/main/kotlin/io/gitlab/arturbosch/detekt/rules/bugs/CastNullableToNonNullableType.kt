@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
@@ -44,7 +43,6 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 class CastNullableToNonNullableType(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         javaClass.simpleName,
-        Severity.Defect,
         "Nullable type to non-null type cast is found. Consider using two assertions, " +
             "`null` assertions and type cast",
         Debt.FIVE_MINS

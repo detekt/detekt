@@ -16,7 +16,6 @@ complexity:
     excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
     allowedDuplications: 4
     ignoreAnnotation: true
-    excludeStringsWithLessThan5Characters: true
     ignoreStringsRegex: '$^'
   ComplexInterface:
     active: true
@@ -225,6 +224,8 @@ style:
     active: true
   PreferToOverPairSyntax:
     active: true
+  RangeUntilInsteadOfRangeTo:
+    active: true
   RedundantExplicitType:
     active: true
   RedundantHigherOrderMapUsage:
@@ -251,9 +252,7 @@ style:
   UnnecessaryInnerClass:
     active: true
     ignoreAnnotated: ['Nested']
-  UntilInsteadOfRangeTo:
-    active: true
-  UnusedImports:
+  UnusedImport:
     active: false # formatting already have this rule enabled
   UnusedPrivateMember:
     active: true

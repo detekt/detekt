@@ -5,8 +5,9 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.rules.isPartOfString
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
@@ -19,7 +20,6 @@ class TrailingWhitespace(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
-        Severity.Style,
         "Whitespaces at the end of a line are unnecessary and can be removed.",
         Debt.FIVE_MINS
     )
@@ -39,9 +39,14 @@ class TrailingWhitespace(config: Config = Config.empty) : Rule(config) {
                 val ktElement = findFirstKtElementInParentsOrNull(file, offset, line)
                 if (ktElement == null || ktElement.shouldReport(trailingWhitespaces)) {
                     val entity = Entity.from(file, offset - trailingWhitespaces).let { entity ->
-                        entity.copy(
-                            location = entity.location.copy(
-                                text = entity.location.text.copy(end = offset)
+                        Entity(
+                            entity.name,
+                            entity.signature,
+                            location = Location(
+                                entity.location.source,
+                                entity.location.endSource,
+                                TextLocation(entity.location.text.start, offset),
+                                entity.location.filePath
                             )
                         )
                     }

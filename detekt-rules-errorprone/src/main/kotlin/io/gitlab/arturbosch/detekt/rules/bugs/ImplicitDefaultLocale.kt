@@ -6,17 +6,18 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns.isStringOrNullableString
+import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
-import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
-import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 
 /**
  * Prefer passing [java.util.Locale] explicitly than using implicit default value when formatting
@@ -29,6 +30,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
  *
  * <noncompliant>
  * String.format("Timestamp: %d", System.currentTimeMillis())
+ * "Timestamp: %d".format(System.currentTimeMillis())
  *
  * val str: String = getString()
  * str.toUpperCase()
@@ -37,6 +39,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
  *
  * <compliant>
  * String.format(Locale.US, "Timestamp: %d", System.currentTimeMillis())
+ * "Timestamp: %d".format(Locale.US, System.currentTimeMillis())
  *
  * val str: String = getString()
  * str.toUpperCase(Locale.US)
@@ -47,29 +50,25 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
 @RequiresTypeResolution
 class ImplicitDefaultLocale(config: Config = Config.empty) : Rule(config) {
 
+    private val formatCalls = listOf(
+        FqName("kotlin.text.format")
+    )
+
     override val issue = Issue(
         "ImplicitDefaultLocale",
-        Severity.CodeSmell,
         "Implicit default locale used for string processing. Consider using explicit locale.",
         Debt.FIVE_MINS
     )
 
-    override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
-        super.visitDotQualifiedExpression(expression)
-        checkStringFormatting(expression)
-        checkCaseConversion(expression)
-    }
-
-    override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
-        super.visitSafeQualifiedExpression(expression)
+    override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
+        super.visitQualifiedExpression(expression)
         checkStringFormatting(expression)
         checkCaseConversion(expression)
     }
 
     private fun checkStringFormatting(expression: KtQualifiedExpression) {
-        if (expression.receiverExpression.text == "String" &&
-            expression.getCalleeExpressionIfAny()?.text == "format" &&
-            expression.containsStringTemplate()
+        if (expression.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameSafe in formatCalls &&
+            expression.containsLocaleObject(bindingContext).not()
         ) {
             report(
                 CodeSmell(
@@ -106,9 +105,19 @@ private fun KtQualifiedExpression.isCalleeNoArgs(): Boolean {
     return lastCallExpression?.valueArguments.isNullOrEmpty()
 }
 
-private fun KtQualifiedExpression.containsStringTemplate(): Boolean {
+private fun KtQualifiedExpression.containsLocaleObject(bindingContext: BindingContext): Boolean {
     val lastCallExpression = lastChild as? KtCallExpression
-    return lastCallExpression?.valueArguments
+    val firstArgument = lastCallExpression
+        ?.valueArguments
         ?.firstOrNull()
-        ?.run { children.firstOrNull() } is KtStringTemplateExpression
+        ?: return false
+    return firstArgument.getArgumentExpression()
+        .getResolvedCall(bindingContext)
+        ?.resultingDescriptor
+        ?.fqNameSafe
+        ?.startsWith(
+            Name.identifier(
+                "java.util.Locale"
+            )
+        ) == true
 }

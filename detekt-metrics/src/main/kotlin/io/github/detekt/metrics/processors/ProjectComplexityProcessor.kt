@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.psi.KtFile
 
 class ProjectComplexityProcessor : AbstractProcessor() {
 
+    override val id: String = "ProjectComplexityProcessor"
     override val visitor = ComplexityVisitor()
     override val key = complexityKey
 }

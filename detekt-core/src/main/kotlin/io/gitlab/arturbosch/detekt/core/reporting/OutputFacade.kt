@@ -4,8 +4,8 @@ import io.github.detekt.tooling.api.spec.ReportsSpec
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.getOrNull
-import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.core.util.SimpleNotification
 
 @OptIn(UnstableApi::class)
 class OutputFacade(
@@ -40,7 +40,7 @@ class OutputFacade(
             val filePath = reports[defaultReportMapping(report.id)]?.path
             if (filePath != null) {
                 report.write(filePath, result)
-                result.add(SimpleNotification("Successfully generated ${report.name} at ${filePath.toUri()}"))
+                result.add(SimpleNotification("Successfully generated ${report.id} at ${filePath.toUri()}"))
             }
         }
     }

@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
@@ -48,7 +47,6 @@ import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
 class UseOrEmpty(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UseOrEmpty",
-        Severity.Style,
         "Use `orEmpty()` call instead of `?:` with empty collection factory methods",
         Debt.FIVE_MINS
     )

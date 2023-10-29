@@ -34,9 +34,9 @@ private const val EXTRA_LINES_IN_SNIPPET = 3
  * [See](https://detekt.dev/docs/introduction/configurations/#output-reports)
  */
 class MdOutputReport : OutputReport() {
-    override val ending: String = "md"
 
-    override val name = "Markdown report"
+    override val id: String = "MdOutputReport"
+    override val ending: String = "md"
 
     override fun render(detektion: Detektion) = markdown {
         h1 { "detekt" }

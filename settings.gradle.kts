@@ -45,11 +45,11 @@ enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
 // build scan plugin can only be applied in settings file
 plugins {
-    id("com.gradle.enterprise") version "3.13.4"
-    id("com.gradle.common-custom-user-data-gradle-plugin") version "1.11.1"
+    id("com.gradle.enterprise") version "3.15.1"
+    id("com.gradle.common-custom-user-data-gradle-plugin") version "1.12"
 }
 
-val isCiBuild = System.getenv("CI") != null
+val isCiBuild = providers.environmentVariable("CI").isPresent
 
 gradleEnterprise {
     buildScan {
@@ -79,8 +79,8 @@ buildCache {
         isEnabled = true
         url = uri("https://ge.detekt.dev/cache/")
         credentials {
-            username = System.getenv("GRADLE_CACHE_USERNAME")
-            password = System.getenv("GRADLE_CACHE_PASSWORD")
+            username = providers.environmentVariable("GRADLE_CACHE_USERNAME").orNull
+            password = providers.environmentVariable("GRADLE_CACHE_PASSWORD").orNull
         }
     }
 }

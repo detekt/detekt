@@ -6,9 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -33,7 +31,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "PreferToOverPairSyntax",
-        Severity.Style,
         "Pair was created using the Pair constructor, using the to syntax is preferred.",
         Debt.FIVE_MINS
     )
@@ -56,7 +53,7 @@ class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
 
     private fun KtCallExpression.isPairConstructor(): Boolean {
         val descriptor = getResolvedCall(bindingContext)?.resultingDescriptor
-        val fqName = descriptor?.safeAs<ClassConstructorDescriptor>()?.containingDeclaration?.fqNameOrNull()
+        val fqName = (descriptor as? ClassConstructorDescriptor)?.containingDeclaration?.fqNameOrNull()
         return fqName == PAIR_FQ_NAME
     }
 

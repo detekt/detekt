@@ -11,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
-import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 
 internal fun defaultReportMapping(reportId: String) = when (reportId) {
     TxtOutputReport::class.java.simpleName -> "txt"
@@ -39,7 +38,6 @@ internal fun printFindings(findings: Map<String, List<Finding>>): String {
         }
         val overallDebt = debtList.reduce { acc, d -> acc + d }
         append("\nOverall debt: $overallDebt\n")
-        toString()
     }
 }
 
@@ -85,7 +83,4 @@ private fun Finding.truncatedMessage(): String {
     }
 }
 
-private fun Finding.detailed(): String = when (this) {
-    is ThresholdedCodeSmell -> "$id - $metric - [${truncatedMessage()}] at ${location.compact()}"
-    else -> "$id - [${truncatedMessage()}] at ${location.compact()}"
-}
+private fun Finding.detailed(): String = "$id - [${truncatedMessage()}] at ${location.compact()}"

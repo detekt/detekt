@@ -10,5 +10,7 @@ import io.gitlab.arturbosch.detekt.core.reporting.printFindings
  */
 class FindingsReport : AbstractFindingsReport() {
 
+    override val id: String = "FindingsReport"
+
     override fun render(findings: Map<RuleSetId, List<Finding>>): String = printFindings(findings)
 }

@@ -6,10 +6,8 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
-import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIsExpression
@@ -42,7 +40,6 @@ class DontDowncastCollectionTypes(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "DontDowncastCollectionTypes",
-        Severity.Warning,
         "Down-casting immutable collection types is breaking the collection contract.",
         Debt.TEN_MINS
     )
@@ -68,7 +65,7 @@ class DontDowncastCollectionTypes(config: Config) : Rule(config) {
 
         val rhsType = right
             ?.typeElement
-            ?.safeAs<KtUserType>()
+            ?.let { it as? KtUserType }
             ?.referencedName
 
         if (lhsType in immutableTypes && rhsType in mutableTypes) {

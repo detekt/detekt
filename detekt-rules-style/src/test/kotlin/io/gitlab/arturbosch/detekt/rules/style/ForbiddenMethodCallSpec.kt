@@ -398,6 +398,98 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `should report interface default method`() {
+        val code = """
+            package org.example.com
+            
+            fun foo() {
+                String.CASE_INSENSITIVE_ORDER.reversed()
+            }
+        """.trimIndent()
+        val findings = ForbiddenMethodCall(
+            TestConfig(METHODS to listOf("java.util.Comparator.reversed"))
+        ).compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
+    fun `should report interface default method in a derived class`() {
+        val code = """
+            package org.example.com
+
+            class SimpleComparator : Comparator<String> {
+                override fun compare(p0: String?, p1: String?): Int {
+                    return 0
+                }
+            }
+            
+            fun foo(i: SimpleComparator) {
+                i.reversed()
+            }
+        """.trimIndent()
+        val findings = ForbiddenMethodCall(
+            TestConfig(METHODS to listOf("java.util.Comparator.reversed"))
+        ).compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
+    fun `should report class grandparent interface default method is not allowed`() {
+        val code = """
+            package org.example.com
+            open class SimpleComparator : Comparator<String> {
+                override fun compare(p0: String?, p1: String?): Int {
+                    return 0
+                }
+            }
+
+            class ComplexComparator : SimpleComparator() {
+                override fun compare(p0: String?, p1: String?): Int {
+                    return 0
+                }
+            }
+            
+            fun foo(bar1: ComplexComparator) {
+                bar1.reversed()
+                val bar2 = ComplexComparator()
+                bar2.reversed()
+            }
+        """.trimIndent()
+        val findings = ForbiddenMethodCall(
+            TestConfig(METHODS to listOf("java.util.Comparator.reversed"))
+        ).compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(2)
+    }
+
+    @Test
+    fun `should report class when grandparent default interface is not allowed extending other class`() {
+        val code = """
+            package org.example.com
+            open class Parent
+            open class SimpleComparator : Parent(), Comparator<String> {
+                override fun compare(p0: String?, p1: String?): Int {
+                    return 0
+                }
+            }
+
+            class ComplexComparator : SimpleComparator() {
+                override fun compare(p0: String?, p1: String?): Int {
+                    return 0
+                }
+            }
+            
+            fun foo() {
+                val bar = ComplexComparator()
+                bar.reversed()
+            }
+        """.trimIndent()
+        val findings = ForbiddenMethodCall(
+            TestConfig(METHODS to listOf("java.util.Comparator.reversed"))
+        ).compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
     fun `should report functions with lambda params`() {
         val code = """
             package org.example

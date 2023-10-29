@@ -8,25 +8,19 @@ import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.psi.UserDataProperty
 import java.nio.file.Path
 import kotlin.io.path.Path
-import kotlin.io.path.invariantSeparatorsPathString
 
 const val KOTLIN_SUFFIX = ".kt"
 const val KOTLIN_SCRIPT_SUFFIX = ".kts"
-private const val KOTLIN_KMP_COMMON_SUFFIX = ".common.kt"
-
-private val KOTLIN_FILE_SUFFIXES = arrayOf(
-    KOTLIN_KMP_COMMON_SUFFIX,
-    KOTLIN_SUFFIX,
-    KOTLIN_SCRIPT_SUFFIX
-)
+private val KOTLIN_GENERIC_SUFFIXES = listOf(KOTLIN_SUFFIX, KOTLIN_SCRIPT_SUFFIX)
 
 /**
  * Removes kotlin specific file name suffixes, e.g. .kt.
  * Note, will not remove other possible/known file suffixes like '.java'
  */
-fun PsiFile.fileNameWithoutSuffix(): String {
+fun PsiFile.fileNameWithoutSuffix(multiplatformTargetSuffixes: List<String> = emptyList()): String {
     val fileName = this.name
-    for (suffix in KOTLIN_FILE_SUFFIXES) {
+    val suffixesToRemove = buildPlatformSpecificSuffixes(multiplatformTargetSuffixes) + KOTLIN_GENERIC_SUFFIXES
+    for (suffix in suffixesToRemove) {
         if (fileName.endsWith(suffix)) {
             return fileName.removeSuffix(suffix)
         }
@@ -45,7 +39,7 @@ fun PsiFile.absolutePath(): Path = absolutePath ?: Path(virtualFile.path)
 /**
  * Represents both absolute path and relative path if available.
  */
-data class FilePath constructor(
+class FilePath constructor(
     val absolutePath: Path,
     val basePath: Path? = null,
     val relativePath: Path? = null
@@ -92,11 +86,5 @@ fun getLineAndColumnInPsiFile(file: PsiFile, range: TextRange): PsiDiagnosticUti
     }.getOrNull()
 }
 
-/**
- * Returns a system-independent string with UNIX system file separator.
- */
-@Deprecated(
-    "Use stdlib method",
-    ReplaceWith("invariantSeparatorsPathString", "kotlin.io.path.invariantSeparatorsPathString")
-)
-fun Path.toUnifiedString(): String = invariantSeparatorsPathString
+private fun buildPlatformSpecificSuffixes(platforms: List<String>): List<String> =
+    platforms.map { platform -> ".$platform.kt" }

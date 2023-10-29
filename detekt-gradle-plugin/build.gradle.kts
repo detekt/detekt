@@ -3,7 +3,9 @@
 @file:Suppress("StringLiteralDuplication")
 
 import com.gradle.enterprise.gradleplugin.testretry.retry
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import java.net.URL
 
 plugins {
     id("module")
@@ -13,6 +15,8 @@ plugins {
     alias(libs.plugins.pluginPublishing)
     // We use this published version of the detekt plugin to self analyse this project.
     id("io.gitlab.arturbosch.detekt") version "1.23.1"
+    alias(libs.plugins.binaryCompatibilityValidator)
+    alias(libs.plugins.dokka)
 }
 
 repositories {
@@ -52,8 +56,8 @@ testing {
                 all {
                     testTask.configure {
                         // If `androidSdkInstalled` is false, skip running DetektAndroidSpec
-                        val isAndroidSdkInstalled = System.getenv("ANDROID_SDK_ROOT") != null ||
-                            System.getenv("ANDROID_HOME") != null
+                        val isAndroidSdkInstalled = providers.environmentVariable("ANDROID_SDK_ROOT").isPresent ||
+                            providers.environmentVariable("ANDROID_HOME").isPresent
                         inputs.property("isAndroidSdkInstalled", isAndroidSdkInstalled).optional(true)
                     }
                 }
@@ -146,6 +150,20 @@ tasks {
         from(writeDetektVersionProperties)
     }
 
+    withType<DokkaTask>().configureEach {
+        suppressInheritedMembers = true
+        failOnWarning = true
+        outputDirectory = layout.projectDirectory.dir("../website/static/kdoc/detekt-gradle-plugin")
+        notCompatibleWithConfigurationCache("https://github.com/Kotlin/dokka/issues/1217")
+
+        dokkaSourceSets.configureEach {
+            apiVersion = "1.4"
+            externalDocumentationLink {
+                url = URL("https://docs.gradle.org/current/javadoc/")
+            }
+        }
+    }
+
     check {
         dependsOn(testing.suites.named("functionalTest"))
     }
@@ -179,7 +197,7 @@ kotlin {
 tasks.withType<Test>().configureEach {
     retry {
         @Suppress("MagicNumber")
-        if (System.getenv().containsKey("CI")) {
+        if (providers.environmentVariable("CI").isPresent) {
             maxRetries = 2
             maxFailures = 20
         }

@@ -11,27 +11,12 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 /**
  * Stores information about a specific code fragment.
  */
-data class Entity(
-    private val name: String,
+class Entity(
+    val name: String,
     val signature: String,
     val location: Location,
     val ktElement: KtElement? = null
 ) : Compactable {
-
-    @Deprecated(
-        "className property is not used and will be removed in the future. ",
-        ReplaceWith(
-            "Entity(name, signature, location, ktElement)",
-            "io.gitlab.arturbosch.detekt.api.Entity"
-        )
-    )
-    constructor(
-        name: String,
-        @Suppress("UNUSED_PARAMETER") className: String,
-        signature: String,
-        location: Location,
-        ktElement: KtElement? = null
-    ) : this(name, signature, location, ktElement)
 
     override fun compact(): String = "[$name] at ${location.compact()}"
 

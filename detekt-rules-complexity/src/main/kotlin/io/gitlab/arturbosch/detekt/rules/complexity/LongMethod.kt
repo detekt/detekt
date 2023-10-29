@@ -5,10 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
@@ -29,7 +26,6 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
         "LongMethod",
-        Severity.Maintainability,
         "One method should have one responsibility. Long methods tend to handle many things at once. " +
             "Prefer smaller methods to make them easier to understand.",
         Debt.TWENTY_MINS
@@ -64,7 +60,7 @@ class LongMethod(config: Config = Config.empty) : Rule(config) {
                     ThresholdedCodeSmell(
                         issue,
                         Entity.atName(function),
-                        Metric("SIZE", lines, allowedLines),
+                        Metric(lines, allowedLines),
                         "The function ${function.nameAsSafeName} is too long ($lines). " +
                             "The maximum length is $allowedLines."
                     )

@@ -10,7 +10,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "TestFile.kt"
+                  "uri": "<PREFIX>TestFile.kt"
                 },
                 "region": {
                   "startColumn": 1,
@@ -30,7 +30,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "TestFile.kt"
+                  "uri": "<PREFIX>TestFile.kt"
                 },
                 "region": {
                   "startColumn": 1,
@@ -50,7 +50,7 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "TestFile.kt"
+                  "uri": "<PREFIX>TestFile.kt"
                 },
                 "region": {
                   "startColumn": 1,

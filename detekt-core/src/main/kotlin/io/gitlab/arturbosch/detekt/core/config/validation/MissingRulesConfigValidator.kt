@@ -3,14 +3,16 @@ package io.gitlab.arturbosch.detekt.core.config.validation
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
+import io.gitlab.arturbosch.detekt.core.util.SimpleNotification
 import java.util.ServiceLoader
 
 internal class MissingRulesConfigValidator(
     private val baseline: YamlConfig,
     private val excludePatterns: Set<Regex>,
 ) : AbstractYamlConfigValidator() {
+
+    override val id: String = "MissingRulesConfigValidator"
 
     override fun validate(
         configToValidate: YamlConfig,

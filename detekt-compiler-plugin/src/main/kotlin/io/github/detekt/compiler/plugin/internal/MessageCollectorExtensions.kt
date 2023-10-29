@@ -33,11 +33,15 @@ fun MessageCollector.reportFindings(result: Detektion) {
 }
 
 fun Finding.renderAsCompilerWarningMessage(): Pair<String, CompilerMessageLocation?> {
-    val (line, column) = entity.location.source
     val location = MessageUtil.psiElementToMessageLocation(entity.ktElement)
 
     val sourceLocation = location?.let {
-        CompilerMessageLocation.create(location.path, line, column, location.lineContent)
+        CompilerMessageLocation.create(
+            location.path,
+            entity.location.source.line,
+            entity.location.source.column,
+            location.lineContent
+        )
     }
 
     return "$id: ${messageOrDescription()}" to sourceLocation
