@@ -6,6 +6,37 @@ keywords: [changelog, release-notes, migration]
 
 # Changelog and Migration Guide
 
+#### 1.23.2 - 2023-10-29
+
+This is a point release for Detekt `1.23.0`, where we added support for Kotlin `1.9.10` and fixed several bugs that
+got reported by the community.
+
+##### Changelog
+
+- Consider deprecated rules as inactive when running allRules [#6381](https://github.com/detekt/detekt/pull/6381)
+- Fix inputstream leaking file descriptor in Gradle - [#6519](https://github.com/detekt/detekt/pull/6519)
+- ForbiddenMethodCall - Handle sequence of overridden methods - [#6478](https://github.com/detekt/detekt/pull/6478)
+- Function to return supported Kotlin version - [#6472](https://github.com/detekt/detekt/pull/6472)
+- Fix false negative `IgnoredReturnValue` with scope functions - [#6446](https://github.com/detekt/detekt/pull/6446)
+- UnconditionalJumpStatementInLoop: don't report a conditional break in a single body expression - [#6443](https://github.com/detekt/detekt/pull/6443)
+- Fix reporting unused imports at file level - [#6390](https://github.com/detekt/detekt/pull/6390)
+- OutdatedDocumentation - Detect param which private property documented as property - [#6372](https://github.com/detekt/detekt/pull/6372)
+- NullableToStringCall: fix false negative in lambda - [#6352](https://github.com/detekt/detekt/pull/6352)
+- Correctly set scheme for URIs in the SARIF report output - [#6331](https://github.com/detekt/detekt/pull/6331)
+- SleepInsteadOfDelay - Find the parent for suspend check - [#6191](https://github.com/detekt/detekt/pull/6191)
+
+##### Dependency Updates
+
+- Update kotlin monorepo to v1.9.10 - [#6423](https://github.com/detekt/detekt/pull/6423)
+- Update dependency gradle to v8.4 - [#6522](https://github.com/detekt/detekt/pull/6522)
+- Update dependency gradle to v8.3 - [#6406](https://github.com/detekt/detekt/pull/6406)
+- Update com.android.tools.build to 8.1.1 - [#6419](https://github.com/detekt/detekt/pull/6419)
+- update dependency org.jetbrains.dokka to v1.9.10 - [#6549](https://github.com/detekt/detekt/pull/6549)
+
+##### Contributors
+
+We would like to thank the following contributors that made this release possible: @3flex, @BraisGabin, @ErdoganSeref, @Goooler, @Hexcles, @LeoColman, @PoisonedYouth, @TWiStErRob, @VirtualParticle, @arturbosch, @atulgpt, @bric3, @chao2zhang, @cortinico, @dzirbel, @eygraber, @kkocel, @lexa-diky, @marschwar, @matejdro, @mdemianova, @pablobaxter, @rmarquis, @segunfamisa, @severn-everett, @t-kameyama
+
 #### 1.23.1 - 2023-07-30
 
 This is a point release for Detekt `1.23.0`, where we added support for Kotlin `1.9.0` and fixed several bugs that
