@@ -42,7 +42,7 @@ interface DetektExtension {
     val autoCorrect: Property<Boolean>
 
     // TODO: Add test to verify that setting is used from extension and task definition
-    val failOnSeverity: Property<String?>
+    val failOnSeverity: Property<String>
 
     /**
      * List of Android build variants for which no detekt task should be created.
