@@ -14,6 +14,7 @@ interface DetektExtension {
 
     val toolVersion: Property<String>
 
+    // TODO: Should this be removed in favor of `failOnSeverity`? Since #6496 we are no longer extending the `CodeQualityExtension`. Having both could be confusing, But I don't know if users expect this property to exist
     val ignoreFailures: Property<Boolean>
 
     val reportsDir: DirectoryProperty
