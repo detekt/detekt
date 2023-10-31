@@ -14,7 +14,7 @@ plugins {
     idea
     alias(libs.plugins.pluginPublishing)
     // We use this published version of the detekt plugin to self analyse this project.
-    id("io.gitlab.arturbosch.detekt") version "1.23.2"
+    id("io.gitlab.arturbosch.detekt") version "1.23.3"
     alias(libs.plugins.binaryCompatibilityValidator)
     alias(libs.plugins.dokka)
 }
