@@ -35,7 +35,7 @@ got reported by the community.
 
 ##### Contributors
 
-We would like to thank the following contributors that made this release possible: @3flex, @BraisGabin, @ErdoganSeref, @Goooler, @Hexcles, @LeoColman, @PoisonedYouth, @TWiStErRob, @VirtualParticle, @arturbosch, @atulgpt, @bric3, @chao2zhang, @cortinico, @dzirbel, @eygraber, @kkocel, @lexa-diky, @marschwar, @matejdro, @mdemianova, @pablobaxter, @rmarquis, @segunfamisa, @severn-everett, @t-kameyama
+We would like to thank the following contributors that made this release possible: @3fle, @arturbosc, @atulgp, @kkocel, @marschwa, @pablobaxte, @t-kameyama
 
 #### 1.23.1 - 2023-07-30
 
