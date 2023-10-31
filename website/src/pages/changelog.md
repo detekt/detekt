@@ -6,6 +6,10 @@ keywords: [changelog, release-notes, migration]
 
 # Changelog and Migration Guide
 
+#### 1.23.3 - 2023-10-31
+
+This is a point release for Detekt `1.23.0`. The changelog is equivalent to `1.23.2`.
+
 #### 1.23.2 - 2023-10-29
 
 This is a point release for Detekt `1.23.0`, where we added support for Kotlin `1.9.10` and fixed several bugs that
@@ -35,7 +39,7 @@ got reported by the community.
 
 ##### Contributors
 
-We would like to thank the following contributors that made this release possible: @3fle, @arturbosc, @atulgp, @kkocel, @marschwa, @pablobaxte, @t-kameyama
+We would like to thank the following contributors that made this release possible: @3flex, @arturbosch, @atulgpt, @kkocel, @marschwar, @pablobaxter, @t-kameyama
 
 #### 1.23.1 - 2023-07-30
 
