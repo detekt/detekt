@@ -1,9 +1,9 @@
 const visit = require("unist-util-visit");
 
 // Remark plugin that is replacing the [detekt_version] with the latest
-// released version. Please note that this field is updated automatically 
+// released version. Please note that this field is updated automatically
 // by the `applyDocVersion` task.
-const detektVersion = "1.23.1";
+const detektVersion = "1.23.2";
 
 const plugin = (options) => {
   const transformer = async (ast) => {
