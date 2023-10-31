@@ -48,6 +48,14 @@ About [markdown](https://github.github.com/gfm/#what-is-markdown-) on GitHub.
 In a shared codebase, it is often required to use relative path so that all developers and tooling
 have a consistent view. This can be enabled by CLI option `--base-path` or Gradle as the following:
 
+### Kotlin DSL
+```kotlin
+detekt {
+    basePath.set(projectDir)
+}
+```
+
+### Groovy DSL
 ```groovy
 detekt {
     basePath = projectDir

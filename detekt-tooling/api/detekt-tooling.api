@@ -123,7 +123,6 @@ public abstract interface class io/github/detekt/tooling/api/spec/CompilerSpec {
 
 public abstract interface class io/github/detekt/tooling/api/spec/ConfigSpec {
 	public abstract fun getConfigPaths ()Ljava/util/Collection;
-	public abstract fun getKnownPatterns ()Ljava/util/Collection;
 	public abstract fun getResources ()Ljava/util/Collection;
 	public abstract fun getShouldValidateBeforeAnalysis ()Ljava/lang/Boolean;
 	public abstract fun getUseDefaultConfig ()Z
@@ -269,12 +268,10 @@ public final class io/github/detekt/tooling/dsl/ConfigSpecBuilder : io/github/de
 	public fun build ()Lio/github/detekt/tooling/api/spec/ConfigSpec;
 	public synthetic fun build ()Ljava/lang/Object;
 	public final fun getConfigPaths ()Ljava/util/Collection;
-	public final fun getKnownPatterns ()Ljava/util/Collection;
 	public final fun getResources ()Ljava/util/Collection;
 	public final fun getShouldValidateBeforeAnalysis ()Ljava/lang/Boolean;
 	public final fun getUseDefaultConfig ()Z
 	public final fun setConfigPaths (Ljava/util/Collection;)V
-	public final fun setKnownPatterns (Ljava/util/Collection;)V
 	public final fun setResources (Ljava/util/Collection;)V
 	public final fun setShouldValidateBeforeAnalysis (Ljava/lang/Boolean;)V
 	public final fun setUseDefaultConfig (Z)V

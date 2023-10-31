@@ -3,9 +3,9 @@ plugins {
     id("module")
 }
 
-val generatedUsage: Configuration by configurations.creating {
-    isCanBeConsumed = false
-    isCanBeResolved = true
+val generatedUsage by configurations.dependencyScope("generatedUsage")
+val generatedUsageOutput by configurations.resolvable("generatedUsageOutput") {
+    extendsFrom(generatedUsage)
 }
 
 dependencies {
@@ -33,7 +33,7 @@ val librariesConfigFile = "$rootDir/detekt-rules-libraries/src/main/resources/co
 val ruleauthorsConfigFile = "$rootDir/detekt-rules-ruleauthors/src/main/resources/config/config.yml"
 
 val copyDetektCliUsage by tasks.registering(Copy::class) {
-    from(generatedUsage) { rename { "_cli-options.md" } }
+    from(generatedUsageOutput) { rename { "_cli-options.md" } }
     destinationDir = rootDir.resolve("website/docs/gettingstarted")
 }
 
@@ -41,7 +41,8 @@ tasks.register("generateWebsite") {
     dependsOn(
         copyDetektCliUsage,
         generateDocumentation,
-        ":detekt-api:dokkaHtml",
+        ":dokkaHtmlMultiModule",
+        gradle.includedBuild("detekt-gradle-plugin").task(":dokkaHtml"),
     )
 }
 
@@ -89,25 +90,10 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     )
 }
 
-val generatedFormattingConfig: Configuration by configurations.creating {
-    isCanBeConsumed = true
-    isCanBeResolved = false
-}
-
-val generatedLibrariesConfig: Configuration by configurations.creating {
-    isCanBeConsumed = true
-    isCanBeResolved = false
-}
-
-val generatedRuleauthorsConfig: Configuration by configurations.creating {
-    isCanBeConsumed = true
-    isCanBeResolved = false
-}
-
-val generatedCoreConfig: Configuration by configurations.creating {
-    isCanBeConsumed = true
-    isCanBeResolved = false
-}
+val generatedFormattingConfig by configurations.consumable("generatedFormattingConfig")
+val generatedLibrariesConfig by configurations.consumable("generatedLibrariesConfig")
+val generatedRuleauthorsConfig by configurations.consumable("generatedRuleauthorsConfig")
+val generatedCoreConfig by configurations.consumable("generatedCoreConfig")
 
 artifacts {
     add(generatedFormattingConfig.name, file(formattingConfigFile)) {

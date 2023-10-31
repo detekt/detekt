@@ -1,10 +1,8 @@
-import org.jetbrains.dokka.gradle.DokkaTask
-
 plugins {
     id("module")
-    alias(libs.plugins.dokka)
+    id("public-api")
     `java-test-fixtures`
-    alias(libs.plugins.binaryCompatibilityValidator)
+    alias(libs.plugins.poko)
 }
 
 dependencies {
@@ -16,6 +14,11 @@ dependencies {
     testImplementation(libs.assertj)
 
     testFixturesApi(libs.kotlin.stdlibJdk8)
+    testFixturesCompileOnly(libs.poko.annotations)
+}
+
+detekt {
+    config.from("config/detekt.yml")
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants
@@ -25,14 +28,6 @@ listOf(configurations.testFixturesApiElements, configurations.testFixturesRuntim
             skip()
         }
     }
-}
-
-tasks.withType<DokkaTask>().configureEach {
-    outputDirectory = rootDir.resolve("website/static/kdoc")
-}
-
-tasks.dokkaHtml {
-    notCompatibleWithConfigurationCache("https://github.com/Kotlin/dokka/issues/1217")
 }
 
 apiValidation {

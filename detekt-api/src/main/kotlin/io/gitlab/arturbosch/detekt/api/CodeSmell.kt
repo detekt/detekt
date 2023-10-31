@@ -14,7 +14,6 @@ open class CodeSmell(
     final override val issue: Issue,
     override val entity: Entity,
     override val message: String,
-    override val metrics: List<Metric> = emptyList(),
     override val references: List<Entity> = emptyList()
 ) : Finding {
 
@@ -32,7 +31,6 @@ open class CodeSmell(
         return "CodeSmell(issue=$issue, " +
             "entity=$entity, " +
             "message=$message, " +
-            "metrics=$metrics, " +
             "references=$references, " +
             "severity=$severity, " +
             "id='$id')"
@@ -50,14 +48,12 @@ open class CorrectableCodeSmell(
     issue: Issue,
     entity: Entity,
     message: String,
-    metrics: List<Metric> = emptyList(),
     references: List<Entity> = emptyList(),
     val autoCorrectEnabled: Boolean
 ) : CodeSmell(
     issue,
     entity,
     message,
-    metrics,
     references
 ) {
     override fun toString(): String {
@@ -66,33 +62,8 @@ open class CorrectableCodeSmell(
             "issue=$issue, " +
             "entity=$entity, " +
             "message=$message, " +
-            "metrics=$metrics, " +
             "references=$references, " +
             "severity=$severity, " +
             "id='$id')"
     }
-}
-
-/**
- * Represents a code smell for which a specific metric can be determined which is responsible
- * for the existence of this rule violation.
- *
- * @see CodeSmell
- */
-open class ThresholdedCodeSmell(
-    issue: Issue,
-    entity: Entity,
-    val metric: Metric,
-    message: String,
-    references: List<Entity> = emptyList()
-) : CodeSmell(
-    issue,
-    entity,
-    message,
-    metrics = listOf(metric),
-    references = references
-) {
-    override fun compact(): String = "$id - $metric - ${entity.compact()}"
-
-    override fun messageOrDescription(): String = message.ifEmpty { issue.description }
 }

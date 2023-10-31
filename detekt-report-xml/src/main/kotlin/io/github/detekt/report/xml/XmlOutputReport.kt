@@ -12,9 +12,8 @@ import kotlin.io.path.invariantSeparatorsPathString
  */
 class XmlOutputReport : OutputReport() {
 
+    override val id: String = "XmlOutputReport"
     override val ending = "xml"
-
-    override val name = "Checkstyle XML report"
 
     private val Finding.severityLabel: String
         get() = severity.name.lowercase(Locale.US)

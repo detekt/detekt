@@ -17,7 +17,7 @@ abstract class DetektReport @Inject constructor(val type: DetektReportType) {
         return "DetektReport(type='$type', required=$required, outputLocation=$outputLocation)"
     }
 
-    companion object {
-        const val DEFAULT_FILENAME = "detekt"
+    internal companion object {
+        internal const val DEFAULT_FILENAME = "detekt"
     }
 }

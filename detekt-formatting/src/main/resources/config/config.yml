@@ -178,7 +178,6 @@ formatting:
     autoCorrect: true
   PackageName:
     active: true
-    autoCorrect: true
   ParameterListSpacing:
     active: false
     autoCorrect: true

@@ -5,9 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isOverride
@@ -62,7 +60,7 @@ class MethodOverloading(config: Config = Config.empty) : Rule(config) {
                     ThresholdedCodeSmell(
                         issue,
                         entity,
-                        Metric("OVERLOAD SIZE: ", value, allowedOverloads),
+                        Metric(value, allowedOverloads),
                         message = "The method '$name' is overloaded $value times."
                     )
                 )

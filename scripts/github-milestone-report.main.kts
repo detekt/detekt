@@ -8,7 +8,7 @@
  */
 
 @file:Suppress("detekt.CommentSpacing") // For the polyglot exec command in line 2.
-@file:DependsOn("org.kohsuke:github-api:1.316")
+@file:DependsOn("org.kohsuke:github-api:1.317")
 @file:DependsOn("com.github.ajalt:clikt:2.8.0")
 
 import com.github.ajalt.clikt.core.CliktCommand
@@ -54,7 +54,6 @@ class GithubMilestoneReport : CliktCommand() {
         val ghMilestone: GHMilestone = ghRepository.getMilestone(milestoneId)
         var ghIssues: List<GHIssue> = ghRepository.getIssues(GHIssueState.CLOSED, ghMilestone)
             .filter { it.pullRequest != null }
-        val ghContributors = ghIssues.map { it.user.login }.distinct().sorted()
 
         if (filterExisting) {
             val changeLogContent = File("./website/src/pages/changelog.md").readText()
@@ -64,6 +63,7 @@ class GithubMilestoneReport : CliktCommand() {
         if (filterPickRequests) {
             ghIssues = ghIssues.filter { "pick request" in it.labels.map { it.name } }
         }
+        val ghContributors = ghIssues.map { it.user.login }.distinct().sorted()
 
         val milestoneTitle = ghMilestone.title.trim()
         val groups = ghIssues.groupBy { issue ->

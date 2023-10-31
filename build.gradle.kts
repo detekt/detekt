@@ -2,11 +2,22 @@ import com.gradle.enterprise.gradleplugin.testretry.retry
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
+import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
 
 plugins {
     id("releasing")
     id("io.gitlab.arturbosch.detekt")
     alias(libs.plugins.gradleVersions)
+    alias(libs.plugins.dokka)
+}
+
+tasks.withType<DokkaMultiModuleTask>().configureEach {
+    notCompatibleWithConfigurationCache("https://github.com/Kotlin/dokka/issues/1217")
+    outputDirectory = layout.projectDirectory.dir("website/static/kdoc")
+}
+
+tasks.wrapper {
+    distributionType = Wrapper.DistributionType.ALL
 }
 
 val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {
@@ -20,12 +31,6 @@ allprojects {
     apply(plugin = "io.gitlab.arturbosch.detekt")
 
     detekt {
-        source.setFrom(
-            io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_SRC_DIR_JAVA,
-            io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_TEST_SRC_DIR_JAVA,
-            io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_SRC_DIR_KOTLIN,
-            io.gitlab.arturbosch.detekt.extensions.DetektExtension.DEFAULT_TEST_SRC_DIR_KOTLIN,
-        )
         buildUponDefaultConfig = true
         baseline = file("$rootDir/config/detekt/baseline.xml")
     }

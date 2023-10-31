@@ -55,16 +55,3 @@ public final class io/gitlab/arturbosch/detekt/test/TestConfigKt {
 	public static final fun toConfig (Lio/gitlab/arturbosch/detekt/api/ValueWithReason;)Ljava/util/Map;
 }
 
-public final class io/gitlab/arturbosch/detekt/test/ThresholdedCodeSmellAssert : org/assertj/core/api/AbstractAssert {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/ThresholdedCodeSmell;)V
-	public final fun hasThreshold (I)V
-	public final fun hasValue (I)V
-	public final fun withThreshold (I)Lio/gitlab/arturbosch/detekt/test/ThresholdedCodeSmellAssert;
-	public final fun withValue (I)Lio/gitlab/arturbosch/detekt/test/ThresholdedCodeSmellAssert;
-}
-
-public final class io/gitlab/arturbosch/detekt/test/ThresholdedCodeSmellAssertKt {
-	public static final fun assertThat (Lio/gitlab/arturbosch/detekt/api/ThresholdedCodeSmell;)Lio/gitlab/arturbosch/detekt/test/ThresholdedCodeSmellAssert;
-	public static final fun isThresholded (Lio/gitlab/arturbosch/detekt/test/FindingAssert;)Lio/gitlab/arturbosch/detekt/test/ThresholdedCodeSmellAssert;
-}
-

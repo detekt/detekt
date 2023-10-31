@@ -102,19 +102,11 @@ abstract class DetektCreateBaselineTask @Inject constructor(
      */
     @get:Input
     @get:Optional
-    internal abstract val basePathProp: Property<String>
-    var basePath: String
-        @Internal
-        get() = basePathProp.get()
-        set(value) = basePathProp.set(value)
+    abstract val basePath: Property<String>
 
     @get:Input
     @get:Optional
-    internal abstract val jvmTargetProp: Property<String>
-    var jvmTarget: String
-        @Internal
-        get() = jvmTargetProp.get()
-        set(value) = jvmTargetProp.set(value)
+    abstract val jvmTarget: Property<String>
 
     @get:Input
     @get:Optional
@@ -129,7 +121,7 @@ abstract class DetektCreateBaselineTask @Inject constructor(
             CreateBaselineArgument,
             ClasspathArgument(classpath),
             LanguageVersionArgument(languageVersion.orNull),
-            JvmTargetArgument(jvmTargetProp.orNull),
+            JvmTargetArgument(jvmTarget.orNull),
             JdkHomeArgument(jdkHome),
             BaselineArgument(baseline.get()),
             InputArgument(source),
@@ -139,7 +131,7 @@ abstract class DetektCreateBaselineTask @Inject constructor(
             BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
             AutoCorrectArgument(autoCorrect.getOrElse(false)),
             AllRulesArgument(allRules.getOrElse(false)),
-            BasePathArgument(basePathProp.orNull),
+            BasePathArgument(basePath.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
         ).flatMap(CliArgument::toArgument)
 

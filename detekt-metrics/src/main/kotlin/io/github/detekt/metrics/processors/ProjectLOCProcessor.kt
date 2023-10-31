@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.psi.KtFile
 
 class ProjectLOCProcessor : AbstractProcessor() {
 
+    override val id: String = "ProjectLOCProcessor"
     override val visitor: DetektVisitor = LOCVisitor()
     override val key = linesKey
 }

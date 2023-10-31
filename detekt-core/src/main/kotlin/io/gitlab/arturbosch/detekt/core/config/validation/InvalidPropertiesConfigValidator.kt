@@ -9,9 +9,12 @@ internal class InvalidPropertiesConfigValidator(
     deprecatedProperties: Set<DeprecatedProperty>,
     private val excludePatterns: Set<Regex>,
 ) : AbstractYamlConfigValidator() {
+
     private val deprecatedPropertyPaths: Set<String> = deprecatedProperties
         .map { "${it.ruleSetId}>${it.ruleId}>${it.propertyName}" }
         .toSet()
+
+    override val id: String = "InvalidPropertiesConfigValidator"
 
     override fun validate(
         configToValidate: YamlConfig,
@@ -78,7 +81,10 @@ internal class InvalidPropertiesConfigValidator(
     companion object {
 
         internal fun propertyDoesNotExists(prop: String): Notification =
-            SimpleNotification("Property '$prop' is misspelled or does not exist.")
+            SimpleNotification(
+                "Property '$prop' is misspelled or does not exist. " +
+                    "This error may also indicate a detekt plugin is necessary to handle the '$prop' key."
+            )
 
         internal fun nestedConfigurationExpected(prop: String): Notification =
             SimpleNotification("Nested config expected for '$prop'.")

@@ -29,7 +29,7 @@ internal class DetektJvm(private val project: Project) {
             classpath.setFrom(compilation.output.classesDirs, compilation.compileDependencyFiles)
             // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
             // We try to find the configured baseline or alternatively a specific variant matching this task.
-            extension.baseline?.existingVariantOrBaseFile(compilation.name)?.let { baselineFile ->
+            extension.baseline.asFile.orNull?.existingVariantOrBaseFile(compilation.name)?.let { baselineFile ->
                 baseline.convention(layout.file(provider { baselineFile }))
             }
             setReportOutputConventions(reports, extension, compilation.name)
@@ -45,7 +45,7 @@ internal class DetektJvm(private val project: Project) {
         registerCreateBaselineTask(DetektPlugin.BASELINE_TASK_NAME + compilation.name.capitalize(), extension) {
             setSource(inputSource)
             classpath.setFrom(compilation.output.classesDirs, compilation.compileDependencyFiles)
-            val variantBaselineFile = extension.baseline?.addVariantName(compilation.name)
+            val variantBaselineFile = extension.baseline.asFile.orNull?.addVariantName(compilation.name)
             baseline.convention(layout.file(provider { variantBaselineFile }))
             description = "EXPERIMENTAL: Creates detekt baseline for ${compilation.name} classes with type resolution"
         }

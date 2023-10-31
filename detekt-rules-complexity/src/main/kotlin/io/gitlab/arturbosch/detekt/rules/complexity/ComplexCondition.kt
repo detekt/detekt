@@ -4,9 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
@@ -84,7 +82,7 @@ class ComplexCondition(
                     ThresholdedCodeSmell(
                         issue,
                         Entity.from(condition),
-                        Metric("SIZE", count, allowedConditions),
+                        Metric(count, allowedConditions),
                         "This condition is too complex ($count). " +
                             "The defined maximum number of allowed conditions is set to '$allowedConditions'"
                     )

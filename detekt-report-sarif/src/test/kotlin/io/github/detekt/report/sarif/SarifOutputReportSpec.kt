@@ -1,7 +1,6 @@
 package io.github.detekt.report.sarif
 
 import io.github.detekt.test.utils.readResourceContent
-import io.github.detekt.tooling.api.VersionProvider
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -39,7 +38,10 @@ class SarifOutputReportSpec {
             .apply { init(EmptySetupContext()) }
             .render(result)
 
-        assertThat(report).isEqualToIgnoringWhitespace(readResourceContent("vanilla.sarif.json"))
+        val expectedReport = readResourceContent("vanilla.sarif.json")
+            .replace("<PREFIX>", Path(System.getProperty("user.dir")).toUri().toString())
+
+        assertThat(report).isEqualToIgnoringWhitespace(expectedReport)
     }
 
     @Test
@@ -67,7 +69,7 @@ class SarifOutputReportSpec {
         // Note: GitHub CI uses D: drive, but it could be any drive for local development
         val systemAwareExpectedReport = if (whichOS().startsWith("windows", ignoreCase = true)) {
             val winRoot = Path("/").absolutePathString().replace("\\", "/")
-            expectedReport.replace("file:///", "file://$winRoot")
+            expectedReport.replace("file:///", "file:///$winRoot")
         } else {
             expectedReport
         }
@@ -99,7 +101,7 @@ class SarifOutputReportSpec {
         val result = TestDetektion(
             createFinding(
                 ruleName = "TestSmellB",
-                entity = refEntity.copy(location = location),
+                entity = Entity(refEntity.name, refEntity.signature, location, refEntity.ktElement),
                 severity = Severity.WARNING
             )
         )
@@ -136,7 +138,7 @@ class SarifOutputReportSpec {
         val result = TestDetektion(
             createFinding(
                 ruleName = "TestSmellB",
-                entity = refEntity.copy(location = location),
+                entity = Entity(refEntity.name, refEntity.signature, location, refEntity.ktElement),
                 severity = Severity.WARNING
             )
         )
@@ -180,8 +182,3 @@ class TestRule : Rule() {
 }
 
 private fun String.stripWhitespace() = replace(Regex("\\s"), "")
-
-internal class TestVersionProvider : VersionProvider {
-
-    override fun current(): String = "1.0.0"
-}

@@ -14,7 +14,6 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.androidJvm
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.jvm
 import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmAndroidCompilation
-import java.io.File
 
 internal class DetektMultiplatform(private val project: Project) {
 
@@ -101,9 +100,9 @@ internal class DetektMultiplatform(private val project: Project) {
             // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
             // We try to find the configured baseline or alternatively a specific variant matching this task.
             if (runWithTypeResolution) {
-                extension.baseline?.existingVariantOrBaseFile(compilation.name)
+                extension.baseline.asFile.orNull?.existingVariantOrBaseFile(compilation.name)
             } else {
-                extension.baseline?.takeIf { it.exists() }
+                extension.baseline.asFile.orNull?.takeIf { it.exists() }
             }?.let { baselineFile ->
                 baseline.convention(layout.file(provider { baselineFile }))
             }
@@ -124,9 +123,9 @@ internal class DetektMultiplatform(private val project: Project) {
                 classpath.setFrom(compilation.output.classesDirs, compilation.compileDependencyFiles)
             }
             val variantBaselineFile = if (runWithTypeResolution) {
-                extension.baseline?.addVariantName(compilation.name)
+                extension.baseline.asFile.orNull?.addVariantName(compilation.name)
             } else {
-                extension.baseline
+                extension.baseline.get().asFile
             }
             baseline.convention(
                 layout.file(provider { variantBaselineFile })
@@ -141,7 +140,7 @@ internal class DetektMultiplatform(private val project: Project) {
     }
 }
 
-internal fun Project.setReportOutputConventions(reports: DetektReports, extension: DetektExtension, name: String) {
+internal fun setReportOutputConventions(reports: DetektReports, extension: DetektExtension, name: String) {
     setReportOutputConvention(extension, reports.xml, name, "xml")
     setReportOutputConvention(extension, reports.html, name, "html")
     setReportOutputConvention(extension, reports.txt, name, "txt")
@@ -149,19 +148,13 @@ internal fun Project.setReportOutputConventions(reports: DetektReports, extensio
     setReportOutputConvention(extension, reports.md, name, "md")
 }
 
-private fun Project.setReportOutputConvention(
+private fun setReportOutputConvention(
     extension: DetektExtension,
     report: DetektReport,
     name: String,
     format: String
 ) {
-    report.outputLocation.convention(
-        layout.projectDirectory.file(
-            providers.provider {
-                File(extension.reportsDir, "$name.$format").absolutePath
-            }
-        )
-    )
+    report.outputLocation.convention(extension.reportsDir.file("$name.$format"))
 }
 
 // We currently run type resolution only for Jvm & Android targets as

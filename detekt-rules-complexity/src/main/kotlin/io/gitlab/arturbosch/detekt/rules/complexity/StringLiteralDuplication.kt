@@ -5,9 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isPartOf
@@ -66,14 +64,13 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
     override fun visitKtFile(file: KtFile) {
         val visitor = StringLiteralVisitor()
         file.accept(visitor)
-        val type = "SIZE: "
         for ((name, value) in visitor.getLiteralsOverThreshold()) {
             val (main, references) = visitor.entitiesForLiteral(name)
             report(
                 ThresholdedCodeSmell(
                     issue,
                     main,
-                    Metric(type + name, value, allowedDuplications),
+                    Metric(value, allowedDuplications),
                     issue.description,
                     references
                 )

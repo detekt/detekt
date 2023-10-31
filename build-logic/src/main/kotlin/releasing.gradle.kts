@@ -1,4 +1,4 @@
-import com.vdurmont.semver4j.Semver
+import org.semver4j.Semver
 
 plugins {
     id("com.github.breadmoirai.github-release")
@@ -16,9 +16,9 @@ nexusPublishing {
     }
 }
 
-val releaseArtifacts: Configuration by configurations.creating {
-    isCanBeConsumed = false
-    isCanBeResolved = true
+val releaseArtifacts: Configuration by configurations.dependencyScope("releaseArtifacts")
+val releaseAssetFiles by configurations.resolvable("releaseAssetFiles") {
+    extendsFrom(releaseArtifacts)
 }
 
 val version = Versions.currentOrSnapshot()
@@ -42,7 +42,7 @@ githubRelease {
             changelog.trim()
         }
     )
-    releaseAssets.setFrom(releaseArtifacts)
+    releaseAssets.setFrom(releaseAssetFiles)
 }
 
 dependencies {
@@ -86,9 +86,18 @@ fun updateVersion(increment: (Semver) -> Semver) {
 }
 
 tasks {
-    register("incrementPatch") { doLast { updateVersion { it.nextPatch() } } }
-    register("incrementMinor") { doLast { updateVersion { it.nextMinor() } } }
-    register("incrementMajor") { doLast { updateVersion { it.nextMajor() } } }
+    register("incrementPatch") {
+        notCompatibleWithConfigurationCache("cannot serialize Gradle script object references")
+        doLast { updateVersion { it.nextPatch() } }
+    }
+    register("incrementMinor") {
+        notCompatibleWithConfigurationCache("cannot serialize Gradle script object references")
+        doLast { updateVersion { it.nextMinor() } }
+    }
+    register("incrementMajor") {
+        notCompatibleWithConfigurationCache("cannot serialize Gradle script object references")
+        doLast { updateVersion { it.nextMajor() } }
+    }
 
     register<UpdateVersionInFileTask>("applyDocVersion") {
         fileToUpdate = file("$rootDir/website/src/remark/detektVersionReplace.js")

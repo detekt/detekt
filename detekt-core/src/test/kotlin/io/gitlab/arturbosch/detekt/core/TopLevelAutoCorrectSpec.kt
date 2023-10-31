@@ -46,6 +46,8 @@ class TopLevelAutoCorrectSpec {
         }
 
         val contentChangedListener = object : FileProcessListener {
+            override val id: String = "ContentChangedListener"
+
             override fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
                 assertThat(files).hasSize(1)
                 assertThat(files[0].text).isNotEqualToIgnoringWhitespace(fileContentBeforeAutoCorrect)

@@ -15,6 +15,8 @@ class BaselineResultMapping : ReportingExtension {
     private var baselineFile: Path? = null
     private var createBaseline: Boolean = false
 
+    override val id: String = "BaselineResultMapping"
+
     override fun init(context: SetupContext) {
         baselineFile = context.getOrNull(DETEKT_BASELINE_PATH_KEY)
         createBaseline = context.getOrNull(DETEKT_BASELINE_CREATION_KEY) ?: false
