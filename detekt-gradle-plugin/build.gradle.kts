@@ -80,7 +80,7 @@ dependencies {
     testKitJava17RuntimeOnly(libs.android.gradle.maxSupported)
 
     // We use this published version of the detekt-formatting to self analyse this project.
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.2")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.3")
 }
 
 gradlePlugin {
