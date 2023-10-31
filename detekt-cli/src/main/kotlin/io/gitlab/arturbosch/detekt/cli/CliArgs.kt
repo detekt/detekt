@@ -93,7 +93,7 @@ class CliArgs {
         names = ["--fail-on-severity"],
         description = "Specifies the minimum severity that causes the build to fail. " +
             "When the value is set to 'NEVER' detekt will not fail regardless of the number " +
-            "of issues and their severities. Defaults for 'ERROR'."
+            "of issues and their severities. Defaults to 'ERROR'."
     )
     var failOnSeverity: FailureSeverity = FailureSeverity.ERROR
 

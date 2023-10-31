@@ -39,43 +39,6 @@ class FailurePoliciesKtTest {
     }
 
     @Nested
-    inner class `Default Failure Policy` {
-        val subject = RulesSpec.FailurePolicy.DefaultFailurePolicy
-
-        @Test
-        fun `does not fail without a finding`() {
-            val result = TestDetektion()
-
-            subject.check(result, Config.empty)
-        }
-
-        @ParameterizedTest
-        @EnumSource(value = Severity::class, names = ["ERROR"], mode = INCLUDE)
-        fun `fails on at least one finding at or above threshold`(issueSeverity: Severity) {
-            val result = TestDetektion(createFinding(severity = issueSeverity))
-
-            assertThatThrownBy { subject.check(result, Config.empty) }
-                .isInstanceOf(IssuesFound::class.java)
-        }
-
-        @ParameterizedTest
-        @EnumSource(value = Severity::class, names = ["ERROR"], mode = EXCLUDE)
-        fun `does not fail on finding below threshold`(issueSeverity: Severity) {
-            val result = TestDetektion(createFinding(severity = issueSeverity))
-
-            subject.check(result, Config.empty)
-        }
-
-        @Test
-        fun `does not fail on correctable finding if configured`() {
-            val result = TestDetektion(createCorrectableFinding(severity = Severity.ERROR))
-            val config = TestConfig("excludeCorrectable" to "true")
-
-            subject.check(result, config)
-        }
-    }
-
-    @Nested
     inner class `Fail On Severity` {
         val subject = RulesSpec.FailurePolicy.FailOnSeverity(Severity.WARNING)
 

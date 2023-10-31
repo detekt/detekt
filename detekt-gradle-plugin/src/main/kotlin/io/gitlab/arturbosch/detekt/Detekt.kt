@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt
 
+import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.DEFAULT_FAIL_ON_SEVERITY
 import io.gitlab.arturbosch.detekt.extensions.DetektReport
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
@@ -118,7 +119,7 @@ abstract class Detekt @Inject constructor(
 
     @get:Input
     @get:Optional
-    internal abstract val failOnSeverity: Property<String>
+    abstract val failOnSeverity: Property<String>
 
     /**
      * Respect only the file path for incremental build. Using @InputFile respects both file path and content.
@@ -195,7 +196,7 @@ abstract class Detekt @Inject constructor(
             AutoCorrectArgument(autoCorrect.getOrElse(false)),
             FailOnSeverityArgument(
                 ignoreFailures = ignoreFailures.getOrElse(false),
-                minSeverity = failOnSeverity.getOrElse("error")
+                minSeverity = failOnSeverity.orNull ?: DEFAULT_FAIL_ON_SEVERITY
             ),
             BasePathArgument(basePath.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
