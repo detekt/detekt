@@ -195,13 +195,6 @@ public abstract interface class io/github/detekt/tooling/api/spec/RulesSpec {
 public abstract class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
 }
 
-public final class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$DefaultFailurePolicy : io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
-	public static final field INSTANCE Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$DefaultFailurePolicy;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
 public final class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity : io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Severity;)V
 	public final fun component1 ()Lio/gitlab/arturbosch/detekt/api/Severity;
