@@ -1,5 +1,6 @@
 package io.github.detekt.compiler.plugin.util
 
+import com.tschuchort.compiletesting.JvmCompilationResult
 import com.tschuchort.compiletesting.KotlinCompilation
 import com.tschuchort.compiletesting.SourceFile
 import io.github.detekt.compiler.plugin.DetektCommandLineProcessor
@@ -9,7 +10,7 @@ import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 object CompilerTestUtils {
 
     @OptIn(ExperimentalCompilerApi::class)
-    fun compile(@Language("kotlin") vararg kotlinSources: String): KotlinCompilation.Result {
+    fun compile(@Language("kotlin") vararg kotlinSources: String): JvmCompilationResult {
         val sourceFiles = kotlinSources.map {
             SourceFile.kotlin("KClass.kt", it, trimIndent = true)
         }
