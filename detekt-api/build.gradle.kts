@@ -14,8 +14,6 @@ dependencies {
 
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
-
-    testFixturesApi(libs.kotlin.stdlibJdk8)
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants
