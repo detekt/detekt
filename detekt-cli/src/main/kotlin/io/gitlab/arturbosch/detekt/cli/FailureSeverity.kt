@@ -3,7 +3,10 @@ package io.gitlab.arturbosch.detekt.cli
 import io.gitlab.arturbosch.detekt.api.Severity
 
 enum class FailureSeverity {
-    ERROR, WARNING, INFO, NEVER;
+    ERROR,
+    WARNING,
+    INFO,
+    NEVER;
 
     internal fun toSeverity(): Severity {
         return when (this) {
