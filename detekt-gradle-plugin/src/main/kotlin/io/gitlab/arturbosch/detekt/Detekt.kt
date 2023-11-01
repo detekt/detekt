@@ -114,12 +114,12 @@ abstract class Detekt @Inject constructor(
     abstract val ignoreFailures: Property<Boolean>
 
     @get:Input
-    @get:Option(option = "auto-correct", description = "Allow rules to auto correct code if they support it")
-    abstract val autoCorrect: Property<Boolean>
-
-    @get:Input
     @get:Optional
     abstract val failOnSeverity: Property<String>
+
+    @get:Input
+    @get:Option(option = "auto-correct", description = "Allow rules to auto correct code if they support it")
+    abstract val autoCorrect: Property<Boolean>
 
     /**
      * Respect only the file path for incremental build. Using @InputFile respects both file path and content.

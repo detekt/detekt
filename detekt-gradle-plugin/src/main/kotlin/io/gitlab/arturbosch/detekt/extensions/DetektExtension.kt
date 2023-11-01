@@ -14,8 +14,12 @@ interface DetektExtension {
 
     val toolVersion: Property<String>
 
-    // TODO: Should this be removed in favor of `failOnSeverity`? Since #6496 we are no longer extending the `CodeQualityExtension`. Having both could be confusing, But I don't know if users expect this property to exist
+    // [QUESTION] Should this be removed in favor of `failOnSeverity`?
+    // Since #6496 we are no longer extending the `CodeQualityExtension`.
+    // Having both could be confusing, but I don't know if users expect this property.
     val ignoreFailures: Property<Boolean>
+
+    val failOnSeverity: Property<String>
 
     val reportsDir: DirectoryProperty
 
@@ -40,9 +44,6 @@ interface DetektExtension {
     val disableDefaultRuleSets: Property<Boolean>
 
     val autoCorrect: Property<Boolean>
-
-    // TODO: Add test to verify that setting is used from extension and task definition
-    val failOnSeverity: Property<String>
 
     /**
      * List of Android build variants for which no detekt task should be created.

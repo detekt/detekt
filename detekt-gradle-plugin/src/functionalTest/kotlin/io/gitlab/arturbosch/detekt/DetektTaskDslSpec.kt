@@ -453,6 +453,31 @@ class DetektTaskDslSpec {
     }
 
     @Nested
+    inner class FailOnSeverity {
+        private val builder = kotlin().dryRun()
+
+        @Test
+        fun `is set to error by default`() {
+            val gradleRunner = builder.withDetektConfig("").build()
+            val result = gradleRunner.runDetektTask()
+            assertThat(result.output).contains("--fail-on-severity error")
+        }
+
+        @Test
+        fun `can be configured`() {
+            val config = """
+                detekt {
+                    failOnSeverity = "never"
+                }
+            """.trimIndent()
+
+            val gradleRunner = builder.withDetektConfig(config).build()
+            val result = gradleRunner.runDetektTask()
+            assertThat(result.output).contains("--fail-on-severity never")
+        }
+    }
+
+    @Nested
     inner class `with cmdline args` {
         private val builder = kotlin().dryRun()
         private val gradleRunner = builder.build()
