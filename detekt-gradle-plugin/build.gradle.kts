@@ -47,7 +47,6 @@ testing {
             useJUnitJupiter(libs.versions.junit.get())
 
             dependencies {
-                compileOnly("org.jetbrains:annotations:24.0.1")
                 implementation(libs.assertj)
                 implementation(testFixtures(project(":")))
             }
@@ -74,6 +73,7 @@ dependencies {
     compileOnly(libs.kotlin.gradle)
     compileOnly(libs.kotlin.gradlePluginApi)
     testFixturesCompileOnly("org.jetbrains:annotations:24.0.1")
+    compileOnly("org.jetbrains:annotations:24.0.1")
     compileOnly("io.gitlab.arturbosch.detekt:detekt-cli:1.23.3")
 
     testKitRuntimeOnly(libs.kotlin.gradle)
