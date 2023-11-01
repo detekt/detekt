@@ -3,7 +3,6 @@ package io.github.detekt.test.utils
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
-import org.jetbrains.kotlin.psi.KtPsiFactory
 import java.io.File
 
 /**
@@ -32,5 +31,3 @@ fun createEnvironment(
     additionalRootPaths: List<File> = emptyList(),
     additionalJavaSourceRootPaths: List<File> = emptyList()
 ): KotlinCoreEnvironmentWrapper = KtTestCompiler.createEnvironment(additionalRootPaths, additionalJavaSourceRootPaths)
-
-fun createPsiFactory(): KtPsiFactory = KtPsiFactory(KtTestCompiler.project(), false)
