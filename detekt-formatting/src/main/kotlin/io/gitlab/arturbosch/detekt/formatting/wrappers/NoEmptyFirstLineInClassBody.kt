@@ -11,7 +11,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#disallow-empty-lines-at-start-of-class-body)
+ * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#no-empty-first-line-at-start-in-class-body)
  * for documentation.
  */
 @ActiveByDefault(since = "2.0.0")
