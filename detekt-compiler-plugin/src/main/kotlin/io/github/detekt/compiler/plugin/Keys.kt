@@ -6,32 +6,32 @@ import java.nio.file.Path
 object Options {
 
     @Suppress("NonBooleanPropertyPrefixedWithIs")
-    const val isEnabled: String = "isEnabled"
-    const val debug: String = "debug"
-    const val config = "config"
-    const val configDigest: String = "configDigest"
-    const val baseline: String = "baseline"
-    const val useDefaultConfig: String = "useDefaultConfig"
-    const val allRules: String = "allRules"
-    const val disableDefaultRuleSets: String = "disableDefaultRuleSets"
-    const val parallel: String = "parallel"
-    const val rootPath = "rootDir"
-    const val excludes = "excludes"
-    const val report = "report"
+    const val IS_ENABLED: String = "isEnabled"
+    const val DEBUG: String = "debug"
+    const val CONFIG = "config"
+    const val CONFIG_DIGEST: String = "configDigest"
+    const val BASELINE: String = "baseline"
+    const val USE_DEFAULT_CONFIG: String = "useDefaultConfig"
+    const val ALL_RULES: String = "allRules"
+    const val DISABLE_DEFAULT_RULE_SETS: String = "disableDefaultRuleSets"
+    const val PARALLEL: String = "parallel"
+    const val ROOT_PATH = "rootDir"
+    const val EXCLUDES = "excludes"
+    const val REPORT = "report"
 }
 
 object Keys {
 
-    val DEBUG = CompilerConfigurationKey.create<Boolean>(Options.debug)
-    val IS_ENABLED = CompilerConfigurationKey.create<Boolean>(Options.isEnabled)
-    val CONFIG = CompilerConfigurationKey.create<List<Path>>(Options.config)
-    val CONFIG_DIGEST = CompilerConfigurationKey.create<String>(Options.configDigest)
-    val BASELINE = CompilerConfigurationKey.create<Path>(Options.baseline)
-    val USE_DEFAULT_CONFIG = CompilerConfigurationKey.create<Boolean>(Options.useDefaultConfig)
-    val ALL_RULES = CompilerConfigurationKey.create<Boolean>(Options.allRules)
-    val DISABLE_DEFAULT_RULE_SETS = CompilerConfigurationKey.create<Boolean>(Options.disableDefaultRuleSets)
-    val PARALLEL = CompilerConfigurationKey.create<Boolean>(Options.parallel)
-    val ROOT_PATH = CompilerConfigurationKey.create<Path>(Options.rootPath)
-    val EXCLUDES = CompilerConfigurationKey.create<List<String>>(Options.excludes)
-    val REPORTS = CompilerConfigurationKey.create<Map<String, Path>>(Options.report)
+    val DEBUG = CompilerConfigurationKey.create<Boolean>(Options.DEBUG)
+    val IS_ENABLED = CompilerConfigurationKey.create<Boolean>(Options.IS_ENABLED)
+    val CONFIG = CompilerConfigurationKey.create<List<Path>>(Options.CONFIG)
+    val CONFIG_DIGEST = CompilerConfigurationKey.create<String>(Options.CONFIG_DIGEST)
+    val BASELINE = CompilerConfigurationKey.create<Path>(Options.BASELINE)
+    val USE_DEFAULT_CONFIG = CompilerConfigurationKey.create<Boolean>(Options.USE_DEFAULT_CONFIG)
+    val ALL_RULES = CompilerConfigurationKey.create<Boolean>(Options.ALL_RULES)
+    val DISABLE_DEFAULT_RULE_SETS = CompilerConfigurationKey.create<Boolean>(Options.DISABLE_DEFAULT_RULE_SETS)
+    val PARALLEL = CompilerConfigurationKey.create<Boolean>(Options.PARALLEL)
+    val ROOT_PATH = CompilerConfigurationKey.create<Path>(Options.ROOT_PATH)
+    val EXCLUDES = CompilerConfigurationKey.create<List<String>>(Options.EXCLUDES)
+    val REPORTS = CompilerConfigurationKey.create<Map<String, Path>>(Options.REPORT)
 }

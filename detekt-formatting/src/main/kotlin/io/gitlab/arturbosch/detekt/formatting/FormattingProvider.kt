@@ -14,8 +14,10 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.ArgumentListWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BinaryExpressionWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BlankLineBeforeDeclaration
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BlockCommentInitialStarAlignment
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainMethodContinuation
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ClassName
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ClassSignature
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ContextReceiverMapping
@@ -25,10 +27,13 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Filename
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FinalNewline
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunKeywordSpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionExpressionBody
+import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionLiteral
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionName
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionReturnTypeSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionSignature
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionStartOfBodySpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionTypeModifierSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunctionTypeReferenceSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.IfElseBracing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.IfElseWrapping
@@ -114,19 +119,26 @@ class FormattingProvider : RuleSetProvider {
             AnnotationOnSeparateLine(config),
             AnnotationSpacing(config),
             ArgumentListWrapping(config),
+            BlankLineBeforeDeclaration(config),
             BlockCommentInitialStarAlignment(config),
             ChainWrapping(config),
             ClassName(config),
             CommentSpacing(config),
             CommentWrapping(config),
+            ContextReceiverMapping(config),
+            DiscouragedCommentLocation(config),
             EnumEntryNameCase(config),
+            EnumWrapping(config),
             Filename(config),
             FinalNewline(config),
             FunctionName(config),
             FunKeywordSpacing(config),
             FunctionReturnTypeSpacing(config),
+            FunctionSignature(config),
             FunctionStartOfBodySpacing(config),
             FunctionTypeReferenceSpacing(config),
+            IfElseBracing(config),
+            IfElseWrapping(config),
             ImportOrdering(config),
             Indentation(config),
             KdocWrapping(config),
@@ -134,10 +146,15 @@ class FormattingProvider : RuleSetProvider {
             ModifierListSpacing(config),
             ModifierOrdering(config),
             MultiLineIfElse(config),
+            MultilineExpressionWrapping(config),
             NoBlankLineBeforeRbrace(config),
+            NoBlankLineInList(config),
             NoBlankLinesInChainedMethodCalls(config),
             NoConsecutiveBlankLines(config),
+            NoConsecutiveComments(config),
             NoEmptyClassBody(config),
+            NoEmptyFile(config),
+            NoEmptyFirstLineInClassBody(config),
             NoEmptyFirstLineInMethodBlock(config),
             NoLineBreakAfterElse(config),
             NoLineBreakBeforeAssignment(config),
@@ -150,6 +167,7 @@ class FormattingProvider : RuleSetProvider {
             NoWildcardImports(config),
             NullableTypeSpacing(config),
             PackageName(config),
+            ParameterListSpacing(config),
             ParameterListWrapping(config),
             ParameterWrapping(config),
             PropertyName(config),
@@ -168,32 +186,23 @@ class FormattingProvider : RuleSetProvider {
             SpacingBetweenDeclarationsWithAnnotations(config),
             SpacingBetweenDeclarationsWithComments(config),
             SpacingBetweenFunctionNameAndOpeningParenthesis(config),
+            StatementWrapping(config),
             StringTemplate(config),
+            StringTemplateIndent(config),
             TrailingCommaOnCallSite(config), // in standard ruleset but not enabled by default
             TrailingCommaOnDeclarationSite(config), // in standard ruleset but not enabled by default
-            UnnecessaryParenthesesBeforeTrailingLambda(config),
-            Wrapping(config),
-
-            // Wrappers for ktlint-ruleset-experimental rules. Disabled by default.
-            BinaryExpressionWrapping(config),
-            BlankLineBeforeDeclaration(config),
-            ContextReceiverMapping(config),
-            DiscouragedCommentLocation(config),
-            EnumWrapping(config),
-            FunctionSignature(config),
-            IfElseBracing(config),
-            IfElseWrapping(config),
-            MultilineExpressionWrapping(config),
-            NoBlankLineInList(config),
-            NoConsecutiveComments(config),
-            NoEmptyFile(config),
-            NoEmptyFirstLineInClassBody(config),
-            ParameterListSpacing(config),
-            StatementWrapping(config),
-            StringTemplateIndent(config),
             TryCatchFinallySpacing(config),
             TypeArgumentListSpacing(config),
             TypeParameterListSpacing(config),
+            UnnecessaryParenthesesBeforeTrailingLambda(config),
+            Wrapping(config),
+            // Wrappers for ktlint-ruleset-experimental rules. Disabled by default.
+            BinaryExpressionWrapping(config),
+            ChainMethodContinuation(config),
+            ClassSignature(config),
+            FunctionExpressionBody(config),
+            FunctionLiteral(config),
+            FunctionTypeModifierSpacing(config),
         ).sorted()
     )
 

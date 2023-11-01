@@ -37,19 +37,19 @@ class RangeUntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
-        if (expression.operationReference.text == rangeToOperator &&
+        if (expression.operationReference.text == RANGE_TO_OPERATOR &&
             expression.right.isMinusOneExpression()
         ) {
-            report(expression, rangeToOperator)
+            report(expression, RANGE_TO_OPERATOR)
         }
         super.visitBinaryExpression(expression)
     }
 
     override fun visitCallExpression(expression: KtCallExpression) {
-        if (expression.calleeExpression?.text == rangeTo &&
+        if (expression.calleeExpression?.text == RANGE_TO &&
             expression.valueArguments.singleOrNull()?.getArgumentExpression().isMinusOneExpression()
         ) {
-            report(expression, rangeTo)
+            report(expression, RANGE_TO)
         }
         super.visitCallExpression(expression)
     }
@@ -68,7 +68,7 @@ class RangeUntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
     }
 
     companion object {
-        private const val rangeToOperator = ".."
-        private const val rangeTo = "rangeTo"
+        private const val RANGE_TO_OPERATOR = ".."
+        private const val RANGE_TO = "rangeTo"
     }
 }

@@ -92,8 +92,8 @@ class SarifOutputReportSpec {
         val location = Location(
             source = SourceLocation(startLine, startColumn),
             text = TextLocation(
-                startLine + (startColumn - 1) * Snippet.lineLength,
-                endColumn + (endLine - 1) * Snippet.lineLength
+                startLine + (startColumn - 1) * Snippet.LINE_LENGTH,
+                endColumn + (endLine - 1) * Snippet.LINE_LENGTH
             ),
             filePath = refEntity.location.filePath
         )
@@ -129,8 +129,8 @@ class SarifOutputReportSpec {
         val location = Location(
             source = SourceLocation(startLine, startColumn),
             text = TextLocation(
-                startLine + (startColumn - 1) * Snippet.lineLength,
-                endColumn + (endLine - 1) * Snippet.lineLength
+                startLine + (startColumn - 1) * Snippet.LINE_LENGTH,
+                endColumn + (endLine - 1) * Snippet.LINE_LENGTH
             ),
             filePath = refEntity.location.filePath
         )
@@ -154,7 +154,7 @@ class SarifOutputReportSpec {
 
 private object Snippet {
     // Each line of code is 50 chars long
-    const val lineLength = 50
+    const val LINE_LENGTH = 50
     val code = """
         // 4567890123456789012345678901234567890123456789
         // 0000001111111111222222222233333333334444444444

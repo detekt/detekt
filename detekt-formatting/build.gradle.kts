@@ -10,6 +10,8 @@ dependencies {
         exclude(group = "org.jetbrains.kotlin")
     }
 
+    runtimeOnly(libs.slf4j.api)
+
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
 
@@ -31,7 +33,7 @@ consumeGeneratedConfig(
 val depsToPackage = setOf(
     "org.ec4j.core",
     "com.pinterest.ktlint",
-    "io.github.microutils",
+    "io.github.oshai",
 )
 
 tasks.jar {

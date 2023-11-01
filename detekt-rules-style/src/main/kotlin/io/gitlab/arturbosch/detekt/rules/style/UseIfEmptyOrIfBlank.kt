@@ -112,21 +112,21 @@ class UseIfEmptyOrIfBlank(config: Config = Config.empty) : Rule(config) {
     )
 
     companion object {
-        private const val ifBlank = "ifBlank"
+        private const val IF_BLANK = "ifBlank"
 
-        private const val ifEmpty = "ifEmpty"
+        private const val IF_EMPTY = "ifEmpty"
 
         private val replacements = listOf(
-            Replacement(FqName("kotlin.text.isBlank"), ifBlank),
-            Replacement(FqName("kotlin.text.isEmpty"), ifEmpty),
-            Replacement(FqName("kotlin.collections.List.isEmpty"), ifEmpty),
-            Replacement(FqName("kotlin.collections.Set.isEmpty"), ifEmpty),
-            Replacement(FqName("kotlin.collections.Map.isEmpty"), ifEmpty),
-            Replacement(FqName("kotlin.collections.Collection.isEmpty"), ifEmpty),
-            Replacement(FqName("kotlin.text.isNotBlank"), ifBlank, negativeCondition = true),
-            Replacement(FqName("kotlin.text.isNotEmpty"), ifEmpty, negativeCondition = true),
-            Replacement(FqName("kotlin.collections.isNotEmpty"), ifEmpty, negativeCondition = true),
-            Replacement(FqName("kotlin.String.isEmpty"), ifEmpty)
+            Replacement(FqName("kotlin.text.isBlank"), IF_BLANK),
+            Replacement(FqName("kotlin.text.isEmpty"), IF_EMPTY),
+            Replacement(FqName("kotlin.collections.List.isEmpty"), IF_EMPTY),
+            Replacement(FqName("kotlin.collections.Set.isEmpty"), IF_EMPTY),
+            Replacement(FqName("kotlin.collections.Map.isEmpty"), IF_EMPTY),
+            Replacement(FqName("kotlin.collections.Collection.isEmpty"), IF_EMPTY),
+            Replacement(FqName("kotlin.text.isNotBlank"), IF_BLANK, negativeCondition = true),
+            Replacement(FqName("kotlin.text.isNotEmpty"), IF_EMPTY, negativeCondition = true),
+            Replacement(FqName("kotlin.collections.isNotEmpty"), IF_EMPTY, negativeCondition = true),
+            Replacement(FqName("kotlin.String.isEmpty"), IF_EMPTY)
         ).associateBy { it.conditionFunctionFqName }
 
         private val conditionFunctionShortNames = replacements.keys.map { it.shortName().asString() }.toSet()

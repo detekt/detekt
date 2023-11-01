@@ -94,26 +94,22 @@ class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
                 Precedence.COMPARISON, // (a ?: b) > c
                 Precedence.IN_OR_IS, // (a ?: b) in c
             ),
-
             Precedence.SIMPLE_NAME to arrayOf(
                 Precedence.ELVIS, // a ?: (b to c)
                 Precedence.SIMPLE_NAME, // (a to b) to c
             ),
-
             Precedence.MULTIPLICATIVE to arrayOf(
                 Precedence.ADDITIVE, // (a * b) + c
                 Precedence.RANGE, // (a / b)..(c * d)
                 // taken from https://github.com/JetBrains/intellij-kotlin/commit/70cd07bcffe701da0fd8c803abceef2b5c67ab9c
                 Precedence.ELVIS, // a ?: (b * c)
             ),
-
             // (a + b)..(c + d)
             Precedence.ADDITIVE to arrayOf(
                 Precedence.RANGE,
                 // taken from https://github.com/JetBrains/intellij-kotlin/commit/70cd07bcffe701da0fd8c803abceef2b5c67ab9c
                 Precedence.ELVIS // a ?: (b + c)
             ),
-
             // (a && b) || c
             Precedence.CONJUNCTION to arrayOf(Precedence.DISJUNCTION),
         )
