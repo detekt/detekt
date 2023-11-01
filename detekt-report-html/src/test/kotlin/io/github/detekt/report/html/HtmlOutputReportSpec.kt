@@ -172,7 +172,7 @@ class HtmlOutputReportSpec {
     fun `asserts that the generated HTML is the same as expected`() {
         val expected = resourceAsPath("HtmlOutputFormatTest.html")
         var result = htmlReport.render(createTestDetektionWithMultipleSmells())
-        result = generatedRegex.replace(result, replacement)
+        result = generatedRegex.replace(result, REPLACEMENT)
 
         val actual = createTempFileForTest("actual-report", ".html")
         actual.writeText(result)
@@ -286,13 +286,13 @@ private fun createHtmlDetektion(vararg findingPairs: Pair<String, List<Finding>>
 }
 
 private val generatedRegex = """^generated\swith.*$""".toRegex(RegexOption.MULTILINE)
-private const val replacement = "generated with..."
+private const val REPLACEMENT = "generated with..."
 
 private fun createReportWithFindings(findings: Array<Pair<String, List<Finding>>>): Path {
     val htmlReport = HtmlOutputReport()
     val detektion = createHtmlDetektion(*findings)
     var result = htmlReport.render(detektion)
-    result = generatedRegex.replace(result, replacement)
+    result = generatedRegex.replace(result, REPLACEMENT)
     val reportPath = createTempFileForTest("report", ".html")
     reportPath.writeText(result)
     return reportPath

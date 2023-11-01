@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import java.util.Locale
 
 // Note: ​ (zero-width-space) is used to prevent the Kotlin parser getting confused by talking about comments in a comment.
+
 /**
  * This rule allows to set a list of comments which are forbidden in the codebase and should only be used during
  * development. Offending code comments will then be reported.

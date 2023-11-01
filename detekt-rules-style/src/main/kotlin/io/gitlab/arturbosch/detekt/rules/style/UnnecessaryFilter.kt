@@ -151,7 +151,6 @@ class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
             SecondCall(FqName("kotlin.collections.lastOrNull")),
             SecondCall(FqName("kotlin.collections.single")),
             SecondCall(FqName("kotlin.collections.singleOrNull")),
-
             SecondCall(FqName("kotlin.sequences.count")),
             SecondCall(FqName("kotlin.sequences.any")),
             SecondCall(FqName("kotlin.sequences.none")),
@@ -161,7 +160,6 @@ class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
             SecondCall(FqName("kotlin.sequences.lastOrNull")),
             SecondCall(FqName("kotlin.sequences.single")),
             SecondCall(FqName("kotlin.sequences.singleOrNull")),
-
             SecondCall(FqName("kotlin.text.isEmpty"), "none"),
             SecondCall(FqName("kotlin.text.isNotEmpty"), "any"),
             SecondCall(FqName("kotlin.text.count")),

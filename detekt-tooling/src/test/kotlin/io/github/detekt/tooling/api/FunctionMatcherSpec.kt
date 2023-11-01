@@ -302,13 +302,11 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
             "fun bar(p: String), class BarClass, io.github.detekt.BarClass.bar, true",
             "fun bar(p: T), class BarClass<T>, io.github.detekt.BarClass.bar, true",
             "fun T.bar(), class BarClass<T>, io.github.detekt.BarClass.bar, true",
-
             "fun bar(), class BarClass, io.github.detekt.BarClass.bar(), true",
             "fun bar(p: String), class BarClass, io.github.detekt.BarClass.bar(kotlin.String), true",
             "fun bar(p: T), class BarClass<T>, io.github.detekt.BarClass.bar(T), true",
             "fun T.bar(), class BarClass<T>, io.github.detekt.BarClass.bar(T), true",
             "'fun <V> bar(p1: V, p2: T)', class BarClass<T>, 'io.github.detekt.BarClass.bar(V, T)', true",
-
             "fun bar(), class BarClass, io.github.detekt.BarClass.bar(kotlin.String), false",
             "fun bar(p: String), class BarClass, io.github.detekt.BarClass.bar(kotlin.Int), false",
             "fun bar(p: T), class BarClass, io.github.detekt.BarClass.bar(T), false",

@@ -7,14 +7,16 @@ import com.pinterest.ktlint.ruleset.standard.rules.FunctionSignatureRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.configWithAndroidVariants
+import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/experimental/#function-signature) for
+ * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#function-signature) for
  * documentation.
  */
+@ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.22.0")
 class FunctionSignature(config: Config) : FormattingRule(config) {
 

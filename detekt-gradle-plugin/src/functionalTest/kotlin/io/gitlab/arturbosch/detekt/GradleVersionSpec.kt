@@ -11,17 +11,17 @@ import org.junit.jupiter.api.condition.JRE.JAVA_15
 class GradleVersionSpec {
 
     @Test
-    @DisplayName("Runs on version $gradleVersion")
-    @EnabledForJreRange(max = JAVA_15, disabledReason = "Gradle $gradleVersion unsupported on this Java version")
+    @DisplayName("Runs on version $GRADLE_VERSION")
+    @EnabledForJreRange(max = JAVA_15, disabledReason = "Gradle $GRADLE_VERSION unsupported on this Java version")
     fun runsOnOldestSupportedGradleVersion() {
         val builder = DslTestBuilder.kotlin()
-        val gradleRunner = builder.withGradleVersion(gradleVersion).build()
+        val gradleRunner = builder.withGradleVersion(GRADLE_VERSION).build()
         gradleRunner.runDetektTaskAndCheckResult { result ->
             assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
         }
     }
 
     companion object {
-        const val gradleVersion = "6.8.3"
+        const val GRADLE_VERSION = "6.8.3"
     }
 }

@@ -14,7 +14,7 @@ plugins {
     idea
     alias(libs.plugins.pluginPublishing)
     // We use this published version of the detekt plugin to self analyse this project.
-    id("io.gitlab.arturbosch.detekt") version "1.23.2"
+    id("io.gitlab.arturbosch.detekt") version "1.23.3"
     alias(libs.plugins.binaryCompatibilityValidator)
     alias(libs.plugins.dokka)
 }
@@ -47,7 +47,6 @@ testing {
             useJUnitJupiter(libs.versions.junit.get())
 
             dependencies {
-                compileOnly("org.jetbrains:annotations:24.0.1")
                 implementation(libs.assertj)
                 implementation(testFixtures(project(":")))
             }
@@ -74,13 +73,14 @@ dependencies {
     compileOnly(libs.kotlin.gradle)
     compileOnly(libs.kotlin.gradlePluginApi)
     testFixturesCompileOnly("org.jetbrains:annotations:24.0.1")
-    compileOnly("io.gitlab.arturbosch.detekt:detekt-cli:1.23.2")
+    compileOnly("org.jetbrains:annotations:24.0.1")
+    compileOnly("io.gitlab.arturbosch.detekt:detekt-cli:1.23.3")
 
     testKitRuntimeOnly(libs.kotlin.gradle)
     testKitJava17RuntimeOnly(libs.android.gradle.maxSupported)
 
     // We use this published version of the detekt-formatting to self analyse this project.
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.2")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.3")
 }
 
 gradlePlugin {

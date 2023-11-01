@@ -13,7 +13,6 @@ dependencies {
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
 
-    testFixturesApi(libs.kotlin.stdlibJdk8)
     testFixturesCompileOnly(libs.poko.annotations)
 }
 

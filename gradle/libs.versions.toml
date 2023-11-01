@@ -2,9 +2,10 @@
 dokka = "1.9.10"
 jacoco = "0.8.11"
 kotlin = "1.9.10"
-ktlint = "0.50.0"
+ktlint = "1.0.1"
 junit = "5.10.0"
 poko = "0.15.0"
+slf4j = "2.0.9"
 
 [libraries]
 semver4j = "org.semver4j:semver4j:5.2.2"
@@ -29,8 +30,9 @@ android-gradle-minSupported = "com.android.tools.build:gradle:7.0.0"
 android-gradle-maxSupported = "com.android.tools.build:gradle:8.1.1"
 
 ktlintRulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint"  }
-slf4j-nop = { module = "org.slf4j:slf4j-nop", version = "2.0.9" }
-slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "2.0.9" }
+slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4j" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 
@@ -40,7 +42,7 @@ classgraph = "io.github.classgraph:classgraph:4.8.163"
 mockk = "io.mockk:mockk:1.13.7"
 snakeyaml = "org.snakeyaml:snakeyaml-engine:2.7"
 jcommander = "org.jcommander:jcommander:1.83"
-kotlinCompileTesting = { module = "com.github.tschuchortdev:kotlin-compile-testing", version = "1.5.0" }
+kotlinCompileTesting = { module = "dev.zacsweers.kctfork:core", version = "0.4.0" }
 poko-annotations = { module = "dev.drewhamilton.poko:poko-annotations", version.ref = "poko" }
 
 [plugins]

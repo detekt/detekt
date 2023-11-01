@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.types.typeUtil.isLong
  * Based on code from Kotlin compiler:
  * https://github.com/JetBrains/kotlin/blob/v1.3.50/idea/src/org/jetbrains/kotlin/idea/inspections/RedundantExplicitTypeInspection.kt
  */
+
 /**
  * Local properties do not need their type to be explicitly provided when the inferred type matches the explicit type.
  *

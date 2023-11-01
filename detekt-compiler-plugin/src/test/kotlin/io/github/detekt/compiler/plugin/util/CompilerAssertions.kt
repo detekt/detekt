@@ -1,14 +1,14 @@
 package io.github.detekt.compiler.plugin.util
 
-import com.tschuchort.compiletesting.KotlinCompilation
+import com.tschuchort.compiletesting.JvmCompilationResult
 import com.tschuchort.compiletesting.KotlinCompilation.ExitCode.COMPILATION_ERROR
 import com.tschuchort.compiletesting.KotlinCompilation.ExitCode.OK
 import org.assertj.core.api.AbstractObjectAssert
 
-fun assertThat(result: KotlinCompilation.Result) = CompilationAssert(result)
+fun assertThat(result: JvmCompilationResult) = CompilationAssert(result)
 
-class CompilationAssert(private val result: KotlinCompilation.Result) :
-    AbstractObjectAssert<CompilationAssert, KotlinCompilation.Result>(result, CompilationAssert::class.java) {
+class CompilationAssert(private val result: JvmCompilationResult) :
+    AbstractObjectAssert<CompilationAssert, JvmCompilationResult>(result, CompilationAssert::class.java) {
 
     private val detektMessages = result.messages.split("\n")
         .dropWhile { "Running detekt" !in it }
