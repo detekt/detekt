@@ -105,6 +105,40 @@ class EqualsWithHashCodeExistSpec {
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
+
+        @Test
+        fun `doesn't report when custom method named equals with extension receiver is used - #6569`() {
+            val code = """
+                open class Base1 {
+                    open fun Base1.equals(other: Any?): Boolean {
+                        return false
+                    }
+                }
+                class A1 : Base1() {
+                    override fun Base1.equals(other: Any?): Boolean {
+                        return true
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `doesn't report when custom method named hashCode with extension receiver is used - #6569`() {
+            val code = """
+                open class Base1 {
+                    open fun Base1.hashCode(): Int {
+                        return 0
+                    }
+                }
+                class A1 : Base1() {
+                    override fun Base1.hashCode(): Int {
+                        return 1
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
     }
 
     @Nested

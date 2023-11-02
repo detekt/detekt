@@ -9,10 +9,16 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 
 fun KtFunction.isEqualsFunction() =
-    this.name == "equals" && this.isOverride() && hasCorrectEqualsParameter()
+    this.name == "equals" &&
+        this.isOverride() &&
+        hasCorrectEqualsParameter() &&
+        this.receiverTypeReference == null
 
 fun KtFunction.isHashCodeFunction() =
-    this.name == "hashCode" && this.isOverride() && this.valueParameters.isEmpty()
+    this.name == "hashCode" &&
+        this.isOverride() &&
+        this.valueParameters.isEmpty() &&
+        this.receiverTypeReference == null
 
 /**
  * [Kotlin Documentation](https://kotlinlang.org/docs/java-interop.html#finalize)
