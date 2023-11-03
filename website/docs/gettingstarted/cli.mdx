@@ -55,12 +55,12 @@ nix-shell -I nixpkgs=channel:nixpkgs-unstable -p detekt
 
 detekt will exit with one of the following exit codes:
 
-| Exit code | Description                                    |
-| --------- | ---------------------------------------------- |
-| 0         | detekt ran normally no issues were found.      |
-| 1         | An unexpected error occurred.                  |
-| 2         | At least one issues was found.                 |
-| 3         | Invalid detekt configuration file detected.    |
+| Exit code | Description                                          |
+| --------- | ---------------------------------------------------- |
+| 0         | _detekt_ ran normally and no issues[^1] were found.  |
+| 1         | An unexpected error occurred.                        |
+| 2         | At least one issue[^1] was found.                    |
+| 3         | Invalid detekt configuration file detected.          |
 
 The following parameters are shown when `--help` is entered.
 
@@ -73,3 +73,5 @@ The following parameters are shown when `--help` is entered.
 ```sh
 java -jar detekt-generator-[detekt_version]-all.jar -gcrc -i /path/to/rule1, /path/to/rule2
 ```
+
+[^1]: All found issues that have a severity of or above the `--fail-on-severity` are considered.
