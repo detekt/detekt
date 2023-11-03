@@ -145,7 +145,7 @@ output-reports:
   #  - 'HtmlOutputReport'
   #  - 'TxtOutputReport'
   #  - 'XmlOutputReport'
-  #  - 'SarifOutputReport'
+  #  - 'sarif'
   #  - 'MdOutputReport'
 ```
 
