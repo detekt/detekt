@@ -97,7 +97,7 @@ The severity will be computed in the priority order:
 
 - Severity of the rule if exists
 - Severity of the parent ruleset if exists
-- Default severity: warning
+- Default severity: error
 
 ## Build failure
 
