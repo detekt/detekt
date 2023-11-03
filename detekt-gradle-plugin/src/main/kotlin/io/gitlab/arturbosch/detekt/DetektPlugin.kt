@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import io.gitlab.arturbosch.detekt.extensions.FailOnSeverity
 import io.gitlab.arturbosch.detekt.extensions.loadDetektVersion
 import io.gitlab.arturbosch.detekt.internal.DetektAndroid
 import io.gitlab.arturbosch.detekt.internal.DetektJvm
@@ -165,7 +166,7 @@ class DetektPlugin : Plugin<Project> {
         internal const val DEFAULT_TEST_SRC_DIR_KOTLIN = "src/test/kotlin"
         internal const val DEFAULT_DEBUG_VALUE = false
         internal const val DEFAULT_IGNORE_FAILURES = false
-        internal const val DEFAULT_FAIL_ON_SEVERITY = "error"
+        internal val DEFAULT_FAIL_ON_SEVERITY = FailOnSeverity.ERROR
         internal const val DEFAULT_PARALLEL_VALUE = false
         internal const val DEFAULT_AUTO_CORRECT_VALUE = false
         internal const val DEFAULT_DISABLE_RULESETS_VALUE = false

@@ -204,8 +204,7 @@ class CliArgs {
 
     val failurePolicy: RulesSpec.FailurePolicy
         get() {
-            val minSeverity = failOnSeverity
-            return when (minSeverity) {
+            return when (val minSeverity = failOnSeverity) {
                 FailureSeverity.NEVER -> NeverFail
 
                 FailureSeverity.ERROR,

@@ -467,7 +467,7 @@ class DetektTaskDslSpec {
         fun `can be configured`() {
             val config = """
                 detekt {
-                    failOnSeverity = "never"
+                    failOnSeverity = io.gitlab.arturbosch.detekt.extensions.FailOnSeverity.NEVER
                 }
             """.trimIndent()
 

@@ -19,7 +19,7 @@ interface DetektExtension {
     // Having both could be confusing, but I don't know if users expect this property.
     val ignoreFailures: Property<Boolean>
 
-    val failOnSeverity: Property<String>
+    val failOnSeverity: Property<FailOnSeverity>
 
     val reportsDir: DirectoryProperty
 

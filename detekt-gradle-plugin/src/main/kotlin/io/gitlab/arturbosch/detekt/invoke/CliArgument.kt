@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.invoke
 
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
+import io.gitlab.arturbosch.detekt.extensions.FailOnSeverity
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFile
@@ -25,7 +26,6 @@ private const val LANGUAGE_VERSION_PARAMETER = "--language-version"
 private const val JVM_TARGET_PARAMETER = "--jvm-target"
 private const val JDK_HOME_PARAMETER = "--jdk-home"
 private const val BASE_PATH_PARAMETER = "--base-path"
-private val failOnSeverityOptions = listOf("error", "warning", "info", "never")
 
 internal sealed class CliArgument {
     abstract fun toArgument(): List<String>
@@ -83,17 +83,11 @@ internal data class BasePathArgument(val basePath: String?) : CliArgument() {
     override fun toArgument() = basePath?.let { listOf(BASE_PATH_PARAMETER, it) }.orEmpty()
 }
 
-internal data class FailOnSeverityArgument(val ignoreFailures: Boolean, val minSeverity: String) : CliArgument() {
+internal data class FailOnSeverityArgument(val ignoreFailures: Boolean, val minSeverity: FailOnSeverity) :
+    CliArgument() {
     override fun toArgument(): List<String> {
-        if (ignoreFailures) {
-            return listOf(FAIL_ON_SEVERITY_PARAMETER, "never")
-        }
-        return minSeverity.let {
-            require(it.trim().toLowerCase(Locale.ROOT) in failOnSeverityOptions) {
-                "'$it' is not a valid option for failOnSeverity. Allowed values are $failOnSeverityOptions."
-            }
-            listOf(FAIL_ON_SEVERITY_PARAMETER, it)
-        }
+        val effectiveSeverity = if (ignoreFailures) FailOnSeverity.NEVER else minSeverity
+        return listOf(FAIL_ON_SEVERITY_PARAMETER, effectiveSeverity.name.toLowerCase(Locale.ROOT))
     }
 }
 

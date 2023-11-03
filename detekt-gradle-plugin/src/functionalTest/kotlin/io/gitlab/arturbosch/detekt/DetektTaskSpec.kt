@@ -35,7 +35,7 @@ class DetektTaskSpec {
     fun `build succeeds with issues if failOnSeverity = never`() {
         val config = """
             detekt {
-                failOnSeverity = "never"
+                failOnSeverity = io.gitlab.arturbosch.detekt.extensions.FailOnSeverity.NEVER
             }
         """.trimIndent()
 
@@ -71,7 +71,7 @@ class DetektTaskSpec {
     fun `build fails with issues if failOnSeverity = error`() {
         val config = """
             detekt {
-                failOnSeverity = "error"
+                failOnSeverity = io.gitlab.arturbosch.detekt.extensions.FailOnSeverity.ERROR
             }
         """.trimIndent()
 

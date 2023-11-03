@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.DEFAULT_FAIL_ON_SEVERI
 import io.gitlab.arturbosch.detekt.extensions.DetektReport
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
+import io.gitlab.arturbosch.detekt.extensions.FailOnSeverity
 import io.gitlab.arturbosch.detekt.invoke.AllRulesArgument
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
 import io.gitlab.arturbosch.detekt.invoke.BasePathArgument
@@ -115,7 +116,7 @@ abstract class Detekt @Inject constructor(
 
     @get:Input
     @get:Optional
-    abstract val failOnSeverity: Property<String>
+    abstract val failOnSeverity: Property<FailOnSeverity>
 
     @get:Input
     @get:Option(option = "auto-correct", description = "Allow rules to auto correct code if they support it")

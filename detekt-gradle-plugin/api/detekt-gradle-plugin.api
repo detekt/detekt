@@ -172,6 +172,15 @@ public class io/gitlab/arturbosch/detekt/extensions/DetektReports {
 	public final fun xml (Lorg/gradle/api/Action;)V
 }
 
+public final class io/gitlab/arturbosch/detekt/extensions/FailOnSeverity : java/lang/Enum {
+	public static final field ERROR Lio/gitlab/arturbosch/detekt/extensions/FailOnSeverity;
+	public static final field INFO Lio/gitlab/arturbosch/detekt/extensions/FailOnSeverity;
+	public static final field NEVER Lio/gitlab/arturbosch/detekt/extensions/FailOnSeverity;
+	public static final field WARNING Lio/gitlab/arturbosch/detekt/extensions/FailOnSeverity;
+	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/extensions/FailOnSeverity;
+	public static fun values ()[Lio/gitlab/arturbosch/detekt/extensions/FailOnSeverity;
+}
+
 public abstract class io/gitlab/arturbosch/detekt/report/ReportMergeTask : org/gradle/api/DefaultTask {
 	public fun <init> ()V
 	public abstract fun getInput ()Lorg/gradle/api/file/ConfigurableFileCollection;
