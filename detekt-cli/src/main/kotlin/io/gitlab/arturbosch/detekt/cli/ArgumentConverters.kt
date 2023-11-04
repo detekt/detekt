@@ -58,3 +58,9 @@ class ClasspathResourceConverter : IStringConverter<URL> {
             ?: throw ParameterException("Classpath resource '$resource' does not exist!")
     }
 }
+
+class FailureSeverityConverter : IStringConverter<FailureSeverity> {
+    override fun convert(value: String): FailureSeverity {
+        return FailureSeverity.fromString(value)
+    }
+}

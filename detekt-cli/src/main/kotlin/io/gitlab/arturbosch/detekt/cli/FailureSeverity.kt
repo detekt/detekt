@@ -3,17 +3,28 @@ package io.gitlab.arturbosch.detekt.cli
 import io.gitlab.arturbosch.detekt.api.Severity
 
 enum class FailureSeverity {
-    ERROR,
-    WARNING,
-    INFO,
-    NEVER;
+    Error,
+    Warning,
+    Info,
+    Never;
 
     internal fun toSeverity(): Severity {
         return when (this) {
-            ERROR -> Severity.ERROR
-            WARNING -> Severity.WARNING
-            INFO -> Severity.INFO
-            NEVER -> error("'$this' does not have a corresponding severity.")
+            Error -> Severity.Error
+            Warning -> Severity.Warning
+            Info -> Severity.Info
+            Never -> error("'$this' does not have a corresponding severity.")
+        }
+    }
+
+    internal companion object {
+        fun fromString(value: String): FailureSeverity {
+            val lowercase = value.lowercase()
+            return FailureSeverity.entries.find { it.name.lowercase() == lowercase }
+                ?: throw IllegalArgumentException(
+                    "'$value' is not a valid FailureSeverity. " +
+                        "Allowed values are ${FailureSeverity.entries}"
+                )
         }
     }
 }

@@ -13,7 +13,7 @@ class DetektTaskGroovyDslSpec {
             detekt {
                 toolVersion = "1.0.0.RC8"
                 ignoreFailures = true
-                failOnSeverity = io.gitlab.arturbosch.detekt.extensions.FailOnSeverity.INFO
+                failOnSeverity = io.gitlab.arturbosch.detekt.extensions.FailOnSeverity.Info
                 source.setFrom(file("src/main/kotlin"))
                 baseline = file("path/to/baseline.xml")
                 basePath = projectDir
@@ -43,7 +43,7 @@ class DetektTaskGroovyDslSpec {
                 includes = ["**/*.kt", "**/*.kts"]
                 excludes = ["build/"]
                 ignoreFailures = false
-                failOnSeverity = io.gitlab.arturbosch.detekt.extensions.FailOnSeverity.INFO
+                failOnSeverity = io.gitlab.arturbosch.detekt.extensions.FailOnSeverity.Info
                 detektClasspath.setFrom(files("config.yml"))
                 pluginClasspath.setFrom(files("config.yml"))
                 baseline = file("config.yml")

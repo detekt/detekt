@@ -20,13 +20,13 @@ class FailOnSeverityArgumentSpec {
 
     @ParameterizedTest
     @EnumSource(FailOnSeverity::class)
-    fun `use NEVER if ignoreFailures is true`(severity: FailOnSeverity) {
+    fun `use Never if ignoreFailures is true`(severity: FailOnSeverity) {
         val subject = FailOnSeverityArgument(ignoreFailures = true, minSeverity = severity)
 
         val actual = subject.toArgument()
 
         assertThat(actual).hasSize(2)
         assertThat(actual.first()).isEqualTo("--fail-on-severity")
-        assertThat(actual.last()).isEqualToIgnoringCase(FailOnSeverity.NEVER.name)
+        assertThat(actual.last()).isEqualToIgnoringCase(FailOnSeverity.Never.name)
     }
 }

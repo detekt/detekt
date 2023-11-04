@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 class RulesSpecBuilder : Builder<RulesSpec> {
 
     var activateAllRules: Boolean = false
-    var failurePolicy: FailurePolicy = FailurePolicy.FailOnSeverity(Severity.ERROR)
+    var failurePolicy: FailurePolicy = FailurePolicy.FailOnSeverity(Severity.Error)
     var excludeCorrectable: Boolean = false
     var autoCorrect: Boolean = false
     var runPolicy: RulesSpec.RunPolicy = RulesSpec.RunPolicy.NoRestrictions

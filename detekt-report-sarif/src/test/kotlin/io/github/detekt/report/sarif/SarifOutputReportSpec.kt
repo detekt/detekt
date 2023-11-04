@@ -29,9 +29,9 @@ class SarifOutputReportSpec {
     @Test
     fun `renders multiple issues`() {
         val result = TestDetektion(
-            createFinding(ruleName = "TestSmellA", severity = Severity.ERROR),
-            createFinding(ruleName = "TestSmellB", severity = Severity.WARNING),
-            createFinding(ruleName = "TestSmellC", severity = Severity.INFO)
+            createFinding(ruleName = "TestSmellA", severity = Severity.Error),
+            createFinding(ruleName = "TestSmellB", severity = Severity.Warning),
+            createFinding(ruleName = "TestSmellC", severity = Severity.Info)
         )
 
         val report = SarifOutputReport()
@@ -102,7 +102,7 @@ class SarifOutputReportSpec {
             createFinding(
                 ruleName = "TestSmellB",
                 entity = Entity(refEntity.name, refEntity.signature, location, refEntity.ktElement),
-                severity = Severity.WARNING
+                severity = Severity.Warning
             )
         )
 
@@ -139,7 +139,7 @@ class SarifOutputReportSpec {
             createFinding(
                 ruleName = "TestSmellB",
                 entity = Entity(refEntity.name, refEntity.signature, location, refEntity.ktElement),
-                severity = Severity.WARNING
+                severity = Severity.Warning
             )
         )
 

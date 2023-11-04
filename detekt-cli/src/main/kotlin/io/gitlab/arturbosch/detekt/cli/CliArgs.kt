@@ -92,10 +92,11 @@ class CliArgs {
     @Parameter(
         names = ["--fail-on-severity"],
         description = "Specifies the minimum severity that causes the build to fail. " +
-            "When the value is set to 'NEVER' detekt will not fail regardless of the number " +
-            "of issues and their severities."
+            "When the value is set to 'Never' detekt will not fail regardless of the number " +
+            "of issues and their severities.",
+        converter = FailureSeverityConverter::class
     )
-    var failOnSeverity: FailureSeverity = FailureSeverity.ERROR
+    var failOnSeverity: FailureSeverity = FailureSeverity.Error
 
     @Parameter(
         names = ["--base-path", "-bp"],
@@ -205,11 +206,11 @@ class CliArgs {
     val failurePolicy: RulesSpec.FailurePolicy
         get() {
             return when (val minSeverity = failOnSeverity) {
-                FailureSeverity.NEVER -> NeverFail
+                FailureSeverity.Never -> NeverFail
 
-                FailureSeverity.ERROR,
-                FailureSeverity.WARNING,
-                FailureSeverity.INFO -> FailOnSeverity(minSeverity.toSeverity())
+                FailureSeverity.Error,
+                FailureSeverity.Warning,
+                FailureSeverity.Info -> FailOnSeverity(minSeverity.toSeverity())
             }
         }
 

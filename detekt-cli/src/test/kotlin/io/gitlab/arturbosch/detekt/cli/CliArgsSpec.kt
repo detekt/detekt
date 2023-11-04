@@ -152,7 +152,7 @@ internal class CliArgsSpec {
 
             val actual = parseArguments(args)
 
-            assertThat(actual.failurePolicy).isEqualTo(FailOnSeverity(Severity.ERROR))
+            assertThat(actual.failurePolicy).isEqualTo(FailOnSeverity(Severity.Error))
         }
 
         @Test
@@ -165,7 +165,7 @@ internal class CliArgsSpec {
         }
 
         @ParameterizedTest(name = "{0}")
-        @EnumSource(value = FailureSeverity::class, names = ["NEVER"], mode = EnumSource.Mode.EXCLUDE)
+        @EnumSource(value = FailureSeverity::class, names = ["Never"], mode = EnumSource.Mode.EXCLUDE)
         fun `--fail-on-severity`(severity: FailureSeverity) {
             val args = arrayOf("--fail-on-severity", severity.name.lowercase())
 
@@ -182,7 +182,7 @@ internal class CliArgsSpec {
 
             assertThatThrownBy {
                 parseArguments(args)
-            }.isInstanceOf(HandledArgumentViolation::class.java)
+            }.isInstanceOf(IllegalArgumentException::class.java)
         }
     }
 }

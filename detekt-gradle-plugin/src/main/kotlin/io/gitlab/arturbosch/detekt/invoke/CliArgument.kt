@@ -86,7 +86,7 @@ internal data class BasePathArgument(val basePath: String?) : CliArgument() {
 internal data class FailOnSeverityArgument(val ignoreFailures: Boolean, val minSeverity: FailOnSeverity) :
     CliArgument() {
     override fun toArgument(): List<String> {
-        val effectiveSeverity = if (ignoreFailures) FailOnSeverity.NEVER else minSeverity
+        val effectiveSeverity = if (ignoreFailures) FailOnSeverity.Never else minSeverity
         return listOf(FAIL_ON_SEVERITY_PARAMETER, effectiveSeverity.name.toLowerCase(Locale.ROOT))
     }
 }
