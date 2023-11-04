@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtUserType
 
 /**
  * Reports function names that do not follow the specified naming convention.
@@ -52,7 +53,7 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
         val functionName = function.nameIdentifier?.text ?: return
         if (!function.isContainingExcludedClassOrObject(excludeClassPattern) &&
             !functionName.matches(functionPattern) &&
-            functionName != function.typeReference?.text
+            functionName != function.returnTypeName()
         ) {
             report(
                 CodeSmell(
@@ -63,6 +64,8 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
             )
         }
     }
+
+    private fun KtNamedFunction.returnTypeName() = (typeReference?.typeElement as? KtUserType)?.referencedName
 
     companion object {
         const val FUNCTION_PATTERN = "functionPattern"
