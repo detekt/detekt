@@ -81,7 +81,7 @@ naming:
 ### Severity
 
 By default, all findings have a severity of `error` but is possible to configure the severity of each rule to fit
-your CI policy with respects to errors. You may specify the severity level in the config file at the rule or ruleSets
+your CI policy with respects to errors. You may specify the severity level in the config file at the rule or ruleset
 level:
 
 ```yaml
