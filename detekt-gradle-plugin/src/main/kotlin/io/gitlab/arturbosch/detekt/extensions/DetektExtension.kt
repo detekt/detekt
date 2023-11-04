@@ -14,9 +14,6 @@ interface DetektExtension {
 
     val toolVersion: Property<String>
 
-    // [QUESTION] Should this be removed in favor of `failOnSeverity`?
-    // Since #6496 we are no longer extending the `CodeQualityExtension`.
-    // Having both could be confusing, but I don't know if users expect this property.
     val ignoreFailures: Property<Boolean>
 
     val failOnSeverity: Property<FailOnSeverity>
