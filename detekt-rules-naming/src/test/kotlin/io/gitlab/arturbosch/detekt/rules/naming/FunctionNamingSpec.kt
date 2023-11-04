@@ -77,6 +77,15 @@ class FunctionNamingSpec {
     }
 
     @Test
+    fun `does not report when the function's name equals to the return type's name with type arguments`() {
+        val code = """
+            interface Foo<T>
+            fun <T> Foo(): Foo<T> = object : Foo<T> {}
+        """.trimIndent()
+        assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
+    }
+
+    @Test
     fun `flags functions with bad names inside overridden functions by default`() {
         val code = """
             class C : I {
