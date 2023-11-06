@@ -243,4 +243,16 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) 
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
+
+    @Test
+    fun `does not report when last parameter is vararg - #6593`() {
+        val code = """
+            fun foo(f: () -> Unit, vararg x: Unit) = f()
+            fun test() {
+                foo({})
+            }
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
 }
