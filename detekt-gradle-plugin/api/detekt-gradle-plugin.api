@@ -123,6 +123,7 @@ public abstract interface class io/gitlab/arturbosch/detekt/extensions/DetektExt
 	public abstract fun getDebug ()Lorg/gradle/api/provider/Property;
 	public abstract fun getDisableDefaultRuleSets ()Lorg/gradle/api/provider/Property;
 	public abstract fun getEnableCompilerPlugin ()Lorg/gradle/api/provider/Property;
+	public abstract fun getExcludes ()Lorg/gradle/api/provider/ListProperty;
 	public abstract fun getIgnoreFailures ()Lorg/gradle/api/provider/Property;
 	public abstract fun getIgnoredBuildTypes ()Lorg/gradle/api/provider/ListProperty;
 	public abstract fun getIgnoredFlavors ()Lorg/gradle/api/provider/ListProperty;

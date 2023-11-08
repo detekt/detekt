@@ -21,7 +21,7 @@ internal class DetektPlain(private val project: Project) {
             }
             setSource(existingInputDirectoriesProvider(project, extension))
             setIncludes(DetektPlugin.defaultIncludes)
-            setExcludes(DetektPlugin.defaultExcludes)
+            setExcludes(extension.excludes.get())
             reportsDir.convention(extension.reportsDir)
         }
 

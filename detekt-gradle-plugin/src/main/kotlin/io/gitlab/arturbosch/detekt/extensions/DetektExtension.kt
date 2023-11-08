@@ -20,6 +20,11 @@ interface DetektExtension {
 
     val source: ConfigurableFileCollection
 
+    /**
+     * List of glob patterns for files and directories to be excluded from the analysis.
+     */
+    val excludes: ListProperty<String>
+
     val baseline: RegularFileProperty
 
     val basePath: DirectoryProperty

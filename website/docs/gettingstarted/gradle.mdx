@@ -196,6 +196,9 @@ detekt {
         "src/main/kotlin",
         "gensrc/main/kotlin"
     )
+
+    // List of glob patterns for files and directories to be excluded from the analysis.
+    excludes = ["**/generated-src/**"]
     
     // Builds the AST in parallel. Rules are always executed in parallel. 
     // Can lead to speedups in larger projects. `false` by default.
@@ -251,6 +254,9 @@ detekt {
     // The directories where detekt looks for source files. 
     // Defaults to `files("src/main/java", "src/test/java", "src/main/kotlin", "src/test/kotlin")`.
     source.setFrom("src/main/java", "src/main/kotlin")
+
+    // List of glob patterns for files and directories to be excluded from the analysis.
+    excludes = listOf("**/generated-src/**")
     
     // Builds the AST in parallel. Rules are always executed in parallel. 
     // Can lead to speedups in larger projects. `false` by default.

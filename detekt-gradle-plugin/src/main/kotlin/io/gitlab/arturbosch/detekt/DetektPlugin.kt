@@ -33,6 +33,7 @@ class DetektPlugin : Plugin<Project> {
                 DEFAULT_SRC_DIR_KOTLIN,
                 DEFAULT_TEST_SRC_DIR_KOTLIN,
             )
+            excludes.convention(defaultExcludes)
             baseline.convention(project.layout.projectDirectory.file("detekt-baseline.xml"))
             enableCompilerPlugin.convention(DEFAULT_COMPILER_PLUGIN_ENABLED)
             debug.convention(DEFAULT_DEBUG_VALUE)
