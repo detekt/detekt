@@ -62,16 +62,6 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
 
     private fun <T> Iterable<T>.toNormalizedForm() = joinToString("|")
 
-    private fun FqName.startsWith(other: FqName): Boolean {
-        val segments = pathSegments()
-        val otherSegments = other.pathSegments()
-        return if (otherSegments.size <= segments.size) {
-            otherSegments.indices.all { index -> segments[index] == otherSegments[index] }
-        } else {
-            false
-        }
-    }
-
     private fun FqName.withoutPrefix(prefix: FqName): List<String> {
         val dropCount = if (startsWith(prefix)) prefix.pathSegments().size else 0
         return pathSegments()
