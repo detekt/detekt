@@ -10,7 +10,14 @@ dependencies {
         exclude(group = "org.jetbrains.kotlin")
     }
 
-    testImplementation(projects.detektTest)
+    testImplementation(projects.detektTest) {
+        /* Workaround for https://youtrack.jetbrains.com/issue/KT-60813. Required due to detekt-main-kts embedding an
+        old version of SLF4J which conflicts with the version used in detekt-formatting. This dependency isn't required
+        for formatting tests as ktlint only requires the AST for its analysis and doesn't need to be compiled.
+        Prevents test execution with "compile-test-snippets" enabled.
+         */
+        exclude("org.jetbrains.kotlin", "kotlin-main-kts")
+    }
     testImplementation(libs.assertj)
 
     testRuntimeOnly(libs.slf4j.nop)
@@ -49,4 +56,9 @@ tasks.test {
     if (javaVersion.isJava9Compatible) {
         jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
     }
+}
+
+tasks.withType<Test>().configureEach {
+    // Required due to exclusion of kotlin-main-kts dependency above
+    systemProperty("compile-test-snippets", false)
 }
