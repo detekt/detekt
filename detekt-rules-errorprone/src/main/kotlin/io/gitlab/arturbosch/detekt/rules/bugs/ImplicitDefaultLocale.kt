@@ -8,15 +8,12 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-import org.jetbrains.kotlin.builtins.KotlinBuiltIns.isStringOrNullableString
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 
 /**
@@ -32,18 +29,12 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
  * String.format("Timestamp: %d", System.currentTimeMillis())
  * "Timestamp: %d".format(System.currentTimeMillis())
  *
- * val str: String = getString()
- * str.toUpperCase()
- * str.toLowerCase()
  * </noncompliant>
  *
  * <compliant>
  * String.format(Locale.US, "Timestamp: %d", System.currentTimeMillis())
  * "Timestamp: %d".format(Locale.US, System.currentTimeMillis())
  *
- * val str: String = getString()
- * str.toUpperCase(Locale.US)
- * str.toLowerCase(Locale.US)
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
@@ -63,7 +54,6 @@ class ImplicitDefaultLocale(config: Config = Config.empty) : Rule(config) {
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)
         checkStringFormatting(expression)
-        checkCaseConversion(expression)
     }
 
     private fun checkStringFormatting(expression: KtQualifiedExpression) {
@@ -79,30 +69,6 @@ class ImplicitDefaultLocale(config: Config = Config.empty) : Rule(config) {
             )
         }
     }
-
-    private fun checkCaseConversion(expression: KtQualifiedExpression) {
-        if (isStringOrNullableString(expression.receiverExpression.getType(bindingContext)) &&
-            expression.isCalleeCaseConversion() &&
-            expression.isCalleeNoArgs()
-        ) {
-            report(
-                CodeSmell(
-                    issue,
-                    Entity.from(expression),
-                    "${expression.text} uses implicitly default locale for case conversion."
-                )
-            )
-        }
-    }
-}
-
-private fun KtQualifiedExpression.isCalleeCaseConversion(): Boolean {
-    return getCalleeExpressionIfAny()?.text in arrayOf("toLowerCase", "toUpperCase")
-}
-
-private fun KtQualifiedExpression.isCalleeNoArgs(): Boolean {
-    val lastCallExpression = lastChild as? KtCallExpression
-    return lastCallExpression?.valueArguments.isNullOrEmpty()
 }
 
 private fun KtQualifiedExpression.containsLocaleObject(bindingContext: BindingContext): Boolean {
