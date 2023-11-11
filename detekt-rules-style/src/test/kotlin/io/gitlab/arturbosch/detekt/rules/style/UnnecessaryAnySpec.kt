@@ -121,7 +121,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `does not report any with safe call which is used for checking presence of a element`() {
         val code = """
-            fun test(list: List<Int>, value: Int?) {
+            fun test(list: List<Int?>, value: Int?) {
                 list.any { value?.equals(it) == true }
             }
         """.trimIndent()
@@ -141,7 +141,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    fun `does not report any when it is not used`() {
+    fun `does report any when it is not used`() {
         val code = """
             fun test(list: List<Int>, value: Int) {
                 list.any { value == 2 }
@@ -149,7 +149,53 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val actual = subject.compileAndLintWithContext(env, code)
-        assertThat(actual).isEmpty()
+        assertThat(actual).hasSize(2)
+    }
+
+    @Test
+    fun `does report any when it is not used in presence of nested it with different value`() {
+        val code = """
+            fun test(list: List<Int>, value: Int) {
+                list.any { value.also { println(it) } == 2 }
+            }
+        """.trimIndent()
+        val actual = subject.compileAndLintWithContext(env, code)
+        assertThat(actual).hasSize(1)
+    }
+
+    @Test
+    fun `does report any when it is not used returns boolean directly`() {
+        val code = """
+            fun test(list: List<Int>, value: Boolean) {
+                list.any { true }
+                list.any { value }
+                list.any { value.also { println(it) } }
+            }
+        """.trimIndent()
+        val actual = subject.compileAndLintWithContext(env, code)
+        assertThat(actual).hasSize(3)
+    }
+
+    @Test
+    fun `does report nested violations`() {
+        val code = """
+            fun test(list: List<Boolean>, values: List<Int>, value: Int) {
+                list.any { it == values.any { it == value } }
+            }
+        """.trimIndent()
+        val actual = subject.compileAndLintWithContext(env, code)
+        assertThat(actual).hasSize(2)
+    }
+
+    @Test
+    fun `does report nested violations with named it`() {
+        val code = """
+            fun test(list: List<Boolean>, values: List<Int>, value: Int) {
+            list.any { outerIt -> outerIt == values.any { it == value } }
+        }
+        """.trimIndent()
+        val actual = subject.compileAndLintWithContext(env, code)
+        assertThat(actual).hasSize(2)
     }
 
     @Test

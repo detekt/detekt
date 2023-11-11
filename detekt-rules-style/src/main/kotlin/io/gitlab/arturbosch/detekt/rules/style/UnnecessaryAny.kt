@@ -82,7 +82,7 @@ class UnnecessaryAny(config: Config = Config.empty) : Rule(config) {
                     ] as? ValueParameterDescriptor ?: return false
                 val bodyExpression =
                     valueExpression.bodyExpression as? KtBlockExpression
-                        ?: return valueExpression.bodyExpression?.isEligibleEqualityCheck(
+                        ?: return valueExpression.bodyExpression?.isEqualityCheckEligible(
                             valueParameterDescriptor,
                         ) == true
                 bodyExpression.isBodyContainsEligibleEqualityCheck(valueParameterDescriptor)
@@ -104,17 +104,17 @@ class UnnecessaryAny(config: Config = Config.empty) : Rule(config) {
             firstStatement
         } ?: return false
 
-        return statement.isEligibleEqualityCheck(itParameter)
+        return statement.isEqualityCheckEligible(itParameter)
     }
 
-    private fun KtExpression.isEligibleEqualityCheck(itParameter: ValueParameterDescriptor?): Boolean {
+    private fun KtExpression.isEqualityCheckEligible(itParameter: ValueParameterDescriptor?): Boolean {
         return when {
             this is KtBinaryExpression && operationToken == KtTokens.EQEQ -> {
-                isUsageOfValueAndItCorrect(itParameter, left, right)
+                isUsageOfValueAndItEligible(itParameter, left, right)
             }
 
             this is KtDotQualifiedExpression && selectorExpression.isCallingEquals() -> {
-                isUsageOfValueAndItCorrect(
+                isUsageOfValueAndItEligible(
                     itParameter,
                     receiverExpression,
                     (selectorExpression as? KtCallExpression)?.valueArguments?.getOrNull(0)
@@ -123,46 +123,51 @@ class UnnecessaryAny(config: Config = Config.empty) : Rule(config) {
             }
 
             else -> {
-                false
+                !(itParameter == null || this.getItUsageCount(itParameter) > 0)
             }
         }
     }
 
     @Suppress("ReturnCount")
-    private fun isUsageOfValueAndItCorrect(
+    private fun isUsageOfValueAndItEligible(
         itParameterDescriptor: ValueParameterDescriptor?,
         leftExpression: KtExpression?,
         rightExpression: KtExpression?
     ): Boolean {
         leftExpression ?: return false
         rightExpression ?: return true
+        itParameterDescriptor ?: return false
 
-        fun KtExpression.getItUsageCount() =
-            collectDescendantsOfType<KtNameReferenceExpression>().count {
-                bindingContext[BindingContext.REFERENCE_TARGET, it] == itParameterDescriptor
+        val itRefCountInLeft = leftExpression.getItUsageCount(itParameterDescriptor)
+        val itRefCountInRight = rightExpression.getItUsageCount(itParameterDescriptor)
+        return when {
+            itRefCountInLeft > 0 && itRefCountInRight > 0 -> {
+                // both side `it` has been used
+                false
             }
-
-        val itRefCountInLeft = leftExpression.getItUsageCount()
-        val itRefCountInRight = rightExpression.getItUsageCount()
-        return if (itIsPresentOnOneSide(itRefCountInLeft, itRefCountInRight)) {
-            // both side `it` has been used or no side uses `it`
-            false
-        } else if (itRefCountInRight > 0) {
-            // reversing the order of parameter
-            isUsageOfValueAndItCorrect(itParameterDescriptor, rightExpression, leftExpression)
-        } else {
-            val valueExpressionType =
-                rightExpression.getResolvedCall(bindingContext)?.getReturnType() ?: return false
-            val itExpressionType =
-                leftExpression.getResolvedCall(bindingContext)?.getReturnType() ?: return false
-            leftExpression is KtReferenceExpression &&
-                valueExpressionType.isSubtypeOf(itExpressionType)
+            itRefCountInLeft == 0 && itRefCountInRight == 0 -> {
+                // no side has `it`
+                true
+            }
+            itRefCountInRight > 0 -> {
+                // reversing the order of parameter
+                isUsageOfValueAndItEligible(itParameterDescriptor, rightExpression, leftExpression)
+            }
+            else -> {
+                val valueExpressionType =
+                    rightExpression.getResolvedCall(bindingContext)?.getReturnType() ?: return false
+                val itExpressionType =
+                    leftExpression.getResolvedCall(bindingContext)?.getReturnType() ?: return false
+                leftExpression is KtReferenceExpression &&
+                    valueExpressionType.isSubtypeOf(itExpressionType)
+            }
         }
     }
 
-    private fun itIsPresentOnOneSide(itRefCountInLeft: Int, itRefCountInRight: Int) =
-        itRefCountInLeft > 0 && itRefCountInRight > 0 ||
-            itRefCountInLeft == 0 && itRefCountInRight == 0
+    private fun KtExpression.getItUsageCount(itParameterDescriptor: ValueParameterDescriptor) =
+        collectDescendantsOfType<KtNameReferenceExpression>().count {
+            bindingContext[BindingContext.REFERENCE_TARGET, it] == itParameterDescriptor
+        }
 
     private fun KtCallExpression.isCallingAny(): Boolean = isCalling(anyFqName, bindingContext)
 
