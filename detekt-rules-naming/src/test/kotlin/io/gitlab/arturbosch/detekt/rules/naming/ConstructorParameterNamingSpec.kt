@@ -25,7 +25,7 @@ class ConstructorParameterNamingSpec {
         val code = """
             class C(val PARAM: String, private val PRIVATE_PARAM: String)
             
-            class C {
+            class D {
                 constructor(PARAM: String) {}
                 constructor(PARAM: String, PRIVATE_PARAM: String) {}
             }
