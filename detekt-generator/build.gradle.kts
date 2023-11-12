@@ -1,6 +1,11 @@
 plugins {
     alias(libs.plugins.shadow)
     id("module")
+    application
+}
+
+application {
+    mainClass = "io.gitlab.arturbosch.detekt.generator.Main"
 }
 
 dependencies {
