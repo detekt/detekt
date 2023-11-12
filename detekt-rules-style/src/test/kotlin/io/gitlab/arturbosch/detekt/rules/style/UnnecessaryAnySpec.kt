@@ -19,11 +19,11 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val actual = subject.compileAndLintWithContext(env, code)
-        assertThat(actual).hasSize(1)
-        assertThat(actual[0].message)
-            .isEqualTo(
-                "Use `contains` instead of `any {  }` call to check the presence of the element"
-            )
+        assertThat(actual)
+            .hasSize(1)
+            .allMatch {
+                it.message == "Use `contains` instead of `any {  }` call to check the presence of the element"
+            }
     }
 
     @Test
@@ -31,6 +31,20 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
         val code = """
             fun test(list: List<Int>, value: Int) {
                 list.contains(value)
+            }
+        """.trimIndent()
+        val actual = subject.compileAndLintWithContext(env, code)
+        assertThat(actual).isEmpty()
+    }
+
+    @Test
+    fun `does not report when any is used with multiline lambda body to find a element`() {
+        val code = """
+            fun test(list: List<Int>, value: Int) {
+                list.any {
+                    println(it)
+                    it == value
+                }
             }
         """.trimIndent()
         val actual = subject.compileAndLintWithContext(env, code)
@@ -53,6 +67,17 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
         val code = """
             fun test(list: List<Int>, value: Int) {
                 list.any { it * it == value }
+            }
+        """.trimIndent()
+        val actual = subject.compileAndLintWithContext(env, code)
+        assertThat(actual).isEmpty()
+    }
+
+    @Test
+    fun `does not report any when it is printed with chain`() {
+        val code = """
+            fun test(list: List<Int>, value: Int) {
+                list.any { it.also { println(it) } == value }
             }
         """.trimIndent()
         val actual = subject.compileAndLintWithContext(env, code)
@@ -150,6 +175,58 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val actual = subject.compileAndLintWithContext(env, code)
         assertThat(actual).hasSize(2)
+            .allMatch { it.message == "`any {  }` expression can be omitted" }
+    }
+
+    @Test
+    fun `does report any when it is not used for multiline lambda`() {
+        val code = """
+            fun test(list: List<Int>, value: Int) {
+                list.any { 
+                    println(value)
+                    value == 2
+                }
+            }
+        """.trimIndent()
+        val actual = subject.compileAndLintWithContext(env, code)
+        assertThat(actual).hasSize(1)
+            .allMatch { it.message == "`any {  }` expression can be omitted" }
+    }
+
+    @Test
+    fun `does not report any when one of destructed value of it is used`() {
+        val code = """
+            fun test(list: List<Pair<Int, Int>>, value: Int) {
+                list.any { (a, b) ->
+                    value == b
+                }
+
+                list.any { (_, b) ->
+                    value == b
+                }
+            }
+        """.trimIndent()
+        val actual = subject.compileAndLintWithContext(env, code)
+        assertThat(actual).isEmpty()
+    }
+
+    @Test
+    fun `does report any when none of destructed value of it is used`() {
+        val code = """
+            fun test(list: List<Pair<Int, Int>>, value: Int) {
+                list.any { (a, b) ->
+                    false
+                }
+
+                list.any { (_, b) ->
+                    true
+                }
+            }
+        """.trimIndent()
+        val actual = subject.compileAndLintWithContext(env, code)
+        assertThat(actual)
+            .hasSize(2)
+            .allMatch { it.message == "`any {  }` expression can be omitted" }
     }
 
     @Test
@@ -289,6 +366,18 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val actual = subject.compileAndLintWithContext(env, code)
         assertThat(actual).hasSize(1)
+    }
+
+    @Test
+    fun `reports any with anonymous function with expression body when it is not used`() {
+        val code = """
+            fun test(list: List<Int>, value: Int) {
+                list.any(fun(value: Int) = false)
+            }
+        """.trimIndent()
+        val actual = subject.compileAndLintWithContext(env, code)
+        assertThat(actual).hasSize(1)
+            .allMatch { it.message == "`any {  }` expression can be omitted" }
     }
 
     @Test
