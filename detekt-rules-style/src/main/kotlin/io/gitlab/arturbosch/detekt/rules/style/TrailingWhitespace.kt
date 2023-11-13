@@ -16,10 +16,10 @@ import org.jetbrains.kotlin.psi.KtFile
  * This rule reports lines that end with a whitespace.
  *
  * Note: in KDoc comments we use Markdown, so two spaces at the end of lines should be allowed.
- * However, JetBrains haven't implemented this in their flavour of "standard" Markdown yet (
- * [in Dokka](https://github.com/Kotlin/dokka/issues/2823),
- * nor [in KTIJ](https://youtrack.jetbrains.com/issue/KTIJ-6702/KDoc-Dokka-allow-for-newlines-line-breaks-inside-paragraphs)
- * ), which means Markdown line-breaks in KDoc are really only trailing whitespace for now.
+ * However, JetBrains haven't implemented this in their flavour of "standard" Markdown yet
+ * ([in Dokka](https://github.com/Kotlin/dokka/issues/2823),
+ * nor [in KTIJ](https://youtrack.jetbrains.com/issue/KTIJ-6702/KDoc-Dokka-allow-for-newlines-line-breaks-inside-paragraphs)),
+ * which means Markdown line-breaks in KDoc are really only trailing whitespace for now.
  */
 class TrailingWhitespace(config: Config = Config.empty) : Rule(config) {
 
