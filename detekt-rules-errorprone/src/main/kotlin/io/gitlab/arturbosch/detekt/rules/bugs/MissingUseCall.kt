@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.getParentExpressionAfterParenthesis
@@ -65,7 +64,6 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
 class MissingUseCall(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         javaClass.simpleName,
-        Severity.Warning,
         "Usage of `Closeable` detected without `use` call. Using `Closeable` without `use` can be problematic " +
             "as closing `Closeable` may throw exception.",
         Debt.FIVE_MINS
