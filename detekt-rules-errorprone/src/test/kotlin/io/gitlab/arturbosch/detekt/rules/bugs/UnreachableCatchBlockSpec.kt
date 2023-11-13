@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
@@ -72,6 +73,20 @@ class UnreachableCatchBlockSpec(private val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report unreachable catch block for unknown exceptions`() {
+        val code = """
+            fun test() {
+                try {
+                } catch (e: Foo) {
+                } catch (e: Bar) {
+                }
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 }

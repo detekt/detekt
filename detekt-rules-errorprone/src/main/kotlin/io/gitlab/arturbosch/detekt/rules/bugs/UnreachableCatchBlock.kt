@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.isSubclassOf
+import org.jetbrains.kotlin.types.error.ErrorClassDescriptor
 
 /**
  * Reports unreachable catch blocks.
@@ -54,6 +55,7 @@ class UnreachableCatchBlock(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    @Suppress("ReturnCount")
     override fun visitCatchSection(catchClause: KtCatchClause) {
         super.visitCatchSection(catchClause)
 
@@ -61,6 +63,9 @@ class UnreachableCatchBlock(config: Config = Config.empty) : Rule(config) {
         val prevCatchClauses = tryExpression.catchClauses.takeWhile { it != catchClause }
         if (prevCatchClauses.isEmpty()) return
         val catchClassDescriptor = catchClause.catchClassDescriptor() ?: return
+        // There is no point in checking classes that failed to resolve as they will only give
+        // false positives (error classes are subclasses of other error classes).
+        if (catchClassDescriptor is ErrorClassDescriptor) return
         if (prevCatchClauses.any { catchClassDescriptor.isSubclassOf(it) }) {
             report(CodeSmell(issue, Entity.from(catchClause), "This catch block is unreachable."))
         }
