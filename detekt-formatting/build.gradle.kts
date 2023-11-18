@@ -59,8 +59,3 @@ tasks.test {
         jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
     }
 }
-
-tasks.withType<Test>().configureEach {
-    // Required due to exclusion of kotlin-main-kts dependency above
-    systemProperty("compile-test-snippets", false)
-}
