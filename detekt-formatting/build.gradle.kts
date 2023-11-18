@@ -3,6 +3,8 @@ plugins {
 }
 
 val extraDepsToPackage: Configuration by configurations.creating
+val testRuntimeOnlyPriority: Configuration = configurations.resolvable("testRuntimeOnlyPriority").get()
+sourceSets.test.configure { runtimeClasspath = testRuntimeOnlyPriority + runtimeClasspath }
 
 dependencies {
     compileOnly(projects.detektApi)
@@ -12,15 +14,15 @@ dependencies {
 
     runtimeOnly(libs.slf4j.api)
 
-    testImplementation(projects.detektTest) {
-        /* Workaround for https://youtrack.jetbrains.com/issue/KT-60813. Required due to detekt-main-kts embedding an
-        old version of SLF4J which conflicts with the version used in detekt-formatting. This dependency isn't required
-        for formatting tests as ktlint only requires the AST for its analysis and doesn't need to be compiled.
-        Prevents test execution with "compile-test-snippets" enabled.
-         */
-        exclude("org.jetbrains.kotlin", "kotlin-main-kts")
-    }
+    testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
+
+    /* Workaround for https://youtrack.jetbrains.com/issue/KT-60813.
+       Required due to detekt-main-kts embedding a ProGuarded version of SLF4J.
+       This dependency will be placed at the beginning of the testRuntimeClasspath,
+       so that it takes precedence over the ProGuarded version coming later from kotlin-test.
+     */
+    testRuntimeOnlyPriority(libs.slf4j.api)
 
     testRuntimeOnly(libs.slf4j.nop)
     extraDepsToPackage(libs.slf4j.nop)
