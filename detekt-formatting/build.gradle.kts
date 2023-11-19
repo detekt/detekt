@@ -4,7 +4,13 @@ plugins {
 
 val extraDepsToPackage: Configuration by configurations.creating
 val testRuntimeOnlyPriority: Configuration = configurations.resolvable("testRuntimeOnlyPriority").get()
-sourceSets.test.configure { runtimeClasspath = testRuntimeOnlyPriority + runtimeClasspath }
+sourceSets.test.configure {
+    val moduleSources = runtimeClasspath.filter { it.isDirectory }
+    val moduleDependencies = runtimeClasspath.filter { !it.isDirectory }
+    // Inject the priority dependencies between the compiled classes and the dependencies,
+    // so that KtTestCompiler.root resolves correctly.
+    runtimeClasspath = moduleSources + testRuntimeOnlyPriority + moduleDependencies
+}
 
 dependencies {
     compileOnly(projects.detektApi)

@@ -31,10 +31,7 @@ internal object KtTestCompiler : KtCompiler() {
      * are JAR files, which leads to crashes. By initializing the root on demand, it's at least possible to
      * use String based input from Bazel.
      */
-    private val root: Path by lazy {
-        // STOPSHIP TestClass::class.java.protectionDomain.codeSource.location.toPath()
-        resourceAsPath("/META-INF/detekt-formatting_test.kotlin_module").parent.parent
-    }
+    private val root: Path by lazy { resourceAsPath("/") }
 
     fun compile(path: Path) = compile(root, path)
 
