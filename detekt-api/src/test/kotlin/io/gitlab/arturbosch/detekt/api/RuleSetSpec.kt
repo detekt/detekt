@@ -39,7 +39,7 @@ class RuleSetSpec {
         )
 
         @JvmStatic
-        fun getViolations() = listOf(
+        fun getInvalidNames() = listOf(
             "abc def",
             "abc1 def",
             "ab1c def",
