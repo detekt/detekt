@@ -7,14 +7,14 @@ import org.junit.jupiter.params.provider.MethodSource
 
 class RuleSetSpec {
     @ParameterizedTest(name = "should allow RuleSet with name {0}")
-    @MethodSource("getNonViolations")
+    @MethodSource("getValidNames")
     fun shouldAllowValidNames(ruleSetId: String) {
         assertThatCode { RuleSet(ruleSetId, emptyList()) }.doesNotThrowAnyException()
     }
 
     @ParameterizedTest(name = "should not allow RuleSet with name {0}")
-    @MethodSource("getViolations")
-    fun shouldNotAllowValidNames(ruleSetId: String) {
+    @MethodSource("getInvalidNames")
+    fun shouldNotAllowInvalidNames(ruleSetId: String) {
         assertThatExceptionOfType(IllegalArgumentException::class.java).isThrownBy {
             RuleSet(
                 ruleSetId,
@@ -25,7 +25,7 @@ class RuleSetSpec {
 
     companion object {
         @JvmStatic
-        fun getNonViolations() = listOf(
+        fun getValidNames() = listOf(
             "abc-def",
             "abc-def",
             "abc1-def",
