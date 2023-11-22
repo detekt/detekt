@@ -93,6 +93,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             UseRequire(config),
             UseCheckOrError(config),
             UseIfInsteadOfWhen(config),
+            RedundantConstructorKeyword(config),
             RedundantExplicitType(config),
             UseArrayLiteralsInAnnotations(config),
             UseEmptyCounterpart(config),

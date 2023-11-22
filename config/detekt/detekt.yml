@@ -230,6 +230,8 @@ style:
     active: true
   RangeUntilInsteadOfRangeTo:
     active: true
+  RedundantConstructorKeyword:
+    active: true
   RedundantExplicitType:
     active: true
   RedundantHigherOrderMapUsage:
