@@ -34,6 +34,7 @@ object CompilerTestUtils {
                     useDefaultConfig.toString(),
                 )
             )
+            languageVersion = "1.9"
         }.compile()
     }
 }
