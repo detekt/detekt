@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator
 
+import com.beust.jcommander.DynamicParameter
 import com.beust.jcommander.Parameter
 import java.nio.file.Path
 import kotlin.io.path.Path
@@ -49,6 +50,15 @@ class GeneratorArgs {
             "Path to user rules can be specified with --input option"
     )
     var generateCustomRuleConfig: Boolean = false
+
+    @DynamicParameter(
+        names = ["--replace", "-r"],
+        required = false,
+        description = "Any number of key and value pairs that are used to replace placeholders " +
+            "during data collection and output generation. Key and value are separated by '='. " +
+            "The property may be used multiple times."
+    )
+    var textReplacements: Map<String, String> = mutableMapOf()
 
     val inputPath: List<Path> by lazy {
         checkNotNull(input) { "Input parameter was not initialized by jcommander!" }

@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#property-naming) for
+ * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/experimental/#property-naming) for
  * documentation.
  */
 class PropertyName(config: Config) : FormattingRule(config) {

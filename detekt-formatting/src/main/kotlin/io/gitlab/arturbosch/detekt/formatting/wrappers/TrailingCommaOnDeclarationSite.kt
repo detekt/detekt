@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/) for documentation.
+ * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#trailing-comma-on-declaration-site) for documentation.
  *
  * The default config comes from ktlint and follows these conventions:
  * - [Kotlin coding convention](https://kotlinlang.org/docs/coding-conventions.html#trailing-commas) recommends
