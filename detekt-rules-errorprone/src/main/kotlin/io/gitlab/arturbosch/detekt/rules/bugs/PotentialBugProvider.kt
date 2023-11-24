@@ -56,6 +56,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             UnusedUnaryOperator(config),
             PropertyUsedBeforeDeclaration(config),
             CharArrayToStringCall(config),
+            UnsafeSealedClassChild(config),
         )
     )
 }

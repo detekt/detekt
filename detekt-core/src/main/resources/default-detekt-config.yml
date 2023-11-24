@@ -507,6 +507,8 @@ potential-bugs:
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
   UnsafeCast:
     active: true
+  UnsafeSealedClassChild:
+    active: false
   UnusedUnaryOperator:
     active: true
   UselessPostfixExpression:
