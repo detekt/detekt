@@ -515,15 +515,14 @@ This happens when the version of `kotlin-compiler-embeddable` is overridden on d
 dependency configuration). This can happen when build scripts use things like this which override all dependency
 configurations (e.g. by [Spring Dependency Management Plugin](https://docs.spring.io/dependency-management-plugin/docs/current/reference/html/):
 
+You can pin the detekt version to a supported one by adding the following to your build gradle file:
+
 ```kotlin
-configurations.all {
-    resolutionStrategy.eachDependency {
+project.afterEvaluate {
+    configurations["detekt"].resolutionStrategy.eachDependency {
         if (requested.group == "org.jetbrains.kotlin") {
             useVersion(io.gitlab.arturbosch.detekt.getSupportedKotlinVersion())
         }
     }
 }
 ```
-
-If Kotlin dependencies are being aligned like this then exclude the `detekt` dependency configuration with something
-like `configurations.matching { it.name != "detekt" }.all`.
