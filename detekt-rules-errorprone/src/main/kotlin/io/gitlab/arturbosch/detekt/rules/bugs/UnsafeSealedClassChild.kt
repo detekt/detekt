@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.cfg.WhenChecker
 import org.jetbrains.kotlin.descriptors.isInterface
 import org.jetbrains.kotlin.descriptors.isSealed
@@ -35,6 +36,7 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * }
  * </compliant>
  */
+@RequiresTypeResolution
 class UnsafeSealedClassChild(ruleSetConfig: Config = Config.empty) : Rule(ruleSetConfig) {
 
     override val issue: Issue = Issue(
@@ -55,15 +57,19 @@ class UnsafeSealedClassChild(ruleSetConfig: Config = Config.empty) : Rule(ruleSe
         if (isChildOfSealedClass) {
             val isNormalSealedChild = klass.isData() || klass.isSealed()
             if (!isNormalSealedChild) {
-                report(
-                    CodeSmell(
-                        issue,
-                        Entity.from(klass),
-                        "The ${klass.name} must be data class or object because its child of sealed class"
-                    )
-                )
+                reportUnsafeChild(klass)
             }
         }
+    }
+
+    private fun reportUnsafeChild(klass: KtClass) {
+        report(
+            CodeSmell(
+                issue,
+                Entity.from(klass),
+                "The ${klass.name} must be data class or object because it's a subclass of a sealed class"
+            )
+        )
     }
 
     private fun isSealedClass(type: KotlinType?): Boolean {

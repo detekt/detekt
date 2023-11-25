@@ -42,7 +42,7 @@ class UnsafeSealedClassChildSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    fun `non report sealed class has object as child outside sealed body`() {
+    fun `does not report sealed class has object as child outside sealed body`() {
         val code = """
             sealed class Foo {
                 data class Bar1(val foo: Int): Foo()
@@ -56,7 +56,7 @@ class UnsafeSealedClassChildSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    fun `non report sealed class all child ok outside sealed body`() {
+    fun `does not report sealed class all child ok outside sealed body`() {
         val code = """
             sealed class Foo
             data class Bar1(val foo: Int): Foo()
@@ -70,7 +70,7 @@ class UnsafeSealedClassChildSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    fun `non report sealed class with other sealed class as child, all child ok outside sealed body`() {
+    fun `does not report sealed class with other sealed class as child, all child ok outside sealed body`() {
         val code = """
             sealed class Foo
             sealed class ChildFoo: Foo
@@ -101,7 +101,7 @@ class UnsafeSealedClassChildSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    fun `check sealed interface not affect by the rule`() {
+    fun `does not report sealed interface`() {
         val code = """
             sealed interface Error
 
