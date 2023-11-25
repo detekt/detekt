@@ -73,7 +73,7 @@ class UnsafeSealedClassChildSpec(private val env: KotlinCoreEnvironment) {
     fun `does not report sealed class with other sealed class as child, all child ok outside sealed body`() {
         val code = """
             sealed class Foo
-            sealed class ChildFoo: Foo
+            sealed class ChildFoo: Foo()
             data class Bar1(val foo: Int): Foo()
             data object Bar2 : ChildFoo()
             data object Bar3 : Foo()
@@ -88,7 +88,7 @@ class UnsafeSealedClassChildSpec(private val env: KotlinCoreEnvironment) {
     fun `report sealed class has open class as child`() {
         val code = """
             sealed class Foo
-            open class ChildFoo(val i : Int): Foo()
+            open class ChildFoo(open val i : Int): Foo()
             
             data class Bar1(val foo: Int): Foo()
             data object Bar2 : ChildFoo(0)
