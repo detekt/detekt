@@ -32,7 +32,7 @@ githubRelease {
     draft = true
     prerelease = true
     targetCommitish = "main"
-    body(
+    body =
         provider {
             var changelog = project.file("website/src/pages/changelog.md").readText()
             val nextNonBetaVersion = version
@@ -41,7 +41,6 @@ githubRelease {
             changelog = changelog.substring(0, changelog.indexOf("#### 1.", changelog.indexOf(sectionStart) + 1))
             changelog.trim()
         }
-    )
     releaseAssets.setFrom(releaseAssetFiles)
 }
 
