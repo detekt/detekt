@@ -508,18 +508,34 @@ If detekt is run with an unexpected version of the Kotlin compiler on its classp
 when you try to run detekt via Gradle:
 
 ```
-detekt was compiled with Kotlin 1.8.0 but is currently running with 1.7.0
+detekt was compiled with Kotlin x.x.x but is currently running with y.y.y
 ```
 
 This happens when the version of `kotlin-compiler-embeddable` is overridden on detekt's classpath (in the `detekt`
 dependency configuration). This can happen when build scripts use things like this which override all dependency
-configurations (e.g. by [Spring Dependency Management Plugin](https://docs.spring.io/dependency-management-plugin/docs/current/reference/html/):
+configurations (e.g. by [Spring Dependency Management Plugin](https://docs.spring.io/dependency-management-plugin/docs/current/reference/html/)
+in combination with the [Spring boot plugin](https://docs.spring.io/spring-boot/docs/3.2.0/gradle-plugin/reference/htmlsingle/#introduction):
 
-You can pin the detekt version to a supported one by adding the following to your build gradle file:
+Below are two workarounds, be aware that both come with their own drawbacks.
+
+You can pin the whole projects kotlin version to the one supported by detekt:
 
 ```kotlin
-project.afterEvaluate {
-    configurations["detekt"].resolutionStrategy.eachDependency {
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "org.jetbrains.kotlin") {
+            useVersion(io.gitlab.arturbosch.detekt.getSupportedKotlinVersion())
+        }
+    }
+}
+```
+
+You can pin the detekt version to a supported one by adding the following to your build gradle file, this may cause
+incorrect analysis results as detekt is running on a different kotlin version than the project is compiled with:
+
+```kotlin
+configurations.detekt {
+    resolutionStrategy.eachDependency {
         if (requested.group == "org.jetbrains.kotlin") {
             useVersion(io.gitlab.arturbosch.detekt.getSupportedKotlinVersion())
         }
