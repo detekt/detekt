@@ -142,6 +142,94 @@ class UnusedImportsSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `does not report KDoc references with companion method calls`() {
+        val main = """
+            package com.example
+
+            import android.text.TextWatcher.beforeTextChanged
+
+            class Test {
+                /**
+                 * [beforeTextChanged]
+                 */
+                fun test() {
+                    TODO()
+                }
+            }
+        """.trimIndent()
+        val additional = """
+            package android.text
+
+            object TextWatcher {
+                fun beforeTextChanged() {}
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
+    }
+
+    @Test
+    fun `does not report KDoc references with extension method calls`() {
+        val main = """
+            package com.example
+
+            import android.text.TextWatcher
+            import android.text.beforeTextChanged
+
+            class TestClass {
+                /**
+                 * [TextWatcher.beforeTextChanged]
+                 */
+                fun test() {
+                    TODO()
+                }
+            }
+        """.trimIndent()
+        val additional1 = """
+            package android.text
+
+            class TextWatcher
+        """.trimIndent()
+        val additional2 = """
+            package android.text
+
+            fun TextWatcher.beforeTextChanged() {}
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, main, additional1, additional2)).isEmpty()
+    }
+
+    @Test
+    fun `does report imported extension method which is not used`() {
+        val main = """
+            package com.example
+
+            import android.text.TextWatcher
+            import android.text.beforeTextChanged
+            import android.text.afterTextChanged
+
+            class TestClass {
+                /**
+                 * [TextWatcher.beforeTextChanged]
+                 */
+                fun test() {
+                    TODO()
+                }
+            }
+        """.trimIndent()
+        val additional1 = """
+            package android.text
+
+            class TextWatcher
+        """.trimIndent()
+        val additional2 = """
+            package android.text
+
+            fun TextWatcher.beforeTextChanged() {}
+            fun TextWatcher.afterTextChanged() {}
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, main, additional1, additional2)).hasSize(1)
+    }
+
+    @Test
     fun `reports imports with different cases`() {
         val main = """
             import p.a
