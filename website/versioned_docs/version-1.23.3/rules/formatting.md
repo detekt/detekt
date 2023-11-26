@@ -18,7 +18,7 @@ Note: Issues reported by this rule set can only be suppressed on file level (`@f
 
 ### AnnotationOnSeparateLine
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#annotation-formatting) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#annotation-formatting) for documentation.
 
 **Active by default**: Yes - Since v1.22.0
 
@@ -30,13 +30,13 @@ See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#annotation-
 
 ### AnnotationSpacing
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#annotation-spacing) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#annotation-spacing) for documentation.
 
 **Active by default**: Yes - Since v1.22.0
 
 ### ArgumentListWrapping
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#argument-list-wrapping) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#argument-list-wrapping) for documentation.
 
 **Active by default**: Yes - Since v1.22.0
 
@@ -52,14 +52,14 @@ See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#argument-li
 
 ### BlockCommentInitialStarAlignment
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#block-comment-initial-star-alignment) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#block-comment-initial-star-alignment) for
 documentation.
 
 **Active by default**: Yes - Since v1.23.0
 
 ### ChainWrapping
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#chain-wrapping) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#chain-wrapping) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
@@ -71,20 +71,20 @@ See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#chain-wrapp
 
 ### ClassName
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#classobject-naming) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#classobject-naming) for
 documentation.
 
 **Active by default**: No
 
 ### CommentSpacing
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#comment-spacing) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#comment-spacing) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### CommentWrapping
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#comment-wrapping) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#comment-wrapping) for documentation.
 
 **Active by default**: Yes - Since v1.23.0
 
@@ -96,7 +96,7 @@ See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#comment
 
 ### ContextReceiverMapping
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#content-receiver-wrapping) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#content-receiver-wrapping) for documentation.
 
 **Active by default**: No
 
@@ -112,20 +112,20 @@ See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#content
 
 ### DiscouragedCommentLocation
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#discouraged-comment-location) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#discouraged-comment-location) for
 documentation.
 
 **Active by default**: No
 
 ### EnumEntryNameCase
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#enum-entry) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#enum-entry) for documentation.
 
 **Active by default**: Yes - Since v1.22.0
 
 ### EnumWrapping
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#enum-wrapping) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#enum-wrapping) for documentation.
 
 **Active by default**: No
 
@@ -137,7 +137,7 @@ See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#enum-wr
 
 ### Filename
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#file-name) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#file-name) for documentation.
 
 This rules overlaps with [naming>MatchingDeclarationName](https://detekt.dev/naming.html#matchingdeclarationname)
 from the standard rules, make sure to enable just one.
@@ -146,7 +146,7 @@ from the standard rules, make sure to enable just one.
 
 ### FinalNewline
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#final-newline) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#final-newline) for documentation.
 
 This rules overlaps with [style>NewLineAtEndOfFile](https://detekt.dev/style.html#newlineatendoffile)
 from the standard rules, make sure to enable just one. The pro of this rule is that it can auto-correct the issue.
@@ -161,20 +161,20 @@ from the standard rules, make sure to enable just one. The pro of this rule is t
 
 ### FunKeywordSpacing
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#fun-keyword-spacing) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#fun-keyword-spacing) for documentation.
 
 **Active by default**: Yes - Since v1.23.0
 
 ### FunctionName
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#function-naming) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#function-naming) for
 documentation.
 
 **Active by default**: No
 
 ### FunctionReturnTypeSpacing
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#function-return-type-spacing) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#function-return-type-spacing) for
 documentation.
 
 **Active by default**: Yes - Since v1.23.0
@@ -187,7 +187,7 @@ documentation.
 
 ### FunctionSignature
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#function-signature) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#function-signature) for
 documentation.
 
 **Active by default**: No
@@ -212,21 +212,21 @@ documentation.
 
 ### FunctionStartOfBodySpacing
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#function-start-of-body-spacing) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#function-start-of-body-spacing) for
 documentation.
 
 **Active by default**: Yes - Since v1.23.0
 
 ### FunctionTypeReferenceSpacing
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#function-type-reference-spacing) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#function-type-reference-spacing) for
 documentation.
 
 **Active by default**: Yes - Since v1.23.0
 
 ### IfElseBracing
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#if-else-bracing) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#if-else-bracing) for documentation.
 
 **Active by default**: No
 
@@ -238,7 +238,7 @@ See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#if-else
 
 ### IfElseWrapping
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#if-else-wrapping) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#if-else-wrapping) for documentation.
 
 **Active by default**: No
 
@@ -250,7 +250,7 @@ See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#if-else
 
 ### ImportOrdering
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#import-ordering) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#import-ordering) for documentation.
 
 For defining import layout patterns see the [KtLint Source Code](https://github.com/pinterest/ktlint/blob/a6ca5b2edf95cc70a138a9470cfb6c4fd5d9d3ce/ktlint-ruleset-standard/src/main/kotlin/com/pinterest/ktlint/ruleset/standard/ImportOrderingRule.kt)
 
@@ -264,7 +264,7 @@ For defining import layout patterns see the [KtLint Source Code](https://github.
 
 ### Indentation
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#indentation) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#indentation) for documentation.
 
 **Active by default**: Yes - Since v1.19.0
 
@@ -282,7 +282,7 @@ See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#indentation
 
 ### KdocWrapping
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#kdoc-wrapping) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#kdoc-wrapping) for documentation.
 
 **Active by default**: Yes - Since v1.23.0
 
@@ -294,7 +294,7 @@ See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#kdoc-wr
 
 ### MaximumLineLength
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#max-line-length) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#max-line-length) for documentation.
 
 This rules overlaps with [style>MaxLineLength](https://detekt.dev/style.html#maxlinelength)
 from the standard rules, make sure to enable just one or keep them aligned. The pro of this rule is that it can
@@ -314,13 +314,13 @@ auto-correct the issue.
 
 ### ModifierListSpacing
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#modifier-list-spacing) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#modifier-list-spacing) for documentation.
 
 **Active by default**: Yes - Since v1.23.0
 
 ### ModifierOrdering
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#modifier-order) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#modifier-order) for documentation.
 
 This rules overlaps with [style>ModifierOrder](https://detekt.dev/style.html#modifierorder)
 from the standard rules, make sure to enable just one. The pro of this rule is that it can auto-correct the issue.
@@ -329,7 +329,7 @@ from the standard rules, make sure to enable just one. The pro of this rule is t
 
 ### MultiLineIfElse
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#multiline-if-else) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#multiline-if-else) for documentation.
 
 **Active by default**: Yes - Since v1.22.0
 
@@ -341,7 +341,7 @@ See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#multiline-i
 
 ### MultilineExpressionWrapping
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#multiline-expression-wrapping) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#multiline-expression-wrapping) for
 documentation.
 
 **Active by default**: No
@@ -354,44 +354,44 @@ documentation.
 
 ### NoBlankLineBeforeRbrace
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#no-blank-lines-before) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#no-blank-lines-before) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### NoBlankLineInList
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#no-blank-lines-in-list) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#no-blank-lines-in-list) for documentation.
 
 **Active by default**: No
 
 ### NoBlankLinesInChainedMethodCalls
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#no-blank-lines-in-chained-method-calls) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#no-blank-lines-in-chained-method-calls) for
 documentation.
 
 **Active by default**: Yes - Since v1.22.0
 
 ### NoConsecutiveBlankLines
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#no-consecutive-blank-lines) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#no-consecutive-blank-lines) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### NoConsecutiveComments
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#disallow-consecutive-comments) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#disallow-consecutive-comments) for documentation.
 
 **Active by default**: No
 
 ### NoEmptyClassBody
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#no-empty-class-bodies) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#no-empty-class-bodies) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### NoEmptyFirstLineInClassBody
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#disallow-empty-lines-at-start-of-class-body)
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#disallow-empty-lines-at-start-of-class-body)
 for documentation.
 
 **Active by default**: No
@@ -404,39 +404,39 @@ for documentation.
 
 ### NoEmptyFirstLineInMethodBlock
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#no-leading-empty-lines-in-method-blocks) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#no-leading-empty-lines-in-method-blocks) for
 documentation.
 
 **Active by default**: Yes - Since v1.22.0
 
 ### NoLineBreakAfterElse
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#no-line-break-after-else) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#no-line-break-after-else) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### NoLineBreakBeforeAssignment
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#no-line-break-before-assignment) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#no-line-break-before-assignment) for
 documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### NoMultipleSpaces
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#no-multi-spaces) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#no-multi-spaces) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### NoSemicolons
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#no-semicolons) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#no-semicolons) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### NoSingleLineBlockComment
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#no-single-line-block-comments) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#no-single-line-block-comments) for documentation.
 
 **Active by default**: No
 
@@ -448,25 +448,25 @@ See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#no-sing
 
 ### NoTrailingSpaces
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#no-trailing-whitespaces) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#no-trailing-whitespaces) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### NoUnitReturn
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#no-unit-as-return-type) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#no-unit-as-return-type) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### NoUnusedImports
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#no-unused-imports) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#no-unused-imports) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### NoWildcardImports
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#no-wildcard-imports) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#no-wildcard-imports) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
@@ -478,28 +478,28 @@ See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#no-wildcard
 
 ### NullableTypeSpacing
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#nullable-type-spacing) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#nullable-type-spacing) for
 documentation.
 
 **Active by default**: Yes - Since v1.23.0
 
 ### PackageName
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#no-underscores-in-package-names) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#no-underscores-in-package-names) for
 documentation.
 
 **Active by default**: Yes - Since v1.22.0
 
 ### ParameterListSpacing
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#parameter-list-spacing) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#parameter-list-spacing) for
 documentation.
 
 **Active by default**: No
 
 ### ParameterListWrapping
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#parameter-list-wrapping) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#parameter-list-wrapping) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
@@ -515,7 +515,7 @@ See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#parameter-l
 
 ### ParameterWrapping
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#parameter-wrapping) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#parameter-wrapping) for documentation.
 
 **Active by default**: Yes - Since v1.23.0
 
@@ -531,14 +531,14 @@ See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#parameter-w
 
 ### PropertyName
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#property-naming) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#property-naming) for
 documentation.
 
 **Active by default**: No
 
 ### PropertyWrapping
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#property-wrapping) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#property-wrapping) for documentation.
 
 **Active by default**: Yes - Since v1.23.0
 
@@ -554,100 +554,100 @@ See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#property-wr
 
 ### SpacingAroundAngleBrackets
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#angle-bracket-spacing) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#angle-bracket-spacing) for documentation.
 
 **Active by default**: Yes - Since v1.22.0
 
 ### SpacingAroundColon
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#colon-spacing) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#colon-spacing) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### SpacingAroundComma
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#comma-spacing) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#comma-spacing) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### SpacingAroundCurly
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#curly-spacing) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#curly-spacing) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### SpacingAroundDot
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#dot-spacing) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#dot-spacing) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### SpacingAroundDoubleColon
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#double-colon-spacing) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#double-colon-spacing) for documentation.
 
 **Active by default**: Yes - Since v1.22.0
 
 ### SpacingAroundKeyword
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#keyword-spacing) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#keyword-spacing) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### SpacingAroundOperators
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#operator-spacing) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#operator-spacing) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### SpacingAroundParens
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#parenthesis-spacing) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#parenthesis-spacing) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### SpacingAroundRangeOperator
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#range-spacing) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#range-spacing) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### SpacingAroundUnaryOperator
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#unary-operator-spacing) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#unary-operator-spacing) for documentation.
 
 **Active by default**: Yes - Since v1.22.0
 
 ### SpacingBetweenDeclarationsWithAnnotations
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#blank-line-between-declarations-with-annotations)
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#blank-line-between-declarations-with-annotations)
 for documentation.
 
 **Active by default**: Yes - Since v1.22.0
 
 ### SpacingBetweenDeclarationsWithComments
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#blank-line-between-declaration-with-comments)
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#blank-line-between-declaration-with-comments)
 for documentation.
 
 **Active by default**: Yes - Since v1.22.0
 
 ### SpacingBetweenFunctionNameAndOpeningParenthesis
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#spacing-between-function-name-and-opening-parenthesis) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#spacing-between-function-name-and-opening-parenthesis) for
 documentation.
 
 **Active by default**: Yes - Since v1.23.0
 
 ### StringTemplate
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#string-template) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#string-template) for documentation.
 
 **Active by default**: Yes - Since v1.0.0
 
 ### StringTemplateIndent
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#string-template-indent) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#string-template-indent) for documentation.
 
 **Active by default**: No
 
@@ -659,7 +659,7 @@ See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#string-
 
 ### TrailingCommaOnCallSite
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/) for documentation.
 
 The default config comes from ktlint and follows these conventions:
 - [Kotlin coding convention](https://kotlinlang.org/docs/coding-conventions.html#trailing-commas) recommends
@@ -678,7 +678,7 @@ trailing comma usage yet.
 
 ### TrailingCommaOnDeclarationSite
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/) for documentation.
 
 The default config comes from ktlint and follows these conventions:
 - [Kotlin coding convention](https://kotlinlang.org/docs/coding-conventions.html#trailing-commas) recommends
@@ -697,7 +697,7 @@ trailing comma usage yet.
 
 ### TryCatchFinallySpacing
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#try-catch-finally-spacing) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#try-catch-finally-spacing) for
 documentation.
 
 **Active by default**: No
@@ -710,7 +710,7 @@ documentation.
 
 ### TypeArgumentListSpacing
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#type-argument-list-spacing) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#type-argument-list-spacing) for
 documentation.
 
 **Active by default**: No
@@ -723,7 +723,7 @@ documentation.
 
 ### TypeParameterListSpacing
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#type-parameter-list-spacing) for
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#type-parameter-list-spacing) for
 documentation.
 
 **Active by default**: No
@@ -736,14 +736,14 @@ documentation.
 
 ### UnnecessaryParenthesesBeforeTrailingLambda
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/experimental/#unnecessary-parenthesis-before-trailing-lambda)
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#unnecessary-parenthesis-before-trailing-lambda)
 for documentation.
 
 **Active by default**: Yes - Since v1.23.0
 
 ### Wrapping
 
-See [ktlint docs](https://pinterest.github.io/ktlint/rules/standard/#wrapping) for documentation.
+See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#wrapping) for documentation.
 
 **Active by default**: Yes - Since v1.20.0
 
