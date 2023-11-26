@@ -6,6 +6,36 @@ keywords: [changelog, release-notes, migration]
 
 # Changelog and Migration Guide
 
+#### 1.23.4 - 2023-11-26
+
+This is a point release for Detekt `1.23.0`, where we added support for Kotlin `1.9.21` and fixed several bugs that
+got reported by the community.
+
+##### Notable Changes
+
+- fix(deps): update kotlin monorepo to v1.9.21 - [#6642](https://github.com/detekt/detekt/pull/6642)
+- fix(deps): update kotlin monorepo to v1.9.20 - [#6572](https://github.com/detekt/detekt/pull/6572)
+
+##### Changelog
+
+- Update the ruleset regex to allow numbers - [#6635](https://github.com/detekt/detekt/pull/6635)
+- Show deprecation message - [#6614](https://github.com/detekt/detekt/pull/6614)
+- Add io.gitlab.arturbosch.detekt.generator.Main to the jar manifest - [#6613](https://github.com/detekt/detekt/pull/6613)
+- Don't report FunctionNaming when the function's name equals to the return type's name with type arguments - [#6605](https://github.com/detekt/detekt/pull/6605)
+- Fix issues related to kotlin-stdlib's Gradle module metadata in Kotlin 1.9.20 - [#6590](https://github.com/detekt/detekt/pull/6590)
+- MethodSignature - Add the condition of receiver should be null - [#6570](https://github.com/detekt/detekt/pull/6570)
+- Remove check for deprectated functions toUpperCase and toLowerCase - [#6548](https://github.com/detekt/detekt/pull/6548)
+- Fixes false positive of trailing whitespaces in kdoc - [#6370](https://github.com/detekt/detekt/pull/6370)
+
+##### Dependency Updates
+
+- Update tested AGP version to 8.1.3 - [#6610](https://github.com/detekt/detekt/pull/6610)
+- Switch to kctfork for Kotlin compilation testing - [#6589](https://github.com/detekt/detekt/pull/6589)
+
+##### Contributors
+
+We would like to thank the following contributors that made this release possible: @3flex, @BraisGabin, @Gosunet, @atulgpt, @t-kameyama
+
 #### 1.23.3 - 2023-10-31
 
 This is a point release for Detekt `1.23.0`. The changelog is equivalent to `1.23.2`.
