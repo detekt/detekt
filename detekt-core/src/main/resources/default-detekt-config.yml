@@ -726,6 +726,8 @@ style:
     allowNonStandardGrouping: false
   UnnecessaryAnnotationUseSiteTarget:
     active: false
+  UnnecessaryAny:
+    active: false
   UnnecessaryApply:
     active: true
   UnnecessaryBackticks:

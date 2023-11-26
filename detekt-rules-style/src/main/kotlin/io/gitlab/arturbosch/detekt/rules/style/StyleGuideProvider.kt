@@ -74,6 +74,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             RedundantVisibilityModifierRule(config),
             RangeUntilInsteadOfRangeTo(config),
             UnnecessaryApply(config),
+            UnnecessaryAny(config),
             UnnecessaryBracesAroundTrailingLambda(config),
             UnnecessaryFilter(config),
             UnnecessaryLet(config),
