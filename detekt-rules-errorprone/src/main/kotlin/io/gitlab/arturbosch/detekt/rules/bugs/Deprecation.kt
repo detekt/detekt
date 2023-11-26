@@ -34,5 +34,9 @@ class Deprecation(config: Config) : Rule(
         bindingContext.diagnostics
             .forElement(element)
             .firstOrNull { it.factory == Errors.DEPRECATION }
-            ?.let { Errors.DEPRECATION.cast(it) }
+            ?.let {
+                // Not a redundant suppression. See https://youtrack.jetbrains.com/issue/KT-61893
+                @Suppress("DEPRECATION")
+                Errors.DEPRECATION.cast(it)
+            }
 }
