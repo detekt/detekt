@@ -8,21 +8,18 @@ import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 @KotlinCoreEnvironmentTest
 class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     private val subject = MissingUseCall()
 
-    @Test
-    fun `does not report when _use_ is used`() {
+    @ParameterizedTest
+    @ValueSource(strings = ["java.io.Closeable", "java.lang.AutoCloseable"])
+    fun `does not report when _use_ is used`(clazz: String) {
         val code = """
-            import java.io.Closeable
-
-            class MyCloseable : Closeable {
-                override fun close() {
-                    // closing the closeable
-                }
-            }
+            ${myClosable(clazz)}
 
             fun test() {
                 MyCloseable().use { /*no-op*/ }
@@ -32,74 +29,25 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         assertThat(findings).isEmpty()
     }
 
-    @Test
-    fun `does report when _use_ is not used`() {
+    @ParameterizedTest
+    @ValueSource(strings = ["java.io.Closeable", "java.lang.AutoCloseable"])
+    fun `does report when _use_ is not used`(clazz: String) {
         val code = """
-            import java.io.Closeable
-
-            class MyCloseable : Closeable {
-                override fun close() {
-                    // closing the closeable
-                }
-            }
-
             fun test() {
                 val myCloseable = MyCloseable()
             }
+
+            ${myClosable(clazz)}
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-        assertThat(findings[0]).hasSourceLocation(10, 23)
-    }
-
-    @Test
-    fun `does report when _AutoCloseable_ is used without _use_`() {
-        val code = """
-            import java.lang.AutoCloseable
-
-            class MyCloseable : AutoCloseable {
-                override fun close() {
-                    // closing the closeable
-                }
-            }
-
-            fun test() {
-                val myCloseable = MyCloseable()
-            }
-        """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-    }
-
-    @Test
-    fun `does not report when _AutoCloseable_ is used with _use_`() {
-        val code = """
-            import java.lang.AutoCloseable
-
-            class MyCloseable : AutoCloseable {
-                override fun close() {
-                    // closing the closeable
-                }
-            }
-
-            fun test() {
-                val myCloseable = MyCloseable().use { /*no-op*/ }
-            }
-        """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).isEmpty()
+        assertThat(findings[0]).hasSourceLocation(2, 23)
     }
 
     @Test
     fun `does not report when _use_ used with _Closeable_ returned from if else expression in single place`() {
         val code = """
-            import java.io.Closeable
-
-            class MyCloseable(private val i: Int) : Closeable {
-                override fun close() {
-                    println("Closing ${'$'}i")
-                }
-            }
+            ${myClosable()}
 
             fun test() {
                 MyCloseable(
@@ -116,13 +64,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does report when _use_ is used later on the chain`() {
         val code = """
-            import java.io.Closeable
-
-            class MyCloseable(private val i: Int) : Closeable {
-                override fun close() {
-                    println("Closing ${'$'}i")
-                }
-            }
+            ${myClosable()}
 
             fun test() {
                 MyCloseable(0).also { 
@@ -145,20 +87,10 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does not report when _use_ is not used in _Closeable_ as param modifying function`() {
         val code = """
-            import java.io.Closeable
-
-            class MyCloseable(private val i: Int) : Closeable {
-                override fun close() {
-                    println("Closing ${'$'}i")
-                }
-
-                fun makeSound() {
-                    println("🐶 woof")
-                }
-            }
+            ${myClosable()}
 
             fun actOnClosable(bar: MyCloseable): MyCloseable { 
-                bar.makeSound()
+                bar.doStuff()
                 return bar
             }
         """.trimIndent()
@@ -169,20 +101,10 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does not report when _use_ is not used in _Closeable_ as receiver modifying function`() {
         val code = """
-            import java.io.Closeable
-
-            class MyCloseable(private val i: Int) : Closeable {
-                override fun close() {
-                    println("Closing ${'$'}i")
-                }
-
-                fun makeSound() {
-                    println("🐱 meow")
-                }
-            }
+            ${myClosable()}
 
             fun MyCloseable.actOnClosable(): MyCloseable { 
-                this.makeSound()
+                this.doStuff()
                 return this
             }
         """.trimIndent()
@@ -219,7 +141,6 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                     println("Closing ${'$'}i")
                 }
             }
-
 
             val whatever = FileReader("some_file.txt").use { fileReader ->
                 MyCloseable(
@@ -336,8 +257,6 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does not report _Closeable_ anonymous object is used with _use_ with full qualifier`() {
         val code = """
-            import java.io.Closeable
-
             fun test() {
                 val myCloseable = java.io.Closeable { /* no-op */ }.use { /* no-op */ }
             }
@@ -349,8 +268,6 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does not report _Closeable_ anonymous object with full qualifier is used with chain after _use_`() {
         val code = """
-            import java.io.Closeable
-
             fun test() {
                 val myCloseable = java.io.Closeable { /* no-op */ }.use { mutableListOf<Int>() }.also { it.add(0) }
             }
@@ -362,8 +279,6 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does not report _Closeable_ anonymous object with full qualifier is used with arithmetic after _use_`() {
         val code = """
-            import java.io.Closeable
-
             fun test() {
                 val myCloseable = java.io.Closeable { /* no-op */ }.use { 1 } + 2
             }
@@ -375,8 +290,6 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does report _Closeable_ anonymous object is used without _use_ with full qualifier`() {
         val code = """
-            import java.io.Closeable
-
             fun test() {
                 val myCloseable = java.io.Closeable { /* no-op */ }
             }
@@ -403,8 +316,6 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does not report _Closeable_ anonymous object is used with _use_`() {
         val code = """
-            import java.io.Closeable
-
             val myCloseable = object : Closeable {
                 override fun close() {
                     /* no-op */
@@ -418,20 +329,10 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does not report _Closeable_ child class anonymous object is used with _use_`() {
         val code = """
-            import java.io.Closeable
-
-            open class MyCloseable : Closeable {
-                override fun close() {
-                    // closing the closeable
-                }
-            }
+            ${myClosable(open = true)}
 
             fun test() {
-                val myCloseable = object : MyCloseable() {
-                    override fun close() {
-                        /* no-op */
-                    }
-                }.use { /* no-op */ }
+                object : MyCloseable() {}.use { /* no-op */ }
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
@@ -441,20 +342,10 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does report _Closeable_ child class anonymous object is used without _use_`() {
         val code = """
-            import java.io.Closeable
-
-            open class MyCloseable : Closeable {
-                override fun close() {
-                    // closing the closeable
-                }
-            }
+            ${myClosable(open = true)}
 
             fun test() {
-                val myCloseable = object : MyCloseable() {
-                    override fun close() {
-                        /* no-op */
-                    }
-                }
+                object : MyCloseable() {}
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
@@ -496,13 +387,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report when _use_ is used on _Closeable_ returned from multiline if else expression`() {
             val code = """
-                import java.io.Closeable
-
-                class MyCloseable(private val i: Int) : Closeable {
-                    override fun close() {
-                        println("Closing ${'$'}i")
-                    }
-                }
+                ${myClosable()}
 
                 fun test() {
                     if (System.currentTimeMillis() % 2 == 0L) {
@@ -519,29 +404,23 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `does not report when _use_ is used on _Closeable_ inside braces returned from multiline if else expression`() {
+        fun `does not report when _use_ is used on _Closeable_ inside parenthesis returned from multiline if else expression`() {
             val code = """
-                import java.io.Closeable
-
-                class MyCloseable(private val i: Int) : Closeable {
-                    override fun close() {
-                        println("Closing ${'$'}i")
-                    }
-                }
+                ${myClosable()}
 
                 fun test() {
-                    // with braces in Closeables
+                    // with parenthesis in Closeables
                     if (System.currentTimeMillis() % 2 == 0L) {
-                        (MyCloseable(0)) 
+                        (MyCloseable(0))
                     } else {
                         (MyCloseable(1))
                     }.use { 
                         /* no-op */
                     }
 
-                    // with braces in if else
+                    // with parenthesis in if else
                     (if (System.currentTimeMillis() % 2 == 0L) {
-                        (MyCloseable(0)) 
+                        MyCloseable(0)
                     } else {
                         (MyCloseable(1))
                     }).use { 
@@ -556,13 +435,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report when _use_ is used on _Closeable_ inside braces returned from multiline if expression and else returning null`() {
             val code = """
-                import java.io.Closeable
-
-                class MyCloseable(private val i: Int) : Closeable {
-                    override fun close() {
-                        println("Closing ${'$'}i")
-                    }
-                }
+                ${myClosable()}
 
                 fun test() {
                     if (System.currentTimeMillis() % 2 == 0L) {
@@ -581,13 +454,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report when _use_ is used on _Closeable_ returned from single line if else expression`() {
             val code = """
-                import java.io.Closeable
-
-                class MyCloseable(private val i: Int) : Closeable {
-                    override fun close() {
-                        println("Closing ${'$'}i")
-                    }
-                }
+                ${myClosable()}
 
                 fun test() {
                     (if (System.currentTimeMillis() % 2 == 0L) MyCloseable(0) else MyCloseable(1)).use { 
@@ -602,13 +469,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report when _use_ is used on _Closeable_ returned from single line if expression and else returning null`() {
             val code = """
-                import java.io.Closeable
-
-                class MyCloseable(private val i: Int) : Closeable {
-                    override fun close() {
-                        println("Closing ${'$'}i")
-                    }
-                }
+                ${myClosable()}
 
                 fun test() {
                     (if (System.currentTimeMillis() % 2 == 0L) MyCloseable(0) else null)?.use { 
@@ -621,18 +482,12 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `does not report when _use_ is used on _Closeable_ inside braces returned from single line if else expression`() {
+        fun `does not report when _use_ is used on _Closeable_ inside parenthesis returned from single line if else expression`() {
             val code = """
-                import java.io.Closeable
-
-                class MyCloseable(private val i: Int) : Closeable {
-                    override fun close() {
-                        println("Closing ${'$'}i")
-                    }
-                }
+                ${myClosable()}
 
                 fun test() {
-                    // with braces in Closeables
+                    // with parenthesis in Closeables
                     (if (System.currentTimeMillis() % 2 == 0L) (MyCloseable(0)) else (MyCloseable(1))).use { 
                         /* no-op */
                     }
@@ -645,13 +500,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report when _use_ is used in next line on _Closeable_ from if else expression`() {
             val code = """
-                import java.io.Closeable
-
-                class MyCloseable(private val i: Int) : Closeable {
-                    override fun close() {
-                        println("Closing ${'$'}i")
-                    }
-                }
+                ${myClosable()}
 
                 fun test() {
                     val closable1 = if (System.currentTimeMillis() % 2 == 0L) { 
@@ -675,13 +524,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report when _use_ is used after few lines on _Closeable_ from if else expression`() {
             val code = """
-                import java.io.Closeable
-
-                class MyCloseable(private val i: Int) : Closeable {
-                    override fun close() {
-                        println("Closing ${'$'}i")
-                    }
-                }
+                ${myClosable()}
 
                 fun test() {
                     val closable = if (System.currentTimeMillis() % 2 == 0L) { 
@@ -700,13 +543,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report when _use_ is used in next line on _Closeable_ from if expression and else returning null`() {
             val code = """
-                import java.io.Closeable
-
-                class MyCloseable(private val i: Int) : Closeable {
-                    override fun close() {
-                        println("Closing ${'$'}i")
-                    }
-                }
+                ${myClosable()}
 
                 fun test() {
                     val closable1 = if (System.currentTimeMillis() % 2 == 0L) { 
@@ -730,14 +567,9 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `does report when _use_ is used not immediately after if else`() {
             val code = """
-                import java.io.Closeable
                 import kotlin.random.Random
 
-                class MyCloseable(private val i: Int) : Closeable {
-                    override fun close() {
-                        println("Closing ${'$'}i")
-                    }
-                }
+                ${myClosable()}
 
                 fun test() {
                     val closable = if (System.currentTimeMillis() % 2 == 0L) { MyCloseable(0) } else { MyCloseable(1) }
@@ -751,13 +583,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `does report when _Closeable_ is used inside if expression in multiline if else`() {
             val code = """
-                import java.io.Closeable
-
-                class MyCloseable(private val i: Int) : Closeable {
-                    override fun close() {
-                        println("Closing ${'$'}i")
-                    }
-                }
+                ${myClosable()}
 
                 fun test() {
                     val closable = if (System.currentTimeMillis() % 2 == 0L) { 
@@ -777,13 +603,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `does report when _Closeable_ is used inside else expression inside multiline if else`() {
             val code = """
-                import java.io.Closeable
-
-                class MyCloseable(private val i: Int) : Closeable {
-                    override fun close() {
-                        println("Closing ${'$'}i")
-                    }
-                }
+                ${myClosable()}
 
                 fun test() {
                     val closable = if (System.currentTimeMillis() % 2 == 0L) { 
@@ -803,13 +623,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `does report when _Closeable_ is used inside else expression inside single line if else`() {
             val code = """
-                import java.io.Closeable
-
-                class MyCloseable(private val i: Int) : Closeable {
-                    override fun close() {
-                        println("Closing ${'$'}i")
-                    }
-                }
+                ${myClosable()}
 
                 fun test() {
                     val closable = if (System.currentTimeMillis() % 2 == 0L) MyCloseable(0) else MyCloseable(1).also { /* closeable is used */ }
@@ -826,17 +640,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `does report function returning _Closeable_ use it without _use_`() {
             val code = """
-                import java.io.Closeable
-
-                open class MyCloseable : Closeable {
-                    override fun close() {
-                        // closing the closeable
-                    }
-
-                    fun doStuff() {
-
-                    }
-                }
+                ${myClosable()}
 
                 fun functionThatReturnsClosable() = MyCloseable()
 
@@ -853,11 +657,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             val code = """
                 import java.io.Closeable
 
-                open class MyCloseable : Closeable {
-                    override fun close() {
-                        // closing the closeable
-                    }
-                }
+                ${myClosable()}
 
                 fun functionThatReturnsClosable1() = MyCloseable()
 
@@ -876,13 +676,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `does report local function accessing _Closeable_ without _use_ inside outer function returning _Closeable_`() {
             val code = """
-                import java.io.Closeable
-
-                open class MyCloseable : Closeable {
-                    override fun close() {
-                        // closing the closeable
-                    }
-                }
+                ${myClosable()}
 
                 fun functionThatReturnsClosable1(): MyCloseable {
                     fun localFun() {
@@ -898,13 +692,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `does report use of _Closeable_ without _use_ inside lambda inside function returning _Closeable_`() {
             val code = """
-                import java.io.Closeable
-
-                open class MyCloseable : Closeable {
-                    override fun close() {
-                        // closing the closeable
-                    }
-                }
+                ${myClosable()}
 
                 fun functionThatReturnsClosable1(): MyCloseable {
                     val r = Runnable { MyCloseable() }
@@ -918,13 +706,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `does report use of _Closeable_ without _use_ inside object inside function returning _Closeable_`() {
             val code = """
-                import java.io.Closeable
-
-                open class MyCloseable : Closeable {
-                    override fun close() {
-                        // closing the closeable
-                    }
-                }
+                ${myClosable()}
 
                 fun functionThatReturnsClosable1(): MyCloseable {
                     val r = object : Runnable { 
@@ -942,13 +724,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `does report use of _Closeable_ without _use_ inside init inside function returning _Closeable_`() {
             val code = """
-                import java.io.Closeable
-
-                open class MyCloseable : Closeable {
-                    override fun close() {
-                        // closing the closeable
-                    }
-                }
+                ${myClosable()}
 
                 fun functionThatReturnsClosable1(): MyCloseable {
                     val r = object : Runnable { 
@@ -970,13 +746,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         @Test
         fun `does report use of _Closeable_ without _use_ inside class inside function returning _Closeable_`() {
             val code = """
-                import java.io.Closeable
-
-                open class MyCloseable : Closeable {
-                    override fun close() {
-                        // closing the closeable
-                    }
-                }
+                ${myClosable()}
 
                 fun functionThatReturnsClosable1(): MyCloseable {
                     val r = object : Runnable { 
@@ -993,4 +763,14 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             assertThat(findings).hasSize(1)
         }
     }
+}
+
+private fun myClosable(clazz: String = "java.io.Closeable", open: Boolean = false): String {
+    return """
+        ${if (open) "open " else ""} class MyCloseable(private val i: Int) : $clazz {
+            override fun close() { /* no-op */ }
+
+            fun doStuff() { /* no-op */ }
+        }
+    """.trimIndent().replaceIndent("    ".repeat(3)).trim()
 }
