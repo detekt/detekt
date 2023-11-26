@@ -74,7 +74,7 @@ dependencies {
     compileOnly(libs.kotlin.gradlePluginApi)
     testFixturesCompileOnly("org.jetbrains:annotations:24.1.0")
     compileOnly("org.jetbrains:annotations:24.1.0")
-    compileOnly("io.gitlab.arturbosch.detekt:detekt-cli:1.23.3")
+    compileOnly("io.gitlab.arturbosch.detekt:detekt-cli:1.23.4")
 
     testKitRuntimeOnly(libs.kotlin.gradle)
     testKitJava17RuntimeOnly(libs.android.gradle.maxSupported)
