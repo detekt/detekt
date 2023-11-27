@@ -12,7 +12,6 @@ indent_size = 4
 indent_style = space
 indent_size = 2
 
-[{*.md,mdx}]
+[*.md]
 indent_style = space
 indent_size = 4
-trim_trailing_whitespace = false
