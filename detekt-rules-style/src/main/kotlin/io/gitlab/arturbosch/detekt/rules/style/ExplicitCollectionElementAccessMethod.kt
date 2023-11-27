@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -44,7 +43,6 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
         Issue(
             "ExplicitCollectionElementAccessMethod",
             "Prefer usage of the indexed access operator [] for map element access or insert methods.",
-            Debt.FIVE_MINS
         )
 
     override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {

@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -44,7 +43,6 @@ class LoopWithTooManyJumpStatements(config: Config = Config.empty) : Rule(config
         javaClass.simpleName,
         "The loop contains more than one break or continue statement. " +
             "The code should be refactored to increase readability.",
-        Debt.TEN_MINS
     )
 
     @Configuration("maximum allowed jumps in a loop")

@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -51,7 +50,6 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UseDataClass",
         "Classes that do nothing but hold data should be replaced with a data class.",
-        Debt.FIVE_MINS
     )
 
     @Configuration("allows to provide a list of annotations that disable this check")

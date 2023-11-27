@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.coroutines
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -67,7 +66,6 @@ class SuspendFunWithFlowReturnType(config: Config) : Rule(config) {
         description = "The `suspend` modifier should not be used for functions that return a " +
             "Coroutines Flow type. Flows are cold streams and invoking a function that returns " +
             "one should not produce any side effects.",
-        debt = Debt.TEN_MINS
     )
 
     override fun visitNamedFunction(function: KtNamedFunction) {

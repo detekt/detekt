@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -35,7 +34,6 @@ class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
         "Double negative from a function name expressed in the negative (like `takeUnless`) with a lambda block " +
             "that also contains negation. This is more readable when rewritten using a positive form of the function " +
             "(like `takeIf`).",
-        Debt.FIVE_MINS,
     )
 
     private val splitCamelCaseRegex = "(?<=[a-z])(?=[A-Z])".toRegex()

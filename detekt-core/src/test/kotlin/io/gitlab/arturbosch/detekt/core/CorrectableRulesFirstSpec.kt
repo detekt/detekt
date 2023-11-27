@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
@@ -19,14 +18,14 @@ class CorrectableRulesFirstSpec {
         var actualLastRuleId = ""
 
         class First(config: Config) : Rule(config) {
-            override val issue: Issue = Issue("NonCorrectable", "", Debt.FIVE_MINS)
+            override val issue: Issue = Issue("NonCorrectable", "")
             override fun visitClass(klass: KtClass) {
                 actualLastRuleId = issue.id
             }
         }
 
         class Last(config: Config) : Rule(config) {
-            override val issue: Issue = Issue("Correctable", "", Debt.FIVE_MINS)
+            override val issue: Issue = Issue("Correctable", "")
             override fun visitClass(klass: KtClass) {
                 actualLastRuleId = issue.id
             }

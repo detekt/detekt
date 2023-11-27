@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -43,7 +42,6 @@ class ThrowingNewInstanceOfSameException(config: Config = Config.empty) : Rule(c
     override val issue = Issue(
         "ThrowingNewInstanceOfSameException",
         "Avoid catch blocks that rethrow a caught exception wrapped inside a new instance of the same exception.",
-        Debt.FIVE_MINS
     )
 
     override fun visitCatchSection(catchClause: KtCatchClause) {

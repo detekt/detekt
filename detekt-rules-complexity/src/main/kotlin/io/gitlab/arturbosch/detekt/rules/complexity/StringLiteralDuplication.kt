@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -46,7 +45,6 @@ class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
         javaClass.simpleName,
         "Multiple occurrences of the same string literal within a single file detected. " +
             "Prefer extracting the string literal into a property or constant.",
-        Debt.FIVE_MINS
     )
 
     @Configuration("The maximum allowed amount of duplications.")

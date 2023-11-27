@@ -1,5 +1,3 @@
-Ruleset - 10min debt
+Ruleset
 	LongRule - [This is just a long message that should be truncated after a given threshold is (...)] at File.kt:1:1
 	MultilineRule - [A multiline message.] at File.kt:1:1
-
-Overall debt: 10min

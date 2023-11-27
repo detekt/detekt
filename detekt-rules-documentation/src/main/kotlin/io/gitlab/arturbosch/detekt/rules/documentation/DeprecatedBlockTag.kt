@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -42,7 +41,6 @@ class DeprecatedBlockTag(config: Config = Config.empty) : Rule(config) {
         "DeprecatedBlockTag",
         "Do not use the `@deprecated` block tag, which is not supported by KDoc. " +
             "Use the `@Deprecated` annotation instead.",
-        Debt.FIVE_MINS
     )
 
     override fun visitDeclaration(dcl: KtDeclaration) {

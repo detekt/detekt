@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -36,7 +35,6 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
         javaClass.simpleName,
         "Report missing or invalid underscores in base 10 numbers. Numeric literals " +
             "should be underscore separated to increase readability.",
-        Debt.FIVE_MINS
     )
 
     @Configuration("Length under which base 10 numbers are not required to have underscores")

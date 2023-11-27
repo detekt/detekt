@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -44,7 +43,6 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UnusedPrivateClass",
         "Private class is unused and should be removed.",
-        Debt.FIVE_MINS
     )
 
     override fun visit(root: KtFile) {

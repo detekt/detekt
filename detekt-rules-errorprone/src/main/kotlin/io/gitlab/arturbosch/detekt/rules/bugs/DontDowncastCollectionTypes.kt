@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -41,7 +40,6 @@ class DontDowncastCollectionTypes(config: Config) : Rule(config) {
     override val issue = Issue(
         "DontDowncastCollectionTypes",
         "Down-casting immutable collection types is breaking the collection contract.",
-        Debt.TEN_MINS
     )
 
     override fun visitIsExpression(expression: KtIsExpression) {

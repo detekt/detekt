@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.coroutines
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -54,7 +53,6 @@ class SuspendFunWithCoroutineScopeReceiver(config: Config) : Rule(config) {
         description = "The `suspend` modifier should not be used for functions that use a " +
             "CoroutinesScope as receiver. You should use suspend functions without the receiver or use plain " +
             "functions and use coroutineScope { } instead.",
-        debt = Debt.TEN_MINS
     )
 
     override val defaultRuleIdAliases = setOf("SuspendFunctionOnCoroutineScope")

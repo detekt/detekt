@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -50,7 +49,6 @@ class TrimMultilineRawString(val config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Multiline raw strings should be followed by `trimMargin()` or `trimIndent()`.",
-        Debt.FIVE_MINS
     )
 
     @Configuration("allows to provide a list of multiline string trimming methods")

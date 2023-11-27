@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -64,7 +63,6 @@ class RedundantElseInWhen(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "RedundantElseInWhen",
         "Check for redundant `else` case in `when` expression when used as statement.",
-        Debt.FIVE_MINS
     )
 
     override fun visitWhenExpression(whenExpression: KtWhenExpression) {

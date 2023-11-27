@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -51,7 +50,6 @@ class UnusedParameter(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UnusedParameter",
         "Function parameter is unused and should be removed.",
-        Debt.FIVE_MINS,
     )
 
     @Configuration("unused parameter names matching this regex are ignored")

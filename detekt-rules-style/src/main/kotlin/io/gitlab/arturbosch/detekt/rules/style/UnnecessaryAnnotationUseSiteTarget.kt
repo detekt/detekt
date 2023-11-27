@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
@@ -33,7 +32,6 @@ class UnnecessaryAnnotationUseSiteTarget(config: Config = Config.empty) : Rule(c
     override val issue = Issue(
         javaClass.simpleName,
         "Unnecessary Annotation use-site Target. It can be removed.",
-        Debt.FIVE_MINS
     )
 
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {

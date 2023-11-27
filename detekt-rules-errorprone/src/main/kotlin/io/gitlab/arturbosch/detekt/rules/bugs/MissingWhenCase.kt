@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -74,7 +73,6 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "MissingWhenCase",
         "Check usage of `when` used as a statement and don't compare all enum or sealed class cases.",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("whether `else` can be treated as a valid case for enums and sealed classes")

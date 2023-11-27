@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.performance
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -45,7 +44,6 @@ class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "ArrayPrimitive",
         "Using `Array<Primitive>` leads to implicit boxing and a performance hit.",
-        Debt.FIVE_MINS
     )
 
     override fun visitCallExpression(expression: KtCallExpression) {

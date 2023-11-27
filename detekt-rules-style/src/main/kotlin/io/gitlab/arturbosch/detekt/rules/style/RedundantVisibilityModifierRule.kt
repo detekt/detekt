@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -49,7 +48,6 @@ class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(conf
     override val issue: Issue = Issue(
         "RedundantVisibilityModifierRule",
         "Redundant visibility modifiers detected, which can be safely removed.",
-        Debt.FIVE_MINS
     )
 
     private val classVisitor = ClassVisitor()

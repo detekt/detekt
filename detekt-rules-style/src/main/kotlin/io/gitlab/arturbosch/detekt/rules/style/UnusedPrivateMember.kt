@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -54,7 +53,6 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UnusedPrivateMember",
         "Private function is unused and should be removed.",
-        Debt.FIVE_MINS,
     )
 
     @Configuration("unused private function names matching this regex are ignored")

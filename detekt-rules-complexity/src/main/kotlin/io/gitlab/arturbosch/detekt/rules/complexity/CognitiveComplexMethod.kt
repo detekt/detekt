@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.metrics.CognitiveComplexity
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -31,7 +30,6 @@ class CognitiveComplexMethod(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "CognitiveComplexMethod",
         "Prefer splitting up complex methods into smaller, easier to understand methods.",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("Maximum Cognitive Complexity allowed for a method.")

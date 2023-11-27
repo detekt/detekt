@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.libraries
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -52,7 +51,6 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
         this.javaClass.simpleName,
         "Library functions/properties should have an explicit return type. " +
             "Inferred return types can easily be changed by mistake which may lead to breaking changes.",
-        Debt.FIVE_MINS
     )
 
     @Configuration("if functions with `Unit` return type should be allowed without return type declaration")

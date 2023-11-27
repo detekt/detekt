@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.libraries
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -35,7 +34,6 @@ class ForbiddenPublicDataClass(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "The data classes are bad for the binary compatibility in public APIs. Avoid to use it.",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("ignores classes in the specified packages.")

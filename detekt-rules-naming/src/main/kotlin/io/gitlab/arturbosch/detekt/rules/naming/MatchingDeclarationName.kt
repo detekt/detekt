@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.github.detekt.psi.fileNameWithoutSuffix
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -53,7 +52,6 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
         javaClass.simpleName,
         "If a source file contains only a single non-private top-level class or object, " +
             "the file name should reflect the case-sensitive name plus the .kt extension.",
-        Debt.FIVE_MINS
     )
 
     @Configuration("name should only be checked if the file starts with a class or object")

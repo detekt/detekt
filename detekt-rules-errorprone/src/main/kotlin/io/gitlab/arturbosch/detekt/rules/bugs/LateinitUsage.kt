@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -32,7 +31,6 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
         javaClass.simpleName,
         "Usage of `lateinit` detected. Using `lateinit` for property initialization " +
             "is error prone, try using constructor injection or delegation.",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("Allows you to disable the rule for a list of classes")

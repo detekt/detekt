@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style.optional
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -32,7 +31,6 @@ class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "PreferToOverPairSyntax",
         "Pair was created using the Pair constructor, using the to syntax is preferred.",
-        Debt.FIVE_MINS
     )
 
     override fun visitCallExpression(expression: KtCallExpression) {

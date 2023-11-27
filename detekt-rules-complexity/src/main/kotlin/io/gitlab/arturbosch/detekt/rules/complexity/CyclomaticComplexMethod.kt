@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.metrics.CyclomaticComplexity
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -40,7 +39,6 @@ class CyclomaticComplexMethod(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         "CyclomaticComplexMethod",
         "Prefer splitting up complex methods into smaller, easier to test methods.",
-        Debt.TWENTY_MINS
     )
 
     override val defaultRuleIdAliases: Set<String> = setOf("ComplexMethod")

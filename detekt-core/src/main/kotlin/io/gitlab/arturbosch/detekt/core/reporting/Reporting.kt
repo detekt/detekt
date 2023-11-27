@@ -7,7 +7,6 @@ import io.github.detekt.report.txt.TxtOutputReport
 import io.github.detekt.report.xml.XmlOutputReport
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
@@ -23,21 +22,15 @@ internal fun defaultReportMapping(reportId: String) = when (reportId) {
 
 internal fun printFindings(findings: Map<String, List<Finding>>): String {
     return buildString {
-        val debtList = mutableListOf<Debt>()
         findings.forEach { (key, issues) ->
-            val debt = issues
-                .map { it.issue.debt }
-                .reduce { acc, d -> acc + d }
-            debtList.add(debt)
-            append("$key - $debt debt\n")
+            append(key)
+            append("\n")
             issues.forEach {
                 append("\t")
                 append(it.detailed().yellow())
                 append("\n")
             }
         }
-        val overallDebt = debtList.reduce { acc, d -> acc + d }
-        append("\nOverall debt: $overallDebt\n")
     }
 }
 

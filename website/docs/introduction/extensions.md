@@ -33,8 +33,7 @@ Example of a custom rule:
 class TooManyFunctions(config: Config) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,
-        "This rule reports a file with an excessive function count.",
-        Debt.TWENTY_MINS)
+        "This rule reports a file with an excessive function count.")
 
     private val threshold = 10
     private var amount: Int = 0
@@ -62,7 +61,6 @@ class TooManyFunctions2(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "This rule reports a file with an excessive function count.",
-        Debt.TWENTY_MINS
     )
 
     private val threshold: Int by config(defaultValue = 10)

@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style.optional
 import io.github.detekt.metrics.linesOfCode
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -56,7 +55,6 @@ class MandatoryBracesLoops(config: Config = Config.empty) : Rule(config) {
         "MandatoryBracesLoops",
         "A multi-line loop was found that does not have braces. " +
             "These should be added to improve readability.",
-        Debt.FIVE_MINS
     )
 
     override fun visitForExpression(expression: KtForExpression) {

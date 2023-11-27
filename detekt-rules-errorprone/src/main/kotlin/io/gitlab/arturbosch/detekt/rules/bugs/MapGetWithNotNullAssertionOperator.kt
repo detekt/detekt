@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -52,7 +51,6 @@ class MapGetWithNotNullAssertionOperator(config: Config) : Rule(config) {
             "MapGetWithNotNullAssertionOperator",
             "map.get() with not-null assertion operator (!!) can result in a NullPointerException. " +
                 "Consider usage of map.getValue(), map.getOrDefault() or map.getOrElse() instead.",
-            Debt.FIVE_MINS
         )
 
     override fun visitPostfixExpression(expression: KtPostfixExpression) {

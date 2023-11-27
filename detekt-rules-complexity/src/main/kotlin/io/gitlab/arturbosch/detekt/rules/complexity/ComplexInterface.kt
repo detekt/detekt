@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -36,7 +35,6 @@ class ComplexInterface(
             "Large classes tend to handle many things at once. " +
             "An interface should have one responsibility. " +
             "Split up large interfaces into smaller ones that are easier to understand.",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("The amount of allowed definitions in an interface.")

@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -33,7 +32,6 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
         "The more parameters a function has the more complex it is. Long parameter lists are often " +
             "used to control complex algorithms and violate the Single Responsibility Principle. " +
             "Prefer functions with short parameter lists.",
-        Debt.TWENTY_MINS
     )
 
     @Deprecated("Use `allowedFunctionParameters` and `allowedConstructorParameters` instead")

@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -44,7 +43,6 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
         "Having an `equals()` method that always returns true or false is not a good idea. " +
             "It does not follow the contract of this method. " +
             "Consider a good default implementation (e.g. `this == other`).",
-        Debt.TWENTY_MINS
     )
 
     override fun visitNamedFunction(function: KtNamedFunction) {

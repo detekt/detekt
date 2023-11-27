@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.authors
 import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -29,7 +28,6 @@ class ViolatesTypeResolutionRequirements(config: Config = Config.empty) : Rule(c
     override val issue = Issue(
         javaClass.simpleName,
         "`@RequiresTypeResolution` should be used if and only if the property `bindingContext` is used.",
-        Debt.FIVE_MINS
     )
 
     private val klasses: MutableList<KtClass> = mutableListOf()

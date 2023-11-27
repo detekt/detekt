@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -16,7 +15,7 @@ class TestProvider : RuleSetProvider {
 }
 
 class TestRule : Rule() {
-    override val issue = Issue("test", "A failure", Debt.FIVE_MINS)
+    override val issue = Issue("test", "A failure")
     override fun visitClass(klass: KtClass) {
         if (klass.name == "Poko") {
             report(CodeSmell(issue, Entity.from(klass), issue.description))

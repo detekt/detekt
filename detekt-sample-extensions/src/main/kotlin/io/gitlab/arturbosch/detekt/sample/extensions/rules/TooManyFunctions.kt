@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.sample.extensions.rules
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -17,7 +16,6 @@ class TooManyFunctions(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "This rule reports a file with an excessive function count.",
-        Debt.TWENTY_MINS
     )
 
     private var amount: Int = 0
