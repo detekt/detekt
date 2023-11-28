@@ -39,7 +39,7 @@ fun PsiFile.absolutePath(): Path = absolutePath ?: Path(virtualFile.path)
 /**
  * Represents both absolute path and relative path if available.
  */
-class FilePath constructor(
+class FilePath(
     val absolutePath: Path,
     val basePath: Path? = null,
     val relativePath: Path? = null
