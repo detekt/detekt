@@ -38,7 +38,7 @@ class RedundantConstructorKeyword(config: Config = Config.empty) : Rule(config) 
 
         if (constructor.containingClassOrObject is KtClass &&
             constructor.hasConstructorKeyword() &&
-            constructor.notFalsePositive()
+            constructor.hasNoModifier()
         ) {
             report(
                 CodeSmell(
@@ -50,7 +50,7 @@ class RedundantConstructorKeyword(config: Config = Config.empty) : Rule(config) 
         }
     }
 
-    private fun KtPrimaryConstructor.notFalsePositive() = modifierList == null && !hasPreviousComment()
+    private fun KtPrimaryConstructor.hasNoModifier() = modifierList == null && !hasPreviousComment()
 
     private fun KtPrimaryConstructor.hasPreviousComment(): Boolean = siblings(
         forward = false,
