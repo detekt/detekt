@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class RedundantConstructorKeywordSpec {
@@ -11,14 +11,24 @@ class RedundantConstructorKeywordSpec {
         val code = """
             data class Foo constructor(val foo: Int)
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings.first().message).isEqualTo(
+            "The `constructor` keyword on Foo is redundant and should be removed."
+        )
     }
 
     @Test fun `report on abstract class with redundant constructor keyword`() {
         val code = """
             abstract class Foo constructor(val foo: Int)
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings.first().message).isEqualTo(
+            "The `constructor` keyword on Foo is redundant and should be removed."
+        )
     }
 
     @Test fun `report on class with annotated parameter`() {
@@ -29,14 +39,24 @@ class RedundantConstructorKeywordSpec {
                 val y = x
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings.first().message).isEqualTo(
+            "The `constructor` keyword on AnnotatedParam is redundant and should be removed."
+        )
     }
 
     @Test fun `report on annotation class`() {
         val code = """
             annotation class Foo constructor(val foo: Int)
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings.first().message).isEqualTo(
+            "The `constructor` keyword on Foo is redundant and should be removed."
+        )
     }
 
     @Test fun `does not report class without constructor keyword`() {
