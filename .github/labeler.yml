@@ -6,6 +6,7 @@ build:
   - "**/*.gradle"
   - "**/*.gradle.kts"
   - "build-logic/**/*"
+  - "**/gradle.properties"
 
 ci:
   - ".github/workflows/*"
