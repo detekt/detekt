@@ -9,10 +9,14 @@ import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
+import kotlin.io.path.relativeToOrSelf
+import kotlin.io.path.toPath
 
 class EntitySpec {
 
     private val path = Path("src/test/resources/EntitySpecFixture.kt").toAbsolutePath()
+    private val basePath = EntitySpec::class.java.getResource("/")!!.toURI().toPath()
+    private val relativePath = path.relativeToOrSelf(basePath)
     private val code = compileForTest(path)
 
     @Nested
@@ -49,7 +53,12 @@ class EntitySpec {
             val memberFunction = functions.first { it.name == "memberFun" }
 
             assertThat(Entity.atName(memberFunction).toString())
-                .isEqualTo("Entity(name=memberFun, signature=EntitySpecFixture.kt\$C\$private fun memberFun(): Int, location=Location(source=5:17, endSource=5:26, text=49:58, filePath=FilePath(absolutePath=P:\\projects\\contrib\\github-detekt\\detekt-api\\src\\test\\resources\\EntitySpecFixture.kt, basePath=P:\\projects\\contrib\\github-detekt\\detekt-api\\build\\classes\\kotlin\\test, relativePath=..\\..\\..\\..\\src\\test\\resources\\EntitySpecFixture.kt)), ktElement=FUN)")
+                .isEqualTo(
+                    "Entity(name=memberFun, signature=EntitySpecFixture.kt\$C\$private fun memberFun(): Int, " +
+                        "location=Location(source=5:17, endSource=5:26, text=49:58, " +
+                        "filePath=FilePath(absolutePath=$path, basePath=$basePath, relativePath=$relativePath)), " +
+                        "ktElement=FUN)"
+                )
         }
     }
 
@@ -71,7 +80,12 @@ class EntitySpec {
         @Test
         fun `toString gives all details`() {
             assertThat(Entity.atName(clazz).toString())
-                .isEqualTo("Entity(name=C, signature=EntitySpecFixture.kt\$C : Any, location=Location(source=3:7, endSource=3:8, text=20:21, filePath=FilePath(absolutePath=P:\\projects\\contrib\\github-detekt\\detekt-api\\src\\test\\resources\\EntitySpecFixture.kt, basePath=P:\\projects\\contrib\\github-detekt\\detekt-api\\build\\classes\\kotlin\\test, relativePath=..\\..\\..\\..\\src\\test\\resources\\EntitySpecFixture.kt)), ktElement=CLASS)")
+                .isEqualTo(
+                    "Entity(name=C, signature=EntitySpecFixture.kt\$C : Any, " +
+                        "location=Location(source=3:7, endSource=3:8, text=20:21, " +
+                        "filePath=FilePath(absolutePath=$path, basePath=$basePath, relativePath=$relativePath)), " +
+                        "ktElement=CLASS)"
+                )
         }
     }
 
@@ -97,7 +111,12 @@ class EntitySpec {
         @Test
         fun `toString gives all details`() {
             assertThat(Entity.from(code).toString())
-                .isEqualTo("Entity(name=EntitySpecFixture.kt, signature=EntitySpecFixture.kt\$test.EntitySpecFixture.kt, location=Location(source=1:1, endSource=9:1, text=0:109, filePath=FilePath(absolutePath=P:\\projects\\contrib\\github-detekt\\detekt-api\\src\\test\\resources\\EntitySpecFixture.kt, basePath=P:\\projects\\contrib\\github-detekt\\detekt-api\\build\\classes\\kotlin\\test, relativePath=..\\..\\..\\..\\src\\test\\resources\\EntitySpecFixture.kt)), ktElement=KtFile: EntitySpecFixture.kt)")
+                .isEqualTo(
+                    "Entity(name=EntitySpecFixture.kt, signature=EntitySpecFixture.kt\$test.EntitySpecFixture.kt, " +
+                        "location=Location(source=1:1, endSource=9:1, text=0:109, " +
+                        "filePath=FilePath(absolutePath=$path, basePath=$basePath, relativePath=$relativePath)), " +
+                        "ktElement=KtFile: EntitySpecFixture.kt)"
+                )
         }
     }
 }
