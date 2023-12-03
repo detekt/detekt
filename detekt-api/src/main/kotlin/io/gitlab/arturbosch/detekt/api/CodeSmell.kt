@@ -40,7 +40,7 @@ open class CodeSmell(
 }
 
 /**
- * Represents a code smell for that can be auto corrected.
+ * Represents a code smell that can be auto-corrected.
  *
  * @see CodeSmell
  */
@@ -58,7 +58,7 @@ open class CorrectableCodeSmell(
 ) {
     override fun toString(): String {
         return "CorrectableCodeSmell(" +
-            "autoCorrectEnabled=$autoCorrectEnabled," +
+            "autoCorrectEnabled=$autoCorrectEnabled, " +
             "issue=$issue, " +
             "entity=$entity, " +
             "message=$message, " +

@@ -11,7 +11,7 @@ class CorrectableCodeSmellSpec {
         val codeSmell: CorrectableCodeSmell = createCorrectableFinding()
 
         assertThat(codeSmell.toString()).isEqualTo(
-            "CorrectableCodeSmell(autoCorrectEnabled=true,issue=Issue(id='TestSmell'), " +
+            "CorrectableCodeSmell(autoCorrectEnabled=true, issue=Issue(id='TestSmell'), " +
                 "entity=Entity(name=TestEntity, signature=TestEntitySignature, " +
                 "location=Location(source=1:1, endSource=1:1, text=0:0, " +
                 "filePath=FilePath(absolutePath=TestFile.kt, basePath=null, relativePath=null)), " +
