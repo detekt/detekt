@@ -90,6 +90,23 @@ class UnnamedParameterUseSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `report uses the function name as location and message`() {
+        val code = """
+            fun f(enabled: Boolean, shouldLog: Boolean) {
+                if (shouldLog) println(enabled)
+            }
+
+            fun test() {
+                f(false, true)
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code))
+            .hasTextLocations(102 to 116)
+            .singleElement()
+            .hasMessage("Consider using named parameters in CALL_EXPRESSION as they make usage of function more safe.")
+    }
+
+    @Test
     fun `does not report two unnamed param when both are same`() {
         val code = """
             fun f(enabled: Boolean, shouldLog: Boolean) {

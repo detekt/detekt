@@ -75,6 +75,7 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
  */
 @RequiresTypeResolution
 class UnnamedParameterUse(config: Config = Config.empty) : Rule(config) {
+
     override val issue = Issue(
         javaClass.simpleName,
         "Passing no named parameters can cause issue when parameters order change",
@@ -125,8 +126,7 @@ class UnnamedParameterUse(config: Config = Config.empty) : Rule(config) {
                 CodeSmell(
                     issue,
                     Entity.from(expression),
-                    "$expression uses unnamed parameters. Consider using named parameters as they make usage " +
-                        "of function more safe"
+                    "Consider using named parameters in ${expression} as they make usage of function more safe."
                 )
             )
         }
