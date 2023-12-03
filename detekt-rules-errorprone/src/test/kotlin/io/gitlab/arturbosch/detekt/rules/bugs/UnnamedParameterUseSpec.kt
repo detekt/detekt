@@ -101,7 +101,7 @@ class UnnamedParameterUseSpec(private val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code))
-            .hasTextLocations(102 to 116)
+            .hasTextLocations(102 to 103)
             .singleElement()
             .hasMessage("Consider using named parameters in CALL_EXPRESSION as they make usage of function more safe.")
     }

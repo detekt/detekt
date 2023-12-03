@@ -125,7 +125,7 @@ class UnnamedParameterUse(config: Config = Config.empty) : Rule(config) {
             report(
                 CodeSmell(
                     issue,
-                    Entity.from(expression),
+                    Entity.from(expression.calleeExpression ?: expression),
                     "Consider using named parameters in ${expression} as they make usage of function more safe."
                 )
             )
