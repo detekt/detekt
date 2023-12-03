@@ -122,11 +122,12 @@ class UnnamedParameterUse(config: Config = Config.empty) : Rule(config) {
         }
 
         if (namedArgumentList.any { it.first.not() }) {
+            val target = expression.calleeExpression ?: expression
             report(
                 CodeSmell(
                     issue,
-                    Entity.from(expression.calleeExpression ?: expression),
-                    "Consider using named parameters in ${expression.calleeExpression?.text} as they make usage of the function more safe."
+                    Entity.from(target),
+                    "Consider using named parameters in ${target.text} as they make usage of the function more safe."
                 )
             )
         }
