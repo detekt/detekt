@@ -20,7 +20,7 @@ dependencies {
     testRuntimeOnly(projects.detektRules)
     testImplementation(projects.detektTest)
     testImplementation(testFixtures(projects.detektApi))
-    testImplementation(libs.mockk)
+    testImplementation(libs.bundles.mocking)
     testImplementation(libs.classgraph)
     testImplementation(libs.assertj)
     testRuntimeOnly(libs.slf4j.simple)

@@ -5,7 +5,7 @@
 import com.gradle.enterprise.gradleplugin.testretry.retry
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
-import java.net.URL
+import java.net.URI
 
 plugins {
     id("module")
@@ -159,7 +159,7 @@ tasks {
         dokkaSourceSets.configureEach {
             apiVersion = "1.4"
             externalDocumentationLink {
-                url = URL("https://docs.gradle.org/current/javadoc/")
+                url = URI("https://docs.gradle.org/current/javadoc/").toURL()
             }
         }
     }

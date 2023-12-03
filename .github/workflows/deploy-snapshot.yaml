@@ -23,7 +23,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@387ac29b308b003ca37ba93a6cab5eb57c8f5f93 # v4
         with:
-          java-version: 17
+          java-version: 21
           distribution: "temurin"
 
       - name: Setup Gradle
