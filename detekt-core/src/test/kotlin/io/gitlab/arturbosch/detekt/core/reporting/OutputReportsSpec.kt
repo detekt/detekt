@@ -15,7 +15,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Condition
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.util.function.Predicate
 import kotlin.io.path.Path
 
 class OutputReportsSpec {
@@ -90,7 +89,7 @@ class OutputReportsSpec {
                 assertThat(reports).haveExactly(
                     1,
                     Condition(
-                        Predicate { it.type == reportUnderTest },
+                        { it.type == reportUnderTest },
                         "Corresponds exactly to the test output report."
                     )
                 )
@@ -98,7 +97,7 @@ class OutputReportsSpec {
                 assertThat(extensions).haveExactly(
                     1,
                     Condition(
-                        Predicate { it is TestOutputReport && it.ending == "yml" },
+                        { it is TestOutputReport && it.ending == "yml" },
                         "Is exactly the test output report."
                     )
                 )
