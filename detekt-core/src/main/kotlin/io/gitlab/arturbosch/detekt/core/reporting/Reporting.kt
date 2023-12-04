@@ -1,25 +1,15 @@
 package io.gitlab.arturbosch.detekt.core.reporting
 
-import io.github.detekt.report.html.HtmlOutputReport
-import io.github.detekt.report.md.MdOutputReport
-import io.github.detekt.report.sarif.SarifOutputReport
-import io.github.detekt.report.txt.TxtOutputReport
-import io.github.detekt.report.xml.XmlOutputReport
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.RuleSetId
+import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 
-internal fun defaultReportMapping(report: OutputReport) = when (report) {
-    is TxtOutputReport -> "txt"
-    is XmlOutputReport -> "xml"
-    is HtmlOutputReport -> "html"
-    is SarifOutputReport -> "sarif"
-    is MdOutputReport -> "md"
-    else -> report.id
-}
+internal fun defaultReportMapping(report: OutputReport) =
+    if (report is BuiltInOutputReport) report.ending else report.id
 
 internal fun printFindings(findings: Map<String, List<Finding>>): String {
     return buildString {
