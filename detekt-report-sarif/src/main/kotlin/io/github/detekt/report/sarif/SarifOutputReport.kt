@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.getOrNull
+import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import java.nio.file.Path
 import kotlin.io.path.Path
@@ -22,7 +23,7 @@ import kotlin.io.path.invariantSeparatorsPathString
 const val DETEKT_OUTPUT_REPORT_BASE_PATH_KEY = "detekt.output.report.base.path"
 const val SRCROOT = "%SRCROOT%"
 
-class SarifOutputReport : OutputReport() {
+class SarifOutputReport : BuiltInOutputReport, OutputReport() {
 
     override val ending: String = "sarif"
     override val id: String = "sarif"
