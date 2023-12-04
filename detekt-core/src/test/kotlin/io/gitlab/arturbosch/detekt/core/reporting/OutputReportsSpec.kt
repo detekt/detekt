@@ -40,14 +40,14 @@ class OutputReportsSpec {
         @Test
         fun `it should properly parse XML report entry`() {
             val xmlReport = reports[0]
-            assertThat(xmlReport.type).isEqualTo(defaultReportMapping(XmlOutputReport::class.java.simpleName))
+            assertThat(xmlReport.type).isEqualTo(defaultReportMapping(XmlOutputReport()))
             assertThat(xmlReport.path).isEqualTo(Path("/tmp/path1"))
         }
 
         @Test
         fun `it should properly parse TXT report entry`() {
             val txtRepot = reports[1]
-            assertThat(txtRepot.type).isEqualTo(defaultReportMapping(TxtOutputReport::class.java.simpleName))
+            assertThat(txtRepot.type).isEqualTo(defaultReportMapping(TxtOutputReport()))
             assertThat(txtRepot.path).isEqualTo(Path("/tmp/path2"))
         }
 
@@ -55,14 +55,13 @@ class OutputReportsSpec {
         fun `it should properly parse custom report entry`() {
             val customReport = reports[2]
             assertThat(customReport.type).isEqualTo(reportUnderTest)
-            assertThat(defaultReportMapping(customReport.type)).isEqualTo(reportUnderTest)
             assertThat(customReport.path).isEqualTo(Path("/tmp/path3"))
         }
 
         @Test
         fun `it should properly parse HTML report entry`() {
             val htmlReport = reports[3]
-            assertThat(htmlReport.type).isEqualTo(defaultReportMapping(HtmlOutputReport::class.java.simpleName))
+            assertThat(htmlReport.type).isEqualTo(defaultReportMapping(HtmlOutputReport()))
             assertThat(htmlReport.path).isEqualTo(
                 Path("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html")
             )
@@ -71,7 +70,7 @@ class OutputReportsSpec {
         @Test
         fun `it should properly parse MD report entry`() {
             val mdRepot = reports[4]
-            assertThat(mdRepot.type).isEqualTo(defaultReportMapping(MdOutputReport::class.java.simpleName))
+            assertThat(mdRepot.type).isEqualTo(defaultReportMapping(MdOutputReport()))
             assertThat(mdRepot.path).isEqualTo(Path("/tmp/path4"))
         }
 
@@ -79,7 +78,7 @@ class OutputReportsSpec {
         inner class `default report ids` {
 
             private val extensions = createProcessingSettings().use { OutputReportLocator(it).load() }
-            private val extensionsIds = extensions.mapTo(HashSet()) { defaultReportMapping(it.id) }
+            private val extensionsIds = extensions.mapTo(HashSet()) { defaultReportMapping(it) }
 
             @Test
             fun `should be able to convert to output reports`() {

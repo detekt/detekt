@@ -37,7 +37,7 @@ class OutputFacade(
     private fun handleOutputReports(result: Detektion) {
         val extensions = OutputReportLocator(settings).load()
         for (report in extensions) {
-            val filePath = reports[defaultReportMapping(report.id)]?.path
+            val filePath = reports[defaultReportMapping(report)]?.path
             if (filePath != null) {
                 report.write(filePath, result)
                 result.add(SimpleNotification("Successfully generated ${report.id} at ${filePath.toUri()}"))

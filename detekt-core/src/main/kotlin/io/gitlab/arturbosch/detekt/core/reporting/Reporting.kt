@@ -9,15 +9,16 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 
-internal fun defaultReportMapping(reportId: String) = when (reportId) {
-    TxtOutputReport::class.java.simpleName -> "txt"
-    XmlOutputReport::class.java.simpleName -> "xml"
-    HtmlOutputReport::class.java.simpleName -> "html"
-    SarifOutputReport::class.java.simpleName -> "sarif"
-    MdOutputReport::class.java.simpleName -> "md"
-    else -> reportId
+internal fun defaultReportMapping(report: OutputReport) = when (report) {
+    is TxtOutputReport -> "txt"
+    is XmlOutputReport -> "xml"
+    is HtmlOutputReport -> "html"
+    is SarifOutputReport -> "sarif"
+    is MdOutputReport -> "md"
+    else -> report.id
 }
 
 internal fun printFindings(findings: Map<String, List<Finding>>): String {
