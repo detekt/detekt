@@ -22,7 +22,6 @@ val pluginsJarFiles by configurations.resolvable("pluginsJarFiles") {
 dependencies {
     implementation(libs.jcommander)
     implementation(projects.detektTooling)
-    implementation(projects.detektParser)
     implementation(libs.kotlin.compilerEmbeddable) {
         version {
             strictly(libs.versions.kotlin.get())
