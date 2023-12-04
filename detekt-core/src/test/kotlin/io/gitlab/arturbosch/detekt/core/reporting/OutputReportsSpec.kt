@@ -46,9 +46,9 @@ class OutputReportsSpec {
 
         @Test
         fun `it should properly parse TXT report entry`() {
-            val txtRepot = reports[1]
-            assertThat(txtRepot.type).isEqualTo(defaultReportMapping(TxtOutputReport()))
-            assertThat(txtRepot.path).isEqualTo(Path("/tmp/path2"))
+            val txtReport = reports[1]
+            assertThat(txtReport.type).isEqualTo(defaultReportMapping(TxtOutputReport()))
+            assertThat(txtReport.path).isEqualTo(Path("/tmp/path2"))
         }
 
         @Test
@@ -69,9 +69,9 @@ class OutputReportsSpec {
 
         @Test
         fun `it should properly parse MD report entry`() {
-            val mdRepot = reports[4]
-            assertThat(mdRepot.type).isEqualTo(defaultReportMapping(MdOutputReport()))
-            assertThat(mdRepot.path).isEqualTo(Path("/tmp/path4"))
+            val mdReport = reports[4]
+            assertThat(mdReport.type).isEqualTo(defaultReportMapping(MdOutputReport()))
+            assertThat(mdReport.path).isEqualTo(Path("/tmp/path4"))
         }
 
         @Nested
