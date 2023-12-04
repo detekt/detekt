@@ -34,7 +34,6 @@ dependencies {
 
     testImplementation(libs.assertj)
     testImplementation(libs.kotlinCompileTesting)
-    testImplementation(libs.kotlin.compilerEmbeddable)
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants
