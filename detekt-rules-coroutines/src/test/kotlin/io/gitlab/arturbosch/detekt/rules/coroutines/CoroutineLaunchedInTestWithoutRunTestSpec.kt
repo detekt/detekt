@@ -57,7 +57,7 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(val env: KotlinCoreEnvironment) 
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
-    /**
+/*
     @Test
     fun `reports when coroutine is launched in test with a runBlocking block in another function`() {
         val code = """
@@ -72,7 +72,7 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(val env: KotlinCoreEnvironment) 
                 fun `test that launches a coroutine`() = runBlocking {
                     launchCoroutine()
                 }
-                
+
                 fun launchCoroutine() {
                     val scope = CoroutineScope(Dispatchers.Unconfined)
                     scope.launch {
@@ -83,7 +83,7 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(val env: KotlinCoreEnvironment) 
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
-    **/
+*/
 
     @Test
     fun `no reports when coroutine is launched not in a test with a runBlocking block`() {
