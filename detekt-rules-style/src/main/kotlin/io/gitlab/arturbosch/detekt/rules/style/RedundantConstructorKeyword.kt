@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
 class RedundantConstructorKeyword(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
-        "Redundant `constructor` keyword detected, which can be safely removed.",
+        "Redundant `constructor` modifier can be removed.",
     )
 
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
