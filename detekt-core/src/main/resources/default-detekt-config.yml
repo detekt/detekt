@@ -173,6 +173,8 @@ complexity:
 
 coroutines:
   active: true
+  CoroutineLaunchedInTestWithoutRunTest:
+    active: false
   GlobalCoroutineUsage:
     active: false
   InjectDispatcher:

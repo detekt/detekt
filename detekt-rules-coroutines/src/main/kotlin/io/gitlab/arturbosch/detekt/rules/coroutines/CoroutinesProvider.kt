@@ -15,6 +15,7 @@ class CoroutinesProvider : DefaultRuleSetProvider {
     override fun instance(): RuleSet = RuleSet(
         ruleSetId,
         listOf(
+            ::CoroutineLaunchedInTestWithoutRunTest,
             ::GlobalCoroutineUsage,
             ::InjectDispatcher,
             ::RedundantSuspendModifier,

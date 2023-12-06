@@ -2,6 +2,7 @@
 dokka = "1.9.10"
 jacoco = "0.8.11"
 kotlin = "1.9.22"
+coroutines = "1.7.3"
 ktlint = "1.1.1"
 junit = "5.10.1"
 poko = "0.15.2"
@@ -19,7 +20,8 @@ kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", versio
 kotlin-reflection = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 
 kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.10.1"
-kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
+kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
 # This represents the oldest AGP version that is supported by detekt.
 # This should only be updated when updating the minimum version supported by detekt's Gradle plugin.
@@ -35,6 +37,7 @@ slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junit = "junit:junit:4.13.2"
 
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.5.0"
 assertj = "org.assertj:assertj-core:3.25.1"
