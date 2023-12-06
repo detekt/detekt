@@ -95,7 +95,7 @@ run `./gradlew detekt reportMerge --continue` to execute detekt tasks and merge 
 
 ### Groovy DSL
 ```groovy
-tasks.register("reportMerge", io.gitlab.arturbosch.detekt.report.ReportMergeTask) {
+def reportMerge = tasks.create("reportMerge", io.gitlab.arturbosch.detekt.report.ReportMergeTask) {
   output = project.layout.buildDirectory.file("reports/detekt/merge.xml") // or "reports/detekt/merge.sarif"
 }
 
@@ -106,11 +106,8 @@ subprojects {
   }
 
   tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+    reportMerge.input.from(xmlReportFile) // or sarifReportFile
     finalizedBy(reportMerge)
-  }
-
-  reportMerge.configure {
-    input.from(tasks.withType(io.gitlab.arturbosch.detekt.Detekt).collect { it.xmlReportFile }) // or sarifReportFile
   }
 }
 ```
@@ -118,7 +115,7 @@ subprojects {
 ### Kotlin DSL
 
 ```kotlin
-val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) { 
+val reportMerge = tasks.create<io.gitlab.arturbosch.detekt.report.ReportMergeTask> { 
   output.set(rootProject.layout.buildDirectory.file("reports/detekt/merge.xml")) // or "reports/detekt/merge.sarif"
 }
 
@@ -129,11 +126,8 @@ subprojects {
   }
 
   tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    reportMerge.input.from(xmlReportFile) // or sarifReportFile
     finalizedBy(reportMerge)
-  }
-
-  reportMerge {
-    input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.xmlReportFile }) // or .sarifReportFile
   }
 }
 ```
