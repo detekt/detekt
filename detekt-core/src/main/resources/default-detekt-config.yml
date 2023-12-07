@@ -685,6 +685,8 @@ style:
     active: true
   RangeUntilInsteadOfRangeTo:
     active: false
+  RedundantConstructorKeyword:
+    active: false
   RedundantExplicitType:
     active: false
   RedundantHigherOrderMapUsage:
