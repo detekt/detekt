@@ -719,6 +719,17 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
+        fun `reports unused private property if used in one class but not another`() {
+            val code = """
+                class A(private val foo: Any) {
+                    fun myFoo() = foo
+                }
+                class B(private val foo: Any) : ITest
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        @Test
         fun `does not report public property`() {
             val code = """
                 class Test(val unused: Any)
