@@ -72,7 +72,7 @@ gradleEnterprise {
 
 buildCache {
     local {
-        isEnabled = true
+        isEnabled = !isCiBuild
     }
     remote<HttpBuildCache> {
         isPush = isCiBuild

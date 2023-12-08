@@ -20,7 +20,7 @@ val isCiBuild = providers.environmentVariable("CI").isPresent
 
 buildCache {
     local {
-        isEnabled = true
+        isEnabled = !isCiBuild
     }
     remote<HttpBuildCache> {
         isPush = isCiBuild
