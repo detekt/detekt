@@ -724,7 +724,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 class A(private val foo: Any) {
                     fun myFoo() = foo
                 }
-                class B(private val foo: Any) : ITest
+                class B(private val foo: Any)
             """.trimIndent()
             assertThat(subject.lint(code)).hasSize(1)
         }
