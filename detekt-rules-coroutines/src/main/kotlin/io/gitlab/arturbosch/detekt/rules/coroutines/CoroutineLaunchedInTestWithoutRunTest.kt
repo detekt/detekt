@@ -10,13 +10,16 @@ import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.hasAnnotation
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
+import org.jetbrains.kotlin.resolve.source.getPsi
 import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 
 /**
@@ -53,15 +56,20 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
             "You should use `runTest`to avoid altering test results."
     )
 
-    override fun visitNamedFunction(function: KtNamedFunction) {
-        checkAndReport(function)
+    override fun visitNamedFunction(initialFunction: KtNamedFunction) {
+        if (bindingContext == BindingContext.EMPTY) return
+        if (!initialFunction.hasBody()) return
+        if (!initialFunction.hasAnnotation(TEST_ANNOTATION_NAME)) return
+
+        checkAndReport(initialFunction)
+        initialFunction
+            .traverseAndGetAllCalledFunctions()
+            .forEach {
+                checkAndReport(it)
+            }
     }
 
     private fun checkAndReport(function: KtNamedFunction) {
-        if (bindingContext == BindingContext.EMPTY) return
-        if (!function.hasBody()) return
-        if (!function.hasAnnotation(TEST_ANNOTATION_NAME)) return
-
         val resultingDescriptor = function.bodyExpression
             .getResolvedCall(bindingContext)
             ?.resultingDescriptor
@@ -81,6 +89,22 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
         .getType(bindingContext)
         ?.fqNameOrNull() == COROUTINE_SCOPE_FQ &&
         getCalleeExpressionIfAny()?.text == "launch"
+
+    private fun KtNamedFunction.traverseAndGetAllCalledFunctions(): List<KtNamedFunction> {
+        val functions = mutableSetOf<KtNamedFunction>()
+
+        collectDescendantsOfType<KtExpression>().mapNotNull {
+            it.getResolvedCall(bindingContext)
+                ?.resultingDescriptor
+                ?.source
+                ?.getPsi() as? KtNamedFunction
+        }.forEach {
+            functions.add(it)
+            functions.addAll(it.traverseAndGetAllCalledFunctions())
+        }
+
+        return functions.toList()
+    }
 
     companion object {
         private const val MESSAGE =

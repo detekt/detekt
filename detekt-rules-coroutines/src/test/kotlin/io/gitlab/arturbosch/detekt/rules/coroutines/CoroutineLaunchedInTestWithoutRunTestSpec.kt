@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class CoroutineLaunchedInTestWithoutRunTestSpec(val env: KotlinCoreEnvironment) {
+class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvironment) {
 
     private val subject = CoroutineLaunchedInTestWithoutRunTest(Config.empty)
 
@@ -57,7 +57,6 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(val env: KotlinCoreEnvironment) 
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
-/*
     @Test
     fun `reports when coroutine is launched in test with a runBlocking block in another function`() {
         val code = """
@@ -83,7 +82,6 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(val env: KotlinCoreEnvironment) 
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
-*/
 
     @Test
     fun `no reports when coroutine is launched not in a test with a runBlocking block`() {
