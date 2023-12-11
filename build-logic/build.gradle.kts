@@ -17,6 +17,7 @@ dependencies {
 }
 
 kotlin {
+    @Suppress("MagicNumber")
     jvmToolchain(8)
 }
 
