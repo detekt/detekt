@@ -1,5 +1,9 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
+$dokka.location:dev.detekt.gradle.plugin////PointingToDeclaration/detekt-gradle-plugin/dev.detekt.gradle.plugin/index.html
+$dokka.location:dev.detekt.gradle.plugin/DetektBasePlugin///PointingToDeclaration/detekt-gradle-plugin/dev.detekt.gradle.plugin/-detekt-base-plugin/index.html
+$dokka.location:dev.detekt.gradle.plugin/DetektBasePlugin/DetektBasePlugin/#/PointingToDeclaration/detekt-gradle-plugin/dev.detekt.gradle.plugin/-detekt-base-plugin/-detekt-base-plugin.html
+$dokka.location:dev.detekt.gradle.plugin/DetektBasePlugin/apply/#org.gradle.api.Project/PointingToDeclaration/detekt-gradle-plugin/dev.detekt.gradle.plugin/-detekt-base-plugin/apply.html
 $dokka.location:io.github.detekt.gradle.extensions////PointingToDeclaration/detekt-gradle-plugin/io.github.detekt.gradle.extensions/index.html
 $dokka.location:io.github.detekt.gradle.extensions/DetektReport///PointingToDeclaration/detekt-gradle-plugin/io.github.detekt.gradle.extensions/-detekt-report/index.html
 $dokka.location:io.github.detekt.gradle.extensions/DetektReport/DetektReport/#kotlin.String#org.gradle.api.model.ObjectFactory/PointingToDeclaration/detekt-gradle-plugin/io.github.detekt.gradle.extensions/-detekt-report/-detekt-report.html
@@ -150,6 +154,7 @@ $dokka.location:io.gitlab.arturbosch.detekt/DetektGenerateConfigTask/pluginClass
 $dokka.location:io.gitlab.arturbosch.detekt/DetektPlugin///PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-plugin/index.html
 $dokka.location:io.gitlab.arturbosch.detekt/DetektPlugin/DetektPlugin/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-plugin/-detekt-plugin.html
 $dokka.location:io.gitlab.arturbosch.detekt/DetektPlugin/apply/#org.gradle.api.Project/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-plugin/apply.html
+dev.detekt.gradle.plugin
 io.github.detekt.gradle
 io.github.detekt.gradle.extensions
 io.gitlab.arturbosch.detekt
