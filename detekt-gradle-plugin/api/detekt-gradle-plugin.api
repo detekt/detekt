@@ -1,3 +1,9 @@
+public final class dev/detekt/gradle/plugin/DetektBasePlugin : org/gradle/api/Plugin {
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
 public final class io/github/detekt/gradle/DetektKotlinCompilerPlugin : org/jetbrains/kotlin/gradle/plugin/KotlinCompilerPluginSupportPlugin {
 	public fun <init> ()V
 	public synthetic fun apply (Ljava/lang/Object;)V

@@ -87,9 +87,23 @@ gradlePlugin {
     website = "https://detekt.dev"
     vcsUrl = "https://github.com/detekt/detekt"
     plugins {
+        create("detektBasePlugin") {
+            id = "dev.detekt.gradle.base"
+            implementationClass = "dev.detekt.gradle.plugin.DetektBasePlugin"
+            displayName = "Static code analysis for Kotlin"
+            description = "Static code analysis for Kotlin"
+            tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
+        }
         create("detektPlugin") {
             id = "io.gitlab.arturbosch.detekt"
             implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
+            displayName = "Static code analysis for Kotlin"
+            description = "Static code analysis for Kotlin"
+            tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
+        }
+        create("detektCompilerPlugin") {
+            id = "io.github.detekt.gradle.compiler-plugin"
+            implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
             displayName = "Static code analysis for Kotlin"
             description = "Static code analysis for Kotlin"
             tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
@@ -100,18 +114,6 @@ gradlePlugin {
         sourceSets["testFixtures"],
         sourceSets["functionalTest"],
     )
-}
-
-gradlePlugin {
-    plugins {
-        create("detektCompilerPlugin") {
-            id = "io.github.detekt.gradle.compiler-plugin"
-            implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
-            displayName = "Static code analysis for Kotlin"
-            description = "Static code analysis for Kotlin"
-            tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
-        }
-    }
 }
 
 // Some functional tests reference internal functions in the Gradle plugin. This should become unnecessary as further
