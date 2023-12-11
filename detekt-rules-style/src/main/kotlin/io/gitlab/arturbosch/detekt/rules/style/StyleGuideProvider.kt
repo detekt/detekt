@@ -50,6 +50,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             ::AbstractClassCanBeInterface,
             ::UnnecessaryAnnotationUseSiteTarget,
             ::UnnecessaryParentheses,
+            ::UnnecessaryRun,
             ::UnnecessaryInheritance,
             ::UnnecessaryInnerClass,
             ::UtilityClassWithPublicConstructor,

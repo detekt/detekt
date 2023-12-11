@@ -772,6 +772,8 @@ style:
   UnnecessaryParentheses:
     active: false
     allowForUnclearPrecedence: false
+  UnnecessaryRun:
+    active: false
   UnusedImport:
     active: false
   UnusedParameter:
