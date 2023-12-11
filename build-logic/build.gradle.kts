@@ -16,6 +16,10 @@ dependencies {
     implementation(libs.plugins.dokka.asDependency())
 }
 
+kotlin {
+    jvmToolchain(8)
+}
+
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     val isCiBuild = providers.environmentVariable("CI").isPresent
     if (isCiBuild) {
