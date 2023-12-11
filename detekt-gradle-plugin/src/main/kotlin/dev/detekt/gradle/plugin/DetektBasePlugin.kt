@@ -56,20 +56,20 @@ class DetektBasePlugin : Plugin<Project> {
         internal const val CONFIG_DIR_NAME = "config/detekt"
         internal const val CONFIG_FILE = "detekt.yml"
 
-        internal const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
-        internal const val DEFAULT_TEST_SRC_DIR_JAVA = "src/test/java"
-        internal const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"
-        internal const val DEFAULT_TEST_SRC_DIR_KOTLIN = "src/test/kotlin"
-        internal const val DEFAULT_DEBUG_VALUE = false
-        internal const val DEFAULT_IGNORE_FAILURES = false
-        internal const val DEFAULT_PARALLEL_VALUE = false
-        internal const val DEFAULT_AUTO_CORRECT_VALUE = false
-        internal const val DEFAULT_DISABLE_RULESETS_VALUE = false
-        internal const val DEFAULT_ALL_RULES_VALUE = false
-        internal const val DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE = false
+        private const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
+        private const val DEFAULT_TEST_SRC_DIR_JAVA = "src/test/java"
+        private const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"
+        private const val DEFAULT_TEST_SRC_DIR_KOTLIN = "src/test/kotlin"
+        private const val DEFAULT_DEBUG_VALUE = false
+        private const val DEFAULT_IGNORE_FAILURES = false
+        private const val DEFAULT_PARALLEL_VALUE = false
+        private const val DEFAULT_AUTO_CORRECT_VALUE = false
+        private const val DEFAULT_DISABLE_RULESETS_VALUE = false
+        private const val DEFAULT_ALL_RULES_VALUE = false
+        private const val DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE = false
 
         // This flag is ignored unless the compiler plugin is applied to the project
-        internal const val DEFAULT_COMPILER_PLUGIN_ENABLED = true
+        private const val DEFAULT_COMPILER_PLUGIN_ENABLED = true
     }
 }
 
