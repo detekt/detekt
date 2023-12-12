@@ -15,7 +15,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Condition
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.util.function.Predicate
 import kotlin.io.path.Path
 
 class OutputReportsSpec {
@@ -40,29 +39,28 @@ class OutputReportsSpec {
         @Test
         fun `it should properly parse XML report entry`() {
             val xmlReport = reports[0]
-            assertThat(xmlReport.type).isEqualTo(defaultReportMapping(XmlOutputReport::class.java.simpleName))
+            assertThat(xmlReport.type).isEqualTo(defaultReportMapping(XmlOutputReport()))
             assertThat(xmlReport.path).isEqualTo(Path("/tmp/path1"))
         }
 
         @Test
         fun `it should properly parse TXT report entry`() {
-            val txtRepot = reports[1]
-            assertThat(txtRepot.type).isEqualTo(defaultReportMapping(TxtOutputReport::class.java.simpleName))
-            assertThat(txtRepot.path).isEqualTo(Path("/tmp/path2"))
+            val txtReport = reports[1]
+            assertThat(txtReport.type).isEqualTo(defaultReportMapping(TxtOutputReport()))
+            assertThat(txtReport.path).isEqualTo(Path("/tmp/path2"))
         }
 
         @Test
         fun `it should properly parse custom report entry`() {
             val customReport = reports[2]
             assertThat(customReport.type).isEqualTo(reportUnderTest)
-            assertThat(defaultReportMapping(customReport.type)).isEqualTo(reportUnderTest)
             assertThat(customReport.path).isEqualTo(Path("/tmp/path3"))
         }
 
         @Test
         fun `it should properly parse HTML report entry`() {
             val htmlReport = reports[3]
-            assertThat(htmlReport.type).isEqualTo(defaultReportMapping(HtmlOutputReport::class.java.simpleName))
+            assertThat(htmlReport.type).isEqualTo(defaultReportMapping(HtmlOutputReport()))
             assertThat(htmlReport.path).isEqualTo(
                 Path("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html")
             )
@@ -70,16 +68,16 @@ class OutputReportsSpec {
 
         @Test
         fun `it should properly parse MD report entry`() {
-            val mdRepot = reports[4]
-            assertThat(mdRepot.type).isEqualTo(defaultReportMapping(MdOutputReport::class.java.simpleName))
-            assertThat(mdRepot.path).isEqualTo(Path("/tmp/path4"))
+            val mdReport = reports[4]
+            assertThat(mdReport.type).isEqualTo(defaultReportMapping(MdOutputReport()))
+            assertThat(mdReport.path).isEqualTo(Path("/tmp/path4"))
         }
 
         @Nested
         inner class `default report ids` {
 
             private val extensions = createProcessingSettings().use { OutputReportLocator(it).load() }
-            private val extensionsIds = extensions.mapTo(HashSet()) { defaultReportMapping(it.id) }
+            private val extensionsIds = extensions.mapTo(HashSet()) { defaultReportMapping(it) }
 
             @Test
             fun `should be able to convert to output reports`() {
@@ -91,7 +89,7 @@ class OutputReportsSpec {
                 assertThat(reports).haveExactly(
                     1,
                     Condition(
-                        Predicate { it.type == reportUnderTest },
+                        { it.type == reportUnderTest },
                         "Corresponds exactly to the test output report."
                     )
                 )
@@ -99,7 +97,7 @@ class OutputReportsSpec {
                 assertThat(extensions).haveExactly(
                     1,
                     Condition(
-                        Predicate { it is TestOutputReport && it.ending == "yml" },
+                        { it is TestOutputReport && it.ending == "yml" },
                         "Is exactly the test output report."
                     )
                 )
