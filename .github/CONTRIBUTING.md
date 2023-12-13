@@ -1,6 +1,7 @@
 # Contributing to detekt
 
 - Read [this article](https://chris.beams.io/posts/git-commit/) before writing commit messages.
+- Before running any tests, run `./gradlew publishToMavenLocal` to ensure that all tests are using the locally built artifact (c.f. issue [#6708](https://github.com/detekt/detekt/issues/6708) and PR [#6415](https://github.com/detekt/detekt/pull/6415)). Otherwise, the tests will pull a possibly outdated version of detekt from Maven Central or Sonatype.
 - Use `gradle build -x dokkaHtml` to build the source but exclude documentation JAR generation to save time.
 - Make sure that `gradle detekt` does not report any errors.
 - This repository follows the [Kotlin coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html),
