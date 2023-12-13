@@ -143,6 +143,7 @@ constructor(
             withProjectDir(rootDir)
             withPluginClasspath()
             withArguments(args)
+            withTestKitDir(testKitDir)
             gradleVersionOrNone?.let(::withGradleVersion)
         }
     }
@@ -172,5 +173,13 @@ constructor(
     companion object {
         const val SETTINGS_FILENAME = "settings.gradle"
         private const val DETEKT_TASK = "detekt"
+
+        private val testKitDir by lazy {
+            var gradleUserHome = System.getenv("GRADLE_USER_HOME")
+            if (gradleUserHome.isNullOrEmpty()) {
+                gradleUserHome = File(System.getProperty("user.home"), ".gradle").absolutePath
+            }
+            File(gradleUserHome, "testkit")
+        }
     }
 }
