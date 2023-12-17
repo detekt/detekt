@@ -4,7 +4,9 @@ import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.extensions.FailOnSeverity
 import io.gitlab.arturbosch.detekt.extensions.loadDetektVersion
+import io.gitlab.arturbosch.detekt.internal.addVariantName
 import io.gitlab.arturbosch.detekt.internal.existingVariantOrBaseFile
+import io.gitlab.arturbosch.detekt.internal.registerCreateBaselineTask
 import io.gitlab.arturbosch.detekt.internal.registerDetektTask
 import io.gitlab.arturbosch.detekt.internal.setReportOutputConventions
 import org.gradle.api.Plugin
@@ -78,6 +80,17 @@ class DetektBasePlugin : Plugin<Project> {
                             }
                         setReportOutputConventions(reports, extension, sourceSet.name)
                         description = "Run detekt analysis for ${sourceSet.name} source set"
+                    }
+
+                    val baseLineTaskName = "${DetektPlugin.BASELINE_TASK_NAME}${sourceSet.name.capitalize()}SourceSet"
+                    project.registerCreateBaselineTask(baseLineTaskName, extension) {
+                        source = sourceSet.kotlin
+
+                        val variantBaselineFile =
+                            extension.baseline.asFile.orNull?.addVariantName("${sourceSet.name}SourceSet")
+                        baseline.convention(project.layout.file(project.provider { variantBaselineFile }))
+
+                        description = "Creates detekt baseline for ${sourceSet.name} source set"
                     }
                 }
         }

@@ -139,8 +139,9 @@ class DetektAndroidSpec {
         @Test
         @DisplayName("task :app:detektMain")
         fun appDetektMain() {
-            gradleRunner.runTasksAndCheckResult(":app:detektMain") { result ->
-                assertThat(result.output).contains("Abbreviated task name 'detektMain' matched 'detektMainSourceSet'")
+            gradleRunner.runTasksAndExpectFailure(":app:detektMain") { result ->
+                assertThat(result.output)
+                    .contains("Cannot locate tasks that match ':app:detektMain' as task 'detektMain' is ambiguous")
             }
         }
 
