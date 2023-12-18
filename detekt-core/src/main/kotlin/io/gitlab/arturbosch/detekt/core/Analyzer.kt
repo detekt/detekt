@@ -101,7 +101,6 @@ internal class Analyzer(
         bindingContext: BindingContext,
         compilerResources: CompilerResources
     ): Map<RuleSetId, List<Finding>> {
-        @Suppress("DEPRECATION")
         fun isCorrectable(rule: BaseRule): Boolean = when (rule) {
             is Rule -> rule.autoCorrect
             else -> error("No other rule type expected.")
