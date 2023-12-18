@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
 import io.github.detekt.tooling.api.FunctionMatcher
-import io.gitlab.arturbosch.detekt.api.ConfigAware
+import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
@@ -20,7 +20,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * *Note:* you need to write all the types with fully qualified names e.g. `org.example.foo(kotlin.String)`. It
  * is important to add `kotlin.String`. Just adding `String` will not work.
  */
-internal fun functionSuppressorFactory(rule: ConfigAware, bindingContext: BindingContext): Suppressor? {
+internal fun functionSuppressorFactory(rule: Rule, bindingContext: BindingContext): Suppressor? {
     val functionMatchers = rule.valueOrDefault("ignoreFunction", emptyList<String>())
         .map(FunctionMatcher::fromFunctionSignature)
     return if (functionMatchers.isNotEmpty()) {
