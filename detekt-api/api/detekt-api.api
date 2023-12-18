@@ -77,7 +77,6 @@ public final class io/gitlab/arturbosch/detekt/api/Config$Companion {
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Config$DefaultImpls {
-	public static fun getParentPath (Lio/gitlab/arturbosch/detekt/api/Config;)Ljava/lang/String;
 	public static fun valueOrDefault (Lio/gitlab/arturbosch/detekt/api/Config;Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
 }
 
