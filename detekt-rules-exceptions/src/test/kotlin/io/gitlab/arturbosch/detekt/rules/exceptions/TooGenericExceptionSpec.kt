@@ -20,7 +20,7 @@ class TooGenericExceptionSpec {
     }
 }
 
-val tooGenericExceptionCode = """
+private val tooGenericExceptionCode = """
     fun main() {
         try {
             throw Throwable()

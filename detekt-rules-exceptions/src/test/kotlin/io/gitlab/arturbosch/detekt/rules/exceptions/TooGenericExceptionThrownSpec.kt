@@ -15,15 +15,53 @@ class TooGenericExceptionThrownSpec {
     @ValueSource(strings = ["Error", "Exception", "Throwable", "RuntimeException"])
     fun `should report $exceptionName`(exceptionName: String) {
         val rule = TooGenericExceptionThrown(TestConfig(EXCEPTION_NAMES to "[$exceptionName]"))
+        val code = """
+            fun main() {
+                try {
+                    throw Throwable()
+                } catch (e: ArrayIndexOutOfBoundsException) {
+                    throw Error()
+                } catch (e: Error) {
+                    throw Exception()
+                } catch (e: Exception) {
+                } catch (e: IllegalMonitorStateException) {
+                } catch (e: IndexOutOfBoundsException) {
+                    throw RuntimeException()
+                } catch (e: Throwable) {
+                } catch (e: RuntimeException) {
+                    throw NullPointerException()
+                } catch (e: NullPointerException) {
+                }
+            }
+        """.trimIndent()
 
-        assertThat(rule.compileAndLint(tooGenericExceptionCode)).hasSize(1)
+        assertThat(rule.compileAndLint(code)).hasSize(1)
     }
 
     @Test
     fun `should not report thrown exceptions`() {
         val rule = TooGenericExceptionThrown(TestConfig(EXCEPTION_NAMES to "['MyException', Bar]"))
+        val code = """
+            fun main() {
+                try {
+                    throw Throwable()
+                } catch (e: ArrayIndexOutOfBoundsException) {
+                    throw Error()
+                } catch (e: Error) {
+                    throw Exception()
+                } catch (e: Exception) {
+                } catch (e: IllegalMonitorStateException) {
+                } catch (e: IndexOutOfBoundsException) {
+                    throw RuntimeException()
+                } catch (e: Throwable) {
+                } catch (e: RuntimeException) {
+                    throw NullPointerException()
+                } catch (e: NullPointerException) {
+                }
+            }
+        """.trimIndent()
 
-        assertThat(rule.compileAndLint(tooGenericExceptionCode)).isEmpty()
+        assertThat(rule.compileAndLint(code)).isEmpty()
     }
 
     @Test
