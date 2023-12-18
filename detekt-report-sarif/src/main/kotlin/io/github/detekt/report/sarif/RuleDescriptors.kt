@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import java.util.Locale
 import java.util.ServiceLoader
 
 /**
@@ -30,8 +29,8 @@ internal fun toReportingDescriptors(): List<ReportingDescriptor> {
 }
 
 private fun Rule.toDescriptor(ruleSetId: RuleSetId): ReportingDescriptor {
-    val formattedRuleSetId = ruleSetId.lowercase(Locale.US)
-    val formattedRuleId = ruleId.lowercase(Locale.US)
+    val formattedRuleSetId = ruleSetId.lowercase()
+    val formattedRuleId = ruleId.lowercase()
 
     return ReportingDescriptor(
         id = "detekt.$ruleSetId.$ruleId",
