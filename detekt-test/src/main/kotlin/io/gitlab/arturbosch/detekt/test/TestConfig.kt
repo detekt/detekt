@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.core.config.tryParseBasedOnDefault
 import io.gitlab.arturbosch.detekt.core.config.valueOrDefaultInternal
 
 @Suppress("UNCHECKED_CAST")
-open class TestConfig(vararg pairs: Pair<String, Any>) : Config {
+class TestConfig(vararg pairs: Pair<String, Any>) : Config {
 
     private val values: Map<String, Any> = mapOf(*pairs)
 
@@ -42,7 +42,7 @@ open class TestConfig(vararg pairs: Pair<String, Any>) : Config {
             else -> tryParseBasedOnDefault(result, defaultResult)
         }
 
-    protected fun parseList(result: String): List<String> {
+    private fun parseList(result: String): List<String> {
         if (result.startsWith('[') && result.endsWith(']')) {
             val str = result.substring(1, result.length - 1)
             return str.splitToSequence(',')
