@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.test.TestConfig
@@ -57,7 +56,7 @@ class RuleSetConfigPropertySpec {
 private class TestRuleSetProvider : RuleSetProvider {
     override val ruleSetId: String = "testRuleSetId"
 
-    override fun instance(config: Config): RuleSet = RuleSet(ruleSetId, emptyList())
+    override fun instance(): RuleSet = RuleSet(ruleSetId, emptyList())
 
     companion object {
         val android by ruleSetConfig(true)

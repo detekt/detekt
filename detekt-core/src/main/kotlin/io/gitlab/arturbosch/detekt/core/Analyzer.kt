@@ -109,7 +109,7 @@ internal class Analyzer(
         val activeRuleSetsToRuleSetConfigs = providers.asSequence()
             .map { it to config.subConfig(it.ruleSetId) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
-            .map { (provider, ruleSetConfig) -> provider.instance(ruleSetConfig) to ruleSetConfig }
+            .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.shouldAnalyzeFile(file) }
             .toList()
 
@@ -118,7 +118,7 @@ internal class Analyzer(
         )
 
         val (correctableRules, otherRules) = activeRuleSetsToRuleSetConfigs
-            .flatMap { (ruleSet, _) -> ruleSet.rules }
+            .flatMap { (ruleSet, config) -> ruleSet.rules.map { (_, ruleProvider) -> ruleProvider(config) } }
             .filter { rule ->
                 bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
             }
@@ -149,8 +149,8 @@ internal class Analyzer(
         providers.asSequence()
             .map { it to config.subConfig(it.ruleSetId) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
-            .map { (provider, ruleSetConfig) -> provider.instance(ruleSetConfig) to ruleSetConfig }
-            .flatMap { (ruleSet, _) -> ruleSet.rules }
+            .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
+            .flatMap { (ruleSet, config) -> ruleSet.rules.map { (_, ruleProvider) -> ruleProvider(config) } }
             .filter { rule -> (rule as? Rule)?.active == true }
             .filter { rule -> rule::class.hasAnnotation<RequiresTypeResolution>() }
             .forEach { rule ->

@@ -232,13 +232,13 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
 
 private class CustomRuleSetProvider : RuleSetProvider {
     override val ruleSetId: String = "custom"
-    override fun instance(config: Config) = RuleSet(
+    override fun instance() = RuleSet(
         ruleSetId,
         listOf(
-            MaxLineLength(config),
-            RequiresTypeResolutionMaxLineLength(config),
-            FaultyRule(config),
-            FaultyRuleNoStackTrace(config),
+            ::MaxLineLength,
+            ::RequiresTypeResolutionMaxLineLength,
+            ::FaultyRule,
+            ::FaultyRuleNoStackTrace,
         )
     )
 }

@@ -16,8 +16,6 @@ interface RuleSetProvider {
 
     /**
      * This function must be implemented to provide custom rule sets.
-     * Make sure to pass the configuration to each rule to allow rules
-     * to be self configurable.
      */
-    fun instance(config: Config): RuleSet
+    fun instance(): RuleSet
 }

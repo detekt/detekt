@@ -12,20 +12,18 @@ internal class SingleRuleProvider(
 ) : RuleSetProvider {
 
     init {
-        createRuleInstance(Config.empty) // provoke early exit when rule does not exist
+        createRuleInstance() // provoke early exit when rule does not exist
     }
 
     override val ruleSetId: String = wrapped.ruleSetId
 
-    override fun instance(config: Config): RuleSet = RuleSet(
+    override fun instance(): RuleSet = RuleSet(
         ruleSetId,
-        listOf(createRuleInstance(config))
+        listOf(createRuleInstance())
     )
 
-    private fun createRuleInstance(config: Config): BaseRule =
+    private fun createRuleInstance(): (Config) -> BaseRule =
         requireNotNull(
-            wrapped.instance(config)
-                .rules
-                .find { it.ruleId == ruleId }
+            wrapped.instance().rules[ruleId]
         ) { "There was no rule '$ruleId' in rule set '${wrapped.ruleSetId}'." }
 }
