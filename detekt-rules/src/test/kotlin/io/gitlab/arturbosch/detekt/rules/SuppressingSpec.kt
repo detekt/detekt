@@ -1,8 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules
 
 import io.github.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.core.rules.visitFile
 import io.gitlab.arturbosch.detekt.rules.complexity.ComplexCondition
 import io.gitlab.arturbosch.detekt.rules.complexity.LongMethod
 import io.gitlab.arturbosch.detekt.rules.complexity.LongParameterList
@@ -64,13 +62,14 @@ class SuppressingSpec {
                     lpl(1, 2, 3, 4, 5, 6)
                     assert(false) { "FAILED TEST" }
                 }
-            
             }
         """.trimIndent()
         val ktFile = compileContentForTest(code)
-        val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
 
-        val findings = ruleSet.visitFile(ktFile)
+        val findings = listOf(LongMethod(), LongParameterList(), ComplexCondition()).flatMap {
+            it.visitFile(ktFile)
+            it.findings
+        }
 
         assertThat(findings).isEmpty()
     }
@@ -124,9 +123,10 @@ class SuppressingSpec {
             }
         """.trimIndent()
         val ktFile = compileContentForTest(code)
-        val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
-
-        val findings = ruleSet.visitFile(ktFile)
+        val findings = listOf(LongMethod(), LongParameterList(), ComplexCondition()).flatMap {
+            it.visitFile(ktFile)
+            it.findings
+        }
 
         assertThat(findings).isEmpty()
     }
@@ -176,9 +176,11 @@ class SuppressingSpec {
         """.trimIndent()
 
         val ktFile = compileContentForTest(code)
-        val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
 
-        val findings = ruleSet.visitFile(ktFile)
+        val findings = listOf(LongMethod(), LongParameterList(), ComplexCondition()).flatMap {
+            it.visitFile(ktFile)
+            it.findings
+        }
 
         assertThat(findings).isEmpty()
     }
