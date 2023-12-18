@@ -54,7 +54,7 @@ abstract class Rule(
      * Rules are aware of the paths they should run on via configuration properties.
      */
     open val filters: PathFilters? by lazy(LazyThreadSafetyMode.NONE) {
-        createPathFilters()
+        ruleConfig.createPathFilters()
     }
 
     override fun visitCondition(root: KtFile): Boolean =

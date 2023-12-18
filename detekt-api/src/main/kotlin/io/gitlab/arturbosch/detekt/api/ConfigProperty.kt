@@ -127,7 +127,7 @@ private fun ConfigAware.getListOrDefault(propertyName: String, defaultValue: Lis
     return if (defaultValue.all { it is String }) {
         @Suppress("UNCHECKED_CAST")
         val defaultValueAsListOfStrings = defaultValue as List<String>
-        valueOrDefaultCommaSeparated(propertyName, defaultValueAsListOfStrings)
+        ruleConfig.valueOrDefaultCommaSeparated(propertyName, defaultValueAsListOfStrings)
     } else {
         error("Only lists of strings are supported. '$propertyName' is invalid. ")
     }

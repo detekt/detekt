@@ -90,9 +90,10 @@ public final class io/gitlab/arturbosch/detekt/api/Config$InvalidConfigurationEr
 	public synthetic fun <init> (Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
-public abstract interface class io/gitlab/arturbosch/detekt/api/ConfigAware : io/gitlab/arturbosch/detekt/api/Config {
+public abstract interface class io/gitlab/arturbosch/detekt/api/ConfigAware {
 	public abstract fun getActive ()Z
 	public abstract fun getAutoCorrect ()Z
+	public abstract fun getRuleConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public abstract fun getRuleId ()Ljava/lang/String;
 	public abstract fun getRuleSetConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public abstract fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
@@ -103,7 +104,7 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/ConfigAware : io
 public final class io/gitlab/arturbosch/detekt/api/ConfigAware$DefaultImpls {
 	public static fun getActive (Lio/gitlab/arturbosch/detekt/api/ConfigAware;)Z
 	public static fun getAutoCorrect (Lio/gitlab/arturbosch/detekt/api/ConfigAware;)Z
-	public static fun getParentPath (Lio/gitlab/arturbosch/detekt/api/ConfigAware;)Ljava/lang/String;
+	public static fun getRuleConfig (Lio/gitlab/arturbosch/detekt/api/ConfigAware;)Lio/gitlab/arturbosch/detekt/api/Config;
 	public static fun subConfig (Lio/gitlab/arturbosch/detekt/api/ConfigAware;Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
 	public static fun valueOrDefault (Lio/gitlab/arturbosch/detekt/api/ConfigAware;Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
 	public static fun valueOrNull (Lio/gitlab/arturbosch/detekt/api/ConfigAware;Ljava/lang/String;)Ljava/lang/Object;
@@ -351,7 +352,7 @@ public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosc
 	public fun getDefaultRuleIdAliases ()Ljava/util/Set;
 	public fun getFilters ()Lio/gitlab/arturbosch/detekt/api/internal/PathFilters;
 	public abstract fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
-	public fun getParentPath ()Ljava/lang/String;
+	public fun getRuleConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public final fun getRuleId ()Ljava/lang/String;
 	public fun getRuleSetConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public final fun report (Lio/gitlab/arturbosch/detekt/api/Finding;)V
