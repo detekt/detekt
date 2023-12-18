@@ -13,6 +13,8 @@ interface Config {
      */
     val parentPath: String?
 
+    val parent: Config?
+
     /**
      * Tries to retrieve part of the configuration based on given key.
      */
@@ -49,6 +51,8 @@ interface Config {
          */
         val empty: Config = object : Config {
             override val parentPath: String? = null
+
+            override val parent: Config = this
 
             override fun subConfig(key: String): Config = this
 

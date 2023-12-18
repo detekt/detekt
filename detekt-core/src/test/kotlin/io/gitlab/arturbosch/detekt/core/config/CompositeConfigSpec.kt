@@ -70,4 +70,11 @@ class CompositeConfigSpec {
             assertThat(actual).isEqualTo("code-smell")
         }
     }
+
+    @Test
+    fun `parent returns the parent instance`() {
+        val subject = compositeConfig
+        val actual = subject.subConfig("style").parent
+        assertThat(actual).isEqualTo(subject)
+    }
 }

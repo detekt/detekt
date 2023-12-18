@@ -42,7 +42,9 @@ public final class io/gitlab/arturbosch/detekt/test/RuleExtensionsKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/test/TestConfig : io/gitlab/arturbosch/detekt/api/Config {
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;[Lkotlin/Pair;)V
 	public fun <init> ([Lkotlin/Pair;)V
+	public fun getParent ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public fun getParentPath ()Ljava/lang/String;
 	public synthetic fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
 	public fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/test/TestConfig;

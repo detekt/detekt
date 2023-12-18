@@ -38,6 +38,21 @@ class AllRulesConfigSpec {
     }
 
     @Nested
+    inner class Parent {
+        private val rulesetConfig = yamlConfig("/configs/single-rule-in-style-ruleset.yml")
+
+        @Test
+        fun `is the parent`() {
+            val subject = AllRulesConfig(
+                originalConfig = rulesetConfig,
+                defaultConfig = emptyYamlConfig,
+            )
+            val actual = subject.subConfig("style").parent
+            assertThat(actual).isEqualTo(subject)
+        }
+    }
+
+    @Nested
     inner class DeactivateDeprecatedRule {
 
         @Test
