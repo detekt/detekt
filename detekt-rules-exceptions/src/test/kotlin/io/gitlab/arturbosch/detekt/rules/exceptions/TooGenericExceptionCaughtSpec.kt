@@ -116,4 +116,32 @@ class TooGenericExceptionCaughtSpec {
             }
         }
     }
+
+    @Test
+    fun `should not report any`() {
+        val rule = TooGenericExceptionCaught(TestConfig(CAUGHT_EXCEPTIONS_PROPERTY to "[]"))
+        val code = """
+            fun main() {
+                try {
+                    throw Throwable()
+                } catch (e: ArrayIndexOutOfBoundsException) {
+                    throw Error()
+                } catch (e: Error) {
+                    throw Exception()
+                } catch (e: Exception) {
+                } catch (e: IllegalMonitorStateException) {
+                } catch (e: IndexOutOfBoundsException) {
+                    throw RuntimeException()
+                } catch (e: Throwable) {
+                } catch (e: RuntimeException) {
+                    throw NullPointerException()
+                } catch (e: NullPointerException) {
+
+                }
+            }
+        """.trimIndent()
+        val findings = rule.compileAndLint(code)
+
+        assertThat(findings).isEmpty()
+    }
 }
