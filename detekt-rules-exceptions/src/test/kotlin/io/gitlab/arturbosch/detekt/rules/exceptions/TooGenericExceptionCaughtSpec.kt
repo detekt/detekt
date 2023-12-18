@@ -43,12 +43,10 @@ class TooGenericExceptionCaughtSpec {
     inner class `a file with a caught exception which is ignored` {
 
         val code = """
-            class MyTooGenericException : RuntimeException()
-            
             fun f() {
                 try {
                     throw Throwable()
-                } catch (myIgnore: MyTooGenericException) {
+                } catch (myIgnore: NullPointerException) {
                     throw Error()
                 }
             }
