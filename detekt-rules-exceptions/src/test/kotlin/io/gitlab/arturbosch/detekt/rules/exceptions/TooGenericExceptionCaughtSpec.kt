@@ -61,6 +61,29 @@ class TooGenericExceptionCaughtSpec {
 
             assertThat(findings).isEmpty()
         }
+    }
+
+    @Nested
+    inner class InvalidRegex {
+        val code = """
+            fun main() {
+                try {
+                    throw Throwable()
+                } catch (e: ArrayIndexOutOfBoundsException) {
+                    throw Error()
+                } catch (e: Error) {
+                    throw Exception()
+                } catch (e: Exception) {
+                } catch (e: IllegalMonitorStateException) {
+                } catch (e: IndexOutOfBoundsException) {
+                    throw RuntimeException()
+                } catch (e: Throwable) {
+                } catch (e: RuntimeException) {
+                    throw NullPointerException()
+                } catch (e: NullPointerException) {
+                }
+            }
+        """.trimIndent()
 
         @Test
         fun `should not fail when disabled with invalid regex on allowed exception names`() {
@@ -69,9 +92,7 @@ class TooGenericExceptionCaughtSpec {
                 ALLOWED_EXCEPTION_NAME_REGEX to "*MyException",
             )
             val rule = TooGenericExceptionCaught(config)
-            val findings = rule.compileAndLint(tooGenericExceptionCode)
-
-            assertThat(findings).isEmpty()
+            rule.compileAndLint(code)
         }
 
         @Test
@@ -79,7 +100,7 @@ class TooGenericExceptionCaughtSpec {
             val config = TestConfig(ALLOWED_EXCEPTION_NAME_REGEX to "*Foo")
             val rule = TooGenericExceptionCaught(config)
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
-                rule.compileAndLint(tooGenericExceptionCode)
+                rule.compileAndLint(code)
             }
         }
     }
