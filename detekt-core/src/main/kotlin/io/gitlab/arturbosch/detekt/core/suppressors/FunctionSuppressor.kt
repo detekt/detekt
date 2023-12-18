@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * is important to add `kotlin.String`. Just adding `String` will not work.
  */
 internal fun functionSuppressorFactory(rule: Rule, bindingContext: BindingContext): Suppressor? {
-    val functionMatchers = rule.valueOrDefault("ignoreFunction", emptyList<String>())
+    val functionMatchers = rule.config.valueOrDefault("ignoreFunction", emptyList<String>())
         .map(FunctionMatcher::fromFunctionSignature)
     return if (functionMatchers.isNotEmpty()) {
         Suppressor { finding ->

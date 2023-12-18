@@ -175,9 +175,9 @@ private class TransformedConfigPropertyWithAndroidVariants<T : Any, U : Any>(
     private val transform: (T) -> U
 ) : MemoizedConfigProperty<U>() {
     override fun doGetValue(thisRef: Rule, property: KProperty<*>): U {
-        val isAndroid = getValueOrDefault(thisRef.ruleConfig, "android", false)
+        val isAndroid = getValueOrDefault(thisRef.config, "android", false)
         val value = if (isAndroid) defaultAndroidValue else defaultValue
-        return transform(getValueOrDefault(thisRef.ruleConfig, property.name, value))
+        return transform(getValueOrDefault(thisRef.config, property.name, value))
     }
 }
 
@@ -186,7 +186,7 @@ private class TransformedConfigProperty<T : Any, U : Any>(
     private val transform: (T) -> U
 ) : MemoizedConfigProperty<U>() {
     override fun doGetValue(thisRef: Rule, property: KProperty<*>): U {
-        return transform(getValueOrDefault(thisRef.ruleConfig, property.name, defaultValue))
+        return transform(getValueOrDefault(thisRef.config, property.name, defaultValue))
     }
 }
 
@@ -196,10 +196,10 @@ private class FallbackConfigProperty<T : Any, U : Any>(
     private val transform: (T) -> U
 ) : MemoizedConfigProperty<U>() {
     override fun doGetValue(thisRef: Rule, property: KProperty<*>): U {
-        if (thisRef.ruleConfig.isConfigured(property.name)) {
-            return transform(getValueOrDefault(thisRef.ruleConfig, property.name, defaultValue))
+        if (thisRef.config.isConfigured(property.name)) {
+            return transform(getValueOrDefault(thisRef.config, property.name, defaultValue))
         }
-        if (thisRef.ruleConfig.isConfigured(fallbackProperty.name)) {
+        if (thisRef.config.isConfigured(fallbackProperty.name)) {
             return fallbackProperty.get()
         }
         return transform(defaultValue)

@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * name. If you don't run detekt with type solving the fully qualified name does not work.
  */
 internal fun annotationSuppressorFactory(rule: Rule, bindingContext: BindingContext): Suppressor? {
-    val annotations = rule.valueOrDefault("ignoreAnnotated", emptyList<String>()).map {
+    val annotations = rule.config.valueOrDefault("ignoreAnnotated", emptyList<String>()).map {
         it.qualifiedNameGlobToRegex()
     }
     return if (annotations.isNotEmpty()) {

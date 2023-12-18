@@ -16,8 +16,8 @@ import org.jetbrains.kotlin.psi.KtFile
  * two predefined (preVisit/postVisit) functions which can be overridden to setup/teardown additional data.
  */
 abstract class Rule(
-    override val ruleSetConfig: Config,
-) : BaseRule(), ConfigAware {
+    val config: Config,
+) : BaseRule() {
 
     /**
      * A rule is motivated to point out a specific issue in the code base.
@@ -33,7 +33,7 @@ abstract class Rule(
     /**
      * List of rule ids which can optionally be used in suppress annotations to refer to this rule.
      */
-    val aliases: Set<String> get() = valueOrDefault("aliases", defaultRuleIdAliases)
+    val aliases: Set<String> get() = config.valueOrDefault("aliases", defaultRuleIdAliases)
 
     /**
      * The default names which can be used instead of this [ruleId] to refer to this rule in suppression's.
@@ -45,13 +45,19 @@ abstract class Rule(
      */
     open val defaultRuleIdAliases: Set<String> = emptySet()
 
-    private val ruleSetId: RuleSetId? get() = ruleSetConfig.parentPath
+    private val ruleSetId: RuleSetId? get() = config.parent?.parentPath
+
+    val autoCorrect: Boolean
+        get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
+            (config.parent?.valueOrDefault(Config.AUTO_CORRECT_KEY, true) != false)
+
+    val active: Boolean get() = config.valueOrDefault(Config.ACTIVE_KEY, false)
 
     /**
      * Rules are aware of the paths they should run on via configuration properties.
      */
     open val filters: PathFilters? by lazy(LazyThreadSafetyMode.NONE) {
-        ruleConfig.createPathFilters()
+        config.createPathFilters()
     }
 
     override fun visitCondition(root: KtFile): Boolean =
@@ -71,8 +77,9 @@ abstract class Rule(
      * - Default severity
      */
     private fun computeSeverity(): Severity {
-        val configValue: String = valueOrNull(SEVERITY_KEY)
-            ?: ruleSetConfig.valueOrDefault(SEVERITY_KEY, Severity.DEFAULT.name)
+        val configValue: String = config.valueOrNull(SEVERITY_KEY)
+            ?: config.parent?.valueOrNull(SEVERITY_KEY)
+            ?: Severity.DEFAULT.name
         return enumValueOf(configValue.uppercase())
     }
 
