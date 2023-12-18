@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.core.rules
 
 import io.github.detekt.psi.absolutePath
 import io.github.detekt.tooling.api.spec.RulesSpec
-import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleId
@@ -32,16 +31,11 @@ fun RuleSet.visitFile(
     }
 
 fun associateRuleIdsToRuleSetIds(ruleSets: List<RuleSet>): Map<RuleId, RuleSetId> {
-    fun extractIds(rule: BaseRule) = sequenceOf(rule.ruleId)
-    return ruleSets.flatMap { ruleSet ->
-        ruleSet.rules
-            .asSequence()
-            .flatMap { rule ->
-                extractIds(rule).map { ruleId ->
-                    ruleId to ruleSet.id
-                }
-            }
-    }.toMap()
+    return ruleSets
+        .flatMap { ruleSet ->
+            ruleSet.rules.map { rule -> rule.ruleId to ruleSet.id }
+        }
+        .toMap()
 }
 
 fun ProcessingSettings.createRuleProviders(): List<RuleSetProvider> = when (val runPolicy = spec.rulesSpec.runPolicy) {
