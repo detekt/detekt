@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtFile
  * two predefined (preVisit/postVisit) functions which can be overridden to setup/teardown additional data.
  */
 abstract class Rule(
-    override val ruleSetConfig: Config = Config.empty,
+    override val ruleSetConfig: Config,
     ruleContext: Context = DefaultContext()
 ) : BaseRule(ruleContext), ConfigAware {
 
