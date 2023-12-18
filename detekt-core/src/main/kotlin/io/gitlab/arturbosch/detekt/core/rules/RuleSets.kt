@@ -31,7 +31,7 @@ fun RuleSet.visitFile(
         it.findings
     }
 
-fun associateRuleIdsToRuleSetIds(ruleSets: Sequence<RuleSet>): Map<RuleId, RuleSetId> {
+fun associateRuleIdsToRuleSetIds(ruleSets: List<RuleSet>): Map<RuleId, RuleSetId> {
     fun extractIds(rule: BaseRule) = sequenceOf(rule.ruleId)
     return ruleSets.flatMap { ruleSet ->
         ruleSet.rules
