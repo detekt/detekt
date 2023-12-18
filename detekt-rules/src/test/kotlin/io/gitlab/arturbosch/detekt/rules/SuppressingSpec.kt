@@ -6,10 +6,6 @@ import io.gitlab.arturbosch.detekt.core.rules.visitFile
 import io.gitlab.arturbosch.detekt.rules.complexity.ComplexCondition
 import io.gitlab.arturbosch.detekt.rules.complexity.LongMethod
 import io.gitlab.arturbosch.detekt.rules.complexity.LongParameterList
-import io.gitlab.arturbosch.detekt.rules.complexity.StringLiteralDuplication
-import io.gitlab.arturbosch.detekt.rules.complexity.TooManyFunctions
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -181,36 +177,5 @@ class SuppressingSpec {
         val findings = ruleSet.visitFile(ktFile)
 
         assertThat(findings).isEmpty()
-    }
-
-    @Test
-    fun `should suppress TooManyFunctionsRule on class level`() {
-        val rule = TooManyFunctions(TestConfig("thresholdInClasses" to "0"))
-        val code = """
-            @Suppress("TooManyFunctions")
-            class OneIsTooMany {
-                fun f() {}
-            }
-        """.trimIndent()
-
-        val findings = rule.lint(code)
-
-        assertThat(findings).isEmpty()
-    }
-
-    @Test
-    fun `should suppress StringLiteralDuplication on class level`() {
-        @Suppress("UnusedEquals")
-        val code = """
-            @Suppress("StringLiteralDuplication")
-            class Duplication {
-                var s1 = "lorem"
-                fun f(s: String = "lorem") {
-                    s1 == "lorem"
-                }
-            }
-        """.trimIndent()
-
-        assertThat(StringLiteralDuplication().lint(code)).isEmpty()
     }
 }
