@@ -13,18 +13,30 @@ private const val CAUGHT_EXCEPTIONS_PROPERTY = "exceptionNames"
 private const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
 
 class TooGenericExceptionCaughtSpec {
+    @Test
+    fun `a file with many caught exceptions should find one of each kind of defaults`() {
+        val rule = TooGenericExceptionCaught(Config.empty)
+        val code = """
+            fun main() {
+                try {
+                    throw Throwable()
+                } catch (e: ArrayIndexOutOfBoundsException) {
+                    throw Error()
+                } catch (e: Error) {
+                    throw Exception()
+                } catch (e: Exception) {
+                } catch (e: IllegalMonitorStateException) {
+                } catch (e: IndexOutOfBoundsException) {
+                    throw RuntimeException()
+                } catch (e: Throwable) {
+                } catch (e: RuntimeException) {
+                    throw NullPointerException()
+                } catch (e: NullPointerException) {
+                }
+            }
+        """.trimIndent()
 
-    @Nested
-    inner class `a file with many caught exceptions` {
-
-        @Test
-        fun `should find one of each kind of defaults`() {
-            val rule = TooGenericExceptionCaught(Config.empty)
-
-            val findings = rule.compileAndLint(tooGenericExceptionCode)
-
-            assertThat(findings).hasSize(TooGenericExceptionCaught.caughtExceptionDefaults.size)
-        }
+        assertThat(rule.compileAndLint(code)).hasSize(TooGenericExceptionCaught.caughtExceptionDefaults.size)
     }
 
     @Nested
