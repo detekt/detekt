@@ -68,6 +68,9 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
         valuesWithReason(
             "kotlin.io.print" to "print does not allow you to configure the output stream. Use a logger instead.",
             "kotlin.io.println" to "println does not allow you to configure the output stream. Use a logger instead.",
+            "java.math.BigDecimal.<init>(kotlin.Double)" to "using `BigDecimal.<init>(kotlin.Double)` can result in " +
+                "unexpected float point precision behavior. Use `BigDecimal.valueOf(kotlin.Double)` or " +
+                "`BigDecimal.<init>(kotlin.String)` instead.",
         )
     ) { list ->
         list.map { Forbidden(fromFunctionSignature(it.value), it.reason) }

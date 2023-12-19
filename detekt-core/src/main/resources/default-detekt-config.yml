@@ -608,6 +608,8 @@ style:
         value: 'kotlin.io.print'
       - reason: 'println does not allow you to configure the output stream. Use a logger instead.'
         value: 'kotlin.io.println'
+      - reason: 'using `BigDecimal.<init>(kotlin.Double)` can result in unexpected float point precision behavior. Use `BigDecimal.valueOf(kotlin.Double)` or `BigDecimal.<init>(kotlin.String)` instead.'
+        value: 'java.math.BigDecimal.<init>(kotlin.Double)'
   ForbiddenSuppress:
     active: false
     rules: []

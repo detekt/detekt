@@ -741,6 +741,39 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                 ).compileAndLintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
+
+            @Test
+            fun `should report BigDecimal double constructor usages by default`() {
+                val code = """
+                    import java.math.BigDecimal
+
+                    val x = BigDecimal(3.14)
+                """.trimIndent()
+                val findings = ForbiddenMethodCall(TestConfig()).compileAndLintWithContext(env, code)
+                assertThat(findings).hasSize(1)
+            }
+
+            @Test
+            fun `should report nothing when using BigDecimal string constructor`() {
+                val code = """
+                    import java.math.BigDecimal
+
+                    val x = BigDecimal("3.14")
+                """.trimIndent()
+                val findings = ForbiddenMethodCall(TestConfig()).compileAndLintWithContext(env, code)
+                assertThat(findings).isEmpty()
+            }
+
+            @Test
+            fun `should report nothing when using BigDecimal int constructor`() {
+                val code = """
+                    import java.math.BigDecimal
+
+                    val x = BigDecimal(3)
+                """.trimIndent()
+                val findings = ForbiddenMethodCall(TestConfig()).compileAndLintWithContext(env, code)
+                assertThat(findings).isEmpty()
+            }
         }
     }
 }
