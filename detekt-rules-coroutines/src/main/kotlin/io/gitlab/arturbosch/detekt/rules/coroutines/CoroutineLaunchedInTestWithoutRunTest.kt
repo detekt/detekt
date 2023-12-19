@@ -23,9 +23,9 @@ import org.jetbrains.kotlin.resolve.source.getPsi
 import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 
 /**
- * Detect coroutine launches from JUnit `@Test` functions outside a runTest block.
- * Launching coroutines in tests without using runTest could potentially swallow exceptions,
- * altering test results or causing crashes or other unrelated tests.
+ * Detect coroutine launches from `@Test` functions outside a `runTest` block.
+ * Launching coroutines in tests without using `runTest` could potentially swallow exceptions,
+ * altering test results or causing crashes on other unrelated tests.
  *
  * <noncompliant>
  * @@Test
@@ -40,8 +40,7 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
  * <compliant>
  * @@Test
  * fun `test that launches a coroutine`() = runTest {
- *     val scope = CoroutineScope(Dispatchers.Unconfined)
- *     scope.launch {
+ *     launch {
  *         suspendFunction()
  *     }
  * }
@@ -57,7 +56,6 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
     )
 
     override fun visitNamedFunction(initialFunction: KtNamedFunction) {
-        if (bindingContext == BindingContext.EMPTY) return
         if (!initialFunction.hasBody()) return
         if (!initialFunction.hasAnnotation(TEST_ANNOTATION_NAME)) return
 
