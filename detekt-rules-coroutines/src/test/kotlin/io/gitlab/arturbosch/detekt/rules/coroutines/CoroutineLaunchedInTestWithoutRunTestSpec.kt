@@ -15,12 +15,13 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvir
     @Test
     fun `reports when coroutine is launched in test without a runTest block`() {
         val code = """
-            import org.junit.Test
             import kotlinx.coroutines.CoroutineScope
             import kotlinx.coroutines.Dispatchers
             import kotlinx.coroutines.launch
 
             class A {
+                annotation class Test
+
                 @Test
                 fun `test that launches a coroutine`() {
                     val scope = CoroutineScope(Dispatchers.Unconfined)
@@ -36,13 +37,14 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvir
     @Test
     fun `reports when coroutine is launched in test with a runBlocking block`() {
         val code = """
-            import org.junit.Test
             import kotlinx.coroutines.CoroutineScope
             import kotlinx.coroutines.Dispatchers
             import kotlinx.coroutines.launch
             import kotlinx.coroutines.runBlocking
 
             class A {
+                annotation class Test
+                
                 @Test
                 fun `test that launches a coroutine`() = runBlocking {
                     val scope = CoroutineScope(Dispatchers.Unconfined)
@@ -60,13 +62,14 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvir
     @Test
     fun `reports when coroutine is launched in test with a runBlocking block in another function`() {
         val code = """
-            import org.junit.Test
             import kotlinx.coroutines.CoroutineScope
             import kotlinx.coroutines.Dispatchers
             import kotlinx.coroutines.launch
             import kotlinx.coroutines.runBlocking
-
+            
             class A {
+                annotation class Test
+
                 @Test
                 fun `test that launches a coroutine`() = runBlocking {
                     launchCoroutine()
@@ -108,13 +111,14 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvir
     @Test
     fun `no reports when coroutine is launched in test with a runTest block`() {
         val code = """
-            import org.junit.Test
             import kotlinx.coroutines.CoroutineScope
             import kotlinx.coroutines.Dispatchers
             import kotlinx.coroutines.launch
             import kotlinx.coroutines.test.runTest
 
             class A {
+                annotation class Test
+
                 @Test
                 fun `test that launches a coroutine`() = runTest {
                     val scope = CoroutineScope(Dispatchers.Unconfined)
@@ -130,9 +134,9 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvir
     @Test
     fun `no reports when no coroutine is launched in test without a runTest block`() {
         val code = """
-            import org.junit.Test
-
             class A {
+                annotation class Test
+
                 @Test
                 fun `test that launches a coroutine`() {
                     assert(true)
