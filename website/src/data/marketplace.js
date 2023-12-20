@@ -63,7 +63,7 @@ export const tagTypes = {
 export const extensions = [
   {
     title: "Faire's Detekt Rules",
-    description: "A colleciton of opinionated rules aiming to provide project code consistency, improve readability and prevent performance issues.",
+    description: "A collection of opinionated rules aiming to provide project code consistency, improve readability and prevent performance issues.",
     repo: "https://github.com/Faire/faire-detekt-rules",
     ruleset: "FaireRuleSet",
     rules: [
