@@ -20,6 +20,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.ClassName
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ClassSignature
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ConditionWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ContextReceiverMapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumEntryNameCase
 import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumWrapping
@@ -40,10 +41,12 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.ImportOrdering
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Indentation
 import io.gitlab.arturbosch.detekt.formatting.wrappers.KdocWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.MaximumLineLength
+import io.gitlab.arturbosch.detekt.formatting.wrappers.MixedConditionOperators
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ModifierListSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ModifierOrdering
 import io.gitlab.arturbosch.detekt.formatting.wrappers.MultiLineIfElse
 import io.gitlab.arturbosch.detekt.formatting.wrappers.MultilineExpressionWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.MultilineLoop
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoBlankLineBeforeRbrace
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoBlankLineInList
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoBlankLinesInChainedMethodCalls
@@ -89,9 +92,13 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplateIndent
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TrailingCommaOnCallSite
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TrailingCommaOnDeclarationSite
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TryCatchFinallySpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.TypeArgumentComment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TypeArgumentListSpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.TypeParameterComment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TypeParameterListSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.UnnecessaryParenthesesBeforeTrailingLambda
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ValueArgumentComment
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ValueParameterComment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Wrapping
 
 /**
@@ -190,17 +197,24 @@ class FormattingProvider : RuleSetProvider {
             TrailingCommaOnCallSite(config), // in standard ruleset but not enabled by default
             TrailingCommaOnDeclarationSite(config), // in standard ruleset but not enabled by default
             TryCatchFinallySpacing(config),
+            TypeArgumentComment(config),
             TypeArgumentListSpacing(config),
+            TypeParameterComment(config),
             TypeParameterListSpacing(config),
             UnnecessaryParenthesesBeforeTrailingLambda(config),
+            ValueArgumentComment(config),
+            ValueParameterComment(config),
             Wrapping(config),
             // Wrappers for ktlint-ruleset-experimental rules. Disabled by default.
             BinaryExpressionWrapping(config),
             ChainMethodContinuation(config),
             ClassSignature(config),
+            ConditionWrapping(config),
             FunctionExpressionBody(config),
             FunctionLiteral(config),
             FunctionTypeModifierSpacing(config),
+            MixedConditionOperators(config),
+            MultilineLoop(config),
         ).sorted()
     )
 
