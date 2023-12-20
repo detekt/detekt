@@ -84,6 +84,8 @@ formatting:
     active: false
   StringTemplateIndent:
     active: false
+  ValueArgumentComment:
+    active: false
 
 naming:
   ClassNaming:
