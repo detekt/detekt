@@ -72,6 +72,8 @@ formatting:
     active: true
   BlankLineBeforeDeclaration:
     active: false
+  ConditionWrapping:
+    active: true
   Filename:
     active: false
   FunctionSignature:

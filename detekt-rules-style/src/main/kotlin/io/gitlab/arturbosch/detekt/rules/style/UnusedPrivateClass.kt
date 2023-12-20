@@ -70,9 +70,10 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
         private fun KtNamedDeclaration.isUsed(): Boolean {
             if (nameAsSafeName.identifier in namedClasses) return true
             val pathSegments = fqName?.pathSegments().orEmpty()
-            return pathSegments.isNotEmpty() && importedFqNames.any { importedFqName ->
-                importedFqName.pathSegments().zip(pathSegments).all { it.first == it.second }
-            }
+            return pathSegments.isNotEmpty() &&
+                importedFqNames.any { importedFqName ->
+                    importedFqName.pathSegments().zip(pathSegments).all { it.first == it.second }
+                }
         }
 
         override fun visitClass(klass: KtClass) {

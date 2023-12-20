@@ -48,5 +48,6 @@ class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
             parents.filterIsInstance<KtClassOrObject>().all { it.isPublic || it.isProtected() }
         } else {
             parents.filterIsInstance<KtClassOrObject>().all { it.isPublic }
-        } && isPublicNotOverridden(searchProtectedFunction)
+        } &&
+            isPublicNotOverridden(searchProtectedFunction)
 }

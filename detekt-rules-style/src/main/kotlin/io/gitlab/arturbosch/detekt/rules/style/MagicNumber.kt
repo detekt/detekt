@@ -117,7 +117,8 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         val elementType = expression.elementType
         if (elementType != KtNodeTypes.INTEGER_CONSTANT && elementType != KtNodeTypes.FLOAT_CONSTANT) return
 
-        if (isIgnoredByConfig(expression) || expression.isPartOfFunctionReturnConstant() ||
+        if (isIgnoredByConfig(expression) ||
+            expression.isPartOfFunctionReturnConstant() ||
             expression.isPartOfConstructorOrFunctionConstant()
         ) {
             return

@@ -12,7 +12,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * If this element cannot have annotations, the first annotative parent is searched.
  */
 fun KtElement.isSuppressedBy(id: String, aliases: Set<String>, ruleSetId: RuleSetId? = null): Boolean =
-    this is KtAnnotated && this.isSuppressedBy(id, aliases, ruleSetId) ||
+    this is KtAnnotated &&
+        this.isSuppressedBy(id, aliases, ruleSetId) ||
         findAnnotatedSuppressedParent(id, aliases, ruleSetId)
 
 private fun KtElement.findAnnotatedSuppressedParent(
