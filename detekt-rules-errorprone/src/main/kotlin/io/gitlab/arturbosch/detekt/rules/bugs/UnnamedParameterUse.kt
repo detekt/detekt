@@ -113,11 +113,7 @@ class UnnamedParameterUse(config: Config = Config.empty) : Rule(config) {
             isNamedOrVararg to it
         }
 
-        if (allowAdjacentDifferentTypeParams && namedArgumentList.windowed(2)
-                .all {
-                    isAdjacentUnnamedParamsAllowed(it)
-                }
-        ) {
+        if (allowAdjacentDifferentTypeParams && namedArgumentList.windowed(2).all(::isAdjacentUnnamedParamsAllowed)) {
             return
         }
 

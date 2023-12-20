@@ -90,9 +90,10 @@ class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
     private fun KtExpression.isForbiddenNegation(): Boolean {
         return when (this) {
             is KtOperationReferenceExpression -> operationSignTokenType in negationTokens
-            is KtCallExpression -> text == "not()" || text.split(splitCamelCaseRegex).map { it.lowercase() }
-                .any { it in negativeFunctionNameParts }
-
+            is KtCallExpression -> {
+                text == "not()" ||
+                    text.split(splitCamelCaseRegex).map { it.lowercase() }.any { it in negativeFunctionNameParts }
+            }
             else -> false
         }
     }

@@ -78,7 +78,8 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
             // `put` isn't an operator function, but can be replaced with indexer when the caller is Map.
             "put" -> isCallerMap(expression)
             else -> false
-        } && unusedReturnValue(expression)
+        } &&
+            unusedReturnValue(expression)
 
     private fun KtCallExpression.getFunctionDescriptor(): FunctionDescriptor? =
         getResolvedCall(bindingContext)?.resultingDescriptor as? FunctionDescriptor

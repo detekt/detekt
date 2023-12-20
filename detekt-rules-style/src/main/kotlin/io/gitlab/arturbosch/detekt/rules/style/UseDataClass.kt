@@ -76,7 +76,8 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
         if (isIncorrectClassType(klass) || hasOnlyPrivateConstructors(klass)) {
             return
         }
-        if (klass.isClosedForExtension() && klass.onlyExtendsSimpleInterfaces() &&
+        if (klass.isClosedForExtension() &&
+            klass.onlyExtendsSimpleInterfaces() &&
             !annotationExcluder.shouldExclude(klass.annotationEntries)
         ) {
             val declarations = klass.body?.declarations.orEmpty()

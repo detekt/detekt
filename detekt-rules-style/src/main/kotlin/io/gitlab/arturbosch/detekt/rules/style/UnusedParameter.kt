@@ -128,6 +128,13 @@ private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVi
     private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()
 
     private fun KtNamedFunction.isAllowedToHaveUnusedParameters() =
-        isAbstract() || isOpen() || isOverride() || isOperator() || isMainFunction() || isExternal() ||
-            isExpect() || isActual() || isProtected()
+        isAbstract() ||
+            isOpen() ||
+            isOverride() ||
+            isOperator() ||
+            isMainFunction() ||
+            isExternal() ||
+            isExpect() ||
+            isActual() ||
+            isProtected()
 }
