@@ -121,7 +121,7 @@ class FormattingProvider : RuleSetProvider {
     override fun instance(config: Config) = RuleSet(
         ruleSetId,
         listOf(
-            // Wrappers for ktlint-ruleset-standard rules. Enabled by default.
+            // Wrappers for standard rules. Enabled by default.
             AnnotationOnSeparateLine(config),
             AnnotationSpacing(config),
             ArgumentListWrapping(config),
@@ -194,8 +194,8 @@ class FormattingProvider : RuleSetProvider {
             StatementWrapping(config),
             StringTemplate(config),
             StringTemplateIndent(config),
-            TrailingCommaOnCallSite(config), // in standard ruleset but not enabled by default
-            TrailingCommaOnDeclarationSite(config), // in standard ruleset but not enabled by default
+            TrailingCommaOnCallSite(config), // standard rule but not enabled by default
+            TrailingCommaOnDeclarationSite(config), // standard rule but not enabled by default
             TryCatchFinallySpacing(config),
             TypeArgumentComment(config),
             TypeArgumentListSpacing(config),
@@ -205,7 +205,7 @@ class FormattingProvider : RuleSetProvider {
             ValueArgumentComment(config),
             ValueParameterComment(config),
             Wrapping(config),
-            // Wrappers for ktlint-ruleset-experimental rules. Disabled by default.
+            // Wrappers for experimental rules. Disabled by default.
             BinaryExpressionWrapping(config),
             ChainMethodContinuation(config),
             ClassSignature(config),
