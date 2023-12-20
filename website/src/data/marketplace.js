@@ -62,6 +62,38 @@ export const tagTypes = {
 // Add sites to this list
 export const extensions = [
   {
+    title: "Faire's Detekt Rules",
+    description: "A colleciton of opinionated rules aiming to provide project code consistency, improve readability and prevent performance issues.",
+    repo: "https://github.com/Faire/faire-detekt-rules",
+    ruleset: "FaireRuleSet",
+    rules: [
+      "AlwaysUseIsTrueOrIsFalse",
+      "DoNotAccessVisibleForTesting",
+      "DoNotSplitByRegex",
+      "DoNotUseDirectReceiverReferenceInsideWith",
+      "DoNotUseHasSizeForEmptyListInAssert",
+      "DoNotUseIsEqualToWhenArgumentIsOne",
+      "DoNotUseIsEqualToWhenArgumentIsZero",
+      "DoNotUsePropertyAccessInAssert",
+      "DoNotUseSingleOnFilter",
+      "DoNotUseSizePropertyInAssert",
+      "GetOrDefaultShouldBeReplacedWithGetOrElse",
+      "NoNonPrivateGlobalVariables",
+      "NoNullableLambdaWithDefaultNull",
+      "NoPairWithAmbiguousTypes",
+      "PreferIgnoreCase",
+      "PreventBannedImports",
+      "ReturnValueOfLetMustBeUsed",
+      "UseEntriesInsteadOfValuesOnEnum",
+      "UseFirstOrNullInsteadOfFind",
+      "UseMapNotNullInsteadOfFilterNotNull",
+      "UseOfCollectionInsteadOfEmptyCollection",
+      "UseSetInsteadOfListToSet",
+    ],
+    usesTypeResolution: true,
+    tags: ["ruleset"],
+  },
+  {
     title: "Hbmartin's Ruleset",
     description:
       "A somewhat opinionated ruleset for Detekt, primarily intended to avoid crashes and bugs related to mutability.",
