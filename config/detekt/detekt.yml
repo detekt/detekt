@@ -80,6 +80,8 @@ formatting:
     active: false
   MultilineExpressionWrapping:
     active: false
+  MultilineLoop:
+    active: true
   NoEmptyFirstLineInClassBody:
     active: false
   StringTemplateIndent:
