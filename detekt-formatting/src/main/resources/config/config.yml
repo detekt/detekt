@@ -230,6 +230,7 @@ formatting:
   SpacingAroundCurly:
     active: true
     autoCorrect: true
+    indentSize: 4
   SpacingAroundDot:
     active: true
     autoCorrect: true
