@@ -21,7 +21,6 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.ClassSignature
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ContextReceiverMapping
-import io.gitlab.arturbosch.detekt.formatting.wrappers.DiscouragedCommentLocation
 import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumEntryNameCase
 import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Filename
@@ -126,7 +125,6 @@ class FormattingProvider : RuleSetProvider {
             CommentSpacing(config),
             CommentWrapping(config),
             ContextReceiverMapping(config),
-            DiscouragedCommentLocation(config),
             EnumEntryNameCase(config),
             EnumWrapping(config),
             Filename(config),

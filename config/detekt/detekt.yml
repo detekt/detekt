@@ -72,8 +72,6 @@ formatting:
     active: true
   BlankLineBeforeDeclaration:
     active: false
-  DiscouragedCommentLocation:
-    active: false
   Filename:
     active: false
   FunctionSignature:

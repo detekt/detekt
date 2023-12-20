@@ -53,9 +53,6 @@ formatting:
     autoCorrect: true
     maxLineLength: 120
     indentSize: 4
-  DiscouragedCommentLocation:
-    active: true
-    autoCorrect: true
   EnumEntryNameCase:
     active: true
     autoCorrect: true
