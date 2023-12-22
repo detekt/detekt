@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.yieldStatementsSkippingGuardClauses
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
@@ -53,31 +52,29 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
-        if (!function.isOverride()) {
-            val statements = if (excludeGuardClauses) {
-                function.yieldStatementsSkippingGuardClauses<KtThrowExpression>()
-            } else {
-                function.bodyBlockExpression?.statements?.asSequence().orEmpty()
+        val statements = if (excludeGuardClauses) {
+            function.yieldStatementsSkippingGuardClauses<KtThrowExpression>()
+        } else {
+            function.bodyBlockExpression?.statements?.asSequence().orEmpty()
+        }
+
+        val countOfThrows = statements
+            .flatMap { statement ->
+                statement.collectDescendantsOfType<KtThrowExpression> {
+                    it.getStrictParentOfType<KtNamedFunction>() == function
+                }.asSequence()
             }
+            .count()
 
-            val countOfThrows = statements
-                .flatMap { statement ->
-                    statement.collectDescendantsOfType<KtThrowExpression> {
-                        it.getStrictParentOfType<KtNamedFunction>() == function
-                    }.asSequence()
-                }
-                .count()
-
-            if (countOfThrows > max) {
-                report(
-                    CodeSmell(
-                        issue,
-                        Entity.atName(function),
-                        "Too many throw statements in the function" +
-                            " ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."
-                    )
+        if (countOfThrows > max) {
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.atName(function),
+                    "Too many throw statements in the function" +
+                        " ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."
                 )
-            }
+            )
         }
     }
 }

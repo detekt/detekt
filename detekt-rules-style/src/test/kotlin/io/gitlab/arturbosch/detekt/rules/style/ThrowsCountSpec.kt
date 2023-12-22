@@ -76,7 +76,7 @@ class ThrowsCountSpec {
     @Nested
     inner class `code with an override function with 3 throw expressions` {
         val code = """
-            override fun f3(x: Int) { // does not report overridden function
+            override fun f3(x: Int) {
                 when (x) {
                     1 -> throw IOException()
                     2 -> throw IOException()
@@ -88,7 +88,7 @@ class ThrowsCountSpec {
 
         @Test
         fun `reports violation by default`() {
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lint(code)).hasSize(1)
         }
     }
 
