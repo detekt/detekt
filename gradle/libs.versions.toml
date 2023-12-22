@@ -21,7 +21,7 @@ kotlin-reflection = { module = "org.jetbrains.kotlin:kotlin-reflect", version.re
 kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.10.1"
 kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
 
-# This represents the the oldest AGP version that is supported by detekt.
+# This represents the oldest AGP version that is supported by detekt.
 # This should only be updated when updating the minimum version supported by detekt's Gradle plugin.
 android-gradle-minSupported = "com.android.tools.build:gradle:7.0.0"
 
