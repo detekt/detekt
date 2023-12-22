@@ -5,7 +5,7 @@ kotlin = "2.0.0-Beta5"
 coroutines = "1.8.0"
 ktlint = "1.1.1"
 junit = "5.10.2"
-poko = "0.15.2"
+poko = "0.16.0-SNAPSHOT"
 slf4j = "2.0.12"
 
 [libraries]
