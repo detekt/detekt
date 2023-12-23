@@ -14,29 +14,59 @@ class TooGenericExceptionThrownSpec {
     @ParameterizedTest
     @ValueSource(strings = ["Error", "Exception", "Throwable", "RuntimeException"])
     fun `should report $exceptionName`(exceptionName: String) {
-        val config = TestConfig(EXCEPTION_NAMES to "[$exceptionName]")
-        val rule = TooGenericExceptionThrown(config)
+        val rule = TooGenericExceptionThrown(TestConfig(EXCEPTION_NAMES to "[$exceptionName]"))
+        val code = """
+            fun main() {
+                try {
+                    throw Throwable()
+                } catch (e: ArrayIndexOutOfBoundsException) {
+                    throw Error()
+                } catch (e: Error) {
+                    throw Exception()
+                } catch (e: Exception) {
+                } catch (e: IllegalMonitorStateException) {
+                } catch (e: IndexOutOfBoundsException) {
+                    throw RuntimeException()
+                } catch (e: Throwable) {
+                } catch (e: RuntimeException) {
+                    throw NullPointerException()
+                } catch (e: NullPointerException) {
+                }
+            }
+        """.trimIndent()
 
-        val findings = rule.compileAndLint(tooGenericExceptionCode)
-
-        assertThat(findings).hasSize(1)
+        assertThat(rule.compileAndLint(code)).hasSize(1)
     }
 
     @Test
     fun `should not report thrown exceptions`() {
-        val config = TestConfig(EXCEPTION_NAMES to "['MyException', Bar]")
-        val rule = TooGenericExceptionThrown(config)
+        val rule = TooGenericExceptionThrown(TestConfig(EXCEPTION_NAMES to "['MyException', Bar]"))
+        val code = """
+            fun main() {
+                try {
+                    throw Throwable()
+                } catch (e: ArrayIndexOutOfBoundsException) {
+                    throw Error()
+                } catch (e: Error) {
+                    throw Exception()
+                } catch (e: Exception) {
+                } catch (e: IllegalMonitorStateException) {
+                } catch (e: IndexOutOfBoundsException) {
+                    throw RuntimeException()
+                } catch (e: Throwable) {
+                } catch (e: RuntimeException) {
+                    throw NullPointerException()
+                } catch (e: NullPointerException) {
+                }
+            }
+        """.trimIndent()
 
-        val findings = rule.compileAndLint(tooGenericExceptionCode)
-
-        assertThat(findings).isEmpty()
+        assertThat(rule.compileAndLint(code)).isEmpty()
     }
 
     @Test
     fun `should not report caught exceptions`() {
-        val config = TestConfig(EXCEPTION_NAMES to "['Exception']")
-        val rule = TooGenericExceptionThrown(config)
-
+        val rule = TooGenericExceptionThrown(TestConfig(EXCEPTION_NAMES to "['Exception']"))
         val code = """
             fun f() {
                 try {
@@ -46,17 +76,41 @@ class TooGenericExceptionThrownSpec {
                 }
             }
         """.trimIndent()
-        val findings = rule.compileAndLint(code)
 
-        assertThat(findings).isEmpty()
+        assertThat(rule.compileAndLint(code)).isEmpty()
     }
 
     @Test
     fun `should not report initialize exceptions`() {
-        val config = TestConfig(EXCEPTION_NAMES to "['Exception']")
-        val rule = TooGenericExceptionThrown(config)
-
+        val rule = TooGenericExceptionThrown(TestConfig(EXCEPTION_NAMES to "['Exception']"))
         val code = """fun f() { val ex = Exception() }"""
+
+        assertThat(rule.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `should not report any`() {
+        val rule = TooGenericExceptionThrown(TestConfig(EXCEPTION_NAMES to "[]"))
+        val code = """
+            fun main() {
+                try {
+                    throw Throwable()
+                } catch (e: ArrayIndexOutOfBoundsException) {
+                    throw Error()
+                } catch (e: Error) {
+                    throw Exception()
+                } catch (e: Exception) {
+                } catch (e: IllegalMonitorStateException) {
+                } catch (e: IndexOutOfBoundsException) {
+                    throw RuntimeException()
+                } catch (e: Throwable) {
+                } catch (e: RuntimeException) {
+                    throw NullPointerException()
+                } catch (e: NullPointerException) {
+
+                }
+            }
+        """.trimIndent()
         val findings = rule.compileAndLint(code)
 
         assertThat(findings).isEmpty()
