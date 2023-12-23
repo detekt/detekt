@@ -67,5 +67,3 @@ val detektAll by tasks.registering(Detekt::class) {
     }
 }
 ```
-
-{% include links.html %}
