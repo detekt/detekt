@@ -2,7 +2,7 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 
 import { themes as prismThemes } from "prism-react-renderer";
-const detektVersionReplace = require('./src/remark/detektVersionReplace');
+const detektVersionReplace = require("./src/remark/detektVersionReplace");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -123,14 +123,19 @@ const config = {
             position: "left",
           },
           {
-            href: "/kdoc/",
+            label: "APIs",
+            type: "dropdown",
             position: "left",
-            label: "API",
-          },
-          {
-            href: "/kdoc/detekt-gradle-plugin/",
-            position: "left",
-            label: "Gradle Plugin API",
+            items: [
+              {
+                href: "https://detekt.dev/kdoc/",
+                label: "Core APIs",
+              },
+              {
+                href: "https://detekt.dev/kdoc/detekt-gradle-plugin/",
+                label: "Gradle Plugin APIs",
+              },
+            ],
           },
           {
             to: "/marketplace",
