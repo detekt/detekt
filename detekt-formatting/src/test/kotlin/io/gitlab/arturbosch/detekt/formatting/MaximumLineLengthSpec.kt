@@ -39,7 +39,7 @@ class MaximumLineLengthSpec {
                 "Test.kt"
             ).first()
 
-            assertJThat(finding.entity.signature).isEqualTo("Test.kt\$fun")
+            assertJThat(finding.entity.signature).isEqualTo("Test.kt\$}")
         }
 
         @Test
@@ -63,7 +63,7 @@ class MaximumLineLengthSpec {
         // exceeded lines in block comments.
         assertThat(findings)
             .hasSize(2)
-            .hasStartSourceLocations(SourceLocation(8, 1), SourceLocation(14, 1))
+            .hasStartSourceLocations(SourceLocation(8, 31), SourceLocation(14, 31))
     }
 
     @Test

@@ -79,7 +79,8 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
     }
 
     private fun isNotDecimalNumber(rawText: String): Boolean {
-        return rawText.replace("_", "").toDoubleOrNull() == null || rawText.startsWith(HEX_PREFIX) ||
+        return rawText.replace("_", "").toDoubleOrNull() == null ||
+            rawText.startsWith(HEX_PREFIX) ||
             rawText.startsWith(BIN_PREFIX)
     }
 

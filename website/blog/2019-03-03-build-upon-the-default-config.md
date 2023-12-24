@@ -38,6 +38,3 @@ detekt {
     ...
 }
 ```
-
-
-{% include links.html %}

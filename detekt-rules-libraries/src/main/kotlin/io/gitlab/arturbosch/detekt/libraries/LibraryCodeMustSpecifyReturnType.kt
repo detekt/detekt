@@ -87,9 +87,7 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
         if (bodyExpression == null || bodyExpression.isUnitExpression()) {
             return true
         }
-        return allowOmitUnit && this.hasImplicitUnitReturnType(
-            bindingContext
-        )
+        return allowOmitUnit && this.hasImplicitUnitReturnType(bindingContext)
     }
 
     private fun KtCallableDeclaration.explicitReturnTypeRequired(): Boolean =

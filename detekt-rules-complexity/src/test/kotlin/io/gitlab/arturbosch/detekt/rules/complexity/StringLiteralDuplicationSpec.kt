@@ -173,6 +173,22 @@ class StringLiteralDuplicationSpec {
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
+
+    @Test
+    fun `should suppress StringLiteralDuplication on class level`() {
+        @Suppress("UnusedEquals")
+        val code = """
+            @Suppress("StringLiteralDuplication")
+            class Duplication {
+                var s1 = "lorem"
+                fun f(s: String = "lorem") {
+                    s1 == "lorem"
+                }
+            }
+        """.trimIndent()
+
+        assertThat(StringLiteralDuplication().compileAndLint(code)).isEmpty()
+    }
 }
 
 private fun assertFindingWithConfig(code: String, config: TestConfig, expected: Int) {
