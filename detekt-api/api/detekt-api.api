@@ -364,12 +364,8 @@ public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosc
 
 public final class io/gitlab/arturbosch/detekt/api/RuleSet {
 	public fun <init> (Ljava/lang/String;Ljava/util/List;)V
-	public final fun accept (Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;)Ljava/util/List;
-	public static synthetic fun accept$default (Lio/gitlab/arturbosch/detekt/api/RuleSet;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;ILjava/lang/Object;)Ljava/util/List;
 	public final fun getId ()Ljava/lang/String;
-	public final fun getPathFilters ()Lio/gitlab/arturbosch/detekt/api/internal/PathFilters;
 	public final fun getRules ()Ljava/util/List;
-	public final fun setPathFilters (Lio/gitlab/arturbosch/detekt/api/internal/PathFilters;)V
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/RuleSetProvider {
