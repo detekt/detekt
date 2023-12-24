@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.core.rules
 import io.github.detekt.psi.absolutePath
 import io.github.detekt.tooling.api.spec.RulesSpec
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleId
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetId
@@ -11,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
 
 fun Config.isActive(): Boolean =
     valueOrDefault(Config.ACTIVE_KEY, true)
@@ -20,15 +18,6 @@ fun Config.shouldAnalyzeFile(file: KtFile): Boolean {
     val filters = createPathFilters()
     return filters == null || !filters.isIgnored(file.absolutePath())
 }
-
-fun RuleSet.visitFile(
-    file: KtFile,
-    bindingContext: BindingContext = BindingContext.EMPTY
-): List<Finding> =
-    rules.flatMap {
-        it.visitFile(file, bindingContext)
-        it.findings
-    }
 
 fun associateRuleIdsToRuleSetIds(ruleSets: List<RuleSet>): Map<RuleId, RuleSetId> {
     return ruleSets
