@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -66,8 +65,10 @@ class MissingUseCall(config: Config = Config.empty) : Rule(config) {
         javaClass.simpleName,
         "Usage of `Closeable` detected without `use` call. Using `Closeable` without `use` can be problematic " +
             "as closing `Closeable` may throw exception.",
-        Debt.FIVE_MINS
     )
+
+    private val traversedParentExpression: MutableList<PsiElement> = mutableListOf()
+
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -110,7 +111,7 @@ class MissingUseCall(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun shouldReport(expression: KtExpression): Boolean {
-        val expressionParent = getParentExpression(expression)
+        val expressionParent = getParentExpression(expression) ?: return false
         return when {
             expressionParent is KtQualifiedExpression -> {
                 expressionParent.doesEndWithUse().not()
@@ -124,10 +125,15 @@ class MissingUseCall(config: Config = Config.empty) : Rule(config) {
                 false
             }
 
+            expressionParent is KtProperty -> {
+                // rhs has already been analysed
+                traversedParentExpression.contains(expressionParent.children.getOrNull(0)).not()
+            }
+
             else -> {
                 true
             }
-        }
+        }.also { traversedParentExpression.add(expressionParent) }
     }
 
     private fun isParentFunctionReturnsCloseable(expression: KtExpression): Boolean {

@@ -124,6 +124,23 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             )
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
+        // TODO discussion going at https://github.com/detekt/detekt/pull/6026/files#r1405499670
+        assertThat(findings).hasSize(2)
+    }
+
+    @Test
+    fun `does not report nested use of _use_`() {
+        val code = """
+            import java.io.Closeable
+            import java.io.BufferedReader
+            import java.io.FileReader
+
+            val lines = BufferedReader(
+                FileReader("some_file.txt")
+            )
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        // TODO discussion going at https://github.com/detekt/detekt/pull/6026/files#r1405499670
         assertThat(findings).hasSize(2)
     }
 
@@ -150,7 +167,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(2)
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -199,6 +216,21 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                     getSomeValueButGenerateException()
                 ).use { myClosable -> whatever(myClosable) }
             }
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report nested call when _use_ is used with computation inside _use_`() {
+        val code = """
+            import java.io.Closeable
+            import java.io.BufferedReader
+            import java.io.FileReader
+
+            val lines1 = FileReader("some_file.txt").use { fileReader -> BufferedReader(fileReader).use { it.lines().collect(Collectors.toList()) } }
+            val lines2 = FileReader("some_file.txt").use { fileReader -> fileReader.buffered().lines().collect(Collectors.toList()) }
+            val linesStream = FileReader("some_file.txt").use { fileReader -> fileReader.buffered().lines() }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
@@ -329,7 +361,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does not report _Closeable_ child class anonymous object is used with _use_`() {
         val code = """
-            ${myClosable(open = true)}
+            ${myClosable(isOpen = true)}
 
             fun test() {
                 object : MyCloseable() {}.use { /* no-op */ }
@@ -342,7 +374,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does report _Closeable_ child class anonymous object is used without _use_`() {
         val code = """
-            ${myClosable(open = true)}
+            ${myClosable(isOpen = true)}
 
             fun test() {
                 object : MyCloseable() {}
@@ -591,13 +623,13 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                             // closeable is used
                         }
                     } else {
-                        MyCloseable(1)
+                        null
                     }
                     closable.use { /* no-op */ }
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(2)
+            assertThat(findings).hasSize(1)
         }
 
         @Test
@@ -607,7 +639,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
 
                 fun test() {
                     val closable = if (System.currentTimeMillis() % 2 == 0L) { 
-                        MyCloseable(0)
+                        null
                     } else {
                         MyCloseable(1).also { 
                             // closeable is used
@@ -617,7 +649,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(2)
+            assertThat(findings).hasSize(1)
         }
 
         @Test
@@ -626,12 +658,12 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 ${myClosable()}
 
                 fun test() {
-                    val closable = if (System.currentTimeMillis() % 2 == 0L) MyCloseable(0) else MyCloseable(1).also { /* closeable is used */ }
+                    val closable = if (System.currentTimeMillis() % 2 == 0L) null else MyCloseable(1).also { /* closeable is used */ }
                     closable.use { /* no-op */ }
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(2)
+            assertThat(findings).hasSize(1)
         }
     }
 
@@ -765,9 +797,9 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     }
 }
 
-private fun myClosable(clazz: String = "java.io.Closeable", open: Boolean = false): String {
+private fun myClosable(clazz: String = "java.io.Closeable", isOpen: Boolean = false): String {
     return """
-        ${if (open) "open " else ""} class MyCloseable(private val i: Int) : $clazz {
+        ${if (isOpen) "open " else ""} class MyCloseable(private val i: Int) : $clazz {
             override fun close() { /* no-op */ }
 
             fun doStuff() { /* no-op */ }
