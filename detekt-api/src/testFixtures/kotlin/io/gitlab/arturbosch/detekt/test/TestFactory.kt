@@ -76,10 +76,11 @@ fun createEntity(
     position: Pair<Int, Int> = 1 to 1,
     text: IntRange = 0..0,
     ktElement: KtElement? = null,
-    basePath: String? = null
+    basePath: String? = null,
+    signature: String = "TestEntitySignature",
 ) = Entity(
     name = "TestEntity",
-    signature = "TestEntitySignature",
+    signature = signature,
     location = Location(
         source = SourceLocation(position.first, position.second),
         text = TextLocation(text.first, text.last),

@@ -15,7 +15,6 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.core.tooling.AnalysisFacade
 import io.gitlab.arturbosch.detekt.core.tooling.DefaultLifecycle
 import io.gitlab.arturbosch.detekt.core.tooling.inputPathsToKtFiles
-import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtAnnotation
 import org.jetbrains.kotlin.psi.KtFile
@@ -55,7 +54,7 @@ class TopLevelAutoCorrectSpec {
 
         AnalysisFacade(spec).runAnalysis {
             DefaultLifecycle(
-                mockk(),
+                Config.empty,
                 it,
                 inputPathsToKtFiles,
                 processorsProvider = { listOf(contentChangedListener) },
