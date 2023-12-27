@@ -72,7 +72,7 @@ fun createIssue(id: String) = Issue(
 )
 
 fun createEntity(
-    path: String,
+    path: String = "File.kt",
     position: Pair<Int, Int> = 1 to 1,
     text: IntRange = 0..0,
     ktElement: KtElement? = null,

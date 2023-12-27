@@ -109,11 +109,11 @@ class MdOutputReportSpec {
         val detektion = object : TestDetektion() {
             override val findings: Map<String, List<Finding>> = mapOf(
                 "Style" to listOf(
-                    createFinding(createIssue("ValCouldBeVar"), createEntity(""))
+                    createFinding(createIssue("ValCouldBeVar"), createEntity())
                 ),
                 "empty" to listOf(
-                    createFinding(createIssue("EmptyBody"), createEntity("")),
-                    createFinding(createIssue("EmptyIf"), createEntity(""))
+                    createFinding(createIssue("EmptyBody"), createEntity()),
+                    createFinding(createIssue("EmptyIf"), createEntity())
                 )
             )
         }
