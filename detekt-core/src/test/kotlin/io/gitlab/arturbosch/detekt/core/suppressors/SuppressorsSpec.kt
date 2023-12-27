@@ -16,7 +16,7 @@ class SuppressorsSpec {
     val noIgnorableCodeSmell = CodeSmell(
         issue = ARule().issue,
         entity = Entity.from(compileContentForTest("""fun foo() = Unit""".trimIndent())),
-        message = ""
+        message = "TestMessage"
     )
 
     val ignorableCodeSmell = CodeSmell(
@@ -32,7 +32,7 @@ class SuppressorsSpec {
                 """.trimIndent()
             )
         ),
-        message = ""
+        message = "TestMessage"
     )
 
     @Test

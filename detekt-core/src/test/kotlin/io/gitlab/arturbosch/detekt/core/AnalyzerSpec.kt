@@ -174,7 +174,7 @@ private class StyleRuleSetProvider(private val threshold: Int? = null) : RuleSet
 }
 
 private class MaxLineLength(config: Config, threshold: Int?) : Rule(config) {
-    override val issue = Issue(this::class.java.simpleName, "")
+    override val issue = Issue(this::class.java.simpleName, "TestDescription")
     private val lengthThreshold: Int = threshold ?: valueOrDefault("maxLineLength", 100)
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
@@ -188,7 +188,7 @@ private class MaxLineLength(config: Config, threshold: Int?) : Rule(config) {
 
 @RequiresTypeResolution
 private class RequiresTypeResolutionMaxLineLength(config: Config, threshold: Int?) : Rule(config) {
-    override val issue = Issue(this::class.java.simpleName, "")
+    override val issue = Issue(this::class.java.simpleName, "TestDescription")
     private val lengthThreshold: Int = threshold ?: valueOrDefault("maxLineLength", 100)
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)

@@ -208,7 +208,7 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
             createFinding(issueA, entity2, "Message finding 2")
         ),
         "Section-2" to listOf(
-            createFinding(issueB, entity3, "")
+            createFinding(issueB, entity3, "Message finding 3")
         )
     ).also {
         it.putUserData(complexityKey, 10)
