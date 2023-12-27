@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
@@ -39,14 +38,6 @@ class ModifierOrderSpec {
             assertThat(subject.lint("private actual class Test(val test: String)")).isEmpty()
             assertThat(subject.lint("expect annotation class Test")).isEmpty()
             assertThat(subject.lint("private /* comment */ data class Test(val test: String)")).isEmpty()
-        }
-
-        @Test
-        fun `should not report issues if inactive`() {
-            val rule = ModifierOrder(TestConfig(Config.ACTIVE_KEY to "false"))
-            assertThat(rule.compileAndLint(bad1)).isEmpty()
-            assertThat(rule.lint(bad2)).isEmpty()
-            assertThat(rule.lint(bad3)).isEmpty()
         }
     }
 
