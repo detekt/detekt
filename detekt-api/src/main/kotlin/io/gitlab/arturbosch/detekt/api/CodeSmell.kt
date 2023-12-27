@@ -4,9 +4,6 @@ package io.gitlab.arturbosch.detekt.api
  * A code smell indicates any possible design problem inside a program's source code.
  * The type of a code smell is described by an [Issue].
  *
- * If the design problem results from metric violations, a list of [Metric]'s
- * can describe further the kind of metrics.
- *
  * If the design problem manifests by different source locations, references to these
  * locations can be stored in additional [Entity]'s.
  */
