@@ -130,8 +130,8 @@ internal class Analyzer(
             for (rule in rules) {
                 rule.visitFile(file, bindingContext, compilerResources)
                 for (finding in filterSuppressedFindings(rule, bindingContext)) {
-                    val mappedRuleSet = checkNotNull(ruleIdsToRuleSetIds[finding.id]) {
-                        "Mapping for '${finding.id}' expected."
+                    val mappedRuleSet = checkNotNull(ruleIdsToRuleSetIds[finding.issue.id]) {
+                        "Mapping for '${finding.issue.id}' expected."
                     }
                     result.computeIfAbsent(mappedRuleSet) { mutableListOf() }
                         .add(finding)

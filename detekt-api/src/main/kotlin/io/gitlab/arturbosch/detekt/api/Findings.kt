@@ -8,7 +8,6 @@ package io.gitlab.arturbosch.detekt.api
  * an entity. Metrics and entity references can also considered for deeper characterization.
  */
 interface Finding : Compactable, HasEntity {
-    val id: String
     val issue: Issue
     val references: List<Entity>
     val message: String
