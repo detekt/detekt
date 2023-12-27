@@ -9,9 +9,9 @@ package io.gitlab.arturbosch.detekt.api
  */
 open class CodeSmell(
     final override val issue: Issue,
-    override val entity: Entity,
-    override val message: String,
-    override val references: List<Entity> = emptyList()
+    final override val entity: Entity,
+    final override val message: String,
+    final override val references: List<Entity> = emptyList()
 ) : Finding {
 
     internal var internalSeverity: Severity? = null

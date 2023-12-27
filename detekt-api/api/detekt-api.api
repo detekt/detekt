@@ -30,13 +30,13 @@ public class io/gitlab/arturbosch/detekt/api/CodeSmell : io/gitlab/arturbosch/de
 	public fun compact ()Ljava/lang/String;
 	public fun compactWithSignature ()Ljava/lang/String;
 	public fun getCharPosition ()Lio/gitlab/arturbosch/detekt/api/TextLocation;
-	public fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
+	public final fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
 	public fun getFile ()Ljava/lang/String;
 	public fun getId ()Ljava/lang/String;
 	public final fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
 	public fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
-	public fun getMessage ()Ljava/lang/String;
-	public fun getReferences ()Ljava/util/List;
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getReferences ()Ljava/util/List;
 	public fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
 	public fun getSignature ()Ljava/lang/String;
 	public fun getStartPosition ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
