@@ -1,12 +1,9 @@
 package io.github.detekt.tooling.api
 
-import io.gitlab.arturbosch.detekt.api.Finding
 import java.nio.file.Path
 import java.util.ServiceLoader
 
 interface BaselineProvider {
-
-    fun id(finding: Finding): FindingId
     fun of(manuallySuppressedIssues: FindingsIdList, currentIssues: FindingsIdList): Baseline
     fun read(sourcePath: Path): Baseline
     fun write(targetPath: Path, baseline: Baseline)
