@@ -86,16 +86,6 @@ abstract class Rule(
         finding.updateWithComputedSeverity()
         report(finding, aliases, ruleSetId)
     }
-
-    /**
-     * Simplified version of [Context.report] with rule defaults.
-     */
-    fun report(findings: List<Finding>) {
-        findings.forEach {
-            it.updateWithComputedSeverity()
-        }
-        report(findings, aliases, ruleSetId)
-    }
 }
 
 /**
