@@ -34,7 +34,7 @@ class XmlOutputReport : BuiltInOutputReport, OutputReport() {
                         "\t<error line=\"${it.location.source.line.toXmlString()}\"",
                         "column=\"${it.location.source.column.toXmlString()}\"",
                         "severity=\"${it.severityLabel.toXmlString()}\"",
-                        "message=\"${it.messageOrDescription().toXmlString()}\"",
+                        "message=\"${it.message.toXmlString()}\"",
                         "source=\"${"detekt.${it.id.toXmlString()}"}\" />"
                     ).joinToString(separator = " ")
                 }

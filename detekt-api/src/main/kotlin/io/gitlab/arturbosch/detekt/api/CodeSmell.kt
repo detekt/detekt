@@ -13,6 +13,9 @@ open class CodeSmell(
     final override val message: String,
     final override val references: List<Entity> = emptyList()
 ) : Finding {
+    init {
+        require(message.isNotBlank()) { "The message should not be empty" }
+    }
 
     internal var internalSeverity: Severity? = null
     override val severity: Severity
@@ -32,8 +35,6 @@ open class CodeSmell(
             "severity=$severity, " +
             "id='$id')"
     }
-
-    override fun messageOrDescription(): String = message.ifEmpty { issue.description }
 }
 
 /**

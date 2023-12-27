@@ -14,7 +14,7 @@ class LiteFindingsReport : AbstractFindingsReport() {
     override fun render(findings: Map<RuleSetId, List<Finding>>): String {
         return buildString {
             findings.values.flatten().forEach { finding ->
-                append("${finding.location.compact()}: ${finding.messageOrDescription()} [${finding.issue.id}]")
+                append("${finding.location.compact()}: ${finding.message} [${finding.issue.id}]")
                 appendLine()
             }
         }
