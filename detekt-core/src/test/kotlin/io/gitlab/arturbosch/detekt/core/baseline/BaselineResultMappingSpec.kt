@@ -19,7 +19,6 @@ import java.nio.file.Path
 import kotlin.io.path.copyTo
 import kotlin.io.path.deleteIfExists
 
-@OptIn(UnstableApi::class)
 class BaselineResultMappingSpec {
 
     private val dir = createTempDirectoryForTest("baseline_format")
