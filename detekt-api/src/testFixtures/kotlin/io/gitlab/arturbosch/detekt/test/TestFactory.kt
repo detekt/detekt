@@ -15,7 +15,7 @@ import kotlin.io.path.Path
 fun createFinding(
     ruleName: String = "TestSmell",
     fileName: String = "TestFile.kt",
-    entity: Entity = createEntity(fileName),
+    entity: Entity = createEntity(location = createLocation(fileName)),
     severity: Severity = Severity.ERROR
 ) = createFinding(createIssue(ruleName), entity, "TestMessage", severity)
 
@@ -25,7 +25,7 @@ fun createCorrectableFinding(
     severity: Severity = Severity.ERROR
 ) = object : CorrectableCodeSmell(
     issue = createIssue(ruleName),
-    entity = createEntity(fileName),
+    entity = createEntity(location = createLocation(fileName)),
     message = "TestMessage",
     autoCorrectEnabled = true
 ) {
@@ -72,20 +72,24 @@ fun createIssue(id: String) = Issue(
 )
 
 fun createEntity(
-    path: String = "File.kt",
-    position: Pair<Int, Int> = 1 to 1,
-    text: IntRange = 0..0,
-    ktElement: KtElement? = null,
-    basePath: String? = null,
     signature: String = "TestEntitySignature",
+    location: Location = createLocation(),
+    ktElement: KtElement? = null,
 ) = Entity(
     name = "TestEntity",
     signature = signature,
-    location = Location(
-        source = SourceLocation(position.first, position.second),
-        text = TextLocation(text.first, text.last),
-        filePath = basePath?.let { FilePath.fromRelative(Path(it), Path(path)) }
-            ?: FilePath.fromAbsolute(Path(path))
-    ),
+    location = location,
     ktElement = ktElement
+)
+
+fun createLocation(
+    path: String = "File.kt",
+    basePath: String? = null,
+    position: Pair<Int, Int> = 1 to 1,
+    text: IntRange = 0..0,
+) = Location(
+    source = SourceLocation(position.first, position.second),
+    text = TextLocation(text.first, text.last),
+    filePath = basePath?.let { FilePath.fromRelative(Path(it), Path(path)) }
+        ?: FilePath.fromAbsolute(Path(path)),
 )
