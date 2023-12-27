@@ -36,7 +36,7 @@ fun createCorrectableFinding(
 fun createFinding(
     issue: Issue,
     entity: Entity,
-    message: String = entity.signature,
+    message: String = "TestMessage",
     severity: Severity = Severity.ERROR
 ) = object : CodeSmell(
     issue = issue,
