@@ -51,7 +51,7 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
     override val issue = Issue(
         id = "CoroutineLaunchedInTestWithoutRunTest",
         description = "Launching coroutines in tests without a `runTest` block could swallow exceptions. " +
-            "You should use `runTest`to avoid altering test results."
+            "You should use `runTest` to avoid altering test results."
     )
 
     override fun visitNamedFunction(initialFunction: KtNamedFunction) {
