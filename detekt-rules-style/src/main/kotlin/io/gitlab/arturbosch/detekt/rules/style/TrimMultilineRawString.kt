@@ -45,7 +45,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * """Hello World! How are you?"""
  * </compliant>
  */
-class TrimMultilineRawString(val config: Config) : Rule(config) {
+class TrimMultilineRawString(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Multiline raw strings should be followed by `trimMargin()` or `trimIndent()`.",

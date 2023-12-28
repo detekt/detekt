@@ -66,7 +66,7 @@ class TopLevelAutoCorrectSpec {
     }
 }
 
-private class DeleteAnnotationsRule : Rule() {
+private class DeleteAnnotationsRule(config: Config) : Rule(config) {
     override val issue = Issue("test-rule", "")
     override fun visitAnnotation(annotation: KtAnnotation) {
         annotation.delete()
@@ -75,5 +75,5 @@ private class DeleteAnnotationsRule : Rule() {
 
 private class TopLevelAutoCorrectProvider : RuleSetProvider {
     override val ruleSetId: String = "test-rule-set"
-    override fun instance(config: Config) = RuleSet(ruleSetId, listOf(DeleteAnnotationsRule()))
+    override fun instance(config: Config) = RuleSet(ruleSetId, listOf(DeleteAnnotationsRule(config)))
 }

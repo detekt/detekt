@@ -43,7 +43,7 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * </compliant>
  */
 @ActiveByDefault(since = "1.21.0")
-class ExplicitItLambdaParameter(val config: Config) : Rule(config) {
+class ExplicitItLambdaParameter(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Declaring lambda parameters as `it` is redundant.",
