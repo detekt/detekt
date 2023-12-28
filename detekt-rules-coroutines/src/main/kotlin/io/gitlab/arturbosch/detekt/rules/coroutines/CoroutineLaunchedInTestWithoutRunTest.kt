@@ -48,6 +48,8 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
  */
 @RequiresTypeResolution
 class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
+    private val exploredNamedFunctions = mutableSetOf<KtNamedFunction>()
+
     override val issue = Issue(
         id = "CoroutineLaunchedInTestWithoutRunTest",
         description = "Launching coroutines in tests without a `runTest` block could swallow exceptions. " +
@@ -57,22 +59,17 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
     override fun visitNamedFunction(initialFunction: KtNamedFunction) {
         if (!initialFunction.hasBody()) return
         if (!initialFunction.hasAnnotation(TEST_ANNOTATION_NAME)) return
+        if (initialFunction.runsInRunTestBlock()) return
 
-        checkAndReport(initialFunction)
+        checkAndReportIfNecessary(initialFunction)
         initialFunction
             .traverseAndGetAllCalledFunctions()
             .forEach {
-                checkAndReport(it)
+                checkAndReportIfNecessary(it)
             }
     }
 
-    private fun checkAndReport(function: KtNamedFunction) {
-        val resultingDescriptor = function.bodyExpression
-            .getResolvedCall(bindingContext)
-            ?.resultingDescriptor
-
-        if (resultingDescriptor?.fqNameSafe == RUN_TEST_FQ) return
-
+    private fun checkAndReportIfNecessary(function: KtNamedFunction) {
         function
             .anyDescendantOfType<KtDotQualifiedExpression> {
                 it.isLaunchingCoroutine()
@@ -88,20 +85,26 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
         getCalleeExpressionIfAny()?.text == "launch"
 
     private fun KtNamedFunction.traverseAndGetAllCalledFunctions(): List<KtNamedFunction> {
-        val functions = mutableSetOf<KtNamedFunction>()
-
         collectDescendantsOfType<KtExpression>().mapNotNull {
             it.getResolvedCall(bindingContext)
                 ?.resultingDescriptor
                 ?.source
                 ?.getPsi() as? KtNamedFunction
         }.forEach {
-            functions.add(it)
-            functions.addAll(it.traverseAndGetAllCalledFunctions())
+            if (!exploredNamedFunctions.contains(it)) {
+                exploredNamedFunctions.add(it)
+                exploredNamedFunctions.addAll(it.traverseAndGetAllCalledFunctions())
+            }
         }
 
-        return functions.toList()
+        return exploredNamedFunctions.toList()
     }
+
+    private fun KtNamedFunction.runsInRunTestBlock() =
+        bodyExpression
+            .getResolvedCall(bindingContext)
+            ?.resultingDescriptor
+            ?.fqNameSafe == RUN_TEST_FQ
 
     companion object {
         private const val MESSAGE =

@@ -87,6 +87,64 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvir
     }
 
     @Test
+    fun `reports when coroutine is launched in test with a runBlocking block in a recursive function`() {
+        val code = """
+            import kotlinx.coroutines.CoroutineScope
+            import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.launch
+            import kotlinx.coroutines.runBlocking
+            
+            class A {
+                annotation class Test
+
+                @Test
+                fun `test that launches a coroutine`() = runBlocking {
+                    launchCoroutine()
+                }
+
+                fun launchCoroutine() {
+                    val scope = CoroutineScope(Dispatchers.Unconfined)
+                    launchCoroutine()
+
+                    scope.launch {
+                        throw Exception()
+                    }
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `no reports when coroutine is launched in test with a runTest block in a recursive function`() {
+        val code = """
+            import kotlinx.coroutines.CoroutineScope
+            import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.launch
+            import kotlinx.coroutines.test.runTest
+
+            class A {
+                annotation class Test
+
+                @Test
+                fun `test that launches a coroutine`() = runTest {
+                    launchCoroutine()
+                }
+                
+                fun launchCoroutine() {
+                    val scope = CoroutineScope(Dispatchers.Unconfined)
+                    launchCoroutine()
+
+                    scope.launch {
+                        throw Exception()
+                    }
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
     fun `no reports when coroutine is launched not in a test with a runBlocking block`() {
         val code = """
             import kotlinx.coroutines.CoroutineScope
