@@ -66,17 +66,6 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         .filter { it.exists() }
         .toList()
 
-    inputs.files(ruleModules)
-
-    outputs.files(
-        fileTree(documentationDir),
-        file(defaultConfigFile),
-        file(formattingConfigFile),
-        file(librariesConfigFile),
-        file(ruleauthorsConfigFile),
-        file(deprecationFile),
-    )
-
     classpath(
         configurations.runtimeClasspath.get(),
         configurations.compileClasspath.get(),
