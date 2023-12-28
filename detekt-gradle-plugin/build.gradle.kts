@@ -88,7 +88,7 @@ gradlePlugin {
     vcsUrl = "https://github.com/detekt/detekt"
     plugins {
         create("detektBasePlugin") {
-            id = "dev.detekt.gradle.base"
+            id = "io.github.detekt.gradle.base"
             implementationClass = "dev.detekt.gradle.plugin.DetektBasePlugin"
             displayName = "Static code analysis for Kotlin"
             description = "Static code analysis for Kotlin"
