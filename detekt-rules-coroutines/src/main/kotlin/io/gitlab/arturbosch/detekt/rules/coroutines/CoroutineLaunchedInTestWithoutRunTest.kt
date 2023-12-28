@@ -6,6 +6,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.rules.coroutines.CoroutineLaunchedInTestWithoutRunTest.FunLaunchesCoroutine.FALSE
+import io.gitlab.arturbosch.detekt.rules.coroutines.CoroutineLaunchedInTestWithoutRunTest.FunLaunchesCoroutine.TRUE
+import io.gitlab.arturbosch.detekt.rules.coroutines.CoroutineLaunchedInTestWithoutRunTest.FunLaunchesCoroutine.UNKNOWN
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.hasAnnotation
 import org.jetbrains.kotlin.name.FqName
@@ -19,7 +22,6 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.source.getPsi
-import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 
 /**
  * Detect coroutine launches from `@Test` functions outside a `runTest` block.
@@ -48,7 +50,7 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
  */
 @RequiresTypeResolution
 class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
-    private val exploredNamedFunctions = mutableSetOf<KtNamedFunction>()
+    private val exploredFunctionsCache = hashMapOf<KtNamedFunction, FunLaunchesCoroutine>()
 
     override val issue = Issue(
         id = "CoroutineLaunchedInTestWithoutRunTest",
@@ -61,43 +63,70 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
         if (!initialFunction.hasAnnotation(TEST_ANNOTATION_NAME)) return
         if (initialFunction.runsInRunTestBlock()) return
 
-        checkAndReportIfNecessary(initialFunction)
+        checkIfNecessaryAndReport(initialFunction)
         initialFunction
-            .traverseAndGetAllCalledFunctions()
+            .traverseAndGetAllCalledFunctionsIfNecessary()
             .forEach {
-                checkAndReportIfNecessary(it)
+                checkIfNecessaryAndReport(it)
             }
     }
 
-    private fun checkAndReportIfNecessary(function: KtNamedFunction) {
-        function
-            .anyDescendantOfType<KtDotQualifiedExpression> {
-                it.isLaunchingCoroutine()
+    private fun checkIfNecessaryAndReport(function: KtNamedFunction) {
+        val cacheResult = exploredFunctionsCache[function]
+
+        when (cacheResult) {
+            UNKNOWN, null -> {
+                if (function.isLaunchingCoroutine()) {
+                    exploredFunctionsCache[function] = TRUE
+                    report(CodeSmell(issue, Entity.from(function), MESSAGE))
+                    return
+                } else {
+                    exploredFunctionsCache[function] = FALSE
+                }
             }
-            .ifTrue {
+            TRUE -> {
                 report(CodeSmell(issue, Entity.from(function), MESSAGE))
+                return
             }
-    }
-
-    private fun KtDotQualifiedExpression.isLaunchingCoroutine() = receiverExpression
-        .getType(bindingContext)
-        ?.fqNameOrNull() == COROUTINE_SCOPE_FQ &&
-        getCalleeExpressionIfAny()?.text == "launch"
-
-    private fun KtNamedFunction.traverseAndGetAllCalledFunctions(): List<KtNamedFunction> {
-        collectDescendantsOfType<KtExpression>().mapNotNull {
-            it.getResolvedCall(bindingContext)
-                ?.resultingDescriptor
-                ?.source
-                ?.getPsi() as? KtNamedFunction
-        }.forEach {
-            if (!exploredNamedFunctions.contains(it)) {
-                exploredNamedFunctions.add(it)
-                exploredNamedFunctions.addAll(it.traverseAndGetAllCalledFunctions())
+            FALSE -> {
+                // nothing to report
             }
         }
+    }
 
-        return exploredNamedFunctions.toList()
+    private fun KtNamedFunction.isLaunchingCoroutine() = anyDescendantOfType<KtDotQualifiedExpression> {
+        it.receiverExpression
+            .getType(bindingContext)
+            ?.fqNameOrNull() == COROUTINE_SCOPE_FQ &&
+            it.getCalleeExpressionIfAny()?.text == "launch"
+    }
+
+    private fun KtNamedFunction.traverseAndGetAllCalledFunctionsIfNecessary(): List<KtNamedFunction> {
+        val traversedFunctions = mutableSetOf<KtNamedFunction>()
+
+        fun getChildFunctionsOf(function: KtNamedFunction): Set<KtNamedFunction> {
+            function.collectDescendantsOfType<KtExpression>().mapNotNull {
+                it.getResolvedCall(bindingContext)
+                    ?.resultingDescriptor
+                    ?.source
+                    ?.getPsi() as? KtNamedFunction
+            }.forEach {
+                if (!exploredFunctionsCache.containsKey(it)) {
+                    traversedFunctions.add(it)
+                    exploredFunctionsCache[it] = UNKNOWN
+
+                    getChildFunctionsOf(it).forEach { childFunction ->
+                        traversedFunctions.add(childFunction)
+                        exploredFunctionsCache[childFunction] = UNKNOWN
+                    }
+                }
+            }
+
+            return traversedFunctions
+        }
+
+        getChildFunctionsOf(this)
+        return traversedFunctions.toList()
     }
 
     private fun KtNamedFunction.runsInRunTestBlock() =
@@ -105,6 +134,8 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
             .getResolvedCall(bindingContext)
             ?.resultingDescriptor
             ?.fqNameSafe == RUN_TEST_FQ
+
+    enum class FunLaunchesCoroutine { UNKNOWN, TRUE, FALSE }
 
     companion object {
         private const val MESSAGE =
