@@ -2,9 +2,7 @@ package io.gitlab.arturbosch.detekt.core.baseline
 
 import io.github.detekt.tooling.api.Baseline
 import io.github.detekt.tooling.api.BaselineProvider
-import io.github.detekt.tooling.api.FindingId
 import io.github.detekt.tooling.api.FindingsIdList
-import io.gitlab.arturbosch.detekt.api.Finding
 import org.xml.sax.SAXParseException
 import java.nio.file.Path
 import javax.xml.XMLConstants
@@ -20,8 +18,6 @@ internal class BaselineFormat : BaselineProvider {
         get() = location.lineNumber to location.columnNumber
 
     class InvalidState(msg: String, error: Throwable) : IllegalStateException(msg, error)
-
-    override fun id(finding: Finding): FindingId = finding.baselineId
 
     override fun of(manuallySuppressedIssues: FindingsIdList, currentIssues: FindingsIdList): DefaultBaseline =
         DefaultBaseline(manuallySuppressedIssues, currentIssues)
