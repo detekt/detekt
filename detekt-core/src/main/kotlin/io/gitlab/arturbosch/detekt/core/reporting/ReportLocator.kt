@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.core.rules.isActive
 internal sealed class ReportLocator<T : Extension>(configKey: String, protected val settings: ProcessingSettings) {
 
     private val config = settings.config.subConfig(configKey)
-    private val isActive = config.isActive()
+    private val isActive = config.isActive(true)
     protected val excludes = config.valueOrDefault("exclude", emptyList<String>()).toSet()
 
     fun load(): List<T> {

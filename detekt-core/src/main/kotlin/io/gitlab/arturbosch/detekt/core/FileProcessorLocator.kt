@@ -9,7 +9,7 @@ class FileProcessorLocator(private val settings: ProcessingSettings) {
 
     private val config: Config = settings.config
     private val subConfig = config.subConfig("processors")
-    private val processorsActive = subConfig.isActive()
+    private val processorsActive = subConfig.isActive(true)
     private val excludes = subConfig.valueOrDefault("exclude", emptyList<String>())
 
     fun load(): List<FileProcessListener> {

@@ -96,16 +96,6 @@ class TooGenericExceptionCaughtSpec {
         """.trimIndent()
 
         @Test
-        fun `should not fail when disabled with invalid regex on allowed exception names`() {
-            val config = TestConfig(
-                "active" to "false",
-                ALLOWED_EXCEPTION_NAME_REGEX to "*MyException",
-            )
-            val rule = TooGenericExceptionCaught(config)
-            rule.compileAndLint(code)
-        }
-
-        @Test
         fun `should fail with invalid regex on allowed exception names`() {
             val config = TestConfig(ALLOWED_EXCEPTION_NAME_REGEX to "*Foo")
             val rule = TooGenericExceptionCaught(config)

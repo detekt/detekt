@@ -161,15 +161,6 @@ class FunctionNamingSpec {
                 FunctionNaming(config).compileAndLint(excludeClassPatternFunctionRegexCode)
             }
         }
-
-        @Test
-        fun shouldNotFailWithInvalidRegexWhenDisabledFunctionNaming() {
-            val config = TestConfig(
-                "active" to "false",
-                FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo",
-            )
-            assertThat(FunctionNaming(config).compileAndLint(excludeClassPatternFunctionRegexCode)).isEmpty()
-        }
     }
 
     @Test

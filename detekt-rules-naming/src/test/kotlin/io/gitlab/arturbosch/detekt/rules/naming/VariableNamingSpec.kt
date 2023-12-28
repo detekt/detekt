@@ -26,15 +26,6 @@ class VariableNamingSpec {
         """.trimIndent()
 
         @Test
-        fun shouldNotFailWithInvalidRegexWhenDisabledVariableNaming() {
-            val config = TestConfig(
-                "active" to "false",
-                VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo",
-            )
-            assertThat(VariableNaming(config).compileAndLint(excludeClassPatternVariableRegexCode)).isEmpty()
-        }
-
-        @Test
         fun shouldFailWithInvalidRegexVariableNaming() {
             val config = TestConfig(VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo")
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {

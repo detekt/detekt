@@ -13,17 +13,19 @@ import org.junit.jupiter.api.Test
 class RuleSetSpec {
 
     @Nested
-    inner class `should rule set be used` {
+    inner class `Config isActive` {
 
         @Test
-        fun `is explicitly deactivated`() {
+        fun `use the provided value when defined`() {
             val config = yamlConfig("configs/deactivated_ruleset.yml")
-            assertThat(config.subConfig("comments").isActive()).isFalse()
+            assertThat(config.subConfig("comments").isActive(true)).isFalse()
+            assertThat(config.subConfig("comments").isActive(false)).isFalse()
         }
 
         @Test
-        fun `is active with an empty config`() {
-            assertThat(Config.empty.isActive()).isTrue()
+        fun `use the default value when it is not defined`() {
+            assertThat(Config.empty.isActive(true)).isTrue()
+            assertThat(Config.empty.isActive(false)).isFalse()
         }
     }
 
