@@ -1,4 +1,0 @@
-style:
-  MaxLineLength:
-    active: true
-    maxLineLength: 'abc'
