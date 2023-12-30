@@ -69,7 +69,8 @@ tasks {
     distTar { enabled = false }
 
     processTestResources {
-        filter(ReplaceTokens::class, "tokens" to mapOf("kotlinVersion" to libs.versions.kotlin.get()))
+        inputs.property("kotlin-version", libs.versions.kotlin.get())
+        filter(ReplaceTokens::class, "tokens" to mapOf("kotlinVersion" to inputs.properties["kotlin-version"]))
         filteringCharset = "UTF-8"
     }
 

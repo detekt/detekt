@@ -298,7 +298,7 @@ private class TestRule(config: Config = Config.empty) : Rule(config) {
     }
 }
 
-private class TestLM : Rule() {
+private class TestLM(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue("LongMethod", "")
     override fun visitNamedFunction(function: KtNamedFunction) {
         val start = Location.startLineAndColumn(function.funKeyword!!).line

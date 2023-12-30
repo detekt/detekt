@@ -2115,7 +2115,7 @@ class BracesOnIfStatementsSpec {
 
         private fun options(option: String): List<String> =
             if (option == NOT_RELEVANT) {
-                BracePolicy.values().map { it.config }
+                BracePolicy.entries.map { it.config }
             } else {
                 listOf(option)
             }
