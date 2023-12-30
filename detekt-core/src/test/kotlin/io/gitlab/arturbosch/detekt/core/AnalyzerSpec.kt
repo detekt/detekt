@@ -244,7 +244,7 @@ private class CustomRuleSetProvider : RuleSetProvider {
 }
 
 private class MaxLineLength(config: Config) : Rule(config) {
-    override val issue = Issue(this::class.java.simpleName, "")
+    override val issue = Issue(this::class.java.simpleName, "TestDescription")
     private val lengthThreshold: Int = valueOrDefault("maxLineLength", 10)
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
@@ -258,7 +258,7 @@ private class MaxLineLength(config: Config) : Rule(config) {
 
 @RequiresTypeResolution
 private class RequiresTypeResolutionMaxLineLength(config: Config) : Rule(config) {
-    override val issue = Issue(this::class.java.simpleName, "")
+    override val issue = Issue(this::class.java.simpleName, "TestDescription")
     private val lengthThreshold: Int = valueOrDefault("maxLineLength", 10)
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)

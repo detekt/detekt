@@ -58,7 +58,7 @@ fun Detektion.filterAutoCorrectedIssues(config: Config): Map<RuleSetId, List<Fin
 }
 
 private fun Finding.truncatedMessage(): String {
-    val message = messageOrDescription()
+    val message = message
         .replace(messageReplacementRegex, " ")
         .trim()
     return when {

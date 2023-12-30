@@ -220,7 +220,7 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
             createFinding(issueA, entity1, "Message finding 1"),
             createFinding(issueA, entity2, "Message finding 2")
         ),
-        "Section 2" to listOf(createFinding(issueB, entity3, ""))
+        "Section 2" to listOf(createFinding(issueB, entity3, "Message finding 3"))
     )
 }
 
@@ -257,7 +257,7 @@ private fun createTestDetektionFromRelativePath(): Detektion {
             createFinding(issueA, entity1, "Message finding 1"),
             createFinding(issueA, entity2, "Message finding 2")
         ),
-        "Section 2" to listOf(createFinding(issueB, entity3, ""))
+        "Section 2" to listOf(createFinding(issueB, entity3, "Message finding 3"))
     )
 }
 

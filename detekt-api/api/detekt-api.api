@@ -30,17 +30,16 @@ public class io/gitlab/arturbosch/detekt/api/CodeSmell : io/gitlab/arturbosch/de
 	public fun compact ()Ljava/lang/String;
 	public fun compactWithSignature ()Ljava/lang/String;
 	public fun getCharPosition ()Lio/gitlab/arturbosch/detekt/api/TextLocation;
-	public fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
+	public final fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
 	public fun getFile ()Ljava/lang/String;
 	public fun getId ()Ljava/lang/String;
 	public final fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
 	public fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
-	public fun getMessage ()Ljava/lang/String;
-	public fun getReferences ()Ljava/util/List;
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getReferences ()Ljava/util/List;
 	public fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
 	public fun getSignature ()Ljava/lang/String;
 	public fun getStartPosition ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
-	public fun messageOrDescription ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -221,7 +220,6 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Finding : io/git
 	public abstract fun getMessage ()Ljava/lang/String;
 	public abstract fun getReferences ()Ljava/util/List;
 	public abstract fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
-	public abstract fun messageOrDescription ()Ljava/lang/String;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Finding$DefaultImpls {
