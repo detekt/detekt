@@ -37,7 +37,7 @@ slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.5.0"
-assertj = "org.assertj:assertj-core:3.24.2"
+assertj = "org.assertj:assertj-core:3.25.0"
 classgraph = "io.github.classgraph:classgraph:4.8.165"
 mockk = "io.mockk:mockk:1.13.7"
 byte-buddy = "net.bytebuddy:byte-buddy:1.14.11"
