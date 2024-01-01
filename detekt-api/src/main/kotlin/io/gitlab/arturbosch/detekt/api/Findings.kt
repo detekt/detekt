@@ -14,11 +14,6 @@ interface Finding : Compactable, HasEntity {
     val message: String
     val severity: Severity
         get() = Severity.DEFAULT
-
-    /**
-     * Explanation why this finding was raised.
-     */
-    fun messageOrDescription(): String
 }
 
 /**

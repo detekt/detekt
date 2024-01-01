@@ -265,4 +265,19 @@ class TooManyFunctionsSpec {
             assertThat(configuredRule.compileAndLint(code)).hasSize(1)
         }
     }
+
+    @Test
+    fun `should suppress TooManyFunctionsRule on class level`() {
+        val rule = TooManyFunctions(TestConfig("thresholdInClasses" to "0"))
+        val code = """
+            @Suppress("TooManyFunctions")
+            class OneIsTooMany {
+                fun f() {}
+            }
+        """.trimIndent()
+
+        val findings = rule.compileAndLint(code)
+
+        assertThat(findings).isEmpty()
+    }
 }

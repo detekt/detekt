@@ -1,4 +1,4 @@
-const visit = require("unist-util-visit");
+import { visit } from "unist-util-visit";
 
 // Remark plugin that is replacing the [detekt_version] with the latest
 // released version. Please note that this field is updated automatically

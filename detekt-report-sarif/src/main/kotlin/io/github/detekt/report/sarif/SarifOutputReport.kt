@@ -7,12 +7,12 @@ import io.github.detekt.sarif4k.SarifSerializer
 import io.github.detekt.sarif4k.Tool
 import io.github.detekt.sarif4k.ToolComponent
 import io.github.detekt.sarif4k.Version
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.getOrNull
+import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import java.nio.file.Path
 import kotlin.io.path.Path
@@ -22,17 +22,15 @@ import kotlin.io.path.invariantSeparatorsPathString
 const val DETEKT_OUTPUT_REPORT_BASE_PATH_KEY = "detekt.output.report.base.path"
 const val SRCROOT = "%SRCROOT%"
 
-class SarifOutputReport : OutputReport() {
+class SarifOutputReport : BuiltInOutputReport, OutputReport() {
 
     override val ending: String = "sarif"
     override val id: String = "sarif"
 
-    private lateinit var config: Config
     private var basePath: String? = null
 
     @OptIn(UnstableApi::class)
     override fun init(context: SetupContext) {
-        this.config = context.config
         this.basePath = context.getOrNull<Path>(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY)
             ?.absolute()
             ?.invariantSeparatorsPathString
@@ -56,7 +54,7 @@ class SarifOutputReport : OutputReport() {
                             informationURI = "https://detekt.dev",
                             language = "en",
                             name = "detekt",
-                            rules = toReportingDescriptors(config),
+                            rules = toReportingDescriptors(),
                             organization = "detekt",
                             semanticVersion = version,
                             version = version

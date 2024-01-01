@@ -8,6 +8,6 @@ dependencies {
     implementation(projects.detektUtils)
 
     testImplementation(testFixtures(projects.detektApi))
-    testImplementation(libs.mockk)
+    testImplementation(libs.bundles.mocking)
     testImplementation(libs.assertj)
 }

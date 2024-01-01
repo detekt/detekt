@@ -14,7 +14,8 @@ fun KtModifierListOwner.isPublicNotOverridden(considerProtectedAsPublic: Boolean
         isPublic || isProtected()
     } else {
         isPublic
-    } && !isOverride()
+    } &&
+        !isOverride()
 
 fun KtModifierListOwner.isAbstract() = hasModifier(KtTokens.ABSTRACT_KEYWORD)
 

@@ -2,8 +2,9 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RuleSet
+import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.loadRuleSet
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.api.Test
@@ -60,3 +61,9 @@ private fun runRule(config: Config): Pair<KtFile, List<Finding>> {
 }
 
 private fun wasFormatted(file: KtFile) = file.text == contentAfterChainWrapping
+
+private inline fun <reified T : RuleSetProvider> loadRuleSet(config: Config = Config.empty): RuleSet {
+    val provider = T::class.java.constructors[0].newInstance() as? T
+        ?: error("Could not load RuleSet for '${T::class.java}'")
+    return provider.instance(config.subConfig(provider.ruleSetId))
+}

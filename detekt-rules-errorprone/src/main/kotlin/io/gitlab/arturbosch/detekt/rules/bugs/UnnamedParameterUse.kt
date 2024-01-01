@@ -75,6 +75,7 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
  */
 @RequiresTypeResolution
 class UnnamedParameterUse(config: Config = Config.empty) : Rule(config) {
+
     override val issue = Issue(
         javaClass.simpleName,
         "Passing no named parameters can cause issue when parameters order change",
@@ -112,21 +113,17 @@ class UnnamedParameterUse(config: Config = Config.empty) : Rule(config) {
             isNamedOrVararg to it
         }
 
-        if (allowAdjacentDifferentTypeParams && namedArgumentList.windowed(2)
-                .all {
-                    isAdjacentUnnamedParamsAllowed(it)
-                }
-        ) {
+        if (allowAdjacentDifferentTypeParams && namedArgumentList.windowed(2).all(::isAdjacentUnnamedParamsAllowed)) {
             return
         }
 
         if (namedArgumentList.any { it.first.not() }) {
+            val target = expression.calleeExpression ?: expression
             report(
                 CodeSmell(
                     issue,
-                    Entity.from(expression),
-                    "$expression uses unnamed parameters. Consider using named parameters as they make usage " +
-                        "of function more safe"
+                    Entity.from(target),
+                    "Consider using named parameters in ${target.text} as they make usage of the function more safe."
                 )
             )
         }

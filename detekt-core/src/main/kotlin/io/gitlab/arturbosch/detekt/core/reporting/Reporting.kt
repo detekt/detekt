@@ -1,24 +1,15 @@
 package io.gitlab.arturbosch.detekt.core.reporting
 
-import io.github.detekt.report.html.HtmlOutputReport
-import io.github.detekt.report.md.MdOutputReport
-import io.github.detekt.report.sarif.SarifOutputReport
-import io.github.detekt.report.txt.TxtOutputReport
-import io.github.detekt.report.xml.XmlOutputReport
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.RuleSetId
+import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 
-internal fun defaultReportMapping(reportId: String) = when (reportId) {
-    TxtOutputReport::class.java.simpleName -> "txt"
-    XmlOutputReport::class.java.simpleName -> "xml"
-    HtmlOutputReport::class.java.simpleName -> "html"
-    SarifOutputReport::class.java.simpleName -> "sarif"
-    MdOutputReport::class.java.simpleName -> "md"
-    else -> reportId
-}
+internal fun defaultReportMapping(report: OutputReport) =
+    if (report is BuiltInOutputReport) report.ending else report.id
 
 internal fun printFindings(findings: Map<String, List<Finding>>): String {
     return buildString {
@@ -67,7 +58,7 @@ fun Detektion.filterAutoCorrectedIssues(config: Config): Map<RuleSetId, List<Fin
 }
 
 private fun Finding.truncatedMessage(): String {
-    val message = messageOrDescription()
+    val message = message
         .replace(messageReplacementRegex, " ")
         .trim()
     return when {

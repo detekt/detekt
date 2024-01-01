@@ -22,7 +22,6 @@ val pluginsJarFiles by configurations.resolvable("pluginsJarFiles") {
 dependencies {
     implementation(libs.jcommander)
     implementation(projects.detektTooling)
-    implementation(projects.detektParser)
     implementation(libs.kotlin.compilerEmbeddable) {
         version {
             strictly(libs.versions.kotlin.get())
@@ -30,6 +29,11 @@ dependencies {
     }
     runtimeOnly(projects.detektCore)
     runtimeOnly(projects.detektRules)
+    runtimeOnly(projects.detektReportHtml)
+    runtimeOnly(projects.detektReportMd)
+    runtimeOnly(projects.detektReportSarif)
+    runtimeOnly(projects.detektReportTxt)
+    runtimeOnly(projects.detektReportXml)
 
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj)
@@ -65,7 +69,8 @@ tasks {
     distTar { enabled = false }
 
     processTestResources {
-        filter(ReplaceTokens::class, "tokens" to mapOf("kotlinVersion" to libs.versions.kotlin.get()))
+        inputs.property("kotlin-version", libs.versions.kotlin.get())
+        filter(ReplaceTokens::class, "tokens" to mapOf("kotlinVersion" to inputs.properties["kotlin-version"]))
         filteringCharset = "UTF-8"
     }
 

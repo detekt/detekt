@@ -24,6 +24,6 @@ class PerformanceMonitorSpec {
 
         DefaultDetektProvider().get(spec).run()
 
-        assertThat(actual.toString()).contains(PerformanceMonitor.Phase.values().map { it.name })
+        assertThat(actual.toString()).contains(PerformanceMonitor.Phase.entries.map { it.name })
     }
 }

@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl.WithDe
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
+import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
@@ -104,6 +105,7 @@ private fun canBeReplacedWithCall(lambdaExpr: KtLambdaExpression?): Boolean {
     } else {
         lambdaParameter.destructuringDeclaration?.entries.orEmpty()
             .plus(lambdaParameter)
+            .filterIsInstance<KtNamedDeclaration>()
             .map { it.nameAsSafeName.asString() }
     }
     return lambdaParameterNames.any { receiver.textMatches(it) }

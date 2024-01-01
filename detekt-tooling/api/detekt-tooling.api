@@ -15,7 +15,6 @@ public abstract interface class io/github/detekt/tooling/api/Baseline {
 
 public abstract interface class io/github/detekt/tooling/api/BaselineProvider {
 	public static final field Companion Lio/github/detekt/tooling/api/BaselineProvider$Companion;
-	public abstract fun id (Lio/gitlab/arturbosch/detekt/api/Finding;)Ljava/lang/String;
 	public abstract fun of (Ljava/util/Set;Ljava/util/Set;)Lio/github/detekt/tooling/api/Baseline;
 	public abstract fun read (Ljava/nio/file/Path;)Lio/github/detekt/tooling/api/Baseline;
 	public abstract fun write (Ljava/nio/file/Path;Lio/github/detekt/tooling/api/Baseline;)V

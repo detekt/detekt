@@ -63,8 +63,8 @@ class FindingsReportSpec {
         val detektion = object : TestDetektion() {
             override val findings: Map<String, List<Finding>> = mapOf(
                 "Ruleset" to listOf(
-                    createFinding(createIssue("LongRule"), createEntity("File.kt"), longMessage),
-                    createFinding(createIssue("MultilineRule"), createEntity("File.kt"), multilineMessage),
+                    createFinding(createIssue("LongRule"), createEntity(), longMessage),
+                    createFinding(createIssue("MultilineRule"), createEntity(), multilineMessage),
                 ),
             )
         }

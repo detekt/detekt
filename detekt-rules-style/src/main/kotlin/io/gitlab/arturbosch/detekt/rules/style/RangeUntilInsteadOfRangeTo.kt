@@ -53,7 +53,9 @@ class RangeUntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtExpression?.isMinusOneExpression() = this is KtBinaryExpression &&
-        left != null && operationToken == KtTokens.MINUS && (right as? KtConstantExpression)?.text == "1"
+        left != null &&
+        operationToken == KtTokens.MINUS &&
+        (right as? KtConstantExpression)?.text == "1"
 
     private fun report(expression: KtExpression, rangeTo: String) {
         report(

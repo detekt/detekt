@@ -14,6 +14,7 @@ import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createFinding
 import io.gitlab.arturbosch.detekt.test.createIssue
+import io.gitlab.arturbosch.detekt.test.createLocation
 import io.mockk.clearStaticMockk
 import io.mockk.every
 import io.mockk.mockk
@@ -109,11 +110,11 @@ class MdOutputReportSpec {
         val detektion = object : TestDetektion() {
             override val findings: Map<String, List<Finding>> = mapOf(
                 "Style" to listOf(
-                    createFinding(createIssue("ValCouldBeVar"), createEntity(""))
+                    createFinding(createIssue("ValCouldBeVar"), createEntity())
                 ),
                 "empty" to listOf(
-                    createFinding(createIssue("EmptyBody"), createEntity("")),
-                    createFinding(createIssue("EmptyIf"), createEntity(""))
+                    createFinding(createIssue("EmptyBody"), createEntity()),
+                    createFinding(createIssue("EmptyIf"), createEntity())
                 )
             )
         }
@@ -173,23 +174,29 @@ private fun mockKtElement(): KtElement {
 
 private fun createTestDetektionWithMultipleSmells(): Detektion {
     val entity1 = createEntity(
-        path = "src/main/com/sample/Sample1.kt",
-        position = 9 to 17,
-        text = 17..20,
+        location = createLocation(
+            path = "src/main/com/sample/Sample1.kt",
+            basePath = "/Users/tester/detekt/",
+            position = 9 to 17,
+            text = 17..20,
+        ),
         ktElement = mockKtElement(),
-        basePath = "/Users/tester/detekt/"
     )
     val entity2 = createEntity(
-        path = "src/main/com/sample/Sample2.kt",
+        location = createLocation(
+            path = "src/main/com/sample/Sample2.kt",
+            basePath = "/Users/tester/detekt/",
+            position = 13 to 17,
+        ),
         ktElement = mockKtElement(),
-        position = 13 to 17,
-        basePath = "/Users/tester/detekt/"
     )
     val entity3 = createEntity(
-        path = "src/main/com/sample/Sample3.kt",
-        position = 14 to 16,
+        location = createLocation(
+            path = "src/main/com/sample/Sample3.kt",
+            basePath = "/Users/tester/detekt/",
+            position = 14 to 16,
+        ),
         ktElement = mockKtElement(),
-        basePath = "/Users/tester/detekt/"
     )
 
     val issueA = createIssue("id_a")
@@ -201,7 +208,7 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
             createFinding(issueA, entity2, "Message finding 2")
         ),
         "Section-2" to listOf(
-            createFinding(issueB, entity3, "")
+            createFinding(issueB, entity3, "Message finding 3")
         )
     ).also {
         it.putUserData(complexityKey, 10)
@@ -229,10 +236,10 @@ private fun findings(): Array<Pair<String, List<Finding>>> {
     val issueB = createIssue("id_b")
     val issueC = createIssue("id_c")
 
-    val entity1 = createEntity("src/main/com/sample/Sample1.kt", 11 to 5)
-    val entity2 = createEntity("src/main/com/sample/Sample1.kt", 22 to 2)
-    val entity3 = createEntity("src/main/com/sample/Sample1.kt", 11 to 2)
-    val entity4 = createEntity("src/main/com/sample/Sample2.kt", 1 to 1)
+    val entity1 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 5))
+    val entity2 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 22 to 2))
+    val entity3 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 2))
+    val entity4 = createEntity(location = createLocation("src/main/com/sample/Sample2.kt", position = 1 to 1))
 
     return arrayOf(
         "Section 1" to listOf(

@@ -9,9 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
-import io.gitlab.arturbosch.detekt.core.rules.visitFile
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfig
@@ -21,7 +19,6 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -140,8 +137,10 @@ class SuppressionSpec {
         @Test
         fun `findings are suppressed`() {
             val ktFile = compileForTest(resourceAsPath("/suppression/SuppressedElements.kt"))
-            val ruleSet = RuleSet("Test", listOf(TestLM(), TestLPL()))
-            val findings = ruleSet.visitFile(ktFile, BindingContext.EMPTY)
+            val findings = listOf(TestLM(), TestLPL()).flatMap {
+                it.visitFile(ktFile)
+                it.findings
+            }
             assertThat(findings.size).isZero()
         }
 
@@ -299,13 +298,13 @@ private class TestRule(config: Config = Config.empty) : Rule(config) {
     }
 }
 
-private class TestLM : Rule() {
+private class TestLM(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue("LongMethod", "")
     override fun visitNamedFunction(function: KtNamedFunction) {
         val start = Location.startLineAndColumn(function.funKeyword!!).line
         val end = Location.startLineAndColumn(function.lastBlockStatementOrThis()).line
         val offset = end - start
-        if (offset > 10) report(CodeSmell(issue, Entity.from(function), message = ""))
+        if (offset > 10) report(CodeSmell(issue, Entity.from(function), message = "TestMessage"))
     }
 }
 
@@ -313,6 +312,6 @@ private class TestLPL(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue("LongParameterList", "")
     override fun visitNamedFunction(function: KtNamedFunction) {
         val size = function.valueParameters.size
-        if (size > 5) report(CodeSmell(issue, Entity.from(function), message = ""))
+        if (size > 5) report(CodeSmell(issue, Entity.from(function), message = "TestMessage"))
     }
 }

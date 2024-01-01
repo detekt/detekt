@@ -53,7 +53,7 @@ class ForbiddenPublicDataClass(config: Config = Config.empty) : Rule(config) {
         }
         if (isPublicOrProtected) {
             if (klass.isData()) {
-                report(CodeSmell(issue, Entity.atName(klass), ""))
+                report(CodeSmell(issue, Entity.atName(klass), "Don't use data class"))
             }
             super.visitClass(klass)
         }

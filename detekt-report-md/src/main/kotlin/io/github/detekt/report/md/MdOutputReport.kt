@@ -16,6 +16,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.SourceLocation
+import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -33,7 +34,7 @@ private const val EXTRA_LINES_IN_SNIPPET = 3
  * Contains rule violations in Markdown format report.
  * [See](https://detekt.dev/docs/introduction/configurations/#output-reports)
  */
-class MdOutputReport : OutputReport() {
+class MdOutputReport : BuiltInOutputReport, OutputReport() {
 
     override val id: String = "MdOutputReport"
     override val ending: String = "md"

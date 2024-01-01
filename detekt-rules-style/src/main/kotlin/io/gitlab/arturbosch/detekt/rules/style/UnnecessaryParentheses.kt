@@ -166,7 +166,8 @@ class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
             if (parentExpression.operationReference.getReferencedNameElementType() in listOf(
                     KtTokens.PLUSPLUS,
                     KtTokens.MINUSMINUS,
-                ) && (this.expression as? KtDotQualifiedExpression)?.receiverExpression is KtConstantExpression
+                ) &&
+                (this.expression as? KtDotQualifiedExpression)?.receiverExpression is KtConstantExpression
             ) {
                 return false
             }

@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import org.jetbrains.kotlin.psi.KtFile
-import java.util.Locale
 
 /**
  * A rule defines how one specific code structure should look like. If code is found
@@ -18,7 +17,7 @@ import java.util.Locale
  * two predefined (preVisit/postVisit) functions which can be overridden to setup/teardown additional data.
  */
 abstract class Rule(
-    override val ruleSetConfig: Config = Config.empty,
+    override val ruleSetConfig: Config,
     ruleContext: Context = DefaultContext()
 ) : BaseRule(ruleContext), ConfigAware {
 
@@ -48,7 +47,7 @@ abstract class Rule(
      */
     open val defaultRuleIdAliases: Set<String> = emptySet()
 
-    internal val ruleSetId: RuleId? get() = ruleSetConfig.parentPath
+    private val ruleSetId: RuleSetId? get() = ruleSetConfig.parentPath
 
     /**
      * Rules are aware of the paths they should run on via configuration properties.
@@ -76,7 +75,7 @@ abstract class Rule(
     private fun computeSeverity(): Severity {
         val configValue: String = valueOrNull(SEVERITY_KEY)
             ?: ruleSetConfig.valueOrDefault(SEVERITY_KEY, Severity.DEFAULT.name)
-        return enumValueOf(configValue.uppercase(Locale.US))
+        return enumValueOf(configValue.uppercase())
     }
 
     /**
@@ -85,16 +84,6 @@ abstract class Rule(
     fun report(finding: Finding) {
         finding.updateWithComputedSeverity()
         report(finding, aliases, ruleSetId)
-    }
-
-    /**
-     * Simplified version of [Context.report] with rule defaults.
-     */
-    fun report(findings: List<Finding>) {
-        findings.forEach {
-            it.updateWithComputedSeverity()
-        }
-        report(findings, aliases, ruleSetId)
     }
 }
 

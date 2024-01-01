@@ -124,7 +124,8 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
         val assignmentText = property.children
             .singleOrNull { it is KtConstantExpression || it is KtPrefixExpression }
             ?.text
-        return assignmentText != null && assignmentText.last() == 'L' &&
+        return assignmentText != null &&
+            assignmentText.last() == 'L' &&
             assignmentText.substring(0, assignmentText.length - 1).toLongOrNull() != null
     }
 

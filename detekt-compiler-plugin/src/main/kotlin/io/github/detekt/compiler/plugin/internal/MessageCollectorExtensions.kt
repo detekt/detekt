@@ -44,5 +44,5 @@ fun Finding.renderAsCompilerWarningMessage(): Pair<String, CompilerMessageLocati
         )
     }
 
-    return "$id: ${messageOrDescription()}" to sourceLocation
+    return "$id: $message" to sourceLocation
 }

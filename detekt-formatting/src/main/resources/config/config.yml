@@ -48,14 +48,15 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
+  ConditionWrapping:
+    active: false
+    autoCorrect: true
+    indentSize: 4
   ContextReceiverMapping:
     active: true
     autoCorrect: true
     maxLineLength: 120
     indentSize: 4
-  DiscouragedCommentLocation:
-    active: true
-    autoCorrect: true
   EnumEntryNameCase:
     active: true
     autoCorrect: true
@@ -128,6 +129,8 @@ formatting:
     active: true
     maxLineLength: 120
     ignoreBackTickedIdentifier: false
+  MixedConditionOperators:
+    active: false
   ModifierListSpacing:
     active: true
     autoCorrect: true
@@ -140,6 +143,10 @@ formatting:
     indentSize: 4
   MultilineExpressionWrapping:
     active: true
+    autoCorrect: true
+    indentSize: 4
+  MultilineLoop:
+    active: false
     autoCorrect: true
     indentSize: 4
   NoBlankLineBeforeRbrace:
@@ -233,6 +240,7 @@ formatting:
   SpacingAroundCurly:
     active: true
     autoCorrect: true
+    indentSize: 4
   SpacingAroundDot:
     active: true
     autoCorrect: true
@@ -286,10 +294,14 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
+  TypeArgumentComment:
+    active: true
   TypeArgumentListSpacing:
     active: true
     autoCorrect: true
     indentSize: 4
+  TypeParameterComment:
+    active: true
   TypeParameterListSpacing:
     active: true
     autoCorrect: true
@@ -297,6 +309,10 @@ formatting:
   UnnecessaryParenthesesBeforeTrailingLambda:
     active: true
     autoCorrect: true
+  ValueArgumentComment:
+    active: true
+  ValueParameterComment:
+    active: true
   Wrapping:
     active: true
     autoCorrect: true

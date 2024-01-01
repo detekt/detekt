@@ -71,14 +71,16 @@ class RunnerSpec {
         }
 
         @Nested
-        inner class `execute with default config with issues` {
+        inner class `execute with issues` {
 
             @BeforeEach
             fun setUp() {
                 val args = parseArguments(
                     arrayOf(
                         "--input",
-                        inputPath.toString()
+                        inputPath.toString(),
+                        "--config-resource",
+                        "/configs/valid-config.yml"
                     )
                 )
 
@@ -168,7 +170,9 @@ class RunnerSpec {
                     "--report",
                     "txt:$tmp",
                     "--run-rule",
-                    "test:test"
+                    "test:test",
+                    "--config-resource",
+                    "/configs/valid-config.yml"
                 )
             }.isExactlyInstanceOf(IssuesFound::class.java)
             assertThat(tmp.readLines()).hasSize(1)

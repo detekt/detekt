@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
@@ -21,14 +20,6 @@ class WildcardImportSpec {
             class Test {
             }
         """.trimIndent()
-
-        @Test
-        fun `should not report anything when the rule is turned off`() {
-            val rule = WildcardImport(TestConfig(Config.ACTIVE_KEY to "false"))
-
-            val findings = rule.compileAndLint(code)
-            assertThat(findings).isEmpty()
-        }
 
         @Test
         fun `should report all wildcard imports`() {

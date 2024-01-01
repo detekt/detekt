@@ -72,8 +72,8 @@ formatting:
     active: true
   BlankLineBeforeDeclaration:
     active: false
-  DiscouragedCommentLocation:
-    active: false
+  ConditionWrapping:
+    active: true
   Filename:
     active: false
   FunctionSignature:
@@ -82,9 +82,13 @@ formatting:
     active: false
   MultilineExpressionWrapping:
     active: false
+  MultilineLoop:
+    active: true
   NoEmptyFirstLineInClassBody:
     active: false
   StringTemplateIndent:
+    active: false
+  ValueArgumentComment:
     active: false
 
 naming:
@@ -229,6 +233,8 @@ style:
   PreferToOverPairSyntax:
     active: true
   RangeUntilInsteadOfRangeTo:
+    active: true
+  RedundantConstructorKeyword:
     active: true
   RedundantExplicitType:
     active: true

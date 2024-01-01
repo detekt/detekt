@@ -45,8 +45,9 @@ enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
 // build scan plugin can only be applied in settings file
 plugins {
-    id("com.gradle.enterprise") version "3.15.1"
-    id("com.gradle.common-custom-user-data-gradle-plugin") version "1.12"
+    id("com.gradle.enterprise") version "3.16.1"
+    id("com.gradle.common-custom-user-data-gradle-plugin") version "1.12.1"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.7.0"
 }
 
 val isCiBuild = providers.environmentVariable("CI").isPresent
@@ -75,12 +76,18 @@ buildCache {
         isEnabled = true
     }
     remote<HttpBuildCache> {
-        isPush = isCiBuild
-        isEnabled = true
         url = uri("https://ge.detekt.dev/cache/")
+        isEnabled = true
+
+        val cacheUsername = providers.environmentVariable("GRADLE_CACHE_USERNAME").orNull
+        val cachePassword = providers.environmentVariable("GRADLE_CACHE_PASSWORD").orNull
+        val isAuthenticated = !cacheUsername.isNullOrEmpty() && !cachePassword.isNullOrEmpty()
+
+        // Check credentials presence to avoid build cache errors on PR builds when access key is not present
+        isPush = isCiBuild && isAuthenticated
         credentials {
-            username = providers.environmentVariable("GRADLE_CACHE_USERNAME").orNull
-            password = providers.environmentVariable("GRADLE_CACHE_PASSWORD").orNull
+            username = cacheUsername
+            password = cachePassword
         }
     }
 }

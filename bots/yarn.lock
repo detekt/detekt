@@ -305,10 +305,10 @@ core-js@^3.8.2:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.24.1.tgz#cf7724d41724154010a6576b7b57d94c5d66e64f"
   integrity sha512-0QTBSYSUZ6Gq21utGzkfITDylE8jWC9Ne1D2MrhvlsZBI1x39OdDIVbzSqtgMndIy6BlHxBXpMGqzZmnztg2rg==
 
-danger@11.3.0:
-  version "11.3.0"
-  resolved "https://registry.yarnpkg.com/danger/-/danger-11.3.0.tgz#5a2cbe3e45f367ed0899156c480c7d7e40d90b3d"
-  integrity sha512-h4zkvmEfRVZp2EIKlQSky0IotxrDbJZtXgMTvyN1nwPCfg0JgvQVmVbvOZXrOgNVlgL+42ZDjNL2qAwVmJypNw==
+danger@11.3.1:
+  version "11.3.1"
+  resolved "https://registry.yarnpkg.com/danger/-/danger-11.3.1.tgz#9df659fb58c15a82d9880231ba3f676c934e565d"
+  integrity sha512-+slkGnbf0czY7g4LSuYpYkKJgFrb9YIXFJvV5JAuLLF39CXLlUw0iebgeL3ASK1t6RDb8xe+Rk2F5ilh2Hdv2w==
   dependencies:
     "@gitbeaker/core" "^35.8.1"
     "@gitbeaker/node" "^35.8.1"

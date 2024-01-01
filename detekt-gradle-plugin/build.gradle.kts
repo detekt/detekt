@@ -5,7 +5,7 @@
 import com.gradle.enterprise.gradleplugin.testretry.retry
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
-import java.net.URL
+import java.net.URI
 
 plugins {
     id("module")
@@ -87,9 +87,23 @@ gradlePlugin {
     website = "https://detekt.dev"
     vcsUrl = "https://github.com/detekt/detekt"
     plugins {
+        create("detektBasePlugin") {
+            id = "io.github.detekt.gradle.base"
+            implementationClass = "dev.detekt.gradle.plugin.DetektBasePlugin"
+            displayName = "Static code analysis for Kotlin"
+            description = "Static code analysis for Kotlin"
+            tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
+        }
         create("detektPlugin") {
             id = "io.gitlab.arturbosch.detekt"
             implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
+            displayName = "Static code analysis for Kotlin"
+            description = "Static code analysis for Kotlin"
+            tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
+        }
+        create("detektCompilerPlugin") {
+            id = "io.github.detekt.gradle.compiler-plugin"
+            implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
             displayName = "Static code analysis for Kotlin"
             description = "Static code analysis for Kotlin"
             tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
@@ -100,18 +114,6 @@ gradlePlugin {
         sourceSets["testFixtures"],
         sourceSets["functionalTest"],
     )
-}
-
-gradlePlugin {
-    plugins {
-        create("detektCompilerPlugin") {
-            id = "io.github.detekt.gradle.compiler-plugin"
-            implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
-            displayName = "Static code analysis for Kotlin"
-            description = "Static code analysis for Kotlin"
-            tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
-        }
-    }
 }
 
 // Some functional tests reference internal functions in the Gradle plugin. This should become unnecessary as further
@@ -159,7 +161,7 @@ tasks {
         dokkaSourceSets.configureEach {
             apiVersion = "1.4"
             externalDocumentationLink {
-                url = URL("https://docs.gradle.org/current/javadoc/")
+                url = URI("https://docs.gradle.org/current/javadoc/").toURL()
             }
         }
     }
