@@ -20,6 +20,9 @@ class Entity(
 
     override fun compact(): String = "[$name] at ${location.compact()}"
 
+    override fun toString(): String =
+        "Entity(name=$name, signature=$signature, location=$location, ktElement=$ktElement)"
+
     companion object {
         /**
          * Factory function which retrieves all needed information from the PsiElement itself.

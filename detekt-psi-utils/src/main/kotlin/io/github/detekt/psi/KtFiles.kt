@@ -55,6 +55,9 @@ class FilePath(
         }
     }
 
+    override fun toString(): String =
+        "FilePath(absolutePath=$absolutePath, basePath=$basePath, relativePath=$relativePath)"
+
     companion object {
         fun fromAbsolute(path: Path) = FilePath(absolutePath = path.normalize())
         fun fromRelative(basePath: Path, relativePath: Path) = FilePath(

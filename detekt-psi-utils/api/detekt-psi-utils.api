@@ -5,6 +5,7 @@ public final class io/github/detekt/psi/FilePath {
 	public final fun getAbsolutePath ()Ljava/nio/file/Path;
 	public final fun getBasePath ()Ljava/nio/file/Path;
 	public final fun getRelativePath ()Ljava/nio/file/Path;
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/github/detekt/psi/FilePath$Companion {
