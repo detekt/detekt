@@ -117,9 +117,7 @@ private fun Path.runWith(rule: DummyRule): DummyRule {
     return rule
 }
 
-private class OnlyLibraryTrackingRule(config: Config) : Rule(config) {
-
-    override val issue = Issue(javaClass.simpleName, "")
+private class OnlyLibraryTrackingRule(config: Config) : Rule(config, "") {
     private var libraryFileVisited = false
     private var counter = 0
 
@@ -140,9 +138,7 @@ private class OnlyLibraryTrackingRule(config: Config) : Rule(config) {
     }
 }
 
-private class DummyRule(config: Config = Config.empty) : Rule(config) {
-
-    override val issue = Issue(javaClass.simpleName, "")
+private class DummyRule(config: Config = Config.empty) : Rule(config, "") {
     private var isDirty: Boolean = false
 
     override fun visitKtFile(file: KtFile) {

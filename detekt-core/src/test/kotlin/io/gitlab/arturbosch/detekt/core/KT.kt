@@ -25,8 +25,7 @@ class TestProvider2(override val ruleSetId: String = "Test2") : RuleSetProvider 
     }
 }
 
-class FindName(config: Config) : Rule(config) {
-    override val issue = Issue(javaClass.simpleName, "")
+class FindName(config: Config) : Rule(config, "") {
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         report(CodeSmell(issue, Entity.atName(classOrObject), message = "TestMessage"))
     }

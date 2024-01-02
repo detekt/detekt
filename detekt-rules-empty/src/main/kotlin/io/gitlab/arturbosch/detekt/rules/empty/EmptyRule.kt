@@ -20,12 +20,7 @@ abstract class EmptyRule(
     config: Config,
     description: String = "Empty block of code detected. As they serve no purpose they should be removed.",
     private val codeSmellMessage: String = "This empty block of code can be removed."
-) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        description,
-    )
+) : Rule(config, description) {
 
     fun KtExpression.addFindingIfBlockExprIsEmpty() {
         checkBlockExpr(false)

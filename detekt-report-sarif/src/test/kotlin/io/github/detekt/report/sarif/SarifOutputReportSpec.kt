@@ -171,9 +171,7 @@ private fun constrainRegion(startLine: Int, startColumn: Int, endLine: Int, endC
     }
 """.trimIndent()
 
-class TestRule(config: Config = Config.empty) : Rule(config) {
-    override val issue = Issue(javaClass.simpleName, "")
-
+class TestRule(config: Config = Config.empty) : Rule(config, "") {
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         report(CodeSmell(issue, Entity.atName(classOrObject), message = "Error"))
     }

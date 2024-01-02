@@ -14,8 +14,7 @@ class TestProvider : RuleSetProvider {
     override fun instance(): RuleSet = RuleSet(ruleSetId, listOf(::TestRule))
 }
 
-class TestRule(config: Config) : Rule(config) {
-    override val issue = Issue(javaClass.simpleName, "A failure")
+class TestRule(config: Config) : Rule(config, "A failure") {
     override fun visitClass(klass: KtClass) {
         if (klass.name == "Poko") {
             report(CodeSmell(issue, Entity.from(klass), issue.description))

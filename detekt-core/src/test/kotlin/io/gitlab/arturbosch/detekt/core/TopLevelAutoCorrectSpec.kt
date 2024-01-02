@@ -66,8 +66,7 @@ class TopLevelAutoCorrectSpec {
     }
 }
 
-private class DeleteAnnotationsRule(config: Config) : Rule(config) {
-    override val issue = Issue(javaClass.simpleName, "")
+private class DeleteAnnotationsRule(config: Config) : Rule(config, "") {
     override fun visitAnnotation(annotation: KtAnnotation) {
         annotation.delete()
     }
