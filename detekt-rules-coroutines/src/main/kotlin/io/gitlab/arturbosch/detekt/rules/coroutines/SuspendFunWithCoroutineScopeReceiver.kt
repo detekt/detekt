@@ -49,10 +49,9 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
 class SuspendFunWithCoroutineScopeReceiver(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        id = javaClass.simpleName,
-        description = "The `suspend` modifier should not be used for functions that use a " +
-            "CoroutinesScope as receiver. You should use suspend functions without the receiver or use plain " +
-            "functions and use coroutineScope { } instead.",
+        javaClass.simpleName,
+        "The `suspend` modifier should not be used for functions that use a CoroutinesScope as receiver. You should " +
+            "use suspend functions without the receiver or use plain functions and use coroutineScope { } instead.",
     )
 
     override val defaultRuleIdAliases = setOf("SuspendFunctionOnCoroutineScope")

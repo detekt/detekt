@@ -62,10 +62,9 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
 class SuspendFunWithFlowReturnType(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        id = javaClass.simpleName,
-        description = "The `suspend` modifier should not be used for functions that return a " +
-            "Coroutines Flow type. Flows are cold streams and invoking a function that returns " +
-            "one should not produce any side effects.",
+        javaClass.simpleName,
+        "The `suspend` modifier should not be used for functions that return a Coroutines Flow type. Flows are cold " +
+            "streams and invoking a function that returns one should not produce any side effects.",
     )
 
     override fun visitNamedFunction(function: KtNamedFunction) {
