@@ -48,7 +48,7 @@ class UnusedParameter(config: Config) : Rule(config) {
         setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused", "UnusedPrivateMember")
 
     override val issue = Issue(
-        "UnusedParameter",
+        javaClass.simpleName,
         "Function parameter is unused and should be removed.",
     )
 

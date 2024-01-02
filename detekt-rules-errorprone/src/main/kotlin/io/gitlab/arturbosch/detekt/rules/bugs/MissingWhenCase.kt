@@ -71,7 +71,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
 class MissingWhenCase(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "MissingWhenCase",
+        javaClass.simpleName,
         "Check usage of `when` used as a statement and don't compare all enum or sealed class cases.",
     )
 

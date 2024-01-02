@@ -38,7 +38,7 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
 class NestedClassesVisibility(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "NestedClassesVisibility",
+        javaClass.simpleName,
         "The explicit public modifier still results in an internal nested class.",
     )
 

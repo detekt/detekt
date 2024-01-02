@@ -33,7 +33,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 @ActiveByDefault(since = "1.21.0")
 class UseAnyOrNoneInsteadOfFind(config: Config) : Rule(config) {
     override val issue = Issue(
-        "UseAnyOrNoneInsteadOfFind",
+        javaClass.simpleName,
         "Use `any` or `none` instead of `find` and `null` checks.",
     )
 

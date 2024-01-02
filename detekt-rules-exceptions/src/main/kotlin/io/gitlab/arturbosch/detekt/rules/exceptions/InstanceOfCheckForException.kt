@@ -48,7 +48,7 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
 class InstanceOfCheckForException(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "InstanceOfCheckForException",
+        javaClass.simpleName,
         "Instead of catching for a general exception type and checking for a specific exception type, " +
             "use multiple catch blocks.",
     )

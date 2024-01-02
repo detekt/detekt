@@ -38,7 +38,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
 class DontDowncastCollectionTypes(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "DontDowncastCollectionTypes",
+        javaClass.simpleName,
         "Down-casting immutable collection types is breaking the collection contract.",
     )
 

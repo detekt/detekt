@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 @ActiveByDefault(since = "1.21.0")
 class UseRequireNotNull(config: Config) : Rule(config) {
     override val issue = Issue(
-        "UseRequireNotNull",
+        javaClass.simpleName,
         "Use requireNotNull() instead of require() for checking not-null.",
     )
 

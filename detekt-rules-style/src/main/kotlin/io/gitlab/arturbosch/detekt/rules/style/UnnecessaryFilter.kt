@@ -52,7 +52,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 class UnnecessaryFilter(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "UnnecessaryFilter",
+        javaClass.simpleName,
         "`filter()` with other collection operations may be simplified.",
     )
 

@@ -45,7 +45,7 @@ class ImplicitDefaultLocale(config: Config) : Rule(config) {
     )
 
     override val issue = Issue(
-        "ImplicitDefaultLocale",
+        javaClass.simpleName,
         "Implicit default locale used for string processing. Consider using explicit locale.",
     )
 

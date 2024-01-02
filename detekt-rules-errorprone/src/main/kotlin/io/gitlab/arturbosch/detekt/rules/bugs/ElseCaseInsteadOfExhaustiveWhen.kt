@@ -54,7 +54,7 @@ import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
 class ElseCaseInsteadOfExhaustiveWhen(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "ElseCaseInsteadOfExhaustiveWhen",
+        javaClass.simpleName,
         "A `when` expression that has an exhaustive set of cases should not contain an `else` case.",
     )
 

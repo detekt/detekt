@@ -51,7 +51,7 @@ class UnusedPrivateMember(config: Config) : Rule(config) {
     override val defaultRuleIdAliases: Set<String> = setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused")
 
     override val issue = Issue(
-        "UnusedPrivateMember",
+        javaClass.simpleName,
         "Private function is unused and should be removed.",
     )
 

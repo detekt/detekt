@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
 @RequiresTypeResolution
 class ObjectExtendsThrowable(config: Config) : Rule(config) {
     override val issue = Issue(
-        id = "ObjectExtendsThrowable",
+        id = javaClass.simpleName,
         description = "An `object` should not extend and type of Throwable. Throwables are " +
             "stateful and should be instantiated only when needed for when a specific error " +
             "occurs. An `object`, being a singleton, that extends any type of Throwable " +

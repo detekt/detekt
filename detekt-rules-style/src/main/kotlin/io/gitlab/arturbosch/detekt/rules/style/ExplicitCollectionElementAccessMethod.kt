@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
 class ExplicitCollectionElementAccessMethod(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "ExplicitCollectionElementAccessMethod",
+        javaClass.simpleName,
         "Prefer usage of the indexed access operator [] for map element access or insert methods.",
     )
 

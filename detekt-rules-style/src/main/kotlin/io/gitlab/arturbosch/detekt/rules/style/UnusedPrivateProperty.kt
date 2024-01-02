@@ -53,7 +53,7 @@ class UnusedPrivateProperty(config: Config) : Rule(config) {
         setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused", "UnusedPrivateMember")
 
     override val issue = Issue(
-        "UnusedPrivateProperty",
+        javaClass.simpleName,
         "Property is unused and should be removed.",
     )
 

@@ -61,7 +61,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 class RedundantElseInWhen(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "RedundantElseInWhen",
+        javaClass.simpleName,
         "Check for redundant `else` case in `when` expression when used as statement.",
     )
 

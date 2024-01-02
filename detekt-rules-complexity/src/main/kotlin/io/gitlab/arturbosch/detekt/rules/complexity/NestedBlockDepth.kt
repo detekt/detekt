@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 class NestedBlockDepth(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "NestedBlockDepth",
+        javaClass.simpleName,
         "Excessive nesting leads to hidden complexity. " +
             "Prefer extracting code to make it easier to understand.",
     )

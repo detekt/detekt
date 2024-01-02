@@ -54,7 +54,7 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
 class IgnoredReturnValue(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "IgnoredReturnValue",
+        javaClass.simpleName,
         "This call returns a value which is ignored",
     )
 

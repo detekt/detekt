@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 class TooManyFunctions(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "TooManyFunctions",
+        javaClass.simpleName,
         "Too many functions inside a/an file/class/object/interface always indicate a violation of " +
             "the single responsibility principle. Maybe the file/class/object/interface wants to manage too " +
             "many things at once. Extract functionality which clearly belongs together.",

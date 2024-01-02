@@ -20,7 +20,7 @@ import org.jetbrains.kotlin.psi.KtProperty
 class CommentOverPrivateProperty(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "CommentOverPrivateProperty",
+        javaClass.simpleName,
         "Private properties should be named in a self-explanatory manner without the need for a  comment.",
     )
 

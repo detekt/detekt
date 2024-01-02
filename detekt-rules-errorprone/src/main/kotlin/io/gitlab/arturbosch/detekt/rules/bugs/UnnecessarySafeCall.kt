@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
 class UnnecessarySafeCall(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "UnnecessarySafeCall",
+        javaClass.simpleName,
         "Unnecessary safe call operator detected.",
     )
 

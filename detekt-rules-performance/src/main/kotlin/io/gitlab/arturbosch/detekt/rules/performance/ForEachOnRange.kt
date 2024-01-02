@@ -44,7 +44,7 @@ import org.jetbrains.kotlin.psi2ir.deparenthesize
 class ForEachOnRange(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "ForEachOnRange",
+        javaClass.simpleName,
         "Using the forEach method on ranges has a heavy performance cost. Prefer using simple for loops.",
     )
 

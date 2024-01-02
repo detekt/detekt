@@ -63,7 +63,7 @@ class VarCouldBeVal(config: Config) : Rule(config) {
     override val defaultRuleIdAliases: Set<String> = setOf("CanBeVal")
 
     override val issue = Issue(
-        "VarCouldBeVal",
+        javaClass.simpleName,
         "Var declaration could be val.",
     )
 
