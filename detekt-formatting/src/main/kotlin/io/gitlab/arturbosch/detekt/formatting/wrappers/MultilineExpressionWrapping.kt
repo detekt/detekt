@@ -16,11 +16,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.23.0")
-class MultilineExpressionWrapping(config: Config) : FormattingRule(config) {
+class MultilineExpressionWrapping(config: Config) : FormattingRule(config, "Multiline expression on the right hand side of an expression must start on a separate line.") {
 
     override val wrapping = MultilineExpressionWrappingRule()
-    override val issue =
-        issueFor("Multiline expression on the right hand side of an expression must start on a separate line.")
 
     @Configuration("indentation size")
     private val indentSize by config(4)

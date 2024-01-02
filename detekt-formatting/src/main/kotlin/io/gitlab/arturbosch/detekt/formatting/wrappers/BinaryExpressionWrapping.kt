@@ -16,11 +16,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * documentation.
  */
 @AutoCorrectable(since = "2.0.0")
-class BinaryExpressionWrapping(config: Config) : FormattingRule(config) {
+class BinaryExpressionWrapping(config: Config) : FormattingRule(config, "Wrap binary expression at the operator reference if the binary expression does not fit on the line") {
 
     override val wrapping = BinaryExpressionWrappingRule()
-    override val issue =
-        issueFor("Wrap binary expression at the operator reference if the binary expression does not fit on the line")
 
     @Configuration("maximum line length")
     private val maxLineLength: Int by configWithAndroidVariants(120, 100)

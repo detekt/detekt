@@ -17,11 +17,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @AutoCorrectable(since = "1.23.0")
 @ActiveByDefault(since = "1.23.0")
-class ParameterWrapping(config: Config) : FormattingRule(config) {
+class ParameterWrapping(config: Config) : FormattingRule(config, "Type or value of functions and class parameters must wrap if parameters don't fit on a single line") {
 
     override val wrapping = ParameterWrappingRule()
-    override val issue =
-        issueFor("Type or value of functions and class parameters must wrap if parameters don't fit on a single line")
 
     @Configuration("indentation size")
     private val indentSize by config(4)

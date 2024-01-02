@@ -11,9 +11,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.23.0")
-class NoBlankLineInList(config: Config) : FormattingRule(config) {
+class NoBlankLineInList(config: Config) : FormattingRule(config, "Disallow blank lines in lists before, between or after any list element.") {
 
     override val wrapping = NoBlankLineInListRule()
-    override val issue =
-        issueFor("Disallow blank lines in lists before, between or after any list element.")
 }

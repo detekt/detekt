@@ -11,8 +11,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class NoUnitReturn(config: Config) : FormattingRule(config) {
+class NoUnitReturn(config: Config) : FormattingRule(config, "Detects optional 'Unit' return types") {
 
     override val wrapping = NoUnitReturnRule()
-    override val issue = issueFor("Detects optional 'Unit' return types")
 }

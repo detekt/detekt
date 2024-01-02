@@ -18,10 +18,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class FinalNewline(config: Config) : FormattingRule(config) {
+class FinalNewline(config: Config) : FormattingRule(config, "Detects missing final newlines") {
 
     override val wrapping = FinalNewlineRule()
-    override val issue = issueFor("Detects missing final newlines")
 
     @Configuration("report absence or presence of a newline")
     private val insertFinalNewLine by config(true)

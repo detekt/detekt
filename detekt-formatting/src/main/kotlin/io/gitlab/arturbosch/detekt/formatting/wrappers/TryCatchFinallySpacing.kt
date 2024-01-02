@@ -16,10 +16,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.23.0")
-class TryCatchFinallySpacing(config: Config) : FormattingRule(config) {
+class TryCatchFinallySpacing(config: Config) : FormattingRule(config, "Enforce consistent spacing in try-catch-finally blocks.") {
 
     override val wrapping = TryCatchFinallySpacingRule()
-    override val issue = issueFor("Enforce consistent spacing in try-catch-finally blocks.")
 
     @Configuration("indentation size")
     private val indentSize by config(4)

@@ -11,8 +11,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class SpacingAroundRangeOperator(config: Config) : FormattingRule(config) {
+class SpacingAroundRangeOperator(config: Config) : FormattingRule(config, "Reports spaces around range operator") {
 
     override val wrapping = SpacingAroundRangeOperatorRule()
-    override val issue = issueFor("Reports spaces around range operator")
 }

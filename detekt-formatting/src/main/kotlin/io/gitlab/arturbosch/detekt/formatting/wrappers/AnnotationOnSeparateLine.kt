@@ -15,10 +15,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @AutoCorrectable(since = "1.0.0")
 @ActiveByDefault(since = "1.22.0")
-class AnnotationOnSeparateLine(config: Config) : FormattingRule(config) {
+class AnnotationOnSeparateLine(config: Config) : FormattingRule(config, "Multiple annotations should be placed on separate lines. ") {
 
     override val wrapping = AnnotationRule()
-    override val issue = issueFor("Multiple annotations should be placed on separate lines. ")
 
     @Configuration("indentation size")
     private val indentSize by config(4)

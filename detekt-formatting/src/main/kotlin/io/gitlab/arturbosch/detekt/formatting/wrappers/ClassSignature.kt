@@ -17,10 +17,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * documentation.
  */
 @AutoCorrectable(since = "2.0.0")
-class ClassSignature(config: Config) : FormattingRule(config) {
+class ClassSignature(config: Config) : FormattingRule(config, "Ensure class signatures have a consistent format.") {
 
     override val wrapping = ClassSignatureRule()
-    override val issue = issueFor("Ensure class signatures have a consistent format.")
 
     @Configuration("indentation size")
     private val indentSize by config(4)

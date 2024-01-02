@@ -11,8 +11,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class NoMultipleSpaces(config: Config) : FormattingRule(config) {
+class NoMultipleSpaces(config: Config) : FormattingRule(config, "Reports multiple space usages") {
 
     override val wrapping = NoMultipleSpacesRule()
-    override val issue = issueFor("Reports multiple space usages")
 }

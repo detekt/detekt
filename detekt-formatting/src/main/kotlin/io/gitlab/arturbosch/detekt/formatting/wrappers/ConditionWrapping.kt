@@ -13,10 +13,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/experimental/) for documentation.
  */
 @AutoCorrectable(since = "2.0.0")
-class ConditionWrapping(config: Config) : FormattingRule(config) {
+class ConditionWrapping(config: Config) : FormattingRule(config, "Conditions should be wrapped when expression doesn't fit on one line") {
 
     override val wrapping = ConditionWrappingRule()
-    override val issue = issueFor("Conditions should be wrapped when expression doesn't fit on one line")
 
     @Configuration("indentation size")
     private val indentSize by config(4)

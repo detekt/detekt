@@ -10,8 +10,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-class TypeParameterComment(config: Config) : FormattingRule(config) {
+class TypeParameterComment(config: Config) : FormattingRule(config, "Detect discouraged type parameter comment locations.") {
 
     override val wrapping = TypeParameterCommentRule()
-    override val issue = issueFor("Detect discouraged type parameter comment locations.")
 }

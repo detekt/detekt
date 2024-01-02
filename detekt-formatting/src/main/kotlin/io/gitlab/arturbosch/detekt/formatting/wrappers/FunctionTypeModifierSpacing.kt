@@ -10,8 +10,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * for documentation.
  */
 @AutoCorrectable(since = "2.0.0")
-class FunctionTypeModifierSpacing(config: Config) : FormattingRule(config) {
+class FunctionTypeModifierSpacing(config: Config) : FormattingRule(config, "Enforce a single whitespace between the modifier list and the function type.") {
 
     override val wrapping = FunctionTypeModifierSpacingRule()
-    override val issue = issueFor("Enforce a single whitespace between the modifier list and the function type.")
 }

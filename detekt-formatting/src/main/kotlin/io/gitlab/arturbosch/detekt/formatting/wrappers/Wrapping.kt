@@ -17,10 +17,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "1.20.0")
 @AutoCorrectable(since = "1.20.0")
-class Wrapping(config: Config) : FormattingRule(config) {
+class Wrapping(config: Config) : FormattingRule(config, "Reports missing newlines (e.g. between parentheses of a multi-line function call") {
 
     override val wrapping = WrappingRule()
-    override val issue = issueFor("Reports missing newlines (e.g. between parentheses of a multi-line function call")
 
     @Configuration("indentation size")
     private val indentSize by config(4)

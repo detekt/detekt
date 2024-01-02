@@ -15,10 +15,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class ChainWrapping(config: Config) : FormattingRule(config) {
+class ChainWrapping(config: Config) : FormattingRule(config, "Checks if condition chaining is wrapped right") {
 
     override val wrapping = ChainWrappingRule()
-    override val issue = issueFor("Checks if condition chaining is wrapped right")
 
     @Configuration("indentation size")
     private val indentSize by config(4)

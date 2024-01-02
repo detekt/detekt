@@ -16,10 +16,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "1.23.0")
 @AutoCorrectable(since = "1.22.0")
-class FunctionReturnTypeSpacing(config: Config) : FormattingRule(config) {
+class FunctionReturnTypeSpacing(config: Config) : FormattingRule(config, "Checks the spacing between colon and return type.") {
 
     override val wrapping = FunctionReturnTypeSpacingRule()
-    override val issue = issueFor("Checks the spacing between colon and return type.")
 
     @Configuration("maximum line length")
     private val maxLineLength: Int by configWithAndroidVariants(120, 100)

@@ -17,10 +17,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class ParameterListWrapping(config: Config) : FormattingRule(config) {
+class ParameterListWrapping(config: Config) : FormattingRule(config, "Detects mis-aligned parameter lists") {
 
     override val wrapping = ParameterListWrappingRule()
-    override val issue = issueFor("Detects mis-aligned parameter lists")
 
     @Configuration("maximum line length")
     private val maxLineLength: Int by configWithAndroidVariants(120, 100)

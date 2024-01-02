@@ -17,10 +17,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @AutoCorrectable(since = "1.0.0")
 @ActiveByDefault(since = "1.22.0")
-class ArgumentListWrapping(config: Config) : FormattingRule(config) {
+class ArgumentListWrapping(config: Config) : FormattingRule(config, "Reports incorrect argument list wrapping") {
 
     override val wrapping = ArgumentListWrappingRule()
-    override val issue = issueFor("Reports incorrect argument list wrapping")
 
     @Configuration("indentation size")
     private val indentSize by config(4)

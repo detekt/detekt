@@ -9,8 +9,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#no-empty-file) for documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-class NoEmptyFile(config: Config) : FormattingRule(config) {
+class NoEmptyFile(config: Config) : FormattingRule(config, "Kotlin files must contain at least one declaration") {
 
     override val wrapping = NoEmptyFileRule()
-    override val issue = issueFor("Kotlin files must contain at least one declaration")
 }

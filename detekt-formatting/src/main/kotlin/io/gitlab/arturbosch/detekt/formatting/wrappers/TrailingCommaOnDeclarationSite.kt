@@ -19,10 +19,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * trailing comma usage yet.
  */
 @AutoCorrectable(since = "1.22.0")
-class TrailingCommaOnDeclarationSite(config: Config) : FormattingRule(config) {
+class TrailingCommaOnDeclarationSite(config: Config) : FormattingRule(config, "Rule to mandate/forbid trailing commas at declaration sites") {
 
     override val wrapping = TrailingCommaOnDeclarationSiteRule()
-    override val issue = issueFor("Rule to mandate/forbid trailing commas at declaration sites")
 
     @Configuration("Defines whether trailing commas are required (true) or forbidden (false) at declaration sites")
     private val useTrailingCommaOnDeclarationSite by configWithAndroidVariants(

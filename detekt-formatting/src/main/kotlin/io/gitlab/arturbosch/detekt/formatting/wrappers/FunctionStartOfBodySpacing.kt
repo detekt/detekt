@@ -12,8 +12,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "1.23.0")
 @AutoCorrectable(since = "1.22.0")
-class FunctionStartOfBodySpacing(config: Config) : FormattingRule(config) {
+class FunctionStartOfBodySpacing(config: Config) : FormattingRule(config, "Check for consistent spacing before start of function body.") {
 
     override val wrapping = FunctionStartOfBodySpacingRule()
-    override val issue = issueFor("Check for consistent spacing before start of function body.")
 }

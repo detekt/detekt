@@ -17,10 +17,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.23.0")
-class ContextReceiverMapping(config: Config) : FormattingRule(config) {
+class ContextReceiverMapping(config: Config) : FormattingRule(config, "Reports mis-indented code") {
 
     override val wrapping = ContextReceiverWrappingRule()
-    override val issue = issueFor("Reports mis-indented code")
 
     @Configuration("maximum line length")
     private val maxLineLength: Int by configWithAndroidVariants(120, 100)

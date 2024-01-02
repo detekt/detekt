@@ -11,8 +11,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @AutoCorrectable(since = "1.16.0")
 @ActiveByDefault(since = "1.22.0")
-class SpacingAroundAngleBrackets(config: Config) : FormattingRule(config) {
+class SpacingAroundAngleBrackets(config: Config) : FormattingRule(config, "Reports spaces around angle brackets") {
 
     override val wrapping = SpacingAroundAngleBracketsRule()
-    override val issue = issueFor("Reports spaces around angle brackets")
 }

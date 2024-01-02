@@ -15,10 +15,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @AutoCorrectable(since = "1.0.0")
 @ActiveByDefault(since = "1.22.0")
-class MultiLineIfElse(config: Config) : FormattingRule(config) {
+class MultiLineIfElse(config: Config) : FormattingRule(config, "Detects multiline if-else statements without braces") {
 
     override val wrapping = MultiLineIfElseRule()
-    override val issue = issueFor("Detects multiline if-else statements without braces")
 
     @Configuration("indentation size")
     private val indentSize by config(4)

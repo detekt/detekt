@@ -18,10 +18,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.22.0")
-class FunctionSignature(config: Config) : FormattingRule(config) {
+class FunctionSignature(config: Config) : FormattingRule(config, "Format signature to be single when possible, multiple lines otherwise.") {
 
     override val wrapping = FunctionSignatureRule()
-    override val issue = issueFor("Format signature to be single when possible, multiple lines otherwise.")
 
     @Configuration("parameter count means multiline threshold")
     private val forceMultilineWhenParameterCountGreaterOrEqualThan by config(2_147_483_647)

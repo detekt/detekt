@@ -15,10 +15,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.23.0")
-class NoSingleLineBlockComment(config: Config) : FormattingRule(config) {
+class NoSingleLineBlockComment(config: Config) : FormattingRule(config, "Reports single block line comments") {
 
     override val wrapping = NoSingleLineBlockCommentRule()
-    override val issue = issueFor("Reports single block line comments")
 
     @Configuration("indentation size")
     private val indentSize by config(4)

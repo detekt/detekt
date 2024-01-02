@@ -15,11 +15,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.23.0")
-class EnumWrapping(config: Config) : FormattingRule(config) {
+class EnumWrapping(config: Config) : FormattingRule(config, "An enum should be a single line, or each enum entry has to be placed on a separate line.") {
 
     override val wrapping = EnumWrappingRule()
-    override val issue =
-        issueFor("An enum should be a single line, or each enum entry has to be placed on a separate line.")
 
     @Configuration("indentation size")
     private val indentSize by config(4)

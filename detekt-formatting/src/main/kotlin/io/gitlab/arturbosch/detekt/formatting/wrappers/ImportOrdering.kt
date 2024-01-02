@@ -17,10 +17,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "1.19.0")
 @AutoCorrectable(since = "1.0.0")
-class ImportOrdering(config: Config) : FormattingRule(config) {
+class ImportOrdering(config: Config) : FormattingRule(config, "Detects imports in non default order") {
 
     override val wrapping = ImportOrderingRule()
-    override val issue = issueFor("Detects imports in non default order")
 
     @Configuration("the import ordering layout")
     private val layout: String by configWithAndroidVariants(IDEA_PATTERN, ASCII_PATTERN)

@@ -11,8 +11,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class SpacingAroundParens(config: Config) : FormattingRule(config) {
+class SpacingAroundParens(config: Config) : FormattingRule(config, "Reports spaces around parentheses") {
 
     override val wrapping = SpacingAroundParensRule()
-    override val issue = issueFor("Reports spaces around parentheses")
 }
