@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.test.yamlConfig
+import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
 import org.junit.jupiter.params.ParameterizedTest
@@ -16,18 +16,18 @@ class CorrectableRulesFirstSpec {
 
     @ParameterizedTest
     @ValueSource(booleans = [true, false])
-    fun `runs rule with id 'NonCorrectable' last when autoCorrect is enabled`(reverse: Boolean) {
+    fun `runs the correctable rules first, the registration order doesn't matter`(reverse: Boolean) {
         var actualLastRuleId = ""
 
-        class First(config: Config) : Rule(config) {
-            override val issue: Issue = Issue("NonCorrectable", "")
+        class NonCorrectable(config: Config) : Rule(config) {
+            override val issue: Issue = Issue(javaClass.simpleName, "")
             override fun visitClass(klass: KtClass) {
                 actualLastRuleId = issue.id
             }
         }
 
-        class Last(config: Config) : Rule(config) {
-            override val issue: Issue = Issue("Correctable", "")
+        class Correctable(config: Config) : Rule(config) {
+            override val issue: Issue = Issue(javaClass.simpleName, "")
             override fun visitClass(klass: KtClass) {
                 actualLastRuleId = issue.id
             }
@@ -36,7 +36,17 @@ class CorrectableRulesFirstSpec {
         val testFile = path.resolve("Test.kt")
         val settings = createProcessingSettings(
             testFile,
-            yamlConfig("configs/one-correctable-rule.yml"),
+            yamlConfigFromContent(
+                """
+                    Test:
+                      NonCorrectable:
+                        active: true
+                        autoCorrect: false
+                      Correctable:
+                        active: true
+                        autoCorrect: true
+                """.trimIndent()
+            ),
         ) { rules { autoCorrect = true } }
         val detector = Analyzer(
             settings,
@@ -44,7 +54,7 @@ class CorrectableRulesFirstSpec {
                 override val ruleSetId: String = "Test"
                 override fun instance(config: Config) = RuleSet(
                     ruleSetId,
-                    listOf(Last(config), First(config)).let { if (reverse) it.reversed() else it }
+                    listOf(NonCorrectable(config), Correctable(config)).let { if (reverse) it.reversed() else it }
                 )
             }),
             emptyList()
