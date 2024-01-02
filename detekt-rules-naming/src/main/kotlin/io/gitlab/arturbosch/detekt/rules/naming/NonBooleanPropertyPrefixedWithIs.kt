@@ -32,16 +32,16 @@ import org.jetbrains.kotlin.types.isError
 @RequiresTypeResolution
 class NonBooleanPropertyPrefixedWithIs(config: Config) : Rule(config) {
 
+    override val issue = Issue(
+        javaClass.simpleName,
+        "Only boolean property names can start with `is` prefix.",
+    )
+
     private val booleanTypes = listOf(
         "kotlin.Boolean",
         "java.lang.Boolean",
         "java.util.concurrent.atomic.AtomicBoolean",
     ).map { FqName(it) }.toSet()
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Only boolean property names can start with `is` prefix.",
-    )
 
     override fun visitParameter(parameter: KtParameter) {
         super.visitParameter(parameter)

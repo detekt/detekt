@@ -60,12 +60,12 @@ import org.jetbrains.kotlin.util.containingNonLocalDeclaration
 @RequiresTypeResolution
 class VarCouldBeVal(config: Config) : Rule(config) {
 
-    override val defaultRuleIdAliases: Set<String> = setOf("CanBeVal")
-
     override val issue = Issue(
         javaClass.simpleName,
         "Var declaration could be val.",
     )
+
+    override val defaultRuleIdAliases: Set<String> = setOf("CanBeVal")
 
     @Configuration("Whether to ignore uninitialized lateinit vars")
     private val ignoreLateinitVar: Boolean by config(defaultValue = false)

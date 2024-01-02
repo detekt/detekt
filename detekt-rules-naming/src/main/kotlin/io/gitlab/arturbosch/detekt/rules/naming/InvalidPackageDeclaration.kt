@@ -19,12 +19,12 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
 @ActiveByDefault(since = "1.21.0")
 class InvalidPackageDeclaration(config: Config) : Rule(config) {
 
-    override val defaultRuleIdAliases: Set<String> = setOf("PackageDirectoryMismatch")
-
     override val issue = Issue(
         javaClass.simpleName,
         "Kotlin source files should be stored in the directory corresponding to its package statement.",
     )
+
+    override val defaultRuleIdAliases: Set<String> = setOf("PackageDirectoryMismatch")
 
     @Configuration("if specified this part of the package structure is ignored")
     private val rootPackage: String by config("")

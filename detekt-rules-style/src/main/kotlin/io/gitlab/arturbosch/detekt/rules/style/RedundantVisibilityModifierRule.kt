@@ -43,12 +43,12 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  */
 class RedundantVisibilityModifierRule(config: Config) : Rule(config) {
 
-    override val defaultRuleIdAliases: Set<String> = setOf("RedundantVisibilityModifier")
-
     override val issue = Issue(
         javaClass.simpleName,
         "Redundant visibility modifiers detected, which can be safely removed.",
     )
+
+    override val defaultRuleIdAliases: Set<String> = setOf("RedundantVisibilityModifier")
 
     private val classVisitor = ClassVisitor()
     private val childrenVisitor = ChildrenVisitor()

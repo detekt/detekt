@@ -38,12 +38,12 @@ import org.jetbrains.kotlin.utils.addIfNotNull
 @ActiveByDefault(since = "1.2.0")
 class UnusedPrivateClass(config: Config) : Rule(config) {
 
-    override val defaultRuleIdAliases: Set<String> = setOf("unused")
-
     override val issue = Issue(
         javaClass.simpleName,
         "Private class is unused and should be removed.",
     )
+
+    override val defaultRuleIdAliases: Set<String> = setOf("unused")
 
     override fun visit(root: KtFile) {
         super.visit(root)

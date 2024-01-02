@@ -16,12 +16,12 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
 @ActiveByDefault(since = "1.0.0")
 class PackageNaming(config: Config) : Rule(config) {
 
-    override val defaultRuleIdAliases: Set<String> = setOf("PackageName", "PackageDirectoryMismatch")
-
     override val issue = Issue(
         javaClass.simpleName,
         "Package names should match the naming convention set in the configuration.",
     )
+
+    override val defaultRuleIdAliases: Set<String> = setOf("PackageName", "PackageDirectoryMismatch")
 
     @Configuration("naming pattern")
     private val packagePattern: Regex by config("""[a-z]+(\.[a-z][A-Za-z0-9]*)*""") { it.toRegex() }

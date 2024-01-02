@@ -44,13 +44,13 @@ import org.jetbrains.kotlin.psi.psiUtil.isProtected
  */
 @ActiveByDefault(since = "1.23.0")
 class UnusedParameter(config: Config) : Rule(config) {
-    override val defaultRuleIdAliases: Set<String> =
-        setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused", "UnusedPrivateMember")
-
     override val issue = Issue(
         javaClass.simpleName,
         "Function parameter is unused and should be removed.",
     )
+
+    override val defaultRuleIdAliases: Set<String> =
+        setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused", "UnusedPrivateMember")
 
     @Configuration("unused parameter names matching this regex are ignored")
     private val allowedNames: Regex by config("ignored|expected", String::toRegex)

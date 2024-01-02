@@ -21,12 +21,12 @@ import org.jetbrains.kotlin.psi.KtUserType
 @ActiveByDefault(since = "1.0.0")
 class FunctionNaming(config: Config) : Rule(config) {
 
-    override val defaultRuleIdAliases: Set<String> = setOf("FunctionName")
-
     override val issue = Issue(
         javaClass.simpleName,
         "Function names should follow the naming convention set in the configuration.",
     )
+
+    override val defaultRuleIdAliases: Set<String> = setOf("FunctionName")
 
     @Configuration("naming pattern")
     private val functionPattern: Regex by config("[a-z][a-zA-Z0-9]*", String::toRegex)

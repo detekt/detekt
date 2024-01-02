@@ -17,12 +17,12 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 @ActiveByDefault(since = "1.0.0")
 class ClassNaming(config: Config) : Rule(config) {
 
-    override val defaultRuleIdAliases: Set<String> = setOf("ClassName")
-
     override val issue = Issue(
         javaClass.simpleName,
         "A class or object name should fit the naming pattern defined in the projects configuration.",
     )
+
+    override val defaultRuleIdAliases: Set<String> = setOf("ClassName")
 
     @Configuration("naming pattern")
     private val classPattern: Regex by config("[A-Z][a-zA-Z0-9]*") { it.toRegex() }

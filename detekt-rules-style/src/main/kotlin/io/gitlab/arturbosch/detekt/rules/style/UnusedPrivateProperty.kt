@@ -49,13 +49,13 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  */
 @ActiveByDefault(since = "1.23.0")
 class UnusedPrivateProperty(config: Config) : Rule(config) {
-    override val defaultRuleIdAliases: Set<String> =
-        setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused", "UnusedPrivateMember")
-
     override val issue = Issue(
         javaClass.simpleName,
         "Property is unused and should be removed.",
     )
+
+    override val defaultRuleIdAliases: Set<String> =
+        setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused", "UnusedPrivateMember")
 
     @Configuration("unused property names matching this regex are ignored")
     private val allowedNames: Regex by config("_|ignored|expected|serialVersionUID", String::toRegex)

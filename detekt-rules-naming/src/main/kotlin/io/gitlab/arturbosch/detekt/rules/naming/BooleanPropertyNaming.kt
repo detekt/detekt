@@ -31,6 +31,11 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 @RequiresTypeResolution
 class BooleanPropertyNaming(config: Config) : Rule(config) {
 
+    override val issue = Issue(
+        javaClass.simpleName,
+        "Boolean property name should follow the naming convention set in the projects configuration.",
+    )
+
     @Configuration("naming pattern")
     private val allowedPattern: Regex by config("^(is|has|are)", String::toRegex)
 
@@ -38,11 +43,6 @@ class BooleanPropertyNaming(config: Config) : Rule(config) {
     @Deprecated("This configuration is ignored and will be removed in the future")
     @Suppress("UnusedPrivateMember")
     private val ignoreOverridden: Boolean by config(true)
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Boolean property name should follow the naming convention set in the projects configuration.",
-    )
 
     override fun visitParameter(parameter: KtParameter) {
         super.visitParameter(parameter)
