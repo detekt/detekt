@@ -4,7 +4,7 @@ import io.github.detekt.test.utils.compileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.yamlConfig
+import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -17,7 +17,12 @@ class RuleSetSpec {
 
         @Test
         fun `is explicitly deactivated`() {
-            val config = yamlConfig("configs/deactivated_ruleset.yml")
+            val config = yamlConfigFromContent(
+                """
+                    comments:
+                      active: false
+                """.trimIndent()
+            )
             assertThat(config.subConfig("comments").isActive()).isFalse()
         }
 
