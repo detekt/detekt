@@ -15,8 +15,5 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 class SpacingBetweenDeclarationsWithComments(config: Config) : FormattingRule(config) {
 
     override val wrapping = SpacingBetweenDeclarationsWithCommentsRule()
-    override val issue = issueFor(
-        // message reported by the KtLint rule
-        "Declarations and declarations with comments should have an empty space between."
-    )
+    override val issue = issueFor("Declarations and declarations with comments should have an empty space between.")
 }

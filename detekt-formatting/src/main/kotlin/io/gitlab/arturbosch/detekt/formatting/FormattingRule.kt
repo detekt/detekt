@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.psi.KtFile
 /**
  * Rule to detect formatting violations.
  */
-abstract class FormattingRule(config: Config) : Rule(config) {
+abstract class FormattingRule(config: Config, description: String) : Rule(config, description) {
 
     abstract val wrapping: com.pinterest.ktlint.rule.engine.core.api.Rule
 
@@ -36,9 +36,6 @@ abstract class FormattingRule(config: Config) : Rule(config) {
 
     private lateinit var positionByOffset: (offset: Int) -> Pair<Int, Int>
     private lateinit var root: KtFile
-
-    protected fun issueFor(description: String) =
-        Issue(javaClass.simpleName, description)
 
     override fun visit(root: KtFile) {
         this.root = root
