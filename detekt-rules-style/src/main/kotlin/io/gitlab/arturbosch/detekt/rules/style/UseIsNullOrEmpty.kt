@@ -46,7 +46,7 @@ import org.jetbrains.kotlin.types.isNullable
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
 class UseIsNullOrEmpty(config: Config) : Rule(config) {
-    override val issue: Issue = Issue(
+    override val issue = Issue(
         "UseIsNullOrEmpty",
         "Use `isNullOrEmpty()` call instead of `x == null || x.isEmpty()`.",
     )

@@ -59,7 +59,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
  */
 class LabeledExpression(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue(
+    override val issue = Issue(
         "LabeledExpression",
         "Expression with labels increase complexity and affect maintainability.",
     )

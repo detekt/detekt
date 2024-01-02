@@ -48,7 +48,7 @@ import org.jetbrains.kotlin.resolve.checkers.ExplicitApiDeclarationChecker
 class LibraryCodeMustSpecifyReturnType(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        this.javaClass.simpleName,
+        javaClass.simpleName,
         "Library functions/properties should have an explicit return type. " +
             "Inferred return types can easily be changed by mistake which may lead to breaking changes.",
     )

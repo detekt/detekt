@@ -70,7 +70,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
 @Deprecated("Rule deprecated as compiler performs this check by default")
 class MissingWhenCase(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue(
+    override val issue = Issue(
         "MissingWhenCase",
         "Check usage of `when` used as a statement and don't compare all enum or sealed class cases.",
     )

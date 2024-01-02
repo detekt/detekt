@@ -46,12 +46,11 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 @ActiveByDefault(since = "1.21.0")
 class MapGetWithNotNullAssertionOperator(config: Config) : Rule(config) {
 
-    override val issue: Issue =
-        Issue(
-            "MapGetWithNotNullAssertionOperator",
-            "map.get() with not-null assertion operator (!!) can result in a NullPointerException. " +
-                "Consider usage of map.getValue(), map.getOrDefault() or map.getOrElse() instead.",
-        )
+    override val issue = Issue(
+        "MapGetWithNotNullAssertionOperator",
+        "map.get() with not-null assertion operator (!!) can result in a NullPointerException. " +
+            "Consider usage of map.getValue(), map.getOrDefault() or map.getOrElse() instead.",
+    )
 
     override fun visitPostfixExpression(expression: KtPostfixExpression) {
         if (expression.operationToken == KtTokens.EXCLEXCL && expression.isMapGet()) {

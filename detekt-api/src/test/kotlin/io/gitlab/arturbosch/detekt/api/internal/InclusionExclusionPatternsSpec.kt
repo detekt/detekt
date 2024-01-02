@@ -119,7 +119,7 @@ private fun Path.runWith(rule: DummyRule): DummyRule {
 
 private class OnlyLibraryTrackingRule(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue("test", "")
+    override val issue = Issue("test", "")
     private var libraryFileVisited = false
     private var counter = 0
 

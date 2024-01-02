@@ -34,7 +34,7 @@ import org.jetbrains.kotlin.utils.addIfNotNull
  */
 class UnnecessaryPartOfBinaryExpression(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue(
+    override val issue = Issue(
         "UnnecessaryPartOfBinaryExpression",
         "Detects duplicate condition into binary expression and recommends to remove unnecessary checks",
     )

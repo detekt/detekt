@@ -55,7 +55,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 @ActiveByDefault(since = "1.21.0")
 class UselessPostfixExpression(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue(
+    override val issue = Issue(
         "UselessPostfixExpression",
         "The incremented or decremented value is unused. This value is replaced with the original value.",
     )

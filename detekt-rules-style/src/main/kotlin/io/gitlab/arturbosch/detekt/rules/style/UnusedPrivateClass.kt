@@ -40,7 +40,7 @@ class UnusedPrivateClass(config: Config) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("unused")
 
-    override val issue: Issue = Issue(
+    override val issue = Issue(
         "UnusedPrivateClass",
         "Private class is unused and should be removed.",
     )
