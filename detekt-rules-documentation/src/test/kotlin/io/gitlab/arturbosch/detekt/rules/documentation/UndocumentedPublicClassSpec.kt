@@ -252,7 +252,11 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `does not report protected class by default`() {
         val code = """
-            protected class Test {
+            /**
+             * Sample KDoc for parent class.
+             */
+            class Test {
+                protected class ProtectedClass
             }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
@@ -261,7 +265,11 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `reports protected class if configured`() {
         val code = """
-            protected class Test {
+            /**
+             * Sample KDoc for parent class.
+             */
+            class Test {
+                protected class ProtectedClass
             }
         """.trimIndent()
         val subject = UndocumentedPublicClass(TestConfig(SEARCH_IN_PROTECTED_CLASS to "true"))
