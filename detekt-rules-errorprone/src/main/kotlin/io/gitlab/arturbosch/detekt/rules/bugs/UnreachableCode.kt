@@ -41,7 +41,9 @@ class UnreachableCode(config: Config = Config.empty) : Rule(config) {
 
     override fun visitExpression(expression: KtExpression) {
         super.visitExpression(expression)
-        if (bindingContext.diagnostics.forElement(expression).any { it.factory == Errors.UNREACHABLE_CODE }) {
+        if (bindingContext.diagnostics.forElement(expression)
+                .any { it.factory == Errors.UNREACHABLE_CODE || it.factory == Errors.USELESS_ELVIS }
+        ) {
             report(
                 CodeSmell(
                     issue,
