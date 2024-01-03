@@ -6,9 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
-import io.gitlab.arturbosch.detekt.rules.coroutines.CoroutineLaunchedInTestWithoutRunTest.FunLaunchesCoroutine.FALSE
-import io.gitlab.arturbosch.detekt.rules.coroutines.CoroutineLaunchedInTestWithoutRunTest.FunLaunchesCoroutine.TRUE
-import io.gitlab.arturbosch.detekt.rules.coroutines.CoroutineLaunchedInTestWithoutRunTest.FunLaunchesCoroutine.UNKNOWN
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.hasAnnotation
 import org.jetbrains.kotlin.name.FqName
@@ -17,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
@@ -50,7 +48,7 @@ import org.jetbrains.kotlin.resolve.source.getPsi
  */
 @RequiresTypeResolution
 class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
-    private val exploredFunctionsCache = hashMapOf<KtNamedFunction, FunLaunchesCoroutine>()
+    private val funTraverseHelper = FunTraverseHelper()
 
     override val issue = Issue(
         id = "CoroutineLaunchedInTestWithoutRunTest",
@@ -63,34 +61,19 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
         if (!initialFunction.hasAnnotation(TEST_ANNOTATION_NAME)) return
         if (initialFunction.runsInRunTestBlock()) return
 
-        checkIfNecessaryAndReport(initialFunction)
-        initialFunction
-            .traverseAndGetAllCalledFunctionsIfNecessary()
+        checkAndReport(initialFunction)
+
+        funTraverseHelper
+            .getAllUnexploredCalledFunctions(initialFunction, bindingContext)
             .forEach {
-                checkIfNecessaryAndReport(it)
+                checkAndReport(it)
             }
     }
 
-    private fun checkIfNecessaryAndReport(function: KtNamedFunction) {
-        val cacheResult = exploredFunctionsCache[function]
-
-        when (cacheResult) {
-            UNKNOWN, null -> {
-                if (function.isLaunchingCoroutine()) {
-                    exploredFunctionsCache[function] = TRUE
-                    report(CodeSmell(issue, Entity.from(function), MESSAGE))
-                    return
-                } else {
-                    exploredFunctionsCache[function] = FALSE
-                }
-            }
-            TRUE -> {
-                report(CodeSmell(issue, Entity.from(function), MESSAGE))
-                return
-            }
-            FALSE -> {
-                // nothing to report
-            }
+    private fun checkAndReport(function: KtNamedFunction) {
+        if (function.isLaunchingCoroutine()) {
+            report(CodeSmell(issue, Entity.from(function), MESSAGE))
+            return
         }
     }
 
@@ -101,7 +84,29 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
             it.getCalleeExpressionIfAny()?.text == "launch"
     }
 
-    private fun KtNamedFunction.traverseAndGetAllCalledFunctionsIfNecessary(): List<KtNamedFunction> {
+    private fun KtNamedFunction.runsInRunTestBlock() =
+        bodyExpression
+            .getResolvedCall(bindingContext)
+            ?.resultingDescriptor
+            ?.fqNameSafe == RUN_TEST_FQ
+
+    companion object {
+        private const val MESSAGE =
+            "Launching coroutines in tests without a `runTest` block."
+
+        private const val TEST_ANNOTATION_NAME = "Test"
+        private val RUN_TEST_FQ = FqName("kotlinx.coroutines.test.runTest")
+        private val COROUTINE_SCOPE_FQ = FqName("kotlinx.coroutines.CoroutineScope")
+    }
+}
+
+class FunTraverseHelper {
+    private val exploredFunctionsCache = mutableSetOf<KtNamedFunction>()
+
+    fun getAllUnexploredCalledFunctions(
+        initialFunction: KtNamedFunction,
+        bindingContext: BindingContext
+    ): List<KtNamedFunction> {
         val traversedFunctions = mutableSetOf<KtNamedFunction>()
 
         fun getChildFunctionsOf(function: KtNamedFunction): Set<KtNamedFunction> {
@@ -111,13 +116,13 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
                     ?.source
                     ?.getPsi() as? KtNamedFunction
             }.forEach {
-                if (!exploredFunctionsCache.containsKey(it)) {
+                if (!exploredFunctionsCache.contains(it)) {
                     traversedFunctions.add(it)
-                    exploredFunctionsCache[it] = UNKNOWN
+                    exploredFunctionsCache.add(it)
 
                     getChildFunctionsOf(it).forEach { childFunction ->
                         traversedFunctions.add(childFunction)
-                        exploredFunctionsCache[childFunction] = UNKNOWN
+                        exploredFunctionsCache.add(childFunction)
                     }
                 }
             }
@@ -125,24 +130,7 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
             return traversedFunctions
         }
 
-        getChildFunctionsOf(this)
+        getChildFunctionsOf(initialFunction)
         return traversedFunctions.toList()
-    }
-
-    private fun KtNamedFunction.runsInRunTestBlock() =
-        bodyExpression
-            .getResolvedCall(bindingContext)
-            ?.resultingDescriptor
-            ?.fqNameSafe == RUN_TEST_FQ
-
-    enum class FunLaunchesCoroutine { UNKNOWN, TRUE, FALSE }
-
-    companion object {
-        private const val MESSAGE =
-            "Launching coroutines in tests without a `runTest` block."
-
-        private const val TEST_ANNOTATION_NAME = "Test"
-        private val RUN_TEST_FQ = FqName("kotlinx.coroutines.test.runTest")
-        private val COROUTINE_SCOPE_FQ = FqName("kotlinx.coroutines.CoroutineScope")
     }
 }

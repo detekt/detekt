@@ -1,10 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
+import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.getContextForPaths
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
@@ -202,5 +206,67 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvir
             }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `FunTraverseHelper does not return already explored functions`() {
+        val subject = FunTraverseHelper()
+
+        val code = """
+            import kotlinx.coroutines.CoroutineScope
+            import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.launch
+            import kotlinx.coroutines.runBlocking
+
+            class A {
+                annotation class Test
+
+                @Test
+                fun `test function one`() = runBlocking {
+                    doNotLaunchCoroutine()
+                }
+
+                @Test
+                fun `test function two`() = runBlocking {
+                    doNotLaunchCoroutine()
+                    launchCoroutine()
+                }
+
+
+                fun doNotLaunchCoroutine() {
+                    return
+                }
+
+                fun launchCoroutine() {
+                    val scope = CoroutineScope(Dispatchers.Unconfined)
+                    launchCoroutine()
+
+                    scope.launch {
+                        throw Exception()
+                    }
+                }
+            }
+        """.trimIndent()
+
+        val ktFile = compileContentForTest(code)
+        val bindingContext = env.getContextForPaths(listOf(ktFile))
+
+        val namedFunctions = ktFile
+            .collectDescendantsOfType<KtNamedFunction>()
+
+        val testFunctionOne = namedFunctions.first { it.name == "test function one" }
+        val testFunctionTwo = namedFunctions.first { it.name == "test function two" }
+
+        val calledFunctionTestOne =
+            subject.getAllUnexploredCalledFunctions(testFunctionOne, bindingContext)
+
+        assert(calledFunctionTestOne.size == 1)
+        assert(calledFunctionTestOne.first().name == "doNotLaunchCoroutine")
+
+        val calledFunctionTestTwo =
+            subject.getAllUnexploredCalledFunctions(testFunctionTwo, bindingContext)
+
+        assert(calledFunctionTestTwo.size == 1)
+        assert(calledFunctionTestTwo.first().name == "launchCoroutine")
     }
 }
