@@ -44,6 +44,10 @@ tasks.withType<Test>().configureEach {
         showCauses = true
         showStackTraces = true
     }
+
+    configure<JacocoTaskExtension> {
+        excludes = listOf("org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors")
+    }
 }
 
 kotlin {
