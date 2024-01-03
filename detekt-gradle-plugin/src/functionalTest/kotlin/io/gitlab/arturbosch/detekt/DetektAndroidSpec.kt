@@ -721,7 +721,7 @@ private val SAMPLE_ACTIVITY_USING_VIEW_BINDING = """
     
         override fun onCreate(savedInstanceState: Bundle?) {
             binding = ActivitySampleBinding.inflate(LayoutInflater.from(this))
-            binding.sampleView ?: return
+            binding.sampleView
             setContentView(binding.root)
         }
     }
