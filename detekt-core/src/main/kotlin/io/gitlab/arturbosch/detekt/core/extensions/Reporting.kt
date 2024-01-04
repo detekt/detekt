@@ -2,11 +2,9 @@ package io.gitlab.arturbosch.detekt.core.extensions
 
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.ReportingExtension
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.core.DelegatingResult
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 
-@OptIn(UnstableApi::class)
 fun handleReportingExtensions(settings: ProcessingSettings, initialResult: Detektion): Detektion {
     val extensions = loadExtensions<ReportingExtension>(settings)
     extensions.forEach { it.onRawResult(initialResult) }

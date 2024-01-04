@@ -4,12 +4,10 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.ReportingExtension
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.SetupContext
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.getOrNull
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import java.nio.file.Path
 
-@OptIn(UnstableApi::class)
 class BaselineResultMapping : ReportingExtension {
 
     private var baselineFile: Path? = null

@@ -405,10 +405,6 @@ public final class io/gitlab/arturbosch/detekt/api/TextLocation {
 	public fun toString ()Ljava/lang/String;
 }
 
-public abstract interface annotation class io/gitlab/arturbosch/detekt/api/UnstableApi : java/lang/annotation/Annotation {
-	public abstract fun reason ()Ljava/lang/String;
-}
-
 public final class io/gitlab/arturbosch/detekt/api/ValueWithReason {
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V

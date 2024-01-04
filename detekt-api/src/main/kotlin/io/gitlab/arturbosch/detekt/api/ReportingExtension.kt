@@ -4,7 +4,6 @@ package io.gitlab.arturbosch.detekt.api
  * Allows to intercept detekt's result container by listening to the initial and final state
  * and manipulate the reported findings.
  */
-@UnstableApi
 interface ReportingExtension : Extension {
 
     /**
