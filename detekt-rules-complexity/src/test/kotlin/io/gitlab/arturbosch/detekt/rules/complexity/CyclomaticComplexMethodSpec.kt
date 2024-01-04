@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -298,7 +299,7 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `should not count these overridden functions to base functions complexity`() {
-            assertThat(CyclomaticComplexMethod().compileAndLint(code)).isEmpty()
+            assertThat(CyclomaticComplexMethod(Config.empty).compileAndLint(code)).isEmpty()
         }
     }
 }

@@ -41,7 +41,7 @@ import org.jetbrains.kotlin.psi2ir.deparenthesize
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ForEachOnRange(config: Config = Config.empty) : Rule(config) {
+class ForEachOnRange(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "ForEachOnRange",

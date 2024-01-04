@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UseRequire(config: Config = Config.empty) : Rule(config) {
+class UseRequire(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "UseRequire",

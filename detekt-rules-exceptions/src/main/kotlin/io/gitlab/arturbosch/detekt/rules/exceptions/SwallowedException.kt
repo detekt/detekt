@@ -67,7 +67,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class SwallowedException(config: Config = Config.empty) : Rule(config) {
+class SwallowedException(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "SwallowedException",

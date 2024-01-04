@@ -20,7 +20,7 @@ import org.jetbrains.kotlin.psi.KtParameter
  * Reports function parameter names that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
-class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
+class FunctionParameterNaming(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

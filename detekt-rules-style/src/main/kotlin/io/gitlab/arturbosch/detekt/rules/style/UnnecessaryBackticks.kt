@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isIdentifier
  * class HelloWorld
  * </compliant>
  */
-class UnnecessaryBackticks(config: Config = Config.empty) : Rule(config) {
+class UnnecessaryBackticks(config: Config) : Rule(config) {
     override val issue: Issue = Issue(
         javaClass.simpleName,
         "Backticks are unnecessary.",

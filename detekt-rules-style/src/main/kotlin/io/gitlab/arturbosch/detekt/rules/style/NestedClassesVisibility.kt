@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
+class NestedClassesVisibility(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "NestedClassesVisibility",

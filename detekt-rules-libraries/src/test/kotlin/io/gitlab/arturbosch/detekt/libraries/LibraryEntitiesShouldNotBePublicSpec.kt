@@ -23,7 +23,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
 
     @Nested
     inner class `positive cases` {
-        val subject = LibraryEntitiesShouldNotBePublic()
+        val subject = LibraryEntitiesShouldNotBePublic(Config.empty)
 
         @Test
         fun `should report a class`() {
@@ -88,7 +88,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
 
     @Nested
     inner class `negative cases` {
-        val subject = LibraryEntitiesShouldNotBePublic()
+        val subject = LibraryEntitiesShouldNotBePublic(Config.empty)
 
         @Test
         fun `should not report a class`() {

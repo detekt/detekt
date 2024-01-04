@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style.optional
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class MandatoryBracesLoopsSpec {
-    val subject = MandatoryBracesLoops()
+    val subject = MandatoryBracesLoops(Config.empty)
 
     @Nested
     inner class `MandatoryBracesLoops rule for 'for' loops` {

@@ -39,7 +39,7 @@ import org.jetbrains.kotlin.psi.psiUtil.plainContent
  * }
  * </compliant>
  */
-class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
+class StringLiteralDuplication(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

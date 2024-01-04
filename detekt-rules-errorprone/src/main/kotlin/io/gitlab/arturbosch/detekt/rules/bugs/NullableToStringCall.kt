@@ -39,7 +39,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
  * </compliant>
  */
 @RequiresTypeResolution
-class NullableToStringCall(config: Config = Config.empty) : Rule(config) {
+class NullableToStringCall(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "`toString()` on nullable receiver may return the string \"null\"",

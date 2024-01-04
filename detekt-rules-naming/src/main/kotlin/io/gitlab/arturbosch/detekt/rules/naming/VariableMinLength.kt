@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 /**
  * Reports when very short variable names are used.
  */
-class VariableMinLength(config: Config = Config.empty) : Rule(config) {
+class VariableMinLength(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

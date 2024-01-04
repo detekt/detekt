@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtStringTemplateEntryWithExpression
  * the only whitespace chars that are allowed in a source file are the line terminator sequence
  * and the ASCII horizontal space character (0x20). Strings containing tabs are allowed.
  */
-class NoTabs(config: Config = Config.empty) : Rule(config) {
+class NoTabs(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

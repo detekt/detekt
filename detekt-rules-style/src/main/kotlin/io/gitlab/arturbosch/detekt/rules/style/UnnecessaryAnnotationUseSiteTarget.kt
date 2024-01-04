@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.psi.KtProperty
  * class Module(@Inject private val foo: String)
  * </compliant>
  */
-class UnnecessaryAnnotationUseSiteTarget(config: Config = Config.empty) : Rule(config) {
+class UnnecessaryAnnotationUseSiteTarget(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

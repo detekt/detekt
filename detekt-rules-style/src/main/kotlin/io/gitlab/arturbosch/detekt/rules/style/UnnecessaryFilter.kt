@@ -49,7 +49,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UnnecessaryFilter(config: Config = Config.empty) : Rule(config) {
+class UnnecessaryFilter(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "UnnecessaryFilter",

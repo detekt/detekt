@@ -39,7 +39,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class WildcardImport(config: Config = Config.empty) : Rule(config) {
+class WildcardImport(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

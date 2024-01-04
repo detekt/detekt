@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * }
  * </noncompliant>
  */
-class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
+class DataClassContainsFunctions(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "DataClassContainsFunctions",

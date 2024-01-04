@@ -37,7 +37,7 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class LoopWithTooManyJumpStatements(config: Config = Config.empty) : Rule(config) {
+class LoopWithTooManyJumpStatements(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * Reports when very short function names are used.
  */
-class FunctionNameMinLength(config: Config = Config.empty) : Rule(config) {
+class FunctionNameMinLength(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

@@ -58,7 +58,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.2.0")
 @Deprecated("Rule deprecated as compiler performs this check by default")
-class RedundantElseInWhen(config: Config = Config.empty) : Rule(config) {
+class RedundantElseInWhen(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "RedundantElseInWhen",

@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * </compliant>
  */
 @ActiveByDefault(since = "1.21.0")
-class UseArrayLiteralsInAnnotations(config: Config = Config.empty) : Rule(config) {
+class UseArrayLiteralsInAnnotations(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

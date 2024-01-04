@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.github.detekt.test.utils.compileContentForTest
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
@@ -14,7 +15,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class RedundantVisibilityModifierRuleSpec {
-    val subject = RedundantVisibilityModifierRule()
+    val subject = RedundantVisibilityModifierRule(Config.empty)
 
     @Test
     fun `does not report overridden function of abstract class with public modifier`() {
@@ -188,7 +189,7 @@ class RedundantVisibilityModifierRuleSpec {
             """.trimIndent()
         )
 
-        val rule = RedundantVisibilityModifierRule()
+        val rule = RedundantVisibilityModifierRule(Config.empty)
 
         private fun mockCompilerResources(mode: ExplicitApiMode): CompilerResources {
             val languageVersionSettings = mockk<LanguageVersionSettings>()

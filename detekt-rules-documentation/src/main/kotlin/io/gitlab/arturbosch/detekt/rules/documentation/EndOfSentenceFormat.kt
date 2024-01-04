@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtDeclaration
  * It should end with proper punctuation or with a correct URL.
  */
 @Suppress("MemberNameEqualsClassName")
-class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
+class EndOfSentenceFormat(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

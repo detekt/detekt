@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class ForbiddenPublicDataClassSpec {
-    val subject = ForbiddenPublicDataClass()
+    val subject = ForbiddenPublicDataClass(Config.empty)
 
     @Test
     fun `public data class should pass without explicit filters set`() {

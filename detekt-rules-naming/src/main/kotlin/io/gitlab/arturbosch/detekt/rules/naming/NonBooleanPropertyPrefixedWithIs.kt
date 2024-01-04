@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.types.isError
  * </compliant>
  */
 @RequiresTypeResolution
-class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(config) {
+class NonBooleanPropertyPrefixedWithIs(config: Config) : Rule(config) {
 
     private val booleanTypes = listOf(
         "kotlin.Boolean",

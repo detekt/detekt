@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * - __Nesting Level Increments__ - `if`, `when`, `for`, `while`, `do while`, `catch`, `nested function`
  * - __Additional Complexity Increments by Nesting Level__ - `if`, `when`, `for`, `while`, `do while`, `catch`
  */
-class CognitiveComplexMethod(config: Config = Config.empty) : Rule(config) {
+class CognitiveComplexMethod(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "CognitiveComplexMethod",

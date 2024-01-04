@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
  * Reports enum names that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
-class EnumNaming(config: Config = Config.empty) : Rule(config) {
+class EnumNaming(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

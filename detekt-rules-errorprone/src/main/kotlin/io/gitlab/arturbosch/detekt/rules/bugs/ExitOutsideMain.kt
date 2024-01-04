@@ -43,7 +43,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *
  */
 @RequiresTypeResolution
-class ExitOutsideMain(config: Config = Config.empty) : Rule(config) {
+class ExitOutsideMain(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

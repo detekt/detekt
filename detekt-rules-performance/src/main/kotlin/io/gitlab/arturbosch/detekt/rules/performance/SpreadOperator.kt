@@ -48,7 +48,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.0.0")
-class SpreadOperator(config: Config = Config.empty) : Rule(config) {
+class SpreadOperator(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "SpreadOperator",

@@ -1,11 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.Test
 
 class SafeCastSpec {
-    val subject = SafeCast()
+    val subject = SafeCast(Config.empty)
 
     @Test
     fun `reports negated expression`() {

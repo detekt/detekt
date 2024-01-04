@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * </compliant>
  */
 @RequiresTypeResolution
-class NestedScopeFunctions(config: Config = Config.empty) : Rule(config) {
+class NestedScopeFunctions(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

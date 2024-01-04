@@ -50,7 +50,7 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ModifierOrder(config: Config = Config.empty) : Rule(config) {
+class ModifierOrder(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

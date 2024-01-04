@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
  * Reports variable names that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
-class VariableNaming(config: Config = Config.empty) : Rule(config) {
+class VariableNaming(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

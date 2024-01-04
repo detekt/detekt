@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
@@ -187,7 +188,7 @@ class StringLiteralDuplicationSpec {
             }
         """.trimIndent()
 
-        assertThat(StringLiteralDuplication().compileAndLint(code)).isEmpty()
+        assertThat(StringLiteralDuplication(Config.empty).compileAndLint(code)).isEmpty()
     }
 }
 

@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.utils.addIfNotNull
  * </compliant>
  *
  */
-class UnnecessaryPartOfBinaryExpression(config: Config = Config.empty) : Rule(config) {
+class UnnecessaryPartOfBinaryExpression(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "UnnecessaryPartOfBinaryExpression",

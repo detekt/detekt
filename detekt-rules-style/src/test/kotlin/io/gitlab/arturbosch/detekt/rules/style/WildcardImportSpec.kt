@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
@@ -23,7 +24,7 @@ class WildcardImportSpec {
 
         @Test
         fun `should report all wildcard imports`() {
-            val rule = WildcardImport()
+            val rule = WildcardImport(Config.empty)
 
             val findings = rule.compileAndLint(code)
             assertThat(findings).hasSize(2)
@@ -75,7 +76,7 @@ class WildcardImportSpec {
                 import java.util.*
             """.trimIndent()
 
-            val findings = WildcardImport().lint(code2)
+            val findings = WildcardImport(Config.empty).lint(code2)
             assertThat(findings).isEmpty()
         }
     }
@@ -93,7 +94,7 @@ class WildcardImportSpec {
 
         @Test
         fun `should not report any issues`() {
-            val findings = WildcardImport().compileAndLint(code)
+            val findings = WildcardImport(Config.empty).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
     }

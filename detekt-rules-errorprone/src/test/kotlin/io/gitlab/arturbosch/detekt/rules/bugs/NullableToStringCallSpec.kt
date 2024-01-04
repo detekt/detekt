@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
@@ -8,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class NullableToStringCallSpec(private val env: KotlinCoreEnvironment) {
-    private val subject = NullableToStringCall()
+    private val subject = NullableToStringCall(Config.empty)
 
     @Test
     fun `reports when a nullable toString is explicitly called`() {

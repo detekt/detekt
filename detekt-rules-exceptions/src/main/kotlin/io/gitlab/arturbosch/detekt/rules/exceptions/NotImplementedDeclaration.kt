@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
  * }
  * </noncompliant>
  */
-class NotImplementedDeclaration(config: Config = Config.empty) : Rule(config) {
+class NotImplementedDeclaration(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "NotImplementedDeclaration",

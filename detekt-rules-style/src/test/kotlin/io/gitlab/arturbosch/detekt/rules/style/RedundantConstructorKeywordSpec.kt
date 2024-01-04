@@ -1,11 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class RedundantConstructorKeywordSpec {
-    val subject = RedundantConstructorKeyword()
+    val subject = RedundantConstructorKeyword(Config.empty)
 
     @Test fun `report on data class with redundant constructor keyword`() {
         val code = """

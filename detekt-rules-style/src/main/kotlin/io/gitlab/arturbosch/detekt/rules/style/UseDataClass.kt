@@ -45,7 +45,7 @@ import org.jetbrains.kotlin.types.KotlinType
  * </compliant>
  */
 @RequiresTypeResolution
-class UseDataClass(config: Config = Config.empty) : Rule(config) {
+class UseDataClass(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "UseDataClass",

@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.github.detekt.test.utils.compileForTest
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
@@ -16,7 +17,7 @@ class InvalidPackageDeclarationSpec {
     @Test
     fun `should pass if package declaration is correct`() {
         val ktFile = compileForTest(Path("src/test/resources/InvalidPackageDeclarationSpec/src/foo/bar/correct.kt"))
-        val findings = InvalidPackageDeclaration().lint(ktFile)
+        val findings = InvalidPackageDeclaration(Config.empty).lint(ktFile)
 
         assertThat(findings).isEmpty()
     }
@@ -24,7 +25,7 @@ class InvalidPackageDeclarationSpec {
     @Test
     fun `should ignore the issue by alias suppression`() {
         val ktFile = compileForTest(Path("src/test/resources/InvalidPackageDeclarationSpec/src/bar/suppressed.kt"))
-        val findings = InvalidPackageDeclaration().lint(ktFile)
+        val findings = InvalidPackageDeclaration(Config.empty).lint(ktFile)
 
         assertThat(findings).isEmpty()
     }
@@ -32,7 +33,7 @@ class InvalidPackageDeclarationSpec {
     @Test
     fun `should report if package declaration does not match source location`() {
         val ktFile = compileForTest(Path("src/test/resources/InvalidPackageDeclarationSpec/src/bar/incorrect.kt"))
-        val findings = InvalidPackageDeclaration().lint(ktFile)
+        val findings = InvalidPackageDeclaration(Config.empty).lint(ktFile)
 
         assertThat(findings).hasSize(1)
         assertThat(findings).hasTextLocations(0 to 11)

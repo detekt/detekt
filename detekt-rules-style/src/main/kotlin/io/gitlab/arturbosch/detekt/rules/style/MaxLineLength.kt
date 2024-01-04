@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  * in the codebase will help make the code more uniform.
  */
 @ActiveByDefault(since = "1.0.0")
-class MaxLineLength(config: Config = Config.empty) : Rule(config) {
+class MaxLineLength(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

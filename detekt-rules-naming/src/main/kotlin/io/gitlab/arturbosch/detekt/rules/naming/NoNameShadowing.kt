@@ -48,7 +48,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class NoNameShadowing(config: Config = Config.empty) : Rule(config) {
+class NoNameShadowing(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Disallow shadowing variable declarations.",

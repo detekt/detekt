@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  */
 
 @RequiresTypeResolution
-class CastToNullableType(config: Config = Config.empty) : Rule(config) {
+class CastToNullableType(config: Config) : Rule(config) {
     override val issue: Issue = Issue(
         javaClass.simpleName,
         "Use safe cast instead of unsafe cast to nullable types.",

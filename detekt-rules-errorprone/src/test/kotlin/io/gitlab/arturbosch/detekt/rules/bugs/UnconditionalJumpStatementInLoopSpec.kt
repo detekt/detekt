@@ -1,11 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class UnconditionalJumpStatementInLoopSpec {
-    private val subject = UnconditionalJumpStatementInLoop()
+    private val subject = UnconditionalJumpStatementInLoop(Config.empty)
 
     @Test
     fun `reports an unconditional return in for loop`() {

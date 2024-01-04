@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
@@ -20,7 +21,7 @@ class FunctionParameterNamingSpec {
                     fun someStuff(param: String) {}
                 }
             """.trimIndent()
-            assertThat(FunctionParameterNaming().compileAndLint(code)).isEmpty()
+            assertThat(FunctionParameterNaming(Config.empty).compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -31,7 +32,7 @@ class FunctionParameterNamingSpec {
                 }
                 interface I { fun someStuff(@Suppress("FunctionParameterNaming") `object`: String) }
             """.trimIndent()
-            assertThat(FunctionParameterNaming().compileAndLint(code)).isEmpty()
+            assertThat(FunctionParameterNaming(Config.empty).compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -41,7 +42,7 @@ class FunctionParameterNamingSpec {
                     fun someStuff(PARAM: String) {}
                 }
             """.trimIndent()
-            assertThat(FunctionParameterNaming().compileAndLint(code)).hasSize(1)
+            assertThat(FunctionParameterNaming(Config.empty).compileAndLint(code)).hasSize(1)
         }
     }
 

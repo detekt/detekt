@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  * If the codebase should have documentation on all public properties enable this rule to enforce this.
  * Overridden properties are excluded by this rule.
  */
-class UndocumentedPublicProperty(config: Config = Config.empty) : Rule(config) {
+class UndocumentedPublicProperty(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

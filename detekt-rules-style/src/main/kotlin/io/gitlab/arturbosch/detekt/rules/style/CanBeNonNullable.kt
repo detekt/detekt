@@ -128,7 +128,7 @@ import org.jetbrains.kotlin.types.isNullable
  * </compliant>
  */
 @RequiresTypeResolution
-class CanBeNonNullable(config: Config = Config.empty) : Rule(config) {
+class CanBeNonNullable(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Variable can be changed to non-nullable, as it is never set to null.",

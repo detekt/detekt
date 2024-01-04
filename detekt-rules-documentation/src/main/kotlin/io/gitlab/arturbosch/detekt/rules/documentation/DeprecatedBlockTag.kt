@@ -36,7 +36,7 @@ import org.jetbrains.kotlin.psi.KtDeclaration
  * }
  * </compliant>
  */
-class DeprecatedBlockTag(config: Config = Config.empty) : Rule(config) {
+class DeprecatedBlockTag(config: Config) : Rule(config) {
     override val issue = Issue(
         "DeprecatedBlockTag",
         "Do not use the `@deprecated` block tag, which is not supported by KDoc. " +

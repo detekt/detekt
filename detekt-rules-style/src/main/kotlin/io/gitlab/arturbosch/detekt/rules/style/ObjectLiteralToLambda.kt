@@ -43,7 +43,7 @@ import org.jetbrains.kotlin.types.KotlinType
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class ObjectLiteralToLambda(config: Config = Config.empty) : Rule(config) {
+class ObjectLiteralToLambda(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Report object literals that can be changed to lambdas.",

@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  * fun Int.evenOrNull() = takeIf { it % 2 == 0 }
  * </compliant>
  */
-class DoubleNegativeLambda(config: Config = Config.empty) : Rule(config) {
+class DoubleNegativeLambda(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "DoubleNegativeLambda",

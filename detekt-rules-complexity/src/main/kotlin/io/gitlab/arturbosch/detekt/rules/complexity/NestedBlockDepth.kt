@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * Prefer extracting the nested code into well-named functions to make it easier to understand.
  */
 @ActiveByDefault(since = "1.0.0")
-class NestedBlockDepth(config: Config = Config.empty) : Rule(config) {
+class NestedBlockDepth(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "NestedBlockDepth",

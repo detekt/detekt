@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * </compliant>
  */
 @RequiresTypeResolution
-class CouldBeSequence(config: Config = Config.empty) : Rule(config) {
+class CouldBeSequence(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "CouldBeSequence",

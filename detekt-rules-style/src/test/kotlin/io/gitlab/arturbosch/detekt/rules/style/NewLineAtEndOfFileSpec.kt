@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class NewLineAtEndOfFileSpec {
 
-    val subject = NewLineAtEndOfFile()
+    val subject = NewLineAtEndOfFile(Config.empty)
 
     @Test
     fun `should not flag a kt file containing new line at the end`() {

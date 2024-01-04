@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * if (x == null) true else false
  * </compliant>
  */
-class UseIfInsteadOfWhen(config: Config = Config.empty) : Rule(config) {
+class UseIfInsteadOfWhen(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "UseIfInsteadOfWhen",

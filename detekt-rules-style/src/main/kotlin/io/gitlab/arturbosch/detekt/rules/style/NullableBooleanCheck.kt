@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
  * </compliant>
  */
 @RequiresTypeResolution
-class NullableBooleanCheck(config: Config = Config.empty) : Rule(config) {
+class NullableBooleanCheck(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Nullable boolean check should use `==` rather than `?:`",

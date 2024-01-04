@@ -53,7 +53,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  * </compliant>
  */
 @ActiveByDefault(since = "1.21.0")
-class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
+class UselessPostfixExpression(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "UselessPostfixExpression",

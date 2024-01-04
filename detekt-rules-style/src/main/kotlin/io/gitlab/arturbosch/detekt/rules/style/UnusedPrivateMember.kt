@@ -46,7 +46,7 @@ private const val ARRAY_GET_METHOD_NAME = "get"
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
-class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
+class UnusedPrivateMember(config: Config) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused")
 

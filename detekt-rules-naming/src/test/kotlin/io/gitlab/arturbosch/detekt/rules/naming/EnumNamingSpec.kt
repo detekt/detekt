@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
@@ -23,7 +24,7 @@ class EnumNamingSpec {
 
     @Test
     fun `should detect no violation`() {
-        val findings = EnumNaming().compileAndLint(
+        val findings = EnumNaming(Config.empty).compileAndLint(
             """
                 enum class WorkFlow {
                     ACTIVE, NOT_ACTIVE, Unknown, Number1
@@ -40,7 +41,7 @@ class EnumNamingSpec {
                 default
             }
         """.trimIndent()
-        assertThat(EnumNaming().compileAndLint(code)).hasSize(1)
+        assertThat(EnumNaming(Config.empty).compileAndLint(code)).hasSize(1)
     }
 
     @Test
@@ -50,7 +51,7 @@ class EnumNamingSpec {
                 _Default
             }
         """.trimIndent()
-        assertThat(EnumNaming().compileAndLint(code)).hasSize(1)
+        assertThat(EnumNaming(Config.empty).compileAndLint(code)).hasSize(1)
     }
 
     @Test
@@ -60,7 +61,7 @@ class EnumNamingSpec {
                 @Suppress("EnumNaming") _Default
             }
         """.trimIndent()
-        assertThat(EnumNaming().compileAndLint(code)).isEmpty()
+        assertThat(EnumNaming(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -70,7 +71,7 @@ class EnumNamingSpec {
                 _Default,
             }
         """.trimIndent()
-        val findings = EnumNaming().compileAndLint(code)
+        val findings = EnumNaming(Config.empty).compileAndLint(code)
         assertThat(findings).hasTextLocations(26 to 34)
     }
 }

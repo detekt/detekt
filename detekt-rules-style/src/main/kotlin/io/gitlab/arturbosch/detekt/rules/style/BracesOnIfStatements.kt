@@ -143,7 +143,7 @@ import org.jetbrains.kotlin.psi.KtIfExpression
  *    f
  * </compliant>
  */
-class BracesOnIfStatements(config: Config = Config.empty) : Rule(config) {
+class BracesOnIfStatements(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

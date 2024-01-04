@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  * fun <V> foo(): Int where V : Int = 5
  * </compliant>
  */
-class EqualsOnSignatureLine(config: Config = Config.empty) : Rule(config) {
+class EqualsOnSignatureLine(config: Config) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName, MESSAGE)
 

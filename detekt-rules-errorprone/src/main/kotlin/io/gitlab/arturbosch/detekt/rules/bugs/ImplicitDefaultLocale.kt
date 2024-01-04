@@ -38,7 +38,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
  */
 @ActiveByDefault(since = "1.16.0")
 @RequiresTypeResolution
-class ImplicitDefaultLocale(config: Config = Config.empty) : Rule(config) {
+class ImplicitDefaultLocale(config: Config) : Rule(config) {
 
     private val formatCalls = listOf(
         FqName("kotlin.text.format")

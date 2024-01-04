@@ -34,7 +34,7 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
  *   .baz()
  * </compliant>
  */
-class CascadingCallWrapping(config: Config = Config.empty) : Rule(config) {
+class CascadingCallWrapping(config: Config) : Rule(config) {
     override val issue = Issue(
         id = javaClass.simpleName,
         description = "If a chained call is wrapped to a new line, subsequent chained calls should be as well.",

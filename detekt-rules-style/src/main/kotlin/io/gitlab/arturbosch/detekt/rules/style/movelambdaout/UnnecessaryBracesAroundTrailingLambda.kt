@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
  * </compliant>
  */
 @RequiresTypeResolution
-class UnnecessaryBracesAroundTrailingLambda(config: Config = Config.empty) : Rule(config) {
+class UnnecessaryBracesAroundTrailingLambda(config: Config) : Rule(config) {
     override val issue: Issue = Issue(
         javaClass.simpleName,
         "Braces around trailing lambda is unnecessary.",

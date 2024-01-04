@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class SafeCast(config: Config = Config.empty) : Rule(config) {
+class SafeCast(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

@@ -1,11 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class ThrowingExceptionFromFinallySpec {
-    val subject = ThrowingExceptionFromFinally()
+    val subject = ThrowingExceptionFromFinally(Config.empty)
 
     @Test
     fun `should report a throw expression`() {

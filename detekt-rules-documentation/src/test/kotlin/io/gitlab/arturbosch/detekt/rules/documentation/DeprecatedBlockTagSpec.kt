@@ -1,12 +1,13 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class DeprecatedBlockTagSpec {
-    val subject = DeprecatedBlockTag()
+    val subject = DeprecatedBlockTag(Config.empty)
 
     @Test
     fun `does not report regular kdoc block`() {

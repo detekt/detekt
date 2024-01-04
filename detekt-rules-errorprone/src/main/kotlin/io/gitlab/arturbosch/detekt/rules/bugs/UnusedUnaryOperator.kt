@@ -37,7 +37,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UnusedUnaryOperator(config: Config = Config.empty) : Rule(config) {
+class UnusedUnaryOperator(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "This unary operator is unused.",

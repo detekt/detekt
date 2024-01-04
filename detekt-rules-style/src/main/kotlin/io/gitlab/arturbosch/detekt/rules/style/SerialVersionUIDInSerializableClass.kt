@@ -42,7 +42,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(config) {
+class SerialVersionUIDInSerializableClass(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

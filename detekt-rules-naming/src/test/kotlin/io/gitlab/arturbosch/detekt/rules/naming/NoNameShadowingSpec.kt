@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
@@ -8,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class NoNameShadowingSpec(val env: KotlinCoreEnvironment) {
-    val subject = NoNameShadowing()
+    val subject = NoNameShadowing(Config.empty)
 
     @Test
     fun `report shadowing variable`() {

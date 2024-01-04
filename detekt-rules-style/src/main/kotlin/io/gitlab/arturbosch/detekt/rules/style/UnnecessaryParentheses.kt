@@ -48,7 +48,7 @@ import org.jetbrains.kotlin.psi.KtPsiUtil
  * }
  * </compliant>
  */
-class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
+class UnnecessaryParentheses(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "UnnecessaryParentheses",

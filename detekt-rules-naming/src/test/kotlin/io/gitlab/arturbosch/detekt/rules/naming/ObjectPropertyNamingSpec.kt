@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
@@ -15,7 +16,7 @@ class ObjectPropertyNamingSpec {
     @Nested
     inner class `constants in object declarations` {
 
-        val subject = ObjectPropertyNaming()
+        val subject = ObjectPropertyNaming(Config.empty)
 
         @Test
         fun `should not detect public constants complying to the naming rules`() {
@@ -71,7 +72,7 @@ class ObjectPropertyNamingSpec {
     @Nested
     inner class `constants in companion object` {
 
-        val subject = ObjectPropertyNaming()
+        val subject = ObjectPropertyNaming(Config.empty)
 
         @Test
         fun `should not detect public constants complying to the naming rules`() {
@@ -137,7 +138,7 @@ class ObjectPropertyNamingSpec {
     @Nested
     inner class `variables in objects` {
 
-        val subject = ObjectPropertyNaming()
+        val subject = ObjectPropertyNaming(Config.empty)
 
         @Test
         fun `should not detect public variables complying to the naming rules`() {
@@ -235,7 +236,7 @@ class ObjectPropertyNamingSpec {
     inner class `top level properties` {
         @Test
         fun `should not detect top level properties`() {
-            val subject = ObjectPropertyNaming()
+            val subject = ObjectPropertyNaming(Config.empty)
 
             val code = """
                 val _invalidNaming = 1
@@ -247,7 +248,7 @@ class ObjectPropertyNamingSpec {
 
     @Test
     fun `should not detect class properties`() {
-        val subject = ObjectPropertyNaming()
+        val subject = ObjectPropertyNaming(Config.empty)
         val code = """
             class O {
                 val _invalidNaming = 1
@@ -258,7 +259,7 @@ class ObjectPropertyNamingSpec {
 
     @Test
     fun `should not detect properties of class in object declaration`() {
-        val subject = ObjectPropertyNaming()
+        val subject = ObjectPropertyNaming(Config.empty)
         val code = """
             object A {
                 class O {

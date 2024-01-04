@@ -21,7 +21,7 @@ import java.util.IdentityHashMap
  * Extract parts of the functionality of long methods into separate, smaller methods.
  */
 @ActiveByDefault(since = "1.0.0")
-class LongMethod(config: Config = Config.empty) : Rule(config) {
+class LongMethod(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "LongMethod",

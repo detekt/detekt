@@ -1,11 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class DataClassShouldBeImmutableSpec {
-    val subject = DataClassShouldBeImmutable()
+    val subject = DataClassShouldBeImmutable(Config.empty)
 
     @Test
     fun `reports mutable variable in primary constructor`() {

@@ -52,7 +52,7 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
+class IgnoredReturnValue(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "IgnoredReturnValue",

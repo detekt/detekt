@@ -45,7 +45,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  * </compliant>
  *
  */
-class KDocReferencesNonPublicProperty(config: Config = Config.empty) : Rule(config) {
+class KDocReferencesNonPublicProperty(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

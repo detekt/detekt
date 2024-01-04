@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class ForEachOnRangeSpec {
 
-    val subject = ForEachOnRange()
+    val subject = ForEachOnRange(Config.empty)
 
     @Nested
     inner class `using a forEach on a range` {

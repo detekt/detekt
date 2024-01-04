@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnnecessaryNotNullOperatorSpec(private val env: KotlinCoreEnvironment) {
-    private val subject = UnnecessaryNotNullOperator()
+    private val subject = UnnecessaryNotNullOperator(Config.empty)
 
     @Nested
     inner class `check unnecessary not null operators` {

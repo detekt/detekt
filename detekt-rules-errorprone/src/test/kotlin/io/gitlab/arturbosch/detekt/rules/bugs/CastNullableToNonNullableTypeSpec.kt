@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) {
-    private val subject = CastNullableToNonNullableType()
+    private val subject = CastNullableToNonNullableType(Config.empty)
 
     @Test
     fun `reports casting Nullable type to NonNullable type`() {

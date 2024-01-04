@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.psi.KtUnaryExpression
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
-class UnnecessaryNotNullOperator(config: Config = Config.empty) : Rule(config) {
+class UnnecessaryNotNullOperator(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "UnnecessaryNotNullOperator",

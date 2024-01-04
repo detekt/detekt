@@ -37,7 +37,7 @@ import org.jetbrains.kotlin.resolve.bindingContextUtil.getAbbreviatedTypeOrType
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
+class ForbiddenVoid(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

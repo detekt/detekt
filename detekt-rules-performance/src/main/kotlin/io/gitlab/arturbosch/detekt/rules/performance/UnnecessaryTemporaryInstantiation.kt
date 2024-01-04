@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.psi.KtExpression
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class UnnecessaryTemporaryInstantiation(config: Config = Config.empty) : Rule(config) {
+class UnnecessaryTemporaryInstantiation(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "UnnecessaryTemporaryInstantiation",

@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtFile
  * a regular expression produced from the passed template license file (defined via `licenseTemplateFile` configuration
  * option).
  */
-class AbsentOrWrongFileLicense(config: Config = Config.empty) : Rule(config) {
+class AbsentOrWrongFileLicense(config: Config) : Rule(config) {
 
     override val issue = Issue(
         id = RULE_NAME,

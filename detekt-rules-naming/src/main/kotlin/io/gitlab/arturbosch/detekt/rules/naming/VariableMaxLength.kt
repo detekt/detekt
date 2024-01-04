@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtProperty
 /**
  * Reports when very long variable names are used.
  */
-class VariableMaxLength(config: Config = Config.empty) : Rule(config) {
+class VariableMaxLength(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

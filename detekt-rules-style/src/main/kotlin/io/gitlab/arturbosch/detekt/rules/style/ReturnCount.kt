@@ -44,7 +44,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ReturnCount(config: Config = Config.empty) : Rule(config) {
+class ReturnCount(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.types.KotlinType
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
-class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
+class ReturnFromFinally(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "ReturnFromFinally",

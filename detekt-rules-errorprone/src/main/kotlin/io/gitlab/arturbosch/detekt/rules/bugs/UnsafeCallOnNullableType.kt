@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.types.typeUtil.nullability
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.2.0")
-class UnsafeCallOnNullableType(config: Config = Config.empty) : Rule(config) {
+class UnsafeCallOnNullableType(config: Config) : Rule(config) {
     override val issue: Issue = Issue(
         "UnsafeCallOnNullableType",
         "Unsafe calls on nullable types detected. These calls will throw a NullPointerException in case " +

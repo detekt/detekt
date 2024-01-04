@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * </compliant>
  */
 @RequiresTypeResolution
-class MaxChainedCallsOnSameLine(config: Config = Config.empty) : Rule(config) {
+class MaxChainedCallsOnSameLine(config: Config) : Rule(config) {
     override val issue = Issue(
         id = javaClass.simpleName,
         description = "Chained calls beyond the maximum should be wrapped to a new line.",

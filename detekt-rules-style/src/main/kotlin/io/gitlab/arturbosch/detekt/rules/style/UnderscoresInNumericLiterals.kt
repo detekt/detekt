@@ -29,7 +29,7 @@ import java.util.Locale
  * const val DEFAULT_AMOUNT = 1_000_000
  * </compliant>
  */
-class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config) {
+class UnderscoresInNumericLiterals(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

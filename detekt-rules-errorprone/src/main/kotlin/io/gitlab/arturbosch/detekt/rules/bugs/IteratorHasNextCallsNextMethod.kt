@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class IteratorHasNextCallsNextMethod(config: Config = Config.empty) : Rule(config) {
+class IteratorHasNextCallsNextMethod(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "IteratorHasNextCallsNextMethod",

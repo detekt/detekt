@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *
  */
 @RequiresTypeResolution
-class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
+class PreferToOverPairSyntax(config: Config) : Rule(config) {
     override val issue = Issue(
         "PreferToOverPairSyntax",
         "Pair was created using the Pair constructor, using the to syntax is preferred.",
