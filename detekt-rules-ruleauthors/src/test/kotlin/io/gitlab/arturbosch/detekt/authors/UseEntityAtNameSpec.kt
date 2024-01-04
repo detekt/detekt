@@ -1,12 +1,13 @@
 package io.gitlab.arturbosch.detekt.authors
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.Test
 
 internal class UseEntityAtNameSpec {
 
-    private val rule = UseEntityAtName()
+    private val rule = UseEntityAtName(Config.empty)
 
     @Test
     fun `should not report calls when there's no name involved`() {

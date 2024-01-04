@@ -53,7 +53,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.2.0")
-class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
+class MemberNameEqualsClassName(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

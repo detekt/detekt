@@ -51,7 +51,7 @@ import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
  * </compliant>
  */
 @RequiresTypeResolution
-class ElseCaseInsteadOfExhaustiveWhen(config: Config = Config.empty) : Rule(config) {
+class ElseCaseInsteadOfExhaustiveWhen(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "ElseCaseInsteadOfExhaustiveWhen",

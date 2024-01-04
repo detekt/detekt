@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(config) {
+class ExceptionRaisedInUnexpectedLocation(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "ExceptionRaisedInUnexpectedLocation",

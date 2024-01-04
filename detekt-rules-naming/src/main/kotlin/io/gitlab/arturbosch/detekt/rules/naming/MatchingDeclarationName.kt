@@ -46,7 +46,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
+class MatchingDeclarationName(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         javaClass.simpleName,

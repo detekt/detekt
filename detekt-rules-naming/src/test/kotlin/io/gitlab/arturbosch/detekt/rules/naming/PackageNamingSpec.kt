@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
@@ -16,7 +17,7 @@ class PackageNamingSpec {
     @Test
     fun `should ignore the issue by alias suppression - PackageName`() {
         assertThat(
-            PackageNaming().compileAndLint(
+            PackageNaming(Config.empty).compileAndLint(
                 """
                     @file:Suppress("PackageName")
                     package FOO.BAR
@@ -28,7 +29,7 @@ class PackageNamingSpec {
     @Test
     fun `should ignore the issue by alias suppression - PackageDirectoryMismatch`() {
         assertThat(
-            PackageNaming().compileAndLint(
+            PackageNaming(Config.empty).compileAndLint(
                 """
                     @file:Suppress("PackageDirectoryMismatch")
                     package FOO.BAR
@@ -39,21 +40,21 @@ class PackageNamingSpec {
 
     @Test
     fun `should find a uppercase package name`() {
-        assertThat(PackageNaming().compileAndLint("package FOO.BAR")).hasSize(1)
+        assertThat(PackageNaming(Config.empty).compileAndLint("package FOO.BAR")).hasSize(1)
     }
 
     @Test
     fun `should find a upper camel case package name`() {
-        assertThat(PackageNaming().compileAndLint("package Foo.Bar")).hasSize(1)
+        assertThat(PackageNaming(Config.empty).compileAndLint("package Foo.Bar")).hasSize(1)
     }
 
     @Test
     fun `should find a camel case package name`() {
-        assertThat(PackageNaming().compileAndLint("package fOO.bAR")).hasSize(1)
+        assertThat(PackageNaming(Config.empty).compileAndLint("package fOO.bAR")).hasSize(1)
     }
 
     @Test
     fun `should check an valid package name`() {
-        assertThat(PackageNaming().compileAndLint("package foo.bar")).isEmpty()
+        assertThat(PackageNaming(Config.empty).compileAndLint("package foo.bar")).isEmpty()
     }
 }

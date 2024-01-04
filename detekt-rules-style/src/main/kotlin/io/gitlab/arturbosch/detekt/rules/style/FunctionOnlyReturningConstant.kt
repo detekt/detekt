@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config) {
+class FunctionOnlyReturningConstant(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

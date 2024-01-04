@@ -155,7 +155,7 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  *
  *  </compliant>
  */
-class BracesOnWhenStatements(config: Config = Config.empty) : Rule(config) {
+class BracesOnWhenStatements(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Braces do not comply with the specified policy",

@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnIfStatements.BracePolicy
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnIfStatementsSpec.Companion.NOT_RELEVANT
@@ -2129,7 +2130,7 @@ class BracesOnIfStatementsSpec {
             val codeLocation = locations.map { it(code) }.toTypedArray()
             // Separately compile the code because otherwise all the combinations would compile them again and again.
             val compileTest = dynamicTest("Compiles: $code") {
-                BracesOnIfStatements().compileAndLint(code)
+                BracesOnIfStatements(Config.empty).compileAndLint(code)
             }
             val validationTests = createBraceTests(singleLine, multiLine) { rule ->
                 rule.test(code, *codeLocation)

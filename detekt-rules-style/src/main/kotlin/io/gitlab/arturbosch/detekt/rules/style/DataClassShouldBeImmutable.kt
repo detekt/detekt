@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.psi.KtClass
  * )
  * </compliant>
  */
-class DataClassShouldBeImmutable(config: Config = Config.empty) : Rule(config) {
+class DataClassShouldBeImmutable(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "DataClassShouldBeImmutable",

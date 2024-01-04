@@ -45,7 +45,7 @@ import org.jetbrains.kotlin.resolve.checkers.ExplicitApiDeclarationChecker
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.2.0")
-class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(config) {
+class LibraryCodeMustSpecifyReturnType(config: Config) : Rule(config) {
 
     override val issue = Issue(
         this.javaClass.simpleName,

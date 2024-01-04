@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
  * }
  * </compliant>
  */
-class CollapsibleIfStatements(config: Config = Config.empty) : Rule(config) {
+class CollapsibleIfStatements(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "CollapsibleIfStatements",

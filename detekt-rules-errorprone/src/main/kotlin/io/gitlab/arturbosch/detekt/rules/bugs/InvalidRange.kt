@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class InvalidRange(config: Config = Config.empty) : Rule(config) {
+class InvalidRange(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

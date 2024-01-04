@@ -203,5 +203,5 @@ private fun checkLicence(@Language("kotlin") content: String, isRegexLicense: Bo
         onStart(listOf(file), BindingContext.EMPTY)
     }
 
-    return AbsentOrWrongFileLicense().lint(file)
+    return AbsentOrWrongFileLicense(Config.empty).lint(file)
 }

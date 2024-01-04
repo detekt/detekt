@@ -37,7 +37,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.isSubclassOf
  * </compliant>
  */
 @RequiresTypeResolution
-class UseSumOfInsteadOfFlatMapSize(config: Config = Config.empty) : Rule(config) {
+class UseSumOfInsteadOfFlatMapSize(config: Config) : Rule(config) {
     override val issue: Issue = Issue(
         javaClass.simpleName,
         "Use `sumOf` instead of `flatMap` and `size/count` calls",

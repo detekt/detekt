@@ -1,11 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class NestedClassesVisibilitySpec {
-    val subject = NestedClassesVisibility()
+    val subject = NestedClassesVisibility(Config.empty)
 
     @Test
     fun `reports explicit public visibility in nested objects, classes and interfaces`() {

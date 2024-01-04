@@ -25,9 +25,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * Large interfaces should be split into smaller interfaces which have a clear responsibility and are easier
  * to understand and implement.
  */
-class ComplexInterface(
-    config: Config = Config.empty,
-) : Rule(config) {
+class ComplexInterface(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

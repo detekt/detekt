@@ -74,7 +74,7 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
  * </compliant>
  */
 @RequiresTypeResolution
-class UnnamedParameterUse(config: Config = Config.empty) : Rule(config) {
+class UnnamedParameterUse(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

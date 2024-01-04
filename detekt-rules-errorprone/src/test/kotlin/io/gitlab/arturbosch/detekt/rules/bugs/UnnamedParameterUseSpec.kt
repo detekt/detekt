@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -10,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnnamedParameterUseSpec(private val env: KotlinCoreEnvironment) {
-    private val subject = UnnamedParameterUse()
+    private val subject = UnnamedParameterUse(Config.empty)
 
     @Test
     fun `does not report for no param function call`() {

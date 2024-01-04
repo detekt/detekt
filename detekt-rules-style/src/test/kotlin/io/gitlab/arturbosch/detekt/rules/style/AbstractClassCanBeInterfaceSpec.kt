@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -10,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
-    val subject = AbstractClassCanBeInterface()
+    val subject = AbstractClassCanBeInterface(Config.empty)
 
     @Nested
     inner class `abstract classes with no concrete members` {

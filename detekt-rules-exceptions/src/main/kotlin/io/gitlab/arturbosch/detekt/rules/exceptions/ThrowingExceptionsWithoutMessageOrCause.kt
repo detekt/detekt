@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : Rule(config) {
+class ThrowingExceptionsWithoutMessageOrCause(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "ThrowingExceptionsWithoutMessageOrCause",

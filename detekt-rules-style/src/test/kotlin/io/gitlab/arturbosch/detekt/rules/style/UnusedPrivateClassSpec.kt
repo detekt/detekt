@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 class UnusedPrivateClassSpec {
 
-    val subject = UnusedPrivateClass()
+    val subject = UnusedPrivateClass(Config.empty)
 
     @Nested
     inner class `top level interfaces` {
@@ -320,7 +321,7 @@ class UnusedPrivateClassSpec {
                 fun bar(clazz: KClass<*>) = Unit
             """.trimIndent()
 
-            val findings = UnusedPrivateClass().compileAndLint(code)
+            val findings = UnusedPrivateClass(Config.empty).compileAndLint(code)
 
             assertThat(findings).hasSize(1)
         }
@@ -340,7 +341,7 @@ class UnusedPrivateClassSpec {
                 }
             """.trimIndent()
 
-            val findings = UnusedPrivateClass().compileAndLint(code)
+            val findings = UnusedPrivateClass(Config.empty).compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
@@ -365,7 +366,7 @@ class UnusedPrivateClassSpec {
                 }
             """.trimIndent()
 
-            val findings = UnusedPrivateClass().compileAndLint(code)
+            val findings = UnusedPrivateClass(Config.empty).compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
@@ -384,7 +385,7 @@ class UnusedPrivateClassSpec {
                 }
             """.trimIndent()
 
-            val findings = UnusedPrivateClass().compileAndLint(code)
+            val findings = UnusedPrivateClass(Config.empty).compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
@@ -408,7 +409,7 @@ class UnusedPrivateClassSpec {
                     }
                 }
             """.trimIndent()
-            val findings = UnusedPrivateClass().lint(code)
+            val findings = UnusedPrivateClass(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -433,7 +434,7 @@ class UnusedPrivateClassSpec {
                     }
                 }
             """.trimIndent()
-            val findings = UnusedPrivateClass().lint(code)
+            val findings = UnusedPrivateClass(Config.empty).lint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(10, 5)
         }

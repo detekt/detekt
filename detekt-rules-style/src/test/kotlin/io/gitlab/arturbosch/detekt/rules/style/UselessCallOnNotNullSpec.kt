@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
-    val subject = UselessCallOnNotNull()
+    val subject = UselessCallOnNotNull(Config.empty)
 
     @Test
     fun `reports when calling orEmpty on a list`() {

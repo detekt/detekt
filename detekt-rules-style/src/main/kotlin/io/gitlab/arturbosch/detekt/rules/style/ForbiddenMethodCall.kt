@@ -43,7 +43,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequenc
  *
  */
 @RequiresTypeResolution
-class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
+class ForbiddenMethodCall(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

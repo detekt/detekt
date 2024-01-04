@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.authors
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCoreEnvironment) {
 
-    private val rule = ViolatesTypeResolutionRequirements()
+    private val rule = ViolatesTypeResolutionRequirements(Config.empty)
 
     @Test
     fun `should not report classes that don't extend from BaseRule`() {

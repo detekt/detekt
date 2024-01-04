@@ -33,7 +33,7 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  * }
  * </compliant>
  */
-class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(config) {
+class UnconditionalJumpStatementInLoop(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

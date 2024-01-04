@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
@@ -12,7 +13,7 @@ import org.junit.jupiter.api.Test
 class RedundantElseInWhenSpec(private val env: KotlinCoreEnvironment) {
 
     @Suppress("DEPRECATION")
-    private val subject = RedundantElseInWhen()
+    private val subject = RedundantElseInWhen(Config.empty)
 
     @Nested
     inner class Enum {

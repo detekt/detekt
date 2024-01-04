@@ -87,7 +87,7 @@ import java.util.Locale
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
+class ForbiddenComment(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

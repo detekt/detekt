@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.psi.KtExpression
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.0.0")
-class UnreachableCode(config: Config = Config.empty) : Rule(config) {
+class UnreachableCode(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "UnreachableCode",

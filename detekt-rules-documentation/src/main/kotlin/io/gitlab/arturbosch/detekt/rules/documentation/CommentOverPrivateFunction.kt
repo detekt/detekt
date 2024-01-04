@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * with better names if necessary. Giving the function a better, more descriptive name can also help in
  * solving this issue.
  */
-class CommentOverPrivateFunction(config: Config = Config.empty) : Rule(config) {
+class CommentOverPrivateFunction(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "CommentOverPrivateFunction",

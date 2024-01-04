@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * which clearly belongs together in separate parts of the code.
  */
 @ActiveByDefault(since = "1.0.0")
-class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
+class TooManyFunctions(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "TooManyFunctions",

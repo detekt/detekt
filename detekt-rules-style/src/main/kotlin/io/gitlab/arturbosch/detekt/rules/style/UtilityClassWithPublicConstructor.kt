@@ -56,7 +56,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(config) {
+class UtilityClassWithPublicConstructor(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         javaClass.simpleName,

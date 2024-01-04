@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
-class UnsafeCast(config: Config = Config.empty) : Rule(config) {
+class UnsafeCast(config: Config) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("UNCHECKED_CAST")
 

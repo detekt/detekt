@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
@@ -12,7 +13,7 @@ private const val SEARCH_IN_INNER_INTERFACE = "searchInInnerInterface"
 private const val SEARCH_IN_PROTECTED_CLASS = "searchInProtectedClass"
 
 class UndocumentedPublicClassSpec {
-    val subject = UndocumentedPublicClass()
+    val subject = UndocumentedPublicClass(Config.empty)
 
     val inner = """
         /** Some doc */

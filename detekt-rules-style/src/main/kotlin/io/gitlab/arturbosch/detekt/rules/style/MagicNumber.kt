@@ -68,7 +68,7 @@ import java.util.Locale
  */
 @Suppress("TooManyFunctions")
 @ActiveByDefault(since = "1.0.0")
-class MagicNumber(config: Config = Config.empty) : Rule(config) {
+class MagicNumber(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

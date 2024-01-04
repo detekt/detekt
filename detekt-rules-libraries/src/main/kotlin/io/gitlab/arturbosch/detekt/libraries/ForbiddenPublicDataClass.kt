@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierTypeOrDefault
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class ForbiddenPublicDataClass(config: Config = Config.empty) : Rule(config) {
+class ForbiddenPublicDataClass(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

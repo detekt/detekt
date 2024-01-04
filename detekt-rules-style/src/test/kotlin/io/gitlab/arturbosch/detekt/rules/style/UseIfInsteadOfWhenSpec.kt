@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class UseIfInsteadOfWhenSpec {
 
-    val subject = UseIfInsteadOfWhen()
+    val subject = UseIfInsteadOfWhen(Config.empty)
 
     @Test
     fun `reports when using two branches`() {

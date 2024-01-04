@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  * }
  * </compliant>
  */
-class RedundantConstructorKeyword(config: Config = Config.empty) : Rule(config) {
+class RedundantConstructorKeyword(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Redundant `constructor` modifier can be removed.",

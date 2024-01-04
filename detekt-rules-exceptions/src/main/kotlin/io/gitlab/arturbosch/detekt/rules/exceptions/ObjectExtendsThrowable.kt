@@ -38,7 +38,7 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  *
  */
 @RequiresTypeResolution
-class ObjectExtendsThrowable(config: Config = Config.empty) : Rule(config) {
+class ObjectExtendsThrowable(config: Config) : Rule(config) {
     override val issue = Issue(
         id = "ObjectExtendsThrowable",
         description = "An `object` should not extend and type of Throwable. Throwables are " +

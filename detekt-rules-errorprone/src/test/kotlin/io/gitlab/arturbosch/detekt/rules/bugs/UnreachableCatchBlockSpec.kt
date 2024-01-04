@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnreachableCatchBlockSpec(private val env: KotlinCoreEnvironment) {
-    private val subject = UnreachableCatchBlock()
+    private val subject = UnreachableCatchBlock(Config.empty)
 
     @Test
     fun `reports a unreachable catch block that is after the super class catch block`() {

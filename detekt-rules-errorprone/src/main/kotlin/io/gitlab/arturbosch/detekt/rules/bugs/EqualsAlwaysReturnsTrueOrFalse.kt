@@ -36,7 +36,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(config) {
+class EqualsAlwaysReturnsTrueOrFalse(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "EqualsAlwaysReturnsTrueOrFalse",

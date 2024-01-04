@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
 
-    private val subject = SpreadOperator()
+    private val subject = SpreadOperator(Config.empty)
 
     private val errorMessage = "Used in this way a spread operator causes a full copy of the array to" +
         " be created before calling a method. This may result in a performance penalty."

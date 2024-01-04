@@ -48,7 +48,7 @@ import org.jetbrains.kotlin.types.typeUtil.isInterface
  */
 @ActiveByDefault(since = "1.2.0")
 @RequiresTypeResolution
-class AbstractClassCanBeConcreteClass(config: Config = Config.empty) : Rule(config) {
+class AbstractClassCanBeConcreteClass(config: Config) : Rule(config) {
 
     private val noAbstractMember = "An abstract class without an abstract member can be refactored to a concrete class."
 

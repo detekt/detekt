@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.psi.KtDestructuringDeclaration
  * </compliant>
  */
 @ActiveByDefault(since = "1.21.0")
-class DestructuringDeclarationWithTooManyEntries(config: Config = Config.empty) : Rule(config) {
+class DestructuringDeclarationWithTooManyEntries(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Too many entries in a destructuring declaration make the code hard to understand.",

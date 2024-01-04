@@ -21,7 +21,7 @@ import java.util.IdentityHashMap
  * things.
  */
 @ActiveByDefault(since = "1.0.0")
-class LargeClass(config: Config = Config.empty) : Rule(config) {
+class LargeClass(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "LargeClass",

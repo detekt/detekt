@@ -44,7 +44,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class PrintStackTrace(config: Config = Config.empty) : Rule(config) {
+class PrintStackTrace(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "PrintStackTrace",

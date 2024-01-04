@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
  *
  * Refactor these methods and try to use optional parameters instead to prevent some of the overloading.
  */
-class MethodOverloading(config: Config = Config.empty) : Rule(config) {
+class MethodOverloading(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "MethodOverloading",

@@ -1,12 +1,13 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class UselessPostfixExpressionSpec {
-    private val subject = UselessPostfixExpression()
+    private val subject = UselessPostfixExpression(Config.empty)
 
     @Nested
     inner class `check several types of postfix increments` {

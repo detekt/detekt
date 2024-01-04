@@ -33,7 +33,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isProtected
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) {
+class ProtectedMemberInFinalClass(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

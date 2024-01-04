@@ -41,7 +41,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * }
  * </compliant>
  */
-class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(config) {
+class RedundantVisibilityModifierRule(config: Config) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("RedundantVisibilityModifier")
 

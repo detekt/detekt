@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * Reports top level constant that which do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
-class TopLevelPropertyNaming(config: Config = Config.empty) : Rule(config) {
+class TopLevelPropertyNaming(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

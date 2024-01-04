@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
  */
 @Suppress("ViolatesTypeResolutionRequirements")
 @ActiveByDefault(since = "1.0.0")
-class LongParameterList(config: Config = Config.empty) : Rule(config) {
+class LongParameterList(config: Config) : Rule(config) {
     override val issue = Issue(
         "LongParameterList",
         "The more parameters a function has the more complex it is. Long parameter lists are often " +

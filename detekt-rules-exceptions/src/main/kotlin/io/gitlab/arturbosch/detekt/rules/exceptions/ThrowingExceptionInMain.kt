@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
  * }
  * </noncompliant>
  */
-class ThrowingExceptionInMain(config: Config = Config.empty) : Rule(config) {
+class ThrowingExceptionInMain(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "ThrowingExceptionInMain",

@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.types.isNullable
  * </compliant>
  */
 @RequiresTypeResolution
-class UnnecessaryNotNullCheck(config: Config = Config.empty) : Rule(config) {
+class UnnecessaryNotNullCheck(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "UnnecessaryNotNullCheck",

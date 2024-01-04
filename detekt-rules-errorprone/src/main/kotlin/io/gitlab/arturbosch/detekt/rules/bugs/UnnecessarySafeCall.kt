@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
-class UnnecessarySafeCall(config: Config = Config.empty) : Rule(config) {
+class UnnecessarySafeCall(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "UnnecessarySafeCall",

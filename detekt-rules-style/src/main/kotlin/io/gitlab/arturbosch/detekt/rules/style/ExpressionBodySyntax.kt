@@ -38,7 +38,7 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
  * }
  * </compliant>
  */
-class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
+class ExpressionBodySyntax(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

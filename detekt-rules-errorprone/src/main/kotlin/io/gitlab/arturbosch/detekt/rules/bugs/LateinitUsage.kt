@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * }
  * </noncompliant>
  */
-class LateinitUsage(config: Config = Config.empty) : Rule(config) {
+class LateinitUsage(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

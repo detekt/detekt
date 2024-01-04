@@ -43,7 +43,7 @@ import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UseOrEmpty(config: Config = Config.empty) : Rule(config) {
+class UseOrEmpty(config: Config) : Rule(config) {
     override val issue: Issue = Issue(
         "UseOrEmpty",
         "Use `orEmpty()` call instead of `?:` with empty collection factory methods",

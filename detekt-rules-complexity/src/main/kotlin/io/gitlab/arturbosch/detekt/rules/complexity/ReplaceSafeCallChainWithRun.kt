@@ -37,7 +37,7 @@ import org.jetbrains.kotlin.types.isNullable
  *
  */
 @RequiresTypeResolution
-class ReplaceSafeCallChainWithRun(config: Config = Config.empty) : Rule(config) {
+class ReplaceSafeCallChainWithRun(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

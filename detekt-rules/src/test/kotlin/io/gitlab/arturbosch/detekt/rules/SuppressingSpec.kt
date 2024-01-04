@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules
 
 import io.github.detekt.test.utils.compileContentForTest
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.complexity.ComplexCondition
 import io.gitlab.arturbosch.detekt.rules.complexity.LongMethod
 import io.gitlab.arturbosch.detekt.rules.complexity.LongParameterList
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test
 class SuppressingSpec {
 
     @Test
+    @Suppress("LongMethod")
     fun `all findings are suppressed on element levels`() {
         @Suppress("KotlinConstantConditions")
         val code = """
@@ -62,7 +64,11 @@ class SuppressingSpec {
         """.trimIndent()
         val ktFile = compileContentForTest(code)
 
-        val findings = listOf(LongMethod(), LongParameterList(), ComplexCondition()).flatMap {
+        val findings = listOf(
+            LongMethod(Config.empty),
+            LongParameterList(Config.empty),
+            ComplexCondition(Config.empty),
+        ).flatMap {
             it.visitFile(ktFile)
             it.findings
         }
@@ -119,7 +125,11 @@ class SuppressingSpec {
             }
         """.trimIndent()
         val ktFile = compileContentForTest(code)
-        val findings = listOf(LongMethod(), LongParameterList(), ComplexCondition()).flatMap {
+        val findings = listOf(
+            LongMethod(Config.empty),
+            LongParameterList(Config.empty),
+            ComplexCondition(Config.empty),
+        ).flatMap {
             it.visitFile(ktFile)
             it.findings
         }
@@ -173,7 +183,11 @@ class SuppressingSpec {
 
         val ktFile = compileContentForTest(code)
 
-        val findings = listOf(LongMethod(), LongParameterList(), ComplexCondition()).flatMap {
+        val findings = listOf(
+            LongMethod(Config.empty),
+            LongParameterList(Config.empty),
+            ComplexCondition(Config.empty),
+        ).flatMap {
             it.visitFile(ktFile)
             it.findings
         }

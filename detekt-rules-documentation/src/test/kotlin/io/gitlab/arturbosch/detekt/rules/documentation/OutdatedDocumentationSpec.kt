@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class OutdatedDocumentationSpec {
-    val subject = OutdatedDocumentation()
+    val subject = OutdatedDocumentation(Config.empty)
 
     @Nested
     inner class General {

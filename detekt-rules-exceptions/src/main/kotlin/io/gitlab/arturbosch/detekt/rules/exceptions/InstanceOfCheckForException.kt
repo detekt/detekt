@@ -45,7 +45,7 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class InstanceOfCheckForException(config: Config = Config.empty) : Rule(config) {
+class InstanceOfCheckForException(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "InstanceOfCheckForException",

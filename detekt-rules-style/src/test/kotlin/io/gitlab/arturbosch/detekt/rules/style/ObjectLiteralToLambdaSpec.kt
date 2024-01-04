@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assert
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class ObjectLiteralToLambdaSpec {
-    val subject = ObjectLiteralToLambda()
+    val subject = ObjectLiteralToLambda(Config.empty)
 
     @Nested
     @KotlinCoreEnvironmentTest

@@ -38,7 +38,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.classId
  */
 @Suppress("TooManyFunctions")
 @RequiresTypeResolution
-class UnnecessaryInnerClass(config: Config = Config.empty) : Rule(config) {
+class UnnecessaryInnerClass(config: Config) : Rule(config) {
 
     private val candidateClassToParentClasses = mutableMapOf<KtClass, List<KtClass>>()
     private val classChain = ArrayDeque<KtClass>()

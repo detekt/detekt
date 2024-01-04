@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.DynamicTest
@@ -8,7 +9,7 @@ import org.junit.jupiter.api.TestFactory
 
 class UseLetSpec {
 
-    val subject = UseLet()
+    val subject = UseLet(Config.empty)
 
     @TestFactory
     fun `it forbids all != null else null combinations`(): Iterable<DynamicTest> {

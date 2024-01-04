@@ -37,7 +37,7 @@ import org.jetbrains.kotlin.types.KotlinType
  * </compliant>
  */
 @RequiresTypeResolution
-class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
+class ForbiddenAnnotation(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

@@ -37,7 +37,7 @@ import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
  * class Bar
  * </compliant>
  */
-class ForbiddenSuppress(config: Config = Config.empty) : Rule(config) {
+class ForbiddenSuppress(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

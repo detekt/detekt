@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  * If the codebase should have documentation on all public functions enable this rule to enforce this.
  * Overridden functions are excluded by this rule.
  */
-class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
+class UndocumentedPublicFunction(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

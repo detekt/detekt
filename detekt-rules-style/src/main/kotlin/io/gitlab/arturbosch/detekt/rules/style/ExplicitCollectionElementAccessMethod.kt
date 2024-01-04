@@ -37,7 +37,7 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * </compliant>
  */
 @RequiresTypeResolution
-class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rule(config) {
+class ExplicitCollectionElementAccessMethod(config: Config) : Rule(config) {
 
     override val issue: Issue =
         Issue(

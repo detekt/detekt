@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
@@ -8,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class InstanceOfCheckForExceptionSpec(private val env: KotlinCoreEnvironment) {
-    val subject = InstanceOfCheckForException()
+    val subject = InstanceOfCheckForException(Config.empty)
 
     @Test
     fun `has is and as checks`() {

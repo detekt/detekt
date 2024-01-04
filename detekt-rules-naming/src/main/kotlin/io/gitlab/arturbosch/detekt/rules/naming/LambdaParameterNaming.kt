@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtParameter
 /**
  * Reports lambda parameter names that do not follow the specified naming convention.
  */
-class LambdaParameterNaming(config: Config = Config.empty) : Rule(config) {
+class LambdaParameterNaming(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

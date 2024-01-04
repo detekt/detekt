@@ -34,7 +34,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  *  [Reference](https://kotlinlang.org/docs/scope-functions.html)
  */
 @ActiveByDefault(since = "1.0.0")
-class CyclomaticComplexMethod(config: Config = Config.empty) : Rule(config) {
+class CyclomaticComplexMethod(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "CyclomaticComplexMethod",

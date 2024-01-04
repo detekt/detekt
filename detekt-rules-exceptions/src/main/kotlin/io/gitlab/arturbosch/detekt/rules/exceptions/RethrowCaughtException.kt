@@ -58,7 +58,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class RethrowCaughtException(config: Config = Config.empty) : Rule(config) {
+class RethrowCaughtException(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "RethrowCaughtException",

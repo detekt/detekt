@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtProperty
  * name. If this property is inside a bigger class, it makes sense to refactor and split up the class. This can
  * increase readability and make the documentation obsolete.
  */
-class CommentOverPrivateProperty(config: Config = Config.empty) : Rule(config) {
+class CommentOverPrivateProperty(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "CommentOverPrivateProperty",

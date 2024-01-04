@@ -43,7 +43,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class DoubleMutabilityForCollection(config: Config = Config.empty) : Rule(config) {
+class DoubleMutabilityForCollection(config: Config) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("DoubleMutability")
 

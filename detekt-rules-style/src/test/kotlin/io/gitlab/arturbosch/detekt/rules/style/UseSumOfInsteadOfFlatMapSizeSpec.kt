@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
@@ -8,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
-    val subject = UseSumOfInsteadOfFlatMapSize()
+    val subject = UseSumOfInsteadOfFlatMapSize(Config.empty)
 
     @Test
     fun `reports flatMap and size`() {

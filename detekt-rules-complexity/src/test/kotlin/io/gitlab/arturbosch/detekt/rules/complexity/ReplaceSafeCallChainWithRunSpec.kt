@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class ReplaceSafeCallChainWithRunSpec(val env: KotlinCoreEnvironment) {
 
-    val subject = ReplaceSafeCallChainWithRun()
+    val subject = ReplaceSafeCallChainWithRun(Config.empty)
 
     @Test
     fun `reports long chain of unnecessary safe qualified expressions`() {

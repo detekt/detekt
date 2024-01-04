@@ -43,7 +43,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
+class EqualsWithHashCodeExist(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "EqualsWithHashCodeExist",

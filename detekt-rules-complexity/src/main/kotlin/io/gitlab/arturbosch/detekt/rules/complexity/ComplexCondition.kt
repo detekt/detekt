@@ -36,9 +36,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ComplexCondition(
-    config: Config = Config.empty
-) : Rule(config) {
+class ComplexCondition(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "ComplexCondition",

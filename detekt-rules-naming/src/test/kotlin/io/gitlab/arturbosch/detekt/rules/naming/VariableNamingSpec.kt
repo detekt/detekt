@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -66,7 +67,7 @@ class VariableNamingSpec {
                 val camel_Case_Property = 5
             }
         """.trimIndent()
-        assertThat(VariableNaming().compileAndLint(code))
+        assertThat(VariableNaming(Config.empty).compileAndLint(code))
             .hasStartSourceLocations(
                 SourceLocation(2, 17),
                 SourceLocation(3, 9),
@@ -83,7 +84,7 @@ class VariableNamingSpec {
                 val camelCaseProperty = 5
             }
         """.trimIndent()
-        assertThat(VariableNaming().compileAndLint(code)).isEmpty()
+        assertThat(VariableNaming(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -99,7 +100,7 @@ class VariableNamingSpec {
                 @Suppress("VariableNaming") val SHOULD_NOT_BE_FLAGGED: String
             }
         """.trimIndent()
-        assertThat(VariableNaming().compileAndLint(code)).isEmpty()
+        assertThat(VariableNaming(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -112,7 +113,7 @@ class VariableNamingSpec {
                 listOf<Pair<Int, Int>>().flatMap { (right, _) -> listOf(right) }
             }
         """.trimIndent()
-        assertThat(VariableNaming().compileAndLint(code)).isEmpty()
+        assertThat(VariableNaming(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -123,6 +124,6 @@ class VariableNamingSpec {
                 val (_, HOLY_GRAIL) = D(5, 4)
             }
         """.trimIndent()
-        assertThat(VariableNaming().compileAndLint(code)).isEmpty()
+        assertThat(VariableNaming(Config.empty).compileAndLint(code)).isEmpty()
     }
 }

@@ -1,11 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.github.detekt.test.utils.compileContentForTest
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
 import org.junit.jupiter.api.Test
 
 class NoTabsSpec {
-    private val subject = NoTabs()
+    private val subject = NoTabs(Config.empty)
 
     @Test
     fun `should flag a line that contains a tab`() {

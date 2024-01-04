@@ -33,7 +33,7 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  * class Bar { }
  * </compliant>
  */
-class SpacingAfterPackageDeclaration(config: Config = Config.empty) : Rule(config) {
+class SpacingAfterPackageDeclaration(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

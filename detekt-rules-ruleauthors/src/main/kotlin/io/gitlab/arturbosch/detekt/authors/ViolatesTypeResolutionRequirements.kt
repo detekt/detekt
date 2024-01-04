@@ -24,7 +24,7 @@ import kotlin.reflect.KClass
  */
 @ActiveByDefault("1.22.0")
 @RequiresTypeResolution
-class ViolatesTypeResolutionRequirements(config: Config = Config.empty) : Rule(config) {
+class ViolatesTypeResolutionRequirements(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "`@RequiresTypeResolution` should be used if and only if the property `bindingContext` is used.",

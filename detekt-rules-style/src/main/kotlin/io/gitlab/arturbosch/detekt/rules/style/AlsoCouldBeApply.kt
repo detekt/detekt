@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
  * }
  * </compliant>
  */
-class AlsoCouldBeApply(config: Config = Config.empty) : Rule(config) {
+class AlsoCouldBeApply(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "AlsoCouldBeApply",

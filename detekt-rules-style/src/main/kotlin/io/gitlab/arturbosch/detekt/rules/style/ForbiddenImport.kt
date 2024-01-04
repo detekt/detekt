@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * import kotlin.SinceKotlin
  * </noncompliant>
  */
-class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
+class ForbiddenImport(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

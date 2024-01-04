@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * </compliant>
  */
 @RequiresTypeResolution
-class NamedArguments(config: Config = Config.empty) : Rule(config) {
+class NamedArguments(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "NamedArguments",

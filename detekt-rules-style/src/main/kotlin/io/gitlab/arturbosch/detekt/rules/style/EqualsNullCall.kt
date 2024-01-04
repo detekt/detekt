@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class EqualsNullCall(config: Config = Config.empty) : Rule(config) {
+class EqualsNullCall(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "EqualsNullCall",

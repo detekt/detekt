@@ -62,7 +62,7 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
  * </compliant>
  */
 @Suppress("TooManyFunctions")
-class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
+class OutdatedDocumentation(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
