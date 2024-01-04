@@ -65,7 +65,7 @@
     <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="index.html">Rule</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>ruleSetConfig<span class="token operator">: </span><a href="../-config/index.html">Config</a></span></span><span class="token punctuation">)</span> : <a href="../-base-rule/index.html">BaseRule</a>, <a href="../-config-aware/index.html">ConfigAware</a></div><p class="paragraph">A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability.</p><p class="paragraph">A rule is implemented using the visitor pattern and should be started using the visit(KtFile) function. If calculations must be done before or after the visiting process, here are two predefined (preVisit/postVisit) functions which can be overridden to setup/teardown additional data.</p></div></div>
   </div>
   <div class="tabbedcontent">
-    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
       <div data-togglable="CONSTRUCTOR">
         <h2 class="">Constructors</h2>
@@ -223,17 +223,17 @@
               </div>
             </div>
           </div>
-<a data-name="-1660489391%2FProperties%2F581599712" anchor-label="parentPath" id="-1660489391%2FProperties%2F581599712" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"></a>
+<a data-name="-2044623140%2FProperties%2F581599712" anchor-label="ruleConfig" id="-2044623140%2FProperties%2F581599712" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"></a>
           <div class="table-row" data-filterable-current=":detekt-api:dokkaHtmlPartial/main" data-filterable-set=":detekt-api:dokkaHtmlPartial/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="../-config/parent-path.html"><span>parent</span><wbr><span><span>Path</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1660489391%2FProperties%2F581599712"></span>
+                  <div><a href="../-config-aware/rule-config.html"><span>rule</span><wbr><span><span>Config</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2044623140%2FProperties%2F581599712"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">val </span><a href="../-config/parent-path.html">parentPath</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Keeps track of which key was taken to <a href="../-config/sub-config.html">subConfig</a> this configuration. Sub-sequential calls to <a href="../-config/sub-config.html">subConfig</a> are tracked with '&gt;' as a separator.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">val </span><a href="../-config-aware/rule-config.html">ruleConfig</a><span class="token operator">: </span><a href="../-config/index.html">Config</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -287,21 +287,6 @@
               </div>
             </div>
           </div>
-<a data-name="-746047200%2FFunctions%2F581599712" anchor-label="createPathFilters" id="-746047200%2FFunctions%2F581599712" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"></a>
-          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":detekt-api:dokkaHtmlPartial/main" data-filterable-set=":detekt-api:dokkaHtmlPartial/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="../../io.gitlab.arturbosch.detekt.api.internal/create-path-filters.html"><span>create</span><wbr><span>Path</span><wbr><span><span>Filters</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-746047200%2FFunctions%2F581599712"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../-config/index.html">Config</a><span class="token punctuation">.</span><a href="../../io.gitlab.arturbosch.detekt.api.internal/create-path-filters.html"><span class="token function">createPathFilters</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../io.gitlab.arturbosch.detekt.api.internal/-path-filters/index.html">PathFilters</a><span class="token operator">?</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
 <a data-name="319616036%2FFunctions%2F581599712" anchor-label="report" id="319616036%2FFunctions%2F581599712" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"></a>
           <div class="table-row" data-filterable-current=":detekt-api:dokkaHtmlPartial/main" data-filterable-set=":detekt-api:dokkaHtmlPartial/main">
             <div class="main-subrow keyValue ">
@@ -327,7 +312,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-config-aware/sub-config.html"><span class="token function">subConfig</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-config/index.html">Config</a></div><div class="brief "><p class="paragraph">Tries to retrieve part of the configuration based on given key.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="../-config-aware/sub-config.html"><span class="token function">subConfig</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-config/index.html">Config</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -342,22 +327,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-config-aware/value-or-default.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="../-config-aware/value-or-default.html"><span class="token function">valueOrDefault</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">default<span class="token operator">: </span><a href="../-config-aware/value-or-default.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-config-aware/value-or-default.html">T</a></div><div class="brief "><p class="paragraph">Retrieves a sub configuration or value based on given key. If configuration property cannot be found the specified default value is returned.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="1863150414%2FFunctions%2F581599712" anchor-label="valueOrDefaultCommaSeparated" id="1863150414%2FFunctions%2F581599712" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"></a>
-          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":detekt-api:dokkaHtmlPartial/main" data-filterable-set=":detekt-api:dokkaHtmlPartial/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="../../io.gitlab.arturbosch.detekt.api.internal/value-or-default-comma-separated.html"><span>value</span><wbr><span>Or</span><wbr><span>Default</span><wbr><span>Comma</span><wbr><span><span>Separated</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1863150414%2FFunctions%2F581599712"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../-config/index.html">Config</a><span class="token punctuation">.</span><a href="../../io.gitlab.arturbosch.detekt.api.internal/value-or-default-comma-separated.html"><span class="token function">valueOrDefaultCommaSeparated</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">default<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-config-aware/value-or-default.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="../-config-aware/value-or-default.html"><span class="token function">valueOrDefault</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">default<span class="token operator">: </span><a href="../-config-aware/value-or-default.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-config-aware/value-or-default.html">T</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -372,7 +342,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-config-aware/value-or-null.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="../-config-aware/value-or-null.html"><span class="token function">valueOrNull</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-config-aware/value-or-null.html">T</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Retrieves a sub configuration or value based on given key. If the configuration property cannot be found, null is returned.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-config-aware/value-or-null.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="../-config-aware/value-or-null.html"><span class="token function">valueOrNull</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-config-aware/value-or-null.html">T</a><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
