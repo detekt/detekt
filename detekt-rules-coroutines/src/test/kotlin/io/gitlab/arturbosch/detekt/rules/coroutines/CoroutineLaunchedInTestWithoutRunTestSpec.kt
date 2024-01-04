@@ -209,7 +209,7 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvir
     }
 
     @Test
-    fun `FunTraverseHelper does not return already explored functions`() {
+    fun `FunTraverseHelper does not return children of already explored functions`() {
         val subject = FunTraverseHelper()
 
         val code = """
@@ -222,21 +222,72 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvir
                 annotation class Test
 
                 @Test
-                fun `test function one`() = runBlocking {
-                    doNotLaunchCoroutine()
+                fun `test one`() = runBlocking {
+                    functionOne()
                 }
 
                 @Test
-                fun `test function two`() = runBlocking {
-                    doNotLaunchCoroutine()
-                    launchCoroutine()
+                fun `test two`() = runBlocking {
+                    functionOne()
                 }
 
 
-                fun doNotLaunchCoroutine() {
+                fun functionOne() {
+                    functionTwo()
+                }
+
+                fun functionTwo() {
                     return
                 }
+            }
+        """.trimIndent()
 
+        val ktFile = compileContentForTest(code)
+        val bindingContext = env.getContextForPaths(listOf(ktFile))
+
+        val namedFunctions = ktFile
+            .collectDescendantsOfType<KtNamedFunction>()
+
+        val testFunctionOne = namedFunctions.first { it.name == "test one" }
+        val testFunctionTwo = namedFunctions.first { it.name == "test two" }
+
+        val calledFunctionTestOne =
+            subject.getFunctionWithCalledFunctionsAndExploreIfNew(testFunctionOne, bindingContext)
+
+        assertThat(calledFunctionTestOne).hasSize(3)
+        assert(calledFunctionTestOne[0].name == "test one")
+        assert(calledFunctionTestOne[1].name == "functionOne")
+        assert(calledFunctionTestOne[2].name == "functionTwo")
+
+        val calledFunctionTestTwo =
+            subject.getFunctionWithCalledFunctionsAndExploreIfNew(testFunctionTwo, bindingContext)
+
+        assertThat(calledFunctionTestTwo).hasSize(2)
+        assert(calledFunctionTestTwo[0].name == "test two")
+        assert(calledFunctionTestTwo[1].name == "functionOne")
+    }
+
+    @Test
+    fun `reports two times when coroutine is launched from two tests without runTest block`() {
+        val code = """
+            import kotlinx.coroutines.CoroutineScope
+            import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.launch
+            import kotlinx.coroutines.runBlocking
+
+            class A {
+                annotation class Test
+
+                @Test
+                fun `test that launches a coroutine one`() = runBlocking {
+                    launchCoroutine()
+                }
+                
+                @Test
+                fun `test that launches a coroutine two`() = runBlocking {
+                    launchCoroutine()
+                }
+                
                 fun launchCoroutine() {
                     val scope = CoroutineScope(Dispatchers.Unconfined)
                     launchCoroutine()
@@ -248,25 +299,9 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvir
             }
         """.trimIndent()
 
-        val ktFile = compileContentForTest(code)
-        val bindingContext = env.getContextForPaths(listOf(ktFile))
-
-        val namedFunctions = ktFile
-            .collectDescendantsOfType<KtNamedFunction>()
-
-        val testFunctionOne = namedFunctions.first { it.name == "test function one" }
-        val testFunctionTwo = namedFunctions.first { it.name == "test function two" }
-
-        val calledFunctionTestOne =
-            subject.getAllUnexploredCalledFunctions(testFunctionOne, bindingContext)
-
-        assert(calledFunctionTestOne.size == 1)
-        assert(calledFunctionTestOne.first().name == "doNotLaunchCoroutine")
-
-        val calledFunctionTestTwo =
-            subject.getAllUnexploredCalledFunctions(testFunctionTwo, bindingContext)
-
-        assert(calledFunctionTestTwo.size == 1)
-        assert(calledFunctionTestTwo.first().name == "launchCoroutine")
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(2)
+        assert(findings.any { it.startPosition.line == 9 })
+        assert(findings.any { it.startPosition.line == 14 })
     }
 }

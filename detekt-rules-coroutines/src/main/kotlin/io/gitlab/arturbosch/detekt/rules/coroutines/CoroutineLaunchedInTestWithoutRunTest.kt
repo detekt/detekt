@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.source.getPsi
+import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 
 /**
  * Detect coroutine launches from `@Test` functions outside a `runTest` block.
@@ -49,6 +50,7 @@ import org.jetbrains.kotlin.resolve.source.getPsi
 @RequiresTypeResolution
 class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
     private val funTraverseHelper = FunTraverseHelper()
+    val funLaunchesCoroutineCache = hashMapOf<KtNamedFunction, Boolean>()
 
     override val issue = Issue(
         id = "CoroutineLaunchedInTestWithoutRunTest",
@@ -61,21 +63,14 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
         if (!initialFunction.hasAnnotation(TEST_ANNOTATION_NAME)) return
         if (initialFunction.runsInRunTestBlock()) return
 
-        checkAndReport(initialFunction)
-
         funTraverseHelper
-            .getAllUnexploredCalledFunctions(initialFunction, bindingContext)
-            .forEach {
-                checkAndReport(it)
-            }
+            .getFunctionWithCalledFunctionsAndExploreIfNew(initialFunction, bindingContext)
+            .any { needsToReport(it) }
+            .ifTrue { report(CodeSmell(issue, Entity.from(initialFunction), MESSAGE)) }
     }
 
-    private fun checkAndReport(function: KtNamedFunction) {
-        if (function.isLaunchingCoroutine()) {
-            report(CodeSmell(issue, Entity.from(function), MESSAGE))
-            return
-        }
-    }
+    private fun needsToReport(function: KtNamedFunction) =
+        funLaunchesCoroutineCache.getOrPut(function) { function.isLaunchingCoroutine() }
 
     private fun KtNamedFunction.isLaunchingCoroutine() = anyDescendantOfType<KtDotQualifiedExpression> {
         it.receiverExpression
@@ -103,7 +98,11 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
 class FunTraverseHelper {
     private val exploredFunctionsCache = mutableSetOf<KtNamedFunction>()
 
-    fun getAllUnexploredCalledFunctions(
+    /**
+     * Returns all function calls inside `initialFunction` and recursively on each one.
+     * If a function has been already explored, returns only the root function without children.
+     */
+    fun getFunctionWithCalledFunctionsAndExploreIfNew(
         initialFunction: KtNamedFunction,
         bindingContext: BindingContext
     ): List<KtNamedFunction> {
@@ -116,8 +115,9 @@ class FunTraverseHelper {
                     ?.source
                     ?.getPsi() as? KtNamedFunction
             }.forEach {
+                traversedFunctions.add(it)
+
                 if (!exploredFunctionsCache.contains(it)) {
-                    traversedFunctions.add(it)
                     exploredFunctionsCache.add(it)
 
                     getChildFunctionsOf(it).forEach { childFunction ->
@@ -130,6 +130,7 @@ class FunTraverseHelper {
             return traversedFunctions
         }
 
+        traversedFunctions.add(initialFunction)
         getChildFunctionsOf(initialFunction)
         return traversedFunctions.toList()
     }
