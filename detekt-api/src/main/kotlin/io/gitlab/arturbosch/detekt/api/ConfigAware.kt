@@ -15,7 +15,7 @@ package io.gitlab.arturbosch.detekt.api
  * rule set and all rules upfront and letting them 'sub config' the rule set config would
  * be error-prone.
  */
-interface ConfigAware : Config {
+interface ConfigAware {
 
     /**
      * Id which is used to retrieve the sub config for the rule implementing this interface.
@@ -30,7 +30,7 @@ interface ConfigAware : Config {
      */
     val ruleSetConfig: Config
 
-    private val ruleConfig: Config
+    val ruleConfig: Config
         get() = ruleSetConfig.subConfig(ruleId)
 
     /**
@@ -47,12 +47,12 @@ interface ConfigAware : Config {
      */
     val active: Boolean get() = valueOrDefault(Config.ACTIVE_KEY, false)
 
-    override fun subConfig(key: String): Config =
+    fun subConfig(key: String): Config =
         ruleConfig.subConfig(key)
 
-    override fun <T : Any> valueOrDefault(key: String, default: T): T =
+    fun <T : Any> valueOrDefault(key: String, default: T): T =
         ruleConfig.valueOrDefault(key, default)
 
-    override fun <T : Any> valueOrNull(key: String): T? =
+    fun <T : Any> valueOrNull(key: String): T? =
         ruleConfig.valueOrNull(key)
 }

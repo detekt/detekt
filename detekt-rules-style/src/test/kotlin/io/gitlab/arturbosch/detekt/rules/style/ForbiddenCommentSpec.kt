@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.ValueWithReason
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.toConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -251,8 +252,8 @@ class ForbiddenCommentSpec {
     @Nested
     inner class `custom message is not configured` {
         private val messageConfig = TestConfig(VALUES to "Comment")
-        private val messageConfigWithReason = ForbiddenComment(
-            ValueWithReason("Comment", "Comment is disallowed")
+        private val messageWithReasonConfig = TestConfig(
+            COMMENTS to listOf(ValueWithReason("Comment", "Comment is disallowed").toConfig())
         )
 
         @Test
@@ -267,7 +268,7 @@ class ForbiddenCommentSpec {
         @Test
         fun `should report a Finding with reason`() {
             val comment = "// Comment"
-            val findings = ForbiddenComment(messageConfigWithReason).compileAndLint(comment)
+            val findings = ForbiddenComment(messageWithReasonConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
             assertThat(findings.first().message).isEqualTo("Comment is disallowed")
         }
@@ -1045,7 +1046,3 @@ class ForbiddenCommentSpec {
 @Suppress("TestFunctionName") // This is a factory function for ForbiddenComment
 private fun ForbiddenComment(vararg comments: String): ForbiddenComment =
     ForbiddenComment(TestConfig(COMMENTS to comments.toList()))
-
-@Suppress("TestFunctionName")
-private fun ForbiddenComment(vararg comments: ValueWithReason): ForbiddenComment =
-    ForbiddenComment(TestConfig(COMMENTS to comments.map { mapOf("value" to it.value, "reason" to it.reason) }))
