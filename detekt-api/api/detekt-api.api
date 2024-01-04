@@ -338,8 +338,7 @@ public final class io/gitlab/arturbosch/detekt/api/ReportingExtension$DefaultImp
 }
 
 public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/BaseRule, io/gitlab/arturbosch/detekt/api/ConfigAware {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;Lio/gitlab/arturbosch/detekt/api/Context;)V
-	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;Lio/gitlab/arturbosch/detekt/api/Context;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;)V
 	public fun getActive ()Z
 	public final fun getAliases ()Ljava/util/Set;
 	public fun getAutoCorrect ()Z

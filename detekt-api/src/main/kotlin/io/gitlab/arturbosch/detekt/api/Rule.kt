@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.api.Config.Companion.SEVERITY_KEY
-import io.gitlab.arturbosch.detekt.api.internal.DefaultContext
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
@@ -18,8 +17,7 @@ import org.jetbrains.kotlin.psi.KtFile
  */
 abstract class Rule(
     override val ruleSetConfig: Config,
-    ruleContext: Context = DefaultContext()
-) : BaseRule(ruleContext), ConfigAware {
+) : BaseRule(), ConfigAware {
 
     /**
      * A rule is motivated to point out a specific issue in the code base.
