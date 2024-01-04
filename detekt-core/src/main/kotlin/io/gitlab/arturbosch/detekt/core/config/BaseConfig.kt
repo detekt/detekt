@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.core.config
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Config.Companion.CONFIG_SEPARATOR
 import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
+import kotlin.reflect.KClass
 
 private val ALLOWED_BOOL_VALUES = setOf("true", "false")
 
@@ -19,7 +20,7 @@ fun Config.valueOrDefaultInternal(
         if (result != null) {
             when {
                 result is String -> parser(result, default)
-                default::class in Config.PRIMITIVES &&
+                default::class in PRIMITIVES &&
                     result::class != default::class -> throw ClassCastException()
                 else -> result
             }
@@ -52,3 +53,14 @@ fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defa
     is List<*> -> result.commaSeparatedPattern().toList()
     else -> throw ClassCastException()
 }
+
+private val PRIMITIVES: Set<KClass<out Any>> = setOf(
+    Int::class,
+    Boolean::class,
+    Float::class,
+    Double::class,
+    String::class,
+    Short::class,
+    Char::class,
+    Long::class
+)
