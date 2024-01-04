@@ -16,7 +16,7 @@ class WildcardImportSpec {
     inner class `a kt file with wildcard imports` {
         val code = """
             import io.gitlab.arturbosch.detekt.*
-            import io.mockk.*
+            import org.assertj.core.api.Assertions.*
             
             class Test {
             }
@@ -32,7 +32,7 @@ class WildcardImportSpec {
 
         @Test
         fun `should not report excluded wildcard imports`() {
-            val rule = WildcardImport(TestConfig(EXCLUDED_IMPORTS to listOf("io.mockk.*")))
+            val rule = WildcardImport(TestConfig(EXCLUDED_IMPORTS to listOf("org.assertj.core.api.Assertions.*")))
 
             val findings = rule.compileAndLint(code)
             assertThat(findings).hasSize(1)
@@ -43,7 +43,7 @@ class WildcardImportSpec {
             val rule = WildcardImport(
                 TestConfig(
                     EXCLUDED_IMPORTS to listOf(
-                        "io.mockk.*",
+                        "org.assertj.core.api.Assertions.*",
                         "io.gitlab.arturbosch.detekt"
                     )
                 )
@@ -55,8 +55,9 @@ class WildcardImportSpec {
 
         @Test
         fun `should not report excluded wildcard imports when multiple are excluded using config string`() {
-            val rule =
-                WildcardImport(TestConfig(EXCLUDED_IMPORTS to "io.mockk.*, io.gitlab.arturbosch.detekt"))
+            val rule = WildcardImport(
+                TestConfig(EXCLUDED_IMPORTS to "org.assertj.core.api.Assertions.*, io.gitlab.arturbosch.detekt")
+            )
 
             val findings = rule.compileAndLint(code)
             assertThat(findings).isEmpty()
@@ -86,7 +87,7 @@ class WildcardImportSpec {
         val code = """
             package org
             
-            import io.mockk.mockk
+            import org.assertj.core.api.Assertions.assertThat
             
             class Test {
             }
