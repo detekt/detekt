@@ -6,7 +6,6 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SetupContext
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfig
@@ -181,7 +180,6 @@ class AbsentOrWrongFileLicenseSpec {
     }
 }
 
-@OptIn(UnstableApi::class)
 private fun checkLicence(@Language("kotlin") content: String, isRegexLicense: Boolean = false): List<Finding> {
     val file = compileContentForTest(content.trimIndent())
 

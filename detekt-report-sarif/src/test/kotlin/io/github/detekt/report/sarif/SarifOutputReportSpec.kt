@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.test.EmptySetupContext
 import io.gitlab.arturbosch.detekt.test.TestDetektion
@@ -23,7 +22,6 @@ import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
 import kotlin.io.path.absolutePathString
 
-@OptIn(UnstableApi::class)
 class SarifOutputReportSpec {
 
     @Test

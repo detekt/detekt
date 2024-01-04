@@ -10,7 +10,6 @@ import io.github.detekt.sarif4k.Version
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.SetupContext
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.getOrNull
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
@@ -29,7 +28,6 @@ class SarifOutputReport : BuiltInOutputReport, OutputReport() {
 
     private var basePath: String? = null
 
-    @OptIn(UnstableApi::class)
     override fun init(context: SetupContext) {
         this.basePath = context.getOrNull<Path>(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY)
             ?.absolute()

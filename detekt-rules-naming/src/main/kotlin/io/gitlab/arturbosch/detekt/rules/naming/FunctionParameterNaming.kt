@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -40,7 +39,6 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
     @Configuration("ignores overridden functions with parameters not matching the pattern")
     @Deprecated("This configuration is ignored and will be removed in the future")
     @Suppress("DEPRECATION", "UnusedPrivateMember")
-    @OptIn(UnstableApi::class)
     private val ignoreOverridden: Boolean by configWithFallback(::ignoreOverriddenFunctions, true)
 
     override fun visitParameter(parameter: KtParameter) {

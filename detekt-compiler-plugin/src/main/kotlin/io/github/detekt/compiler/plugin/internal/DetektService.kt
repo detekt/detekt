@@ -5,7 +5,6 @@ import io.github.detekt.tooling.api.InvalidConfig
 import io.github.detekt.tooling.api.IssuesFound
 import io.github.detekt.tooling.api.UnexpectedError
 import io.github.detekt.tooling.api.spec.ProcessingSpec
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -15,7 +14,6 @@ internal class DetektService(
     private val spec: ProcessingSpec
 ) {
 
-    @OptIn(UnstableApi::class)
     @Suppress("ForbiddenComment")
     fun analyze(files: Collection<KtFile>, context: BindingContext) {
         val detekt = DetektProvider.load().get(spec)
