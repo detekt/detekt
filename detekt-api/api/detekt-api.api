@@ -74,7 +74,6 @@ public final class io/gitlab/arturbosch/detekt/api/Config$Companion {
 	public static final field INCLUDES_KEY Ljava/lang/String;
 	public static final field SEVERITY_KEY Ljava/lang/String;
 	public final fun getEmpty ()Lio/gitlab/arturbosch/detekt/api/Config;
-	public final fun getPRIMITIVES ()Ljava/util/Set;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Config$DefaultImpls {

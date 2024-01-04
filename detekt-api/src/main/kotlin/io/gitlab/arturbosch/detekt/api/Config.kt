@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.api.internal.EmptyConfig
-import kotlin.reflect.KClass
 
 /**
  * A configuration holds information about how to configure specific rules.
@@ -59,16 +58,5 @@ interface Config {
         const val EXCLUDES_KEY: String = "excludes"
         const val INCLUDES_KEY: String = "includes"
         const val CONFIG_SEPARATOR: String = ">"
-
-        val PRIMITIVES: Set<KClass<out Any>> = setOf(
-            Int::class,
-            Boolean::class,
-            Float::class,
-            Double::class,
-            String::class,
-            Short::class,
-            Char::class,
-            Long::class
-        )
     }
 }
