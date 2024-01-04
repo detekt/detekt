@@ -306,6 +306,21 @@ public abstract class io/gitlab/arturbosch/detekt/api/OutputReport : io/gitlab/a
 	public final fun write (Ljava/nio/file/Path;Lio/gitlab/arturbosch/detekt/api/Detektion;)V
 }
 
+public final class io/gitlab/arturbosch/detekt/api/PathFilters {
+	public static final field Companion Lio/gitlab/arturbosch/detekt/api/PathFilters$Companion;
+	public final fun isIgnored (Ljava/nio/file/Path;)Z
+	public final fun isIgnored (Lorg/jetbrains/kotlin/psi/KtFile;)Z
+}
+
+public final class io/gitlab/arturbosch/detekt/api/PathFilters$Companion {
+	public final fun of (Ljava/util/List;Ljava/util/List;)Lio/gitlab/arturbosch/detekt/api/PathFilters;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/PathFiltersKt {
+	public static final fun createPathFilters (Lio/gitlab/arturbosch/detekt/api/Config;)Lio/gitlab/arturbosch/detekt/api/PathFilters;
+	public static final fun valueOrDefaultCommaSeparated (Lio/gitlab/arturbosch/detekt/api/Config;Ljava/lang/String;Ljava/util/List;)Ljava/util/List;
+}
+
 public class io/gitlab/arturbosch/detekt/api/ProjectMetric {
 	public fun <init> (Ljava/lang/String;IIZI)V
 	public synthetic fun <init> (Ljava/lang/String;IIZIILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -344,7 +359,7 @@ public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosc
 	public final fun getAliases ()Ljava/util/Set;
 	public fun getAutoCorrect ()Z
 	public fun getDefaultRuleIdAliases ()Ljava/util/Set;
-	public fun getFilters ()Lio/gitlab/arturbosch/detekt/api/internal/PathFilters;
+	public fun getFilters ()Lio/gitlab/arturbosch/detekt/api/PathFilters;
 	public abstract fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
 	public fun getParentPath ()Ljava/lang/String;
 	public final fun getRuleId ()Ljava/lang/String;

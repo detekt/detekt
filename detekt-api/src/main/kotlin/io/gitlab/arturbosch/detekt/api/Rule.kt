@@ -2,8 +2,6 @@ package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.api.Config.Companion.SEVERITY_KEY
 import io.gitlab.arturbosch.detekt.api.internal.DefaultContext
-import io.gitlab.arturbosch.detekt.api.internal.PathFilters
-import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import org.jetbrains.kotlin.psi.KtFile
 

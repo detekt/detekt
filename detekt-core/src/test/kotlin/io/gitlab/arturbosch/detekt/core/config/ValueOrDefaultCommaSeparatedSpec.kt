@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.config
 
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
+import io.gitlab.arturbosch.detekt.api.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested

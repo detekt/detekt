@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.parser.KtCompiler
 import io.github.detekt.tooling.api.spec.ProjectSpec
-import io.gitlab.arturbosch.detekt.api.internal.PathFilters
+import io.gitlab.arturbosch.detekt.api.PathFilters
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.IOException
 import java.nio.file.FileVisitResult

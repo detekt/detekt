@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.RuleId
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
+import io.gitlab.arturbosch.detekt.api.createPathFilters
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import org.jetbrains.kotlin.psi.KtFile
 

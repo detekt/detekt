@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty0

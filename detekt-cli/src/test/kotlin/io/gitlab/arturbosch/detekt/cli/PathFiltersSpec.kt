@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.github.detekt.test.utils.NullPrintStream
-import io.gitlab.arturbosch.detekt.api.internal.PathFilters
+import io.gitlab.arturbosch.detekt.api.PathFilters
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
