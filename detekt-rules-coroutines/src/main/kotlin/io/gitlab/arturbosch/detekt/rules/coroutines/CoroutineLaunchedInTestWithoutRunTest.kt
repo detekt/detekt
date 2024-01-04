@@ -93,7 +93,7 @@ class FunCoroutineLaunchesTraverseHelper {
 
         fun checkFunctionAndSaveToCache(
             function: KtNamedFunction,
-            parents: List<KtNamedFunction> = listOf()
+            parents: List<KtNamedFunction> = emptyList()
         ) {
             val isLaunching = function.isLaunchingCoroutine(bindingContext)
             exploredFunctionsCache.putIfAbsent(function, isLaunching)
@@ -105,7 +105,7 @@ class FunCoroutineLaunchesTraverseHelper {
 
         fun getChildFunctionsOf(
             function: KtNamedFunction,
-            parents: List<KtNamedFunction> = listOf()
+            parents: List<KtNamedFunction> = emptyList()
         ): Set<KtNamedFunction> {
             function.collectDescendantsOfType<KtExpression>().mapNotNull {
                 it.getResolvedCall(bindingContext)
