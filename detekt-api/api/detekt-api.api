@@ -58,15 +58,8 @@ public final class io/gitlab/arturbosch/detekt/api/Compactable$DefaultImpls {
 
 public final class io/gitlab/arturbosch/detekt/api/CompilerResources {
 	public fun <init> (Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;)V
-	public final fun component1 ()Lorg/jetbrains/kotlin/config/LanguageVersionSettings;
-	public final fun component2 ()Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;
-	public final fun copy (Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;)Lio/gitlab/arturbosch/detekt/api/CompilerResources;
-	public static synthetic fun copy$default (Lio/gitlab/arturbosch/detekt/api/CompilerResources;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;ILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/CompilerResources;
-	public fun equals (Ljava/lang/Object;)Z
 	public final fun getDataFlowValueFactory ()Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;
 	public final fun getLanguageVersionSettings ()Lorg/jetbrains/kotlin/config/LanguageVersionSettings;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/Config {

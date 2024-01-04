@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory
 /**
  * Provides compiler resources.
  */
-data class CompilerResources(
+class CompilerResources(
     val languageVersionSettings: LanguageVersionSettings,
     val dataFlowValueFactory: DataFlowValueFactory
 )
