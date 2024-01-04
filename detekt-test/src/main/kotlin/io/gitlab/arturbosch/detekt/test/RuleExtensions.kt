@@ -4,8 +4,8 @@ import io.github.detekt.test.utils.KotlinScriptEngine
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.BaseRule
+import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.languageVersionSettings

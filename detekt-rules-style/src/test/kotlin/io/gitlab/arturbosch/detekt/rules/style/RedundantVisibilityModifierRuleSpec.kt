@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
+import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.jetbrains.kotlin.config.AnalysisFlag

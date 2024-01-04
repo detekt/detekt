@@ -13,7 +13,7 @@ public abstract class io/gitlab/arturbosch/detekt/api/BaseRule : io/gitlab/artur
 	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Context;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun clearFindings ()V
 	public final fun getBindingContext ()Lorg/jetbrains/kotlin/resolve/BindingContext;
-	public final fun getCompilerResources ()Lio/gitlab/arturbosch/detekt/api/internal/CompilerResources;
+	public final fun getCompilerResources ()Lio/gitlab/arturbosch/detekt/api/CompilerResources;
 	protected final fun getContext ()Lio/gitlab/arturbosch/detekt/api/Context;
 	public fun getFindings ()Ljava/util/List;
 	public fun getRuleId ()Ljava/lang/String;
@@ -21,11 +21,11 @@ public abstract class io/gitlab/arturbosch/detekt/api/BaseRule : io/gitlab/artur
 	protected fun preVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	public fun report (Lio/gitlab/arturbosch/detekt/api/Finding;Ljava/util/Set;Ljava/lang/String;)V
 	public final fun setBindingContext (Lorg/jetbrains/kotlin/resolve/BindingContext;)V
-	public final fun setCompilerResources (Lio/gitlab/arturbosch/detekt/api/internal/CompilerResources;)V
+	public final fun setCompilerResources (Lio/gitlab/arturbosch/detekt/api/CompilerResources;)V
 	public fun visit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	public abstract fun visitCondition (Lorg/jetbrains/kotlin/psi/KtFile;)Z
-	public final fun visitFile (Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;Lio/gitlab/arturbosch/detekt/api/internal/CompilerResources;)V
-	public static synthetic fun visitFile$default (Lio/gitlab/arturbosch/detekt/api/BaseRule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;Lio/gitlab/arturbosch/detekt/api/internal/CompilerResources;ILjava/lang/Object;)V
+	public final fun visitFile (Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;Lio/gitlab/arturbosch/detekt/api/CompilerResources;)V
+	public static synthetic fun visitFile$default (Lio/gitlab/arturbosch/detekt/api/BaseRule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;Lio/gitlab/arturbosch/detekt/api/CompilerResources;ILjava/lang/Object;)V
 }
 
 public class io/gitlab/arturbosch/detekt/api/CodeSmell : io/gitlab/arturbosch/detekt/api/Finding {
@@ -54,6 +54,19 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Compactable {
 
 public final class io/gitlab/arturbosch/detekt/api/Compactable$DefaultImpls {
 	public static fun compactWithSignature (Lio/gitlab/arturbosch/detekt/api/Compactable;)Ljava/lang/String;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/CompilerResources {
+	public fun <init> (Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;)V
+	public final fun component1 ()Lorg/jetbrains/kotlin/config/LanguageVersionSettings;
+	public final fun component2 ()Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;
+	public final fun copy (Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;)Lio/gitlab/arturbosch/detekt/api/CompilerResources;
+	public static synthetic fun copy$default (Lio/gitlab/arturbosch/detekt/api/CompilerResources;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;ILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/CompilerResources;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDataFlowValueFactory ()Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;
+	public final fun getLanguageVersionSettings ()Lorg/jetbrains/kotlin/config/LanguageVersionSettings;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/Config {
