@@ -209,36 +209,40 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvir
     }
 
     @Test
-    fun `FunTraverseHelper does not return children of already explored functions`() {
-        val subject = FunTraverseHelper()
+    fun `FunTraverseHelper correctly caches explored functions states`() {
+        val subject = FunCoroutineLaunchesTraverseHelper()
 
         val code = """
             import kotlinx.coroutines.CoroutineScope
             import kotlinx.coroutines.Dispatchers
             import kotlinx.coroutines.launch
             import kotlinx.coroutines.runBlocking
-
+            
             class A {
                 annotation class Test
 
                 @Test
-                fun `test one`() = runBlocking {
-                    functionOne()
+                fun `test that launches a coroutine`() = runBlocking {
+                    launchCoroutineOne()
                 }
 
                 @Test
-                fun `test two`() = runBlocking {
-                    functionOne()
+                fun `test that does not launch a coroutine`() = runBlocking {
+                    doNotLaunchCoroutineOne()()
+                }
+                
+                fun launchCoroutineOne() { launchCoroutineTwo() }
+                fun launchCoroutineTwo() { launchCoroutineThree() }
+                fun launchCoroutineThree() {
+                    val scope = CoroutineScope(Dispatchers.Unconfined)
+                    scope.launch {
+                        throw Exception()
+                    }
                 }
 
-
-                fun functionOne() {
-                    functionTwo()
-                }
-
-                fun functionTwo() {
-                    return
-                }
+                fun doNotLaunchCoroutineOne() { doNotLaunchCoroutineTwo() }
+                fun doNotLaunchCoroutineTwo() { doNotLaunchCoroutineThree() }
+                fun doNotLaunchCoroutineThree() { return }
             }
         """.trimIndent()
 
@@ -248,23 +252,18 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvir
         val namedFunctions = ktFile
             .collectDescendantsOfType<KtNamedFunction>()
 
-        val testFunctionOne = namedFunctions.first { it.name == "test one" }
-        val testFunctionTwo = namedFunctions.first { it.name == "test two" }
+        val testLaunch = namedFunctions.first { it.name == "test that launches a coroutine" }
+        val testNotLaunch = namedFunctions.first { it.name == "test that does not launch a coroutine" }
 
-        val calledFunctionTestOne =
-            subject.getFunctionWithCalledFunctionsAndExploreIfNew(testFunctionOne, bindingContext)
+        subject.isFunctionOrChildrenLaunchingCoroutines(testLaunch, bindingContext)
 
-        assertThat(calledFunctionTestOne).hasSize(3)
-        assert(calledFunctionTestOne[0].name == "test one")
-        assert(calledFunctionTestOne[1].name == "functionOne")
-        assert(calledFunctionTestOne[2].name == "functionTwo")
+        assertThat(subject.exploredFunctionsCache).hasSize(4)
+        assertThat(subject.exploredFunctionsCache.values.filter { it }).hasSize(4)
 
-        val calledFunctionTestTwo =
-            subject.getFunctionWithCalledFunctionsAndExploreIfNew(testFunctionTwo, bindingContext)
+        subject.isFunctionOrChildrenLaunchingCoroutines(testNotLaunch, bindingContext)
 
-        assertThat(calledFunctionTestTwo).hasSize(2)
-        assert(calledFunctionTestTwo[0].name == "test two")
-        assert(calledFunctionTestTwo[1].name == "functionOne")
+        assertThat(subject.exploredFunctionsCache).hasSize(8)
+        assertThat(subject.exploredFunctionsCache.values.filterNot { it }).hasSize(4)
     }
 
     @Test
@@ -303,5 +302,66 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvir
         assertThat(findings).hasSize(2)
         assert(findings.any { it.startPosition.line == 9 })
         assert(findings.any { it.startPosition.line == 14 })
+    }
+
+    @Test
+    fun `reports correctly coroutine launches in deep functions`() {
+        val code = """
+            import kotlinx.coroutines.CoroutineScope
+            import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.launch
+            import kotlinx.coroutines.runBlocking
+            
+            class A {
+                annotation class Test
+
+                @Test
+                fun `test that launches a coroutine`() = runBlocking {
+                    launchCoroutineOne()
+                }
+
+                @Test
+                fun `test that launches a coroutine2`() = runBlocking {
+                    launchCoroutineTwo()
+                }
+
+                @Test
+                fun `test that does not launch a coroutine`() = runBlocking {
+                    doNotLaunchCoroutineOne()
+                }
+                
+                fun launchCoroutineOne() {
+                    launchCoroutineTwo()
+                }
+                
+                fun launchCoroutineTwo() {
+                    launchCoroutineThree()
+                }
+
+                fun launchCoroutineThree() {
+                    launchCoroutineFour()
+                }
+
+                fun launchCoroutineFour() {
+                    val scope = CoroutineScope(Dispatchers.Unconfined)
+                    scope.launch {
+                        throw Exception()
+                    }
+                }
+                
+                fun doNotLaunchCoroutineOne() {
+                    doNotLaunchCoroutineTwo()
+                }
+                
+                fun doNotLaunchCoroutineTwo() {
+                    doNotLaunchCoroutineThree()
+                }
+
+                fun doNotLaunchCoroutineThree() {
+                    return
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
     }
 }

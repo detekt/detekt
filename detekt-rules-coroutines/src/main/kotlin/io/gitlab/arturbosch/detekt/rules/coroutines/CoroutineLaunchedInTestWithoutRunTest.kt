@@ -49,8 +49,7 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
  */
 @RequiresTypeResolution
 class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
-    private val funTraverseHelper = FunTraverseHelper()
-    val funLaunchesCoroutineCache = hashMapOf<KtNamedFunction, Boolean>()
+    private val funCoroutineLaunchesTraverseHelper = FunCoroutineLaunchesTraverseHelper()
 
     override val issue = Issue(
         id = "CoroutineLaunchedInTestWithoutRunTest",
@@ -63,20 +62,9 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
         if (!initialFunction.hasAnnotation(TEST_ANNOTATION_NAME)) return
         if (initialFunction.runsInRunTestBlock()) return
 
-        funTraverseHelper
-            .getFunctionWithCalledFunctionsAndExploreIfNew(initialFunction, bindingContext)
-            .any { needsToReport(it) }
+        funCoroutineLaunchesTraverseHelper
+            .isFunctionOrChildrenLaunchingCoroutines(initialFunction, bindingContext)
             .ifTrue { report(CodeSmell(issue, Entity.from(initialFunction), MESSAGE)) }
-    }
-
-    private fun needsToReport(function: KtNamedFunction) =
-        funLaunchesCoroutineCache.getOrPut(function) { function.isLaunchingCoroutine() }
-
-    private fun KtNamedFunction.isLaunchingCoroutine() = anyDescendantOfType<KtDotQualifiedExpression> {
-        it.receiverExpression
-            .getType(bindingContext)
-            ?.fqNameOrNull() == COROUTINE_SCOPE_FQ &&
-            it.getCalleeExpressionIfAny()?.text == "launch"
     }
 
     private fun KtNamedFunction.runsInRunTestBlock() =
@@ -91,24 +79,34 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
 
         private const val TEST_ANNOTATION_NAME = "Test"
         private val RUN_TEST_FQ = FqName("kotlinx.coroutines.test.runTest")
-        private val COROUTINE_SCOPE_FQ = FqName("kotlinx.coroutines.CoroutineScope")
     }
 }
 
-class FunTraverseHelper {
-    private val exploredFunctionsCache = mutableSetOf<KtNamedFunction>()
+class FunCoroutineLaunchesTraverseHelper {
+    val exploredFunctionsCache = mutableMapOf<KtNamedFunction, Boolean>()
 
-    /**
-     * Returns all function calls inside `initialFunction` and recursively on each one.
-     * If a function has been already explored, returns only the root function without children.
-     */
-    fun getFunctionWithCalledFunctionsAndExploreIfNew(
+    fun isFunctionOrChildrenLaunchingCoroutines(
         initialFunction: KtNamedFunction,
         bindingContext: BindingContext
-    ): List<KtNamedFunction> {
+    ): Boolean {
         val traversedFunctions = mutableSetOf<KtNamedFunction>()
 
-        fun getChildFunctionsOf(function: KtNamedFunction): Set<KtNamedFunction> {
+        fun checkFunctionAndSaveToCache(
+            function: KtNamedFunction,
+            parents: List<KtNamedFunction> = listOf()
+        ) {
+            val isLaunching = function.isLaunchingCoroutine(bindingContext)
+            exploredFunctionsCache.putIfAbsent(function, isLaunching)
+
+            if (isLaunching) {
+                parents.forEach { exploredFunctionsCache[it] = true }
+            }
+        }
+
+        fun getChildFunctionsOf(
+            function: KtNamedFunction,
+            parents: List<KtNamedFunction> = listOf()
+        ): Set<KtNamedFunction> {
             function.collectDescendantsOfType<KtExpression>().mapNotNull {
                 it.getResolvedCall(bindingContext)
                     ?.resultingDescriptor
@@ -116,14 +114,12 @@ class FunTraverseHelper {
                     ?.getPsi() as? KtNamedFunction
             }.forEach {
                 traversedFunctions.add(it)
+                if (exploredFunctionsCache.contains(it)) return@forEach
 
-                if (!exploredFunctionsCache.contains(it)) {
-                    exploredFunctionsCache.add(it)
+                checkFunctionAndSaveToCache(it, parents)
 
-                    getChildFunctionsOf(it).forEach { childFunction ->
-                        traversedFunctions.add(childFunction)
-                        exploredFunctionsCache.add(childFunction)
-                    }
+                getChildFunctionsOf(it, parents + it,).forEach { childFunction ->
+                    checkFunctionAndSaveToCache(childFunction, parents)
                 }
             }
 
@@ -131,7 +127,21 @@ class FunTraverseHelper {
         }
 
         traversedFunctions.add(initialFunction)
-        getChildFunctionsOf(initialFunction)
-        return traversedFunctions.toList()
+        checkFunctionAndSaveToCache(initialFunction)
+        getChildFunctionsOf(initialFunction, listOf(initialFunction))
+
+        return traversedFunctions.any { exploredFunctionsCache[it] == true }
+    }
+
+    private fun KtNamedFunction.isLaunchingCoroutine(bindingContext: BindingContext) =
+        anyDescendantOfType<KtDotQualifiedExpression> {
+            it.receiverExpression
+                .getType(bindingContext)
+                ?.fqNameOrNull() == COROUTINE_SCOPE_FQ &&
+                it.getCalleeExpressionIfAny()?.text == "launch"
+        }
+
+    companion object {
+        private val COROUTINE_SCOPE_FQ = FqName("kotlinx.coroutines.CoroutineScope")
     }
 }
