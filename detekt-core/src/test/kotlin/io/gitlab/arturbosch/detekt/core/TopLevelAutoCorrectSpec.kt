@@ -6,7 +6,6 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.test.utils.resourceUrl
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -16,7 +15,6 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.core.tooling.AnalysisFacade
 import io.gitlab.arturbosch.detekt.core.tooling.DefaultLifecycle
 import io.gitlab.arturbosch.detekt.core.tooling.inputPathsToKtFiles
-import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtAnnotation
 import org.jetbrains.kotlin.psi.KtFile
@@ -56,7 +54,7 @@ class TopLevelAutoCorrectSpec {
 
         AnalysisFacade(spec).runAnalysis {
             DefaultLifecycle(
-                mockk(),
+                Config.empty,
                 it,
                 inputPathsToKtFiles,
                 processorsProvider = { listOf(contentChangedListener) },
@@ -68,8 +66,8 @@ class TopLevelAutoCorrectSpec {
     }
 }
 
-private class DeleteAnnotationsRule : Rule() {
-    override val issue = Issue("test-rule", "", Debt.FIVE_MINS)
+private class DeleteAnnotationsRule(config: Config) : Rule(config) {
+    override val issue = Issue("test-rule", "")
     override fun visitAnnotation(annotation: KtAnnotation) {
         annotation.delete()
     }
@@ -77,5 +75,5 @@ private class DeleteAnnotationsRule : Rule() {
 
 private class TopLevelAutoCorrectProvider : RuleSetProvider {
     override val ruleSetId: String = "test-rule-set"
-    override fun instance(config: Config) = RuleSet(ruleSetId, listOf(DeleteAnnotationsRule()))
+    override fun instance(config: Config) = RuleSet(ruleSetId, listOf(DeleteAnnotationsRule(config)))
 }

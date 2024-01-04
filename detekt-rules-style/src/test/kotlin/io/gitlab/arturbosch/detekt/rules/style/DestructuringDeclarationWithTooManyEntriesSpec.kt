@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test
 private const val MAX_DESTRUCTURING_ENTRIES = "maxDestructuringEntries"
 
 class DestructuringDeclarationWithTooManyEntriesSpec {
-    val subject = DestructuringDeclarationWithTooManyEntries()
+    val subject = DestructuringDeclarationWithTooManyEntries(Config.empty)
 
     @Nested
     inner class `default configuration` {

@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.metrics.linesOfCode
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -22,13 +21,12 @@ import java.util.IdentityHashMap
  * Extract parts of the functionality of long methods into separate, smaller methods.
  */
 @ActiveByDefault(since = "1.0.0")
-class LongMethod(config: Config = Config.empty) : Rule(config) {
+class LongMethod(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "LongMethod",
         "One method should have one responsibility. Long methods tend to handle many things at once. " +
             "Prefer smaller methods to make them easier to understand.",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("number of lines in a method that are allowed at maximum")

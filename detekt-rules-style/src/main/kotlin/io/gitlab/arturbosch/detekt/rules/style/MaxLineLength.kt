@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
@@ -27,12 +26,11 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  * in the codebase will help make the code more uniform.
  */
 @ActiveByDefault(since = "1.0.0")
-class MaxLineLength(config: Config = Config.empty) : Rule(config) {
+class MaxLineLength(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "Line detected, which is longer than the defined maximum line length in the code style.",
-        Debt.FIVE_MINS
     )
 
     @Suppress("MemberNameEqualsClassName")

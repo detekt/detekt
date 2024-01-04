@@ -4,7 +4,6 @@ import io.github.detekt.tooling.api.FunctionMatcher
 import io.github.detekt.tooling.api.FunctionMatcher.Companion.fromFunctionSignature
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -44,13 +43,12 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequenc
  *
  */
 @RequiresTypeResolution
-class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
+class ForbiddenMethodCall(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "Mark forbidden methods. A forbidden method could be an invocation of an unstable / experimental " +
             "method and hence you might want to mark it as forbidden in order to get warned about the usage.",
-        Debt.TEN_MINS
     )
 
     @Configuration(
@@ -70,6 +68,9 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
         valuesWithReason(
             "kotlin.io.print" to "print does not allow you to configure the output stream. Use a logger instead.",
             "kotlin.io.println" to "println does not allow you to configure the output stream. Use a logger instead.",
+            "java.math.BigDecimal.<init>(kotlin.Double)" to "using `BigDecimal.<init>(kotlin.Double)` can result in " +
+                "unexpected float point precision behavior. Use `BigDecimal.valueOf(kotlin.Double)` or " +
+                "`BigDecimal.<init>(kotlin.String)` instead.",
         )
     ) { list ->
         list.map { Forbidden(fromFunctionSignature(it.value), it.reason) }

@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -26,9 +25,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * Large interfaces should be split into smaller interfaces which have a clear responsibility and are easier
  * to understand and implement.
  */
-class ComplexInterface(
-    config: Config = Config.empty,
-) : Rule(config) {
+class ComplexInterface(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
@@ -36,7 +33,6 @@ class ComplexInterface(
             "Large classes tend to handle many things at once. " +
             "An interface should have one responsibility. " +
             "Split up large interfaces into smaller ones that are easier to understand.",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("The amount of allowed definitions in an interface.")
@@ -79,7 +75,8 @@ class ComplexInterface(
 
     private fun calculateMembers(body: KtClassBody): Int {
         fun PsiElement.considerPrivate() = includePrivateDeclarations ||
-            this is KtTypeParameterListOwner && !this.isPrivate()
+            this is KtTypeParameterListOwner &&
+            !this.isPrivate()
 
         fun countFunctions(psiElements: List<PsiElement>): Int {
             val functions = psiElements.filterIsInstance<KtNamedFunction>()

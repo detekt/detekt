@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -36,12 +35,11 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
+class NestedClassesVisibility(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "NestedClassesVisibility",
         "The explicit public modifier still results in an internal nested class.",
-        Debt.FIVE_MINS
     )
 
     override fun visitClass(klass: KtClass) {

@@ -451,7 +451,6 @@ class ConfigPropertySpec {
         }
     }
 
-    @OptIn(UnstableApi::class)
     @Nested
     inner class ConfigWithFallback {
         @Nested

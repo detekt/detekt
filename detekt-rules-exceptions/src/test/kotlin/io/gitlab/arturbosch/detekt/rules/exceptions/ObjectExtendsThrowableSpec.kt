@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class ObjectExtendsThrowableSpec(val env: KotlinCoreEnvironment) {
 
-    val subject = ObjectExtendsThrowable()
+    val subject = ObjectExtendsThrowable(Config.empty)
 
     @Test
     fun `reports top-level objects that extend Throwable`() {

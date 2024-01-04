@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class LabeledExpressionSpec {
 
-    private val subject = LabeledExpression()
+    private val subject = LabeledExpression(Config.empty)
 
     @Test
     fun `reports break and continue labels`() {

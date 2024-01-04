@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -39,7 +38,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.classId
  */
 @Suppress("TooManyFunctions")
 @RequiresTypeResolution
-class UnnecessaryInnerClass(config: Config = Config.empty) : Rule(config) {
+class UnnecessaryInnerClass(config: Config) : Rule(config) {
 
     private val candidateClassToParentClasses = mutableMapOf<KtClass, List<KtClass>>()
     private val classChain = ArrayDeque<KtClass>()
@@ -47,7 +46,6 @@ class UnnecessaryInnerClass(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         javaClass.simpleName,
         "The 'inner' qualifier is unnecessary.",
-        Debt.FIVE_MINS
     )
 
     override fun visitClass(klass: KtClass) {

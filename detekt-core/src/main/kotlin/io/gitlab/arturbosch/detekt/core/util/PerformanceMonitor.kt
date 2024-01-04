@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.util
 
 import io.gitlab.arturbosch.detekt.api.PropertiesAware
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.getOrNull
 import kotlin.time.Duration
 import kotlin.time.measureTimedValue
@@ -34,6 +33,5 @@ class PerformanceMonitor {
 
 internal const val MONITOR_PROPERTY_KEY = "detekt.core.monitor"
 
-@OptIn(UnstableApi::class)
 internal fun PropertiesAware.getOrCreateMonitor() =
     getOrNull(MONITOR_PROPERTY_KEY) ?: PerformanceMonitor().also { register(MONITOR_PROPERTY_KEY, it) }

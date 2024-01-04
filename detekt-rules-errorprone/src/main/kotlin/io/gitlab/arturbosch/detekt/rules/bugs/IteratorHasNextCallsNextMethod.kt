@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -29,14 +28,13 @@ import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class IteratorHasNextCallsNextMethod(config: Config = Config.empty) : Rule(config) {
+class IteratorHasNextCallsNextMethod(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "IteratorHasNextCallsNextMethod",
         "The `hasNext()` method of an Iterator implementation should not call the `next()` method. " +
             "The state of the iterator should not be changed inside the `hasNext()` method. " +
             "The `hasNext()` method is not supposed to have any side effects.",
-        Debt.TEN_MINS
     )
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {

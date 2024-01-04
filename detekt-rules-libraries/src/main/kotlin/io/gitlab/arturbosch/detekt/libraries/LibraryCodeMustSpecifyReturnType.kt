@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.libraries
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -46,13 +45,12 @@ import org.jetbrains.kotlin.resolve.checkers.ExplicitApiDeclarationChecker
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.2.0")
-class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(config) {
+class LibraryCodeMustSpecifyReturnType(config: Config) : Rule(config) {
 
     override val issue = Issue(
         this.javaClass.simpleName,
         "Library functions/properties should have an explicit return type. " +
             "Inferred return types can easily be changed by mistake which may lead to breaking changes.",
-        Debt.FIVE_MINS
     )
 
     @Configuration("if functions with `Unit` return type should be allowed without return type declaration")
@@ -89,9 +87,7 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
         if (bodyExpression == null || bodyExpression.isUnitExpression()) {
             return true
         }
-        return allowOmitUnit && this.hasImplicitUnitReturnType(
-            bindingContext
-        )
+        return allowOmitUnit && this.hasImplicitUnitReturnType(bindingContext)
     }
 
     private fun KtCallableDeclaration.explicitReturnTypeRequired(): Boolean =

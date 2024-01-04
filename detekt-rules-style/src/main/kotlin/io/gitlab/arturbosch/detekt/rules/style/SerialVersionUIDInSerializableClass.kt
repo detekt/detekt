@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -43,13 +42,12 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(config) {
+class SerialVersionUIDInSerializableClass(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "A class which implements the Serializable interface does not define a correct serialVersionUID field. " +
             "The serialVersionUID field should be a private constant long value inside a companion object.",
-        Debt.FIVE_MINS
     )
 
     override fun visitClass(klass: KtClass) {
@@ -126,7 +124,8 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
         val assignmentText = property.children
             .singleOrNull { it is KtConstantExpression || it is KtPrefixExpression }
             ?.text
-        return assignmentText != null && assignmentText.last() == 'L' &&
+        return assignmentText != null &&
+            assignmentText.last() == 'L' &&
             assignmentText.substring(0, assignmentText.length - 1).toLongOrNull() != null
     }
 

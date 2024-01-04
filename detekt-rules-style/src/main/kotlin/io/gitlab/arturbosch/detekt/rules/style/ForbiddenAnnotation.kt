@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
@@ -38,12 +37,11 @@ import org.jetbrains.kotlin.types.KotlinType
  * </compliant>
  */
 @RequiresTypeResolution
-class ForbiddenAnnotation(config: Config = Config.empty) : Rule(config) {
+class ForbiddenAnnotation(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "Avoid using this annotation.",
-        Debt.FIVE_MINS
     )
 
     @Configuration(

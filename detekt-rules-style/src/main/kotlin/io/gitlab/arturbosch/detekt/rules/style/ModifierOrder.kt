@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -51,12 +50,11 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ModifierOrder(config: Config = Config.empty) : Rule(config) {
+class ModifierOrder(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "Modifiers are not in the correct order. Consider to reorder these modifiers.",
-        Debt.FIVE_MINS
     )
 
     // subset of KtTokens.MODIFIER_KEYWORDS_ARRAY
@@ -97,7 +95,6 @@ class ModifierOrder(config: Config = Config.empty) : Rule(config) {
                     Issue(
                         javaClass.simpleName,
                         "Modifier order should be: $modifierString",
-                        Debt(mins = 1)
                     ),
                     Entity.from(list),
                     "Modifier order should be: $modifierString"

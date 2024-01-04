@@ -5,7 +5,7 @@
 import com.gradle.enterprise.gradleplugin.testretry.retry
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
-import java.net.URL
+import java.net.URI
 
 plugins {
     id("module")
@@ -14,7 +14,7 @@ plugins {
     idea
     alias(libs.plugins.pluginPublishing)
     // We use this published version of the detekt plugin to self analyse this project.
-    id("io.gitlab.arturbosch.detekt") version "1.23.3"
+    id("io.gitlab.arturbosch.detekt") version "1.23.4"
     alias(libs.plugins.binaryCompatibilityValidator)
     alias(libs.plugins.dokka)
 }
@@ -74,22 +74,36 @@ dependencies {
     compileOnly(libs.kotlin.gradlePluginApi)
     testFixturesCompileOnly("org.jetbrains:annotations:24.1.0")
     compileOnly("org.jetbrains:annotations:24.1.0")
-    compileOnly("io.gitlab.arturbosch.detekt:detekt-cli:1.23.3")
+    compileOnly("io.gitlab.arturbosch.detekt:detekt-cli:1.23.4")
 
     testKitRuntimeOnly(libs.kotlin.gradle)
     testKitJava17RuntimeOnly(libs.android.gradle.maxSupported)
 
     // We use this published version of the detekt-formatting to self analyse this project.
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.3")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.4")
 }
 
 gradlePlugin {
     website = "https://detekt.dev"
     vcsUrl = "https://github.com/detekt/detekt"
     plugins {
+        create("detektBasePlugin") {
+            id = "io.github.detekt.gradle.base"
+            implementationClass = "dev.detekt.gradle.plugin.DetektBasePlugin"
+            displayName = "Static code analysis for Kotlin"
+            description = "Static code analysis for Kotlin"
+            tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
+        }
         create("detektPlugin") {
             id = "io.gitlab.arturbosch.detekt"
             implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
+            displayName = "Static code analysis for Kotlin"
+            description = "Static code analysis for Kotlin"
+            tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
+        }
+        create("detektCompilerPlugin") {
+            id = "io.github.detekt.gradle.compiler-plugin"
+            implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
             displayName = "Static code analysis for Kotlin"
             description = "Static code analysis for Kotlin"
             tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
@@ -100,18 +114,6 @@ gradlePlugin {
         sourceSets["testFixtures"],
         sourceSets["functionalTest"],
     )
-}
-
-gradlePlugin {
-    plugins {
-        create("detektCompilerPlugin") {
-            id = "io.github.detekt.gradle.compiler-plugin"
-            implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
-            displayName = "Static code analysis for Kotlin"
-            description = "Static code analysis for Kotlin"
-            tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
-        }
-    }
 }
 
 // Some functional tests reference internal functions in the Gradle plugin. This should become unnecessary as further
@@ -159,7 +161,7 @@ tasks {
         dokkaSourceSets.configureEach {
             apiVersion = "1.4"
             externalDocumentationLink {
-                url = URL("https://docs.gradle.org/current/javadoc/")
+                url = URI("https://docs.gradle.org/current/javadoc/").toURL()
             }
         }
     }

@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.libraries
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -30,12 +29,11 @@ import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierTypeOrDefault
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class ForbiddenPublicDataClass(config: Config = Config.empty) : Rule(config) {
+class ForbiddenPublicDataClass(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "The data classes are bad for the binary compatibility in public APIs. Avoid to use it.",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("ignores classes in the specified packages.")
@@ -55,7 +53,7 @@ class ForbiddenPublicDataClass(config: Config = Config.empty) : Rule(config) {
         }
         if (isPublicOrProtected) {
             if (klass.isData()) {
-                report(CodeSmell(issue, Entity.atName(klass), ""))
+                report(CodeSmell(issue, Entity.atName(klass), "Don't use data class"))
             }
             super.visitClass(klass)
         }

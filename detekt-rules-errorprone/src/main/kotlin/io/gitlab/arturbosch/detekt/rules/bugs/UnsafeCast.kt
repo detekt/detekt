@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -32,14 +31,13 @@ import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
-class UnsafeCast(config: Config = Config.empty) : Rule(config) {
+class UnsafeCast(config: Config) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("UNCHECKED_CAST")
 
     override val issue: Issue = Issue(
         "UnsafeCast",
         "Cast operator throws an exception if the cast is not possible.",
-        Debt.TWENTY_MINS
     )
 
     override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {

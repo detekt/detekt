@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.DEFAULT_FAIL_ON_SEVERITY
 import io.gitlab.arturbosch.detekt.extensions.DetektReport
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
@@ -197,7 +196,7 @@ abstract class Detekt @Inject constructor(
             AutoCorrectArgument(autoCorrect.getOrElse(false)),
             FailOnSeverityArgument(
                 ignoreFailures = ignoreFailures.getOrElse(false),
-                minSeverity = failOnSeverity.orNull ?: DEFAULT_FAIL_ON_SEVERITY
+                minSeverity = failOnSeverity.get()
             ),
             BasePathArgument(basePath.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))

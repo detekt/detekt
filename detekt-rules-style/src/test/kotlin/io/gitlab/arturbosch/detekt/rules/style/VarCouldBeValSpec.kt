@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
@@ -12,7 +13,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
-    val subject = VarCouldBeVal()
+    val subject = VarCouldBeVal(Config.empty)
 
     @Nested
     inner class `file-level declarations` {

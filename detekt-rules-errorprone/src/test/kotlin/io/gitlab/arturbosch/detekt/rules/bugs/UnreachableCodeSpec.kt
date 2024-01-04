@@ -169,4 +169,16 @@ class UnreachableCodeSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
+
+    @Test
+    fun `reports unreachable code after elvis`() {
+        val code = """
+            fun test() {
+                val a = 2 ?: run {
+                    3
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
 }

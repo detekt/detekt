@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -18,12 +17,11 @@ import org.jetbrains.kotlin.psi.KtStringTemplateEntryWithExpression
  * the only whitespace chars that are allowed in a source file are the line terminator sequence
  * and the ASCII horizontal space character (0x20). Strings containing tabs are allowed.
  */
-class NoTabs(config: Config = Config.empty) : Rule(config) {
+class NoTabs(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "Checks if tabs are used in Kotlin files.",
-        Debt.FIVE_MINS
     )
 
     override fun visitWhiteSpace(space: PsiWhiteSpace) {

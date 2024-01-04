@@ -1,8 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import io.gitlab.arturbosch.detekt.api.internal.EmptyConfig
-import kotlin.reflect.KClass
-
 /**
  * A configuration holds information about how to configure specific rules.
  */
@@ -51,7 +48,15 @@ interface Config {
          * This config should only be used in test cases.
          * Always returns the default value except when 'active' is queried, it returns true.
          */
-        val empty: Config = EmptyConfig
+        val empty: Config = object : Config {
+            override fun subConfig(key: String): Config = this
+
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : Any> valueOrNull(key: String): T? = when (key) {
+                ACTIVE_KEY -> true as? T
+                else -> null
+            }
+        }
 
         const val ACTIVE_KEY: String = "active"
         const val AUTO_CORRECT_KEY: String = "autoCorrect"
@@ -59,16 +64,5 @@ interface Config {
         const val EXCLUDES_KEY: String = "excludes"
         const val INCLUDES_KEY: String = "includes"
         const val CONFIG_SEPARATOR: String = ">"
-
-        val PRIMITIVES: Set<KClass<out Any>> = setOf(
-            Int::class,
-            Boolean::class,
-            Float::class,
-            Double::class,
-            String::class,
-            Short::class,
-            Char::class,
-            Long::class
-        )
     }
 }

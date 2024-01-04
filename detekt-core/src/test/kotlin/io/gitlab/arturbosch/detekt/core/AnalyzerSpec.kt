@@ -4,7 +4,6 @@ import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -13,7 +12,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.getContextForPaths
-import io.gitlab.arturbosch.detekt.test.yamlConfig
+import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -30,8 +29,18 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `throw error explicitly when config has wrong value type in config`() {
             val testFile = path.resolve("Test.kt")
-            val settings = createProcessingSettings(testFile, yamlConfig("configs/config-value-type-wrong.yml"))
-            val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider()), emptyList())
+            val settings = createProcessingSettings(
+                inputPath = testFile,
+                config = yamlConfigFromContent(
+                    """
+                        custom:
+                          MaxLineLength:
+                            active: true
+                            maxLineLength: 'abc'
+                    """.trimIndent()
+                ),
+            )
+            val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
 
             assertThatThrownBy {
                 settings.use { analyzer.run(listOf(compileForTest(testFile))) }
@@ -43,14 +52,21 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val testFile = path.resolve("Test.kt")
             val settings = createProcessingSettings(
                 inputPath = testFile,
-                config = yamlConfig("configs/config-value-type-wrong.yml"),
+                config = yamlConfigFromContent(
+                    """
+                        custom:
+                          MaxLineLength:
+                            active: true
+                            maxLineLength: 'abc'
+                    """.trimIndent()
+                ),
             ) {
                 execution {
                     parallelParsing = true
                     parallelAnalysis = true
                 }
             }
-            val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider()), emptyList())
+            val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
                 .isInstanceOf(CompletionException::class.java)
@@ -67,10 +83,20 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val output = StringPrintStream()
             val settings = createProcessingSettings(
                 testFile,
-                yamlConfig("configs/config-value-type-correct.yml"),
+                yamlConfigFromContent(
+                    """
+                        custom:
+                          MaxLineLength:
+                            active: true
+                            maxLineLength: 120
+                          RequiresTypeResolutionMaxLineLength:
+                            active: true
+                            maxLineLength: 120
+                    """.trimIndent()
+                ),
                 outputChannel = output,
             )
-            val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider()), emptyList())
+            val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }.values.flatten()).isEmpty()
             assertThat(output.toString()).isEqualTo(
@@ -84,10 +110,20 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val output = StringPrintStream()
             val settings = createProcessingSettings(
                 testFile,
-                yamlConfig("configs/config-value-type-correct.yml"),
+                yamlConfigFromContent(
+                    """
+                        custom:
+                          MaxLineLength:
+                            active: true
+                            maxLineLength: 30
+                          RequiresTypeResolutionMaxLineLength:
+                            active: true
+                            maxLineLength: 30
+                    """.trimIndent()
+                ),
                 outputChannel = output,
             )
-            val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider(30)), emptyList())
+            val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }.values.flatten()).hasSize(1)
             assertThat(output.toString()).isEqualTo(
@@ -101,10 +137,20 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val output = StringPrintStream()
             val settings = createProcessingSettings(
                 testFile,
-                yamlConfig("configs/config-value-type-correct.yml"),
+                yamlConfigFromContent(
+                    """
+                        custom:
+                          MaxLineLength:
+                            active: true
+                            maxLineLength: 30
+                          RequiresTypeResolutionMaxLineLength:
+                            active: true
+                            maxLineLength: 30
+                    """.trimIndent()
+                ),
                 outputChannel = output,
             )
-            val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider(30)), emptyList())
+            val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
             val ktFile = compileForTest(testFile)
             val bindingContext = env.getContextForPaths(listOf(ktFile))
 
@@ -118,10 +164,19 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val output = StringPrintStream()
             val settings = createProcessingSettings(
                 testFile,
-                yamlConfig("configs/config-value-type-correct-ignore-annotated.yml"),
+                yamlConfigFromContent(
+                    """
+                        custom:
+                          MaxLineLength:
+                            active: true
+                            maxLineLength: 30
+                            ignoreAnnotated:
+                              - "AnAnnotation"
+                    """.trimIndent()
+                ),
                 outputChannel = output,
             )
-            val analyzer = Analyzer(settings, listOf(StyleRuleSetProvider(18)), emptyList())
+            val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }.values.flatten()).isEmpty()
             assertThat(output.toString()).isEmpty()
@@ -133,10 +188,16 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val output = StringPrintStream()
             val settings = createProcessingSettings(
                 testFile,
-                yamlConfig("configs/config-value-type-correct.yml"),
+                yamlConfigFromContent(
+                    """
+                      custom:
+                        FaultyRule:
+                          active: true
+                    """.trimIndent()
+                ),
                 outputChannel = output,
             )
-            val analyzer = Analyzer(settings, listOf(FaultyRuleSetProvider()), emptyList())
+            val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
                 .hasCauseInstanceOf(IllegalStateException::class.java)
@@ -150,10 +211,16 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val output = StringPrintStream()
             val settings = createProcessingSettings(
                 testFile,
-                yamlConfig("configs/config-value-type-correct.yml"),
+                yamlConfigFromContent(
+                    """
+                        custom:
+                          FaultyRuleNoStackTrace:
+                            active: true
+                    """.trimIndent()
+                ),
                 outputChannel = output,
             )
-            val analyzer = Analyzer(settings, listOf(FaultyRuleNoStackTraceSetProvider()), emptyList())
+            val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
                 .hasCauseInstanceOf(IllegalStateException::class.java)
@@ -163,20 +230,22 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
     }
 }
 
-private class StyleRuleSetProvider(private val threshold: Int? = null) : RuleSetProvider {
-    override val ruleSetId: String = "style"
+private class CustomRuleSetProvider : RuleSetProvider {
+    override val ruleSetId: String = "custom"
     override fun instance(config: Config) = RuleSet(
         ruleSetId,
         listOf(
-            MaxLineLength(config, threshold),
-            RequiresTypeResolutionMaxLineLength(config, threshold),
+            MaxLineLength(config),
+            RequiresTypeResolutionMaxLineLength(config),
+            FaultyRule(config),
+            FaultyRuleNoStackTrace(config),
         )
     )
 }
 
-private class MaxLineLength(config: Config, threshold: Int?) : Rule(config) {
-    override val issue = Issue(this::class.java.simpleName, "", Debt.FIVE_MINS)
-    private val lengthThreshold: Int = threshold ?: valueOrDefault("maxLineLength", 100)
+private class MaxLineLength(config: Config) : Rule(config) {
+    override val issue = Issue(this::class.java.simpleName, "TestDescription")
+    private val lengthThreshold: Int = valueOrDefault("maxLineLength", 10)
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
         for (line in file.text.lineSequence()) {
@@ -188,9 +257,9 @@ private class MaxLineLength(config: Config, threshold: Int?) : Rule(config) {
 }
 
 @RequiresTypeResolution
-private class RequiresTypeResolutionMaxLineLength(config: Config, threshold: Int?) : Rule(config) {
-    override val issue = Issue(this::class.java.simpleName, "", Debt.FIVE_MINS)
-    private val lengthThreshold: Int = threshold ?: valueOrDefault("maxLineLength", 100)
+private class RequiresTypeResolutionMaxLineLength(config: Config) : Rule(config) {
+    override val issue = Issue(this::class.java.simpleName, "TestDescription")
+    private val lengthThreshold: Int = valueOrDefault("maxLineLength", 10)
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
         for (line in file.text.lineSequence()) {
@@ -201,25 +270,15 @@ private class RequiresTypeResolutionMaxLineLength(config: Config, threshold: Int
     }
 }
 
-private class FaultyRuleSetProvider : RuleSetProvider {
-    override val ruleSetId: String = "style"
-    override fun instance(config: Config) = RuleSet(ruleSetId, listOf(FaultyRule(config)))
-}
-
 private class FaultyRule(config: Config) : Rule(config) {
-    override val issue = Issue(this::class.java.simpleName, "", Debt.FIVE_MINS)
+    override val issue = Issue(this::class.java.simpleName, "")
     override fun visitKtFile(file: KtFile) {
         throw object : IllegalStateException("Deliberately triggered error.") {}
     }
 }
 
-private class FaultyRuleNoStackTraceSetProvider : RuleSetProvider {
-    override val ruleSetId: String = "style"
-    override fun instance(config: Config) = RuleSet(ruleSetId, listOf(FaultyRuleNoStackTrace(config)))
-}
-
 private class FaultyRuleNoStackTrace(config: Config) : Rule(config) {
-    override val issue = Issue(this::class.java.simpleName, "", Debt.FIVE_MINS)
+    override val issue = Issue(this::class.java.simpleName, "")
     override fun visitKtFile(file: KtFile) {
         throw object : IllegalStateException("Deliberately triggered error without stack trace.") {
             init {

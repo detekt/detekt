@@ -442,18 +442,13 @@ class DetektTaskDslSpec {
         }
 
         @Test
-        fun `enables auto correcting`() {
-            assertThat(result.output).contains("--auto-correct")
-        }
-
-        @Test
         fun `enables using default config as baseline`() {
             assertThat(result.output).contains("--build-upon-default-config")
         }
     }
 
     @Nested
-    inner class FailOnSeverity {
+    inner class FailureSeverity {
         private val builder = kotlin().dryRun()
 
         @Test
@@ -553,6 +548,7 @@ class DetektTaskDslSpec {
                 buildUponDefaultConfig = true
                 allRules = false
                 ignoreFailures = false
+                failOnSeverity = io.gitlab.arturbosch.detekt.extensions.FailOnSeverity.Error
                 autoCorrect = false
                 reports {
                     xml {

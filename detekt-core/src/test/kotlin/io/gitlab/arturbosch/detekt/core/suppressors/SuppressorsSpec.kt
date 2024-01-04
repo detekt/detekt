@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.core.suppressors
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -17,7 +16,7 @@ class SuppressorsSpec {
     val noIgnorableCodeSmell = CodeSmell(
         issue = ARule().issue,
         entity = Entity.from(compileContentForTest("""fun foo() = Unit""".trimIndent())),
-        message = ""
+        message = "TestMessage"
     )
 
     val ignorableCodeSmell = CodeSmell(
@@ -33,7 +32,7 @@ class SuppressorsSpec {
                 """.trimIndent()
             )
         ),
-        message = ""
+        message = "TestMessage"
     )
 
     @Test
@@ -56,5 +55,5 @@ class SuppressorsSpec {
 }
 
 private class ARule(config: Config = Config.empty) : Rule(config) {
-    override val issue = Issue("IssueId", "", Debt.TWENTY_MINS)
+    override val issue = Issue("IssueId", "")
 }

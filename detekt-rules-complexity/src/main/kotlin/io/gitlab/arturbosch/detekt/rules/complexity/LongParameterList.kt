@@ -2,11 +2,9 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
@@ -27,13 +25,12 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
  */
 @Suppress("ViolatesTypeResolutionRequirements")
 @ActiveByDefault(since = "1.0.0")
-class LongParameterList(config: Config = Config.empty) : Rule(config) {
+class LongParameterList(config: Config) : Rule(config) {
     override val issue = Issue(
         "LongParameterList",
         "The more parameters a function has the more complex it is. Long parameter lists are often " +
             "used to control complex algorithms and violate the Single Responsibility Principle. " +
             "Prefer functions with short parameter lists.",
-        Debt.TWENTY_MINS
     )
 
     @Deprecated("Use `allowedFunctionParameters` and `allowedConstructorParameters` instead")
@@ -41,12 +38,10 @@ class LongParameterList(config: Config = Config.empty) : Rule(config) {
     private val threshold: Int by config(DEFAULT_ALLOWED_FUNCTION_PARAMETERS)
 
     @Suppress("DEPRECATION")
-    @OptIn(UnstableApi::class)
     @Configuration("number of function parameters required to trigger the rule")
     private val allowedFunctionParameters: Int by configWithFallback(::threshold, DEFAULT_ALLOWED_FUNCTION_PARAMETERS)
 
     @Suppress("DEPRECATION")
-    @OptIn(UnstableApi::class)
     @Configuration("number of constructor parameters required to trigger the rule")
     private val allowedConstructorParameters: Int
         by configWithFallback(::threshold, DEFAULT_ALLOWED_CONSTRUCTOR_PARAMETERS)

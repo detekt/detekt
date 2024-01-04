@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -49,12 +48,11 @@ import org.jetbrains.kotlin.psi.KtPsiUtil
  * }
  * </compliant>
  */
-class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
+class UnnecessaryParentheses(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "UnnecessaryParentheses",
         "Unnecessary parentheses don't add any value to the code and should be removed.",
-        Debt.FIVE_MINS
     )
 
     @Configuration(
@@ -168,7 +166,8 @@ class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
             if (parentExpression.operationReference.getReferencedNameElementType() in listOf(
                     KtTokens.PLUSPLUS,
                     KtTokens.MINUSMINUS,
-                ) && (this.expression as? KtDotQualifiedExpression)?.receiverExpression is KtConstantExpression
+                ) &&
+                (this.expression as? KtDotQualifiedExpression)?.receiverExpression is KtConstantExpression
             ) {
                 return false
             }

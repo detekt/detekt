@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -16,7 +17,7 @@ private const val ALLOWED_NAMES_PATTERN = "allowedNames"
 
 @KotlinCoreEnvironmentTest
 class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
-    val subject = UnusedPrivateProperty()
+    val subject = UnusedPrivateProperty(Config.empty)
 
     val regexTestingCode = """
         class Test {

@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -37,14 +36,13 @@ import org.jetbrains.kotlin.utils.addIfNotNull
  * can lead to confusion and potential bugs.
  */
 @ActiveByDefault(since = "1.2.0")
-class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
+class UnusedPrivateClass(config: Config) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("unused")
 
     override val issue: Issue = Issue(
         "UnusedPrivateClass",
         "Private class is unused and should be removed.",
-        Debt.FIVE_MINS
     )
 
     override fun visit(root: KtFile) {
@@ -72,9 +70,10 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
         private fun KtNamedDeclaration.isUsed(): Boolean {
             if (nameAsSafeName.identifier in namedClasses) return true
             val pathSegments = fqName?.pathSegments().orEmpty()
-            return pathSegments.isNotEmpty() && importedFqNames.any { importedFqName ->
-                importedFqName.pathSegments().zip(pathSegments).all { it.first == it.second }
-            }
+            return pathSegments.isNotEmpty() &&
+                importedFqNames.any { importedFqName ->
+                    importedFqName.pathSegments().zip(pathSegments).all { it.first == it.second }
+                }
         }
 
         override fun visitClass(klass: KtClass) {

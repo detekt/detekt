@@ -3,6 +3,7 @@ package io.github.detekt.report.xml
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
+import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import java.util.Locale
 import kotlin.io.path.invariantSeparatorsPathString
 
@@ -10,7 +11,7 @@ import kotlin.io.path.invariantSeparatorsPathString
  * Contains rule violations in an XML format. The report follows the structure of a Checkstyle report.
  * See: https://detekt.dev/configurations.html#output-reports
  */
-class XmlOutputReport : OutputReport() {
+class XmlOutputReport : BuiltInOutputReport, OutputReport() {
 
     override val id: String = "XmlOutputReport"
     override val ending = "xml"
@@ -33,7 +34,7 @@ class XmlOutputReport : OutputReport() {
                         "\t<error line=\"${it.location.source.line.toXmlString()}\"",
                         "column=\"${it.location.source.column.toXmlString()}\"",
                         "severity=\"${it.severityLabel.toXmlString()}\"",
-                        "message=\"${it.messageOrDescription().toXmlString()}\"",
+                        "message=\"${it.message.toXmlString()}\"",
                         "source=\"${"detekt.${it.id.toXmlString()}"}\" />"
                     ).joinToString(separator = " ")
                 }

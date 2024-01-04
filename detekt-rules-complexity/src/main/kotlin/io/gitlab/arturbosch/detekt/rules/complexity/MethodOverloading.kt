@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -23,14 +22,13 @@ import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
  *
  * Refactor these methods and try to use optional parameters instead to prevent some of the overloading.
  */
-class MethodOverloading(config: Config = Config.empty) : Rule(config) {
+class MethodOverloading(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "MethodOverloading",
         "Methods which are overloaded often might be harder to maintain. " +
             "Furthermore, these methods are tightly coupled. " +
             "Refactor these methods and try to use optional parameters.",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("The allowed number of overloads for a method.")

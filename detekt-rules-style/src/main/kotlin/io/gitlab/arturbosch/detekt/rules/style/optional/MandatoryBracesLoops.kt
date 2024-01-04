@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style.optional
 import io.github.detekt.metrics.linesOfCode
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -51,12 +50,11 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  * do println("Hello, world") while (true)
  * </compliant>
  */
-class MandatoryBracesLoops(config: Config = Config.empty) : Rule(config) {
+class MandatoryBracesLoops(config: Config) : Rule(config) {
     override val issue = Issue(
         "MandatoryBracesLoops",
         "A multi-line loop was found that does not have braces. " +
             "These should be added to improve readability.",
-        Debt.FIVE_MINS
     )
 
     override fun visitForExpression(expression: KtForExpression) {

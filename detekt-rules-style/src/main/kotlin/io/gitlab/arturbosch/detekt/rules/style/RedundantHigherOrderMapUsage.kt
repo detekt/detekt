@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -73,11 +72,10 @@ import org.jetbrains.kotlin.types.typeUtil.immediateSupertypes
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class RedundantHigherOrderMapUsage(config: Config = Config.empty) : Rule(config) {
+class RedundantHigherOrderMapUsage(config: Config) : Rule(config) {
     override val issue: Issue = Issue(
         javaClass.simpleName,
         "Checks for redundant 'map' calls, which can be removed.",
-        Debt.FIVE_MINS
     )
 
     @Suppress("ReturnCount")

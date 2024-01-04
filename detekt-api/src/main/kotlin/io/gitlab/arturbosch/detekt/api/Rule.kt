@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.api.Config.Companion.SEVERITY_KEY
-import io.gitlab.arturbosch.detekt.api.internal.DefaultContext
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
@@ -17,9 +16,8 @@ import org.jetbrains.kotlin.psi.KtFile
  * two predefined (preVisit/postVisit) functions which can be overridden to setup/teardown additional data.
  */
 abstract class Rule(
-    override val ruleSetConfig: Config = Config.empty,
-    ruleContext: Context = DefaultContext()
-) : BaseRule(ruleContext), ConfigAware {
+    override val ruleSetConfig: Config,
+) : BaseRule(), ConfigAware {
 
     /**
      * A rule is motivated to point out a specific issue in the code base.
@@ -47,7 +45,7 @@ abstract class Rule(
      */
     open val defaultRuleIdAliases: Set<String> = emptySet()
 
-    internal val ruleSetId: RuleId? get() = ruleSetConfig.parentPath
+    private val ruleSetId: RuleSetId? get() = ruleSetConfig.parentPath
 
     /**
      * Rules are aware of the paths they should run on via configuration properties.
@@ -84,16 +82,6 @@ abstract class Rule(
     fun report(finding: Finding) {
         finding.updateWithComputedSeverity()
         report(finding, aliases, ruleSetId)
-    }
-
-    /**
-     * Simplified version of [Context.report] with rule defaults.
-     */
-    fun report(findings: List<Finding>) {
-        findings.forEach {
-            it.updateWithComputedSeverity()
-        }
-        report(findings, aliases, ruleSetId)
     }
 }
 

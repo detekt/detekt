@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -54,12 +53,11 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  * </compliant>
  */
 @ActiveByDefault(since = "1.21.0")
-class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
+class UselessPostfixExpression(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "UselessPostfixExpression",
         "The incremented or decremented value is unused. This value is replaced with the original value.",
-        Debt.TWENTY_MINS
     )
 
     var properties = emptySet<String?>()

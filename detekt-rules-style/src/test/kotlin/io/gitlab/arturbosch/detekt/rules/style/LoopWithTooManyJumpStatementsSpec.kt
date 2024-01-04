@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
@@ -22,7 +23,7 @@ class LoopWithTooManyJumpStatementsSpec {
                 }
             }
         """.trimIndent()
-        assertThat(LoopWithTooManyJumpStatements().compileAndLint(code)).hasTextLocations(20 to 23)
+        assertThat(LoopWithTooManyJumpStatements(Config.empty).compileAndLint(code)).hasTextLocations(20 to 23)
     }
 
     @Test
@@ -34,7 +35,7 @@ class LoopWithTooManyJumpStatementsSpec {
                 }
             }
         """.trimIndent()
-        assertThat(LoopWithTooManyJumpStatements().compileAndLint(code)).hasTextLocations(20 to 25)
+        assertThat(LoopWithTooManyJumpStatements(Config.empty).compileAndLint(code)).hasTextLocations(20 to 25)
     }
 
     @Test
@@ -46,7 +47,7 @@ class LoopWithTooManyJumpStatementsSpec {
                 } while (i < 1)
             }
         """.trimIndent()
-        assertThat(LoopWithTooManyJumpStatements().compileAndLint(code)).hasTextLocations(20 to 22)
+        assertThat(LoopWithTooManyJumpStatements(Config.empty).compileAndLint(code)).hasTextLocations(20 to 22)
     }
 
     @Test
@@ -101,7 +102,7 @@ class LoopWithTooManyJumpStatementsSpec {
                 }
             }
         """.trimIndent()
-        val findings = LoopWithTooManyJumpStatements().compileAndLint(code)
+        val findings = LoopWithTooManyJumpStatements(Config.empty).compileAndLint(code)
         assertThat(findings).isEmpty()
     }
 
@@ -118,7 +119,7 @@ class LoopWithTooManyJumpStatementsSpec {
                 }
             }
         """.trimIndent()
-        val findings = LoopWithTooManyJumpStatements().compileAndLint(code)
+        val findings = LoopWithTooManyJumpStatements(Config.empty).compileAndLint(code)
         assertThat(findings).isEmpty()
     }
 }

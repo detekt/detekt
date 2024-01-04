@@ -6,12 +6,10 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SetupContext
-import io.gitlab.arturbosch.detekt.api.UnstableApi
-import io.mockk.every
-import io.mockk.mockk
+import io.gitlab.arturbosch.detekt.test.createEntity
+import io.gitlab.arturbosch.detekt.test.createFinding
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.io.PrintStream
 import java.net.URI
@@ -19,22 +17,16 @@ import java.nio.file.Path
 import kotlin.io.path.copyTo
 import kotlin.io.path.deleteIfExists
 
-@OptIn(UnstableApi::class)
 class BaselineResultMappingSpec {
 
     private val dir = createTempDirectoryForTest("baseline_format")
     private val baselineFile = dir.resolve("baseline.xml")
     private val existingBaselineFile = resourceAsPath("/baseline_feature/valid-baseline.xml")
-    private lateinit var findings: Map<String, List<Finding>>
-    private lateinit var finding: Finding
-
-    @BeforeEach
-    fun setupMocks() {
-        finding = mockk()
-        every { finding.id }.returns("SomeIssueId")
-        every { finding.signature }.returns("SomeSignature")
-        findings = mapOf("RuleSet" to listOf(finding))
-    }
+    private val finding: Finding = createFinding(
+        ruleName = "SomeIssueId",
+        entity = createEntity(signature = "SomeSignature"),
+    )
+    private val findings: Map<String, List<Finding>> = mapOf("RuleSet" to listOf(finding))
 
     @AfterEach
     fun tearDown() {
@@ -121,12 +113,11 @@ class BaselineResultMappingSpec {
     }
 }
 
-@OptIn(UnstableApi::class)
 private fun resultMapping(baselineFile: Path?, createBaseline: Boolean?) =
     BaselineResultMapping().apply {
         init(object : SetupContext {
-            override val configUris: Collection<URI> = mockk()
-            override val config: Config = mockk()
+            override val configUris: Collection<URI> = emptyList()
+            override val config: Config = Config.empty
             override val outputChannel: PrintStream = NullPrintStream()
             override val errorChannel: PrintStream = NullPrintStream()
             override val properties: MutableMap<String, Any?> = mutableMapOf(

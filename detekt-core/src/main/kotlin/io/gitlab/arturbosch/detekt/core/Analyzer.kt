@@ -101,7 +101,6 @@ internal class Analyzer(
         bindingContext: BindingContext,
         compilerResources: CompilerResources
     ): Map<RuleSetId, List<Finding>> {
-        @Suppress("DEPRECATION")
         fun isCorrectable(rule: BaseRule): Boolean = when (rule) {
             is Rule -> rule.autoCorrect
             else -> error("No other rule type expected.")
@@ -112,13 +111,14 @@ internal class Analyzer(
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
             .map { (provider, ruleSetConfig) -> provider.instance(ruleSetConfig) to ruleSetConfig }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.shouldAnalyzeFile(file) }
+            .toList()
 
         val ruleIdsToRuleSetIds = associateRuleIdsToRuleSetIds(
             activeRuleSetsToRuleSetConfigs.map { (ruleSet, _) -> ruleSet }
         )
 
         val (correctableRules, otherRules) = activeRuleSetsToRuleSetConfigs
-            .flatMap { (ruleSet, _) -> ruleSet.rules.asSequence() }
+            .flatMap { (ruleSet, _) -> ruleSet.rules }
             .filter { rule ->
                 bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
             }
@@ -150,7 +150,7 @@ internal class Analyzer(
             .map { it to config.subConfig(it.ruleSetId) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
             .map { (provider, ruleSetConfig) -> provider.instance(ruleSetConfig) to ruleSetConfig }
-            .flatMap { (ruleSet, _) -> ruleSet.rules.asSequence() }
+            .flatMap { (ruleSet, _) -> ruleSet.rules }
             .filter { rule -> (rule as? Rule)?.active == true }
             .filter { rule -> rule::class.hasAnnotation<RequiresTypeResolution>() }
             .forEach { rule ->

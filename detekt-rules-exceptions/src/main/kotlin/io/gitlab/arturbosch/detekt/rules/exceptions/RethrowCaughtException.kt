@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -59,12 +58,11 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class RethrowCaughtException(config: Config = Config.empty) : Rule(config) {
+class RethrowCaughtException(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "RethrowCaughtException",
         "Do not rethrow a caught exception of the same type.",
-        Debt.FIVE_MINS
     )
 
     override fun visitTryExpression(tryExpr: KtTryExpression) {

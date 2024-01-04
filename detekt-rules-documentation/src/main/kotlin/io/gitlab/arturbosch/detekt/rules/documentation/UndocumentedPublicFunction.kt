@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -20,12 +19,11 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  * If the codebase should have documentation on all public functions enable this rule to enforce this.
  * Overridden functions are excluded by this rule.
  */
-class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
+class UndocumentedPublicFunction(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "Public functions require documentation.",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("if protected functions should be searched")
@@ -50,5 +48,6 @@ class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
             parents.filterIsInstance<KtClassOrObject>().all { it.isPublic || it.isProtected() }
         } else {
             parents.filterIsInstance<KtClassOrObject>().all { it.isPublic }
-        } && isPublicNotOverridden(searchProtectedFunction)
+        } &&
+            isPublicNotOverridden(searchProtectedFunction)
 }

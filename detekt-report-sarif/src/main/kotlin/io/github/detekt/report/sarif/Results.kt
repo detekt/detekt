@@ -30,7 +30,7 @@ private fun Finding.toResult(ruleSetId: RuleSetId): io.github.detekt.sarif4k.Res
         ruleID = "detekt.$ruleSetId.$id",
         level = severity.toResultLevel(),
         locations = (listOf(location) + references.map { it.location }).map { it.toLocation(code) }.distinct().toList(),
-        message = Message(text = messageOrDescription())
+        message = Message(text = message)
     )
 }
 

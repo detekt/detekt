@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.test
 import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
@@ -16,7 +15,7 @@ import kotlin.io.path.Path
 fun createFinding(
     ruleName: String = "TestSmell",
     fileName: String = "TestFile.kt",
-    entity: Entity = createEntity(fileName),
+    entity: Entity = createEntity(location = createLocation(fileName)),
     severity: Severity = Severity.Error
 ) = createFinding(createIssue(ruleName), entity, "TestMessage", severity)
 
@@ -26,7 +25,7 @@ fun createCorrectableFinding(
     severity: Severity = Severity.Error
 ) = object : CorrectableCodeSmell(
     issue = createIssue(ruleName),
-    entity = createEntity(fileName),
+    entity = createEntity(location = createLocation(fileName)),
     message = "TestMessage",
     autoCorrectEnabled = true
 ) {
@@ -37,7 +36,7 @@ fun createCorrectableFinding(
 fun createFinding(
     issue: Issue,
     entity: Entity,
-    message: String = entity.signature,
+    message: String = "TestMessage",
     severity: Severity = Severity.Error
 ) = object : CodeSmell(
     issue = issue,
@@ -70,23 +69,27 @@ fun createFindingForRelativePath(
 fun createIssue(id: String) = Issue(
     id = id,
     description = "Description $id",
-    debt = Debt.FIVE_MINS
 )
 
 fun createEntity(
-    path: String,
-    position: Pair<Int, Int> = 1 to 1,
-    text: IntRange = 0..0,
+    signature: String = "TestEntitySignature",
+    location: Location = createLocation(),
     ktElement: KtElement? = null,
-    basePath: String? = null
 ) = Entity(
     name = "TestEntity",
-    signature = "TestEntitySignature",
-    location = Location(
-        source = SourceLocation(position.first, position.second),
-        text = TextLocation(text.first, text.last),
-        filePath = basePath?.let { FilePath.fromRelative(Path(it), Path(path)) }
-            ?: FilePath.fromAbsolute(Path(path))
-    ),
+    signature = signature,
+    location = location,
     ktElement = ktElement
+)
+
+fun createLocation(
+    path: String = "File.kt",
+    basePath: String? = null,
+    position: Pair<Int, Int> = 1 to 1,
+    text: IntRange = 0..0,
+) = Location(
+    source = SourceLocation(position.first, position.second),
+    text = TextLocation(text.first, text.last),
+    filePath = basePath?.let { FilePath.fromRelative(Path(it), Path(path)) }
+        ?: FilePath.fromAbsolute(Path(path)),
 )

@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
@@ -18,7 +19,7 @@ class ClassNamingSpec {
             }
         """.trimIndent()
 
-        assertThat(ClassNaming().compileAndLint(code)).isEmpty()
+        assertThat(ClassNaming(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -39,7 +40,7 @@ class ClassNamingSpec {
             class MyClassWithNumbers5
         """.trimIndent()
 
-        assertThat(ClassNaming().compileAndLint(code)).isEmpty()
+        assertThat(ClassNaming(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -49,7 +50,7 @@ class ClassNamingSpec {
             }
         """.trimIndent()
 
-        assertThat(ClassNaming().compileAndLint(code)).isEmpty()
+        assertThat(ClassNaming(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -58,7 +59,7 @@ class ClassNamingSpec {
             class `NamingConventions`
         """.trimIndent()
 
-        assertThat(ClassNaming().compileAndLint(code)).isEmpty()
+        assertThat(ClassNaming(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -67,7 +68,7 @@ class ClassNamingSpec {
             class _NamingConventions
         """.trimIndent()
 
-        assertThat(ClassNaming().compileAndLint(code))
+        assertThat(ClassNaming(Config.empty).compileAndLint(code))
             .hasSize(1)
             .hasTextLocations(6 to 24)
     }
@@ -78,7 +79,7 @@ class ClassNamingSpec {
             class namingConventions {}
         """.trimIndent()
 
-        assertThat(ClassNaming().compileAndLint(code))
+        assertThat(ClassNaming(Config.empty).compileAndLint(code))
             .hasSize(1)
             .hasTextLocations(6 to 23)
     }
@@ -89,7 +90,7 @@ class ClassNamingSpec {
             @Suppress("ClassName")
             class namingConventions {}
         """.trimIndent()
-        assertThat(ClassNaming().compileAndLint(code)).isEmpty()
+        assertThat(ClassNaming(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -101,6 +102,6 @@ class ClassNamingSpec {
             }
         """.trimIndent()
 
-        assertThat(ClassNaming().compileAndLint(code)).isEmpty()
+        assertThat(ClassNaming(Config.empty).compileAndLint(code)).isEmpty()
     }
 }

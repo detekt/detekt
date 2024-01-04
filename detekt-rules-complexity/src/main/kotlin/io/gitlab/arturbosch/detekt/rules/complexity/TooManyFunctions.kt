@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -25,14 +24,13 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * which clearly belongs together in separate parts of the code.
  */
 @ActiveByDefault(since = "1.0.0")
-class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
+class TooManyFunctions(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "TooManyFunctions",
         "Too many functions inside a/an file/class/object/interface always indicate a violation of " +
             "the single responsibility principle. Maybe the file/class/object/interface wants to manage too " +
             "many things at once. Extract functionality which clearly belongs together.",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("The maximum allowed functions per file")

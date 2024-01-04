@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -50,7 +49,6 @@ class RedundantExplicitType(config: Config) : Rule(config) {
     override val issue = Issue(
         "RedundantExplicitType",
         "Type does not need to be stated explicitly and can be removed.",
-        Debt.FIVE_MINS
     )
 
     @Suppress("ReturnCount", "ComplexMethod")

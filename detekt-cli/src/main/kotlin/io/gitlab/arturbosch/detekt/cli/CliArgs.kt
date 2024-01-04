@@ -177,10 +177,11 @@ class CliArgs {
 
     @Parameter(
         names = ["--jvm-target"],
+        converter = JvmTargetConverter::class,
         description = "EXPERIMENTAL: Target version of the generated JVM bytecode that was generated during " +
-            "compilation and is now being used for type resolution (1.8, 9, 10, ..., 20)"
+            "compilation and is now being used for type resolution"
     )
-    var jvmTarget: String = JvmTarget.DEFAULT.description
+    var jvmTarget: JvmTarget = JvmTarget.DEFAULT
 
     @Parameter(
         names = ["--jdk-home"],

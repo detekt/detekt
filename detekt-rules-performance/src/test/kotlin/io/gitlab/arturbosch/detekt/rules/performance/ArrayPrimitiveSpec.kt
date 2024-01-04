@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class ArrayPrimitiveSpec(val env: KotlinCoreEnvironment) {
 
-    val subject = ArrayPrimitive()
+    val subject = ArrayPrimitive(Config.empty)
 
     @Nested
     inner class `one function parameter` {

@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -32,11 +31,10 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UseAnyOrNoneInsteadOfFind(config: Config = Config.empty) : Rule(config) {
+class UseAnyOrNoneInsteadOfFind(config: Config) : Rule(config) {
     override val issue: Issue = Issue(
         "UseAnyOrNoneInsteadOfFind",
         "Use `any` or `none` instead of `find` and `null` checks.",
-        Debt.FIVE_MINS
     )
 
     @Suppress("ReturnCount")

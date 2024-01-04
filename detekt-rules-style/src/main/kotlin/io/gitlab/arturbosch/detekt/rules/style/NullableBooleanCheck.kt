@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -32,11 +31,10 @@ import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
  * </compliant>
  */
 @RequiresTypeResolution
-class NullableBooleanCheck(config: Config = Config.empty) : Rule(config) {
+class NullableBooleanCheck(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Nullable boolean check should use `==` rather than `?:`",
-        Debt.FIVE_MINS,
     )
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {

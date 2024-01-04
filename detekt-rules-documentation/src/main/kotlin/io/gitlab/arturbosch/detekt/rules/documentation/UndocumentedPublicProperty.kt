@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -22,12 +21,11 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  * If the codebase should have documentation on all public properties enable this rule to enforce this.
  * Overridden properties are excluded by this rule.
  */
-class UndocumentedPublicProperty(config: Config = Config.empty) : Rule(config) {
+class UndocumentedPublicProperty(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "Public properties require documentation.",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("if protected functions should be searched")

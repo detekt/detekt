@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.github.detekt.test.utils.compileContentForTest
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -89,7 +90,7 @@ class MaxLineLengthSpec {
 
         @Test
         fun `should report all errors with default maxLineLength`() {
-            val rule = MaxLineLength()
+            val rule = MaxLineLength(Config.empty)
 
             rule.visitKtFile(file)
             assertThat(rule.findings).hasSize(3)
@@ -109,7 +110,7 @@ class MaxLineLengthSpec {
 
         @Test
         fun `should report meaningful signature for all violations`() {
-            val rule = MaxLineLength()
+            val rule = MaxLineLength(Config.empty)
 
             rule.visitKtFile(file)
             val locations = rule.findings.map { it.signature.substringAfterLast('$') }
@@ -192,7 +193,7 @@ class MaxLineLengthSpec {
 
         @Test
         fun `should not report as lines are suppressed`() {
-            val rule = MaxLineLength()
+            val rule = MaxLineLength(Config.empty)
 
             rule.visitKtFile(file)
             assertThat(rule.findings).isEmpty()

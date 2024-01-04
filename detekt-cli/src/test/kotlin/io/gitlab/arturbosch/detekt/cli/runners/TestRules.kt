@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -12,11 +11,11 @@ import org.jetbrains.kotlin.psi.KtClass
 
 class TestProvider : RuleSetProvider {
     override val ruleSetId: String = "test"
-    override fun instance(config: Config): RuleSet = RuleSet(ruleSetId, listOf(TestRule()))
+    override fun instance(config: Config): RuleSet = RuleSet(ruleSetId, listOf(TestRule(config)))
 }
 
-class TestRule : Rule() {
-    override val issue = Issue("test", "A failure", Debt.FIVE_MINS)
+class TestRule(config: Config) : Rule(config) {
+    override val issue = Issue("test", "A failure")
     override fun visitClass(klass: KtClass) {
         if (klass.name == "Poko") {
             report(CodeSmell(issue, Entity.from(klass), issue.description))

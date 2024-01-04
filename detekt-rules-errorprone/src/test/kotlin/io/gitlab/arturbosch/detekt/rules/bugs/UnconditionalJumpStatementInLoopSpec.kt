@@ -1,11 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class UnconditionalJumpStatementInLoopSpec {
-    private val subject = UnconditionalJumpStatementInLoop()
+    private val subject = UnconditionalJumpStatementInLoop(Config.empty)
 
     @Test
     fun `reports an unconditional return in for loop`() {
@@ -364,5 +365,107 @@ class UnconditionalJumpStatementInLoopSpec {
             }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    // https://github.com/detekt/detekt/issues/6657
+    @Test
+    fun `does not report a break in while when break execution depends on previous expression`() {
+        val code = """
+            fun main() {
+                val lastIndex = 3
+                val cycles = intArrayOf(1, 2, 3, 4)
+                outer@ while (true) {
+                    for (i in lastIndex downTo 0) {
+                        if (cycles[i] != 0) {
+                            continue@outer
+                        }
+                        println(cycles[i])
+                    }
+                    break
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report a break in while when break execution depends on previous to previous expression`() {
+        val code = """
+            fun main() {
+                val lastIndex = 3
+                val cycles = intArrayOf(1, 2, 3, 4)
+                outer@ while (true) {
+                    for (i in lastIndex downTo 0) {
+                        if (cycles[i] != 0) {
+                            continue@outer
+                        }
+                        println(cycles[i])
+                    }
+                    println("test")
+                    break
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does report a break in while when break and previous expression doesn't use labels`() {
+        val code = """
+            fun main() {
+                val lastIndex = 3
+                val cycles = intArrayOf(1, 2, 3, 4)
+                outer@ while (true) {
+                    for (i in lastIndex downTo 0) {
+                        if (cycles[i] != 0) {
+                            println("not zero")
+                        }
+                        println(cycles[i])
+                    }
+                    break
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
+
+    @Test
+    fun `does report a break in while when previous statement continue refer to different label`() {
+        val code = """
+            fun main() {
+                val lastIndex = 3
+                val cycles = intArrayOf(1, 2, 3, 4)
+                outer@ while (true) {
+                    break
+                    for (i in lastIndex downTo 0) {
+                        if (cycles[i] != 0) {
+                            continue@outer
+                        }
+                        println(cycles[i])
+                    }
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
+
+    @Test
+    fun `does report a break in while when break is before the rest of the statements`() {
+        val code = """
+            fun main() {
+                val lastIndex = 3
+                val cycles = intArrayOf(1, 2, 3, 4)
+                outer@ while (true) {
+                    inner@ for (i in lastIndex downTo 0) {
+                        if (cycles[i] != 0) {
+                            continue@inner
+                        }
+                        println(cycles[i])
+                    }
+                    break
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 }

@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -46,11 +45,10 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * """Hello World! How are you?"""
  * </compliant>
  */
-class TrimMultilineRawString(val config: Config) : Rule(config) {
+class TrimMultilineRawString(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Multiline raw strings should be followed by `trimMargin()` or `trimIndent()`.",
-        Debt.FIVE_MINS
     )
 
     @Configuration("allows to provide a list of multiline string trimming methods")
@@ -75,10 +73,12 @@ class TrimMultilineRawString(val config: Config) : Rule(config) {
 }
 
 fun KtStringTemplateExpression.isRawStringWithLineBreak(): Boolean =
-    text.startsWith("\"\"\"") && text.endsWith("\"\"\"") && entries.any {
-        val literalText = (it as? KtLiteralStringTemplateEntry)?.text
-        literalText != null && "\n" in literalText
-    }
+    text.startsWith("\"\"\"") &&
+        text.endsWith("\"\"\"") &&
+        entries.any {
+            val literalText = (it as? KtLiteralStringTemplateEntry)?.text
+            literalText != null && "\n" in literalText
+        }
 
 fun KtStringTemplateExpression.isTrimmed(trimmingMethods: List<String>): Boolean {
     val nextCall = getQualifiedExpressionForReceiver()

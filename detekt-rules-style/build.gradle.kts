@@ -8,6 +8,5 @@ dependencies {
     compileOnly(projects.detektTooling)
     testImplementation(projects.detektMetrics)
     testImplementation(projects.detektTest)
-    testImplementation(libs.mockk)
     testImplementation(libs.assertj)
 }

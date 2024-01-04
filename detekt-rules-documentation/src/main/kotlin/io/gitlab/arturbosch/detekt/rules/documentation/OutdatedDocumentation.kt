@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -63,12 +62,11 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
  * </compliant>
  */
 @Suppress("TooManyFunctions")
-class OutdatedDocumentation(config: Config = Config.empty) : Rule(config) {
+class OutdatedDocumentation(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "KDoc comments should match the actual function or class signature",
-        Debt.TEN_MINS
     )
 
     @Configuration("if type parameters should be matched")

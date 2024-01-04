@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -12,9 +11,11 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtBreakExpression
 import org.jetbrains.kotlin.psi.KtContinueExpression
+import org.jetbrains.kotlin.psi.KtLabeledExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
+import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
 /**
@@ -32,17 +33,16 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  * }
  * </compliant>
  */
-class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(config) {
+class UnconditionalJumpStatementInLoop(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "An unconditional jump statement in a loop is useless. " +
             "The loop itself is only executed once.",
-        Debt.TEN_MINS
     )
 
     override fun visitLoopExpression(loopExpression: KtLoopExpression) {
-        if (loopExpression.hasJumpStatements()) {
+        if (loopExpression.hasJumpStatements((loopExpression.parent as? KtLabeledExpression)?.getLabelName())) {
             report(
                 CodeSmell(
                     issue,
@@ -56,17 +56,32 @@ class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(con
         super.visitLoopExpression(loopExpression)
     }
 
-    private fun KtLoopExpression.hasJumpStatements(): Boolean {
+    private fun KtLoopExpression.hasJumpStatements(label: String?): Boolean {
         val body = this.body ?: return false
         return when (body) {
-            is KtBlockExpression -> body.children.any { it.isJumpStatement() }
-            else -> body.isJumpStatement()
+            is KtBlockExpression -> {
+                body.children.takeWhile {
+                    if (label != null) {
+                        val labelExpression = it.findDescendantOfType<KtContinueExpression>()
+                        labelExpression == null || labelExpression.getLabelName() != label
+                    } else {
+                        true
+                    }
+                }.any { it.isJumpStatement() }
+            }
+
+            else -> {
+                body.isJumpStatement()
+            }
         }
     }
 
     private fun PsiElement.isJumpStatement(): Boolean =
-        this is KtReturnExpression && !isFollowedByElvisJump() && !isAfterConditionalJumpStatement() ||
-            this is KtBreakExpression || this is KtContinueExpression
+        this is KtReturnExpression &&
+            !isFollowedByElvisJump() &&
+            !isAfterConditionalJumpStatement() ||
+            this is KtBreakExpression ||
+            this is KtContinueExpression
 
     private fun KtReturnExpression.isFollowedByElvisJump(): Boolean =
         (returnedExpression as? KtBinaryExpression)?.isElvisJump() == true

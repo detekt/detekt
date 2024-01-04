@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
@@ -172,6 +173,22 @@ class StringLiteralDuplicationSpec {
             """.trimIndent()
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
+    }
+
+    @Test
+    fun `should suppress StringLiteralDuplication on class level`() {
+        @Suppress("UnusedEquals")
+        val code = """
+            @Suppress("StringLiteralDuplication")
+            class Duplication {
+                var s1 = "lorem"
+                fun f(s: String = "lorem") {
+                    s1 == "lorem"
+                }
+            }
+        """.trimIndent()
+
+        assertThat(StringLiteralDuplication(Config.empty).compileAndLint(code)).isEmpty()
     }
 }
 

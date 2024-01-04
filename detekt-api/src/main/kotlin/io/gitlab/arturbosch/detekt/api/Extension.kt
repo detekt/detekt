@@ -32,7 +32,6 @@ interface Extension {
     /**
      * Setup extension by querying common paths and config options.
      */
-    @OptIn(UnstableApi::class)
     fun init(context: SetupContext) {
         // implement for setup code
     }

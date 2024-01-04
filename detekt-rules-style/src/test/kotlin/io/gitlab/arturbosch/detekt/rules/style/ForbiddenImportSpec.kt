@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ValueWithReason
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
@@ -25,7 +26,7 @@ class ForbiddenImportSpec {
 
     @Test
     fun `should report nothing by default`() {
-        val findings = ForbiddenImport().lint(code)
+        val findings = ForbiddenImport(Config.empty).lint(code)
         assertThat(findings).isEmpty()
     }
 

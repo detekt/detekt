@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -39,7 +38,6 @@ class AvoidReferentialEquality(config: Config) : Rule(config) {
     override val issue = Issue(
         "AvoidReferentialEquality",
         "Avoid using referential equality and prefer to use referential equality checks instead.",
-        Debt.FIVE_MINS
     )
 
     @Configuration(

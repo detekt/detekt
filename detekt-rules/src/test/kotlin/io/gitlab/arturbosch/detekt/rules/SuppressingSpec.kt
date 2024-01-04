@@ -1,21 +1,17 @@
 package io.gitlab.arturbosch.detekt.rules
 
 import io.github.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.core.rules.visitFile
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.complexity.ComplexCondition
 import io.gitlab.arturbosch.detekt.rules.complexity.LongMethod
 import io.gitlab.arturbosch.detekt.rules.complexity.LongParameterList
-import io.gitlab.arturbosch.detekt.rules.complexity.StringLiteralDuplication
-import io.gitlab.arturbosch.detekt.rules.complexity.TooManyFunctions
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class SuppressingSpec {
 
     @Test
+    @Suppress("LongMethod")
     fun `all findings are suppressed on element levels`() {
         @Suppress("KotlinConstantConditions")
         val code = """
@@ -64,13 +60,18 @@ class SuppressingSpec {
                     lpl(1, 2, 3, 4, 5, 6)
                     assert(false) { "FAILED TEST" }
                 }
-            
             }
         """.trimIndent()
         val ktFile = compileContentForTest(code)
-        val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
 
-        val findings = ruleSet.visitFile(ktFile)
+        val findings = listOf(
+            LongMethod(Config.empty),
+            LongParameterList(Config.empty),
+            ComplexCondition(Config.empty),
+        ).flatMap {
+            it.visitFile(ktFile)
+            it.findings
+        }
 
         assertThat(findings).isEmpty()
     }
@@ -124,9 +125,14 @@ class SuppressingSpec {
             }
         """.trimIndent()
         val ktFile = compileContentForTest(code)
-        val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
-
-        val findings = ruleSet.visitFile(ktFile)
+        val findings = listOf(
+            LongMethod(Config.empty),
+            LongParameterList(Config.empty),
+            ComplexCondition(Config.empty),
+        ).flatMap {
+            it.visitFile(ktFile)
+            it.findings
+        }
 
         assertThat(findings).isEmpty()
     }
@@ -176,41 +182,16 @@ class SuppressingSpec {
         """.trimIndent()
 
         val ktFile = compileContentForTest(code)
-        val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
 
-        val findings = ruleSet.visitFile(ktFile)
-
-        assertThat(findings).isEmpty()
-    }
-
-    @Test
-    fun `should suppress TooManyFunctionsRule on class level`() {
-        val rule = TooManyFunctions(TestConfig("thresholdInClasses" to "0"))
-        val code = """
-            @Suppress("TooManyFunctions")
-            class OneIsTooMany {
-                fun f() {}
-            }
-        """.trimIndent()
-
-        val findings = rule.lint(code)
+        val findings = listOf(
+            LongMethod(Config.empty),
+            LongParameterList(Config.empty),
+            ComplexCondition(Config.empty),
+        ).flatMap {
+            it.visitFile(ktFile)
+            it.findings
+        }
 
         assertThat(findings).isEmpty()
-    }
-
-    @Test
-    fun `should suppress StringLiteralDuplication on class level`() {
-        @Suppress("UnusedEquals")
-        val code = """
-            @Suppress("StringLiteralDuplication")
-            class Duplication {
-                var s1 = "lorem"
-                fun f(s: String = "lorem") {
-                    s1 == "lorem"
-                }
-            }
-        """.trimIndent()
-
-        assertThat(StringLiteralDuplication().lint(code)).isEmpty()
     }
 }

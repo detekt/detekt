@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -33,12 +32,11 @@ import org.jetbrains.kotlin.types.typeUtil.nullability
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.2.0")
-class UnsafeCallOnNullableType(config: Config = Config.empty) : Rule(config) {
+class UnsafeCallOnNullableType(config: Config) : Rule(config) {
     override val issue: Issue = Issue(
         "UnsafeCallOnNullableType",
         "Unsafe calls on nullable types detected. These calls will throw a NullPointerException in case " +
             "the nullable value is null.",
-        Debt.TWENTY_MINS
     )
 
     override fun visitPostfixExpression(expression: KtPostfixExpression) {

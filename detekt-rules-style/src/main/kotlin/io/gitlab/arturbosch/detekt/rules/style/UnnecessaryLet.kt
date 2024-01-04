@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -15,6 +14,7 @@ import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl.WithDe
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
+import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
@@ -49,7 +49,6 @@ class UnnecessaryLet(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "The `let` usage is unnecessary.",
-        Debt.FIVE_MINS
     )
 
     override fun visitCallExpression(expression: KtCallExpression) {
@@ -106,6 +105,7 @@ private fun canBeReplacedWithCall(lambdaExpr: KtLambdaExpression?): Boolean {
     } else {
         lambdaParameter.destructuringDeclaration?.entries.orEmpty()
             .plus(lambdaParameter)
+            .filterIsInstance<KtNamedDeclaration>()
             .map { it.nameAsSafeName.asString() }
     }
     return lambdaParameterNames.any { receiver.textMatches(it) }

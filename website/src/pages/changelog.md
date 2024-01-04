@@ -6,6 +6,36 @@ keywords: [changelog, release-notes, migration]
 
 # Changelog and Migration Guide
 
+#### 1.23.4 - 2023-11-26
+
+This is a point release for Detekt `1.23.0`, where we added support for Kotlin `1.9.21` and fixed several bugs that
+got reported by the community.
+
+##### Notable Changes
+
+- fix(deps): update kotlin monorepo to v1.9.21 - [#6642](https://github.com/detekt/detekt/pull/6642)
+- fix(deps): update kotlin monorepo to v1.9.20 - [#6572](https://github.com/detekt/detekt/pull/6572)
+
+##### Changelog
+
+- Update the ruleset regex to allow numbers - [#6635](https://github.com/detekt/detekt/pull/6635)
+- Show deprecation message - [#6614](https://github.com/detekt/detekt/pull/6614)
+- Add io.gitlab.arturbosch.detekt.generator.Main to the jar manifest - [#6613](https://github.com/detekt/detekt/pull/6613)
+- Don't report FunctionNaming when the function's name equals to the return type's name with type arguments - [#6605](https://github.com/detekt/detekt/pull/6605)
+- Fix issues related to kotlin-stdlib's Gradle module metadata in Kotlin 1.9.20 - [#6590](https://github.com/detekt/detekt/pull/6590)
+- MethodSignature - Add the condition of receiver should be null - [#6570](https://github.com/detekt/detekt/pull/6570)
+- Remove check for deprectated functions toUpperCase and toLowerCase - [#6548](https://github.com/detekt/detekt/pull/6548)
+- Fixes false positive of trailing whitespaces in kdoc - [#6370](https://github.com/detekt/detekt/pull/6370)
+
+##### Dependency Updates
+
+- Update tested AGP version to 8.1.3 - [#6610](https://github.com/detekt/detekt/pull/6610)
+- Switch to kctfork for Kotlin compilation testing - [#6589](https://github.com/detekt/detekt/pull/6589)
+
+##### Contributors
+
+We would like to thank the following contributors that made this release possible: @3flex, @BraisGabin, @Gosunet, @atulgpt, @t-kameyama
+
 #### 1.23.3 - 2023-10-31
 
 This is a point release for Detekt `1.23.0`. The changelog is equivalent to `1.23.2`.
@@ -1227,7 +1257,7 @@ private val allowedPattern: Regex by config("", String::toRegex)
 - Fail with a meaningful error message for invalid boolean - [#3931](https://github.com/detekt/detekt/pull/3931)
 - UndocumentedPublicProperty and UndocumentedPublicFunction should include objects - [#3940](https://github.com/detekt/detekt/pull/3940)
 - Fix exclusion pattern for InvalidPackageDeclaration - [#3907](https://github.com/detekt/detekt/pull/3907)
-- Allow else when {...} in MandatoryBracesIfStatements rule - [#3905](https://github.com/detekt/detekt/pull/3905)
+- Allow else when `{...}` in MandatoryBracesIfStatements rule - [#3905](https://github.com/detekt/detekt/pull/3905)
 - Remove unnecessary constant declaration - [#3903](https://github.com/detekt/detekt/pull/3903)
 - Check bindingContext only once in MemberNameEqualsClassName - [#3899](https://github.com/detekt/detekt/pull/3899)
 - LongMethod: add 'ignoreAnnotated' configuration option - [#3892](https://github.com/detekt/detekt/pull/3892)
@@ -1664,7 +1694,7 @@ Rule authors can use `TestConfig(Map)` or `yamlConfig(String)` from `detekt-test
 - SARIF export support - [#3045](https://github.com/detekt/detekt/issues/3045)
 - IgnoredReturnValue false positives - [#3043](https://github.com/detekt/detekt/issues/3043)
 - Offset calculation in KtLint deprecated/made private - [#3021](https://github.com/detekt/detekt/issues/3021)
-- Map { it } must return an error - [#2975](https://github.com/detekt/detekt/issues/2975)
+- Map `{ it }` must return an error - [#2975](https://github.com/detekt/detekt/issues/2975)
 - Upload detekt-formatting plugin to Github releases next to precompiled cli binary - [#2927](https://github.com/detekt/detekt/issues/2927)
 - Add a rule to flag places where `ifBlank` and `ifEmpty` can be used - [#2840](https://github.com/detekt/detekt/issues/2840)
 - Remove hardcoded default values from rules - [#2597](https://github.com/detekt/detekt/issues/2597)
@@ -2738,7 +2768,7 @@ See all issues at: [1.3.1](https://github.com/detekt/detekt/milestone/54)
 - Fix exception when running ArrayPrimitive on star-projected arrays - [#2181](https://github.com/detekt/detekt/pull/2181)
 - Gradle cache restoration issue - [#2180](https://github.com/detekt/detekt/issues/2180)
 - Add MacOS JDK13 build job to TravisCI - [#2177](https://github.com/detekt/detekt/pull/2177)
-- Running "ArrayPrimitive" rule on "Array<*>" causes detekt to throw exception - [#2176](https://github.com/detekt/detekt/issues/2176)
+- Running `ArrayPrimitive` rule on `Array<>` causes detekt to throw exception - [#2176](https://github.com/detekt/detekt/issues/2176)
 - Update Spek to v2.0.9 - [#2173](https://github.com/detekt/detekt/pull/2173)
 - Create Rule: MapGetWithNotNullAssertionOperator - [#2171](https://github.com/detekt/detekt/pull/2171)
 - EqualsAlwaysReturnsTrueOrFalse fails hard on `override fun equals(other:Any) = ...` - [#2167](https://github.com/detekt/detekt/issues/2167)

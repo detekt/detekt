@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -30,7 +29,7 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  * </compliant>
  */
 @RequiresTypeResolution
-class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
+class BooleanPropertyNaming(config: Config) : Rule(config) {
 
     @Configuration("naming pattern")
     private val allowedPattern: Regex by config("^(is|has|are)", String::toRegex)
@@ -43,7 +42,6 @@ class BooleanPropertyNaming(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Boolean property name should follow the naming convention set in the projects configuration.",
-        Debt.FIVE_MINS
     )
 
     override fun visitParameter(parameter: KtParameter) {

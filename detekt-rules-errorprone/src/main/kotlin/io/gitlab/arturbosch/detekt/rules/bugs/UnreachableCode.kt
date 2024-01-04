@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -33,17 +32,18 @@ import org.jetbrains.kotlin.psi.KtExpression
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.0.0")
-class UnreachableCode(config: Config = Config.empty) : Rule(config) {
+class UnreachableCode(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "UnreachableCode",
         "Unreachable code detected. This code should be removed.",
-        Debt.TEN_MINS
     )
 
     override fun visitExpression(expression: KtExpression) {
         super.visitExpression(expression)
-        if (bindingContext.diagnostics.forElement(expression).any { it.factory == Errors.UNREACHABLE_CODE }) {
+        if (bindingContext.diagnostics.forElement(expression)
+                .any { it.factory == Errors.UNREACHABLE_CODE || it.factory == Errors.USELESS_ELVIS }
+        ) {
             report(
                 CodeSmell(
                     issue,

@@ -4,7 +4,6 @@ import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConfigAware
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -17,9 +16,9 @@ import org.jetbrains.kotlin.psi.KtElement
 import kotlin.io.path.Path
 
 internal fun buildFinding(element: KtElement?): Finding = CodeSmell(
-    issue = Issue("RuleName", "", Debt.FIVE_MINS),
+    issue = Issue("RuleName", ""),
     entity = element?.let { Entity.from(element) } ?: buildEmptyEntity(),
-    message = "",
+    message = "TestMessage",
 )
 
 private fun buildEmptyEntity(): Entity = Entity(

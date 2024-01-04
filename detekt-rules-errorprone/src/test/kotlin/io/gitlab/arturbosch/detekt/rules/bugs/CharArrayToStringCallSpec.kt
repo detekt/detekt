@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
@@ -8,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class CharArrayToStringCallSpec(private val env: KotlinCoreEnvironment) {
-    private val subject = CharArrayToStringCall()
+    private val subject = CharArrayToStringCall(Config.empty)
 
     @Test
     fun `toString() calls`() {

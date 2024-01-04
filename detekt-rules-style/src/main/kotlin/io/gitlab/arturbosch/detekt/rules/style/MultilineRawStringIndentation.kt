@@ -4,7 +4,6 @@ import io.github.detekt.psi.getLineAndColumnInPsiFile
 import io.github.detekt.psi.toFilePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
@@ -53,7 +52,6 @@ class MultilineRawStringIndentation(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "The indentation of the raw String should be consistent",
-        Debt.FIVE_MINS
     )
 
     @Configuration("indentation size")

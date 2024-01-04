@@ -23,6 +23,9 @@ class Location(
 
     override fun compact(): String = "${filePath.absolutePath}:$source"
 
+    override fun toString(): String =
+        "Location(source=$source, endSource=$endSource, text=$text, filePath=$filePath)"
+
     companion object {
         /**
          * Creates a [Location] from a [PsiElement].

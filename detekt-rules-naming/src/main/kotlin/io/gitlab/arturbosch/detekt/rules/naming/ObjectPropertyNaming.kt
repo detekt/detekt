@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -21,12 +20,11 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * Reports property names inside objects that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
-class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
+class ObjectPropertyNaming(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "Property names inside objects should follow the naming convention set in the projects configuration.",
-        debt = Debt.FIVE_MINS
     )
 
     @Configuration("naming pattern")

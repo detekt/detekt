@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -44,11 +43,10 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * </compliant>
  */
 @ActiveByDefault(since = "1.21.0")
-class ExplicitItLambdaParameter(val config: Config) : Rule(config) {
+class ExplicitItLambdaParameter(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Declaring lambda parameters as `it` is redundant.",
-        Debt.FIVE_MINS
     )
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {

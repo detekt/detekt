@@ -38,15 +38,15 @@ private fun KtCallExpression.canMoveLambdaOutsideParentheses(bindingContext: Bin
         // the intention
         @Suppress("ComplexCondition")
         if (
-            candidates.isNotEmpty() && candidates.none { candidate ->
+            candidates.isNotEmpty() &&
+            candidates.none { candidate ->
                 val params = candidate.valueParameters
                 val lastParamType = params.lastOrNull()?.type
-                (
-                    lastParamType?.isFunctionOrSuspendFunctionType == true ||
-                        lastParamType?.isTypeParameter() == true
-                    ) && params.count {
-                    it.type.let { type -> type.isFunctionOrSuspendFunctionType || type.isTypeParameter() }
-                } == lambdaArgumentCount + referenceArgumentCount
+
+                (lastParamType?.isFunctionOrSuspendFunctionType == true || lastParamType?.isTypeParameter() == true) &&
+                    params.count {
+                        it.type.let { type -> type.isFunctionOrSuspendFunctionType || type.isTypeParameter() }
+                    } == lambdaArgumentCount + referenceArgumentCount
             }
         ) {
             return false

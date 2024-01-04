@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -44,7 +43,6 @@ class ImplicitUnitReturnType(config: Config) : Rule(config) {
             "Changing the type of the expression accidentally, changes the function return type. " +
             "This may lead to backward incompatibility. " +
             "Use a block statement to make clear this function will never return a value.",
-        Debt.FIVE_MINS
     )
 
     @Configuration("if functions with explicit `Unit` return type should be allowed")

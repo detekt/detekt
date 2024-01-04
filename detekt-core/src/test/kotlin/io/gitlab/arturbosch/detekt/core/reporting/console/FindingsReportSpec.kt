@@ -10,17 +10,15 @@ import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createFinding
 import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class FindingsReportSpec {
 
     private val subject = createFindingsReport()
 
-    @Nested
-    inner class `reports the debt per rule set and the overall debt` {
-        private val expectedContent = readResourceContent("/reporting/findings-report.txt")
+    @Test
+    fun `has the reference content`() {
+        val expectedContent = readResourceContent("/reporting/findings-report.txt")
         val detektion = object : TestDetektion() {
             override val findings: Map<String, List<Finding>> = mapOf(
                 "Ruleset1" to listOf(createFinding(), createFinding()),
@@ -29,22 +27,9 @@ class FindingsReportSpec {
             )
         }
 
-        var output: String? = null
+        val output = subject.render(detektion)?.decolorized()
 
-        @BeforeEach
-        fun setUp() {
-            output = subject.render(detektion)?.decolorized()
-        }
-
-        @Test
-        fun `has the reference content`() {
-            assertThat(output).isEqualTo(expectedContent)
-        }
-
-        @Test
-        fun `does contain the rule set id of rule sets with findings`() {
-            assertThat(output).contains("TestSmell")
-        }
+        assertThat(output).isEqualTo(expectedContent)
     }
 
     @Test
@@ -78,8 +63,8 @@ class FindingsReportSpec {
         val detektion = object : TestDetektion() {
             override val findings: Map<String, List<Finding>> = mapOf(
                 "Ruleset" to listOf(
-                    createFinding(createIssue("LongRule"), createEntity("File.kt"), longMessage),
-                    createFinding(createIssue("MultilineRule"), createEntity("File.kt"), multilineMessage),
+                    createFinding(createIssue("LongRule"), createEntity(), longMessage),
+                    createFinding(createIssue("MultilineRule"), createEntity(), multilineMessage),
                 ),
             )
         }

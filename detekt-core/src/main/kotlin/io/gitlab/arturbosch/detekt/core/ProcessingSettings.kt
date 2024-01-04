@@ -4,7 +4,6 @@ import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.PropertiesAware
 import io.gitlab.arturbosch.detekt.api.SetupContext
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.core.config.extractUris
 import io.gitlab.arturbosch.detekt.core.settings.ClassloaderAware
 import io.gitlab.arturbosch.detekt.core.settings.EnvironmentAware
@@ -24,7 +23,6 @@ import java.net.URI
  * Always close the settings as dispose the Kotlin compiler and detekt class loader.
  * If using a custom executor service be aware that detekt won't shut it down after use!
  */
-@OptIn(UnstableApi::class)
 class ProcessingSettings(
     val spec: ProcessingSpec,
     override val config: Config

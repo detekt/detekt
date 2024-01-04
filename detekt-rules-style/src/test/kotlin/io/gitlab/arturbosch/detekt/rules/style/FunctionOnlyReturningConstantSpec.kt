@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
@@ -12,7 +13,7 @@ private const val IGNORE_ACTUAL_FUNCTION = "ignoreActualFunction"
 private const val EXCLUDED_FUNCTIONS = "excludedFunctions"
 
 class FunctionOnlyReturningConstantSpec {
-    val subject = FunctionOnlyReturningConstant()
+    val subject = FunctionOnlyReturningConstant(Config.empty)
 
     @Nested
     inner class `FunctionOnlyReturningConstant rule - positive cases` {

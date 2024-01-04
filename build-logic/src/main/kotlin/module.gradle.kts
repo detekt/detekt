@@ -1,5 +1,6 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.kotlin.gradle.tasks.UsesKotlinJavaToolchain
 
 plugins {
     id("packaging")
@@ -16,7 +17,7 @@ tasks.withType<Jar>().configureEach {
     }
 }
 
-val versionCatalog = project.extensions.getByType<VersionCatalogsExtension>().named("libs")
+val versionCatalog = versionCatalogs.named("libs")
 
 jacoco.toolVersion = versionCatalog.findVersion("jacoco").get().requiredVersion
 
@@ -43,6 +44,10 @@ tasks.withType<Test>().configureEach {
         showCauses = true
         showStackTraces = true
     }
+
+    configure<JacocoTaskExtension> {
+        excludes = listOf("org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors")
+    }
 }
 
 kotlin {
@@ -51,6 +56,14 @@ kotlin {
         progressiveMode = true
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
     }
+}
+
+val java8Launcher = javaToolchains.launcherFor {
+    languageVersion = JavaLanguageVersion.of(8)
+}
+
+project.tasks.withType<UsesKotlinJavaToolchain>().configureEach {
+    kotlinJavaToolchain.toolchain.use(java8Launcher)
 }
 
 testing {

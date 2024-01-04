@@ -16,7 +16,6 @@ public abstract class io/gitlab/arturbosch/detekt/api/BaseRule : io/gitlab/artur
 	protected fun postVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	protected fun preVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	public fun report (Lio/gitlab/arturbosch/detekt/api/Finding;Ljava/util/Set;Ljava/lang/String;)V
-	public fun report (Ljava/util/List;Ljava/util/Set;Ljava/lang/String;)V
 	public final fun setBindingContext (Lorg/jetbrains/kotlin/resolve/BindingContext;)V
 	public final fun setCompilerResources (Lio/gitlab/arturbosch/detekt/api/internal/CompilerResources;)V
 	public fun visit (Lorg/jetbrains/kotlin/psi/KtFile;)V
@@ -31,17 +30,16 @@ public class io/gitlab/arturbosch/detekt/api/CodeSmell : io/gitlab/arturbosch/de
 	public fun compact ()Ljava/lang/String;
 	public fun compactWithSignature ()Ljava/lang/String;
 	public fun getCharPosition ()Lio/gitlab/arturbosch/detekt/api/TextLocation;
-	public fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
+	public final fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
 	public fun getFile ()Ljava/lang/String;
 	public fun getId ()Ljava/lang/String;
 	public final fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
 	public fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
-	public fun getMessage ()Ljava/lang/String;
-	public fun getReferences ()Ljava/util/List;
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getReferences ()Ljava/util/List;
 	public fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
 	public fun getSignature ()Ljava/lang/String;
 	public fun getStartPosition ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
-	public fun messageOrDescription ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -76,7 +74,6 @@ public final class io/gitlab/arturbosch/detekt/api/Config$Companion {
 	public static final field INCLUDES_KEY Ljava/lang/String;
 	public static final field SEVERITY_KEY Ljava/lang/String;
 	public final fun getEmpty ()Lio/gitlab/arturbosch/detekt/api/Config;
-	public final fun getPRIMITIVES ()Ljava/util/Set;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Config$DefaultImpls {
@@ -140,14 +137,11 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Context {
 	public abstract fun clearFindings ()V
 	public abstract fun getFindings ()Ljava/util/List;
 	public abstract fun report (Lio/gitlab/arturbosch/detekt/api/Finding;Ljava/util/Set;Ljava/lang/String;)V
-	public abstract fun report (Ljava/util/List;Ljava/util/Set;Ljava/lang/String;)V
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Context$DefaultImpls {
 	public static fun report (Lio/gitlab/arturbosch/detekt/api/Context;Lio/gitlab/arturbosch/detekt/api/Finding;Ljava/util/Set;Ljava/lang/String;)V
-	public static fun report (Lio/gitlab/arturbosch/detekt/api/Context;Ljava/util/List;Ljava/util/Set;Ljava/lang/String;)V
 	public static synthetic fun report$default (Lio/gitlab/arturbosch/detekt/api/Context;Lio/gitlab/arturbosch/detekt/api/Finding;Ljava/util/Set;Ljava/lang/String;ILjava/lang/Object;)V
-	public static synthetic fun report$default (Lio/gitlab/arturbosch/detekt/api/Context;Ljava/util/List;Ljava/util/Set;Ljava/lang/String;ILjava/lang/Object;)V
 }
 
 public class io/gitlab/arturbosch/detekt/api/CorrectableCodeSmell : io/gitlab/arturbosch/detekt/api/CodeSmell {
@@ -155,24 +149,6 @@ public class io/gitlab/arturbosch/detekt/api/CorrectableCodeSmell : io/gitlab/ar
 	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Issue;Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getAutoCorrectEnabled ()Z
 	public fun toString ()Ljava/lang/String;
-}
-
-public final class io/gitlab/arturbosch/detekt/api/Debt {
-	public static final field Companion Lio/gitlab/arturbosch/detekt/api/Debt$Companion;
-	public fun <init> ()V
-	public fun <init> (III)V
-	public synthetic fun <init> (IIIILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getDays ()I
-	public final fun getHours ()I
-	public final fun getMins ()I
-	public final fun plus (Lio/gitlab/arturbosch/detekt/api/Debt;)Lio/gitlab/arturbosch/detekt/api/Debt;
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class io/gitlab/arturbosch/detekt/api/Debt$Companion {
-	public final fun getFIVE_MINS ()Lio/gitlab/arturbosch/detekt/api/Debt;
-	public final fun getTEN_MINS ()Lio/gitlab/arturbosch/detekt/api/Debt;
-	public final fun getTWENTY_MINS ()Lio/gitlab/arturbosch/detekt/api/Debt;
 }
 
 public class io/gitlab/arturbosch/detekt/api/DetektVisitor : org/jetbrains/kotlin/psi/KtTreeVisitorVoid {
@@ -197,6 +173,7 @@ public final class io/gitlab/arturbosch/detekt/api/Entity : io/gitlab/arturbosch
 	public final fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
 	public final fun getName ()Ljava/lang/String;
 	public final fun getSignature ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Entity$Companion {
@@ -243,7 +220,6 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Finding : io/git
 	public abstract fun getMessage ()Ljava/lang/String;
 	public abstract fun getReferences ()Ljava/util/List;
 	public abstract fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
-	public abstract fun messageOrDescription ()Ljava/lang/String;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Finding$DefaultImpls {
@@ -274,8 +250,7 @@ public final class io/gitlab/arturbosch/detekt/api/HasEntity$DefaultImpls {
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Issue {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Debt;)V
-	public final fun getDebt ()Lio/gitlab/arturbosch/detekt/api/Debt;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
 	public final fun getDescription ()Ljava/lang/String;
 	public final fun getId ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
@@ -291,6 +266,7 @@ public final class io/gitlab/arturbosch/detekt/api/Location : io/gitlab/arturbos
 	public final fun getFilePath ()Lio/github/detekt/psi/FilePath;
 	public final fun getSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
 	public final fun getText ()Lio/gitlab/arturbosch/detekt/api/TextLocation;
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Location$Companion {
@@ -361,9 +337,7 @@ public final class io/gitlab/arturbosch/detekt/api/ReportingExtension$DefaultImp
 }
 
 public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/BaseRule, io/gitlab/arturbosch/detekt/api/ConfigAware {
-	public fun <init> ()V
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;Lio/gitlab/arturbosch/detekt/api/Context;)V
-	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;Lio/gitlab/arturbosch/detekt/api/Context;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;)V
 	public fun getActive ()Z
 	public final fun getAliases ()Ljava/util/Set;
 	public fun getAutoCorrect ()Z
@@ -374,7 +348,6 @@ public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosc
 	public final fun getRuleId ()Ljava/lang/String;
 	public fun getRuleSetConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public final fun report (Lio/gitlab/arturbosch/detekt/api/Finding;)V
-	public final fun report (Ljava/util/List;)V
 	public fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
 	public fun valueOrDefault (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun valueOrNull (Ljava/lang/String;)Ljava/lang/Object;
@@ -383,12 +356,8 @@ public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosc
 
 public final class io/gitlab/arturbosch/detekt/api/RuleSet {
 	public fun <init> (Ljava/lang/String;Ljava/util/List;)V
-	public final fun accept (Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;)Ljava/util/List;
-	public static synthetic fun accept$default (Lio/gitlab/arturbosch/detekt/api/RuleSet;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;ILjava/lang/Object;)Ljava/util/List;
 	public final fun getId ()Ljava/lang/String;
-	public final fun getPathFilters ()Lio/gitlab/arturbosch/detekt/api/internal/PathFilters;
 	public final fun getRules ()Ljava/util/List;
-	public final fun setPathFilters (Lio/gitlab/arturbosch/detekt/api/internal/PathFilters;)V
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/RuleSetProvider {
@@ -434,10 +403,6 @@ public final class io/gitlab/arturbosch/detekt/api/TextLocation {
 	public final fun getStart ()I
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-}
-
-public abstract interface annotation class io/gitlab/arturbosch/detekt/api/UnstableApi : java/lang/annotation/Annotation {
-	public abstract fun reason ()Ljava/lang/String;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/ValueWithReason {

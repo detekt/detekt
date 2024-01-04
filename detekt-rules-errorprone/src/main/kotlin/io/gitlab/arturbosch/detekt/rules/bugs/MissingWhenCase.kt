@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -69,12 +68,11 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
 @ActiveByDefault(since = "1.2.0")
 @RequiresTypeResolution
 @Deprecated("Rule deprecated as compiler performs this check by default")
-class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
+class MissingWhenCase(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue(
         "MissingWhenCase",
         "Check usage of `when` used as a statement and don't compare all enum or sealed class cases.",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("whether `else` can be treated as a valid case for enums and sealed classes")

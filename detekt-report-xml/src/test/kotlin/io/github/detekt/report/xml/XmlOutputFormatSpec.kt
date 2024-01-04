@@ -2,7 +2,6 @@ package io.github.detekt.report.xml
 
 import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
@@ -58,7 +57,7 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders one reported issue in single file`() {
-        val smell = CodeSmell(Issue("id_a", "", Debt.TWENTY_MINS), entity1, message = "")
+        val smell = CodeSmell(Issue("id_a", ""), entity1, message = "TestMessage")
 
         val result = outputFormat.render(TestDetektion(smell))
 
@@ -67,7 +66,7 @@ class XmlOutputFormatSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
-                $TAB<error line="11" column="1" severity="error" message="" source="detekt.id_a" />
+                $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.id_a" />
                 </file>
                 </checkstyle>
             """.trimIndent()
@@ -76,8 +75,8 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders two reported issues in single file`() {
-        val smell1 = CodeSmell(Issue("id_a", "", Debt.TWENTY_MINS), entity1, message = "")
-        val smell2 = CodeSmell(Issue("id_b", "", Debt.TWENTY_MINS), entity1, message = "")
+        val smell1 = CodeSmell(Issue("id_a", ""), entity1, message = "TestMessage")
+        val smell2 = CodeSmell(Issue("id_b", ""), entity1, message = "TestMessage")
 
         val result = outputFormat.render(TestDetektion(smell1, smell2))
 
@@ -86,8 +85,8 @@ class XmlOutputFormatSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
-                $TAB<error line="11" column="1" severity="error" message="" source="detekt.id_a" />
-                $TAB<error line="11" column="1" severity="error" message="" source="detekt.id_b" />
+                $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.id_a" />
+                $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.id_b" />
                 </file>
                 </checkstyle>
             """.trimIndent()
@@ -96,8 +95,8 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders one reported issue across multiple files`() {
-        val smell1 = CodeSmell(Issue("id_a", "", Debt.TWENTY_MINS), entity1, message = "")
-        val smell2 = CodeSmell(Issue("id_a", "", Debt.TWENTY_MINS), entity2, message = "")
+        val smell1 = CodeSmell(Issue("id_a", ""), entity1, message = "TestMessage")
+        val smell2 = CodeSmell(Issue("id_a", ""), entity2, message = "TestMessage")
 
         val result = outputFormat.render(TestDetektion(smell1, smell2))
 
@@ -106,10 +105,10 @@ class XmlOutputFormatSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
-                $TAB<error line="11" column="1" severity="error" message="" source="detekt.id_a" />
+                $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.id_a" />
                 </file>
                 <file name="src/main/com/sample/Sample2.kt">
-                $TAB<error line="22" column="2" severity="error" message="" source="detekt.id_a" />
+                $TAB<error line="22" column="2" severity="error" message="TestMessage" source="detekt.id_a" />
                 </file>
                 </checkstyle>
             """.trimIndent()
@@ -148,10 +147,10 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders two reported issues across multiple files`() {
-        val smell1 = CodeSmell(Issue("id_a", "", Debt.TWENTY_MINS), entity1, message = "")
-        val smell2 = CodeSmell(Issue("id_b", "", Debt.TWENTY_MINS), entity1, message = "")
-        val smell3 = CodeSmell(Issue("id_a", "", Debt.TWENTY_MINS), entity2, message = "")
-        val smell4 = CodeSmell(Issue("id_b", "", Debt.TWENTY_MINS), entity2, message = "")
+        val smell1 = CodeSmell(Issue("id_a", ""), entity1, message = "TestMessage")
+        val smell2 = CodeSmell(Issue("id_b", ""), entity1, message = "TestMessage")
+        val smell3 = CodeSmell(Issue("id_a", ""), entity2, message = "TestMessage")
+        val smell4 = CodeSmell(Issue("id_b", ""), entity2, message = "TestMessage")
 
         val result = outputFormat.render(
             TestDetektion(
@@ -167,12 +166,12 @@ class XmlOutputFormatSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
-                $TAB<error line="11" column="1" severity="error" message="" source="detekt.id_a" />
-                $TAB<error line="11" column="1" severity="error" message="" source="detekt.id_b" />
+                $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.id_a" />
+                $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.id_b" />
                 </file>
                 <file name="src/main/com/sample/Sample2.kt">
-                $TAB<error line="22" column="2" severity="error" message="" source="detekt.id_a" />
-                $TAB<error line="22" column="2" severity="error" message="" source="detekt.id_b" />
+                $TAB<error line="22" column="2" severity="error" message="TestMessage" source="detekt.id_a" />
+                $TAB<error line="22" column="2" severity="error" message="TestMessage" source="detekt.id_b" />
                 </file>
                 </checkstyle>
             """.trimIndent()
@@ -187,7 +186,7 @@ class XmlOutputFormatSpec {
         fun `renders detektion with severity as XML with severity`(severity: Severity) {
             val xmlSeverity = severity.name.lowercase(Locale.US)
             val finding = object : CodeSmell(
-                issue = Issue("issue_id", "issue description", Debt.FIVE_MINS),
+                issue = Issue("issue_id", "issue description"),
                 entity = entity1,
                 message = "message"
             ) {
@@ -199,7 +198,7 @@ class XmlOutputFormatSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
-                $TAB<error line="${finding.location.source.line}" column="${finding.location.source.column}" severity="$xmlSeverity" message="${finding.messageOrDescription()}" source="detekt.${finding.id}" />
+                $TAB<error line="${finding.location.source.line}" column="${finding.location.source.column}" severity="$xmlSeverity" message="${finding.message}" source="detekt.${finding.id}" />
                 </file>
                 </checkstyle>
             """.trimIndent()

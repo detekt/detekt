@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -34,7 +33,6 @@ class UnusedImport(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Unused Imports are dead code and should be removed.",
-        Debt.FIVE_MINS
     )
 
     override fun visit(root: KtFile) {
@@ -142,7 +140,11 @@ class UnusedImport(config: Config) : Rule(config) {
         private fun handleKDoc(content: String) {
             kotlinDocReferencesRegExp.findAll(content, 0)
                 .map { it.groupValues[1] }
-                .forEach { namedReferencesInKDoc.add(it.split(".")[0]) }
+                .forEach {
+                    val referenceNames = it.split(".")
+                    namedReferencesInKDoc.add(referenceNames[0])
+                    namedReferencesInKDoc.add(referenceNames.last())
+                }
             kotlinDocBlockTagReferenceRegExp.find(content)?.let {
                 val str = it.groupValues[2].split(whiteSpaceRegex)[0]
                 namedReferencesInKDoc.add(str.split(".")[0])

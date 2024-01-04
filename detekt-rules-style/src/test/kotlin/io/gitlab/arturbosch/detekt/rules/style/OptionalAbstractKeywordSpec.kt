@@ -1,11 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.Test
 
 class OptionalAbstractKeywordSpec {
-    val subject = OptionalAbstractKeyword()
+    val subject = OptionalAbstractKeyword(Config.empty)
 
     @Test
     fun `does not report abstract keywords on an interface`() {

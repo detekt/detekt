@@ -67,7 +67,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                     fun methodNameEqualsClassName() {}
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+            assertThat(MemberNameEqualsClassName(Config.empty).compileAndLint(code)).hasSize(1)
         }
 
         @Test
@@ -77,7 +77,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                     fun MethodNameEqualsObjectName() {}
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+            assertThat(MemberNameEqualsClassName(Config.empty).compileAndLint(code)).hasSize(1)
         }
 
         @Test
@@ -87,7 +87,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                     val propertyNameEqualsClassName = 0
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+            assertThat(MemberNameEqualsClassName(Config.empty).compileAndLint(code)).hasSize(1)
         }
 
         @Test
@@ -97,7 +97,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                     val propertyNameEqualsObjectName = 0
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+            assertThat(MemberNameEqualsClassName(Config.empty).compileAndLint(code)).hasSize(1)
         }
 
         @Test
@@ -109,7 +109,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+            assertThat(MemberNameEqualsClassName(Config.empty).compileAndLint(code)).hasSize(1)
         }
 
         @Test
@@ -121,7 +121,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+            assertThat(MemberNameEqualsClassName(Config.empty).compileAndLint(code)).hasSize(1)
         }
 
         @Test
@@ -134,7 +134,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                     abstract fun AbstractMethodNameEqualsClassName()
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
+            assertThat(MemberNameEqualsClassName(Config.empty).compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -144,7 +144,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                     fun MethodNameEqualsInterfaceName() {}
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
+            assertThat(MemberNameEqualsClassName(Config.empty).compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -170,7 +170,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                     abstract val AbstractMethodNameEqualsClassName: String
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
+            assertThat(MemberNameEqualsClassName(Config.empty).compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -200,7 +200,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+            assertThat(MemberNameEqualsClassName(Config.empty).compileAndLint(code)).hasSize(1)
         }
 
         @Test
@@ -215,7 +215,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+            assertThat(MemberNameEqualsClassName(Config.empty).compileAndLint(code)).hasSize(1)
         }
 
         @Test
@@ -228,7 +228,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(MemberNameEqualsClassName(Config.empty).compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -246,7 +246,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                 
                 class C: A()
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(MemberNameEqualsClassName(Config.empty).compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -263,7 +263,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(MemberNameEqualsClassName(Config.empty).compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -280,7 +280,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
                 class C: A()
             """.trimIndent()
 
-            assertThat(MemberNameEqualsClassName().compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(MemberNameEqualsClassName(Config.empty).compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 }

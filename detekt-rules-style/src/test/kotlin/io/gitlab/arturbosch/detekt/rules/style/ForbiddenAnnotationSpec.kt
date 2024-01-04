@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
@@ -19,7 +20,7 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
             @SuppressWarnings("unused")
             fun main() {}
         """.trimIndent()
-        val findings = ForbiddenAnnotation().compileAndLintWithContext(env, code)
+        val findings = ForbiddenAnnotation(Config.empty).compileAndLintWithContext(env, code)
 
         assertThat(findings)
             .hasSize(1)
@@ -52,7 +53,7 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
             @Inherited
             annotation class SomeClass(val value: Array<SomeClass>)
         """.trimIndent()
-        val findings = ForbiddenAnnotation().compileAndLintWithContext(env, code)
+        val findings = ForbiddenAnnotation(Config.empty).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(6)
             .hasTextLocations(
                 "@Deprecated",
@@ -220,7 +221,7 @@ class ForbiddenAnnotationSpec(val env: KotlinCoreEnvironment) {
             @Dep
             fun f() = Unit
         """.trimIndent()
-        val findings = ForbiddenAnnotation().compileAndLintWithContext(env, code)
+        val findings = ForbiddenAnnotation(Config.empty).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
             .hasTextLocations("@Dep")
     }

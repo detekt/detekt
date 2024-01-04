@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
@@ -21,12 +20,11 @@ import org.jetbrains.kotlin.psi.KtFile
  * nor [in KTIJ](https://youtrack.jetbrains.com/issue/KTIJ-6702/KDoc-Dokka-allow-for-newlines-line-breaks-inside-paragraphs)),
  * which means Markdown line-breaks in KDoc are really only trailing whitespace for now.
  */
-class TrailingWhitespace(config: Config = Config.empty) : Rule(config) {
+class TrailingWhitespace(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "Whitespaces at the end of a line are unnecessary and can be removed.",
-        Debt.FIVE_MINS
     )
 
     override fun visitKtFile(file: KtFile) {

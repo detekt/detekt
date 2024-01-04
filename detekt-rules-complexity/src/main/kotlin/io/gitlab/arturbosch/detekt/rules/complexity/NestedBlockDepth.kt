@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -26,13 +25,12 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * Prefer extracting the nested code into well-named functions to make it easier to understand.
  */
 @ActiveByDefault(since = "1.0.0")
-class NestedBlockDepth(config: Config = Config.empty) : Rule(config) {
+class NestedBlockDepth(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "NestedBlockDepth",
         "Excessive nesting leads to hidden complexity. " +
             "Prefer extracting code to make it easier to understand.",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("The maximum allowed nested block depth for a function")

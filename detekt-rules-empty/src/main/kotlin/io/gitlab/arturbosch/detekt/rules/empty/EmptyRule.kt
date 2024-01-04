@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -26,7 +25,6 @@ abstract class EmptyRule(
     override val issue = Issue(
         javaClass.simpleName,
         description,
-        Debt.FIVE_MINS
     )
 
     fun KtExpression.addFindingIfBlockExprIsEmpty() {

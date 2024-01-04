@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -18,12 +17,11 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * Reports top level constant that which do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
-class TopLevelPropertyNaming(config: Config = Config.empty) : Rule(config) {
+class TopLevelPropertyNaming(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "Top level property names should follow the naming convention set in the projects configuration.",
-        debt = Debt.FIVE_MINS
     )
 
     @Configuration("naming pattern")

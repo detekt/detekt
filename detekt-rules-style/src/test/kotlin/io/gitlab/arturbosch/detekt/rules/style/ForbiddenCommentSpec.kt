@@ -2,6 +2,7 @@
 
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ValueWithReason
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -28,34 +29,34 @@ class ForbiddenCommentSpec {
         @Test
         @DisplayName("should report TODO: usages")
         fun reportTodoColon() {
-            val findings = ForbiddenComment().compileAndLint("// TODO: I need to fix this.")
+            val findings = ForbiddenComment(Config.empty).compileAndLint("// TODO: I need to fix this.")
             assertThat(findings).hasSize(1)
             assertThat(findings[0]).hasMessage("Forbidden TODO todo marker in comment, please do the changes.")
         }
 
         @Test
         fun `should not report TODO usages`() {
-            val findings = ForbiddenComment().compileAndLint("// TODO I need to fix this.")
+            val findings = ForbiddenComment(Config.empty).compileAndLint("// TODO I need to fix this.")
             assertThat(findings).isEmpty()
         }
 
         @Test
         @DisplayName("should report FIXME: usages")
         fun reportFixMe() {
-            val findings = ForbiddenComment().compileAndLint("// FIXME: I need to fix this.")
+            val findings = ForbiddenComment(Config.empty).compileAndLint("// FIXME: I need to fix this.")
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `should not report FIXME usages`() {
-            val findings = ForbiddenComment().compileAndLint("// FIXME I need to fix this.")
+            val findings = ForbiddenComment(Config.empty).compileAndLint("// FIXME I need to fix this.")
             assertThat(findings).isEmpty()
         }
 
         @Test
         @DisplayName("should report STOPSHIP: usages")
         fun reportStopShipColon() {
-            val findings = ForbiddenComment().compileAndLint("// STOPSHIP: I need to fix this.")
+            val findings = ForbiddenComment(Config.empty).compileAndLint("// STOPSHIP: I need to fix this.")
             assertThat(findings).hasSize(1)
             assertThat(findings[0]).hasMessage(
                 "Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code."
@@ -64,7 +65,7 @@ class ForbiddenCommentSpec {
 
         @Test
         fun `should not report STOPSHIP usages`() {
-            val findings = ForbiddenComment().compileAndLint("// STOPSHIP I need to fix this.")
+            val findings = ForbiddenComment(Config.empty).compileAndLint("// STOPSHIP I need to fix this.")
             assertThat(findings).isEmpty()
         }
 
@@ -75,7 +76,7 @@ class ForbiddenCommentSpec {
                  TODO: I need to fix this.
                  */
             """.trimIndent()
-            val findings = ForbiddenComment().compileAndLint(code)
+            val findings = ForbiddenComment(Config.empty).compileAndLint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -84,7 +85,7 @@ class ForbiddenCommentSpec {
             val code = """
                 /*TODO: I need to fix this.*/
             """.trimIndent()
-            val findings = ForbiddenComment().compileAndLint(code)
+            val findings = ForbiddenComment(Config.empty).compileAndLint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -100,7 +101,7 @@ class ForbiddenCommentSpec {
                      */
                 }
             """.trimIndent()
-            val findings = ForbiddenComment().compileAndLint(code)
+            val findings = ForbiddenComment(Config.empty).compileAndLint(code)
             assertThat(findings).hasSize(2)
         }
 
@@ -112,7 +113,7 @@ class ForbiddenCommentSpec {
                  */
                 class A
             """.trimIndent()
-            val findings = ForbiddenComment().compileAndLint(code)
+            val findings = ForbiddenComment(Config.empty).compileAndLint(code)
             assertThat(findings).hasSize(1)
         }
     }

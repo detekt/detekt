@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -26,7 +25,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
  * }
  * </noncompliant>
  */
-class NotImplementedDeclaration(config: Config = Config.empty) : Rule(config) {
+class NotImplementedDeclaration(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "NotImplementedDeclaration",
@@ -34,7 +33,6 @@ class NotImplementedDeclaration(config: Config = Config.empty) : Rule(config) {
             "This defers the development of the functionality of this function. " +
             "Hence, the `NotImplementedDeclaration` should only serve as a temporary declaration. " +
             "Before releasing, this type of declaration should be removed.",
-        Debt.TWENTY_MINS
     )
 
     override fun visitThrowExpression(expression: KtThrowExpression) {

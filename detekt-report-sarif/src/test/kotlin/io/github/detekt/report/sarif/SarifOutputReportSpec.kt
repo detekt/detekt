@@ -2,7 +2,7 @@ package io.github.detekt.report.sarif
 
 import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.test.EmptySetupContext
 import io.gitlab.arturbosch.detekt.test.TestDetektion
@@ -23,7 +22,6 @@ import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
 import kotlin.io.path.absolutePathString
 
-@OptIn(UnstableApi::class)
 class SarifOutputReportSpec {
 
     @Test
@@ -173,8 +171,8 @@ private fun constrainRegion(startLine: Int, startColumn: Int, endLine: Int, endC
     }
 """.trimIndent()
 
-class TestRule : Rule() {
-    override val issue = Issue(javaClass.simpleName, "", Debt.FIVE_MINS)
+class TestRule(config: Config = Config.empty) : Rule(config) {
+    override val issue = Issue(javaClass.simpleName, "")
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         report(CodeSmell(issue, Entity.atName(classOrObject), message = "Error"))

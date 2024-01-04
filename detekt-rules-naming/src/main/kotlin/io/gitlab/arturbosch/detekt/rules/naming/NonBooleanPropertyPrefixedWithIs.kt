@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -31,7 +30,7 @@ import org.jetbrains.kotlin.types.isError
  * </compliant>
  */
 @RequiresTypeResolution
-class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(config) {
+class NonBooleanPropertyPrefixedWithIs(config: Config) : Rule(config) {
 
     private val booleanTypes = listOf(
         "kotlin.Boolean",
@@ -42,7 +41,6 @@ class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(con
     override val issue = Issue(
         javaClass.simpleName,
         "Only boolean property names can start with `is` prefix.",
-        debt = Debt.FIVE_MINS
     )
 
     override fun visitParameter(parameter: KtParameter) {

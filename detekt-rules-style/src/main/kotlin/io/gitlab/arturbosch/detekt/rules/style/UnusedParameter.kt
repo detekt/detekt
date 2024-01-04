@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -44,14 +43,13 @@ import org.jetbrains.kotlin.psi.psiUtil.isProtected
  * </compliant>
  */
 @ActiveByDefault(since = "1.23.0")
-class UnusedParameter(config: Config = Config.empty) : Rule(config) {
+class UnusedParameter(config: Config) : Rule(config) {
     override val defaultRuleIdAliases: Set<String> =
         setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused", "UnusedPrivateMember")
 
     override val issue: Issue = Issue(
         "UnusedParameter",
         "Function parameter is unused and should be removed.",
-        Debt.FIVE_MINS,
     )
 
     @Configuration("unused parameter names matching this regex are ignored")
@@ -130,6 +128,13 @@ private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVi
     private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()
 
     private fun KtNamedFunction.isAllowedToHaveUnusedParameters() =
-        isAbstract() || isOpen() || isOverride() || isOperator() || isMainFunction() || isExternal() ||
-            isExpect() || isActual() || isProtected()
+        isAbstract() ||
+            isOpen() ||
+            isOverride() ||
+            isOperator() ||
+            isMainFunction() ||
+            isExternal() ||
+            isExpect() ||
+            isActual() ||
+            isProtected()
 }

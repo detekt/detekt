@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -46,12 +45,11 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  * </compliant>
  *
  */
-class KDocReferencesNonPublicProperty(config: Config = Config.empty) : Rule(config) {
+class KDocReferencesNonPublicProperty(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "KDoc comments should not refer to non-public properties.",
-        Debt.FIVE_MINS
     )
 
     private val publicPropertiesByClass = mutableMapOf<KtClass, MutableSet<KtNamedDeclaration>>()

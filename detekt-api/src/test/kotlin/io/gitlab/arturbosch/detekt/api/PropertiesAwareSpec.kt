@@ -5,7 +5,6 @@ import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Test
 import kotlin.random.Random
 
-@OptIn(UnstableApi::class)
 class PropertiesAwareSpec {
 
     private val hash = Random(1).nextInt()

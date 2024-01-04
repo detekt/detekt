@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -39,7 +38,7 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  *
  */
 @RequiresTypeResolution
-class ObjectExtendsThrowable(config: Config = Config.empty) : Rule(config) {
+class ObjectExtendsThrowable(config: Config) : Rule(config) {
     override val issue = Issue(
         id = "ObjectExtendsThrowable",
         description = "An `object` should not extend and type of Throwable. Throwables are " +
@@ -48,7 +47,6 @@ class ObjectExtendsThrowable(config: Config = Config.empty) : Rule(config) {
             "consequently introduces a global singleton exception whose instance may be " +
             "inadvertently reused from multiple places, thus introducing shared mutable " +
             "state.",
-        debt = Debt.TEN_MINS
     )
 
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {

@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -49,7 +48,7 @@ import org.jetbrains.kotlin.types.typeUtil.isInterface
  */
 @ActiveByDefault(since = "1.2.0")
 @RequiresTypeResolution
-class AbstractClassCanBeConcreteClass(config: Config = Config.empty) : Rule(config) {
+class AbstractClassCanBeConcreteClass(config: Config) : Rule(config) {
 
     private val noAbstractMember = "An abstract class without an abstract member can be refactored to a concrete class."
 
@@ -57,7 +56,6 @@ class AbstractClassCanBeConcreteClass(config: Config = Config.empty) : Rule(conf
         Issue(
             "AbstractClassCanBeConcreteClass",
             "An abstract class is unnecessary. May be refactored to a concrete class.",
-            Debt.FIVE_MINS
         )
 
     @Configuration("Allows you to provide a list of annotations that disable this check.")

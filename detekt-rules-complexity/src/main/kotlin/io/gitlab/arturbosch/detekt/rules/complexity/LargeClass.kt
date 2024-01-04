@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.metrics.linesOfCode
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -22,13 +21,12 @@ import java.util.IdentityHashMap
  * things.
  */
 @ActiveByDefault(since = "1.0.0")
-class LargeClass(config: Config = Config.empty) : Rule(config) {
+class LargeClass(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "LargeClass",
         "One class should have one responsibility. Large classes tend to handle many things at once. " +
             "Split up large classes into smaller classes that are easier to understand.",
-        Debt.TWENTY_MINS
     )
 
     @Configuration("The maximum number of lines allowed per class.")

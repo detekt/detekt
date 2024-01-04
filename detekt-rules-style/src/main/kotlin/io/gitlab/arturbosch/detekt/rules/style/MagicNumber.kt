@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -69,7 +68,7 @@ import java.util.Locale
  */
 @Suppress("TooManyFunctions")
 @ActiveByDefault(since = "1.0.0")
-class MagicNumber(config: Config = Config.empty) : Rule(config) {
+class MagicNumber(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
@@ -77,7 +76,6 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
             "and hence it's unclear what the purpose of this number is. " +
             "It's better to declare such numbers as constants and give them a proper name. " +
             "By default, -1, 0, 1, and 2 are not considered to be magic numbers.",
-        Debt.TEN_MINS
     )
 
     @Configuration("numbers which do not count as magic numbers")
@@ -119,7 +117,8 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         val elementType = expression.elementType
         if (elementType != KtNodeTypes.INTEGER_CONSTANT && elementType != KtNodeTypes.FLOAT_CONSTANT) return
 
-        if (isIgnoredByConfig(expression) || expression.isPartOfFunctionReturnConstant() ||
+        if (isIgnoredByConfig(expression) ||
+            expression.isPartOfFunctionReturnConstant() ||
             expression.isPartOfConstructorOrFunctionConstant()
         ) {
             return

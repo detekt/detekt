@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test
 private const val SEARCH_PROTECTED_PROPERTY = "searchProtectedProperty"
 
 class UndocumentedPublicPropertySpec {
-    val subject = UndocumentedPublicProperty()
+    val subject = UndocumentedPublicProperty(Config.empty)
 
     @Test
     fun `reports undocumented public property`() {

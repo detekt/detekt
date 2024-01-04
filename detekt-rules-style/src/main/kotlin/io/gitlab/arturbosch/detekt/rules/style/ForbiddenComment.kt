@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -88,12 +87,11 @@ import java.util.Locale
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
+class ForbiddenComment(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "Flags a forbidden comment.",
-        Debt.TEN_MINS
     )
 
     @Configuration("forbidden comment strings")

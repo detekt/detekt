@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -44,11 +43,10 @@ import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UseOrEmpty(config: Config = Config.empty) : Rule(config) {
+class UseOrEmpty(config: Config) : Rule(config) {
     override val issue: Issue = Issue(
         "UseOrEmpty",
         "Use `orEmpty()` call instead of `?:` with empty collection factory methods",
-        Debt.FIVE_MINS
     )
 
     @Suppress("ReturnCount")

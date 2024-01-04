@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -33,12 +32,11 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config) {
+class FunctionOnlyReturningConstant(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "A function that only returns a constant is misleading. Consider declaring a constant instead.",
-        Debt.TEN_MINS
     )
 
     @Configuration("if overriden functions should be ignored")

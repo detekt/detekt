@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -35,12 +34,11 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class MayBeConstant(config: Config = Config.empty) : Rule(config) {
+class MayBeConstant(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "Usage of `vals` that can be `const val` detected.",
-        Debt.FIVE_MINS
     )
 
     private val binaryTokens = hashSetOf<KtSingleValueToken>(
@@ -118,7 +116,8 @@ class MayBeConstant(config: Config = Config.empty) : Rule(config) {
         !isTopLevel && containingClassOrObject !is KtObjectDeclaration
 
     private fun KtExpression.isConstantExpression(): Boolean {
-        return this is KtStringTemplateExpression && !hasInterpolation() ||
+        return this is KtStringTemplateExpression &&
+            !hasInterpolation() ||
             node.elementType == KtNodeTypes.BOOLEAN_CONSTANT ||
             node.elementType == KtNodeTypes.INTEGER_CONSTANT ||
             node.elementType == KtNodeTypes.CHARACTER_CONSTANT ||

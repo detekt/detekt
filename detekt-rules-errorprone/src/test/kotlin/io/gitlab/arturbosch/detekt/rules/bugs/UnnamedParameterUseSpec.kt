@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -10,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnnamedParameterUseSpec(private val env: KotlinCoreEnvironment) {
-    private val subject = UnnamedParameterUse()
+    private val subject = UnnamedParameterUse(Config.empty)
 
     @Test
     fun `does not report for no param function call`() {
@@ -87,6 +88,23 @@ class UnnamedParameterUseSpec(private val env: KotlinCoreEnvironment) {
         assertThat(
             subject.compileAndLintWithContext(env, code)
         ).hasSize(1)
+    }
+
+    @Test
+    fun `report uses the function name as location and message`() {
+        val code = """
+            fun f(enabled: Boolean, shouldLog: Boolean) {
+                if (shouldLog) println(enabled)
+            }
+
+            fun test() {
+                f(false, true)
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code))
+            .hasTextLocations(102 to 103)
+            .singleElement()
+            .hasMessage("Consider using named parameters in f as they make usage of the function more safe.")
     }
 
     @Test

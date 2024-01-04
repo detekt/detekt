@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -38,13 +37,12 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * </compliant>
  */
 @RequiresTypeResolution
-class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rule(config) {
+class ExplicitCollectionElementAccessMethod(config: Config) : Rule(config) {
 
     override val issue: Issue =
         Issue(
             "ExplicitCollectionElementAccessMethod",
             "Prefer usage of the indexed access operator [] for map element access or insert methods.",
-            Debt.FIVE_MINS
         )
 
     override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
@@ -80,7 +78,8 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
             // `put` isn't an operator function, but can be replaced with indexer when the caller is Map.
             "put" -> isCallerMap(expression)
             else -> false
-        } && unusedReturnValue(expression)
+        } &&
+            unusedReturnValue(expression)
 
     private fun KtCallExpression.getFunctionDescriptor(): FunctionDescriptor? =
         getResolvedCall(bindingContext)?.resultingDescriptor as? FunctionDescriptor

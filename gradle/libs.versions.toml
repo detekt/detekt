@@ -1,11 +1,11 @@
 [versions]
 dokka = "1.9.10"
 jacoco = "0.8.11"
-kotlin = "1.9.21"
-ktlint = "1.0.1"
+kotlin = "1.9.22"
+ktlint = "1.1.0"
 junit = "5.10.1"
-poko = "0.15.0"
-slf4j = "2.0.9"
+poko = "0.15.2"
+slf4j = "2.0.10"
 
 [libraries]
 semver4j = "org.semver4j:semver4j:5.2.2"
@@ -18,16 +18,16 @@ kotlin-mainKts = { module = "org.jetbrains.kotlin:kotlin-main-kts", version.ref 
 kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlin-reflection = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 
-kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.9.1"
+kotlinx-html = "org.jetbrains.kotlinx:kotlinx-html-jvm:0.10.1"
 kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
 
-# This represents the the oldest AGP version that is supported by detekt.
+# This represents the oldest AGP version that is supported by detekt.
 # This should only be updated when updating the minimum version supported by detekt's Gradle plugin.
 android-gradle-minSupported = "com.android.tools.build:gradle:7.0.0"
 
 # This version of AGP is used for testing and should be updated when new AGP versions are released to ensure detekt's
 # Gradle plugin remains compatible.
-android-gradle-maxSupported = "com.android.tools.build:gradle:8.1.3"
+android-gradle-maxSupported = "com.android.tools.build:gradle:8.2.1"
 
 ktlintRulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint"  }
 slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4j" }
@@ -37,13 +37,17 @@ slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.5.0"
-assertj = "org.assertj:assertj-core:3.24.2"
+assertj = "org.assertj:assertj-core:3.25.1"
 classgraph = "io.github.classgraph:classgraph:4.8.165"
 mockk = "io.mockk:mockk:1.13.7"
+byte-buddy = "net.bytebuddy:byte-buddy:1.14.11"
 snakeyaml = "org.snakeyaml:snakeyaml-engine:2.7"
 jcommander = "org.jcommander:jcommander:1.83"
 kotlinCompileTesting = { module = "dev.zacsweers.kctfork:core", version = "0.4.0" }
 poko-annotations = { module = "dev.drewhamilton.poko:poko-annotations", version.ref = "poko" }
+
+[bundles]
+mocking = ["mockk", "byte-buddy"]
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

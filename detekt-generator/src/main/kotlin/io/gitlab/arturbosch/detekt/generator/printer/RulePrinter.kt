@@ -39,12 +39,6 @@ internal object RulePrinter : DocumentationPrinter<Rule> {
                 }
             }
 
-            if (item.debt.isNotEmpty()) {
-                paragraph {
-                    "${bold { "Debt" }}: ${item.debt}"
-                }
-            }
-
             if (!item.aliases.isNullOrEmpty()) {
                 paragraph {
                     "${bold { "Aliases" }}: ${item.aliases}"

@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -33,13 +32,12 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
  * }
  * </compliant>
  */
-class CollapsibleIfStatements(config: Config = Config.empty) : Rule(config) {
+class CollapsibleIfStatements(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "CollapsibleIfStatements",
         "Two if statements which could be collapsed were detected. " +
             "These statements can be merged to improve readability.",
-        Debt.FIVE_MINS
     )
 
     override fun visitIfExpression(expression: KtIfExpression) {

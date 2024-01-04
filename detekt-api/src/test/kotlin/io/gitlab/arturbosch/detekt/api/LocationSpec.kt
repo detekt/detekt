@@ -3,7 +3,10 @@ package io.gitlab.arturbosch.detekt.api
 import io.github.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtReturnExpression
+import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.junit.jupiter.api.Test
+import java.io.File
 
 class LocationSpec {
 
@@ -31,5 +34,21 @@ class LocationSpec {
         val location = Location.from(psiElement.funKeyword!!)
 
         assertThat("${location.source} - ${location.endSource}").isEqualTo("1:1 - 1:4")
+    }
+
+    @Test
+    fun `return keyword's location`() {
+        val code = """
+            fun data(): Int {
+                return 0
+            }
+        """.trimIndent()
+        val psiElement = compileContentForTest(code).findDescendantOfType<KtReturnExpression>()!!
+        val location = Location.from(psiElement.returnKeyword)
+
+        assertThat(location.toString()).isEqualTo(
+            "Location(source=2:5, endSource=2:11, text=22:28, " +
+                "filePath=FilePath(absolutePath=${File.separator}Test.kt, basePath=null, relativePath=null))"
+        )
     }
 }

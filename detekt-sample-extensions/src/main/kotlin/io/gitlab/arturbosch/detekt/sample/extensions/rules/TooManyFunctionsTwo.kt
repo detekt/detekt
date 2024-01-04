@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.sample.extensions.rules
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -19,7 +18,6 @@ class TooManyFunctionsTwo(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Too many functions can make the maintainability of a file more costly.",
-        Debt(hours = 1)
     )
 
     private val allowedFunctions: Int by config(defaultValue = 10)

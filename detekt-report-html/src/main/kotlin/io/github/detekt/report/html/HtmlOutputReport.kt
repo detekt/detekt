@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.TextLocation
+import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import kotlinx.html.CommonAttributeGroupFacadeFlowInteractiveContent
 import kotlinx.html.FlowContent
@@ -44,7 +45,7 @@ private const val DETEKT_WEBSITE_BASE_URL = "https://detekt.dev"
  * Contains rule violations and metrics formatted in a human friendly way, so that it can be inspected in a web browser.
  * See: https://detekt.dev/configurations.html#output-reports
  */
-class HtmlOutputReport : OutputReport() {
+class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
 
     override val id: String = "HtmlOutputReport"
     override val ending = "html"

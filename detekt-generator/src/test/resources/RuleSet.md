@@ -6,8 +6,6 @@ a wildcard import
 
 **Active by default**: Yes - Since v1.0.0
 
-**Debt**: 10min
-
 **Aliases**: alias1, alias2
 
 #### Configuration options:
@@ -62,8 +60,6 @@ removes :Unit
 
 **Requires Type Resolution**
 
-**Debt**: 5m
-
 #### Noncompliant Code:
 
 ```kotlin
@@ -83,8 +79,6 @@ is deprecated
 Duplicated `case` statements in a `when` expression detected.
 
 **Active by default**: Yes - Since v1.16.0
-
-**Debt**: 5m
 
 #### Noncompliant Code:
 

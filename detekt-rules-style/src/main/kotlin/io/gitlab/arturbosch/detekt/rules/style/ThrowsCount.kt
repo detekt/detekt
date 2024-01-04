@@ -2,14 +2,12 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.yieldStatementsSkippingGuardClauses
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
@@ -39,12 +37,11 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ThrowsCount(config: Config = Config.empty) : Rule(config) {
+class ThrowsCount(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
         "Restrict the number of throw statements in methods.",
-        Debt.TEN_MINS
     )
 
     @Configuration("maximum amount of throw statements in a method")
@@ -55,31 +52,29 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
-        if (!function.isOverride()) {
-            val statements = if (excludeGuardClauses) {
-                function.yieldStatementsSkippingGuardClauses<KtThrowExpression>()
-            } else {
-                function.bodyBlockExpression?.statements?.asSequence().orEmpty()
+        val statements = if (excludeGuardClauses) {
+            function.yieldStatementsSkippingGuardClauses<KtThrowExpression>()
+        } else {
+            function.bodyBlockExpression?.statements?.asSequence().orEmpty()
+        }
+
+        val countOfThrows = statements
+            .flatMap { statement ->
+                statement.collectDescendantsOfType<KtThrowExpression> {
+                    it.getStrictParentOfType<KtNamedFunction>() == function
+                }.asSequence()
             }
+            .count()
 
-            val countOfThrows = statements
-                .flatMap { statement ->
-                    statement.collectDescendantsOfType<KtThrowExpression> {
-                        it.getStrictParentOfType<KtNamedFunction>() == function
-                    }.asSequence()
-                }
-                .count()
-
-            if (countOfThrows > max) {
-                report(
-                    CodeSmell(
-                        issue,
-                        Entity.atName(function),
-                        "Too many throw statements in the function" +
-                            " ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."
-                    )
+        if (countOfThrows > max) {
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.atName(function),
+                    "Too many throw statements in the function" +
+                        " ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."
                 )
-            }
+            )
         }
     }
 }

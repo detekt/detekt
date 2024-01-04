@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -27,11 +26,10 @@ import org.jetbrains.kotlin.psi.KtDestructuringDeclaration
  * </compliant>
  */
 @ActiveByDefault(since = "1.21.0")
-class DestructuringDeclarationWithTooManyEntries(config: Config = Config.empty) : Rule(config) {
+class DestructuringDeclarationWithTooManyEntries(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Too many entries in a destructuring declaration make the code hard to understand.",
-        Debt.TEN_MINS
     )
 
     @Configuration("maximum allowed elements in a destructuring declaration")

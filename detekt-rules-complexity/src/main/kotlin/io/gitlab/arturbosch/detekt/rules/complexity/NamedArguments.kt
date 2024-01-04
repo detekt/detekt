@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -31,12 +30,11 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * </compliant>
  */
 @RequiresTypeResolution
-class NamedArguments(config: Config = Config.empty) : Rule(config) {
+class NamedArguments(config: Config) : Rule(config) {
 
     override val issue = Issue(
         "NamedArguments",
         "Named arguments are required for function calls with many arguments.",
-        Debt.FIVE_MINS
     )
 
     @Configuration("The allowed number of arguments for a function.")

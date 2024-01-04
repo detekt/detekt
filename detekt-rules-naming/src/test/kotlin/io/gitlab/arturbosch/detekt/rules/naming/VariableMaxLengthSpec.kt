@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
@@ -15,13 +16,13 @@ class VariableMaxLengthSpec {
                 val (_, status) = getResult()
             }
         """.trimIndent()
-        assertThat(VariableMaxLength().compileAndLint(code)).isEmpty()
+        assertThat(VariableMaxLength(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
     fun `should not report a variable with 64 letters`() {
         val code = "private val varThatIsExactly64LettersLongWhichYouMightNotWantToBelieveInLolz = 3"
-        assertThat(VariableMaxLength().compileAndLint(code)).isEmpty()
+        assertThat(VariableMaxLength(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -45,6 +46,6 @@ class VariableMaxLengthSpec {
     @Test
     fun `should report a variable name that is too long`() {
         val code = "private val thisVariableIsDefinitelyWayTooLongLongerThanEverythingAndShouldBeMuchShorter = 3"
-        assertThat(VariableMaxLength().compileAndLint(code)).hasSize(1)
+        assertThat(VariableMaxLength(Config.empty).compileAndLint(code)).hasSize(1)
     }
 }
