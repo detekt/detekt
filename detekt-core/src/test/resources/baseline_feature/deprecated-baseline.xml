@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <SmellBaseline>
-    <Blacklist>
+    <ManuallySuppressedIssues>
         <ID>LongParameterList:Signature</ID>
         <ID>LongMethod:Signature</ID>
-    </Blacklist>
-    <Whitelist>
+    </ManuallySuppressedIssues>
+    <CurrentIssues>
         <ID>FeatureEnvy:Signature</ID>
-    </Whitelist>
+    </CurrentIssues>
 </SmellBaseline>
