@@ -5,10 +5,12 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import io.mockk.every
-import io.mockk.mockk
+import org.jetbrains.kotlin.config.AnalysisFlag
 import org.jetbrains.kotlin.config.AnalysisFlags
+import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.ExplicitApiMode
+import org.jetbrains.kotlin.config.LanguageFeature
+import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 import org.junit.jupiter.api.Nested
@@ -191,24 +193,36 @@ class RedundantVisibilityModifierRuleSpec {
 
         val rule = RedundantVisibilityModifierRule(Config.empty)
 
-        private fun mockCompilerResources(mode: ExplicitApiMode): CompilerResources {
-            val languageVersionSettings = mockk<LanguageVersionSettings>()
-            every {
-                hint(ExplicitApiMode::class)
-                languageVersionSettings.getFlag(AnalysisFlags.explicitApiMode)
-            } returns mode
+        private fun fakeCompilerResources(mode: ExplicitApiMode): CompilerResources {
+            val languageVersionSettings = object : LanguageVersionSettings {
+                override val apiVersion: ApiVersion get() = error("This is a fake")
+
+                override val languageVersion: LanguageVersion get() = error("This is a fake")
+
+                override fun getFeatureSupport(feature: LanguageFeature) = error("This is a fake")
+
+                override fun <T> getFlag(flag: AnalysisFlag<T>): T {
+                    @Suppress("UNCHECKED_CAST")
+                    return when (flag) {
+                        AnalysisFlags.explicitApiMode -> mode as T
+                        else -> error("This is a fake")
+                    }
+                }
+
+                override fun isPreRelease() = error("This is a fake")
+            }
             return CompilerResources(languageVersionSettings, DataFlowValueFactoryImpl(languageVersionSettings))
         }
 
         @Test
         fun `does not report public function in class if explicit API mode is set to strict`() {
-            rule.visitFile(code, compilerResources = mockCompilerResources(ExplicitApiMode.STRICT))
+            rule.visitFile(code, compilerResources = fakeCompilerResources(ExplicitApiMode.STRICT))
             assertThat(rule.findings).isEmpty()
         }
 
         @Test
         fun `reports public function in class if explicit API mode is disabled`() {
-            rule.visitFile(code, compilerResources = mockCompilerResources(ExplicitApiMode.DISABLED))
+            rule.visitFile(code, compilerResources = fakeCompilerResources(ExplicitApiMode.DISABLED))
             assertThat(rule.findings).hasSize(1)
         }
 
