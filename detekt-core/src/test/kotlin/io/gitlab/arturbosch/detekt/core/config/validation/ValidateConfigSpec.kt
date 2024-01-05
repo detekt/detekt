@@ -45,10 +45,8 @@ internal class ValidateConfigSpec {
         val config = yamlConfigFromContent(
             """
                 config:
+                  checkExhaustiveness: true
                   warningsAsErrors: $warningsAsErrors
-                style:
-                  MagicNumber:
-                    ignoreNumbers: '-1,0,1,2'
             """.trimIndent()
         )
 
@@ -56,7 +54,7 @@ internal class ValidateConfigSpec {
 
         val expectedLevel = if (warningsAsErrors) Notification.Level.Error else Notification.Level.Warning
         assertThat(result).anySatisfy { notification ->
-            assertThat(notification.message).contains("style>MagicNumber")
+            assertThat(notification.message).isEqualTo("Rule set 'style' is missing in the configuration.")
             assertThat(notification.level).isEqualTo(expectedLevel)
         }
     }
