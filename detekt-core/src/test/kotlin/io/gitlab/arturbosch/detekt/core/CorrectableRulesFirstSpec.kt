@@ -17,22 +17,6 @@ class CorrectableRulesFirstSpec {
     @ParameterizedTest
     @ValueSource(booleans = [true, false])
     fun `runs the correctable rules first, the registration order doesn't matter`(reverse: Boolean) {
-        var actualLastRuleId = ""
-
-        class NonCorrectable(config: Config) : Rule(config) {
-            override val issue: Issue = Issue(javaClass.simpleName, "")
-            override fun visitClass(klass: KtClass) {
-                actualLastRuleId = issue.id
-            }
-        }
-
-        class Correctable(config: Config) : Rule(config) {
-            override val issue: Issue = Issue(javaClass.simpleName, "")
-            override fun visitClass(klass: KtClass) {
-                actualLastRuleId = issue.id
-            }
-        }
-
         val testFile = path.resolve("Test.kt")
         val settings = createProcessingSettings(
             testFile,
@@ -63,5 +47,21 @@ class CorrectableRulesFirstSpec {
         settings.use { detector.run(listOf(compileForTest(testFile))) }
 
         assertThat(actualLastRuleId).isEqualTo("NonCorrectable")
+    }
+}
+
+private var actualLastRuleId = ""
+
+private class NonCorrectable(config: Config) : Rule(config) {
+    override val issue: Issue = Issue(javaClass.simpleName, "")
+    override fun visitClass(klass: KtClass) {
+        actualLastRuleId = issue.id
+    }
+}
+
+private class Correctable(config: Config) : Rule(config) {
+    override val issue: Issue = Issue(javaClass.simpleName, "")
+    override fun visitClass(klass: KtClass) {
+        actualLastRuleId = issue.id
     }
 }
