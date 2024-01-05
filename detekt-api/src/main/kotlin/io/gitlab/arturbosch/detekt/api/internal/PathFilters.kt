@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.api.internal
 import io.github.detekt.psi.absolutePath
 import io.github.detekt.psi.basePath
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import java.nio.file.PathMatcher
@@ -66,25 +65,7 @@ class PathFilters internal constructor(
 }
 
 fun Config.createPathFilters(): PathFilters? {
-    val includes = valueOrDefaultCommaSeparated(Config.INCLUDES_KEY, emptyList())
-    val excludes = valueOrDefaultCommaSeparated(Config.EXCLUDES_KEY, emptyList())
+    val includes = valueOrDefault(Config.INCLUDES_KEY, emptyList<String>())
+    val excludes = valueOrDefault(Config.EXCLUDES_KEY, emptyList<String>())
     return PathFilters.of(includes, excludes)
-}
-
-fun Config.valueOrDefaultCommaSeparated(
-    key: String,
-    default: List<String>
-): List<String> {
-    fun fallBack() = valueOrDefault(key, default.joinToString(","))
-        .trim()
-        .commaSeparatedPattern(",", ";")
-        .toList()
-
-    return try {
-        valueOrDefault(key, default)
-    } catch (_: IllegalStateException) {
-        fallBack()
-    } catch (_: ClassCastException) {
-        fallBack()
-    }
 }

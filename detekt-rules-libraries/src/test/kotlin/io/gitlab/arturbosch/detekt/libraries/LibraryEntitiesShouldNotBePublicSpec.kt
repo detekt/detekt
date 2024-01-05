@@ -11,7 +11,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
 
     @Test
     fun `should not report without explicit filters set`() {
-        val subject = LibraryEntitiesShouldNotBePublic(TestConfig(Config.EXCLUDES_KEY to "**"))
+        val subject = LibraryEntitiesShouldNotBePublic(TestConfig(Config.EXCLUDES_KEY to listOf("**")))
         assertThat(
             subject.compileAndLint(
                 """

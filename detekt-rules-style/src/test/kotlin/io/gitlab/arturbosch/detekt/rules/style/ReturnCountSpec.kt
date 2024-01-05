@@ -421,7 +421,7 @@ class ReturnCountSpec {
             val findings = ReturnCount(
                 TestConfig(
                     MAX to "2",
-                    EXCLUDED_FUNCTIONS to "test",
+                    EXCLUDED_FUNCTIONS to listOf("test"),
                 )
             ).compileAndLint(code)
             assertThat(findings).isEmpty()

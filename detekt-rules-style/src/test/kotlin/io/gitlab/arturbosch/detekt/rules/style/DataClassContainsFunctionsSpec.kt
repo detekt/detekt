@@ -31,14 +31,7 @@ class DataClassContainsFunctionsSpec {
         }
 
         @Test
-        fun `reports valid data class without conversion function string`() {
-            val config = TestConfig(CONVERSION_FUNCTION_PREFIX to "")
-            val rule = DataClassContainsFunctions(config)
-            assertThat(rule.compileAndLint(code)).hasSize(2)
-        }
-
-        @Test
-        fun `reports valid data class without conversion function list`() {
+        fun `reports valid data class without conversion function`() {
             val config = TestConfig(CONVERSION_FUNCTION_PREFIX to emptyList<String>())
             val rule = DataClassContainsFunctions(config)
             assertThat(rule.compileAndLint(code)).hasSize(2)

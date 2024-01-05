@@ -102,17 +102,4 @@ class ExceptionRaisedInUnexpectedLocationSpec {
         )
         assertThat(findings).hasSize(1)
     }
-
-    @Test
-    fun `reports the configured method with String`() {
-        val config = TestConfig("methodNames" to "toDo,todo2")
-        val findings = ExceptionRaisedInUnexpectedLocation(config).compileAndLint(
-            """
-                fun toDo() {
-                    throw IllegalStateException()
-                }
-            """.trimIndent()
-        )
-        assertThat(findings).hasSize(1)
-    }
 }

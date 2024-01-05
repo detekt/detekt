@@ -208,7 +208,7 @@ class ConfigPropertySpec {
 
             @Nested
             inner class `defined as list` {
-                private val subject = object : TestConfigAware("present" to "a,b,c") {
+                private val subject = object : TestConfigAware("present" to listOf("a", "b", "c")) {
                     val present: List<String> by config(defaultValue)
                     val notPresent: List<String> by config(defaultValue)
                 }
@@ -226,7 +226,7 @@ class ConfigPropertySpec {
 
             @Nested
             inner class `defined as comma separated string` {
-                private val subject = object : TestConfigAware("present" to "a,b,c") {
+                private val subject = object : TestConfigAware("present" to listOf("a", "b", "c")) {
                     val present: List<String> by config(defaultValue)
                     val notPresent: List<String> by config(defaultValue)
                 }
@@ -392,7 +392,7 @@ class ConfigPropertySpec {
         @Nested
         inner class `list of strings` {
             private val defaultValue = listOf("99")
-            private val subject = object : TestConfigAware("present" to "1,2,3") {
+            private val subject = object : TestConfigAware("present" to listOf("1", "2", "3")) {
                 val present: Int by config(defaultValue) { it.sumOf(String::toInt) }
                 val notPresent: Int by config(defaultValue) { it.sumOf(String::toInt) }
             }

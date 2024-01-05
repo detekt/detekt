@@ -157,13 +157,6 @@ class MagicNumberSpec {
                 .lint(code)
             assertThat(findings).hasStartSourceLocation(1, 15)
         }
-
-        @Test
-        fun `should not be ignored when ignoredNumbers contains 2 but not -2 config with string`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to "1,2,3,-1,0"))
-                .lint(code)
-            assertThat(findings).hasStartSourceLocation(1, 15)
-        }
     }
 
     @Nested
