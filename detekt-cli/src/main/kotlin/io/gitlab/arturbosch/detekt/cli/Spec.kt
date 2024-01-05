@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.tooling.api.spec.RulesSpec
-import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
 
 internal fun CliArgs.createSpec(output: Appendable, error: Appendable): ProcessingSpec {
     val args = this
@@ -66,7 +65,9 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
 }
 
 private fun asPatterns(rawValue: String): List<String> = rawValue.trim()
-    .commaSeparatedPattern(",", ";")
+    .splitToSequence(",", ";")
+    .filter { it.isNotBlank() }
+    .map { it.trim() }
     .toList()
 
 private fun CliArgs.toRunPolicy(): RulesSpec.RunPolicy {
