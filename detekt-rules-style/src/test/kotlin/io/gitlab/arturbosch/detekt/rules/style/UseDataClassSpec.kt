@@ -387,7 +387,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
             @SinceKotlin("1.0.0")
             class AnnotatedClass(val i: Int) {}
         """.trimIndent()
-        val config = TestConfig(EXCLUDE_ANNOTATED_CLASSES to "kotlin.*")
+        val config = TestConfig(EXCLUDE_ANNOTATED_CLASSES to listOf("kotlin.*"))
         assertThat(UseDataClass(config).compileAndLintWithContext(env, code)).isEmpty()
     }
 

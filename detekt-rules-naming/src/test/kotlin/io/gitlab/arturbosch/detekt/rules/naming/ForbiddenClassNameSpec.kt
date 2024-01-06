@@ -32,19 +32,6 @@ class ForbiddenClassNameSpec {
     }
 
     @Test
-    fun `should report classes with forbidden names using config string`() {
-        val code = """
-            class TestManager {} // violation
-            class TestProvider {} // violation
-            class TestHolder
-        """.trimIndent()
-        assertThat(
-            ForbiddenClassName(TestConfig(FORBIDDEN_NAME to "Manager, Provider"))
-                .compileAndLint(code)
-        ).hasSize(2)
-    }
-
-    @Test
     fun `should report classes with forbidden names using config string using wildcards`() {
         val code = """
             class TestManager {} // violation
@@ -52,7 +39,7 @@ class ForbiddenClassNameSpec {
             class TestHolder
         """.trimIndent()
         assertThat(
-            ForbiddenClassName(TestConfig(FORBIDDEN_NAME to "*Manager*, *Provider*"))
+            ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("*Manager*", "*Provider*")))
                 .compileAndLint(code)
         ).hasSize(2)
     }
@@ -62,7 +49,7 @@ class ForbiddenClassNameSpec {
         val code = """
             class TestManager {}
         """.trimIndent()
-        val actual = ForbiddenClassName(TestConfig(FORBIDDEN_NAME to "Test, Manager, Provider"))
+        val actual = ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("Test", "Manager", "Provider")))
             .compileAndLint(code)
         assertThat(actual.first().message)
             .isEqualTo("Class name TestManager is forbidden as it contains: Test, Manager")

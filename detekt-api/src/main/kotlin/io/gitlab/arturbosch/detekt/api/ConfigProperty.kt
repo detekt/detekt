@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty0
@@ -125,7 +124,7 @@ private fun ConfigAware.getListOrDefault(propertyName: String, defaultValue: Lis
     return if (defaultValue.all { it is String }) {
         @Suppress("UNCHECKED_CAST")
         val defaultValueAsListOfStrings = defaultValue as List<String>
-        ruleConfig.valueOrDefaultCommaSeparated(propertyName, defaultValueAsListOfStrings)
+        ruleConfig.valueOrDefault(propertyName, defaultValueAsListOfStrings)
     } else {
         error("Only lists of strings are supported. '$propertyName' is invalid. ")
     }

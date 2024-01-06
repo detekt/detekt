@@ -40,11 +40,8 @@ class TrimMultilineRawStringSpec {
             Hello world!
             $TQ.customTrim()
         """.trimIndent()
-        val findings = TrimMultilineRawString(
-            TestConfig(
-                "trimmingMethods" to "customTrim"
-            )
-        ).compileAndLint(code)
+        val findings = TrimMultilineRawString(TestConfig("trimmingMethods" to listOf("customTrim")))
+            .compileAndLint(code)
         assertThat(findings).isEmpty()
     }
 

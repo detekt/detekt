@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.core.config
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Config.Companion.CONFIG_SEPARATOR
-import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
 import kotlin.reflect.KClass
 
 private val ALLOWED_BOOL_VALUES = setOf("true", "false")
@@ -50,7 +49,6 @@ fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defa
         }
     is Double -> result.toDouble()
     is String -> result
-    is List<*> -> result.commaSeparatedPattern().toList()
     else -> throw ClassCastException()
 }
 

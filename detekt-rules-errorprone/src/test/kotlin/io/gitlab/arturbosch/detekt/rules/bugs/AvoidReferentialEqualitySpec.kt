@@ -100,7 +100,7 @@ class AvoidReferentialEqualitySpec(private val env: KotlinCoreEnvironment) {
 
     @Nested
     inner class `ReferentialEquality enabled for all types` {
-        private val subject = AvoidReferentialEquality(TestConfig("forbiddenTypePatterns" to "*"))
+        private val subject = AvoidReferentialEquality(TestConfig("forbiddenTypePatterns" to listOf("*")))
 
         @Test
         fun `reports usage of === for strings`() {
@@ -119,8 +119,9 @@ class AvoidReferentialEqualitySpec(private val env: KotlinCoreEnvironment) {
 
     @Nested
     inner class `ReferentialEquality enabled for all lists` {
-        private val pattern = """kotlin.collections.*List"""
-        private val subject = AvoidReferentialEquality(TestConfig("forbiddenTypePatterns" to pattern))
+        private val subject = AvoidReferentialEquality(
+            TestConfig("forbiddenTypePatterns" to listOf("kotlin.collections.*List"))
+        )
 
         @Test
         fun `reports usage of ===`() {

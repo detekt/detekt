@@ -156,7 +156,7 @@ class ForbiddenCommentSpec {
 
             @Test
             fun `should report Banana usages regardless of case sensitive`() {
-                val forbiddenComment = ForbiddenComment(TestConfig(VALUES to "bAnAnA"))
+                val forbiddenComment = ForbiddenComment(TestConfig(VALUES to listOf("bAnAnA")))
                 val findings = forbiddenComment.compileAndLint(banana)
                 assertThat(findings).hasSize(1)
             }
@@ -196,7 +196,7 @@ class ForbiddenCommentSpec {
 
             @Test
             fun `should report Banana usages regardless of case sensitive`() {
-                val forbiddenComment = ForbiddenComment(TestConfig(VALUES to "bAnAnA"))
+                val forbiddenComment = ForbiddenComment(TestConfig(VALUES to listOf("bAnAnA")))
                 val findings = forbiddenComment.compileAndLint(banana)
                 assertThat(findings).hasSize(1)
             }
@@ -207,7 +207,7 @@ class ForbiddenCommentSpec {
     inner class `custom default values with allowed patterns are configured` {
 
         private val patternsConfig = TestConfig(
-            VALUES to "Comment",
+            VALUES to listOf("Comment"),
             ALLOWED_PATTERNS to "Ticket|Task",
         )
 
@@ -236,7 +236,7 @@ class ForbiddenCommentSpec {
     @Nested
     inner class `custom message is configured` {
         private val messageConfig = TestConfig(
-            VALUES to "Comment",
+            VALUES to listOf("Comment"),
             MESSAGE to "Custom Message",
         )
 
@@ -251,7 +251,7 @@ class ForbiddenCommentSpec {
 
     @Nested
     inner class `custom message is not configured` {
-        private val messageConfig = TestConfig(VALUES to "Comment")
+        private val messageConfig = TestConfig(VALUES to listOf("Comment"))
         private val messageWithReasonConfig = TestConfig(
             COMMENTS to listOf(ValueWithReason("Comment", "Comment is disallowed").toConfig())
         )

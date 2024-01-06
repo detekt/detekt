@@ -54,16 +54,6 @@ class WildcardImportSpec {
         }
 
         @Test
-        fun `should not report excluded wildcard imports when multiple are excluded using config string`() {
-            val rule = WildcardImport(
-                TestConfig(EXCLUDED_IMPORTS to "org.assertj.core.api.Assertions.*, io.gitlab.arturbosch.detekt")
-            )
-
-            val findings = rule.compileAndLint(code)
-            assertThat(findings).isEmpty()
-        }
-
-        @Test
         fun `ignores excludes that are not matching`() {
             val rule = WildcardImport(TestConfig(EXCLUDED_IMPORTS to listOf("other.test.*")))
 

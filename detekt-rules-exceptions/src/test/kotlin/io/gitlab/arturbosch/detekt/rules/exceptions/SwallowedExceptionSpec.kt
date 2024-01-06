@@ -179,12 +179,7 @@ class SwallowedExceptionSpec {
 
     @Nested
     inner class `when given IllegalArgumentException ignores given exception types config` {
-        val ignoredExceptionValue = "IllegalArgumentException"
-
-        val config =
-            TestConfig("ignoredExceptionTypes" to ignoredExceptionValue)
-
-        val rule = SwallowedException(config)
+        val rule = SwallowedException(TestConfig("ignoredExceptionTypes" to listOf("IllegalArgumentException")))
 
         @Test
         fun `ignores given exception type in configuration`() {

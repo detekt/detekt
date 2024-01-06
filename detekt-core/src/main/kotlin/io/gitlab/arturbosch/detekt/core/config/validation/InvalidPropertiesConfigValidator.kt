@@ -93,9 +93,6 @@ internal class InvalidPropertiesConfigValidator(
             SimpleNotification("Unexpected nested config for '$prop'.")
 
         internal fun propertyShouldBeAnArray(prop: String): Notification =
-            SimpleNotification(
-                "Property '$prop' should be a YAML array instead of a comma-separated String.",
-                Notification.Level.Warning,
-            )
+            SimpleNotification("Property '$prop' should be a YAML array instead of a String.")
     }
 }

@@ -151,25 +151,13 @@ class LabeledExpressionSpec {
     }
 
     @Test
-    fun `does not report excluded label config with string`() {
-        val code = """
-            fun f() {
-                loop@ for (i in 1..5) {}
-            }
-        """.trimIndent()
-        val config = TestConfig("ignoredLabels" to "loop")
-        val findings = LabeledExpression(config).compileAndLint(code)
-        assertThat(findings).isEmpty()
-    }
-
-    @Test
     fun `does not report excluded label config with leading and trailing wildcard`() {
         val code = """
             fun f() {
                 loop@ for (i in 1..5) {}
             }
         """.trimIndent()
-        val config = TestConfig("ignoredLabels" to "*loop*,other")
+        val config = TestConfig("ignoredLabels" to listOf("*loop*", "other"))
         val findings = LabeledExpression(config).compileAndLint(code)
         assertThat(findings).isEmpty()
     }
