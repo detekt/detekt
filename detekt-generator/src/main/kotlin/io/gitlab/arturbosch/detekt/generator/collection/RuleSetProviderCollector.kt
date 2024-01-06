@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.psi.KtSuperTypeList
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
-import io.gitlab.arturbosch.detekt.api.internal.Configuration as ConfigAnnotation
+import io.gitlab.arturbosch.detekt.api.Configuration as ConfigAnnotation
 
 data class RuleSetProvider(
     val name: String,

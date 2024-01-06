@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.api.internal
+package io.gitlab.arturbosch.detekt.api
 
 /**
  * Annotate the target to specify a configuration for [io.gitlab.arturbosch.detekt.api.Rule] or
