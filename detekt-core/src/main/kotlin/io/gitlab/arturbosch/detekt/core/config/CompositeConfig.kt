@@ -8,14 +8,17 @@ import io.gitlab.arturbosch.detekt.core.config.validation.validateConfig
 /**
  * Wraps two different configuration which should be considered when retrieving properties.
  */
-class CompositeConfig(private val lookFirst: Config, private val lookSecond: Config) :
-    Config, ValidatableConfiguration {
+class CompositeConfig(
+    private val lookFirst: Config,
+    private val lookSecond: Config,
+    override val parent: Config? = null,
+) : Config, ValidatableConfiguration {
 
     override val parentPath: String?
         get() = lookFirst.parentPath ?: lookSecond.parentPath
 
     override fun subConfig(key: String): Config =
-        CompositeConfig(lookFirst.subConfig(key), lookSecond.subConfig(key))
+        CompositeConfig(lookFirst.subConfig(key), lookSecond.subConfig(key), this)
 
     override fun <T : Any> valueOrDefault(key: String, default: T): T {
         if (lookFirst.valueOrNull<T>(key) != null) {
