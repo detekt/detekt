@@ -10,6 +10,8 @@ class TestConfig(vararg pairs: Pair<String, Any>) : Config {
 
     private val values: Map<String, Any> = mapOf(*pairs)
 
+    override val parentPath: String? = null
+
     override fun subConfig(key: String) = this
 
     override fun <T : Any> valueOrDefault(key: String, default: T) =
