@@ -7,9 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
-import io.gitlab.arturbosch.detekt.rules.getParentExpressionRemovingParenthesis
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
  * Lambda expressions are one of the core features of the language. They often include very small chunks of
@@ -51,7 +51,7 @@ class ExplicitItLambdaParameter(config: Config) : Rule(config) {
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
-        if (lambdaExpression.getParentExpressionRemovingParenthesis() is KtCallableReferenceExpression) return
+        if (lambdaExpression.getStrictParentOfType<KtCallableReferenceExpression>() != null) return
         val parameterNames = lambdaExpression.valueParameters.map { it.name }
         if (IT_LITERAL in parameterNames) {
             val message = if (parameterNames.size == 1) {
