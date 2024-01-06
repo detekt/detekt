@@ -136,6 +136,10 @@ public final class io/gitlab/arturbosch/detekt/api/ConfigValidator$DefaultImpls 
 	public static fun init (Lio/gitlab/arturbosch/detekt/api/ConfigValidator;Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
 }
 
+public abstract interface annotation class io/gitlab/arturbosch/detekt/api/Configuration : java/lang/annotation/Annotation {
+	public abstract fun description ()Ljava/lang/String;
+}
+
 public abstract class io/gitlab/arturbosch/detekt/api/ConsoleReport : io/gitlab/arturbosch/detekt/api/Extension {
 	public fun <init> ()V
 	public fun getPriority ()I
