@@ -116,7 +116,7 @@ class SampleRuleProvider : RuleSetProvider {
 
     override val ruleSetId: String = "sample-rule-set"
 
-    override fun instance(config: Config) = RuleSet(ruleSetId, emptyList())
+    override fun instance() = RuleSet(ruleSetId, emptyList())
 }
 
 class SampleConfigValidator : ConfigValidator {

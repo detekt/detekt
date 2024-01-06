@@ -6,13 +6,14 @@ import io.gitlab.arturbosch.detekt.core.config.tryParseBasedOnDefault
 import io.gitlab.arturbosch.detekt.core.config.valueOrDefaultInternal
 
 @Suppress("UNCHECKED_CAST")
-class TestConfig(vararg pairs: Pair<String, Any>) : Config {
-
+class TestConfig(override val parent: Config?, vararg pairs: Pair<String, Any>) : Config {
     private val values: Map<String, Any> = mapOf(*pairs)
 
     override val parentPath: String? = null
 
-    override fun subConfig(key: String) = this
+    constructor(vararg pairs: Pair<String, Any>) : this(Config.empty, *pairs)
+
+    override fun subConfig(key: String) = TestConfig(this, *values.map { (key, value) -> key to value }.toTypedArray())
 
     override fun <T : Any> valueOrDefault(key: String, default: T) =
         if (key == Config.ACTIVE_KEY) {

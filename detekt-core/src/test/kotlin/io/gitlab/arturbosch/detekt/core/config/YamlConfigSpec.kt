@@ -67,6 +67,14 @@ class YamlConfigSpec {
             val actual = subject.parentPath
             assertThat(actual).isEqualTo(rulesetId)
         }
+
+        @Test
+        fun `parent returns the original config`() {
+            val rulesetId = "style"
+            val subject = config.subConfig(rulesetId)
+            val actual = subject.parent
+            assertThat(actual).isEqualTo(config)
+        }
     }
 
     @Nested

@@ -20,7 +20,8 @@ import kotlin.io.path.reader
  */
 class YamlConfig internal constructor(
     val properties: Map<String, Any>,
-    override val parentPath: String? = null
+    override val parentPath: String?,
+    override val parent: Config?,
 ) : Config, ValidatableConfiguration {
 
     override fun subConfig(key: String): Config {
@@ -28,7 +29,8 @@ class YamlConfig internal constructor(
         val subProperties = properties.getOrElse(key) { emptyMap<String, Any>() } as Map<String, Any>
         return YamlConfig(
             subProperties,
-            if (parentPath == null) key else "$parentPath $CONFIG_SEPARATOR $key"
+            if (parentPath == null) key else "$parentPath $CONFIG_SEPARATOR $key",
+            this,
         )
     }
 
@@ -78,7 +80,7 @@ class YamlConfig internal constructor(
                 createYamlLoad().loadFromReader(bufferedReader) as Map<String, *>?
             }.getOrElse { throw Config.InvalidConfigurationError(it) }
             @Suppress("UNCHECKED_CAST")
-            YamlConfig(map.orEmpty() as Map<String, Any>)
+            YamlConfig(map.orEmpty() as Map<String, Any>, null, null)
         }
 
         private fun createYamlLoad() = Load(

@@ -114,7 +114,7 @@ class RuleSetProviderCollectorSpec {
             
                 override fun instance(config: Config): RuleSet {
                     return RuleSet(ruleSetId, listOf(
-                            $ruleName(config)
+                            ::$ruleName
                     ))
                 }
             }
@@ -172,7 +172,7 @@ class RuleSetProviderCollectorSpec {
             
                 override fun instance(config: Config): RuleSet {
                     return RuleSet(ruleSetId, listOf(
-                            $ruleName(config)
+                            ::$ruleName
                     ))
                 }
             }
@@ -199,7 +199,7 @@ class RuleSetProviderCollectorSpec {
             class TestProvider: RuleSetProvider {
                 override fun instance(config: Config): RuleSet {
                     return RuleSet(ruleSetId, listOf(
-                            $ruleName(config)
+                            ::$ruleName
                     ))
                 }
             }
@@ -224,7 +224,7 @@ class RuleSetProviderCollectorSpec {
             
                 override fun instance(config: Config): RuleSet {
                     return RuleSet(ruleSetId, listOf(
-                            $ruleName(config)
+                            ::$ruleName
                     ))
                 }
             }
@@ -251,7 +251,7 @@ class RuleSetProviderCollectorSpec {
             
                 override fun instance(config: Config): RuleSet {
                     return RuleSet(ruleSetId, listOf(
-                            TestRule(config)
+                            ::TestRule
                     ))
                 }
             }
@@ -304,8 +304,8 @@ class RuleSetProviderCollectorSpec {
             
                 override fun instance(config: Config): RuleSet {
                     return RuleSet(ruleSetId, listOf(
-                            $ruleName(config),
-                            $secondRuleName(config)
+                            ::$ruleName,
+                            ::$secondRuleName
                     ))
                 }
             }
@@ -336,8 +336,8 @@ class RuleSetProviderCollectorSpec {
             
                 override fun instance(config: Config): RuleSet {
                     return RuleSet(ruleSetId, listOf(
-                            $ruleName(config),
-                            $secondRuleName(config)
+                            ::$ruleName,
+                            ::$secondRuleName
                     ).sortedBy(SomeComparator))
                 }
             }
@@ -381,7 +381,7 @@ class RuleSetProviderCollectorSpec {
                 override val ruleSetId: String = "ruleSetId"
             
                 override fun instance(config: Config): RuleSet {
-                    return RuleSet(ruleSetId, listOf(RruleName(config)))
+                    return RuleSet(ruleSetId, listOf(::RruleName))
                 }
             
                 companion object {
@@ -438,7 +438,7 @@ class RuleSetProviderCollectorSpec {
                 override val ruleSetId: String = "ruleSetId"
             
                 override fun instance(config: Config): RuleSet {
-                    return RuleSet(ruleSetId, listOf(RruleName(config)))
+                    return RuleSet(ruleSetId, listOf(::RruleName))
                 }
             
                 companion object {

@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.psi.KtClass
 
 class TestProvider : RuleSetProvider {
     override val ruleSetId: String = "test"
-    override fun instance(config: Config): RuleSet = RuleSet(ruleSetId, listOf(TestRule(config)))
+    override fun instance(): RuleSet = RuleSet(ruleSetId, listOf(::TestRule))
 }
 
 class TestRule(config: Config) : Rule(config) {
