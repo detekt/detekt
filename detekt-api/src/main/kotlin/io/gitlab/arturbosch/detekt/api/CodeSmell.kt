@@ -21,9 +21,7 @@ open class CodeSmell(
     override val severity: Severity
         get() = internalSeverity ?: super.severity
 
-    override val id: String = issue.id
-
-    override fun compact(): String = "$id - ${entity.compact()}"
+    override fun compact(): String = "${issue.id} - ${entity.compact()}"
 
     override fun compactWithSignature(): String = compact() + " - Signature=" + entity.signature
 
@@ -32,8 +30,7 @@ open class CodeSmell(
             "entity=$entity, " +
             "message=$message, " +
             "references=$references, " +
-            "severity=$severity, " +
-            "id='$id')"
+            "severity=$severity)"
     }
 }
 
@@ -61,7 +58,6 @@ open class CorrectableCodeSmell(
             "entity=$entity, " +
             "message=$message, " +
             "references=$references, " +
-            "severity=$severity, " +
-            "id='$id')"
+            "severity=$severity)"
     }
 }

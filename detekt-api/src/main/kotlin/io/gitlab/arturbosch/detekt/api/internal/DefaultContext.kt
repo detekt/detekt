@@ -25,7 +25,7 @@ internal class DefaultContext : Context {
      */
     override fun report(finding: Finding, aliases: Set<String>, ruleSetId: RuleSetId?) {
         val ktElement = finding.entity.ktElement
-        if (ktElement == null || !ktElement.isSuppressedBy(finding.id, aliases, ruleSetId)) {
+        if (ktElement == null || !ktElement.isSuppressedBy(finding.issue.id, aliases, ruleSetId)) {
             _findings.add(finding)
         }
     }

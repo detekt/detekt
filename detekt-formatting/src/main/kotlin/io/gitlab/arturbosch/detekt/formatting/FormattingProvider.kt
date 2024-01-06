@@ -3,11 +3,11 @@ package io.gitlab.arturbosch.detekt.formatting
 import com.pinterest.ktlint.rule.engine.core.api.Rule
 import com.pinterest.ktlint.rule.engine.core.api.RuleId
 import com.pinterest.ktlint.rule.engine.core.api.RuleSetId
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationOnSeparateLine
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ArgumentListWrapping
@@ -118,103 +118,103 @@ class FormattingProvider : RuleSetProvider {
     override val ruleSetId: String = "formatting"
 
     @Suppress("LongMethod")
-    override fun instance(config: Config) = RuleSet(
+    override fun instance() = RuleSet(
         ruleSetId,
         listOf(
             // Wrappers for standard rules. Enabled by default.
-            AnnotationOnSeparateLine(config),
-            AnnotationSpacing(config),
-            ArgumentListWrapping(config),
-            BlankLineBeforeDeclaration(config),
-            BlockCommentInitialStarAlignment(config),
-            ChainWrapping(config),
-            ClassName(config),
-            CommentSpacing(config),
-            CommentWrapping(config),
-            ContextReceiverMapping(config),
-            EnumEntryNameCase(config),
-            EnumWrapping(config),
-            Filename(config),
-            FinalNewline(config),
-            FunctionName(config),
-            FunKeywordSpacing(config),
-            FunctionReturnTypeSpacing(config),
-            FunctionSignature(config),
-            FunctionStartOfBodySpacing(config),
-            FunctionTypeReferenceSpacing(config),
-            IfElseBracing(config),
-            IfElseWrapping(config),
-            ImportOrdering(config),
-            Indentation(config),
-            KdocWrapping(config),
-            MaximumLineLength(config),
-            ModifierListSpacing(config),
-            ModifierOrdering(config),
-            MultiLineIfElse(config),
-            MultilineExpressionWrapping(config),
-            NoBlankLineBeforeRbrace(config),
-            NoBlankLineInList(config),
-            NoBlankLinesInChainedMethodCalls(config),
-            NoConsecutiveBlankLines(config),
-            NoConsecutiveComments(config),
-            NoEmptyClassBody(config),
-            NoEmptyFile(config),
-            NoEmptyFirstLineInClassBody(config),
-            NoEmptyFirstLineInMethodBlock(config),
-            NoLineBreakAfterElse(config),
-            NoLineBreakBeforeAssignment(config),
-            NoMultipleSpaces(config),
-            NoSemicolons(config),
-            NoSingleLineBlockComment(config),
-            NoTrailingSpaces(config),
-            NoUnitReturn(config),
-            NoUnusedImports(config),
-            NoWildcardImports(config),
-            NullableTypeSpacing(config),
-            PackageName(config),
-            ParameterListSpacing(config),
-            ParameterListWrapping(config),
-            ParameterWrapping(config),
-            PropertyName(config),
-            PropertyWrapping(config),
-            SpacingAroundAngleBrackets(config),
-            SpacingAroundColon(config),
-            SpacingAroundComma(config),
-            SpacingAroundCurly(config),
-            SpacingAroundDot(config),
-            SpacingAroundDoubleColon(config),
-            SpacingAroundKeyword(config),
-            SpacingAroundOperators(config),
-            SpacingAroundParens(config),
-            SpacingAroundRangeOperator(config),
-            SpacingAroundUnaryOperator(config),
-            SpacingBetweenDeclarationsWithAnnotations(config),
-            SpacingBetweenDeclarationsWithComments(config),
-            SpacingBetweenFunctionNameAndOpeningParenthesis(config),
-            StatementWrapping(config),
-            StringTemplate(config),
-            StringTemplateIndent(config),
-            TrailingCommaOnCallSite(config), // standard rule but not enabled by default
-            TrailingCommaOnDeclarationSite(config), // standard rule but not enabled by default
-            TryCatchFinallySpacing(config),
-            TypeArgumentComment(config),
-            TypeArgumentListSpacing(config),
-            TypeParameterComment(config),
-            TypeParameterListSpacing(config),
-            UnnecessaryParenthesesBeforeTrailingLambda(config),
-            ValueArgumentComment(config),
-            ValueParameterComment(config),
-            Wrapping(config),
+            ::AnnotationOnSeparateLine,
+            ::AnnotationSpacing,
+            ::ArgumentListWrapping,
+            ::BlankLineBeforeDeclaration,
+            ::BlockCommentInitialStarAlignment,
+            ::ChainWrapping,
+            ::ClassName,
+            ::CommentSpacing,
+            ::CommentWrapping,
+            ::ContextReceiverMapping,
+            ::EnumEntryNameCase,
+            ::EnumWrapping,
+            ::Filename,
+            ::FinalNewline,
+            ::FunctionName,
+            ::FunKeywordSpacing,
+            ::FunctionReturnTypeSpacing,
+            ::FunctionSignature,
+            ::FunctionStartOfBodySpacing,
+            ::FunctionTypeReferenceSpacing,
+            ::IfElseBracing,
+            ::IfElseWrapping,
+            ::ImportOrdering,
+            ::Indentation,
+            ::KdocWrapping,
+            ::MaximumLineLength,
+            ::ModifierListSpacing,
+            ::ModifierOrdering,
+            ::MultiLineIfElse,
+            ::MultilineExpressionWrapping,
+            ::NoBlankLineBeforeRbrace,
+            ::NoBlankLineInList,
+            ::NoBlankLinesInChainedMethodCalls,
+            ::NoConsecutiveBlankLines,
+            ::NoConsecutiveComments,
+            ::NoEmptyClassBody,
+            ::NoEmptyFile,
+            ::NoEmptyFirstLineInClassBody,
+            ::NoEmptyFirstLineInMethodBlock,
+            ::NoLineBreakAfterElse,
+            ::NoLineBreakBeforeAssignment,
+            ::NoMultipleSpaces,
+            ::NoSemicolons,
+            ::NoSingleLineBlockComment,
+            ::NoTrailingSpaces,
+            ::NoUnitReturn,
+            ::NoUnusedImports,
+            ::NoWildcardImports,
+            ::NullableTypeSpacing,
+            ::PackageName,
+            ::ParameterListSpacing,
+            ::ParameterListWrapping,
+            ::ParameterWrapping,
+            ::PropertyName,
+            ::PropertyWrapping,
+            ::SpacingAroundAngleBrackets,
+            ::SpacingAroundColon,
+            ::SpacingAroundComma,
+            ::SpacingAroundCurly,
+            ::SpacingAroundDot,
+            ::SpacingAroundDoubleColon,
+            ::SpacingAroundKeyword,
+            ::SpacingAroundOperators,
+            ::SpacingAroundParens,
+            ::SpacingAroundRangeOperator,
+            ::SpacingAroundUnaryOperator,
+            ::SpacingBetweenDeclarationsWithAnnotations,
+            ::SpacingBetweenDeclarationsWithComments,
+            ::SpacingBetweenFunctionNameAndOpeningParenthesis,
+            ::StatementWrapping,
+            ::StringTemplate,
+            ::StringTemplateIndent,
+            ::TrailingCommaOnCallSite, // standard rule but not enabled by default
+            ::TrailingCommaOnDeclarationSite, // standard rule but not enabled by default
+            ::TryCatchFinallySpacing,
+            ::TypeArgumentComment,
+            ::TypeArgumentListSpacing,
+            ::TypeParameterComment,
+            ::TypeParameterListSpacing,
+            ::UnnecessaryParenthesesBeforeTrailingLambda,
+            ::ValueArgumentComment,
+            ::ValueParameterComment,
+            ::Wrapping,
             // Wrappers for experimental rules. Disabled by default.
-            BinaryExpressionWrapping(config),
-            ChainMethodContinuation(config),
-            ClassSignature(config),
-            ConditionWrapping(config),
-            FunctionExpressionBody(config),
-            FunctionLiteral(config),
-            FunctionTypeModifierSpacing(config),
-            MixedConditionOperators(config),
-            MultilineLoop(config),
+            ::BinaryExpressionWrapping,
+            ::ChainMethodContinuation,
+            ::ClassSignature,
+            ::ConditionWrapping,
+            ::FunctionExpressionBody,
+            ::FunctionLiteral,
+            ::FunctionTypeModifierSpacing,
+            ::MixedConditionOperators,
+            ::MultilineLoop,
         ).sorted()
     )
 
@@ -232,39 +232,40 @@ class FormattingProvider : RuleSetProvider {
  * [Rule.VisitorModifier.RunAsLateAsPossible] and [Rule.VisitorModifier.RunAfterRule].
  * Algorithm is based on [com.pinterest.ktlint.rule.engine.internal.RuleProviderSorter].
  */
-internal fun List<FormattingRule>.sorted(): List<FormattingRule> {
-    val sortedRules = mutableListOf<FormattingRule>()
+internal fun List<(Config) -> FormattingRule>.sorted(): List<(Config) -> FormattingRule> {
+    val sortedRules = mutableListOf<(Config) -> FormattingRule>()
     val sortedRuleIds = mutableSetOf<RuleId>()
     val unprocessedRules = this
+        .map { it to it(Config.empty) }
         .sortedWith(defaultRuleOrderComparator())
         .toMutableList()
 
     // Initially the list only contains the rules without any VisitorModifiers
     unprocessedRules
-        .filter { !it.runAsLateAsPossible && it.hasNoRunAfterRules() }
-        .forEach { formattingRule ->
-            sortedRules.add(formattingRule)
-            sortedRuleIds.add(formattingRule.wrappingRuleId)
+        .filter { (_, rule) -> !rule.runAsLateAsPossible && rule.hasNoRunAfterRules() }
+        .forEach { (provider, rule) ->
+            sortedRules.add(provider)
+            sortedRuleIds.add(rule.wrappingRuleId)
         }
-    unprocessedRules.removeAll(sortedRules)
+    unprocessedRules.removeAll { (provider, _) -> provider in sortedRules }
 
     // Then we add the rules that have a RunAsLateAsPossible modifier
     // and we obey the RunAfterRule modifiers as well.
     while (unprocessedRules.isNotEmpty()) {
-        val formattingRule =
+        val (provider, rule) =
             checkNotNull(
                 unprocessedRules
-                    .firstOrNull { formattingRule ->
-                        formattingRule
+                    .firstOrNull { (_, rule) ->
+                        rule
                             .runAfterRules()
                             .all { it.ruleId in sortedRuleIds }
                     }
             ) {
                 "Can not complete sorting of rule providers as next item can not be determined."
             }
-        sortedRuleIds.add(formattingRule.wrappingRuleId)
-        sortedRules.add(formattingRule)
-        unprocessedRules.remove(formattingRule)
+        sortedRuleIds.add(rule.wrappingRuleId)
+        sortedRules.add(provider)
+        unprocessedRules.removeAll { (provider, _) -> provider in sortedRules }
     }
 
     return sortedRules
@@ -273,11 +274,11 @@ internal fun List<FormattingRule>.sorted(): List<FormattingRule> {
 private fun defaultRuleOrderComparator() =
 // The sort order below should guarantee a stable order of the rule between multiple invocations of KtLint given
     // the same set of input parameters. There should be no dependency on data ordering outside this class.
-    compareBy<FormattingRule> {
-        if (it.runAsLateAsPossible) 1 else 0
-    }.thenBy {
-        if (it.wrappingRuleId.ruleSetId == RuleSetId.STANDARD) 0 else 1
-    }.thenBy { it.wrappingRuleId.value }
+    compareBy<Pair<(Config) -> FormattingRule, FormattingRule>> { (_, rule) ->
+        if (rule.runAsLateAsPossible) 1 else 0
+    }.thenBy { (_, rule) ->
+        if (rule.wrappingRuleId.ruleSetId == RuleSetId.STANDARD) 0 else 1
+    }.thenBy { (_, rule) -> rule.wrappingRuleId.value }
 
 internal val FormattingRule.wrappingRuleId
     get() = wrapping.ruleId

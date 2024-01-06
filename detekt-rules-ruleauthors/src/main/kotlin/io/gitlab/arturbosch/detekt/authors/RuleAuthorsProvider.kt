@@ -1,9 +1,8 @@
 package io.gitlab.arturbosch.detekt.authors
 
-import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 
 /**
  * The rule authors ruleset provides rules that ensures good practices when writing detekt rules.
@@ -19,11 +18,11 @@ class RuleAuthorsProvider : RuleSetProvider {
 
     override val ruleSetId: String = "ruleauthors"
 
-    override fun instance(config: Config) = RuleSet(
+    override fun instance() = RuleSet(
         ruleSetId,
         listOf(
-            ViolatesTypeResolutionRequirements(config),
-            UseEntityAtName(config),
+            ::ViolatesTypeResolutionRequirements,
+            ::UseEntityAtName,
         )
     )
 }

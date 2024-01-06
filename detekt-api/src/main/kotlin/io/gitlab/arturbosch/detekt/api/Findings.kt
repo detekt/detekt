@@ -1,14 +1,12 @@
 package io.gitlab.arturbosch.detekt.api
 
 /**
- * Base interface of detection findings. Inherits a bunch of useful behaviour
- * from sub interfaces.
+ * Represents a problem detected by a rule on the source code
  *
- * Basic behaviour of a finding is that is can be assigned to an id and a source code position described as
- * an entity. Metrics and entity references can also considered for deeper characterization.
+ * A finding has an issue (information about the rule that detected the problem), a severity and a source code position
+ * described as an entity. Entity references can also be considered for deeper characterization.
  */
 interface Finding : Compactable, HasEntity {
-    val id: String
     val issue: Issue
     val references: List<Entity>
     val message: String

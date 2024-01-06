@@ -22,7 +22,7 @@ fun Config.shouldAnalyzeFile(file: KtFile): Boolean {
 fun associateRuleIdsToRuleSetIds(ruleSets: List<RuleSet>): Map<RuleId, RuleSetId> {
     return ruleSets
         .flatMap { ruleSet ->
-            ruleSet.rules.map { rule -> rule.ruleId to ruleSet.id }
+            ruleSet.rules.map { (ruleId, _) -> ruleId to ruleSet.id }
         }
         .toMap()
 }

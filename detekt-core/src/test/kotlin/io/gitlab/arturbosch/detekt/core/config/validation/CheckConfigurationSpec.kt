@@ -91,7 +91,7 @@ class CheckConfigurationSpec {
                   # Additional properties can be useful when writing custom extensions.
                   # However only properties defined in the default config are known to detekt.
                   # All unknown properties are treated as errors if not excluded.
-                  excludes: 'my_additional_properties'
+                  excludes: ['my_additional_properties']
                 
                 # Properties of custom rule sets get excluded by default.
                 # If you want to validate them further, consider implementing a ConfigValidator.
@@ -116,7 +116,7 @@ class SampleRuleProvider : RuleSetProvider {
 
     override val ruleSetId: String = "sample-rule-set"
 
-    override fun instance(config: Config) = RuleSet(ruleSetId, emptyList())
+    override fun instance() = RuleSet(ruleSetId, emptyList())
 }
 
 class SampleConfigValidator : ConfigValidator {

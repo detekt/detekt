@@ -6,10 +6,10 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.getContextForPaths
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
@@ -232,13 +232,13 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
 
 private class CustomRuleSetProvider : RuleSetProvider {
     override val ruleSetId: String = "custom"
-    override fun instance(config: Config) = RuleSet(
+    override fun instance() = RuleSet(
         ruleSetId,
         listOf(
-            MaxLineLength(config),
-            RequiresTypeResolutionMaxLineLength(config),
-            FaultyRule(config),
-            FaultyRuleNoStackTrace(config),
+            ::MaxLineLength,
+            ::RequiresTypeResolutionMaxLineLength,
+            ::FaultyRule,
+            ::FaultyRuleNoStackTrace,
         )
     )
 }

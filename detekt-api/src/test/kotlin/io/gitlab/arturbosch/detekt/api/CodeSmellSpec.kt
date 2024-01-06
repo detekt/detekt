@@ -17,7 +17,7 @@ class CodeSmellSpec {
                 "location=Location(source=1:1, endSource=1:1, text=0:0, " +
                 "filePath=FilePath(absolutePath=$basePath${File.separator}TestFile.kt, " +
                 "basePath=$basePath, relativePath=TestFile.kt)), ktElement=null), message=TestMessage, " +
-                "references=[], severity=Error, id='TestSmell')"
+                "references=[], severity=Error)"
         )
     }
 }

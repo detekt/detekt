@@ -3,14 +3,14 @@ package io.gitlab.arturbosch.detekt.core
 import io.github.detekt.psi.absolutePath
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.BaseRule
+import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.CompilerResources
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
@@ -109,7 +109,7 @@ internal class Analyzer(
         val activeRuleSetsToRuleSetConfigs = providers.asSequence()
             .map { it to config.subConfig(it.ruleSetId) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
-            .map { (provider, ruleSetConfig) -> provider.instance(ruleSetConfig) to ruleSetConfig }
+            .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.shouldAnalyzeFile(file) }
             .toList()
 
@@ -118,7 +118,7 @@ internal class Analyzer(
         )
 
         val (correctableRules, otherRules) = activeRuleSetsToRuleSetConfigs
-            .flatMap { (ruleSet, _) -> ruleSet.rules }
+            .flatMap { (ruleSet, config) -> ruleSet.rules.map { (_, ruleProvider) -> ruleProvider(config) } }
             .filter { rule ->
                 bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
             }
@@ -130,8 +130,8 @@ internal class Analyzer(
             for (rule in rules) {
                 rule.visitFile(file, bindingContext, compilerResources)
                 for (finding in filterSuppressedFindings(rule, bindingContext)) {
-                    val mappedRuleSet = checkNotNull(ruleIdsToRuleSetIds[finding.id]) {
-                        "Mapping for '${finding.id}' expected."
+                    val mappedRuleSet = checkNotNull(ruleIdsToRuleSetIds[finding.issue.id]) {
+                        "Mapping for '${finding.issue.id}' expected."
                     }
                     result.computeIfAbsent(mappedRuleSet) { mutableListOf() }
                         .add(finding)
@@ -149,8 +149,8 @@ internal class Analyzer(
         providers.asSequence()
             .map { it to config.subConfig(it.ruleSetId) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
-            .map { (provider, ruleSetConfig) -> provider.instance(ruleSetConfig) to ruleSetConfig }
-            .flatMap { (ruleSet, _) -> ruleSet.rules }
+            .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
+            .flatMap { (ruleSet, config) -> ruleSet.rules.map { (_, ruleProvider) -> ruleProvider(config) } }
             .filter { rule -> (rule as? Rule)?.active == true }
             .filter { rule -> rule::class.hasAnnotation<RequiresTypeResolution>() }
             .forEach { rule ->

@@ -1,15 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
-import io.gitlab.arturbosch.detekt.rules.parentsOfTypeUntil
 import io.gitlab.arturbosch.detekt.rules.yieldStatementsSkippingGuardClauses
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -106,7 +105,7 @@ class ReturnCount(config: Config) : Rule(config) {
     private fun KtReturnExpression.isNamedReturnFromLambda(): Boolean {
         val label = this.labeledExpression
         if (label != null) {
-            return this.parentsOfTypeUntil<KtLambdaExpression, KtNamedFunction>().any()
+            return this.getParentOfType<KtLambdaExpression>(true, KtNamedFunction::class.java) != null
         }
         return false
     }

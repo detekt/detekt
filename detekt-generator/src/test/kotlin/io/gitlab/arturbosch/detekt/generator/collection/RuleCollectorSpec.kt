@@ -745,7 +745,7 @@ class RuleCollectorSpec {
                 /**
                  * description
                  */
-                @io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+                @io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
                 class SomeRandomClass : Rule
             """.trimIndent()
             val items = subject.run(code)

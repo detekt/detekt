@@ -27,7 +27,7 @@ private fun Finding.toResult(ruleSetId: RuleSetId): io.github.detekt.sarif4k.Res
     val code = entity.ktElement?.containingFile?.text
 
     return io.github.detekt.sarif4k.Result(
-        ruleID = "detekt.$ruleSetId.$id",
+        ruleID = "detekt.$ruleSetId.${issue.id}",
         level = severity.toResultLevel(),
         locations = (listOf(location) + references.map { it.location }).map { it.toLocation(code) }.distinct().toList(),
         message = Message(text = message)

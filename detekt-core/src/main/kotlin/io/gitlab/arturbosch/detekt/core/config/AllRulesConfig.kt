@@ -9,14 +9,15 @@ import io.gitlab.arturbosch.detekt.core.config.validation.validateConfig
 internal data class AllRulesConfig(
     private val originalConfig: Config,
     private val defaultConfig: Config,
-    private val deprecatedRules: Set<DeprecatedRule> = emptySet()
+    private val deprecatedRules: Set<DeprecatedRule> = emptySet(),
+    override val parent: Config? = null,
 ) : Config, ValidatableConfiguration {
 
     override val parentPath: String?
         get() = originalConfig.parentPath ?: defaultConfig.parentPath
 
     override fun subConfig(key: String) =
-        AllRulesConfig(originalConfig.subConfig(key), defaultConfig.subConfig(key), deprecatedRules)
+        AllRulesConfig(originalConfig.subConfig(key), defaultConfig.subConfig(key), deprecatedRules, this)
 
     override fun <T : Any> valueOrDefault(key: String, default: T): T {
         return when (key) {

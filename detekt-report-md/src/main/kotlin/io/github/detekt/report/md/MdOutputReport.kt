@@ -83,7 +83,7 @@ private fun MarkdownContent.renderComplexity(complexityReport: List<String>) {
 
 private fun MarkdownContent.renderGroup(group: String, findings: List<Finding>) {
     findings
-        .groupBy { it.id }
+        .groupBy { it.issue.id }
         .toList()
         .sortedBy { (rule, _) -> rule }
         .forEach { (rule, ruleFindings) ->

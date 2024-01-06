@@ -12,7 +12,8 @@ interface Config {
      * May be null if this is the top most configuration object.
      */
     val parentPath: String?
-        get() = null
+
+    val parent: Config?
 
     /**
      * Tries to retrieve part of the configuration based on given key.
@@ -49,6 +50,10 @@ interface Config {
          * Always returns the default value except when 'active' is queried, it returns true.
          */
         val empty: Config = object : Config {
+            override val parentPath: String? = null
+
+            override val parent: Config = this
+
             override fun subConfig(key: String): Config = this
 
             @Suppress("UNCHECKED_CAST")

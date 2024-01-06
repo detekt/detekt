@@ -1,8 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 
 /**
@@ -13,30 +12,30 @@ class NamingProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "naming"
 
-    override fun instance(config: Config): RuleSet = RuleSet(
+    override fun instance(): RuleSet = RuleSet(
         ruleSetId,
         listOf(
-            MatchingDeclarationName(config),
-            MemberNameEqualsClassName(config),
-            InvalidPackageDeclaration(config),
-            NoNameShadowing(config),
-            TopLevelPropertyNaming(config),
-            BooleanPropertyNaming(config),
-            LambdaParameterNaming(config),
-            ConstructorParameterNaming(config),
-            ForbiddenClassName(config),
-            ClassNaming(config),
-            PackageNaming(config),
-            EnumNaming(config),
-            ObjectPropertyNaming(config),
-            FunctionParameterNaming(config),
-            FunctionNaming(config),
-            FunctionNameMinLength(config),
-            FunctionNameMaxLength(config),
-            VariableMaxLength(config),
-            VariableMinLength(config),
-            VariableNaming(config),
-            NonBooleanPropertyPrefixedWithIs(config)
+            ::MatchingDeclarationName,
+            ::MemberNameEqualsClassName,
+            ::InvalidPackageDeclaration,
+            ::NoNameShadowing,
+            ::TopLevelPropertyNaming,
+            ::BooleanPropertyNaming,
+            ::LambdaParameterNaming,
+            ::ConstructorParameterNaming,
+            ::ForbiddenClassName,
+            ::ClassNaming,
+            ::PackageNaming,
+            ::EnumNaming,
+            ::ObjectPropertyNaming,
+            ::FunctionParameterNaming,
+            ::FunctionNaming,
+            ::FunctionNameMinLength,
+            ::FunctionNameMaxLength,
+            ::VariableMaxLength,
+            ::VariableMinLength,
+            ::VariableNaming,
+            ::NonBooleanPropertyPrefixedWithIs
         )
     )
 }

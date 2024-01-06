@@ -96,18 +96,12 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `skips all if if the nested functions is empty`() {
-            val config = TestConfig(defaultAllowedComplexity, "nestingFunctions" to "")
+            val config = TestConfig(defaultAllowedComplexity, "nestingFunctions" to emptyList<String>())
             assertExpectedComplexityValue(code, config, expectedValue = 2)
         }
 
         @Test
         fun `skips 'forEach' as it is not specified`() {
-            val config = TestConfig(defaultAllowedComplexity, "nestingFunctions" to "let,apply,also")
-            assertExpectedComplexityValue(code, config, expectedValue = 2)
-        }
-
-        @Test
-        fun `skips 'forEach' as it is not specified list`() {
             val config = TestConfig(defaultAllowedComplexity, "nestingFunctions" to listOf("let", "apply", "also"))
             assertExpectedComplexityValue(code, config, expectedValue = 2)
         }

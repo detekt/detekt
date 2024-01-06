@@ -89,7 +89,7 @@ internal class InvalidPropertiesConfigValidatorSpec {
     }
 
     @Test
-    fun `reports a string that should be an array as a warning`() {
+    fun `reports a string that should be an array as an error`() {
         val config = yamlConfigFromContent(
             """
                 style:
@@ -103,8 +103,8 @@ internal class InvalidPropertiesConfigValidatorSpec {
         assertThat(result).anySatisfy { notification ->
             assertThat(notification.message)
                 .contains("style>MagicNumber>ignoreNumbers")
-                .contains("should be a YAML array instead of a comma-separated String")
-            assertThat(notification.level).isEqualTo(Notification.Level.Warning)
+                .contains("should be a YAML array instead of a String")
+            assertThat(notification.level).isEqualTo(Notification.Level.Error)
         }
     }
 
