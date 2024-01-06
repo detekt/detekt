@@ -7,10 +7,10 @@ import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
