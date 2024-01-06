@@ -105,7 +105,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         h3 { text("$group: %,d".format(Locale.US, findings.size)) }
 
         findings
-            .groupBy { it.id }
+            .groupBy { it.issue.id }
             .toList()
             .sortedBy { (rule, _) -> rule }
             .forEach { (rule, ruleFindings) ->
@@ -155,7 +155,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         val psiFile = finding.entity.ktElement?.containingFile
         if (psiFile != null) {
             val lineSequence = psiFile.text.splitToSequence('\n')
-            snippetCode(finding.id, lineSequence, finding.startPosition, finding.charPosition.length())
+            snippetCode(finding.issue.id, lineSequence, finding.startPosition, finding.charPosition.length())
         }
     }
 
