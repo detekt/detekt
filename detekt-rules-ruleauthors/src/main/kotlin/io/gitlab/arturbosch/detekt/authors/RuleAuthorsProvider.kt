@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.authors
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 
@@ -19,11 +18,11 @@ class RuleAuthorsProvider : RuleSetProvider {
 
     override val ruleSetId: String = "ruleauthors"
 
-    override fun instance(config: Config) = RuleSet(
+    override fun instance() = RuleSet(
         ruleSetId,
         listOf(
-            ViolatesTypeResolutionRequirements(config),
-            UseEntityAtName(config),
+            ::ViolatesTypeResolutionRequirements,
+            ::UseEntityAtName,
         )
     )
 }

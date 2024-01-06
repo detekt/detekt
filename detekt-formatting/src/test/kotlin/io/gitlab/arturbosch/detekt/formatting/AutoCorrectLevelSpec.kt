@@ -55,15 +55,16 @@ class AutoCorrectLevelSpec {
 
 private fun runRule(config: Config): Pair<KtFile, List<Finding>> {
     val testFile = loadFile("configTests/fixed.kt")
-    val ruleSet = loadRuleSet<FormattingProvider>(config)
-    ruleSet.rules.forEach { it.visitFile(testFile) }
-    return testFile to ruleSet.rules.flatMap { it.findings }
+    val ruleSet = loadRuleSet<FormattingProvider>()
+    val rules = ruleSet.rules.map { (_, provider) -> provider(config.subConfig(ruleSet.id)) }
+    rules.forEach { it.visitFile(testFile) }
+    return testFile to rules.flatMap { it.findings }
 }
 
 private fun wasFormatted(file: KtFile) = file.text == contentAfterChainWrapping
 
-private inline fun <reified T : RuleSetProvider> loadRuleSet(config: Config = Config.empty): RuleSet {
+private inline fun <reified T : RuleSetProvider> loadRuleSet(): RuleSet {
     val provider = T::class.java.constructors[0].newInstance() as? T
         ?: error("Could not load RuleSet for '${T::class.java}'")
-    return provider.instance(config.subConfig(provider.ruleSetId))
+    return provider.instance()
 }

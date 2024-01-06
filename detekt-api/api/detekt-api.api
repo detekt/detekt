@@ -371,14 +371,19 @@ public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosc
 }
 
 public final class io/gitlab/arturbosch/detekt/api/RuleSet {
-	public fun <init> (Ljava/lang/String;Ljava/util/List;)V
+	public static final field Companion Lio/gitlab/arturbosch/detekt/api/RuleSet$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/Map;)V
 	public final fun getId ()Ljava/lang/String;
-	public final fun getRules ()Ljava/util/List;
+	public final fun getRules ()Ljava/util/Map;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/RuleSet$Companion {
+	public final fun invoke (Ljava/lang/String;Ljava/util/List;)Lio/gitlab/arturbosch/detekt/api/RuleSet;
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/RuleSetProvider {
 	public abstract fun getRuleSetId ()Ljava/lang/String;
-	public abstract fun instance (Lio/gitlab/arturbosch/detekt/api/Config;)Lio/gitlab/arturbosch/detekt/api/RuleSet;
+	public abstract fun instance ()Lio/gitlab/arturbosch/detekt/api/RuleSet;
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/SetupContext : io/gitlab/arturbosch/detekt/api/PropertiesAware {

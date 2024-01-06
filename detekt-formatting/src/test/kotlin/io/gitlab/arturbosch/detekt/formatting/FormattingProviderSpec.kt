@@ -9,25 +9,17 @@ import org.junit.jupiter.api.Test
 class FormattingProviderSpec {
 
     @Test
-    fun `list is unique`() {
-        val subject: RuleSet = FormattingProvider().instance(Config.empty)
-        subject.rules.groupBy { it.ruleId }.forEach {
-            assertThat(it.value).hasSize(1)
-        }
-    }
-
-    @Test
     fun `run as late as possible is observed`() {
-        val subject: RuleSet = FormattingProvider().instance(Config.empty)
-        val formattingRules = subject.rules.map { it as FormattingRule }
+        val subject: RuleSet = FormattingProvider().instance()
+        val formattingRules = subject.rules.map { (_, provider) -> provider(Config.empty) as FormattingRule }
         val indexOfFirstLateRule = formattingRules.indexOfFirst { it.runAsLateAsPossible }
         assertThat(indexOfFirstLateRule).isGreaterThan(0)
     }
 
     @Test
     fun `run after rule is observed`() {
-        val subject: RuleSet = FormattingProvider().instance(Config.empty)
-        val formattingRules = subject.rules.map { it as FormattingRule }
+        val subject: RuleSet = FormattingProvider().instance()
+        val formattingRules = subject.rules.map { (_, provider) -> provider(Config.empty) as FormattingRule }
         val ruleIdToIndices = formattingRules
             .mapIndexed { index, formattingRule -> formattingRule.wrapping.ruleId to index }
             .toMap()

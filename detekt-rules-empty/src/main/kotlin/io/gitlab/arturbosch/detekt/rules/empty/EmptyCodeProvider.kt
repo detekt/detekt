@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 
@@ -14,24 +13,24 @@ class EmptyCodeProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "empty-blocks"
 
-    override fun instance(config: Config): RuleSet = RuleSet(
+    override fun instance(): RuleSet = RuleSet(
         ruleSetId,
         listOf(
-            EmptyCatchBlock(config),
-            EmptyClassBlock(config),
-            EmptyDefaultConstructor(config),
-            EmptyDoWhileBlock(config),
-            EmptyElseBlock(config),
-            EmptyFinallyBlock(config),
-            EmptyForBlock(config),
-            EmptyFunctionBlock(config),
-            EmptyIfBlock(config),
-            EmptyInitBlock(config),
-            EmptyKotlinFile(config),
-            EmptySecondaryConstructor(config),
-            EmptyTryBlock(config),
-            EmptyWhenBlock(config),
-            EmptyWhileBlock(config),
+            ::EmptyCatchBlock,
+            ::EmptyClassBlock,
+            ::EmptyDefaultConstructor,
+            ::EmptyDoWhileBlock,
+            ::EmptyElseBlock,
+            ::EmptyFinallyBlock,
+            ::EmptyForBlock,
+            ::EmptyFunctionBlock,
+            ::EmptyIfBlock,
+            ::EmptyInitBlock,
+            ::EmptyKotlinFile,
+            ::EmptySecondaryConstructor,
+            ::EmptyTryBlock,
+            ::EmptyWhenBlock,
+            ::EmptyWhileBlock,
         )
     )
 }

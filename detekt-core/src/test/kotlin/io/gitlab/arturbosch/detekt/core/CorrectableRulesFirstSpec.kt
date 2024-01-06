@@ -36,9 +36,9 @@ class CorrectableRulesFirstSpec {
             settings,
             listOf(object : RuleSetProvider {
                 override val ruleSetId: String = "Test"
-                override fun instance(config: Config) = RuleSet(
+                override fun instance() = RuleSet(
                     ruleSetId,
-                    listOf(NonCorrectable(config), Correctable(config)).let { if (reverse) it.reversed() else it }
+                    listOf(::NonCorrectable, ::Correctable).let { if (reverse) it.reversed() else it }
                 )
             }),
             emptyList()

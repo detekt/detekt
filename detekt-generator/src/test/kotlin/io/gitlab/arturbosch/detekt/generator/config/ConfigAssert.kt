@@ -63,8 +63,9 @@ class ConfigAssert(
 
     private fun getRulesDefinedByRuleSet(): List<BaseRule> {
         return getRuleSetProviderInPackageOrNull()
-            ?.instance(Config.empty)
+            ?.instance()
             ?.rules
+            ?.map { (_, provider) -> provider(Config.empty) }
             .orEmpty()
     }
 

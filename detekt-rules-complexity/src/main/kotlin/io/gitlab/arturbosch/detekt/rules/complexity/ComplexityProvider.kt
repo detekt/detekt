@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 
@@ -13,24 +12,24 @@ class ComplexityProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "complexity"
 
-    override fun instance(config: Config): RuleSet = RuleSet(
+    override fun instance(): RuleSet = RuleSet(
         ruleSetId,
         listOf(
-            LongParameterList(config),
-            LongMethod(config),
-            LargeClass(config),
-            ComplexInterface(config),
-            CyclomaticComplexMethod(config),
-            CognitiveComplexMethod(config),
-            StringLiteralDuplication(config),
-            MethodOverloading(config),
-            NestedBlockDepth(config),
-            NestedScopeFunctions(config),
-            TooManyFunctions(config),
-            ComplexCondition(config),
-            LabeledExpression(config),
-            ReplaceSafeCallChainWithRun(config),
-            NamedArguments(config)
+            ::LongParameterList,
+            ::LongMethod,
+            ::LargeClass,
+            ::ComplexInterface,
+            ::CyclomaticComplexMethod,
+            ::CognitiveComplexMethod,
+            ::StringLiteralDuplication,
+            ::MethodOverloading,
+            ::NestedBlockDepth,
+            ::NestedScopeFunctions,
+            ::TooManyFunctions,
+            ::ComplexCondition,
+            ::LabeledExpression,
+            ::ReplaceSafeCallChainWithRun,
+            ::NamedArguments
         )
     )
 }
