@@ -59,8 +59,8 @@ internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCor
     fun `should not report Rules that use bindingContext and are annotated`() {
         val code = """
             import io.gitlab.arturbosch.detekt.api.Config
-            import io.gitlab.arturbosch.detekt.api.Rule
             import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+            import io.gitlab.arturbosch.detekt.api.Rule
             
             @RequiresTypeResolution
             class A(config: Config) : Rule(config) {
@@ -79,8 +79,8 @@ internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCor
     fun `should report Rules that don't use bindingContext and are annotated`() {
         val code = """
             import io.gitlab.arturbosch.detekt.api.Config
-            import io.gitlab.arturbosch.detekt.api.Rule
             import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+            import io.gitlab.arturbosch.detekt.api.Rule
             
             @RequiresTypeResolution
             class A(config: Config) : Rule(config) {
