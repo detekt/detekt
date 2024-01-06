@@ -142,8 +142,6 @@ public final class io/gitlab/arturbosch/detekt/rules/ThrowExtensionsKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/TraversingKt {
-	public static final fun getParentExpressionRemovingParenthesis (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;Z)Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;
-	public static synthetic fun getParentExpressionRemovingParenthesis$default (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;ZILjava/lang/Object;)Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;
 	public static final fun isPublicInherited (Lorg/jetbrains/kotlin/psi/KtNamedDeclaration;)Z
 	public static final fun isPublicInherited (Lorg/jetbrains/kotlin/psi/KtNamedDeclaration;Z)Z
 }
