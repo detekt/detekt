@@ -62,7 +62,7 @@
   <div class="breadcrumbs"><a href="../../index.html">detekt-api</a><span class="delimiter">/</span><a href="../index.html">io.gitlab.arturbosch.detekt.api</a><span class="delimiter">/</span><span class="current">Finding</span></div>
   <div class="cover ">
     <h1 class="cover"><span><span>Finding</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">Finding</a> : <a href="../-compactable/index.html">Compactable</a>, <a href="../-has-entity/index.html">HasEntity</a></div><p class="paragraph">Base interface of detection findings. Inherits a bunch of useful behaviour from sub interfaces.</p><p class="paragraph">Basic behaviour of a finding is that is can be assigned to an id and a source code position described as an entity. Metrics and entity references can also considered for deeper characterization.</p><h4 class="">Inheritors</h4><div class="table"><div class="table-row" data-filterable-current=":detekt-api:dokkaHtmlPartial/main" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-code-smell/index.html">CodeSmell</a></div></span></div><div></div></div></div></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">Finding</a> : <a href="../-compactable/index.html">Compactable</a>, <a href="../-has-entity/index.html">HasEntity</a></div><p class="paragraph">Represents a problem detected by a rule on the source code</p><p class="paragraph">A finding has an issue (information about the rule that detected the problem), a severity and a source code position described as an entity. Entity references can also be considered for deeper characterization.</p><h4 class="">Inheritors</h4><div class="table"><div class="table-row" data-filterable-current=":detekt-api:dokkaHtmlPartial/main" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-code-smell/index.html">CodeSmell</a></div></span></div><div></div></div></div></div></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
@@ -110,21 +110,6 @@
               <div>
                 <div class="title">
                   <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">val </span><a href="../-has-entity/file.html">file</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="2034056332%2FProperties%2F581599712" anchor-label="id" id="2034056332%2FProperties%2F581599712" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-api:dokkaHtmlPartial/main" data-filterable-set=":detekt-api:dokkaHtmlPartial/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="id.html"><span><span>id</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2034056332%2FProperties%2F581599712"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="id.html">id</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div></div></div>
                 </div>
               </div>
             </div>
