@@ -351,6 +351,9 @@ public final class io/gitlab/arturbosch/detekt/api/ReportingExtension$DefaultImp
 	public static fun transformFindings (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Ljava/util/Map;)Ljava/util/Map;
 }
 
+public abstract interface annotation class io/gitlab/arturbosch/detekt/api/RequiresTypeResolution : java/lang/annotation/Annotation {
+}
+
 public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/BaseRule, io/gitlab/arturbosch/detekt/api/ConfigAware {
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;)V
 	public fun getActive ()Z

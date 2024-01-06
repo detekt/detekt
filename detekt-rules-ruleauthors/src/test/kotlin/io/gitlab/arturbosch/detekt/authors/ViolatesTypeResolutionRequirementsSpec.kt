@@ -60,7 +60,7 @@ internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCor
         val code = """
             import io.gitlab.arturbosch.detekt.api.Config
             import io.gitlab.arturbosch.detekt.api.Rule
-            import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+            import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
             
             @RequiresTypeResolution
             class A(config: Config) : Rule(config) {
@@ -80,7 +80,7 @@ internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCor
         val code = """
             import io.gitlab.arturbosch.detekt.api.Config
             import io.gitlab.arturbosch.detekt.api.Rule
-            import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
+            import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
             
             @RequiresTypeResolution
             class A(config: Config) : Rule(config) {
