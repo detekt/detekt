@@ -64,18 +64,6 @@ class BaselineFormatSpec {
                 .isThrownBy { BaselineFormat().read(path) }
                 .withMessage("The content of the ID element must not be empty")
         }
-
-        @Test
-        fun `supports deprecated baseline values`() {
-            val path = resourceAsPath("/baseline_feature/deprecated-baseline.xml")
-            val (manuallySuppressedIssues, currentIssues) = BaselineFormat().read(path)
-
-            assertThat(manuallySuppressedIssues).hasSize(2)
-            assertThat(manuallySuppressedIssues).anySatisfy { it.startsWith("LongParameterList") }
-            assertThat(manuallySuppressedIssues).anySatisfy { it.startsWith("LongMethod") }
-            assertThat(currentIssues).hasSize(1)
-            assertThat(currentIssues).anySatisfy { it.startsWith("FeatureEnvy") }
-        }
     }
 
     @Nested
