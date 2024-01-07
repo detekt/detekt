@@ -442,13 +442,33 @@ class DetektTaskDslSpec {
         }
 
         @Test
-        fun `enables auto correcting`() {
-            assertThat(result.output).contains("--auto-correct")
+        fun `enables using default config as baseline`() {
+            assertThat(result.output).contains("--build-upon-default-config")
+        }
+    }
+
+    @Nested
+    inner class FailureSeverity {
+        private val builder = kotlin().dryRun()
+
+        @Test
+        fun `is set to error by default`() {
+            val gradleRunner = builder.withDetektConfig("").build()
+            val result = gradleRunner.runDetektTask()
+            assertThat(result.output).contains("--fail-on-severity error")
         }
 
         @Test
-        fun `enables using default config as baseline`() {
-            assertThat(result.output).contains("--build-upon-default-config")
+        fun `can be configured`() {
+            val config = """
+                detekt {
+                    failOnSeverity = io.gitlab.arturbosch.detekt.extensions.FailOnSeverity.Never
+                }
+            """.trimIndent()
+
+            val gradleRunner = builder.withDetektConfig(config).build()
+            val result = gradleRunner.runDetektTask()
+            assertThat(result.output).contains("--fail-on-severity never")
         }
     }
 
@@ -528,6 +548,7 @@ class DetektTaskDslSpec {
                 buildUponDefaultConfig = true
                 allRules = false
                 ignoreFailures = false
+                failOnSeverity = io.gitlab.arturbosch.detekt.extensions.FailOnSeverity.Error
                 autoCorrect = false
                 reports {
                     xml {

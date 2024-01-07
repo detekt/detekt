@@ -5,11 +5,17 @@ package io.gitlab.arturbosch.detekt.api
  * Depending on the severity of the issues found, the build process result is determined.
  */
 enum class Severity {
-    ERROR,
-    WARNING,
-    INFO;
+    Error,
+    Warning,
+    Info;
 
     internal companion object {
-        val DEFAULT = ERROR
+        val DEFAULT = Error
+
+        fun fromString(severity: String): Severity {
+            val lowercase = severity.lowercase()
+            return entries.find { it.name.lowercase() == lowercase }
+                ?: error("$severity is not a valid Severity. Allowed values are ${Severity.entries}")
+        }
     }
 }

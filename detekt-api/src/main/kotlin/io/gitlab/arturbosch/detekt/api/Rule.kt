@@ -73,7 +73,7 @@ abstract class Rule(
     private fun computeSeverity(): Severity {
         val configValue: String = valueOrNull(SEVERITY_KEY)
             ?: ruleSetConfig.valueOrDefault(SEVERITY_KEY, Severity.DEFAULT.name)
-        return enumValueOf(configValue.uppercase())
+        return Severity.fromString(configValue)
     }
 
     /**
