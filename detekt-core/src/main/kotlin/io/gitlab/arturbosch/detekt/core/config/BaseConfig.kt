@@ -19,8 +19,20 @@ fun Config.valueOrDefaultInternal(
         if (result != null) {
             when {
                 result is String -> parser(result, default)
+                result is List<*> -> {
+                    if (default !is List<*>) {
+                        throw ClassCastException()
+                    }
+                    check(result.all { it is String }) {
+                        "Only lists of strings are supported. Value \"$result\" set " +
+                            "for config parameter \"${keySequence(key)}\" contains non-string values."
+                    }
+                    result.map { it as String }
+                }
+
                 default::class in PRIMITIVES &&
                     result::class != default::class -> throw ClassCastException()
+
                 else -> result
             }
         } else {
@@ -47,6 +59,7 @@ fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defa
         } else {
             throw ClassCastException()
         }
+
     is Double -> result.toDouble()
     is String -> result
     else -> throw ClassCastException()
