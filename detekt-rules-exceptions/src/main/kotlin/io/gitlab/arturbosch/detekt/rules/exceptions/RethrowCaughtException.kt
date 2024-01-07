@@ -61,7 +61,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 class RethrowCaughtException(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "RethrowCaughtException",
+        javaClass.simpleName,
         "Do not rethrow a caught exception of the same type.",
     )
 

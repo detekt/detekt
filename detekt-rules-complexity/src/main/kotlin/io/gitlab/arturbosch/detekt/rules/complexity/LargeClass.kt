@@ -24,7 +24,7 @@ import java.util.IdentityHashMap
 class LargeClass(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "LargeClass",
+        javaClass.simpleName,
         "One class should have one responsibility. Large classes tend to handle many things at once. " +
             "Split up large classes into smaller classes that are easier to understand.",
     )

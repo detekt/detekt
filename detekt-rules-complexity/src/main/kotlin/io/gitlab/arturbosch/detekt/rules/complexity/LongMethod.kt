@@ -24,7 +24,7 @@ import java.util.IdentityHashMap
 class LongMethod(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "LongMethod",
+        javaClass.simpleName,
         "One method should have one responsibility. Long methods tend to handle many things at once. " +
             "Prefer smaller methods to make them easier to understand.",
     )

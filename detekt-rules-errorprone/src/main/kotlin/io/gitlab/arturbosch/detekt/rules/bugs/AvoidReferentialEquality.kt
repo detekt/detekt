@@ -36,7 +36,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
 class AvoidReferentialEquality(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "AvoidReferentialEquality",
+        javaClass.simpleName,
         "Avoid using referential equality and prefer to use referential equality checks instead.",
     )
 

@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
  */
 @RequiresTypeResolution
 class CastNullableToNonNullableType(config: Config) : Rule(config) {
-    override val issue: Issue = Issue(
+    override val issue = Issue(
         javaClass.simpleName,
         "Nullable type to non-null type cast is found. Consider using two assertions, " +
             "`null` assertions and type cast",

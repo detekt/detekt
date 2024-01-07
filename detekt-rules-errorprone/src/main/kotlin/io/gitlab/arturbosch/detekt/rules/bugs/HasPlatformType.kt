@@ -42,7 +42,7 @@ import org.jetbrains.kotlin.types.isFlexible
 class HasPlatformType(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "HasPlatformType",
+        javaClass.simpleName,
         "Platform types must be declared explicitly in public APIs.",
     )
 

@@ -47,8 +47,8 @@ class DoubleMutabilityForCollection(config: Config) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("DoubleMutability")
 
-    override val issue: Issue = Issue(
-        "DoubleMutabilityForCollection",
+    override val issue = Issue(
+        javaClass.simpleName,
         "Using var with mutable collections or values leads to double mutability. " +
             "Consider using val or immutable collection or value types.",
     )

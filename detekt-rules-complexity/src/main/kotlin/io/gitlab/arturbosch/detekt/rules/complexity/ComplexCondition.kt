@@ -39,7 +39,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 class ComplexCondition(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "ComplexCondition",
+        javaClass.simpleName,
         "Complex conditions should be simplified and extracted into well-named methods if necessary.",
     )
 

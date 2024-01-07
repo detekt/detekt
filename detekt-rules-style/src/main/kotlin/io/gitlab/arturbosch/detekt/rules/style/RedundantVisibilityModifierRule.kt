@@ -45,8 +45,8 @@ class RedundantVisibilityModifierRule(config: Config) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("RedundantVisibilityModifier")
 
-    override val issue: Issue = Issue(
-        "RedundantVisibilityModifierRule",
+    override val issue = Issue(
+        javaClass.simpleName,
         "Redundant visibility modifiers detected, which can be safely removed.",
     )
 

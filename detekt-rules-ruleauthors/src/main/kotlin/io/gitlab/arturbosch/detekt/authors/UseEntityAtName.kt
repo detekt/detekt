@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
 class UseEntityAtName(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "UseEntityAtName",
+        javaClass.simpleName,
         "Prefer Entity.atName to Entity.from(....nameIdentifier).",
     )
 

@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
 class Deprecation(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "Deprecation",
+        javaClass.simpleName,
         "Deprecated elements should not be used.",
     )
 

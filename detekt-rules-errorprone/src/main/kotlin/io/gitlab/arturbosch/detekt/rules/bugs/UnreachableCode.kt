@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 class UnreachableCode(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "UnreachableCode",
+        javaClass.simpleName,
         "Unreachable code detected. This code should be removed.",
     )
 

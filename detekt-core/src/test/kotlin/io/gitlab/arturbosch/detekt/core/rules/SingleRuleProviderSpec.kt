@@ -16,6 +16,7 @@ class SingleRuleProviderSpec {
         "MagicNumber",
         object : RuleSetProvider {
             override val ruleSetId: String = "style"
+
             override fun instance(): RuleSet = RuleSet(ruleSetId, listOf(::MagicNumber))
         }
     )
@@ -39,5 +40,5 @@ private fun produceRule(provider: RuleSetProvider, config: Config): Rule =
     provider.instance().rules.map { (_, provider) -> provider(config.subConfig("style")) }.single() as Rule
 
 private class MagicNumber(config: Config) : Rule(config) {
-    override val issue = Issue("MagicNumber", "")
+    override val issue = Issue(javaClass.simpleName, "")
 }

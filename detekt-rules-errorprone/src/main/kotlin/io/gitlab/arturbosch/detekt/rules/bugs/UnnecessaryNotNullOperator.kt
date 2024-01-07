@@ -27,8 +27,8 @@ import org.jetbrains.kotlin.psi.KtUnaryExpression
 @ActiveByDefault(since = "1.16.0")
 class UnnecessaryNotNullOperator(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue(
-        "UnnecessaryNotNullOperator",
+    override val issue = Issue(
+        javaClass.simpleName,
         "Unnecessary not-null unary operator (!!) detected.",
     )
 

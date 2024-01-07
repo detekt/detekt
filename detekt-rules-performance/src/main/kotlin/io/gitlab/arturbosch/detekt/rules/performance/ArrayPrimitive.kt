@@ -42,7 +42,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 @ActiveByDefault(since = "1.2.0")
 class ArrayPrimitive(config: Config) : Rule(config) {
     override val issue = Issue(
-        "ArrayPrimitive",
+        javaClass.simpleName,
         "Using `Array<Primitive>` leads to implicit boxing and a performance hit.",
     )
 

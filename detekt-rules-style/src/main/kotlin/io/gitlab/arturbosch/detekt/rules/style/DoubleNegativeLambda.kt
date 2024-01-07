@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 class DoubleNegativeLambda(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "DoubleNegativeLambda",
+        javaClass.simpleName,
         "Double negative from a function name expressed in the negative (like `takeUnless`) with a lambda block " +
             "that also contains negation. This is more readable when rewritten using a positive form of the function " +
             "(like `takeIf`).",

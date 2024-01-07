@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 class CognitiveComplexMethod(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "CognitiveComplexMethod",
+        javaClass.simpleName,
         "Prefer splitting up complex methods into smaller, easier to understand methods.",
     )
 

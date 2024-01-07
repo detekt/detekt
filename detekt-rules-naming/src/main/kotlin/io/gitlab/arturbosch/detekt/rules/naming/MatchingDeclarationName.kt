@@ -48,7 +48,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 @ActiveByDefault(since = "1.0.0")
 class MatchingDeclarationName(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue(
+    override val issue = Issue(
         javaClass.simpleName,
         "If a source file contains only a single non-private top-level class or object, " +
             "the file name should reflect the case-sensitive name plus the .kt extension.",

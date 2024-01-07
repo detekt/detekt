@@ -1,4 +1,4 @@
 complexity:
-  LongParameterList:
+  TestLPL:
     active: true
     threshold: 5

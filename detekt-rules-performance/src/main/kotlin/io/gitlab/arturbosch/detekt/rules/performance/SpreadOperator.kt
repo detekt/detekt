@@ -50,8 +50,8 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 @ActiveByDefault(since = "1.0.0")
 class SpreadOperator(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue(
-        "SpreadOperator",
+    override val issue = Issue(
+        javaClass.simpleName,
         "In most cases using a spread operator causes a full copy of the array to be created before calling a " +
             "method. This may result in a performance penalty.",
     )
