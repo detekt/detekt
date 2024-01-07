@@ -50,6 +50,7 @@ $dokka.location:io.gitlab.arturbosch.detekt.extensions/DetektExtension/config/#/
 $dokka.location:io.gitlab.arturbosch.detekt.extensions/DetektExtension/debug/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt.extensions/-detekt-extension/debug.html
 $dokka.location:io.gitlab.arturbosch.detekt.extensions/DetektExtension/disableDefaultRuleSets/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt.extensions/-detekt-extension/disable-default-rule-sets.html
 $dokka.location:io.gitlab.arturbosch.detekt.extensions/DetektExtension/enableCompilerPlugin/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt.extensions/-detekt-extension/enable-compiler-plugin.html
+$dokka.location:io.gitlab.arturbosch.detekt.extensions/DetektExtension/failOnSeverity/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt.extensions/-detekt-extension/fail-on-severity.html
 $dokka.location:io.gitlab.arturbosch.detekt.extensions/DetektExtension/ignoreFailures/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt.extensions/-detekt-extension/ignore-failures.html
 $dokka.location:io.gitlab.arturbosch.detekt.extensions/DetektExtension/ignoredBuildTypes/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt.extensions/-detekt-extension/ignored-build-types.html
 $dokka.location:io.gitlab.arturbosch.detekt.extensions/DetektExtension/ignoredFlavors/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt.extensions/-detekt-extension/ignored-flavors.html
@@ -90,6 +91,14 @@ $dokka.location:io.gitlab.arturbosch.detekt.extensions/DetektReports/txt/#/Point
 $dokka.location:io.gitlab.arturbosch.detekt.extensions/DetektReports/txt/#org.gradle.api.Action[io.gitlab.arturbosch.detekt.extensions.DetektReport]/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt.extensions/-detekt-reports/txt.html
 $dokka.location:io.gitlab.arturbosch.detekt.extensions/DetektReports/xml/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt.extensions/-detekt-reports/xml.html
 $dokka.location:io.gitlab.arturbosch.detekt.extensions/DetektReports/xml/#org.gradle.api.Action[io.gitlab.arturbosch.detekt.extensions.DetektReport]/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt.extensions/-detekt-reports/xml.html
+$dokka.location:io.gitlab.arturbosch.detekt.extensions/FailOnSeverity.Error///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}detekt-gradle-plugin/io.gitlab.arturbosch.detekt.extensions/-fail-on-severity/-error/index.html
+$dokka.location:io.gitlab.arturbosch.detekt.extensions/FailOnSeverity.Info///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}detekt-gradle-plugin/io.gitlab.arturbosch.detekt.extensions/-fail-on-severity/-info/index.html
+$dokka.location:io.gitlab.arturbosch.detekt.extensions/FailOnSeverity.Never///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}detekt-gradle-plugin/io.gitlab.arturbosch.detekt.extensions/-fail-on-severity/-never/index.html
+$dokka.location:io.gitlab.arturbosch.detekt.extensions/FailOnSeverity.Warning///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}detekt-gradle-plugin/io.gitlab.arturbosch.detekt.extensions/-fail-on-severity/-warning/index.html
+$dokka.location:io.gitlab.arturbosch.detekt.extensions/FailOnSeverity///PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt.extensions/-fail-on-severity/index.html
+$dokka.location:io.gitlab.arturbosch.detekt.extensions/FailOnSeverity/entries/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt.extensions/-fail-on-severity/entries.html
+$dokka.location:io.gitlab.arturbosch.detekt.extensions/FailOnSeverity/valueOf/#kotlin.String/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt.extensions/-fail-on-severity/value-of.html
+$dokka.location:io.gitlab.arturbosch.detekt.extensions/FailOnSeverity/values/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt.extensions/-fail-on-severity/values.html
 $dokka.location:io.gitlab.arturbosch.detekt.report////PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt.report/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.report/ReportMergeTask///PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt.report/-report-merge-task/index.html
 $dokka.location:io.gitlab.arturbosch.detekt.report/ReportMergeTask/ReportMergeTask/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt.report/-report-merge-task/-report-merge-task.html
@@ -111,6 +120,7 @@ $dokka.location:io.gitlab.arturbosch.detekt/Detekt/config/#/PointingToDeclaratio
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/debug/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/debug.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/detektClasspath/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/detekt-classpath.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/disableDefaultRuleSets/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/disable-default-rule-sets.html
+$dokka.location:io.gitlab.arturbosch.detekt/Detekt/failOnSeverity/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/fail-on-severity.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/getSource/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/get-source.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/htmlReportFile/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/html-report-file.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/ignoreFailures/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/ignore-failures.html
