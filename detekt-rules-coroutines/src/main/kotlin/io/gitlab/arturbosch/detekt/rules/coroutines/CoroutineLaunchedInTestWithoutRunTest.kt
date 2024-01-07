@@ -4,8 +4,8 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.hasAnnotation
 import org.jetbrains.kotlin.name.FqName
@@ -52,7 +52,7 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
     private val funCoroutineLaunchesTraverseHelper = FunCoroutineLaunchesTraverseHelper()
 
     override val issue = Issue(
-        id = "CoroutineLaunchedInTestWithoutRunTest",
+        javaClass.simpleName,
         description = "Launching coroutines in tests without a `runTest` block could swallow exceptions. " +
             "You should use `runTest` to avoid altering test results."
     )
