@@ -11,16 +11,9 @@ fun interface Suppressor {
     fun shouldSuppress(finding: Finding): Boolean
 }
 
-private fun buildSuppressors(rule: Rule, bindingContext: BindingContext): List<Suppressor> {
+internal fun buildSuppressors(rule: Rule, bindingContext: BindingContext): List<Suppressor> {
     return listOfNotNull(
         annotationSuppressorFactory(rule, bindingContext),
         functionSuppressorFactory(rule, bindingContext),
     )
-}
-
-internal fun getSuppressors(rule: Rule, bindingContext: BindingContext): List<Suppressor> {
-    return when (rule) {
-        is Rule -> buildSuppressors(rule, bindingContext)
-        else -> emptyList()
-    }
 }

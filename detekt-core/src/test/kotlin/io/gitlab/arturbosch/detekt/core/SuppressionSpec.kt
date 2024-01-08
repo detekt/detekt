@@ -239,7 +239,7 @@ class SuppressionSpec {
 
         val config = yamlConfig("/suppression/ruleset-suppression.yml")
             .subConfig("complexity")
-            .subConfig("LongParameterList")
+            .subConfig("TestLPL")
 
         @Test
         fun `reports without a suppression`() {
