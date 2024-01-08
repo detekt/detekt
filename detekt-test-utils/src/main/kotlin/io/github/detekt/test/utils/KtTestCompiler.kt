@@ -19,21 +19,11 @@ import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
-import java.nio.file.Path
 
 /**
  * Test compiler extends kt compiler and adds ability to compile from text content.
  */
 internal object KtTestCompiler : KtCompiler() {
-
-    /*
-     * If tests are executed through Bazel, there is no File based resource path as all classpath elements
-     * are JAR files, which leads to crashes. By initializing the root on demand, it's at least possible to
-     * use String based input from Bazel.
-     */
-    private val root by lazy { resourceAsPath("/") }
-
-    fun compile(path: Path) = compile(root, path)
 
     fun compileFromContent(@Language("kotlin") content: String, filename: String = TEST_FILENAME): KtFile {
         require('/' !in filename && '\\' !in filename) {
