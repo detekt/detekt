@@ -521,4 +521,4 @@ class ConfigPropertySpec {
     }
 }
 
-private open class TestRule(vararg data: Pair<String, Any>) : Rule(TestConfig(*data), "description")
+open class TestRule(vararg data: Pair<String, Any>) : Rule(TestConfig(*data), "description")
