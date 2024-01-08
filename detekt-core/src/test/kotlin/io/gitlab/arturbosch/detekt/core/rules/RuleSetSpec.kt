@@ -14,7 +14,7 @@ class RuleSetSpec {
     @Nested
     inner class `should rule analyze a file` {
 
-        private val file = compileContentForTest("", path = Path("/cases/Default.kt"))
+        private val file = compileContentForTest("", basePath = Path("/cases"), path = Path("/cases/Default.kt"))
 
         @Test
         fun `analyzes file with an empty config`() {
@@ -27,6 +27,12 @@ class RuleSetSpec {
         fun ignoreExcludedKt() {
             val config = TestConfig(Config.EXCLUDES_KEY to listOf("**/*.kt"))
             assertThat(config.shouldAnalyzeFile(file)).isFalse()
+        }
+
+        @Test
+        fun `Only check relative path`() {
+            val config = TestConfig(Config.EXCLUDES_KEY to listOf("**/cases/*.kt"))
+            assertThat(config.shouldAnalyzeFile(file)).isTrue()
         }
 
         @Test
