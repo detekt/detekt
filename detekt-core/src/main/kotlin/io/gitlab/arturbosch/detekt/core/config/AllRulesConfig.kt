@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.core.config.validation.validateConfig
 internal data class AllRulesConfig(
     private val originalConfig: Config,
     private val defaultConfig: Config,
-    private val deprecatedRules: Set<DeprecatedRule> = emptySet(),
+    private val deprecatedRules: Set<DeprecatedRule>,
     override val parent: Config? = null,
 ) : Config, ValidatableConfiguration {
 
