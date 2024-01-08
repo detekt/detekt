@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.psi.absolutePath
 import io.github.detekt.tooling.api.spec.ProcessingSpec
-import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
@@ -101,7 +100,7 @@ internal class Analyzer(
         bindingContext: BindingContext,
         compilerResources: CompilerResources
     ): Map<RuleSetId, List<Finding>> {
-        fun isCorrectable(rule: BaseRule): Boolean = when (rule) {
+        fun isCorrectable(rule: Rule): Boolean = when (rule) {
             is Rule -> rule.autoCorrect
             else -> error("No other rule type expected.")
         }
@@ -128,7 +127,7 @@ internal class Analyzer(
 
         val result = HashMap<RuleSetId, MutableList<Finding>>()
 
-        fun executeRules(rules: List<BaseRule>) {
+        fun executeRules(rules: List<Rule>) {
             for (rule in rules) {
                 rule.visitFile(file, bindingContext, compilerResources)
                 for (finding in filterSuppressedFindings(rule, bindingContext)) {
@@ -163,7 +162,7 @@ internal class Analyzer(
     }
 }
 
-private fun filterSuppressedFindings(rule: BaseRule, bindingContext: BindingContext): List<Finding> {
+private fun filterSuppressedFindings(rule: Rule, bindingContext: BindingContext): List<Finding> {
     val suppressors = getSuppressors(rule, bindingContext)
     return if (suppressors.isNotEmpty()) {
         rule.findings.filter { finding -> !suppressors.any { suppressor -> suppressor.shouldSuppress(finding) } }
