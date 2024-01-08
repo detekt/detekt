@@ -41,6 +41,4 @@ private fun produceRule(provider: RuleSetProvider, config: Config): Rule =
         .map { (ruleId, provider) -> provider(config.subConfig("style").subConfig(ruleId)) }
         .single() as Rule
 
-private class MagicNumber(config: Config) : Rule(config) {
-    override val issue = Issue(javaClass.simpleName, "")
-}
+private class MagicNumber(config: Config) : Rule(config, "")

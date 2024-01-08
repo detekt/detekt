@@ -333,14 +333,14 @@ public abstract interface annotation class io/gitlab/arturbosch/detekt/api/Requi
 }
 
 public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/BaseRule {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;)V
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;Ljava/lang/String;)V
 	public final fun getActive ()Z
 	public final fun getAliases ()Ljava/util/Set;
 	public final fun getAutoCorrect ()Z
 	public final fun getConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public fun getDefaultRuleIdAliases ()Ljava/util/Set;
 	public fun getFilters ()Lio/gitlab/arturbosch/detekt/api/internal/PathFilters;
-	public abstract fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
+	public final fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
 	public final fun getRuleId ()Ljava/lang/String;
 	public final fun report (Lio/gitlab/arturbosch/detekt/api/Finding;)V
 	public fun visitCondition (Lorg/jetbrains/kotlin/psi/KtFile;)Z
