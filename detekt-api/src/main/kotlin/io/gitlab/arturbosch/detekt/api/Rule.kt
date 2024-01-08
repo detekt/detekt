@@ -80,7 +80,7 @@ abstract class Rule(
         val configValue: String = config.valueOrNull(SEVERITY_KEY)
             ?: config.parent?.valueOrNull(SEVERITY_KEY)
             ?: Severity.DEFAULT.name
-        return enumValueOf(configValue.uppercase())
+        return Severity.fromString(configValue)
     }
 
     /**

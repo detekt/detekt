@@ -58,7 +58,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
 @ActiveByDefault(since = "1.2.0")
 class UtilityClassWithPublicConstructor(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue(
+    override val issue = Issue(
         javaClass.simpleName,
         "The class declaration is unnecessary because it only contains utility functions. " +
             "An object declaration should be used instead.",

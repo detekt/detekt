@@ -46,7 +46,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 class EqualsWithHashCodeExist(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "EqualsWithHashCodeExist",
+        javaClass.simpleName,
         "Always override hashCode when you override equals. " +
             "All hash-based collections depend on objects meeting the equals-contract. " +
             "Two equal objects must produce the same hashcode. When inheriting equals or hashcode, " +

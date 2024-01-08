@@ -43,7 +43,7 @@ class UnnecessaryInnerClass(config: Config) : Rule(config) {
     private val candidateClassToParentClasses = mutableMapOf<KtClass, List<KtClass>>()
     private val classChain = ArrayDeque<KtClass>()
 
-    override val issue: Issue = Issue(
+    override val issue = Issue(
         javaClass.simpleName,
         "The 'inner' qualifier is unnecessary.",
     )

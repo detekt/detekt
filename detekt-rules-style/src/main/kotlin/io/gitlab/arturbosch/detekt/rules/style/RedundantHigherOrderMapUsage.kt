@@ -73,7 +73,7 @@ import org.jetbrains.kotlin.types.typeUtil.immediateSupertypes
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
 class RedundantHigherOrderMapUsage(config: Config) : Rule(config) {
-    override val issue: Issue = Issue(
+    override val issue = Issue(
         javaClass.simpleName,
         "Checks for redundant 'map' calls, which can be removed.",
     )

@@ -52,7 +52,7 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  */
 class MandatoryBracesLoops(config: Config) : Rule(config) {
     override val issue = Issue(
-        "MandatoryBracesLoops",
+        javaClass.simpleName,
         "A multi-line loop was found that does not have braces. " +
             "These should be added to improve readability.",
     )

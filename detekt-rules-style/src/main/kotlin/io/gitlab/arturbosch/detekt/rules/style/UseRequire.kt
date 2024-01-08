@@ -33,7 +33,7 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
 class UseRequire(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "UseRequire",
+        javaClass.simpleName,
         "Use require() instead of throwing an IllegalArgumentException.",
     )
 

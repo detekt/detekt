@@ -34,7 +34,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 @ActiveByDefault(since = "1.0.0")
 class OptionalAbstractKeyword(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue(
+    override val issue = Issue(
         javaClass.simpleName,
         "Unnecessary abstract modifier in interface detected. " +
             "This abstract modifier is unnecessary and thus can be removed.",

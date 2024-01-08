@@ -47,8 +47,8 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 @RequiresTypeResolution
 @Suppress("ComplexMethod")
 class UseIfEmptyOrIfBlank(config: Config) : Rule(config) {
-    override val issue: Issue = Issue(
-        "UseIfEmptyOrIfBlank",
+    override val issue = Issue(
+        javaClass.simpleName,
         "Use `ifEmpty` or `ifBlank` instead of `isEmpty` or `isBlank` to assign a default value.",
     )
 

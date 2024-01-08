@@ -39,7 +39,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 class EqualsAlwaysReturnsTrueOrFalse(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "EqualsAlwaysReturnsTrueOrFalse",
+        javaClass.simpleName,
         "Having an `equals()` method that always returns true or false is not a good idea. " +
             "It does not follow the contract of this method. " +
             "Consider a good default implementation (e.g. `this == other`).",

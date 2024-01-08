@@ -92,9 +92,8 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 @RequiresTypeResolution
 class SuspendFunSwallowedCancellation(config: Config) : Rule(config) {
     override val issue = Issue(
-        id = javaClass.simpleName,
-        description = "`runCatching` does not propagate `CancellationException`, don't use it with `suspend` lambda " +
-            "blocks.",
+        javaClass.simpleName,
+        "`runCatching` does not propagate `CancellationException`, don't use it with `suspend` lambda blocks.",
     )
 
     override fun visitCallExpression(expression: KtCallExpression) {

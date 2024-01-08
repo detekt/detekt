@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 class ThrowingExceptionInMain(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "ThrowingExceptionInMain",
+        javaClass.simpleName,
         "The main method should not throw an exception.",
     )
 

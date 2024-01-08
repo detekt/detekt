@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 class ThrowingNewInstanceOfSameException(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "ThrowingNewInstanceOfSameException",
+        javaClass.simpleName,
         "Avoid catch blocks that rethrow a caught exception wrapped inside a new instance of the same exception.",
     )
 

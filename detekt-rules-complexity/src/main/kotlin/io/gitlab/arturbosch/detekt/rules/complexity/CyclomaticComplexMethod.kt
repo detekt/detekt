@@ -37,7 +37,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 class CyclomaticComplexMethod(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "CyclomaticComplexMethod",
+        javaClass.simpleName,
         "Prefer splitting up complex methods into smaller, easier to test methods.",
     )
 

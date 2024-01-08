@@ -46,7 +46,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
 class IteratorNotThrowingNoSuchElementException(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "IteratorNotThrowingNoSuchElementException",
+        javaClass.simpleName,
         "The `next()` method of an `Iterator` implementation should throw a `NoSuchElementException` " +
             "when there are no more elements to return.",
     )

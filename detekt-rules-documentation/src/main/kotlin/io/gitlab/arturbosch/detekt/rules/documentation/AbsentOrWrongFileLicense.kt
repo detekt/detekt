@@ -20,8 +20,8 @@ import org.jetbrains.kotlin.psi.KtFile
 class AbsentOrWrongFileLicense(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        id = RULE_NAME,
-        description = "License text is absent or incorrect.",
+        javaClass.simpleName,
+        "License text is absent or incorrect.",
     )
 
     @Suppress("unused")

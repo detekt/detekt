@@ -34,7 +34,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 class DuplicateCaseInWhenExpression(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "DuplicateCaseInWhenExpression",
+        javaClass.simpleName,
         "Duplicated `case` statements in a `when` expression detected. Both cases should be merged.",
     )
 

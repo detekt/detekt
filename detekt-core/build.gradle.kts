@@ -20,7 +20,7 @@ dependencies {
     testImplementation(projects.detektReportXml)
     testImplementation(projects.detektTest)
     testImplementation(testFixtures(projects.detektApi))
-    testImplementation(libs.bundles.mocking)
+    testImplementation(libs.mockk)
     testImplementation(libs.classgraph)
     testImplementation(libs.assertj)
     testRuntimeOnly(libs.slf4j.simple)

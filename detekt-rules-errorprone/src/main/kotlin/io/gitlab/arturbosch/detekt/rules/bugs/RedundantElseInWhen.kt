@@ -60,8 +60,8 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 @Deprecated("Rule deprecated as compiler performs this check by default")
 class RedundantElseInWhen(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue(
-        "RedundantElseInWhen",
+    override val issue = Issue(
+        javaClass.simpleName,
         "Check for redundant `else` case in `when` expression when used as statement.",
     )
 

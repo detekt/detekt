@@ -45,7 +45,7 @@ class InjectDispatcher(config: Config) : Rule(config) {
     private val dispatcherNames: Set<String> by config(listOf("IO", "Default", "Unconfined")) { it.toSet() }
 
     override val issue = Issue(
-        "InjectDispatcher",
+        javaClass.simpleName,
         "Don't hardcode dispatchers when creating new coroutines or calling `withContext`. " +
             "Use dependency injection for dispatchers to make testing easier.",
     )

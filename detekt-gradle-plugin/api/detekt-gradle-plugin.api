@@ -53,6 +53,7 @@ public abstract class io/gitlab/arturbosch/detekt/Detekt : org/gradle/api/tasks/
 	public abstract fun getDebug ()Lorg/gradle/api/provider/Property;
 	public abstract fun getDetektClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public abstract fun getDisableDefaultRuleSets ()Lorg/gradle/api/provider/Property;
+	public abstract fun getFailOnSeverity ()Lorg/gradle/api/provider/Property;
 	public final fun getHtmlReportFile ()Lorg/gradle/api/provider/Provider;
 	public abstract fun getIgnoreFailures ()Lorg/gradle/api/provider/Property;
 	public abstract fun getJdkHome ()Lorg/gradle/api/file/DirectoryProperty;
@@ -129,6 +130,7 @@ public abstract interface class io/gitlab/arturbosch/detekt/extensions/DetektExt
 	public abstract fun getDebug ()Lorg/gradle/api/provider/Property;
 	public abstract fun getDisableDefaultRuleSets ()Lorg/gradle/api/provider/Property;
 	public abstract fun getEnableCompilerPlugin ()Lorg/gradle/api/provider/Property;
+	public abstract fun getFailOnSeverity ()Lorg/gradle/api/provider/Property;
 	public abstract fun getIgnoreFailures ()Lorg/gradle/api/provider/Property;
 	public abstract fun getIgnoredBuildTypes ()Lorg/gradle/api/provider/ListProperty;
 	public abstract fun getIgnoredFlavors ()Lorg/gradle/api/provider/ListProperty;
@@ -174,6 +176,15 @@ public class io/gitlab/arturbosch/detekt/extensions/DetektReports {
 	public final fun sarif (Lorg/gradle/api/Action;)V
 	public final fun txt (Lorg/gradle/api/Action;)V
 	public final fun xml (Lorg/gradle/api/Action;)V
+}
+
+public final class io/gitlab/arturbosch/detekt/extensions/FailOnSeverity : java/lang/Enum {
+	public static final field Error Lio/gitlab/arturbosch/detekt/extensions/FailOnSeverity;
+	public static final field Info Lio/gitlab/arturbosch/detekt/extensions/FailOnSeverity;
+	public static final field Never Lio/gitlab/arturbosch/detekt/extensions/FailOnSeverity;
+	public static final field Warning Lio/gitlab/arturbosch/detekt/extensions/FailOnSeverity;
+	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/extensions/FailOnSeverity;
+	public static fun values ()[Lio/gitlab/arturbosch/detekt/extensions/FailOnSeverity;
 }
 
 public abstract class io/gitlab/arturbosch/detekt/report/ReportMergeTask : org/gradle/api/DefaultTask {
