@@ -40,14 +40,10 @@ sarif4k = "io.github.detekt.sarif4k:sarif4k:0.5.0"
 assertj = "org.assertj:assertj-core:3.25.1"
 classgraph = "io.github.classgraph:classgraph:4.8.165"
 mockk = "io.mockk:mockk:1.13.9"
-byte-buddy = "net.bytebuddy:byte-buddy:1.14.11"
 snakeyaml = "org.snakeyaml:snakeyaml-engine:2.7"
 jcommander = "org.jcommander:jcommander:1.83"
 kotlinCompileTesting = { module = "dev.zacsweers.kctfork:core", version = "0.4.0" }
 poko-annotations = { module = "dev.drewhamilton.poko:poko-annotations", version.ref = "poko" }
-
-[bundles]
-mocking = ["mockk", "byte-buddy"]
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
