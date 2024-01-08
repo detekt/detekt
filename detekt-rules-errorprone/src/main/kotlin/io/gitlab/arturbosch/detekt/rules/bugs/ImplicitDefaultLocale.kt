@@ -38,12 +38,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
  */
 @ActiveByDefault(since = "1.16.0")
 @RequiresTypeResolution
-class ImplicitDefaultLocale(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Implicit default locale used for string processing. Consider using explicit locale.",
-    )
+class ImplicitDefaultLocale(config: Config) : Rule(config, "Implicit default locale used for string processing. Consider using explicit locale.") {
 
     private val formatCalls = listOf(
         FqName("kotlin.text.format")

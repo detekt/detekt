@@ -44,13 +44,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class PrintStackTrace(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Do not print a stack trace. " +
-            "These debug statements should be removed or replaced with a logger.",
-    )
+class PrintStackTrace(config: Config) : Rule(config, "Do not print a stack trace. " +
+            "These debug statements should be removed or replaced with a logger.") {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         val callNameExpression = expression.getCallNameExpression()

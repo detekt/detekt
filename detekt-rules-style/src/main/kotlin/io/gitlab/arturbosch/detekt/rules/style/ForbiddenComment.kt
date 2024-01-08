@@ -87,12 +87,7 @@ import java.util.Locale
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ForbiddenComment(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Flags a forbidden comment.",
-    )
+class ForbiddenComment(config: Config) : Rule(config, "Flags a forbidden comment.") {
 
     @Configuration("forbidden comment strings")
     @Deprecated("Use `comments` instead, make sure you escape your text for Regular Expressions.")

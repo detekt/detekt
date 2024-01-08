@@ -13,12 +13,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  * Reports class names which are forbidden per configuration. By default, this rule does not report any classes.
  * Examples for forbidden names might be too generic class names like `...Manager`.
  */
-class ForbiddenClassName(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Forbidden class name as per configuration detected.",
-    )
+class ForbiddenClassName(config: Config) : Rule(config, "Forbidden class name as per configuration detected.") {
 
     @Configuration("forbidden class names")
     private val forbiddenName: List<String> by config(emptyList<String>()) { names ->

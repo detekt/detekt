@@ -35,15 +35,10 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *
  */
 @RequiresTypeResolution
-class ImplicitUnitReturnType(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Functions using expression statements have an implicit return type. " +
+class ImplicitUnitReturnType(config: Config) : Rule(config, "Functions using expression statements have an implicit return type. " +
             "Changing the type of the expression accidentally, changes the function return type. " +
             "This may lead to backward incompatibility. " +
-            "Use a block statement to make clear this function will never return a value.",
-    )
+            "Use a block statement to make clear this function will never return a value.") {
 
     @Configuration("if functions with explicit `Unit` return type should be allowed")
     private val allowExplicitReturnType: Boolean by config(true)

@@ -10,12 +10,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * Description
  */
-class CognitiveComplexMethod(config: Config = Config.empty) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Prefer splitting up complex methods into smaller, easier to understand methods.",
-    )
+class CognitiveComplexMethod(config: Config = Config.empty) : Rule(config, "Prefer splitting up complex methods into smaller, easier to understand methods.") {
 
     @Configuration("Maximum Cognitive Complexity allowed for a method.")
     private val allowedComplexity: Int by config(defaultValue = 15)

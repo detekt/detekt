@@ -37,12 +37,7 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * </compliant>
  */
 @RequiresTypeResolution
-class ExplicitCollectionElementAccessMethod(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Prefer usage of the indexed access operator [] for map element access or insert methods.",
-    )
+class ExplicitCollectionElementAccessMethod(config: Config) : Rule(config, "Prefer usage of the indexed access operator [] for map element access or insert methods.") {
 
     override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
         super.visitDotQualifiedExpression(expression)

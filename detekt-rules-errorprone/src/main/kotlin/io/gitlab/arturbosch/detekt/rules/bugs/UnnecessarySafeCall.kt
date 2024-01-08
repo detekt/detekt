@@ -28,12 +28,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
-class UnnecessarySafeCall(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Unnecessary safe call operator detected.",
-    )
+class UnnecessarySafeCall(config: Config) : Rule(config, "Unnecessary safe call operator detected.") {
 
     override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
         super.visitSafeQualifiedExpression(expression)

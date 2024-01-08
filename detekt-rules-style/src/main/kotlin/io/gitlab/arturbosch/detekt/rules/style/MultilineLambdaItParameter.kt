@@ -66,11 +66,7 @@ import org.jetbrains.kotlin.utils.ifEmpty
  *
  */
 @RequiresTypeResolution
-class MultilineLambdaItParameter(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Multiline lambdas should not use `it` as a parameter name.",
-    )
+class MultilineLambdaItParameter(config: Config) : Rule(config, "Multiline lambdas should not use `it` as a parameter name.") {
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)

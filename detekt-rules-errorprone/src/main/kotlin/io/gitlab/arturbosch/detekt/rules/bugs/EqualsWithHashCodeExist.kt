@@ -43,15 +43,10 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class EqualsWithHashCodeExist(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Always override hashCode when you override equals. " +
+class EqualsWithHashCodeExist(config: Config) : Rule(config, "Always override hashCode when you override equals. " +
             "All hash-based collections depend on objects meeting the equals-contract. " +
             "Two equal objects must produce the same hashcode. When inheriting equals or hashcode, " +
-            "override the inherited and call the super method for clarification.",
-    )
+            "override the inherited and call the super method for clarification.") {
 
     private val queue = ArrayDeque<ViolationHolder>(MAXIMUM_EXPECTED_NESTED_CLASSES)
 

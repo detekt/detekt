@@ -39,15 +39,10 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class WildcardImport(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Wildcard imports should be replaced with imports using fully qualified class names. " +
+class WildcardImport(config: Config) : Rule(config, "Wildcard imports should be replaced with imports using fully qualified class names. " +
             "Wildcard imports can lead to naming conflicts. " +
             "A library update can introduce naming clashes with your classes which " +
-            "results in compilation errors.",
-    )
+            "results in compilation errors.") {
 
     @Configuration("Define a list of package names that should be allowed to be imported with wildcard imports.")
     private val excludeImports: List<String> by config(listOf("java.util.*")) { imports ->

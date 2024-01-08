@@ -45,12 +45,7 @@ import org.jetbrains.kotlin.types.KotlinType
  * </compliant>
  */
 @RequiresTypeResolution
-class UseDataClass(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Classes that do nothing but hold data should be replaced with a data class.",
-    )
+class UseDataClass(config: Config) : Rule(config, "Classes that do nothing but hold data should be replaced with a data class.") {
 
     @Configuration("allows to provide a list of annotations that disable this check")
     @Deprecated("Use `ignoreAnnotated` instead")

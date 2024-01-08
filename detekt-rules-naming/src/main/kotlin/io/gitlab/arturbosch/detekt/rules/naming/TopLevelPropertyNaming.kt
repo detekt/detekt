@@ -17,12 +17,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * Reports top level constant that which do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
-class TopLevelPropertyNaming(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Top level property names should follow the naming convention set in the projects configuration.",
-    )
+class TopLevelPropertyNaming(config: Config) : Rule(config, "Top level property names should follow the naming convention set in the projects configuration.") {
 
     @Configuration("naming pattern")
     private val constantPattern: Regex by config("[A-Z][_A-Z0-9]*") { it.toRegex() }

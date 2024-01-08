@@ -19,12 +19,7 @@ import org.jetbrains.kotlin.psi.KtUserType
  * These factory functions can have the same name as the class being created.
  */
 @ActiveByDefault(since = "1.0.0")
-class FunctionNaming(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Function names should follow the naming convention set in the configuration.",
-    )
+class FunctionNaming(config: Config) : Rule(config, "Function names should follow the naming convention set in the configuration.") {
 
     override val defaultRuleIdAliases: Set<String> = setOf("FunctionName")
 

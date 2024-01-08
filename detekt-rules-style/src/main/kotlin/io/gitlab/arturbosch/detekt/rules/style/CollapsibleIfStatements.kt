@@ -32,13 +32,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
  * }
  * </compliant>
  */
-class CollapsibleIfStatements(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Two if statements which could be collapsed were detected. " +
-            "These statements can be merged to improve readability.",
-    )
+class CollapsibleIfStatements(config: Config) : Rule(config, "Two if statements which could be collapsed were detected. " +
+            "These statements can be merged to improve readability.") {
 
     override fun visitIfExpression(expression: KtIfExpression) {
         if (isNotElseIfOrElse(expression) && hasOneKtIfExpression(expression)) {

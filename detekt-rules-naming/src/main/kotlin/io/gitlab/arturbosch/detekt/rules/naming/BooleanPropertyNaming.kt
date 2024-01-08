@@ -29,12 +29,7 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  * </compliant>
  */
 @RequiresTypeResolution
-class BooleanPropertyNaming(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Boolean property name should follow the naming convention set in the projects configuration.",
-    )
+class BooleanPropertyNaming(config: Config) : Rule(config, "Boolean property name should follow the naming convention set in the projects configuration.") {
 
     @Configuration("naming pattern")
     private val allowedPattern: Regex by config("^(is|has|are)", String::toRegex)

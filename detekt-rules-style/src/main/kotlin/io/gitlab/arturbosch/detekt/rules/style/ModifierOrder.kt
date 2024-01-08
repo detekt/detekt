@@ -50,12 +50,7 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ModifierOrder(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Modifiers are not in the correct order. Consider to reorder these modifiers.",
-    )
+class ModifierOrder(config: Config) : Rule(config, "Modifiers are not in the correct order. Consider to reorder these modifiers.") {
 
     // subset of KtTokens.MODIFIER_KEYWORDS_ARRAY
     private val order = arrayOf(

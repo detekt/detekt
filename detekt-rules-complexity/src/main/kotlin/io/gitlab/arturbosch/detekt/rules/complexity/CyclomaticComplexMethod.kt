@@ -34,12 +34,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  *  [Reference](https://kotlinlang.org/docs/scope-functions.html)
  */
 @ActiveByDefault(since = "1.0.0")
-class CyclomaticComplexMethod(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Prefer splitting up complex methods into smaller, easier to test methods.",
-    )
+class CyclomaticComplexMethod(config: Config) : Rule(config, "Prefer splitting up complex methods into smaller, easier to test methods.") {
 
     override val defaultRuleIdAliases: Set<String> = setOf("ComplexMethod")
 

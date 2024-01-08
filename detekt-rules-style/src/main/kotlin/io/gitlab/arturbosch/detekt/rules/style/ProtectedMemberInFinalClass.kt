@@ -33,13 +33,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isProtected
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class ProtectedMemberInFinalClass(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Member with protected visibility in final class is private. " +
-            "Consider using private or internal as modifier.",
-    )
+class ProtectedMemberInFinalClass(config: Config) : Rule(config, "Member with protected visibility in final class is private. " +
+            "Consider using private or internal as modifier.") {
 
     private val visitor = DeclarationVisitor()
 

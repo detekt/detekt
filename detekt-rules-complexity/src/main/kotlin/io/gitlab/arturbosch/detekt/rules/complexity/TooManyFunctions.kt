@@ -24,14 +24,9 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * which clearly belongs together in separate parts of the code.
  */
 @ActiveByDefault(since = "1.0.0")
-class TooManyFunctions(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Too many functions inside a/an file/class/object/interface always indicate a violation of " +
+class TooManyFunctions(config: Config) : Rule(config, "Too many functions inside a/an file/class/object/interface always indicate a violation of " +
             "the single responsibility principle. Maybe the file/class/object/interface wants to manage too " +
-            "many things at once. Extract functionality which clearly belongs together.",
-    )
+            "many things at once. Extract functionality which clearly belongs together.") {
 
     @Configuration("The maximum allowed functions per file")
     private val allowedFunctionsPerFile: Int by config(DEFAULT_THRESHOLD)

@@ -34,12 +34,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class MayBeConstant(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Usage of `vals` that can be `const val` detected.",
-    )
+class MayBeConstant(config: Config) : Rule(config, "Usage of `vals` that can be `const val` detected.") {
 
     private val binaryTokens = hashSetOf<KtSingleValueToken>(
         KtTokens.PLUS,

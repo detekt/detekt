@@ -19,12 +19,7 @@ import org.jetbrains.kotlin.psi.psiUtil.endOffset
  * This rule reports files which do not end with a line separator.
  */
 @ActiveByDefault(since = "1.0.0")
-class NewLineAtEndOfFile(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Checks whether files end with a line separator.",
-    )
+class NewLineAtEndOfFile(config: Config) : Rule(config, "Checks whether files end with a line separator.") {
 
     override fun visitKtFile(file: KtFile) {
         val text = file.text

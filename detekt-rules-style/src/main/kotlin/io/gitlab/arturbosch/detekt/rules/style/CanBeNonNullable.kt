@@ -128,11 +128,7 @@ import org.jetbrains.kotlin.types.isNullable
  * </compliant>
  */
 @RequiresTypeResolution
-class CanBeNonNullable(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Variable can be changed to non-nullable, as it is never set to null.",
-    )
+class CanBeNonNullable(config: Config) : Rule(config, "Variable can be changed to non-nullable, as it is never set to null.") {
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)

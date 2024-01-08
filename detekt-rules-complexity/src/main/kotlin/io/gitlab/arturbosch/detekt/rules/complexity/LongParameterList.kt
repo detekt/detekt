@@ -25,13 +25,9 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
  */
 @Suppress("ViolatesTypeResolutionRequirements")
 @ActiveByDefault(since = "1.0.0")
-class LongParameterList(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "The more parameters a function has the more complex it is. Long parameter lists are often " +
+class LongParameterList(config: Config) : Rule(config, "The more parameters a function has the more complex it is. Long parameter lists are often " +
             "used to control complex algorithms and violate the Single Responsibility Principle. " +
-            "Prefer functions with short parameter lists.",
-    )
+            "Prefer functions with short parameter lists.") {
 
     @Deprecated("Use `allowedFunctionParameters` and `allowedConstructorParameters` instead")
     @Configuration("number of parameters required to trigger the rule")

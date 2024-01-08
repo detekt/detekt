@@ -32,12 +32,8 @@ import org.jetbrains.kotlin.types.typeUtil.nullability
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.2.0")
-class UnsafeCallOnNullableType(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Unsafe calls on nullable types detected. These calls will throw a NullPointerException in case " +
-            "the nullable value is null.",
-    )
+class UnsafeCallOnNullableType(config: Config) : Rule(config, "Unsafe calls on nullable types detected. These calls will throw a NullPointerException in case " +
+            "the nullable value is null.") {
 
     override fun visitPostfixExpression(expression: KtPostfixExpression) {
         super.visitPostfixExpression(expression)

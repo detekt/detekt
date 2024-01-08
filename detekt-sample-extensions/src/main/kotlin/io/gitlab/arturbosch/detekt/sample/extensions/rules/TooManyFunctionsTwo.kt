@@ -13,12 +13,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * This rule is a copy of [TooManyFunctions] which allows the threshold to be configured
  * in the detekt configuration file.
  */
-class TooManyFunctionsTwo(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Too many functions can make the maintainability of a file more costly.",
-    )
+class TooManyFunctionsTwo(config: Config) : Rule(config, "Too many functions can make the maintainability of a file more costly.") {
 
     private val allowedFunctions: Int by config(defaultValue = 10)
 

@@ -31,11 +31,7 @@ import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
  * </compliant>
  */
 @RequiresTypeResolution
-class NullableBooleanCheck(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Nullable boolean check should use `==` rather than `?:`",
-    )
+class NullableBooleanCheck(config: Config) : Rule(config, "Nullable boolean check should use `==` rather than `?:`") {
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         if (expression.operationToken == KtTokens.ELVIS &&

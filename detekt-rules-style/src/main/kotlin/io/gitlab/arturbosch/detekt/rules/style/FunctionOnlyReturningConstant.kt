@@ -32,12 +32,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class FunctionOnlyReturningConstant(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "A function that only returns a constant is misleading. Consider declaring a constant instead.",
-    )
+class FunctionOnlyReturningConstant(config: Config) : Rule(config, "A function that only returns a constant is misleading. Consider declaring a constant instead.") {
 
     @Configuration("if overriden functions should be ignored")
     private val ignoreOverridableFunction: Boolean by config(true)

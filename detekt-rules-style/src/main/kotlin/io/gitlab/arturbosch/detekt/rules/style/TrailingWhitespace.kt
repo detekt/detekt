@@ -20,12 +20,7 @@ import org.jetbrains.kotlin.psi.KtFile
  * nor [in KTIJ](https://youtrack.jetbrains.com/issue/KTIJ-6702/KDoc-Dokka-allow-for-newlines-line-breaks-inside-paragraphs)),
  * which means Markdown line-breaks in KDoc are really only trailing whitespace for now.
  */
-class TrailingWhitespace(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Whitespaces at the end of a line are unnecessary and can be removed.",
-    )
+class TrailingWhitespace(config: Config) : Rule(config, "Whitespaces at the end of a line are unnecessary and can be removed.") {
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)

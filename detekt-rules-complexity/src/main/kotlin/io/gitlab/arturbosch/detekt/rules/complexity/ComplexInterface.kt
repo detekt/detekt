@@ -25,15 +25,10 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * Large interfaces should be split into smaller interfaces which have a clear responsibility and are easier
  * to understand and implement.
  */
-class ComplexInterface(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "An interface contains too many functions and properties. " +
+class ComplexInterface(config: Config) : Rule(config, "An interface contains too many functions and properties. " +
             "Large classes tend to handle many things at once. " +
             "An interface should have one responsibility. " +
-            "Split up large interfaces into smaller ones that are easier to understand.",
-    )
+            "Split up large interfaces into smaller ones that are easier to understand.") {
 
     @Configuration("The amount of allowed definitions in an interface.")
     private val allowedDefinitions: Int by config(defaultValue = 10)

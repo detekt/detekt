@@ -49,12 +49,7 @@ import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
  * </compliant>
  */
 @RequiresTypeResolution
-class OptionalUnit(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Return type of `Unit` is unnecessary and can be safely removed.",
-    )
+class OptionalUnit(config: Config) : Rule(config, "Return type of `Unit` is unnecessary and can be safely removed.") {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         val typeReference = function.typeReference

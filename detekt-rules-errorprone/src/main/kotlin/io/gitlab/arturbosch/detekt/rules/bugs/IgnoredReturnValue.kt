@@ -51,12 +51,7 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class IgnoredReturnValue(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "This call returns a value which is ignored",
-    )
+class IgnoredReturnValue(config: Config) : Rule(config, "This call returns a value which is ignored") {
 
     @Configuration("if the rule should check only annotated methods")
     @Deprecated("Use `restrictToConfig` instead")

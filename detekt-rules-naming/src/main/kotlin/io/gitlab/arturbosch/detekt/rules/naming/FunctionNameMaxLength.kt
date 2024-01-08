@@ -15,12 +15,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * Reports when very long function names are used.
  */
-class FunctionNameMaxLength(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Function names should not be longer than the maximum set in the project configuration.",
-    )
+class FunctionNameMaxLength(config: Config) : Rule(config, "Function names should not be longer than the maximum set in the project configuration.") {
 
     override val defaultRuleIdAliases: Set<String>
         get() = setOf("FunctionMaxNameLength")

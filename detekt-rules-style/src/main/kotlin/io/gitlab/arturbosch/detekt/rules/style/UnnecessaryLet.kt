@@ -44,12 +44,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *
  */
 @RequiresTypeResolution
-class UnnecessaryLet(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "The `let` usage is unnecessary.",
-    )
+class UnnecessaryLet(config: Config) : Rule(config, "The `let` usage is unnecessary.") {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

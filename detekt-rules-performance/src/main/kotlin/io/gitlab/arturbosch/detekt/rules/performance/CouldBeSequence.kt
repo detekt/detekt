@@ -30,12 +30,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * </compliant>
  */
 @RequiresTypeResolution
-class CouldBeSequence(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Several chained collection operations that should be a sequence.",
-    )
+class CouldBeSequence(config: Config) : Rule(config, "Several chained collection operations that should be a sequence.") {
 
     @Configuration("The maximum number of allowed chained collection operations.")
     private val allowedOperations: Int by config(defaultValue = 2)

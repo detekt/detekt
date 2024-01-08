@@ -51,12 +51,7 @@ import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
  * </compliant>
  */
 @RequiresTypeResolution
-class ElseCaseInsteadOfExhaustiveWhen(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "A `when` expression that has an exhaustive set of cases should not contain an `else` case.",
-    )
+class ElseCaseInsteadOfExhaustiveWhen(config: Config) : Rule(config, "A `when` expression that has an exhaustive set of cases should not contain an `else` case.") {
 
     @Configuration(
         "List of fully qualified types which should be ignored for when expressions with a subject. " +

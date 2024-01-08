@@ -23,14 +23,9 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ExplicitGarbageCollectionCall(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Don't try to be smarter than the JVM. Your code should work independently whether the garbage " +
+class ExplicitGarbageCollectionCall(config: Config) : Rule(config, "Don't try to be smarter than the JVM. Your code should work independently whether the garbage " +
             "collector is disabled or not. If you face memory issues, " +
-            "try tuning the JVM options instead of relying on code itself.",
-    )
+            "try tuning the JVM options instead of relying on code itself.") {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         expression.getCallNameExpression()?.let {

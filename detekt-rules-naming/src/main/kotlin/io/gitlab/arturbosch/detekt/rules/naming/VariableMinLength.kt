@@ -15,12 +15,7 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 /**
  * Reports when very short variable names are used.
  */
-class VariableMinLength(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Variable names should not be shorter than the minimum defined in the configuration.",
-    )
+class VariableMinLength(config: Config) : Rule(config, "Variable names should not be shorter than the minimum defined in the configuration.") {
 
     @Configuration("minimum name length")
     private val minimumVariableNameLength: Int by config(DEFAULT_MINIMUM_VARIABLE_NAME_LENGTH)
