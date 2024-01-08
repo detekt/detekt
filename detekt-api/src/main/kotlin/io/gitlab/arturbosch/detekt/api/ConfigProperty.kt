@@ -175,7 +175,8 @@ private class TransformedConfigPropertyWithAndroidVariants<T : Any, U : Any>(
     private val transform: (T) -> U
 ) : MemoizedConfigProperty<U>() {
     override fun doGetValue(thisRef: Rule, property: KProperty<*>): U {
-        val isAndroid = getValueOrDefault(thisRef.config, "android", false)
+        val rulesetConfig = thisRef.config.parent ?: Config.empty
+        val isAndroid = getValueOrDefault(rulesetConfig, "android", false)
         val value = if (isAndroid) defaultAndroidValue else defaultValue
         return transform(getValueOrDefault(thisRef.config, property.name, value))
     }
