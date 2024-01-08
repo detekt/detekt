@@ -100,11 +100,6 @@ internal class Analyzer(
         bindingContext: BindingContext,
         compilerResources: CompilerResources
     ): Map<RuleSetId, List<Finding>> {
-        fun isCorrectable(rule: Rule): Boolean = when (rule) {
-            is Rule -> rule.autoCorrect
-            else -> error("No other rule type expected.")
-        }
-
         val activeRuleSetsToRuleSetConfigs = providers.asSequence()
             .map { it to config.subConfig(it.ruleSetId) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
@@ -123,7 +118,9 @@ internal class Analyzer(
             .filter { rule ->
                 bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
             }
-            .partition { isCorrectable(it) }
+            .partition { rule ->
+                rule.autoCorrect
+            }
 
         val result = HashMap<RuleSetId, MutableList<Finding>>()
 
