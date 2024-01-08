@@ -27,13 +27,8 @@ import org.jetbrains.kotlin.psi.KtClass
  * )
  * </compliant>
  */
-class DataClassShouldBeImmutable(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Data classes should mainly be immutable and should not have any side effects " +
-            "(To copy an object altering some of its properties use the copy function).",
-    )
+class DataClassShouldBeImmutable(config: Config) : Rule(config, "Data classes should mainly be immutable and should not have any side effects " +
+            "(To copy an object altering some of its properties use the copy function).") {
 
     override fun visitClass(klass: KtClass) {
         if (klass.isData()) {

@@ -36,14 +36,9 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class EqualsAlwaysReturnsTrueOrFalse(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Having an `equals()` method that always returns true or false is not a good idea. " +
+class EqualsAlwaysReturnsTrueOrFalse(config: Config) : Rule(config, "Having an `equals()` method that always returns true or false is not a good idea. " +
             "It does not follow the contract of this method. " +
-            "Consider a good default implementation (e.g. `this == other`).",
-    )
+            "Consider a good default implementation (e.g. `this == other`).") {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.isEqualsFunction() && function.returnsBooleanConstant()) {

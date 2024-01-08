@@ -46,11 +46,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class SleepInsteadOfDelay(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Usage of `Thread.sleep()` in coroutines can potentially halt multiple coroutines at once.",
-    )
+class SleepInsteadOfDelay(config: Config) : Rule(config, "Usage of `Thread.sleep()` in coroutines can potentially halt multiple coroutines at once.") {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

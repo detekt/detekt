@@ -21,12 +21,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  * then it can be replaced with [Entity.atName] for more semantic code and better baseline support.
  */
 @ActiveByDefault("1.22.0")
-class UseEntityAtName(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Prefer Entity.atName to Entity.from(....nameIdentifier).",
-    )
+class UseEntityAtName(config: Config) : Rule(config, "Prefer Entity.atName to Entity.from(....nameIdentifier).") {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
