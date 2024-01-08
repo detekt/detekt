@@ -1,6 +1,7 @@
 package dev.detekt.gradle.plugin
 
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import io.gitlab.arturbosch.detekt.extensions.FailOnSeverity
 import io.gitlab.arturbosch.detekt.extensions.loadDetektVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -16,6 +17,7 @@ class DetektBasePlugin : Plugin<Project> {
         with(extension) {
             toolVersion.convention(loadDetektVersion(DetektExtension::class.java.classLoader))
             ignoreFailures.convention(DEFAULT_IGNORE_FAILURES)
+            failOnSeverity.convention(DEFAULT_FAIL_ON_SEVERITY)
             source.setFrom(
                 DEFAULT_SRC_DIR_JAVA,
                 DEFAULT_TEST_SRC_DIR_JAVA,
@@ -62,6 +64,7 @@ class DetektBasePlugin : Plugin<Project> {
         private const val DEFAULT_TEST_SRC_DIR_KOTLIN = "src/test/kotlin"
         private const val DEFAULT_DEBUG_VALUE = false
         private const val DEFAULT_IGNORE_FAILURES = false
+        private val DEFAULT_FAIL_ON_SEVERITY = FailOnSeverity.Error
         private const val DEFAULT_PARALLEL_VALUE = false
         private const val DEFAULT_AUTO_CORRECT_VALUE = false
         private const val DEFAULT_DISABLE_RULESETS_VALUE = false

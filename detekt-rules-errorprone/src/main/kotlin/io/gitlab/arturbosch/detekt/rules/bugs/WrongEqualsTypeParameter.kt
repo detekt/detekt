@@ -37,7 +37,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 class WrongEqualsTypeParameter(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "WrongEqualsTypeParameter",
+        javaClass.simpleName,
         "Wrong parameter type for `equals()` method found. " +
             "To correctly override the `equals()` method use `Any?`.",
     )

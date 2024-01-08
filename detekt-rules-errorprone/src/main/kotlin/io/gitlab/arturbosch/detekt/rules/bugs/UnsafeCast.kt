@@ -35,8 +35,8 @@ class UnsafeCast(config: Config) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("UNCHECKED_CAST")
 
-    override val issue: Issue = Issue(
-        "UnsafeCast",
+    override val issue = Issue(
+        javaClass.simpleName,
         "Cast operator throws an exception if the cast is not possible.",
     )
 

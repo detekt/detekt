@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
 class IteratorHasNextCallsNextMethod(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "IteratorHasNextCallsNextMethod",
+        javaClass.simpleName,
         "The `hasNext()` method of an Iterator implementation should not call the `next()` method. " +
             "The state of the iterator should not be changed inside the `hasNext()` method. " +
             "The `hasNext()` method is not supposed to have any side effects.",

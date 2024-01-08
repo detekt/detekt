@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 @ActiveByDefault(since = "1.0.0")
 class LongParameterList(config: Config) : Rule(config) {
     override val issue = Issue(
-        "LongParameterList",
+        javaClass.simpleName,
         "The more parameters a function has the more complex it is. Long parameter lists are often " +
             "used to control complex algorithms and violate the Single Responsibility Principle. " +
             "Prefer functions with short parameter lists.",

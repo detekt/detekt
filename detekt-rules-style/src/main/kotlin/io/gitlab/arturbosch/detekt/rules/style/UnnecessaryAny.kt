@@ -45,7 +45,7 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
  */
 @RequiresTypeResolution
 class UnnecessaryAny(config: Config) : Rule(config) {
-    override val issue: Issue = Issue(
+    override val issue = Issue(
         javaClass.simpleName,
         "The `any {  }` usage is unnecessary.",
     )

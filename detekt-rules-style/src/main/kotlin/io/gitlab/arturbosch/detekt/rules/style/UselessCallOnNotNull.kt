@@ -46,8 +46,8 @@ import org.jetbrains.kotlin.types.isNullable
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.2.0")
 class UselessCallOnNotNull(config: Config) : Rule(config) {
-    override val issue: Issue = Issue(
-        "UselessCallOnNotNull",
+    override val issue = Issue(
+        javaClass.simpleName,
         "This call on a non-null reference may be reduced or removed. " +
             "Some calls are intended to be called on nullable collection or text types (e.g. `String?`)." +
             "When this call is used on a reference to a non-null type " +

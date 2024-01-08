@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
 class MethodOverloading(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "MethodOverloading",
+        javaClass.simpleName,
         "Methods which are overloaded often might be harder to maintain. " +
             "Furthermore, these methods are tightly coupled. " +
             "Refactor these methods and try to use optional parameters.",

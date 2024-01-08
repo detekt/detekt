@@ -16,6 +16,8 @@ interface DetektExtension {
 
     val ignoreFailures: Property<Boolean>
 
+    val failOnSeverity: Property<FailOnSeverity>
+
     val reportsDir: DirectoryProperty
 
     val source: ConfigurableFileCollection

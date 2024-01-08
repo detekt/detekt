@@ -55,5 +55,5 @@ class SuppressorsSpec {
 }
 
 private class ARule(config: Config = Config.empty) : Rule(config) {
-    override val issue = Issue("IssueId", "")
+    override val issue = Issue(javaClass.simpleName, "")
 }

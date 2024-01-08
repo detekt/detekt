@@ -58,7 +58,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 class RedundantSuspendModifier(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "RedundantSuspendModifier",
+        javaClass.simpleName,
         "The `suspend` modifier is only needed for functions that contain suspending calls.",
     )
 

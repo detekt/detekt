@@ -47,8 +47,8 @@ import org.jetbrains.kotlin.types.KotlinType
 @RequiresTypeResolution
 class UseDataClass(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue(
-        "UseDataClass",
+    override val issue = Issue(
+        javaClass.simpleName,
         "Classes that do nothing but hold data should be replaced with a data class.",
     )
 

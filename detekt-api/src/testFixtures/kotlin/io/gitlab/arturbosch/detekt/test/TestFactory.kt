@@ -16,13 +16,13 @@ fun createFinding(
     ruleName: String = "TestSmell",
     fileName: String = "TestFile.kt",
     entity: Entity = createEntity(location = createLocation(fileName)),
-    severity: Severity = Severity.ERROR
+    severity: Severity = Severity.Error
 ) = createFinding(createIssue(ruleName), entity, "TestMessage", severity)
 
 fun createCorrectableFinding(
     ruleName: String = "TestSmell",
     fileName: String = "TestFile.kt",
-    severity: Severity = Severity.ERROR
+    severity: Severity = Severity.Error
 ) = object : CorrectableCodeSmell(
     issue = createIssue(ruleName),
     entity = createEntity(location = createLocation(fileName)),
@@ -37,7 +37,7 @@ fun createFinding(
     issue: Issue,
     entity: Entity,
     message: String = "TestMessage",
-    severity: Severity = Severity.ERROR
+    severity: Severity = Severity.Error
 ) = object : CodeSmell(
     issue = issue,
     entity = entity,

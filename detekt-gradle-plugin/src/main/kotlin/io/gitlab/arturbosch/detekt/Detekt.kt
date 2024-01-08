@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektReport
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
+import io.gitlab.arturbosch.detekt.extensions.FailOnSeverity
 import io.gitlab.arturbosch.detekt.invoke.AllRulesArgument
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
 import io.gitlab.arturbosch.detekt.invoke.BasePathArgument
@@ -17,6 +18,7 @@ import io.gitlab.arturbosch.detekt.invoke.DefaultReportArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.DetektWorkAction
 import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
+import io.gitlab.arturbosch.detekt.invoke.FailOnSeverityArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JdkHomeArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
@@ -112,6 +114,10 @@ abstract class Detekt @Inject constructor(
     abstract val ignoreFailures: Property<Boolean>
 
     @get:Input
+    @get:Optional
+    abstract val failOnSeverity: Property<FailOnSeverity>
+
+    @get:Input
     @get:Option(option = "auto-correct", description = "Allow rules to auto correct code if they support it")
     abstract val autoCorrect: Property<Boolean>
 
@@ -188,6 +194,10 @@ abstract class Detekt @Inject constructor(
             BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
             AllRulesArgument(allRules.getOrElse(false)),
             AutoCorrectArgument(autoCorrect.getOrElse(false)),
+            FailOnSeverityArgument(
+                ignoreFailures = ignoreFailures.getOrElse(false),
+                minSeverity = failOnSeverity.get()
+            ),
             BasePathArgument(basePath.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
         ).plus(convertCustomReportsToArguments()).flatMap(CliArgument::toArgument)
