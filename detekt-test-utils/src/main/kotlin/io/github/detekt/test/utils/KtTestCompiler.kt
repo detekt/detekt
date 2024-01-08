@@ -2,7 +2,6 @@ package io.github.detekt.test.utils
 
 import io.github.detekt.parser.KtCompiler
 import kotlinx.coroutines.CoroutineScope
-import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
@@ -13,27 +12,15 @@ import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.cli.jvm.config.configureJdkClasspathRoots
 import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
-import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
-import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
 
 /**
  * Test compiler extends kt compiler and adds ability to compile from text content.
  */
 internal object KtTestCompiler : KtCompiler() {
-
-    fun compileFromContent(@Language("kotlin") content: String, filename: String = TEST_FILENAME): KtFile {
-        require('/' !in filename && '\\' !in filename) {
-            "filename must be a file name only and not contain any path elements"
-        }
-        return psiFileFactory.createPhysicalFile(
-            filename,
-            StringUtilRt.convertLineSeparators(content)
-        )
-    }
 
     /**
      * Not sure why but this function only works from this context.
@@ -81,5 +68,3 @@ internal object KtTestCompiler : KtCompiler() {
         return File(CoroutineScope::class.java.protectionDomain.codeSource.location.path)
     }
 }
-
-internal const val TEST_FILENAME = "Test.kt"
