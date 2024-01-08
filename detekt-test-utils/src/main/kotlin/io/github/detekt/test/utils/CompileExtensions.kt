@@ -10,12 +10,23 @@ import kotlin.io.path.Path
  */
 fun compileContentForTest(
     @Language("kotlin") content: String,
-    filename: String = "Test.kt",
+    filename: String,
 ): KtFile {
     require('/' !in filename && '\\' !in filename) {
         "filename must be a file name only and not contain any path elements"
     }
-    return KtTestCompiler.createKtFile(content, Path("/"), Path("/$filename"))
+    return compileContentForTest(content, path = Path("/$filename"))
+}
+
+/**
+ * Use this method if you define a kt file/class as a plain string in your test.
+ */
+fun compileContentForTest(
+    @Language("kotlin") content: String,
+    basePath: Path = Path("/"),
+    path: Path = Path("/Test.kt"),
+): KtFile {
+    return KtTestCompiler.createKtFile(content, basePath, path)
 }
 
 /**
