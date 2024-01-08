@@ -14,6 +14,7 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
+import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -236,7 +237,9 @@ class SuppressionSpec {
             fun lpl(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int) = Unit
         """.trimIndent()
 
-        val config = yamlConfig("/suppression/ruleset-suppression.yml").subConfig("complexity")
+        val config = yamlConfig("/suppression/ruleset-suppression.yml")
+            .subConfig("complexity")
+            .subConfig("TestLPL")
 
         @Test
         fun `reports without a suppression`() {
@@ -272,12 +275,12 @@ class SuppressionSpec {
         fun `suppresses by combination of detekt prefix, rule set and rule id`() {
             assertCodeIsSuppressed("""@Suppress("detekt:complexity:TestLPL")$code""", config)
         }
-    }
-}
 
-private fun assertCodeIsSuppressed(code: String, config: Config) {
-    val findings = TestLPL(config).lint(code)
-    assertThat(findings).isEmpty()
+        private fun assertCodeIsSuppressed(@Language("kotlin") code: String, config: Config) {
+            val findings = TestLPL(config).lint(code)
+            assertThat(findings).isEmpty()
+        }
+    }
 }
 
 private fun isSuppressedBy(annotation: String, argument: String): Boolean {

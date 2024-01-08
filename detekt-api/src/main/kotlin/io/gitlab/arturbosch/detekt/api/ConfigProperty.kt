@@ -13,7 +13,7 @@ import kotlin.reflect.KProperty0
  */
 fun <T : Any> config(
     defaultValue: T
-): ReadOnlyProperty<ConfigAware, T> = config(defaultValue) { it }
+): ReadOnlyProperty<Rule, T> = config(defaultValue) { it }
 
 /**
  * Creates a delegated read-only property that can be used in [ConfigAware] objects. The name of the property is the
@@ -27,7 +27,7 @@ fun <T : Any> config(
 fun <T : Any, U : Any> config(
     defaultValue: T,
     transformer: (T) -> U
-): ReadOnlyProperty<ConfigAware, U> = TransformedConfigProperty(defaultValue, transformer)
+): ReadOnlyProperty<Rule, U> = TransformedConfigProperty(defaultValue, transformer)
 
 /**
  * Creates a delegated read-only property that can be used in [ConfigAware] objects. The name of the property is the
@@ -46,7 +46,7 @@ fun <T : Any, U : Any> config(
 fun <T : Any> configWithFallback(
     fallbackProperty: KProperty0<T>,
     defaultValue: T
-): ReadOnlyProperty<ConfigAware, T> = configWithFallback(fallbackProperty, defaultValue) { it }
+): ReadOnlyProperty<Rule, T> = configWithFallback(fallbackProperty, defaultValue) { it }
 
 /**
  * Creates a delegated read-only property that can be used in [ConfigAware] objects. The name of the property is the
@@ -68,7 +68,7 @@ fun <T : Any, U : Any> configWithFallback(
     fallbackProperty: KProperty0<U>,
     defaultValue: T,
     transformer: (T) -> U
-): ReadOnlyProperty<ConfigAware, U> =
+): ReadOnlyProperty<Rule, U> =
     FallbackConfigProperty(fallbackProperty, defaultValue, transformer)
 
 /**
@@ -84,7 +84,7 @@ fun <T : Any, U : Any> configWithFallback(
 fun <T : Any> configWithAndroidVariants(
     defaultValue: T,
     defaultAndroidValue: T,
-): ReadOnlyProperty<ConfigAware, T> = configWithAndroidVariants(defaultValue, defaultAndroidValue) { it }
+): ReadOnlyProperty<Rule, T> = configWithAndroidVariants(defaultValue, defaultAndroidValue) { it }
 
 /**
  * Creates a delegated read-only property that can be used in [ConfigAware] objects. The name of the property is the
@@ -102,17 +102,17 @@ fun <T : Any, U : Any> configWithAndroidVariants(
     defaultValue: T,
     defaultAndroidValue: T,
     transformer: (T) -> U
-): ReadOnlyProperty<ConfigAware, U> =
+): ReadOnlyProperty<Rule, U> =
     TransformedConfigPropertyWithAndroidVariants(defaultValue, defaultAndroidValue, transformer)
 
-private fun <T : Any> getValueOrDefault(configAware: ConfigAware, propertyName: String, defaultValue: T): T {
+private fun <T : Any> getValueOrDefault(config: Config, propertyName: String, defaultValue: T): T {
     @Suppress("UNCHECKED_CAST")
     return when (defaultValue) {
-        is ValuesWithReason -> configAware.getValuesWithReasonOrDefault(propertyName, defaultValue) as T
-        is List<*> -> configAware.getListOrDefault(propertyName, defaultValue) as T
+        is ValuesWithReason -> config.getValuesWithReasonOrDefault(propertyName, defaultValue) as T
+        is List<*> -> config.getListOrDefault(propertyName, defaultValue) as T
         is String,
         is Boolean,
-        is Int -> configAware.valueOrDefault(propertyName, defaultValue)
+        is Int -> config.valueOrDefault(propertyName, defaultValue)
         else -> error(
             "${defaultValue.javaClass} is not supported for delegated config property '$propertyName'. " +
                 "Use one of String, Boolean, Int or List<String> instead."
@@ -120,17 +120,17 @@ private fun <T : Any> getValueOrDefault(configAware: ConfigAware, propertyName: 
     }
 }
 
-private fun ConfigAware.getListOrDefault(propertyName: String, defaultValue: List<*>): List<String> {
+private fun Config.getListOrDefault(propertyName: String, defaultValue: List<*>): List<String> {
     return if (defaultValue.all { it is String }) {
         @Suppress("UNCHECKED_CAST")
         val defaultValueAsListOfStrings = defaultValue as List<String>
-        ruleConfig.valueOrDefault(propertyName, defaultValueAsListOfStrings)
+        valueOrDefault(propertyName, defaultValueAsListOfStrings)
     } else {
         error("Only lists of strings are supported. '$propertyName' is invalid. ")
     }
 }
 
-private fun ConfigAware.getValuesWithReasonOrDefault(
+private fun Config.getValuesWithReasonOrDefault(
     propertyName: String,
     defaultValue: ValuesWithReason
 ): ValuesWithReason {
@@ -159,14 +159,14 @@ private fun ConfigAware.getValuesWithReasonOrDefault(
     error("Only lists of strings or maps with keys 'value' and 'reason' are supported. '$propertyName' is invalid.")
 }
 
-private abstract class MemoizedConfigProperty<U : Any> : ReadOnlyProperty<ConfigAware, U> {
+private abstract class MemoizedConfigProperty<U : Any> : ReadOnlyProperty<Rule, U> {
     private var value: U? = null
 
-    override fun getValue(thisRef: ConfigAware, property: KProperty<*>): U {
+    override fun getValue(thisRef: Rule, property: KProperty<*>): U {
         return value ?: doGetValue(thisRef, property).also { value = it }
     }
 
-    abstract fun doGetValue(thisRef: ConfigAware, property: KProperty<*>): U
+    abstract fun doGetValue(thisRef: Rule, property: KProperty<*>): U
 }
 
 private class TransformedConfigPropertyWithAndroidVariants<T : Any, U : Any>(
@@ -174,10 +174,10 @@ private class TransformedConfigPropertyWithAndroidVariants<T : Any, U : Any>(
     private val defaultAndroidValue: T,
     private val transform: (T) -> U
 ) : MemoizedConfigProperty<U>() {
-    override fun doGetValue(thisRef: ConfigAware, property: KProperty<*>): U {
-        val isAndroid = getValueOrDefault(thisRef, "android", false)
+    override fun doGetValue(thisRef: Rule, property: KProperty<*>): U {
+        val isAndroid = getValueOrDefault(thisRef.config, "android", false)
         val value = if (isAndroid) defaultAndroidValue else defaultValue
-        return transform(getValueOrDefault(thisRef, property.name, value))
+        return transform(getValueOrDefault(thisRef.config, property.name, value))
     }
 }
 
@@ -185,8 +185,8 @@ private class TransformedConfigProperty<T : Any, U : Any>(
     private val defaultValue: T,
     private val transform: (T) -> U
 ) : MemoizedConfigProperty<U>() {
-    override fun doGetValue(thisRef: ConfigAware, property: KProperty<*>): U {
-        return transform(getValueOrDefault(thisRef, property.name, defaultValue))
+    override fun doGetValue(thisRef: Rule, property: KProperty<*>): U {
+        return transform(getValueOrDefault(thisRef.config, property.name, defaultValue))
     }
 }
 
@@ -195,15 +195,15 @@ private class FallbackConfigProperty<T : Any, U : Any>(
     private val defaultValue: T,
     private val transform: (T) -> U
 ) : MemoizedConfigProperty<U>() {
-    override fun doGetValue(thisRef: ConfigAware, property: KProperty<*>): U {
-        if (thisRef.isConfigured(property.name)) {
-            return transform(getValueOrDefault(thisRef, property.name, defaultValue))
+    override fun doGetValue(thisRef: Rule, property: KProperty<*>): U {
+        if (thisRef.config.isConfigured(property.name)) {
+            return transform(getValueOrDefault(thisRef.config, property.name, defaultValue))
         }
-        if (thisRef.isConfigured(fallbackProperty.name)) {
+        if (thisRef.config.isConfigured(fallbackProperty.name)) {
             return fallbackProperty.get()
         }
         return transform(defaultValue)
     }
 
-    private fun ConfigAware.isConfigured(propertyName: String) = valueOrNull<Any>(propertyName) != null
+    private fun Config.isConfigured(propertyName: String) = valueOrNull<Any>(propertyName) != null
 }

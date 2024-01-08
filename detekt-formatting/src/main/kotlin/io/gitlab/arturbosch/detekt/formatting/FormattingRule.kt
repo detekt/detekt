@@ -31,8 +31,8 @@ abstract class FormattingRule(config: Config) : Rule(config) {
      * Should the android style guide be enforced?
      * This property is read from the ruleSet config.
      */
-    protected val isAndroid
-        get() = FormattingProvider.android.value(ruleSetConfig)
+    protected val isAndroid: Boolean
+        get() = config.parent?.let { FormattingProvider.android.value(it) } == true
 
     private lateinit var positionByOffset: (offset: Int) -> Pair<Int, Int>
     private lateinit var root: KtFile

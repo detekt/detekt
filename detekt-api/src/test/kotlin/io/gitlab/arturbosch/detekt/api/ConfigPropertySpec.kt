@@ -16,7 +16,7 @@ class ConfigPropertySpec {
         inner class `String property` {
             private val configValue = "value"
             private val defaultValue = "default"
-            private val subject = object : TestConfigAware("present" to configValue) {
+            private val subject = object : TestRule("present" to configValue) {
                 val present: String by config(defaultValue)
                 val notPresent: String by config(defaultValue)
             }
@@ -39,7 +39,7 @@ class ConfigPropertySpec {
 
             @Nested
             inner class `defined as number` {
-                private val subject = object : TestConfigAware("present" to configValue) {
+                private val subject = object : TestRule("present" to configValue) {
                     val present: Int by config(defaultValue)
                     val notPresent: Int by config(defaultValue)
                 }
@@ -57,7 +57,7 @@ class ConfigPropertySpec {
 
             @Nested
             inner class `defined as string` {
-                private val subject = object : TestConfigAware("present" to "$configValue") {
+                private val subject = object : TestRule("present" to "$configValue") {
                     val present: Int by config(defaultValue)
                 }
 
@@ -73,7 +73,7 @@ class ConfigPropertySpec {
 
                 @Nested
                 inner class `value defined as list` {
-                    private val subject = object : TestConfigAware("present" to listOf("a", "b", "c")) {
+                    private val subject = object : TestRule("present" to listOf("a", "b", "c")) {
                         val present: ValuesWithReason by config(defaultValue)
                         val notPresent: ValuesWithReason by config(defaultValue)
                     }
@@ -93,7 +93,7 @@ class ConfigPropertySpec {
 
                 @Nested
                 inner class `value defined as list of maps` {
-                    private val subject = object : TestConfigAware(
+                    private val subject = object : TestRule(
                         "present" to listOf(
                             mapOf("value" to "a", "reason" to "reasonA"),
                             mapOf("value" to "b", "reason" to null),
@@ -127,7 +127,7 @@ class ConfigPropertySpec {
                     @Test
                     fun `value missing`() {
                         assertThatThrownBy {
-                            object : TestConfigAware(
+                            object : TestRule(
                                 "present" to listOf(
                                     mapOf("reason" to "reason")
                                 )
@@ -140,7 +140,7 @@ class ConfigPropertySpec {
                     @Test
                     fun `value with an invalid type`() {
                         assertThatThrownBy {
-                            object : TestConfigAware(
+                            object : TestRule(
                                 "present" to listOf(
                                     mapOf("value" to 42, "reason" to "reason")
                                 )
@@ -153,7 +153,7 @@ class ConfigPropertySpec {
                     @Test
                     fun `reason with an invalid type`() {
                         assertThatThrownBy {
-                            object : TestConfigAware(
+                            object : TestRule(
                                 "present" to listOf(
                                     mapOf("value" to "a", "reason" to 42)
                                 )
@@ -173,7 +173,7 @@ class ConfigPropertySpec {
 
             @Nested
             inner class `defined as Boolean` {
-                private val subject = object : TestConfigAware("present" to configValue) {
+                private val subject = object : TestRule("present" to configValue) {
                     val present: Boolean by config(defaultValue)
                     val notPresent: Boolean by config(defaultValue)
                 }
@@ -191,7 +191,7 @@ class ConfigPropertySpec {
 
             @Nested
             inner class `defined as string` {
-                private val subject = object : TestConfigAware("present" to "$configValue") {
+                private val subject = object : TestRule("present" to "$configValue") {
                     val present: Boolean by config(defaultValue)
                 }
 
@@ -208,7 +208,7 @@ class ConfigPropertySpec {
 
             @Nested
             inner class `defined as list` {
-                private val subject = object : TestConfigAware("present" to listOf("a", "b", "c")) {
+                private val subject = object : TestRule("present" to listOf("a", "b", "c")) {
                     val present: List<String> by config(defaultValue)
                     val notPresent: List<String> by config(defaultValue)
                 }
@@ -226,7 +226,7 @@ class ConfigPropertySpec {
 
             @Nested
             inner class `defined as comma separated string` {
-                private val subject = object : TestConfigAware("present" to listOf("a", "b", "c")) {
+                private val subject = object : TestRule("present" to listOf("a", "b", "c")) {
                     val present: List<String> by config(defaultValue)
                     val notPresent: List<String> by config(defaultValue)
                 }
@@ -249,7 +249,7 @@ class ConfigPropertySpec {
         @Nested
         inner class `Long property` {
             private val defaultValue = 1L
-            private val subject = object : TestConfigAware() {
+            private val subject = object : TestRule() {
                 val prop: Long by config(defaultValue)
             }
 
@@ -264,7 +264,7 @@ class ConfigPropertySpec {
         @Nested
         inner class `Regex property` {
             private val defaultValue = Regex("a")
-            private val subject = object : TestConfigAware() {
+            private val subject = object : TestRule() {
                 val prop: Regex by config(defaultValue)
             }
 
@@ -279,7 +279,7 @@ class ConfigPropertySpec {
         @Nested
         inner class `Set property` {
             private val defaultValue = setOf("a")
-            private val subject = object : TestConfigAware() {
+            private val subject = object : TestRule() {
                 val prop: Set<String> by config(defaultValue)
             }
 
@@ -294,7 +294,7 @@ class ConfigPropertySpec {
         @Nested
         inner class `List of Int` {
             private val defaultValue = listOf(1)
-            private val subject = object : TestConfigAware() {
+            private val subject = object : TestRule() {
                 val prop: List<Int> by config(defaultValue)
             }
 
@@ -315,7 +315,7 @@ class ConfigPropertySpec {
             inner class `String property is transformed to regex` {
                 private val defaultValue = ".*"
                 private val configValue = "[a-z]+"
-                private val subject = object : TestConfigAware("present" to configValue) {
+                private val subject = object : TestRule("present" to configValue) {
                     val present: Regex by config(defaultValue) { it.toRegex() }
                     val notPresent: Regex by config(defaultValue) { it.toRegex() }
                 }
@@ -337,7 +337,7 @@ class ConfigPropertySpec {
             inner class `Int property is transformed to String` {
                 private val configValue = 99
                 private val defaultValue = -1
-                private val subject = object : TestConfigAware("present" to configValue) {
+                private val subject = object : TestRule("present" to configValue) {
                     val present: String by config(defaultValue) { it.toString() }
                     val notPresent: String by config(defaultValue) { it.toString() }
                 }
@@ -357,7 +357,7 @@ class ConfigPropertySpec {
             inner class `Boolean property is transformed to String` {
                 private val configValue = true
                 private val defaultValue = false
-                private val subject = object : TestConfigAware("present" to configValue) {
+                private val subject = object : TestRule("present" to configValue) {
                     val present: String by config(defaultValue) { it.toString() }
                     val notPresent: String by config(defaultValue) { it.toString() }
                 }
@@ -376,7 +376,7 @@ class ConfigPropertySpec {
             @Nested
             inner class `Boolean property is transformed to String with function reference` {
                 private val defaultValue = false
-                private val subject = object : TestConfigAware() {
+                private val subject = object : TestRule() {
                     val prop1: String by config(defaultValue, Boolean::toString)
                     val prop2: String by config(transformer = Boolean::toString, defaultValue = defaultValue)
                 }
@@ -392,7 +392,7 @@ class ConfigPropertySpec {
         @Nested
         inner class `list of strings` {
             private val defaultValue = listOf("99")
-            private val subject = object : TestConfigAware("present" to listOf("1", "2", "3")) {
+            private val subject = object : TestRule("present" to listOf("1", "2", "3")) {
                 val present: Int by config(defaultValue) { it.sumOf(String::toInt) }
                 val notPresent: Int by config(defaultValue) { it.sumOf(String::toInt) }
             }
@@ -410,7 +410,7 @@ class ConfigPropertySpec {
 
         @Nested
         inner class `empty list of strings` {
-            private val subject = object : TestConfigAware() {
+            private val subject = object : TestRule() {
                 val defaultValue: List<String> = emptyList()
                 val prop1: List<Int> by config(defaultValue) { it.map(String::toInt) }
                 val prop2: List<Int> by config(emptyList<String>()) { it.map(String::toInt) }
@@ -429,7 +429,7 @@ class ConfigPropertySpec {
 
         @Nested
         inner class Memoization {
-            private val subject = object : TestConfigAware() {
+            private val subject = object : TestRule() {
                 val counter = AtomicInteger(0)
                 val prop: String by config(1) {
                     counter.getAndIncrement()
@@ -459,7 +459,7 @@ class ConfigPropertySpec {
             private val defaultValue = 0
             private val fallbackValue = -1
             private val subject =
-                object : TestConfigAware("present" to "$configValue", "fallback" to fallbackValue) {
+                object : TestRule("present" to "$configValue", "fallback" to fallbackValue) {
                     private val fallback: Int by config(42)
                     private val missing: Int by config(42)
                     val present: Int by configWithFallback(::fallback, defaultValue)
@@ -489,7 +489,7 @@ class ConfigPropertySpec {
             private val defaultValue = 0
             private val fallbackValue = -1
             private val fallbackOffset = 10
-            private val subject = object : TestConfigAware("present" to configValue, "fallback" to fallbackValue) {
+            private val subject = object : TestRule("present" to configValue, "fallback" to fallbackValue) {
                 private val fallback: String by config(42) { (it + fallbackOffset).toString() }
                 private val missing: String by config(42) { (it + fallbackOffset).toString() }
                 val present: String by configWithFallback(::fallback, defaultValue) { v ->
@@ -521,9 +521,6 @@ class ConfigPropertySpec {
     }
 }
 
-private open class TestConfigAware(private vararg val data: Pair<String, Any>) : ConfigAware {
-    override val ruleId: RuleId
-        get() = "test"
-    override val ruleSetConfig: Config
-        get() = TestConfig(*data)
+private open class TestRule(vararg data: Pair<String, Any>) : Rule(TestConfig(*data)) {
+    override val issue = Issue("id", "description")
 }

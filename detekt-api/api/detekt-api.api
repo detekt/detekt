@@ -96,26 +96,6 @@ public final class io/gitlab/arturbosch/detekt/api/Config$InvalidConfigurationEr
 	public synthetic fun <init> (Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
-public abstract interface class io/gitlab/arturbosch/detekt/api/ConfigAware {
-	public abstract fun getActive ()Z
-	public abstract fun getAutoCorrect ()Z
-	public abstract fun getRuleConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
-	public abstract fun getRuleId ()Ljava/lang/String;
-	public abstract fun getRuleSetConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
-	public abstract fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
-	public abstract fun valueOrDefault (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
-	public abstract fun valueOrNull (Ljava/lang/String;)Ljava/lang/Object;
-}
-
-public final class io/gitlab/arturbosch/detekt/api/ConfigAware$DefaultImpls {
-	public static fun getActive (Lio/gitlab/arturbosch/detekt/api/ConfigAware;)Z
-	public static fun getAutoCorrect (Lio/gitlab/arturbosch/detekt/api/ConfigAware;)Z
-	public static fun getRuleConfig (Lio/gitlab/arturbosch/detekt/api/ConfigAware;)Lio/gitlab/arturbosch/detekt/api/Config;
-	public static fun subConfig (Lio/gitlab/arturbosch/detekt/api/ConfigAware;Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
-	public static fun valueOrDefault (Lio/gitlab/arturbosch/detekt/api/ConfigAware;Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
-	public static fun valueOrNull (Lio/gitlab/arturbosch/detekt/api/ConfigAware;Ljava/lang/String;)Ljava/lang/Object;
-}
-
 public final class io/gitlab/arturbosch/detekt/api/ConfigPropertyKt {
 	public static final fun config (Ljava/lang/Object;)Lkotlin/properties/ReadOnlyProperty;
 	public static final fun config (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;
@@ -352,21 +332,17 @@ public final class io/gitlab/arturbosch/detekt/api/ReportingExtension$DefaultImp
 public abstract interface annotation class io/gitlab/arturbosch/detekt/api/RequiresTypeResolution : java/lang/annotation/Annotation {
 }
 
-public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/BaseRule, io/gitlab/arturbosch/detekt/api/ConfigAware {
+public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/BaseRule {
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;)V
-	public fun getActive ()Z
+	public final fun getActive ()Z
 	public final fun getAliases ()Ljava/util/Set;
-	public fun getAutoCorrect ()Z
+	public final fun getAutoCorrect ()Z
+	public final fun getConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public fun getDefaultRuleIdAliases ()Ljava/util/Set;
 	public fun getFilters ()Lio/gitlab/arturbosch/detekt/api/internal/PathFilters;
 	public abstract fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
-	public fun getRuleConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public final fun getRuleId ()Ljava/lang/String;
-	public fun getRuleSetConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public final fun report (Lio/gitlab/arturbosch/detekt/api/Finding;)V
-	public fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
-	public fun valueOrDefault (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
-	public fun valueOrNull (Ljava/lang/String;)Ljava/lang/Object;
 	public fun visitCondition (Lorg/jetbrains/kotlin/psi/KtFile;)Z
 }
 
