@@ -12,6 +12,6 @@ dependencies {
     testImplementation(projects.detektMetrics)
     testImplementation(projects.detektTestUtils)
     testImplementation(testFixtures(projects.detektApi))
-    testImplementation(libs.bundles.mocking)
+    testImplementation(libs.mockk)
     testImplementation(libs.assertj)
 }
