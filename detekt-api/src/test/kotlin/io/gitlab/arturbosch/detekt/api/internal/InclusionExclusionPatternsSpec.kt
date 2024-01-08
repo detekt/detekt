@@ -55,6 +55,25 @@ class InclusionExclusionPatternsSpec {
     }
 
     @Nested
+    inner class `pattern should only check the relative path` {
+        private val config = TestConfig(Config.EXCLUDES_KEY to listOf("glob:**/library/*.kt"))
+
+        @Test
+        fun `should not run`() {
+            compileContentForTest("", path = Path("/library/Test.kt"))
+                .runWith(DummyRule(config))
+                .assertNotVisited()
+        }
+
+        @Test
+        fun `should run`() {
+            compileContentForTest("", basePath = Path("/library/"), path = Path("/library/Test.kt"))
+                .runWith(DummyRule(config))
+                .assertWasVisited()
+        }
+    }
+
+    @Nested
     inner class `rule should report on both runs without config` {
 
         @Test
