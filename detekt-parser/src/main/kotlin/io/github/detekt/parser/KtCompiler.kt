@@ -27,8 +27,6 @@ open class KtCompiler(
     }
 
     fun createKtFile(content: String, basePath: Path, path: Path): KtFile {
-        require(path.isRegularFile()) { "Given sub path ($path) should be a regular file!" }
-
         val normalizedAbsolutePath = path.absolute().normalize()
         val lineSeparator = content.determineLineSeparator()
 
