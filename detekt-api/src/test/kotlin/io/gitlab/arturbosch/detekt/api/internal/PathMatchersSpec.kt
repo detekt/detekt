@@ -4,28 +4,22 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.nio.file.Path
 import kotlin.io.path.Path
 
 class PathMatchersSpec {
 
-    private val expectedMatch: Path = Path("/detekt/api/Issue.kt")
-    private val nonMatchingPath: Path = Path("/detekt/cli/Issue.kt")
-
     @Nested
     inner class `supports globbing` {
-
-        val libraryPattern = "**/detekt/api/**"
-        private val matcher = pathMatcher("glob:$libraryPattern")
+        private val matcher = pathMatcher("glob:**/detekt/api/**")
 
         @Test
         fun `should match`() {
-            assertThat(matcher.matches(expectedMatch)).isTrue()
+            assertThat(matcher.matches(Path("/detekt/api/Issue.kt"))).isTrue()
         }
 
         @Test
         fun `should not match`() {
-            assertThat(matcher.matches(nonMatchingPath)).isFalse()
+            assertThat(matcher.matches(Path("/detekt/cli/Issue.kt"))).isFalse()
         }
 
         @Test
