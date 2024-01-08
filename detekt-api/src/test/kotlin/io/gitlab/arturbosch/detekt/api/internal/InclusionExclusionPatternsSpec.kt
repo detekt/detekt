@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
 import io.github.detekt.psi.absolutePath
-import io.github.detekt.test.utils.resourceAsPath
+import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.test.TestConfig
@@ -10,9 +10,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.nio.file.Files
-import java.nio.file.Path
-import kotlin.io.path.isRegularFile
+import kotlin.io.path.Path
 
 class InclusionExclusionPatternsSpec {
 
@@ -23,14 +21,14 @@ class InclusionExclusionPatternsSpec {
 
         @Test
         fun `should run`() {
-            resourceAsPath("library/Library.kt")
+            compileContentForTest("", path = Path("/library/Library.kt"))
                 .runWith(DummyRule(config))
                 .assertWasVisited()
         }
 
         @Test
         fun `should not run`() {
-            resourceAsPath("Default.kt")
+            compileContentForTest("", path = Path("/Default.kt"))
                 .runWith(DummyRule(config))
                 .assertNotVisited()
         }
@@ -43,14 +41,14 @@ class InclusionExclusionPatternsSpec {
 
         @Test
         fun `should run`() {
-            resourceAsPath("library/Library.kt")
+            compileContentForTest("", path = Path("/library/Library.kt"))
                 .runWith(DummyRule(config))
                 .assertWasVisited()
         }
 
         @Test
         fun `should not run`() {
-            resourceAsPath("Default.kt")
+            compileContentForTest("", path = Path("/Default.kt"))
                 .runWith(DummyRule(config))
                 .assertNotVisited()
         }
@@ -61,14 +59,14 @@ class InclusionExclusionPatternsSpec {
 
         @Test
         fun `should run on library file`() {
-            resourceAsPath("library/Library.kt")
+            compileContentForTest("", path = Path("/library/Library.kt"))
                 .runWith(DummyRule())
                 .assertWasVisited()
         }
 
         @Test
         fun `should run on non library file`() {
-            resourceAsPath("Default.kt")
+            compileContentForTest("", path = Path("/Default.kt"))
                 .runWith(DummyRule())
                 .assertWasVisited()
         }
@@ -76,6 +74,7 @@ class InclusionExclusionPatternsSpec {
 
     @Nested
     inner class `rule should only run on included files` {
+        private val files = listOf("/library/Library.kt", "/library/Dummy.kt", "/library/Dummy2.kt")
 
         @Test
         fun `should only run on dummies`() {
@@ -85,9 +84,7 @@ class InclusionExclusionPatternsSpec {
             )
 
             OnlyLibraryTrackingRule(config).apply {
-                Files.walk(resourceAsPath("library/Library.kt").parent)
-                    .filter { it.isRegularFile() }
-                    .forEach { this.lint(it) }
+                files.forEach { this.lint(compileContentForTest("", path = Path(it))) }
                 assertOnlyLibraryFileVisited(false)
                 assertCounterWasCalledTimes(2)
             }
@@ -101,9 +98,7 @@ class InclusionExclusionPatternsSpec {
             )
 
             OnlyLibraryTrackingRule(config).apply {
-                Files.walk(resourceAsPath("library/Library.kt").parent)
-                    .filter { it.isRegularFile() }
-                    .forEach { this.lint(it) }
+                files.forEach { this.lint(compileContentForTest("", path = Path(it))) }
                 assertOnlyLibraryFileVisited(true)
                 assertCounterWasCalledTimes(0)
             }
@@ -111,7 +106,7 @@ class InclusionExclusionPatternsSpec {
     }
 }
 
-private fun Path.runWith(rule: DummyRule): DummyRule {
+private fun KtFile.runWith(rule: DummyRule): DummyRule {
     rule.lint(this)
     return rule
 }
