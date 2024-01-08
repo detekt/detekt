@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.core.util.indentCompat
 internal class AllRulesConfig(
     private val originalConfig: Config,
     private val defaultConfig: Config,
-    private val deprecatedRules: Set<DeprecatedRule> = emptySet(),
+    private val deprecatedRules: Set<DeprecatedRule>,
     override val parent: Config? = null,
 ) : Config, ValidatableConfiguration {
 

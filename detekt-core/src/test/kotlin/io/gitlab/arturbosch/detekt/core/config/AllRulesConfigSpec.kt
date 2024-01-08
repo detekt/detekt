@@ -24,6 +24,7 @@ class AllRulesConfigSpec {
                     """.trimIndent()
                 ),
                 defaultConfig = emptyYamlConfig,
+                deprecatedRules = emptySet(),
             )
 
             val subConfig = subject.subConfig("style")
@@ -49,6 +50,7 @@ class AllRulesConfigSpec {
                         maxLineLength: 120
                     """.trimIndent()
                 ),
+                deprecatedRules = emptySet(),
             )
 
             val actual = subject.subConfig("style")
@@ -75,6 +77,7 @@ class AllRulesConfigSpec {
             val subject = AllRulesConfig(
                 originalConfig = rulesetConfig,
                 defaultConfig = emptyYamlConfig,
+                deprecatedRules = emptySet(),
             )
             val actual = subject.parentPath
             assertThat(actual).isEqualTo(rulesetId)
@@ -85,6 +88,7 @@ class AllRulesConfigSpec {
             val subject = AllRulesConfig(
                 originalConfig = emptyYamlConfig,
                 defaultConfig = rulesetConfig,
+                deprecatedRules = emptySet(),
             )
             val actual = subject.parentPath
             assertThat(actual).isEqualTo(rulesetId)
@@ -106,6 +110,7 @@ class AllRulesConfigSpec {
             val subject = AllRulesConfig(
                 originalConfig = rulesetConfig,
                 defaultConfig = emptyYamlConfig,
+                deprecatedRules = emptySet(),
             )
             val actual = subject.subConfig("style").parent
             assertThat(actual).isEqualTo(subject)
@@ -116,6 +121,7 @@ class AllRulesConfigSpec {
             val subject = AllRulesConfig(
                 originalConfig = rulesetConfig,
                 defaultConfig = emptyYamlConfig,
+                deprecatedRules = emptySet(),
             )
 
             assertThat(subject.subConfigKeys()).contains("style")
