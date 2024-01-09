@@ -118,9 +118,7 @@ internal class Analyzer(
             .filter { rule ->
                 bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
             }
-            .partition { rule ->
-                rule.autoCorrect
-            }
+            .partition { rule -> rule.autoCorrect }
 
         val result = HashMap<RuleSetId, MutableList<Finding>>()
 
