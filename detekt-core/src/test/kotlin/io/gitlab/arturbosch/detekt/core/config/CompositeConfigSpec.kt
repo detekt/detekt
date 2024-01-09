@@ -16,6 +16,31 @@ class CompositeConfigSpec {
     )
 
     @Test
+    fun `should return a list of sub configs of each config`() {
+        val subConfigs = compositeConfig.subConfigs()
+        assertThat(subConfigs).hasSize(2)
+
+        assertThat(subConfigs.keys).containsExactly("style", "code-smell")
+    }
+
+    @Test
+    fun `should return a list of sub configs of each config with parent path`() {
+        val subConfigs = compositeConfig.subConfigs()
+        assertThat(subConfigs).hasSize(2)
+
+        assertThat(subConfigs.keys).containsExactly("style", "code-smell")
+        subConfigs["style"]?.let {
+            assertThat(it.parentPath).isEqualTo("style")
+            assertThat(it.subConfigs().keys).containsExactly(
+                "WildcardImport",
+                "NoElseInWhenExpression",
+                "MagicNumber",
+                "LargeClass",
+            )
+        }
+    }
+
+    @Test
     fun `should have style sub config with active false which is overridden in second config regardless of default value`() {
         val styleConfig = compositeConfig.subConfig("style").subConfig("WildcardImport")
         assertThat(styleConfig.valueOrDefault("active", true)).isEqualTo(false)
