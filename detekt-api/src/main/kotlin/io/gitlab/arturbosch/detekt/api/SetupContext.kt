@@ -12,9 +12,14 @@ interface SetupContext : PropertiesAware {
     val configUris: Collection<URI>
 
     /**
-     * Configuration which is used to setup detekt.
+     * Configuration which is used to set up detekt.
      */
     val config: Config
+
+    /**
+     * Configuration which is used to set up detekt without default config behind
+     */
+    val baseConfig: Config
 
     /**
      * The channel to log all the output.
