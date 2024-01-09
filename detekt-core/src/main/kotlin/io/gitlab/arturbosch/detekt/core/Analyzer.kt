@@ -200,29 +200,24 @@ private fun throwIllegalStateException(file: KtFile, error: Throwable): Nothing 
     throw IllegalStateException(message, error)
 }
 
-internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config = with(configSpec) {
-    var declaredConfig: Config? = when {
-        configPaths.isNotEmpty() -> config
-        resources.isNotEmpty() -> config
-        useDefaultConfig -> config
-        else -> null
-    }
+internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config {
+    var declaredConfig: Config = config
 
     if (rulesSpec.activateAllRules) {
         val defaultConfig = getDefaultConfiguration()
         val deprecatedRules = loadDeprecations().filterIsInstance<DeprecatedRule>().toSet()
         declaredConfig = AllRulesConfig(
-            originalConfig = declaredConfig ?: defaultConfig,
+            originalConfig = declaredConfig,
             defaultConfig = defaultConfig,
             deprecatedRules = deprecatedRules
         )
     }
 
     if (!rulesSpec.autoCorrect) {
-        declaredConfig = DisabledAutoCorrectConfig(declaredConfig ?: getDefaultConfiguration())
+        declaredConfig = DisabledAutoCorrectConfig(declaredConfig)
     }
 
-    return declaredConfig ?: getDefaultConfiguration()
+    return declaredConfig
 }
 
 private fun Finding.toFinding2(rule: Finding2.RuleInfo, severity: Severity): Finding2 {
