@@ -21,6 +21,7 @@ import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.api.ruleId
 import io.gitlab.arturbosch.detekt.core.config.AllRulesConfig
+import io.gitlab.arturbosch.detekt.core.config.CompositeConfig
 import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.core.config.validation.DeprecatedRule
 import io.gitlab.arturbosch.detekt.core.config.validation.loadDeprecations
@@ -43,7 +44,7 @@ internal class Analyzer(
     private val processors: List<FileProcessListener>
 ) {
 
-    private val config: Config = settings.spec.workaroundConfiguration(settings.config)
+    private val config: Config = settings.spec.workaroundConfiguration(settings.baseConfig)
 
     fun run(
         ktFiles: Collection<KtFile>,
@@ -204,17 +205,16 @@ internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config {
     var declaredConfig: Config = config
 
     if (rulesSpec.activateAllRules) {
-        val defaultConfig = getDefaultConfiguration()
         val deprecatedRules = loadDeprecations().filterIsInstance<DeprecatedRule>().toSet()
-        declaredConfig = AllRulesConfig(
-            originalConfig = declaredConfig,
-            defaultConfig = defaultConfig,
-            deprecatedRules = deprecatedRules
-        )
+        declaredConfig = AllRulesConfig(declaredConfig, deprecatedRules)
     }
 
     if (!rulesSpec.autoCorrect) {
         declaredConfig = DisabledAutoCorrectConfig(declaredConfig)
+    }
+
+    if (configSpec.useDefaultConfig) {
+        declaredConfig = CompositeConfig(declaredConfig, getDefaultConfiguration())
     }
 
     return declaredConfig
