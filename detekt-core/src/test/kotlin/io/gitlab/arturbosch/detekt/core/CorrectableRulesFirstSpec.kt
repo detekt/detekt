@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
