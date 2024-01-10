@@ -300,7 +300,7 @@ public final class io/gitlab/arturbosch/detekt/api/ReportingExtension$DefaultImp
 public abstract interface annotation class io/gitlab/arturbosch/detekt/api/RequiresTypeResolution : java/lang/annotation/Annotation {
 }
 
-public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/DetektVisitor {
+public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/DetektVisitor {
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;Ljava/lang/String;)V
 	public final fun getActive ()Z
 	public final fun getAliases ()Ljava/util/Set;
