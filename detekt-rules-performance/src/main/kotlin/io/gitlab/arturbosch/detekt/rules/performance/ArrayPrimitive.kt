@@ -40,7 +40,10 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.2.0")
-class ArrayPrimitive(config: Config) : Rule(config, "Using `Array<Primitive>` leads to implicit boxing and a performance hit.") {
+class ArrayPrimitive(config: Config) : Rule(
+    config,
+    "Using `Array<Primitive>` leads to implicit boxing and a performance hit."
+) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

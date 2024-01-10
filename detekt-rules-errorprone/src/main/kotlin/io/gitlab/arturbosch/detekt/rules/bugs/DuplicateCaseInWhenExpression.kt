@@ -31,7 +31,10 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  */
 @ActiveByDefault(since = "1.0.0")
 @Deprecated("Rule deprecated as compiler performs this check by default")
-class DuplicateCaseInWhenExpression(config: Config) : Rule(config, "Duplicated `case` statements in a `when` expression detected. Both cases should be merged.") {
+class DuplicateCaseInWhenExpression(config: Config) : Rule(
+    config,
+    "Duplicated `case` statements in a `when` expression detected. Both cases should be merged."
+) {
 
     override fun visitWhenExpression(expression: KtWhenExpression) {
         val distinctEntries = expression.entries.distinctBy { entry -> entry.conditions.joinToString { it.text } }

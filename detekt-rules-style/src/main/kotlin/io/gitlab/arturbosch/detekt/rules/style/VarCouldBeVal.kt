@@ -58,7 +58,10 @@ import org.jetbrains.kotlin.util.containingNonLocalDeclaration
  */
 @ActiveByDefault(since = "1.16.0")
 @RequiresTypeResolution
-class VarCouldBeVal(config: Config) : Rule(config, "Var declaration could be val.") {
+class VarCouldBeVal(config: Config) : Rule(
+    config,
+    "Var declaration could be val."
+) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("CanBeVal")
 

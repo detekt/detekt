@@ -62,7 +62,10 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
  * </compliant>
  */
 @Suppress("TooManyFunctions")
-class OutdatedDocumentation(config: Config) : Rule(config, "KDoc comments should match the actual function or class signature") {
+class OutdatedDocumentation(config: Config) : Rule(
+    config,
+    "KDoc comments should match the actual function or class signature"
+) {
 
     @Configuration("if type parameters should be matched")
     private val matchTypeParameters: Boolean by config(true)

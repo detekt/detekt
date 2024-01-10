@@ -20,7 +20,10 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * Reports property names inside objects that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
-class ObjectPropertyNaming(config: Config) : Rule(config, "Property names inside objects should follow the naming convention set in the projects configuration.") {
+class ObjectPropertyNaming(config: Config) : Rule(
+    config,
+    "Property names inside objects should follow the naming convention set in the projects configuration."
+) {
 
     @Configuration("naming pattern")
     private val constantPattern: Regex by config("[A-Za-z][_A-Za-z0-9]*") { it.toRegex() }

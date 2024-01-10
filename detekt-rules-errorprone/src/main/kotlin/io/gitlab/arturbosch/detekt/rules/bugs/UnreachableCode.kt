@@ -32,7 +32,10 @@ import org.jetbrains.kotlin.psi.KtExpression
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.0.0")
-class UnreachableCode(config: Config) : Rule(config, "Unreachable code detected. This code should be removed.") {
+class UnreachableCode(config: Config) : Rule(
+    config,
+    "Unreachable code detected. This code should be removed."
+) {
 
     override fun visitExpression(expression: KtExpression) {
         super.visitExpression(expression)

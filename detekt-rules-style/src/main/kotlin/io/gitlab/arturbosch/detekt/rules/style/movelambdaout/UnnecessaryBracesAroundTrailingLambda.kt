@@ -32,7 +32,10 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
  * </compliant>
  */
 @RequiresTypeResolution
-class UnnecessaryBracesAroundTrailingLambda(config: Config) : Rule(config, "Braces around trailing lambda is unnecessary.") {
+class UnnecessaryBracesAroundTrailingLambda(config: Config) : Rule(
+    config,
+    "Braces around trailing lambda is unnecessary."
+) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

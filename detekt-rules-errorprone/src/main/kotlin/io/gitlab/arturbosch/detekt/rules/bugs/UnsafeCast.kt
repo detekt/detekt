@@ -31,7 +31,10 @@ import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
-class UnsafeCast(config: Config) : Rule(config, "Cast operator throws an exception if the cast is not possible.") {
+class UnsafeCast(config: Config) : Rule(
+    config,
+    "Cast operator throws an exception if the cast is not possible."
+) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("UNCHECKED_CAST")
 

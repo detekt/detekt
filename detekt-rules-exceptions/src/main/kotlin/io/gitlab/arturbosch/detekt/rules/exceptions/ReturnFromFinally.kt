@@ -40,7 +40,10 @@ import org.jetbrains.kotlin.types.KotlinType
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
-class ReturnFromFinally(config: Config) : Rule(config, "Do not return within a finally statement. This can discard exceptions.") {
+class ReturnFromFinally(config: Config) : Rule(
+    config,
+    "Do not return within a finally statement. This can discard exceptions."
+) {
 
     @Configuration("ignores labeled return statements")
     private val ignoreLabeled: Boolean by config(false)

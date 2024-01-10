@@ -72,7 +72,10 @@ import org.jetbrains.kotlin.types.typeUtil.immediateSupertypes
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class RedundantHigherOrderMapUsage(config: Config) : Rule(config, "Checks for redundant 'map' calls, which can be removed.") {
+class RedundantHigherOrderMapUsage(config: Config) : Rule(
+    config,
+    "Checks for redundant 'map' calls, which can be removed."
+) {
 
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {

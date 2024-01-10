@@ -43,7 +43,10 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.21.0")
-class ExplicitItLambdaParameter(config: Config) : Rule(config, "Declaring lambda parameters as `it` is redundant.") {
+class ExplicitItLambdaParameter(config: Config) : Rule(
+    config,
+    "Declaring lambda parameters as `it` is redundant."
+) {
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)

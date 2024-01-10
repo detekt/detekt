@@ -36,7 +36,10 @@ import org.jetbrains.kotlin.utils.addIfNotNull
  * can lead to confusion and potential bugs.
  */
 @ActiveByDefault(since = "1.2.0")
-class UnusedPrivateClass(config: Config) : Rule(config, "Private class is unused and should be removed.") {
+class UnusedPrivateClass(config: Config) : Rule(
+    config,
+    "Private class is unused and should be removed."
+) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("unused")
 

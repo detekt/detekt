@@ -37,7 +37,10 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.isSubclassOf
  * </compliant>
  */
 @RequiresTypeResolution
-class UseSumOfInsteadOfFlatMapSize(config: Config) : Rule(config, "Use `sumOf` instead of `flatMap` and `size/count` calls") {
+class UseSumOfInsteadOfFlatMapSize(config: Config) : Rule(
+    config,
+    "Use `sumOf` instead of `flatMap` and `size/count` calls"
+) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

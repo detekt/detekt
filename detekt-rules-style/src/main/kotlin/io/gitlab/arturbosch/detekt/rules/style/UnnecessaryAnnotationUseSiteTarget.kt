@@ -27,7 +27,10 @@ import org.jetbrains.kotlin.psi.KtProperty
  * class Module(@Inject private val foo: String)
  * </compliant>
  */
-class UnnecessaryAnnotationUseSiteTarget(config: Config) : Rule(config, "Unnecessary Annotation use-site Target. It can be removed.") {
+class UnnecessaryAnnotationUseSiteTarget(config: Config) : Rule(
+    config,
+    "Unnecessary Annotation use-site Target. It can be removed."
+) {
 
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
         constructor.valueParameters.forEach { parameter ->

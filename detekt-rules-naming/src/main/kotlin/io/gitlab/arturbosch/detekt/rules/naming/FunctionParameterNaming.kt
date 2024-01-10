@@ -19,7 +19,10 @@ import org.jetbrains.kotlin.psi.KtParameter
  * Reports function parameter names that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
-class FunctionParameterNaming(config: Config) : Rule(config, "Function parameter names should follow the naming convention set in the projects configuration.") {
+class FunctionParameterNaming(config: Config) : Rule(
+    config,
+    "Function parameter names should follow the naming convention set in the projects configuration."
+) {
 
     @Configuration("naming pattern")
     private val parameterPattern: Regex by config("[a-z][A-Za-z0-9]*", String::toRegex)

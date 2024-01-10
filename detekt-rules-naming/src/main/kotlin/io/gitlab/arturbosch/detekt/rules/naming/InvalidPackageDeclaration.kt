@@ -17,7 +17,10 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
  * Reports when the file location does not match the declared package.
  */
 @ActiveByDefault(since = "1.21.0")
-class InvalidPackageDeclaration(config: Config) : Rule(config, "Kotlin source files should be stored in the directory corresponding to its package statement.") {
+class InvalidPackageDeclaration(config: Config) : Rule(
+    config,
+    "Kotlin source files should be stored in the directory corresponding to its package statement."
+) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("PackageDirectoryMismatch")
 

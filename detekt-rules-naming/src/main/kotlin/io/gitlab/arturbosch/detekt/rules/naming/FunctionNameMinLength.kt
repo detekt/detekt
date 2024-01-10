@@ -15,7 +15,10 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * Reports when very short function names are used.
  */
-class FunctionNameMinLength(config: Config) : Rule(config, "Function names should not be shorter than the minimum defined in the configuration.") {
+class FunctionNameMinLength(config: Config) : Rule(
+    config,
+    "Function names should not be shorter than the minimum defined in the configuration."
+) {
 
     override val defaultRuleIdAliases: Set<String>
         get() = setOf("FunctionMinNameLength")

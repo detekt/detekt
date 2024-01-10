@@ -31,7 +31,10 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UseAnyOrNoneInsteadOfFind(config: Config) : Rule(config, "Use `any` or `none` instead of `find` and `null` checks.") {
+class UseAnyOrNoneInsteadOfFind(config: Config) : Rule(
+    config,
+    "Use `any` or `none` instead of `find` and `null` checks."
+) {
 
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {

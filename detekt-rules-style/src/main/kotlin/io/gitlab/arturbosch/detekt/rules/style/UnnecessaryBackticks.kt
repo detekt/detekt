@@ -25,7 +25,10 @@ import org.jetbrains.kotlin.psi.psiUtil.isIdentifier
  * class HelloWorld
  * </compliant>
  */
-class UnnecessaryBackticks(config: Config) : Rule(config, "Backticks are unnecessary.") {
+class UnnecessaryBackticks(config: Config) : Rule(
+    config,
+    "Backticks are unnecessary."
+) {
 
     override fun visitKtElement(element: KtElement) {
         element.allChildren

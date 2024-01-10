@@ -38,7 +38,10 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
  * }
  * </compliant>
  */
-class ExpressionBodySyntax(config: Config) : Rule(config, "Functions with exact one statement, the return statement, can be rewritten with ExpressionBodySyntax.") {
+class ExpressionBodySyntax(config: Config) : Rule(
+    config,
+    "Functions with exact one statement, the return statement, can be rewritten with ExpressionBodySyntax."
+) {
 
     @Configuration("include return statements with line wraps in it")
     private val includeLineWrapping: Boolean by config(false)

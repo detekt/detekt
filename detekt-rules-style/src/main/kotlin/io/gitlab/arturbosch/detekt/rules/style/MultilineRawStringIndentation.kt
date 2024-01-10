@@ -48,7 +48,10 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * """.trimMargin()
  * </compliant>
  */
-class MultilineRawStringIndentation(config: Config) : Rule(config, "The indentation of the raw String should be consistent") {
+class MultilineRawStringIndentation(config: Config) : Rule(
+    config,
+    "The indentation of the raw String should be consistent"
+) {
 
     @Configuration("indentation size")
     private val indentSize by config(4)

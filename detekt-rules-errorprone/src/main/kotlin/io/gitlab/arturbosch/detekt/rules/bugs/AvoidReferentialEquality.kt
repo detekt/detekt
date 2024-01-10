@@ -33,7 +33,10 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class AvoidReferentialEquality(config: Config) : Rule(config, "Avoid using referential equality and prefer to use referential equality checks instead.") {
+class AvoidReferentialEquality(config: Config) : Rule(
+    config,
+    "Avoid using referential equality and prefer to use referential equality checks instead."
+) {
 
     @Configuration(
         "Specifies those types for which referential equality checks are considered a rule violation. " +

@@ -27,7 +27,10 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *
  */
 @RequiresTypeResolution
-class PreferToOverPairSyntax(config: Config) : Rule(config, "Pair was created using the Pair constructor, using the to syntax is preferred.") {
+class PreferToOverPairSyntax(config: Config) : Rule(
+    config,
+    "Pair was created using the Pair constructor, using the to syntax is preferred."
+) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

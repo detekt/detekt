@@ -43,7 +43,10 @@ import org.jetbrains.kotlin.types.KotlinType
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class ObjectLiteralToLambda(config: Config) : Rule(config, "Report object literals that can be changed to lambdas.") {
+class ObjectLiteralToLambda(config: Config) : Rule(
+    config,
+    "Report object literals that can be changed to lambdas."
+) {
 
     private val KotlinType.couldBeSamInterface
         get() = JavaSingleAbstractMethodUtils.isSamType(this)

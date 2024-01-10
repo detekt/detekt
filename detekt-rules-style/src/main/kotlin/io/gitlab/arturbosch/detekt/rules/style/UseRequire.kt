@@ -30,7 +30,10 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UseRequire(config: Config) : Rule(config, "Use require() instead of throwing an IllegalArgumentException.") {
+class UseRequire(config: Config) : Rule(
+    config,
+    "Use require() instead of throwing an IllegalArgumentException."
+) {
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
         if (!expression.isIllegalArgumentException()) return

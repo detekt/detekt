@@ -44,7 +44,10 @@ import org.jetbrains.kotlin.types.typeUtil.isLong
  * </compliant>
  */
 @RequiresTypeResolution
-class RedundantExplicitType(config: Config) : Rule(config, "Type does not need to be stated explicitly and can be removed.") {
+class RedundantExplicitType(config: Config) : Rule(
+    config,
+    "Type does not need to be stated explicitly and can be removed."
+) {
 
     @Suppress("ReturnCount", "ComplexMethod")
     override fun visitProperty(property: KtProperty) {

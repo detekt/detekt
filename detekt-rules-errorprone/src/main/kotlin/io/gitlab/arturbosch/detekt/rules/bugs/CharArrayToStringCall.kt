@@ -35,7 +35,10 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
  * </compliant>
  */
 @RequiresTypeResolution
-class CharArrayToStringCall(config: Config) : Rule(config, "`CharArray.toString()` call does not return expected result.") {
+class CharArrayToStringCall(config: Config) : Rule(
+    config,
+    "`CharArray.toString()` call does not return expected result."
+) {
 
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)

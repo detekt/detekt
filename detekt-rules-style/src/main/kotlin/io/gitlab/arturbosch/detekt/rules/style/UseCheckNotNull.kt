@@ -24,7 +24,10 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UseCheckNotNull(config: Config) : Rule(config, "Use checkNotNull() instead of check() for checking not-null.") {
+class UseCheckNotNull(config: Config) : Rule(
+    config,
+    "Use checkNotNull() instead of check() for checking not-null."
+) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

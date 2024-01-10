@@ -40,7 +40,10 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * </compliant>
  */
 @RequiresTypeResolution
-class NestedScopeFunctions(config: Config) : Rule(config, "Over-using scope functions makes code confusing, hard to read and bug prone.") {
+class NestedScopeFunctions(config: Config) : Rule(
+    config,
+    "Over-using scope functions makes code confusing, hard to read and bug prone."
+) {
 
     @Configuration("The maximum allowed depth for nested scope functions.")
     private val allowedDepth: Int by config(defaultValue = 1)

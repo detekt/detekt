@@ -48,7 +48,10 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * </compliant>
  */
 @ActiveByDefault(since = "1.23.0")
-class UnusedPrivateProperty(config: Config) : Rule(config, "Property is unused and should be removed.") {
+class UnusedPrivateProperty(config: Config) : Rule(
+    config,
+    "Property is unused and should be removed."
+) {
 
     override val defaultRuleIdAliases: Set<String> =
         setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused", "UnusedPrivateMember")
