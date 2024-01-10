@@ -4,13 +4,12 @@ import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakBeforeAssignment
-import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
-import org.assertj.core.api.Assertions.assertThat as assertJThat
 
 class FormattingRuleSpec {
 
@@ -63,7 +62,7 @@ class FormattingRuleSpec {
                 """.trimIndent()
             )
 
-            assertJThat(findings.first().signature).isEqualTo("Test.kt\$=")
+            assertThat(findings.first().signature).isEqualTo("Test.kt\$=")
         }
 
         @Test
@@ -76,7 +75,7 @@ class FormattingRuleSpec {
                 """.trimIndent()
             )
 
-            assertJThat(findings.first().signature).isEqualTo("Test.kt\$=")
+            assertThat(findings.first().signature).isEqualTo("Test.kt\$=")
         }
     }
 
@@ -90,6 +89,6 @@ class FormattingRuleSpec {
 
         val findings = rule.findings
 
-        assertJThat(findings.first().location.filePath.absolutePath.toString()).isEqualTo(expectedPath.toString())
+        assertThat(findings.first().location.filePath.absolutePath.toString()).isEqualTo(expectedPath.toString())
     }
 }
