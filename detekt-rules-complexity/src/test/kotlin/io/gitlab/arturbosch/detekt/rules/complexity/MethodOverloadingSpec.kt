@@ -41,7 +41,7 @@ class MethodOverloadingSpec {
 
         @Test
         fun `does not report overloaded methods which do not exceed the threshold`() {
-            subject.compileAndLint(
+            val findings = subject.compileAndLint(
                 """
                     class Test {
                         fun x() { }
@@ -49,7 +49,7 @@ class MethodOverloadingSpec {
                     }
                 """.trimIndent()
             )
-            assertThat(subject.findings.size).isZero()
+            assertThat(findings.size).isZero()
         }
     }
 
@@ -58,26 +58,26 @@ class MethodOverloadingSpec {
 
         @Test
         fun `does not report extension methods with a different receiver`() {
-            subject.compileAndLint(
+            val findings = subject.compileAndLint(
                 """
                     fun Boolean.foo() {}
                     fun Int.foo() {}
                     fun Long.foo() {}
                 """.trimIndent()
             )
-            assertThat(subject.findings.size).isZero()
+            assertThat(findings.size).isZero()
         }
 
         @Test
         fun `reports extension methods with the same receiver`() {
-            subject.compileAndLint(
+            val findings = subject.compileAndLint(
                 """
                     fun Int.foo() {}
                     fun Int.foo(i: Int) {}
                     fun Int.foo(i: String) {}
                 """.trimIndent()
             )
-            assertThat(subject.findings.size).isEqualTo(1)
+            assertThat(findings.size).isEqualTo(1)
         }
     }
 

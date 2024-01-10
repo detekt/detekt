@@ -21,8 +21,8 @@ class MayBeConstantSpec {
                     const val X = 42
                 }
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).isEmpty()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -32,8 +32,8 @@ class MayBeConstantSpec {
                     const val TEST = "Test"
                 }
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).isEmpty()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -45,8 +45,8 @@ class MayBeConstantSpec {
                     }
                 }
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).isEmpty()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -62,8 +62,8 @@ class MayBeConstantSpec {
                     }
                 }
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).isEmpty()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -75,8 +75,8 @@ class MayBeConstantSpec {
                 val p = Pair(Something.a, Something.a + Something.a)
                 val p2 = emptyList<Int>().plus(Something.a)
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).isEmpty()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
         }
     }
 
@@ -87,8 +87,8 @@ class MayBeConstantSpec {
             val code = """
                 val x = 1
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(1, 5)
             )
         }
@@ -98,8 +98,8 @@ class MayBeConstantSpec {
             val code = """
                 @JvmField val x = 1
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(1, 15)
             )
         }
@@ -111,8 +111,8 @@ class MayBeConstantSpec {
                     @JvmField val test = "Test"
                 }
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(2, 19)
             )
         }
@@ -126,8 +126,8 @@ class MayBeConstantSpec {
                     }
                 }
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(3, 13)
             )
         }
@@ -143,8 +143,8 @@ class MayBeConstantSpec {
                     val two = one * 2
                 }
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(3, 9)
             )
         }
@@ -159,8 +159,8 @@ class MayBeConstantSpec {
                     }
                 }
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(4, 13)
             )
         }
@@ -173,8 +173,8 @@ class MayBeConstantSpec {
                     val two = one * 2 + 1
                 }
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(3, 9)
             )
         }
@@ -187,8 +187,8 @@ class MayBeConstantSpec {
                     val two = one * (2 + 1)
                 }
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(3, 9)
             )
         }
@@ -203,8 +203,8 @@ class MayBeConstantSpec {
                     val b = a + 1
                 }
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(5, 9)
             )
         }
@@ -217,8 +217,8 @@ class MayBeConstantSpec {
                     private val B = A + "b"
                 }
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1).hasStartSourceLocations(
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1).hasStartSourceLocations(
                 SourceLocation(3, 17)
             )
         }
@@ -229,29 +229,29 @@ class MayBeConstantSpec {
         @Test
         fun `does not report arrays`() {
             val code = "val arr = arrayOf(\"a\", \"b\")"
-            subject.compileAndLint(code)
-            assertThat(subject.findings).isEmpty()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
         }
 
         @Test
         fun `is a var`() {
             val code = "var test = 1"
-            subject.compileAndLint(code)
-            assertThat(subject.findings).isEmpty()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
         }
 
         @Test
         fun `has a getter`() {
             val code = "val withGetter get() = 42"
-            subject.compileAndLint(code)
-            assertThat(subject.findings).isEmpty()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
         }
 
         @Test
         fun `is initialized to null`() {
             val code = "val test = null"
-            subject.compileAndLint(code)
-            assertThat(subject.findings).isEmpty()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -261,8 +261,8 @@ class MayBeConstantSpec {
                     @JvmField val a = 3
                 }
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).isEmpty()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -272,8 +272,8 @@ class MayBeConstantSpec {
                 
                 @A val a = 55
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).isEmpty()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -287,15 +287,15 @@ class MayBeConstantSpec {
                     override val property = 1
                 }
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).isEmpty()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
         }
 
         @Test
         fun `does not detect just a dollar as interpolation`() {
             val code = """ val hasDollar = "$" """
-            subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(1)
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1)
         }
 
         @Test
@@ -316,8 +316,8 @@ class MayBeConstantSpec {
                 var test_var = "test"
                 var code = $innerCode
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).isEmpty()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -329,15 +329,15 @@ class MayBeConstantSpec {
                     }
                 }
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).isEmpty()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
         }
 
         @Test
         fun `does not report actual vals`() {
             // Until the [KotlinScriptEngine] can compile KMP, we will only lint.
-            subject.lint("""actual val abc123 = "abc123" """)
-            assertThat(subject.findings).isEmpty()
+            val findings = subject.lint("""actual val abc123 = "abc123" """)
+            assertThat(findings).isEmpty()
         }
     }
 
@@ -361,8 +361,8 @@ class MayBeConstantSpec {
                     }
                 }
             """.trimIndent()
-            subject.compileAndLint(code)
-            assertThat(subject.findings).hasSize(3).hasStartSourceLocations(
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(3).hasStartSourceLocations(
                 SourceLocation(4, 13),
                 SourceLocation(7, 17),
                 SourceLocation(11, 13)
