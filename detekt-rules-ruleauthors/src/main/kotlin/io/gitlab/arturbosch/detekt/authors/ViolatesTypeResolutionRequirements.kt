@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.authors
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -19,7 +18,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.getAllSuperclassesWithoutAny
 import kotlin.reflect.KClass
 
 /**
- * If a rule uses the property [BaseRule.bindingContext] should be annotated with `@RequiresTypeResolution`.
+ * If a rule uses the property [Rule.bindingContext] should be annotated with `@RequiresTypeResolution`.
  * And if the rule doesn't use that property it shouldn't be annotated with it.
  */
 @ActiveByDefault("1.22.0")
@@ -62,7 +61,7 @@ class ViolatesTypeResolutionRequirements(config: Config) : Rule(config) {
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
 
-        if (klass.extendsFrom(BaseRule::class)) {
+        if (klass.extendsFrom(Rule::class)) {
             klasses.add(klass)
         }
     }
@@ -74,7 +73,7 @@ class ViolatesTypeResolutionRequirements(config: Config) : Rule(config) {
     }
 }
 
-context(BaseRule)
+context(Rule)
 private inline fun <reified T : Any> KtClass.extendsFrom(kClass: KClass<T>): Boolean {
     return bindingContext[BindingContext.CLASS, this]
         ?.getAllSuperclassesWithoutAny()
@@ -82,7 +81,7 @@ private inline fun <reified T : Any> KtClass.extendsFrom(kClass: KClass<T>): Boo
         .any { it.fqNameOrNull()?.toString() == checkNotNull(kClass.qualifiedName) }
 }
 
-context(BaseRule)
+context(Rule)
 private inline fun <reified T : Any> KtClass.isAnnotatedWith(kClass: KClass<T>): Boolean {
     return annotationEntries
         .asSequence()

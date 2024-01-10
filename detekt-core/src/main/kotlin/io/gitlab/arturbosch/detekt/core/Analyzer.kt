@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.psi.absolutePath
 import io.github.detekt.tooling.api.spec.ProcessingSpec
-import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
@@ -21,7 +20,7 @@ import io.gitlab.arturbosch.detekt.core.config.validation.loadDeprecations
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
 import io.gitlab.arturbosch.detekt.core.rules.isActive
 import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
-import io.gitlab.arturbosch.detekt.core.suppressors.getSuppressors
+import io.gitlab.arturbosch.detekt.core.suppressors.buildSuppressors
 import io.gitlab.arturbosch.detekt.core.tooling.getDefaultConfiguration
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
@@ -101,11 +100,6 @@ internal class Analyzer(
         bindingContext: BindingContext,
         compilerResources: CompilerResources
     ): Map<RuleSetId, List<Finding>> {
-        fun isCorrectable(rule: BaseRule): Boolean = when (rule) {
-            is Rule -> rule.autoCorrect
-            else -> error("No other rule type expected.")
-        }
-
         val activeRuleSetsToRuleSetConfigs = providers.asSequence()
             .map { it to config.subConfig(it.ruleSetId) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
@@ -124,11 +118,11 @@ internal class Analyzer(
             .filter { rule ->
                 bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
             }
-            .partition { isCorrectable(it) }
+            .partition { rule -> rule.autoCorrect }
 
         val result = HashMap<RuleSetId, MutableList<Finding>>()
 
-        fun executeRules(rules: List<BaseRule>) {
+        fun executeRules(rules: List<Rule>) {
             for (rule in rules) {
                 rule.visitFile(file, bindingContext, compilerResources)
                 for (finding in filterSuppressedFindings(rule, bindingContext)) {
@@ -163,8 +157,8 @@ internal class Analyzer(
     }
 }
 
-private fun filterSuppressedFindings(rule: BaseRule, bindingContext: BindingContext): List<Finding> {
-    val suppressors = getSuppressors(rule, bindingContext)
+private fun filterSuppressedFindings(rule: Rule, bindingContext: BindingContext): List<Finding> {
+    val suppressors = buildSuppressors(rule, bindingContext)
     return if (suppressors.isNotEmpty()) {
         rule.findings.filter { finding -> !suppressors.any { suppressor -> suppressor.shouldSuppress(finding) } }
     } else {
