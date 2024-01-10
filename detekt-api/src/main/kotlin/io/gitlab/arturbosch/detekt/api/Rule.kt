@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * function. If calculations must be done before or after the visiting process, here are
  * two predefined (preVisit/postVisit) functions which can be overridden to setup/teardown additional data.
  */
-abstract class Rule(
+open class Rule(
     val config: Config,
     description: String,
 ) : DetektVisitor() {
