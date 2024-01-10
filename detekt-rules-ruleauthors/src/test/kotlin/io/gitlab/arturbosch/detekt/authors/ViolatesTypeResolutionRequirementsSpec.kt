@@ -29,8 +29,7 @@ internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCor
             import io.gitlab.arturbosch.detekt.api.Config
             import io.gitlab.arturbosch.detekt.api.Rule
             
-            class A(config: Config) : Rule(config) {
-                override val issue = error("I don't care")
+            class A(config: Config) : Rule(config, "") {
             
                 private fun asdf() {
                     bindingContext
@@ -47,9 +46,7 @@ internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCor
             import io.gitlab.arturbosch.detekt.api.Config
             import io.gitlab.arturbosch.detekt.api.Rule
             
-            class A(config: Config) : Rule(config) {
-                override val issue = error("I don't care")
-            }
+            class A(config: Config) : Rule(config, "")
         """.trimIndent()
         val findings = rule.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
@@ -63,9 +60,7 @@ internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCor
             import io.gitlab.arturbosch.detekt.api.Rule
             
             @RequiresTypeResolution
-            class A(config: Config) : Rule(config) {
-                override val issue = error("I don't care")
-            
+            class A(config: Config) : Rule(config, "") {
                 private fun asdf() {
                     bindingContext
                 }
@@ -83,9 +78,7 @@ internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCor
             import io.gitlab.arturbosch.detekt.api.Rule
             
             @RequiresTypeResolution
-            class A(config: Config) : Rule(config) {
-                override val issue = error("I don't care")
-            }
+            class A(config: Config) : Rule(config, "")
         """.trimIndent()
         val findings = rule.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
@@ -97,9 +90,7 @@ internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCor
             import io.gitlab.arturbosch.detekt.api.Config
             import io.gitlab.arturbosch.detekt.api.Rule
             
-            class A(config: Config) : Rule(config) {
-                override val issue = error("I don't care")
-            
+            class A(config: Config) : Rule(config, "") {
                 private fun asdf() {
                     extension()
                 }
