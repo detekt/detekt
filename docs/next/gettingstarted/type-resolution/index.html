@@ -9,7 +9,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.55df89b5.css">
-<script src="/assets/js/runtime~main.a4e8fe7c.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.7849b456.js" defer="defer"></script>
 <script src="/assets/js/main.bfe2e2f3.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -60,7 +60,8 @@ Gradle plugins from configuring Android-specific gradle tasks.</p>
 <code>--jvm-target</code> flags. See the list of <a href="/docs/gettingstarted/cli#use-the-cli">CLI options</a> for details.</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="writing-a-rule-that-uses-type-resolution">Writing a rule that uses type resolution<a href="#writing-a-rule-that-uses-type-resolution" class="hash-link" aria-label="Direct link to Writing a rule that uses type resolution" title="Direct link to Writing a rule that uses type resolution">​</a></h2>
 <p>If you&#x27;re <a href="/docs/introduction/extensions">writing a custom rule</a> or if you&#x27;re willing to write a rule to contribute to detekt, you might want to leverage type resolution.</p>
-<p>Rules that are using type resolution, access the <a href="https://github.com/JetBrains/kotlin/blob/master/compiler/frontend/src/org/jetbrains/kotlin/resolve/BindingContext.java" target="_blank" rel="noopener noreferrer">bindingContext</a> from the <code>BaseRule</code> class (<a href="https://github.com/detekt/detekt/blob/cd659ce8737fb177caf140f46f73a1a86b22be56/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/internal/BaseRule.kt#L30" target="_blank" rel="noopener noreferrer">source</a>).</p>
+<p>Rules that are using type resolution, access the <a href="https://github.com/JetBrains/kotlin/blob/master/compiler/frontend/src/org/jetbrains/kotlin/resolve/BindingContext.java" target="_blank" rel="noopener noreferrer">bindingContext</a>
+from the <code>Rule</code> class (<a href="https://github.com/detekt/detekt/blob/main/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/Rule.kt#L40" target="_blank" rel="noopener noreferrer">source</a>).</p>
 <p>By default, the <code>bindingContext</code> is initialized as <code>BindingContext.EMPTY</code>. This is the <strong>default value</strong> that the rule receives if type resolution is <strong>not enabled</strong>.</p>
 <p>Therefore, is generally advised to annotate your <code>Rule</code> with <code>@RequiresTypeResolution</code> to ensure that your rule doesn&#x27;t run if you don&#x27;t have a proper <code>BindingContext</code>.</p>
 <p>If your rule is annotated with <code>@RequiresTypeResolution</code> you are free to use it to resolve types and get access to all the information needed for your rules. As a rule of thumb, we recommend to get inspiration from other rules on how they&#x27;re using the <code>bindingContext</code>.</p>

@@ -98,21 +98,6 @@
               </div>
             </div>
           </div>
-<a data-name="-1240424332%2FClasslikes%2F581599712" anchor-label="BaseRule" id="-1240424332%2FClasslikes%2F581599712" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-api:dokkaHtmlPartial/main" data-filterable-set=":detekt-api:dokkaHtmlPartial/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="-base-rule/index.html"><span>Base</span><wbr><span><span>Rule</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1240424332%2FClasslikes%2F581599712"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-base-rule/index.html">BaseRule</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="-context/index.html">Context</a><span class="token operator"> = </span>DefaultContext()</span></span><span class="token punctuation">)</span> : <a href="-detekt-visitor/index.html">DetektVisitor</a>, <a href="-context/index.html">Context</a></div><div class="brief "><p class="paragraph">Defines the visiting mechanism for KtFile's.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
 <a data-name="-805143357%2FClasslikes%2F581599712" anchor-label="CodeSmell" id="-805143357%2FClasslikes%2F581599712" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"></a>
           <div class="table-row" data-filterable-current=":detekt-api:dokkaHtmlPartial/main" data-filterable-set=":detekt-api:dokkaHtmlPartial/main">
             <div class="main-subrow keyValue ">
@@ -483,7 +468,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-rule/index.html">Rule</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>config<span class="token operator">: </span><a href="-config/index.html">Config</a></span></span><span class="token punctuation">)</span> : <a href="-base-rule/index.html">BaseRule</a></div><div class="brief "><p class="paragraph">A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-rule/index.html">Rule</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>config<span class="token operator">: </span><a href="-config/index.html">Config</a></span></span><span class="token punctuation">)</span> : <a href="-detekt-visitor/index.html">DetektVisitor</a>, <a href="-context/index.html">Context</a></div><div class="brief "><p class="paragraph">A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability.</p></div></div></div>
                 </div>
               </div>
             </div>
@@ -513,7 +498,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-rule-set/index.html">RuleSet</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>id<span class="token operator">: </span><a href="-rule-set-id/index.html">RuleSetId</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>rules<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span class="token keyword"></span><span class="token punctuation">(</span><span class="token keyword"></span><a href="-config/index.html">Config</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="-base-rule/index.html">BaseRule</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A rule set is a collection of rules and must be defined within a rule set provider implementation.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-rule-set/index.html">RuleSet</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>id<span class="token operator">: </span><a href="-rule-set-id/index.html">RuleSetId</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>rules<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span class="token keyword"></span><span class="token punctuation">(</span><span class="token keyword"></span><a href="-config/index.html">Config</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="-rule/index.html">Rule</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A rule set is a collection of rules and must be defined within a rule set provider implementation.</p></div></div></div>
                 </div>
               </div>
             </div>
