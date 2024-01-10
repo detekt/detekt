@@ -85,7 +85,8 @@ class FormattingRuleSpec {
 
         val rule = ChainWrapping(Config.empty)
         val findings = rule.visitFile(compileForTest(expectedPath))
-        assertThat(findings).isNotNull()
-        assertThat(findings.first().location.filePath.absolutePath.toString()).isEqualTo(expectedPath.toString())
+        assertThat(findings).anySatisfy { finding ->
+            assertThat(finding.location.filePath.absolutePath.toString()).isEqualTo(expectedPath.toString())
+        }
     }
 }
