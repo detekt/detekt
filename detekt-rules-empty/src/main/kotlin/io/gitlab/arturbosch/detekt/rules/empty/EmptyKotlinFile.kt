@@ -12,19 +12,12 @@ import org.jetbrains.kotlin.psi.KtFile
 @ActiveByDefault(since = "1.0.0")
 class EmptyKotlinFile(config: Config) : EmptyRule(config) {
 
-    private val ignorePackageDeclaration = config.valueOrDefault(
-        "ignorePackageDeclaration",
-        false
-    )
-
     override fun visitKtFile(file: KtFile) {
         var text = file.text
-        if (ignorePackageDeclaration) {
-            val packageDirective = file.packageDirective
-            if (packageDirective != null) {
-                val range = packageDirective.textRange
-                text = text.removeRange(range.startOffset, range.endOffset)
-            }
+        val packageDirective = file.packageDirective
+        if (packageDirective != null) {
+            val range = packageDirective.textRange
+            text = text.removeRange(range.startOffset, range.endOffset)
         }
         if (text.isNullOrBlank()) {
             report(
