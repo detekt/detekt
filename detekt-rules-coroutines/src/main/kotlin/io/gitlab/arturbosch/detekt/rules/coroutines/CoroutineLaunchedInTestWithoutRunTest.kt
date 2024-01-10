@@ -118,7 +118,7 @@ class FunCoroutineLaunchesTraverseHelper {
 
                 checkFunctionAndSaveToCache(it, parents)
 
-                getChildFunctionsOf(it, parents + it,).forEach { childFunction ->
+                getChildFunctionsOf(it, parents + it).forEach { childFunction ->
                     checkFunctionAndSaveToCache(childFunction, parents)
                 }
             }
