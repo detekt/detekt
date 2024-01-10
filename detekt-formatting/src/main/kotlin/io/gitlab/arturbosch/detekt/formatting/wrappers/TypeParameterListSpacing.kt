@@ -16,7 +16,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.22.0")
-class TypeParameterListSpacing(config: Config) : FormattingRule(config, "Check spacing after a type parameter list in function and class declarations.") {
+class TypeParameterListSpacing(config: Config) : FormattingRule(
+    config,
+    "Check spacing after a type parameter list in function and class declarations."
+) {
 
     override val wrapping = TypeParameterListSpacingRule()
 

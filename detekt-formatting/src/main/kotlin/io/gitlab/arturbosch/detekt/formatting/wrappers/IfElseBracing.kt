@@ -15,7 +15,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.23.0")
-class IfElseBracing(config: Config) : FormattingRule(config, "All branches must be wrapped in curly braces if any branches are wrapped.") {
+class IfElseBracing(config: Config) : FormattingRule(
+    config,
+    "All branches must be wrapped in curly braces if any branches are wrapped."
+) {
 
     override val wrapping = IfElseBracingRule()
 

@@ -45,7 +45,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * </compliant>
  */
 class TrimMultilineRawString(config: Config) : Rule(
-    config, "Multiline raw strings should be followed by `trimMargin()` or `trimIndent()`.",
+    config,
+    "Multiline raw strings should be followed by `trimMargin()` or `trimIndent()`.",
 ) {
 
     @Configuration("allows to provide a list of multiline string trimming methods")

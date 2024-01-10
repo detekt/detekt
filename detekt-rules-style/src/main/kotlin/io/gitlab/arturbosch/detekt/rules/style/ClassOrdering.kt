@@ -50,8 +50,11 @@ private typealias DeclarationToSectionPair = Pair<KtDeclaration, Section>
  * }
  * </compliant>
  */
-class ClassOrdering(config: Config) : Rule(config, "Class contents should be in this order: Property declarations/initializer blocks; secondary constructors; " +
-            "method declarations then companion objects.") {
+class ClassOrdering(config: Config) : Rule(
+    config,
+    "Class contents should be in this order: Property declarations/initializer blocks; secondary constructors; " +
+        "method declarations then companion objects."
+) {
 
     override fun visitClassBody(classBody: KtClassBody) {
         super.visitClassBody(classBody)

@@ -11,7 +11,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class NoTrailingSpaces(config: Config) : FormattingRule(config, "Detects trailing spaces") {
+class NoTrailingSpaces(config: Config) : FormattingRule(
+    config,
+    "Detects trailing spaces"
+) {
 
     override val wrapping = NoTrailingSpacesRule()
 }

@@ -12,7 +12,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "1.23.0")
 @AutoCorrectable(since = "1.22.0")
-class SpacingBetweenFunctionNameAndOpeningParenthesis(config: Config) : FormattingRule(config, "Ensure consistent spacing between function name and opening parenthesis.") {
+class SpacingBetweenFunctionNameAndOpeningParenthesis(config: Config) : FormattingRule(
+    config,
+    "Ensure consistent spacing between function name and opening parenthesis."
+) {
 
     override val wrapping = SpacingBetweenFunctionNameAndOpeningParenthesisRule()
 }

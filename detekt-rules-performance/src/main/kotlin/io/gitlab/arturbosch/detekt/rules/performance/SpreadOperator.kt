@@ -47,8 +47,11 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.0.0")
-class SpreadOperator(config: Config) : Rule(config, "In most cases using a spread operator causes a full copy of the array to be created before calling a " +
-            "method. This may result in a performance penalty.") {
+class SpreadOperator(config: Config) : Rule(
+    config,
+    "In most cases using a spread operator causes a full copy of the array to be created before calling a " +
+        "method. This may result in a performance penalty."
+) {
 
     override fun visitValueArgumentList(list: KtValueArgumentList) {
         super.visitValueArgumentList(list)

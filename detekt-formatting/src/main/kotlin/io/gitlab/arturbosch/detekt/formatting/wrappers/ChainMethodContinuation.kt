@@ -16,7 +16,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * for documentation.
  */
 @AutoCorrectable(since = "2.0.0")
-class ChainMethodContinuation(config: Config) : FormattingRule(config, "Checks if condition chaining is wrapped right") {
+class ChainMethodContinuation(config: Config) : FormattingRule(
+    config,
+    "Checks if condition chaining is wrapped right"
+) {
 
     override val wrapping = ChainMethodContinuationRule()
 

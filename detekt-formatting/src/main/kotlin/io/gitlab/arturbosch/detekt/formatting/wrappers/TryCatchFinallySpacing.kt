@@ -16,7 +16,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.23.0")
-class TryCatchFinallySpacing(config: Config) : FormattingRule(config, "Enforce consistent spacing in try-catch-finally blocks.") {
+class TryCatchFinallySpacing(config: Config) : FormattingRule(
+    config,
+    "Enforce consistent spacing in try-catch-finally blocks."
+) {
 
     override val wrapping = TryCatchFinallySpacingRule()
 

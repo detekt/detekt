@@ -17,7 +17,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "1.19.0")
 @AutoCorrectable(since = "1.0.0")
-class ImportOrdering(config: Config) : FormattingRule(config, "Detects imports in non default order") {
+class ImportOrdering(config: Config) : FormattingRule(
+    config,
+    "Detects imports in non default order"
+) {
 
     override val wrapping = ImportOrderingRule()
 

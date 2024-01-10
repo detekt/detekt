@@ -15,7 +15,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "1.19.0")
 @AutoCorrectable(since = "1.0.0")
-class Indentation(config: Config) : FormattingRule(config, "Reports mis-indented code") {
+class Indentation(config: Config) : FormattingRule(
+    config,
+    "Reports mis-indented code"
+) {
 
     override val wrapping = IndentationRule()
 

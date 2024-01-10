@@ -17,7 +17,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @AutoCorrectable(since = "1.23.0")
 @ActiveByDefault(since = "1.23.0")
-class PropertyWrapping(config: Config) : FormattingRule(config, "Type or value of properties must wrap if parameters don't fit on a single line") {
+class PropertyWrapping(config: Config) : FormattingRule(
+    config,
+    "Type or value of properties must wrap if parameters don't fit on a single line"
+) {
 
     override val wrapping = PropertyWrappingRule()
 

@@ -25,7 +25,8 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  */
 @ActiveByDefault(since = "1.21.0")
 class UseArrayLiteralsInAnnotations(config: Config) : Rule(
-    config, "Array literals [...] should be preferred as they are more readable than `arrayOf(...)` expressions.",
+    config,
+    "Array literals [...] should be preferred as they are more readable than `arrayOf(...)` expressions.",
 ) {
 
     override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry) {

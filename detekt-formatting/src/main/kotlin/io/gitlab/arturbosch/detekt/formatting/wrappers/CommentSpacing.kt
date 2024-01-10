@@ -11,7 +11,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class CommentSpacing(config: Config) : FormattingRule(config, "Checks if comments have the right spacing") {
+class CommentSpacing(config: Config) : FormattingRule(
+    config,
+    "Checks if comments have the right spacing"
+) {
 
     override val wrapping = CommentSpacingRule()
 }

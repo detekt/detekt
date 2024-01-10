@@ -16,7 +16,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * for documentation.
  */
 @AutoCorrectable(since = "2.0.0")
-class FunctionExpressionBody(config: Config) : FormattingRule(config, "Function body containing only a return or throw expression should be an expression body.") {
+class FunctionExpressionBody(config: Config) : FormattingRule(
+    config,
+    "Function body containing only a return or throw expression should be an expression body."
+) {
 
     override val wrapping = FunctionExpressionBodyRule()
 

@@ -12,7 +12,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * from the standard rules, make sure to enable just one.
  */
 @ActiveByDefault(since = "1.0.0")
-class Filename(config: Config) : FormattingRule(config, "Checks if top level class matches the filename") {
+class Filename(config: Config) : FormattingRule(
+    config,
+    "Checks if top level class matches the filename"
+) {
 
     override val wrapping = FilenameRule()
 }

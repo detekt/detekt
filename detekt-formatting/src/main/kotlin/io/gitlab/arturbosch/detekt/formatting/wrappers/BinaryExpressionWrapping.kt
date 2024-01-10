@@ -16,7 +16,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * documentation.
  */
 @AutoCorrectable(since = "2.0.0")
-class BinaryExpressionWrapping(config: Config) : FormattingRule(config, "Wrap binary expression at the operator reference if the binary expression does not fit on the line") {
+class BinaryExpressionWrapping(config: Config) : FormattingRule(
+    config,
+    "Wrap binary expression at the operator reference if the binary expression does not fit on the line"
+) {
 
     override val wrapping = BinaryExpressionWrappingRule()
 

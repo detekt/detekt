@@ -13,7 +13,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/experimental/) for documentation.
  */
 @AutoCorrectable(since = "2.0.0")
-class ConditionWrapping(config: Config) : FormattingRule(config, "Conditions should be wrapped when expression doesn't fit on one line") {
+class ConditionWrapping(config: Config) : FormattingRule(
+    config,
+    "Conditions should be wrapped when expression doesn't fit on one line"
+) {
 
     override val wrapping = ConditionWrappingRule()
 

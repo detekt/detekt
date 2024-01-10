@@ -15,7 +15,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @AutoCorrectable(since = "1.0.0")
 @ActiveByDefault(since = "1.22.0")
-class AnnotationOnSeparateLine(config: Config) : FormattingRule(config, "Multiple annotations should be placed on separate lines. ") {
+class AnnotationOnSeparateLine(config: Config) : FormattingRule(
+    config,
+    "Multiple annotations should be placed on separate lines. "
+) {
 
     override val wrapping = AnnotationRule()
 

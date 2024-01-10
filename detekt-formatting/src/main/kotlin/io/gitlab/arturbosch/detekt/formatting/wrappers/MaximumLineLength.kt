@@ -17,7 +17,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * from the standard rules, make sure to enable just one or keep them aligned.
  */
 @ActiveByDefault(since = "1.0.0")
-class MaximumLineLength(config: Config) : FormattingRule(config, "Reports lines with exceeded length") {
+class MaximumLineLength(config: Config) : FormattingRule(
+    config,
+    "Reports lines with exceeded length"
+) {
 
     override val wrapping = MaxLineLengthRule()
 

@@ -12,9 +12,11 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class BlankLineBeforeDeclaration(config: Config) : FormattingRule(config,
+class BlankLineBeforeDeclaration(config: Config) : FormattingRule(
+    config,
     "A blank line is required before any class or function declaration, and before any list of top level or " +
-        "class properties.") {
+        "class properties."
+) {
 
     override val wrapping = BlankLineBeforeDeclarationRule()
 }

@@ -15,7 +15,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "1.23.0")
 @AutoCorrectable(since = "1.20.0")
-class CommentWrapping(config: Config) : FormattingRule(config, "Reports mis-indented code") {
+class CommentWrapping(config: Config) : FormattingRule(
+    config,
+    "Reports mis-indented code"
+) {
 
     override val wrapping = CommentWrappingRule()
 

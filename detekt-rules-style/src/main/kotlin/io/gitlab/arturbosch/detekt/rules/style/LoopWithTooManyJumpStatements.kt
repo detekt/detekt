@@ -36,8 +36,11 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class LoopWithTooManyJumpStatements(config: Config) : Rule(config, "The loop contains more than one break or continue statement. " +
-            "The code should be refactored to increase readability.") {
+class LoopWithTooManyJumpStatements(config: Config) : Rule(
+    config,
+    "The loop contains more than one break or continue statement. " +
+        "The code should be refactored to increase readability."
+) {
 
     @Configuration("maximum allowed jumps in a loop")
     private val maxJumpCount: Int by config(1)

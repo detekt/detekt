@@ -26,10 +26,12 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  * fun Int.evenOrNull() = takeIf { it % 2 == 0 }
  * </compliant>
  */
-class DoubleNegativeLambda(config: Config) : Rule(config, "Double negative from a function name expressed in the negative (like `takeUnless`) with a lambda block " +
-            "that also contains negation. This is more readable when rewritten using a positive form of the function " +
-            "(like `takeIf`).",
-    ) {
+class DoubleNegativeLambda(config: Config) : Rule(
+    config,
+    "Double negative from a function name expressed in the negative (like `takeUnless`) with a lambda block " +
+        "that also contains negation. This is more readable when rewritten using a positive form of the function " +
+        "(like `takeIf`).",
+) {
 
     private val splitCamelCaseRegex = "(?<=[a-z])(?=[A-Z])".toRegex()
 
@@ -49,7 +51,8 @@ class DoubleNegativeLambda(config: Config) : Rule(config, "Double negative from 
     private val negativeFunctions: List<NegativeFunction> by config(
         valuesWithReason(
             "takeUnless" to "Use `takeIf` instead.",
-            "none" to "Use `all` instead.")
+            "none" to "Use `all` instead."
+        )
     ) { list ->
         list.map { NegativeFunction(simpleName = it.value, recommendation = it.reason) }
     }

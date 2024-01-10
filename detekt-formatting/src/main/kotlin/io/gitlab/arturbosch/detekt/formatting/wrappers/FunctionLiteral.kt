@@ -16,7 +16,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * documentation.
  */
 @AutoCorrectable(since = "2.0.0")
-class FunctionLiteral(config: Config) : FormattingRule(config, "Parameters and -> of a function literal should be on the same line as the opening brace.") {
+class FunctionLiteral(config: Config) : FormattingRule(
+    config,
+    "Parameters and -> of a function literal should be on the same line as the opening brace."
+) {
     override val wrapping = FunctionLiteralRule()
 
     @Configuration("indentation size")

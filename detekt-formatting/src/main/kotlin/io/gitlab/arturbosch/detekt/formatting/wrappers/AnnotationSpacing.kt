@@ -11,7 +11,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @AutoCorrectable(since = "1.0.0")
 @ActiveByDefault(since = "1.22.0")
-class AnnotationSpacing(config: Config) : FormattingRule(config, "There should not be empty lines between an annotation and the object that it's annotating") {
+class AnnotationSpacing(config: Config) : FormattingRule(
+    config,
+    "There should not be empty lines between an annotation and the object that it's annotating"
+) {
 
     override val wrapping = AnnotationSpacingRule()
 }

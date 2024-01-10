@@ -13,7 +13,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/experimental/) for documentation.
  */
 @AutoCorrectable(since = "2.0.0")
-class MultilineLoop(config: Config) : FormattingRule(config, "Detects multiline loop statements without braces") {
+class MultilineLoop(config: Config) : FormattingRule(
+    config,
+    "Detects multiline loop statements without braces"
+) {
 
     override val wrapping = MultilineLoopRule()
 

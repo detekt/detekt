@@ -17,7 +17,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @AutoCorrectable(since = "1.23.0")
 @ActiveByDefault(since = "1.23.0")
-class ParameterWrapping(config: Config) : FormattingRule(config, "Type or value of functions and class parameters must wrap if parameters don't fit on a single line") {
+class ParameterWrapping(config: Config) : FormattingRule(
+    config,
+    "Type or value of functions and class parameters must wrap if parameters don't fit on a single line"
+) {
 
     override val wrapping = ParameterWrappingRule()
 

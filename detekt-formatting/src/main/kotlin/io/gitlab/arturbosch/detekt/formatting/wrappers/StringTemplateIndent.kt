@@ -15,7 +15,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.23.0")
-class StringTemplateIndent(config: Config) : FormattingRule(config, "Enforce consistent multiline string template indentation which are post-fixed with .trimIndent()") {
+class StringTemplateIndent(config: Config) : FormattingRule(
+    config,
+    "Enforce consistent multiline string template indentation which are post-fixed with .trimIndent()"
+) {
 
     override val wrapping = StringTemplateIndentRule()
 

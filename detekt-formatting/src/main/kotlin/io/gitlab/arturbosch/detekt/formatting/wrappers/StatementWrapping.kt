@@ -16,7 +16,10 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class StatementWrapping(config: Config) : FormattingRule(config, "Block body statements must be placed on a different line than the braces of the body block.") {
+class StatementWrapping(config: Config) : FormattingRule(
+    config,
+    "Block body statements must be placed on a different line than the braces of the body block."
+) {
 
     override val wrapping = StatementWrappingRule()
 
