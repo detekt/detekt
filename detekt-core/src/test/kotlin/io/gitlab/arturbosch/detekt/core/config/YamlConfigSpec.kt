@@ -94,7 +94,16 @@ class YamlConfigSpec {
     @Nested
     inner class `meaningful error messages` {
 
-        private val config = yamlConfig("wrong-property-type.yml")
+        private val config = yamlConfigFromContent(
+            """
+                RuleSet:
+                  Rule:
+                    active: []
+                    threshold: v5.7
+                
+                bool: fasle
+            """.trimIndent()
+        )
 
         @Test
         fun `only accepts true and false boolean values`() {
