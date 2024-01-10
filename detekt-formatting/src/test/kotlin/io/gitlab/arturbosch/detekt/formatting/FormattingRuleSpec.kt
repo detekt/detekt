@@ -84,11 +84,8 @@ class FormattingRuleSpec {
         val expectedPath = Path("src/test/resources/configTests/chain-wrapping-before.kt").toAbsolutePath()
 
         val rule = ChainWrapping(Config.empty)
-        rule.visitFile(compileForTest(expectedPath))
-        assertThat(rule.findings).isNotNull()
-
-        val findings = rule.findings
-
+        val findings = rule.visitFile(compileForTest(expectedPath))
+        assertThat(findings).isNotNull()
         assertThat(findings.first().location.filePath.absolutePath.toString()).isEqualTo(expectedPath.toString())
     }
 }

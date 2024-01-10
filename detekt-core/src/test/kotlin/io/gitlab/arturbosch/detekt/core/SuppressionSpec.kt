@@ -138,10 +138,7 @@ class SuppressionSpec {
         @Test
         fun `findings are suppressed`() {
             val ktFile = compileForTest(resourceAsPath("/suppression/SuppressedElements.kt"))
-            val findings = listOf(TestLM(), TestLPL()).flatMap {
-                it.visitFile(ktFile)
-                it.findings
-            }
+            val findings = listOf(TestLM(), TestLPL()).flatMap { it.visitFile(ktFile) }
             assertThat(findings.size).isZero()
         }
 

@@ -57,8 +57,7 @@ private fun runRule(config: Config): Pair<KtFile, List<Finding>> {
     val testFile = loadFile("configTests/fixed.kt")
     val ruleSet = loadRuleSet<FormattingProvider>()
     val rules = ruleSet.rules.map { (ruleId, provider) -> provider(config.subConfig(ruleSet.id).subConfig(ruleId)) }
-    rules.forEach { it.visitFile(testFile) }
-    return testFile to rules.flatMap { it.findings }
+    return testFile to rules.flatMap { it.visitFile(testFile) }
 }
 
 private fun wasFormatted(file: KtFile) = file.text == contentAfterChainWrapping

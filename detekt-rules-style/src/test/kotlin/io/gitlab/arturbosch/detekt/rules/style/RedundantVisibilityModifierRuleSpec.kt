@@ -216,20 +216,20 @@ class RedundantVisibilityModifierRuleSpec {
 
         @Test
         fun `does not report public function in class if explicit API mode is set to strict`() {
-            rule.visitFile(code, compilerResources = fakeCompilerResources(ExplicitApiMode.STRICT))
-            assertThat(rule.findings).isEmpty()
+            val findings = rule.visitFile(code, compilerResources = fakeCompilerResources(ExplicitApiMode.STRICT))
+            assertThat(findings).isEmpty()
         }
 
         @Test
         fun `reports public function in class if explicit API mode is disabled`() {
-            rule.visitFile(code, compilerResources = fakeCompilerResources(ExplicitApiMode.DISABLED))
-            assertThat(rule.findings).hasSize(1)
+            val findings = rule.visitFile(code, compilerResources = fakeCompilerResources(ExplicitApiMode.DISABLED))
+            assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `reports public function in class if compiler resources are not available`() {
-            rule.visitFile(code, compilerResources = null)
-            assertThat(rule.findings).hasSize(1)
+            val findings = rule.visitFile(code, compilerResources = null)
+            assertThat(findings).hasSize(1)
         }
     }
 }
