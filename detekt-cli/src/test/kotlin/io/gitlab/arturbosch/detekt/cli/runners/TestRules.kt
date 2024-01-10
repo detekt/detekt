@@ -11,11 +11,11 @@ import org.jetbrains.kotlin.psi.KtClass
 
 class TestProvider : RuleSetProvider {
     override val ruleSetId: String = "test"
-    override fun instance(config: Config): RuleSet = RuleSet(ruleSetId, listOf(TestRule(config)))
+    override fun instance(): RuleSet = RuleSet(ruleSetId, listOf(::TestRule))
 }
 
 class TestRule(config: Config) : Rule(config) {
-    override val issue = Issue("test", "A failure")
+    override val issue = Issue(javaClass.simpleName, "A failure")
     override fun visitClass(klass: KtClass) {
         if (klass.name == "Poko") {
             report(CodeSmell(issue, Entity.from(klass), issue.description))

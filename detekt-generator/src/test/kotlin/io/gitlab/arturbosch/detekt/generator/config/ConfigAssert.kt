@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.config
 
 import io.github.classgraph.ClassGraph
-import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
@@ -51,7 +50,7 @@ class ConfigAssert(
         getRulesDefinedByRuleSet().forEach(::verifyIssueIdMatchesName)
     }
 
-    private fun verifyIssueIdMatchesName(rule: BaseRule) {
+    private fun verifyIssueIdMatchesName(rule: Rule) {
         val clazz = rule::class.java
         assertThat(rule.ruleId)
             .withFailMessage { "rule $clazz declares the rule id ${rule.ruleId} instead of ${clazz.simpleName}" }
@@ -61,10 +60,11 @@ class ConfigAssert(
     private fun getYmlRuleConfig() = config.subConfig(name) as? YamlConfig
         ?: error("yaml config expected but got ${config.javaClass}")
 
-    private fun getRulesDefinedByRuleSet(): List<BaseRule> {
+    private fun getRulesDefinedByRuleSet(): List<Rule> {
         return getRuleSetProviderInPackageOrNull()
-            ?.instance(Config.empty)
+            ?.instance()
             ?.rules
+            ?.map { (_, provider) -> provider(Config.empty) }
             .orEmpty()
     }
 

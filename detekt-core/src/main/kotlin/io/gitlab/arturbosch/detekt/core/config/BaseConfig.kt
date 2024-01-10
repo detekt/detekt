@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.core.config
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Config.Companion.CONFIG_SEPARATOR
-import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
+import kotlin.reflect.KClass
 
 private val ALLOWED_BOOL_VALUES = setOf("true", "false")
 
@@ -19,8 +19,20 @@ fun Config.valueOrDefaultInternal(
         if (result != null) {
             when {
                 result is String -> parser(result, default)
-                default::class in Config.PRIMITIVES &&
+                result is List<*> -> {
+                    if (default !is List<*>) {
+                        throw ClassCastException()
+                    }
+                    check(result.all { it is String }) {
+                        "Only lists of strings are supported. Value \"$result\" set " +
+                            "for config parameter \"${keySequence(key)}\" contains non-string values."
+                    }
+                    result.map { it as String }
+                }
+
+                default::class in PRIMITIVES &&
                     result::class != default::class -> throw ClassCastException()
+
                 else -> result
             }
         } else {
@@ -47,8 +59,19 @@ fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defa
         } else {
             throw ClassCastException()
         }
+
     is Double -> result.toDouble()
     is String -> result
-    is List<*> -> result.commaSeparatedPattern().toList()
     else -> throw ClassCastException()
 }
+
+private val PRIMITIVES: Set<KClass<out Any>> = setOf(
+    Int::class,
+    Boolean::class,
+    Float::class,
+    Double::class,
+    String::class,
+    Short::class,
+    Char::class,
+    Long::class
+)

@@ -2,11 +2,11 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
@@ -26,10 +26,10 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * if (x == null) true else false
  * </compliant>
  */
-class UseIfInsteadOfWhen(config: Config = Config.empty) : Rule(config) {
+class UseIfInsteadOfWhen(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue(
-        "UseIfInsteadOfWhen",
+    override val issue = Issue(
+        javaClass.simpleName,
         "Binary expressions are better expressed using an `if` expression than a `when` expression.",
     )
 

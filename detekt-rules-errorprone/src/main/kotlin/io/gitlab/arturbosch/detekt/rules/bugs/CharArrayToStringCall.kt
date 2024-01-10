@@ -4,8 +4,8 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.isCalling
 import org.jetbrains.kotlin.name.FqName
@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
  * </compliant>
  */
 @RequiresTypeResolution
-class CharArrayToStringCall(config: Config = Config.empty) : Rule(config) {
+class CharArrayToStringCall(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "`CharArray.toString()` call does not return expected result.",

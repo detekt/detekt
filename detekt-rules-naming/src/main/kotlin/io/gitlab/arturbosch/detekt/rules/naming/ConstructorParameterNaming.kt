@@ -1,13 +1,13 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
 import org.jetbrains.kotlin.psi.KtConstructor
@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * Reports constructor parameter names that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
-class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
+class ConstructorParameterNaming(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

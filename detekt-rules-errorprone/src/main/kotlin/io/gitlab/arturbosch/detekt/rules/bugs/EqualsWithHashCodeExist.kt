@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
 import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
@@ -43,10 +43,10 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
+class EqualsWithHashCodeExist(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "EqualsWithHashCodeExist",
+        javaClass.simpleName,
         "Always override hashCode when you override equals. " +
             "All hash-based collections depend on objects meeting the equals-contract. " +
             "Two equal objects must produce the same hashcode. When inheriting equals or hashcode, " +

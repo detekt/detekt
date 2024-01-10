@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
-    val subject = BooleanPropertyNaming()
+    val subject = BooleanPropertyNaming(Config.empty)
 
     @Nested
     inner class `argument declarations` {

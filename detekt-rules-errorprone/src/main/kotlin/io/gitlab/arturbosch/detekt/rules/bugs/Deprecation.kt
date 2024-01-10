@@ -4,8 +4,8 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
 class Deprecation(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "Deprecation",
+        javaClass.simpleName,
         "Deprecated elements should not be used.",
     )
 

@@ -6,7 +6,6 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SetupContext
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createFinding
 import org.assertj.core.api.Assertions.assertThat
@@ -114,7 +113,6 @@ class BaselineResultMappingSpec {
     }
 }
 
-@OptIn(UnstableApi::class)
 private fun resultMapping(baselineFile: Path?, createBaseline: Boolean?) =
     BaselineResultMapping().apply {
         init(object : SetupContext {

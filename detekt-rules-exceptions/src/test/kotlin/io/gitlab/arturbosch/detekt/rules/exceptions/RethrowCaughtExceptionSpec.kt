@@ -1,11 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class RethrowCaughtExceptionSpec {
-    val subject = RethrowCaughtException()
+    val subject = RethrowCaughtException(Config.empty)
 
     @Test
     fun `reports when the same exception is rethrown`() {

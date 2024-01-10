@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -95,18 +96,12 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `skips all if if the nested functions is empty`() {
-            val config = TestConfig(defaultAllowedComplexity, "nestingFunctions" to "")
+            val config = TestConfig(defaultAllowedComplexity, "nestingFunctions" to emptyList<String>())
             assertExpectedComplexityValue(code, config, expectedValue = 2)
         }
 
         @Test
         fun `skips 'forEach' as it is not specified`() {
-            val config = TestConfig(defaultAllowedComplexity, "nestingFunctions" to "let,apply,also")
-            assertExpectedComplexityValue(code, config, expectedValue = 2)
-        }
-
-        @Test
-        fun `skips 'forEach' as it is not specified list`() {
             val config = TestConfig(defaultAllowedComplexity, "nestingFunctions" to listOf("let", "apply", "also"))
             assertExpectedComplexityValue(code, config, expectedValue = 2)
         }
@@ -298,7 +293,7 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `should not count these overridden functions to base functions complexity`() {
-            assertThat(CyclomaticComplexMethod().compileAndLint(code)).isEmpty()
+            assertThat(CyclomaticComplexMethod(Config.empty).compileAndLint(code)).isEmpty()
         }
     }
 }

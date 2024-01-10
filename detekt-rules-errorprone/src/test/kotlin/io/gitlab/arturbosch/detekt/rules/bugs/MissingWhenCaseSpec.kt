@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
@@ -16,7 +17,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
     inner class `MissingWhenCase rule` {
 
         @Suppress("DEPRECATION")
-        private val subject = MissingWhenCase()
+        private val subject = MissingWhenCase(Config.empty)
 
         @Nested
         inner class Enum {

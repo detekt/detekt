@@ -1,8 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
-import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 
 /**
@@ -14,19 +13,19 @@ class CommentSmellProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "comments"
 
-    override fun instance(config: Config): RuleSet = RuleSet(
+    override fun instance(): RuleSet = RuleSet(
         ruleSetId,
         listOf(
-            CommentOverPrivateFunction(config),
-            CommentOverPrivateProperty(config),
-            DeprecatedBlockTag(config),
-            EndOfSentenceFormat(config),
-            OutdatedDocumentation(config),
-            UndocumentedPublicClass(config),
-            UndocumentedPublicFunction(config),
-            UndocumentedPublicProperty(config),
-            AbsentOrWrongFileLicense(config),
-            KDocReferencesNonPublicProperty(config)
+            ::CommentOverPrivateFunction,
+            ::CommentOverPrivateProperty,
+            ::DeprecatedBlockTag,
+            ::EndOfSentenceFormat,
+            ::OutdatedDocumentation,
+            ::UndocumentedPublicClass,
+            ::UndocumentedPublicFunction,
+            ::UndocumentedPublicProperty,
+            ::AbsentOrWrongFileLicense,
+            ::KDocReferencesNonPublicProperty
         )
     )
 }

@@ -1,10 +1,8 @@
 package io.gitlab.arturbosch.detekt.core.settings
 
 import io.gitlab.arturbosch.detekt.api.PropertiesAware
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import java.util.concurrent.ConcurrentHashMap
 
-@OptIn(UnstableApi::class)
 internal class PropertiesFacade : PropertiesAware {
 
     private val _properties: MutableMap<String, Any?> = ConcurrentHashMap()

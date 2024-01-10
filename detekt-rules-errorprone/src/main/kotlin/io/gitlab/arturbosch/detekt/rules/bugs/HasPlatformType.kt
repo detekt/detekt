@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtElement
@@ -42,7 +42,7 @@ import org.jetbrains.kotlin.types.isFlexible
 class HasPlatformType(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "HasPlatformType",
+        javaClass.simpleName,
         "Platform types must be declared explicitly in public APIs.",
     )
 

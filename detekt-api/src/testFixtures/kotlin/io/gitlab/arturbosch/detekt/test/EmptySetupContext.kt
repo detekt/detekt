@@ -2,10 +2,8 @@ package io.gitlab.arturbosch.detekt.test
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SetupContext
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import java.net.URI
 
-@OptIn(UnstableApi::class)
 class EmptySetupContext : SetupContext {
     override val configUris: Collection<URI> = emptyList()
     override val config: Config = Config.empty

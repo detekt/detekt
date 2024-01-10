@@ -2,12 +2,12 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.PackageViewDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -35,10 +35,10 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * </compliant>
  */
 @RequiresTypeResolution
-class MaxChainedCallsOnSameLine(config: Config = Config.empty) : Rule(config) {
+class MaxChainedCallsOnSameLine(config: Config) : Rule(config) {
     override val issue = Issue(
-        id = javaClass.simpleName,
-        description = "Chained calls beyond the maximum should be wrapped to a new line.",
+        javaClass.simpleName,
+        "Chained calls beyond the maximum should be wrapped to a new line.",
     )
 
     @Configuration("maximum chained calls allowed on a single line")

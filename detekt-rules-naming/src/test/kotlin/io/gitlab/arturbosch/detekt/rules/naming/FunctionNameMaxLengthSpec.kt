@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
@@ -31,13 +32,13 @@ class FunctionNameMaxLengthSpec {
     @Test
     fun `should report a function name that is too long`() {
         val code = "fun thisFunctionIsDefinitelyWayTooLongAndShouldBeMuchShorter() = 3"
-        assertThat(FunctionNameMaxLength().compileAndLint(code)).hasSize(1)
+        assertThat(FunctionNameMaxLength(Config.empty).compileAndLint(code)).hasSize(1)
     }
 
     @Test
     fun `should not report a function name that is okay`() {
         val code = "fun three() = 3"
-        assertThat(FunctionNameMaxLength().compileAndLint(code)).isEmpty()
+        assertThat(FunctionNameMaxLength(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test

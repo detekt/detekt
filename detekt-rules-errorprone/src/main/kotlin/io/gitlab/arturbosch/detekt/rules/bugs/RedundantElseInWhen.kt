@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
@@ -58,10 +58,10 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.2.0")
 @Deprecated("Rule deprecated as compiler performs this check by default")
-class RedundantElseInWhen(config: Config = Config.empty) : Rule(config) {
+class RedundantElseInWhen(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue(
-        "RedundantElseInWhen",
+    override val issue = Issue(
+        javaClass.simpleName,
         "Check for redundant `else` case in `when` expression when used as statement.",
     )
 

@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class LabeledExpressionSpec {
 
-    private val subject = LabeledExpression()
+    private val subject = LabeledExpression(Config.empty)
 
     @Test
     fun `reports break and continue labels`() {
@@ -150,25 +151,13 @@ class LabeledExpressionSpec {
     }
 
     @Test
-    fun `does not report excluded label config with string`() {
-        val code = """
-            fun f() {
-                loop@ for (i in 1..5) {}
-            }
-        """.trimIndent()
-        val config = TestConfig("ignoredLabels" to "loop")
-        val findings = LabeledExpression(config).compileAndLint(code)
-        assertThat(findings).isEmpty()
-    }
-
-    @Test
     fun `does not report excluded label config with leading and trailing wildcard`() {
         val code = """
             fun f() {
                 loop@ for (i in 1..5) {}
             }
         """.trimIndent()
-        val config = TestConfig("ignoredLabels" to "*loop*,other")
+        val config = TestConfig("ignoredLabels" to listOf("*loop*", "other"))
         val findings = LabeledExpression(config).compileAndLint(code)
         assertThat(findings).isEmpty()
     }

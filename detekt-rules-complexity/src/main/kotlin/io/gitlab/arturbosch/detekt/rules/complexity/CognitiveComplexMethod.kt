@@ -2,11 +2,11 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.metrics.CognitiveComplexity
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -25,10 +25,10 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * - __Nesting Level Increments__ - `if`, `when`, `for`, `while`, `do while`, `catch`, `nested function`
  * - __Additional Complexity Increments by Nesting Level__ - `if`, `when`, `for`, `while`, `do while`, `catch`
  */
-class CognitiveComplexMethod(config: Config = Config.empty) : Rule(config) {
+class CognitiveComplexMethod(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "CognitiveComplexMethod",
+        javaClass.simpleName,
         "Prefer splitting up complex methods into smaller, easier to understand methods.",
     )
 

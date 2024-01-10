@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isPartOf
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
@@ -39,7 +39,7 @@ import org.jetbrains.kotlin.psi.psiUtil.plainContent
  * }
  * </compliant>
  */
-class StringLiteralDuplication(config: Config = Config.empty) : Rule(config) {
+class StringLiteralDuplication(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

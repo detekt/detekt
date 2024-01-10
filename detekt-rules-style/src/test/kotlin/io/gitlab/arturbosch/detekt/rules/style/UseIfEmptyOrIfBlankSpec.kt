@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
@@ -10,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UseIfEmptyOrIfBlankSpec(val env: KotlinCoreEnvironment) {
-    val subject = UseIfEmptyOrIfBlank()
+    val subject = UseIfEmptyOrIfBlank(Config.empty)
 
     @Nested
     inner class `report UseIfEmptyOrIfBlank rule` {

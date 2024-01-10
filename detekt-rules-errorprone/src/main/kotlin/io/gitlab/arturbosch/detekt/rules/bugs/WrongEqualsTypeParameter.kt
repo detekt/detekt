@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.hasCorrectEqualsParameter
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -34,10 +34,10 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class WrongEqualsTypeParameter(config: Config = Config.empty) : Rule(config) {
+class WrongEqualsTypeParameter(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "WrongEqualsTypeParameter",
+        javaClass.simpleName,
         "Wrong parameter type for `equals()` method found. " +
             "To correctly override the `equals()` method use `Any?`.",
     )

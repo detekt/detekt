@@ -1,13 +1,13 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.psi.KtUserType
  * These factory functions can have the same name as the class being created.
  */
 @ActiveByDefault(since = "1.0.0")
-class FunctionNaming(config: Config = Config.empty) : Rule(config) {
+class FunctionNaming(config: Config) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("FunctionName")
 

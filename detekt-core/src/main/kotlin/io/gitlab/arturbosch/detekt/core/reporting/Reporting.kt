@@ -67,4 +67,4 @@ private fun Finding.truncatedMessage(): String {
     }
 }
 
-private fun Finding.detailed(): String = "$id - [${truncatedMessage()}] at ${location.compact()}"
+private fun Finding.detailed(): String = "${issue.id} - [${truncatedMessage()}] at ${location.compact()}"

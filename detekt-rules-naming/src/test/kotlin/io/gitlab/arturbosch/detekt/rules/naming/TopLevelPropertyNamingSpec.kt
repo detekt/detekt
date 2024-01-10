@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 class TopLevelPropertyNamingSpec {
 
-    val subject = TopLevelPropertyNaming()
+    val subject = TopLevelPropertyNaming(Config.empty)
 
     @Test
     fun `should use custom name top level properties`() {

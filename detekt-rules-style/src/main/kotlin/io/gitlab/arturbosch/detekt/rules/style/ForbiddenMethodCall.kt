@@ -4,12 +4,12 @@ import io.github.detekt.tooling.api.FunctionMatcher
 import io.github.detekt.tooling.api.FunctionMatcher.Companion.fromFunctionSignature
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.valuesWithReason
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
@@ -43,7 +43,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequenc
  *
  */
 @RequiresTypeResolution
-class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
+class ForbiddenMethodCall(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

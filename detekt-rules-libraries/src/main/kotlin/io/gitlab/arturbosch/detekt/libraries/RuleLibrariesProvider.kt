@@ -1,9 +1,8 @@
 package io.gitlab.arturbosch.detekt.libraries
 
-import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 
 /**
  * Rules in this rule set report issues related to libraries API exposure.
@@ -19,12 +18,12 @@ class RuleLibrariesProvider : RuleSetProvider {
 
     override val ruleSetId: String = "libraries"
 
-    override fun instance(config: Config) = RuleSet(
+    override fun instance() = RuleSet(
         ruleSetId,
         listOf(
-            ForbiddenPublicDataClass(config),
-            LibraryEntitiesShouldNotBePublic(config),
-            LibraryCodeMustSpecifyReturnType(config),
+            ::ForbiddenPublicDataClass,
+            ::LibraryEntitiesShouldNotBePublic,
+            ::LibraryCodeMustSpecifyReturnType,
         )
     )
 }

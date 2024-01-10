@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.companionObject
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtClass
@@ -25,9 +25,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * Large interfaces should be split into smaller interfaces which have a clear responsibility and are easier
  * to understand and implement.
  */
-class ComplexInterface(
-    config: Config = Config.empty,
-) : Rule(config) {
+class ComplexInterface(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

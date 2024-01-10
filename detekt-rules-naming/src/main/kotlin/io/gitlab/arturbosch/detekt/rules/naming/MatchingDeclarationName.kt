@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.github.detekt.psi.fileNameWithoutSuffix
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtTypeAlias
@@ -46,9 +46,9 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
+class MatchingDeclarationName(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue(
+    override val issue = Issue(
         javaClass.simpleName,
         "If a source file contains only a single non-private top-level class or object, " +
             "the file name should reflect the case-sensitive name plus the .kt extension.",

@@ -4,8 +4,8 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.builtins.isFunctionOrKFunctionTypeWithAnySuspendability
@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.types.isError
  * </compliant>
  */
 @RequiresTypeResolution
-class NonBooleanPropertyPrefixedWithIs(config: Config = Config.empty) : Rule(config) {
+class NonBooleanPropertyPrefixedWithIs(config: Config) : Rule(config) {
 
     private val booleanTypes = listOf(
         "kotlin.Boolean",

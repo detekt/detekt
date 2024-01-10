@@ -1,11 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class CommentOverPrivatePropertiesSpec {
-    private val subject = CommentOverPrivateProperty()
+    private val subject = CommentOverPrivateProperty(Config.empty)
 
     @Test
     fun `reports private property with a comment`() {

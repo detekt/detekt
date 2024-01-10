@@ -1,11 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.UnstableApi
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.configWithFallback
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtClass
@@ -28,7 +27,6 @@ class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
     private val ignoreOverriddenFunctions: Boolean by config(false)
 
     @Suppress("DEPRECATION")
-    @OptIn(UnstableApi::class)
     @Configuration("Excludes all the overridden functions")
     private val ignoreOverridden: Boolean by configWithFallback(::ignoreOverriddenFunctions, false)
 

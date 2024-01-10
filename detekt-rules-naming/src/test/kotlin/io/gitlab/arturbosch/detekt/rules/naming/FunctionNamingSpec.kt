@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -17,7 +18,7 @@ class FunctionNamingSpec {
             @Suppress("FunctionName")
             fun MY_FUN() {}
         """.trimIndent()
-        assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
+        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -27,7 +28,7 @@ class FunctionNamingSpec {
                 return i + i
             }
         """.trimIndent()
-        assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
+        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -51,7 +52,7 @@ class FunctionNamingSpec {
             }
             interface I { fun shouldNotBeFlagged() }
         """.trimIndent()
-        assertThat(FunctionNaming().compileAndLint(code)).hasStartSourceLocation(3, 13)
+        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).hasStartSourceLocation(3, 13)
     }
 
     @Test
@@ -62,7 +63,7 @@ class FunctionNamingSpec {
             }
             interface I { @Suppress("FunctionNaming") fun SHOULD_NOT_BE_FLAGGED() }
         """.trimIndent()
-        assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
+        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -73,7 +74,7 @@ class FunctionNamingSpec {
             
             fun Foo(): Foo = FooImpl()
         """.trimIndent()
-        assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
+        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -82,7 +83,7 @@ class FunctionNamingSpec {
             interface Foo<T>
             fun <T> Foo(): Foo<T> = object : Foo<T> {}
         """.trimIndent()
-        assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
+        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -95,7 +96,7 @@ class FunctionNamingSpec {
             }
             interface I { @Suppress("FunctionNaming") fun SHOULD_BE_FLAGGED() }
         """.trimIndent()
-        assertThat(FunctionNaming().compileAndLint(code)).hasStartSourceLocation(3, 13)
+        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).hasStartSourceLocation(3, 13)
     }
 
     @Test
@@ -103,7 +104,7 @@ class FunctionNamingSpec {
         val code = """
             fun `7his is a function name _`() = Unit
         """.trimIndent()
-        assertThat(FunctionNaming().compileAndLint(code)).hasStartSourceLocations(SourceLocation(1, 5))
+        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).hasStartSourceLocations(SourceLocation(1, 5))
     }
 
     @Test
@@ -135,7 +136,7 @@ class FunctionNamingSpec {
 
     @Test
     fun `should report a function name that begins with a backtick, capitals, and spaces`() {
-        val subject = FunctionNaming()
+        val subject = FunctionNaming(Config.empty)
         val code = "fun `Hi bye`() = 3"
         subject.compileAndLint(code)
         assertThat(subject.findings).hasSize(1)
@@ -179,6 +180,6 @@ class FunctionNamingSpec {
                 val (_, HOLY_GRAIL) = D(5, 4)
             }
         """.trimIndent()
-        assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
+        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).isEmpty()
     }
 }

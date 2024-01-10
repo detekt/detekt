@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtDoWhileExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -36,12 +36,10 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ComplexCondition(
-    config: Config = Config.empty
-) : Rule(config) {
+class ComplexCondition(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "ComplexCondition",
+        javaClass.simpleName,
         "Complex conditions should be simplified and extracted into well-named methods if necessary.",
     )
 

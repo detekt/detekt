@@ -1,8 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 
 /**
@@ -13,49 +12,50 @@ class PotentialBugProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "potential-bugs"
 
-    override fun instance(config: Config): RuleSet = RuleSet(
+    @Suppress("DEPRECATION")
+    override fun instance(): RuleSet = RuleSet(
         ruleSetId,
         listOf(
-            AvoidReferentialEquality(config),
-            Deprecation(config),
-            DontDowncastCollectionTypes(config),
-            DoubleMutabilityForCollection(config),
-            @Suppress("DEPRECATION") DuplicateCaseInWhenExpression(config),
-            ElseCaseInsteadOfExhaustiveWhen(config),
-            EqualsAlwaysReturnsTrueOrFalse(config),
-            EqualsWithHashCodeExist(config),
-            ExitOutsideMain(config),
-            ExplicitGarbageCollectionCall(config),
-            HasPlatformType(config),
-            ImplicitDefaultLocale(config),
-            InvalidRange(config),
-            IteratorHasNextCallsNextMethod(config),
-            IteratorNotThrowingNoSuchElementException(config),
-            LateinitUsage(config),
-            MapGetWithNotNullAssertionOperator(config),
-            MissingPackageDeclaration(config),
-            @Suppress("DEPRECATION") MissingWhenCase(config),
-            NullCheckOnMutableProperty(config),
-            @Suppress("DEPRECATION") RedundantElseInWhen(config),
-            UnconditionalJumpStatementInLoop(config),
-            UnnamedParameterUse(config),
-            UnnecessaryNotNullOperator(config),
-            UnnecessaryNotNullCheck(config),
-            UnnecessarySafeCall(config),
-            UnreachableCode(config),
-            UnsafeCallOnNullableType(config),
-            UnsafeCast(config),
-            UselessPostfixExpression(config),
-            WrongEqualsTypeParameter(config),
-            IgnoredReturnValue(config),
-            ImplicitUnitReturnType(config),
-            NullableToStringCall(config),
-            UnreachableCatchBlock(config),
-            CastToNullableType(config),
-            CastNullableToNonNullableType(config),
-            UnusedUnaryOperator(config),
-            PropertyUsedBeforeDeclaration(config),
-            CharArrayToStringCall(config),
+            ::AvoidReferentialEquality,
+            ::Deprecation,
+            ::DontDowncastCollectionTypes,
+            ::DoubleMutabilityForCollection,
+            ::DuplicateCaseInWhenExpression,
+            ::ElseCaseInsteadOfExhaustiveWhen,
+            ::EqualsAlwaysReturnsTrueOrFalse,
+            ::EqualsWithHashCodeExist,
+            ::ExitOutsideMain,
+            ::ExplicitGarbageCollectionCall,
+            ::HasPlatformType,
+            ::ImplicitDefaultLocale,
+            ::InvalidRange,
+            ::IteratorHasNextCallsNextMethod,
+            ::IteratorNotThrowingNoSuchElementException,
+            ::LateinitUsage,
+            ::MapGetWithNotNullAssertionOperator,
+            ::MissingPackageDeclaration,
+            ::MissingWhenCase,
+            ::NullCheckOnMutableProperty,
+            ::RedundantElseInWhen,
+            ::UnconditionalJumpStatementInLoop,
+            ::UnnamedParameterUse,
+            ::UnnecessaryNotNullOperator,
+            ::UnnecessaryNotNullCheck,
+            ::UnnecessarySafeCall,
+            ::UnreachableCode,
+            ::UnsafeCallOnNullableType,
+            ::UnsafeCast,
+            ::UselessPostfixExpression,
+            ::WrongEqualsTypeParameter,
+            ::IgnoredReturnValue,
+            ::ImplicitUnitReturnType,
+            ::NullableToStringCall,
+            ::UnreachableCatchBlock,
+            ::CastToNullableType,
+            ::CastNullableToNonNullableType,
+            ::UnusedUnaryOperator,
+            ::PropertyUsedBeforeDeclaration,
+            ::CharArrayToStringCall,
         )
     )
 }

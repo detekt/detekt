@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.MemberDescriptor
@@ -48,15 +48,14 @@ import org.jetbrains.kotlin.types.typeUtil.isInterface
  */
 @ActiveByDefault(since = "1.2.0")
 @RequiresTypeResolution
-class AbstractClassCanBeConcreteClass(config: Config = Config.empty) : Rule(config) {
+class AbstractClassCanBeConcreteClass(config: Config) : Rule(config) {
 
     private val noAbstractMember = "An abstract class without an abstract member can be refactored to a concrete class."
 
-    override val issue =
-        Issue(
-            "AbstractClassCanBeConcreteClass",
-            "An abstract class is unnecessary. May be refactored to a concrete class.",
-        )
+    override val issue = Issue(
+        javaClass.simpleName,
+        "An abstract class is unnecessary. May be refactored to a concrete class.",
+    )
 
     @Configuration("Allows you to provide a list of annotations that disable this check.")
     @Deprecated("Use `ignoreAnnotated` instead")

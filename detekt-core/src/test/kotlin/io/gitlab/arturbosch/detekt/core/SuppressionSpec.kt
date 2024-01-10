@@ -14,6 +14,7 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
+import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -236,7 +237,9 @@ class SuppressionSpec {
             fun lpl(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int) = Unit
         """.trimIndent()
 
-        val config = yamlConfig("/suppression/ruleset-suppression.yml").subConfig("complexity")
+        val config = yamlConfig("/suppression/ruleset-suppression.yml")
+            .subConfig("complexity")
+            .subConfig("TestLPL")
 
         @Test
         fun `reports without a suppression`() {
@@ -260,24 +263,24 @@ class SuppressionSpec {
 
         @Test
         fun `suppresses by rule id`() {
-            assertCodeIsSuppressed("""@Suppress("LongParameterList")$code""", config)
+            assertCodeIsSuppressed("""@Suppress("TestLPL")$code""", config)
         }
 
         @Test
         fun `suppresses by combination of rule set and rule id`() {
-            assertCodeIsSuppressed("""@Suppress("complexity.LongParameterList")$code""", config)
+            assertCodeIsSuppressed("""@Suppress("complexity.TestLPL")$code""", config)
         }
 
         @Test
         fun `suppresses by combination of detekt prefix, rule set and rule id`() {
-            assertCodeIsSuppressed("""@Suppress("detekt:complexity:LongParameterList")$code""", config)
+            assertCodeIsSuppressed("""@Suppress("detekt:complexity:TestLPL")$code""", config)
+        }
+
+        private fun assertCodeIsSuppressed(@Language("kotlin") code: String, config: Config) {
+            val findings = TestLPL(config).lint(code)
+            assertThat(findings).isEmpty()
         }
     }
-}
-
-private fun assertCodeIsSuppressed(code: String, config: Config) {
-    val findings = TestLPL(config).lint(code)
-    assertThat(findings).isEmpty()
 }
 
 private fun isSuppressedBy(annotation: String, argument: String): Boolean {
@@ -291,7 +294,7 @@ private fun isSuppressedBy(annotation: String, argument: String): Boolean {
 }
 
 private class TestRule(config: Config = Config.empty) : Rule(config) {
-    override val issue = Issue("Test", "")
+    override val issue = Issue(javaClass.simpleName, "")
     var expected: String? = "Test"
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         expected = null
@@ -299,7 +302,7 @@ private class TestRule(config: Config = Config.empty) : Rule(config) {
 }
 
 private class TestLM(config: Config = Config.empty) : Rule(config) {
-    override val issue = Issue("LongMethod", "")
+    override val issue = Issue(javaClass.simpleName, "")
     override fun visitNamedFunction(function: KtNamedFunction) {
         val start = Location.startLineAndColumn(function.funKeyword!!).line
         val end = Location.startLineAndColumn(function.lastBlockStatementOrThis()).line
@@ -309,7 +312,7 @@ private class TestLM(config: Config = Config.empty) : Rule(config) {
 }
 
 private class TestLPL(config: Config = Config.empty) : Rule(config) {
-    override val issue = Issue("LongParameterList", "")
+    override val issue = Issue(javaClass.simpleName, "")
     override fun visitNamedFunction(function: KtNamedFunction) {
         val size = function.valueParameters.size
         if (size > 5) report(CodeSmell(issue, Entity.from(function), message = "TestMessage"))

@@ -11,9 +11,11 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtBreakExpression
 import org.jetbrains.kotlin.psi.KtContinueExpression
+import org.jetbrains.kotlin.psi.KtLabeledExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
+import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
 /**
@@ -31,7 +33,7 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  * }
  * </compliant>
  */
-class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(config) {
+class UnconditionalJumpStatementInLoop(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
@@ -40,7 +42,7 @@ class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(con
     )
 
     override fun visitLoopExpression(loopExpression: KtLoopExpression) {
-        if (loopExpression.hasJumpStatements()) {
+        if (loopExpression.hasJumpStatements((loopExpression.parent as? KtLabeledExpression)?.getLabelName())) {
             report(
                 CodeSmell(
                     issue,
@@ -54,11 +56,23 @@ class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(con
         super.visitLoopExpression(loopExpression)
     }
 
-    private fun KtLoopExpression.hasJumpStatements(): Boolean {
+    private fun KtLoopExpression.hasJumpStatements(label: String?): Boolean {
         val body = this.body ?: return false
         return when (body) {
-            is KtBlockExpression -> body.children.any { it.isJumpStatement() }
-            else -> body.isJumpStatement()
+            is KtBlockExpression -> {
+                body.children.takeWhile {
+                    if (label != null) {
+                        val labelExpression = it.findDescendantOfType<KtContinueExpression>()
+                        labelExpression == null || labelExpression.getLabelName() != label
+                    } else {
+                        true
+                    }
+                }.any { it.isJumpStatement() }
+            }
+
+            else -> {
+                body.isJumpStatement()
+            }
         }
     }
 

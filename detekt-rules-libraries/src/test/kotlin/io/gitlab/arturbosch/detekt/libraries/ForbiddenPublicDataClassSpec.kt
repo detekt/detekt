@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class ForbiddenPublicDataClassSpec {
-    val subject = ForbiddenPublicDataClass()
+    val subject = ForbiddenPublicDataClass(Config.empty)
 
     @Test
     fun `public data class should pass without explicit filters set`() {
@@ -15,7 +15,8 @@ class ForbiddenPublicDataClassSpec {
             data class C(val a: String)
         """.trimIndent()
 
-        assertThat(ForbiddenPublicDataClass(TestConfig(Config.EXCLUDES_KEY to "**")).compileAndLint(code)).isEmpty()
+        assertThat(ForbiddenPublicDataClass(TestConfig(Config.EXCLUDES_KEY to listOf("**"))).compileAndLint(code))
+            .isEmpty()
     }
 
     @Test
@@ -151,18 +152,6 @@ class ForbiddenPublicDataClassSpec {
         """.trimIndent()
 
         val config = TestConfig("ignorePackages" to listOf("*.hello", "com.example"))
-        assertThat(ForbiddenPublicDataClass(config).compileAndLint(code)).isEmpty()
-    }
-
-    @Test
-    fun `public data class inside an ignored package should pass config as string`() {
-        val code = """
-            package org.example
-            
-            data class C(val a: String)
-        """.trimIndent()
-
-        val config = TestConfig("ignorePackages" to "*.hello,org.example")
         assertThat(ForbiddenPublicDataClass(config).compileAndLint(code)).isEmpty()
     }
 }

@@ -67,6 +67,14 @@ class YamlConfigSpec {
             val actual = subject.parentPath
             assertThat(actual).isEqualTo(rulesetId)
         }
+
+        @Test
+        fun `parent returns the original config`() {
+            val rulesetId = "style"
+            val subject = config.subConfig(rulesetId)
+            val actual = subject.parent
+            assertThat(actual).isEqualTo(config)
+        }
     }
 
     @Nested
@@ -118,6 +126,16 @@ class YamlConfigSpec {
                 .withMessage(
                     "Value \"[]\" set for config parameter \"RuleSet > Rule > active\" is not of required type Int."
                 )
+        }
+
+        @Test
+        fun `prints meaningful message when list of ints is used instead of list of strings`() {
+            assertThatIllegalStateException().isThrownBy {
+                config.valueOrDefaultInternal(key = "key", result = listOf(1, 2), default = listOf("1", "2"))
+            }.withMessage(
+                "Only lists of strings are supported. " +
+                    "Value \"[1, 2]\" set for config parameter \"key\" contains non-string values."
+            )
         }
     }
 

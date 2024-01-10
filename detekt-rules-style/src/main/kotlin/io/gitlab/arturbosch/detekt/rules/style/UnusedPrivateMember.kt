@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isOperator
 import org.jetbrains.kotlin.backend.jvm.ir.psiElement
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
@@ -46,12 +46,12 @@ private const val ARRAY_GET_METHOD_NAME = "get"
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
-class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
+class UnusedPrivateMember(config: Config) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused")
 
-    override val issue: Issue = Issue(
-        "UnusedPrivateMember",
+    override val issue = Issue(
+        javaClass.simpleName,
         "Private function is unused and should be removed.",
     )
 

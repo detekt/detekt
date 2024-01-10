@@ -2,12 +2,12 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.cfg.WhenChecker
 import org.jetbrains.kotlin.psi.KtWhenExpression
@@ -51,10 +51,10 @@ import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
  * </compliant>
  */
 @RequiresTypeResolution
-class ElseCaseInsteadOfExhaustiveWhen(config: Config = Config.empty) : Rule(config) {
+class ElseCaseInsteadOfExhaustiveWhen(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue(
-        "ElseCaseInsteadOfExhaustiveWhen",
+    override val issue = Issue(
+        javaClass.simpleName,
         "A `when` expression that has an exhaustive set of cases should not contain an `else` case.",
     )
 

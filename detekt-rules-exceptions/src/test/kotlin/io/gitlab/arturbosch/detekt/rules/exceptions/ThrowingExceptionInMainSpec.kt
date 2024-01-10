@@ -1,12 +1,13 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class ThrowingExceptionInMainSpec {
-    val subject = ThrowingExceptionInMain()
+    val subject = ThrowingExceptionInMain(Config.empty)
 
     @Test
     fun `reports a runnable main function without args which throws an exception`() {

@@ -15,7 +15,7 @@ class CorrectableCodeSmellSpec {
                 "entity=Entity(name=TestEntity, signature=TestEntitySignature, " +
                 "location=Location(source=1:1, endSource=1:1, text=0:0, " +
                 "filePath=FilePath(absolutePath=TestFile.kt, basePath=null, relativePath=null)), " +
-                "ktElement=null), message=TestMessage, references=[], severity=ERROR, id='TestSmell')"
+                "ktElement=null), message=TestMessage, references=[], severity=Error)"
         )
     }
 }

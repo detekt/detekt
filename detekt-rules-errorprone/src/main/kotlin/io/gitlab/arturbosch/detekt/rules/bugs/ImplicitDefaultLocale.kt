@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -38,14 +38,14 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
  */
 @ActiveByDefault(since = "1.16.0")
 @RequiresTypeResolution
-class ImplicitDefaultLocale(config: Config = Config.empty) : Rule(config) {
+class ImplicitDefaultLocale(config: Config) : Rule(config) {
 
     private val formatCalls = listOf(
         FqName("kotlin.text.format")
     )
 
     override val issue = Issue(
-        "ImplicitDefaultLocale",
+        javaClass.simpleName,
         "Implicit default locale used for string processing. Consider using explicit locale.",
     )
 

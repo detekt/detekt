@@ -18,16 +18,16 @@ internal fun toResults(detektion: Detektion): List<io.github.detekt.sarif4k.Resu
     }
 
 private fun Severity.toResultLevel() = when (this) {
-    Severity.ERROR -> Level.Error
-    Severity.WARNING -> Level.Warning
-    Severity.INFO -> Level.Note
+    Severity.Error -> Level.Error
+    Severity.Warning -> Level.Warning
+    Severity.Info -> Level.Note
 }
 
 private fun Finding.toResult(ruleSetId: RuleSetId): io.github.detekt.sarif4k.Result {
     val code = entity.ktElement?.containingFile?.text
 
     return io.github.detekt.sarif4k.Result(
-        ruleID = "detekt.$ruleSetId.$id",
+        ruleID = "detekt.$ruleSetId.${issue.id}",
         level = severity.toResultLevel(),
         locations = (listOf(location) + references.map { it.location }).map { it.toLocation(code) }.distinct().toList(),
         message = Message(text = message)

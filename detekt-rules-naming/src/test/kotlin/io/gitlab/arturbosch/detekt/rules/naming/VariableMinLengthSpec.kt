@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
@@ -34,13 +35,13 @@ class VariableMinLengthSpec {
     @Test
     fun `should not report a variable name that is okay`() {
         val code = "private val thisOneIsCool = 3"
-        assertThat(VariableMinLength().compileAndLint(code)).isEmpty()
+        assertThat(VariableMinLength(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
     fun `should not report a variable with single letter name`() {
         val code = "private val a = 3"
-        assertThat(VariableMinLength().compileAndLint(code)).isEmpty()
+        assertThat(VariableMinLength(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -51,7 +52,7 @@ class VariableMinLengthSpec {
                 val (_, status) = getResult()
             }
         """.trimIndent()
-        assertThat(VariableMinLength().compileAndLint(code)).isEmpty()
+        assertThat(VariableMinLength(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test

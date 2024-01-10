@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.builtins.StandardNames
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -45,9 +45,9 @@ import org.jetbrains.kotlin.types.isNullable
 @Suppress("TooManyFunctions")
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UseIsNullOrEmpty(config: Config = Config.empty) : Rule(config) {
-    override val issue: Issue = Issue(
-        "UseIsNullOrEmpty",
+class UseIsNullOrEmpty(config: Config) : Rule(config) {
+    override val issue = Issue(
+        javaClass.simpleName,
         "Use `isNullOrEmpty()` call instead of `x == null || x.isEmpty()`.",
     )
 

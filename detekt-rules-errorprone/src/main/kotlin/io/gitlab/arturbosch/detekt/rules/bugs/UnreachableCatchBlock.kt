@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtTryExpression
@@ -46,7 +46,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.isSubclassOf
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UnreachableCatchBlock(config: Config = Config.empty) : Rule(config) {
+class UnreachableCatchBlock(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Unreachable catch block detected.",

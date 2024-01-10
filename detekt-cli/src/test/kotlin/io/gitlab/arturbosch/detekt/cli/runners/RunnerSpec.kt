@@ -90,7 +90,7 @@ class RunnerSpec {
 
             @Test
             fun `writes output to output printer`() {
-                assertThat(outPrintStream.toString()).contains("A failure [test]")
+                assertThat(outPrintStream.toString()).contains("A failure [TestRule]")
             }
 
             @Test
@@ -170,7 +170,7 @@ class RunnerSpec {
                     "--report",
                     "txt:$tmp",
                     "--run-rule",
-                    "test:test",
+                    "test:TestRule",
                     "--config-resource",
                     "/configs/valid-config.yml"
                 )
@@ -186,7 +186,7 @@ class RunnerSpec {
 
         @Test
         fun `should throw on non existing rule set`() {
-            assertThatThrownBy { executeDetekt("--run-rule", "non_existing:test") }
+            assertThatThrownBy { executeDetekt("--run-rule", "non_existing:TestRule") }
                 .isExactlyInstanceOf(IllegalArgumentException::class.java)
         }
 
@@ -196,18 +196,5 @@ class RunnerSpec {
                 .isExactlyInstanceOf(IllegalArgumentException::class.java)
                 .hasMessage("Pattern 'RuleSetId:RuleId' expected.")
         }
-    }
-
-    @Test
-    fun `does not fail on rule property type change from comma separated string to list when YamlConfig is wrapped`() {
-        assertThatCode {
-            executeDetekt(
-                "--all-rules", // wrapping config
-                "--input",
-                inputPath.toString(),
-                "--config-resource",
-                "configs/return-count-with-string-property.yml"
-            )
-        }.isExactlyInstanceOf(IssuesFound::class.java)
     }
 }

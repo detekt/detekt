@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.Test
@@ -11,7 +12,7 @@ class LambdaParameterNamingSpec {
         val code = """
             val a: (String) -> Unit = { HELLO_THERE -> Unit }
         """.trimIndent()
-        assertThat(LambdaParameterNaming().compileAndLint(code))
+        assertThat(LambdaParameterNaming(Config.empty).compileAndLint(code))
             .hasSize(1)
             .hasTextLocations("HELLO_THERE")
     }
@@ -21,7 +22,7 @@ class LambdaParameterNamingSpec {
         val code = """
             val a: (String, Int) -> Unit = { HI, HELLO_THERE -> Unit }
         """.trimIndent()
-        assertThat(LambdaParameterNaming().compileAndLint(code))
+        assertThat(LambdaParameterNaming(Config.empty).compileAndLint(code))
             .hasSize(2)
             .hasTextLocations("HI", "HELLO_THERE")
     }
@@ -31,7 +32,7 @@ class LambdaParameterNamingSpec {
         val code = """
             val a: (String) -> Unit = { helloThere -> Unit }
         """.trimIndent()
-        assertThat(LambdaParameterNaming().compileAndLint(code))
+        assertThat(LambdaParameterNaming(Config.empty).compileAndLint(code))
             .isEmpty()
     }
 
@@ -40,7 +41,7 @@ class LambdaParameterNamingSpec {
         val code = """
             val a = { helloThere: String -> Unit }
         """.trimIndent()
-        assertThat(LambdaParameterNaming().compileAndLint(code))
+        assertThat(LambdaParameterNaming(Config.empty).compileAndLint(code))
             .isEmpty()
     }
 
@@ -49,7 +50,7 @@ class LambdaParameterNamingSpec {
         val code = """
             val a: (String) -> Unit = { _ -> Unit }
         """.trimIndent()
-        assertThat(LambdaParameterNaming().compileAndLint(code))
+        assertThat(LambdaParameterNaming(Config.empty).compileAndLint(code))
             .isEmpty()
     }
 
@@ -58,7 +59,7 @@ class LambdaParameterNamingSpec {
         val code = """
             val a: (String) -> Unit = { Unit }
         """.trimIndent()
-        assertThat(LambdaParameterNaming().compileAndLint(code))
+        assertThat(LambdaParameterNaming(Config.empty).compileAndLint(code))
             .isEmpty()
     }
 
@@ -67,7 +68,7 @@ class LambdaParameterNamingSpec {
         val code = """
             val a: () -> Unit = { Unit }
         """.trimIndent()
-        assertThat(LambdaParameterNaming().compileAndLint(code))
+        assertThat(LambdaParameterNaming(Config.empty).compileAndLint(code))
             .isEmpty()
     }
 
@@ -77,7 +78,7 @@ class LambdaParameterNamingSpec {
             data class Bar(val a: String)
             val a: (Bar) -> Unit = { (HELLO_THERE) -> Unit }
         """.trimIndent()
-        assertThat(LambdaParameterNaming().compileAndLint(code))
+        assertThat(LambdaParameterNaming(Config.empty).compileAndLint(code))
             .hasSize(1)
             .hasTextLocations("HELLO_THERE")
     }
@@ -88,7 +89,7 @@ class LambdaParameterNamingSpec {
             data class Bar(val a: String, val b: String)
             val a: (Bar) -> Unit = { (HI, HELLO_THERE) -> Unit }
         """.trimIndent()
-        assertThat(LambdaParameterNaming().compileAndLint(code))
+        assertThat(LambdaParameterNaming(Config.empty).compileAndLint(code))
             .hasSize(2)
             .hasTextLocations("HI", "HELLO_THERE")
     }
@@ -99,7 +100,7 @@ class LambdaParameterNamingSpec {
             data class Bar(val a: String, val b: String)
             val a: (Bar) -> Unit = { (a, b) -> Unit }
         """.trimIndent()
-        assertThat(LambdaParameterNaming().compileAndLint(code))
+        assertThat(LambdaParameterNaming(Config.empty).compileAndLint(code))
             .isEmpty()
     }
 
@@ -109,7 +110,7 @@ class LambdaParameterNamingSpec {
             data class Bar(val a: String, val b: String)
             val a: (Bar) -> Unit = { (a: String, b) -> Unit }
         """.trimIndent()
-        assertThat(LambdaParameterNaming().compileAndLint(code))
+        assertThat(LambdaParameterNaming(Config.empty).compileAndLint(code))
             .isEmpty()
     }
 
@@ -119,7 +120,7 @@ class LambdaParameterNamingSpec {
             data class Bar(val a: String, val b: String)
             val a: (Bar) -> Unit = { (_, b) -> Unit }
         """.trimIndent()
-        assertThat(LambdaParameterNaming().compileAndLint(code))
+        assertThat(LambdaParameterNaming(Config.empty).compileAndLint(code))
             .isEmpty()
     }
 
@@ -128,7 +129,7 @@ class LambdaParameterNamingSpec {
         val code = """
             data class C(val _invalid: String)
         """.trimIndent()
-        assertThat(LambdaParameterNaming().compileAndLint(code))
+        assertThat(LambdaParameterNaming(Config.empty).compileAndLint(code))
             .isEmpty()
     }
 
@@ -137,7 +138,7 @@ class LambdaParameterNamingSpec {
         val code = """
             fun f(_invalid: String) = Unit
         """.trimIndent()
-        assertThat(LambdaParameterNaming().compileAndLint(code))
+        assertThat(LambdaParameterNaming(Config.empty).compileAndLint(code))
             .isEmpty()
     }
 }

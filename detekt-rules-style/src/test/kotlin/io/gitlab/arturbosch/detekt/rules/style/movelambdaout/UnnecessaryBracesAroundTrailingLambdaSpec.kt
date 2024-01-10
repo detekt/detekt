@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style.movelambdaout
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
@@ -10,7 +11,7 @@ import org.junit.jupiter.api.Test
 // Source https://github.com/JetBrains/intellij-community/tree/master/plugins/kotlin/idea/tests/testData/inspectionsLocal/moveLambdaOutsideParentheses
 @KotlinCoreEnvironmentTest
 class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) {
-    private val subject = UnnecessaryBracesAroundTrailingLambda()
+    private val subject = UnnecessaryBracesAroundTrailingLambda(Config.empty)
 
     @Test
     fun `does report when trailing lambda had braces`() {

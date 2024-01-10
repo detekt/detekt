@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtProperty
@@ -43,12 +43,12 @@ import org.jetbrains.kotlin.resolve.BindingContext
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class DoubleMutabilityForCollection(config: Config = Config.empty) : Rule(config) {
+class DoubleMutabilityForCollection(config: Config) : Rule(config) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("DoubleMutability")
 
-    override val issue: Issue = Issue(
-        "DoubleMutabilityForCollection",
+    override val issue = Issue(
+        javaClass.simpleName,
         "Using var with mutable collections or values leads to double mutability. " +
             "Consider using val or immutable collection or value types.",
     )

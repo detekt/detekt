@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules
 
 import io.github.classgraph.ClassGraph
-import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
@@ -66,9 +65,9 @@ private fun getRulesPackageNameForProvider(providerType: Class<out RuleSetProvid
     return packageName!!
 }
 
-private fun getRules(provider: RuleSetProvider): List<BaseRule> {
-    val ruleSet = provider.instance(Config.empty)
-    val rules = ruleSet.rules
+private fun getRules(provider: RuleSetProvider): List<Rule> {
+    val ruleSet = provider.instance()
+    val rules = ruleSet.rules.map { (_, provider) -> provider(Config.empty) }
     assertThat(rules).isNotEmpty
     return rules
 }

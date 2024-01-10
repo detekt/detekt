@@ -1,11 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class UnnecessaryTemporaryInstantiationSpec {
-    val subject = UnnecessaryTemporaryInstantiation()
+    val subject = UnnecessaryTemporaryInstantiation(Config.empty)
 
     @Test
     fun `temporary instantiation for conversion`() {

@@ -1,17 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.github.detekt.tooling.api.FunctionMatcher
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.configWithFallback
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.isCalling
@@ -52,10 +51,10 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
+class IgnoredReturnValue(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue(
-        "IgnoredReturnValue",
+    override val issue = Issue(
+        javaClass.simpleName,
         "This call returns a value which is ignored",
     )
 
@@ -64,7 +63,6 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
     private val restrictToAnnotatedMethods: Boolean by config(defaultValue = true)
 
     @Suppress("DEPRECATION")
-    @OptIn(UnstableApi::class)
     @Configuration("If the rule should check only methods matching to configuration, or all methods")
     private val restrictToConfig: Boolean by configWithFallback(::restrictToAnnotatedMethods, defaultValue = true)
 

@@ -4,8 +4,8 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.backend.common.peek
 import org.jetbrains.kotlin.backend.common.pop
 import org.jetbrains.kotlin.descriptors.ClassifierDescriptor
@@ -38,12 +38,12 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.classId
  */
 @Suppress("TooManyFunctions")
 @RequiresTypeResolution
-class UnnecessaryInnerClass(config: Config = Config.empty) : Rule(config) {
+class UnnecessaryInnerClass(config: Config) : Rule(config) {
 
     private val candidateClassToParentClasses = mutableMapOf<KtClass, List<KtClass>>()
     private val classChain = ArrayDeque<KtClass>()
 
-    override val issue: Issue = Issue(
+    override val issue = Issue(
         javaClass.simpleName,
         "The 'inner' qualifier is unnecessary.",
     )

@@ -4,8 +4,8 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.firstParameter
 import io.gitlab.arturbosch.detekt.rules.isCalling
 import org.jetbrains.kotlin.contracts.parsing.isEqualsDescriptor
@@ -44,8 +44,8 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
  * </compliant>
  */
 @RequiresTypeResolution
-class UnnecessaryAny(config: Config = Config.empty) : Rule(config) {
-    override val issue: Issue = Issue(
+class UnnecessaryAny(config: Config) : Rule(config) {
+    override val issue = Issue(
         javaClass.simpleName,
         "The `any {  }` usage is unnecessary.",
     )

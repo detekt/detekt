@@ -1,11 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.Test
 
 class KDocReferencesNonPublicPropertySpec {
-    val subject = KDocReferencesNonPublicProperty()
+    val subject = KDocReferencesNonPublicProperty(Config.empty)
 
     @Test
     fun `reports referenced non-public properties`() {

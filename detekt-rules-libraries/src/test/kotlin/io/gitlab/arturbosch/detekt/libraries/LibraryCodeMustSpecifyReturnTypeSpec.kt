@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.libraries
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -15,7 +16,7 @@ import org.junit.jupiter.params.provider.ValueSource
 class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
     @Nested
     inner class `positive cases` {
-        val subject = LibraryCodeMustSpecifyReturnType()
+        val subject = LibraryCodeMustSpecifyReturnType(Config.empty)
 
         @Test
         fun `should report a top level function`() {
@@ -99,7 +100,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
 
     @Nested
     inner class `negative cases with public scope` {
-        val subject = LibraryCodeMustSpecifyReturnType()
+        val subject = LibraryCodeMustSpecifyReturnType(Config.empty)
 
         @Test
         fun `should not report a top level function`() {
@@ -185,7 +186,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
 
     @Nested
     inner class `negative cases with no public scope` {
-        val subject = LibraryCodeMustSpecifyReturnType()
+        val subject = LibraryCodeMustSpecifyReturnType(Config.empty)
 
         @Test
         fun `should not report a private top level function`() {

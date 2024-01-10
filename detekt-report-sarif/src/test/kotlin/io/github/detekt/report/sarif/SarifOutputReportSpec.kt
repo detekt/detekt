@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.test.EmptySetupContext
 import io.gitlab.arturbosch.detekt.test.TestDetektion
@@ -23,15 +22,14 @@ import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
 import kotlin.io.path.absolutePathString
 
-@OptIn(UnstableApi::class)
 class SarifOutputReportSpec {
 
     @Test
     fun `renders multiple issues`() {
         val result = TestDetektion(
-            createFinding(ruleName = "TestSmellA", severity = Severity.ERROR),
-            createFinding(ruleName = "TestSmellB", severity = Severity.WARNING),
-            createFinding(ruleName = "TestSmellC", severity = Severity.INFO)
+            createFinding(ruleName = "TestSmellA", severity = Severity.Error),
+            createFinding(ruleName = "TestSmellB", severity = Severity.Warning),
+            createFinding(ruleName = "TestSmellC", severity = Severity.Info)
         )
 
         val report = SarifOutputReport()
@@ -102,7 +100,7 @@ class SarifOutputReportSpec {
             createFinding(
                 ruleName = "TestSmellB",
                 entity = Entity(refEntity.name, refEntity.signature, location, refEntity.ktElement),
-                severity = Severity.WARNING
+                severity = Severity.Warning
             )
         )
 
@@ -139,7 +137,7 @@ class SarifOutputReportSpec {
             createFinding(
                 ruleName = "TestSmellB",
                 entity = Entity(refEntity.name, refEntity.signature, location, refEntity.ktElement),
-                severity = Severity.WARNING
+                severity = Severity.Warning
             )
         )
 

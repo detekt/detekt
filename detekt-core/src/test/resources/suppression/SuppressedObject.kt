@@ -1,4 +1,4 @@
-@file:SuppressWarnings("Test")
+@file:SuppressWarnings("TestRule")
 
 object SuppressedObject {
 

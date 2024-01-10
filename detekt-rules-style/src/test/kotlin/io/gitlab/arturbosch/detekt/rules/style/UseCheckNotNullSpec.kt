@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
@@ -8,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UseCheckNotNullSpec(val env: KotlinCoreEnvironment) {
-    val subject = UseCheckNotNull()
+    val subject = UseCheckNotNull(Config.empty)
 
     @Test
     fun `reports 'check' calls with a non-null check`() {

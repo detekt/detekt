@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
@@ -20,7 +21,7 @@ class LateinitUsageSpec {
 
     @Test
     fun `should report lateinit usages`() {
-        val findings = LateinitUsage().compileAndLint(code)
+        val findings = LateinitUsage(Config.empty).compileAndLint(code)
         assertThat(findings).hasSize(2)
     }
 

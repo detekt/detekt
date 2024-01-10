@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -14,7 +15,7 @@ class IgnoredReturnValueSpec {
     @Nested
     @KotlinCoreEnvironmentTest
     inner class `default config with non-annotated return values`(private val env: KotlinCoreEnvironment) {
-        private val subject = IgnoredReturnValue()
+        private val subject = IgnoredReturnValue(Config.empty)
 
         @Test
         fun `does not report when a function which returns a value is called and the return is ignored`() {
@@ -184,7 +185,7 @@ class IgnoredReturnValueSpec {
     @Nested
     @KotlinCoreEnvironmentTest
     inner class `default config with annotated return values`(private val env: KotlinCoreEnvironment) {
-        private val subject = IgnoredReturnValue()
+        private val subject = IgnoredReturnValue(Config.empty)
 
         @Test
         fun `reports when a function which returns a value is called and the return is ignored`() {
@@ -1000,7 +1001,7 @@ class IgnoredReturnValueSpec {
     @Nested
     @KotlinCoreEnvironmentTest
     inner class `return value types default config`(private val env: KotlinCoreEnvironment) {
-        private val subject = IgnoredReturnValue()
+        private val subject = IgnoredReturnValue(Config.empty)
 
         @Test
         fun `reports when result of function returning Flow is ignored`() {
@@ -1067,7 +1068,7 @@ class IgnoredReturnValueSpec {
     @Nested
     @KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
     inner class `Java sources`(val env: KotlinCoreEnvironment) {
-        private val subject = IgnoredReturnValue()
+        private val subject = IgnoredReturnValue(Config.empty)
 
         @Test
         fun `reports when annotation is on the method`() {

@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtConstructorDelegationCall
@@ -45,7 +45,7 @@ class InjectDispatcher(config: Config) : Rule(config) {
     private val dispatcherNames: Set<String> by config(listOf("IO", "Default", "Unconfined")) { it.toSet() }
 
     override val issue = Issue(
-        "InjectDispatcher",
+        javaClass.simpleName,
         "Don't hardcode dispatchers when creating new coroutines or calling `withContext`. " +
             "Use dependency injection for dispatchers to make testing easier.",
     )

@@ -4,8 +4,8 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.getDataFlowAwareTypes
 import io.gitlab.arturbosch.detekt.rules.isCalling
 import org.jetbrains.kotlin.name.FqName
@@ -26,10 +26,10 @@ import org.jetbrains.kotlin.types.isNullable
  * </compliant>
  */
 @RequiresTypeResolution
-class UnnecessaryNotNullCheck(config: Config = Config.empty) : Rule(config) {
+class UnnecessaryNotNullCheck(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "UnnecessaryNotNullCheck",
+        javaClass.simpleName,
         "Remove unnecessary not-null checks on non-null types.",
     )
 

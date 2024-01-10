@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 class MayBeConstantSpec {
 
-    val subject = MayBeConstant()
+    val subject = MayBeConstant(Config.empty)
 
     @Nested
     inner class `some valid constants` {

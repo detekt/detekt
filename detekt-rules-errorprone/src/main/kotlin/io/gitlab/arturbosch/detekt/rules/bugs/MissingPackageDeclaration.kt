@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
 /**
  * Reports when the package declaration is missing.
  */
-class MissingPackageDeclaration(config: Config = Config.empty) : Rule(config) {
+class MissingPackageDeclaration(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

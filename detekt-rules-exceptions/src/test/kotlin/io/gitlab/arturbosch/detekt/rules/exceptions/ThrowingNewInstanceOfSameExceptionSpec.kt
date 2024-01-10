@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class ThrowingNewInstanceOfSameExceptionSpec {
-    val subject = ThrowingNewInstanceOfSameException()
+    val subject = ThrowingNewInstanceOfSameException(Config.empty)
 
     @Nested
     inner class `a catch block which rethrows a new instance of the caught exception` {

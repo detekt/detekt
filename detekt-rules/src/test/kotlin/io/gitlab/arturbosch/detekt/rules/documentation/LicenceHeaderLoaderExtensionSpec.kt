@@ -4,13 +4,11 @@ import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.resource
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SetupContext
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Test
 import java.io.PrintStream
 import java.net.URI
 
-@OptIn(UnstableApi::class)
 class LicenceHeaderLoaderExtensionSpec {
 
     @Test

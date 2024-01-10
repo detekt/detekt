@@ -4,8 +4,8 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -32,8 +32,8 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
  * </compliant>
  */
 @RequiresTypeResolution
-class UnnecessaryBracesAroundTrailingLambda(config: Config = Config.empty) : Rule(config) {
-    override val issue: Issue = Issue(
+class UnnecessaryBracesAroundTrailingLambda(config: Config) : Rule(config) {
+    override val issue = Issue(
         javaClass.simpleName,
         "Braces around trailing lambda is unnecessary.",
     )

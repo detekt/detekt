@@ -2,11 +2,11 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import io.gitlab.arturbosch.detekt.rules.isPublicInherited
 import io.gitlab.arturbosch.detekt.rules.isPublicNotOverridden
 import org.jetbrains.kotlin.psi.KtClass
@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
  * By default, this rule also searches for nested and inner classes and objects. This default behavior can be changed
  * with the configuration options of this rule.
  */
-class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
+class UndocumentedPublicClass(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

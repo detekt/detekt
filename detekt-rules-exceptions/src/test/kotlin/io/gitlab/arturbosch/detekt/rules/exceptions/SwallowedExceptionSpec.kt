@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
@@ -9,7 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 class SwallowedExceptionSpec {
-    val subject = SwallowedException()
+    val subject = SwallowedException(Config.empty)
 
     @Test
     fun `reports a swallowed exception`() {
@@ -178,12 +179,7 @@ class SwallowedExceptionSpec {
 
     @Nested
     inner class `when given IllegalArgumentException ignores given exception types config` {
-        val ignoredExceptionValue = "IllegalArgumentException"
-
-        val config =
-            TestConfig("ignoredExceptionTypes" to ignoredExceptionValue)
-
-        val rule = SwallowedException(config)
+        val rule = SwallowedException(TestConfig("ignoredExceptionTypes" to listOf("IllegalArgumentException")))
 
         @Test
         fun `ignores given exception type in configuration`() {

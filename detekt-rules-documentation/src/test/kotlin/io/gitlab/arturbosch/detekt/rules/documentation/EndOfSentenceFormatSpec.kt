@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.Nested
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class EndOfSentenceFormatSpec {
 
-    val subject = EndOfSentenceFormat()
+    val subject = EndOfSentenceFormat(Config.empty)
 
     @Test
     fun `reports invalid KDoc endings on classes`() {

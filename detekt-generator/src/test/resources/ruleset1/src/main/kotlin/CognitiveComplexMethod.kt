@@ -1,10 +1,10 @@
 package ruleset1
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 class CognitiveComplexMethod(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "CognitiveComplexMethod",
+        javaClass.simpleName,
         "Prefer splitting up complex methods into smaller, easier to understand methods.",
     )
 

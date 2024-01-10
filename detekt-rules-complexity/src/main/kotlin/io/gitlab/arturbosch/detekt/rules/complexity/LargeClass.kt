@@ -1,13 +1,13 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.metrics.linesOfCode
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
@@ -21,10 +21,10 @@ import java.util.IdentityHashMap
  * things.
  */
 @ActiveByDefault(since = "1.0.0")
-class LargeClass(config: Config = Config.empty) : Rule(config) {
+class LargeClass(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "LargeClass",
+        javaClass.simpleName,
         "One class should have one responsibility. Large classes tend to handle many things at once. " +
             "Split up large classes into smaller classes that are easier to understand.",
     )

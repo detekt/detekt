@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtTryExpression
@@ -58,10 +58,10 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class RethrowCaughtException(config: Config = Config.empty) : Rule(config) {
+class RethrowCaughtException(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "RethrowCaughtException",
+        javaClass.simpleName,
         "Do not rethrow a caught exception of the same type.",
     )
 

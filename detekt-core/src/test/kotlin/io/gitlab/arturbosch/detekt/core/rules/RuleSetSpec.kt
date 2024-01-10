@@ -41,15 +41,15 @@ class RuleSetSpec {
         @Test
         @DisplayName("should not analyze file with **/*.kt excludes")
         fun ignoreExcludedKt() {
-            val config = TestConfig(Config.EXCLUDES_KEY to "**/*.kt")
+            val config = TestConfig(Config.EXCLUDES_KEY to listOf("**/*.kt"))
             assertThat(config.subConfig("comments").shouldAnalyzeFile(file)).isFalse()
         }
 
         @Test
         fun `should not analyze file as its path is both included and excluded`() {
             val config = TestConfig(
-                Config.EXCLUDES_KEY to "**/*.kt",
-                Config.INCLUDES_KEY to "**/*.kt"
+                Config.EXCLUDES_KEY to listOf("**/*.kt"),
+                Config.INCLUDES_KEY to listOf("**/*.kt"),
             )
             assertThat(config.subConfig("comments").shouldAnalyzeFile(file)).isFalse()
         }

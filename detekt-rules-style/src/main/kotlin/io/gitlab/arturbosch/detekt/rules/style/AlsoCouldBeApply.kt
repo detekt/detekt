@@ -35,10 +35,10 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
  * }
  * </compliant>
  */
-class AlsoCouldBeApply(config: Config = Config.empty) : Rule(config) {
+class AlsoCouldBeApply(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "AlsoCouldBeApply",
+        javaClass.simpleName,
         "When an `also` block contains only `it`-started expressions, simplify it to the `apply` block.",
     )
 

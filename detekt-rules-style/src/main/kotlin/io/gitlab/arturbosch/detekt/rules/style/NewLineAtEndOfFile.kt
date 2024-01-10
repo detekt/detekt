@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.github.detekt.psi.getLineAndColumnInPsiFile
 import io.github.detekt.psi.toFilePath
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -10,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.psi.psiUtil.endOffset
  * This rule reports files which do not end with a line separator.
  */
 @ActiveByDefault(since = "1.0.0")
-class NewLineAtEndOfFile(config: Config = Config.empty) : Rule(config) {
+class NewLineAtEndOfFile(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

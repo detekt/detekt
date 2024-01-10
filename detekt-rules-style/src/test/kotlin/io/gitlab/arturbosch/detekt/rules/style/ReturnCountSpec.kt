@@ -355,7 +355,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should get flagged by default`() {
-            val findings = ReturnCount().compileAndLint(code)
+            val findings = ReturnCount(Config.empty).compileAndLint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -386,7 +386,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should not get flagged by default`() {
-            val findings = ReturnCount().compileAndLint(code)
+            val findings = ReturnCount(Config.empty).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -421,7 +421,7 @@ class ReturnCountSpec {
             val findings = ReturnCount(
                 TestConfig(
                     MAX to "2",
-                    EXCLUDED_FUNCTIONS to "test",
+                    EXCLUDED_FUNCTIONS to listOf("test"),
                 )
             ).compileAndLint(code)
             assertThat(findings).isEmpty()
@@ -600,7 +600,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should not count labeled returns from lambda by default`() {
-            val findings = ReturnCount().lint(code)
+            val findings = ReturnCount(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -644,7 +644,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should not count labeled return of lambda with explicit label when deactivated by default`() {
-            val findings = ReturnCount().compileAndLint(code)
+            val findings = ReturnCount(Config.empty).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
 

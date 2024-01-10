@@ -4,8 +4,8 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -47,7 +47,7 @@ import org.jetbrains.kotlin.types.typeUtil.isLong
 class RedundantExplicitType(config: Config) : Rule(config) {
 
     override val issue = Issue(
-        "RedundantExplicitType",
+        javaClass.simpleName,
         "Type does not need to be stated explicitly and can be removed.",
     )
 

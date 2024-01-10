@@ -20,7 +20,7 @@ class InclusionExclusionPatternsSpec {
     @Nested
     inner class `rule should only run on library file specified by 'includes' pattern` {
 
-        private val config = TestConfig(Config.INCLUDES_KEY to "**/library/*.kt")
+        private val config = TestConfig(Config.INCLUDES_KEY to listOf("**/library/*.kt"))
 
         @Test
         fun `should run`() {
@@ -40,7 +40,7 @@ class InclusionExclusionPatternsSpec {
     @Nested
     inner class `rule should only run on library file not matching the specified 'excludes' pattern` {
 
-        private val config = TestConfig(Config.EXCLUDES_KEY to "glob:**/Default.kt")
+        private val config = TestConfig(Config.EXCLUDES_KEY to listOf("glob:**/Default.kt"))
 
         @Test
         fun `should run`() {
@@ -81,8 +81,8 @@ class InclusionExclusionPatternsSpec {
         @Test
         fun `should only run on dummies`() {
             val config = TestConfig(
-                Config.INCLUDES_KEY to "**/library/**",
-                Config.EXCLUDES_KEY to "**Library.kt",
+                Config.INCLUDES_KEY to listOf("**/library/**"),
+                Config.EXCLUDES_KEY to listOf("**Library.kt"),
             )
 
             OnlyLibraryTrackingRule(config).apply {
@@ -97,8 +97,8 @@ class InclusionExclusionPatternsSpec {
         @Test
         fun `should only run on library file`() {
             val config = TestConfig(
-                Config.INCLUDES_KEY to "**/library/**",
-                Config.EXCLUDES_KEY to "**Dummy*.kt",
+                Config.INCLUDES_KEY to listOf("**/library/**"),
+                Config.EXCLUDES_KEY to listOf("**Dummy*.kt"),
             )
 
             OnlyLibraryTrackingRule(config).apply {
@@ -119,7 +119,7 @@ private fun Path.runWith(rule: DummyRule): DummyRule {
 
 private class OnlyLibraryTrackingRule(config: Config) : Rule(config) {
 
-    override val issue: Issue = Issue("test", "")
+    override val issue = Issue(javaClass.simpleName, "")
     private var libraryFileVisited = false
     private var counter = 0
 
@@ -142,7 +142,7 @@ private class OnlyLibraryTrackingRule(config: Config) : Rule(config) {
 
 private class DummyRule(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("test", "")
+    override val issue = Issue(javaClass.simpleName, "")
     private var isDirty: Boolean = false
 
     override fun visitKtFile(file: KtFile) {

@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
@@ -10,7 +11,7 @@ private const val CONVERSION_FUNCTION_PREFIX = "conversionFunctionPrefix"
 private const val ALLOW_OPERATORS = "allowOperators"
 
 class DataClassContainsFunctionsSpec {
-    val subject = DataClassContainsFunctions()
+    val subject = DataClassContainsFunctions(Config.empty)
 
     @Nested
     inner class `flagged functions in data class` {
@@ -30,14 +31,7 @@ class DataClassContainsFunctionsSpec {
         }
 
         @Test
-        fun `reports valid data class without conversion function string`() {
-            val config = TestConfig(CONVERSION_FUNCTION_PREFIX to "")
-            val rule = DataClassContainsFunctions(config)
-            assertThat(rule.compileAndLint(code)).hasSize(2)
-        }
-
-        @Test
-        fun `reports valid data class without conversion function list`() {
+        fun `reports valid data class without conversion function`() {
             val config = TestConfig(CONVERSION_FUNCTION_PREFIX to emptyList<String>())
             val rule = DataClassContainsFunctions(config)
             assertThat(rule.compileAndLint(code)).hasSize(2)
@@ -54,7 +48,7 @@ class DataClassContainsFunctionsSpec {
 
         @Test
         fun `reports operators if not allowed by default`() {
-            val rule = DataClassContainsFunctions()
+            val rule = DataClassContainsFunctions(Config.empty)
             assertThat(rule.compileAndLint(code)).hasSize(1)
         }
 

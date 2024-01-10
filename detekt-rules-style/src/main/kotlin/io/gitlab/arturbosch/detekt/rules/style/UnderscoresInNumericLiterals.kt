@@ -2,13 +2,12 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.configWithFallback
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtPrefixExpression
@@ -29,7 +28,7 @@ import java.util.Locale
  * const val DEFAULT_AMOUNT = 1_000_000
  * </compliant>
  */
-class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config) {
+class UnderscoresInNumericLiterals(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
@@ -42,7 +41,6 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
     private val acceptableDecimalLength: Int by config(5) { it - 1 }
 
     @Suppress("DEPRECATION")
-    @OptIn(UnstableApi::class)
     @Configuration("Maximum number of consecutive digits that a numeric literal can have without using an underscore")
     private val acceptableLength: Int by configWithFallback(::acceptableDecimalLength, 4)
 

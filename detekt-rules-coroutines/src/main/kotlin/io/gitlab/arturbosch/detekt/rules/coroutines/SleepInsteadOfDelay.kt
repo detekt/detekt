@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.builtins.isSuspendFunctionType
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
@@ -46,7 +46,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class SleepInsteadOfDelay(config: Config = Config.empty) : Rule(config) {
+class SleepInsteadOfDelay(config: Config) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         "Usage of `Thread.sleep()` in coroutines can potentially halt multiple coroutines at once.",

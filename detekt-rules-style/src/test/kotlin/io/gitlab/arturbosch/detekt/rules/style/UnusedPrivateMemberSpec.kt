@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -12,7 +13,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
-    val subject = UnusedPrivateMember()
+    val subject = UnusedPrivateMember(Config.empty)
 
     @Nested
     inner class `interface functions` {

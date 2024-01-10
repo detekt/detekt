@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.psi.KtExpression
  * val range = 0..<10
  * </compliant>
  */
-class RangeUntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
+class RangeUntilInsteadOfRangeTo(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

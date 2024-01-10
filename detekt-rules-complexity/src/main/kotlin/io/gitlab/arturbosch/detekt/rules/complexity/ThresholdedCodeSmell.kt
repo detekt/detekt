@@ -22,5 +22,5 @@ open class ThresholdedCodeSmell(
     message,
     references = references
 ) {
-    override fun compact(): String = "$id - $metric - ${entity.compact()}"
+    override fun compact(): String = "${issue.id} - $metric - ${entity.compact()}"
 }

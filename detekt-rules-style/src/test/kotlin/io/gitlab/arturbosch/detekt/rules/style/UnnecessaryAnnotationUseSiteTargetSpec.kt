@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.DisplayName
@@ -15,7 +16,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
             
             annotation class Asdf
         """.trimIndent()
-        assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("param:")
+        assertThat(UnnecessaryAnnotationUseSiteTarget(Config.empty).compileAndLint(code)).hasTextLocations("param:")
     }
 
     @Test
@@ -26,7 +27,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
             
             annotation class Asdf
         """.trimIndent()
-        assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("param:")
+        assertThat(UnnecessaryAnnotationUseSiteTarget(Config.empty).compileAndLint(code)).hasTextLocations("param:")
     }
 
     @Test
@@ -37,7 +38,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
             
             annotation class Asdf
         """.trimIndent()
-        assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).isEmpty()
+        assertThat(UnnecessaryAnnotationUseSiteTarget(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -48,7 +49,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
             
             annotation class Asdf
         """.trimIndent()
-        assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).isEmpty()
+        assertThat(UnnecessaryAnnotationUseSiteTarget(Config.empty).compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -61,7 +62,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
             
             annotation class Asdf
         """.trimIndent()
-        assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("property:")
+        assertThat(UnnecessaryAnnotationUseSiteTarget(Config.empty).compileAndLint(code)).hasTextLocations("property:")
     }
 
     @Test
@@ -72,6 +73,6 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
             
             annotation class Asdf
         """.trimIndent()
-        assertThat(UnnecessaryAnnotationUseSiteTarget().compileAndLint(code)).hasTextLocations("property:")
+        assertThat(UnnecessaryAnnotationUseSiteTarget(Config.empty).compileAndLint(code)).hasTextLocations("property:")
     }
 }

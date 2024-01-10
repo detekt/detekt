@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.authors
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
@@ -9,10 +10,10 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCoreEnvironment) {
 
-    private val rule = ViolatesTypeResolutionRequirements()
+    private val rule = ViolatesTypeResolutionRequirements(Config.empty)
 
     @Test
-    fun `should not report classes that don't extend from BaseRule`() {
+    fun `should not report classes that don't extend from Rule`() {
         val code = """
             class A {
                 val issue: Int = error("bindingContext")
@@ -58,8 +59,8 @@ internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCor
     fun `should not report Rules that use bindingContext and are annotated`() {
         val code = """
             import io.gitlab.arturbosch.detekt.api.Config
+            import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
             import io.gitlab.arturbosch.detekt.api.Rule
-            import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
             
             @RequiresTypeResolution
             class A(config: Config) : Rule(config) {
@@ -78,8 +79,8 @@ internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCor
     fun `should report Rules that don't use bindingContext and are annotated`() {
         val code = """
             import io.gitlab.arturbosch.detekt.api.Config
+            import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
             import io.gitlab.arturbosch.detekt.api.Rule
-            import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
             
             @RequiresTypeResolution
             class A(config: Config) : Rule(config) {

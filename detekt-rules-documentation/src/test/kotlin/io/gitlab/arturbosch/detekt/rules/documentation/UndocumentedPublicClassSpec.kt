@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
@@ -12,7 +13,7 @@ private const val SEARCH_IN_INNER_INTERFACE = "searchInInnerInterface"
 private const val SEARCH_IN_PROTECTED_CLASS = "searchInProtectedClass"
 
 class UndocumentedPublicClassSpec {
-    val subject = UndocumentedPublicClass()
+    val subject = UndocumentedPublicClass(Config.empty)
 
     val inner = """
         /** Some doc */
@@ -252,7 +253,11 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `does not report protected class by default`() {
         val code = """
-            protected class Test {
+            /**
+             * Sample KDoc for parent class.
+             */
+            class Test {
+                protected class ProtectedClass
             }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
@@ -261,7 +266,11 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `reports protected class if configured`() {
         val code = """
-            protected class Test {
+            /**
+             * Sample KDoc for parent class.
+             */
+            class Test {
+                protected class ProtectedClass
             }
         """.trimIndent()
         val subject = UndocumentedPublicClass(TestConfig(SEARCH_IN_PROTECTED_CLASS to "true"))

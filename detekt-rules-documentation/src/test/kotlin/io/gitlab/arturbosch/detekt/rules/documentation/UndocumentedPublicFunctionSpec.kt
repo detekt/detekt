@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test
 private const val SEARCH_PROTECTED_FUN = "searchProtectedFunction"
 
 class UndocumentedPublicFunctionSpec {
-    val subject = UndocumentedPublicFunction()
+    val subject = UndocumentedPublicFunction(Config.empty)
 
     @Test
     fun `reports undocumented public functions`() {

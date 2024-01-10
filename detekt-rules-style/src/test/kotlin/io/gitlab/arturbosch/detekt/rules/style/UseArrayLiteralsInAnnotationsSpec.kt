@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.DisplayName
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class UseArrayLiteralsInAnnotationsSpec {
 
-    val subject = UseArrayLiteralsInAnnotations()
+    val subject = UseArrayLiteralsInAnnotations(Config.empty)
 
     @Test
     fun `finds an arrayOf usage`() {

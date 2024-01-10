@@ -13,17 +13,15 @@ import java.util.ServiceLoader
  */
 internal fun toReportingDescriptors(): List<ReportingDescriptor> {
     val sets = ServiceLoader.load(RuleSetProvider::class.java, SarifOutputReport::class.java.classLoader)
-        .map { it.instance(Config.empty) }
+        .map { it.instance() }
     val ruleSetIdAndRules = sets.flatMap { ruleSet ->
-        ruleSet.rules.map { rule ->
-            ruleSet.id to rule
+        ruleSet.rules.map { (_, provider) ->
+            ruleSet.id to provider(Config.empty)
         }
     }
     val descriptors = mutableListOf<ReportingDescriptor>()
     ruleSetIdAndRules.forEach { (ruleSetId, rule) ->
-        if (rule is Rule) {
-            descriptors.add(rule.toDescriptor(ruleSetId))
-        }
+        descriptors.add(rule.toDescriptor(ruleSetId))
     }
     return descriptors
 }

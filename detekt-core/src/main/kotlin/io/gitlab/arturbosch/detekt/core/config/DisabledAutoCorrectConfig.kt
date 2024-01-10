@@ -6,12 +6,15 @@ import io.gitlab.arturbosch.detekt.core.config.validation.ValidatableConfigurati
 import io.gitlab.arturbosch.detekt.core.config.validation.validateConfig
 
 @Suppress("UNCHECKED_CAST")
-class DisabledAutoCorrectConfig(private val wrapped: Config) : Config, ValidatableConfiguration {
+class DisabledAutoCorrectConfig(
+    private val wrapped: Config,
+    override val parent: Config? = null,
+) : Config, ValidatableConfiguration {
 
     override val parentPath: String?
         get() = wrapped.parentPath
 
-    override fun subConfig(key: String): Config = DisabledAutoCorrectConfig(wrapped.subConfig(key))
+    override fun subConfig(key: String): Config = DisabledAutoCorrectConfig(wrapped.subConfig(key), this)
 
     override fun <T : Any> valueOrDefault(key: String, default: T): T = when (key) {
         Config.AUTO_CORRECT_KEY -> false as T

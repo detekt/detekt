@@ -51,7 +51,7 @@ private typealias DeclarationToSectionPair = Pair<KtDeclaration, Section>
  * }
  * </compliant>
  */
-class ClassOrdering(config: Config = Config.empty) : Rule(config) {
+class ClassOrdering(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

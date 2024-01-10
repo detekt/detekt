@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.api.Config.Companion.SEVERITY_KEY
-import io.gitlab.arturbosch.detekt.api.internal.DefaultContext
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * A rule defines how one specific code structure should look like. If code is found
@@ -17,9 +17,8 @@ import org.jetbrains.kotlin.psi.KtFile
  * two predefined (preVisit/postVisit) functions which can be overridden to setup/teardown additional data.
  */
 abstract class Rule(
-    override val ruleSetConfig: Config,
-    ruleContext: Context = DefaultContext()
-) : BaseRule(ruleContext), ConfigAware {
+    val config: Config,
+) : DetektVisitor() {
 
     /**
      * A rule is motivated to point out a specific issue in the code base.
@@ -30,12 +29,15 @@ abstract class Rule(
      * An id this rule is identified with.
      * Conventionally the rule id is derived from the issue id as these two classes have a coexistence.
      */
-    final override val ruleId: RuleId get() = issue.id
+    val ruleId: RuleId get() = issue.id
 
     /**
      * List of rule ids which can optionally be used in suppress annotations to refer to this rule.
      */
-    val aliases: Set<String> get() = valueOrDefault("aliases", defaultRuleIdAliases)
+    val aliases: Set<String> get() = config.valueOrDefault("aliases", defaultRuleIdAliases)
+
+    var bindingContext: BindingContext = BindingContext.EMPTY
+    var compilerResources: CompilerResources? = null
 
     /**
      * The default names which can be used instead of this [ruleId] to refer to this rule in suppression's.
@@ -47,16 +49,83 @@ abstract class Rule(
      */
     open val defaultRuleIdAliases: Set<String> = emptySet()
 
-    private val ruleSetId: RuleSetId? get() = ruleSetConfig.parentPath
+    private val ruleSetId: RuleSetId? get() = config.parent?.parentPath
+
+    val autoCorrect: Boolean
+        get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
+            (config.parent?.valueOrDefault(Config.AUTO_CORRECT_KEY, true) != false)
+
+    val active: Boolean get() = config.valueOrDefault(Config.ACTIVE_KEY, false)
 
     /**
      * Rules are aware of the paths they should run on via configuration properties.
      */
     open val filters: PathFilters? by lazy(LazyThreadSafetyMode.NONE) {
-        createPathFilters()
+        config.createPathFilters()
     }
 
-    override fun visitCondition(root: KtFile): Boolean =
+    /**
+     * Returns a copy of violations for this rule.
+     */
+    val findings: List<Finding>
+        get() = _findings.toList()
+
+    private val _findings: MutableList<Finding> = mutableListOf()
+
+    /**
+     * Before starting visiting kotlin elements, a check is performed if this rule should be triggered.
+     * Pre- and post-visit-hooks are executed before/after the visiting process.
+     * BindingContext holds the result of the semantic analysis of the source code by the Kotlin compiler. Rules that
+     * rely on symbols and types being resolved can use the BindingContext for this analysis. Note that detekt must
+     * receive the correct compile classpath for the code being analyzed otherwise the default value
+     * [BindingContext.EMPTY] will be used and it will not be possible for detekt to resolve types or symbols.
+     */
+    fun visitFile(
+        root: KtFile,
+        bindingContext: BindingContext = BindingContext.EMPTY,
+        compilerResources: CompilerResources? = null
+    ) {
+        clearFindings()
+        this.bindingContext = bindingContext
+        this.compilerResources = compilerResources
+        if (visitCondition(root)) {
+            preVisit(root)
+            visit(root)
+            postVisit(root)
+        }
+    }
+
+    /**
+     * Could be overridden by subclasses to specify a behaviour which should be done before
+     * visiting kotlin elements.
+     */
+    protected open fun preVisit(root: KtFile) {
+        // nothing to do by default
+    }
+
+    /**
+     * Init function to start visiting the [KtFile].
+     * Can be overridden to start a different visiting process.
+     */
+    open fun visit(root: KtFile) {
+        root.accept(this)
+    }
+
+    /**
+     * Could be overridden by subclasses to specify a behaviour which should be done after
+     * visiting kotlin elements.
+     */
+    protected open fun postVisit(root: KtFile) {
+        // nothing to do by default
+    }
+
+    /**
+     * Basic mechanism to decide if a rule should run or not.
+     *
+     * By default, any rule which is declared 'active' in the [Config]
+     * or not suppressed by a [Suppress] annotation on file level should run.
+     */
+    open fun visitCondition(root: KtFile): Boolean =
         active && shouldRunOnGivenFile(root) && !root.isSuppressedBy(ruleId, aliases, ruleSetId)
 
     private fun shouldRunOnGivenFile(root: KtFile) =
@@ -73,17 +142,28 @@ abstract class Rule(
      * - Default severity
      */
     private fun computeSeverity(): Severity {
-        val configValue: String = valueOrNull(SEVERITY_KEY)
-            ?: ruleSetConfig.valueOrDefault(SEVERITY_KEY, Severity.DEFAULT.name)
-        return enumValueOf(configValue.uppercase())
+        val configValue: String = config.valueOrNull(SEVERITY_KEY)
+            ?: config.parent?.valueOrNull(SEVERITY_KEY)
+            ?: Severity.DEFAULT.name
+        return Severity.fromString(configValue)
     }
 
     /**
-     * Simplified version of [Context.report] with rule defaults.
+     * Reports a single code smell finding.
+     *
+     * Before adding a finding, it is checked if it is not suppressed
+     * by @Suppress or @SuppressWarnings annotations.
      */
     fun report(finding: Finding) {
         finding.updateWithComputedSeverity()
-        report(finding, aliases, ruleSetId)
+        val ktElement = finding.entity.ktElement
+        if (ktElement == null || !ktElement.isSuppressedBy(finding.issue.id, aliases, ruleSetId)) {
+            _findings.add(finding)
+        }
+    }
+
+    private fun clearFindings() {
+        _findings.clear()
     }
 }
 

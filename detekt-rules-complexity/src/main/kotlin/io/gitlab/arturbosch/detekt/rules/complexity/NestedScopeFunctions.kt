@@ -2,13 +2,13 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.tooling.api.FunctionMatcher
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * </compliant>
  */
 @RequiresTypeResolution
-class NestedScopeFunctions(config: Config = Config.empty) : Rule(config) {
+class NestedScopeFunctions(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

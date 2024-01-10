@@ -1,16 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.configWithFallback
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.internal.Configuration
-import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtClass
@@ -53,7 +52,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.2.0")
-class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
+class MemberNameEqualsClassName(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,
@@ -70,7 +69,6 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
     private val ignoreOverriddenFunction: Boolean by config(true)
 
     @Suppress("DEPRECATION")
-    @OptIn(UnstableApi::class)
     @Configuration("if overridden functions and properties should be ignored")
     private val ignoreOverridden: Boolean by configWithFallback(::ignoreOverriddenFunction, true)
 

@@ -1,12 +1,13 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtAnnotatedExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -15,8 +16,7 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtSuperTypeList
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
-import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
-import io.gitlab.arturbosch.detekt.api.internal.Configuration as ConfigAnnotation
+import io.gitlab.arturbosch.detekt.api.Configuration as ConfigAnnotation
 
 data class RuleSetProvider(
     val name: String,
@@ -141,8 +141,9 @@ private class RuleSetProviderVisitor : DetektVisitor() {
             val ruleArgumentNames = (ruleListExpression as? KtCallExpression)
                 ?.valueArguments
                 ?.mapNotNull { it.getArgumentExpression() }
-                ?.map { if (it is KtAnnotatedExpression) it.lastChild as KtCallExpression else it }
-                ?.mapNotNull { it.referenceExpression()?.text }
+                ?.map { if (it is KtAnnotatedExpression) it.lastChild!! else it }
+                ?.map { it as KtCallableReferenceExpression }
+                ?.map { it.getCallableReference().text!! }
                 .orEmpty()
 
             ruleNames.addAll(ruleArgumentNames)

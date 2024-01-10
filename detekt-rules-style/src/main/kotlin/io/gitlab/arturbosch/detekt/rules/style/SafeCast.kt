@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class SafeCast(config: Config = Config.empty) : Rule(config) {
+class SafeCast(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

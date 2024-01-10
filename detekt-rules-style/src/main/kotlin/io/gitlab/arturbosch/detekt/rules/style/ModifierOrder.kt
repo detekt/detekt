@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import org.jetbrains.kotlin.lexer.KtModifierKeywordToken
 import org.jetbrains.kotlin.lexer.KtTokens.ABSTRACT_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.ACTUAL_KEYWORD
@@ -50,7 +50,7 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ModifierOrder(config: Config = Config.empty) : Rule(config) {
+class ModifierOrder(config: Config) : Rule(config) {
 
     override val issue = Issue(
         javaClass.simpleName,

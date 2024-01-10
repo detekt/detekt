@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.api
 /**
  * Properties holder. Allows to store and retrieve any data.
  */
-@UnstableApi
 interface PropertiesAware {
 
     /**
@@ -20,7 +19,6 @@ interface PropertiesAware {
 /**
  * Allows to retrieve stored properties in a type safe way.
  */
-@UnstableApi
 inline fun <reified T : Any> PropertiesAware.getOrNull(key: String): T? {
     val value = properties[key]
     if (value != null) {
