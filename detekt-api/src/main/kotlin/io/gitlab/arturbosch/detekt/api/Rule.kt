@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.api.Config.Companion.SEVERITY_KEY
-import io.gitlab.arturbosch.detekt.api.internal.DefaultContext
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
@@ -19,7 +18,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  */
 abstract class Rule(
     val config: Config,
-) : DetektVisitor(), Context by DefaultContext() {
+) : DetektVisitor() {
 
     /**
      * A rule is motivated to point out a specific issue in the code base.
@@ -64,6 +63,14 @@ abstract class Rule(
     open val filters: PathFilters? by lazy(LazyThreadSafetyMode.NONE) {
         config.createPathFilters()
     }
+
+    /**
+     * Returns a copy of violations for this rule.
+     */
+    val findings: List<Finding>
+        get() = _findings.toList()
+
+    private val _findings: MutableList<Finding> = mutableListOf()
 
     /**
      * Before starting visiting kotlin elements, a check is performed if this rule should be triggered.
@@ -142,11 +149,21 @@ abstract class Rule(
     }
 
     /**
-     * Simplified version of [Context.report] with rule defaults.
+     * Reports a single code smell finding.
+     *
+     * Before adding a finding, it is checked if it is not suppressed
+     * by @Suppress or @SuppressWarnings annotations.
      */
     fun report(finding: Finding) {
         finding.updateWithComputedSeverity()
-        report(finding, aliases, ruleSetId)
+        val ktElement = finding.entity.ktElement
+        if (ktElement == null || !ktElement.isSuppressedBy(finding.issue.id, aliases, ruleSetId)) {
+            _findings.add(finding)
+        }
+    }
+
+    private fun clearFindings() {
+        _findings.clear()
     }
 }
 
