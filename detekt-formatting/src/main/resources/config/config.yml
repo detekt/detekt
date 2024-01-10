@@ -211,6 +211,7 @@ formatting:
   ParameterListSpacing:
     active: true
     autoCorrect: true
+    maxLineLength: 120
   ParameterListWrapping:
     active: true
     autoCorrect: true
