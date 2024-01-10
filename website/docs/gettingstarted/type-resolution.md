@@ -96,7 +96,8 @@ If you're using [detekt via CLI](/docs/gettingstarted/cli), type resolution will
 
 If you're [writing a custom rule](/docs/introduction/extensions) or if you're willing to write a rule to contribute to detekt, you might want to leverage type resolution.
 
-Rules that are using type resolution, access the [bindingContext](https://github.com/JetBrains/kotlin/blob/master/compiler/frontend/src/org/jetbrains/kotlin/resolve/BindingContext.java) from the `BaseRule` class ([source](https://github.com/detekt/detekt/blob/cd659ce8737fb177caf140f46f73a1a86b22be56/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/internal/BaseRule.kt#L30)).
+Rules that are using type resolution, access the [bindingContext](https://github.com/JetBrains/kotlin/blob/master/compiler/frontend/src/org/jetbrains/kotlin/resolve/BindingContext.java)
+from the `Rule` class ([source](https://github.com/detekt/detekt/blob/main/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/Rule.kt#L40)).
 
 By default, the `bindingContext` is initialized as `BindingContext.EMPTY`. This is the **default value** that the rule receives if type resolution is **not enabled**.
 
