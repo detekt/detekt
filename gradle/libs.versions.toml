@@ -2,10 +2,10 @@
 dokka = "1.9.10"
 jacoco = "0.8.11"
 kotlin = "1.9.22"
-ktlint = "1.1.0"
+ktlint = "1.1.1"
 junit = "5.10.1"
 poko = "0.15.2"
-slf4j = "2.0.10"
+slf4j = "2.0.11"
 
 [libraries]
 semver4j = "org.semver4j:semver4j:5.2.2"

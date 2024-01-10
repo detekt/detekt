@@ -3,9 +3,9 @@ package io.gitlab.arturbosch.detekt.test
 import io.github.detekt.test.utils.KotlinScriptEngine
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.compileForTest
-import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Rule
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.languageVersionSettings
@@ -17,24 +17,24 @@ import java.nio.file.Path
 private val shouldCompileTestSnippets: Boolean =
     System.getProperty("compile-test-snippets", "false")!!.toBoolean()
 
-fun BaseRule.compileAndLint(@Language("kotlin") content: String): List<Finding> {
+fun Rule.compileAndLint(@Language("kotlin") content: String): List<Finding> {
     if (shouldCompileTestSnippets) {
         KotlinScriptEngine.compile(content)
     }
     return lint(content)
 }
 
-fun BaseRule.lint(@Language("kotlin") content: String): List<Finding> {
+fun Rule.lint(@Language("kotlin") content: String): List<Finding> {
     val ktFile = compileContentForTest(content)
     return findingsAfterVisit(ktFile)
 }
 
-fun BaseRule.lint(path: Path): List<Finding> {
+fun Rule.lint(path: Path): List<Finding> {
     val ktFile = compileForTest(path)
     return findingsAfterVisit(ktFile)
 }
 
-fun BaseRule.lintWithContext(
+fun Rule.lintWithContext(
     environment: KotlinCoreEnvironment,
     @Language("kotlin") content: String,
     @Language("kotlin") vararg additionalContents: String,
@@ -51,7 +51,7 @@ fun BaseRule.lintWithContext(
     return findingsAfterVisit(ktFile, bindingContext, compilerResources)
 }
 
-fun BaseRule.compileAndLintWithContext(
+fun Rule.compileAndLintWithContext(
     environment: KotlinCoreEnvironment,
     @Language("kotlin") content: String
 ): List<Finding> {
@@ -61,9 +61,9 @@ fun BaseRule.compileAndLintWithContext(
     return lintWithContext(environment, content)
 }
 
-fun BaseRule.lint(ktFile: KtFile): List<Finding> = findingsAfterVisit(ktFile)
+fun Rule.lint(ktFile: KtFile): List<Finding> = findingsAfterVisit(ktFile)
 
-private fun BaseRule.findingsAfterVisit(
+private fun Rule.findingsAfterVisit(
     ktFile: KtFile,
     bindingContext: BindingContext = BindingContext.EMPTY,
     compilerResources: CompilerResources? = null

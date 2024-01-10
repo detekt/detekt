@@ -39,6 +39,6 @@ class SingleRuleProviderSpec {
 private fun produceRule(provider: RuleSetProvider, config: Config): Rule =
     provider.instance().rules
         .map { (ruleId, provider) -> provider(config.subConfig("style").subConfig(ruleId)) }
-        .single() as Rule
+        .single()
 
 private class MagicNumber(config: Config) : Rule(config, "")

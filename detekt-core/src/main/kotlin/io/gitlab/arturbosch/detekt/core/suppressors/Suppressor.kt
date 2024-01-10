@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
-import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -12,16 +11,9 @@ fun interface Suppressor {
     fun shouldSuppress(finding: Finding): Boolean
 }
 
-private fun buildSuppressors(rule: Rule, bindingContext: BindingContext): List<Suppressor> {
+internal fun buildSuppressors(rule: Rule, bindingContext: BindingContext): List<Suppressor> {
     return listOfNotNull(
         annotationSuppressorFactory(rule, bindingContext),
         functionSuppressorFactory(rule, bindingContext),
     )
-}
-
-internal fun getSuppressors(rule: BaseRule, bindingContext: BindingContext): List<Suppressor> {
-    return when (rule) {
-        is Rule -> buildSuppressors(rule, bindingContext)
-        else -> emptyList()
-    }
 }
