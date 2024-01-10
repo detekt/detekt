@@ -94,6 +94,34 @@ class TrailingCommaOnCallSiteSpec {
         }
     }
 
+    @Nested
+    inner class DefaultSettings {
+        val code = """
+            val withoutTrailingComma = listOf(
+                "a", 
+                "b"
+            )
+        """.trimIndent()
+
+        @Test
+        fun `trailing commas are discouraged on android`() {
+            val rulesetConfig = TestConfig("android" to true)
+            val ruleConfig = TestConfig(parent = rulesetConfig)
+
+            val findings = TrailingCommaOnCallSite(ruleConfig).lint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `trailing commas are required on non-android in multiline statements`() {
+            val rulesetConfig = TestConfig("android" to false)
+            val ruleConfig = TestConfig(parent = rulesetConfig)
+
+            val findings = TrailingCommaOnCallSite(ruleConfig).lint(code)
+            assertThat(findings).hasSize(1)
+        }
+    }
+
     private companion object {
         private const val USE_TRAILING_COMMA = "useTrailingCommaOnCallSite"
     }
