@@ -9,11 +9,11 @@ class EmptyKotlinFileSpec {
     private val subject = EmptyKotlinFile(Config.empty)
 
     private val codeWithPackageStatement = """
-            package my.package
+            package my.packagee
     """.trimIndent()
 
     private val codeWithFunction = """
-            package my.package
+            package my.packagee
             
             fun myFunction() {}
     """.trimIndent()
@@ -21,7 +21,7 @@ class EmptyKotlinFileSpec {
     @Test
     fun `reports empty if file is blank`() {
         val code = ""
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
