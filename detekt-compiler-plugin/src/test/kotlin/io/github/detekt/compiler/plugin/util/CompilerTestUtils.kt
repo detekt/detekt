@@ -13,6 +13,7 @@ object CompilerTestUtils {
             SourceFile.kotlin("KClass.kt", it, trimIndent = true)
         }
         return KotlinCompilation().apply {
+            verbose = false
             sources = sourceFiles
             compilerPluginRegistrars = listOf(DetektCompilerPluginRegistrar())
         }.compile()
