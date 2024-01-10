@@ -62,7 +62,7 @@
   <div class="breadcrumbs"><a href="../../index.html">detekt-api</a><span class="delimiter">/</span><a href="../index.html">io.gitlab.arturbosch.detekt.api</a><span class="delimiter">/</span><span class="current">Rule</span></div>
   <div class="cover ">
     <h1 class="cover"><span><span>Rule</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="index.html">Rule</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>config<span class="token operator">: </span><a href="../-config/index.html">Config</a></span></span><span class="token punctuation">)</span> : <a href="../-detekt-visitor/index.html">DetektVisitor</a>, <a href="../-context/index.html">Context</a></div><p class="paragraph">A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability.</p><p class="paragraph">A rule is implemented using the visitor pattern and should be started using the visit(KtFile) function. If calculations must be done before or after the visiting process, here are two predefined (preVisit/postVisit) functions which can be overridden to setup/teardown additional data.</p></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="index.html">Rule</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>config<span class="token operator">: </span><a href="../-config/index.html">Config</a></span></span><span class="token punctuation">)</span> : <a href="../-detekt-visitor/index.html">DetektVisitor</a></div><p class="paragraph">A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability.</p><p class="paragraph">A rule is implemented using the visitor pattern and should be started using the visit(KtFile) function. If calculations must be done before or after the visiting process, here are two predefined (preVisit/postVisit) functions which can be overridden to setup/teardown additional data.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
@@ -208,17 +208,17 @@
               </div>
             </div>
           </div>
-<a data-name="-1067200605%2FProperties%2F581599712" anchor-label="findings" id="-1067200605%2FProperties%2F581599712" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"></a>
+<a data-name="-1428584048%2FProperties%2F581599712" anchor-label="findings" id="-1428584048%2FProperties%2F581599712" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"></a>
           <div class="table-row" data-filterable-current=":detekt-api:dokkaHtmlPartial/main" data-filterable-set=":detekt-api:dokkaHtmlPartial/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="../-context/findings.html"><span><span>findings</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1067200605%2FProperties%2F581599712"></span>
+                  <div><a href="findings.html"><span><span>findings</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1428584048%2FProperties%2F581599712"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="../-context/findings.html">findings</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-finding/index.html">Finding</a><span class="token operator">&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="findings.html">findings</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-finding/index.html">Finding</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns a copy of violations for this rule.</p></div></div></div>
                 </div>
               </div>
             </div>
@@ -257,32 +257,17 @@
       </div>
       <div data-togglable="FUNCTION">
         <h2 class="">Functions</h2>
-        <div class="table"><a data-name="-1486258314%2FFunctions%2F581599712" anchor-label="clearFindings" id="-1486258314%2FFunctions%2F581599712" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"></a>
+        <div class="table"><a data-name="33214114%2FFunctions%2F581599712" anchor-label="report" id="33214114%2FFunctions%2F581599712" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"></a>
           <div class="table-row" data-filterable-current=":detekt-api:dokkaHtmlPartial/main" data-filterable-set=":detekt-api:dokkaHtmlPartial/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="../-context/clear-findings.html"><span>clear</span><wbr><span><span>Findings</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1486258314%2FFunctions%2F581599712"></span>
+                  <div><a href="report.html"><span><span>report</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="33214114%2FFunctions%2F581599712"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-context/clear-findings.html"><span class="token function">clearFindings</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Clears previous findings. Normally this is done on every new <span data-unresolved-link="org.jetbrains.kotlin.psi/KtFile///PointingToDeclaration/">KtFile</span> analyzed and should be called by clients.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="319616036%2FFunctions%2F581599712" anchor-label="report" id="319616036%2FFunctions%2F581599712" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-api:dokkaHtmlPartial/main" data-filterable-set=":detekt-api:dokkaHtmlPartial/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="../-context/report.html"><span><span>report</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="319616036%2FFunctions%2F581599712"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-context/report.html"><span class="token function">report</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">finding<span class="token operator">: </span><a href="../-finding/index.html">Finding</a><span class="token punctuation">, </span></span><span class="parameter ">aliases<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">ruleSetId<span class="token operator">: </span><a href="../-rule-set-id/index.html">RuleSetId</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Reports a single new violation. By contract the implementation can check if this finding is already suppressed and should not get reported. An alias set can be given to additionally check if an alias was used when suppressing. Additionally suppression by rule set id is supported.</p></div><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="report.html"><span class="token function">report</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">finding<span class="token operator">: </span><a href="../-finding/index.html">Finding</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Simplified version of <a href="../-context/report.html">Context.report</a> with rule defaults.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="report.html"><span class="token function">report</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">finding<span class="token operator">: </span><a href="../-finding/index.html">Finding</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Reports a single code smell finding.</p></div></div></div>
                 </div>
               </div>
             </div>
