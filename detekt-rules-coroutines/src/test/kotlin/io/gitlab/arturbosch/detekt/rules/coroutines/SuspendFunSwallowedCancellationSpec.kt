@@ -4,11 +4,12 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import io.gitlab.arturbosch.detekt.test.assertThat as assertThatFindings
 
 @KotlinCoreEnvironmentTest
 class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment) {
@@ -1272,9 +1273,9 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         listOfStartLocation: List<SourceLocation>,
         listOfEndLocation: List<SourceLocation>,
     ) {
-        check(listOfEndLocation.size == listOfStartLocation.size)
-        assertThat(findings).hasSize(listOfStartLocation.size)
-        assertThat(findings).hasStartSourceLocations(*listOfStartLocation.toTypedArray())
-        assertThat(findings).hasEndSourceLocations(*listOfEndLocation.toTypedArray())
+        assertThat(listOfEndLocation).hasSameSizeAs(listOfStartLocation)
+        assertThatFindings(findings).hasSameSizeAs(listOfStartLocation)
+        assertThatFindings(findings).hasStartSourceLocations(*listOfStartLocation.toTypedArray())
+        assertThatFindings(findings).hasEndSourceLocations(*listOfEndLocation.toTypedArray())
     }
 }

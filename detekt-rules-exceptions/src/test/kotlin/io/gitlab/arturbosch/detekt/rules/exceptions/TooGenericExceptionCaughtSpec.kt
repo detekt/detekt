@@ -36,7 +36,7 @@ class TooGenericExceptionCaughtSpec {
             }
         """.trimIndent()
 
-        assertThat(rule.compileAndLint(code)).hasSize(TooGenericExceptionCaught.caughtExceptionDefaults.size)
+        assertThat(rule.compileAndLint(code)).hasSameSizeAs(TooGenericExceptionCaught.caughtExceptionDefaults)
     }
 
     @Nested

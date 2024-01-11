@@ -142,7 +142,7 @@ class SuppressionSpec {
                 it.visitFile(ktFile)
                 it.findings
             }
-            assertThat(findings.size).isZero()
+            assertThat(findings).isEmpty()
         }
 
         @Test
