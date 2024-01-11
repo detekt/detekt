@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.arguments
@@ -38,12 +37,10 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UseCheckOrError(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Use check() or error() instead of throwing an IllegalStateException.",
-    )
+class UseCheckOrError(config: Config) : Rule(
+    config,
+    "Use check() or error() instead of throwing an IllegalStateException."
+) {
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
         if (expression.isOnlyExpressionInLambda()) return

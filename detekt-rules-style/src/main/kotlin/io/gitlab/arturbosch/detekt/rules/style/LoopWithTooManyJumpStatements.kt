@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -37,13 +36,11 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class LoopWithTooManyJumpStatements(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "The loop contains more than one break or continue statement. " +
-            "The code should be refactored to increase readability.",
-    )
+class LoopWithTooManyJumpStatements(config: Config) : Rule(
+    config,
+    "The loop contains more than one break or continue statement. " +
+        "The code should be refactored to increase readability."
+) {
 
     @Configuration("maximum allowed jumps in a loop")
     private val maxJumpCount: Int by config(1)

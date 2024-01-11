@@ -300,8 +300,8 @@ public final class io/gitlab/arturbosch/detekt/api/ReportingExtension$DefaultImp
 public abstract interface annotation class io/gitlab/arturbosch/detekt/api/RequiresTypeResolution : java/lang/annotation/Annotation {
 }
 
-public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/DetektVisitor {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;)V
+public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/DetektVisitor {
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;Ljava/lang/String;)V
 	public final fun getActive ()Z
 	public final fun getAliases ()Ljava/util/Set;
 	public final fun getAutoCorrect ()Z
@@ -310,8 +310,8 @@ public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosc
 	public final fun getConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public fun getDefaultRuleIdAliases ()Ljava/util/Set;
 	public fun getFilters ()Lio/gitlab/arturbosch/detekt/api/internal/PathFilters;
-	public abstract fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
-	public final fun getRuleId ()Ljava/lang/String;
+	public final fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
+	public fun getRuleId ()Ljava/lang/String;
 	protected fun postVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	protected fun preVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	public final fun report (Lio/gitlab/arturbosch/detekt/api/Finding;)V

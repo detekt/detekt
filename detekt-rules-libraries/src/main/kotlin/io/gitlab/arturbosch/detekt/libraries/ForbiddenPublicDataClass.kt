@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
@@ -29,12 +28,10 @@ import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierTypeOrDefault
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class ForbiddenPublicDataClass(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "The data classes are bad for the binary compatibility in public APIs. Avoid to use it.",
-    )
+class ForbiddenPublicDataClass(config: Config) : Rule(
+    config,
+    "The data classes are bad for the binary compatibility in public APIs. Avoid to use it."
+) {
 
     @Configuration("ignores classes in the specified packages.")
     private val ignorePackages: List<Regex> by config(listOf("*.internal", "*.internal.*")) { packages ->

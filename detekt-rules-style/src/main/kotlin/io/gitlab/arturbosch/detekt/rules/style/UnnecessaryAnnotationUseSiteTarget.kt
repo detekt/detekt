@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.TextLocation
@@ -27,12 +26,10 @@ import org.jetbrains.kotlin.psi.KtProperty
  * class Module(@Inject private val foo: String)
  * </compliant>
  */
-class UnnecessaryAnnotationUseSiteTarget(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Unnecessary Annotation use-site Target. It can be removed.",
-    )
+class UnnecessaryAnnotationUseSiteTarget(config: Config) : Rule(
+    config,
+    "Unnecessary Annotation use-site Target. It can be removed."
+) {
 
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
         constructor.valueParameters.forEach { parameter ->

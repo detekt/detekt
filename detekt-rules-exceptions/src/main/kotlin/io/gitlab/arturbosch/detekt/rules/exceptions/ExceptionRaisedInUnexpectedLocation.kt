@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtExpression
@@ -29,12 +28,10 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class ExceptionRaisedInUnexpectedLocation(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "This method is not expected to throw exceptions. This can cause weird behavior.",
-    )
+class ExceptionRaisedInUnexpectedLocation(config: Config) : Rule(
+    config,
+    "This method is not expected to throw exceptions. This can cause weird behavior."
+) {
 
     @Configuration("methods which should not throw exceptions")
     private val methodNames: List<String> by config(

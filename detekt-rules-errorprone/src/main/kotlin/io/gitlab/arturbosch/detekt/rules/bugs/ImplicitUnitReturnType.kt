@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -35,15 +34,13 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *
  */
 @RequiresTypeResolution
-class ImplicitUnitReturnType(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Functions using expression statements have an implicit return type. " +
-            "Changing the type of the expression accidentally, changes the function return type. " +
-            "This may lead to backward incompatibility. " +
-            "Use a block statement to make clear this function will never return a value.",
-    )
+class ImplicitUnitReturnType(config: Config) : Rule(
+    config,
+    "Functions using expression statements have an implicit return type. " +
+        "Changing the type of the expression accidentally, changes the function return type. " +
+        "This may lead to backward incompatibility. " +
+        "Use a block statement to make clear this function will never return a value."
+) {
 
     @Configuration("if functions with explicit `Unit` return type should be allowed")
     private val allowExplicitReturnType: Boolean by config(true)

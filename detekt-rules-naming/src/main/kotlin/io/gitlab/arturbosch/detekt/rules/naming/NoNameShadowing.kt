@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.hasImplicitParameterReference
@@ -48,11 +47,10 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class NoNameShadowing(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Disallow shadowing variable declarations.",
-    )
+class NoNameShadowing(config: Config) : Rule(
+    config,
+    "Disallow shadowing variable declarations."
+) {
 
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)

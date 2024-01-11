@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -37,12 +36,10 @@ import org.jetbrains.kotlin.types.KotlinType
  * </compliant>
  */
 @RequiresTypeResolution
-class ForbiddenAnnotation(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Avoid using this annotation.",
-    )
+class ForbiddenAnnotation(config: Config) : Rule(
+    config,
+    "Avoid using this annotation."
+) {
 
     @Configuration(
         "List of fully qualified annotation classes which are forbidden."

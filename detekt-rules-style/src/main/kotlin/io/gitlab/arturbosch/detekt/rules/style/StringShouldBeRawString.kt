@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -53,11 +52,10 @@ import org.jetbrains.kotlin.psi2ir.deparenthesize
  * val patRegex = """/^(\/[^\/]+){0,2}\/?$/gm"""
  * </compliant>
  */
-class StringShouldBeRawString(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "The string can be converted to raw string.",
-    )
+class StringShouldBeRawString(config: Config) : Rule(
+    config,
+    "The string can be converted to raw string."
+) {
 
     @Configuration("maximum escape characters allowed")
     private val maxEscapedCharacterCount by config(2)

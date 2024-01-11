@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -38,12 +37,10 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
  * }
  * </compliant>
  */
-class ExpressionBodySyntax(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Functions with exact one statement, the return statement, can be rewritten with ExpressionBodySyntax.",
-    )
+class ExpressionBodySyntax(config: Config) : Rule(
+    config,
+    "Functions with exact one statement, the return statement, can be rewritten with ExpressionBodySyntax."
+) {
 
     @Configuration("include return statements with line wraps in it")
     private val includeLineWrapping: Boolean by config(false)

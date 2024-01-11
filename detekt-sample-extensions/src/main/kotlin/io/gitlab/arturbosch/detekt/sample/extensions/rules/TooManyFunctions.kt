@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.sample.extensions.rules
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -11,12 +10,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * This is a sample rule reporting too many functions inside a file.
  */
-class TooManyFunctions(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "This rule reports a file with an excessive function count.",
-    )
+class TooManyFunctions(config: Config) : Rule(config, "This rule reports a file with an excessive function count.") {
 
     private var amount: Int = 0
 

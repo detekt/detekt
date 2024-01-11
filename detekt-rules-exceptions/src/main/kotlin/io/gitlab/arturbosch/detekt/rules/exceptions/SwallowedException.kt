@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
@@ -67,12 +66,10 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class SwallowedException(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "The caught exception is swallowed. The original exception could be lost.",
-    )
+class SwallowedException(config: Config) : Rule(
+    config,
+    "The caught exception is swallowed. The original exception could be lost."
+) {
 
     @Configuration("exception types which should be ignored (both in the catch clause and body)")
     private val ignoredExceptionTypes: List<String> by config(EXCEPTIONS_IGNORED_BY_DEFAULT) { exceptions ->

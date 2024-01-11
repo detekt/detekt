@@ -16,20 +16,21 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * function. If calculations must be done before or after the visiting process, here are
  * two predefined (preVisit/postVisit) functions which can be overridden to setup/teardown additional data.
  */
-abstract class Rule(
+open class Rule(
     val config: Config,
+    description: String,
 ) : DetektVisitor() {
 
     /**
      * A rule is motivated to point out a specific issue in the code base.
      */
-    abstract val issue: Issue
+    val issue: Issue by lazy(LazyThreadSafetyMode.NONE) { Issue(ruleId, description) }
 
     /**
      * An id this rule is identified with.
      * Conventionally the rule id is derived from the issue id as these two classes have a coexistence.
      */
-    val ruleId: RuleId get() = issue.id
+    open val ruleId: RuleId = javaClass.simpleName
 
     /**
      * List of rule ids which can optionally be used in suppress annotations to refer to this rule.
