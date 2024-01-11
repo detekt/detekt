@@ -1274,7 +1274,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         listOfEndLocation: List<SourceLocation>,
     ) {
         assertThat(listOfEndLocation).hasSameSizeAs(listOfStartLocation)
-        assertThatFindings(findings).hasSize(listOfStartLocation.size)
+        assertThatFindings(findings).hasSameSizeAs(listOfStartLocation)
         assertThatFindings(findings).hasStartSourceLocations(*listOfStartLocation.toTypedArray())
         assertThatFindings(findings).hasEndSourceLocations(*listOfEndLocation.toTypedArray())
     }
