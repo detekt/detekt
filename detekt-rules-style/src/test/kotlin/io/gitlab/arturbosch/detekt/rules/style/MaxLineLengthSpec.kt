@@ -200,17 +200,14 @@ class MaxLineLengthSpec {
         val code = """
             package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
             
-            import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
-            
-            class Test {
-            }
+            import org.assertj.core.api.Assertions.assertThat
         """.trimIndent()
 
         @Test
         fun `should not report the package statement and import statements by default`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    MAX_LINE_LENGTH to "60",
+                    MAX_LINE_LENGTH to "40",
                 )
             )
 
@@ -222,7 +219,7 @@ class MaxLineLengthSpec {
         fun `should report the package statement and import statements if they're enabled`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    MAX_LINE_LENGTH to "60",
+                    MAX_LINE_LENGTH to "40",
                     EXCLUDE_PACKAGE_STATEMENTS to "false",
                     EXCLUDE_IMPORT_STATEMENTS to "false",
                 )
@@ -236,7 +233,7 @@ class MaxLineLengthSpec {
         fun `should not report anything if both package and import statements are disabled`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    MAX_LINE_LENGTH to "60",
+                    MAX_LINE_LENGTH to "40",
                     EXCLUDE_PACKAGE_STATEMENTS to "true",
                     EXCLUDE_IMPORT_STATEMENTS to "true",
                 )
@@ -326,7 +323,7 @@ class MaxLineLengthSpec {
         val code = """
             package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
             
-            import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
+            import org.assertj.core.api.Assertions.assertThat
             
             class Test {
                 fun anIncrediblyLongAndComplexMethodNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot() {}
@@ -337,7 +334,7 @@ class MaxLineLengthSpec {
         fun `should only the function line by default`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    MAX_LINE_LENGTH to "60",
+                    MAX_LINE_LENGTH to "40",
                 )
             )
 
@@ -349,7 +346,7 @@ class MaxLineLengthSpec {
         fun `should report the package statement, import statements and line if they're not excluded`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    MAX_LINE_LENGTH to "60",
+                    MAX_LINE_LENGTH to "40",
                     EXCLUDE_PACKAGE_STATEMENTS to "false",
                     EXCLUDE_IMPORT_STATEMENTS to "false",
                 )
@@ -363,29 +360,15 @@ class MaxLineLengthSpec {
         fun `should report only method if both package and import statements are disabled`() {
             val rule = MaxLineLength(
                 TestConfig(
-                    MAX_LINE_LENGTH to "60",
+                    MAX_LINE_LENGTH to "40",
                     EXCLUDE_PACKAGE_STATEMENTS to "true",
                     EXCLUDE_IMPORT_STATEMENTS to "true",
                 )
             )
 
             val findings = rule.compileAndLint(code)
-            assertThat(findings).hasSize(1)
-        }
-
-        @Test
-        fun `should report correct line and column for function with excessive length`() {
-            val rule = MaxLineLength(
-                TestConfig(
-                    MAX_LINE_LENGTH to "60",
-                    EXCLUDE_PACKAGE_STATEMENTS to "true",
-                    EXCLUDE_IMPORT_STATEMENTS to "true",
-                )
-            )
-
-            val findings = rule.compileAndLint(code)
-            assertThat(findings).hasSize(1)
             assertThat(findings)
+                .hasSize(1)
                 .hasStartSourceLocations(SourceLocation(6, 1))
                 .hasEndSourceLocation(6, 109)
         }
