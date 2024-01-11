@@ -1,13 +1,9 @@
 package io.gitlab.arturbosch.detekt.core.config
 
-import io.github.detekt.tooling.api.spec.ConfigSpec
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Config
-import java.net.URI
 import java.net.URL
-import java.nio.file.FileSystemNotFoundException
-import java.nio.file.FileSystems
 import java.nio.file.Path
 
 internal fun ProcessingSpec.loadConfiguration(): Config = with(configSpec) {
@@ -35,21 +31,3 @@ private fun parsePathConfig(paths: Collection<Path>): Config =
             .map { YamlConfig.load(it) }
             .reduce { composite, config -> CompositeConfig(config, composite) }
     }
-
-internal fun ConfigSpec.extractUris(): Collection<URI> {
-    fun initFileSystem(uri: URI) {
-        runCatching {
-            @Suppress("SwallowedException") // Create file system inferred from URI if it does not exist.
-            try {
-                FileSystems.getFileSystem(uri)
-            } catch (e: FileSystemNotFoundException) {
-                FileSystems.newFileSystem(uri, mapOf("create" to "true"))
-            }
-        }
-    }
-
-    val pathUris = configPaths.map(Path::toUri)
-    val resourceUris = resources.map(URL::toURI)
-    resourceUris.forEach(::initFileSystem)
-    return resourceUris + pathUris
-}
