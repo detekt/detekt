@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.psi.absolutePath
-import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Config
@@ -20,14 +19,8 @@ import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.api.ruleId
-import io.gitlab.arturbosch.detekt.core.config.AllRulesConfig
-import io.gitlab.arturbosch.detekt.core.config.CompositeConfig
-import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
-import io.gitlab.arturbosch.detekt.core.config.validation.DeprecatedRule
-import io.gitlab.arturbosch.detekt.core.config.validation.loadDeprecations
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
 import io.gitlab.arturbosch.detekt.core.suppressors.buildSuppressors
-import io.gitlab.arturbosch.detekt.core.tooling.getDefaultConfiguration
 import io.gitlab.arturbosch.detekt.core.util.isActiveOrDefault
 import io.gitlab.arturbosch.detekt.core.util.shouldAnalyzeFile
 import org.jetbrains.kotlin.config.languageVersionSettings
@@ -43,9 +36,6 @@ internal class Analyzer(
     private val providers: List<RuleSetProvider>,
     private val processors: List<FileProcessListener>
 ) {
-
-    private val config: Config = settings.spec.workaroundConfiguration(settings.baseConfig)
-
     fun run(
         ktFiles: Collection<KtFile>,
         bindingContext: BindingContext = BindingContext.EMPTY
@@ -109,7 +99,7 @@ internal class Analyzer(
         compilerResources: CompilerResources
     ): Map<RuleSet.Id, List<Finding2>> {
         val activeRuleSetsToRuleSetConfigs = providers.asSequence()
-            .map { it to config.subConfig(it.ruleSetId.value) }
+            .map { it to settings.config.subConfig(it.ruleSetId.value) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
             .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.shouldAnalyzeFile(file) }
@@ -158,7 +148,7 @@ internal class Analyzer(
 
     private fun warnAboutEnabledRequiresTypeResolutionRules() {
         providers.asSequence()
-            .map { it to config.subConfig(it.ruleSetId.value) }
+            .map { it to settings.config.subConfig(it.ruleSetId.value) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
             .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
             .flatMap { (ruleSet, ruleSetConfig) ->
@@ -199,25 +189,6 @@ private fun throwIllegalStateException(file: KtFile, error: Throwable): Nothing 
         If the exception message does not help, please feel free to create an issue on our GitHub page.
     """.trimIndent()
     throw IllegalStateException(message, error)
-}
-
-internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config {
-    var declaredConfig: Config = config
-
-    if (rulesSpec.activateAllRules) {
-        val deprecatedRules = loadDeprecations().filterIsInstance<DeprecatedRule>().toSet()
-        declaredConfig = AllRulesConfig(declaredConfig, deprecatedRules)
-    }
-
-    if (!rulesSpec.autoCorrect) {
-        declaredConfig = DisabledAutoCorrectConfig(declaredConfig)
-    }
-
-    if (configSpec.useDefaultConfig) {
-        declaredConfig = CompositeConfig(declaredConfig, getDefaultConfiguration())
-    }
-
-    return declaredConfig
 }
 
 private fun Finding.toFinding2(rule: Finding2.RuleInfo, severity: Severity): Finding2 {
