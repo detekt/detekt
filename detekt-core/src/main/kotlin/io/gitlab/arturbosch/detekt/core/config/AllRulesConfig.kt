@@ -20,7 +20,8 @@ internal data class AllRulesConfig(
         AllRulesConfig(originalConfig.subConfig(key), defaultConfig.subConfig(key), deprecatedRules, this)
 
     override fun subConfigs(): Map<String, Config> {
-        return defaultConfig.subConfigs().plus(originalConfig.subConfigs())
+        val keys = originalConfig.subConfigs().keys + defaultConfig.subConfigs().keys
+        return keys.associateWith { subConfig(it) }
     }
 
     override fun <T : Any> valueOrDefault(key: String, default: T): T {

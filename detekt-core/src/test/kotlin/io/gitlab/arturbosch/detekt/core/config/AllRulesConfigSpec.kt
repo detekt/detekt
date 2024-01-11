@@ -110,6 +110,17 @@ class AllRulesConfigSpec {
             val actual = subject.subConfig("style").parent
             assertThat(actual).isEqualTo(subject)
         }
+
+        @Test
+        fun `is the parent for all subConfig`() {
+            val subject = AllRulesConfig(
+                originalConfig = rulesetConfig,
+                defaultConfig = emptyYamlConfig,
+            )
+
+            val actual = subject.subConfigs()["style"]!!.parent
+            assertThat(actual).isEqualTo(subject)
+        }
     }
 
     @Nested
