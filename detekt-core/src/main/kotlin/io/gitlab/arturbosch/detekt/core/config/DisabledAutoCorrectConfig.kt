@@ -16,9 +16,8 @@ class DisabledAutoCorrectConfig(
 
     override fun subConfig(key: String): Config = DisabledAutoCorrectConfig(wrapped.subConfig(key), this)
 
-    override fun subConfigs(): Map<String, Config> {
-        val subConfigs = wrapped.subConfigs()
-        return subConfigs.mapValues { DisabledAutoCorrectConfig(it.value, this) }
+    override fun subConfigKeys(): Set<String> {
+        return wrapped.subConfigKeys()
     }
 
     override fun <T : Any> valueOrDefault(key: String, default: T): T = when (key) {

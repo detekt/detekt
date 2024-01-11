@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test
 
 class DisabledAutoCorrectConfigSpec {
     private val rulesetId = "style"
-
     private val configSingleRuleInStyle = yamlConfigFromContent(
         """
             style:
@@ -36,9 +35,8 @@ class DisabledAutoCorrectConfigSpec {
     @Test
     fun `subConfigs returns the expected number of sub configs`() {
         val subject = DisabledAutoCorrectConfig(configSingleRuleInStyle)
-        val actual = subject.subConfigs()
-        assertThat(actual.size).isEqualTo(1)
-        assertThat(actual.keys).containsExactly("style")
+        val actual = subject.subConfigKeys()
+        assertThat(actual).containsExactly("style")
     }
 
     @Test
@@ -56,7 +54,7 @@ class DisabledAutoCorrectConfigSpec {
               autoCorrect: false
               ClassDoc:
                 test: true
-        """
+            """.trimMargin()
         )
 
         val commentsConfig = DisabledAutoCorrectConfig(config.subConfig("comments"))
@@ -75,7 +73,7 @@ class DisabledAutoCorrectConfigSpec {
                 test: true
               FunctionDoc:
                 test: true
-        """.trimIndent()
+            """.trimMargin()
         )
 
         val commentsConfig = DisabledAutoCorrectConfig(config.subConfig("comments"))

@@ -17,27 +17,14 @@ class CompositeConfigSpec {
 
     @Test
     fun `should return a list of sub configs of each config`() {
-        val subConfigs = compositeConfig.subConfigs()
-        assertThat(subConfigs).hasSize(2)
-
-        assertThat(subConfigs.keys).containsExactly("style", "code-smell")
+        val subConfigs = compositeConfig.subConfigKeys()
+        assertThat(subConfigs).containsExactly("style", "code-smell")
     }
 
     @Test
     fun `should return a list of sub configs of each config with parent path`() {
-        val subConfigs = compositeConfig.subConfigs()
-        assertThat(subConfigs).hasSize(2)
-
-        assertThat(subConfigs.keys).containsExactly("style", "code-smell")
-        subConfigs["style"]?.let {
-            assertThat(it.parentPath).isEqualTo("style")
-            assertThat(it.subConfigs().keys).containsExactly(
-                "WildcardImport",
-                "NoElseInWhenExpression",
-                "MagicNumber",
-                "LargeClass",
-            )
-        }
+        val subConfigs = compositeConfig.subConfigKeys()
+        assertThat(subConfigs).containsExactly("style", "code-smell")
     }
 
     @Test

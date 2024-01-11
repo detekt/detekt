@@ -79,22 +79,8 @@ class YamlConfigSpec {
         @Test
         fun `subConfigs returns all sub configs`() {
             val subject = config.subConfig("style")
-            val actual = subject.subConfigs()
-            assertThat(actual).hasSize(3)
-
-            actual["WildcardImport"]?.let { subConfig ->
-                assertThat(subConfig.valueOrDefault("active", false)).isTrue()
-            }
-
-            actual["NoElseInWhenExpression"]?.let { subConfig ->
-                assertThat(subConfig.valueOrDefault("active", false)).isTrue()
-            }
-
-            actual["MagicNumber"]?.let { subConfig ->
-                assertThat(subConfig.valueOrDefault("active", false)).isTrue()
-                assertThat(subConfig.valueOrDefault("ignoreNumbers", emptyList<String>()))
-                    .containsExactly("-1", "0", "1", "2")
-            }
+            val actual = subject.subConfigKeys()
+            assertThat(actual).containsExactly("WildcardImport", "NoElseInWhenExpression", "MagicNumber")
         }
     }
 

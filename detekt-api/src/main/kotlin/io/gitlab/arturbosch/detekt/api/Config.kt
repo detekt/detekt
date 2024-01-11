@@ -21,9 +21,9 @@ interface Config {
     fun subConfig(key: String): Config
 
     /**
-     * Returns a map of all sub configurations.
+     * Returns a set of all sub configuration keys.
      */
-    fun subConfigs(): Map<String, Config>
+    fun subConfigKeys(): Set<String>
 
     /**
      * Retrieves a sub configuration or value based on given key. If configuration property cannot be found
@@ -61,7 +61,7 @@ interface Config {
 
             override fun subConfig(key: String): Config = this
 
-            override fun subConfigs(): Map<String, Config> = emptyMap()
+            override fun subConfigKeys(): Set<String> = emptySet()
 
             @Suppress("UNCHECKED_CAST")
             override fun <T : Any> valueOrNull(key: String): T? = when (key) {

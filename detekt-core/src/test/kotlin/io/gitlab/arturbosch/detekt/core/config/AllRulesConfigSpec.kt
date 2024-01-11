@@ -14,7 +14,7 @@ class AllRulesConfigSpec {
     inner class ValueVerification {
 
         @Test
-        fun verifyTheValue() {
+        fun verifyValue() {
             val subject = AllRulesConfig(
                 originalConfig = yamlConfigFromContent(
                     """
@@ -33,7 +33,7 @@ class AllRulesConfigSpec {
         }
 
         @Test
-        fun verifyTheValueOverride() {
+        fun verifyValueOverride() {
             val subject = AllRulesConfig(
                 originalConfig = yamlConfigFromContent(
                     """
@@ -118,8 +118,7 @@ class AllRulesConfigSpec {
                 defaultConfig = emptyYamlConfig,
             )
 
-            val actual = subject.subConfigs()["style"]!!.parent
-            assertThat(actual).isEqualTo(subject)
+            assertThat(subject.subConfigKeys()).contains("style")
         }
     }
 
