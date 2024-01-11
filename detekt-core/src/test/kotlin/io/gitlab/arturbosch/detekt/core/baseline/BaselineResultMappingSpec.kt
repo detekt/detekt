@@ -119,7 +119,6 @@ private fun resultMapping(baselineFile: Path?, createBaseline: Boolean?) =
         init(object : SetupContext {
             override val configUris: Collection<URI> = emptyList()
             override val config: Config = Config.empty
-            override val baseConfig: Config = Config.empty
             override val outputChannel: PrintStream = NullPrintStream()
             override val errorChannel: PrintStream = NullPrintStream()
             override val properties: MutableMap<String, Any?> = mutableMapOf(

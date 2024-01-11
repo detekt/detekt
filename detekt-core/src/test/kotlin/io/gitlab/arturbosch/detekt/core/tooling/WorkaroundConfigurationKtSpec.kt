@@ -1,8 +1,7 @@
-package io.gitlab.arturbosch.detekt.core
+package io.gitlab.arturbosch.detekt.core.tooling
 
 import io.github.detekt.test.utils.resourceUrl
 import io.github.detekt.tooling.api.spec.ProcessingSpec
-import io.gitlab.arturbosch.detekt.core.tooling.withSettings
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -18,7 +17,7 @@ class WorkaroundConfigurationKtSpec {
                 useDefaultConfig = true
             }
             rules { activateAllRules = true }
-        }.withSettings { spec.workaroundConfiguration(baseConfig) }
+        }.withSettings { spec.workaroundConfiguration(config) }
 
         @Test
         fun `should override active to true by default`() {
@@ -43,7 +42,7 @@ class WorkaroundConfigurationKtSpec {
         private val config = ProcessingSpec {
             config { resources = listOf(resourceUrl("/configs/activate-all-rules-will-override-here.yml")) }
             rules { activateAllRules = true }
-        }.withSettings { spec.workaroundConfiguration(baseConfig) }
+        }.withSettings { spec.workaroundConfiguration(config) }
 
         @Test
         fun `should override config when specified`() {
@@ -71,7 +70,7 @@ class WorkaroundConfigurationKtSpec {
             private val config = ProcessingSpec {
                 config { resources = listOf(resourceUrl("/configs/config-with-auto-correct.yml")) }
                 rules { autoCorrect = true }
-            }.withSettings { spec.workaroundConfiguration(baseConfig) }
+            }.withSettings { spec.workaroundConfiguration(config) }
 
             private val style = config.subConfig("style")
             private val comments = config.subConfig("comments")
@@ -95,7 +94,7 @@ class WorkaroundConfigurationKtSpec {
         inner class `when not specified all autoCorrect values are overridden to false` {
             private val config = ProcessingSpec {
                 config { resources = listOf(resourceUrl("/configs/config-with-auto-correct.yml")) }
-            }.withSettings { spec.workaroundConfiguration(baseConfig) }
+            }.withSettings { spec.workaroundConfiguration(config) }
             private val style = config.subConfig("style")
             private val comments = config.subConfig("comments")
 
@@ -119,7 +118,7 @@ class WorkaroundConfigurationKtSpec {
             private val config = ProcessingSpec {
                 config { resources = listOf(resourceUrl("/configs/config-with-auto-correct.yml")) }
                 rules { autoCorrect = false }
-            }.withSettings { spec.workaroundConfiguration(baseConfig) }
+            }.withSettings { spec.workaroundConfiguration(config) }
             private val style = config.subConfig("style")
             private val comments = config.subConfig("comments")
 
@@ -149,7 +148,7 @@ class WorkaroundConfigurationKtSpec {
                     autoCorrect = false
                     activateAllRules = true
                 }
-            }.withSettings { spec.workaroundConfiguration(baseConfig) }
+            }.withSettings { spec.workaroundConfiguration(config) }
 
             private val style = config.subConfig("style")
             private val comments = config.subConfig("comments")

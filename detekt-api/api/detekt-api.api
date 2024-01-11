@@ -363,7 +363,6 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/RuleSetProvider 
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/SetupContext : io/gitlab/arturbosch/detekt/api/PropertiesAware {
-	public abstract fun getBaseConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public abstract fun getConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public abstract fun getConfigUris ()Ljava/util/Collection;
 	public abstract fun getErrorChannel ()Ljava/lang/Appendable;
