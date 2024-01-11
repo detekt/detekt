@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.identifierName
@@ -15,12 +14,10 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * Reports when very short function names are used.
  */
-class FunctionNameMinLength(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Function names should not be shorter than the minimum defined in the configuration.",
-    )
+class FunctionNameMinLength(config: Config) : Rule(
+    config,
+    "Function names should not be shorter than the minimum defined in the configuration."
+) {
 
     override val defaultRuleIdAliases: Set<String>
         get() = setOf("FunctionMinNameLength")

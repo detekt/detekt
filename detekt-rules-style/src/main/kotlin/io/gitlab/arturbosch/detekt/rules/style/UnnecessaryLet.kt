@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
@@ -44,12 +43,10 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *
  */
 @RequiresTypeResolution
-class UnnecessaryLet(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "The `let` usage is unnecessary.",
-    )
+class UnnecessaryLet(config: Config) : Rule(
+    config,
+    "The `let` usage is unnecessary."
+) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

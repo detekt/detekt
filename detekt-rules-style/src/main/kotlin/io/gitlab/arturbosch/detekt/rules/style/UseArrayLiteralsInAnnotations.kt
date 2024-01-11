@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -25,12 +24,10 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * </compliant>
  */
 @ActiveByDefault(since = "1.21.0")
-class UseArrayLiteralsInAnnotations(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Array literals [...] should be preferred as they are more readable than `arrayOf(...)` expressions.",
-    )
+class UseArrayLiteralsInAnnotations(config: Config) : Rule(
+    config,
+    "Array literals [...] should be preferred as they are more readable than `arrayOf(...)` expressions.",
+) {
 
     override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry) {
         for (argument in annotationEntry.valueArguments) {

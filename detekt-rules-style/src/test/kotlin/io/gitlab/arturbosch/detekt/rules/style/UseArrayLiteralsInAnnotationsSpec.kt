@@ -31,8 +31,8 @@ class UseArrayLiteralsInAnnotationsSpec {
             @Test(intArrayOf(1, 2))
             fun test() {}
         """.trimIndent()
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(1)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -43,8 +43,8 @@ class UseArrayLiteralsInAnnotationsSpec {
             @Test(longArrayOf(1, 2))
             fun test() {}
         """.trimIndent()
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(1)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -52,8 +52,8 @@ class UseArrayLiteralsInAnnotationsSpec {
         val code = """
             annotation class Test(val s: Array<String> = arrayOf("a", "b"))
         """.trimIndent()
-        subject.compileAndLint(code)
-        assertThat(subject.findings)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings)
             .hasSize(1)
             .hasTextLocations(45 to 62)
     }

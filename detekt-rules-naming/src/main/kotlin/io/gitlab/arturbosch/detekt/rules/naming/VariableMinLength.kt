@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.identifierName
@@ -15,12 +14,10 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 /**
  * Reports when very short variable names are used.
  */
-class VariableMinLength(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Variable names should not be shorter than the minimum defined in the configuration.",
-    )
+class VariableMinLength(config: Config) : Rule(
+    config,
+    "Variable names should not be shorter than the minimum defined in the configuration."
+) {
 
     @Configuration("minimum name length")
     private val minimumVariableNameLength: Int by config(DEFAULT_MINIMUM_VARIABLE_NAME_LENGTH)

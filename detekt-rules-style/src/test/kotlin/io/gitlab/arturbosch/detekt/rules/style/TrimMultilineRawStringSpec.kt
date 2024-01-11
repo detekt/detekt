@@ -16,8 +16,8 @@ class TrimMultilineRawStringSpec {
             Hello world!
             $TQ
         """.trimIndent()
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(1)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -28,8 +28,8 @@ class TrimMultilineRawStringSpec {
             Hello world!
             $TQ.trimIndent()
         """.trimIndent()
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -52,8 +52,8 @@ class TrimMultilineRawStringSpec {
             Hello world!
             $TQ.length
         """.trimIndent()
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(1)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -63,8 +63,8 @@ class TrimMultilineRawStringSpec {
             Hello world!
             $TQ.trimIndent()
         """.trimIndent()
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -74,8 +74,8 @@ class TrimMultilineRawStringSpec {
             |Hello world!
             $TQ.trimMargin()
         """.trimIndent()
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -85,8 +85,8 @@ class TrimMultilineRawStringSpec {
             >Hello world!
             $TQ.trimMargin(">")
         """.trimIndent()
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -94,8 +94,8 @@ class TrimMultilineRawStringSpec {
         val code = """
             val a = ${TQ}Hello world!$TQ
         """.trimIndent()
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -103,8 +103,8 @@ class TrimMultilineRawStringSpec {
         val code = """
             val a = "Hello world!"
         """.trimIndent()
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -114,8 +114,8 @@ class TrimMultilineRawStringSpec {
                 "cruel"
             } world!"
         """.trimIndent()
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -130,8 +130,8 @@ class TrimMultilineRawStringSpec {
                     $TQ
             }
         """.trimIndent()
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -147,8 +147,8 @@ class TrimMultilineRawStringSpec {
             )
             class Foo
         """.trimIndent()
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -163,8 +163,8 @@ class TrimMultilineRawStringSpec {
                     $TQ
             )
         """.trimIndent()
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -180,8 +180,8 @@ class TrimMultilineRawStringSpec {
             )
             class Foo
         """.trimIndent()
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(1)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -196,8 +196,8 @@ class TrimMultilineRawStringSpec {
                     $TQ
             )
         """.trimIndent()
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(1)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
     }
 }
 

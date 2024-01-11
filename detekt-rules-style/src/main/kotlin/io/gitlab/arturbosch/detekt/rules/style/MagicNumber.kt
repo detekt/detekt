@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isConstant
@@ -68,15 +67,13 @@ import java.util.Locale
  */
 @Suppress("TooManyFunctions")
 @ActiveByDefault(since = "1.0.0")
-class MagicNumber(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Report magic numbers. Magic number is a numeric literal that is not defined as a constant " +
-            "and hence it's unclear what the purpose of this number is. " +
-            "It's better to declare such numbers as constants and give them a proper name. " +
-            "By default, -1, 0, 1, and 2 are not considered to be magic numbers.",
-    )
+class MagicNumber(config: Config) : Rule(
+    config,
+    "Report magic numbers. Magic number is a numeric literal that is not defined as a constant " +
+        "and hence it's unclear what the purpose of this number is. " +
+        "It's better to declare such numbers as constants and give them a proper name. " +
+        "By default, -1, 0, 1, and 2 are not considered to be magic numbers."
+) {
 
     @Configuration("numbers which do not count as magic numbers")
     private val ignoreNumbers: List<Double> by config(listOf("-1", "0", "1", "2")) { numbers ->

@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
@@ -43,11 +42,10 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.21.0")
-class ExplicitItLambdaParameter(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Declaring lambda parameters as `it` is redundant.",
-    )
+class ExplicitItLambdaParameter(config: Config) : Rule(
+    config,
+    "Declaring lambda parameters as `it` is redundant."
+) {
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)

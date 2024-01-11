@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
@@ -37,11 +36,10 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UnusedUnaryOperator(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "This unary operator is unused.",
-    )
+class UnusedUnaryOperator(config: Config) : Rule(
+    config,
+    "This unary operator is unused."
+) {
 
     @Suppress("ReturnCount")
     override fun visitPrefixExpression(expression: KtPrefixExpression) {

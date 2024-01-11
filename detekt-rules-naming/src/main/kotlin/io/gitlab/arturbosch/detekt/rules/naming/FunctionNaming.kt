@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isOverride
@@ -19,14 +18,12 @@ import org.jetbrains.kotlin.psi.KtUserType
  * These factory functions can have the same name as the class being created.
  */
 @ActiveByDefault(since = "1.0.0")
-class FunctionNaming(config: Config) : Rule(config) {
+class FunctionNaming(config: Config) : Rule(
+    config,
+    "Function names should follow the naming convention set in the configuration."
+) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("FunctionName")
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Function names should follow the naming convention set in the configuration.",
-    )
 
     @Configuration("naming pattern")
     private val functionPattern: Regex by config("[a-z][a-zA-Z0-9]*", String::toRegex)

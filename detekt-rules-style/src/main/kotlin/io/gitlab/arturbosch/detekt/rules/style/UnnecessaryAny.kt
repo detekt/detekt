@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.firstParameter
@@ -44,11 +43,10 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
  * </compliant>
  */
 @RequiresTypeResolution
-class UnnecessaryAny(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "The `any {  }` usage is unnecessary.",
-    )
+class UnnecessaryAny(config: Config) : Rule(
+    config,
+    "The `any {  }` usage is unnecessary."
+) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

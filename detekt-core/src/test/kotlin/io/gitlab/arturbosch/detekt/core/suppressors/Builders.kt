@@ -31,7 +31,7 @@ private fun buildEmptyEntity(): Entity = Entity(
 )
 
 internal fun buildRule(
-    vararg pairs: Pair<String, Any>
-) = object : Rule(TestConfig(*pairs)) {
-    override val issue: Issue = Issue("id", "description")
-}
+    vararg pairs: Pair<String, Any>,
+): Rule = TestRule(*pairs)
+
+private class TestRule(vararg data: Pair<String, Any>) : Rule(TestConfig(*data), "description")

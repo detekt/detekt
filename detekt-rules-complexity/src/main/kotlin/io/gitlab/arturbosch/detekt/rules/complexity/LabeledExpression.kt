@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtClass
@@ -57,12 +56,10 @@ import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
  * }
  * </compliant>
  */
-class LabeledExpression(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Expression with labels increase complexity and affect maintainability.",
-    )
+class LabeledExpression(config: Config) : Rule(
+    config,
+    "Expression with labels increase complexity and affect maintainability."
+) {
 
     @Configuration("allows to provide a list of label names which should be ignored by this rule")
     private val ignoredLabels: List<String> by config(emptyList<String>()) { list ->

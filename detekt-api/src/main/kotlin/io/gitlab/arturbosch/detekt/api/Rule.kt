@@ -16,20 +16,21 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * function. If calculations must be done before or after the visiting process, here are
  * two predefined (preVisit/postVisit) functions which can be overridden to setup/teardown additional data.
  */
-abstract class Rule(
+open class Rule(
     val config: Config,
+    description: String,
 ) : DetektVisitor() {
 
     /**
      * A rule is motivated to point out a specific issue in the code base.
      */
-    abstract val issue: Issue
+    val issue: Issue by lazy(LazyThreadSafetyMode.NONE) { Issue(ruleId, description) }
 
     /**
      * An id this rule is identified with.
      * Conventionally the rule id is derived from the issue id as these two classes have a coexistence.
      */
-    val ruleId: RuleId get() = issue.id
+    open val ruleId: RuleId = javaClass.simpleName
 
     /**
      * List of rule ids which can optionally be used in suppress annotations to refer to this rule.
@@ -62,13 +63,7 @@ abstract class Rule(
         config.createPathFilters()
     }
 
-    /**
-     * Returns a copy of violations for this rule.
-     */
-    val findings: List<Finding>
-        get() = _findings.toList()
-
-    private val _findings: MutableList<Finding> = mutableListOf()
+    private val findings: MutableList<Finding> = mutableListOf()
 
     /**
      * Before starting visiting kotlin elements, a check is performed if this rule should be triggered.
@@ -82,8 +77,8 @@ abstract class Rule(
         root: KtFile,
         bindingContext: BindingContext = BindingContext.EMPTY,
         compilerResources: CompilerResources? = null
-    ) {
-        clearFindings()
+    ): List<Finding> {
+        findings.clear()
         this.bindingContext = bindingContext
         this.compilerResources = compilerResources
         if (visitCondition(root)) {
@@ -91,6 +86,7 @@ abstract class Rule(
             visit(root)
             postVisit(root)
         }
+        return findings
     }
 
     /**
@@ -155,12 +151,8 @@ abstract class Rule(
         finding.updateWithComputedSeverity()
         val ktElement = finding.entity.ktElement
         if (ktElement == null || !ktElement.isSuppressedBy(finding.issue.id, aliases, ruleSetId)) {
-            _findings.add(finding)
+            findings.add(finding)
         }
-    }
-
-    private fun clearFindings() {
-        _findings.clear()
     }
 }
 

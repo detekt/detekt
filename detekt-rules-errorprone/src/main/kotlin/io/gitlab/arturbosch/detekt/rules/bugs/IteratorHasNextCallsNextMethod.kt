@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -28,14 +27,12 @@ import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class IteratorHasNextCallsNextMethod(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "The `hasNext()` method of an Iterator implementation should not call the `next()` method. " +
-            "The state of the iterator should not be changed inside the `hasNext()` method. " +
-            "The `hasNext()` method is not supposed to have any side effects.",
-    )
+class IteratorHasNextCallsNextMethod(config: Config) : Rule(
+    config,
+    "The `hasNext()` method of an Iterator implementation should not call the `next()` method. " +
+        "The state of the iterator should not be changed inside the `hasNext()` method. " +
+        "The `hasNext()` method is not supposed to have any side effects."
+) {
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         if (classOrObject.getSuperNames().contains("Iterator")) {
