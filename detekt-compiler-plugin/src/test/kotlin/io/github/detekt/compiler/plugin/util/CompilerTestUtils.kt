@@ -14,7 +14,6 @@ object CompilerTestUtils {
             SourceFile.kotlin("KClass.kt", it, trimIndent = true)
         }
         return KotlinCompilation().apply {
-            verbose = false
             messageOutputStream = object : OutputStream() {
                 override fun write(b: Int) {
                     // no-op
