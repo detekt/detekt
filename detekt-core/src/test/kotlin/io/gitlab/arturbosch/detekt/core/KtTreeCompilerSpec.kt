@@ -15,9 +15,9 @@ class KtTreeCompilerSpec {
     @Test
     fun `should compile all files`() {
         val (ktFiles, _) = fixture { compile(path) }
-        assertThat(ktFiles.size)
+        assertThat(ktFiles)
             .describedAs("It should compile at least three files, but did ${ktFiles.size}")
-            .isGreaterThanOrEqualTo(3)
+            .hasSizeGreaterThanOrEqualTo(3)
     }
 
     @Test
@@ -45,9 +45,9 @@ class KtTreeCompilerSpec {
     @ValueSource(strings = ["**/ignored/**", "**/ignored", "**/cases/i*"])
     fun `skips entire subtrees`(filter: String) {
         val (ktFiles, output) = fixture(filter, loggingDebug = true) { compile(path) }
-        assertThat(ktFiles.size)
+        assertThat(ktFiles)
             .describedAs("It should compile at least three files, but did ${ktFiles.size}")
-            .isGreaterThanOrEqualTo(3)
+            .hasSizeGreaterThanOrEqualTo(3)
         assertThat(output)
             .describedAs("File should not be ignored as entire subtree should be skipped")
             .doesNotContainPattern("""Ignoring file.*Something\.kt""")
@@ -58,7 +58,7 @@ class KtTreeCompilerSpec {
     @Test
     fun `should also compile regular files`() {
         val (ktFiles, _) = fixture { compile(path.resolve("Default.kt")) }
-        assertThat(ktFiles.size).isEqualTo(1)
+        assertThat(ktFiles).hasSize(1)
     }
 
     @Test

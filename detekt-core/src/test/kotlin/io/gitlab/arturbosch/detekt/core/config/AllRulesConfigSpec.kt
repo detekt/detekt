@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.core.config
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.config.validation.DeprecatedRule
-import io.gitlab.arturbosch.detekt.test.yamlConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -12,9 +11,64 @@ class AllRulesConfigSpec {
     private val emptyYamlConfig = yamlConfigFromContent("")
 
     @Nested
+    inner class ValueVerification {
+
+        @Test
+        fun verifyTheValue() {
+            val subject = AllRulesConfig(
+                originalConfig = yamlConfigFromContent(
+                    """
+                    style:
+                      MaxLineLength:
+                        maxLineLength: 100
+                    """.trimIndent()
+                ),
+                defaultConfig = emptyYamlConfig,
+            )
+
+            val subConfig = subject.subConfig("style")
+                .subConfig("MaxLineLength")
+            assertThat(subConfig.valueOrDefault("maxLineLength", 0)).isEqualTo(100)
+            assertThat(subConfig.valueOrNull<Int>("maxLineLength")).isEqualTo(100)
+        }
+
+        @Test
+        fun verifyTheValueOverride() {
+            val subject = AllRulesConfig(
+                originalConfig = yamlConfigFromContent(
+                    """
+                    style:
+                      MaxLineLength:
+                        maxLineLength: 100
+                    """.trimIndent()
+                ),
+                defaultConfig = yamlConfigFromContent(
+                    """
+                    style:
+                      MaxLineLength:
+                        maxLineLength: 120
+                    """.trimIndent()
+                ),
+            )
+
+            val actual = subject.subConfig("style")
+                .subConfig("MaxLineLength")
+                .valueOrDefault("maxLineLength", 0)
+
+            assertThat(actual).isEqualTo(100)
+        }
+    }
+
+    @Nested
     inner class ParentPath {
         private val rulesetId = "style"
-        private val rulesetConfig = yamlConfig("/configs/single-rule-in-style-ruleset.yml").subConfig(rulesetId)
+        private val rulesetConfig = yamlConfigFromContent(
+            """
+                style:
+                  MaxLineLength:
+                    maxLineLength: 100
+            """.trimIndent()
+        ).subConfig(rulesetId)
 
         @Test
         fun `is derived from the original config`() {
@@ -39,7 +93,13 @@ class AllRulesConfigSpec {
 
     @Nested
     inner class Parent {
-        private val rulesetConfig = yamlConfig("/configs/single-rule-in-style-ruleset.yml")
+        private val rulesetConfig = yamlConfigFromContent(
+            """
+                style:
+                  MaxLineLength:
+                    maxLineLength: 100
+            """.trimIndent()
+        )
 
         @Test
         fun `is the parent`() {

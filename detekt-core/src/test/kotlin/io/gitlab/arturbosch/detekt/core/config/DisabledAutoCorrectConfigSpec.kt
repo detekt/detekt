@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.core.config
 
-import io.gitlab.arturbosch.detekt.test.yamlConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -8,8 +7,31 @@ import org.junit.jupiter.api.Test
 class DisabledAutoCorrectConfigSpec {
     private val rulesetId = "style"
 
-    private val configSingleRuleInStyle = yamlConfig("/configs/single-rule-in-style-ruleset.yml")
-    private val configWithAutoCorrect = yamlConfig("/configs/config-with-auto-correct.yml")
+    private val configSingleRuleInStyle = yamlConfigFromContent(
+        """
+            style:
+              MaxLineLength:
+                maxLineLength: 100
+        """.trimIndent()
+    )
+
+    private val configWithAutoCorrect = yamlConfigFromContent(
+        """
+            style:
+              autoCorrect: true
+              MagicNumber:
+                autoCorrect: true
+              MagicString:
+                autoCorrect: false
+            
+            comments:
+              autoCorrect: false
+              ClassDoc:
+                autoCorrect: true
+              FunctionDoc:
+                autoCorrect: false
+        """.trimIndent()
+    )
 
     @Test
     fun `subConfigs returns the expected number of sub configs`() {
@@ -18,7 +40,6 @@ class DisabledAutoCorrectConfigSpec {
         assertThat(actual.size).isEqualTo(1)
         assertThat(actual.keys).containsExactly("style")
     }
-
 
     @Test
     fun `parent path is derived from wrapped config`() {

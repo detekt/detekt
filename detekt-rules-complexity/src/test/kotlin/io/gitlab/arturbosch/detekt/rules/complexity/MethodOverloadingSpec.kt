@@ -49,7 +49,7 @@ class MethodOverloadingSpec {
                     }
                 """.trimIndent()
             )
-            assertThat(subject.findings.size).isZero()
+            assertThat(subject.findings).isEmpty()
         }
     }
 
@@ -65,7 +65,7 @@ class MethodOverloadingSpec {
                     fun Long.foo() {}
                 """.trimIndent()
             )
-            assertThat(subject.findings.size).isZero()
+            assertThat(subject.findings).isEmpty()
         }
 
         @Test
@@ -77,7 +77,7 @@ class MethodOverloadingSpec {
                     fun Int.foo(i: String) {}
                 """.trimIndent()
             )
-            assertThat(subject.findings.size).isEqualTo(1)
+            assertThat(subject.findings).hasSize(1)
         }
     }
 

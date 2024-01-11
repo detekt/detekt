@@ -21,9 +21,7 @@ internal fun toReportingDescriptors(): List<ReportingDescriptor> {
     }
     val descriptors = mutableListOf<ReportingDescriptor>()
     ruleSetIdAndRules.forEach { (ruleSetId, rule) ->
-        if (rule is Rule) {
-            descriptors.add(rule.toDescriptor(ruleSetId))
-        }
+        descriptors.add(rule.toDescriptor(ruleSetId))
     }
     return descriptors
 }
