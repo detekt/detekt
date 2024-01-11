@@ -5,6 +5,7 @@ import com.tschuchort.compiletesting.KotlinCompilation
 import com.tschuchort.compiletesting.SourceFile
 import io.github.detekt.compiler.plugin.DetektCompilerPluginRegistrar
 import org.intellij.lang.annotations.Language
+import java.io.OutputStream
 
 object CompilerTestUtils {
 
@@ -14,6 +15,11 @@ object CompilerTestUtils {
         }
         return KotlinCompilation().apply {
             verbose = false
+            messageOutputStream = object : OutputStream() {
+                override fun write(b: Int) {
+                    // no-op
+                }
+            }
             sources = sourceFiles
             compilerPluginRegistrars = listOf(DetektCompilerPluginRegistrar())
         }.compile()
