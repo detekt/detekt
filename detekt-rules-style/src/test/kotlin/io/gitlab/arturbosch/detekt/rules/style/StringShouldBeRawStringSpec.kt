@@ -21,8 +21,8 @@ class StringShouldBeRawStringSpec {
         """.trimIndent()
         val subject =
             StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to maxEscapedCharacterCount))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(1)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
     }
 
     @ParameterizedTest(name = "does not report for raw string {0} when max allowed escape is {1}")
@@ -37,8 +37,8 @@ class StringShouldBeRawStringSpec {
         """.trimIndent()
         val subject =
             StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to maxEscapedCharacterCount))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @ParameterizedTest(name = "does not report for string {0} as allowed char is {1}")
@@ -56,8 +56,8 @@ class StringShouldBeRawStringSpec {
         """.trimIndent()
         val subject =
             StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to maxEscapedCharacterCount))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @ParameterizedTest(name = "does report for string {0} as it exceeds max allowed char ({1}-1)")
@@ -75,8 +75,8 @@ class StringShouldBeRawStringSpec {
         """.trimIndent()
         val subject =
             StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to maxEscapedCharacterCount - 1))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(1)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
     }
 
     @ParameterizedTest(name = "does not report for string {0} as {2} characters are allowed")
@@ -100,8 +100,8 @@ class StringShouldBeRawStringSpec {
                 IGNORED_CHARACTERS to allowedCharacters,
             )
         )
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -114,8 +114,8 @@ class StringShouldBeRawStringSpec {
             }
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 0))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -126,8 +126,8 @@ class StringShouldBeRawStringSpec {
             }
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 1))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(2)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(2)
     }
 
     @Test
@@ -139,8 +139,8 @@ class StringShouldBeRawStringSpec {
             }
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 1))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(2)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(2)
     }
 
     @Test
@@ -150,8 +150,8 @@ class StringShouldBeRawStringSpec {
             val totalSize = !"\n\n"
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 1))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(1)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -161,8 +161,8 @@ class StringShouldBeRawStringSpec {
             val totalSize = "\n\n".not()
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 1))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(1)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -172,8 +172,8 @@ class StringShouldBeRawStringSpec {
             val totalSize = (!"\n\n").toString() + "\n"
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 2))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -183,8 +183,8 @@ class StringShouldBeRawStringSpec {
             val totalSize = (!"\n\n").toString() + "\n\n\n"
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 2))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(1)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -194,8 +194,8 @@ class StringShouldBeRawStringSpec {
             val totalSize = (!"\n\n").toString() + "\n" + "\n"
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 1))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(2)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(2)
     }
 
     @Test
@@ -205,8 +205,8 @@ class StringShouldBeRawStringSpec {
             val totalSize = ((!"\n\n").toString() + "\n") + "\n"
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 1))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(2)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(2)
     }
 
     @Test
@@ -216,8 +216,8 @@ class StringShouldBeRawStringSpec {
             val totalSize = (!"\n\n").toString() + ("\n" + "\n")
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 1))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(2)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(2)
     }
 
     @Test
@@ -227,8 +227,8 @@ class StringShouldBeRawStringSpec {
             val totalSize = (!"\n\n").toString() + ("\n" + "\n") + "\n"
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 1))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(2)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(2)
     }
 
     @Test
@@ -238,8 +238,8 @@ class StringShouldBeRawStringSpec {
             val totalSize = (!"\n\n").toString() + ("\n" + "\n") + "\n"
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 2))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(1)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -249,8 +249,8 @@ class StringShouldBeRawStringSpec {
             val totalSize = (!("\n\n" + "\n")).toString() + ("\n" + "\n") + "\n"
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 2))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(2)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(2)
     }
 
     @Test
@@ -260,8 +260,8 @@ class StringShouldBeRawStringSpec {
             val totalSize = ((!"\n\n").toString()) + "\n"
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 2))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -271,8 +271,8 @@ class StringShouldBeRawStringSpec {
             val totalSize = "\n\n"[0] + "\n"
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 2))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -282,8 +282,8 @@ class StringShouldBeRawStringSpec {
             val totalSize = ("\n\n"[0]) + "\n"
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 2))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -295,8 +295,8 @@ class StringShouldBeRawStringSpec {
             }
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 2))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -308,8 +308,8 @@ class StringShouldBeRawStringSpec {
             }
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 1))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(2)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(2)
     }
 
     @Test
@@ -321,8 +321,8 @@ class StringShouldBeRawStringSpec {
             }
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 2))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(0)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(0)
     }
 
     @Test
@@ -336,8 +336,8 @@ class StringShouldBeRawStringSpec {
             }
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 2))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(0)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(0)
     }
 
     @Test
@@ -349,8 +349,8 @@ class StringShouldBeRawStringSpec {
             }
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 0))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(1)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -362,8 +362,8 @@ class StringShouldBeRawStringSpec {
             }
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 0))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -376,8 +376,8 @@ class StringShouldBeRawStringSpec {
             }
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 0))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -393,9 +393,9 @@ class StringShouldBeRawStringSpec {
             }
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 0))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(1)
-        assertThat(subject.findings[0]).hasSourceLocation(5, 13)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings[0]).hasSourceLocation(5, 13)
     }
 
     @Test
@@ -412,8 +412,8 @@ class StringShouldBeRawStringSpec {
             }
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 0))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -426,8 +426,8 @@ class StringShouldBeRawStringSpec {
             }
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 0))
-        subject.compileAndLint(code)
-        assertThat(subject.findings).isEmpty()
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).isEmpty()
     }
 
     companion object {

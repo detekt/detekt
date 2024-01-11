@@ -64,13 +64,7 @@ abstract class Rule(
         config.createPathFilters()
     }
 
-    /**
-     * Returns a copy of violations for this rule.
-     */
-    val findings: List<Finding>
-        get() = _findings.toList()
-
-    private val _findings: MutableList<Finding> = mutableListOf()
+    private val findings: MutableList<Finding> = mutableListOf()
 
     /**
      * Before starting visiting kotlin elements, a check is performed if this rule should be triggered.
@@ -84,8 +78,8 @@ abstract class Rule(
         root: KtFile,
         bindingContext: BindingContext = BindingContext.EMPTY,
         compilerResources: CompilerResources? = null
-    ) {
-        clearFindings()
+    ): List<Finding> {
+        findings.clear()
         this.bindingContext = bindingContext
         this.compilerResources = compilerResources
         if (visitCondition(root)) {
@@ -93,6 +87,7 @@ abstract class Rule(
             visit(root)
             postVisit(root)
         }
+        return findings
     }
 
     /**
@@ -158,12 +153,8 @@ abstract class Rule(
         finding.updateWithComputedSeverity()
         val ktElement = finding.entity.ktElement
         if (ktElement == null || !ktElement.isSuppressedBy(finding.issue.id, aliases, ruleSetId)) {
-            _findings.add(finding)
+            findings.add(finding)
         }
-    }
-
-    private fun clearFindings() {
-        _findings.clear()
     }
 }
 
