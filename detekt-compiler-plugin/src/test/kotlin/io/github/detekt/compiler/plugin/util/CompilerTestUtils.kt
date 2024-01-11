@@ -5,6 +5,7 @@ import com.tschuchort.compiletesting.KotlinCompilation
 import com.tschuchort.compiletesting.SourceFile
 import io.github.detekt.compiler.plugin.DetektCompilerPluginRegistrar
 import org.intellij.lang.annotations.Language
+import java.io.OutputStream
 
 object CompilerTestUtils {
 
@@ -13,6 +14,11 @@ object CompilerTestUtils {
             SourceFile.kotlin("KClass.kt", it, trimIndent = true)
         }
         return KotlinCompilation().apply {
+            messageOutputStream = object : OutputStream() {
+                override fun write(b: Int) {
+                    // no-op
+                }
+            }
             sources = sourceFiles
             compilerPluginRegistrars = listOf(DetektCompilerPluginRegistrar())
         }.compile()

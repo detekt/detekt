@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isConstant
 import io.gitlab.arturbosch.detekt.rules.isOverride
@@ -34,12 +33,10 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class MayBeConstant(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Usage of `vals` that can be `const val` detected.",
-    )
+class MayBeConstant(config: Config) : Rule(
+    config,
+    "Usage of `vals` that can be `const val` detected."
+) {
 
     private val binaryTokens = hashSetOf<KtSingleValueToken>(
         KtTokens.PLUS,

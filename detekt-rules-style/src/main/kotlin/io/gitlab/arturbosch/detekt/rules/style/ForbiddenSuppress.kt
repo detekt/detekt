@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
@@ -37,12 +36,10 @@ import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
  * class Bar
  * </compliant>
  */
-class ForbiddenSuppress(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Suppressing a rule which is forbidden in current configuration.",
-    )
+class ForbiddenSuppress(config: Config) : Rule(
+    config,
+    "Suppressing a rule which is forbidden in current configuration."
+) {
 
     @Configuration("Rules whose suppression is forbidden.")
     private val rules: List<String> by config(emptyList())

@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isElseIf
@@ -46,11 +45,10 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  */
 @RequiresTypeResolution
 @Suppress("ComplexMethod")
-class UseIfEmptyOrIfBlank(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Use `ifEmpty` or `ifBlank` instead of `isEmpty` or `isBlank` to assign a default value.",
-    )
+class UseIfEmptyOrIfBlank(config: Config) : Rule(
+    config,
+    "Use `ifEmpty` or `ifBlank` instead of `isEmpty` or `isBlank` to assign a default value."
+) {
 
     @Suppress("ReturnCount")
     override fun visitIfExpression(expression: KtIfExpression) {

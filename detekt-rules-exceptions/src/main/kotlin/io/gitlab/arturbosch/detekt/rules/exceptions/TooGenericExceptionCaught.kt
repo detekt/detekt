@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
@@ -34,13 +33,11 @@ import org.jetbrains.kotlin.psi.KtTypeReference
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class TooGenericExceptionCaught(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "The caught exception is too generic. " +
-            "Prefer catching specific exceptions to the case that is currently handled.",
-    )
+class TooGenericExceptionCaught(config: Config) : Rule(
+    config,
+    "The caught exception is too generic. " +
+        "Prefer catching specific exceptions to the case that is currently handled."
+) {
 
     @Configuration("exceptions which are too generic and should not be caught")
     private val exceptionNames: Set<String> by config(caughtExceptionDefaults) { it.toSet() }

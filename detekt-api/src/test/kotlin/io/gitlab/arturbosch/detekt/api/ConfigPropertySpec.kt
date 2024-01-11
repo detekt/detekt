@@ -521,6 +521,6 @@ class ConfigPropertySpec {
     }
 }
 
-private open class TestRule(vararg data: Pair<String, Any>) : Rule(TestConfig(*data)) {
-    override val issue = Issue("id", "description")
+open class TestRule(vararg data: Pair<String, Any>) : Rule(TestConfig(*data), "description") {
+    final override val ruleId: RuleId = "TestRule"
 }

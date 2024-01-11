@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -43,13 +42,11 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequenc
  *
  */
 @RequiresTypeResolution
-class ForbiddenMethodCall(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Mark forbidden methods. A forbidden method could be an invocation of an unstable / experimental " +
-            "method and hence you might want to mark it as forbidden in order to get warned about the usage.",
-    )
+class ForbiddenMethodCall(config: Config) : Rule(
+    config,
+    "Mark forbidden methods. A forbidden method could be an invocation of an unstable / experimental " +
+        "method and hence you might want to mark it as forbidden in order to get warned about the usage."
+) {
 
     @Configuration(
         "List of fully qualified method signatures which are forbidden. " +

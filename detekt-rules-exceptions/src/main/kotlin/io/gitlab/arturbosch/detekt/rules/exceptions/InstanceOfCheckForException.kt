@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
@@ -45,13 +44,11 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class InstanceOfCheckForException(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Instead of catching for a general exception type and checking for a specific exception type, " +
-            "use multiple catch blocks.",
-    )
+class InstanceOfCheckForException(config: Config) : Rule(
+    config,
+    "Instead of catching for a general exception type and checking for a specific exception type, " +
+        "use multiple catch blocks."
+) {
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         val catchParameter = catchClause.catchParameter ?: return

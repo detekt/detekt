@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
@@ -15,12 +14,10 @@ import org.jetbrains.kotlin.psi.KtDeclaration
  * It should end with proper punctuation or with a correct URL.
  */
 @Suppress("MemberNameEqualsClassName")
-class EndOfSentenceFormat(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "The first sentence in a KDoc comment should end with proper punctuation or with a correct URL.",
-    )
+class EndOfSentenceFormat(config: Config) : Rule(
+    config,
+    "The first sentence in a KDoc comment should end with proper punctuation or with a correct URL."
+) {
 
     @Configuration("regular expression which should match the end of the first sentence in the KDoc")
     private val endOfSentenceFormat: Regex by config("""([.?!][ \t\n\r\f<])|([.?!:]$)""") { it.toRegex() }

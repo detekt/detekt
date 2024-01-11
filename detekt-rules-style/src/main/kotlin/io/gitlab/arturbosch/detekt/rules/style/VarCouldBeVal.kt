@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -58,14 +57,12 @@ import org.jetbrains.kotlin.util.containingNonLocalDeclaration
  */
 @ActiveByDefault(since = "1.16.0")
 @RequiresTypeResolution
-class VarCouldBeVal(config: Config) : Rule(config) {
+class VarCouldBeVal(config: Config) : Rule(
+    config,
+    "Var declaration could be val."
+) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("CanBeVal")
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Var declaration could be val.",
-    )
 
     @Configuration("Whether to ignore uninitialized lateinit vars")
     private val ignoreLateinitVar: Boolean by config(defaultValue = false)

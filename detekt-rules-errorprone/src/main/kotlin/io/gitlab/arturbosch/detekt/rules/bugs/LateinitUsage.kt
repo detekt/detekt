@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isLateinit
@@ -25,13 +24,11 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * }
  * </noncompliant>
  */
-class LateinitUsage(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Usage of `lateinit` detected. Using `lateinit` for property initialization " +
-            "is error prone, try using constructor injection or delegation.",
-    )
+class LateinitUsage(config: Config) : Rule(
+    config,
+    "Usage of `lateinit` detected. Using `lateinit` for property initialization " +
+        "is error prone, try using constructor injection or delegation."
+) {
 
     @Configuration("Allows you to disable the rule for a list of classes")
     private val ignoreOnClassesPattern: Regex by config("", String::toRegex)

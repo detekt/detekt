@@ -4,7 +4,6 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
@@ -25,8 +24,7 @@ class TestProvider2(override val ruleSetId: String = "Test2") : RuleSetProvider 
     }
 }
 
-class FindName(config: Config) : Rule(config) {
-    override val issue = Issue(javaClass.simpleName, "")
+class FindName(config: Config) : Rule(config, "") {
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         report(CodeSmell(issue, Entity.atName(classOrObject), message = "TestMessage"))
     }

@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -35,12 +34,10 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
  * }
  * </compliant>
  */
-class AlsoCouldBeApply(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "When an `also` block contains only `it`-started expressions, simplify it to the `apply` block.",
-    )
+class AlsoCouldBeApply(config: Config) : Rule(
+    config,
+    "When an `also` block contains only `it`-started expressions, simplify it to the `apply` block."
+) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

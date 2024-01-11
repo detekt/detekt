@@ -6,7 +6,6 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
@@ -138,10 +137,7 @@ class SuppressionSpec {
         @Test
         fun `findings are suppressed`() {
             val ktFile = compileForTest(resourceAsPath("/suppression/SuppressedElements.kt"))
-            val findings = listOf(TestLM(), TestLPL()).flatMap {
-                it.visitFile(ktFile)
-                it.findings
-            }
+            val findings = listOf(TestLM(), TestLPL()).flatMap { it.visitFile(ktFile) }
             assertThat(findings).isEmpty()
         }
 
@@ -300,16 +296,14 @@ private fun isSuppressedBy(annotation: String, argument: String): Boolean {
     return annotatedClass.isSuppressedBy("Test", setOf("alias"))
 }
 
-private class TestRule(config: Config = Config.empty) : Rule(config) {
-    override val issue = Issue(javaClass.simpleName, "")
+private class TestRule(config: Config = Config.empty) : Rule(config, "") {
     var expected: String? = "Test"
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         expected = null
     }
 }
 
-private class TestLM(config: Config = Config.empty) : Rule(config) {
-    override val issue = Issue(javaClass.simpleName, "")
+private class TestLM(config: Config = Config.empty) : Rule(config, "") {
     override fun visitNamedFunction(function: KtNamedFunction) {
         val start = Location.startLineAndColumn(function.funKeyword!!).line
         val end = Location.startLineAndColumn(function.lastBlockStatementOrThis()).line
@@ -318,8 +312,7 @@ private class TestLM(config: Config = Config.empty) : Rule(config) {
     }
 }
 
-private class TestLPL(config: Config = Config.empty) : Rule(config) {
-    override val issue = Issue(javaClass.simpleName, "")
+private class TestLPL(config: Config = Config.empty) : Rule(config, "") {
     override fun visitNamedFunction(function: KtNamedFunction) {
         val size = function.valueParameters.size
         if (size > 5) report(CodeSmell(issue, Entity.from(function), message = "TestMessage"))

@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.coroutines
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.builtins.StandardNames.COROUTINES_PACKAGE_FQ_NAME
@@ -90,11 +89,10 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
  *
  */
 @RequiresTypeResolution
-class SuspendFunSwallowedCancellation(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "`runCatching` does not propagate `CancellationException`, don't use it with `suspend` lambda blocks.",
-    )
+class SuspendFunSwallowedCancellation(config: Config) : Rule(
+    config,
+    "`runCatching` does not propagate `CancellationException`, don't use it with `suspend` lambda blocks."
+) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

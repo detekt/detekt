@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
 import io.gitlab.arturbosch.detekt.rules.isNullCheck
@@ -28,11 +27,10 @@ import org.jetbrains.kotlin.psi.KtPsiUtil
  * x?.let { y }
  * </compliant>
  */
-class UseLet(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Use `?.let {}` instead of if/else with a null block when checking for nullable values",
-    )
+class UseLet(config: Config) : Rule(
+    config,
+    "Use `?.let {}` instead of if/else with a null block when checking for nullable values"
+) {
 
     private fun isExpressionNull(branch: KtExpression?): Boolean {
         val statement = when (branch) {

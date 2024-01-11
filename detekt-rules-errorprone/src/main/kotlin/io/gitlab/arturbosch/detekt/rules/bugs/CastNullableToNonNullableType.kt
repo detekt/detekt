@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -39,12 +38,10 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
  * </compliant>
  */
 @RequiresTypeResolution
-class CastNullableToNonNullableType(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Nullable type to non-null type cast is found. Consider using two assertions, " +
-            "`null` assertions and type cast",
-    )
+class CastNullableToNonNullableType(config: Config) : Rule(
+    config,
+    "Nullable type to non-null type cast is found. Consider using two assertions, `null` assertions and type cast"
+) {
 
     @Configuration("Whether platform types should be considered as non-nullable and ignored by this rule")
     private val ignorePlatformTypes: Boolean by config(true)

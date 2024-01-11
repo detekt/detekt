@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isAbstract
@@ -47,14 +46,12 @@ import org.jetbrains.kotlin.types.typeUtil.isInterface
  */
 @ActiveByDefault(since = "1.23.0")
 @RequiresTypeResolution
-class AbstractClassCanBeInterface(config: Config) : Rule(config) {
+class AbstractClassCanBeInterface(config: Config) : Rule(
+    config,
+    "An abstract class is unnecessary. May be refactored to an interface."
+) {
 
     private val noConcreteMember = "An abstract class without a concrete member can be refactored to an interface."
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "An abstract class is unnecessary. May be refactored to an interface.",
-    )
 
     override fun visitClass(klass: KtClass) {
         klass.check()

@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -37,12 +36,10 @@ import org.jetbrains.kotlin.resolve.bindingContextUtil.getAbbreviatedTypeOrType
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class ForbiddenVoid(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "`Unit` should be used instead of `Void`.",
-    )
+class ForbiddenVoid(config: Config) : Rule(
+    config,
+    "`Unit` should be used instead of `Void`."
+) {
 
     @Configuration("ignores void types in signatures of overridden functions")
     private val ignoreOverridden: Boolean by config(false)

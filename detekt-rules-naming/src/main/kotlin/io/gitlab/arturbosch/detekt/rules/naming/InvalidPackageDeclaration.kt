@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.name.FqName
@@ -17,14 +16,12 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
  * Reports when the file location does not match the declared package.
  */
 @ActiveByDefault(since = "1.21.0")
-class InvalidPackageDeclaration(config: Config) : Rule(config) {
+class InvalidPackageDeclaration(config: Config) : Rule(
+    config,
+    "Kotlin source files should be stored in the directory corresponding to its package statement."
+) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("PackageDirectoryMismatch")
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Kotlin source files should be stored in the directory corresponding to its package statement.",
-    )
 
     @Configuration("if specified this part of the package structure is ignored")
     private val rootPackage: String by config("")

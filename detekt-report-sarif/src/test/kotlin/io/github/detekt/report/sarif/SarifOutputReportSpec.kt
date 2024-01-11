@@ -4,7 +4,6 @@ import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
@@ -171,9 +170,7 @@ private fun constrainRegion(startLine: Int, startColumn: Int, endLine: Int, endC
     }
 """.trimIndent()
 
-class TestRule(config: Config = Config.empty) : Rule(config) {
-    override val issue = Issue(javaClass.simpleName, "")
-
+class TestRule(config: Config = Config.empty) : Rule(config, "") {
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         report(CodeSmell(issue, Entity.atName(classOrObject), message = "Error"))
     }

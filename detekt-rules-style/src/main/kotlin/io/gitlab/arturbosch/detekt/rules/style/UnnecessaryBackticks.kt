@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -25,11 +24,10 @@ import org.jetbrains.kotlin.psi.psiUtil.isIdentifier
  * class HelloWorld
  * </compliant>
  */
-class UnnecessaryBackticks(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Backticks are unnecessary.",
-    )
+class UnnecessaryBackticks(config: Config) : Rule(
+    config,
+    "Backticks are unnecessary."
+) {
 
     override fun visitKtElement(element: KtElement) {
         element.allChildren

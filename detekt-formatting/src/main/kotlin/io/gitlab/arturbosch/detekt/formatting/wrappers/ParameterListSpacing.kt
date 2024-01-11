@@ -16,10 +16,12 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.22.0")
-class ParameterListSpacing(config: Config) : FormattingRule(config) {
+class ParameterListSpacing(config: Config) : FormattingRule(
+    config,
+    "Ensure consistent spacing inside the parameter list."
+) {
 
     override val wrapping = ParameterListSpacingRule()
-    override val issue = issueFor("Ensure consistent spacing inside the parameter list.")
 
     @Configuration("maximum line length")
     private val maxLineLength: Int by configWithAndroidVariants(120, 100)
