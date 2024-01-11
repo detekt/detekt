@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.core.config
+package io.gitlab.arturbosch.detekt.core.tooling
 
 import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.test.utils.resourceUrl
