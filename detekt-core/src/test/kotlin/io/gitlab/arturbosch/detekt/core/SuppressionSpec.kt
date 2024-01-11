@@ -12,7 +12,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
-import io.gitlab.arturbosch.detekt.test.yamlConfig
+import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.psi.KtAnnotated
@@ -142,7 +142,7 @@ class SuppressionSpec {
                 it.visitFile(ktFile)
                 it.findings
             }
-            assertThat(findings.size).isZero()
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -237,7 +237,14 @@ class SuppressionSpec {
             fun lpl(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int) = Unit
         """.trimIndent()
 
-        val config = yamlConfig("/suppression/ruleset-suppression.yml")
+        val config = yamlConfigFromContent(
+            """
+                complexity:
+                  TestLPL:
+                    active: true
+                    threshold: 5
+            """.trimIndent()
+        )
             .subConfig("complexity")
             .subConfig("TestLPL")
 

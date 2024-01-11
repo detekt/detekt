@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.core
 import io.github.classgraph.ClassGraph
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
-import io.gitlab.arturbosch.detekt.test.yamlConfig
+import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.junit.jupiter.api.Test
@@ -29,7 +29,12 @@ class FileProcessorLocatorSpec {
 
     @Test
     fun `has disabled processors`() {
-        val config = yamlConfig("configs/disabled-processors.yml")
+        val config = yamlConfigFromContent(
+            """
+                processors:
+                  active: false
+            """.trimIndent()
+        )
         val processors = createProcessingSettings(path, config).use { FileProcessorLocator(it).load() }
         assertThat(processors).isEmpty()
     }

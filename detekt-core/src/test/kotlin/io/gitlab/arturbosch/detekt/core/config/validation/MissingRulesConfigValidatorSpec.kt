@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.core.config.validation
 
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfig
+import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -11,7 +12,16 @@ internal class MissingRulesConfigValidatorSpec {
 
     @Test
     fun `do not check for exhaustiveness if disabled by config`() {
-        val config = yamlConfig("config_validation/exhaustiveness-check-disabled.yml")
+        val config = yamlConfigFromContent(
+            """
+                config:
+                  checkExhaustiveness: false
+                
+                complexity:
+                style:
+                comments:
+            """.trimIndent()
+        )
 
         val result = subject.validate(config)
 
@@ -20,7 +30,27 @@ internal class MissingRulesConfigValidatorSpec {
 
     @Test
     fun `do not report violations if all rules are mentioned or rule set is disabled`() {
-        val config = yamlConfig("config_validation/exhaustiveness-check-successful.yml")
+        val config = yamlConfigFromContent(
+            """
+                config:
+                  checkExhaustiveness: true
+                
+                complexity:
+                  active: false
+                
+                style:
+                  WildcardImport:
+                    active: true
+                  NoElseInWhenExpression:
+                    active: true
+                  MagicNumber:
+                    active: true
+                
+                comments:
+                  CommentOverPrivateProperty:
+                    active: false
+            """.trimIndent()
+        )
 
         val result = subject.validate(config)
 
@@ -29,7 +59,31 @@ internal class MissingRulesConfigValidatorSpec {
 
     @Test
     fun `report violations of missing rules and rule sets`() {
-        val config = yamlConfig("config_validation/exhaustiveness-check-with-error.yml")
+        val config = yamlConfigFromContent(
+            """
+                config:
+                  checkExhaustiveness: true
+                
+                complexity:
+                  LongParameterList:
+                    active: false
+                  LargeClass:
+                    active: false
+                  InnerMap:
+                    Inner1:
+                      active: true
+                    Inner2:
+                      active: true
+                
+                style:
+                  NoElseInWhenExpression:
+                    active: true
+                  MagicNumber:
+                    active: true
+                
+                comments:
+            """.trimIndent()
+        )
 
         val result = subject.validate(config)
 
