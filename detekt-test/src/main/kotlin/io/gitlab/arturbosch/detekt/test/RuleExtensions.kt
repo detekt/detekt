@@ -10,7 +10,6 @@ import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 import java.nio.file.Path
 
@@ -26,12 +25,12 @@ fun Rule.compileAndLint(@Language("kotlin") content: String): List<Finding> {
 
 fun Rule.lint(@Language("kotlin") content: String): List<Finding> {
     val ktFile = compileContentForTest(content)
-    return findingsAfterVisit(ktFile)
+    return visitFile(ktFile)
 }
 
 fun Rule.lint(path: Path): List<Finding> {
     val ktFile = compileForTest(path)
-    return findingsAfterVisit(ktFile)
+    return visitFile(ktFile)
 }
 
 fun Rule.lintWithContext(
@@ -48,7 +47,7 @@ fun Rule.lintWithContext(
 
     val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
     val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
-    return findingsAfterVisit(ktFile, bindingContext, compilerResources)
+    return visitFile(ktFile, bindingContext, compilerResources)
 }
 
 fun Rule.compileAndLintWithContext(
@@ -61,13 +60,4 @@ fun Rule.compileAndLintWithContext(
     return lintWithContext(environment, content)
 }
 
-fun Rule.lint(ktFile: KtFile): List<Finding> = findingsAfterVisit(ktFile)
-
-private fun Rule.findingsAfterVisit(
-    ktFile: KtFile,
-    bindingContext: BindingContext = BindingContext.EMPTY,
-    compilerResources: CompilerResources? = null
-): List<Finding> {
-    this.visitFile(ktFile, bindingContext, compilerResources)
-    return this.findings
-}
+fun Rule.lint(ktFile: KtFile): List<Finding> = visitFile(ktFile)

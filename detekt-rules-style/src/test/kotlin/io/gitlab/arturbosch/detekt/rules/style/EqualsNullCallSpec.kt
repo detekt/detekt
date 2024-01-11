@@ -15,7 +15,7 @@ class EqualsNullCallSpec {
                 a.equals(null)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code).size).isEqualTo(1)
+        assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
     @Test
@@ -25,7 +25,7 @@ class EqualsNullCallSpec {
                 a.equals(b.equals(null))
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code).size).isEqualTo(1)
+        assertThat(subject.compileAndLint(code)).hasSize(1)
     }
 
     @Test
@@ -35,6 +35,6 @@ class EqualsNullCallSpec {
                 a.equals(b)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code).size).isEqualTo(0)
+        assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }
