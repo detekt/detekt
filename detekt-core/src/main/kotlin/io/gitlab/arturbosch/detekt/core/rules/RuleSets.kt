@@ -30,7 +30,8 @@ fun associateRuleIdsToRuleSetIds(ruleSets: List<RuleSet>): Map<RuleId, RuleSetId
 fun ProcessingSettings.createRuleProviders(): List<RuleSetProvider> = when (val runPolicy = spec.rulesSpec.runPolicy) {
     RulesSpec.RunPolicy.NoRestrictions -> RuleSetLocator(this).load()
     is RulesSpec.RunPolicy.RestrictToSingleRule -> {
-        val (ruleSetId, ruleId) = runPolicy.id
+        val ruleSetId = runPolicy.ruleSetId
+        val ruleId = runPolicy.ruleId
         val realProvider = requireNotNull(
             RuleSetLocator(this).load().find { it.ruleSetId == ruleSetId }
         ) { "There was no rule set with id '$ruleSetId'." }
