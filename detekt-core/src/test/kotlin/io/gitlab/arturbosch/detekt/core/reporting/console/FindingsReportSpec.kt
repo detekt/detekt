@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.core.reporting.console
 import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
 import io.gitlab.arturbosch.detekt.core.reporting.decolorized
@@ -21,7 +22,7 @@ class FindingsReportSpec {
     fun `has the reference content`() {
         val expectedContent = readResourceContent("/reporting/findings-report.txt")
         val detektion = object : TestDetektion() {
-            override val findings: Map<RuleSet.Id, List<Finding>> = mapOf(
+            override val findings: Map<RuleSet.Id, List<Finding2>> = mapOf(
                 RuleSet.Id("Ruleset1") to listOf(createFinding(), createFinding()),
                 RuleSet.Id("EmptyRuleset") to emptyList(),
                 RuleSet.Id("Ruleset2") to listOf(createFinding())
@@ -42,7 +43,7 @@ class FindingsReportSpec {
     @Test
     fun `reports no findings with rule set containing no smells`() {
         val detektion = object : TestDetektion() {
-            override val findings: Map<RuleSet.Id, List<Finding>> = mapOf(
+            override val findings: Map<RuleSet.Id, List<Finding2>> = mapOf(
                 RuleSet.Id("Ruleset") to emptyList()
             )
         }
@@ -62,7 +63,7 @@ class FindingsReportSpec {
             "threshold is reached."
         val multilineMessage = "A multiline\n\r\tmessage.\t "
         val detektion = object : TestDetektion() {
-            override val findings: Map<RuleSet.Id, List<Finding>> = mapOf(
+            override val findings: Map<RuleSet.Id, List<Finding2>> = mapOf(
                 RuleSet.Id("Ruleset") to listOf(
                     createFinding(createIssue("LongRule"), createEntity(), longMessage),
                     createFinding(createIssue("MultilineRule"), createEntity(), multilineMessage),

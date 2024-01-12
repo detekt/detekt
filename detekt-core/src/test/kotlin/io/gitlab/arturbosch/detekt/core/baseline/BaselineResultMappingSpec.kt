@@ -5,6 +5,7 @@ import io.github.detekt.test.utils.createTempDirectoryForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.test.createEntity
@@ -23,11 +24,11 @@ class BaselineResultMappingSpec {
     private val dir = createTempDirectoryForTest("baseline_format")
     private val baselineFile = dir.resolve("baseline.xml")
     private val existingBaselineFile = resourceAsPath("/baseline_feature/valid-baseline.xml")
-    private val finding: Finding = createFinding(
+    private val finding: Finding2 = createFinding(
         ruleName = "SomeIssueId",
         entity = createEntity(signature = "SomeSignature"),
     )
-    private val findings: Map<RuleSet.Id, List<Finding>> = mapOf(RuleSet.Id("RuleSet") to listOf(finding))
+    private val findings: Map<RuleSet.Id, List<Finding2>> = mapOf(RuleSet.Id("RuleSet") to listOf(finding))
 
     @AfterEach
     fun tearDown() {

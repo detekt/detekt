@@ -2,7 +2,9 @@ package io.gitlab.arturbosch.detekt.test
 
 import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.CodeSmell2
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
+import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell2
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
@@ -24,7 +26,7 @@ fun createCorrectableFinding(
     ruleName: String = "TestSmell",
     fileName: String = "TestFile.kt",
     severity: Severity = Severity.Error
-) = object : CorrectableCodeSmell(
+) = object : CorrectableCodeSmell2(
     issue = createIssue(ruleName),
     entity = createEntity(location = createLocation(fileName)),
     message = "TestMessage",
@@ -39,7 +41,7 @@ fun createFinding(
     entity: Entity,
     message: String = "TestMessage",
     severity: Severity = Severity.Error
-) = object : CodeSmell(
+) = object : CodeSmell2(
     issue = issue,
     entity = entity,
     message = message
@@ -52,7 +54,7 @@ fun createFindingForRelativePath(
     ruleName: String = "TestSmell",
     basePath: String = "/Users/tester/detekt/",
     relativePath: String = "TestFile.kt"
-) = CodeSmell(
+) = CodeSmell2(
     issue = createIssue(ruleName),
     entity = Entity(
         name = "TestEntity",

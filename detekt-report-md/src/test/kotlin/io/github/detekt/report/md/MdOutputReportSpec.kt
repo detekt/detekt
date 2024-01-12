@@ -8,6 +8,7 @@ import io.github.detekt.metrics.processors.logicalLinesKey
 import io.github.detekt.metrics.processors.sourceLinesKey
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
@@ -109,7 +110,7 @@ class MdOutputReportSpec {
     @Test
     fun `renders the right documentation links for the rules`() {
         val detektion = object : TestDetektion() {
-            override val findings: Map<RuleSet.Id, List<Finding>> = mapOf(
+            override val findings: Map<RuleSet.Id, List<Finding2>> = mapOf(
                 RuleSet.Id("Style") to listOf(
                     createFinding(createIssue("ValCouldBeVar"), createEntity())
                 ),
@@ -221,9 +222,9 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     }
 }
 
-private fun createMdDetektion(vararg findingPairs: Pair<String, List<Finding>>): Detektion {
+private fun createMdDetektion(vararg findingPairs: Pair<String, List<Finding2>>): Detektion {
     return object : TestDetektion() {
-        override val findings: Map<RuleSet.Id, List<Finding>> = findingPairs.toMap()
+        override val findings: Map<RuleSet.Id, List<Finding2>> = findingPairs.toMap()
             .mapKeys { (key, _) -> RuleSet.Id(key) }
 
         override val metrics: Collection<ProjectMetric> = listOf(
@@ -233,7 +234,7 @@ private fun createMdDetektion(vararg findingPairs: Pair<String, List<Finding>>):
     }
 }
 
-private fun findings(): Array<Pair<String, List<Finding>>> {
+private fun findings(): Array<Pair<String, List<Finding2>>> {
     val issueA = createIssue("id_a")
     val issueB = createIssue("id_b")
     val issueC = createIssue("id_c")

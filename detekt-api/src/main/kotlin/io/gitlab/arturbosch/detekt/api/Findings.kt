@@ -14,6 +14,14 @@ interface Finding : Compactable, HasEntity {
         get() = Severity.DEFAULT
 }
 
+interface Finding2 : Compactable, HasEntity {
+    val issue: Issue
+    val references: List<Entity>
+    val message: String
+    val severity: Severity
+        get() = Severity.DEFAULT
+}
+
 /**
  * Describes a source code position.
  */

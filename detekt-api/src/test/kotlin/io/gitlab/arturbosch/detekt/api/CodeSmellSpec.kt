@@ -1,15 +1,31 @@
 package io.gitlab.arturbosch.detekt.api
 
+import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
+import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.io.File
+import kotlin.io.path.Path
 
 class CodeSmellSpec {
 
     @Test
     fun `toString contains all information`() {
-        val codeSmell: CodeSmell = createFindingForRelativePath()
+        val codeSmell = CodeSmell(
+            issue = createIssue("TestSmell"),
+            entity = Entity(
+                name = "TestEntity",
+                signature = "TestEntitySignature",
+                location = Location(
+                    source = SourceLocation(1, 1),
+                    text = TextLocation(0, 0),
+                    filePath = FilePath.fromRelative(Path("/Users/tester/detekt/"), Path("TestFile.kt"))
+                ),
+                ktElement = null
+            ),
+            message = "TestMessage"
+        )
         val basePath = "${File.separator}Users${File.separator}tester${File.separator}detekt"
 
         assertThat(codeSmell.toString()).isEqualTo(
