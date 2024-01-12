@@ -29,7 +29,9 @@ class BaselineResultMapping : ReportingExtension {
         return baselineFile?.let { findings.transformWithBaseline(it) } ?: findings
     }
 
-    private fun Map<RuleSet.Id, List<Finding>>.transformWithBaseline(baselinePath: Path): Map<RuleSet.Id, List<Finding>> {
+    private fun Map<RuleSet.Id, List<Finding>>.transformWithBaseline(
+        baselinePath: Path,
+    ): Map<RuleSet.Id, List<Finding>> {
         val facade = BaselineFacade()
         val flatten = this.flatMap { it.value }
 

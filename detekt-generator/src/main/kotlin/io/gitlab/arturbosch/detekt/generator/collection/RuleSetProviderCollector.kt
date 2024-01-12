@@ -17,7 +17,6 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtSuperTypeList
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
-import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 import io.gitlab.arturbosch.detekt.api.Configuration as ConfigAnnotation
 
 data class RuleSetProvider(

@@ -92,7 +92,8 @@ class AutoCorrectLevelSpec {
 private fun runRule(config: Config): Pair<KtFile, List<Finding>> {
     val testFile = loadFile("configTests/fixed.kt")
     val ruleSet = loadRuleSet<FormattingProvider>()
-    val rules = ruleSet.rules.map { (ruleId, provider) -> provider(config.subConfig(ruleSet.id.value).subConfig(ruleId)) }
+    val rules = ruleSet.rules
+        .map { (ruleId, provider) -> provider(config.subConfig(ruleSet.id.value).subConfig(ruleId)) }
     return testFile to rules.flatMap { it.visitFile(testFile) }
 }
 
