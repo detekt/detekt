@@ -104,7 +104,7 @@ private class RuleSetProviderVisitor : DetektVisitor() {
             name = (property.initializer as? KtStringTemplateExpression)?.entries?.get(0)?.text
                 ?: throw InvalidDocumentationException(
                     "RuleSetProvider class " +
-                        "${property.containingClass()?.name.orEmpty()} doesn't provide list of rules."
+                        "${property.containingClass()?.name.orEmpty()} doesn't provide a ruleSetId."
                 )
         }
         if (property.isAnnotatedWith(ConfigAnnotation::class)) {
