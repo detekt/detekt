@@ -18,10 +18,10 @@ import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.core.config.validation.DeprecatedRule
 import io.gitlab.arturbosch.detekt.core.config.validation.loadDeprecations
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
-import io.gitlab.arturbosch.detekt.core.rules.isActive
 import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
 import io.gitlab.arturbosch.detekt.core.suppressors.buildSuppressors
 import io.gitlab.arturbosch.detekt.core.tooling.getDefaultConfiguration
+import io.gitlab.arturbosch.detekt.core.util.isActiveOrDefault
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -102,7 +102,7 @@ internal class Analyzer(
     ): Map<RuleSetId, List<Finding>> {
         val activeRuleSetsToRuleSetConfigs = providers.asSequence()
             .map { it to config.subConfig(it.ruleSetId) }
-            .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive(true) }
+            .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
             .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.shouldAnalyzeFile(file) }
             .toList()
@@ -116,7 +116,7 @@ internal class Analyzer(
                 ruleSet.rules
                     .asSequence()
                     .map { (ruleId, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleId) }
-                    .filter { (_, config) -> config.isActive(false) }
+                    .filter { (_, config) -> config.isActiveOrDefault(false) }
                     .map { (ruleProvider, config) -> ruleProvider(config) }
             }
             .filter { rule ->
@@ -149,13 +149,13 @@ internal class Analyzer(
     private fun warnAboutEnabledRequiresTypeResolutionRules() {
         providers.asSequence()
             .map { it to config.subConfig(it.ruleSetId) }
-            .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive(true) }
+            .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
             .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
             .flatMap { (ruleSet, ruleSetConfig) ->
                 ruleSet.rules
                     .asSequence()
                     .map { (ruleId, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleId) }
-                    .filter { (_, config) -> config.isActive(false) }
+                    .filter { (_, config) -> config.isActiveOrDefault(false) }
                     .map { (ruleProvider, config) -> ruleProvider(config) }
             }
             .filter { rule -> rule::class.hasAnnotation<RequiresTypeResolution>() }

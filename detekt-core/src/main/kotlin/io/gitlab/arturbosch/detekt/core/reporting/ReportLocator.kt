@@ -5,12 +5,12 @@ import io.gitlab.arturbosch.detekt.api.Extension
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.extensions.loadExtensions
-import io.gitlab.arturbosch.detekt.core.rules.isActive
+import io.gitlab.arturbosch.detekt.core.util.isActiveOrDefault
 
 internal sealed class ReportLocator<T : Extension>(configKey: String, protected val settings: ProcessingSettings) {
 
     private val config = settings.config.subConfig(configKey)
-    private val isActive = config.isActive(true)
+    private val isActive = config.isActiveOrDefault(true)
     protected val excludes = config.valueOrDefault("exclude", emptyList<String>()).toSet()
 
     fun load(): List<T> {

@@ -11,8 +11,6 @@ import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import org.jetbrains.kotlin.psi.KtFile
 
-internal fun Config.isActive(default: Boolean): Boolean = valueOrDefault(Config.ACTIVE_KEY, default)
-
 fun Config.shouldAnalyzeFile(file: KtFile): Boolean {
     val filters = createPathFilters()
     return filters == null || !filters.isIgnored(file.absolutePath())

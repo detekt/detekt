@@ -4,35 +4,12 @@ import io.github.detekt.test.utils.compileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class RuleSetSpec {
-
-    @Nested
-    inner class `Config isActive` {
-
-        @Test
-        fun `use the provided value when defined`() {
-            val config = yamlConfigFromContent(
-                """
-                    comments:
-                      active: false
-                """.trimIndent()
-            )
-            assertThat(config.subConfig("comments").isActive(true)).isFalse()
-            assertThat(config.subConfig("comments").isActive(false)).isFalse()
-        }
-
-        @Test
-        fun `use the default value when it is not defined`() {
-            assertThat(Config.empty.isActive(true)).isTrue()
-            assertThat(Config.empty.isActive(false)).isFalse()
-        }
-    }
 
     @Nested
     inner class `should rule analyze a file` {
