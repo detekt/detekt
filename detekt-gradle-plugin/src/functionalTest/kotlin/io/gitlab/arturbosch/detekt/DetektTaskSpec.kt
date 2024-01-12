@@ -8,13 +8,13 @@ import org.junit.jupiter.api.Test
 
 class DetektTaskSpec {
 
-    private val projectLayoutWithTooManyIssues = ProjectLayout(
-        numberOfSourceFilesInRootPerSourceDir = 15,
-        numberOfCodeSmellsInRootPerSourceDir = 15
+    private val projectLayoutWithIssues = ProjectLayout(
+        numberOfSourceFilesInRootPerSourceDir = 1,
+        numberOfCodeSmellsInRootPerSourceDir = 1
     )
 
     @Test
-    fun `build succeeds with more issues than threshold if ignoreFailures = true`() {
+    fun `build succeeds with issues if ignoreFailures = true`() {
         val config = """
             detekt {
                 ignoreFailures = true
@@ -22,7 +22,7 @@ class DetektTaskSpec {
         """.trimIndent()
 
         val gradleRunner = DslTestBuilder.kotlin()
-            .withProjectLayout(projectLayoutWithTooManyIssues)
+            .withProjectLayout(projectLayoutWithIssues)
             .withDetektConfig(config)
             .build()
 
@@ -32,7 +32,25 @@ class DetektTaskSpec {
     }
 
     @Test
-    fun `build fails with more issues than threshold successfully if ignoreFailures = false`() {
+    fun `build succeeds with issues if failOnSeverity = never`() {
+        val config = """
+            detekt {
+                failOnSeverity = io.gitlab.arturbosch.detekt.extensions.FailOnSeverity.Never
+            }
+        """.trimIndent()
+
+        val gradleRunner = DslTestBuilder.kotlin()
+            .withProjectLayout(projectLayoutWithIssues)
+            .withDetektConfig(config)
+            .build()
+
+        gradleRunner.runDetektTaskAndCheckResult { result ->
+            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+        }
+    }
+
+    @Test
+    fun `build fails with issues if ignoreFailures = false`() {
         val config = """
             detekt {
                 ignoreFailures = false
@@ -40,12 +58,30 @@ class DetektTaskSpec {
         """.trimIndent()
 
         val gradleRunner = DslTestBuilder.kotlin()
-            .withProjectLayout(projectLayoutWithTooManyIssues)
+            .withProjectLayout(projectLayoutWithIssues)
             .withDetektConfig(config)
             .build()
 
         gradleRunner.runDetektTaskAndExpectFailure { result ->
-            assertThat(result.output).contains("Analysis failed with 15 issues.")
+            assertThat(result.output).contains("Analysis failed with 1 issues.")
+        }
+    }
+
+    @Test
+    fun `build fails with issues if failOnSeverity = error`() {
+        val config = """
+            detekt {
+                failOnSeverity = io.gitlab.arturbosch.detekt.extensions.FailOnSeverity.Error
+            }
+        """.trimIndent()
+
+        val gradleRunner = DslTestBuilder.kotlin()
+            .withProjectLayout(projectLayoutWithIssues)
+            .withDetektConfig(config)
+            .build()
+
+        gradleRunner.runDetektTaskAndExpectFailure { result ->
+            assertThat(result.output).contains("Analysis failed with 1 issues.")
         }
     }
 }

@@ -7,6 +7,7 @@ import io.github.detekt.report.xml.XmlOutputReport
 import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.resourceAsPath
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings
@@ -21,7 +22,7 @@ class OutputFacadeSpec {
     fun `Running the output facade with multiple reports`() {
         val printStream = StringPrintStream()
         val inputPath: Path = resourceAsPath("/cases")
-        val defaultResult = DetektResult(mapOf("Key" to listOf(createFinding())))
+        val defaultResult = DetektResult(mapOf(RuleSet.Id("Key") to listOf(createFinding())))
         val plainOutputPath = createTempFileForTest("detekt", ".txt")
         val htmlOutputPath = createTempFileForTest("detekt", ".html")
         val xmlOutputPath = createTempFileForTest("detekt", ".xml")

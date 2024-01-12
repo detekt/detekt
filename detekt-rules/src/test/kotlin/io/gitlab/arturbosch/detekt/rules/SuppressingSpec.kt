@@ -68,10 +68,7 @@ class SuppressingSpec {
             LongMethod(Config.empty),
             LongParameterList(Config.empty),
             ComplexCondition(Config.empty),
-        ).flatMap {
-            it.visitFile(ktFile)
-            it.findings
-        }
+        ).flatMap { it.visitFile(ktFile) }
 
         assertThat(findings).isEmpty()
     }
@@ -129,10 +126,7 @@ class SuppressingSpec {
             LongMethod(Config.empty),
             LongParameterList(Config.empty),
             ComplexCondition(Config.empty),
-        ).flatMap {
-            it.visitFile(ktFile)
-            it.findings
-        }
+        ).flatMap { it.visitFile(ktFile) }
 
         assertThat(findings).isEmpty()
     }
@@ -187,10 +181,7 @@ class SuppressingSpec {
             LongMethod(Config.empty),
             LongParameterList(Config.empty),
             ComplexCondition(Config.empty),
-        ).flatMap {
-            it.visitFile(ktFile)
-            it.findings
-        }
+        ).flatMap { it.visitFile(ktFile) }
 
         assertThat(findings).isEmpty()
     }

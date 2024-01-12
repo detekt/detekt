@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
@@ -30,18 +29,16 @@ import org.jetbrains.kotlin.types.isError
  * </compliant>
  */
 @RequiresTypeResolution
-class NonBooleanPropertyPrefixedWithIs(config: Config) : Rule(config) {
+class NonBooleanPropertyPrefixedWithIs(config: Config) : Rule(
+    config,
+    "Only boolean property names can start with `is` prefix."
+) {
 
     private val booleanTypes = listOf(
         "kotlin.Boolean",
         "java.lang.Boolean",
         "java.util.concurrent.atomic.AtomicBoolean",
     ).map { FqName(it) }.toSet()
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Only boolean property names can start with `is` prefix.",
-    )
 
     override fun visitParameter(parameter: KtParameter) {
         super.visitParameter(parameter)

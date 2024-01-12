@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style.optional
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
@@ -27,11 +26,10 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *
  */
 @RequiresTypeResolution
-class PreferToOverPairSyntax(config: Config) : Rule(config) {
-    override val issue = Issue(
-        "PreferToOverPairSyntax",
-        "Pair was created using the Pair constructor, using the to syntax is preferred.",
-    )
+class PreferToOverPairSyntax(config: Config) : Rule(
+    config,
+    "Pair was created using the Pair constructor, using the to syntax is preferred."
+) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

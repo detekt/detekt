@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
-import io.gitlab.arturbosch.detekt.api.RuleSetId
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 
 internal fun defaultReportMapping(report: OutputReport) =
@@ -36,17 +36,17 @@ private val messageReplacementRegex = Regex("\\s+")
 
 fun Config.excludeCorrectable(): Boolean = subConfig(BUILD).valueOrDefault(EXCLUDE_CORRECTABLE, false)
 
-fun Detektion.filterEmptyIssues(config: Config): Map<RuleSetId, List<Finding>> {
+fun Detektion.filterEmptyIssues(config: Config): Map<RuleSet.Id, List<Finding>> {
     return this
         .filterAutoCorrectedIssues(config)
         .filter { it.value.isNotEmpty() }
 }
 
-fun Detektion.filterAutoCorrectedIssues(config: Config): Map<RuleSetId, List<Finding>> {
+fun Detektion.filterAutoCorrectedIssues(config: Config): Map<RuleSet.Id, List<Finding>> {
     if (!config.excludeCorrectable()) {
         return findings
     }
-    val filteredFindings = HashMap<RuleSetId, List<Finding>>()
+    val filteredFindings = HashMap<RuleSet.Id, List<Finding>>()
     findings.forEach { (ruleSetId, findingsList) ->
         val newFindingsList = findingsList.filter { finding ->
             val correctableCodeSmell = finding as? CorrectableCodeSmell

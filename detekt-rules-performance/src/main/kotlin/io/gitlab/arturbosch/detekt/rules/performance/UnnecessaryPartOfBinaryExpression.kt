@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.performance
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.com.intellij.psi.tree.IElementType
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -32,12 +31,10 @@ import org.jetbrains.kotlin.utils.addIfNotNull
  * </compliant>
  *
  */
-class UnnecessaryPartOfBinaryExpression(config: Config) : Rule(config) {
-
-    override val issue: Issue = Issue(
-        "UnnecessaryPartOfBinaryExpression",
-        "Detects duplicate condition into binary expression and recommends to remove unnecessary checks",
-    )
+class UnnecessaryPartOfBinaryExpression(config: Config) : Rule(
+    config,
+    "Detects duplicate condition into binary expression and recommends to remove unnecessary checks"
+) {
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)

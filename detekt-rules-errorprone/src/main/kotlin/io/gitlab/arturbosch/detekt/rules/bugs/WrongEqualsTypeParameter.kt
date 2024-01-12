@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.hasCorrectEqualsParameter
 import org.jetbrains.kotlin.psi.KtClass
@@ -34,13 +33,10 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class WrongEqualsTypeParameter(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        "WrongEqualsTypeParameter",
-        "Wrong parameter type for `equals()` method found. " +
-            "To correctly override the `equals()` method use `Any?`.",
-    )
+class WrongEqualsTypeParameter(config: Config) : Rule(
+    config,
+    "Wrong parameter type for `equals()` method found. To correctly override the `equals()` method use `Any?`."
+) {
 
     override fun visitClass(klass: KtClass) {
         if (klass.isInterface()) {

@@ -5,7 +5,6 @@ import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
@@ -231,7 +230,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
 }
 
 private class CustomRuleSetProvider : RuleSetProvider {
-    override val ruleSetId: String = "custom"
+    override val ruleSetId = RuleSet.Id("custom")
     override fun instance() = RuleSet(
         ruleSetId,
         listOf(
@@ -243,9 +242,8 @@ private class CustomRuleSetProvider : RuleSetProvider {
     )
 }
 
-private class MaxLineLength(config: Config) : Rule(config) {
-    override val issue = Issue(this::class.java.simpleName, "TestDescription")
-    private val lengthThreshold: Int = valueOrDefault("maxLineLength", 10)
+private class MaxLineLength(config: Config) : Rule(config, "TestDescription") {
+    private val lengthThreshold: Int = config.valueOrDefault("maxLineLength", 10)
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
         for (line in file.text.lineSequence()) {
@@ -257,9 +255,8 @@ private class MaxLineLength(config: Config) : Rule(config) {
 }
 
 @RequiresTypeResolution
-private class RequiresTypeResolutionMaxLineLength(config: Config) : Rule(config) {
-    override val issue = Issue(this::class.java.simpleName, "TestDescription")
-    private val lengthThreshold: Int = valueOrDefault("maxLineLength", 10)
+private class RequiresTypeResolutionMaxLineLength(config: Config) : Rule(config, "TestDescription") {
+    private val lengthThreshold: Int = config.valueOrDefault("maxLineLength", 10)
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
         for (line in file.text.lineSequence()) {
@@ -270,15 +267,13 @@ private class RequiresTypeResolutionMaxLineLength(config: Config) : Rule(config)
     }
 }
 
-private class FaultyRule(config: Config) : Rule(config) {
-    override val issue = Issue(this::class.java.simpleName, "")
+private class FaultyRule(config: Config) : Rule(config, "") {
     override fun visitKtFile(file: KtFile) {
         throw object : IllegalStateException("Deliberately triggered error.") {}
     }
 }
 
-private class FaultyRuleNoStackTrace(config: Config) : Rule(config) {
-    override val issue = Issue(this::class.java.simpleName, "")
+private class FaultyRuleNoStackTrace(config: Config) : Rule(config, "") {
     override fun visitKtFile(file: KtFile) {
         throw object : IllegalStateException("Deliberately triggered error without stack trace.") {
             init {

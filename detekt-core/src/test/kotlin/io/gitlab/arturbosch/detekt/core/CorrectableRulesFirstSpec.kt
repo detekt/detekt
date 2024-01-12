@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
@@ -35,7 +34,7 @@ class CorrectableRulesFirstSpec {
         val detector = Analyzer(
             settings,
             listOf(object : RuleSetProvider {
-                override val ruleSetId: String = "Test"
+                override val ruleSetId = RuleSet.Id("Test")
                 override fun instance() = RuleSet(
                     ruleSetId,
                     listOf(::NonCorrectable, ::Correctable).let { if (reverse) it.reversed() else it }
@@ -52,15 +51,13 @@ class CorrectableRulesFirstSpec {
 
 private var actualLastRuleId = ""
 
-private class NonCorrectable(config: Config) : Rule(config) {
-    override val issue: Issue = Issue(javaClass.simpleName, "")
+private class NonCorrectable(config: Config) : Rule(config, "") {
     override fun visitClass(klass: KtClass) {
         actualLastRuleId = issue.id
     }
 }
 
-private class Correctable(config: Config) : Rule(config) {
-    override val issue: Issue = Issue(javaClass.simpleName, "")
+private class Correctable(config: Config) : Rule(config, "") {
     override fun visitClass(klass: KtClass) {
         actualLastRuleId = issue.id
     }

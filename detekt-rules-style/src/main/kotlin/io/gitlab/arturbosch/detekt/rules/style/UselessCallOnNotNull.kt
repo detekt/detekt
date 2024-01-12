@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.name.FqName
@@ -45,14 +44,13 @@ import org.jetbrains.kotlin.types.isNullable
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.2.0")
-class UselessCallOnNotNull(config: Config) : Rule(config) {
-    override val issue: Issue = Issue(
-        "UselessCallOnNotNull",
-        "This call on a non-null reference may be reduced or removed. " +
-            "Some calls are intended to be called on nullable collection or text types (e.g. `String?`)." +
-            "When this call is used on a reference to a non-null type " +
-            "(e.g. `String`) it is redundant and will have no effect, so it can be removed.",
-    )
+class UselessCallOnNotNull(config: Config) : Rule(
+    config,
+    "This call on a non-null reference may be reduced or removed. " +
+        "Some calls are intended to be called on nullable collection or text types (e.g. `String?`)." +
+        "When this call is used on a reference to a non-null type " +
+        "(e.g. `String`) it is redundant and will have no effect, so it can be removed."
+) {
 
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)

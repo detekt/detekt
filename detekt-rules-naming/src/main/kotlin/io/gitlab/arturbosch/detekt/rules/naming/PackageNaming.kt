@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtPackageDirective
@@ -14,14 +13,12 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
  * Reports package names that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
-class PackageNaming(config: Config) : Rule(config) {
+class PackageNaming(config: Config) : Rule(
+    config,
+    "Package names should match the naming convention set in the configuration."
+) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("PackageName", "PackageDirectoryMismatch")
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Package names should match the naming convention set in the configuration.",
-    )
 
     @Configuration("naming pattern")
     private val packagePattern: Regex by config("""[a-z]+(\.[a-z][A-Za-z0-9]*)*""") { it.toRegex() }

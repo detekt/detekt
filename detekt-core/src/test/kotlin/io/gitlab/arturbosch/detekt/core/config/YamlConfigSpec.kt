@@ -94,7 +94,16 @@ class YamlConfigSpec {
     @Nested
     inner class `meaningful error messages` {
 
-        private val config = yamlConfig("wrong-property-type.yml")
+        private val config = yamlConfigFromContent(
+            """
+                RuleSet:
+                  Rule:
+                    active: []
+                    threshold: v5.7
+                
+                bool: fasle
+            """.trimIndent()
+        )
 
         @Test
         fun `only accepts true and false boolean values`() {
@@ -126,6 +135,16 @@ class YamlConfigSpec {
                 .withMessage(
                     "Value \"[]\" set for config parameter \"RuleSet > Rule > active\" is not of required type Int."
                 )
+        }
+
+        @Test
+        fun `prints meaningful message when list of ints is used instead of list of strings`() {
+            assertThatIllegalStateException().isThrownBy {
+                config.valueOrDefaultInternal(key = "key", result = listOf(1, 2), default = listOf("1", "2"))
+            }.withMessage(
+                "Only lists of strings are supported. " +
+                    "Value \"[1, 2]\" set for config parameter \"key\" contains non-string values."
+            )
         }
     }
 

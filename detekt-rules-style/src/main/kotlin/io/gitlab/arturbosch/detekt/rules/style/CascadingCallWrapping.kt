@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.TextLocation
@@ -34,11 +33,10 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
  *   .baz()
  * </compliant>
  */
-class CascadingCallWrapping(config: Config) : Rule(config) {
-    override val issue = Issue(
-        id = javaClass.simpleName,
-        description = "If a chained call is wrapped to a new line, subsequent chained calls should be as well.",
-    )
+class CascadingCallWrapping(config: Config) : Rule(
+    config,
+    "If a chained call is wrapped to a new line, subsequent chained calls should be as well."
+) {
 
     @Configuration("require trailing elvis expressions to be wrapped on a new line")
     private val includeElvis: Boolean by config(true)

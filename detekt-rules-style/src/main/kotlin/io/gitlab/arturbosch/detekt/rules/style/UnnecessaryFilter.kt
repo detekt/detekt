@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
@@ -49,12 +48,10 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UnnecessaryFilter(config: Config) : Rule(config) {
-
-    override val issue: Issue = Issue(
-        "UnnecessaryFilter",
-        "`filter()` with other collection operations may be simplified.",
-    )
+class UnnecessaryFilter(config: Config) : Rule(
+    config,
+    "`filter()` with other collection operations may be simplified."
+) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.yamlConfig
+import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.api.Test
 import org.assertj.core.api.Assertions.assertThat as assertJThat
@@ -14,7 +14,16 @@ class AutoCorrectLevelSpec {
 
     @Test
     fun `autoCorrect_ true on all levels should reformat the test file`() {
-        val config = yamlConfig("/autocorrect/autocorrect-all-true.yml")
+        val config = yamlConfigFromContent(
+            """
+                formatting:
+                  active: true
+                  autoCorrect: true
+                  ChainWrapping:
+                    active: true
+                    autoCorrect: true
+            """.trimIndent()
+        )
 
         val (file, findings) = runRule(config)
 
@@ -24,7 +33,16 @@ class AutoCorrectLevelSpec {
 
     @Test
     fun `autoCorrect_ false on ruleSet level should not reformat the test file`() {
-        val config = yamlConfig("/autocorrect/autocorrect-ruleset-false.yml")
+        val config = yamlConfigFromContent(
+            """
+                formatting:
+                  active: true
+                  autoCorrect: false
+                  ChainWrapping:
+                    active: true
+                    autoCorrect: true
+            """.trimIndent()
+        )
 
         val (file, findings) = runRule(config)
 
@@ -34,21 +52,20 @@ class AutoCorrectLevelSpec {
 
     @Test
     fun `autoCorrect_ false on rule level should not reformat the test file`() {
-        val config = yamlConfig("/autocorrect/autocorrect-rule-false.yml")
+        val config = yamlConfigFromContent(
+            """
+                formatting:
+                  active: true
+                  autoCorrect: true
+                  ChainWrapping:
+                    active: true
+                    autoCorrect: false
+            """.trimIndent()
+        )
 
         val (file, findings) = runRule(config)
 
         assertThat(findings).isNotEmpty()
-        assertJThat(wasFormatted(file)).isFalse()
-    }
-
-    @Test
-    fun `autoCorrect_ true but rule active false should not reformat the test file`() {
-        val config = yamlConfig("/autocorrect/autocorrect-true-rule-active-false.yml")
-
-        val (file, findings) = runRule(config)
-
-        assertThat(findings).isEmpty()
         assertJThat(wasFormatted(file)).isFalse()
     }
 }
@@ -56,9 +73,10 @@ class AutoCorrectLevelSpec {
 private fun runRule(config: Config): Pair<KtFile, List<Finding>> {
     val testFile = loadFile("configTests/fixed.kt")
     val ruleSet = loadRuleSet<FormattingProvider>()
-    val rules = ruleSet.rules.map { (_, provider) -> provider(config.subConfig(ruleSet.id)) }
-    rules.forEach { it.visitFile(testFile) }
-    return testFile to rules.flatMap { it.findings }
+    val rules = ruleSet.rules
+        .map { (ruleId, provider) -> provider(config.subConfig(ruleSet.id.value).subConfig(ruleId)) }
+        .filter { it.config.valueOrDefault("active", false) }
+    return testFile to rules.flatMap { it.visitFile(testFile) }
 }
 
 private fun wasFormatted(file: KtFile) = file.text == contentAfterChainWrapping

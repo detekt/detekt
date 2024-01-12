@@ -36,7 +36,7 @@ class TooGenericExceptionCaughtSpec {
             }
         """.trimIndent()
 
-        assertThat(rule.compileAndLint(code)).hasSize(TooGenericExceptionCaught.caughtExceptionDefaults.size)
+        assertThat(rule.compileAndLint(code)).hasSameSizeAs(TooGenericExceptionCaught.caughtExceptionDefaults)
     }
 
     @Nested
@@ -94,16 +94,6 @@ class TooGenericExceptionCaughtSpec {
                 }
             }
         """.trimIndent()
-
-        @Test
-        fun `should not fail when disabled with invalid regex on allowed exception names`() {
-            val config = TestConfig(
-                "active" to "false",
-                ALLOWED_EXCEPTION_NAME_REGEX to "*MyException",
-            )
-            val rule = TooGenericExceptionCaught(config)
-            rule.compileAndLint(code)
-        }
 
         @Test
         fun `should fail with invalid regex on allowed exception names`() {

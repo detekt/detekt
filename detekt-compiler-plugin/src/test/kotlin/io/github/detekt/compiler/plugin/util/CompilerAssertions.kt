@@ -24,7 +24,8 @@ class CompilationAssert(private val result: JvmCompilationResult) :
             failWithActualExpectedAndMessage(
                 result.exitCode,
                 expectedErrorCode,
-                "Expected compilation to finish with code $expectedErrorCode but was ${result.exitCode}"
+                "Expected compilation to finish with code $expectedErrorCode but was ${actual.exitCode}.\n" +
+                    actual.messages,
             )
         }
     }
@@ -42,7 +43,8 @@ class CompilationAssert(private val result: JvmCompilationResult) :
             failWithActualExpectedAndMessage(
                 status,
                 expectedStatus,
-                "Expected detekt to finish with success status: $expectedStatus but was $status",
+                "Expected detekt to finish with success status: $expectedStatus but was $status.\n" +
+                    actual.messages,
             )
         }
     }
@@ -54,7 +56,8 @@ class CompilationAssert(private val result: JvmCompilationResult) :
             failWithActualExpectedAndMessage(
                 detektViolations.size,
                 expectedViolationNumber,
-                "Expected detekt violations to be $expectedViolationNumber but was ${detektViolations.size}",
+                "Expected detekt violations to be $expectedViolationNumber but was ${detektViolations.size}.\n" +
+                    actual.messages,
             )
         }
     }
@@ -63,7 +66,8 @@ class CompilationAssert(private val result: JvmCompilationResult) :
         if (expectedRuleName.any { it !in detektViolations }) {
             failWithMessage(
                 "Expected rules ${expectedRuleName.toList()} to raise a violation but not all were found. " +
-                    "Found violations are instead $detektViolations"
+                    "Found violations are instead $detektViolations.\n" +
+                    actual.messages,
             )
         }
     }

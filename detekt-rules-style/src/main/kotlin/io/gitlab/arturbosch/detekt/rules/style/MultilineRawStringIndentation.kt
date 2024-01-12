@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.SourceLocation
@@ -48,11 +47,10 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * """.trimMargin()
  * </compliant>
  */
-class MultilineRawStringIndentation(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "The indentation of the raw String should be consistent",
-    )
+class MultilineRawStringIndentation(config: Config) : Rule(
+    config,
+    "The indentation of the raw String should be consistent"
+) {
 
     @Configuration("indentation size")
     private val indentSize by config(4)

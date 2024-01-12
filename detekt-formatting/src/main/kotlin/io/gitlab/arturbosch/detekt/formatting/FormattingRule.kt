@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.SourceLocation
@@ -23,7 +22,7 @@ import org.jetbrains.kotlin.psi.KtFile
 /**
  * Rule to detect formatting violations.
  */
-abstract class FormattingRule(config: Config) : Rule(config) {
+abstract class FormattingRule(config: Config, description: String) : Rule(config, description) {
 
     abstract val wrapping: com.pinterest.ktlint.rule.engine.core.api.Rule
 
@@ -31,14 +30,11 @@ abstract class FormattingRule(config: Config) : Rule(config) {
      * Should the android style guide be enforced?
      * This property is read from the ruleSet config.
      */
-    protected val isAndroid
-        get() = FormattingProvider.android.value(ruleSetConfig)
+    protected val isAndroid: Boolean
+        get() = config.parent?.let { FormattingProvider.android.value(it) } == true
 
     private lateinit var positionByOffset: (offset: Int) -> Pair<Int, Int>
     private lateinit var root: KtFile
-
-    protected fun issueFor(description: String) =
-        Issue(javaClass.simpleName, description)
 
     override fun visit(root: KtFile) {
         this.root = root

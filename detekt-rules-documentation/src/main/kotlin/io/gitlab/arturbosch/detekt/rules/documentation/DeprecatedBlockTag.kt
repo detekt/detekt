@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtDeclaration
 
@@ -36,12 +35,11 @@ import org.jetbrains.kotlin.psi.KtDeclaration
  * }
  * </compliant>
  */
-class DeprecatedBlockTag(config: Config) : Rule(config) {
-    override val issue = Issue(
-        "DeprecatedBlockTag",
-        "Do not use the `@deprecated` block tag, which is not supported by KDoc. " +
-            "Use the `@Deprecated` annotation instead.",
-    )
+class DeprecatedBlockTag(config: Config) : Rule(
+    config,
+    "Do not use the `@deprecated` block tag, which is not supported by KDoc. " +
+        "Use the `@Deprecated` annotation instead."
+) {
 
     override fun visitDeclaration(dcl: KtDeclaration) {
         super.visitDeclaration(dcl)

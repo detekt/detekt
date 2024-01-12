@@ -56,11 +56,7 @@ interface Config {
 
             override fun subConfig(key: String): Config = this
 
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : Any> valueOrNull(key: String): T? = when (key) {
-                ACTIVE_KEY -> true as? T
-                else -> null
-            }
+            override fun <T : Any> valueOrNull(key: String): T? = null
         }
 
         const val ACTIVE_KEY: String = "active"

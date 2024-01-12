@@ -135,15 +135,6 @@ class EmptyCodeSpec {
     }
 
     @Test
-    fun doesNotFailWithInvalidRegexWhenDisabled() {
-        val config = TestConfig(
-            "active" to "false",
-            ALLOWED_EXCEPTION_NAME_REGEX to "*foo",
-        )
-        assertThat(EmptyCatchBlock(config).compileAndLint(regexTestingCode)).isEmpty()
-    }
-
-    @Test
     fun doesFailWithInvalidRegex() {
         val config = TestConfig(ALLOWED_EXCEPTION_NAME_REGEX to "*foo")
         assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
@@ -156,7 +147,7 @@ class EmptyCodeSpec {
 @Suppress("LongMethod")
 private fun test(block: () -> Rule) {
     val rule = block()
-    rule.lint(
+    val findings = rule.lint(
         """
             class Empty : Runnable {
             
@@ -213,5 +204,5 @@ private fun test(block: () -> Rule) {
             class EmptyClass() {}
         """.trimIndent()
     )
-    assertThat(rule.findings).hasSize(1)
+    assertThat(findings).hasSize(1)
 }

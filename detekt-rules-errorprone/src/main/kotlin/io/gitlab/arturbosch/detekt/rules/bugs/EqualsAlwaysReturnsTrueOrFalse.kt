@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
 import org.jetbrains.kotlin.KtNodeTypes
@@ -36,14 +35,12 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class EqualsAlwaysReturnsTrueOrFalse(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        "EqualsAlwaysReturnsTrueOrFalse",
-        "Having an `equals()` method that always returns true or false is not a good idea. " +
-            "It does not follow the contract of this method. " +
-            "Consider a good default implementation (e.g. `this == other`).",
-    )
+class EqualsAlwaysReturnsTrueOrFalse(config: Config) : Rule(
+    config,
+    "Having an `equals()` method that always returns true or false is not a good idea. " +
+        "It does not follow the contract of this method. " +
+        "Consider a good default implementation (e.g. `this == other`)."
+) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.isEqualsFunction() && function.returnsBooleanConstant()) {

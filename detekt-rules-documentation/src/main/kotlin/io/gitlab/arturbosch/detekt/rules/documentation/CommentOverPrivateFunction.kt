@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -17,14 +16,12 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * with better names if necessary. Giving the function a better, more descriptive name can also help in
  * solving this issue.
  */
-class CommentOverPrivateFunction(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        "CommentOverPrivateFunction",
-        "Comments for private functions should be avoided. " +
-            "Prefer giving the function an expressive name. " +
-            "Split it up in smaller, self-explaining functions if necessary.",
-    )
+class CommentOverPrivateFunction(config: Config) : Rule(
+    config,
+    "Comments for private functions should be avoided. " +
+        "Prefer giving the function an expressive name. " +
+        "Split it up in smaller, self-explaining functions if necessary."
+) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.hasCommentInPrivateMember()) {

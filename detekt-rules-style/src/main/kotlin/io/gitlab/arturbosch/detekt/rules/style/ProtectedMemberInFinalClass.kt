@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isJvmFinalizeFunction
 import io.gitlab.arturbosch.detekt.rules.isOpen
@@ -33,13 +32,10 @@ import org.jetbrains.kotlin.psi.psiUtil.isProtected
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class ProtectedMemberInFinalClass(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Member with protected visibility in final class is private. " +
-            "Consider using private or internal as modifier.",
-    )
+class ProtectedMemberInFinalClass(config: Config) : Rule(
+    config,
+    "Member with protected visibility in final class is private. Consider using private or internal as modifier."
+) {
 
     private val visitor = DeclarationVisitor()
 

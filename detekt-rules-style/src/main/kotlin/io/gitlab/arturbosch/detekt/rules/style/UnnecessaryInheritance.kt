@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
@@ -18,12 +17,10 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class UnnecessaryInheritance(config: Config) : Rule(config) {
-
-    override val issue: Issue = Issue(
-        javaClass.simpleName,
-        "The extended super type is unnecessary.",
-    )
+class UnnecessaryInheritance(config: Config) : Rule(
+    config,
+    "The extended super type is unnecessary."
+) {
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         for (superEntry in classOrObject.superTypeListEntries) {

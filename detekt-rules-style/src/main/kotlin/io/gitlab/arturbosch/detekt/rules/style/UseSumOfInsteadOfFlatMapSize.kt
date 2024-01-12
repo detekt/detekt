@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isCalling
@@ -37,11 +36,10 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.isSubclassOf
  * </compliant>
  */
 @RequiresTypeResolution
-class UseSumOfInsteadOfFlatMapSize(config: Config) : Rule(config) {
-    override val issue: Issue = Issue(
-        javaClass.simpleName,
-        "Use `sumOf` instead of `flatMap` and `size/count` calls",
-    )
+class UseSumOfInsteadOfFlatMapSize(config: Config) : Rule(
+    config,
+    "Use `sumOf` instead of `flatMap` and `size/count` calls"
+) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

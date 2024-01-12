@@ -4,7 +4,6 @@ import io.github.detekt.metrics.CognitiveComplexity
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -25,12 +24,10 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * - __Nesting Level Increments__ - `if`, `when`, `for`, `while`, `do while`, `catch`, `nested function`
  * - __Additional Complexity Increments by Nesting Level__ - `if`, `when`, `for`, `while`, `do while`, `catch`
  */
-class CognitiveComplexMethod(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        "CognitiveComplexMethod",
-        "Prefer splitting up complex methods into smaller, easier to understand methods.",
-    )
+class CognitiveComplexMethod(config: Config) : Rule(
+    config,
+    "Prefer splitting up complex methods into smaller, easier to understand methods."
+) {
 
     @Configuration("Maximum Cognitive Complexity allowed for a method.")
     private val allowedComplexity: Int by config(defaultValue = 15)

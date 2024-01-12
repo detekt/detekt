@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -30,12 +29,10 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * </compliant>
  */
 @RequiresTypeResolution
-class CouldBeSequence(config: Config) : Rule(config) {
-
-    override val issue: Issue = Issue(
-        "CouldBeSequence",
-        "Several chained collection operations that should be a sequence.",
-    )
+class CouldBeSequence(config: Config) : Rule(
+    config,
+    "Several chained collection operations that should be a sequence."
+) {
 
     @Configuration("The maximum number of allowed chained collection operations.")
     private val allowedOperations: Int by config(defaultValue = 2)

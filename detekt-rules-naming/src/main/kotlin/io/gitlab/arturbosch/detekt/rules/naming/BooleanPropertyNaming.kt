@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -29,7 +28,10 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  * </compliant>
  */
 @RequiresTypeResolution
-class BooleanPropertyNaming(config: Config) : Rule(config) {
+class BooleanPropertyNaming(config: Config) : Rule(
+    config,
+    "Boolean property name should follow the naming convention set in the projects configuration."
+) {
 
     @Configuration("naming pattern")
     private val allowedPattern: Regex by config("^(is|has|are)", String::toRegex)
@@ -38,11 +40,6 @@ class BooleanPropertyNaming(config: Config) : Rule(config) {
     @Deprecated("This configuration is ignored and will be removed in the future")
     @Suppress("UnusedPrivateMember")
     private val ignoreOverridden: Boolean by config(true)
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Boolean property name should follow the naming convention set in the projects configuration.",
-    )
 
     override fun visitParameter(parameter: KtParameter) {
         super.visitParameter(parameter)

@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.api.internal
 import io.github.detekt.psi.absolutePath
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
@@ -117,9 +116,7 @@ private fun Path.runWith(rule: DummyRule): DummyRule {
     return rule
 }
 
-private class OnlyLibraryTrackingRule(config: Config) : Rule(config) {
-
-    override val issue: Issue = Issue("test", "")
+private class OnlyLibraryTrackingRule(config: Config) : Rule(config, "") {
     private var libraryFileVisited = false
     private var counter = 0
 
@@ -140,9 +137,7 @@ private class OnlyLibraryTrackingRule(config: Config) : Rule(config) {
     }
 }
 
-private class DummyRule(config: Config = Config.empty) : Rule(config) {
-
-    override val issue = Issue("test", "")
+private class DummyRule(config: Config = Config.empty) : Rule(config, "") {
     private var isDirty: Boolean = false
 
     override fun visitKtFile(file: KtFile) {

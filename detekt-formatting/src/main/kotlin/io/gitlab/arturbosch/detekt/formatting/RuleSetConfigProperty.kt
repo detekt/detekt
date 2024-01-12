@@ -18,6 +18,5 @@ private class RuleSetConfigPropertyDelegate<T : Any>(
 }
 
 class RuleSetConfigProperty<T : Any>(val key: String, val defaultValue: T) {
-    fun value(config: Config): T =
-        config.valueOrDefault(key, defaultValue)
+    fun value(config: Config): T = config.valueOrDefault(key, defaultValue)
 }

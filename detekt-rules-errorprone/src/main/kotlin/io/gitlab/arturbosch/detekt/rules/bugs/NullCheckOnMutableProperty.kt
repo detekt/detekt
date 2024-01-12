@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
@@ -49,12 +48,10 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * </compliant>
  */
 @RequiresTypeResolution
-class NullCheckOnMutableProperty(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Checking nullability on a mutable property is not useful because the " +
-            "property may be set to null afterwards.",
-    )
+class NullCheckOnMutableProperty(config: Config) : Rule(
+    config,
+    "Checking nullability on a mutable property is not useful because the property may be set to null afterwards."
+) {
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)

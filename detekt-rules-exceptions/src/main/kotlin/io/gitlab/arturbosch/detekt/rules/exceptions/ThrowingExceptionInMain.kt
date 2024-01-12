@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -21,12 +20,10 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
  * }
  * </noncompliant>
  */
-class ThrowingExceptionInMain(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        "ThrowingExceptionInMain",
-        "The main method should not throw an exception.",
-    )
+class ThrowingExceptionInMain(config: Config) : Rule(
+    config,
+    "The main method should not throw an exception."
+) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.isMainFunction() && containsThrowExpression(function)) {

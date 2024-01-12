@@ -2,10 +2,10 @@
 dokka = "1.9.10"
 jacoco = "0.8.11"
 kotlin = "1.9.22"
-ktlint = "1.1.0"
+ktlint = "1.1.1"
 junit = "5.10.1"
 poko = "0.15.2"
-slf4j = "2.0.10"
+slf4j = "2.0.11"
 
 [libraries]
 semver4j = "org.semver4j:semver4j:5.2.2"
@@ -39,15 +39,11 @@ junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "jun
 sarif4k = "io.github.detekt.sarif4k:sarif4k:0.5.0"
 assertj = "org.assertj:assertj-core:3.25.1"
 classgraph = "io.github.classgraph:classgraph:4.8.165"
-mockk = "io.mockk:mockk:1.13.7"
-byte-buddy = "net.bytebuddy:byte-buddy:1.14.11"
+mockk = "io.mockk:mockk:1.13.9"
 snakeyaml = "org.snakeyaml:snakeyaml-engine:2.7"
 jcommander = "org.jcommander:jcommander:1.83"
 kotlinCompileTesting = { module = "dev.zacsweers.kctfork:core", version = "0.4.0" }
 poko-annotations = { module = "dev.drewhamilton.poko:poko-annotations", version.ref = "poko" }
-
-[bundles]
-mocking = ["mockk", "byte-buddy"]
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

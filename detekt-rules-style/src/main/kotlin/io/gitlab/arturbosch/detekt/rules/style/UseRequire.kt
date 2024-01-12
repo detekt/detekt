@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.arguments
@@ -30,12 +29,10 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UseRequire(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        "UseRequire",
-        "Use require() instead of throwing an IllegalArgumentException.",
-    )
+class UseRequire(config: Config) : Rule(
+    config,
+    "Use require() instead of throwing an IllegalArgumentException."
+) {
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
         if (!expression.isIllegalArgumentException()) return

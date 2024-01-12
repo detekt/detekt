@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtFile
@@ -17,12 +16,10 @@ import org.jetbrains.kotlin.psi.KtFile
  * a regular expression produced from the passed template license file (defined via `licenseTemplateFile` configuration
  * option).
  */
-class AbsentOrWrongFileLicense(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        id = RULE_NAME,
-        description = "License text is absent or incorrect.",
-    )
+class AbsentOrWrongFileLicense(config: Config) : Rule(
+    config,
+    "License text is absent or incorrect."
+) {
 
     @Suppress("unused")
     @Configuration("path to file with license header template resolved relatively to config file")

@@ -138,8 +138,8 @@ class FunctionNamingSpec {
     fun `should report a function name that begins with a backtick, capitals, and spaces`() {
         val subject = FunctionNaming(Config.empty)
         val code = "fun `Hi bye`() = 3"
-        subject.compileAndLint(code)
-        assertThat(subject.findings).hasSize(1)
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
     }
 
     @Nested
@@ -160,15 +160,6 @@ class FunctionNamingSpec {
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
                 FunctionNaming(config).compileAndLint(excludeClassPatternFunctionRegexCode)
             }
-        }
-
-        @Test
-        fun shouldNotFailWithInvalidRegexWhenDisabledFunctionNaming() {
-            val config = TestConfig(
-                "active" to "false",
-                FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo",
-            )
-            assertThat(FunctionNaming(config).compileAndLint(excludeClassPatternFunctionRegexCode)).isEmpty()
         }
     }
 

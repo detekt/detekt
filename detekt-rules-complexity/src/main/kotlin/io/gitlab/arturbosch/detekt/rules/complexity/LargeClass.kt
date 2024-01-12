@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.com.intellij.psi.util.PsiTreeUtil
@@ -21,13 +20,11 @@ import java.util.IdentityHashMap
  * things.
  */
 @ActiveByDefault(since = "1.0.0")
-class LargeClass(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        "LargeClass",
-        "One class should have one responsibility. Large classes tend to handle many things at once. " +
-            "Split up large classes into smaller classes that are easier to understand.",
-    )
+class LargeClass(config: Config) : Rule(
+    config,
+    "One class should have one responsibility. Large classes tend to handle many things at once. " +
+        "Split up large classes into smaller classes that are easier to understand."
+) {
 
     @Configuration("The maximum number of lines allowed per class.")
     private val allowedLines: Int by config(defaultValue = 600)

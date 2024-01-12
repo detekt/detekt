@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
@@ -28,12 +27,10 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
-class UnnecessarySafeCall(config: Config) : Rule(config) {
-
-    override val issue: Issue = Issue(
-        "UnnecessarySafeCall",
-        "Unnecessary safe call operator detected.",
-    )
+class UnnecessarySafeCall(config: Config) : Rule(
+    config,
+    "Unnecessary safe call operator detected."
+) {
 
     override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
         super.visitSafeQualifiedExpression(expression)

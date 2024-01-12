@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isInternal
 import io.gitlab.arturbosch.detekt.rules.isOverride
@@ -41,14 +40,12 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * }
  * </compliant>
  */
-class RedundantVisibilityModifierRule(config: Config) : Rule(config) {
+class RedundantVisibilityModifierRule(config: Config) : Rule(
+    config,
+    "Redundant visibility modifiers detected, which can be safely removed."
+) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("RedundantVisibilityModifier")
-
-    override val issue: Issue = Issue(
-        "RedundantVisibilityModifierRule",
-        "Redundant visibility modifiers detected, which can be safely removed.",
-    )
 
     private val classVisitor = ClassVisitor()
     private val childrenVisitor = ChildrenVisitor()

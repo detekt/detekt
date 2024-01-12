@@ -4,28 +4,12 @@ import io.github.detekt.test.utils.compileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class RuleSetSpec {
-
-    @Nested
-    inner class `should rule set be used` {
-
-        @Test
-        fun `is explicitly deactivated`() {
-            val config = yamlConfig("configs/deactivated_ruleset.yml")
-            assertThat(config.subConfig("comments").isActive()).isFalse()
-        }
-
-        @Test
-        fun `is active with an empty config`() {
-            assertThat(Config.empty.isActive()).isTrue()
-        }
-    }
 
     @Nested
     inner class `should rule analyze a file` {

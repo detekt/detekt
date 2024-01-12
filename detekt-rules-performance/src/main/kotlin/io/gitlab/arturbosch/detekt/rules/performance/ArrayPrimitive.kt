@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
@@ -40,11 +39,10 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.2.0")
-class ArrayPrimitive(config: Config) : Rule(config) {
-    override val issue = Issue(
-        "ArrayPrimitive",
-        "Using `Array<Primitive>` leads to implicit boxing and a performance hit.",
-    )
+class ArrayPrimitive(config: Config) : Rule(
+    config,
+    "Using `Array<Primitive>` leads to implicit boxing and a performance hit."
+) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.getIntValueForPsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -31,12 +30,10 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class InvalidRange(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "If a for loops condition is false before the first iteration, the loop will never get executed.",
-    )
+class InvalidRange(config: Config) : Rule(
+    config,
+    "If a for loops condition is false before the first iteration, the loop will never get executed."
+) {
 
     private val minimumSize = 3
 

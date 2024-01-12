@@ -1,7 +1,8 @@
 package io.github.detekt.tooling.api.spec
 
 import io.gitlab.arturbosch.detekt.api.RuleId
-import io.gitlab.arturbosch.detekt.api.RuleSetId
+import io.gitlab.arturbosch.detekt.api.RuleSet
+import io.gitlab.arturbosch.detekt.api.Severity
 
 interface RulesSpec {
 
@@ -26,9 +27,14 @@ interface RulesSpec {
     sealed class FailurePolicy {
 
         /**
-         * No issues with a severity of error is allowed.
+         * Any number of issues is allowed. The build never fails due to detekt issues.
          */
-        data object FailOnError : FailurePolicy()
+        data object NeverFail : FailurePolicy()
+
+        /**
+         * No issue at or above the specified severity is allowed.
+         */
+        data class FailOnSeverity(val minSeverity: Severity) : FailurePolicy()
     }
 
     /**
@@ -56,6 +62,6 @@ interface RulesSpec {
         /**
          * Run a single rule.
          */
-        class RestrictToSingleRule(val id: Pair<RuleSetId, RuleId>) : RunPolicy()
+        class RestrictToSingleRule(val ruleSetId: RuleSet.Id, val ruleId: RuleId) : RunPolicy()
     }
 }

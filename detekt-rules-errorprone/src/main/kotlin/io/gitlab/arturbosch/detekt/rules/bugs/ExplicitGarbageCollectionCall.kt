@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
@@ -23,14 +22,12 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ExplicitGarbageCollectionCall(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        "ExplicitGarbageCollectionCall",
-        "Don't try to be smarter than the JVM. Your code should work independently whether the garbage " +
-            "collector is disabled or not. If you face memory issues, " +
-            "try tuning the JVM options instead of relying on code itself.",
-    )
+class ExplicitGarbageCollectionCall(config: Config) : Rule(
+    config,
+    "Don't try to be smarter than the JVM. Your code should work independently whether the garbage " +
+        "collector is disabled or not. If you face memory issues, " +
+        "try tuning the JVM options instead of relying on code itself."
+) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         expression.getCallNameExpression()?.let {

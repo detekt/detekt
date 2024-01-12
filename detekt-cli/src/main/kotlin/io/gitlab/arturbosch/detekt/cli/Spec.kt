@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.tooling.api.spec.RulesSpec
+import io.gitlab.arturbosch.detekt.api.RuleSet
 
 internal fun CliArgs.createSpec(output: Appendable, error: Appendable): ProcessingSpec {
     val args = this
@@ -22,7 +23,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
         rules {
             autoCorrect = args.autoCorrect
             activateAllRules = args.allRules
-            failurePolicy = RulesSpec.FailurePolicy.FailOnError
+            failurePolicy = args.failurePolicy
             excludeCorrectable = false // not yet supported; loaded from config
             runPolicy = args.toRunPolicy()
         }
@@ -73,5 +74,5 @@ private fun asPatterns(rawValue: String): List<String> = rawValue.trim()
 private fun CliArgs.toRunPolicy(): RulesSpec.RunPolicy {
     val parts = runRule?.split(":") ?: return RulesSpec.RunPolicy.NoRestrictions
     require(parts.size == 2) { "Pattern 'RuleSetId:RuleId' expected." }
-    return RulesSpec.RunPolicy.RestrictToSingleRule(parts[0] to parts[1])
+    return RulesSpec.RunPolicy.RestrictToSingleRule(RuleSet.Id(parts[0]), parts[1])
 }

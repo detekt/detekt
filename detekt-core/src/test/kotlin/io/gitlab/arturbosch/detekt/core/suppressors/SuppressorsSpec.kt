@@ -4,7 +4,6 @@ import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
@@ -38,7 +37,7 @@ class SuppressorsSpec {
     @Test
     fun `A finding that should be suppressed`() {
         val rule = ARule(TestConfig("ignoreAnnotated" to listOf("Composable")))
-        val suppress = getSuppressors(rule, BindingContext.EMPTY)
+        val suppress = buildSuppressors(rule, BindingContext.EMPTY)
             .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(noIgnorableCodeSmell) }
 
         assertThat(suppress).isFalse()
@@ -47,13 +46,11 @@ class SuppressorsSpec {
     @Test
     fun `A finding that should not be suppressed`() {
         val rule = ARule(TestConfig("ignoreAnnotated" to listOf("Composable")))
-        val suppress = getSuppressors(rule, BindingContext.EMPTY)
+        val suppress = buildSuppressors(rule, BindingContext.EMPTY)
             .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(ignorableCodeSmell) }
 
         assertThat(suppress).isTrue()
     }
 }
 
-private class ARule(config: Config = Config.empty) : Rule(config) {
-    override val issue = Issue("IssueId", "")
-}
+private class ARule(config: Config = Config.empty) : Rule(config, "")

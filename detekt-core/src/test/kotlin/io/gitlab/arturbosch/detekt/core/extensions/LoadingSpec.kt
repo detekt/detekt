@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.extensions
 
 import io.gitlab.arturbosch.detekt.api.ConfigValidator
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.rules.RuleSetLocator
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings
@@ -30,6 +31,6 @@ class LoadingSpec {
         }.withSettings { RuleSetLocator(this).load() }
 
         assertThat(providers.map { it.ruleSetId })
-            .doesNotContain("sample-rule-set")
+            .doesNotContain(RuleSet.Id("sample-rule-set"))
     }
 }

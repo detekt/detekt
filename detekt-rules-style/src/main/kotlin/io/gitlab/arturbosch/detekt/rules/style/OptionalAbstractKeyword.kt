@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
@@ -32,13 +31,11 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class OptionalAbstractKeyword(config: Config) : Rule(config) {
-
-    override val issue: Issue = Issue(
-        javaClass.simpleName,
-        "Unnecessary abstract modifier in interface detected. " +
-            "This abstract modifier is unnecessary and thus can be removed.",
-    )
+class OptionalAbstractKeyword(config: Config) : Rule(
+    config,
+    "Unnecessary abstract modifier in interface detected. " +
+        "This abstract modifier is unnecessary and thus can be removed."
+) {
 
     override fun visitClass(klass: KtClass) {
         if (klass.isInterface()) {

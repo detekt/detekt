@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import org.jetbrains.kotlin.psi.KtClass
@@ -56,13 +55,11 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class UtilityClassWithPublicConstructor(config: Config) : Rule(config) {
-
-    override val issue: Issue = Issue(
-        javaClass.simpleName,
-        "The class declaration is unnecessary because it only contains utility functions. " +
-            "An object declaration should be used instead.",
-    )
+class UtilityClassWithPublicConstructor(config: Config) : Rule(
+    config,
+    "The class declaration is unnecessary because it only contains utility functions. " +
+        "An object declaration should be used instead."
+) {
 
     override fun visitClass(klass: KtClass) {
         if (canBeCheckedForUtilityClass(klass)) {

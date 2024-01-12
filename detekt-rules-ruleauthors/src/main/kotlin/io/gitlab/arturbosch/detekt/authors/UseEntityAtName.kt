@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -21,12 +20,10 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  * then it can be replaced with [Entity.atName] for more semantic code and better baseline support.
  */
 @ActiveByDefault("1.22.0")
-class UseEntityAtName(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        "UseEntityAtName",
-        "Prefer Entity.atName to Entity.from(....nameIdentifier).",
-    )
+class UseEntityAtName(config: Config) : Rule(
+    config,
+    "Prefer Entity.atName to Entity.from(....nameIdentifier)."
+) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

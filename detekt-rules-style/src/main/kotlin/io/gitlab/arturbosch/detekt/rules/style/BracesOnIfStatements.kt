@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -143,12 +142,10 @@ import org.jetbrains.kotlin.psi.KtIfExpression
  *    f
  * </compliant>
  */
-class BracesOnIfStatements(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Braces do not comply with the specified policy",
-    )
+class BracesOnIfStatements(config: Config) : Rule(
+    config,
+    "Braces do not comply with the specified policy"
+) {
 
     @Configuration("single-line braces policy")
     private val singleLine: BracePolicy by config("never") { BracePolicy.getValue(it) }

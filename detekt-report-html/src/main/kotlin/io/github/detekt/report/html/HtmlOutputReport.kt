@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
@@ -71,7 +72,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
     private fun renderMetrics(metrics: Collection<ProjectMetric>) = createHTML().div {
         ul {
             metrics.forEach {
-                li { text("%,d ${it.type}".format(Locale.US, it.value)) }
+                li { text("%,d ${it.type}".format(Locale.ROOT, it.value)) }
             }
         }
     }
@@ -84,25 +85,25 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         }
     }
 
-    private fun renderFindings(findings: Map<String, List<Finding>>) = createHTML().div {
+    private fun renderFindings(findings: Map<RuleSet.Id, List<Finding>>) = createHTML().div {
         val total = findings.values
             .asSequence()
             .map { it.size }
             .fold(0) { a, b -> a + b }
 
-        text("Total: %,d".format(Locale.US, total))
+        text("Total: %,d".format(Locale.ROOT, total))
 
         findings
             .filter { it.value.isNotEmpty() }
             .toList()
-            .sortedBy { (group, _) -> group }
+            .sortedBy { (group, _) -> group.value }
             .forEach { (group, groupFindings) ->
                 renderGroup(group, groupFindings)
             }
     }
 
-    private fun FlowContent.renderGroup(group: String, findings: List<Finding>) {
-        h3 { text("$group: %,d".format(Locale.US, findings.size)) }
+    private fun FlowContent.renderGroup(group: RuleSet.Id, findings: List<Finding>) {
+        h3 { text("$group: %,d".format(Locale.ROOT, findings.size)) }
 
         findings
             .groupBy { it.issue.id }
@@ -113,17 +114,17 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
             }
     }
 
-    private fun FlowContent.renderRule(rule: String, group: String, findings: List<Finding>) {
+    private fun FlowContent.renderRule(rule: String, group: RuleSet.Id, findings: List<Finding>) {
         details {
             id = rule
             open = true
 
             summary("rule-container") {
-                span("rule") { text("$rule: %,d ".format(Locale.US, findings.size)) }
+                span("rule") { text("$rule: %,d ".format(Locale.ROOT, findings.size)) }
                 span("description") { text(findings.first().issue.description) }
             }
 
-            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.lowercase(Locale.US)}#${rule.lowercase(Locale.US)}") {
+            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.value.lowercase()}#${rule.lowercase()}") {
                 +"Documentation"
             }
 

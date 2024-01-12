@@ -8,7 +8,6 @@ import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
@@ -66,14 +65,13 @@ class TopLevelAutoCorrectSpec {
     }
 }
 
-private class DeleteAnnotationsRule(config: Config) : Rule(config) {
-    override val issue = Issue("test-rule", "")
+private class DeleteAnnotationsRule(config: Config) : Rule(config, "") {
     override fun visitAnnotation(annotation: KtAnnotation) {
         annotation.delete()
     }
 }
 
 private class TopLevelAutoCorrectProvider : RuleSetProvider {
-    override val ruleSetId: String = "test-rule-set"
+    override val ruleSetId = RuleSet.Id("test-rule-set")
     override fun instance() = RuleSet(ruleSetId, listOf(::DeleteAnnotationsRule))
 }

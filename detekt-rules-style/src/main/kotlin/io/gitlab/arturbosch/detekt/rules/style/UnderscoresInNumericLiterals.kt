@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.configWithFallback
@@ -28,13 +27,11 @@ import java.util.Locale
  * const val DEFAULT_AMOUNT = 1_000_000
  * </compliant>
  */
-class UnderscoresInNumericLiterals(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Report missing or invalid underscores in base 10 numbers. Numeric literals " +
-            "should be underscore separated to increase readability.",
-    )
+class UnderscoresInNumericLiterals(config: Config) : Rule(
+    config,
+    "Report missing or invalid underscores in base 10 numbers. Numeric literals " +
+        "should be underscore separated to increase readability."
+) {
 
     @Configuration("Length under which base 10 numbers are not required to have underscores")
     @Deprecated("Use `acceptableLength` instead")

@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 @ActiveByDefault(since = "1.0.0")
 class PerformanceProvider : DefaultRuleSetProvider {
 
-    override val ruleSetId: String = "performance"
+    override val ruleSetId = RuleSet.Id("performance")
 
     override fun instance(): RuleSet = RuleSet(
         ruleSetId,

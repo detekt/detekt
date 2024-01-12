@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -46,13 +45,11 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class MatchingDeclarationName(config: Config) : Rule(config) {
-
-    override val issue: Issue = Issue(
-        javaClass.simpleName,
-        "If a source file contains only a single non-private top-level class or object, " +
-            "the file name should reflect the case-sensitive name plus the .kt extension.",
-    )
+class MatchingDeclarationName(config: Config) : Rule(
+    config,
+    "If a source file contains only a single non-private top-level class or object, " +
+        "the file name should reflect the case-sensitive name plus the .kt extension."
+) {
 
     @Configuration("name should only be checked if the file starts with a class or object")
     private val mustBeFirst: Boolean by config(true)

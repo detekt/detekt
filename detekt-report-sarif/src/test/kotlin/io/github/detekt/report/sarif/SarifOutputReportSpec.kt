@@ -4,7 +4,6 @@ import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
@@ -27,9 +26,9 @@ class SarifOutputReportSpec {
     @Test
     fun `renders multiple issues`() {
         val result = TestDetektion(
-            createFinding(ruleName = "TestSmellA", severity = Severity.ERROR),
-            createFinding(ruleName = "TestSmellB", severity = Severity.WARNING),
-            createFinding(ruleName = "TestSmellC", severity = Severity.INFO)
+            createFinding(ruleName = "TestSmellA", severity = Severity.Error),
+            createFinding(ruleName = "TestSmellB", severity = Severity.Warning),
+            createFinding(ruleName = "TestSmellC", severity = Severity.Info)
         )
 
         val report = SarifOutputReport()
@@ -100,7 +99,7 @@ class SarifOutputReportSpec {
             createFinding(
                 ruleName = "TestSmellB",
                 entity = Entity(refEntity.name, refEntity.signature, location, refEntity.ktElement),
-                severity = Severity.WARNING
+                severity = Severity.Warning
             )
         )
 
@@ -137,7 +136,7 @@ class SarifOutputReportSpec {
             createFinding(
                 ruleName = "TestSmellB",
                 entity = Entity(refEntity.name, refEntity.signature, location, refEntity.ktElement),
-                severity = Severity.WARNING
+                severity = Severity.Warning
             )
         )
 
@@ -171,9 +170,7 @@ private fun constrainRegion(startLine: Int, startColumn: Int, endLine: Int, endC
     }
 """.trimIndent()
 
-class TestRule(config: Config = Config.empty) : Rule(config) {
-    override val issue = Issue(javaClass.simpleName, "")
-
+class TestRule(config: Config = Config.empty) : Rule(config, "") {
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         report(CodeSmell(issue, Entity.atName(classOrObject), message = "Error"))
     }

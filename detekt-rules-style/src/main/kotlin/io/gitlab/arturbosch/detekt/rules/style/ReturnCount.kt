@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
@@ -43,12 +42,10 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ReturnCount(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Restrict the number of return statements in methods.",
-    )
+class ReturnCount(config: Config) : Rule(
+    config,
+    "Restrict the number of return statements in methods."
+) {
 
     @Configuration("define the maximum number of return statements allowed per function")
     private val max: Int by config(2)

@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -36,12 +35,10 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ComplexCondition(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        "ComplexCondition",
-        "Complex conditions should be simplified and extracted into well-named methods if necessary.",
-    )
+class ComplexCondition(config: Config) : Rule(
+    config,
+    "Complex conditions should be simplified and extracted into well-named methods if necessary."
+) {
 
     @Configuration("Maximum allowed number of conditions.")
     private val allowedConditions: Int by config(defaultValue = 3)

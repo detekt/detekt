@@ -90,7 +90,7 @@ class RunnerSpec {
 
             @Test
             fun `writes output to output printer`() {
-                assertThat(outPrintStream.toString()).contains("A failure [test]")
+                assertThat(outPrintStream.toString()).contains("A failure [TestRule]")
             }
 
             @Test
@@ -170,7 +170,7 @@ class RunnerSpec {
                     "--report",
                     "txt:$tmp",
                     "--run-rule",
-                    "test:test",
+                    "test:TestRule",
                     "--config-resource",
                     "/configs/valid-config.yml"
                 )
@@ -186,7 +186,7 @@ class RunnerSpec {
 
         @Test
         fun `should throw on non existing rule set`() {
-            assertThatThrownBy { executeDetekt("--run-rule", "non_existing:test") }
+            assertThatThrownBy { executeDetekt("--run-rule", "non_existing:TestRule") }
                 .isExactlyInstanceOf(IllegalArgumentException::class.java)
         }
 

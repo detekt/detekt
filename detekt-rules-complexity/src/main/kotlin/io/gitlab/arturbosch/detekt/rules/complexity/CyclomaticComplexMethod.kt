@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -34,12 +33,10 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  *  [Reference](https://kotlinlang.org/docs/scope-functions.html)
  */
 @ActiveByDefault(since = "1.0.0")
-class CyclomaticComplexMethod(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        "CyclomaticComplexMethod",
-        "Prefer splitting up complex methods into smaller, easier to test methods.",
-    )
+class CyclomaticComplexMethod(config: Config) : Rule(
+    config,
+    "Prefer splitting up complex methods into smaller, easier to test methods."
+) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("ComplexMethod")
 
