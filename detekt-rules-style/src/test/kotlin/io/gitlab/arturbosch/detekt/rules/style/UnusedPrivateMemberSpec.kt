@@ -664,7 +664,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -714,7 +714,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -738,7 +738,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -756,7 +756,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -811,7 +811,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                         this.firstOrNull { it.s == s }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -830,7 +830,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                         this.firstOrNull { it.s == b }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -849,7 +849,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                         this.firstOrNull { it.s == s }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -881,7 +881,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 private operator fun List<StringWrapper>.get(s: String) =
                     this.firstOrNull { it.s == s }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).hasSize(0)
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -900,7 +900,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
                 private operator fun List<StringWrapper>.get(s: String) =
                     this.firstOrNull { it.s == s }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).hasSize(0)
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 

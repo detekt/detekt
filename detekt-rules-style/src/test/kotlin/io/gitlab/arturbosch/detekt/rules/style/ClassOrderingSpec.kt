@@ -212,7 +212,7 @@ class ClassOrderingSpec {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(0)
+        assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -235,7 +235,7 @@ class ClassOrderingSpec {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(0)
+        assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
     @Test

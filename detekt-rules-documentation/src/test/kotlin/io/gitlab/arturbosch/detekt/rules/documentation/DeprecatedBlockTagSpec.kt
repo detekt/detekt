@@ -19,7 +19,7 @@ class DeprecatedBlockTagSpec {
              */
             val v = 2
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(0)
+        assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
     @Nested

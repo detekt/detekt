@@ -322,7 +322,7 @@ class StringShouldBeRawStringSpec {
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 2))
         val findings = subject.compileAndLint(code)
-        assertThat(findings).hasSize(0)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -337,7 +337,7 @@ class StringShouldBeRawStringSpec {
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 2))
         val findings = subject.compileAndLint(code)
-        assertThat(findings).hasSize(0)
+        assertThat(findings).isEmpty()
     }
 
     @Test

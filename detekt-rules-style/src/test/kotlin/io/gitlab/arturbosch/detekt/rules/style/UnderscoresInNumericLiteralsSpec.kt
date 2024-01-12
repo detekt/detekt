@@ -315,7 +315,7 @@ class UnderscoresInNumericLiteralsSpec {
                 }
             """.trimIndent()
             val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -330,7 +330,7 @@ class UnderscoresInNumericLiteralsSpec {
                 }
             """.trimIndent()
             val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
     }
 
@@ -347,7 +347,7 @@ class UnderscoresInNumericLiteralsSpec {
                 }
             """.trimIndent()
             val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -360,7 +360,7 @@ class UnderscoresInNumericLiteralsSpec {
                 }
             """.trimIndent()
             val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
     }
 
