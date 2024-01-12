@@ -13,11 +13,10 @@ class PackageCountVisitorSpec {
             compileContentForTest(default),
             compileContentForTest(emptyEnum)
         )
-        val count = files
+        val distinctFiles = files
             .map { getData(it) }
             .distinct()
-            .count()
-        assertThat(count).isEqualTo(2)
+        assertThat(distinctFiles).hasSize(2)
     }
 }
 
