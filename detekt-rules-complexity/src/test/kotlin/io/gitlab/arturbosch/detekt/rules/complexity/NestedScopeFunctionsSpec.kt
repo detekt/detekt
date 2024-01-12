@@ -114,7 +114,7 @@ class NestedScopeFunctionsSpec(private val env: KotlinCoreEnvironment) {
     private fun expectFunctionInMsg(scopeFunction: String) {
         val expected = "The scope function '$scopeFunction' is nested too deeply ('2'). " +
             "The maximum allowed depth is set to '1'."
-        assertThat(actual[0]).hasMessage(expected)
+        assertThat(actual).singleElement().hasMessage(expected)
     }
 
     private fun expectNoFindings() {

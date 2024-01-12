@@ -34,13 +34,8 @@ class DeprecatedBlockTagSpec {
         """.trimIndent()
 
         @Test
-        fun `has found something`() {
-            assertThat(subject.compileAndLint(code)).hasSize(1)
-        }
-
-        @Test
         fun `correct message`() {
-            assertThat(subject.compileAndLint(code)[0]).hasMessage(
+            assertThat(subject.compileAndLint(code)).singleElement().hasMessage(
                 "@deprecated tag block does not properly report " +
                     "deprecation in Kotlin, use @Deprecated annotation instead"
             )

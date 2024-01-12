@@ -54,8 +54,8 @@ internal class UseEntityAtNameSpec {
             }
         """.trimIndent()
         val findings = rule.compileAndLint(code)
-        assertThat(findings).hasSize(1).hasTextLocations("from")
-        assertThat(findings.single()).hasMessage("Recommended to use Entity.atName(element) instead.")
+        assertThat(findings).singleElement().hasMessage("Recommended to use Entity.atName(element) instead.")
+        assertThat(findings).hasTextLocations("from")
     }
 
     @Test
@@ -71,8 +71,8 @@ internal class UseEntityAtNameSpec {
             }
         """.trimIndent()
         val findings = rule.compileAndLint(code)
-        assertThat(findings).hasSize(1).hasTextLocations("from")
-        assertThat(findings.single()).hasMessage("Recommended to use Entity.atName(element) instead.")
+        assertThat(findings).singleElement().hasMessage("Recommended to use Entity.atName(element) instead.")
+        assertThat(findings).hasTextLocations("from")
     }
 
     @Test
@@ -88,8 +88,8 @@ internal class UseEntityAtNameSpec {
             }
         """.trimIndent()
         val findings = rule.compileAndLint(code)
-        assertThat(findings).hasSize(1).hasTextLocations("from")
-        assertThat(findings.single()).hasMessage("Recommended to use Entity.atName(element) instead.")
+        assertThat(findings).singleElement().hasMessage("Recommended to use Entity.atName(element) instead.")
+        assertThat(findings).hasTextLocations("from")
     }
 
     @Test
@@ -108,9 +108,9 @@ internal class UseEntityAtNameSpec {
             }
         """.trimIndent()
         val findings = rule.compileAndLint(code)
-        assertThat(findings).hasSize(1).hasTextLocations("from")
-        assertThat(findings.single())
+        assertThat(findings).singleElement()
             .hasMessage("Recommended to use Entity.atName(element.getStrictParentOfType<KtClass>()) instead.")
+        assertThat(findings).hasTextLocations("from")
     }
 
     @Test
@@ -127,8 +127,8 @@ internal class UseEntityAtNameSpec {
             }
         """.trimIndent()
         val findings = rule.compileAndLint(code)
-        assertThat(findings).hasSize(1).hasTextLocations("from")
-        assertThat(findings.single()).hasMessage("Recommended to use Entity.atName(element) instead.")
+        assertThat(findings).singleElement().hasMessage("Recommended to use Entity.atName(element) instead.")
+        assertThat(findings).hasTextLocations("from")
     }
 
     @Test

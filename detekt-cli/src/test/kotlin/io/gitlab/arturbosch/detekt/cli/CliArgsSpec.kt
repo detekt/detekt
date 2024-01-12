@@ -28,15 +28,13 @@ internal class CliArgsSpec {
         @Test
         fun `the current working directory is used if parameter is not set`() {
             val cli = parseArguments(emptyArray())
-            assertThat(cli.inputPaths).hasSize(1)
-            assertThat(cli.inputPaths.first()).isEqualTo(Path(System.getProperty("user.dir")))
+            assertThat(cli.inputPaths).singleElement().isEqualTo(Path(System.getProperty("user.dir")))
         }
 
         @Test
         fun `a single value is converted to a path`() {
             val cli = parseArguments(arrayOf("--input", "$projectPath"))
-            assertThat(cli.inputPaths).hasSize(1)
-            assertThat(cli.inputPaths.first().absolute()).isEqualTo(projectPath)
+            assertThat(cli.inputPaths.map(Path::absolute)).singleElement().isEqualTo(projectPath)
         }
 
         @Test

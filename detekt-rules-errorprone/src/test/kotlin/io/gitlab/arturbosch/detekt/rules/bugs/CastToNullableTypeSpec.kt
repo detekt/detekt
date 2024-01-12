@@ -19,9 +19,8 @@ class CastToNullableTypeSpec(private val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1)
+        assertThat(findings).singleElement().hasMessage("Use the safe cast ('as? String') instead of 'as String?'.")
         assertThat(findings).hasStartSourceLocation(2, 24)
-        assertThat(findings[0]).hasMessage("Use the safe cast ('as? String') instead of 'as String?'.")
     }
 
     @Test

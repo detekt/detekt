@@ -214,7 +214,7 @@ class RuleCollectorSpec {
                 defaultAndroidValue = null,
                 deprecated = null
             )
-            assertThat(items[0].configurations[0]).isEqualTo(expectedConfiguration)
+            assertThat(items[0].configurations).singleElement().isEqualTo(expectedConfiguration)
         }
 
         @Test
@@ -531,7 +531,7 @@ class RuleCollectorSpec {
                     }
                 """.trimIndent()
                 val items = subject.run(code)
-                assertThat(items[0].configurations[0]).isEqualTo(
+                assertThat(items[0].configurations).singleElement().isEqualTo(
                     Configuration(
                         name = "maxLineLength",
                         description = "description",
@@ -555,7 +555,7 @@ class RuleCollectorSpec {
                     }
                 """.trimIndent()
                 val items = subject.run(code)
-                assertThat(items[0].configurations[0]).isEqualTo(
+                assertThat(items[0].configurations).singleElement().isEqualTo(
                     Configuration(
                         name = "maxLineLength",
                         description = "description",
