@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.psi.KtAnnotatedExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
@@ -16,6 +17,7 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtSuperTypeList
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
+import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 import io.gitlab.arturbosch.detekt.api.Configuration as ConfigAnnotation
 
 data class RuleSetProvider(
@@ -101,7 +103,11 @@ private class RuleSetProviderVisitor : DetektVisitor() {
         if (!containsRuleSetProvider) return
 
         if (property.isOverride() && property.name != null && property.name == PROPERTY_RULE_SET_ID) {
-            name = (property.initializer as? KtStringTemplateExpression)?.entries?.get(0)?.text
+            val initializer = (property.initializer as? KtDotQualifiedExpression)
+            val argument = (initializer?.lastChild as? KtCallExpression)?.valueArguments
+                ?.single()
+                ?.getArgumentExpression()
+            name = (argument as? KtStringTemplateExpression)?.entries?.get(0)?.text
                 ?: throw InvalidDocumentationException(
                     "RuleSetProvider class " +
                         "${property.containingClass()?.name.orEmpty()} doesn't provide a ruleSetId."

@@ -11,7 +11,7 @@ import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 @ActiveByDefault(since = "1.0.0")
 class EmptyCodeProvider : DefaultRuleSetProvider {
 
-    override val ruleSetId: String = "empty-blocks"
+    override val ruleSetId = RuleSet.Id("empty-blocks")
 
     override fun instance(): RuleSet = RuleSet(
         ruleSetId,

@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 @ActiveByDefault(since = "1.4.0")
 class CoroutinesProvider : DefaultRuleSetProvider {
 
-    override val ruleSetId: String = "coroutines"
+    override val ruleSetId = RuleSet.Id("coroutines")
 
     override fun instance(): RuleSet = RuleSet(
         ruleSetId,

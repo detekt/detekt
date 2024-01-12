@@ -101,7 +101,7 @@ internal class Analyzer(
         compilerResources: CompilerResources
     ): Map<RuleSet.Id, List<Finding>> {
         val activeRuleSetsToRuleSetConfigs = providers.asSequence()
-            .map { it to config.subConfig(it.ruleSetId) }
+            .map { it to config.subConfig(it.ruleSetId.value) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
             .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.shouldAnalyzeFile(file) }
@@ -143,7 +143,7 @@ internal class Analyzer(
 
     private fun warnAboutEnabledRequiresTypeResolutionRules() {
         providers.asSequence()
-            .map { it to config.subConfig(it.ruleSetId) }
+            .map { it to config.subConfig(it.ruleSetId.value) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
             .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
             .flatMap { (ruleSet, config) ->

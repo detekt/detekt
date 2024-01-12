@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 @ActiveByDefault(since = "1.0.0")
 class NamingProvider : DefaultRuleSetProvider {
 
-    override val ruleSetId: String = "naming"
+    override val ruleSetId = RuleSet.Id("naming")
 
     override fun instance(): RuleSet = RuleSet(
         ruleSetId,

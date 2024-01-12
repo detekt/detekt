@@ -7,8 +7,8 @@ import io.gitlab.arturbosch.detekt.api.internal.validateIdentifier
  */
 class RuleSet(val id: Id, val rules: Map<String, (Config) -> Rule>) {
     companion object {
-        operator fun invoke(id: String, rules: List<(Config) -> Rule>): RuleSet {
-            return RuleSet(Id(id), rules.associateBy { it(Config.empty).ruleId })
+        operator fun invoke(id: Id, rules: List<(Config) -> Rule>): RuleSet {
+            return RuleSet(id, rules.associateBy { it(Config.empty).ruleId })
         }
     }
 

@@ -14,7 +14,7 @@ class SingleRuleProviderSpec {
     private val provider = SingleRuleProvider(
         "MagicNumber",
         object : RuleSetProvider {
-            override val ruleSetId: String = "style"
+            override val ruleSetId = RuleSet.Id("style")
 
             override fun instance(): RuleSet = RuleSet(ruleSetId, listOf(::MagicNumber))
         }

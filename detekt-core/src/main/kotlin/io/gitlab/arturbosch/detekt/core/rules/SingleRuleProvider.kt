@@ -15,7 +15,7 @@ internal class SingleRuleProvider(
         createRuleInstance() // provoke early exit when rule does not exist
     }
 
-    override val ruleSetId: String = wrapped.ruleSetId
+    override val ruleSetId = wrapped.ruleSetId
 
     override fun instance(): RuleSet = RuleSet(
         ruleSetId,

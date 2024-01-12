@@ -12,15 +12,19 @@ import java.nio.file.Path
 
 val path: Path = resourceAsPath("/cases")
 
-class TestProvider(override val ruleSetId: String = "Test") : RuleSetProvider {
+class TestProvider : RuleSetProvider {
+    override val ruleSetId: RuleSet.Id = RuleSet.Id("Test")
+
     override fun instance(): RuleSet {
-        return RuleSet("Test", listOf(::FindName))
+        return RuleSet(ruleSetId, listOf(::FindName))
     }
 }
 
-class TestProvider2(override val ruleSetId: String = "Test2") : RuleSetProvider {
+class TestProvider2 : RuleSetProvider {
+    override val ruleSetId: RuleSet.Id = RuleSet.Id("Test2")
+
     override fun instance(): RuleSet {
-        return RuleSet("Test", emptyList())
+        return RuleSet(ruleSetId, emptyList())
     }
 }
 

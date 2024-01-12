@@ -32,7 +32,7 @@ fun ProcessingSettings.createRuleProviders(): List<RuleSetProvider> = when (val 
         val ruleSetId = runPolicy.ruleSetId
         val ruleId = runPolicy.ruleId
         val realProvider = requireNotNull(
-            RuleSetLocator(this).load().find { it.ruleSetId == ruleSetId.value }
+            RuleSetLocator(this).load().find { it.ruleSetId == ruleSetId }
         ) { "There was no rule set with id '$ruleSetId'." }
         listOf(SingleRuleProvider(ruleId, realProvider))
     }
