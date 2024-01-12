@@ -68,31 +68,13 @@ class AutoCorrectLevelSpec {
         assertThat(findings).isNotEmpty()
         assertJThat(wasFormatted(file)).isFalse()
     }
-
-    @Test
-    fun `autoCorrect_ true but rule active false should not reformat the test file`() {
-        val config = yamlConfigFromContent(
-            """
-                formatting:
-                  active: true
-                  autoCorrect: true
-                  ChainWrapping:
-                    active: false
-                    autoCorrect: true
-            """.trimIndent()
-        )
-
-        val (file, findings) = runRule(config)
-
-        assertThat(findings).isEmpty()
-        assertJThat(wasFormatted(file)).isFalse()
-    }
 }
 
 private fun runRule(config: Config): Pair<KtFile, List<Finding>> {
     val testFile = loadFile("configTests/fixed.kt")
     val ruleSet = loadRuleSet<FormattingProvider>()
     val rules = ruleSet.rules.map { (ruleId, provider) -> provider(config.subConfig(ruleSet.id).subConfig(ruleId)) }
+        .filter { it.config.valueOrDefault("active", false) }
     return testFile to rules.flatMap { it.visitFile(testFile) }
 }
 

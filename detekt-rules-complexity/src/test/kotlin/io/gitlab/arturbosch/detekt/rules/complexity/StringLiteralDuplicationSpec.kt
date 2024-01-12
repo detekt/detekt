@@ -122,15 +122,6 @@ class StringLiteralDuplicationSpec {
         }
 
         @Test
-        fun `should not fail with invalid regex when disabled`() {
-            val config = TestConfig(
-                "active" to "false",
-                IGNORE_STRINGS_REGEX to "*lorem",
-            )
-            assertFindingWithConfig(regexTestingCode, config, 0)
-        }
-
-        @Test
         fun `should fail with invalid regex`() {
             val config = TestConfig(IGNORE_STRINGS_REGEX to "*lorem")
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
