@@ -188,7 +188,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             TestConfig(METHODS to listOf("java.time.LocalDate.now()"))
         ).compileAndLintWithContext(env, code)
         assertThat(findings).hasStartSourceLocation(5, 26)
-        assertThat(findings[0])
+        assertThat(findings).singleElement()
             .hasMessage("The method `java.time.LocalDate.now()` has been forbidden in the detekt config.")
     }
 

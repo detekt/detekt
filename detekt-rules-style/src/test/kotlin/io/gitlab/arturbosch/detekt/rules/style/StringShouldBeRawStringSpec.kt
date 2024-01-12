@@ -394,8 +394,7 @@ class StringShouldBeRawStringSpec {
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 0))
         val findings = subject.compileAndLint(code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0]).hasSourceLocation(5, 13)
+        assertThat(findings).singleElement().hasSourceLocation(5, 13)
     }
 
     @Test

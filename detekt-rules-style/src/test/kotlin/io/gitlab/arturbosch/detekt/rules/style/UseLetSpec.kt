@@ -39,8 +39,7 @@ class UseLetSpec {
                         val shouldFail = (isNonNullCheck && rightIsNull) || (isNullCheck && leftIsNull)
                         val findings = subject.compileAndLint(expr)
                         if (shouldFail) {
-                            assertThat(findings).hasSize(1)
-                            assertThat(findings[0]).hasMessage(subject.description)
+                            assertThat(findings).singleElement().hasMessage(subject.description)
                         } else {
                             assertThat(findings).isEmpty()
                         }
