@@ -110,7 +110,7 @@ class RuleSetProviderCollectorSpec {
              */
             @ActiveByDefault("1.0.0")
             class TestProvider: RuleSetProvider {
-                override val ruleSetId: String = "$ruleSetId"
+                override val ruleSetId = RuleSet.Id("$ruleSetId")
             
                 override fun instance(config: Config): RuleSet {
                     return RuleSet(ruleSetId, listOf(
@@ -168,7 +168,7 @@ class RuleSetProviderCollectorSpec {
              * $description
              */
             class TestProvider: RuleSetProvider {
-                override val ruleSetId: String = "$ruleSetId"
+                override val ruleSetId = RuleSet.Id("$ruleSetId")
             
                 override fun instance(config: Config): RuleSet {
                     return RuleSet(ruleSetId, listOf(
@@ -220,7 +220,7 @@ class RuleSetProviderCollectorSpec {
             package foo
             
             class TestProvider: RuleSetProvider {
-                override val ruleSetId: String = "$ruleSetId"
+                override val ruleSetId = RuleSet.Id("$ruleSetId")
             
                 override fun instance(config: Config): RuleSet {
                     return RuleSet(ruleSetId, listOf(
@@ -247,7 +247,7 @@ class RuleSetProviderCollectorSpec {
              */
             @ActiveByDefault(since = "1.2.xyz")
             class TestProvider: RuleSetProvider {
-                override val ruleSetId: String = "ruleSetId"
+                override val ruleSetId = RuleSet.Id("ruleSetId")
             
                 override fun instance(config: Config): RuleSet {
                     return RuleSet(ruleSetId, listOf(
@@ -271,7 +271,7 @@ class RuleSetProviderCollectorSpec {
             package foo
             
             class TestProvider: RuleSetProvider {
-                override val ruleSetId: String = "$ruleSetId"
+                override val ruleSetId = RuleSet.Id("$ruleSetId")
             
                 override fun instance(config: Config): RuleSet {
                     return RuleSet(ruleSetId, emptyListOf())
@@ -300,7 +300,7 @@ class RuleSetProviderCollectorSpec {
              */
             @ActiveByDefault("1.0.0")
             class TestProvider: RuleSetProvider {
-                override val ruleSetId: String = "$ruleSetId"
+                override val ruleSetId = RuleSet.Id("$ruleSetId")
             
                 override fun instance(config: Config): RuleSet {
                     return RuleSet(ruleSetId, listOf(
@@ -332,7 +332,7 @@ class RuleSetProviderCollectorSpec {
              */
             @ActiveByDefault("1.0.0")
             class TestProvider: RuleSetProvider {
-                override val ruleSetId: String = "$ruleSetId"
+                override val ruleSetId = RuleSet.Id("$ruleSetId")
             
                 override fun instance(config: Config): RuleSet {
                     return RuleSet(ruleSetId, listOf(
@@ -378,7 +378,7 @@ class RuleSetProviderCollectorSpec {
              * description
              */
             class TestProvider: RuleSetProvider {
-                override val ruleSetId: String = "ruleSetId"
+                override val ruleSetId = RuleSet.Id("ruleSetId")
             
                 override fun instance(config: Config): RuleSet {
                     return RuleSet(ruleSetId, listOf(::RruleName))
@@ -435,7 +435,7 @@ class RuleSetProviderCollectorSpec {
              * description
              */
             class TestProvider: RuleSetProvider {
-                override val ruleSetId: String = "ruleSetId"
+                override val ruleSetId = RuleSet.Id("ruleSetId")
             
                 override fun instance(config: Config): RuleSet {
                     return RuleSet(ruleSetId, listOf(::RruleName))

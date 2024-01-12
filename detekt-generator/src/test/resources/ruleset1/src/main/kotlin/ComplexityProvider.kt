@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 @ActiveByDefault(since = "1.0.0")
 class ComplexityProvider : DefaultRuleSetProvider {
 
-    override val ruleSetId: String = "complexity"
+    override val ruleSetId = RuleSet.Id("complexity")
 
     override fun instance(): RuleSet = RuleSet(
         ruleSetId,

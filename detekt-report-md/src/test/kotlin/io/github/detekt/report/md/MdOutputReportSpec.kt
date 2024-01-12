@@ -9,6 +9,7 @@ import io.github.detekt.metrics.processors.sourceLinesKey
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createEntity
@@ -108,11 +109,11 @@ class MdOutputReportSpec {
     @Test
     fun `renders the right documentation links for the rules`() {
         val detektion = object : TestDetektion() {
-            override val findings: Map<String, List<Finding>> = mapOf(
-                "Style" to listOf(
+            override val findings: Map<RuleSet.Id, List<Finding>> = mapOf(
+                RuleSet.Id("Style") to listOf(
                     createFinding(createIssue("ValCouldBeVar"), createEntity())
                 ),
-                "empty" to listOf(
+                RuleSet.Id("empty") to listOf(
                     createFinding(createIssue("EmptyBody"), createEntity()),
                     createFinding(createIssue("EmptyIf"), createEntity())
                 )
@@ -222,7 +223,8 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
 
 private fun createMdDetektion(vararg findingPairs: Pair<String, List<Finding>>): Detektion {
     return object : TestDetektion() {
-        override val findings: Map<String, List<Finding>> = findingPairs.toMap()
+        override val findings: Map<RuleSet.Id, List<Finding>> = findingPairs.toMap()
+            .mapKeys { (key, _) -> RuleSet.Id(key) }
 
         override val metrics: Collection<ProjectMetric> = listOf(
             ProjectMetric("M1", 10_000),
@@ -242,7 +244,7 @@ private fun findings(): Array<Pair<String, List<Finding>>> {
     val entity4 = createEntity(location = createLocation("src/main/com/sample/Sample2.kt", position = 1 to 1))
 
     return arrayOf(
-        "Section 1" to listOf(
+        "RuleSet1" to listOf(
             createFinding(issueA, entity1),
             createFinding(issueA, entity2),
             createFinding(issueA, entity3),
@@ -251,7 +253,7 @@ private fun findings(): Array<Pair<String, List<Finding>>> {
             createFinding(issueB, entity1),
             createFinding(issueB, entity4)
         ),
-        "Section 2" to listOf(
+        "RuleSet2" to listOf(
             createFinding(issueB, entity3),
             createFinding(issueC, entity1),
             createFinding(issueC, entity2)

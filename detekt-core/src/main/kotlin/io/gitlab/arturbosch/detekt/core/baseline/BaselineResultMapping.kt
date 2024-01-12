@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.core.baseline
 
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.ReportingExtension
-import io.gitlab.arturbosch.detekt.api.RuleSetId
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.getOrNull
 import io.gitlab.arturbosch.detekt.core.DetektResult
@@ -20,7 +20,7 @@ class BaselineResultMapping : ReportingExtension {
         createBaseline = context.getOrNull(DETEKT_BASELINE_CREATION_KEY) ?: false
     }
 
-    override fun transformFindings(findings: Map<RuleSetId, List<Finding>>): Map<RuleSetId, List<Finding>> {
+    override fun transformFindings(findings: Map<RuleSet.Id, List<Finding>>): Map<RuleSet.Id, List<Finding>> {
         val baselineFile = baselineFile
         require(!createBaseline || (createBaseline && baselineFile != null)) {
             "Invalid baseline options invariant."
@@ -29,7 +29,9 @@ class BaselineResultMapping : ReportingExtension {
         return baselineFile?.let { findings.transformWithBaseline(it) } ?: findings
     }
 
-    private fun Map<RuleSetId, List<Finding>>.transformWithBaseline(baselinePath: Path): Map<RuleSetId, List<Finding>> {
+    private fun Map<RuleSet.Id, List<Finding>>.transformWithBaseline(
+        baselinePath: Path,
+    ): Map<RuleSet.Id, List<Finding>> {
         val facade = BaselineFacade()
         val flatten = this.flatMap { it.value }
 

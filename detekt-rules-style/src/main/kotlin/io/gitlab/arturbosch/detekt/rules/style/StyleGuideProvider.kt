@@ -16,7 +16,7 @@ import io.gitlab.arturbosch.detekt.rules.style.optional.PreferToOverPairSyntax
 @ActiveByDefault(since = "1.0.0")
 class StyleGuideProvider : DefaultRuleSetProvider {
 
-    override val ruleSetId: String = "style"
+    override val ruleSetId = RuleSet.Id("style")
 
     @Suppress("LongMethod")
     override fun instance(): RuleSet = RuleSet(

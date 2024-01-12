@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import org.jetbrains.kotlin.psi.KtClass
 
 class TestProvider : RuleSetProvider {
-    override val ruleSetId: String = "test"
+    override val ruleSetId = RuleSet.Id("test")
     override fun instance(): RuleSet = RuleSet(ruleSetId, listOf(::TestRule))
 }
 

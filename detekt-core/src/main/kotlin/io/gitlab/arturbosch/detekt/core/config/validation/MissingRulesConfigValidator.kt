@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.core.config.validation
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Notification
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import io.gitlab.arturbosch.detekt.core.util.SimpleNotification
@@ -25,7 +26,7 @@ internal class MissingRulesConfigValidator(
     }
 
     private fun validateRuleSet(
-        ruleSet: String,
+        ruleSet: RuleSet.Id,
         configToValidate: YamlConfig,
     ): List<Notification> {
         val ruleSetConfigToValidate = configToValidate.getSubMapOrNull(ruleSet)
@@ -38,7 +39,7 @@ internal class MissingRulesConfigValidator(
     }
 
     private fun checkForMissingRules(
-        ruleSetName: String,
+        ruleSetName: RuleSet.Id,
         ruleSetConfigToValidate: Map<String, Any>,
         ruleSetConfigFromBaseline: Map<String, Any>,
     ): List<Notification> {
@@ -52,25 +53,25 @@ internal class MissingRulesConfigValidator(
             .map { ruleName -> ruleMissing(ruleName, ruleSetName) }
     }
 
-    private fun ruleMissing(ruleName: String, ruleSetName: String): Notification =
+    private fun ruleMissing(ruleName: String, ruleSetName: RuleSet.Id): Notification =
         SimpleNotification(
             "Rule '$ruleName' from the '$ruleSetName' rule set is missing in the configuration.",
             Notification.Level.Warning,
         )
 
-    private fun ruleSetMissing(ruleSetName: String): Notification =
+    private fun ruleSetMissing(ruleSetName: RuleSet.Id): Notification =
         SimpleNotification(
             "Rule set '$ruleSetName' is missing in the configuration.",
             Notification.Level.Warning,
         )
 
     @Suppress("UNCHECKED_CAST")
-    private fun YamlConfig.getSubMapOrNull(propertyName: String) = properties[propertyName] as? Map<String, Any>
+    private fun YamlConfig.getSubMapOrNull(ruleSetId: RuleSet.Id) = properties[ruleSetId.value] as? Map<String, Any>
 
     companion object {
 
-        private val ruleSetNames: List<String> by lazy(Companion::loadRuleSets)
-        private fun loadRuleSets(): List<String> {
+        private val ruleSetNames: List<RuleSet.Id> by lazy(Companion::loadRuleSets)
+        private fun loadRuleSets(): List<RuleSet.Id> {
             return ServiceLoader.load(
                 RuleSetProvider::class.java,
                 MissingRulesConfigValidator::class.java.classLoader

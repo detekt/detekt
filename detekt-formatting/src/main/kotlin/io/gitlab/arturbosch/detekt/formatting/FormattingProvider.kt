@@ -115,7 +115,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.Wrapping
 @ActiveByDefault(since = "1.0.0")
 class FormattingProvider : RuleSetProvider {
 
-    override val ruleSetId: String = "formatting"
+    override val ruleSetId = RuleSet.Id("formatting")
 
     @Suppress("LongMethod")
     override fun instance() = RuleSet(

@@ -8,7 +8,7 @@ import io.github.detekt.sarif4k.Region
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Location
-import io.gitlab.arturbosch.detekt.api.RuleSetId
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.Severity
 import kotlin.io.path.invariantSeparatorsPathString
 
@@ -23,7 +23,7 @@ private fun Severity.toResultLevel() = when (this) {
     Severity.Info -> Level.Note
 }
 
-private fun Finding.toResult(ruleSetId: RuleSetId): io.github.detekt.sarif4k.Result {
+private fun Finding.toResult(ruleSetId: RuleSet.Id): io.github.detekt.sarif4k.Result {
     val code = entity.ktElement?.containingFile?.text
 
     return io.github.detekt.sarif4k.Result(
