@@ -123,7 +123,7 @@ private fun MarkdownContent.renderFindings(findings: Map<RuleSet.Id, List<Findin
     findings
         .filter { it.value.isNotEmpty() }
         .toList()
-        .sortedBy { (group, _) -> group }
+        .sortedBy { (group, _) -> group.value }
         .forEach { (group, groupFindings) ->
             renderGroup(group, groupFindings)
         }

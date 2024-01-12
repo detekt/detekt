@@ -13,13 +13,9 @@ class RuleSet(val id: Id, val rules: Map<String, (Config) -> Rule>) {
     }
 
     @JvmInline
-    value class Id(val value: String) : Comparable<Id> { // FIXME we shouldn't implement Comparable here
+    value class Id(val value: String) {
         init {
             validateIdentifier(value)
-        }
-
-        override fun compareTo(other: Id): Int {
-            return value.compareTo(other.value)
         }
 
         override fun toString(): String {

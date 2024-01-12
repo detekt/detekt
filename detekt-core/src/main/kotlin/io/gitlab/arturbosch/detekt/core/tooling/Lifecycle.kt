@@ -43,7 +43,7 @@ internal interface Lifecycle {
             val analyzer = Analyzer(settings, ruleSets, processors)
             processors.forEach { it.onStart(filesToAnalyze, bindingContext) }
             val findings: Map<RuleSet.Id, List<Finding>> = analyzer.run(filesToAnalyze, bindingContext)
-            val result: Detektion = DetektResult(findings.toSortedMap())
+            val result: Detektion = DetektResult(findings.toSortedMap { o1, o2 -> o1.value.compareTo(o2.value) })
             processors.forEach { it.onFinish(filesToAnalyze, result, bindingContext) }
             result
         }

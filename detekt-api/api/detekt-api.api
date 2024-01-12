@@ -334,11 +334,8 @@ public final class io/gitlab/arturbosch/detekt/api/RuleSet$Companion {
 	public final fun invoke-wynkp2w (Ljava/lang/String;Ljava/util/List;)Lio/gitlab/arturbosch/detekt/api/RuleSet;
 }
 
-public final class io/gitlab/arturbosch/detekt/api/RuleSet$Id : java/lang/Comparable {
+public final class io/gitlab/arturbosch/detekt/api/RuleSet$Id {
 	public static final synthetic fun box-impl (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
-	public synthetic fun compareTo (Ljava/lang/Object;)I
-	public fun compareTo-ilhpFZo (Ljava/lang/String;)I
-	public static fun compareTo-ilhpFZo (Ljava/lang/String;Ljava/lang/String;)I
 	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
 	public fun equals (Ljava/lang/Object;)Z
 	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
