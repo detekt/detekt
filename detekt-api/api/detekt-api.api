@@ -213,7 +213,7 @@ public final class io/gitlab/arturbosch/detekt/api/HasEntity$DefaultImpls {
 public final class io/gitlab/arturbosch/detekt/api/Issue {
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getDescription ()Ljava/lang/String;
-	public final fun getId-2Rbgges ()Ljava/lang/String;
+	public final fun getId ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 }
 
