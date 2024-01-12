@@ -6,9 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
-import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
-import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
  * Lambda expressions are one of the core features of the language. They often include very small chunks of
@@ -28,6 +26,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  *
  * <compliant>
  * a?.let { it.plus(1) } // Much better to use implicit it
+ * a?.let { value: Int -> value.plus(1) } // Better as states the type more clearly
  * foo.flatMapObservable(Observable::fromIterable) // Here we can have a method reference
  *
  * // For multiline blocks it is usually better come up with a clear and more meaningful name
@@ -49,14 +48,17 @@ class ExplicitItLambdaParameter(config: Config) : Rule(
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
-        if (lambdaExpression.getStrictParentOfType<KtCallableReferenceExpression>() != null) return
         val parameterNames = lambdaExpression.valueParameters.map { it.name }
         if (IT_LITERAL in parameterNames) {
-            val message = if (parameterNames.size == 1) {
-                "This explicit usage of `it` as the lambda parameter name can be omitted."
-            } else {
-                "`it` should not be used as name for a lambda parameter."
-            }
+            val message =
+                if (
+                    parameterNames.size == 1 &&
+                    lambdaExpression.valueParameters[0].typeReference == null
+                ) {
+                    "This explicit usage of `it` as the lambda parameter name can be omitted."
+                } else {
+                    "`it` should not be used as name for a lambda parameter."
+                }
             report(
                 CodeSmell(
                     issue,
