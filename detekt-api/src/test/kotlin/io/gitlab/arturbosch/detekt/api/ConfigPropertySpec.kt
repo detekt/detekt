@@ -446,7 +446,7 @@ class ConfigPropertySpec {
                 repeat(5) {
                     assertThat(subject.useProperty()).isEqualTo("something with 1")
                 }
-                assertThat(subject.counter.get()).isEqualTo(1)
+                assertThat(subject.counter).hasValue(1)
             }
         }
     }
