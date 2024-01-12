@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.core.reporting.console
 import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
 import io.gitlab.arturbosch.detekt.core.reporting.decolorized
 import io.gitlab.arturbosch.detekt.test.TestDetektion
@@ -20,10 +21,10 @@ class FindingsReportSpec {
     fun `has the reference content`() {
         val expectedContent = readResourceContent("/reporting/findings-report.txt")
         val detektion = object : TestDetektion() {
-            override val findings: Map<String, List<Finding>> = mapOf(
-                "Ruleset1" to listOf(createFinding(), createFinding()),
-                "EmptyRuleset" to emptyList(),
-                "Ruleset2" to listOf(createFinding())
+            override val findings: Map<RuleSet.Id, List<Finding>> = mapOf(
+                RuleSet.Id("Ruleset1") to listOf(createFinding(), createFinding()),
+                RuleSet.Id("EmptyRuleset") to emptyList(),
+                RuleSet.Id("Ruleset2") to listOf(createFinding())
             )
         }
 
@@ -41,8 +42,8 @@ class FindingsReportSpec {
     @Test
     fun `reports no findings with rule set containing no smells`() {
         val detektion = object : TestDetektion() {
-            override val findings: Map<String, List<Finding>> = mapOf(
-                "Ruleset" to emptyList()
+            override val findings: Map<RuleSet.Id, List<Finding>> = mapOf(
+                RuleSet.Id("Ruleset") to emptyList()
             )
         }
         assertThat(subject.render(detektion)).isNull()
@@ -61,8 +62,8 @@ class FindingsReportSpec {
             "threshold is reached."
         val multilineMessage = "A multiline\n\r\tmessage.\t "
         val detektion = object : TestDetektion() {
-            override val findings: Map<String, List<Finding>> = mapOf(
-                "Ruleset" to listOf(
+            override val findings: Map<RuleSet.Id, List<Finding>> = mapOf(
+                RuleSet.Id("Ruleset") to listOf(
                     createFinding(createIssue("LongRule"), createEntity(), longMessage),
                     createFinding(createIssue("MultilineRule"), createEntity(), multilineMessage),
                 ),

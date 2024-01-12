@@ -11,6 +11,7 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createEntity
@@ -64,8 +65,8 @@ class HtmlOutputReportSpec {
     @Test
     fun `contains no findings`() {
         val detektion = object : TestDetektion() {
-            override val findings: Map<String, List<Finding>> = mapOf(
-                "EmptyRuleset" to emptyList()
+            override val findings: Map<RuleSet.Id, List<Finding>> = mapOf(
+                RuleSet.Id("EmptyRuleset") to emptyList()
             )
         }
         val result = htmlReport.render(detektion)
@@ -118,11 +119,11 @@ class HtmlOutputReportSpec {
     @Test
     fun `renders the right documentation links for the rules`() {
         val detektion = object : TestDetektion() {
-            override val findings: Map<String, List<Finding>> = mapOf(
-                "Style" to listOf(
+            override val findings: Map<RuleSet.Id, List<Finding>> = mapOf(
+                RuleSet.Id("Style") to listOf(
                     createFinding(createIssue("ValCouldBeVar"), createEntity())
                 ),
-                "empty" to listOf(
+                RuleSet.Id("empty") to listOf(
                     createFinding(createIssue("EmptyBody"), createEntity()),
                     createFinding(createIssue("EmptyIf"), createEntity())
                 )
@@ -216,11 +217,11 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     val issueB = createIssue("id_b")
 
     return createHtmlDetektion(
-        "Section 1" to listOf(
+        "RuleSet1" to listOf(
             createFinding(issueA, entity1, "Message finding 1"),
             createFinding(issueA, entity2, "Message finding 2")
         ),
-        "Section 2" to listOf(createFinding(issueB, entity3, "Message finding 3"))
+        "RuleSet2" to listOf(createFinding(issueB, entity3, "Message finding 3"))
     )
 }
 
@@ -253,11 +254,11 @@ private fun createTestDetektionFromRelativePath(): Detektion {
     val issueB = createIssue("id_b")
 
     return createHtmlDetektion(
-        "Section 1" to listOf(
+        "RuleSet1" to listOf(
             createFinding(issueA, entity1, "Message finding 1"),
             createFinding(issueA, entity2, "Message finding 2")
         ),
-        "Section 2" to listOf(createFinding(issueB, entity3, "Message finding 3"))
+        "RuleSet2" to listOf(createFinding(issueB, entity3, "Message finding 3"))
     )
 }
 
@@ -272,7 +273,7 @@ private fun findings(): Array<Pair<String, List<Finding>>> {
     val entity4 = createEntity(location = createLocation("src/main/com/sample/Sample2.kt", position = 1 to 1))
 
     return arrayOf(
-        "Section 1" to listOf(
+        "RuleSet1" to listOf(
             createFinding(issueA, entity1),
             createFinding(issueA, entity2),
             createFinding(issueA, entity3),
@@ -281,7 +282,7 @@ private fun findings(): Array<Pair<String, List<Finding>>> {
             createFinding(issueB, entity1),
             createFinding(issueB, entity4)
         ),
-        "Section 2" to listOf(
+        "RuleSet2" to listOf(
             createFinding(issueB, entity3),
             createFinding(issueC, entity1),
             createFinding(issueC, entity2)
@@ -291,7 +292,8 @@ private fun findings(): Array<Pair<String, List<Finding>>> {
 
 private fun createHtmlDetektion(vararg findingPairs: Pair<String, List<Finding>>): Detektion {
     return object : TestDetektion() {
-        override val findings: Map<String, List<Finding>> = findingPairs.toMap()
+        override val findings: Map<RuleSet.Id, List<Finding>> = findingPairs.toMap()
+            .mapKeys { (key, _) -> RuleSet.Id(key) }
     }
 }
 

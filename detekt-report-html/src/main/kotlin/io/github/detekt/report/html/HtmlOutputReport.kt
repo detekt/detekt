@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
@@ -84,7 +85,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         }
     }
 
-    private fun renderFindings(findings: Map<String, List<Finding>>) = createHTML().div {
+    private fun renderFindings(findings: Map<RuleSet.Id, List<Finding>>) = createHTML().div {
         val total = findings.values
             .asSequence()
             .map { it.size }
@@ -101,7 +102,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
             }
     }
 
-    private fun FlowContent.renderGroup(group: String, findings: List<Finding>) {
+    private fun FlowContent.renderGroup(group: RuleSet.Id, findings: List<Finding>) {
         h3 { text("$group: %,d".format(Locale.ROOT, findings.size)) }
 
         findings
@@ -113,7 +114,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
             }
     }
 
-    private fun FlowContent.renderRule(rule: String, group: String, findings: List<Finding>) {
+    private fun FlowContent.renderRule(rule: String, group: RuleSet.Id, findings: List<Finding>) {
         details {
             id = rule
             open = true
@@ -123,7 +124,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
                 span("description") { text(findings.first().issue.description) }
             }
 
-            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.lowercase()}#${rule.lowercase()}") {
+            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.value.lowercase()}#${rule.lowercase()}") {
                 +"Documentation"
             }
 

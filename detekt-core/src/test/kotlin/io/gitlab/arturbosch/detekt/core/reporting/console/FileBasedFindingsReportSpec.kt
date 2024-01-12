@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.core.reporting.console
 import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
 import io.gitlab.arturbosch.detekt.core.reporting.decolorized
 import io.gitlab.arturbosch.detekt.test.TestDetektion
@@ -18,13 +19,13 @@ class FileBasedFindingsReportSpec {
     fun `has the reference content`() {
         val expectedContent = readResourceContent("/reporting/grouped-findings-report.txt")
         val detektion = object : TestDetektion() {
-            override val findings: Map<String, List<Finding>> = mapOf(
-                "Ruleset1" to listOf(
+            override val findings: Map<RuleSet.Id, List<Finding>> = mapOf(
+                RuleSet.Id("Ruleset1") to listOf(
                     createFinding(fileName = "File1.kt"),
                     createFinding(fileName = "File2.kt")
                 ),
-                "EmptyRuleset" to emptyList(),
-                "Ruleset2" to listOf(createFinding(fileName = "File1.kt"))
+                RuleSet.Id("EmptyRuleset") to emptyList(),
+                RuleSet.Id("Ruleset2") to listOf(createFinding(fileName = "File1.kt"))
             )
         }
 
@@ -42,8 +43,8 @@ class FileBasedFindingsReportSpec {
     @Test
     fun `reports no findings when no rule set contains smells`() {
         val detektion = object : TestDetektion() {
-            override val findings: Map<String, List<Finding>> = mapOf(
-                "EmptySmells" to emptyList()
+            override val findings: Map<RuleSet.Id, List<Finding>> = mapOf(
+                RuleSet.Id("EmptySmells") to emptyList()
             )
         }
         assertThat(subject.render(detektion)).isNull()

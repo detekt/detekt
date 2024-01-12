@@ -5,7 +5,6 @@ import io.github.detekt.tooling.api.spec.RulesSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleId
 import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
@@ -19,7 +18,7 @@ fun Config.shouldAnalyzeFile(file: KtFile): Boolean {
     return filters == null || !filters.isIgnored(file.absolutePath())
 }
 
-fun associateRuleIdsToRuleSetIds(ruleSets: List<RuleSet>): Map<RuleId, RuleSetId> {
+fun associateRuleIdsToRuleSetIds(ruleSets: List<RuleSet>): Map<RuleId, RuleSet.Id> {
     return ruleSets
         .flatMap { ruleSet ->
             ruleSet.rules.map { (ruleId, _) -> ruleId to ruleSet.id }
@@ -33,7 +32,7 @@ fun ProcessingSettings.createRuleProviders(): List<RuleSetProvider> = when (val 
         val ruleSetId = runPolicy.ruleSetId
         val ruleId = runPolicy.ruleId
         val realProvider = requireNotNull(
-            RuleSetLocator(this).load().find { it.ruleSetId == ruleSetId }
+            RuleSetLocator(this).load().find { it.ruleSetId == ruleSetId.value }
         ) { "There was no rule set with id '$ruleSetId'." }
         listOf(SingleRuleProvider(ruleId, realProvider))
     }

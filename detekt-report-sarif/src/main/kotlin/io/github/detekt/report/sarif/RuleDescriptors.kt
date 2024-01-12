@@ -4,7 +4,7 @@ import io.github.detekt.sarif4k.MultiformatMessageString
 import io.github.detekt.sarif4k.ReportingDescriptor
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.RuleSetId
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import java.util.ServiceLoader
 
@@ -26,8 +26,8 @@ internal fun toReportingDescriptors(): List<ReportingDescriptor> {
     return descriptors
 }
 
-private fun Rule.toDescriptor(ruleSetId: RuleSetId): ReportingDescriptor {
-    val formattedRuleSetId = ruleSetId.lowercase()
+private fun Rule.toDescriptor(ruleSetId: RuleSet.Id): ReportingDescriptor {
+    val formattedRuleSetId = ruleSetId.value.lowercase()
     val formattedRuleId = ruleId.lowercase()
 
     return ReportingDescriptor(

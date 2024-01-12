@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RuleSetId
+import io.gitlab.arturbosch.detekt.api.RuleSet
 
 /**
  * A lightweight versions of the console report, where each line contains location, messages and issue id only.
@@ -11,7 +11,7 @@ class LiteFindingsReport : AbstractFindingsReport() {
 
     override val id: String = "LiteFindingsReport"
 
-    override fun render(findings: Map<RuleSetId, List<Finding>>): String {
+    override fun render(findings: Map<RuleSet.Id, List<Finding>>): String {
         return buildString {
             findings.values.flatten().forEach { finding ->
                 append("${finding.location.compact()}: ${finding.message} [${finding.issue.id}]")

@@ -15,6 +15,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
@@ -81,7 +82,7 @@ private fun MarkdownContent.renderComplexity(complexityReport: List<String>) {
     }
 }
 
-private fun MarkdownContent.renderGroup(group: String, findings: List<Finding>) {
+private fun MarkdownContent.renderGroup(group: RuleSet.Id, findings: List<Finding>) {
     findings
         .groupBy { it.issue.id }
         .toList()
@@ -91,14 +92,14 @@ private fun MarkdownContent.renderGroup(group: String, findings: List<Finding>) 
         }
 }
 
-private fun MarkdownContent.renderRule(rule: String, group: String, findings: List<Finding>) {
+private fun MarkdownContent.renderRule(rule: String, group: RuleSet.Id, findings: List<Finding>) {
     h3 { "$group, $rule (%,d)".format(Locale.ROOT, findings.size) }
     paragraph { (findings.first().issue.description) }
 
     paragraph {
         link(
             "Documentation",
-            "$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.lowercase()}#${rule.lowercase()}"
+            "$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.value.lowercase()}#${rule.lowercase()}"
         )
     }
 
@@ -111,7 +112,7 @@ private fun MarkdownContent.renderRule(rule: String, group: String, findings: Li
     }
 }
 
-private fun MarkdownContent.renderFindings(findings: Map<String, List<Finding>>) {
+private fun MarkdownContent.renderFindings(findings: Map<RuleSet.Id, List<Finding>>) {
     val total = findings.values
         .asSequence()
         .map { it.size }

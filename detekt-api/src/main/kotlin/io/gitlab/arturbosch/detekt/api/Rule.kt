@@ -50,7 +50,7 @@ open class Rule(
      */
     open val defaultRuleIdAliases: Set<String> = emptySet()
 
-    private val ruleSetId: RuleSetId? get() = config.parent?.parentPath
+    private val ruleSetId: RuleSet.Id? get() = config.parent?.parentPath?.let(RuleSet::Id)
 
     val autoCorrect: Boolean
         get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
