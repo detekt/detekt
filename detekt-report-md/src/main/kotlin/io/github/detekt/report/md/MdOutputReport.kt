@@ -71,7 +71,7 @@ class MdOutputReport : BuiltInOutputReport, OutputReport() {
 
 private fun MarkdownContent.renderMetrics(metrics: Collection<ProjectMetric>) {
     list {
-        metrics.forEach { item { "%,d ${it.type}".format(Locale.US, it.value) } }
+        metrics.forEach { item { "%,d ${it.type}".format(Locale.ROOT, it.value) } }
     }
 }
 
@@ -92,13 +92,13 @@ private fun MarkdownContent.renderGroup(group: String, findings: List<Finding>) 
 }
 
 private fun MarkdownContent.renderRule(rule: String, group: String, findings: List<Finding>) {
-    h3 { "$group, $rule (%,d)".format(Locale.US, findings.size) }
+    h3 { "$group, $rule (%,d)".format(Locale.ROOT, findings.size) }
     paragraph { (findings.first().issue.description) }
 
     paragraph {
         link(
             "Documentation",
-            "$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.lowercase(Locale.US)}#${rule.lowercase(Locale.US)}"
+            "$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.lowercase()}#${rule.lowercase()}"
         )
     }
 
@@ -117,7 +117,7 @@ private fun MarkdownContent.renderFindings(findings: Map<String, List<Finding>>)
         .map { it.size }
         .fold(0) { a, b -> a + b }
 
-    h2 { "Findings (%,d)".format(Locale.US, total) }
+    h2 { "Findings (%,d)".format(Locale.ROOT, total) }
 
     findings
         .filter { it.value.isNotEmpty() }

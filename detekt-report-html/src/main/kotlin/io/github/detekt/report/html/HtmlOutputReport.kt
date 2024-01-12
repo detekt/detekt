@@ -71,7 +71,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
     private fun renderMetrics(metrics: Collection<ProjectMetric>) = createHTML().div {
         ul {
             metrics.forEach {
-                li { text("%,d ${it.type}".format(Locale.US, it.value)) }
+                li { text("%,d ${it.type}".format(Locale.ROOT, it.value)) }
             }
         }
     }
@@ -90,7 +90,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
             .map { it.size }
             .fold(0) { a, b -> a + b }
 
-        text("Total: %,d".format(Locale.US, total))
+        text("Total: %,d".format(Locale.ROOT, total))
 
         findings
             .filter { it.value.isNotEmpty() }
@@ -102,7 +102,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
     }
 
     private fun FlowContent.renderGroup(group: String, findings: List<Finding>) {
-        h3 { text("$group: %,d".format(Locale.US, findings.size)) }
+        h3 { text("$group: %,d".format(Locale.ROOT, findings.size)) }
 
         findings
             .groupBy { it.issue.id }
@@ -119,11 +119,11 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
             open = true
 
             summary("rule-container") {
-                span("rule") { text("$rule: %,d ".format(Locale.US, findings.size)) }
+                span("rule") { text("$rule: %,d ".format(Locale.ROOT, findings.size)) }
                 span("description") { text(findings.first().issue.description) }
             }
 
-            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.lowercase(Locale.US)}#${rule.lowercase(Locale.US)}") {
+            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.lowercase()}#${rule.lowercase()}") {
                 +"Documentation"
             }
 
