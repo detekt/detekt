@@ -325,12 +325,12 @@ public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/
 public final class io/gitlab/arturbosch/detekt/api/RuleSet {
 	public static final field Companion Lio/gitlab/arturbosch/detekt/api/RuleSet$Companion;
 	public synthetic fun <init> (Ljava/lang/String;Ljava/util/Map;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getId-7o6PJhY ()Ljava/lang/String;
+	public final fun getId ()Ljava/lang/String;
 	public final fun getRules ()Ljava/util/Map;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/RuleSet$Companion {
-	public final fun invoke-wynkp2w (Ljava/lang/String;Ljava/util/List;)Lio/gitlab/arturbosch/detekt/api/RuleSet;
+	public final fun invoke (Ljava/lang/String;Ljava/util/List;)Lio/gitlab/arturbosch/detekt/api/RuleSet;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/RuleSet$Id {
