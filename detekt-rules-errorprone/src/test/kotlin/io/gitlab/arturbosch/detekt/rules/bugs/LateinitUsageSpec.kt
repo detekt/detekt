@@ -45,16 +45,6 @@ class LateinitUsageSpec {
             LateinitUsage(TestConfig(IGNORE_ON_CLASSES_PATTERN to "*Test")).compileAndLint(code)
         }
     }
-
-    @Test
-    fun `should not fail when disabled with faulty regex pattern`() {
-        val config = TestConfig(
-            "active" to "false",
-            IGNORE_ON_CLASSES_PATTERN to "*Test"
-        )
-        val findings = LateinitUsage(config).compileAndLint(code)
-        assertThat(findings).isEmpty()
-    }
 }
 
 private const val IGNORE_ON_CLASSES_PATTERN = "ignoreOnClassesPattern"

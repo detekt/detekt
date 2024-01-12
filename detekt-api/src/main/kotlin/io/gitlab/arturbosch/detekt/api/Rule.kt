@@ -56,8 +56,6 @@ open class Rule(
         get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
             (config.parent?.valueOrDefault(Config.AUTO_CORRECT_KEY, true) != false)
 
-    val active: Boolean get() = config.valueOrDefault(Config.ACTIVE_KEY, false)
-
     /**
      * Rules are aware of the paths they should run on via configuration properties.
      */
@@ -118,11 +116,10 @@ open class Rule(
     /**
      * Basic mechanism to decide if a rule should run or not.
      *
-     * By default, any rule which is declared 'active' in the [Config]
-     * or not suppressed by a [Suppress] annotation on file level should run.
+     * By default, any rule not suppressed by a [Suppress] annotation on file level should run.
      */
     open fun visitCondition(root: KtFile): Boolean =
-        active && shouldRunOnGivenFile(root) && !root.isSuppressedBy(ruleId, aliases, ruleSetId)
+        shouldRunOnGivenFile(root) && !root.isSuppressedBy(ruleId, aliases, ruleSetId)
 
     private fun shouldRunOnGivenFile(root: KtFile) =
         filters?.isIgnored(root)?.not() ?: true

@@ -18,10 +18,10 @@ import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.core.config.validation.DeprecatedRule
 import io.gitlab.arturbosch.detekt.core.config.validation.loadDeprecations
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
-import io.gitlab.arturbosch.detekt.core.rules.isActive
 import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
 import io.gitlab.arturbosch.detekt.core.suppressors.buildSuppressors
 import io.gitlab.arturbosch.detekt.core.tooling.getDefaultConfiguration
+import io.gitlab.arturbosch.detekt.core.util.isActiveOrDefault
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -102,7 +102,7 @@ internal class Analyzer(
     ): Map<RuleSet.Id, List<Finding>> {
         val activeRuleSetsToRuleSetConfigs = providers.asSequence()
             .map { it to config.subConfig(it.ruleSetId.value) }
-            .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
+            .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
             .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.shouldAnalyzeFile(file) }
             .toList()
@@ -112,8 +112,12 @@ internal class Analyzer(
         )
 
         val (correctableRules, otherRules) = activeRuleSetsToRuleSetConfigs
-            .flatMap { (ruleSet, config) ->
-                ruleSet.rules.map { (ruleId, ruleProvider) -> ruleProvider(config.subConfig(ruleId)) }
+            .flatMap { (ruleSet, ruleSetConfig) ->
+                ruleSet.rules
+                    .asSequence()
+                    .map { (ruleId, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleId) }
+                    .filter { (_, config) -> config.isActiveOrDefault(false) }
+                    .map { (ruleProvider, config) -> ruleProvider(config) }
             }
             .filter { rule ->
                 bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
@@ -144,12 +148,15 @@ internal class Analyzer(
     private fun warnAboutEnabledRequiresTypeResolutionRules() {
         providers.asSequence()
             .map { it to config.subConfig(it.ruleSetId.value) }
-            .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
+            .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
             .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
-            .flatMap { (ruleSet, config) ->
-                ruleSet.rules.map { (ruleId, ruleProvider) -> ruleProvider(config.subConfig(ruleId)) }
+            .flatMap { (ruleSet, ruleSetConfig) ->
+                ruleSet.rules
+                    .asSequence()
+                    .map { (ruleId, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleId) }
+                    .filter { (_, config) -> config.isActiveOrDefault(false) }
+                    .map { (ruleProvider, config) -> ruleProvider(config) }
             }
-            .filter { rule -> (rule as? Rule)?.active == true }
             .filter { rule -> rule::class.hasAnnotation<RequiresTypeResolution>() }
             .forEach { rule ->
                 settings.debug { "The rule '${rule.ruleId}' requires type resolution but it was run without it." }
