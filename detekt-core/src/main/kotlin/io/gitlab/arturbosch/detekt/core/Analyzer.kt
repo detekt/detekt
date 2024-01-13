@@ -117,6 +117,7 @@ internal class Analyzer(
                     .asSequence()
                     .map { (ruleId, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleId.value) }
                     .filter { (_, config) -> config.isActiveOrDefault(false) }
+                    .filter { (_, config) -> config.shouldAnalyzeFile(file) }
                     .map { (ruleProvider, config) -> ruleProvider(config) }
             }
             .filter { rule ->
