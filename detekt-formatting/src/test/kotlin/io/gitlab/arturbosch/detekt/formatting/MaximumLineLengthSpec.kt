@@ -5,10 +5,10 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.MaximumLineLength
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.assertj.core.api.Assertions.assertThat as assertJThat
 
 class MaximumLineLengthSpec {
 
@@ -39,7 +39,7 @@ class MaximumLineLengthSpec {
                 "Test.kt"
             ).first()
 
-            assertJThat(finding.entity.signature).isEqualTo("Test.kt\$}")
+            assertThat(finding.entity.signature).isEqualTo("Test.kt\$}")
         }
 
         @Test

@@ -4,7 +4,6 @@ import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.tooling.api.spec.RulesSpec
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
 
 internal fun CliArgs.createSpec(output: Appendable, error: Appendable): ProcessingSpec {
     val args = this
@@ -18,8 +17,8 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
         project {
             basePath = args.basePath
             inputPaths = args.inputPaths
-            excludes = asPatterns(args.excludes)
-            includes = asPatterns(args.includes)
+            excludes = args.excludes?.let(::asPatterns).orEmpty()
+            includes = args.includes?.let(::asPatterns).orEmpty()
         }
 
         rules {
@@ -67,11 +66,11 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
     }
 }
 
-private fun asPatterns(rawValue: String?): List<String> =
-    rawValue?.trim()
-        ?.commaSeparatedPattern(",", ";")
-        ?.toList()
-        .orEmpty()
+private fun asPatterns(rawValue: String): List<String> = rawValue.trim()
+    .splitToSequence(",", ";")
+    .filter { it.isNotBlank() }
+    .map { it.trim() }
+    .toList()
 
 private fun CliArgs.toRunPolicy(): RulesSpec.RunPolicy {
     val parts = runRule?.split(":") ?: return RulesSpec.RunPolicy.NoRestrictions

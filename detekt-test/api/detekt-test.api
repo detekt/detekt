@@ -18,7 +18,6 @@ public final class io/gitlab/arturbosch/detekt/test/FindingsAssert : org/assertj
 }
 
 public final class io/gitlab/arturbosch/detekt/test/FindingsAssertionsKt {
-	public static final fun assert (Ljava/util/List;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
 	public static final fun assertThat (Lio/gitlab/arturbosch/detekt/api/Finding;)Lio/gitlab/arturbosch/detekt/test/FindingAssert;
 	public static final fun assertThat (Ljava/util/List;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
 }

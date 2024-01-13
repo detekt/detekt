@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -328,7 +328,7 @@ class UndocumentedPublicPropertySpec {
             """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            io.gitlab.arturbosch.detekt.test.assertThat(findings[0]).hasSourceLocation(9, 13)
+            assertThat(findings[0]).hasSourceLocation(9, 13)
         }
 
         @Test
@@ -348,7 +348,7 @@ class UndocumentedPublicPropertySpec {
             """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(1)
-            io.gitlab.arturbosch.detekt.test.assertThat(findings[0]).hasSourceLocation(2, 9)
+            assertThat(findings[0]).hasSourceLocation(2, 9)
         }
 
         @Test
