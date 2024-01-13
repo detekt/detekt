@@ -115,7 +115,7 @@ internal class Analyzer(
             .flatMap { (ruleSet, ruleSetConfig) ->
                 ruleSet.rules
                     .asSequence()
-                    .map { (ruleId, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleId) }
+                    .map { (ruleId, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleId.value) }
                     .filter { (_, config) -> config.isActiveOrDefault(false) }
                     .map { (ruleProvider, config) -> ruleProvider(config) }
             }
@@ -153,7 +153,7 @@ internal class Analyzer(
             .flatMap { (ruleSet, ruleSetConfig) ->
                 ruleSet.rules
                     .asSequence()
-                    .map { (ruleId, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleId) }
+                    .map { (ruleId, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleId.value) }
                     .filter { (_, config) -> config.isActiveOrDefault(false) }
                     .map { (ruleProvider, config) -> ruleProvider(config) }
             }

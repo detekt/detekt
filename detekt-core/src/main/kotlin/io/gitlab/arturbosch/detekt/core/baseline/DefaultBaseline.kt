@@ -35,4 +35,4 @@ internal const val CURRENT_ISSUES = "CurrentIssues"
 internal const val ID = "ID"
 
 internal val Finding.baselineId: String
-    get() = issue.id + ":" + this.signature
+    get() = "${issue.id}:${this.signature}"

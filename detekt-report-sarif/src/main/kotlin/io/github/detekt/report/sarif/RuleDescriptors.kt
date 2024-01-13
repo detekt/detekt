@@ -28,11 +28,11 @@ internal fun toReportingDescriptors(): List<ReportingDescriptor> {
 
 private fun Issue.toDescriptor(ruleSetId: RuleSet.Id): ReportingDescriptor {
     val formattedRuleSetId = ruleSetId.value.lowercase()
-    val formattedRuleId = id.lowercase()
+    val formattedRuleId = id.value.lowercase()
 
     return ReportingDescriptor(
         id = "detekt.$ruleSetId.$id",
-        name = id,
+        name = id.value,
         shortDescription = MultiformatMessageString(text = description),
         helpURI = "https://detekt.dev/$formattedRuleSetId.html#$formattedRuleId"
     )
