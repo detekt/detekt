@@ -59,7 +59,7 @@ class DetektMessageCollectorSpec {
         }
     }
 
-   class FakePrinter : (() -> String) -> Unit {
+    class FakePrinter : (() -> String) -> Unit {
         val messages = mutableListOf<String>()
         override fun invoke(param: () -> String) {
             messages.add(param())
