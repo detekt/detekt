@@ -3,7 +3,7 @@ package io.github.detekt.report.sarif
 import io.github.detekt.sarif4k.MultiformatMessageString
 import io.github.detekt.sarif4k.ReportingDescriptor
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import java.util.ServiceLoader
@@ -16,24 +16,24 @@ internal fun toReportingDescriptors(): List<ReportingDescriptor> {
         .map { it.instance() }
     val ruleSetIdAndRules = sets.flatMap { ruleSet ->
         ruleSet.rules.map { (_, provider) ->
-            ruleSet.id to provider(Config.empty)
+            ruleSet.id to provider(Config.empty).issue
         }
     }
     val descriptors = mutableListOf<ReportingDescriptor>()
-    ruleSetIdAndRules.forEach { (ruleSetId, rule) ->
-        descriptors.add(rule.toDescriptor(ruleSetId))
+    ruleSetIdAndRules.forEach { (ruleSetId, issue) ->
+        descriptors.add(issue.toDescriptor(ruleSetId))
     }
     return descriptors
 }
 
-private fun Rule.toDescriptor(ruleSetId: RuleSet.Id): ReportingDescriptor {
+private fun Issue.toDescriptor(ruleSetId: RuleSet.Id): ReportingDescriptor {
     val formattedRuleSetId = ruleSetId.value.lowercase()
-    val formattedRuleId = ruleId.lowercase()
+    val formattedRuleId = id.lowercase()
 
     return ReportingDescriptor(
-        id = "detekt.$ruleSetId.$ruleId",
-        name = ruleId,
-        shortDescription = MultiformatMessageString(text = issue.description),
+        id = "detekt.$ruleSetId.$id",
+        name = id,
+        shortDescription = MultiformatMessageString(text = description),
         helpURI = "https://detekt.dev/$formattedRuleSetId.html#$formattedRuleId"
     )
 }
