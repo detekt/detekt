@@ -22,7 +22,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             ${myClosable(clazz)}
 
             fun test() {
-                MyCloseable().use { /*no-op*/ }
+                MyCloseable(0).use { /*no-op*/ }
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
@@ -34,7 +34,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     fun `does report when _use_ is not used`(clazz: String) {
         val code = """
             fun test() {
-                val myCloseable = MyCloseable()
+                val myCloseable = MyCloseable(0)
             }
 
             ${myClosable(clazz)}
@@ -59,29 +59,6 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
-    }
-
-    @Test
-    fun `does report when _use_ is used later on the chain`() {
-        val code = """
-            ${myClosable()}
-
-            fun test() {
-                MyCloseable(0).also { 
-                    println("closed is accessed here")
-                }.use { 
-                    /* no-op */
-                }
-
-                MyCloseable(0).apply { 
-                    println("closed is accessed here")
-                }.use { 
-                    /* no-op */
-                }
-            }
-        """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(2)
     }
 
     @Test
@@ -113,7 +90,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    fun `does report nested violations`() {
+    fun `does report when _use_ is not used in outer closeable taking closable param`() {
         val code = """
             import java.io.Closeable
             import java.io.BufferedReader
@@ -124,24 +101,27 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             )
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        // TODO discussion going at https://github.com/detekt/detekt/pull/6026/files#r1405499670
-        assertThat(findings).hasSize(2)
+        assertThat(findings).hasSize(1)
+        assertThat(findings[0]).hasMessage(
+            "BufferedReader doesn't call `use` to access the `Closeable`"
+        )
     }
 
     @Test
-    fun `does not report nested use of _use_`() {
+    fun `does not report when _use_ is used in outer closeable taking closable param`() {
         val code = """
             import java.io.Closeable
             import java.io.BufferedReader
             import java.io.FileReader
 
-            val lines = BufferedReader(
-                FileReader("some_file.txt")
-            )
+            fun test() {
+                BufferedReader(
+                    FileReader("some_file.txt")
+                ).use { val lines = it.lines() }
+            }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        // TODO discussion going at https://github.com/detekt/detekt/pull/6026/files#r1405499670
-        assertThat(findings).hasSize(2)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -168,10 +148,11 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
+        assertThat(findings[0]).hasMessage("MyCloseable doesn't call `use` to access the `Closeable`")
     }
 
     @Test
-    fun `does report inner violations`() {
+    fun `does not report inner use of stream without _use_ with some parameter`() {
         val code = """
             import java.io.Closeable
             import java.io.BufferedReader
@@ -191,7 +172,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             ).use { /* no-op */ }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -227,6 +208,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             import java.io.Closeable
             import java.io.BufferedReader
             import java.io.FileReader
+            import java.util.stream.Collectors
 
             val lines1 = FileReader("some_file.txt").use { fileReader -> BufferedReader(fileReader).use { it.lines().collect(Collectors.toList()) } }
             val lines2 = FileReader("some_file.txt").use { fileReader -> fileReader.buffered().lines().collect(Collectors.toList()) }
@@ -237,17 +219,33 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `does not report use on chains`() {
+        val code = """
+            import java.io.Closeable
+            import java.io.BufferedReader
+            import java.io.FileReader
+            import java.util.stream.Collectors
+
+            val lines1 = BufferedReader(FileReader("some_file.txt")).use { it.lines().collect(Collectors.toList()) }
+            val lines2 = FileReader("some_file.txt").buffered().lines().collect(Collectors.toList())
+            val linesStream = FileReader("some_file.txt").buffered().lines()
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
     fun `does not report with custom class with same name is used`() {
         val code = """
             class Closeable {
                 fun close() {
-                    // closing the closeable
+                    // closing the class
                 }
             }
 
             class AutoCloseable {
                 fun close() {
-                    // closing the closeable
+                    // closing the class
                 }
             }
 
@@ -298,6 +296,17 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `does report _Closeable_ anonymous object is used without _use_ with full qualifier`() {
+        val code = """
+            fun test() {
+                val myCloseable = java.io.Closeable { /* no-op */ }
+            }
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
     fun `does not report _Closeable_ anonymous object with full qualifier is used with chain after _use_`() {
         val code = """
             fun test() {
@@ -320,17 +329,6 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    fun `does report _Closeable_ anonymous object is used without _use_ with full qualifier`() {
-        val code = """
-            fun test() {
-                val myCloseable = java.io.Closeable { /* no-op */ }
-            }
-        """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-    }
-
-    @Test
     fun `does report _Closeable_ anonymous object is used without _use_`() {
         val code = """
             import java.io.Closeable
@@ -348,6 +346,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `does not report _Closeable_ anonymous object is used with _use_`() {
         val code = """
+            import java.io.Closeable
             val myCloseable = object : Closeable {
                 override fun close() {
                     /* no-op */
@@ -364,7 +363,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             ${myClosable(isOpen = true)}
 
             fun test() {
-                object : MyCloseable() {}.use { /* no-op */ }
+                object : MyCloseable(0) {}.use { /* no-op */ }
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
@@ -377,7 +376,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             ${myClosable(isOpen = true)}
 
             fun test() {
-                object : MyCloseable() {}
+                object : MyCloseable(0) {}
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
@@ -674,7 +673,7 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
             val code = """
                 ${myClosable()}
 
-                fun functionThatReturnsClosable() = MyCloseable()
+                fun functionThatReturnsClosable() = MyCloseable(0)
 
                 fun test() {
                     functionThatReturnsClosable().doStuff()
@@ -691,14 +690,14 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
 
                 ${myClosable()}
 
-                fun functionThatReturnsClosable1() = MyCloseable()
+                fun functionThatReturnsClosable1() = MyCloseable(0)
 
                 fun functionThatReturnsClosable2(): MyCloseable {
-                    return MyCloseable()
+                    return MyCloseable(0)
                 }
 
                 fun functionThatReturnsClosable3(): Closeable {
-                    return MyCloseable()
+                    return MyCloseable(0)
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
@@ -712,9 +711,9 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
 
                 fun functionThatReturnsClosable1(): MyCloseable {
                     fun localFun() {
-                        MyCloseable()
+                        MyCloseable(0)
                     }
-                    return MyCloseable()
+                    return MyCloseable(0)
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
@@ -727,8 +726,8 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 ${myClosable()}
 
                 fun functionThatReturnsClosable1(): MyCloseable {
-                    val r = Runnable { MyCloseable() }
-                    return MyCloseable()
+                    val r = Runnable { MyCloseable(0) }
+                    return MyCloseable(0)
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
@@ -743,10 +742,10 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                 fun functionThatReturnsClosable1(): MyCloseable {
                     val r = object : Runnable { 
                         override fun run() {
-                            MyCloseable()
+                            MyCloseable(0)
                         }
                     }
-                    return MyCloseable()
+                    return MyCloseable(0)
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
@@ -765,10 +764,10 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                         }
 
                         init {
-                            MyCloseable()
+                            MyCloseable(0)
                         }
                     }
-                    return MyCloseable()
+                    return MyCloseable(0)
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
@@ -786,9 +785,9 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
                             /* no-op */
                         }
 
-                        val closeable = MyCloseable()
+                        val closeable = MyCloseable(0)
                     }
-                    return MyCloseable()
+                    return MyCloseable(0)
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
