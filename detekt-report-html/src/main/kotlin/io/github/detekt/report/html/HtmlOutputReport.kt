@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
@@ -108,15 +109,15 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         findings
             .groupBy { it.issue.id }
             .toList()
-            .sortedBy { (rule, _) -> rule }
+            .sortedBy { (rule, _) -> rule.value }
             .forEach { (rule, ruleFindings) ->
                 renderRule(rule, group, ruleFindings)
             }
     }
 
-    private fun FlowContent.renderRule(rule: String, group: RuleSet.Id, findings: List<Finding>) {
+    private fun FlowContent.renderRule(rule: Rule.Id, group: RuleSet.Id, findings: List<Finding>) {
         details {
-            id = rule
+            id = rule.value
             open = true
 
             summary("rule-container") {
@@ -124,7 +125,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
                 span("description") { text(findings.first().issue.description) }
             }
 
-            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.value.lowercase()}#${rule.lowercase()}") {
+            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.value.lowercase()}#${rule.value.lowercase()}") {
                 +"Documentation"
             }
 

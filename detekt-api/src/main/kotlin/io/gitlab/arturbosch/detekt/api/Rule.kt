@@ -1,9 +1,11 @@
 package io.gitlab.arturbosch.detekt.api
 
+import dev.drewhamilton.poko.Poko
 import io.gitlab.arturbosch.detekt.api.Config.Companion.SEVERITY_KEY
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
+import io.gitlab.arturbosch.detekt.api.internal.validateIdentifier
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -30,7 +32,7 @@ open class Rule(
      * An id this rule is identified with.
      * Conventionally the rule id is derived from the issue id as these two classes have a coexistence.
      */
-    open val ruleId: RuleId = javaClass.simpleName
+    open val ruleId: Id by lazy(LazyThreadSafetyMode.NONE) { Id(javaClass.simpleName) }
 
     /**
      * List of rule ids which can optionally be used in suppress annotations to refer to this rule.
@@ -154,9 +156,15 @@ open class Rule(
             findings.add(finding)
         }
     }
-}
 
-/**
- * The type to use when referring to rule ids giving it more context then a String would.
- */
-typealias RuleId = String
+    @Poko
+    class Id(val value: String) {
+        init {
+            validateIdentifier(value)
+        }
+
+        override fun toString(): String {
+            return value
+        }
+    }
+}
