@@ -12,8 +12,8 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "generate": "../gradlew -p .. :detekt-generator:generateWebsite",
-    "generate-and-build": "../gradlew -p .. :detekt-generator:generateWebsite && docusaurus build"
+    "generate": "../gradlew -p .. :detekt-generator:generateWebsite --no-daemon",
+    "generate-and-build": "../gradlew -p .. :detekt-generator:generateWebsite --no-daemon && docusaurus build"
   },
   "dependencies": {
     "@docusaurus/core": "3.1.0",
