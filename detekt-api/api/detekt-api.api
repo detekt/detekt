@@ -211,9 +211,9 @@ public final class io/gitlab/arturbosch/detekt/api/HasEntity$DefaultImpls {
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Issue {
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Rule$Id;Ljava/lang/String;)V
 	public final fun getDescription ()Ljava/lang/String;
-	public final fun getId ()Ljava/lang/String;
+	public final fun getId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -310,7 +310,7 @@ public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/
 	public fun getDefaultRuleIdAliases ()Ljava/util/Set;
 	public fun getFilters ()Lio/gitlab/arturbosch/detekt/api/internal/PathFilters;
 	public final fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
-	public fun getRuleId-2Rbgges ()Ljava/lang/String;
+	public fun getRuleId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
 	protected fun postVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	protected fun preVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	public final fun report (Lio/gitlab/arturbosch/detekt/api/Finding;)V
@@ -323,17 +323,11 @@ public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Rule$Id {
-	public static final synthetic fun box-impl (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Rule$Id;
-	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun <init> (Ljava/lang/String;)V
 	public fun equals (Ljava/lang/Object;)Z
-	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
-	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
 	public final fun getValue ()Ljava/lang/String;
 	public fun hashCode ()I
-	public static fun hashCode-impl (Ljava/lang/String;)I
 	public fun toString ()Ljava/lang/String;
-	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
-	public final synthetic fun unbox-impl ()Ljava/lang/String;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/RuleSet {
