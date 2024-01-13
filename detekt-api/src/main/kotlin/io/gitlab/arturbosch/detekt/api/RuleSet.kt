@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
+import dev.drewhamilton.poko.Poko
 import io.gitlab.arturbosch.detekt.api.internal.validateIdentifier
 
 /**
@@ -12,6 +13,7 @@ class RuleSet(val id: Id, val rules: Map<String, (Config) -> Rule>) {
         }
     }
 
+    @Poko
     class Id(val value: String) {
         init {
             validateIdentifier(value)
@@ -19,19 +21,6 @@ class RuleSet(val id: Id, val rules: Map<String, (Config) -> Rule>) {
 
         override fun toString(): String {
             return value
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (javaClass != other?.javaClass) return false
-
-            other as Id
-
-            return value == other.value
-        }
-
-        override fun hashCode(): Int {
-            return value.hashCode()
         }
     }
 }
