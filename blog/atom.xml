@@ -31,7 +31,7 @@ When already using Gradle, we can write a custom task and share this procedure w
         <link href="https://detekt.dev/blog/2019/08/14/custom-console-reports"/>
         <updated>2019-08-14T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[detekt's reporting mechanism relies on implementations of ConsoleReport's.]]></summary>
-        <content type="html"><![CDATA[<p>detekt's reporting mechanism relies on implementations of <a href="https://detekt.dev/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/index.html">ConsoleReport</a>'s.
+        <content type="html"><![CDATA[<p>detekt's reporting mechanism relies on implementations of <a href="https://detekt.dev/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/index.html" target="_blank" rel="noopener noreferrer">ConsoleReport</a>'s.
 The cli module and therefore the Gradle plugin implement a bunch of this reports.</p>
 <p>A typical detekt report will look like following:</p>
 <p><img loading="lazy" alt="report" src="https://detekt.dev/assets/images/typical_console_report-dac0a808bc92ff7a4b5c82cbcfba0724.png" width="1574" height="798" class="img_ev3q"></p>
