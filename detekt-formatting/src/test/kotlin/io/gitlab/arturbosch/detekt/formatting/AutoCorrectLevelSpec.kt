@@ -6,9 +6,9 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.api.Test
-import org.assertj.core.api.Assertions.assertThat as assertJThat
 
 class AutoCorrectLevelSpec {
 
@@ -28,7 +28,7 @@ class AutoCorrectLevelSpec {
         val (file, findings) = runRule(config)
 
         assertThat(findings).isNotEmpty()
-        assertJThat(wasFormatted(file)).isTrue()
+        assertThat(wasFormatted(file)).isTrue()
     }
 
     @Test
@@ -47,7 +47,7 @@ class AutoCorrectLevelSpec {
         val (file, findings) = runRule(config)
 
         assertThat(findings).isNotEmpty()
-        assertJThat(wasFormatted(file)).isFalse()
+        assertThat(wasFormatted(file)).isFalse()
     }
 
     @Test
@@ -66,7 +66,7 @@ class AutoCorrectLevelSpec {
         val (file, findings) = runRule(config)
 
         assertThat(findings).isNotEmpty()
-        assertJThat(wasFormatted(file)).isFalse()
+        assertThat(wasFormatted(file)).isFalse()
     }
 }
 
