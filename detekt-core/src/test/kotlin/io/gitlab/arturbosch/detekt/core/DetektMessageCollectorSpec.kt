@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class DetektMessageCollectorSpec {
 
-    private var debugPrinter = FakePrinter()
+    private val debugPrinter = FakePrinter()
     private lateinit var subject: DetektMessageCollector
 
     @BeforeEach
@@ -59,7 +59,7 @@ class DetektMessageCollectorSpec {
         }
     }
 
-    inner class FakePrinter : (() -> String) -> Unit {
+   class FakePrinter : (() -> String) -> Unit {
         val messages = mutableListOf<String>()
         override fun invoke(param: () -> String) {
             messages.add(param())
