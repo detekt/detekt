@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
+import dev.drewhamilton.poko.Poko
 import io.gitlab.arturbosch.detekt.api.Config.Companion.SEVERITY_KEY
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
@@ -156,6 +157,7 @@ open class Rule(
         }
     }
 
+    @Poko
     class Id(val value: String) {
         init {
             validateIdentifier(value)
@@ -163,19 +165,6 @@ open class Rule(
 
         override fun toString(): String {
             return value
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (javaClass != other?.javaClass) return false
-
-            other as Id
-
-            return value == other.value
-        }
-
-        override fun hashCode(): Int {
-            return value.hashCode()
         }
     }
 }
