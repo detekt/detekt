@@ -255,12 +255,12 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvir
         val testLaunch = namedFunctions.first { it.name == "test that launches a coroutine" }
         val testNotLaunch = namedFunctions.first { it.name == "test that does not launch a coroutine" }
 
-        subject.isFunctionOrChildrenLaunchingCoroutines(testLaunch, bindingContext)
+        subject.isFunctionLaunchingCoroutines(testLaunch, bindingContext)
 
         assertThat(subject.exploredFunctionsCache).hasSize(4)
         assertThat(subject.exploredFunctionsCache.values.filter { it }).hasSize(4)
 
-        subject.isFunctionOrChildrenLaunchingCoroutines(testNotLaunch, bindingContext)
+        subject.isFunctionLaunchingCoroutines(testNotLaunch, bindingContext)
 
         assertThat(subject.exploredFunctionsCache).hasSize(8)
         assertThat(subject.exploredFunctionsCache.values.filterNot { it }).hasSize(4)

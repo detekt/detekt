@@ -20,7 +20,6 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.source.getPsi
-import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 
 /**
  * Detect coroutine launches from `@Test` functions outside a `runTest` block.
@@ -60,7 +59,7 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
     override fun visitNamedFunction(initialFunction: KtNamedFunction) {
         if (!initialFunction.hasBody()) return
         if (!initialFunction.hasAnnotation(TEST_ANNOTATION_NAME)) return
-        if (initialFunction.isRunTestFunction()) return
+        if (initialFunction.runsInRunTestBlock()) return
 
         // By this point we know we're inside a test function that is not a `runTest` function.
         if (funCoroutineLaunchesTraverseHelper.isFunctionLaunchingCoroutines(initialFunction, bindingContext)) {
