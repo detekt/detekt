@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.core.rules
 
-import io.github.detekt.psi.absolutePath
 import io.github.detekt.tooling.api.spec.RulesSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -12,7 +11,7 @@ import org.jetbrains.kotlin.psi.KtFile
 
 fun Config.shouldAnalyzeFile(file: KtFile): Boolean {
     val filters = createPathFilters()
-    return filters == null || !filters.isIgnored(file.absolutePath())
+    return filters == null || !filters.isIgnored(file)
 }
 
 fun associateRuleIdsToRuleSetIds(ruleSets: List<RuleSet>): Map<Rule.Id, RuleSet.Id> {
