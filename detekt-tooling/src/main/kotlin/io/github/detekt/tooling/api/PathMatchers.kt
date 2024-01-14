@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.api.internal
+package io.github.detekt.tooling.api
 
 import java.nio.file.FileSystem
 import java.nio.file.FileSystems
@@ -9,7 +9,7 @@ import java.nio.file.PathMatcher
  * We only support the "glob:" syntax to stay os independently.
  * Internally a globbing pattern is transformed to a regex respecting the Windows file system.
  */
-fun pathMatcher(pattern: String): PathMatcher {
+internal fun pathMatcher(pattern: String): PathMatcher {
     val result = when (pattern.substringBefore(":")) {
         "glob" -> pattern
         "regex" -> throw IllegalArgumentException(USE_GLOB_MSG)

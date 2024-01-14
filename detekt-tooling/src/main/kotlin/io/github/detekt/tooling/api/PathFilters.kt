@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.api.internal
+package io.github.detekt.tooling.api
 
 import io.github.detekt.psi.absolutePath
 import io.github.detekt.psi.basePath

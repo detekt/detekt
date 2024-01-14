@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.api.internal
+package io.github.detekt.tooling.api
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

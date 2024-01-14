@@ -93,6 +93,20 @@ public final class io/github/detekt/tooling/api/IssuesFound : io/github/detekt/t
 	public fun <init> (Ljava/lang/String;)V
 }
 
+public final class io/github/detekt/tooling/api/PathFilters {
+	public static final field Companion Lio/github/detekt/tooling/api/PathFilters$Companion;
+	public final fun isIgnored (Ljava/nio/file/Path;)Z
+	public final fun isIgnored (Lorg/jetbrains/kotlin/psi/KtFile;)Z
+}
+
+public final class io/github/detekt/tooling/api/PathFilters$Companion {
+	public final fun of (Ljava/util/List;Ljava/util/List;)Lio/github/detekt/tooling/api/PathFilters;
+}
+
+public final class io/github/detekt/tooling/api/PathFiltersKt {
+	public static final fun createPathFilters (Lio/gitlab/arturbosch/detekt/api/Config;)Lio/github/detekt/tooling/api/PathFilters;
+}
+
 public final class io/github/detekt/tooling/api/UnexpectedError : io/github/detekt/tooling/api/DetektError {
 	public fun <init> (Ljava/lang/Throwable;)V
 	public fun getCause ()Ljava/lang/Throwable;
