@@ -480,6 +480,8 @@ potential-bugs:
   MissingPackageDeclaration:
     active: false
     excludes: ['**/*.kts']
+  MissingUseCall:
+    active: false
   NullCheckOnMutableProperty:
     active: false
   NullableToStringCall:

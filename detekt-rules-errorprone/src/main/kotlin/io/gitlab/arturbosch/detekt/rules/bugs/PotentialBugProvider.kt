@@ -34,6 +34,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             ::LateinitUsage,
             ::MapGetWithNotNullAssertionOperator,
             ::MissingPackageDeclaration,
+            ::MissingUseCall,
             ::MissingWhenCase,
             ::NullCheckOnMutableProperty,
             ::RedundantElseInWhen,
