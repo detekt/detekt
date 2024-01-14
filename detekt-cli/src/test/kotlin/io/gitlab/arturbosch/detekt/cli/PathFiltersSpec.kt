@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.cli
 
-import io.github.detekt.test.utils.NullPrintStream
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -8,13 +7,6 @@ import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
 
 class PathFiltersSpec {
-
-    @Test
-    fun `should load single filter`() {
-        val filters = CliArgs { excludes = "**/one/**" }.toSpecFilters()
-        assertThat(filters?.isIgnored(Path("/one/path"))).isTrue()
-        assertThat(filters?.isIgnored(Path("/two/path"))).isFalse()
-    }
 
     @Nested
     inner class `parsing with different nullability combinations of path filters` {
@@ -52,9 +44,4 @@ class PathFiltersSpec {
             assertThat(pathFilter?.isIgnored(Path("/one/two/three/path"))).isTrue
         }
     }
-}
-
-private fun CliArgs.toSpecFilters(): PathFilters? {
-    val spec = this.createSpec(NullPrintStream(), NullPrintStream()).projectSpec
-    return PathFilters.of(spec.includes.toList(), spec.excludes.toList())
 }
