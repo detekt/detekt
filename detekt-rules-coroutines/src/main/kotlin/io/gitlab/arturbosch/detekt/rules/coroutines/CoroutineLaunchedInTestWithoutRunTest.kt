@@ -60,11 +60,12 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
     override fun visitNamedFunction(initialFunction: KtNamedFunction) {
         if (!initialFunction.hasBody()) return
         if (!initialFunction.hasAnnotation(TEST_ANNOTATION_NAME)) return
-        if (initialFunction.runsInRunTestBlock()) return
+        if (initialFunction.isRunTestFunction()) return
 
-        funCoroutineLaunchesTraverseHelper
-            .isFunctionOrChildrenLaunchingCoroutines(initialFunction, bindingContext)
-            .ifTrue { report(CodeSmell(issue, Entity.from(initialFunction), MESSAGE)) }
+        // By this point we know we're inside a test function that is not a `runTest` function.
+        if (funCoroutineLaunchesTraverseHelper.isFunctionLaunchingCoroutines(initialFunction, bindingContext)) {
+            report(CodeSmell(issue, Entity.from(initialFunction), MESSAGE))
+        }
     }
 
     private fun KtNamedFunction.runsInRunTestBlock() =
@@ -85,7 +86,7 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(config) {
 class FunCoroutineLaunchesTraverseHelper {
     val exploredFunctionsCache = mutableMapOf<KtNamedFunction, Boolean>()
 
-    fun isFunctionOrChildrenLaunchingCoroutines(
+    fun isFunctionLaunchingCoroutines(
         initialFunction: KtNamedFunction,
         bindingContext: BindingContext
     ): Boolean {
