@@ -2,7 +2,6 @@ package io.github.detekt.tooling.api
 
 import io.github.detekt.psi.absolutePath
 import io.github.detekt.psi.basePath
-import io.gitlab.arturbosch.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import java.nio.file.PathMatcher
@@ -62,10 +61,4 @@ class PathFilters internal constructor(
                     .toSet()
             }
     }
-}
-
-fun Config.createPathFilters(): PathFilters? {
-    val includes = valueOrDefault(Config.INCLUDES_KEY, emptyList<String>())
-    val excludes = valueOrDefault(Config.EXCLUDES_KEY, emptyList<String>())
-    return PathFilters.of(includes, excludes)
 }
