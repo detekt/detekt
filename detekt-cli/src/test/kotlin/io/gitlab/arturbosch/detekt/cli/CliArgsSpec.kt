@@ -1,9 +1,11 @@
 package io.gitlab.arturbosch.detekt.cli
 
+import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.NeverFail
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
+import org.junit.jupiter.params.provider.ValueSource
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.absolute
@@ -118,6 +121,47 @@ internal class CliArgsSpec {
         assertThat(spec.rulesSpec.activateAllRules).isTrue()
     }
 
+    @Test
+    fun `should load single filter`() {
+        val filters = CliArgs { excludes = "**/one/**" }.toSpecFilters()
+        assertThat(filters?.isIgnored(Path("/one/path"))).isTrue()
+        assertThat(filters?.isIgnored(Path("/two/path"))).isFalse()
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+        strings = [
+            "**/one/**,**/two/**,**/three",
+            "**/one/**;**/two/**;**/three",
+            "**/one/** ,**/two/**, **/three",
+            "**/one/** ;**/two/**; **/three",
+            "**/one/**,**/two/**;**/three",
+            "**/one/** ,**/two/**; **/three",
+            " ,,**/one/**,**/two/**,**/three",
+        ]
+    )
+    fun parseExcludes(param: String) {
+        val spec = parseArguments(arrayOf("--excludes", param)).toSpec()
+        assertThat(spec.projectSpec.excludes).containsExactly("**/one/**", "**/two/**", "**/three")
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+        strings = [
+            "**/one/**,**/two/**,**/three",
+            "**/one/**;**/two/**;**/three",
+            "**/one/** ,**/two/**, **/three",
+            "**/one/** ;**/two/**; **/three",
+            "**/one/**,**/two/**;**/three",
+            "**/one/** ,**/two/**; **/three",
+            " ,,**/one/**,**/two/**,**/three",
+        ]
+    )
+    fun parseIncludes(param: String) {
+        val spec = parseArguments(arrayOf("--includes", param)).toSpec()
+        assertThat(spec.projectSpec.includes).containsExactly("**/one/**", "**/two/**", "**/three")
+    }
+
     @Nested
     inner class `type resolution parameters are accepted` {
 
@@ -181,4 +225,9 @@ internal class CliArgsSpec {
             }.isInstanceOf(IllegalArgumentException::class.java)
         }
     }
+}
+
+private fun CliArgs.toSpecFilters(): PathFilters? {
+    val spec = this.createSpec(NullPrintStream(), NullPrintStream()).projectSpec
+    return PathFilters.of(spec.includes.toList(), spec.excludes.toList())
 }
