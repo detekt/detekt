@@ -293,7 +293,7 @@ private fun isSuppressedBy(annotation: String, argument: String): Boolean {
     """.trimIndent()
     val file = compileContentForTest(annotated)
     val annotatedClass = file.children.first { it is KtClass } as KtAnnotated
-    return annotatedClass.isSuppressedBy("Test", setOf("alias"))
+    return annotatedClass.isSuppressedBy(Rule.Id("Test"), setOf("alias"))
 }
 
 private class TestRule(config: Config = Config.empty) : Rule(config, "") {

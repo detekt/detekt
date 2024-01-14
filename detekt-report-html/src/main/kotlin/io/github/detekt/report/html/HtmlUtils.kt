@@ -1,5 +1,6 @@
 package io.github.detekt.report.html
 
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import kotlinx.html.FlowContent
@@ -17,7 +18,12 @@ import java.util.Locale
 import kotlin.math.max
 import kotlin.math.min
 
-internal fun FlowContent.snippetCode(ruleName: String, lines: Sequence<String>, location: SourceLocation, length: Int) {
+internal fun FlowContent.snippetCode(
+    ruleName: Rule.Id,
+    lines: Sequence<String>,
+    location: SourceLocation,
+    length: Int,
+) {
     try {
         pre {
             code {
@@ -61,7 +67,7 @@ private fun FlowContent.writeErrorLine(line: String, errorStarts: Int, length: I
     return errorEnds - errorStarts
 }
 
-private fun FlowContent.showError(ruleName: String, throwable: Throwable) {
+private fun FlowContent.showError(ruleName: Rule.Id, throwable: Throwable) {
     div("exception") {
         h4 {
             text("Error showing the code snippet")
@@ -77,7 +83,7 @@ private fun FlowContent.showError(ruleName: String, throwable: Throwable) {
     }
 }
 
-private fun createReportUrl(ruleName: String, throwable: Throwable): String {
+private fun createReportUrl(ruleName: Rule.Id, throwable: Throwable): String {
     val title = URLEncoder.encode("HtmlReport error in rule: $ruleName", "UTF8")
     val stackTrace = throwable.printStackTraceString()
         .lineSequence()

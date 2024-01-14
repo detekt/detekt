@@ -53,12 +53,12 @@ private var actualLastRuleId = ""
 
 private class NonCorrectable(config: Config) : Rule(config, "") {
     override fun visitClass(klass: KtClass) {
-        actualLastRuleId = issue.id
+        actualLastRuleId = issue.id.value
     }
 }
 
 private class Correctable(config: Config) : Rule(config, "") {
     override fun visitClass(klass: KtClass) {
-        actualLastRuleId = issue.id
+        actualLastRuleId = issue.id.value
     }
 }
