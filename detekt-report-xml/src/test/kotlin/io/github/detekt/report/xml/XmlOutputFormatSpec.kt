@@ -3,13 +3,13 @@ package io.github.detekt.report.xml
 import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
+import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -57,7 +57,7 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders one reported issue in single file`() {
-        val smell = CodeSmell(Issue("id_a", ""), entity1, message = "TestMessage")
+        val smell = CodeSmell(createIssue("id_a"), entity1, message = "TestMessage")
 
         val result = outputFormat.render(TestDetektion(smell))
 
@@ -75,8 +75,8 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders two reported issues in single file`() {
-        val smell1 = CodeSmell(Issue("id_a", ""), entity1, message = "TestMessage")
-        val smell2 = CodeSmell(Issue("id_b", ""), entity1, message = "TestMessage")
+        val smell1 = CodeSmell(createIssue("id_a"), entity1, message = "TestMessage")
+        val smell2 = CodeSmell(createIssue("id_b"), entity1, message = "TestMessage")
 
         val result = outputFormat.render(TestDetektion(smell1, smell2))
 
@@ -95,8 +95,8 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders one reported issue across multiple files`() {
-        val smell1 = CodeSmell(Issue("id_a", ""), entity1, message = "TestMessage")
-        val smell2 = CodeSmell(Issue("id_a", ""), entity2, message = "TestMessage")
+        val smell1 = CodeSmell(createIssue("id_a"), entity1, message = "TestMessage")
+        val smell2 = CodeSmell(createIssue("id_a"), entity2, message = "TestMessage")
 
         val result = outputFormat.render(TestDetektion(smell1, smell2))
 
@@ -147,10 +147,10 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders two reported issues across multiple files`() {
-        val smell1 = CodeSmell(Issue("id_a", ""), entity1, message = "TestMessage")
-        val smell2 = CodeSmell(Issue("id_b", ""), entity1, message = "TestMessage")
-        val smell3 = CodeSmell(Issue("id_a", ""), entity2, message = "TestMessage")
-        val smell4 = CodeSmell(Issue("id_b", ""), entity2, message = "TestMessage")
+        val smell1 = CodeSmell(createIssue("id_a"), entity1, message = "TestMessage")
+        val smell2 = CodeSmell(createIssue("id_b"), entity1, message = "TestMessage")
+        val smell3 = CodeSmell(createIssue("id_a"), entity2, message = "TestMessage")
+        val smell4 = CodeSmell(createIssue("id_b"), entity2, message = "TestMessage")
 
         val result = outputFormat.render(
             TestDetektion(
@@ -186,7 +186,7 @@ class XmlOutputFormatSpec {
         fun `renders detektion with severity as XML with severity`(severity: Severity) {
             val xmlSeverity = severity.name.lowercase(Locale.US)
             val finding = object : CodeSmell(
-                issue = Issue("issue_id", "issue description"),
+                issue = createIssue("issue_id"),
                 entity = entity1,
                 message = "message"
             ) {

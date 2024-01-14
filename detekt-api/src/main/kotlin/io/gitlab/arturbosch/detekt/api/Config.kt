@@ -13,6 +13,10 @@ interface Config {
      */
     val parentPath: String?
 
+    /**
+     * The reference to a parent [Config] from this configuration, useful when navigating with [subConfig].
+     * It's `null` if this is the top most configuration object.
+     */
     val parent: Config?
 
     /**

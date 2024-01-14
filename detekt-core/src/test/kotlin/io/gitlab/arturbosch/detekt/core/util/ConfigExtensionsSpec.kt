@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ConfigSpec {
+class ConfigExtensionsSpec {
 
     @Test
     fun `use the provided value when defined`() {

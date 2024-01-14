@@ -35,7 +35,7 @@ class XmlOutputReport : BuiltInOutputReport, OutputReport() {
                         "column=\"${it.location.source.column.toXmlString()}\"",
                         "severity=\"${it.severityLabel.toXmlString()}\"",
                         "message=\"${it.message.toXmlString()}\"",
-                        "source=\"${"detekt.${it.issue.id.toXmlString()}"}\" />"
+                        "source=\"${"detekt.${it.issue.id.value.toXmlString()}"}\" />"
                     ).joinToString(separator = " ")
                 }
                 lines += "</file>"
