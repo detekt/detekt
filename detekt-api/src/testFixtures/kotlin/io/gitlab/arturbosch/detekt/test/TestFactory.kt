@@ -24,7 +24,7 @@ fun createCorrectableFinding(
     ruleName: String = "TestSmell",
     fileName: String = "TestFile.kt",
     severity: Severity = Severity.Error
-) = Finding2Impl(
+): Finding2 = Finding2Impl(
     issue = createIssue(ruleName),
     entity = createEntity(location = createLocation(fileName)),
     message = "TestMessage",
@@ -37,7 +37,7 @@ fun createFinding(
     entity: Entity,
     message: String = "TestMessage",
     severity: Severity = Severity.Error
-) = Finding2Impl(
+):Finding2 = Finding2Impl(
     issue = issue,
     entity = entity,
     message = message,
@@ -48,7 +48,7 @@ fun createFindingForRelativePath(
     ruleName: String = "TestSmell",
     basePath: String = "/Users/tester/detekt/",
     relativePath: String = "TestFile.kt"
-) = Finding2Impl(
+): Finding2 = Finding2Impl(
     issue = createIssue(ruleName),
     entity = Entity(
         name = "TestEntity",
@@ -92,7 +92,7 @@ fun createLocation(
 )
 
 @Poko
-class Finding2Impl(
+private class Finding2Impl(
     override val issue: Issue,
     override val entity: Entity,
     override val message: String,
