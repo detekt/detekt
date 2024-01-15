@@ -1,5 +1,46 @@
 package io.gitlab.arturbosch.detekt.api
 
+interface Finding2 : Compactable, HasEntity {
+    val issue: Issue
+    val references: List<Entity>
+    val message: String
+    val severity: Severity
+        get() = Severity.DEFAULT
+}
+
+/**
+ * Describes a source code position.
+ */
+interface HasEntity {
+    val entity: Entity
+    val location: Location
+        get() = entity.location
+    val startPosition: SourceLocation
+        get() = location.source
+    val charPosition: TextLocation
+        get() = location.text
+    val file: String
+        get() = location.filePath.absolutePath.toString()
+    val signature: String
+        get() = entity.signature
+}
+
+/**
+ * Provides a compact string representation.
+ */
+interface Compactable {
+    /**
+     * Contract to format implementing object to a string representation.
+     */
+    fun compact(): String
+
+    /**
+     * Same as [compact] except the content should contain a substring which represents
+     * this exact findings via a custom identifier.
+     */
+    fun compactWithSignature(): String = compact()
+}
+
 fun Finding.toFinding2(): Finding2 {
     return when (this) {
         is CorrectableCodeSmell -> CorrectableCodeSmell2(issue, entity, message, references, autoCorrectEnabled).also {
