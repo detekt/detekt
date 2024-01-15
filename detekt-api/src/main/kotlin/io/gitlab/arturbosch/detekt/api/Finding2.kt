@@ -1,7 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import dev.drewhamilton.poko.Poko
-
 /**
  * Represents a problem detected by detekt on the source code
  *

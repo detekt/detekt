@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.github.detekt.psi.FilePath
-import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
 import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

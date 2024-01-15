@@ -12,7 +12,6 @@ import io.github.detekt.utils.list
 import io.github.detekt.utils.markdown
 import io.github.detekt.utils.paragraph
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric

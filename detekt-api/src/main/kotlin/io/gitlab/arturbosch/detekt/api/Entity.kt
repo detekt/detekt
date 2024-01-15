@@ -66,7 +66,6 @@ class Entity(
     }
 }
 
-
 /**
  * Provides a compact string representation.
  */
