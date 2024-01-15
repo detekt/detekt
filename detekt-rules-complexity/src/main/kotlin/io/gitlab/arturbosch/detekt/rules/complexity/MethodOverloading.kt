@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isOverride
@@ -22,14 +21,12 @@ import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
  *
  * Refactor these methods and try to use optional parameters instead to prevent some of the overloading.
  */
-class MethodOverloading(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Methods which are overloaded often might be harder to maintain. " +
-            "Furthermore, these methods are tightly coupled. " +
-            "Refactor these methods and try to use optional parameters.",
-    )
+class MethodOverloading(config: Config) : Rule(
+    config,
+    "Methods which are overloaded often might be harder to maintain. " +
+        "Furthermore, these methods are tightly coupled. " +
+        "Refactor these methods and try to use optional parameters."
+) {
 
     @Configuration("The allowed number of overloads for a method.")
     private val allowedOverloads: Int by config(defaultValue = 6)

@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.diagnostics.Errors
@@ -32,12 +31,10 @@ import org.jetbrains.kotlin.psi.KtExpression
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.0.0")
-class UnreachableCode(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Unreachable code detected. This code should be removed.",
-    )
+class UnreachableCode(config: Config) : Rule(
+    config,
+    "Unreachable code detected. This code should be removed."
+) {
 
     override fun visitExpression(expression: KtExpression) {
         super.visitExpression(expression)

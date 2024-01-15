@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
@@ -31,9 +30,10 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  * fun <V> foo(): Int where V : Int = 5
  * </compliant>
  */
-class EqualsOnSignatureLine(config: Config) : Rule(config) {
-
-    override val issue = Issue(javaClass.simpleName, MESSAGE)
+class EqualsOnSignatureLine(config: Config) : Rule(
+    config,
+    MESSAGE
+) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         val equalsToken = function.equalsToken ?: return

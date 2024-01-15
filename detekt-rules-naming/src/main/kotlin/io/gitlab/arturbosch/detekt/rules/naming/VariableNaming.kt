@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.identifierName
@@ -21,12 +20,10 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
  * Reports variable names that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
-class VariableNaming(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Variable names should follow the naming convention set in the projects configuration.",
-    )
+class VariableNaming(config: Config) : Rule(
+    config,
+    "Variable names should follow the naming convention set in the projects configuration."
+) {
 
     @Configuration("naming pattern")
     private val variablePattern: Regex by config("[a-z][A-Za-z0-9]*", String::toRegex)

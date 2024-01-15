@@ -1,7 +1,0 @@
-RuleSet:
-  Rule:
-    active: []
-    threshold: v5.7
-    strings: [ 0, 99 ]
-
-bool: fasle

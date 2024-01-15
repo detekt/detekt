@@ -156,7 +156,7 @@ class EmptyCodeSpec {
 @Suppress("LongMethod")
 private fun test(block: () -> Rule) {
     val rule = block()
-    rule.lint(
+    val findings = rule.lint(
         """
             class Empty : Runnable {
             
@@ -213,5 +213,5 @@ private fun test(block: () -> Rule) {
             class EmptyClass() {}
         """.trimIndent()
     )
-    assertThat(rule.findings).hasSize(1)
+    assertThat(findings).hasSize(1)
 }

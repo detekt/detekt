@@ -51,7 +51,7 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Config {
 	public abstract fun getParent ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public abstract fun getParentPath ()Ljava/lang/String;
 	public abstract fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
-	public abstract fun subConfigs ()Ljava/util/Map;
+	public abstract fun subConfigKeys ()Ljava/util/Set;
 	public abstract fun valueOrDefault (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
 	public abstract fun valueOrNull (Ljava/lang/String;)Ljava/lang/Object;
 }
@@ -105,17 +105,6 @@ public abstract class io/gitlab/arturbosch/detekt/api/ConsoleReport : io/gitlab/
 	public fun init (Lio/gitlab/arturbosch/detekt/api/Config;)V
 	public fun init (Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
 	public abstract fun render (Lio/gitlab/arturbosch/detekt/api/Detektion;)Ljava/lang/String;
-}
-
-public abstract interface class io/gitlab/arturbosch/detekt/api/Context {
-	public abstract fun clearFindings ()V
-	public abstract fun getFindings ()Ljava/util/List;
-	public abstract fun report (Lio/gitlab/arturbosch/detekt/api/Finding;Ljava/util/Set;Ljava/lang/String;)V
-}
-
-public final class io/gitlab/arturbosch/detekt/api/Context$DefaultImpls {
-	public static fun report (Lio/gitlab/arturbosch/detekt/api/Context;Lio/gitlab/arturbosch/detekt/api/Finding;Ljava/util/Set;Ljava/lang/String;)V
-	public static synthetic fun report$default (Lio/gitlab/arturbosch/detekt/api/Context;Lio/gitlab/arturbosch/detekt/api/Finding;Ljava/util/Set;Ljava/lang/String;ILjava/lang/Object;)V
 }
 
 public class io/gitlab/arturbosch/detekt/api/CorrectableCodeSmell : io/gitlab/arturbosch/detekt/api/CodeSmell {
@@ -312,9 +301,8 @@ public final class io/gitlab/arturbosch/detekt/api/ReportingExtension$DefaultImp
 public abstract interface annotation class io/gitlab/arturbosch/detekt/api/RequiresTypeResolution : java/lang/annotation/Annotation {
 }
 
-public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/DetektVisitor, io/gitlab/arturbosch/detekt/api/Context {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;)V
-	public fun clearFindings ()V
+public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/DetektVisitor {
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;Ljava/lang/String;)V
 	public final fun getActive ()Z
 	public final fun getAliases ()Ljava/util/Set;
 	public final fun getAutoCorrect ()Z
@@ -323,19 +311,17 @@ public abstract class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosc
 	public final fun getConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public fun getDefaultRuleIdAliases ()Ljava/util/Set;
 	public fun getFilters ()Lio/gitlab/arturbosch/detekt/api/internal/PathFilters;
-	public fun getFindings ()Ljava/util/List;
-	public abstract fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
-	public final fun getRuleId ()Ljava/lang/String;
+	public final fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
+	public fun getRuleId ()Ljava/lang/String;
 	protected fun postVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	protected fun preVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	public final fun report (Lio/gitlab/arturbosch/detekt/api/Finding;)V
-	public fun report (Lio/gitlab/arturbosch/detekt/api/Finding;Ljava/util/Set;Ljava/lang/String;)V
 	public final fun setBindingContext (Lorg/jetbrains/kotlin/resolve/BindingContext;)V
 	public final fun setCompilerResources (Lio/gitlab/arturbosch/detekt/api/CompilerResources;)V
 	public fun visit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	public fun visitCondition (Lorg/jetbrains/kotlin/psi/KtFile;)Z
-	public final fun visitFile (Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;Lio/gitlab/arturbosch/detekt/api/CompilerResources;)V
-	public static synthetic fun visitFile$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;Lio/gitlab/arturbosch/detekt/api/CompilerResources;ILjava/lang/Object;)V
+	public final fun visitFile (Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;Lio/gitlab/arturbosch/detekt/api/CompilerResources;)Ljava/util/List;
+	public static synthetic fun visitFile$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;Lio/gitlab/arturbosch/detekt/api/CompilerResources;ILjava/lang/Object;)Ljava/util/List;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/RuleSet {

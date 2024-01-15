@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -43,13 +42,11 @@ import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class IteratorNotThrowingNoSuchElementException(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "The `next()` method of an `Iterator` implementation should throw a `NoSuchElementException` " +
-            "when there are no more elements to return.",
-    )
+class IteratorNotThrowingNoSuchElementException(config: Config) : Rule(
+    config,
+    "The `next()` method of an `Iterator` implementation should throw a `NoSuchElementException` " +
+        "when there are no more elements to return."
+) {
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         if (classOrObject.getSuperNames().contains("Iterator")) {

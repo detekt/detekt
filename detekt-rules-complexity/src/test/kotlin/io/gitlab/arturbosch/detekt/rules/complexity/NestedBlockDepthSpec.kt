@@ -54,9 +54,9 @@ class NestedBlockDepthSpec {
                 }
             }
         """.trimIndent()
-        subject.lint(code)
-        assertThat(subject.findings).hasSize(1)
-        assertThat(subject.findings[0]).isThresholded().hasValue(5)
+        val findings = subject.lint(code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings[0]).isThresholded().hasValue(5)
     }
 
     @Test

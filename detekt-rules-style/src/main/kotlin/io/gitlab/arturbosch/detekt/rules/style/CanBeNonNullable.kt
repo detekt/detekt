@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isAbstract
@@ -128,11 +127,10 @@ import org.jetbrains.kotlin.types.isNullable
  * </compliant>
  */
 @RequiresTypeResolution
-class CanBeNonNullable(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Variable can be changed to non-nullable, as it is never set to null.",
-    )
+class CanBeNonNullable(config: Config) : Rule(
+    config,
+    "Variable can be changed to non-nullable, as it is never set to null."
+) {
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)

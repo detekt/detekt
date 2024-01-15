@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.diagnostics.Errors
@@ -25,12 +24,10 @@ import org.jetbrains.kotlin.psi.KtUnaryExpression
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
-class UnnecessaryNotNullOperator(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Unnecessary not-null unary operator (!!) detected.",
-    )
+class UnnecessaryNotNullOperator(config: Config) : Rule(
+    config,
+    "Unnecessary not-null unary operator (!!) detected."
+) {
 
     override fun visitUnaryExpression(expression: KtUnaryExpression) {
         super.visitUnaryExpression(expression)

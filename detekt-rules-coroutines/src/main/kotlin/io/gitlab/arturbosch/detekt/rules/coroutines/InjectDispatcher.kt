@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -39,16 +38,14 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class InjectDispatcher(config: Config) : Rule(config) {
+class InjectDispatcher(config: Config) : Rule(
+    config,
+    "Don't hardcode dispatchers when creating new coroutines or calling `withContext`. " +
+        "Use dependency injection for dispatchers to make testing easier."
+) {
 
     @Configuration("The names of dispatchers to detect by this rule")
     private val dispatcherNames: Set<String> by config(listOf("IO", "Default", "Unconfined")) { it.toSet() }
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Don't hardcode dispatchers when creating new coroutines or calling `withContext`. " +
-            "Use dependency injection for dispatchers to make testing easier.",
-    )
 
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
         super.visitSimpleNameExpression(expression)

@@ -15,8 +15,8 @@ class TestConfig(override val parent: Config?, vararg pairs: Pair<String, Any>) 
 
     override fun subConfig(key: String) = TestConfig(this, *values.map { (key, value) -> key to value }.toTypedArray())
 
-    override fun subConfigs(): Map<String, Config> {
-        return values.map { (key, _) -> key to subConfig(key) }.toMap()
+    override fun subConfigKeys(): Set<String> {
+        return values.keys
     }
 
     override fun <T : Any> valueOrDefault(key: String, default: T) =

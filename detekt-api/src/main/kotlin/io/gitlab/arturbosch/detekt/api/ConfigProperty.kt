@@ -113,6 +113,7 @@ private fun <T : Any> getValueOrDefault(config: Config, propertyName: String, de
         is String,
         is Boolean,
         is Int -> config.valueOrDefault(propertyName, defaultValue)
+
         else -> error(
             "${defaultValue.javaClass} is not supported for delegated config property '$propertyName'. " +
                 "Use one of String, Boolean, Int or List<String> instead."
@@ -175,7 +176,10 @@ private class TransformedConfigPropertyWithAndroidVariants<T : Any, U : Any>(
     private val transform: (T) -> U
 ) : MemoizedConfigProperty<U>() {
     override fun doGetValue(thisRef: Rule, property: KProperty<*>): U {
-        val isAndroid = getValueOrDefault(thisRef.config, "android", false)
+        val rulesetConfig = requireNotNull(thisRef.config.parent) {
+            "A rule that uses the 'configWithAndroidVariants' property delegate must have a parent config."
+        }
+        val isAndroid = getValueOrDefault(rulesetConfig, "android", false)
         val value = if (isAndroid) defaultAndroidValue else defaultValue
         return transform(getValueOrDefault(thisRef.config, property.name, value))
     }

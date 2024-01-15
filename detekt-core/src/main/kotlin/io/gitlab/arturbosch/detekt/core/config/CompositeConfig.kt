@@ -20,10 +20,8 @@ class CompositeConfig(
     override fun subConfig(key: String): Config =
         CompositeConfig(lookFirst.subConfig(key), lookSecond.subConfig(key), this)
 
-    override fun subConfigs(): Map<String, Config> {
-        val first = lookFirst.subConfigs()
-        val second = lookSecond.subConfigs()
-        return first + second.filterKeys { !first.containsKey(it) }
+    override fun subConfigKeys(): Set<String> {
+        return lookFirst.subConfigKeys() + lookSecond.subConfigKeys()
     }
 
     override fun <T : Any> valueOrDefault(key: String, default: T): T {

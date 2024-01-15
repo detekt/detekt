@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -27,12 +26,10 @@ import org.jetbrains.kotlin.psi.KtExpression
  * val range = 0..<10
  * </compliant>
  */
-class RangeUntilInsteadOfRangeTo(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "A `..` call can be replaced with `..<`.",
-    )
+class RangeUntilInsteadOfRangeTo(config: Config) : Rule(
+    config,
+    "A `..` call can be replaced with `..<`."
+) {
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         if (expression.operationReference.text == RANGE_TO_OPERATOR &&

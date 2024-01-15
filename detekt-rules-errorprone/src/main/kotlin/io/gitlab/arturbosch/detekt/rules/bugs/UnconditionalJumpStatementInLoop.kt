@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -33,13 +32,10 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  * }
  * </compliant>
  */
-class UnconditionalJumpStatementInLoop(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "An unconditional jump statement in a loop is useless. " +
-            "The loop itself is only executed once.",
-    )
+class UnconditionalJumpStatementInLoop(config: Config) : Rule(
+    config,
+    "An unconditional jump statement in a loop is useless. The loop itself is only executed once."
+) {
 
     override fun visitLoopExpression(loopExpression: KtLoopExpression) {
         if (loopExpression.hasJumpStatements((loopExpression.parent as? KtLabeledExpression)?.getLabelName())) {

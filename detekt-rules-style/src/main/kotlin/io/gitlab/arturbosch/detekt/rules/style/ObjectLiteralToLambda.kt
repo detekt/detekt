@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isOverride
@@ -43,11 +42,10 @@ import org.jetbrains.kotlin.types.KotlinType
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class ObjectLiteralToLambda(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Report object literals that can be changed to lambdas.",
-    )
+class ObjectLiteralToLambda(config: Config) : Rule(
+    config,
+    "Report object literals that can be changed to lambdas."
+) {
 
     private val KotlinType.couldBeSamInterface
         get() = JavaSingleAbstractMethodUtils.isSamType(this)

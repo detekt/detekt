@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
@@ -59,13 +58,11 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class SuspendFunWithFlowReturnType(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "The `suspend` modifier should not be used for functions that return a Coroutines Flow type. Flows are cold " +
-            "streams and invoking a function that returns one should not produce any side effects.",
-    )
+class SuspendFunWithFlowReturnType(config: Config) : Rule(
+    config,
+    "The `suspend` modifier should not be used for functions that return a Coroutines Flow type. Flows are cold " +
+        "streams and invoking a function that returns one should not produce any side effects."
+) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         val suspendModifier = function.modifierList?.getModifier(KtTokens.SUSPEND_KEYWORD) ?: return

@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtClass
@@ -27,13 +26,11 @@ import org.jetbrains.kotlin.psi.KtClass
  * )
  * </compliant>
  */
-class DataClassShouldBeImmutable(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Data classes should mainly be immutable and should not have any side effects " +
-            "(To copy an object altering some of its properties use the copy function).",
-    )
+class DataClassShouldBeImmutable(config: Config) : Rule(
+    config,
+    "Data classes should mainly be immutable and should not have any side effects " +
+        "(To copy an object altering some of its properties use the copy function)."
+) {
 
     override fun visitClass(klass: KtClass) {
         if (klass.isData()) {

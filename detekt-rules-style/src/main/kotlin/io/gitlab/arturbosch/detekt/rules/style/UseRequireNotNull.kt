@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isCallingWithNonNullCheckArgument
@@ -24,11 +23,10 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UseRequireNotNull(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Use requireNotNull() instead of require() for checking not-null.",
-    )
+class UseRequireNotNull(config: Config) : Rule(
+    config,
+    "Use requireNotNull() instead of require() for checking not-null."
+) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
@@ -23,11 +22,10 @@ import kotlin.reflect.KClass
  */
 @ActiveByDefault("1.22.0")
 @RequiresTypeResolution
-class ViolatesTypeResolutionRequirements(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "`@RequiresTypeResolution` should be used if and only if the property `bindingContext` is used.",
-    )
+class ViolatesTypeResolutionRequirements(config: Config) : Rule(
+    config,
+    "`@RequiresTypeResolution` should be used if and only if the property `bindingContext` is used."
+) {
 
     private val klasses: MutableList<KtClass> = mutableListOf()
     private var usesBindingContext: Boolean = false

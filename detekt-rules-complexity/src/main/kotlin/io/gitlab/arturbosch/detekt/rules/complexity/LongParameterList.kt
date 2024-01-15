@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.configWithFallback
@@ -25,13 +24,12 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
  */
 @Suppress("ViolatesTypeResolutionRequirements")
 @ActiveByDefault(since = "1.0.0")
-class LongParameterList(config: Config) : Rule(config) {
-    override val issue = Issue(
-        javaClass.simpleName,
-        "The more parameters a function has the more complex it is. Long parameter lists are often " +
-            "used to control complex algorithms and violate the Single Responsibility Principle. " +
-            "Prefer functions with short parameter lists.",
-    )
+class LongParameterList(config: Config) : Rule(
+    config,
+    "The more parameters a function has the more complex it is. Long parameter lists are often " +
+        "used to control complex algorithms and violate the Single Responsibility Principle. " +
+        "Prefer functions with short parameter lists."
+) {
 
     @Deprecated("Use `allowedFunctionParameters` and `allowedConstructorParameters` instead")
     @Configuration("number of parameters required to trigger the rule")

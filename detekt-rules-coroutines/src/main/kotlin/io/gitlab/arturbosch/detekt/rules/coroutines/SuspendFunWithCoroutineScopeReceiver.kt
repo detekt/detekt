@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.coroutines
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
@@ -46,13 +45,11 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  *
  */
 @RequiresTypeResolution
-class SuspendFunWithCoroutineScopeReceiver(config: Config) : Rule(config) {
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "The `suspend` modifier should not be used for functions that use a CoroutinesScope as receiver. You should " +
-            "use suspend functions without the receiver or use plain functions and use coroutineScope { } instead.",
-    )
+class SuspendFunWithCoroutineScopeReceiver(config: Config) : Rule(
+    config,
+    "The `suspend` modifier should not be used for functions that use a CoroutinesScope as receiver. You should " +
+        "use suspend functions without the receiver or use plain functions and use coroutineScope { } instead."
+) {
 
     override val defaultRuleIdAliases = setOf("SuspendFunctionOnCoroutineScope")
 

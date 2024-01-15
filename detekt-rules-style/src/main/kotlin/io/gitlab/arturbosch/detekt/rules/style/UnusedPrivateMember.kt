@@ -46,14 +46,12 @@ private const val ARRAY_GET_METHOD_NAME = "get"
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
-class UnusedPrivateMember(config: Config) : Rule(config) {
+class UnusedPrivateMember(config: Config) : Rule(
+    config,
+    "Private function is unused and should be removed."
+) {
 
     override val defaultRuleIdAliases: Set<String> = setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused")
-
-    override val issue = Issue(
-        javaClass.simpleName,
-        "Private function is unused and should be removed.",
-    )
 
     @Configuration("unused private function names matching this regex are ignored")
     private val allowedNames: Regex by config("", String::toRegex)
