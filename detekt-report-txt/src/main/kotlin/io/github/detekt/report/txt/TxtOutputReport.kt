@@ -1,6 +1,7 @@
 package io.github.detekt.report.txt
 
 import io.gitlab.arturbosch.detekt.api.Detektion
+import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 
@@ -21,3 +22,7 @@ class TxtOutputReport : BuiltInOutputReport, OutputReport() {
         return builder.toString()
     }
 }
+
+private fun Finding2.compact(): String = "${issue.id} - ${entity.compact()}"
+
+private fun Finding2.compactWithSignature(): String = compact() + " - Signature=" + entity.signature

@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
-interface Finding2 : Compactable, HasEntity {
+interface Finding2 : HasEntity {
     val issue: Issue
     val references: List<Entity>
     val message: String
@@ -25,22 +25,6 @@ interface HasEntity {
         get() = entity.signature
 }
 
-/**
- * Provides a compact string representation.
- */
-interface Compactable {
-    /**
-     * Contract to format implementing object to a string representation.
-     */
-    fun compact(): String
-
-    /**
-     * Same as [compact] except the content should contain a substring which represents
-     * this exact findings via a custom identifier.
-     */
-    fun compactWithSignature(): String = compact()
-}
-
 fun Finding.toFinding2(): Finding2 {
     return when (this) {
         is CorrectableCodeSmell -> Finding2Impl(issue, entity, message, references, severity, autoCorrectEnabled)
@@ -62,10 +46,6 @@ class Finding2Impl(
     init {
         require(message.isNotBlank()) { "The message should not be empty" }
     }
-
-    override fun compact(): String = "${issue.id} - ${entity.compact()}"
-
-    override fun compactWithSignature(): String = compact() + " - Signature=" + entity.signature
 
     override fun toString(): String {
         return "CodeSmell(issue=$issue, " +
