@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
+import dev.drewhamilton.poko.Poko
+
 interface Finding2 : HasEntity {
     val issue: Issue
     val references: List<Entity>
@@ -35,7 +37,8 @@ fun Finding.toFinding2(): Finding2 {
     }
 }
 
-class Finding2Impl(
+@Poko
+private class Finding2Impl(
     override val issue: Issue,
     override val entity: Entity,
     override val message: String,
@@ -45,14 +48,5 @@ class Finding2Impl(
 ) : Finding2 {
     init {
         require(message.isNotBlank()) { "The message should not be empty" }
-    }
-
-    override fun toString(): String {
-        return "CodeSmell(issue=$issue, " +
-            "entity=$entity, " +
-            "message=$message, " +
-            "references=$references, " +
-            "severity=$severity," +
-            "autoCorrectEnabled=$autoCorrectEnabled)"
     }
 }

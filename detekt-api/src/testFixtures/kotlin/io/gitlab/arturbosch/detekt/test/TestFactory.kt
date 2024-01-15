@@ -1,8 +1,9 @@
 package io.gitlab.arturbosch.detekt.test
 
+import dev.drewhamilton.poko.Poko
 import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding2Impl
+import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -89,3 +90,13 @@ fun createLocation(
     filePath = basePath?.let { FilePath.fromRelative(Path(it), Path(path)) }
         ?: FilePath.fromAbsolute(Path(path)),
 )
+
+@Poko
+class Finding2Impl(
+    override val issue: Issue,
+    override val entity: Entity,
+    override val message: String,
+    override val references: List<Entity> = emptyList(),
+    override val severity: Severity = Severity.DEFAULT,
+    override val autoCorrectEnabled: Boolean = false,
+) : Finding2
