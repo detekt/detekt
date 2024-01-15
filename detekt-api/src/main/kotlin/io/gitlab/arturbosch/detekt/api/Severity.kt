@@ -7,15 +7,5 @@ package io.gitlab.arturbosch.detekt.api
 enum class Severity {
     Error,
     Warning,
-    Info;
-
-    internal companion object {
-        val DEFAULT = Error
-
-        fun fromString(severity: String): Severity {
-            val lowercase = severity.lowercase()
-            return entries.find { it.name.lowercase() == lowercase }
-                ?: error("$severity is not a valid Severity. Allowed values are ${Severity.entries}")
-        }
-    }
+    Info,
 }
