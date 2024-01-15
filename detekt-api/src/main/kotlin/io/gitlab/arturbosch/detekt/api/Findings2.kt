@@ -51,13 +51,13 @@ fun Finding.toFinding2(): Finding2 {
     }
 }
 
-open class Finding2Impl(
-    final override val issue: Issue,
-    final override val entity: Entity,
-    final override val message: String,
-    final override val references: List<Entity> = emptyList(),
-    final override val severity: Severity = Severity.DEFAULT,
-    final override val autoCorrectEnabled: Boolean = false,
+class Finding2Impl(
+    override val issue: Issue,
+    override val entity: Entity,
+    override val message: String,
+    override val references: List<Entity> = emptyList(),
+    override val severity: Severity = Severity.DEFAULT,
+    override val autoCorrectEnabled: Boolean = false,
 ) : Finding2 {
     init {
         require(message.isNotBlank()) { "The message should not be empty" }
