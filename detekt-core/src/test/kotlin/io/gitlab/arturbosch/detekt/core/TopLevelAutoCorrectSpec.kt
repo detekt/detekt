@@ -72,6 +72,6 @@ private class DeleteAnnotationsRule(config: Config) : Rule(config, "") {
 }
 
 private class TopLevelAutoCorrectProvider : RuleSetProvider {
-    override val ruleSetId: String = "test-rule-set"
+    override val ruleSetId = RuleSet.Id("test-rule-set")
     override fun instance() = RuleSet(ruleSetId, listOf(::DeleteAnnotationsRule))
 }

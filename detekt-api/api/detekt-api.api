@@ -212,9 +212,9 @@ public final class io/gitlab/arturbosch/detekt/api/HasEntity$DefaultImpls {
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Issue {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Rule$Id;Ljava/lang/String;)V
 	public final fun getDescription ()Ljava/lang/String;
-	public final fun getId ()Ljava/lang/String;
+	public final fun getId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -303,7 +303,6 @@ public abstract interface annotation class io/gitlab/arturbosch/detekt/api/Requi
 
 public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/DetektVisitor {
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;Ljava/lang/String;)V
-	public final fun getActive ()Z
 	public final fun getAliases ()Ljava/util/Set;
 	public final fun getAutoCorrect ()Z
 	public final fun getBindingContext ()Lorg/jetbrains/kotlin/resolve/BindingContext;
@@ -312,7 +311,7 @@ public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/
 	public fun getDefaultRuleIdAliases ()Ljava/util/Set;
 	public fun getFilters ()Lio/gitlab/arturbosch/detekt/api/internal/PathFilters;
 	public final fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
-	public fun getRuleId ()Ljava/lang/String;
+	public fun getRuleId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
 	protected fun postVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	protected fun preVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	public final fun report (Lio/gitlab/arturbosch/detekt/api/Finding;)V
@@ -324,19 +323,35 @@ public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/
 	public static synthetic fun visitFile$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;Lio/gitlab/arturbosch/detekt/api/CompilerResources;ILjava/lang/Object;)Ljava/util/List;
 }
 
+public final class io/gitlab/arturbosch/detekt/api/Rule$Id {
+	public fun <init> (Ljava/lang/String;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/gitlab/arturbosch/detekt/api/RuleSet {
 	public static final field Companion Lio/gitlab/arturbosch/detekt/api/RuleSet$Companion;
-	public fun <init> (Ljava/lang/String;Ljava/util/Map;)V
-	public final fun getId ()Ljava/lang/String;
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;Ljava/util/Map;)V
+	public final fun getId ()Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
 	public final fun getRules ()Ljava/util/Map;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/RuleSet$Companion {
-	public final fun invoke (Ljava/lang/String;Ljava/util/List;)Lio/gitlab/arturbosch/detekt/api/RuleSet;
+	public final fun invoke (Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;Ljava/util/List;)Lio/gitlab/arturbosch/detekt/api/RuleSet;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/RuleSet$Id {
+	public fun <init> (Ljava/lang/String;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/RuleSetProvider {
-	public abstract fun getRuleSetId ()Ljava/lang/String;
+	public abstract fun getRuleSetId ()Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
 	public abstract fun instance ()Lio/gitlab/arturbosch/detekt/api/RuleSet;
 }
 
@@ -366,8 +381,6 @@ public final class io/gitlab/arturbosch/detekt/api/SourceLocation {
 }
 
 public final class io/gitlab/arturbosch/detekt/api/SplitPatternKt {
-	public static final fun commaSeparatedPattern (Ljava/lang/String;[Ljava/lang/String;)Lkotlin/sequences/Sequence;
-	public static synthetic fun commaSeparatedPattern$default (Ljava/lang/String;[Ljava/lang/String;ILjava/lang/Object;)Lkotlin/sequences/Sequence;
 	public static final fun simplePatternToRegex (Ljava/lang/String;)Lkotlin/text/Regex;
 }
 

@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
@@ -67,7 +68,7 @@ fun createFindingForRelativePath(
 )
 
 fun createIssue(id: String) = Issue(
-    id = id,
+    id = Rule.Id(id),
     description = "Description $id",
 )
 

@@ -31,6 +31,6 @@ class CustomRuleSetProviderSpec {
 
         val providers = spec.withSettings { RuleSetLocator(this).load() }
 
-        assertThat(providers).filteredOn { it.ruleSetId == "sample" }.hasSize(1)
+        assertThat(providers).filteredOn { it.ruleSetId.value == "sample" }.hasSize(1)
     }
 }

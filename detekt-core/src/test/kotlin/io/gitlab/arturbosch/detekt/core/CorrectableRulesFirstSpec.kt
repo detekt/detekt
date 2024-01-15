@@ -34,7 +34,7 @@ class CorrectableRulesFirstSpec {
         val detector = Analyzer(
             settings,
             listOf(object : RuleSetProvider {
-                override val ruleSetId: String = "Test"
+                override val ruleSetId = RuleSet.Id("Test")
                 override fun instance() = RuleSet(
                     ruleSetId,
                     listOf(::NonCorrectable, ::Correctable).let { if (reverse) it.reversed() else it }
@@ -53,12 +53,12 @@ private var actualLastRuleId = ""
 
 private class NonCorrectable(config: Config) : Rule(config, "") {
     override fun visitClass(klass: KtClass) {
-        actualLastRuleId = issue.id
+        actualLastRuleId = issue.id.value
     }
 }
 
 private class Correctable(config: Config) : Rule(config, "") {
     override fun visitClass(klass: KtClass) {
-        actualLastRuleId = issue.id
+        actualLastRuleId = issue.id.value
     }
 }

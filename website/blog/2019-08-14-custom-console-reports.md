@@ -5,7 +5,7 @@ summary: "This guide shows how to silence detekt and write a custom report forma
 tags: [guides]
 ---
 
-detekt's reporting mechanism relies on implementations of [ConsoleReport](/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/index.html)'s.
+detekt's reporting mechanism relies on implementations of [ConsoleReport](https://detekt.dev/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/index.html)'s.
 The cli module and therefore the Gradle plugin implement a bunch of this reports.
 
 A typical detekt report will look like following:

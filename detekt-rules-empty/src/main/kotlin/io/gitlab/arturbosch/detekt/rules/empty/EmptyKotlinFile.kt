@@ -13,7 +13,13 @@ import org.jetbrains.kotlin.psi.KtFile
 class EmptyKotlinFile(config: Config) : EmptyRule(config) {
 
     override fun visitKtFile(file: KtFile) {
-        if (file.text.isNullOrBlank()) {
+        var text = file.text
+        val packageDirective = file.packageDirective
+        if (packageDirective != null) {
+            val range = packageDirective.textRange
+            text = text.removeRange(range.startOffset, range.endOffset)
+        }
+        if (text.isNullOrBlank()) {
             report(
                 CodeSmell(
                     issue,

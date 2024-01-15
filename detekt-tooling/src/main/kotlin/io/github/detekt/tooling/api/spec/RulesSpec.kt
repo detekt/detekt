@@ -1,7 +1,7 @@
 package io.github.detekt.tooling.api.spec
 
-import io.gitlab.arturbosch.detekt.api.RuleId
-import io.gitlab.arturbosch.detekt.api.RuleSetId
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.Severity
 
 interface RulesSpec {
@@ -62,6 +62,6 @@ interface RulesSpec {
         /**
          * Run a single rule.
          */
-        class RestrictToSingleRule(val id: Pair<RuleSetId, RuleId>) : RunPolicy()
+        class RestrictToSingleRule(val ruleSetId: RuleSet.Id, val ruleId: Rule.Id) : RunPolicy()
     }
 }

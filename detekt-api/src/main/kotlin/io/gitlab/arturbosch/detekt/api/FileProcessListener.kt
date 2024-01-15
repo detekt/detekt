@@ -28,7 +28,7 @@ interface FileProcessListener : Extension {
      * Called when processing of a file completes.
      * This method is called from a thread pool thread. Heavy computations allowed.
      */
-    fun onProcessComplete(file: KtFile, findings: Map<String, List<Finding>>, bindingContext: BindingContext) {}
+    fun onProcessComplete(file: KtFile, findings: Map<RuleSet.Id, List<Finding>>, bindingContext: BindingContext) {}
 
     /**
      * Mainly use this method to save computed metrics from KtFile's to the {@link Detektion} container.

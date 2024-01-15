@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.gitlab.arturbosch.detekt.api.RuleSetId
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
 import org.jetbrains.kotlin.psi.KtFile
@@ -27,7 +27,7 @@ class MetricProcessorTester(
 }
 
 private class MetricResults : Detektion, UserDataHolderBase() {
-    override val findings: Map<RuleSetId, List<Finding>>
+    override val findings: Map<RuleSet.Id, List<Finding>>
         get() = throw UnsupportedOperationException()
     override val notifications: Collection<Notification>
         get() = throw UnsupportedOperationException()

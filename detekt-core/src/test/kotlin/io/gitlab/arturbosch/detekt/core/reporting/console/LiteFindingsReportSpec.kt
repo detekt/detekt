@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.core.reporting.console
 import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createFinding
@@ -35,8 +36,8 @@ class LiteFindingsReportSpec {
     @Test
     fun `reports no findings with rule set containing no smells`() {
         val detektion = object : TestDetektion() {
-            override val findings: Map<String, List<Finding>> = mapOf(
-                "Ruleset" to emptyList()
+            override val findings: Map<RuleSet.Id, List<Finding>> = mapOf(
+                RuleSet.Id("Ruleset") to emptyList()
             )
         }
         assertThat(subject.render(detektion)).isNull()

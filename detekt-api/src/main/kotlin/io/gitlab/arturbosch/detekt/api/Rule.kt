@@ -1,9 +1,11 @@
 package io.gitlab.arturbosch.detekt.api
 
+import dev.drewhamilton.poko.Poko
 import io.gitlab.arturbosch.detekt.api.Config.Companion.SEVERITY_KEY
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
+import io.gitlab.arturbosch.detekt.api.internal.validateIdentifier
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -30,7 +32,7 @@ open class Rule(
      * An id this rule is identified with.
      * Conventionally the rule id is derived from the issue id as these two classes have a coexistence.
      */
-    open val ruleId: RuleId = javaClass.simpleName
+    open val ruleId: Id by lazy(LazyThreadSafetyMode.NONE) { Id(javaClass.simpleName) }
 
     /**
      * List of rule ids which can optionally be used in suppress annotations to refer to this rule.
@@ -50,13 +52,11 @@ open class Rule(
      */
     open val defaultRuleIdAliases: Set<String> = emptySet()
 
-    private val ruleSetId: RuleSetId? get() = config.parent?.parentPath
+    private val ruleSetId: RuleSet.Id? get() = config.parent?.parentPath?.let(RuleSet::Id)
 
     val autoCorrect: Boolean
         get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
             (config.parent?.valueOrDefault(Config.AUTO_CORRECT_KEY, true) != false)
-
-    val active: Boolean get() = config.valueOrDefault(Config.ACTIVE_KEY, false)
 
     /**
      * Rules are aware of the paths they should run on via configuration properties.
@@ -118,11 +118,10 @@ open class Rule(
     /**
      * Basic mechanism to decide if a rule should run or not.
      *
-     * By default, any rule which is declared 'active' in the [Config]
-     * or not suppressed by a [Suppress] annotation on file level should run.
+     * By default, any rule not suppressed by a [Suppress] annotation on file level should run.
      */
     open fun visitCondition(root: KtFile): Boolean =
-        active && shouldRunOnGivenFile(root) && !root.isSuppressedBy(ruleId, aliases, ruleSetId)
+        shouldRunOnGivenFile(root) && !root.isSuppressedBy(ruleId, aliases, ruleSetId)
 
     private fun shouldRunOnGivenFile(root: KtFile) =
         filters?.isIgnored(root)?.not() ?: true
@@ -157,9 +156,15 @@ open class Rule(
             findings.add(finding)
         }
     }
-}
 
-/**
- * The type to use when referring to rule ids giving it more context then a String would.
- */
-typealias RuleId = String
+    @Poko
+    class Id(val value: String) {
+        init {
+            validateIdentifier(value)
+        }
+
+        override fun toString(): String {
+            return value
+        }
+    }
+}

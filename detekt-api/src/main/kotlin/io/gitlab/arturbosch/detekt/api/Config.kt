@@ -13,6 +13,10 @@ interface Config {
      */
     val parentPath: String?
 
+    /**
+     * The reference to a parent [Config] from this configuration, useful when navigating with [subConfig].
+     * It's `null` if this is the top most configuration object.
+     */
     val parent: Config?
 
     /**
@@ -43,7 +47,7 @@ interface Config {
     class InvalidConfigurationError(throwable: Throwable? = null) :
         RuntimeException(
             "Provided configuration file is invalid: Structure must be from type Map<String,Any>!" +
-                throwable?.let { "\n" + it.message }.orEmpty(),
+                    throwable?.let { "\n" + it.message }.orEmpty(),
             throwable
         )
 
@@ -63,11 +67,7 @@ interface Config {
 
             override fun subConfigKeys(): Set<String> = emptySet()
 
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : Any> valueOrNull(key: String): T? = when (key) {
-                ACTIVE_KEY -> true as? T
-                else -> null
-            }
+            override fun <T : Any> valueOrNull(key: String): T? = null
         }
 
         const val ACTIVE_KEY: String = "active"

@@ -16,7 +16,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 @ActiveByDefault("1.16.0")
 class RuleLibrariesProvider : RuleSetProvider {
 
-    override val ruleSetId: String = "libraries"
+    override val ruleSetId = RuleSet.Id("libraries")
 
     override fun instance() = RuleSet(
         ruleSetId,

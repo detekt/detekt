@@ -6,9 +6,9 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.api.Test
-import org.assertj.core.api.Assertions.assertThat as assertJThat
 
 class AutoCorrectLevelSpec {
 
@@ -28,7 +28,7 @@ class AutoCorrectLevelSpec {
         val (file, findings) = runRule(config)
 
         assertThat(findings).isNotEmpty()
-        assertJThat(wasFormatted(file)).isTrue()
+        assertThat(wasFormatted(file)).isTrue()
     }
 
     @Test
@@ -47,7 +47,7 @@ class AutoCorrectLevelSpec {
         val (file, findings) = runRule(config)
 
         assertThat(findings).isNotEmpty()
-        assertJThat(wasFormatted(file)).isFalse()
+        assertThat(wasFormatted(file)).isFalse()
     }
 
     @Test
@@ -66,33 +66,16 @@ class AutoCorrectLevelSpec {
         val (file, findings) = runRule(config)
 
         assertThat(findings).isNotEmpty()
-        assertJThat(wasFormatted(file)).isFalse()
-    }
-
-    @Test
-    fun `autoCorrect_ true but rule active false should not reformat the test file`() {
-        val config = yamlConfigFromContent(
-            """
-                formatting:
-                  active: true
-                  autoCorrect: true
-                  ChainWrapping:
-                    active: false
-                    autoCorrect: true
-            """.trimIndent()
-        )
-
-        val (file, findings) = runRule(config)
-
-        assertThat(findings).isEmpty()
-        assertJThat(wasFormatted(file)).isFalse()
+        assertThat(wasFormatted(file)).isFalse()
     }
 }
 
 private fun runRule(config: Config): Pair<KtFile, List<Finding>> {
     val testFile = loadFile("configTests/fixed.kt")
     val ruleSet = loadRuleSet<FormattingProvider>()
-    val rules = ruleSet.rules.map { (ruleId, provider) -> provider(config.subConfig(ruleSet.id).subConfig(ruleId)) }
+    val rules = ruleSet.rules
+        .map { (ruleId, provider) -> provider(config.subConfig(ruleSet.id.value).subConfig(ruleId.value)) }
+        .filter { it.config.valueOrDefault("active", false) }
     return testFile to rules.flatMap { it.visitFile(testFile) }
 }
 

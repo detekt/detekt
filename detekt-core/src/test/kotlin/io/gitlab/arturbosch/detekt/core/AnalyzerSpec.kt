@@ -230,7 +230,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
 }
 
 private class CustomRuleSetProvider : RuleSetProvider {
-    override val ruleSetId: String = "custom"
+    override val ruleSetId = RuleSet.Id("custom")
     override fun instance() = RuleSet(
         ruleSetId,
         listOf(

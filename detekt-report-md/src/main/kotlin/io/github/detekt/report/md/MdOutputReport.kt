@@ -15,6 +15,8 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
@@ -71,7 +73,7 @@ class MdOutputReport : BuiltInOutputReport, OutputReport() {
 
 private fun MarkdownContent.renderMetrics(metrics: Collection<ProjectMetric>) {
     list {
-        metrics.forEach { item { "%,d ${it.type}".format(Locale.US, it.value) } }
+        metrics.forEach { item { "%,d ${it.type}".format(Locale.ROOT, it.value) } }
     }
 }
 
@@ -81,24 +83,24 @@ private fun MarkdownContent.renderComplexity(complexityReport: List<String>) {
     }
 }
 
-private fun MarkdownContent.renderGroup(group: String, findings: List<Finding>) {
+private fun MarkdownContent.renderGroup(group: RuleSet.Id, findings: List<Finding>) {
     findings
         .groupBy { it.issue.id }
         .toList()
-        .sortedBy { (rule, _) -> rule }
+        .sortedBy { (rule, _) -> rule.value }
         .forEach { (rule, ruleFindings) ->
             renderRule(rule, group, ruleFindings)
         }
 }
 
-private fun MarkdownContent.renderRule(rule: String, group: String, findings: List<Finding>) {
-    h3 { "$group, $rule (%,d)".format(Locale.US, findings.size) }
+private fun MarkdownContent.renderRule(rule: Rule.Id, group: RuleSet.Id, findings: List<Finding>) {
+    h3 { "$group, $rule (%,d)".format(Locale.ROOT, findings.size) }
     paragraph { (findings.first().issue.description) }
 
     paragraph {
         link(
             "Documentation",
-            "$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.lowercase(Locale.US)}#${rule.lowercase(Locale.US)}"
+            "$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.value.lowercase()}#${rule.value.lowercase()}"
         )
     }
 
@@ -111,18 +113,18 @@ private fun MarkdownContent.renderRule(rule: String, group: String, findings: Li
     }
 }
 
-private fun MarkdownContent.renderFindings(findings: Map<String, List<Finding>>) {
+private fun MarkdownContent.renderFindings(findings: Map<RuleSet.Id, List<Finding>>) {
     val total = findings.values
         .asSequence()
         .map { it.size }
         .fold(0) { a, b -> a + b }
 
-    h2 { "Findings (%,d)".format(Locale.US, total) }
+    h2 { "Findings (%,d)".format(Locale.ROOT, total) }
 
     findings
         .filter { it.value.isNotEmpty() }
         .toList()
-        .sortedBy { (group, _) -> group }
+        .sortedBy { (group, _) -> group.value }
         .forEach { (group, groupFindings) ->
             renderGroup(group, groupFindings)
         }

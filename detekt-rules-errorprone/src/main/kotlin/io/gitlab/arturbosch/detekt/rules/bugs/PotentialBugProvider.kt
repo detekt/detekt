@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 @ActiveByDefault(since = "1.0.0")
 class PotentialBugProvider : DefaultRuleSetProvider {
 
-    override val ruleSetId: String = "potential-bugs"
+    override val ruleSetId = RuleSet.Id("potential-bugs")
 
     @Suppress("DEPRECATION")
     override fun instance(): RuleSet = RuleSet(
@@ -34,6 +34,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             ::LateinitUsage,
             ::MapGetWithNotNullAssertionOperator,
             ::MissingPackageDeclaration,
+            ::MissingUseCall,
             ::MissingWhenCase,
             ::NullCheckOnMutableProperty,
             ::RedundantElseInWhen,

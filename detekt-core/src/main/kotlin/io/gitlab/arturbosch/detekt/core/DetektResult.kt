@@ -4,11 +4,11 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.gitlab.arturbosch.detekt.api.RuleSetId
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
 
 @Suppress("DataClassShouldBeImmutable")
-data class DetektResult(override val findings: Map<RuleSetId, List<Finding>>) : Detektion, UserDataHolderBase() {
+data class DetektResult(override val findings: Map<RuleSet.Id, List<Finding>>) : Detektion, UserDataHolderBase() {
 
     private val _notifications = ArrayList<Notification>()
     override val notifications: Collection<Notification> = _notifications

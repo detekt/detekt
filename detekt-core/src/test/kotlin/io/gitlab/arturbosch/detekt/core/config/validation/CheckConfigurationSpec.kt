@@ -114,7 +114,7 @@ class CheckConfigurationSpec {
 
 class SampleRuleProvider : RuleSetProvider {
 
-    override val ruleSetId: String = "sample-rule-set"
+    override val ruleSetId = RuleSet.Id("sample-rule-set")
 
     override fun instance() = RuleSet(ruleSetId, emptyList())
 }

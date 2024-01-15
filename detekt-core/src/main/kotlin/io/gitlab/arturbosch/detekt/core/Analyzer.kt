@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.RuleSetId
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
@@ -18,17 +18,17 @@ import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.core.config.validation.DeprecatedRule
 import io.gitlab.arturbosch.detekt.core.config.validation.loadDeprecations
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
-import io.gitlab.arturbosch.detekt.core.rules.isActive
 import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
 import io.gitlab.arturbosch.detekt.core.suppressors.buildSuppressors
 import io.gitlab.arturbosch.detekt.core.tooling.getDefaultConfiguration
+import io.gitlab.arturbosch.detekt.core.util.isActiveOrDefault
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 import kotlin.reflect.full.hasAnnotation
 
-private typealias FindingsResult = List<Map<RuleSetId, List<Finding>>>
+private typealias FindingsResult = List<Map<RuleSet.Id, List<Finding>>>
 
 internal class Analyzer(
     private val settings: ProcessingSettings,
@@ -41,7 +41,7 @@ internal class Analyzer(
     fun run(
         ktFiles: Collection<KtFile>,
         bindingContext: BindingContext = BindingContext.EMPTY
-    ): Map<RuleSetId, List<Finding>> {
+    ): Map<RuleSet.Id, List<Finding>> {
         val languageVersionSettings = settings.environment.configuration.languageVersionSettings
 
         val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
@@ -57,7 +57,7 @@ internal class Analyzer(
             warnAboutEnabledRequiresTypeResolutionRules()
         }
 
-        val findingsPerRuleSet = HashMap<RuleSetId, List<Finding>>()
+        val findingsPerRuleSet = HashMap<RuleSet.Id, List<Finding>>()
         for (findings in findingsPerFile) {
             findingsPerRuleSet.mergeSmells(findings)
         }
@@ -84,7 +84,7 @@ internal class Analyzer(
         compilerResources: CompilerResources
     ): FindingsResult {
         val service = settings.taskPool
-        val tasks: TaskList<Map<RuleSetId, List<Finding>>?> = ktFiles.map { file ->
+        val tasks: TaskList<Map<RuleSet.Id, List<Finding>>?> = ktFiles.map { file ->
             service.task {
                 processors.forEach { it.onProcess(file, bindingContext) }
                 val findings = analyze(file, bindingContext, compilerResources)
@@ -99,10 +99,10 @@ internal class Analyzer(
         file: KtFile,
         bindingContext: BindingContext,
         compilerResources: CompilerResources
-    ): Map<RuleSetId, List<Finding>> {
+    ): Map<RuleSet.Id, List<Finding>> {
         val activeRuleSetsToRuleSetConfigs = providers.asSequence()
-            .map { it to config.subConfig(it.ruleSetId) }
-            .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
+            .map { it to config.subConfig(it.ruleSetId.value) }
+            .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
             .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.shouldAnalyzeFile(file) }
             .toList()
@@ -112,15 +112,19 @@ internal class Analyzer(
         )
 
         val (correctableRules, otherRules) = activeRuleSetsToRuleSetConfigs
-            .flatMap { (ruleSet, config) ->
-                ruleSet.rules.map { (ruleId, ruleProvider) -> ruleProvider(config.subConfig(ruleId)) }
+            .flatMap { (ruleSet, ruleSetConfig) ->
+                ruleSet.rules
+                    .asSequence()
+                    .map { (ruleId, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleId.value) }
+                    .filter { (_, config) -> config.isActiveOrDefault(false) }
+                    .map { (ruleProvider, config) -> ruleProvider(config) }
             }
             .filter { rule ->
                 bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
             }
             .partition { rule -> rule.autoCorrect }
 
-        val result = HashMap<RuleSetId, MutableList<Finding>>()
+        val result = HashMap<RuleSet.Id, MutableList<Finding>>()
 
         fun executeRules(rules: List<Rule>) {
             for (rule in rules) {
@@ -130,8 +134,7 @@ internal class Analyzer(
                     val mappedRuleSet = checkNotNull(ruleIdsToRuleSetIds[finding.issue.id]) {
                         "Mapping for '${finding.issue.id}' expected."
                     }
-                    result.computeIfAbsent(mappedRuleSet) { mutableListOf() }
-                        .add(finding)
+                    result.computeIfAbsent(mappedRuleSet) { mutableListOf() }.add(finding)
                 }
             }
         }
@@ -144,13 +147,16 @@ internal class Analyzer(
 
     private fun warnAboutEnabledRequiresTypeResolutionRules() {
         providers.asSequence()
-            .map { it to config.subConfig(it.ruleSetId) }
-            .filter { (_, ruleSetConfig) -> ruleSetConfig.isActive() }
+            .map { it to config.subConfig(it.ruleSetId.value) }
+            .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
             .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
-            .flatMap { (ruleSet, config) ->
-                ruleSet.rules.map { (ruleId, ruleProvider) -> ruleProvider(config.subConfig(ruleId)) }
+            .flatMap { (ruleSet, ruleSetConfig) ->
+                ruleSet.rules
+                    .asSequence()
+                    .map { (ruleId, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleId.value) }
+                    .filter { (_, config) -> config.isActiveOrDefault(false) }
+                    .map { (ruleProvider, config) -> ruleProvider(config) }
             }
-            .filter { rule -> (rule as? Rule)?.active == true }
             .filter { rule -> rule::class.hasAnnotation<RequiresTypeResolution>() }
             .forEach { rule ->
                 settings.debug { "The rule '${rule.ruleId}' requires type resolution but it was run without it." }
@@ -167,7 +173,7 @@ private fun List<Finding>.filterSuppressedFindings(rule: Rule, bindingContext: B
     }
 }
 
-private fun MutableMap<String, List<Finding>>.mergeSmells(other: Map<String, List<Finding>>) {
+private fun MutableMap<RuleSet.Id, List<Finding>>.mergeSmells(other: Map<RuleSet.Id, List<Finding>>) {
     for ((key, findings) in other.entries) {
         merge(key, findings) { f1, f2 -> f1.plus(f2) }
     }
