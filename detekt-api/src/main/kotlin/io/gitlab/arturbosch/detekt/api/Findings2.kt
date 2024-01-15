@@ -15,20 +15,3 @@ interface Finding2 : HasEntity {
     val severity: Severity
     val autoCorrectEnabled: Boolean
 }
-
-/**
- * Describes a source code position.
- */
-interface HasEntity {
-    val entity: Entity
-    val location: Location
-        get() = entity.location
-    val startPosition: SourceLocation
-        get() = location.source
-    val charPosition: TextLocation
-        get() = location.text
-    val file: String
-        get() = location.filePath.absolutePath.toString()
-    val signature: String
-        get() = entity.signature
-}
