@@ -52,6 +52,7 @@ class Finding2Impl(
             "entity=$entity, " +
             "message=$message, " +
             "references=$references, " +
-            "severity=$severity)"
+            "severity=$severity," +
+            "autoCorrectEnabled=$autoCorrectEnabled)"
     }
 }
