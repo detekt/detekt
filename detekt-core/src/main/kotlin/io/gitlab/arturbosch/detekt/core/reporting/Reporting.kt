@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.reporting
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.CorrectableFinding2Impl
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.OutputReport
@@ -48,11 +47,7 @@ fun Detektion.filterAutoCorrectedIssues(config: Config): Map<RuleSet.Id, List<Fi
     }
     val filteredFindings = HashMap<RuleSet.Id, List<Finding2>>()
     findings.forEach { (ruleSetId, findingsList) ->
-        val newFindingsList = findingsList.filter { finding ->
-            val correctableCodeSmell = finding as? CorrectableFinding2Impl
-            correctableCodeSmell == null || !correctableCodeSmell.autoCorrectEnabled
-        }
-        filteredFindings[ruleSetId] = newFindingsList
+        filteredFindings[ruleSetId] = findingsList.filter { finding -> !finding.autoCorrectEnabled }
     }
     return filteredFindings
 }

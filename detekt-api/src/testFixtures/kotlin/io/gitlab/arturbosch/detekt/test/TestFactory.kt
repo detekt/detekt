@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.test
 
 import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.api.Finding2Impl
-import io.gitlab.arturbosch.detekt.api.CorrectableFinding2Impl
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
@@ -24,7 +23,7 @@ fun createCorrectableFinding(
     ruleName: String = "TestSmell",
     fileName: String = "TestFile.kt",
     severity: Severity = Severity.Error
-) = object : CorrectableFinding2Impl(
+) = object : Finding2Impl(
     issue = createIssue(ruleName),
     entity = createEntity(location = createLocation(fileName)),
     message = "TestMessage",

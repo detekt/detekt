@@ -6,6 +6,7 @@ interface Finding2 : Compactable, HasEntity {
     val message: String
     val severity: Severity
         get() = Severity.DEFAULT
+    val autoCorrectEnabled: Boolean
 }
 
 /**
@@ -43,7 +44,7 @@ interface Compactable {
 
 fun Finding.toFinding2(): Finding2 {
     return when (this) {
-        is CorrectableCodeSmell -> CorrectableFinding2Impl(issue, entity, message, references, autoCorrectEnabled).also {
+        is CorrectableCodeSmell -> Finding2Impl(issue, entity, message, references, autoCorrectEnabled).also {
             it.internalSeverity = severity
         }
 
@@ -59,7 +60,8 @@ open class Finding2Impl(
     final override val issue: Issue,
     final override val entity: Entity,
     final override val message: String,
-    final override val references: List<Entity> = emptyList()
+    final override val references: List<Entity> = emptyList(),
+    final override val autoCorrectEnabled: Boolean = false,
 ) : Finding2 {
     init {
         require(message.isNotBlank()) { "The message should not be empty" }
@@ -75,29 +77,6 @@ open class Finding2Impl(
 
     override fun toString(): String {
         return "CodeSmell(issue=$issue, " +
-            "entity=$entity, " +
-            "message=$message, " +
-            "references=$references, " +
-            "severity=$severity)"
-    }
-}
-
-open class CorrectableFinding2Impl(
-    issue: Issue,
-    entity: Entity,
-    message: String,
-    references: List<Entity> = emptyList(),
-    val autoCorrectEnabled: Boolean
-) : Finding2Impl(
-    issue,
-    entity,
-    message,
-    references
-) {
-    override fun toString(): String {
-        return "CorrectableCodeSmell(" +
-            "autoCorrectEnabled=$autoCorrectEnabled, " +
-            "issue=$issue, " +
             "entity=$entity, " +
             "message=$message, " +
             "references=$references, " +
