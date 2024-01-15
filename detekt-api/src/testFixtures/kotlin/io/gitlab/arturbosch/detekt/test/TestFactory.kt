@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.test
 
-import dev.drewhamilton.poko.Poko
 import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding2
@@ -37,7 +36,7 @@ fun createFinding(
     entity: Entity,
     message: String = "TestMessage",
     severity: Severity = Severity.Error
-):Finding2 = Finding2Impl(
+): Finding2 = Finding2Impl(
     issue = issue,
     entity = entity,
     message = message,
@@ -91,8 +90,7 @@ fun createLocation(
         ?: FilePath.fromAbsolute(Path(path)),
 )
 
-@Poko
-private class Finding2Impl(
+private data class Finding2Impl(
     override val issue: Issue,
     override val entity: Entity,
     override val message: String,
