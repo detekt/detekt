@@ -43,11 +43,11 @@ interface Compactable {
 
 fun Finding.toFinding2(): Finding2 {
     return when (this) {
-        is CorrectableCodeSmell -> CorrectableCodeSmell2(issue, entity, message, references, autoCorrectEnabled).also {
+        is CorrectableCodeSmell -> CorrectableFinding2Impl(issue, entity, message, references, autoCorrectEnabled).also {
             it.internalSeverity = severity
         }
 
-        is CodeSmell -> CodeSmell2(issue, entity, message, references).also {
+        is CodeSmell -> Finding2Impl(issue, entity, message, references).also {
             it.internalSeverity = severity
         }
 
@@ -55,7 +55,7 @@ fun Finding.toFinding2(): Finding2 {
     }
 }
 
-open class CodeSmell2(
+open class Finding2Impl(
     final override val issue: Issue,
     final override val entity: Entity,
     final override val message: String,
@@ -82,13 +82,13 @@ open class CodeSmell2(
     }
 }
 
-open class CorrectableCodeSmell2(
+open class CorrectableFinding2Impl(
     issue: Issue,
     entity: Entity,
     message: String,
     references: List<Entity> = emptyList(),
     val autoCorrectEnabled: Boolean
-) : CodeSmell2(
+) : Finding2Impl(
     issue,
     entity,
     message,

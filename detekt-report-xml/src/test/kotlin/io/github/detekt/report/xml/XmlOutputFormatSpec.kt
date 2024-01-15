@@ -1,8 +1,7 @@
 package io.github.detekt.report.xml
 
 import io.github.detekt.psi.FilePath
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.CodeSmell2
+import io.gitlab.arturbosch.detekt.api.Finding2Impl
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Severity
@@ -58,7 +57,7 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders one reported issue in single file`() {
-        val smell = CodeSmell2(createIssue("id_a"), entity1, message = "TestMessage")
+        val smell = Finding2Impl(createIssue("id_a"), entity1, message = "TestMessage")
 
         val result = outputFormat.render(TestDetektion(smell))
 
@@ -76,8 +75,8 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders two reported issues in single file`() {
-        val smell1 = CodeSmell2(createIssue("id_a"), entity1, message = "TestMessage")
-        val smell2 = CodeSmell2(createIssue("id_b"), entity1, message = "TestMessage")
+        val smell1 = Finding2Impl(createIssue("id_a"), entity1, message = "TestMessage")
+        val smell2 = Finding2Impl(createIssue("id_b"), entity1, message = "TestMessage")
 
         val result = outputFormat.render(TestDetektion(smell1, smell2))
 
@@ -96,8 +95,8 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders one reported issue across multiple files`() {
-        val smell1 = CodeSmell2(createIssue("id_a"), entity1, message = "TestMessage")
-        val smell2 = CodeSmell2(createIssue("id_a"), entity2, message = "TestMessage")
+        val smell1 = Finding2Impl(createIssue("id_a"), entity1, message = "TestMessage")
+        val smell2 = Finding2Impl(createIssue("id_a"), entity2, message = "TestMessage")
 
         val result = outputFormat.render(TestDetektion(smell1, smell2))
 
@@ -148,10 +147,10 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders two reported issues across multiple files`() {
-        val smell1 = CodeSmell2(createIssue("id_a"), entity1, message = "TestMessage")
-        val smell2 = CodeSmell2(createIssue("id_b"), entity1, message = "TestMessage")
-        val smell3 = CodeSmell2(createIssue("id_a"), entity2, message = "TestMessage")
-        val smell4 = CodeSmell2(createIssue("id_b"), entity2, message = "TestMessage")
+        val smell1 = Finding2Impl(createIssue("id_a"), entity1, message = "TestMessage")
+        val smell2 = Finding2Impl(createIssue("id_b"), entity1, message = "TestMessage")
+        val smell3 = Finding2Impl(createIssue("id_a"), entity2, message = "TestMessage")
+        val smell4 = Finding2Impl(createIssue("id_b"), entity2, message = "TestMessage")
 
         val result = outputFormat.render(
             TestDetektion(
@@ -186,7 +185,7 @@ class XmlOutputFormatSpec {
         @EnumSource(Severity::class)
         fun `renders detektion with severity as XML with severity`(severity: Severity) {
             val xmlSeverity = severity.name.lowercase(Locale.US)
-            val finding = object : CodeSmell2(
+            val finding = object : Finding2Impl(
                 issue = createIssue("issue_id"),
                 entity = entity1,
                 message = "message"
