@@ -118,7 +118,6 @@ class UnnamedParameterUse(config: Config) : Rule(
             val target = expression.calleeExpression ?: expression
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(target),
                     "Consider using named parameters in ${target.text} as they make usage of the function more safe."
                 )

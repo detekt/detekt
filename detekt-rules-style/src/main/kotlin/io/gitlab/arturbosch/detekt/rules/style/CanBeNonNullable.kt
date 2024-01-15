@@ -195,7 +195,6 @@ class CanBeNonNullable(config: Config) : Rule(
                 .forEach { nullableParam ->
                     report(
                         CodeSmell(
-                            issue,
                             Entity.from(nullableParam.param),
                             "The nullable parameter '${nullableParam.param.name}' can be made non-nullable."
                         )
@@ -474,7 +473,6 @@ class CanBeNonNullable(config: Config) : Rule(
             candidateProps.forEach { (_, property) ->
                 report(
                     CodeSmell(
-                        issue,
                         Entity.from(property),
                         "The nullable variable '${property.name}' can be made non-nullable."
                     )

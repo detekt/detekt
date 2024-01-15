@@ -61,7 +61,6 @@ class NestedScopeFunctions(config: Config) : Rule(
 
     private fun report(element: KtCallExpression, depth: Int) {
         val finding = ThresholdedCodeSmell(
-            issue,
             Entity.from(element),
             Metric(depth, allowedDepth),
             "The scope function '${element.calleeExpression?.text}' is nested too deeply ('$depth'). " +

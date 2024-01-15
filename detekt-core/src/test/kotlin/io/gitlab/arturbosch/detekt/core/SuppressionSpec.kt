@@ -203,13 +203,13 @@ private class TestLM(config: Config = Config.empty) : Rule(config, "") {
         val start = Location.startLineAndColumn(function.funKeyword!!).line
         val end = Location.startLineAndColumn(function.lastBlockStatementOrThis()).line
         val offset = end - start
-        if (offset > 10) report(CodeSmell(issue, Entity.from(function), message = "TestMessage"))
+        if (offset > 10) report(CodeSmell(Entity.from(function), message = "TestMessage"))
     }
 }
 
 private class TestLPL(config: Config = Config.empty) : Rule(config, "") {
     override fun visitNamedFunction(function: KtNamedFunction) {
         val size = function.valueParameters.size
-        if (size > 5) report(CodeSmell(issue, Entity.from(function), message = "TestMessage"))
+        if (size > 5) report(CodeSmell(Entity.from(function), message = "TestMessage"))
     }
 }

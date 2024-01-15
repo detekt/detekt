@@ -40,7 +40,6 @@ class RedundantConstructorKeyword(config: Config) : Rule(
         ) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(constructor),
                     message = "The `constructor` keyword on ${constructor.name} is redundant and should be removed."
                 )

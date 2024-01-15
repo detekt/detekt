@@ -40,7 +40,6 @@ class IteratorHasNextCallsNextMethod(config: Config) : Rule(
             if (hasNextMethod != null && callsNextMethod(hasNextMethod)) {
                 report(
                     CodeSmell(
-                        issue,
                         Entity.atName(classOrObject),
                         "Calling hasNext() on an Iterator should " +
                             "have no side-effects. Calling next() is a side effect."

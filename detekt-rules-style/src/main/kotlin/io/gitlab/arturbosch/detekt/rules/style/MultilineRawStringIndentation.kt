@@ -66,7 +66,6 @@ class MultilineRawStringIndentation(config: Config) : Rule(
         if (!expression.isSurroundedByLineBreaks()) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(expression),
                     "A multiline raw string should start with a break line and should end with another",
                 )
@@ -157,7 +156,7 @@ class MultilineRawStringIndentation(config: Config) : Rule(
 }
 
 private fun Rule.report(element: KtElement, location: Location, message: String) {
-    report(CodeSmell(issue, Entity.from(element, location), message))
+    report(CodeSmell(Entity.from(element, location), message))
 }
 
 private fun message(desiredIntent: Int, currentIndent: Int): String {

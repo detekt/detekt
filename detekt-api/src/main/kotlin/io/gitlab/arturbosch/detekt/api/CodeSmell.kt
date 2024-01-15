@@ -8,7 +8,6 @@ package io.gitlab.arturbosch.detekt.api
  * locations can be stored in additional [Entity]'s.
  */
 open class CodeSmell(
-    final override val issue: Issue,
     final override val entity: Entity,
     final override val message: String,
     final override val references: List<Entity> = emptyList()
@@ -18,8 +17,7 @@ open class CodeSmell(
     }
 
     override fun toString(): String {
-        return "CodeSmell(issue=$issue, " +
-            "entity=$entity, " +
+        return "CodeSmell(entity=$entity, " +
             "message=$message, " +
             "references=$references)"
     }
@@ -31,13 +29,11 @@ open class CodeSmell(
  * @see CodeSmell
  */
 open class CorrectableCodeSmell(
-    issue: Issue,
     entity: Entity,
     message: String,
     references: List<Entity> = emptyList(),
     val autoCorrectEnabled: Boolean
 ) : CodeSmell(
-    issue,
     entity,
     message,
     references
@@ -45,7 +41,6 @@ open class CorrectableCodeSmell(
     override fun toString(): String {
         return "CorrectableCodeSmell(" +
             "autoCorrectEnabled=$autoCorrectEnabled, " +
-            "issue=$issue, " +
             "entity=$entity, " +
             "message=$message, " +
             "references=$references)"

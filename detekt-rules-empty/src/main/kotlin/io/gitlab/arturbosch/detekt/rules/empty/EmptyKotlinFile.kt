@@ -22,7 +22,6 @@ class EmptyKotlinFile(config: Config) : EmptyRule(config) {
         if (text.isNullOrBlank()) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atPackageOrFirstDecl(file),
                     "The empty Kotlin file ${file.name} can be removed."
                 )

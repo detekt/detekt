@@ -44,7 +44,6 @@ class UseIfInsteadOfWhen(config: Config) : Rule(
         ) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(expression),
                     "Prefer using 'if' for binary conditions instead of 'when'."
                 )

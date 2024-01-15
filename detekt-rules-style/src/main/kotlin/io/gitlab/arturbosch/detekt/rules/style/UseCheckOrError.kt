@@ -48,7 +48,7 @@ class UseCheckOrError(config: Config) : Rule(
         if (expression.isIllegalStateException() &&
             expression.arguments.isEmptyOrSingleStringArgument(bindingContext)
         ) {
-            report(CodeSmell(issue, Entity.from(expression), issue.description))
+            report(CodeSmell(Entity.from(expression), issue.description))
         }
     }
 

@@ -41,7 +41,6 @@ class UnconditionalJumpStatementInLoop(config: Config) : Rule(
         if (loopExpression.hasJumpStatements((loopExpression.parent as? KtLabeledExpression)?.getLabelName())) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(loopExpression),
                     "This loop contains an unconditional " +
                         "jump expression which " +

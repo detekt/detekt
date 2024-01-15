@@ -140,11 +140,11 @@ internal class Analyzer(
                 val findings = rule.visitFile(file, bindingContext, compilerResources)
                     .filterSuppressedFindings(rule, bindingContext)
                 for (finding in findings) {
-                    val mappedRuleSet = checkNotNull(ruleIdsToRuleSetIds[finding.issue.id]) {
-                        "Mapping for '${finding.issue.id}' expected."
+                    val mappedRuleSet = checkNotNull(ruleIdsToRuleSetIds[rule.issue.id]) {
+                        "Mapping for '${rule.issue.id}' expected."
                     }
                     result.computeIfAbsent(mappedRuleSet) { mutableListOf() }
-                        .add(finding.toFinding2(rule.computeSeverity()))
+                        .add(finding.toFinding2(rule.issue, rule.computeSeverity()))
                 }
             }
         }
@@ -225,7 +225,7 @@ internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config = wi
     return declaredConfig ?: getDefaultConfiguration()
 }
 
-private fun Finding.toFinding2(severity: Severity): Finding2 {
+private fun Finding.toFinding2(issue: Issue, severity: Severity): Finding2 {
     return when (this) {
         is CorrectableCodeSmell -> Finding2Impl(issue, entity, message, references, severity, autoCorrectEnabled)
 

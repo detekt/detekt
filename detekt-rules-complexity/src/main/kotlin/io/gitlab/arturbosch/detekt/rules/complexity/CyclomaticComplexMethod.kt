@@ -73,7 +73,6 @@ class CyclomaticComplexMethod(config: Config) : Rule(
         if (complexity > allowedComplexity) {
             report(
                 ThresholdedCodeSmell(
-                    issue,
                     Entity.atName(function),
                     Metric(complexity, allowedComplexity),
                     "The function ${function.nameAsSafeName} appears to be too complex " +

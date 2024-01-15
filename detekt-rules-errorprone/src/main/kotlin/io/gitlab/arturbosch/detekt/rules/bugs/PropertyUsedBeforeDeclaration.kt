@@ -70,7 +70,7 @@ class PropertyUsedBeforeDeclaration(config: Config) : Rule(
             member.forEachDescendantOfType<KtNameReferenceExpression> {
                 val property = allProperties[it.text]
                 if (property != null && property !in declaredProperties && property == it.descriptor()) {
-                    report(CodeSmell(issue, Entity.from(it), "'${it.text}' is used before declaration."))
+                    report(CodeSmell(Entity.from(it), "'${it.text}' is used before declaration."))
                 }
             }
             if (member is KtProperty) {

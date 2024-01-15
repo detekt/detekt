@@ -48,7 +48,7 @@ class LateinitUsage(config: Config) : Rule(
 
         properties.filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) == true }
             .forEach {
-                report(CodeSmell(issue, Entity.from(it), "Usages of lateinit should be avoided."))
+                report(CodeSmell(Entity.from(it), "Usages of lateinit should be avoided."))
             }
     }
 }

@@ -67,7 +67,6 @@ class SuspendFunWithCoroutineScopeReceiver(config: Config) : Rule(
         if (receiver.isCoroutineScope()) {
             report(
                 CodeSmell(
-                    issue = issue,
                     entity = Entity.from(suspendModifier),
                     message = "`suspend` function uses CoroutineScope as receiver."
                 )

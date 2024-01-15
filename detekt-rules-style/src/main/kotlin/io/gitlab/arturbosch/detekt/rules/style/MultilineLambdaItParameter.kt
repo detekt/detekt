@@ -82,7 +82,6 @@ class MultilineLambdaItParameter(config: Config) : Rule(
         if (IT_LITERAL in parameterNames) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(lambdaExpression),
                     "The parameter name in a multiline lambda should not be an explicit `it`. " +
                         "Consider giving your parameter a readable and descriptive name."
@@ -95,7 +94,6 @@ class MultilineLambdaItParameter(config: Config) : Rule(
             ) {
                 report(
                     CodeSmell(
-                        issue,
                         Entity.from(lambdaExpression),
                         "The implicit `it` should not be used in a multiline lambda. " +
                             "Consider giving your parameter a readable and descriptive name."

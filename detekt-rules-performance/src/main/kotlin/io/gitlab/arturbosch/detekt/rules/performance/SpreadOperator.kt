@@ -67,7 +67,6 @@ class SpreadOperator(config: Config) : Rule(
         }
         report(
             CodeSmell(
-                issue,
                 Entity.from(argsList),
                 "Used in this way a spread operator causes a full copy of the array to be created before " +
                     "calling a method. This may result in a performance penalty."

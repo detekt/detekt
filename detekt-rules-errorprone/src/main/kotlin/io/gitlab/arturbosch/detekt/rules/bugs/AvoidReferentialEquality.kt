@@ -62,7 +62,6 @@ class AvoidReferentialEquality(config: Config) : Rule(
         if (forbiddenTypePatterns.any { it.matches(fullyQualifiedType) }) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(expression),
                     "Checking referential equality may lead to unwanted results."
                 )

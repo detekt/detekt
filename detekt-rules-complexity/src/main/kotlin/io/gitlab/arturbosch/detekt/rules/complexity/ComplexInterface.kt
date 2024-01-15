@@ -54,7 +54,6 @@ class ComplexInterface(config: Config) : Rule(
             if (size > allowedDefinitions) {
                 report(
                     ThresholdedCodeSmell(
-                        issue,
                         Entity.atName(klass),
                         Metric(size, allowedDefinitions),
                         "The interface ${klass.name} is too complex. Consider splitting it up."

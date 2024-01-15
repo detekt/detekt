@@ -57,7 +57,6 @@ class ForbiddenSuppress(config: Config) : Rule(
             if (nonCompliantRules.isNotEmpty()) {
                 report(
                     CodeSmell(
-                        issue,
                         Entity.from(annotationEntry),
                         message = "Cannot @Suppress ${nonCompliantRules.formatMessage()} " +
                             "due to the current configuration.",

@@ -61,7 +61,6 @@ class TrimMultilineRawString(config: Config) : Rule(
         ) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(expression),
                     "Multiline raw strings should be followed by `trimMargin()` or `trimIndent()`",
                 )

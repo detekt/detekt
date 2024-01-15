@@ -68,7 +68,7 @@ class RedundantElseInWhen(config: Config) : Rule(
         val elseEntry = whenExpression.entries.lastOrNull { it.isElse } ?: return
         val compilerReports = bindingContext.diagnostics.forElement(elseEntry)
         if (compilerReports.any { it.factory == Errors.REDUNDANT_ELSE_IN_WHEN }) {
-            report(CodeSmell(issue, Entity.from(whenExpression), "When expression contains redundant `else` case."))
+            report(CodeSmell(Entity.from(whenExpression), "When expression contains redundant `else` case."))
         }
     }
 }

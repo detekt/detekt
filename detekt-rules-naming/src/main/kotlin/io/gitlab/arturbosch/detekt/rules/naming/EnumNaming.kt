@@ -26,7 +26,6 @@ class EnumNaming(config: Config) : Rule(
         if (!enumEntry.identifierName().matches(enumEntryPattern)) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atName(enumEntry),
                     message = "Enum entry names should match the pattern: $enumEntryPattern"
                 )

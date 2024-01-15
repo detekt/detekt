@@ -69,6 +69,6 @@ class SafeCast(config: Config) : Rule(
         if (this is KtBlockExpression) children.singleOrNull() as? KtExpression else this
 
     private fun addReport(expression: KtIfExpression) {
-        report(CodeSmell(issue, Entity.from(expression), "This cast should be replaced with a safe cast: as?"))
+        report(CodeSmell(Entity.from(expression), "This cast should be replaced with a safe cast: as?"))
     }
 }

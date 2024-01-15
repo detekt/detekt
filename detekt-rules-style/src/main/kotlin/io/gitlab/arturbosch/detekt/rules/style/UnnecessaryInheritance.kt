@@ -32,6 +32,6 @@ class UnnecessaryInheritance(config: Config) : Rule(
     }
 
     private fun report(classOrObject: KtClassOrObject, message: String) {
-        report(CodeSmell(issue, Entity.atName(classOrObject), message))
+        report(CodeSmell(Entity.atName(classOrObject), message))
     }
 }

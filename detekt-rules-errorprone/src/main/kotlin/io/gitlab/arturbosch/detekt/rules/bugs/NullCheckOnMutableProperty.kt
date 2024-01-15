@@ -126,7 +126,6 @@ class NullCheckOnMutableProperty(config: Config) : Rule(
                         candidateProperties[fqName]?.peek()?.let { ifExpression ->
                             report(
                                 CodeSmell(
-                                    issue,
                                     Entity.from(ifExpression),
                                     "Null-check is being called on mutable property '$fqName'."
                                 )

@@ -52,7 +52,7 @@ class ForbiddenImport(config: Config) : Rule(
         }
 
         if (reason != null) {
-            report(CodeSmell(issue, Entity.from(importDirective), reason))
+            report(CodeSmell(Entity.from(importDirective), reason))
         }
     }
 

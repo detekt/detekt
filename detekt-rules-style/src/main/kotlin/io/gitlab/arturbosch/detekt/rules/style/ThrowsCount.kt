@@ -66,7 +66,6 @@ class ThrowsCount(config: Config) : Rule(
         if (countOfThrows > max) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atName(function),
                     "Too many throw statements in the function" +
                         " ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."

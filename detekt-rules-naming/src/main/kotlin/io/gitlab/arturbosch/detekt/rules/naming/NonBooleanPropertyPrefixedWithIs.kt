@@ -81,7 +81,6 @@ class NonBooleanPropertyPrefixedWithIs(config: Config) : Rule(
     private fun report(declaration: KtCallableDeclaration, name: String, typeFqName: FqName) {
         val typeName = typeFqName.shortName().asString()
         val codeSmell = CodeSmell(
-            issue,
             Entity.from(declaration),
             message = "Non-boolean properties shouldn't start with 'is' prefix. Actual type of $name: $typeName"
         )

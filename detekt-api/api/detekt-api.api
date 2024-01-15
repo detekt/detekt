@@ -8,12 +8,11 @@ public final class io/gitlab/arturbosch/detekt/api/AnnotationExcluder {
 }
 
 public class io/gitlab/arturbosch/detekt/api/CodeSmell : io/gitlab/arturbosch/detekt/api/Finding {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Issue;Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;)V
-	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Issue;Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;)V
+	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun getCharPosition ()Lio/gitlab/arturbosch/detekt/api/TextLocation;
 	public final fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
 	public fun getFile ()Ljava/lang/String;
-	public final fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
 	public fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
 	public final fun getMessage ()Ljava/lang/String;
 	public final fun getReferences ()Ljava/util/List;
@@ -105,8 +104,8 @@ public abstract class io/gitlab/arturbosch/detekt/api/ConsoleReport : io/gitlab/
 }
 
 public class io/gitlab/arturbosch/detekt/api/CorrectableCodeSmell : io/gitlab/arturbosch/detekt/api/CodeSmell {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Issue;Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;Z)V
-	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Issue;Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;Z)V
+	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getAutoCorrectEnabled ()Z
 	public fun toString ()Ljava/lang/String;
 }
@@ -175,7 +174,6 @@ public final class io/gitlab/arturbosch/detekt/api/FileProcessListener$DefaultIm
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/Finding : io/gitlab/arturbosch/detekt/api/HasEntity {
-	public abstract fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
 	public abstract fun getMessage ()Ljava/lang/String;
 	public abstract fun getReferences ()Ljava/util/List;
 }

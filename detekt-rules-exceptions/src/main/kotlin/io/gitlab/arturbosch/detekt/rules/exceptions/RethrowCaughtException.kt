@@ -68,7 +68,7 @@ class RethrowCaughtException(config: Config) : Rule(
             .takeLastWhile { it != null }
             .forEach { violation ->
                 violation?.let {
-                    report(CodeSmell(issue, Entity.from(it), issue.description))
+                    report(CodeSmell(Entity.from(it), issue.description))
                 }
             }
         super.visitTryExpression(tryExpr)

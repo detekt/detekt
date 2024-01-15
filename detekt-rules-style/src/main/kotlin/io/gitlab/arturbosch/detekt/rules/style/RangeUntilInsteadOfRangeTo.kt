@@ -57,7 +57,6 @@ class RangeUntilInsteadOfRangeTo(config: Config) : Rule(
     private fun report(expression: KtExpression, rangeTo: String) {
         report(
             CodeSmell(
-                issue,
                 Entity.from(expression),
                 "`$rangeTo` call can be replaced with `..<`"
             )

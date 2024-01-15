@@ -92,7 +92,6 @@ class MissingUseCall(config: Config = Config.empty) : Rule(
         if (shouldReport(expression)) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(expression),
                     "${
                         (

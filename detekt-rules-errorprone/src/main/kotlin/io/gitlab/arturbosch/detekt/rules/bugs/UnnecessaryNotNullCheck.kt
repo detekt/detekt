@@ -49,7 +49,6 @@ class UnnecessaryNotNullCheck(config: Config) : Rule(
 
         report(
             CodeSmell(
-                issue = issue,
                 entity = Entity.from(expression),
                 message = "Using `${callee.text}` on non-null `${argument.text}` is unnecessary",
             )

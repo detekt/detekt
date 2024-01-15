@@ -54,7 +54,6 @@ class DataClassContainsFunctions(config: Config) : Rule(
 
         report(
             CodeSmell(
-                issue,
                 Entity.atName(function),
                 "The data class ${klass.name} contains functions which are not registered " +
                     "conversion functions. The offending method is called $functionName"

@@ -73,7 +73,7 @@ class VarCouldBeVal(config: Config) : Rule(
         file.accept(assignmentVisitor)
 
         assignmentVisitor.getNonReAssignedDeclarations().forEach {
-            report(CodeSmell(issue, Entity.from(it), "Variable '${it.nameAsSafeName.identifier}' could be val."))
+            report(CodeSmell(Entity.from(it), "Variable '${it.nameAsSafeName.identifier}' could be val."))
         }
     }
 

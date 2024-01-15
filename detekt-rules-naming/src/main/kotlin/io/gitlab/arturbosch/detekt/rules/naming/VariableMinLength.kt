@@ -34,7 +34,6 @@ class VariableMinLength(config: Config) : Rule(
         if (property.identifierName().length < minimumVariableNameLength) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atName(property),
                     message = "Variable names should be at least $minimumVariableNameLength characters long."
                 )

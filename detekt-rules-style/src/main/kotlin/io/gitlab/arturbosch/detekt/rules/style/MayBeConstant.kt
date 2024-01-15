@@ -80,7 +80,6 @@ class MayBeConstant(config: Config) : Rule(
         if (property.canBeConst()) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atName(property),
                     "${property.nameAsSafeName} can be a `const val`."
                 )

@@ -68,7 +68,7 @@ class MaxLineLength(config: Config) : Rule(
                         filePath = location.filePath,
                     )
                 }
-                report(CodeSmell(issue, Entity.from(ktElement, location), issue.description))
+                report(CodeSmell(Entity.from(ktElement, location), issue.description))
             }
 
             offset += 1 // '\n'

@@ -230,7 +230,7 @@ class BracesOnWhenStatements(config: Config) : Rule(
             BracePolicy.Necessary,
             BracePolicy.Never -> requireNotNull(violator.arrow) { "When branch ${violator.text} has no arrow!" }
         }
-        report(CodeSmell(issue, Entity.from(reported), policy.message))
+        report(CodeSmell(Entity.from(reported), policy.message))
     }
 
     enum class BracePolicy(val config: String, val message: String) {

@@ -213,7 +213,7 @@ class TestProvider : RuleSetProvider {
 
 class TestRule(config: Config = Config.empty) : Rule(config, "") {
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-        report(CodeSmell(issue, Entity.atName(classOrObject), message = "Error"))
+        report(CodeSmell(Entity.atName(classOrObject), message = "Error"))
     }
 }
 

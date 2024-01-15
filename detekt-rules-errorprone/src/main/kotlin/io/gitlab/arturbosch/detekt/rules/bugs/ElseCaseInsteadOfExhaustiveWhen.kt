@@ -87,7 +87,7 @@ class ElseCaseInsteadOfExhaustiveWhen(config: Config) : Rule(
                 else -> "boolean"
             }
             val message = "When expression with $subjectTypeName subject should not contain an `else` case."
-            report(CodeSmell(issue, Entity.from(whenExpression), message))
+            report(CodeSmell(Entity.from(whenExpression), message))
         }
     }
 

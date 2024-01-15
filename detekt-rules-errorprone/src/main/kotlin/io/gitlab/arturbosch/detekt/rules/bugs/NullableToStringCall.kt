@@ -69,7 +69,6 @@ class NullableToStringCall(config: Config) : Rule(
 
     private fun report(element: PsiElement) {
         val codeSmell = CodeSmell(
-            issue,
             Entity.from(element),
             "This call '${element.text}' may return the string \"null\"."
         )

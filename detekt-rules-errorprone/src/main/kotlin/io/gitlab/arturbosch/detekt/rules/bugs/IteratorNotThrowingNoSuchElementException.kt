@@ -54,7 +54,6 @@ class IteratorNotThrowingNoSuchElementException(config: Config) : Rule(
             if (nextMethod != null && !nextMethod.throwsNoSuchElementExceptionThrown()) {
                 report(
                     CodeSmell(
-                        issue,
                         Entity.atName(classOrObject),
                         "This implementation of Iterator does not correctly implement the next() method as " +
                             "it doesn't throw a NoSuchElementException when no elements remain in the Iterator."

@@ -70,7 +70,7 @@ class NoNameShadowing(config: Config) : Rule(
     private fun checkNameShadowing(declaration: KtNamedDeclaration) {
         val nameIdentifier = declaration.nameIdentifier ?: return
         if (bindingContext.diagnostics.forElement(declaration).any { it.factory == Errors.NAME_SHADOWING }) {
-            report(CodeSmell(issue, Entity.from(nameIdentifier), "Name shadowed: ${nameIdentifier.text}"))
+            report(CodeSmell(Entity.from(nameIdentifier), "Name shadowed: ${nameIdentifier.text}"))
         }
     }
 
@@ -82,7 +82,6 @@ class NoNameShadowing(config: Config) : Rule(
         ) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(lambdaExpression),
                     "Name shadowed: implicit lambda parameter 'it'"
                 )

@@ -405,7 +405,7 @@ private class CustomRuleSetProvider : RuleSetProvider {
 private class NoEmptyFile(config: Config) : Rule(config, "TestDescription") {
     override fun visitKtFile(file: KtFile) {
         if (file.text.isEmpty()) {
-            report(CodeSmell(issue, Entity.from(file), "This file is empty"))
+            report(CodeSmell(Entity.from(file), "This file is empty"))
         }
     }
 }
@@ -416,7 +416,7 @@ private class MaxLineLength(config: Config) : Rule(config, "TestDescription") {
         super.visitKtFile(file)
         for (line in file.text.lineSequence()) {
             if (line.length > lengthThreshold) {
-                report(CodeSmell(issue, Entity.atPackageOrFirstDecl(file), issue.description))
+                report(CodeSmell(Entity.atPackageOrFirstDecl(file), issue.description))
             }
         }
     }
@@ -429,7 +429,7 @@ private class RequiresTypeResolutionMaxLineLength(config: Config) : Rule(config,
         super.visitKtFile(file)
         for (line in file.text.lineSequence()) {
             if (line.length > lengthThreshold) {
-                report(CodeSmell(issue, Entity.atPackageOrFirstDecl(file), issue.description))
+                report(CodeSmell(Entity.atPackageOrFirstDecl(file), issue.description))
             }
         }
     }

@@ -37,7 +37,7 @@ class DestructuringDeclarationWithTooManyEntries(config: Config) : Rule(
         if (destructuringDeclaration.entries.size > maxDestructuringEntries) {
             val message = "The destructuring declaration contains ${destructuringDeclaration.entries.size} but only " +
                 "$maxDestructuringEntries are allowed."
-            report(CodeSmell(issue, Entity.from(destructuringDeclaration), message))
+            report(CodeSmell(Entity.from(destructuringDeclaration), message))
         }
         super.visitDestructuringDeclaration(destructuringDeclaration)
     }

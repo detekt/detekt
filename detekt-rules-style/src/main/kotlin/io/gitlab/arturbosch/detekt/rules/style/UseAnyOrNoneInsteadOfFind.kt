@@ -51,7 +51,7 @@ class UseAnyOrNoneInsteadOfFind(config: Config) : Rule(
             else -> return
         }
         val message = "Use '$replacement' instead of '$functionName'"
-        report(CodeSmell(issue, Entity.from(expression), message))
+        report(CodeSmell(Entity.from(expression), message))
     }
 
     companion object {

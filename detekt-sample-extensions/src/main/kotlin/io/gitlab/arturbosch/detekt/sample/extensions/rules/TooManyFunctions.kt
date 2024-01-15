@@ -19,7 +19,6 @@ class TooManyFunctions(config: Config) : Rule(config, "This rule reports a file 
         if (amount > ALLOWED_FUNCTIONS) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atPackageOrFirstDecl(file),
                     message = "The file ${file.name} has $amount function declarations. " +
                         "The maximum number of allowed functions is specified with $ALLOWED_FUNCTIONS."

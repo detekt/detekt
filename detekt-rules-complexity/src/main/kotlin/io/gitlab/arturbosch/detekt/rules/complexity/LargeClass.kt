@@ -42,7 +42,6 @@ class LargeClass(config: Config) : Rule(
             if (lines > allowedLines) {
                 report(
                     ThresholdedCodeSmell(
-                        issue,
                         Entity.atName(clazz),
                         Metric(lines, allowedLines),
                         "Class ${clazz.name} is too large. Consider splitting it into smaller pieces."

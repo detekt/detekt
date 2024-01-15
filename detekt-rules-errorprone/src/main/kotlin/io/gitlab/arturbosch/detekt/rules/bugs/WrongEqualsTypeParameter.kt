@@ -49,7 +49,6 @@ class WrongEqualsTypeParameter(config: Config) : Rule(
         if (function.name == "equals" && !function.isTopLevel && function.hasWrongEqualsSignature()) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atName(function),
                     "equals() methods should only take one parameter " +
                         "of type Any?."

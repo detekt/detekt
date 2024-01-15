@@ -52,7 +52,6 @@ class FunctionOnlyReturningConstant(config: Config) : Rule(
         ) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atName(function),
                     "${function.nameAsSafeName} is returning a constant. Prefer declaring a constant instead."
                 )

@@ -66,7 +66,7 @@ class AbstractClassCanBeInterface(config: Config) : Rule(
             members.isNotEmpty() -> checkMembers(members, nameIdentifier)
             hasInheritedMember(true) && isAnyParentAbstract() -> return
             !hasConstructorParameter() ->
-                report(CodeSmell(issue, Entity.from(nameIdentifier), noConcreteMember))
+                report(CodeSmell(Entity.from(nameIdentifier), noConcreteMember))
         }
     }
 
@@ -81,7 +81,7 @@ class AbstractClassCanBeInterface(config: Config) : Rule(
             abstractMembers.any { it.isInternal() || it.isProtected() } || hasConstructorParameter() ->
                 Unit
             concreteMembers.isEmpty() && !hasInheritedMember(false) ->
-                report(CodeSmell(issue, Entity.from(nameIdentifier), noConcreteMember))
+                report(CodeSmell(Entity.from(nameIdentifier), noConcreteMember))
         }
     }
 

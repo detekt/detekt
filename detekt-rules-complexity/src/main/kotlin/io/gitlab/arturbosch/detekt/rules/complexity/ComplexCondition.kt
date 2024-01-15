@@ -73,7 +73,6 @@ class ComplexCondition(config: Config) : Rule(
             if (count > allowedConditions) {
                 report(
                     ThresholdedCodeSmell(
-                        issue,
                         Entity.from(condition),
                         Metric(count, allowedConditions),
                         "This condition is too complex ($count). " +

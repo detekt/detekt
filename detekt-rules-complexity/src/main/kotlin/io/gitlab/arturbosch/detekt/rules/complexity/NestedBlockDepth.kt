@@ -39,7 +39,6 @@ class NestedBlockDepth(config: Config) : Rule(
             @Suppress("UnsafeCallOnNullableType")
             report(
                 ThresholdedCodeSmell(
-                    issue,
                     Entity.atName(function),
                     Metric(visitor.maxDepth, allowedDepth),
                     "Function ${function.name} is nested too deeply."

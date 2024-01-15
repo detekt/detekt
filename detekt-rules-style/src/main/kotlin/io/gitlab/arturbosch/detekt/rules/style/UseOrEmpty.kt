@@ -72,7 +72,7 @@ class UseOrEmpty(config: Config) : Rule(
         if (!leftType.makeNotNullable().isSubtypeOf(rightType)) return
 
         val message = "This '${KtTokens.ELVIS.value} ${right.text}' can be replaced with 'orEmpty()' call"
-        report(CodeSmell(issue, Entity.from(expression), message))
+        report(CodeSmell(Entity.from(expression), message))
     }
 
     private fun KtExpression.isEmptyElement(): Boolean {

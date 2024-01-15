@@ -75,7 +75,7 @@ class UnnecessaryLet(config: Config) : Rule(
     }
 
     private fun report(expression: KtCallExpression, message: String) {
-        report(CodeSmell(issue, Entity.from(expression), message))
+        report(CodeSmell(Entity.from(expression), message))
     }
 
     companion object {

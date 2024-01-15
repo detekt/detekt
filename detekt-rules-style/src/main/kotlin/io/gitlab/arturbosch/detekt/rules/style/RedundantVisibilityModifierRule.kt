@@ -84,7 +84,6 @@ class RedundantVisibilityModifierRule(config: Config) : Rule(
         ) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(declaration),
                     "The `internal` modifier on ${declaration.name} is redundant and should be removed."
                 )
@@ -98,7 +97,6 @@ class RedundantVisibilityModifierRule(config: Config) : Rule(
             if (klass.isExplicitlyPublic()) {
                 report(
                     CodeSmell(
-                        issue,
                         Entity.atName(klass),
                         message = "${klass.name} is explicitly marked as public. " +
                             "Public is the default visibility for classes. The public modifier is redundant."
@@ -114,7 +112,6 @@ class RedundantVisibilityModifierRule(config: Config) : Rule(
             if (function.isExplicitlyPublicNotOverridden()) {
                 report(
                     CodeSmell(
-                        issue,
                         Entity.atName(function),
                         message = "${function.name} is explicitly marked as public. " +
                             "Functions are public by default so this modifier is redundant."
@@ -128,7 +125,6 @@ class RedundantVisibilityModifierRule(config: Config) : Rule(
             if (property.isExplicitlyPublicNotOverridden()) {
                 report(
                     CodeSmell(
-                        issue,
                         Entity.atName(property),
                         message = "${property.name} is explicitly marked as public. " +
                             "Properties are public by default so this modifier is redundant."

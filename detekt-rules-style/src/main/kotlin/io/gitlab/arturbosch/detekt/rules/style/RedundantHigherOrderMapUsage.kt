@@ -101,7 +101,7 @@ class RedundantHigherOrderMapUsage(config: Config) : Rule(
             receiverIsSet -> "This 'map' call can be replaced with 'toList'."
             else -> "This 'map' call can be removed."
         }
-        report(CodeSmell(issue, Entity.from(calleeExpression), message))
+        report(CodeSmell(Entity.from(calleeExpression), message))
     }
 
     private fun KtCallExpression.lambda(): KtLambdaExpression? {

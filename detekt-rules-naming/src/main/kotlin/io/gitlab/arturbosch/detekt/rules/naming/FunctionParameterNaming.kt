@@ -51,7 +51,6 @@ class FunctionParameterNaming(config: Config) : Rule(
         if (!identifier.matches(parameterPattern)) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(parameter),
                     message = "Function parameter names should match the pattern: $parameterPattern"
                 )

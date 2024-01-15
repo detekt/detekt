@@ -48,7 +48,6 @@ class DataClassShouldBeImmutable(config: Config) : Rule(
     private fun report(element: PsiElement, className: String?, propertyName: String?) {
         report(
             CodeSmell(
-                issue,
                 Entity.from(element),
                 "The data class $className contains a mutable property. " +
                     "The offending property is called $propertyName"

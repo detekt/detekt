@@ -217,7 +217,7 @@ class BracesOnIfStatements(config: Config) : Rule(
             BracePolicy.Necessary -> "Extra braces exist on this branch, remove them (ignore multi-statement)."
             BracePolicy.Never -> "Extra braces exist on this branch, remove them."
         }
-        report(CodeSmell(issue, Entity.from(reported ?: violator), message))
+        report(CodeSmell(Entity.from(reported ?: violator), message))
     }
 
     /**

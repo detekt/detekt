@@ -25,7 +25,7 @@ class MissingPackageDeclaration(config: Config) : Rule(
     override fun postVisit(root: KtFile) {
         super.postVisit(root)
         if (packageDeclaration?.text.isNullOrBlank()) {
-            report(CodeSmell(issue, Entity.from(root), "The file does not contain a package declaration."))
+            report(CodeSmell(Entity.from(root), "The file does not contain a package declaration."))
         }
     }
 }

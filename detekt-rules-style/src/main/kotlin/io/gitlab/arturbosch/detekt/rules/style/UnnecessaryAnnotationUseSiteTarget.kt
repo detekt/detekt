@@ -61,7 +61,7 @@ class UnnecessaryAnnotationUseSiteTarget(config: Config) : Rule(
                 location.filePath
             )
         }
-        report(CodeSmell(issue, Entity.from(useSite, location), message))
+        report(CodeSmell(Entity.from(useSite, location), message))
     }
 
     private enum class UseSiteTarget(val useSiteTarget: String, val message: String) {

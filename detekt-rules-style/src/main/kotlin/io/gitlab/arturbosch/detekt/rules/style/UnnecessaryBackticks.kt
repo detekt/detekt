@@ -32,7 +32,7 @@ class UnnecessaryBackticks(config: Config) : Rule(
     override fun visitKtElement(element: KtElement) {
         element.allChildren
             .filter { it.node.elementType == KtTokens.IDENTIFIER && it.hasUnnecessaryBackticks() }
-            .forEach { report(CodeSmell(issue, Entity.from(it), "Backticks are unnecessary.")) }
+            .forEach { report(CodeSmell(Entity.from(it), "Backticks are unnecessary.")) }
         super.visitKtElement(element)
     }
 

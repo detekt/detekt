@@ -73,7 +73,6 @@ class BooleanPropertyNaming(config: Config) : Rule(
     ): CodeSmell {
         val description = "Boolean property name should match a $allowedPattern pattern."
         return CodeSmell(
-            issue,
             Entity.atName(declaration),
             message = "$description Actual name is $name"
         )

@@ -82,7 +82,7 @@ class SpacingAfterPackageDeclaration(config: Config) : Rule(
         if (element is PsiWhiteSpace || element is KtElement) {
             val count = element.text.count { it == '\n' }
             if (count != 2) {
-                report(CodeSmell(issue, Entity.from(element), message))
+                report(CodeSmell(Entity.from(element), message))
             }
         }
     }

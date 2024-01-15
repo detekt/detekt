@@ -89,9 +89,9 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
         val entity = Entity.from(node.psi, location)
 
         if (canBeAutoCorrected) {
-            report(CorrectableCodeSmell(issue, entity, message, autoCorrectEnabled = autoCorrect))
+            report(CorrectableCodeSmell(entity, message, autoCorrectEnabled = autoCorrect))
         } else {
-            report(CodeSmell(issue, entity, message))
+            report(CodeSmell(entity, message))
         }
     }
 

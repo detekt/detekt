@@ -39,7 +39,6 @@ class NewLineAtEndOfFile(config: Config) : Rule(
             )
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(file, location),
                     "The file ${file.name} is not ending with a new line."
                 )

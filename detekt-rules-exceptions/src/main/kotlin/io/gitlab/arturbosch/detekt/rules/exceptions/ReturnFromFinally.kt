@@ -57,7 +57,6 @@ class ReturnFromFinally(config: Config) : Rule(
         ) {
             report(
                 CodeSmell(
-                    issue = issue,
                     entity = Entity.Companion.from(finallyBlock),
                     message = "Contents of the finally block do not affect " +
                         "the result of the expression."
@@ -70,7 +69,7 @@ class ReturnFromFinally(config: Config) : Rule(
                 isReturnFromTargetFunction(finallyBlock.finalExpression, returnExpression) &&
                     canFilterLabeledExpression(returnExpression)
             }
-            .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
+            .forEach { report(CodeSmell(Entity.from(it), issue.description)) }
     }
 
     private fun isReturnFromTargetFunction(

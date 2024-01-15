@@ -76,7 +76,7 @@ class UseIfEmptyOrIfBlank(config: Config) : Rule(
 
         val message =
             "This '$conditionCalleeExpressionText' call can be replaced with '${replacement.replacementFunctionName}'"
-        report(CodeSmell(issue, Entity.from(conditionCalleeExpression), message))
+        report(CodeSmell(Entity.from(conditionCalleeExpression), message))
     }
 
     @Suppress("ReturnCount")

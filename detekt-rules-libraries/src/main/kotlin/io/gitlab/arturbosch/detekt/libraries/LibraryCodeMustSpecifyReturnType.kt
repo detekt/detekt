@@ -57,7 +57,6 @@ class LibraryCodeMustSpecifyReturnType(config: Config) : Rule(
         if (property.explicitReturnTypeRequired()) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atName(property),
                     "Library property '${property.nameAsSafeName}' without explicit return type."
                 )
@@ -70,7 +69,6 @@ class LibraryCodeMustSpecifyReturnType(config: Config) : Rule(
         if (function.explicitReturnTypeRequired() && !function.isUnitOmissionAllowed()) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atName(function),
                     "Library function '${function.nameAsSafeName}' without explicit return type."
                 )

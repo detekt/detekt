@@ -132,7 +132,6 @@ class MagicNumber(config: Config) : Rule(
         if (number != null && !ignoreNumbers.contains(number)) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(expression),
                     "This expression contains a magic number." +
                         " Consider defining it to a well named constant."

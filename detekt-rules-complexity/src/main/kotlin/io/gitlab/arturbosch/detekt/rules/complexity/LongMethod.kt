@@ -53,7 +53,6 @@ class LongMethod(config: Config) : Rule(
             if (lines > allowedLines) {
                 report(
                     ThresholdedCodeSmell(
-                        issue,
                         Entity.atName(function),
                         Metric(lines, allowedLines),
                         "The function ${function.nameAsSafeName} is too long ($lines). " +

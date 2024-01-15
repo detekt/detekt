@@ -36,7 +36,7 @@ class UnusedImport(config: Config) : Rule(
         with(UnusedImportVisitor(bindingContext)) {
             root.accept(this)
             unusedImports().forEach {
-                report(CodeSmell(issue, Entity.from(it), "The import '${it.importedFqName}' is unused."))
+                report(CodeSmell(Entity.from(it), "The import '${it.importedFqName}' is unused."))
             }
         }
         super.visit(root)
