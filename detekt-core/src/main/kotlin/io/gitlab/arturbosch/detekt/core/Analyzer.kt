@@ -2,19 +2,23 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.psi.absolutePath
 import io.github.detekt.tooling.api.spec.ProcessingSpec
+import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
+import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
-import io.gitlab.arturbosch.detekt.api.toFinding2
 import io.gitlab.arturbosch.detekt.core.config.AllRulesConfig
 import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.core.config.validation.DeprecatedRule
@@ -216,3 +220,22 @@ internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config = wi
 
     return declaredConfig ?: getDefaultConfiguration()
 }
+
+private fun Finding.toFinding2(): Finding2 {
+    return when (this) {
+        is CorrectableCodeSmell -> Finding2Impl(issue, entity, message, references, severity, autoCorrectEnabled)
+
+        is CodeSmell -> Finding2Impl(issue, entity, message, references, severity)
+
+        else -> error("wtf?")
+    }
+}
+
+private data class Finding2Impl(
+    override val issue: Issue,
+    override val entity: Entity,
+    override val message: String,
+    override val references: List<Entity>,
+    override val severity: Severity,
+    override val autoCorrectEnabled: Boolean = false,
+) : Finding2

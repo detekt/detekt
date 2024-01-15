@@ -32,27 +32,3 @@ interface HasEntity {
     val signature: String
         get() = entity.signature
 }
-
-fun Finding.toFinding2(): Finding2 {
-    return when (this) {
-        is CorrectableCodeSmell -> Finding2Impl(issue, entity, message, references, severity, autoCorrectEnabled)
-
-        is CodeSmell -> Finding2Impl(issue, entity, message, references, severity)
-
-        else -> error("wtf?")
-    }
-}
-
-@Poko
-private class Finding2Impl(
-    override val issue: Issue,
-    override val entity: Entity,
-    override val message: String,
-    override val references: List<Entity> = emptyList(),
-    override val severity: Severity = Severity.DEFAULT,
-    override val autoCorrectEnabled: Boolean = false,
-) : Finding2 {
-    init {
-        require(message.isNotBlank()) { "The message should not be empty" }
-    }
-}
