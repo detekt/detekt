@@ -5,7 +5,6 @@ interface Finding2 : Compactable, HasEntity {
     val references: List<Entity>
     val message: String
     val severity: Severity
-        get() = Severity.DEFAULT
     val autoCorrectEnabled: Boolean
 }
 
@@ -44,13 +43,9 @@ interface Compactable {
 
 fun Finding.toFinding2(): Finding2 {
     return when (this) {
-        is CorrectableCodeSmell -> Finding2Impl(issue, entity, message, references, autoCorrectEnabled).also {
-            it.internalSeverity = severity
-        }
+        is CorrectableCodeSmell -> Finding2Impl(issue, entity, message, references, severity, autoCorrectEnabled)
 
-        is CodeSmell -> Finding2Impl(issue, entity, message, references).also {
-            it.internalSeverity = severity
-        }
+        is CodeSmell -> Finding2Impl(issue, entity, message, references, severity)
 
         else -> error("wtf?")
     }
@@ -61,15 +56,12 @@ open class Finding2Impl(
     final override val entity: Entity,
     final override val message: String,
     final override val references: List<Entity> = emptyList(),
+    final override val severity: Severity = Severity.DEFAULT,
     final override val autoCorrectEnabled: Boolean = false,
 ) : Finding2 {
     init {
         require(message.isNotBlank()) { "The message should not be empty" }
     }
-
-    var internalSeverity: Severity? = null
-    override val severity: Severity
-        get() = internalSeverity ?: super.severity
 
     override fun compact(): String = "${issue.id} - ${entity.compact()}"
 

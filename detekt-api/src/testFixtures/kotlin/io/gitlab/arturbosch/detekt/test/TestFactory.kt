@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.test
 
 import io.github.detekt.psi.FilePath
-import io.gitlab.arturbosch.detekt.api.Finding2Impl
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding2Impl
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -23,29 +23,25 @@ fun createCorrectableFinding(
     ruleName: String = "TestSmell",
     fileName: String = "TestFile.kt",
     severity: Severity = Severity.Error
-) = object : Finding2Impl(
+) = Finding2Impl(
     issue = createIssue(ruleName),
     entity = createEntity(location = createLocation(fileName)),
     message = "TestMessage",
+    severity = severity,
     autoCorrectEnabled = true
-) {
-    override val severity: Severity
-        get() = severity
-}
+)
 
 fun createFinding(
     issue: Issue,
     entity: Entity,
     message: String = "TestMessage",
     severity: Severity = Severity.Error
-) = object : Finding2Impl(
+) = Finding2Impl(
     issue = issue,
     entity = entity,
-    message = message
-) {
-    override val severity: Severity
-        get() = severity
-}
+    message = message,
+    severity = severity,
+)
 
 fun createFindingForRelativePath(
     ruleName: String = "TestSmell",

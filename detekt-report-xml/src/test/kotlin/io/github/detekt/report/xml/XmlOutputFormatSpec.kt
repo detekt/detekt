@@ -1,8 +1,8 @@
 package io.github.detekt.report.xml
 
 import io.github.detekt.psi.FilePath
-import io.gitlab.arturbosch.detekt.api.Finding2Impl
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding2Impl
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
@@ -185,14 +185,12 @@ class XmlOutputFormatSpec {
         @EnumSource(Severity::class)
         fun `renders detektion with severity as XML with severity`(severity: Severity) {
             val xmlSeverity = severity.name.lowercase(Locale.US)
-            val finding = object : Finding2Impl(
+            val finding = Finding2Impl(
                 issue = createIssue("issue_id"),
                 entity = entity1,
-                message = "message"
-            ) {
-                override val severity: Severity
-                    get() = severity
-            }
+                message = "message",
+                severity = severity
+            )
 
             val expected = """
                 <?xml version="1.0" encoding="UTF-8"?>
