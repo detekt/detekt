@@ -47,7 +47,7 @@ class UnnecessaryPartOfBinaryExpression(config: Config) : Rule(
 
         val expressions = expression.expressions(operator).map { it.text.replace(whiteSpace, "") }
         if (expressions.size != expressions.distinct().size) {
-            report(CodeSmell(Entity.from(expression), issue.description))
+            report(CodeSmell(Entity.from(expression), description))
         }
     }
 

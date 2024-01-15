@@ -35,7 +35,7 @@ class NotImplementedDeclaration(config: Config) : Rule(
     override fun visitThrowExpression(expression: KtThrowExpression) {
         val calleeExpression = expression.thrownExpression?.getCalleeExpressionIfAny()
         if (calleeExpression?.text == "NotImplementedError") {
-            report(CodeSmell(Entity.from(expression), issue.description))
+            report(CodeSmell(Entity.from(expression), description))
         }
     }
 
@@ -43,7 +43,7 @@ class NotImplementedDeclaration(config: Config) : Rule(
         if (expression.calleeExpression?.text == "TODO") {
             val size = expression.valueArguments.size
             if (size == 0 || size == 1) {
-                report(CodeSmell(Entity.from(expression), issue.description))
+                report(CodeSmell(Entity.from(expression), description))
             }
         }
     }

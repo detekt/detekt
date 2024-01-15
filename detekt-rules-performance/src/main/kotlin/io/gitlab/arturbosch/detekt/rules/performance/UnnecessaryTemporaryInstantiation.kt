@@ -33,7 +33,7 @@ class UnnecessaryTemporaryInstantiation(config: Config) : Rule(
         if (isPrimitiveWrapperType(expression.calleeExpression) &&
             expression.nextSibling?.nextSibling?.text == "toString()"
         ) {
-            report(CodeSmell(Entity.from(expression), issue.description))
+            report(CodeSmell(Entity.from(expression), description))
         }
     }
 

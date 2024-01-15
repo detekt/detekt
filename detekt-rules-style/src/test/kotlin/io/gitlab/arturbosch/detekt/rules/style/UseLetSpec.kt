@@ -40,7 +40,7 @@ class UseLetSpec {
                         val findings = subject.compileAndLint(expr)
                         if (shouldFail) {
                             assertThat(findings).hasSize(1)
-                            assertThat(findings[0]).hasMessage(subject.issue.description)
+                            assertThat(findings[0]).hasMessage(subject.description)
                         } else {
                             assertThat(findings).isEmpty()
                         }

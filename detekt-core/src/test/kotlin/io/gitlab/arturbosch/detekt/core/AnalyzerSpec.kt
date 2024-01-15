@@ -416,7 +416,7 @@ private class MaxLineLength(config: Config) : Rule(config, "TestDescription") {
         super.visitKtFile(file)
         for (line in file.text.lineSequence()) {
             if (line.length > lengthThreshold) {
-                report(CodeSmell(Entity.atPackageOrFirstDecl(file), issue.description))
+                report(CodeSmell(Entity.atPackageOrFirstDecl(file), description))
             }
         }
     }
@@ -429,7 +429,7 @@ private class RequiresTypeResolutionMaxLineLength(config: Config) : Rule(config,
         super.visitKtFile(file)
         for (line in file.text.lineSequence()) {
             if (line.length > lengthThreshold) {
-                report(CodeSmell(Entity.atPackageOrFirstDecl(file), issue.description))
+                report(CodeSmell(Entity.atPackageOrFirstDecl(file), description))
             }
         }
     }

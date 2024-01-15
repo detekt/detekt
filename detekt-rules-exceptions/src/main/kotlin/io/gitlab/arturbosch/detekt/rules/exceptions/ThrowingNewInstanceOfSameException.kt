@@ -51,7 +51,7 @@ class ThrowingNewInstanceOfSameException(config: Config) : Rule(
                 hasSameExceptionParameter(thrownExpression.valueArguments, parameterName)
         }
         if (throwExpression != null) {
-            report(CodeSmell(Entity.from(throwExpression), issue.description))
+            report(CodeSmell(Entity.from(throwExpression), description))
         }
     }
 

@@ -27,7 +27,7 @@ class ThrowingExceptionInMain(config: Config) : Rule(
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.isMainFunction() && containsThrowExpression(function)) {
-            report(CodeSmell(Entity.atName(function), issue.description))
+            report(CodeSmell(Entity.atName(function), description))
         }
     }
 

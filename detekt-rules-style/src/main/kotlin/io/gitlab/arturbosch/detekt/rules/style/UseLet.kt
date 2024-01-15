@@ -47,9 +47,9 @@ class UseLet(config: Config) : Rule(
         val condition = expression.condition as? KtBinaryExpression ?: return
 
         if (condition.isNullCheck() && isExpressionNull(expression.then)) {
-            report(CodeSmell(Entity.from(expression), issue.description))
+            report(CodeSmell(Entity.from(expression), description))
         } else if (condition.isNonNullCheck() && isExpressionNull(expression.`else`)) {
-            report(CodeSmell(Entity.from(expression), issue.description))
+            report(CodeSmell(Entity.from(expression), description))
         }
     }
 }

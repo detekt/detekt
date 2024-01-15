@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.ruleId
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
@@ -53,12 +54,12 @@ private var actualLastRuleId = ""
 
 private class NonCorrectable(config: Config) : Rule(config, "") {
     override fun visitClass(klass: KtClass) {
-        actualLastRuleId = issue.id.value
+        actualLastRuleId = ruleId.value
     }
 }
 
 private class Correctable(config: Config) : Rule(config, "") {
     override fun visitClass(klass: KtClass) {
-        actualLastRuleId = issue.id.value
+        actualLastRuleId = ruleId.value
     }
 }

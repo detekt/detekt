@@ -54,7 +54,7 @@ class InstanceOfCheckForException(config: Config) : Rule(
         val catchParameter = catchClause.catchParameter ?: return
         catchClause.catchBody?.forEachDescendantOfType<KtExpression> {
             if (it.isCheckForSubTypeOf(catchParameter)) {
-                report(CodeSmell(Entity.from(it), issue.description))
+                report(CodeSmell(Entity.from(it), description))
             }
         }
     }

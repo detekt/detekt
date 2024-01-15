@@ -317,8 +317,7 @@ public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/
 	public final fun getCompilerResources ()Lio/gitlab/arturbosch/detekt/api/CompilerResources;
 	public final fun getConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public fun getDefaultRuleIdAliases ()Ljava/util/Set;
-	public final fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
-	public fun getRuleId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
+	public final fun getDescription ()Ljava/lang/String;
 	protected fun postVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	protected fun preVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	public final fun report (Lio/gitlab/arturbosch/detekt/api/Finding;)V
@@ -335,6 +334,10 @@ public final class io/gitlab/arturbosch/detekt/api/Rule$Id {
 	public final fun getValue ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/RuleKt {
+	public static final fun getRuleId (Lio/gitlab/arturbosch/detekt/api/Rule;)Lio/gitlab/arturbosch/detekt/api/Rule$Id;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/RuleSet {

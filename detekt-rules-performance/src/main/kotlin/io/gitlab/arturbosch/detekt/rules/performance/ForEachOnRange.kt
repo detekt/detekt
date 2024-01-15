@@ -56,7 +56,7 @@ class ForEachOnRange(config: Config) : Rule(
             }
             val forExpression = it.getReceiverExpression()?.deparenthesize()
             if (forExpression != null && isRangeOperatorsChainCall(forExpression)) {
-                report(CodeSmell(Entity.from(forExpression), issue.description))
+                report(CodeSmell(Entity.from(forExpression), description))
             }
         }
     }

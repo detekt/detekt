@@ -65,7 +65,7 @@ class StringLiteralDuplication(config: Config) : Rule(
                 ThresholdedCodeSmell(
                     main,
                     Metric(value, allowedDuplications),
-                    issue.description,
+                    description,
                     references
                 )
             )

@@ -69,7 +69,7 @@ class ReturnFromFinally(config: Config) : Rule(
                 isReturnFromTargetFunction(finallyBlock.finalExpression, returnExpression) &&
                     canFilterLabeledExpression(returnExpression)
             }
-            .forEach { report(CodeSmell(Entity.from(it), issue.description)) }
+            .forEach { report(CodeSmell(Entity.from(it), description)) }
     }
 
     private fun isReturnFromTargetFunction(

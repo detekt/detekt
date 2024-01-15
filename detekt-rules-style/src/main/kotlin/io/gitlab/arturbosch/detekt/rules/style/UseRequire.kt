@@ -41,7 +41,7 @@ class UseRequire(config: Config) : Rule(
         if (expression.isEnclosedByConditionalStatement() &&
             expression.arguments.isEmptyOrSingleStringArgument(bindingContext)
         ) {
-            report(CodeSmell(Entity.from(expression), issue.description))
+            report(CodeSmell(Entity.from(expression), description))
         }
     }
 
