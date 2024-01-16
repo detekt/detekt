@@ -36,7 +36,7 @@ class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) 
             complexityMetric.lloc == null || complexityMetric.lloc == 0 -> true
             complexityMetric.sloc == null || complexityMetric.sloc == 0 -> true
             else -> {
-                numberOfSmells = complexityMetric.findings.sumOf { it.value.size }
+                numberOfSmells = complexityMetric.findingsCount
                 smellPerThousandLines = numberOfSmells * 1000 / complexityMetric.lloc
                 mccPerThousandLines = requireNotNull(complexityMetric.mcc) * 1000 / complexityMetric.lloc
                 commentSourceRatio = requireNotNull(complexityMetric.cloc) * 100 / complexityMetric.sloc
