@@ -17,7 +17,12 @@ fun createFinding(
     fileName: String = "TestFile.kt",
     entity: Entity = createEntity(location = createLocation(fileName)),
     severity: Severity = Severity.Error
-) = createFinding(createIssue(ruleName), entity, "TestMessage", severity)
+) = createFinding(
+    ruleName = ruleName,
+    entity = entity,
+    message = "TestMessage",
+    severity = severity,
+)
 
 fun createCorrectableFinding(
     ruleName: String = "TestSmell",
@@ -32,15 +37,18 @@ fun createCorrectableFinding(
 )
 
 fun createFinding(
-    issue: Issue,
+    ruleName: String,
     entity: Entity,
     message: String = "TestMessage",
-    severity: Severity = Severity.Error
+    severity: Severity = Severity.Error,
+    autoCorrectEnabled: Boolean = false,
 ): Finding2 = Finding2Impl(
-    issue = issue,
+    issue = Issue(Rule.Id(ruleName), "Description $ruleName"),
     entity = entity,
     message = message,
     severity = severity,
+    autoCorrectEnabled = autoCorrectEnabled,
+    references = emptyList(),
 )
 
 fun createFindingForRelativePath(
@@ -62,7 +70,7 @@ fun createFindingForRelativePath(
     message = "TestMessage"
 )
 
-fun createIssue(id: String) = Issue(
+private fun createIssue(id: String) = Issue(
     id = Rule.Id(id),
     description = "Description $id",
 )
@@ -94,7 +102,7 @@ private data class Finding2Impl(
     override val issue: Issue,
     override val entity: Entity,
     override val message: String,
-    override val references: List<Entity> = emptyList(),
     override val severity: Severity = Severity.Error,
     override val autoCorrectEnabled: Boolean = false,
+    override val references: List<Entity> = emptyList(),
 ) : Finding2
