@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.api
 /**
  * Represents a problem detected by detekt on the source code
  *
- * A finding has the information about the rule that detected the problem, a severity and a source code position
+ * A finding has information about the rule that detected the problem, a severity and a source code position
  * described as an entity. Entity references can also be considered for deeper characterization.
  */
 interface Finding2 : HasEntity {
