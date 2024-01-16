@@ -159,8 +159,7 @@ class TooManyFunctions(config: Config) : Rule(
         ignoreDeprecated && function.hasAnnotation(DEPRECATED) -> true
         ignorePrivate && function.isPrivate() -> true
         ignoreOverridden && function.isOverride() -> true
-        ignoreAnnotatedFunctions.any { function.hasAnnotation(it) } -> true
-        else -> false
+        else -> function.hasAnnotation(*ignoreAnnotatedFunctions.toTypedArray())
     }
 
     companion object {
