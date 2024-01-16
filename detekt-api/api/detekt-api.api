@@ -331,31 +331,25 @@ public final class io/gitlab/arturbosch/detekt/api/Rule$Id {
 
 public final class io/gitlab/arturbosch/detekt/api/RuleSet {
 	public static final field Companion Lio/gitlab/arturbosch/detekt/api/RuleSet$Companion;
-	public synthetic fun <init> (Ljava/lang/String;Ljava/util/Map;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getId ()Ljava/lang/String;
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;Ljava/util/Map;)V
+	public final fun getId ()Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
 	public final fun getRules ()Ljava/util/Map;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/RuleSet$Companion {
-	public final fun invoke (Ljava/lang/String;Ljava/util/List;)Lio/gitlab/arturbosch/detekt/api/RuleSet;
+	public final fun invoke (Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;Ljava/util/List;)Lio/gitlab/arturbosch/detekt/api/RuleSet;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/RuleSet$Id {
-	public static final synthetic fun box-impl (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
-	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun <init> (Ljava/lang/String;)V
 	public fun equals (Ljava/lang/Object;)Z
-	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
-	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
 	public final fun getValue ()Ljava/lang/String;
 	public fun hashCode ()I
-	public static fun hashCode-impl (Ljava/lang/String;)I
 	public fun toString ()Ljava/lang/String;
-	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
-	public final synthetic fun unbox-impl ()Ljava/lang/String;
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/RuleSetProvider {
-	public abstract fun getRuleSetId-7o6PJhY ()Ljava/lang/String;
+	public abstract fun getRuleSetId ()Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
 	public abstract fun instance ()Lio/gitlab/arturbosch/detekt/api/RuleSet;
 }
 

@@ -1,10 +1,5 @@
 package io.gitlab.arturbosch.detekt.core
 
-import io.mockk.Called
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.slot
-import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.junit.jupiter.api.BeforeEach
@@ -13,12 +8,12 @@ import org.junit.jupiter.api.Test
 
 class DetektMessageCollectorSpec {
 
-    private lateinit var debugPrinter: (() -> String) -> Unit
+    private val debugPrinter = FakePrinter()
     private lateinit var subject: DetektMessageCollector
 
     @BeforeEach
-    fun setupMocksAndSubject() {
-        debugPrinter = mockk { every { this@mockk.invoke(any()) } returns Unit }
+    fun setupFakesAndSubject() {
+        debugPrinter.messages.clear()
         subject = DetektMessageCollector(
             minSeverity = CompilerMessageSeverity.INFO,
             debugPrinter = debugPrinter,
@@ -34,9 +29,7 @@ class DetektMessageCollectorSpec {
 
         @Test
         fun `prints the message`() {
-            val slot = slot<() -> String>()
-            verify { debugPrinter.invoke(capture(slot)) }
-            assertThat(slot.captured()).isEqualTo("info: message")
+            assertThat(debugPrinter.messages).contains("info: message")
         }
     }
 
@@ -49,9 +42,7 @@ class DetektMessageCollectorSpec {
 
         @Test
         fun `prints the message`() {
-            val slot = slot<() -> String>()
-            verify { debugPrinter.invoke(capture(slot)) }
-            assertThat(slot.captured()).isEqualTo("warning: message")
+            assertThat(debugPrinter.messages).contains("warning: message")
         }
     }
 
@@ -64,7 +55,14 @@ class DetektMessageCollectorSpec {
 
         @Test
         fun `ignores the message`() {
-            verify { debugPrinter wasNot Called }
+            assertThat(debugPrinter.messages).isEmpty()
+        }
+    }
+
+    class FakePrinter : (() -> String) -> Unit {
+        val messages = mutableListOf<String>()
+        override fun invoke(param: () -> String) {
+            messages.add(param())
         }
     }
 }

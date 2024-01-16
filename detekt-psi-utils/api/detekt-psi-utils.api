@@ -84,6 +84,8 @@ public final class io/gitlab/arturbosch/detekt/rules/KtCallExpressionKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/KtExpressionKt {
+	public static final fun getParentExpressionAfterParenthesis (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;Z)Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;
+	public static synthetic fun getParentExpressionAfterParenthesis$default (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;ZILjava/lang/Object;)Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;
 	public static final fun isUnitExpression (Lorg/jetbrains/kotlin/psi/KtExpression;)Z
 }
 

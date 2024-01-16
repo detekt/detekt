@@ -7,6 +7,8 @@ import io.github.detekt.metrics.processors.linesKey
 import io.github.detekt.metrics.processors.logicalLinesKey
 import io.github.detekt.metrics.processors.sourceLinesKey
 import io.github.detekt.test.utils.createTempFileForTest
+import io.github.detekt.test.utils.internal.FakeKtElement
+import io.github.detekt.test.utils.internal.FakePsiFile
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
@@ -18,10 +20,7 @@ import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createFinding
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
-import io.mockk.every
-import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtElement
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
@@ -197,18 +196,18 @@ class HtmlOutputReportSpec {
     }
 }
 
-private fun mockKtElement(): KtElement {
-    val ktElementMock = mockk<KtElement>()
-    val psiFileMock = mockk<PsiFile>()
-    every { psiFileMock.text } returns "\n\n\n\n\n\n\n\n\n\nabcdef\nhi\n"
-    every { ktElementMock.containingFile } returns psiFileMock
-    return ktElementMock
+private fun fakeKtElement(): KtElement {
+    val code = "\n\n\n\n\n\n\n\n\n\nabcdef\nhi\n"
+    val fakePsiFile = FakePsiFile(code)
+    val fakeKtElement = FakeKtElement(fakePsiFile)
+
+    return fakeKtElement
 }
 
 private fun createTestDetektionWithMultipleSmells(): Detektion {
     val entity1 = createEntity(
         location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 1, text = 10..14),
-        ktElement = mockKtElement()
+        ktElement = fakeKtElement()
     )
     val entity2 = createEntity(location = createLocation("src/main/com/sample/Sample2.kt", position = 22 to 2))
     val entity3 = createEntity(location = createLocation("src/main/com/sample/Sample3.kt", position = 33 to 3))
@@ -233,7 +232,7 @@ private fun createTestDetektionFromRelativePath(): Detektion {
             position = 11 to 1,
             text = 10..14,
         ),
-        ktElement = mockKtElement(),
+        ktElement = fakeKtElement(),
     )
     val entity2 = createEntity(
         location = createLocation(

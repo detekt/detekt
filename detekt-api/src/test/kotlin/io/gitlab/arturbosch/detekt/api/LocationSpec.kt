@@ -6,7 +6,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.junit.jupiter.api.Test
-import java.io.File
 
 class LocationSpec {
 
@@ -48,7 +47,8 @@ class LocationSpec {
 
         assertThat(location.toString()).isEqualTo(
             "Location(source=2:5, endSource=2:11, text=22:28, " +
-                "filePath=FilePath(absolutePath=${File.separator}Test.kt, basePath=/, relativePath=Test.kt))"
+                "filePath=FilePath(absolutePath=${location.filePath.absolutePath}, " +
+                "basePath=${location.filePath.basePath}, relativePath=${location.filePath.relativePath}))"
         )
     }
 }
