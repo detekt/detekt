@@ -32,7 +32,7 @@ fun createFindingForRelativePath(
     basePath: String = "/Users/tester/detekt/",
     relativePath: String = "TestFile.kt"
 ): Finding2 = Finding2Impl(
-    issue = createIssue(ruleName),
+    issue = Issue(Rule.Id(ruleName), "Description $ruleName"),
     entity = Entity(
         name = "TestEntity",
         signature = "TestEntitySignature",
@@ -44,11 +44,6 @@ fun createFindingForRelativePath(
         ktElement = null
     ),
     message = "TestMessage"
-)
-
-private fun createIssue(id: String) = Issue(
-    id = Rule.Id(id),
-    description = "Description $id",
 )
 
 fun createEntity(
