@@ -6,7 +6,7 @@ import io.github.detekt.sarif4k.Message
 import io.github.detekt.sarif4k.PhysicalLocation
 import io.github.detekt.sarif4k.Region
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.Severity
@@ -23,7 +23,7 @@ private fun Severity.toResultLevel() = when (this) {
     Severity.Info -> Level.Note
 }
 
-private fun Finding.toResult(ruleSetId: RuleSet.Id): io.github.detekt.sarif4k.Result {
+private fun Finding2.toResult(ruleSetId: RuleSet.Id): io.github.detekt.sarif4k.Result {
     val code = entity.ktElement?.containingFile?.text
 
     return io.github.detekt.sarif4k.Result(

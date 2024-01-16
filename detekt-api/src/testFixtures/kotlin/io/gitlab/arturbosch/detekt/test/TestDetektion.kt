@@ -1,16 +1,16 @@
 package io.gitlab.arturbosch.detekt.test
 
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
 
-open class TestDetektion(vararg findings: Finding) : Detektion, UserDataHolderBase() {
+open class TestDetektion(vararg findings: Finding2) : Detektion, UserDataHolderBase() {
 
-    override val findings: Map<RuleSet.Id, List<Finding>> = findings
+    override val findings: Map<RuleSet.Id, List<Finding2>> = findings
         .groupBy { RuleSet.Id(it.issue.id.value) } // FIXME this is not correct
     override val metrics: Collection<ProjectMetric> get() = _metrics
     override val notifications: List<Notification> get() = _notifications

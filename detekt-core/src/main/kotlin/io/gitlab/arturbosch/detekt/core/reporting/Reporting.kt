@@ -1,9 +1,8 @@
 package io.gitlab.arturbosch.detekt.core.reporting
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
@@ -11,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 internal fun defaultReportMapping(report: OutputReport) =
     if (report is BuiltInOutputReport) report.ending else report.id
 
-internal fun printFindings(findings: Map<String, List<Finding>>): String {
+internal fun printFindings(findings: Map<String, List<Finding2>>): String {
     return buildString {
         findings.forEach { (key, issues) ->
             append(key)
@@ -36,28 +35,24 @@ private val messageReplacementRegex = Regex("\\s+")
 
 fun Config.excludeCorrectable(): Boolean = subConfig(BUILD).valueOrDefault(EXCLUDE_CORRECTABLE, false)
 
-fun Detektion.filterEmptyIssues(config: Config): Map<RuleSet.Id, List<Finding>> {
+fun Detektion.filterEmptyIssues(config: Config): Map<RuleSet.Id, List<Finding2>> {
     return this
         .filterAutoCorrectedIssues(config)
         .filter { it.value.isNotEmpty() }
 }
 
-fun Detektion.filterAutoCorrectedIssues(config: Config): Map<RuleSet.Id, List<Finding>> {
+fun Detektion.filterAutoCorrectedIssues(config: Config): Map<RuleSet.Id, List<Finding2>> {
     if (!config.excludeCorrectable()) {
         return findings
     }
-    val filteredFindings = HashMap<RuleSet.Id, List<Finding>>()
+    val filteredFindings = HashMap<RuleSet.Id, List<Finding2>>()
     findings.forEach { (ruleSetId, findingsList) ->
-        val newFindingsList = findingsList.filter { finding ->
-            val correctableCodeSmell = finding as? CorrectableCodeSmell
-            correctableCodeSmell == null || !correctableCodeSmell.autoCorrectEnabled
-        }
-        filteredFindings[ruleSetId] = newFindingsList
+        filteredFindings[ruleSetId] = findingsList.filter { finding -> !finding.autoCorrectEnabled }
     }
     return filteredFindings
 }
 
-private fun Finding.truncatedMessage(): String {
+private fun Finding2.truncatedMessage(): String {
     val message = message
         .replace(messageReplacementRegex, " ")
         .trim()
@@ -67,4 +62,4 @@ private fun Finding.truncatedMessage(): String {
     }
 }
 
-private fun Finding.detailed(): String = "${issue.id} - [${truncatedMessage()}] at ${location.compact()}"
+private fun Finding2.detailed(): String = "${issue.id} - [${truncatedMessage()}] at ${location.compact()}"

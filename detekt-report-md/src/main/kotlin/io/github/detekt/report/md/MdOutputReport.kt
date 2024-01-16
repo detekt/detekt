@@ -12,7 +12,7 @@ import io.github.detekt.utils.list
 import io.github.detekt.utils.markdown
 import io.github.detekt.utils.paragraph
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -83,7 +83,7 @@ private fun MarkdownContent.renderComplexity(complexityReport: List<String>) {
     }
 }
 
-private fun MarkdownContent.renderGroup(group: RuleSet.Id, findings: List<Finding>) {
+private fun MarkdownContent.renderGroup(group: RuleSet.Id, findings: List<Finding2>) {
     findings
         .groupBy { it.issue.id }
         .toList()
@@ -93,7 +93,7 @@ private fun MarkdownContent.renderGroup(group: RuleSet.Id, findings: List<Findin
         }
 }
 
-private fun MarkdownContent.renderRule(rule: Rule.Id, group: RuleSet.Id, findings: List<Finding>) {
+private fun MarkdownContent.renderRule(rule: Rule.Id, group: RuleSet.Id, findings: List<Finding2>) {
     h3 { "$group, $rule (%,d)".format(Locale.ROOT, findings.size) }
     paragraph { (findings.first().issue.description) }
 
@@ -113,7 +113,7 @@ private fun MarkdownContent.renderRule(rule: Rule.Id, group: RuleSet.Id, finding
     }
 }
 
-private fun MarkdownContent.renderFindings(findings: Map<RuleSet.Id, List<Finding>>) {
+private fun MarkdownContent.renderFindings(findings: Map<RuleSet.Id, List<Finding2>>) {
     val total = findings.values
         .asSequence()
         .map { it.size }
@@ -130,7 +130,7 @@ private fun MarkdownContent.renderFindings(findings: Map<RuleSet.Id, List<Findin
         }
 }
 
-private fun MarkdownContent.renderFinding(finding: Finding): String {
+private fun MarkdownContent.renderFinding(finding: Finding2): String {
     val filePath = finding.location.filePath.relativePath ?: finding.location.filePath.absolutePath
     val location =
         "${filePath.invariantSeparatorsPathString}:${finding.location.source.line}:${finding.location.source.column}"

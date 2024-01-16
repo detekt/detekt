@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.sample.extensions.processors
 
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.RuleSet
@@ -31,7 +31,7 @@ class QualifiedNameProcessorSpec {
 
 private val result = object : Detektion, UserDataHolderBase() {
 
-    override val findings: Map<RuleSet.Id, List<Finding>> = emptyMap()
+    override val findings: Map<RuleSet.Id, List<Finding2>> = emptyMap()
     override val notifications: Collection<Notification> = emptyList()
     override val metrics: Collection<ProjectMetric> = emptyList()
 

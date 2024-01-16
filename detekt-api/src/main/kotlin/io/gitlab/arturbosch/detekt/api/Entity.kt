@@ -65,3 +65,19 @@ class Entity(
         }
     }
 }
+
+/**
+ * Provides a compact string representation.
+ */
+interface Compactable {
+    /**
+     * Contract to format implementing object to a string representation.
+     */
+    fun compact(): String
+
+    /**
+     * Same as [compact] except the content should contain a substring which represents
+     * this exact findings via a custom identifier.
+     */
+    fun compactWithSignature(): String = compact()
+}

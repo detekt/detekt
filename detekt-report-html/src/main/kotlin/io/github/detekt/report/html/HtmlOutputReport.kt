@@ -3,7 +3,7 @@ package io.github.detekt.report.html
 import io.github.detekt.metrics.ComplexityReportGenerator
 import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -86,7 +86,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         }
     }
 
-    private fun renderFindings(findings: Map<RuleSet.Id, List<Finding>>) = createHTML().div {
+    private fun renderFindings(findings: Map<RuleSet.Id, List<Finding2>>) = createHTML().div {
         val total = findings.values
             .asSequence()
             .map { it.size }
@@ -103,7 +103,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
             }
     }
 
-    private fun FlowContent.renderGroup(group: RuleSet.Id, findings: List<Finding>) {
+    private fun FlowContent.renderGroup(group: RuleSet.Id, findings: List<Finding2>) {
         h3 { text("$group: %,d".format(Locale.ROOT, findings.size)) }
 
         findings
@@ -115,7 +115,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
             }
     }
 
-    private fun FlowContent.renderRule(rule: Rule.Id, group: RuleSet.Id, findings: List<Finding>) {
+    private fun FlowContent.renderRule(rule: Rule.Id, group: RuleSet.Id, findings: List<Finding2>) {
         details {
             id = rule.value
             open = true
@@ -141,7 +141,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         }
     }
 
-    private fun FlowContent.renderFinding(finding: Finding) {
+    private fun FlowContent.renderFinding(finding: Finding2) {
         val filePath = finding.location.filePath.relativePath ?: finding.location.filePath.absolutePath
         val pathString = filePath.invariantSeparatorsPathString
         span("location") {

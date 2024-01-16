@@ -11,7 +11,7 @@ import io.github.detekt.test.utils.internal.FakeKtElement
 import io.github.detekt.test.utils.internal.FakePsiFile
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
@@ -64,7 +64,7 @@ class HtmlOutputReportSpec {
     @Test
     fun `contains no findings`() {
         val detektion = object : TestDetektion() {
-            override val findings: Map<RuleSet.Id, List<Finding>> = mapOf(
+            override val findings: Map<RuleSet.Id, List<Finding2>> = mapOf(
                 RuleSet.Id("EmptyRuleset") to emptyList()
             )
         }
@@ -118,7 +118,7 @@ class HtmlOutputReportSpec {
     @Test
     fun `renders the right documentation links for the rules`() {
         val detektion = object : TestDetektion() {
-            override val findings: Map<RuleSet.Id, List<Finding>> = mapOf(
+            override val findings: Map<RuleSet.Id, List<Finding2>> = mapOf(
                 RuleSet.Id("Style") to listOf(
                     createFinding(createIssue("ValCouldBeVar"), createEntity())
                 ),
@@ -261,7 +261,7 @@ private fun createTestDetektionFromRelativePath(): Detektion {
     )
 }
 
-private fun findings(): Array<Pair<String, List<Finding>>> {
+private fun findings(): Array<Pair<String, List<Finding2>>> {
     val issueA = createIssue("id_a")
     val issueB = createIssue("id_b")
     val issueC = createIssue("id_c")
@@ -289,9 +289,9 @@ private fun findings(): Array<Pair<String, List<Finding>>> {
     )
 }
 
-private fun createHtmlDetektion(vararg findingPairs: Pair<String, List<Finding>>): Detektion {
+private fun createHtmlDetektion(vararg findingPairs: Pair<String, List<Finding2>>): Detektion {
     return object : TestDetektion() {
-        override val findings: Map<RuleSet.Id, List<Finding>> = findingPairs.toMap()
+        override val findings: Map<RuleSet.Id, List<Finding2>> = findingPairs.toMap()
             .mapKeys { (key, _) -> RuleSet.Id(key) }
     }
 }
@@ -299,7 +299,7 @@ private fun createHtmlDetektion(vararg findingPairs: Pair<String, List<Finding>>
 private val generatedRegex = """^generated\swith.*$""".toRegex(RegexOption.MULTILINE)
 private const val REPLACEMENT = "generated with..."
 
-private fun createReportWithFindings(findings: Array<Pair<String, List<Finding>>>): Path {
+private fun createReportWithFindings(findings: Array<Pair<String, List<Finding2>>>): Path {
     val htmlReport = HtmlOutputReport()
     val detektion = createHtmlDetektion(*findings)
     var result = htmlReport.render(detektion)
