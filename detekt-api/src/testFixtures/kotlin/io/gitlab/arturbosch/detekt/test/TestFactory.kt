@@ -75,7 +75,7 @@ fun createEntity(
 )
 
 fun createLocation(
-    path: String = "File.kt",
+    path: String = "TestFile.kt",
     basePath: String? = null,
     position: Pair<Int, Int> = 1 to 1,
     text: IntRange = 0..0,
