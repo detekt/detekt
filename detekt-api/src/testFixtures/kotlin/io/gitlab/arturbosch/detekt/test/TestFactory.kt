@@ -24,21 +24,9 @@ fun createFinding(
     severity = severity,
 )
 
-fun createCorrectableFinding(
-    ruleName: String = "TestSmell",
-    fileName: String = "TestFile.kt",
-    severity: Severity = Severity.Error
-): Finding2 = Finding2Impl(
-    issue = createIssue(ruleName),
-    entity = createEntity(location = createLocation(fileName)),
-    message = "TestMessage",
-    severity = severity,
-    autoCorrectEnabled = true
-)
-
 fun createFinding(
-    ruleName: String,
-    entity: Entity,
+    ruleName: String = "TestSmell",
+    entity: Entity = createEntity(),
     message: String = "TestMessage",
     severity: Severity = Severity.Error,
     autoCorrectEnabled: Boolean = false,
