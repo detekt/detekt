@@ -56,7 +56,12 @@ class FindingsReportSpec {
 
     @Test
     fun `truncates long message`() {
-        val expectedContent = readResourceContent("/reporting/long-messages-report.txt")
+        val expectedContent = """
+            Ruleset
+            	LongRule - [This is just a long message that should be truncated after a given threshold is (...)] at File.kt:1:1
+            	MultilineRule - [A multiline message.] at File.kt:1:1
+            
+        """.trimIndent()
         val longMessage = "This is just a long message that should be truncated after a given " +
             "threshold is reached."
         val multilineMessage = "A multiline\n\r\tmessage.\t "
