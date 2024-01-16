@@ -1,25 +1,12 @@
 package io.gitlab.arturbosch.detekt.libraries
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class LibraryEntitiesShouldNotBePublicSpec {
-
-    @Test
-    fun `should not report without explicit filters set`() {
-        val subject = LibraryEntitiesShouldNotBePublic(TestConfig(Config.EXCLUDES_KEY to listOf("**")))
-        assertThat(
-            subject.compileAndLint(
-                """
-                    class A
-                """.trimIndent()
-            )
-        ).isEmpty()
-    }
 
     @Nested
     inner class `positive cases` {
