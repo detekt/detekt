@@ -19,6 +19,7 @@ interface Finding2 {
 
     interface RuleInfo {
         val id: Rule.Id
+        val ruleSetId: RuleSet.Id
         val description: String
     }
 }

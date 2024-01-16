@@ -191,6 +191,7 @@ public final class io/gitlab/arturbosch/detekt/api/Finding2$DefaultImpls {
 public abstract interface class io/gitlab/arturbosch/detekt/api/Finding2$RuleInfo {
 	public abstract fun getDescription ()Ljava/lang/String;
 	public abstract fun getId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
+	public abstract fun getRuleSetId ()Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Location : io/gitlab/arturbosch/detekt/api/Compactable {
