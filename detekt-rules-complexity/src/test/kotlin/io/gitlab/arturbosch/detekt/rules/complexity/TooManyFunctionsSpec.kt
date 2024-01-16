@@ -281,6 +281,8 @@ class TooManyFunctionsSpec {
         )
 
         val code = """
+                annotation class Preview            
+
                 class A {
                     fun a() = Unit
                     @Preview
@@ -308,6 +310,8 @@ class TooManyFunctionsSpec {
         )
 
         val code = """
+                annotation class Preview            
+
                 class A {
                     fun a() = Unit
                     fun b() = Unit
