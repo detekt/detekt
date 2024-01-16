@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.TestDetektion
-import io.gitlab.arturbosch.detekt.test.createCorrectableFinding
 import io.gitlab.arturbosch.detekt.test.createFinding
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
@@ -68,7 +67,7 @@ class FailurePoliciesKtTest {
 
         @Test
         fun `does not fail on correctable finding if configured`() {
-            val result = TestDetektion(createCorrectableFinding(severity = Severity.Error))
+            val result = TestDetektion(createFinding(severity = Severity.Error, autoCorrectEnabled = true))
             val config = TestConfig("excludeCorrectable" to "true")
 
             subject.check(result, config)
