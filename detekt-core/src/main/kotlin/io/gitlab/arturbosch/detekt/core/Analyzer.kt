@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Finding2
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
@@ -145,7 +144,7 @@ internal class Analyzer(
                         "Mapping for '${rule.ruleId}' expected."
                     }
                     result.computeIfAbsent(mappedRuleSet) { mutableListOf() }
-                        .add(finding.toFinding2(Issue(rule.ruleId, rule.description), rule.computeSeverity()))
+                        .add(finding.toFinding2(rule.toRuleInfo(), rule.computeSeverity()))
                 }
             }
         }
@@ -226,24 +225,33 @@ internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config = wi
     return declaredConfig ?: getDefaultConfiguration()
 }
 
-private fun Finding.toFinding2(issue: Issue, severity: Severity): Finding2 {
+private fun Finding.toFinding2(rule: Finding2.RuleInfo, severity: Severity): Finding2 {
     return when (this) {
-        is CorrectableCodeSmell -> Finding2Impl(issue, entity, message, references, severity, autoCorrectEnabled)
+        is CorrectableCodeSmell -> Finding2Impl(rule, entity, message, references, severity, autoCorrectEnabled)
 
-        is CodeSmell -> Finding2Impl(issue, entity, message, references, severity)
+        is CodeSmell -> Finding2Impl(rule, entity, message, references, severity)
 
         else -> error("wtf?")
     }
 }
 
+private fun Rule.toRuleInfo(): Finding2.RuleInfo {
+    return Finding2Impl.RuleInfo(ruleId, description)
+}
+
 private data class Finding2Impl(
-    override val issue: Issue,
+    override val rule: Finding2.RuleInfo,
     override val entity: Entity,
     override val message: String,
     override val references: List<Entity>,
     override val severity: Severity,
     override val autoCorrectEnabled: Boolean = false,
-) : Finding2
+) : Finding2 {
+    data class RuleInfo(
+        override val id: Rule.Id,
+        override val description: String,
+    ) : Finding2.RuleInfo
+}
 
 /**
  * Compute severity in the priority order:

@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.test
 import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding2
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
@@ -19,7 +18,7 @@ fun createFinding(
     severity: Severity = Severity.Error,
     autoCorrectEnabled: Boolean = false,
 ): Finding2 = Finding2Impl(
-    issue = Issue(Rule.Id(ruleName), "Description $ruleName"),
+    rule = Finding2Impl.RuleInfo(Rule.Id(ruleName), "Description $ruleName"),
     entity = entity,
     message = message,
     severity = severity,
@@ -32,7 +31,7 @@ fun createFindingForRelativePath(
     basePath: String = "/Users/tester/detekt/",
     relativePath: String = "TestFile.kt"
 ): Finding2 = Finding2Impl(
-    issue = Issue(Rule.Id(ruleName), "Description $ruleName"),
+    rule = Finding2Impl.RuleInfo(Rule.Id(ruleName), "Description $ruleName"),
     entity = Entity(
         name = "TestEntity",
         signature = "TestEntitySignature",
@@ -70,10 +69,12 @@ fun createLocation(
 )
 
 private data class Finding2Impl(
-    override val issue: Issue,
+    override val rule: RuleInfo,
     override val entity: Entity,
     override val message: String,
     override val severity: Severity = Severity.Error,
     override val autoCorrectEnabled: Boolean = false,
     override val references: List<Entity> = emptyList(),
-) : Finding2
+) : Finding2 {
+    data class RuleInfo(override val id: Rule.Id, override val description: String) : Finding2.RuleInfo
+}

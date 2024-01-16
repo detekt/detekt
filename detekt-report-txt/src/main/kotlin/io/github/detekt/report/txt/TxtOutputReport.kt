@@ -23,4 +23,4 @@ class TxtOutputReport : BuiltInOutputReport, OutputReport() {
 }
 
 private fun Finding2.compactWithSignature(): String =
-    "${issue.id} - ${entity.compact()} - Signature=${entity.signature}"
+    "${rule.id} - ${entity.compact()} - Signature=${entity.signature}"

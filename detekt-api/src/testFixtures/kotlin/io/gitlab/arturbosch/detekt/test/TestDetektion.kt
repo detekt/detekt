@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
 open class TestDetektion(vararg findings: Finding2) : Detektion, UserDataHolderBase() {
 
     override val findings: Map<RuleSet.Id, List<Finding2>> = findings
-        .groupBy { RuleSet.Id(it.issue.id.value) } // FIXME this is not correct
+        .groupBy { RuleSet.Id(it.rule.id.value) } // FIXME this is not correct
     override val metrics: Collection<ProjectMetric> get() = _metrics
     override val notifications: List<Notification> get() = _notifications
 
