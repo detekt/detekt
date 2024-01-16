@@ -14,18 +14,6 @@ import kotlin.io.path.Path
 
 fun createFinding(
     ruleName: String = "TestSmell",
-    fileName: String = "TestFile.kt",
-    entity: Entity = createEntity(location = createLocation(fileName)),
-    severity: Severity = Severity.Error
-) = createFinding(
-    ruleName = ruleName,
-    entity = entity,
-    message = "TestMessage",
-    severity = severity,
-)
-
-fun createFinding(
-    ruleName: String = "TestSmell",
     entity: Entity = createEntity(),
     message: String = "TestMessage",
     severity: Severity = Severity.Error,
