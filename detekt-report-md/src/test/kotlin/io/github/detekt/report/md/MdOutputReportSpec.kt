@@ -16,7 +16,6 @@ import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createFinding
-import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
 import org.assertj.core.api.Assertions.assertThat
 import org.intellij.lang.annotations.Language
@@ -84,11 +83,11 @@ class MdOutputReportSpec {
         val detektion = object : TestDetektion() {
             override val findings: Map<RuleSet.Id, List<Finding2>> = mapOf(
                 RuleSet.Id("Style") to listOf(
-                    createFinding(createIssue("ValCouldBeVar"), createEntity())
+                    createFinding("ValCouldBeVar", createEntity())
                 ),
                 RuleSet.Id("empty") to listOf(
-                    createFinding(createIssue("EmptyBody"), createEntity()),
-                    createFinding(createIssue("EmptyIf"), createEntity())
+                    createFinding("EmptyBody", createEntity()),
+                    createFinding("EmptyIf", createEntity())
                 )
             )
         }
@@ -170,16 +169,13 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
         ktElement = fakeKtElement(),
     )
 
-    val issueA = createIssue("id_a")
-    val issueB = createIssue("id_b")
-
     return createMdDetektion(
         "Section-1" to listOf(
-            createFinding(issueA, entity1, "Message finding 1"),
-            createFinding(issueA, entity2, "Message finding 2")
+            createFinding("id_a", entity1, "Message finding 1"),
+            createFinding("id_a", entity2, "Message finding 2")
         ),
         "Section-2" to listOf(
-            createFinding(issueB, entity3, "Message finding 3")
+            createFinding("id_b", entity3, "Message finding 3")
         )
     ).also {
         it.putUserData(complexityKey, 10)
@@ -204,10 +200,6 @@ private fun createMdDetektion(vararg findingPairs: Pair<String, List<Finding2>>)
 }
 
 private fun findings(): Array<Pair<String, List<Finding2>>> {
-    val issueA = createIssue("id_a")
-    val issueB = createIssue("id_b")
-    val issueC = createIssue("id_c")
-
     val entity1 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 5))
     val entity2 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 22 to 2))
     val entity3 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 2))
@@ -215,18 +207,18 @@ private fun findings(): Array<Pair<String, List<Finding2>>> {
 
     return arrayOf(
         "RuleSet1" to listOf(
-            createFinding(issueA, entity1),
-            createFinding(issueA, entity2),
-            createFinding(issueA, entity3),
-            createFinding(issueA, entity4),
-            createFinding(issueB, entity2),
-            createFinding(issueB, entity1),
-            createFinding(issueB, entity4)
+            createFinding("id_a", entity1),
+            createFinding("id_a", entity2),
+            createFinding("id_a", entity3),
+            createFinding("id_a", entity4),
+            createFinding("id_b", entity2),
+            createFinding("id_b", entity1),
+            createFinding("id_b", entity4)
         ),
         "RuleSet2" to listOf(
-            createFinding(issueB, entity3),
-            createFinding(issueC, entity1),
-            createFinding(issueC, entity2)
+            createFinding("id_b", entity3),
+            createFinding("id_c", entity1),
+            createFinding("id_c", entity2)
         )
     )
 }
