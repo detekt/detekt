@@ -6,6 +6,8 @@ import io.github.detekt.metrics.processors.complexityKey
 import io.github.detekt.metrics.processors.linesKey
 import io.github.detekt.metrics.processors.logicalLinesKey
 import io.github.detekt.metrics.processors.sourceLinesKey
+import io.github.detekt.test.utils.internal.FakeKtElement
+import io.github.detekt.test.utils.internal.FakePsiFile
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
@@ -16,44 +18,15 @@ import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createFinding
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
-import io.mockk.clearStaticMockk
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.mockkStatic
 import org.assertj.core.api.Assertions.assertThat
 import org.intellij.lang.annotations.Language
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtElement
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.time.OffsetDateTime
-import java.time.ZoneOffset
 
 class MdOutputReportSpec {
     private val mdReport = MdOutputReport()
     private val detektion = createTestDetektionWithMultipleSmells()
     private val result = mdReport.render(detektion)
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(OffsetDateTime::class)
-        every { OffsetDateTime.now(ZoneOffset.UTC) } returns OffsetDateTime.of(
-            2000, // year
-            1, // month
-            1, // dayOfMonth
-            0, // hour
-            0, // minute
-            0, // second
-            0, // nanoOfSecond
-            ZoneOffset.UTC // offset
-        )
-    }
-
-    @AfterEach
-    fun teardown() {
-        clearStaticMockk(OffsetDateTime::class)
-    }
 
     @Test
     fun `renders Markdown structure correctly`() {
@@ -144,10 +117,7 @@ class MdOutputReportSpec {
     }
 }
 
-private fun mockKtElement(): KtElement {
-    val ktElementMock = mockk<KtElement>()
-    val psiFileMock = mockk<PsiFile>()
-
+private fun fakeKtElement(): KtElement {
     @Language("kotlin")
     val code = """
         package com.example.test
@@ -167,10 +137,10 @@ private fun mockKtElement(): KtElement {
             }
         }
     """.trimIndent()
+    val fakePsiFile = FakePsiFile(code)
+    val fakeKtElement = FakeKtElement(fakePsiFile)
 
-    every { psiFileMock.text } returns code
-    every { ktElementMock.containingFile } returns psiFileMock
-    return ktElementMock
+    return fakeKtElement
 }
 
 private fun createTestDetektionWithMultipleSmells(): Detektion {
@@ -181,7 +151,7 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
             position = 9 to 17,
             text = 17..20,
         ),
-        ktElement = mockKtElement(),
+        ktElement = fakeKtElement(),
     )
     val entity2 = createEntity(
         location = createLocation(
@@ -189,7 +159,7 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
             basePath = "/Users/tester/detekt/",
             position = 13 to 17,
         ),
-        ktElement = mockKtElement(),
+        ktElement = fakeKtElement(),
     )
     val entity3 = createEntity(
         location = createLocation(
@@ -197,7 +167,7 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
             basePath = "/Users/tester/detekt/",
             position = 14 to 16,
         ),
-        ktElement = mockKtElement(),
+        ktElement = fakeKtElement(),
     )
 
     val issueA = createIssue("id_a")

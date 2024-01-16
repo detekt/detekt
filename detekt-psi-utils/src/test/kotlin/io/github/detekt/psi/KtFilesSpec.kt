@@ -1,7 +1,6 @@
 package io.github.detekt.psi
 
-import io.mockk.every
-import io.mockk.mockk
+import io.github.detekt.test.utils.internal.FakePsiFile
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.junit.jupiter.api.Nested
@@ -44,11 +43,7 @@ class KtFilesSpec {
         }
     }
 
-    private fun makeFile(filename: String): PsiFile {
-        return mockk {
-            every { name } returns filename
-        }
-    }
+    private fun makeFile(filename: String): PsiFile = FakePsiFile(name = filename)
 
     @Nested
     inner class FilePathSpec {
