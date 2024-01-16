@@ -18,10 +18,10 @@ import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.core.config.validation.DeprecatedRule
 import io.gitlab.arturbosch.detekt.core.config.validation.loadDeprecations
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
-import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
 import io.gitlab.arturbosch.detekt.core.suppressors.buildSuppressors
 import io.gitlab.arturbosch.detekt.core.tooling.getDefaultConfiguration
 import io.gitlab.arturbosch.detekt.core.util.isActiveOrDefault
+import io.gitlab.arturbosch.detekt.core.util.shouldAnalyzeFile
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -117,6 +117,7 @@ internal class Analyzer(
                     .asSequence()
                     .map { (ruleId, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleId.value) }
                     .filter { (_, config) -> config.isActiveOrDefault(false) }
+                    .filter { (_, config) -> config.shouldAnalyzeFile(file) }
                     .map { (ruleProvider, config) -> ruleProvider(config) }
             }
             .filter { rule ->

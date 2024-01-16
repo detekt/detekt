@@ -10,16 +10,6 @@ class ForbiddenPublicDataClassSpec {
     val subject = ForbiddenPublicDataClass(Config.empty)
 
     @Test
-    fun `public data class should pass without explicit filters set`() {
-        val code = """
-            data class C(val a: String)
-        """.trimIndent()
-
-        assertThat(ForbiddenPublicDataClass(TestConfig(Config.EXCLUDES_KEY to listOf("**"))).compileAndLint(code))
-            .isEmpty()
-    }
-
-    @Test
     fun `public data class should fail`() {
         val code = """
             data class C(val a: String)

@@ -2,8 +2,6 @@ package io.gitlab.arturbosch.detekt.api
 
 import dev.drewhamilton.poko.Poko
 import io.gitlab.arturbosch.detekt.api.Config.Companion.SEVERITY_KEY
-import io.gitlab.arturbosch.detekt.api.internal.PathFilters
-import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import io.gitlab.arturbosch.detekt.api.internal.validateIdentifier
 import org.jetbrains.kotlin.psi.KtFile
@@ -57,13 +55,6 @@ open class Rule(
     val autoCorrect: Boolean
         get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
             (config.parent?.valueOrDefault(Config.AUTO_CORRECT_KEY, true) != false)
-
-    /**
-     * Rules are aware of the paths they should run on via configuration properties.
-     */
-    open val filters: PathFilters? by lazy(LazyThreadSafetyMode.NONE) {
-        config.createPathFilters()
-    }
 
     private val findings: MutableList<Finding> = mutableListOf()
 
@@ -120,11 +111,7 @@ open class Rule(
      *
      * By default, any rule not suppressed by a [Suppress] annotation on file level should run.
      */
-    open fun visitCondition(root: KtFile): Boolean =
-        shouldRunOnGivenFile(root) && !root.isSuppressedBy(ruleId, aliases, ruleSetId)
-
-    private fun shouldRunOnGivenFile(root: KtFile) =
-        filters?.isIgnored(root)?.not() ?: true
+    open fun visitCondition(root: KtFile): Boolean = !root.isSuppressedBy(ruleId, aliases, ruleSetId)
 
     private fun Finding.updateWithComputedSeverity() {
         (this as? CodeSmell)?.internalSeverity = computeSeverity()

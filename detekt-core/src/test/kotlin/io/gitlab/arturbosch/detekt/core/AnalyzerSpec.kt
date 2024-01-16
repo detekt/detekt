@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.test.utils.StringPrintStream
+import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
@@ -19,6 +20,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.concurrent.CompletionException
+import kotlin.io.path.Path
 
 @KotlinCoreEnvironmentTest
 class AnalyzerSpec(val env: KotlinCoreEnvironment) {
@@ -227,6 +229,134 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             assertThat(output.toString()).isEmpty()
         }
     }
+
+    @Nested
+    inner class IncludeExclude {
+
+        @Nested
+        inner class Rule {
+            @Test
+            fun `A file excluded and included is not checked`() {
+                assertThat(isPathChecked("foo/Test.kt", excludes = listOf("**/*.kt"), includes = listOf("**/*.kt")))
+                    .isFalse()
+            }
+
+            @Test
+            fun `A file included is checked`() {
+                assertThat(isPathChecked("foo/Test.kt", includes = listOf("**/foo/*.kt")))
+                    .isTrue()
+            }
+
+            @Test
+            fun `A file not included is not checked`() {
+                assertThat(isPathChecked("foo/Test.kt", includes = listOf("**/bar/*.kt")))
+                    .isFalse()
+            }
+
+            @Test
+            fun `A file excluded is not checked`() {
+                assertThat(isPathChecked("foo/Test.kt", excludes = listOf("**/foo/*.kt")))
+                    .isFalse()
+            }
+
+            @Test
+            fun `A file not excluded is checked`() {
+                assertThat(isPathChecked("foo/Test.kt", excludes = listOf("**/bar/*.kt")))
+                    .isTrue()
+            }
+
+            private fun isPathChecked(
+                path: String,
+                excludes: List<String>? = null,
+                includes: List<String>? = null
+            ): Boolean {
+                fun List<String>.toYaml() = joinToString(", ", "[", "]") { "\"$it\"" }
+
+                return isPathChecked(
+                    path,
+                    yamlConfigFromContent(
+                        """
+                            custom:
+                              NoEmptyFile:
+                                active: true
+                                ${if (excludes != null) "excludes: ${excludes.toYaml()}" else ""}
+                                ${if (includes != null) "includes: ${includes.toYaml()}" else ""}
+                        """.trimIndent()
+                    ),
+                )
+            }
+        }
+
+        @Nested
+        inner class RuleSet {
+            @Test
+            fun `A file excluded and included is not checked`() {
+                assertThat(isPathChecked("foo/Test.kt", excludes = listOf("**/*.kt"), includes = listOf("**/*.kt")))
+                    .isFalse()
+            }
+
+            @Test
+            fun `A file included is checked`() {
+                assertThat(isPathChecked("foo/Test.kt", includes = listOf("**/foo/*.kt")))
+                    .isTrue()
+            }
+
+            @Test
+            fun `A file not included is not checked`() {
+                assertThat(isPathChecked("foo/Test.kt", includes = listOf("**/bar/*.kt")))
+                    .isFalse()
+            }
+
+            @Test
+            fun `A file excluded is not checked`() {
+                assertThat(isPathChecked("foo/Test.kt", excludes = listOf("**/foo/*.kt")))
+                    .isFalse()
+            }
+
+            @Test
+            fun `A file not excluded is checked`() {
+                assertThat(isPathChecked("foo/Test.kt", excludes = listOf("**/bar/*.kt")))
+                    .isTrue()
+            }
+
+            private fun isPathChecked(
+                path: String,
+                excludes: List<String>? = null,
+                includes: List<String>? = null
+            ): Boolean {
+                fun List<String>.toYaml() = joinToString(", ", "[", "]") { "\"$it\"" }
+
+                return isPathChecked(
+                    path,
+                    yamlConfigFromContent(
+                        """
+                            custom:
+                              ${if (excludes != null) "excludes: ${excludes.toYaml()}" else ""}
+                              ${if (includes != null) "includes: ${includes.toYaml()}" else ""}
+                              NoEmptyFile:
+                                active: true
+                        """.trimIndent()
+                    ),
+                )
+            }
+        }
+
+        private fun isPathChecked(
+            path: String,
+            config: Config,
+        ): Boolean {
+            val root = Path("/foo/bar/sample/")
+
+            return createProcessingSettings(config = config) { project { basePath = root } }
+                .use { settings ->
+                    Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
+                        .run(listOf(compileContentForTest("", root, Path(path))))
+                        .values
+                        .flatten()
+                        .isNotEmpty()
+                }
+        }
+    }
 }
 
 private class CustomRuleSetProvider : RuleSetProvider {
@@ -234,12 +364,21 @@ private class CustomRuleSetProvider : RuleSetProvider {
     override fun instance() = RuleSet(
         ruleSetId,
         listOf(
+            ::NoEmptyFile,
             ::MaxLineLength,
             ::RequiresTypeResolutionMaxLineLength,
             ::FaultyRule,
             ::FaultyRuleNoStackTrace,
         )
     )
+}
+
+private class NoEmptyFile(config: Config) : Rule(config, "TestDescription") {
+    override fun visitKtFile(file: KtFile) {
+        if (file.text.isEmpty()) {
+            report(CodeSmell(issue, Entity.from(file), "This file is empty"))
+        }
+    }
 }
 
 private class MaxLineLength(config: Config) : Rule(config, "TestDescription") {

@@ -12,3 +12,7 @@ dependencies {
 
     testImplementation(libs.assertj)
 }
+
+apiValidation {
+    ignoredPackages.add("io.github.detekt.test.utils.internal")
+}
