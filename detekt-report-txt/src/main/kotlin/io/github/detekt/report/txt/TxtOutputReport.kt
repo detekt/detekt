@@ -15,14 +15,12 @@ class TxtOutputReport : BuiltInOutputReport, OutputReport() {
     override val ending: String = "txt"
 
     override fun render(detektion: Detektion): String {
-        val builder = StringBuilder()
-        detektion.findings
+        return detektion.findings
             .flatMap { it.value }
-            .forEach { builder.append(it.compactWithSignature()).append("\n") }
-        return builder.toString()
+            .ifEmpty { return "" }
+            .joinToString("\n", postfix = "\n") { it.compactWithSignature() }
     }
 }
 
-private fun Finding2.compact(): String = "${issue.id} - ${entity.compact()}"
-
-private fun Finding2.compactWithSignature(): String = compact() + " - Signature=" + entity.signature
+private fun Finding2.compactWithSignature(): String =
+    "${issue.id} - ${entity.compact()} - Signature=${entity.signature}"
