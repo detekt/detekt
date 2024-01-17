@@ -1,7 +1,7 @@
 package io.github.detekt.report.xml
 
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import java.util.Locale
@@ -16,7 +16,7 @@ class XmlOutputReport : BuiltInOutputReport, OutputReport() {
     override val id: String = "XmlOutputReport"
     override val ending = "xml"
 
-    private val Finding.severityLabel: String
+    private val Finding2.severityLabel: String
         get() = severity.name.lowercase(Locale.US)
 
     override fun render(detektion: Detektion): String {

@@ -21,10 +21,6 @@ open class CodeSmell(
     override val severity: Severity
         get() = internalSeverity ?: super.severity
 
-    override fun compact(): String = "${issue.id} - ${entity.compact()}"
-
-    override fun compactWithSignature(): String = compact() + " - Signature=" + entity.signature
-
     override fun toString(): String {
         return "CodeSmell(issue=$issue, " +
             "entity=$entity, " +

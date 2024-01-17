@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.baseline
 
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Finding2
 import java.nio.file.Path
 import kotlin.io.path.createDirectories
 import kotlin.io.path.exists
@@ -17,7 +17,7 @@ class BaselineFacade {
         }
     }
 
-    fun createOrUpdate(baselineFile: Path, findings: List<Finding>) {
+    fun createOrUpdate(baselineFile: Path, findings: List<Finding2>) {
         val ids = findings.map { it.baselineId }.toSortedSet()
         val oldBaseline = if (baselineExists(baselineFile)) {
             DefaultBaseline.load(baselineFile)

@@ -1,9 +1,8 @@
 package io.gitlab.arturbosch.detekt.test
 
 import io.github.detekt.psi.FilePath
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -24,35 +23,31 @@ fun createCorrectableFinding(
     ruleName: String = "TestSmell",
     fileName: String = "TestFile.kt",
     severity: Severity = Severity.Error
-) = object : CorrectableCodeSmell(
+): Finding2 = Finding2Impl(
     issue = createIssue(ruleName),
     entity = createEntity(location = createLocation(fileName)),
     message = "TestMessage",
+    severity = severity,
     autoCorrectEnabled = true
-) {
-    override val severity: Severity
-        get() = severity
-}
+)
 
 fun createFinding(
     issue: Issue,
     entity: Entity,
     message: String = "TestMessage",
     severity: Severity = Severity.Error
-) = object : CodeSmell(
+): Finding2 = Finding2Impl(
     issue = issue,
     entity = entity,
-    message = message
-) {
-    override val severity: Severity
-        get() = severity
-}
+    message = message,
+    severity = severity,
+)
 
 fun createFindingForRelativePath(
     ruleName: String = "TestSmell",
     basePath: String = "/Users/tester/detekt/",
     relativePath: String = "TestFile.kt"
-) = CodeSmell(
+): Finding2 = Finding2Impl(
     issue = createIssue(ruleName),
     entity = Entity(
         name = "TestEntity",
@@ -94,3 +89,12 @@ fun createLocation(
     filePath = basePath?.let { FilePath.fromRelative(Path(it), Path(path)) }
         ?: FilePath.fromAbsolute(Path(path)),
 )
+
+private data class Finding2Impl(
+    override val issue: Issue,
+    override val entity: Entity,
+    override val message: String,
+    override val references: List<Entity> = emptyList(),
+    override val severity: Severity = Severity.DEFAULT,
+    override val autoCorrectEnabled: Boolean = false,
+) : Finding2
