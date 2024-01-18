@@ -11,12 +11,12 @@ import io.github.detekt.test.utils.internal.FakePsiFile
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createFinding
 import io.gitlab.arturbosch.detekt.test.createLocation
+import io.gitlab.arturbosch.detekt.test.createRuleInfo
 import org.assertj.core.api.Assertions.assertThat
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.psi.KtElement
@@ -80,17 +80,11 @@ class MdOutputReportSpec {
 
     @Test
     fun `renders the right documentation links for the rules`() {
-        val detektion = object : TestDetektion() {
-            override val findings: Map<RuleSet.Id, List<Finding2>> = mapOf(
-                RuleSet.Id("Style") to listOf(
-                    createFinding("ValCouldBeVar")
-                ),
-                RuleSet.Id("empty") to listOf(
-                    createFinding("EmptyBody"),
-                    createFinding("EmptyIf")
-                )
-            )
-        }
+        val detektion = TestDetektion(
+            createFinding(createRuleInfo("ValCouldBeVar", "Style")),
+            createFinding(createRuleInfo("EmptyBody", "empty")),
+            createFinding(createRuleInfo("EmptyIf", "empty")),
+        )
 
         val result = mdReport.render(detektion)
         assertThat(result).contains("[Documentation](https://detekt.dev/docs/rules/style#valcouldbevar)")
@@ -101,10 +95,7 @@ class MdOutputReportSpec {
     @Test
     fun `asserts that the generated HTML is the same even if we change the order of the findings`() {
         val findings = findings()
-        val reversedFindings = findings
-            .reversedArray()
-            .map { (section, findings) -> section to findings.asReversed() }
-            .toTypedArray()
+        val reversedFindings = findings.reversedArray()
 
         val firstDetektion = createMdDetektion(*findings)
         val secondDetektion = createMdDetektion(*reversedFindings)
@@ -170,13 +161,9 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     )
 
     return createMdDetektion(
-        "Section-1" to listOf(
-            createFinding("id_a", entity1, "Message finding 1"),
-            createFinding("id_a", entity2, "Message finding 2")
-        ),
-        "Section-2" to listOf(
-            createFinding("id_b", entity3, "Message finding 3")
-        )
+        createFinding(createRuleInfo("id_a", "Section-1"), entity1, "Message finding 1"),
+        createFinding(createRuleInfo("id_a", "Section-1"), entity2, "Message finding 2"),
+        createFinding(createRuleInfo("id_b", "Section-2"), entity3, "Message finding 3"),
     ).also {
         it.putUserData(complexityKey, 10)
         it.putUserData(CognitiveComplexity.KEY, 10)
@@ -187,35 +174,29 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     }
 }
 
-private fun createMdDetektion(vararg findingPairs: Pair<String, List<Finding2>>): Detektion {
-    return object : TestDetektion(
+private fun createMdDetektion(vararg findings: Finding2): Detektion {
+    return TestDetektion(
+        *findings,
         metrics = listOf(ProjectMetric("M1", 10_000), ProjectMetric("M2", 2))
-    ) {
-        override val findings: Map<RuleSet.Id, List<Finding2>> = findingPairs.toMap()
-            .mapKeys { (key, _) -> RuleSet.Id(key) }
-    }
+    )
 }
 
-private fun findings(): Array<Pair<String, List<Finding2>>> {
+private fun findings(): Array<Finding2> {
     val entity1 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 5))
     val entity2 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 22 to 2))
     val entity3 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 2))
     val entity4 = createEntity(location = createLocation("src/main/com/sample/Sample2.kt", position = 1 to 1))
 
     return arrayOf(
-        "RuleSet1" to listOf(
-            createFinding("id_a", entity1),
-            createFinding("id_a", entity2),
-            createFinding("id_a", entity3),
-            createFinding("id_a", entity4),
-            createFinding("id_b", entity2),
-            createFinding("id_b", entity1),
-            createFinding("id_b", entity4)
-        ),
-        "RuleSet2" to listOf(
-            createFinding("id_b", entity3),
-            createFinding("id_c", entity1),
-            createFinding("id_c", entity2)
-        )
+        createFinding(createRuleInfo("id_a", "RuleSet1"), entity1),
+        createFinding(createRuleInfo("id_a", "RuleSet1"), entity2),
+        createFinding(createRuleInfo("id_a", "RuleSet1"), entity3),
+        createFinding(createRuleInfo("id_a", "RuleSet1"), entity4),
+        createFinding(createRuleInfo("id_b", "RuleSet1"), entity2),
+        createFinding(createRuleInfo("id_b", "RuleSet1"), entity1),
+        createFinding(createRuleInfo("id_b", "RuleSet1"), entity4),
+        createFinding(createRuleInfo("id_b", "RuleSet2"), entity3),
+        createFinding(createRuleInfo("id_c", "RuleSet2"), entity1),
+        createFinding(createRuleInfo("id_c", "RuleSet2"), entity2),
     )
 }

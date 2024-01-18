@@ -8,15 +8,15 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
 
-open class TestDetektion(
+class TestDetektion(
     vararg findings: Finding2,
     metrics: List<ProjectMetric> = emptyList(),
     notifications: List<Notification> = emptyList(),
 ) : Detektion, UserDataHolderBase() {
 
     override val findings: Map<RuleSet.Id, List<Finding2>> = findings.groupBy { it.ruleInfo.ruleSetId }
-    final override val metrics: Collection<ProjectMetric> get() = _metrics
-    final override val notifications: List<Notification> get() = _notifications
+    override val metrics: Collection<ProjectMetric> get() = _metrics
+    override val notifications: List<Notification> get() = _notifications
 
     private val _metrics = metrics.toMutableList()
     private val _notifications = notifications.toMutableList()
