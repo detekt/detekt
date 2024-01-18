@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
 import dev.drewhamilton.poko.Poko
-import io.gitlab.arturbosch.detekt.api.Config.Companion.SEVERITY_KEY
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import io.gitlab.arturbosch.detekt.api.internal.validateIdentifier
 import org.jetbrains.kotlin.psi.KtFile
@@ -113,23 +112,6 @@ open class Rule(
      */
     open fun visitCondition(root: KtFile): Boolean = !root.isSuppressedBy(ruleId, aliases, ruleSetId)
 
-    private fun Finding.updateWithComputedSeverity() {
-        (this as? CodeSmell)?.internalSeverity = computeSeverity()
-    }
-
-    /**
-     * Compute severity in the priority order:
-     * - Severity of the rule
-     * - Severity of the parent ruleset
-     * - Default severity
-     */
-    private fun computeSeverity(): Severity {
-        val configValue: String = config.valueOrNull(SEVERITY_KEY)
-            ?: config.parent?.valueOrNull(SEVERITY_KEY)
-            ?: Severity.DEFAULT.name
-        return Severity.fromString(configValue)
-    }
-
     /**
      * Reports a single code smell finding.
      *
@@ -137,7 +119,6 @@ open class Rule(
      * by @Suppress or @SuppressWarnings annotations.
      */
     fun report(finding: Finding) {
-        finding.updateWithComputedSeverity()
         val ktElement = finding.entity.ktElement
         if (ktElement == null || !ktElement.isSuppressedBy(finding.issue.id, aliases, ruleSetId)) {
             findings.add(finding)

@@ -17,16 +17,11 @@ open class CodeSmell(
         require(message.isNotBlank()) { "The message should not be empty" }
     }
 
-    internal var internalSeverity: Severity? = null
-    override val severity: Severity
-        get() = internalSeverity ?: super.severity
-
     override fun toString(): String {
         return "CodeSmell(issue=$issue, " +
             "entity=$entity, " +
             "message=$message, " +
-            "references=$references, " +
-            "severity=$severity)"
+            "references=$references)"
     }
 }
 
@@ -53,7 +48,6 @@ open class CorrectableCodeSmell(
             "issue=$issue, " +
             "entity=$entity, " +
             "message=$message, " +
-            "references=$references, " +
-            "severity=$severity)"
+            "references=$references)"
     }
 }

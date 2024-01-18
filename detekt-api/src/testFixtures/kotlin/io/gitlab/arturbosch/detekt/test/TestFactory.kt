@@ -95,6 +95,6 @@ private data class Finding2Impl(
     override val entity: Entity,
     override val message: String,
     override val references: List<Entity> = emptyList(),
-    override val severity: Severity = Severity.DEFAULT,
+    override val severity: Severity = Severity.Error,
     override val autoCorrectEnabled: Boolean = false,
 ) : Finding2

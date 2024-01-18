@@ -10,8 +10,6 @@ interface Finding : HasEntity {
     val issue: Issue
     val references: List<Entity>
     val message: String
-    val severity: Severity
-        get() = Severity.DEFAULT
 }
 
 /**

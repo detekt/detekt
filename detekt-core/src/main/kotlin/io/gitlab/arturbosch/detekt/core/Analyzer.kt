@@ -141,7 +141,8 @@ internal class Analyzer(
                     val mappedRuleSet = checkNotNull(ruleIdsToRuleSetIds[finding.issue.id]) {
                         "Mapping for '${finding.issue.id}' expected."
                     }
-                    result.computeIfAbsent(mappedRuleSet) { mutableListOf() }.add(finding.toFinding2())
+                    result.computeIfAbsent(mappedRuleSet) { mutableListOf() }
+                        .add(finding.toFinding2(rule.computeSeverity()))
                 }
             }
         }
@@ -222,7 +223,7 @@ internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config = wi
     return declaredConfig ?: getDefaultConfiguration()
 }
 
-private fun Finding.toFinding2(): Finding2 {
+private fun Finding.toFinding2(severity: Severity): Finding2 {
     return when (this) {
         is CorrectableCodeSmell -> Finding2Impl(issue, entity, message, references, severity, autoCorrectEnabled)
 
@@ -240,3 +241,22 @@ private data class Finding2Impl(
     override val severity: Severity,
     override val autoCorrectEnabled: Boolean = false,
 ) : Finding2
+
+/**
+ * Compute severity in the priority order:
+ * - Severity of the rule
+ * - Severity of the parent ruleset
+ * - Default severity
+ */
+private fun Rule.computeSeverity(): Severity {
+    val configValue: String = config.valueOrNull(Config.SEVERITY_KEY)
+        ?: config.parent?.valueOrNull(Config.SEVERITY_KEY)
+        ?: return Severity.Error
+    return parseToSeverity(configValue)
+}
+
+internal fun parseToSeverity(severity: String): Severity {
+    val lowercase = severity.lowercase()
+    return Severity.entries.find { it.name.lowercase() == lowercase }
+        ?: error("$severity is not a valid Severity. Allowed values are ${Severity.entries}")
+}

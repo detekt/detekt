@@ -15,17 +15,14 @@ class CorrectableCodeSmellSpec {
             entity = createEntity(location = createLocation("TestFile.kt")),
             message = "TestMessage",
             autoCorrectEnabled = true
-        ) {
-            override val severity: Severity
-                get() = Severity.Error
-        }
+        ) {}
 
         assertThat(codeSmell.toString()).isEqualTo(
             "CorrectableCodeSmell(autoCorrectEnabled=true, issue=Issue(id='TestSmell'), " +
                 "entity=Entity(name=TestEntity, signature=TestEntitySignature, " +
                 "location=Location(source=1:1, endSource=1:1, text=0:0, " +
                 "filePath=FilePath(absolutePath=TestFile.kt, basePath=null, relativePath=null)), " +
-                "ktElement=null), message=TestMessage, references=[], severity=Error)"
+                "ktElement=null), message=TestMessage, references=[])"
         )
     }
 }
