@@ -16,7 +16,6 @@ class TxtOutputReport : BuiltInOutputReport, OutputReport() {
 
     override fun render(detektion: Detektion): String {
         return detektion.findings
-            .flatMap { it.value }
             .ifEmpty { return "" }
             .joinToString("\n", postfix = "\n") { it.compactWithSignature() }
     }
