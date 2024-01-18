@@ -15,5 +15,5 @@ class ComplexityMetric(detektion: Detektion) {
     val sloc = detektion.getUserData(sourceLinesKey)
     val lloc = detektion.getUserData(logicalLinesKey)
     val cloc = detektion.getUserData(commentLinesKey)
-    val findingsCount = detektion.findings.values.sumOf { it.size }
+    val findingsCount = detektion.findings.size
 }

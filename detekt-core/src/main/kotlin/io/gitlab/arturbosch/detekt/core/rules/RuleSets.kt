@@ -1,18 +1,8 @@
 package io.gitlab.arturbosch.detekt.core.rules
 
 import io.github.detekt.tooling.api.spec.RulesSpec
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
-
-fun associateRuleIdsToRuleSetIds(ruleSets: List<RuleSet>): Map<Rule.Id, RuleSet.Id> {
-    return ruleSets
-        .flatMap { ruleSet ->
-            ruleSet.rules.map { (ruleId, _) -> ruleId to ruleSet.id }
-        }
-        .toMap()
-}
 
 fun ProcessingSettings.createRuleProviders(): List<RuleSetProvider> = when (val runPolicy = spec.rulesSpec.runPolicy) {
     RulesSpec.RunPolicy.NoRestrictions -> RuleSetLocator(this).load()

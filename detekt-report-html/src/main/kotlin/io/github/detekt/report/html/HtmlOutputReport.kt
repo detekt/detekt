@@ -85,16 +85,13 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         }
     }
 
-    private fun renderFindings(findings: Map<RuleSet.Id, List<Finding2>>) = createHTML().div {
-        val total = findings.values
-            .asSequence()
-            .map { it.size }
-            .fold(0) { a, b -> a + b }
+    private fun renderFindings(findings: List<Finding2>) = createHTML().div {
+        val total = findings.count()
 
         text("Total: %,d".format(Locale.ROOT, total))
 
         findings
-            .filter { it.value.isNotEmpty() }
+            .groupBy { it.ruleInfo.ruleSetId }
             .toList()
             .sortedBy { (group, _) -> group.value }
             .forEach { (group, groupFindings) ->

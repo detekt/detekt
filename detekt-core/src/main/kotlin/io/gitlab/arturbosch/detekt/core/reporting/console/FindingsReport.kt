@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
 import io.gitlab.arturbosch.detekt.api.Finding2
-import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.reporting.printFindings
 
 /**
@@ -12,7 +11,7 @@ class FindingsReport : AbstractFindingsReport() {
 
     override val id: String = "FindingsReport"
 
-    override fun render(findings: Map<RuleSet.Id, List<Finding2>>): String {
-        return printFindings(findings.mapKeys { (key, _) -> key.value })
+    override fun render(findings: List<Finding2>): String {
+        return printFindings(findings.groupBy { it.ruleInfo.ruleSetId }.mapKeys { (key, _) -> key.value })
     }
 }
