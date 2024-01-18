@@ -43,15 +43,13 @@ internal class Analyzer(
 
         val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
         val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
-        val findingsPerFile: FindingsResult =
-            if (settings.spec.executionSpec.parallelAnalysis) {
-                runAsync(ktFiles, bindingContext, compilerResources)
-            } else {
-                runSync(ktFiles, bindingContext, compilerResources)
-            }
-
         if (bindingContext == BindingContext.EMPTY) {
             warnAboutEnabledRequiresTypeResolutionRules()
+        }
+        val findingsPerFile: FindingsResult = if (settings.spec.executionSpec.parallelAnalysis) {
+            runAsync(ktFiles, bindingContext, compilerResources)
+        } else {
+            runSync(ktFiles, bindingContext, compilerResources)
         }
 
         val findingsPerRuleSet = HashMap<RuleSet.Id, List<Finding2>>()

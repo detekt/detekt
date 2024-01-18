@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import java.util.concurrent.CompletionException
 import kotlin.io.path.Path
 
 @KotlinCoreEnvironmentTest
@@ -45,9 +44,8 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             )
             val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
 
-            assertThatThrownBy {
-                settings.use { analyzer.run(listOf(compileForTest(testFile))) }
-            }.isInstanceOf(IllegalStateException::class.java)
+            assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
+                .isInstanceOf(IllegalStateException::class.java)
         }
 
         @Test
@@ -72,8 +70,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
-                .isInstanceOf(CompletionException::class.java)
-                .hasCauseInstanceOf(IllegalStateException::class.java)
+                .isInstanceOf(IllegalStateException::class.java)
         }
     }
 
