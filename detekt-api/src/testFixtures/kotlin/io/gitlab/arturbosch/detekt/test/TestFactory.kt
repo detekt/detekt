@@ -18,21 +18,44 @@ fun createFinding(
     message: String = "TestMessage",
     severity: Severity = Severity.Error,
     autoCorrectEnabled: Boolean = false,
-): Finding2 = Finding2Impl(
-    ruleInfo = Finding2Impl.RuleInfo(Rule.Id(ruleName), RuleSet.Id("ruleSetId"), "Description $ruleName"),
+): Finding2 = createFinding(
+    ruleInfo = createRuleInfo(ruleName),
     entity = entity,
     message = message,
     severity = severity,
     autoCorrectEnabled = autoCorrectEnabled,
-    references = emptyList(),
+)
+
+fun createFinding(
+    ruleInfo: Finding2.RuleInfo,
+    entity: Entity = createEntity(),
+    message: String = "TestMessage",
+    severity: Severity = Severity.Error,
+    autoCorrectEnabled: Boolean = false,
+): Finding2 = Finding2Impl(
+    ruleInfo = ruleInfo,
+    entity = entity,
+    message = message,
+    severity = severity,
+    autoCorrectEnabled = autoCorrectEnabled,
+)
+
+fun createRuleInfo(
+    id: String = "TestSmell",
+    ruleSetId: String = "RuleSet$id",
+    description: String = "Description $id",
+): Finding2.RuleInfo = Finding2Impl.RuleInfo(
+    id = Rule.Id(id),
+    ruleSetId = RuleSet.Id(ruleSetId),
+    description = description
 )
 
 fun createFindingForRelativePath(
-    ruleName: String = "TestSmell",
+    ruleInfo: Finding2.RuleInfo,
     basePath: String = "/Users/tester/detekt/",
     relativePath: String = "TestFile.kt"
 ): Finding2 = Finding2Impl(
-    ruleInfo = Finding2Impl.RuleInfo(Rule.Id(ruleName), RuleSet.Id("ruleSetId"), "Description $ruleName"),
+    ruleInfo = ruleInfo,
     entity = Entity(
         name = "TestEntity",
         signature = "TestEntitySignature",
@@ -73,7 +96,7 @@ fun createLocation(
 )
 
 private data class Finding2Impl(
-    override val ruleInfo: RuleInfo,
+    override val ruleInfo: Finding2.RuleInfo,
     override val entity: Entity,
     override val message: String,
     override val severity: Severity = Severity.Error,
