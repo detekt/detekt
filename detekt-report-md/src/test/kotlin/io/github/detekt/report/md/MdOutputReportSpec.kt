@@ -188,14 +188,11 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
 }
 
 private fun createMdDetektion(vararg findingPairs: Pair<String, List<Finding2>>): Detektion {
-    return object : TestDetektion() {
+    return object : TestDetektion(
+        metrics = listOf(ProjectMetric("M1", 10_000), ProjectMetric("M2", 2))
+    ) {
         override val findings: Map<RuleSet.Id, List<Finding2>> = findingPairs.toMap()
             .mapKeys { (key, _) -> RuleSet.Id(key) }
-
-        override val metrics: Collection<ProjectMetric> = listOf(
-            ProjectMetric("M1", 10_000),
-            ProjectMetric("M2", 2)
-        )
     }
 }
 
