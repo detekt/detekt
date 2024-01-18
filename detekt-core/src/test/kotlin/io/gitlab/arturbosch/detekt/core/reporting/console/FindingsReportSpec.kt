@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
 import io.gitlab.arturbosch.detekt.core.reporting.decolorized
 import io.gitlab.arturbosch.detekt.test.TestDetektion
-import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createFinding
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -68,8 +67,8 @@ class FindingsReportSpec {
         val detektion = object : TestDetektion() {
             override val findings: Map<RuleSet.Id, List<Finding2>> = mapOf(
                 RuleSet.Id("Ruleset") to listOf(
-                    createFinding("LongRule", createEntity(), longMessage),
-                    createFinding("MultilineRule", createEntity(), multilineMessage),
+                    createFinding("LongRule", message = longMessage),
+                    createFinding("MultilineRule", message = multilineMessage),
                 ),
             )
         }

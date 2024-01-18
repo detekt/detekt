@@ -119,11 +119,11 @@ class HtmlOutputReportSpec {
         val detektion = object : TestDetektion() {
             override val findings: Map<RuleSet.Id, List<Finding2>> = mapOf(
                 RuleSet.Id("Style") to listOf(
-                    createFinding("ValCouldBeVar", createEntity())
+                    createFinding("ValCouldBeVar")
                 ),
                 RuleSet.Id("empty") to listOf(
-                    createFinding("EmptyBody", createEntity()),
-                    createFinding("EmptyIf", createEntity())
+                    createFinding("EmptyBody"),
+                    createFinding("EmptyIf")
                 )
             )
         }
