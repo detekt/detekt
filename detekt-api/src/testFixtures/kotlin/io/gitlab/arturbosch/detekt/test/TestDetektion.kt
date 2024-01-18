@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.gitlab.arturbosch.detekt.api.RuleSet
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
 
@@ -14,7 +13,7 @@ class TestDetektion(
     notifications: List<Notification> = emptyList(),
 ) : Detektion, UserDataHolderBase() {
 
-    override val findings: Map<RuleSet.Id, List<Finding2>> = findings.groupBy { it.ruleInfo.ruleSetId }
+    override val findings: List<Finding2> = findings.toList()
     override val metrics: Collection<ProjectMetric> get() = _metrics
     override val notifications: List<Notification> get() = _notifications
 

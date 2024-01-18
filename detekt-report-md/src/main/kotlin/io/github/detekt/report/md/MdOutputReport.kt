@@ -119,16 +119,13 @@ private fun MarkdownContent.renderRule(rule: Rule.Id, group: RuleSet.Id, finding
     }
 }
 
-private fun MarkdownContent.renderFindings(findings: Map<RuleSet.Id, List<Finding2>>) {
-    val total = findings.values
-        .asSequence()
-        .map { it.size }
-        .fold(0) { a, b -> a + b }
+private fun MarkdownContent.renderFindings(findings: List<Finding2>) {
+    val total = findings.count()
 
     h2 { "Findings (%,d)".format(Locale.ROOT, total) }
 
     findings
-        .filter { it.value.isNotEmpty() }
+        .groupBy { it.ruleInfo.ruleSetId }
         .toList()
         .sortedBy { (group, _) -> group.value }
         .forEach { (group, groupFindings) ->
