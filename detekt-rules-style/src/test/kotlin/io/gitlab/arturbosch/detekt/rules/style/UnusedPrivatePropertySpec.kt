@@ -522,24 +522,6 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `does not report private constructor properties in annotated file`() {
-            val code = """
-                @file:Suppress("unused")
-                
-                class Test(
-                    private val foo: String,
-                    private val bar: String
-                ) {
-                    class InnerTest(
-                        private val baz: String
-                    ) {}
-                }
-            """.trimIndent()
-
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
         fun `does not report annotated private properties`() {
             val code = """
                 class Test {
@@ -582,24 +564,6 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         fun `does not report private properties in class with annotated outer class`() {
             val code = """
                 @Suppress("unused")
-                class Test {
-                    private val foo: String
-                    private val bar: String
-                
-                    class InnerTest {
-                        private val baz: String
-                    }
-                }
-            """.trimIndent()
-
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report private properties in annotated file`() {
-            val code = """
-                @file:Suppress("unused")
-                
                 class Test {
                     private val foo: String
                     private val bar: String

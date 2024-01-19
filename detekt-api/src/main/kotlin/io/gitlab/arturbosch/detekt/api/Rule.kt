@@ -73,11 +73,9 @@ open class Rule(
         findings.clear()
         this.bindingContext = bindingContext
         this.compilerResources = compilerResources
-        if (visitCondition(root)) {
-            preVisit(root)
-            visit(root)
-            postVisit(root)
-        }
+        preVisit(root)
+        visit(root)
+        postVisit(root)
         return findings
     }
 
@@ -104,13 +102,6 @@ open class Rule(
     protected open fun postVisit(root: KtFile) {
         // nothing to do by default
     }
-
-    /**
-     * Basic mechanism to decide if a rule should run or not.
-     *
-     * By default, any rule not suppressed by a [Suppress] annotation on file level should run.
-     */
-    open fun visitCondition(root: KtFile): Boolean = !root.isSuppressedBy(ruleId, aliases, ruleSetId)
 
     /**
      * Reports a single code smell finding.

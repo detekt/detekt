@@ -347,24 +347,6 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
 
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
-
-        @Test
-        fun `does not report private functions in annotated file`() {
-            val code = """
-                @file:Suppress("unused")
-                
-                class Test {
-                    private fun foo(): String = ""
-                    private fun bar(): String = ""
-                
-                    class InnerTest {
-                        private fun baz(): String = ""
-                    }
-                }
-            """.trimIndent()
-
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
     }
 
     @Nested

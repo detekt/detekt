@@ -16,6 +16,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
@@ -125,6 +126,7 @@ internal class Analyzer(
                     .filter { (_, config) -> config.isActiveOrDefault(false) }
                     .filter { (_, config) -> config.shouldAnalyzeFile(file) }
                     .map { (ruleProvider, config) -> ruleProvider(config) }
+                    .filter { rule -> !file.isSuppressedBy(rule.ruleId, rule.aliases, ruleSet.id) }
             }
             .filter { rule ->
                 bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
