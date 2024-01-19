@@ -15,27 +15,9 @@ class PackageNamingSpec {
     }
 
     @Test
-    fun `should ignore the issue by alias suppression - PackageName`() {
-        assertThat(
-            PackageNaming(Config.empty).compileAndLint(
-                """
-                    @file:Suppress("PackageName")
-                    package FOO.BAR
-                """.trimIndent()
-            )
-        ).isEmpty()
-    }
-
-    @Test
     fun `should ignore the issue by alias suppression - PackageDirectoryMismatch`() {
-        assertThat(
-            PackageNaming(Config.empty).compileAndLint(
-                """
-                    @file:Suppress("PackageDirectoryMismatch")
-                    package FOO.BAR
-                """.trimIndent()
-            )
-        ).isEmpty()
+        assertThat(PackageNaming(Config.empty).aliases)
+            .containsExactlyInAnyOrder("PackageDirectoryMismatch", "PackageName")
     }
 
     @Test
