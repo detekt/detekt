@@ -19,6 +19,7 @@ class DetektJvmSpec {
             apply<DetektPlugin>()
             repositories {
                 mavenCentral()
+                maven { it.url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
             }
             tasks.withType(Detekt::class.java).configureEach {
                 it.reports { reports ->

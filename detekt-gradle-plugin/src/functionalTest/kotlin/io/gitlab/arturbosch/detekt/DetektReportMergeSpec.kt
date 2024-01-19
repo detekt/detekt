@@ -16,7 +16,7 @@ class DetektReportMergeSpec {
             ${builder.gradlePlugins.reIndent()}
             
             allprojects {
-                ${builder.gradleRepositories.reIndent(1)}
+                ${builder.gradleRepositoriesKotlin.reIndent(1)}
             }
             
             val sarifReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
@@ -79,7 +79,7 @@ class DetektReportMergeSpec {
             ${builder.gradlePlugins.reIndent()}
             
             allprojects {
-                ${builder.gradleRepositories.reIndent(1)}
+                ${builder.gradleRepositoriesKotlin.reIndent(1)}
             }
             
             val xmlReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {

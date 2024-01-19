@@ -31,6 +31,7 @@ class DetektBasePluginSpec {
                 repositories {
                     mavenLocal()
                     mavenCentral()
+                    maven("https://oss.sonatype.org/content/repositories/snapshots")
                 }
             """.trimIndent(),
             dryRun = true,
@@ -67,6 +68,7 @@ class DetektBasePluginSpec {
                     mavenLocal()
                     mavenCentral()
                     google()
+                    maven("https://oss.sonatype.org/content/repositories/snapshots")
                 }
                 
                 android {
@@ -121,6 +123,7 @@ class DetektBasePluginSpec {
                     mavenLocal()
                     mavenCentral()
                     google()
+                    maven("https://oss.sonatype.org/content/repositories/snapshots")
                 }
                 
                 kotlin {

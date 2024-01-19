@@ -27,7 +27,7 @@ class DetektTaskMultiModuleSpec {
         val mainBuildFileContent: String = """
             ${builder.gradlePlugins.reIndent()}
             allprojects {
-                ${builder.gradleRepositories.reIndent(1)}
+                ${builder.gradleRepositoriesKotlin.reIndent(1)}
             }
             subprojects {
                 ${builder.gradleSubprojectsApplyPlugins.reIndent(1)}
@@ -71,7 +71,7 @@ class DetektTaskMultiModuleSpec {
             ${builder.gradlePlugins.reIndent()}
             
             allprojects {
-                ${builder.gradleRepositories.reIndent(1)}
+                ${builder.gradleRepositoriesKotlin.reIndent(1)}
                 ${builder.gradleSubprojectsApplyPlugins.reIndent(1)}
             }
         """.trimIndent()
@@ -109,7 +109,7 @@ class DetektTaskMultiModuleSpec {
             ${builder.gradlePlugins.reIndent()}
             
             allprojects {
-                ${builder.gradleRepositories.reIndent(1)}
+                ${builder.gradleRepositoriesKotlin.reIndent(1)}
                 ${builder.gradleSubprojectsApplyPlugins.reIndent(1)}
             
                 detekt {
@@ -157,7 +157,7 @@ class DetektTaskMultiModuleSpec {
             ${builder.gradlePlugins.reIndent()}
             
             allprojects {
-                ${builder.gradleRepositories.reIndent(1)}
+                ${builder.gradleRepositoriesKotlin.reIndent(1)}
                 ${builder.gradleSubprojectsApplyPlugins.reIndent(1)}
             
                 detekt {
