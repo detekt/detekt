@@ -34,6 +34,10 @@ class YamlConfig internal constructor(
         )
     }
 
+    override fun subConfigKeys(): Set<String> {
+        return properties.keys
+    }
+
     override fun <T : Any> valueOrDefault(key: String, default: T): T {
         val result = properties[key]
         @Suppress("UNCHECKED_CAST")

@@ -11,6 +11,55 @@ class AllRulesConfigSpec {
     private val emptyYamlConfig = yamlConfigFromContent("")
 
     @Nested
+    inner class ValueVerification {
+
+        @Test
+        fun verifyValue() {
+            val subject = AllRulesConfig(
+                originalConfig = yamlConfigFromContent(
+                    """
+                    style:
+                      MaxLineLength:
+                        maxLineLength: 100
+                    """.trimIndent()
+                ),
+                defaultConfig = emptyYamlConfig,
+            )
+
+            val subConfig = subject.subConfig("style")
+                .subConfig("MaxLineLength")
+            assertThat(subConfig.valueOrDefault("maxLineLength", 0)).isEqualTo(100)
+            assertThat(subConfig.valueOrNull<Int>("maxLineLength")).isEqualTo(100)
+        }
+
+        @Test
+        fun verifyValueOverride() {
+            val subject = AllRulesConfig(
+                originalConfig = yamlConfigFromContent(
+                    """
+                    style:
+                      MaxLineLength:
+                        maxLineLength: 100
+                    """.trimIndent()
+                ),
+                defaultConfig = yamlConfigFromContent(
+                    """
+                    style:
+                      MaxLineLength:
+                        maxLineLength: 120
+                    """.trimIndent()
+                ),
+            )
+
+            val actual = subject.subConfig("style")
+                .subConfig("MaxLineLength")
+                .valueOrDefault("maxLineLength", 0)
+
+            assertThat(actual).isEqualTo(100)
+        }
+    }
+
+    @Nested
     inner class ParentPath {
         private val rulesetId = "style"
         private val rulesetConfig = yamlConfigFromContent(
@@ -60,6 +109,16 @@ class AllRulesConfigSpec {
             )
             val actual = subject.subConfig("style").parent
             assertThat(actual).isEqualTo(subject)
+        }
+
+        @Test
+        fun `is the parent for all subConfig`() {
+            val subject = AllRulesConfig(
+                originalConfig = rulesetConfig,
+                defaultConfig = emptyYamlConfig,
+            )
+
+            assertThat(subject.subConfigKeys()).contains("style")
         }
     }
 

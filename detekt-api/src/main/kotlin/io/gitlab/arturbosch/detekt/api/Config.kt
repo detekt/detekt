@@ -25,6 +25,11 @@ interface Config {
     fun subConfig(key: String): Config
 
     /**
+     * Returns a set of all sub configuration keys.
+     */
+    fun subConfigKeys(): Set<String>
+
+    /**
      * Retrieves a sub configuration or value based on given key. If configuration property cannot be found
      * the specified default value is returned.
      */
@@ -59,6 +64,8 @@ interface Config {
             override val parent: Config = this
 
             override fun subConfig(key: String): Config = this
+
+            override fun subConfigKeys(): Set<String> = emptySet()
 
             override fun <T : Any> valueOrNull(key: String): T? = null
         }

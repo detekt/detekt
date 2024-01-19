@@ -20,6 +20,10 @@ class CompositeConfig(
     override fun subConfig(key: String): Config =
         CompositeConfig(lookFirst.subConfig(key), lookSecond.subConfig(key), this)
 
+    override fun subConfigKeys(): Set<String> {
+        return lookFirst.subConfigKeys() + lookSecond.subConfigKeys()
+    }
+
     override fun <T : Any> valueOrDefault(key: String, default: T): T {
         if (lookFirst.valueOrNull<T>(key) != null) {
             return lookFirst.valueOrDefault(key, default)

@@ -16,6 +16,10 @@ class DisabledAutoCorrectConfig(
 
     override fun subConfig(key: String): Config = DisabledAutoCorrectConfig(wrapped.subConfig(key), this)
 
+    override fun subConfigKeys(): Set<String> {
+        return wrapped.subConfigKeys()
+    }
+
     override fun <T : Any> valueOrDefault(key: String, default: T): T = when (key) {
         Config.AUTO_CORRECT_KEY -> false as T
         else -> wrapped.valueOrDefault(key, default)
