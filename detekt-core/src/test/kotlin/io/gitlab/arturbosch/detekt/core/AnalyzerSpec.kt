@@ -19,6 +19,8 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import java.util.concurrent.CompletionException
 import kotlin.io.path.Path
 
@@ -355,6 +357,33 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                         .flatten()
                         .isNotEmpty()
                 }
+        }
+    }
+
+    @Nested
+    inner class Suppress {
+        @ParameterizedTest
+        @ValueSource(strings = ["MaxLineLength", "detekt.MaxLineLength", "MLL", "custom", "all"])
+        fun `if suppressed the rule is not executed`(suppress: String) {
+            val config = yamlConfigFromContent(
+                """
+                    custom:
+                      MaxLineLength:
+                        active: true
+                        maxLineLength: 10
+                        aliases: ["MLL"]
+                """.trimIndent()
+            )
+            val code = """
+                @file:Suppress("$suppress")
+                
+                fun foo() = Unit
+            """.trimIndent()
+            val findings = createProcessingSettings(config = config).use { settings ->
+                Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
+                    .run(listOf(compileContentForTest(code)))
+            }
+            assertThat(findings).isEmpty()
         }
     }
 }
