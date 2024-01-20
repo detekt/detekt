@@ -66,10 +66,12 @@ class FakeKtElement(val psiFile: PsiFile) : KtElement {
 
     override fun canNavigateToSource(): Boolean = false
 
+    @Deprecated("Deprecated in PsiElement interface")
     override fun checkAdd(p0: PsiElement) {
         // no-op
     }
 
+    @Deprecated("Deprecated in PsiElement interface")
     override fun checkDelete() {
         // no-op
     }
