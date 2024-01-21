@@ -34,7 +34,7 @@ open class Rule(
     /**
      * List of rule ids which can optionally be used in suppress annotations to refer to this rule.
      */
-    val aliases: Set<String> get() = config.valueOrDefault("aliases", defaultRuleIdAliases)
+    val aliases: Set<String> get() = config.valueOrDefault("aliases", defaultRuleIdAliases.toList()).toSet()
 
     var bindingContext: BindingContext = BindingContext.EMPTY
     var compilerResources: CompilerResources? = null
