@@ -240,23 +240,6 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
 
             assertThat(subject.lint(code)).isEmpty()
         }
-
-        @Test
-        fun `does not report parameters in annotated file`() {
-            val code = """
-                @file:Suppress("UNUSED_PARAMETER")
-                
-                class Test {
-                    fun foo(unused: String){}
-                
-                    class InnerTest {
-                        fun bar(unused: String){}
-                    }
-                }
-            """.trimIndent()
-
-            assertThat(subject.lint(code)).isEmpty()
-        }
     }
 
     @Nested

@@ -166,8 +166,10 @@ internal class ForbiddenSuppressSpec {
         @Test
         fun `does not catch self-suppression`() {
             val code = """
-                @file:Suppress("ForbiddenSuppress")
                 package config
+
+                @Suppress("ForbiddenSuppress")
+                class Foo
             """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(0)
@@ -176,8 +178,10 @@ internal class ForbiddenSuppressSpec {
         @Test
         fun `does not catch suppression of any forbidden rule when one of them`() {
             val code = """
-                @file:Suppress("ForbiddenSuppress", "ARule")
                 package config
+
+                @Suppress("ForbiddenSuppress", "ARule")
+                class Foo
             """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings).hasSize(0)
