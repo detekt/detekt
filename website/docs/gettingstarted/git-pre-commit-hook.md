@@ -40,54 +40,13 @@ A special thanks goes to Mohit Sarveiya for providing this shell script.
 You can watch his excellent talk about **Static Code Analysis For Kotlin** on 
 [YouTube](https://www.youtube.com/watch?v=LT6m5_LO2DQ).
 
-## Only run on staged files - CLI
-
-It is also possible to use [the CLI](/docs/gettingstarted/cli) to create a hook that only runs on staged files. This has the advantage of speedier execution, by running on fewer files and avoiding the warm-up time of the gradle daemon.
-
-Please note, however, that a handful of checks requiring [type resolution](/docs/gettingstarted/type-resolution) will not work correctly with this approach. If you do adopt a partial hook, it is recommended that you still implement a full `detekt` check as part of your CI pipeline.
-
-This example has been put together using [pre-commit](https://pre-commit.com/), but the same principle can be applied to any kind of hook. 
-
-Hook definition in pre-commit:
-
-```yml
-- id: detekt
-  name: detekt check
-  description: Runs `detekt` on modified .kt files.
-  language: script
-  entry: detekt.sh
-  files: \.kt
-```
-
-Script `detekt.sh`:
-
-```bash
-#!/bin/bash
-
-echo "Running detekt check..."
-fileArray=($@)
-detektInput=$(IFS=,;printf  "%s" "${fileArray[*]}")
-echo "Input files: $detektInput"
-
-OUTPUT=$(detekt --input "$detektInput" 2>&1)
-EXIT_CODE=$?
-if [ $EXIT_CODE -ne 0 ]; then
-  echo $OUTPUT
-  echo "***********************************************"
-  echo "                 detekt failed                 "
-  echo " Please fix the above issues before committing "
-  echo "***********************************************"
-  exit $EXIT_CODE
-fi
-```
-
 ## Only run on staged files - Gradle
 
-If the CLI is not your cup of tea (you don't want to keep separate CLI binary set up, you want type resolution etc.), 
+If the CLI is not your cup of tea (you don't want to keep separate CLI binary set up, you want type resolution etc.),
 you can also configure Gradle detekt to only run on staged files.
 
-First, we need to declare `GitPreCommitFilesTask` task - a gradle task that will retrieve list of staged files 
-in a configuration-cache compatible way:   
+First, we need to declare `GitPreCommitFilesTask` task - a gradle task that will retrieve list of staged files
+in a configuration-cache compatible way:
 
 ```kotlin
 abstract class GitPreCommitFilesTask : DefaultTask() {
@@ -142,7 +101,7 @@ val gitPreCommitFileList = tasks.register<GitPreCommitFilesTask>("gitPreCommitFi
 }
 ```
 
-Then we need to configure `Detekt` task and change its `source` from the entire `src` foler (by default) to only set of 
+Then we need to configure `Detekt` task and change its `source` from the entire `src` foler (by default) to only set of
 files that have been staged by git:
 
 ```kotlin
@@ -179,6 +138,47 @@ Script `detekt.sh`:
 
 echo "Running detekt check..."
 OUTPUT=$(./gradlew -q --continue -Pprecommit=true detekt)
+EXIT_CODE=$?
+if [ $EXIT_CODE -ne 0 ]; then
+  echo $OUTPUT
+  echo "***********************************************"
+  echo "                 detekt failed                 "
+  echo " Please fix the above issues before committing "
+  echo "***********************************************"
+  exit $EXIT_CODE
+fi
+```
+
+## Only run on staged files - CLI
+
+It is also possible to use [the CLI](/docs/gettingstarted/cli) to create a hook that only runs on staged files. This has the advantage of speedier execution, by running on fewer files and avoiding the warm-up time of the gradle daemon.
+
+Please note, however, that a handful of checks requiring [type resolution](/docs/gettingstarted/type-resolution) will not work correctly with this approach. If you do adopt a partial hook, it is recommended that you still implement a full `detekt` check as part of your CI pipeline.
+
+This example has been put together using [pre-commit](https://pre-commit.com/), but the same principle can be applied to any kind of hook. 
+
+Hook definition in pre-commit:
+
+```yml
+- id: detekt
+  name: detekt check
+  description: Runs `detekt` on modified .kt files.
+  language: script
+  entry: detekt.sh
+  files: \.kt
+```
+
+Script `detekt.sh`:
+
+```bash
+#!/bin/bash
+
+echo "Running detekt check..."
+fileArray=($@)
+detektInput=$(IFS=,;printf  "%s" "${fileArray[*]}")
+echo "Input files: $detektInput"
+
+OUTPUT=$(detekt --input "$detektInput" 2>&1)
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 0 ]; then
   echo $OUTPUT
