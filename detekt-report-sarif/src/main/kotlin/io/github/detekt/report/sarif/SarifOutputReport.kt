@@ -7,6 +7,7 @@ import io.github.detekt.sarif4k.SarifSerializer
 import io.github.detekt.sarif4k.Tool
 import io.github.detekt.sarif4k.ToolComponent
 import io.github.detekt.sarif4k.Version
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.SetupContext
@@ -27,6 +28,7 @@ class SarifOutputReport : BuiltInOutputReport, OutputReport() {
     override val id: String = "sarif"
 
     private var basePath: String? = null
+    private var config: Config? = null
 
     override fun init(context: SetupContext) {
         this.basePath = context.getOrNull<Path>(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY)
@@ -35,9 +37,13 @@ class SarifOutputReport : BuiltInOutputReport, OutputReport() {
             ?.let {
                 if (!it.endsWith("/")) "$it/" else it
             }
+
+        this.config = config
     }
 
     override fun render(detektion: Detektion): String {
+        val config = config ?: Config.empty
+
         val version = whichDetekt()
         val sarifSchema210 = SarifSchema210(
             schema = "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
@@ -52,7 +58,7 @@ class SarifOutputReport : BuiltInOutputReport, OutputReport() {
                             informationURI = "https://detekt.dev",
                             language = "en",
                             name = "detekt",
-                            rules = toReportingDescriptors(),
+                            rules = toReportingDescriptors(config),
                             organization = "detekt",
                             semanticVersion = version,
                             version = version
