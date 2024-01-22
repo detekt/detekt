@@ -47,7 +47,7 @@ This has the advantage of speedier execution, by running on fewer files and
 of lowered false positives by not scanning files that are not yet ready to be commited. 
 
 First, we need to declare `GitPreCommitFilesTask` task - a gradle task that will retrieve list of staged files
-in a configuration-cache compatible way.
+in a configuration-cache compatible way. Paste following into your project's `build.gradle.kts`:
 
 ```kotlin
 abstract class GitPreCommitFilesTask : DefaultTask() {
@@ -103,7 +103,7 @@ val gitPreCommitFileList = tasks.register<GitPreCommitFilesTask>("gitPreCommitFi
 ```
 
 Then we need to configure `Detekt` task and change its `source` from the entire `src` foler (by default) to only set of
-files that have been staged by git:
+files that have been staged by git. Paste following into your project's `build.gradle.kts`::
 
 ```kotlin
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
