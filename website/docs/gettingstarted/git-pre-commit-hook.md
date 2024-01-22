@@ -40,7 +40,7 @@ A special thanks goes to Mohit Sarveiya for providing this shell script.
 You can watch his excellent talk about **Static Code Analysis For Kotlin** on 
 [YouTube](https://www.youtube.com/watch?v=LT6m5_LO2DQ).
 
-## Only run on staged files
+## Only run on staged files - CLI
 
 It is also possible to use [the CLI](/docs/gettingstarted/cli) to create a hook that only runs on staged files. This has the advantage of speedier execution, by running on fewer files and avoiding the warm-up time of the gradle daemon.
 
@@ -70,6 +70,115 @@ detektInput=$(IFS=,;printf  "%s" "${fileArray[*]}")
 echo "Input files: $detektInput"
 
 OUTPUT=$(detekt --input "$detektInput" 2>&1)
+EXIT_CODE=$?
+if [ $EXIT_CODE -ne 0 ]; then
+  echo $OUTPUT
+  echo "***********************************************"
+  echo "                 detekt failed                 "
+  echo " Please fix the above issues before committing "
+  echo "***********************************************"
+  exit $EXIT_CODE
+fi
+```
+
+## Only run on staged files - Gradle
+
+If the CLI is not your cup of tea (you don't want to keep separate CLI binary set up, you want type resolution etc.), 
+you can also configure Gradle detekt to only run on staged files.
+
+First, we need to declare `GitPreCommitFilesTask` task - a gradle task that will retrieve list of staged files 
+in a configuration-cache compatible way:   
+
+```kotlin
+abstract class GitPreCommitFilesTask : DefaultTask() {
+    @get:OutputFile
+    abstract val gitStagedListFile: RegularFileProperty
+
+    @TaskAction
+    fun taskAction() {
+        val gitProcess =
+            ProcessBuilder("git", "--no-pager", "diff", "--name-only", "--cached").start()
+        val error = gitProcess.errorStream.readBytes().decodeToString()
+        if (error.isNotBlank()) {
+            error("Git error : $error")
+        }
+
+        val gitVersion = gitProcess.inputStream.readBytes().decodeToString().trim()
+
+        gitStagedListFile.get().asFile.writeText(gitVersion)
+    }
+}
+
+fun GitPreCommitFilesTask.getStagedFiles(rootDir: File): Provider<List<File>> {
+    return gitStagedListFile.map {
+        try {
+            it.asFile.readLines()
+                .filter { it.isNotBlank() }
+                .map { File(rootDir, it) }
+        } catch (e: FileNotFoundException) {
+            // First build on configuration cache might fail
+            // see https://github.com/gradle/gradle/issues/19252
+            throw IllegalStateException(
+                "Failed to load git configuration. " +
+                    "Please disable configuration cache for the first commit and " +
+                    "try again",
+                e
+            )
+        }
+    }
+}
+
+val gitPreCommitFileList = tasks.register<GitPreCommitFilesTask>("gitPreCommitFileList") {
+    val targetFile = File(
+        project.layout.buildDirectory.asFile.get(),
+        "intermediates/gitPreCommitFileList/output"
+    )
+
+    targetFile.also {
+        it.parentFile.mkdirs()
+        gitStagedListFile.set(it)
+    }
+    outputs.upToDateWhen { false }
+}
+```
+
+Then we need to configure `Detekt` task and change its `source` from the entire `src` foler (by default) to only set of 
+files that have been staged by git:
+
+```kotlin
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    if (project.hasProperty("precommit")) {
+        dependsOn(gitPreCommitFileList)
+
+        val rootDir = project.rootDir
+        val projectDir = projectDir
+
+        val fileCollection = files()
+
+        setSource(
+            gitPreCommitFileList.flatMap { task ->
+                task.getStagedFiles(rootDir)
+                    .map { stagedFiles ->
+                        val stagedFilesFromThisProject = stagedFiles
+                            .filter { it.startsWith(projectDir) }
+
+                        fileCollection.setFrom(*stagedFilesFromThisProject.toTypedArray())
+
+                        fileCollection.asFileTree
+                    }
+            }
+        )
+    }
+}
+```
+
+Script `detekt.sh`:
+
+```bash
+#!/bin/bash
+
+echo "Running detekt check..."
+OUTPUT=$(./gradlew -q --continue -Pprecommit=true detekt)
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 0 ]; then
   echo $OUTPUT
