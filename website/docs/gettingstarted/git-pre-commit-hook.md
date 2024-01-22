@@ -132,22 +132,13 @@ tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
 }
 ```
 
-Script `detekt.sh`:
+Finally, we need to add `-Pprecommit=true` to the pre-commit script to tell Gradle to run detekt in "pre-commit mode".
+For example, from above `detekt.sh` 
 
 ```bash
-#!/bin/bash
-
-echo "Running detekt check..."
-OUTPUT=$(./gradlew -q --continue -Pprecommit=true detekt)
-EXIT_CODE=$?
-if [ $EXIT_CODE -ne 0 ]; then
-  echo $OUTPUT
-  echo "***********************************************"
-  echo "                 detekt failed                 "
-  echo " Please fix the above issues before committing "
-  echo "***********************************************"
-  exit $EXIT_CODE
-fi
+...
+./gradlew -Pprecommit=true detekt > $OUTPUT
+...
 ```
 
 ## Only run on staged files - CLI
