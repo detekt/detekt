@@ -16,6 +16,17 @@ class SarifReportMergerSpec {
         val expectedOutput = resourceAsFile("output.sarif.json")
         assertThat(output.readText()).isEqualToNormalizingNewlines(expectedOutput.readText())
     }
+
+    @Test
+    fun `merges inputs from different tools into multiple runs`() {
+        val input1 = resourceAsFile("input_1.sarif.json")
+        val input2 = resourceAsFile("input_2_different_tool.sarif.json")
+        val output = File.createTempFile("output", "json")
+        SarifReportMerger.merge(listOf(input1, input2), output)
+
+        val expectedOutput = resourceAsFile("output_different_tool.sarif.json")
+        assertThat(output.readText()).isEqualToNormalizingNewlines(expectedOutput.readText())
+    }
 }
 
 internal object Resources
