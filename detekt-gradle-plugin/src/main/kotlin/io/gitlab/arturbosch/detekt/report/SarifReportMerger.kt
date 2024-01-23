@@ -20,7 +20,7 @@ internal object SarifReportMerger {
 
         val mergedRunsByTool = runsByTool.mapValues { (_, runs) ->
             val mergedResults = runs.flatMap { it.results.orEmpty() }
-            val mergedRules = runs.flatMap { it.tool.driver.rules.orEmpty() }
+            val mergedRules = runs.flatMap { it.tool.driver.rules.orEmpty() }.distinctBy { it.id }
             
             runs[0].apply { 
                 results = mergedResults
