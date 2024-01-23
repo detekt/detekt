@@ -83,7 +83,14 @@
                     "name": "detekt",
                     "organization": "detekt",
                     "rules": [
-                        
+                        {
+                            "helpUri": "https://detekt.dev/potential-bugs.html#avoidreferentialequality",
+                            "id": "detekt.potential-bugs.AvoidReferentialEquality",
+                            "name": "AvoidReferentialEquality",
+                            "shortDescription": {
+                                "text": "Avoid using referential equality and prefer to use referential equality checks instead."
+                            }
+                        }
                     ],
                     "semanticVersion": "1.0.0",
                     "version": "1.0.0"

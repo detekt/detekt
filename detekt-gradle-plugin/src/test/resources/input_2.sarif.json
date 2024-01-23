@@ -83,6 +83,14 @@
           "name": "detekt",
           "organization": "detekt",
           "rules": [
+            {
+              "helpUri": "https://detekt.dev/potential-bugs.html#deprecation",
+              "id": "detekt.potential-bugs.Deprecation",
+              "name": "Deprecation",
+              "shortDescription": {
+                "text": "Deprecated elements should not be used."
+              }
+            }
           ],
           "semanticVersion": "1.0.0",
           "version": "1.0.0"

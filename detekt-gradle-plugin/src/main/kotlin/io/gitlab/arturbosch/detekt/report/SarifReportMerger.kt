@@ -20,7 +20,12 @@ internal object SarifReportMerger {
 
         val mergedRunsByTool = runsByTool.mapValues { (_, runs) ->
             val mergedResults = runs.flatMap { it.results.orEmpty() }
-            runs[0].apply { results = mergedResults }
+            val mergedRules = runs.flatMap { it.tool.driver.rules.orEmpty() }
+            
+            runs[0].apply { 
+                results = mergedResults
+                tool.driver.rules = mergedRules
+            }
         }
 
         val mergedSarif = sarifs[0].apply { this.runs = mergedRunsByTool.values.toList() }
@@ -54,3 +59,14 @@ private val JsonObject.driver: JsonObject
 private val JsonObject.fullName: String
     @Suppress("UNCHECKED_CAST")
     get() = this["fullName"] as String
+
+private val JsonObject.id: String
+    @Suppress("UNCHECKED_CAST")
+    get() = this["id"] as String
+
+private var JsonObject.rules: List<JsonObject>?
+    @Suppress("UNCHECKED_CAST")
+    get() = this["rules"] as List<JsonObject>?
+    set(value) {
+        this["rules"] = value
+    }
