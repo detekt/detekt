@@ -13,7 +13,6 @@ val detektPublication = "DetektPublication"
 
 plugins {
     id("module")
-    alias(libs.plugins.gradleVersions)
     alias(libs.plugins.shadow)
     alias(libs.plugins.download)
 }
