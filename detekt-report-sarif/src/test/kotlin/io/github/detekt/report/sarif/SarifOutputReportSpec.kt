@@ -6,6 +6,8 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleSet
+import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
@@ -169,6 +171,11 @@ private fun constrainRegion(startLine: Int, startColumn: Int, endLine: Int, endC
       "startLine": $startLine
     }
 """.trimIndent()
+
+class TestProvider : RuleSetProvider {
+    override val ruleSetId = RuleSet.Id("test")
+    override fun instance(): RuleSet = RuleSet(ruleSetId, listOf(::TestRule))
+}
 
 class TestRule(config: Config = Config.empty) : Rule(config, "") {
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
