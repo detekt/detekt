@@ -49,7 +49,7 @@ kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.13.2" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 download = { id = "de.undercouch.download", version = "5.5.0" }
-gradleVersions = { id = "com.github.ben-manes.versions", version = "0.50.0" }
+gradleVersions = { id = "com.github.ben-manes.versions", version = "0.51.0" }
 pluginPublishing = { id = "com.gradle.plugin-publish", version = "1.2.1" }
 poko = { id = "dev.drewhamilton.poko", version.ref = "poko" }
 nexusPublish = { id = "io.github.gradle-nexus.publish-plugin", version = "1.3.0" }
