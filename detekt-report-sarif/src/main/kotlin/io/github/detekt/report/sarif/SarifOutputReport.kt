@@ -28,7 +28,7 @@ class SarifOutputReport : BuiltInOutputReport, OutputReport() {
     override val id: String = "sarif"
 
     private var basePath: String? = null
-    private var config: Config? = null
+    private lateinit var config: Config
 
     override fun init(context: SetupContext) {
         this.basePath = context.getOrNull<Path>(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY)
@@ -42,8 +42,6 @@ class SarifOutputReport : BuiltInOutputReport, OutputReport() {
     }
 
     override fun render(detektion: Detektion): String {
-        val config = config ?: Config.empty
-
         val version = whichDetekt()
         val sarifSchema210 = SarifSchema210(
             schema = "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
