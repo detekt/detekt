@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
@@ -17,9 +18,11 @@ import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.createFinding
 import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
+import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.junit.jupiter.api.Test
+import java.net.URI
 import kotlin.io.path.Path
 import kotlin.io.path.absolutePathString
 
@@ -38,6 +41,37 @@ class SarifOutputReportSpec {
             .render(result)
 
         val expectedReport = readResourceContent("vanilla.sarif.json")
+            .replace("<PREFIX>", Path(System.getProperty("user.dir")).toUri().toString())
+
+        assertThat(report).isEqualToIgnoringWhitespace(expectedReport)
+    }
+
+    @Test
+    fun `renders multiple issues with rule set to warning by default`() {
+        val result = TestDetektion(
+            createFinding(ruleName = "TestSmellA", severity = Severity.Error),
+            createFinding(ruleName = "TestSmellB", severity = Severity.Warning),
+            createFinding(ruleName = "TestSmellC", severity = Severity.Info)
+        )
+
+        val testConfig = yamlConfig("config_with_rule_set_to_warning.yml")
+
+        val report = SarifOutputReport()
+            .apply {
+                init(object : SetupContext {
+                    override val configUris: Collection<URI> = emptyList()
+                    override val config: Config = testConfig
+                    override val outputChannel: Appendable = StringBuilder()
+                    override val errorChannel: Appendable = StringBuilder()
+                    override val properties: MutableMap<String, Any?> = HashMap()
+                    override fun register(key: String, value: Any) {
+                        properties[key] = value
+                    }
+                })
+            }
+            .render(result)
+
+        val expectedReport = readResourceContent("rule_warning.sarif.json")
             .replace("<PREFIX>", Path(System.getProperty("user.dir")).toUri().toString())
 
         assertThat(report).isEqualToIgnoringWhitespace(expectedReport)

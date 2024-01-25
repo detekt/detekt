@@ -38,7 +38,7 @@ class SarifOutputReport : BuiltInOutputReport, OutputReport() {
                 if (!it.endsWith("/")) "$it/" else it
             }
 
-        this.config = config
+        this.config = context.config
     }
 
     override fun render(detektion: Detektion): String {

@@ -18,8 +18,9 @@ internal fun toReportingDescriptors(config: Config): List<ReportingDescriptor> {
     val sets = ServiceLoader.load(RuleSetProvider::class.java, SarifOutputReport::class.java.classLoader)
         .map { it.instance() }
     val ruleSetIdAndRules = sets.flatMap { ruleSet ->
-        ruleSet.rules.map { (_, provider) ->
-            val rule = provider(config)
+        val ruleSetConfig = config.subConfig(ruleSet.id.value)
+        ruleSet.rules.map { (id, provider) ->
+            val rule = provider(ruleSetConfig.subConfig(id.value))
             val severity = rule.computeSeverity()
             RuleInfo(ruleSet.id, rule.issue, severity)
         }
