@@ -63,6 +63,9 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
     @Configuration("ignore overridden functions")
     private val ignoreOverridden: Boolean by config(false)
 
+    @Configuration("ignore functions annotated with these annotations")
+    private val ignoreAnnotatedFunctions: List<String> by config(emptyList())
+
     private var amountOfTopLevelFunctions: Int = 0
 
     override fun visitKtFile(file: KtFile) {
@@ -163,6 +166,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
         ignoreDeprecated && function.hasAnnotation(DEPRECATED) -> true
         ignorePrivate && function.isPrivate() -> true
         ignoreOverridden && function.isOverride() -> true
+        ignoreAnnotatedFunctions.any { function.hasAnnotation(it) } -> true
         else -> false
     }
 

@@ -14,6 +14,7 @@ private const val THRESHOLD_IN_ENUMS = "thresholdInEnums"
 private const val IGNORE_DEPRECATED = "ignoreDeprecated"
 private const val IGNORE_PRIVATE = "ignorePrivate"
 private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
+private const val IGNORE_ANNOTATED_FUNCTIONS = "ignoreAnnotatedFunctions"
 
 class TooManyFunctionsSpec {
     val rule = TooManyFunctions(
@@ -249,5 +250,62 @@ class TooManyFunctionsSpec {
             )
             assertThat(configuredRule.compileAndLint(code)).hasSize(1)
         }
+    }
+
+    @Test
+    fun `should not count functions included in ignoreAnnotatedFunctions`() {
+        val rule = TooManyFunctions(
+            TestConfig(
+                THRESHOLD_IN_CLASSES to "2",
+                THRESHOLD_IN_ENUMS to "2",
+                THRESHOLD_IN_FILES to "2",
+                THRESHOLD_IN_INTERFACES to "2",
+                THRESHOLD_IN_OBJECTS to "2",
+                IGNORE_ANNOTATED_FUNCTIONS to listOf("Preview"),
+            )
+        )
+
+        val code = """
+                annotation class Preview            
+                class A {
+                    fun a() = Unit
+                    @Preview
+                    fun b() = Unit
+                    @Preview
+                    fun c() = Unit
+                }
+        """.trimIndent()
+
+        val findings = rule.compileAndLint(code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `should trigger when there are too many non-annotated functions`() {
+        val rule = TooManyFunctions(
+            TestConfig(
+                THRESHOLD_IN_CLASSES to "2",
+                THRESHOLD_IN_ENUMS to "2",
+                THRESHOLD_IN_FILES to "2",
+                THRESHOLD_IN_INTERFACES to "2",
+                THRESHOLD_IN_OBJECTS to "2",
+                IGNORE_ANNOTATED_FUNCTIONS to listOf("Preview"),
+            )
+        )
+
+        val code = """
+                annotation class Preview            
+                class A {
+                    fun a() = Unit
+                    fun b() = Unit
+                    @Preview
+                    fun c() = Unit
+                    @Preview
+                    fun d() = Unit
+                }
+        """.trimIndent()
+
+        val findings = rule.compileAndLint(code)
+        assertThat(findings).hasSize(1)
     }
 }
