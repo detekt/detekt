@@ -77,7 +77,7 @@
           "rules": [
             {
               "defaultConfiguration": {
-                "level": "error"
+                "level": "warning"
               },
               "helpUri": "https://detekt.dev/test.html#testrule",
               "id": "detekt.test.TestRule",

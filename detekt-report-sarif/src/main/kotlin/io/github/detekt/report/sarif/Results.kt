@@ -17,7 +17,7 @@ internal fun toResults(detektion: Detektion): List<io.github.detekt.sarif4k.Resu
         findings.map { it.toResult(ruleSetId) }
     }
 
-private fun Severity.toResultLevel() = when (this) {
+internal fun Severity.toResultLevel() = when (this) {
     Severity.Error -> Level.Error
     Severity.Warning -> Level.Warning
     Severity.Info -> Level.Note

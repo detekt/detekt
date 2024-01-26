@@ -1,0 +1,3 @@
+test:
+  TestRule:
+    severity: 'warning'
