@@ -83,6 +83,17 @@
           "name": "detekt",
           "organization": "detekt",
           "rules": [
+            {
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://detekt.dev/test.html#testrule",
+              "id": "detekt.test.TestRule",
+              "name": "TestRule",
+              "shortDescription": {
+                "text": ""
+              }
+            }
           ],
           "semanticVersion": "1.16.0",
           "version": "1.16.0"

@@ -100,3 +100,15 @@ private fun FooLazyColumnPreview() { // Violation for FooLazyColumnPreview()
 #### Recommended configuration
 
 * Set `ignoreAnnotated` to `['Preview']`
+* 
+### TooManyFunctions for Compose
+
+See [TooManyFunctions](/docs/rules/complexity/#toomanyfunctions).
+
+detekt may flag files with many composable preview functions, i.e. those marked with `@Preview`, 
+as having too many functions. Since preview functions do not contribute to complexity, this might not be
+desired.
+
+#### Recommended configuration
+
+* Set `ignoreAnnotatedFunctions` to `['Preview']`

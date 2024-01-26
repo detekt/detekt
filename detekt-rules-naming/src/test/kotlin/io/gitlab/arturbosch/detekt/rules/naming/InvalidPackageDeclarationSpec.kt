@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
@@ -23,11 +24,9 @@ class InvalidPackageDeclarationSpec {
     }
 
     @Test
-    fun `should ignore the issue by alias suppression`() {
-        val ktFile = compileForTest(Path("src/test/resources/InvalidPackageDeclarationSpec/src/bar/suppressed.kt"))
-        val findings = InvalidPackageDeclaration(Config.empty).lint(ktFile)
-
-        assertThat(findings).isEmpty()
+    fun `has correct aliases`() {
+        assertThat(InvalidPackageDeclaration(Config.empty).aliases)
+            .containsExactlyInAnyOrder("PackageDirectoryMismatch")
     }
 
     @Test

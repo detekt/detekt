@@ -75,6 +75,13 @@ class YamlConfigSpec {
             val actual = subject.parent
             assertThat(actual).isEqualTo(config)
         }
+
+        @Test
+        fun `subConfigs returns all sub configs`() {
+            val subject = config.subConfig("style")
+            val actual = subject.subConfigKeys()
+            assertThat(actual).containsExactly("WildcardImport", "NoElseInWhenExpression", "MagicNumber")
+        }
     }
 
     @Nested

@@ -19,6 +19,10 @@ internal data class AllRulesConfig(
     override fun subConfig(key: String) =
         AllRulesConfig(originalConfig.subConfig(key), defaultConfig.subConfig(key), deprecatedRules, this)
 
+    override fun subConfigKeys(): Set<String> {
+        return originalConfig.subConfigKeys() + defaultConfig.subConfigKeys()
+    }
+
     override fun <T : Any> valueOrDefault(key: String, default: T): T {
         return when (key) {
             Config.ACTIVE_KEY -> if (isDeprecated()) false as T else originalConfig.valueOrDefault(key, true) as T

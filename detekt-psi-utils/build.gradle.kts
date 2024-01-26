@@ -7,8 +7,8 @@ dependencies {
     api(libs.kotlin.compilerEmbeddable)
 
     testImplementation(libs.assertj)
-    testImplementation(libs.mockk)
     testImplementation(projects.detektTest)
+    testImplementation(projects.detektTestUtils)
 }
 
 detekt {

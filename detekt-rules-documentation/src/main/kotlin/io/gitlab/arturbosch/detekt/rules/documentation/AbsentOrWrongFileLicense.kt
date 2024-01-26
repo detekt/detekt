@@ -29,11 +29,8 @@ class AbsentOrWrongFileLicense(config: Config) : Rule(
     @Configuration("whether or not the license header template is a regex template")
     private val licenseTemplateIsRegex: Boolean by config(DEFAULT_LICENSE_TEMPLATE_IS_REGEX)
 
-    override fun visitCondition(root: KtFile): Boolean =
-        super.visitCondition(root) && (root.hasLicenseHeader() || root.hasLicenseHeaderRegex())
-
     override fun visitKtFile(file: KtFile) {
-        if (!file.hasValidLicense()) {
+        if ((file.hasLicenseHeader() || file.hasLicenseHeaderRegex()) && !file.hasValidLicense()) {
             report(
                 CodeSmell(
                     issue,

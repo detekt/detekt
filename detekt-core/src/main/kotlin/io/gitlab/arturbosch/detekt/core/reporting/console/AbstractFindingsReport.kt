@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.core.reporting.console
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.reporting.filterEmptyIssues
 
@@ -25,5 +25,5 @@ abstract class AbstractFindingsReport : ConsoleReport() {
         return render(findings)
     }
 
-    abstract fun render(findings: Map<RuleSet.Id, List<Finding>>): String
+    abstract fun render(findings: Map<RuleSet.Id, List<Finding2>>): String
 }

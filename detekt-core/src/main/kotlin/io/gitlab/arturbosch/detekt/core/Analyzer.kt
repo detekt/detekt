@@ -2,14 +2,21 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.psi.absolutePath
 import io.github.detekt.tooling.api.spec.ProcessingSpec
+import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
+import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
@@ -18,17 +25,17 @@ import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.core.config.validation.DeprecatedRule
 import io.gitlab.arturbosch.detekt.core.config.validation.loadDeprecations
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
-import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
 import io.gitlab.arturbosch.detekt.core.suppressors.buildSuppressors
 import io.gitlab.arturbosch.detekt.core.tooling.getDefaultConfiguration
 import io.gitlab.arturbosch.detekt.core.util.isActiveOrDefault
+import io.gitlab.arturbosch.detekt.core.util.shouldAnalyzeFile
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 import kotlin.reflect.full.hasAnnotation
 
-private typealias FindingsResult = List<Map<RuleSet.Id, List<Finding>>>
+private typealias FindingsResult = List<Map<RuleSet.Id, List<Finding2>>>
 
 internal class Analyzer(
     private val settings: ProcessingSettings,
@@ -41,7 +48,7 @@ internal class Analyzer(
     fun run(
         ktFiles: Collection<KtFile>,
         bindingContext: BindingContext = BindingContext.EMPTY
-    ): Map<RuleSet.Id, List<Finding>> {
+    ): Map<RuleSet.Id, List<Finding2>> {
         val languageVersionSettings = settings.environment.configuration.languageVersionSettings
 
         val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
@@ -57,7 +64,7 @@ internal class Analyzer(
             warnAboutEnabledRequiresTypeResolutionRules()
         }
 
-        val findingsPerRuleSet = HashMap<RuleSet.Id, List<Finding>>()
+        val findingsPerRuleSet = HashMap<RuleSet.Id, List<Finding2>>()
         for (findings in findingsPerFile) {
             findingsPerRuleSet.mergeSmells(findings)
         }
@@ -84,7 +91,7 @@ internal class Analyzer(
         compilerResources: CompilerResources
     ): FindingsResult {
         val service = settings.taskPool
-        val tasks: TaskList<Map<RuleSet.Id, List<Finding>>?> = ktFiles.map { file ->
+        val tasks: TaskList<Map<RuleSet.Id, List<Finding2>>?> = ktFiles.map { file ->
             service.task {
                 processors.forEach { it.onProcess(file, bindingContext) }
                 val findings = analyze(file, bindingContext, compilerResources)
@@ -99,7 +106,7 @@ internal class Analyzer(
         file: KtFile,
         bindingContext: BindingContext,
         compilerResources: CompilerResources
-    ): Map<RuleSet.Id, List<Finding>> {
+    ): Map<RuleSet.Id, List<Finding2>> {
         val activeRuleSetsToRuleSetConfigs = providers.asSequence()
             .map { it to config.subConfig(it.ruleSetId.value) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
@@ -117,14 +124,16 @@ internal class Analyzer(
                     .asSequence()
                     .map { (ruleId, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleId.value) }
                     .filter { (_, config) -> config.isActiveOrDefault(false) }
+                    .filter { (_, config) -> config.shouldAnalyzeFile(file) }
                     .map { (ruleProvider, config) -> ruleProvider(config) }
+                    .filter { rule -> !file.isSuppressedBy(rule.ruleId, rule.aliases, ruleSet.id) }
             }
             .filter { rule ->
                 bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
             }
             .partition { rule -> rule.autoCorrect }
 
-        val result = HashMap<RuleSet.Id, MutableList<Finding>>()
+        val result = HashMap<RuleSet.Id, MutableList<Finding2>>()
 
         fun executeRules(rules: List<Rule>) {
             for (rule in rules) {
@@ -134,7 +143,8 @@ internal class Analyzer(
                     val mappedRuleSet = checkNotNull(ruleIdsToRuleSetIds[finding.issue.id]) {
                         "Mapping for '${finding.issue.id}' expected."
                     }
-                    result.computeIfAbsent(mappedRuleSet) { mutableListOf() }.add(finding)
+                    result.computeIfAbsent(mappedRuleSet) { mutableListOf() }
+                        .add(finding.toFinding2(rule.computeSeverity()))
                 }
             }
         }
@@ -173,7 +183,7 @@ private fun List<Finding>.filterSuppressedFindings(rule: Rule, bindingContext: B
     }
 }
 
-private fun MutableMap<RuleSet.Id, List<Finding>>.mergeSmells(other: Map<RuleSet.Id, List<Finding>>) {
+private fun MutableMap<RuleSet.Id, List<Finding2>>.mergeSmells(other: Map<RuleSet.Id, List<Finding2>>) {
     for ((key, findings) in other.entries) {
         merge(key, findings) { f1, f2 -> f1.plus(f2) }
     }
@@ -213,4 +223,42 @@ internal fun ProcessingSpec.workaroundConfiguration(config: Config): Config = wi
     }
 
     return declaredConfig ?: getDefaultConfiguration()
+}
+
+private fun Finding.toFinding2(severity: Severity): Finding2 {
+    return when (this) {
+        is CorrectableCodeSmell -> Finding2Impl(issue, entity, message, references, severity, autoCorrectEnabled)
+
+        is CodeSmell -> Finding2Impl(issue, entity, message, references, severity)
+
+        else -> error("wtf?")
+    }
+}
+
+private data class Finding2Impl(
+    override val issue: Issue,
+    override val entity: Entity,
+    override val message: String,
+    override val references: List<Entity>,
+    override val severity: Severity,
+    override val autoCorrectEnabled: Boolean = false,
+) : Finding2
+
+/**
+ * Compute severity in the priority order:
+ * - Severity of the rule
+ * - Severity of the parent ruleset
+ * - Default severity
+ */
+private fun Rule.computeSeverity(): Severity {
+    val configValue: String = config.valueOrNull(Config.SEVERITY_KEY)
+        ?: config.parent?.valueOrNull(Config.SEVERITY_KEY)
+        ?: return Severity.Error
+    return parseToSeverity(configValue)
+}
+
+internal fun parseToSeverity(severity: String): Severity {
+    val lowercase = severity.lowercase()
+    return Severity.entries.find { it.name.lowercase() == lowercase }
+        ?: error("$severity is not a valid Severity. Allowed values are ${Severity.entries}")
 }

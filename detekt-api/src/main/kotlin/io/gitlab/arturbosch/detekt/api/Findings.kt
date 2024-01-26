@@ -6,12 +6,10 @@ package io.gitlab.arturbosch.detekt.api
  * A finding has an issue (information about the rule that detected the problem), a severity and a source code position
  * described as an entity. Entity references can also be considered for deeper characterization.
  */
-interface Finding : Compactable, HasEntity {
+interface Finding : HasEntity {
     val issue: Issue
     val references: List<Entity>
     val message: String
-    val severity: Severity
-        get() = Severity.DEFAULT
 }
 
 /**
@@ -29,20 +27,4 @@ interface HasEntity {
         get() = location.filePath.absolutePath.toString()
     val signature: String
         get() = entity.signature
-}
-
-/**
- * Provides a compact string representation.
- */
-interface Compactable {
-    /**
-     * Contract to format implementing object to a string representation.
-     */
-    fun compact(): String
-
-    /**
-     * Same as [compact] except the content should contain a substring which represents
-     * this exact findings via a custom identifier.
-     */
-    fun compactWithSignature(): String = compact()
 }

@@ -1,7 +1,7 @@
 package io.github.detekt.compiler.plugin.internal
 
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Finding2
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSourceLocation
@@ -32,7 +32,7 @@ fun MessageCollector.reportFindings(result: Detektion) {
     }
 }
 
-fun Finding.renderAsCompilerWarningMessage(): Pair<String, CompilerMessageLocation?> {
+fun Finding2.renderAsCompilerWarningMessage(): Pair<String, CompilerMessageLocation?> {
     val location = MessageUtil.psiElementToMessageLocation(entity.ktElement)
 
     val sourceLocation = location?.let {

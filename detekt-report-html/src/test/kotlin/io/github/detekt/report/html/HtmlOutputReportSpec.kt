@@ -7,9 +7,11 @@ import io.github.detekt.metrics.processors.linesKey
 import io.github.detekt.metrics.processors.logicalLinesKey
 import io.github.detekt.metrics.processors.sourceLinesKey
 import io.github.detekt.test.utils.createTempFileForTest
+import io.github.detekt.test.utils.internal.FakeKtElement
+import io.github.detekt.test.utils.internal.FakePsiFile
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
@@ -18,10 +20,7 @@ import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createFinding
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
-import io.mockk.every
-import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtElement
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
@@ -65,7 +64,7 @@ class HtmlOutputReportSpec {
     @Test
     fun `contains no findings`() {
         val detektion = object : TestDetektion() {
-            override val findings: Map<RuleSet.Id, List<Finding>> = mapOf(
+            override val findings: Map<RuleSet.Id, List<Finding2>> = mapOf(
                 RuleSet.Id("EmptyRuleset") to emptyList()
             )
         }
@@ -119,7 +118,7 @@ class HtmlOutputReportSpec {
     @Test
     fun `renders the right documentation links for the rules`() {
         val detektion = object : TestDetektion() {
-            override val findings: Map<RuleSet.Id, List<Finding>> = mapOf(
+            override val findings: Map<RuleSet.Id, List<Finding2>> = mapOf(
                 RuleSet.Id("Style") to listOf(
                     createFinding(createIssue("ValCouldBeVar"), createEntity())
                 ),
@@ -197,18 +196,18 @@ class HtmlOutputReportSpec {
     }
 }
 
-private fun mockKtElement(): KtElement {
-    val ktElementMock = mockk<KtElement>()
-    val psiFileMock = mockk<PsiFile>()
-    every { psiFileMock.text } returns "\n\n\n\n\n\n\n\n\n\nabcdef\nhi\n"
-    every { ktElementMock.containingFile } returns psiFileMock
-    return ktElementMock
+private fun fakeKtElement(): KtElement {
+    val code = "\n\n\n\n\n\n\n\n\n\nabcdef\nhi\n"
+    val fakePsiFile = FakePsiFile(code)
+    val fakeKtElement = FakeKtElement(fakePsiFile)
+
+    return fakeKtElement
 }
 
 private fun createTestDetektionWithMultipleSmells(): Detektion {
     val entity1 = createEntity(
         location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 1, text = 10..14),
-        ktElement = mockKtElement()
+        ktElement = fakeKtElement()
     )
     val entity2 = createEntity(location = createLocation("src/main/com/sample/Sample2.kt", position = 22 to 2))
     val entity3 = createEntity(location = createLocation("src/main/com/sample/Sample3.kt", position = 33 to 3))
@@ -233,7 +232,7 @@ private fun createTestDetektionFromRelativePath(): Detektion {
             position = 11 to 1,
             text = 10..14,
         ),
-        ktElement = mockKtElement(),
+        ktElement = fakeKtElement(),
     )
     val entity2 = createEntity(
         location = createLocation(
@@ -262,7 +261,7 @@ private fun createTestDetektionFromRelativePath(): Detektion {
     )
 }
 
-private fun findings(): Array<Pair<String, List<Finding>>> {
+private fun findings(): Array<Pair<String, List<Finding2>>> {
     val issueA = createIssue("id_a")
     val issueB = createIssue("id_b")
     val issueC = createIssue("id_c")
@@ -290,9 +289,9 @@ private fun findings(): Array<Pair<String, List<Finding>>> {
     )
 }
 
-private fun createHtmlDetektion(vararg findingPairs: Pair<String, List<Finding>>): Detektion {
+private fun createHtmlDetektion(vararg findingPairs: Pair<String, List<Finding2>>): Detektion {
     return object : TestDetektion() {
-        override val findings: Map<RuleSet.Id, List<Finding>> = findingPairs.toMap()
+        override val findings: Map<RuleSet.Id, List<Finding2>> = findingPairs.toMap()
             .mapKeys { (key, _) -> RuleSet.Id(key) }
     }
 }
@@ -300,7 +299,7 @@ private fun createHtmlDetektion(vararg findingPairs: Pair<String, List<Finding>>
 private val generatedRegex = """^generated\swith.*$""".toRegex(RegexOption.MULTILINE)
 private const val REPLACEMENT = "generated with..."
 
-private fun createReportWithFindings(findings: Array<Pair<String, List<Finding>>>): Path {
+private fun createReportWithFindings(findings: Array<Pair<String, List<Finding2>>>): Path {
     val htmlReport = HtmlOutputReport()
     val detektion = createHtmlDetektion(*findings)
     var result = htmlReport.render(detektion)

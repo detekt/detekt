@@ -9,14 +9,12 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
-import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
 import org.junit.jupiter.api.Nested
@@ -123,107 +121,11 @@ class SuppressionSpec {
         }
     }
 
-    @Nested
-    inner class `different suppression scenarios` {
-
-        @Test
-        fun `rule should be suppressed`() {
-            val ktFile = compileForTest(resourceAsPath("/suppression/SuppressedObject.kt"))
-            val rule = TestRule()
-            rule.visitFile(ktFile)
-            assertThat(rule.expected).isNotNull()
-        }
-
-        @Test
-        fun `findings are suppressed`() {
-            val ktFile = compileForTest(resourceAsPath("/suppression/SuppressedElements.kt"))
-            val findings = listOf(TestLM(), TestLPL()).flatMap { it.visitFile(ktFile) }
-            assertThat(findings).isEmpty()
-        }
-
-        @Test
-        fun `rule should be suppressed by ALL`() {
-            val ktFile = compileForTest(resourceAsPath("/suppression/SuppressedByAllObject.kt"))
-            val rule = TestRule()
-            rule.visitFile(ktFile)
-            assertThat(rule.expected).isNotNull()
-        }
-
-        @Test
-        fun `rule should be suppressed by detekt prefix in uppercase with dot separator`() {
-            val ktFile = compileContentForTest(
-                """
-                    @file:Suppress("Detekt.ALL")
-                    object SuppressedWithDetektPrefix {
-                    
-                        fun stuff() {
-                            println("FAILED TEST")
-                        }
-                    }
-                """.trimIndent()
-            )
-            val rule = TestRule()
-            rule.visitFile(ktFile)
-            assertThat(rule.expected).isNotNull()
-        }
-
-        @Test
-        fun `rule should be suppressed by detekt prefix in lowercase with colon separator`() {
-            val ktFile = compileContentForTest(
-                """
-                    @file:Suppress("detekt:ALL")
-                    object SuppressedWithDetektPrefix {
-                    
-                        fun stuff() {
-                            println("FAILED TEST")
-                        }
-                    }
-                """.trimIndent()
-            )
-            val rule = TestRule()
-            rule.visitFile(ktFile)
-            assertThat(rule.expected).isNotNull()
-        }
-
-        @Test
-        fun `rule should be suppressed by detekt prefix in all caps with colon separator`() {
-            val ktFile = compileContentForTest(
-                """
-                    @file:Suppress("DETEKT:ALL")
-                    object SuppressedWithDetektPrefix {
-                    
-                        fun stuff() {
-                            println("FAILED TEST")
-                        }
-                    }
-                """.trimIndent()
-            )
-            val rule = TestRule()
-            rule.visitFile(ktFile)
-            assertThat(rule.expected).isNotNull()
-        }
-    }
-
-    @Nested
-    inner class `suppression based on aliases from config property` {
-
-        @Test
-        fun `allows to declare`() {
-            val ktFile = compileContentForTest(
-                """
-                    @file:Suppress("detekt:MyTest")
-                    object SuppressedWithDetektPrefixAndCustomConfigBasedPrefix {
-                    
-                        fun stuff() {
-                            println("FAILED TEST")
-                        }
-                    }
-                """.trimIndent()
-            )
-            val rule = TestRule(TestConfig("aliases" to "[MyTest]"))
-            rule.visitFile(ktFile)
-            assertThat(rule.expected).isNotNull()
-        }
+    @Test
+    fun `findings are suppressed`() {
+        val ktFile = compileForTest(resourceAsPath("/suppression/SuppressedElements.kt"))
+        val findings = listOf(TestLM(), TestLPL()).flatMap { it.visitFile(ktFile) }
+        assertThat(findings).isEmpty()
     }
 
     @Nested
@@ -294,13 +196,6 @@ private fun isSuppressedBy(annotation: String, argument: String): Boolean {
     val file = compileContentForTest(annotated)
     val annotatedClass = file.children.first { it is KtClass } as KtAnnotated
     return annotatedClass.isSuppressedBy(Rule.Id("Test"), setOf("alias"))
-}
-
-private class TestRule(config: Config = Config.empty) : Rule(config, "") {
-    var expected: String? = "Test"
-    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-        expected = null
-    }
 }
 
 private class TestLM(config: Config = Config.empty) : Rule(config, "") {

@@ -24,19 +24,6 @@ class FormattingRuleSpec {
     inner class `formatting rules can be suppressed` {
 
         @Test
-        fun `does support suppression on file level`() {
-            val findings = subject.compileAndLint(
-                """
-                    @file:Suppress("NoLineBreakBeforeAssignment")
-                    fun main()
-                    = Unit
-                """.trimIndent()
-            )
-
-            assertThat(findings).isEmpty()
-        }
-
-        @Test
         fun `support suppression on node level`() {
             val findings = subject.compileAndLint(
                 """

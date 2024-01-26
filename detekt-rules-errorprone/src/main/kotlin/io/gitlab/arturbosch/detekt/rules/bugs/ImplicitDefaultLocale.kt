@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -77,7 +76,7 @@ private fun KtQualifiedExpression.containsLocaleObject(bindingContext: BindingCo
         ?.resultingDescriptor
         ?.fqNameSafe
         ?.startsWith(
-            Name.identifier(
+            FqName(
                 "java.util.Locale"
             )
         ) == true

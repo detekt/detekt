@@ -13,7 +13,6 @@ val detektPublication = "DetektPublication"
 
 plugins {
     id("module")
-    alias(libs.plugins.gradleVersions)
     alias(libs.plugins.shadow)
     alias(libs.plugins.download)
 }
@@ -85,7 +84,6 @@ val testPluginKotlinc by tasks.registering(Task::class) {
     outputs.dir(outputDir)
 
     val baseExecutablePath = "${unzipKotlinCompiler.get().destinationDir}/kotlinc/bin/kotlinc"
-    val pluginParameters = "plugin:detekt-compiler-plugin:debug=true"
 
     val kotlincExecution = providers.exec {
         workingDir = outputDir.get().asFile
@@ -95,14 +93,15 @@ val testPluginKotlinc by tasks.registering(Task::class) {
             sourceFile.path,
             "-Xplugin=${tasks.shadowJar.get().archiveFile.get().asFile.absolutePath}",
             "-P",
+            "plugin:detekt-compiler-plugin:debug=true".toArg(),
+            "-P",
+            "plugin:detekt-compiler-plugin:useDefaultConfig=true".toArg(),
         )
 
-        if (org.apache.tools.ant.taskdefs.condition.Os.isFamily("windows")) {
-            executable = "$baseExecutablePath.bat"
-            args("\"$pluginParameters\"")
+        executable = if (org.apache.tools.ant.taskdefs.condition.Os.isFamily("windows")) {
+            "$baseExecutablePath.bat"
         } else {
-            executable = baseExecutablePath
-            args(pluginParameters)
+            baseExecutablePath
         }
     }
 
@@ -117,6 +116,12 @@ val testPluginKotlinc by tasks.registering(Task::class) {
             )
         }
     }
+}
+
+private fun String.toArg() = if (org.apache.tools.ant.taskdefs.condition.Os.isFamily("windows")) {
+    "\"$this\""
+} else {
+    this
 }
 
 tasks.check {
