@@ -6,6 +6,8 @@ import io.gitlab.arturbosch.detekt.core.config.loadConfiguration
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class WorkaroundConfigurationKtSpec {
 
@@ -67,7 +69,7 @@ class WorkaroundConfigurationKtSpec {
     inner class `auto correct config` {
 
         @Test
-        fun `when specified it respects all autoCorrect values of rules and rule sets`() {
+        fun `when specified it respects all autoCorrect values of rules`() {
             val config = ProcessingSpec {
                 config { resources = listOf(resourceUrl("/configs/config-with-auto-correct.yml")) }
                 rules { autoCorrect = true }
@@ -80,43 +82,27 @@ class WorkaroundConfigurationKtSpec {
             assertThat(style.subConfig("MagicString").valueOrNull<Boolean>("autoCorrect")).isFalse()
         }
 
-        @Test
-        fun `when not specified all autoCorrect values are overridden to false`() {
-            val config = ProcessingSpec {
-                config { resources = listOf(resourceUrl("/configs/config-with-auto-correct.yml")) }
-            }.let { spec ->
-                spec.workaroundConfiguration(spec.loadConfiguration())
-            }
-            val style = config.subConfig("style")
-
-            assertThat(style.subConfig("MagicNumber").valueOrNull<Boolean>("autoCorrect")).isFalse()
-            assertThat(style.subConfig("MagicString").valueOrNull<Boolean>("autoCorrect")).isFalse()
-        }
-
-        @Test
-        fun `when specified as false, all autoCorrect values are overridden to false`() {
-            val config = ProcessingSpec {
-                config { resources = listOf(resourceUrl("/configs/config-with-auto-correct.yml")) }
-                rules { autoCorrect = false }
-            }.let { spec ->
-                spec.workaroundConfiguration(spec.loadConfiguration())
-            }
-            val style = config.subConfig("style")
-
-            assertThat(style.subConfig("MagicNumber").valueOrNull<Boolean>("autoCorrect")).isFalse()
-            assertThat(style.subConfig("MagicString").valueOrNull<Boolean>("autoCorrect")).isFalse()
-        }
-
-        @Test
-        fun `regardless of other cli options, autoCorrect values are overridden to false`() {
+        @ParameterizedTest
+        @CsvSource(
+            """
+                true, true
+                true, false
+                false, true
+                false, false
+            """
+        )
+        fun `regardless of other cli options, autoCorrect values are overridden to false`(
+            useDefaultConfig: Boolean,
+            activateAllRules: Boolean
+        ) {
             val config = ProcessingSpec {
                 config {
-                    useDefaultConfig = true
+                    this.useDefaultConfig = useDefaultConfig
                     resources = listOf(resourceUrl("/configs/config-with-auto-correct.yml"))
                 }
                 rules {
                     autoCorrect = false
-                    activateAllRules = true
+                    this.activateAllRules = activateAllRules
                 }
             }.let { spec ->
                 spec.workaroundConfiguration(spec.loadConfiguration())
