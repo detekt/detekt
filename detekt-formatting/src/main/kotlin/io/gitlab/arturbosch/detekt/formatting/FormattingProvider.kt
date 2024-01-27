@@ -221,9 +221,6 @@ class FormattingProvider : RuleSetProvider {
     companion object {
         @Configuration("if android style guides should be preferred")
         val android by ruleSetConfig(false)
-
-        @Configuration("if rules should auto correct style violation")
-        val autoCorrect by ruleSetConfig(true)
     }
 }
 

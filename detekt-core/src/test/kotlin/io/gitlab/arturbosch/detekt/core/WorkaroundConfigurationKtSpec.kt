@@ -68,7 +68,6 @@ class WorkaroundConfigurationKtSpec {
 
         @Nested
         inner class `when specified it respects all autoCorrect values of rules and rule sets` {
-
             private val config = ProcessingSpec {
                 config { resources = listOf(resourceUrl("/configs/config-with-auto-correct.yml")) }
                 rules { autoCorrect = true }
@@ -78,12 +77,6 @@ class WorkaroundConfigurationKtSpec {
 
             private val style = config.subConfig("style")
             private val comments = config.subConfig("comments")
-
-            @Test
-            fun `is disabled for rule sets`() {
-                assertThat(style.valueOrNull<Boolean>("autoCorrect")).isTrue()
-                assertThat(comments.valueOrNull<Boolean>("autoCorrect")).isFalse()
-            }
 
             @Test
             fun `is disabled for rules`() {
@@ -105,12 +98,6 @@ class WorkaroundConfigurationKtSpec {
             private val comments = config.subConfig("comments")
 
             @Test
-            fun `is disabled for rule sets`() {
-                assertThat(style.valueOrNull<Boolean>("autoCorrect")).isFalse()
-                assertThat(comments.valueOrNull<Boolean>("autoCorrect")).isFalse()
-            }
-
-            @Test
             fun `is disabled for rules`() {
                 assertThat(style.subConfig("MagicNumber").valueOrNull<Boolean>("autoCorrect")).isFalse()
                 assertThat(style.subConfig("MagicString").valueOrNull<Boolean>("autoCorrect")).isFalse()
@@ -129,12 +116,6 @@ class WorkaroundConfigurationKtSpec {
             }
             private val style = config.subConfig("style")
             private val comments = config.subConfig("comments")
-
-            @Test
-            fun `is disabled for rule sets`() {
-                assertThat(style.valueOrNull<Boolean>("autoCorrect")).isFalse()
-                assertThat(comments.valueOrNull<Boolean>("autoCorrect")).isFalse()
-            }
 
             @Test
             fun `is disabled for rules`() {
@@ -162,12 +143,6 @@ class WorkaroundConfigurationKtSpec {
 
             private val style = config.subConfig("style")
             private val comments = config.subConfig("comments")
-
-            @Test
-            fun `is disabled for rule sets`() {
-                assertThat(style.valueOrNull<Boolean>("autoCorrect")).isFalse()
-                assertThat(comments.valueOrNull<Boolean>("autoCorrect")).isFalse()
-            }
 
             @Test
             fun `is disabled for rules`() {

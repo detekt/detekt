@@ -17,14 +17,12 @@ class DisabledAutoCorrectConfigSpec {
     private val configWithAutoCorrect = yamlConfigFromContent(
         """
             style:
-              autoCorrect: true
               MagicNumber:
                 autoCorrect: true
               MagicString:
                 autoCorrect: false
             
             comments:
-              autoCorrect: false
               ClassDoc:
                 autoCorrect: true
               FunctionDoc:
@@ -51,7 +49,6 @@ class DisabledAutoCorrectConfigSpec {
         val config = yamlConfigFromContent(
             """
             comments:
-              autoCorrect: false
               ClassDoc:
                 test: true
             """.trimMargin()

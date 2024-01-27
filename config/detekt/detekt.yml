@@ -67,7 +67,6 @@ exceptions:
 formatting:
   active: true
   android: false
-  autoCorrect: true
   BinaryExpressionWrapping:
     active: true
   BlankLineBeforeDeclaration:

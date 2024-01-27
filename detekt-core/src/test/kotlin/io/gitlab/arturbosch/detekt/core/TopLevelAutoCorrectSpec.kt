@@ -31,7 +31,7 @@ class TopLevelAutoCorrectSpec {
                 inputPaths = listOf(fileUnderTest)
             }
             config {
-                resources = listOf(resourceUrl("configs/rule-and-ruleset-autocorrect-true.yaml"))
+                resources = listOf(resourceUrl("configs/rule-autocorrect-true.yaml"))
             }
             rules {
                 autoCorrect = false // fixture

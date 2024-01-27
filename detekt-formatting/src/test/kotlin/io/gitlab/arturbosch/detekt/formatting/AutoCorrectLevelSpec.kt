@@ -18,7 +18,6 @@ class AutoCorrectLevelSpec {
             """
                 formatting:
                   active: true
-                  autoCorrect: true
                   ChainWrapping:
                     active: true
                     autoCorrect: true
@@ -32,31 +31,11 @@ class AutoCorrectLevelSpec {
     }
 
     @Test
-    fun `autoCorrect_ false on ruleSet level should not reformat the test file`() {
-        val config = yamlConfigFromContent(
-            """
-                formatting:
-                  active: true
-                  autoCorrect: false
-                  ChainWrapping:
-                    active: true
-                    autoCorrect: true
-            """.trimIndent()
-        )
-
-        val (file, findings) = runRule(config)
-
-        assertThat(findings).isNotEmpty()
-        assertThat(wasFormatted(file)).isFalse()
-    }
-
-    @Test
     fun `autoCorrect_ false on rule level should not reformat the test file`() {
         val config = yamlConfigFromContent(
             """
                 formatting:
                   active: true
-                  autoCorrect: true
                   ChainWrapping:
                     active: true
                     autoCorrect: false

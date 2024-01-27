@@ -1,4 +1,3 @@
 test-rule-set:
-  autoCorrect: true
   DeleteAnnotationsRule:
     autoCorrect: true

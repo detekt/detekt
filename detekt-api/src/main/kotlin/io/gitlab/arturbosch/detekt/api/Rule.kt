@@ -52,8 +52,7 @@ open class Rule(
     private val ruleSetId: RuleSet.Id? get() = config.parent?.parentPath?.let(RuleSet::Id)
 
     val autoCorrect: Boolean
-        get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
-            (config.parent?.valueOrDefault(Config.AUTO_CORRECT_KEY, true) != false)
+        get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false)
 
     private val findings: MutableList<Finding> = mutableListOf()
 
