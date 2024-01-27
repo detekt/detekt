@@ -21,14 +21,9 @@ fun MessageCollector.error(msg: String) {
 }
 
 fun MessageCollector.reportFindings(result: Detektion) {
-    for ((ruleSetId, findings) in result.findings.entries) {
-        if (findings.isNotEmpty()) {
-            info("$ruleSetId: ${findings.size} findings found.")
-            for (issue in findings) {
-                val (message, location) = issue.renderAsCompilerWarningMessage()
-                warn(message, location)
-            }
-        }
+    for (finding in result.findings.values.flatten()) {
+        val (message, location) = finding.renderAsCompilerWarningMessage()
+        warn(message, location)
     }
 }
 
