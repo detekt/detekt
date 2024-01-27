@@ -14,22 +14,6 @@ class DisabledAutoCorrectConfigSpec {
         """.trimIndent()
     )
 
-    private val configWithAutoCorrect = yamlConfigFromContent(
-        """
-            style:
-              MagicNumber:
-                autoCorrect: true
-              MagicString:
-                autoCorrect: false
-            
-            comments:
-              ClassDoc:
-                autoCorrect: true
-              FunctionDoc:
-                autoCorrect: false
-        """.trimIndent()
-    )
-
     @Test
     fun `subConfigs returns the expected number of sub configs`() {
         val subject = DisabledAutoCorrectConfig(configSingleRuleInStyle)
@@ -57,7 +41,7 @@ class DisabledAutoCorrectConfigSpec {
         val commentsConfig = DisabledAutoCorrectConfig(config.subConfig("comments"))
         commentsConfig.subConfig("ClassDoc").let { classDocConfig ->
             assertThat(classDocConfig.valueOrDefault("autoCorrect", true)).isFalse()
-            assert(classDocConfig.valueOrNull<Boolean>("autoCorrect") == false)
+            assertThat(classDocConfig.valueOrNull<Boolean>("autoCorrect")).isFalse()
         }
     }
 
@@ -77,27 +61,37 @@ class DisabledAutoCorrectConfigSpec {
 
         commentsConfig.subConfig("ClassDoc").let { classDocConfig ->
             assertThat(classDocConfig.valueOrDefault("test", true)).isTrue()
-            assert(classDocConfig.valueOrNull<Boolean>("test") == true)
+            assertThat(classDocConfig.valueOrNull<Boolean>("test")).isTrue()
         }
 
         commentsConfig.subConfig("FunctionDoc").let { functionDocConfig ->
             assertThat(functionDocConfig.valueOrDefault("test", true)).isTrue()
-            assert(functionDocConfig.valueOrNull<Boolean>("test") == true)
+            assertThat(functionDocConfig.valueOrNull<Boolean>("test")).isTrue()
         }
     }
 
     @Test
     fun `verify the autocorrect field always false`() {
-        val commentsConfig = DisabledAutoCorrectConfig(configWithAutoCorrect.subConfig("comments"))
+        val config = yamlConfigFromContent(
+            """
+                comments:
+                  ClassDoc:
+                    autoCorrect: true
+                  FunctionDoc:
+                    autoCorrect: false
+        """.trimIndent()
+        )
+
+        val commentsConfig = DisabledAutoCorrectConfig(config.subConfig("comments"))
 
         commentsConfig.subConfig("ClassDoc").let { classDocConfig ->
             assertThat(classDocConfig.valueOrDefault("autoCorrect", true)).isFalse()
-            assert(classDocConfig.valueOrNull<Boolean>("autoCorrect") == false)
+            assertThat(classDocConfig.valueOrNull<Boolean>("autoCorrect")).isFalse()
         }
 
         commentsConfig.subConfig("FunctionDoc").let { functionDocConfig ->
             assertThat(functionDocConfig.valueOrDefault("autoCorrect", true)).isFalse()
-            assert(functionDocConfig.valueOrNull<Boolean>("autoCorrect") == false)
+            assertThat(functionDocConfig.valueOrNull<Boolean>("autoCorrect")).isFalse()
         }
     }
 
