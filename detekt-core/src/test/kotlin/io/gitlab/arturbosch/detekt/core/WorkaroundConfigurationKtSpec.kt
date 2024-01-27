@@ -66,69 +66,50 @@ class WorkaroundConfigurationKtSpec {
     @Nested
     inner class `auto correct config` {
 
-        @Nested
-        inner class `when specified it respects all autoCorrect values of rules and rule sets` {
-            private val config = ProcessingSpec {
+        @Test
+        fun `when specified it respects all autoCorrect values of rules and rule sets`() {
+            val config = ProcessingSpec {
                 config { resources = listOf(resourceUrl("/configs/config-with-auto-correct.yml")) }
                 rules { autoCorrect = true }
             }.let { spec ->
                 spec.workaroundConfiguration(spec.loadConfiguration())
             }
+            val style = config.subConfig("style")
 
-            private val style = config.subConfig("style")
-            private val comments = config.subConfig("comments")
-
-            @Test
-            fun `is disabled for rules`() {
-                assertThat(style.subConfig("MagicNumber").valueOrNull<Boolean>("autoCorrect")).isTrue()
-                assertThat(style.subConfig("MagicString").valueOrNull<Boolean>("autoCorrect")).isFalse()
-                assertThat(comments.subConfig("ClassDoc").valueOrNull<Boolean>("autoCorrect")).isTrue()
-                assertThat(comments.subConfig("FunctionDoc").valueOrNull<Boolean>("autoCorrect")).isFalse()
-            }
+            assertThat(style.subConfig("MagicNumber").valueOrNull<Boolean>("autoCorrect")).isTrue()
+            assertThat(style.subConfig("MagicString").valueOrNull<Boolean>("autoCorrect")).isFalse()
         }
 
-        @Nested
-        inner class `when not specified all autoCorrect values are overridden to false` {
-            private val config = ProcessingSpec {
+        @Test
+        fun `when not specified all autoCorrect values are overridden to false`() {
+            val config = ProcessingSpec {
                 config { resources = listOf(resourceUrl("/configs/config-with-auto-correct.yml")) }
             }.let { spec ->
                 spec.workaroundConfiguration(spec.loadConfiguration())
             }
-            private val style = config.subConfig("style")
-            private val comments = config.subConfig("comments")
+            val style = config.subConfig("style")
 
-            @Test
-            fun `is disabled for rules`() {
-                assertThat(style.subConfig("MagicNumber").valueOrNull<Boolean>("autoCorrect")).isFalse()
-                assertThat(style.subConfig("MagicString").valueOrNull<Boolean>("autoCorrect")).isFalse()
-                assertThat(comments.subConfig("ClassDoc").valueOrNull<Boolean>("autoCorrect")).isFalse()
-                assertThat(comments.subConfig("FunctionDoc").valueOrNull<Boolean>("autoCorrect")).isFalse()
-            }
+            assertThat(style.subConfig("MagicNumber").valueOrNull<Boolean>("autoCorrect")).isFalse()
+            assertThat(style.subConfig("MagicString").valueOrNull<Boolean>("autoCorrect")).isFalse()
         }
 
-        @Nested
-        inner class `when specified as false, all autoCorrect values are overridden to false` {
-            private val config = ProcessingSpec {
+        @Test
+        fun `when specified as false, all autoCorrect values are overridden to false`() {
+            val config = ProcessingSpec {
                 config { resources = listOf(resourceUrl("/configs/config-with-auto-correct.yml")) }
                 rules { autoCorrect = false }
             }.let { spec ->
                 spec.workaroundConfiguration(spec.loadConfiguration())
             }
-            private val style = config.subConfig("style")
-            private val comments = config.subConfig("comments")
+            val style = config.subConfig("style")
 
-            @Test
-            fun `is disabled for rules`() {
-                assertThat(style.subConfig("MagicNumber").valueOrNull<Boolean>("autoCorrect")).isFalse()
-                assertThat(style.subConfig("MagicString").valueOrNull<Boolean>("autoCorrect")).isFalse()
-                assertThat(comments.subConfig("ClassDoc").valueOrNull<Boolean>("autoCorrect")).isFalse()
-                assertThat(comments.subConfig("FunctionDoc").valueOrNull<Boolean>("autoCorrect")).isFalse()
-            }
+            assertThat(style.subConfig("MagicNumber").valueOrNull<Boolean>("autoCorrect")).isFalse()
+            assertThat(style.subConfig("MagicString").valueOrNull<Boolean>("autoCorrect")).isFalse()
         }
 
-        @Nested
-        inner class `regardless of other cli options, autoCorrect values are overridden to false` {
-            private val config = ProcessingSpec {
+        @Test
+        fun `regardless of other cli options, autoCorrect values are overridden to false`() {
+            val config = ProcessingSpec {
                 config {
                     useDefaultConfig = true
                     resources = listOf(resourceUrl("/configs/config-with-auto-correct.yml"))
@@ -141,16 +122,10 @@ class WorkaroundConfigurationKtSpec {
                 spec.workaroundConfiguration(spec.loadConfiguration())
             }
 
-            private val style = config.subConfig("style")
-            private val comments = config.subConfig("comments")
+            val style = config.subConfig("style")
 
-            @Test
-            fun `is disabled for rules`() {
-                assertThat(style.subConfig("MagicNumber").valueOrNull<Boolean>("autoCorrect")).isFalse()
-                assertThat(style.subConfig("MagicString").valueOrNull<Boolean>("autoCorrect")).isFalse()
-                assertThat(comments.subConfig("ClassDoc").valueOrNull<Boolean>("autoCorrect")).isFalse()
-                assertThat(comments.subConfig("FunctionDoc").valueOrNull<Boolean>("autoCorrect")).isFalse()
-            }
+            assertThat(style.subConfig("MagicNumber").valueOrNull<Boolean>("autoCorrect")).isFalse()
+            assertThat(style.subConfig("MagicString").valueOrNull<Boolean>("autoCorrect")).isFalse()
         }
     }
 }

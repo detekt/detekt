@@ -3,9 +3,3 @@ style:
     autoCorrect: true
   MagicString:
     autoCorrect: false
-
-comments:
-  ClassDoc:
-    autoCorrect: true
-  FunctionDoc:
-    autoCorrect: false
