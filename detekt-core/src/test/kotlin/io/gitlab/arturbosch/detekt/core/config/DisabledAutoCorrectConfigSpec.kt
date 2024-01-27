@@ -32,9 +32,9 @@ class DisabledAutoCorrectConfigSpec {
     fun `verify the autocorrect field false in case the autoCorrect not present into yaml config`() {
         val config = yamlConfigFromContent(
             """
-            comments:
-              ClassDoc:
-                test: true
+                comments:
+                  ClassDoc:
+                    test: true
             """.trimMargin()
         )
 
@@ -49,11 +49,11 @@ class DisabledAutoCorrectConfigSpec {
     fun `verify the disable auto correct config return fields as normal`() {
         val config = yamlConfigFromContent(
             """
-            comments:
-              ClassDoc:
-                test: true
-              FunctionDoc:
-                test: true
+                comments:
+                  ClassDoc:
+                    test: true
+                  FunctionDoc:
+                    test: true
             """.trimMargin()
         )
 
@@ -79,7 +79,7 @@ class DisabledAutoCorrectConfigSpec {
                     autoCorrect: true
                   FunctionDoc:
                     autoCorrect: false
-        """.trimIndent()
+            """.trimIndent()
         )
 
         val commentsConfig = DisabledAutoCorrectConfig(config.subConfig("comments"))
