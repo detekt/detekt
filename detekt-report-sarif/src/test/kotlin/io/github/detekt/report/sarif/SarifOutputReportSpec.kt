@@ -2,12 +2,16 @@ package io.github.detekt.report.sarif
 
 import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleSet
+import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import io.gitlab.arturbosch.detekt.api.SourceLocation
@@ -20,9 +24,12 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
 import io.gitlab.arturbosch.detekt.test.createIssue
+import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.api.Test
+import java.net.URI
 import kotlin.io.path.Path
 import kotlin.io.path.absolutePathString
 
@@ -153,6 +160,38 @@ class SarifOutputReportSpec {
         assertThat(report)
             .containsIgnoringWhitespaces(constrainRegion(startLine, startColumn, endLine, endColumn))
     }
+
+    @Test
+    fun `renders multiple issues with rule set to warning by default`() {
+        val result = TestDetektion(
+            createFinding(ruleName = "TestSmellA", severity = SeverityLevel.ERROR),
+            createFinding(ruleName = "TestSmellB", severity = SeverityLevel.WARNING),
+            createFinding(ruleName = "TestSmellC", severity = SeverityLevel.INFO)
+        )
+
+        val testConfig = yamlConfig("config_with_rule_set_to_warning.yml")
+
+        val report = SarifOutputReport()
+            .apply {
+                init(object : SetupContext {
+                    override val configUris: Collection<URI>
+                        get() = emptyList()
+                    override val config: Config = testConfig
+                    override val outputChannel: Appendable = StringBuilder()
+                    override val errorChannel: Appendable = StringBuilder()
+                    override val properties: MutableMap<String, Any?> = HashMap()
+                    override fun register(key: String, value: Any) {
+                        properties[key] = value
+                    }
+                })
+            }
+            .render(result)
+
+        val expectedReport = readResourceContent("rule_warning.sarif.json")
+            .replace("<PREFIX>", Path(System.getProperty("user.dir")).toUri().toString())
+
+        assertThat(report).isEqualToIgnoringWhitespace(expectedReport)
+    }
 }
 
 private object Snippet {
@@ -176,8 +215,21 @@ private fun constrainRegion(startLine: Int, startColumn: Int, endLine: Int, endC
     }
 """.trimIndent()
 
+class TestProvider : RuleSetProvider {
+    override val ruleSetId: String
+        get() = "test"
+
+    override fun instance(config: Config): RuleSet {
+        return RuleSet(ruleSetId, listOf(TestRule()))
+    }
+}
+
 class TestRule : Rule() {
     override val issue = Issue(javaClass.simpleName, Severity.Warning, "", Debt.FIVE_MINS)
+
+    override fun visitCondition(root: KtFile): Boolean {
+        return true
+    }
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         report(CodeSmell(issue, Entity.atName(classOrObject), message = "Error"))
