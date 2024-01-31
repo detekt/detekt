@@ -6,6 +6,33 @@ keywords: [changelog, release-notes, migration]
 
 # Changelog and Migration Guide
 
+#### 1.23.5 - 2024-01-31
+
+This is a point release for Detekt `1.23.0`, where we added support for Kotlin `1.9.22` and fixed several bugs that
+got reported by the community.
+
+##### Notable Changes
+
+- Test Gradle plugin with AGP 8.2.0 - [#6672](https://github.com/detekt/detekt/pull/6672)
+- chore(deps): update dependency gradle to v8.5 - [#6663](https://github.com/detekt/detekt/pull/6663)
+- fix(deps): update kotlin monorepo to v1.9.22 - [#6746](https://github.com/detekt/detekt/pull/6746)
+
+##### Changelog
+
+- Report rule's default severity in sarif backport - [#6916](https://github.com/detekt/detekt/pull/6916)
+- Add ignoreAnnotatedFunctions to TooManyFunctions - [#6875](https://github.com/detekt/detekt/pull/6875)
+- Fix by checking the existence of label in previous statements - [#6671](https://github.com/detekt/detekt/pull/6671)
+- Also check `USELESS_ELVIS` in `UnreachableCode` - [#6624](https://github.com/detekt/detekt/pull/6624)
+- Fix by adding last method call to the set - [#6567](https://github.com/detekt/detekt/pull/6567)
+
+##### Housekeeping & Refactorings
+
+- Opt in to ExperimentalCompilerApi in all compilations in compiler-plugin - [#6534](https://github.com/detekt/detekt/pull/6534)
+
+##### Contributors
+
+We would like to thank the following contributors that made this release possible: @3flex, @TWiStErRob, @atulgpt, @matejdro
+
 #### 1.23.4 - 2023-11-26
 
 This is a point release for Detekt `1.23.0`, where we added support for Kotlin `1.9.21` and fixed several bugs that
