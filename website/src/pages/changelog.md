@@ -8,7 +8,7 @@ keywords: [changelog, release-notes, migration]
 
 #### 1.23.5 - 2024-01-31
 
-This is a point release for Detekt `1.23.0`, where we added support for Kotlin `1.9.21` and fixed several bugs that
+This is a point release for Detekt `1.23.0`, where we added support for Kotlin `1.9.22` and fixed several bugs that
 got reported by the community.
 
 ##### Notable Changes
