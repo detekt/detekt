@@ -36,6 +36,7 @@ formatting:
     indentSize: 4
   ClassName:
     active: false
+    autoCorrect: false
   ClassSignature:
     active: false
     autoCorrect: true
@@ -66,6 +67,7 @@ formatting:
     indentSize: 4
   Filename:
     active: true
+    autoCorrect: false
   FinalNewline:
     active: true
     autoCorrect: true
@@ -85,6 +87,7 @@ formatting:
     maxLineLength: 120
   FunctionName:
     active: false
+    autoCorrect: false
   FunctionReturnTypeSpacing:
     active: true
     autoCorrect: true
@@ -127,10 +130,12 @@ formatting:
     indentSize: 4
   MaximumLineLength:
     active: true
+    autoCorrect: false
     maxLineLength: 120
     ignoreBackTickedIdentifier: false
   MixedConditionOperators:
     active: false
+    autoCorrect: false
   ModifierListSpacing:
     active: true
     autoCorrect: true
@@ -163,11 +168,13 @@ formatting:
     autoCorrect: true
   NoConsecutiveComments:
     active: true
+    autoCorrect: false
   NoEmptyClassBody:
     active: true
     autoCorrect: true
   NoEmptyFile:
     active: true
+    autoCorrect: false
   NoEmptyFirstLineInClassBody:
     active: true
     autoCorrect: true
@@ -202,12 +209,14 @@ formatting:
     autoCorrect: true
   NoWildcardImports:
     active: true
+    autoCorrect: false
     packagesToUseImportOnDemandProperty: 'java.util.*,kotlinx.android.synthetic.**'
   NullableTypeSpacing:
     active: true
     autoCorrect: true
   PackageName:
     active: true
+    autoCorrect: false
   ParameterListSpacing:
     active: true
     autoCorrect: true
@@ -224,6 +233,7 @@ formatting:
     maxLineLength: 120
   PropertyName:
     active: true
+    autoCorrect: false
   PropertyWrapping:
     active: true
     autoCorrect: true
@@ -297,12 +307,14 @@ formatting:
     indentSize: 4
   TypeArgumentComment:
     active: true
+    autoCorrect: false
   TypeArgumentListSpacing:
     active: true
     autoCorrect: true
     indentSize: 4
   TypeParameterComment:
     active: true
+    autoCorrect: false
   TypeParameterListSpacing:
     active: true
     autoCorrect: true
@@ -312,8 +324,10 @@ formatting:
     autoCorrect: true
   ValueArgumentComment:
     active: true
+    autoCorrect: false
   ValueParameterComment:
     active: true
+    autoCorrect: false
   Wrapping:
     active: true
     autoCorrect: true

@@ -23,19 +23,24 @@ internal fun YamlNode.printRuleSet(ruleSet: RuleSetProvider, rules: List<Rule>) 
 
         ruleSet.configuration.forEach(::printConfiguration)
 
-        rules.forEach(::printRule)
+        val autoCorrectEnabled = ruleSet.configuration.any {
+            it.name == Config.AUTO_CORRECT_KEY && it.defaultValue.getPlainValue() == "true"
+        }
+        rules.forEach { printRule(it, autoCorrectEnabled) }
 
         emptyLine()
     }
 }
 
-internal fun YamlNode.printRule(rule: Rule) {
+internal fun YamlNode.printRule(rule: Rule, autoCorrectableRuleSet: Boolean) {
     if (rule.isDeprecated()) return
 
     node(rule.name) {
         keyValue { Config.ACTIVE_KEY to "${rule.defaultActivationStatus.active}" }
         if (rule.autoCorrect) {
             keyValue { Config.AUTO_CORRECT_KEY to "true" }
+        } else if (autoCorrectableRuleSet) {
+            keyValue { Config.AUTO_CORRECT_KEY to "false" }
         }
         val ruleExclusion = exclusions.singleOrNull { it.isExcluded(rule) }
         if (ruleExclusion != null) {

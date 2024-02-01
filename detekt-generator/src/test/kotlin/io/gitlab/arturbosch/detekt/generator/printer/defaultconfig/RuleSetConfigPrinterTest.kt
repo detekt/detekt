@@ -81,7 +81,7 @@ internal class RuleSetConfigPrinterTest {
         @Test
         fun `starts with rule name`() {
             val rule = ruleTemplate.copy(name = "RuleA")
-            val actual = yaml { printRule(rule) }
+            val actual = yaml { printRule(rule, false) }
             assertThat(actual).startsWith("RuleA:\n")
         }
 
@@ -91,14 +91,14 @@ internal class RuleSetConfigPrinterTest {
             @Test
             fun `has active property`() {
                 val rule = ruleTemplate.copy(defaultActivationStatus = Active("1.0.0"))
-                val actual = yaml { printRule(rule) }
+                val actual = yaml { printRule(rule, false) }
                 assertThat(actual.lines()).contains("  active: true")
             }
 
             @Test
             fun `has active property if inactive`() {
                 val rule = ruleTemplate.copy(defaultActivationStatus = Inactive)
-                val actual = yaml { printRule(rule) }
+                val actual = yaml { printRule(rule, false) }
                 assertThat(actual.lines()).contains("  active: false")
             }
         }
@@ -109,14 +109,14 @@ internal class RuleSetConfigPrinterTest {
             @Test
             fun `has auto correct property`() {
                 val rule = ruleTemplate.copy(autoCorrect = true)
-                val actual = yaml { printRule(rule) }
+                val actual = yaml { printRule(rule, false) }
                 assertThat(actual.lines()).contains("  autoCorrect: true")
             }
 
             @Test
             fun `omits auto correct property if false`() {
                 val rule = ruleTemplate.copy(autoCorrect = false)
-                val actual = yaml { printRule(rule) }
+                val actual = yaml { printRule(rule, false) }
                 assertThat(actual).doesNotContain(Config.AUTO_CORRECT_KEY)
             }
         }
@@ -129,14 +129,14 @@ internal class RuleSetConfigPrinterTest {
                 val anExclusion = exclusions[0]
                 val anExcludedRuleName = anExclusion.rules.first()
                 val rule = ruleTemplate.copy(name = anExcludedRuleName)
-                val actual = yaml { printRule(rule) }
+                val actual = yaml { printRule(rule, false) }
                 assertThat(actual.lines()).contains("  excludes: ${anExclusion.pattern}")
             }
 
             @Test
             fun `omits excludes property if rule is not excluded in any exclusion`() {
                 val rule = ruleTemplate.copy(name = "ARuleNameThatIsNotExcluded")
-                val actual = yaml { printRule(rule) }
+                val actual = yaml { printRule(rule, false) }
                 assertThat(actual).doesNotContain(Config.EXCLUDES_KEY)
             }
         }
