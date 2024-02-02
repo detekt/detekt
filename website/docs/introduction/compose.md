@@ -100,7 +100,7 @@ private fun FooLazyColumnPreview() { // Violation for FooLazyColumnPreview()
 #### Recommended configuration
 
 * Set `ignoreAnnotated` to `['Preview']`
-* 
+
 ### TooManyFunctions for Compose
 
 See [TooManyFunctions](/docs/rules/complexity/#toomanyfunctions).
