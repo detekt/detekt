@@ -13,6 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
       - name: Generate and submit dependency graph
         uses: gradle/actions/dependency-submission@ec92e829475ac0c2315ea8f9eced72db85bb337a # v3
