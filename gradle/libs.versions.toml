@@ -4,7 +4,7 @@ jacoco = "0.8.11"
 kotlin = "1.9.22"
 coroutines = "1.7.3"
 ktlint = "1.1.1"
-junit = "5.10.1"
+junit = "5.10.2"
 poko = "0.15.2"
 slf4j = "2.0.11"
 
