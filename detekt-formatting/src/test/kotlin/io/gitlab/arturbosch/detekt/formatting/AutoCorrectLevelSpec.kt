@@ -8,65 +8,67 @@ import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class AutoCorrectLevelSpec {
 
-    @Test
-    fun `autoCorrect_ true on all levels should reformat the test file`() {
-        val config = yamlConfigFromContent(
-            """
-                formatting:
-                  active: true
-                  autoCorrect: true
-                  ChainWrapping:
-                    active: true
-                    autoCorrect: true
-            """.trimIndent()
-        )
+    @ParameterizedTest
+    @CsvSource(
+        "Undefined, Undefined, false",
+        "Undefined, True,      true",
+        "Undefined, False,     false",
+        "True,      Undefined, false",
+        "True,      True,      true",
+        "True,      False,     false",
+        "False,     Undefined, false",
+        "False,     True,      false",
+        "False,     False,     false",
+    )
+    fun autoCorrect(
+        ruleSet: AutoCorrectConfig,
+        rule: AutoCorrectConfig,
+        wasFormatted: Boolean
+    ) {
+        val config = yamlConfigFromContent(createConfig(ruleSet, rule))
 
         val (file, findings) = runRule(config)
 
         assertThat(findings).isNotEmpty()
-        assertThat(wasFormatted(file)).isTrue()
+        if (wasFormatted) {
+            assertThat(wasFormatted(file)).isTrue()
+        } else {
+            assertThat(wasFormatted(file)).isFalse()
+        }
     }
+}
 
-    @Test
-    fun `autoCorrect_ false on ruleSet level should not reformat the test file`() {
-        val config = yamlConfigFromContent(
-            """
-                formatting:
-                  active: true
-                  autoCorrect: false
-                  ChainWrapping:
-                    active: true
-                    autoCorrect: true
-            """.trimIndent()
-        )
+enum class AutoCorrectConfig {
+    True,
+    False,
+    Undefined;
 
-        val (file, findings) = runRule(config)
-
-        assertThat(findings).isNotEmpty()
-        assertThat(wasFormatted(file)).isFalse()
+    override fun toString(): String {
+        return when (this) {
+            True -> "true"
+            False -> "false"
+            Undefined -> "Undefined"
+        }
     }
+}
 
-    @Test
-    fun `autoCorrect_ false on rule level should not reformat the test file`() {
-        val config = yamlConfigFromContent(
-            """
-                formatting:
-                  active: true
-                  autoCorrect: true
-                  ChainWrapping:
-                    active: true
-                    autoCorrect: false
-            """.trimIndent()
-        )
-
-        val (file, findings) = runRule(config)
-
-        assertThat(findings).isNotEmpty()
-        assertThat(wasFormatted(file)).isFalse()
+private fun createConfig(ruleSet: AutoCorrectConfig, rule: AutoCorrectConfig): String {
+    return buildString {
+        appendLine("formatting:")
+        appendLine("  active: true")
+        if (ruleSet != AutoCorrectConfig.Undefined) {
+            appendLine("  autoCorrect: $ruleSet")
+        }
+        appendLine("  ChainWrapping:")
+        appendLine("    active: true")
+        if (rule != AutoCorrectConfig.Undefined) {
+            appendLine("    autoCorrect: $rule")
+        }
     }
 }
 
