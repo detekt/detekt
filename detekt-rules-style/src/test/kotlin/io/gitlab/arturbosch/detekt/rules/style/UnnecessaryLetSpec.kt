@@ -283,6 +283,24 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
         assertThat(findings).isEmpty()
     }
 
+    @Test
+    fun `does not report when it has trailing chain calls`() {
+        val findings = subject.compileAndLintWithContext(
+            env,
+            """
+                class ClickContainer(val onClick: () -> ClickContainer)
+
+                fun test(callbacks: List<ClickContainer>) {
+                    callbacks
+                        .firstOrNull()?.let {
+                            it.onClick().onClick().onClick()
+                        }
+                }
+            """.trimIndent()
+        )
+        assertThat(findings).isEmpty()
+    }
+
     @Nested
     inner class `destructuring declarations` {
         @Test
@@ -427,6 +445,46 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
             """.trimIndent()
         )
         assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report let with which result in nested safe call with invoke`() {
+        val findings = subject.compileAndLintWithContext(
+            env,
+            """
+                class ClickContainer(val onClick: () -> Unit)
+
+                fun test(callbacks: List<ClickContainer>) {
+                    callbacks
+                        .firstOrNull()?.let {
+                            it.onClick()
+                        }
+                    callbacks
+                        .firstOrNull()?.let {
+                            it.onClick.invoke()
+                        }
+                }
+            """.trimIndent()
+        )
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does report let with which result in nested call with invoke`() {
+        val findings = subject.compileAndLintWithContext(
+            env,
+            """
+                class ClickContainer(val onClick: () -> Unit)
+
+                fun test(callbacks: List<ClickContainer>) {
+                    callbacks
+                        .first().let {
+                            it.onClick()
+                        }
+                }
+            """.trimIndent()
+        )
+        assertThat(findings).hasSize(1)
     }
 
     @Test

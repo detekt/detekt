@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import io.gitlab.arturbosch.detekt.rules.firstParameter
 import io.gitlab.arturbosch.detekt.rules.isCalling
 import io.gitlab.arturbosch.detekt.rules.receiverIsUsed
+import org.jetbrains.kotlin.builtins.functions.FunctionInvokeDescriptor
 import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl.WithDestructuringDeclaration
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -19,6 +20,7 @@ import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
 /**
  * `let` expressions are used extensively in our code for null-checking and chaining functions,
@@ -63,12 +65,25 @@ class UnnecessaryLet(config: Config) : Rule(
                     referenceCount == 0 && !expression.receiverIsUsed(bindingContext) ->
                         report(expression, "let expression can be replaced with a simple if")
 
-                    referenceCount == 1 && canBeReplacedWithCall(lambdaExpr) ->
+                    referenceCount == 1 &&
+                        canBeReplacedWithCall(
+                            true,
+                            lambdaExpr,
+                            bindingContext
+                        ) ->
                         report(expression, "let expression can be omitted")
                 }
             }
         } else {
-            if (referenceCount == 0 || canBeReplacedWithCall(lambdaExpr) || !expression.inCallChains()) {
+            if (
+                referenceCount == 0 ||
+                canBeReplacedWithCall(
+                    false,
+                    lambdaExpr,
+                    bindingContext
+                ) ||
+                !expression.inCallChains()
+            ) {
                 report(expression, "let expression can be omitted")
             }
         }
@@ -88,12 +103,32 @@ private fun KtCallExpression.inCallChains(): Boolean {
     return qualified.parent is KtQualifiedExpression || qualified.receiverExpression is KtQualifiedExpression
 }
 
-private fun canBeReplacedWithCall(lambdaExpr: KtLambdaExpression?): Boolean {
+private fun canBeReplacedWithCall(
+    isParentSafeQualifiedExpression: Boolean,
+    lambdaExpr: KtLambdaExpression?,
+    context: BindingContext
+): Boolean {
     if (lambdaExpr == null) return false
 
     val receiver = when (val statement = lambdaExpr.bodyExpression?.statements?.singleOrNull()) {
-        is KtQualifiedExpression -> statement.receiverExpression
-        else -> null
+        is KtQualifiedExpression -> {
+            // if parent doesn't have ?. then there is no need of ?.invoke and let can be removed
+            if (
+                isParentSafeQualifiedExpression &&
+                statement
+                    .selectorExpression
+                    .getResolvedCall(context)
+                    ?.resultingDescriptor is FunctionInvokeDescriptor
+            ) {
+                null
+            } else {
+                statement.receiverExpression
+            }
+        }
+
+        else -> {
+            null
+        }
     } ?: return false
 
     val lambdaParameter = lambdaExpr.valueParameters.singleOrNull()
