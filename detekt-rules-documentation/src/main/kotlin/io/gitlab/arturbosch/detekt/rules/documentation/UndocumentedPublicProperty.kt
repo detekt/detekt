@@ -65,7 +65,6 @@ class UndocumentedPublicProperty(config: Config) : Rule(
     private fun report(property: KtNamedDeclaration) {
         report(
             CodeSmell(
-                issue,
                 Entity.atName(property),
                 "The property ${property.nameAsSafeName} is missing documentation."
             )

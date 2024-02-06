@@ -68,7 +68,6 @@ class ImplicitUnitReturnType(config: Config) : Rule(
             }
             report(
                 CodeSmell(
-                    issue,
                     Entity.atName(function),
                     message
                 )

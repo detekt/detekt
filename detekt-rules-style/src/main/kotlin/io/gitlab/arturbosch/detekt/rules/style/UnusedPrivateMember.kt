@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -60,7 +59,7 @@ class UnusedPrivateMember(config: Config) : Rule(
         super.visit(root)
         val visitor = UnusedFunctionVisitor(allowedNames, bindingContext)
         root.accept(visitor)
-        visitor.getUnusedReports(issue).forEach { report(it) }
+        visitor.getUnusedReports().forEach { report(it) }
     }
 }
 
@@ -75,7 +74,7 @@ private class UnusedFunctionVisitor(
     private val propertyDelegates = mutableListOf<KtPropertyDelegate>()
 
     @Suppress("ComplexMethod", "LongMethod")
-    fun getUnusedReports(issue: Issue): List<CodeSmell> {
+    fun getUnusedReports(): List<CodeSmell> {
         val propertyDelegateResultingDescriptors by lazy(LazyThreadSafetyMode.NONE) {
             propertyDelegates.flatMap { it.resultingDescriptors() }
         }
@@ -135,7 +134,7 @@ private class UnusedFunctionVisitor(
                     else -> emptyList()
                 }
                 unusedFunctions.map {
-                    CodeSmell(issue, Entity.atName(it), "Private function `$functionName` is unused.")
+                    CodeSmell(Entity.atName(it), "Private function `$functionName` is unused.")
                 }
             }
     }

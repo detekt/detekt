@@ -67,6 +67,6 @@ class CastNullableToNonNullableType(config: Config) : Rule(
         val message =
             "Use separate `null` assertion and type cast like ('(${expression.left.text} ?: " +
                 "error(\"null assertion message\")) as ${typeRef.text}') instead of '${expression.text}'."
-        report(CodeSmell(issue, Entity.from(operationReference), message))
+        report(CodeSmell(Entity.from(operationReference), message))
     }
 }

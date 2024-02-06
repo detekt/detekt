@@ -23,7 +23,7 @@ class EmptyDefaultConstructor(config: Config) : EmptyRule(config = config) {
             isNotCalled(constructor) &&
             !isExpectedOrActualClass(constructor)
         ) {
-            report(CodeSmell(issue, Entity.from(constructor), "An empty default constructor can be removed."))
+            report(CodeSmell(Entity.from(constructor), "An empty default constructor can be removed."))
         }
     }
 

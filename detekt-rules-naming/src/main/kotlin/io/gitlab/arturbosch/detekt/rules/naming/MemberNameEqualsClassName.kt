@@ -72,7 +72,7 @@ class MemberNameEqualsClassName(config: Config) : Rule(
     override fun visitClass(klass: KtClass) {
         if (!klass.isInterface()) {
             (getMisnamedMembers(klass, klass.name) + getMisnamedCompanionObjectMembers(klass))
-                .forEach { report(CodeSmell(issue, Entity.from(it), classMessage)) }
+                .forEach { report(CodeSmell(Entity.from(it), classMessage)) }
         }
         super.visitClass(klass)
     }
@@ -80,7 +80,7 @@ class MemberNameEqualsClassName(config: Config) : Rule(
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
         if (!declaration.isCompanion()) {
             getMisnamedMembers(declaration, declaration.name)
-                .forEach { report(CodeSmell(issue, Entity.from(it), objectMessage)) }
+                .forEach { report(CodeSmell(Entity.from(it), objectMessage)) }
         }
         super.visitObjectDeclaration(declaration)
     }

@@ -9,12 +9,10 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.createIssue
 import org.jetbrains.kotlin.psi.KtElement
 import kotlin.io.path.Path
 
 internal fun buildFinding(element: KtElement?): Finding = CodeSmell(
-    issue = createIssue("RuleName"),
     entity = element?.let { Entity.from(element) } ?: buildEmptyEntity(),
     message = "TestMessage",
 )

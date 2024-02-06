@@ -133,7 +133,6 @@ class IgnoredReturnValue(config: Config) : Rule(
         val messageText = expression.calleeExpression?.text ?: expression.text
         report(
             CodeSmell(
-                issue,
                 Entity.from(expression),
                 message = "The call $messageText is returning a value that is ignored."
             )

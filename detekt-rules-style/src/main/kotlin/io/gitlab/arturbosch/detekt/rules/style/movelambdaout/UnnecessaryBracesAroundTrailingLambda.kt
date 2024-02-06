@@ -41,7 +41,6 @@ class UnnecessaryBracesAroundTrailingLambda(config: Config) : Rule(
         if (shouldReportUnnecessaryBracesAroundTrailingLambda(bindingContext, expression)) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(getIssueElement(expression)),
                     "Braces around trailing lambda can be removed."
                 )

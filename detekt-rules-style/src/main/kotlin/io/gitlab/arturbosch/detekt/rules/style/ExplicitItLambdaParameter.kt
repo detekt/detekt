@@ -59,7 +59,6 @@ class ExplicitItLambdaParameter(config: Config) : Rule(
             }
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(lambdaExpression),
                     message
                 )

@@ -13,13 +13,11 @@ import org.junit.jupiter.api.Test
 class SuppressorsSpec {
 
     val noIgnorableCodeSmell = CodeSmell(
-        issue = ARule().issue,
         entity = Entity.from(compileContentForTest("""fun foo() = Unit""".trimIndent())),
         message = "TestMessage"
     )
 
     val ignorableCodeSmell = CodeSmell(
-        issue = ARule().issue,
         entity = Entity.from(
             compileContentForTest(
                 """

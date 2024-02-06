@@ -43,7 +43,6 @@ class UnsafeCast(config: Config) : Rule(
         ) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(expression),
                     "${expression.left.text} cast to ${expression.right?.text.orEmpty()} cannot succeed."
                 )

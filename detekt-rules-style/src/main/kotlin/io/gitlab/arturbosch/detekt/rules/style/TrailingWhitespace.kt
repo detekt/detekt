@@ -50,7 +50,7 @@ class TrailingWhitespace(config: Config) : Rule(
                             )
                         )
                     }
-                    report(CodeSmell(issue, entity, createMessage(index)))
+                    report(CodeSmell(entity, createMessage(index)))
                 }
             }
             offset += 1 // '\n'

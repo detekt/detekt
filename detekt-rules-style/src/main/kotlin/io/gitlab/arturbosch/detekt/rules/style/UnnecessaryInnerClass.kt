@@ -58,7 +58,6 @@ class UnnecessaryInnerClass(config: Config) : Rule(
         if (klass.isInner() && candidateClassToParentClasses.contains(klass)) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.Companion.from(klass),
                     "Class '${klass.name}' does not require `inner` keyword."
                 )

@@ -52,7 +52,7 @@ class InvalidPackageDeclaration(config: Config) : Rule(
     }
 
     private fun KtElement.reportInvalidPackageDeclaration(message: String) {
-        report(CodeSmell(issue, Entity.from(this), message))
+        report(CodeSmell(Entity.from(this), message))
     }
 
     private fun <T> Iterable<T>.toNormalizedForm() = joinToString("|")

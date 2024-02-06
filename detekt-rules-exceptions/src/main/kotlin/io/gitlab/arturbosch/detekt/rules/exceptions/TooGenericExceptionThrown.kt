@@ -53,7 +53,6 @@ class TooGenericExceptionThrown(config: Config) : Rule(
             if (it in exceptionNames) {
                 report(
                     CodeSmell(
-                        issue,
                         Entity.from(expression),
                         "$it is a too generic Exception. " +
                             "Prefer throwing specific exceptions that indicate a specific error case."

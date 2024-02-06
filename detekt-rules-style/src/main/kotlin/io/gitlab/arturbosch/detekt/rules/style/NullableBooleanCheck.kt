@@ -48,7 +48,6 @@ class NullableBooleanCheck(config: Config) : Rule(
                 }
             report(
                 CodeSmell(
-                    issue = issue,
                     entity = Entity.from(expression),
                     message = "The nullable boolean check `${expression.text}` should use $messageSuffix",
                 )

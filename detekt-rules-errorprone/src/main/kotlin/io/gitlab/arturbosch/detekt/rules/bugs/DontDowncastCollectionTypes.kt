@@ -68,7 +68,7 @@ class DontDowncastCollectionTypes(config: Config) : Rule(
             if (rhsType != null && rhsType.startsWith("Mutable")) {
                 message += " Use `to$rhsType()` instead."
             }
-            report(CodeSmell(issue, Entity.from(parent), message))
+            report(CodeSmell(Entity.from(parent), message))
         }
     }
 

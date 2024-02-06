@@ -46,7 +46,7 @@ abstract class EmptyRule(
             return
         }
         if (children.isEmpty() && !hasComment) {
-            report(CodeSmell(issue, Entity.from(this), codeSmellMessage))
+            report(CodeSmell(Entity.from(this), codeSmellMessage))
         }
     }
 }

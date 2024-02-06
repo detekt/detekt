@@ -50,7 +50,6 @@ class ObjectExtendsThrowable(config: Config) : Rule(
         if (!declaration.isObjectLiteral() && declaration.isSubtypeOfThrowable()) {
             report(
                 CodeSmell(
-                    issue = issue,
                     entity = Entity.from(element = declaration),
                     message = "${declaration.nameAsSafeName} should be a class instead of an " +
                         "object because it is a subtype of Throwable."

@@ -62,7 +62,7 @@ class SleepInsteadOfDelay(config: Config) : Rule(
 
     private fun checkAndReport(expression: KtExpression) {
         if (expression.isThreadSleepFunction() && shouldReport(expression)) {
-            report(CodeSmell(issue, Entity.from(expression), SUSPEND_FUN_MESSAGE))
+            report(CodeSmell(Entity.from(expression), SUSPEND_FUN_MESSAGE))
         }
     }
 

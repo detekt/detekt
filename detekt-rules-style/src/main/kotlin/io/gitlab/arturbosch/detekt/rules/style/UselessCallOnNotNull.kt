@@ -74,7 +74,7 @@ class UselessCallOnNotNull(config: Config) : Rule(
             } else {
                 "Replace $shortName with ${conversion.replacementName}"
             }
-            report(CodeSmell(issue, Entity.from(expression), message))
+            report(CodeSmell(Entity.from(expression), message))
         }
     }
 
@@ -86,7 +86,7 @@ class UselessCallOnNotNull(config: Config) : Rule(
         if (fqName == listOfNotNull) {
             val varargs = resolvedCall.valueArguments.entries.single().value.arguments
             if (varargs.all { it.isNullable() == false }) {
-                report(CodeSmell(issue, Entity.from(expression), "Replace listOfNotNull with listOf"))
+                report(CodeSmell(Entity.from(expression), "Replace listOfNotNull with listOf"))
             }
         }
     }

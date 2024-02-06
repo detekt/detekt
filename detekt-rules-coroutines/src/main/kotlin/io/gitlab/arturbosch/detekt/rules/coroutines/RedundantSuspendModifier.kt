@@ -68,7 +68,7 @@ class RedundantSuspendModifier(config: Config) : Rule(
         if (descriptor.modality == Modality.OPEN) return
 
         if (!function.anyDescendantOfType<KtExpression> { it.hasSuspendCalls() }) {
-            report(CodeSmell(issue, Entity.from(suspendModifier), "Function has redundant `suspend` modifier."))
+            report(CodeSmell(Entity.from(suspendModifier), "Function has redundant `suspend` modifier."))
         }
     }
 

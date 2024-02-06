@@ -38,7 +38,6 @@ class PreferToOverPairSyntax(config: Config) : Rule(
             val arg = expression.valueArguments.joinToString(" to ") { it.text }
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(expression),
                     message = "Pair is created by using the pair constructor. " +
                         "This can replaced by `$arg`."

@@ -53,7 +53,7 @@ class UseSumOfInsteadOfFlatMapSize(config: Config) : Rule(
 
         val selectorText = (selector as? KtCallExpression)?.calleeExpression?.text ?: selector.text
         val message = "Use 'sumOf' instead of '$calleeText' and '$selectorText'"
-        report(CodeSmell(issue, Entity.from(expression), message))
+        report(CodeSmell(Entity.from(expression), message))
     }
 
     private fun KtCallExpression.isFlatMapOrFlatten(): Boolean = isCalling(flatMapAndFlattenFqName, bindingContext)

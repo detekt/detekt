@@ -103,7 +103,6 @@ class StringShouldBeRawString(config: Config) : Rule(
             if (hasNoViolations.not()) {
                 report(
                     CodeSmell(
-                        issue,
                         Entity.from(rootElement ?: expression),
                         "String with escape characters should be converted to raw string",
                     )

@@ -74,7 +74,6 @@ class ClassOrdering(config: Config) : Rule(
                 "${declaration.toDescription()} should be declared $directionMsg ${anchorSection.toDescription()}."
             report(
                 CodeSmell(
-                    issue = issue,
                     entity = Entity.from(declaration),
                     message = message,
                     references = listOf(Entity.from(classBody))

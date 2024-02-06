@@ -76,7 +76,6 @@ class DoubleNegativeLambda(config: Config) : Rule(
         if (forbiddenChildren.isNotEmpty()) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(expression),
                     formatMessage(forbiddenChildren, negativeFunction)
                 )

@@ -71,7 +71,6 @@ class ReturnCount(config: Config) : Rule(
             if (numberOfReturns > max) {
                 report(
                     CodeSmell(
-                        issue,
                         Entity.atName(function),
                         "Function ${function.name} has $numberOfReturns return statements " +
                             "which exceeds the limit of $max."

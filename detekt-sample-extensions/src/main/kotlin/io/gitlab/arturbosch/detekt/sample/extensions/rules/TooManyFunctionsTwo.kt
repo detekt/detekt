@@ -26,7 +26,6 @@ class TooManyFunctionsTwo(config: Config) : Rule(
         if (amount > allowedFunctions) {
             report(
                 CodeSmell(
-                    issue,
                     entity = Entity.from(file),
                     message = "The file ${file.name} has $amount function declarations. " +
                         "The maximum number of allowed functions is specified with $allowedFunctions.",

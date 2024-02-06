@@ -65,7 +65,7 @@ class UnnecessaryFilter(config: Config) : Rule(
 
         secondCalls.firstOrNull { nextCall.isCalling(it.fqName) }?.let {
             val message = "'${expression.text}' can be replaced by '${it.correctOperator} $lambdaArgumentText'"
-            report(CodeSmell(issue, Entity.from(expression), message))
+            report(CodeSmell(Entity.from(expression), message))
         }
     }
 

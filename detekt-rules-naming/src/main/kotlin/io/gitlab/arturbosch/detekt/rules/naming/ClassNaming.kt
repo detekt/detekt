@@ -31,7 +31,6 @@ class ClassNaming(config: Config) : Rule(
         if (!classOrObject.identifierName().removeSurrounding("`").matches(classPattern)) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atName(classOrObject),
                     message = "Class and Object names should match the pattern: $classPattern"
                 )

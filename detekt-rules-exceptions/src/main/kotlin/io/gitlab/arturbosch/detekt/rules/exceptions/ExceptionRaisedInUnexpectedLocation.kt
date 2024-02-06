@@ -47,7 +47,6 @@ class ExceptionRaisedInUnexpectedLocation(config: Config) : Rule(
         if (isPotentialMethod(function) && hasThrowExpression(function.bodyExpression)) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atName(function),
                     issue.description
                 )

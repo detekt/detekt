@@ -58,7 +58,6 @@ class InjectDispatcher(config: Config) : Rule(
         if (isCoroutineDispatcher && !isUsedAsParameter) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(expression),
                     "Dispatcher ${expression.getReferencedName()} is used without dependency injection."
                 )

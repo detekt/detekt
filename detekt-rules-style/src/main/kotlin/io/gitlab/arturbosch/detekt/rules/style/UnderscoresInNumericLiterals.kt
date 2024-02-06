@@ -104,7 +104,7 @@ class UnderscoresInNumericLiterals(config: Config) : Rule(
     }
 
     private fun doReport(expression: KtConstantExpression, message: String) {
-        report(CodeSmell(issue, Entity.from(expression), message))
+        report(CodeSmell(Entity.from(expression), message))
     }
 
     private fun String.hasNonStandardGrouping(): Boolean = contains('_') && !matches(HAS_ONLY_STANDARD_GROUPING)

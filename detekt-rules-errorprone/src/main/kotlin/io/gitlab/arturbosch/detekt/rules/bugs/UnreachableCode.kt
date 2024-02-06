@@ -43,7 +43,6 @@ class UnreachableCode(config: Config) : Rule(
         ) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(expression),
                     "This expression is unreachable code which should either be used or removed."
                 )

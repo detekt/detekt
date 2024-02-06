@@ -18,7 +18,7 @@ internal class UseEntityAtNameSpec {
             import org.jetbrains.kotlin.com.intellij.psi.PsiElement
             
             fun Rule.f(element: PsiElement) {
-                report(CodeSmell(issue, Entity.from(element), "message"))
+                report(CodeSmell(Entity.from(element), "message"))
             }
         """.trimIndent()
         val findings = rule.compileAndLint(code)
@@ -34,7 +34,7 @@ internal class UseEntityAtNameSpec {
             import org.jetbrains.kotlin.psi.KtNamedDeclaration
             
             fun Rule.f(element: KtNamedDeclaration) {
-                report(CodeSmell(issue, Entity.atName(element), "message"))
+                report(CodeSmell(Entity.atName(element), "message"))
             }
         """.trimIndent()
         val findings = rule.compileAndLint(code)
@@ -50,7 +50,7 @@ internal class UseEntityAtNameSpec {
             import org.jetbrains.kotlin.com.intellij.psi.PsiNameIdentifierOwner
             
             fun Rule.f(element: PsiNameIdentifierOwner) {
-                report(CodeSmell(issue, Entity.from(element.nameIdentifier!!), "message"))
+                report(CodeSmell(Entity.from(element.nameIdentifier!!), "message"))
             }
         """.trimIndent()
         val findings = rule.compileAndLint(code)
@@ -67,7 +67,7 @@ internal class UseEntityAtNameSpec {
             import org.jetbrains.kotlin.com.intellij.psi.PsiNameIdentifierOwner
             
             fun Rule.f(element: PsiNameIdentifierOwner) {
-                report(CodeSmell(issue, Entity.from(element.nameIdentifier!!!!), "message"))
+                report(CodeSmell(Entity.from(element.nameIdentifier!!!!), "message"))
             }
         """.trimIndent()
         val findings = rule.compileAndLint(code)
@@ -84,7 +84,7 @@ internal class UseEntityAtNameSpec {
             import org.jetbrains.kotlin.com.intellij.psi.PsiNameIdentifierOwner
             
             fun Rule.f(element: PsiNameIdentifierOwner) {
-                report(CodeSmell(issue, Entity.from(element.nameIdentifier ?: element), "message"))
+                report(CodeSmell(Entity.from(element.nameIdentifier ?: element), "message"))
             }
         """.trimIndent()
         val findings = rule.compileAndLint(code)
@@ -104,7 +104,7 @@ internal class UseEntityAtNameSpec {
             import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
             
             fun Rule.f(element: PsiExpression) {
-                report(CodeSmell(issue, Entity.from(element.getStrictParentOfType<KtClass>()?.nameIdentifier ?: element), "message"))
+                report(CodeSmell(Entity.from(element.getStrictParentOfType<KtClass>()?.nameIdentifier ?: element), "message"))
             }
         """.trimIndent()
         val findings = rule.compileAndLint(code)
@@ -123,7 +123,7 @@ internal class UseEntityAtNameSpec {
             import org.jetbrains.kotlin.com.intellij.psi.PsiNameIdentifierOwner
             
             fun Rule.f(element: PsiNameIdentifierOwner, element2: PsiElement) {
-                report(CodeSmell(issue, Entity.from(element.nameIdentifier ?: element2), "message"))
+                report(CodeSmell(Entity.from(element.nameIdentifier ?: element2), "message"))
             }
         """.trimIndent()
         val findings = rule.compileAndLint(code)
@@ -141,7 +141,7 @@ internal class UseEntityAtNameSpec {
             import org.jetbrains.kotlin.com.intellij.psi.PsiNameIdentifierOwner
             
             fun Rule.f(element: PsiNameIdentifierOwner, element2: PsiElement) {
-                report(CodeSmell(issue, Entity.from(element.nameIdentifier ?: element2, 0), "message"))
+                report(CodeSmell(Entity.from(element.nameIdentifier ?: element2, 0), "message"))
             }
         """.trimIndent()
         val findings = rule.compileAndLint(code)

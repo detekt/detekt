@@ -57,7 +57,7 @@ class ForbiddenVoid(config: Config) : Rule(
             if (ignoreUsageInGenerics && typeReference.isGenericArgument()) {
                 return
             }
-            report(CodeSmell(issue, Entity.from(typeReference), message = "'Void' should be replaced with 'Unit'."))
+            report(CodeSmell(Entity.from(typeReference), message = "'Void' should be replaced with 'Unit'."))
         }
 
         super.visitTypeReference(typeReference)

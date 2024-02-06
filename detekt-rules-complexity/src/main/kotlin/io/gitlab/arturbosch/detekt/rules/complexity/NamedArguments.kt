@@ -45,7 +45,7 @@ class NamedArguments(config: Config) : Rule(
         if (valueArguments.size > allowedArguments && expression.canNameArguments()) {
             val message = "This function call has ${valueArguments.size} arguments. To call a function with more " +
                 "than $allowedArguments arguments you should set the name of each argument."
-            report(CodeSmell(issue, Entity.from(expression), message))
+            report(CodeSmell(Entity.from(expression), message))
         } else {
             super.visitCallExpression(expression)
         }

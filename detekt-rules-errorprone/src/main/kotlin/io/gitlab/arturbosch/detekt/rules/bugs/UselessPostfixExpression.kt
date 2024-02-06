@@ -111,7 +111,6 @@ class UselessPostfixExpression(config: Config) : Rule(
     private fun report(postfixExpression: KtPostfixExpression) {
         report(
             CodeSmell(
-                issue,
                 Entity.from(postfixExpression),
                 "The result of the postfix expression: " +
                     "${postfixExpression.text} will not be used and is therefore useless."

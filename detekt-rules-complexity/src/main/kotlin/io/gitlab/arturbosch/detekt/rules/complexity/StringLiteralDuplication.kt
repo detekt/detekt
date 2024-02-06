@@ -63,7 +63,6 @@ class StringLiteralDuplication(config: Config) : Rule(
             val (main, references) = visitor.entitiesForLiteral(name)
             report(
                 ThresholdedCodeSmell(
-                    issue,
                     main,
                     Metric(value, allowedDuplications),
                     issue.description,

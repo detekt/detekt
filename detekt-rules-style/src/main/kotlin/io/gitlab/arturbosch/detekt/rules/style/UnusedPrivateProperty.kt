@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isActual
@@ -63,7 +62,7 @@ class UnusedPrivateProperty(config: Config) : Rule(
         super.visit(root)
         val visitor = UnusedPrivatePropertyVisitor(allowedNames)
         root.accept(visitor)
-        visitor.getUnusedReports(issue).forEach { report(it) }
+        visitor.getUnusedReports().forEach { report(it) }
     }
 }
 
@@ -73,12 +72,11 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
     private val properties = mutableSetOf<KtNamedDeclaration>()
     private val nameAccesses = mutableSetOf<String>()
 
-    fun getUnusedReports(issue: Issue): List<CodeSmell> {
+    fun getUnusedReports(): List<CodeSmell> {
         return properties
             .filter { it.nameAsSafeName.identifier !in nameAccesses }
             .map {
                 CodeSmell(
-                    issue,
                     Entity.atName(it),
                     "Private property `${it.nameAsSafeName.identifier}` is unused.",
                 )

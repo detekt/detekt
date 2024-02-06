@@ -37,7 +37,6 @@ class ViolatesTypeResolutionRequirements(config: Config) : Rule(
             if (usesBindingContext && !isAnnotatedWithRequiresTypeResolution) {
                 report(
                     CodeSmell(
-                        issue,
                         Entity.atName(klass),
                         "`${klass.name}` uses `bindingContext` but is not annotated with `@RequiresTypeResolution`"
                     )
@@ -45,7 +44,6 @@ class ViolatesTypeResolutionRequirements(config: Config) : Rule(
             } else if (!usesBindingContext && isAnnotatedWithRequiresTypeResolution) {
                 report(
                     CodeSmell(
-                        issue,
                         Entity.atName(klass),
                         "`${klass.name}` is annotated with `@RequiresTypeResolution` but doesn't use `bindingContext`"
                     )

@@ -32,7 +32,6 @@ class UndocumentedPublicFunction(config: Config) : Rule(
         if (function.docComment == null && function.shouldBeDocumented()) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atName(function),
                     "The function ${function.nameAsSafeName} is missing documentation."
                 )

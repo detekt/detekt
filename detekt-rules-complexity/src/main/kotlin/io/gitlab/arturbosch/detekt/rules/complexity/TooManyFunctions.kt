@@ -64,7 +64,6 @@ class TooManyFunctions(config: Config) : Rule(
         if (amountOfTopLevelFunctions > allowedFunctionsPerFile) {
             report(
                 ThresholdedCodeSmell(
-                    issue,
                     Entity.atPackageOrFirstDecl(file),
                     Metric(amountOfTopLevelFunctions, allowedFunctionsPerFile),
                     "File '${file.name}' with '$amountOfTopLevelFunctions' functions detected. " +
@@ -88,7 +87,6 @@ class TooManyFunctions(config: Config) : Rule(
                 if (amount > allowedFunctionsPerInterface) {
                     report(
                         ThresholdedCodeSmell(
-                            issue,
                             Entity.atName(klass),
                             Metric(amount, allowedFunctionsPerInterface),
                             "Interface '${klass.name}' with '$amount' functions detected. " +
@@ -103,7 +101,6 @@ class TooManyFunctions(config: Config) : Rule(
                 if (amount > allowedFunctionsPerEnum) {
                     report(
                         ThresholdedCodeSmell(
-                            issue,
                             Entity.atName(klass),
                             Metric(amount, allowedFunctionsPerEnum),
                             "Enum class '${klass.name}' with '$amount' functions detected. " +
@@ -118,7 +115,6 @@ class TooManyFunctions(config: Config) : Rule(
                 if (amount > allowedFunctionsPerClass) {
                     report(
                         ThresholdedCodeSmell(
-                            issue,
                             Entity.atName(klass),
                             Metric(amount, allowedFunctionsPerClass),
                             "Class '${klass.name}' with '$amount' functions detected. " +
@@ -136,7 +132,6 @@ class TooManyFunctions(config: Config) : Rule(
         if (amount > allowedFunctionsPerObject) {
             report(
                 ThresholdedCodeSmell(
-                    issue,
                     Entity.atName(declaration),
                     Metric(amount, allowedFunctionsPerObject),
                     "Object '${declaration.name}' with '$amount' functions detected. " +

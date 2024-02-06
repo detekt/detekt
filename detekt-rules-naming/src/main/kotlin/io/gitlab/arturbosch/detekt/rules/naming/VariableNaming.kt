@@ -73,7 +73,6 @@ class VariableNaming(config: Config) : Rule(
     private fun report(property: KtProperty, message: String) {
         report(
             CodeSmell(
-                issue,
                 Entity.atName(property),
                 message = message
             )

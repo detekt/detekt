@@ -60,7 +60,6 @@ class CascadingCallWrapping(config: Config) : Rule(
             val callTextOrEmpty = callExpression?.text?.let { " `$it`" }.orEmpty()
             report(
                 CodeSmell(
-                    issue = issue,
                     entity = expression.toErrorReportEntity(),
                     message = "Chained call$callTextOrEmpty should be wrapped to a new line since preceding calls were."
                 )

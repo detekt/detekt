@@ -49,7 +49,7 @@ class UnusedPrivateClass(config: Config) : Rule(
         root.accept(classVisitor)
 
         classVisitor.getUnusedClasses().forEach {
-            report(CodeSmell(issue, Entity.from(it), "Private class ${it.nameAsSafeName.identifier} is unused."))
+            report(CodeSmell(Entity.from(it), "Private class ${it.nameAsSafeName.identifier} is unused."))
         }
     }
 

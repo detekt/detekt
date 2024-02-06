@@ -60,7 +60,7 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(
 
         // By this point we know we're inside a test function that is not a `runTest` function.
         if (funCoroutineLaunchesTraverseHelper.isFunctionLaunchingCoroutines(initialFunction, bindingContext)) {
-            report(CodeSmell(issue, Entity.from(initialFunction), MESSAGE))
+            report(CodeSmell(Entity.from(initialFunction), MESSAGE))
         }
     }
 

@@ -162,7 +162,6 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
     ) {
         report(
             CodeSmell(
-                issue,
                 Entity.from((expression.calleeExpression as? PsiElement) ?: expression),
                 "The `runCatching` has suspend call inside. You should either use specific `try-catch` " +
                     "only catching exception that you are expecting or rethrow the `CancellationException` if " +

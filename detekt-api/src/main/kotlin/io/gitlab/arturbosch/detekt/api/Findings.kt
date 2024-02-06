@@ -7,7 +7,6 @@ package io.gitlab.arturbosch.detekt.api
  * described as an entity. Entity references can also be considered for deeper characterization.
  */
 interface Finding : HasEntity {
-    val issue: Issue
     val references: List<Entity>
     val message: String
 }

@@ -103,7 +103,7 @@ class MissingWhenCase(config: Config) : Rule(
             if (allowElseExpression) {
                 message += " Either add missing cases or a default `else` case."
             }
-            report(CodeSmell(issue, Entity.from(expression), message))
+            report(CodeSmell(Entity.from(expression), message))
         }
     }
 }

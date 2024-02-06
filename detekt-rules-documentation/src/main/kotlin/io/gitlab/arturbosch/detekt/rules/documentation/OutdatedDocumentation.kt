@@ -224,7 +224,6 @@ class OutdatedDocumentation(config: Config) : Rule(
     private fun reportCodeSmell(element: KtNamedDeclaration) {
         report(
             CodeSmell(
-                issue,
                 Entity.atName(element),
                 "Documentation of ${element.nameAsSafeName} is outdated"
             )

@@ -68,7 +68,6 @@ class UndocumentedPublicClass(config: Config) : Rule(
         ) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atName(element),
                     "${element.nameAsSafeName} is missing required documentation."
                 )

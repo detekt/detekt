@@ -29,7 +29,6 @@ class VariableMaxLength(config: Config) : Rule(
         if (property.identifierName().length > maximumVariableNameLength) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atName(property),
                     message = "Variable names should be at most $maximumVariableNameLength characters long."
                 )

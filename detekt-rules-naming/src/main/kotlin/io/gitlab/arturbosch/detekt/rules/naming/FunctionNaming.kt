@@ -50,7 +50,6 @@ class FunctionNaming(config: Config) : Rule(
         ) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atName(function),
                     message = "Function names should match the pattern: $functionPattern"
                 )

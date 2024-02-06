@@ -82,7 +82,6 @@ class OptionalUnit(config: Config) : Rule(
             .onEach {
                 report(
                     CodeSmell(
-                        issue,
                         Entity.from(expression),
                         "A single Unit expression is unnecessary and can safely be removed."
                     )
@@ -111,14 +110,14 @@ class OptionalUnit(config: Config) : Rule(
         if (typeElementText == UNIT) {
             val initializer = function.initializer
             if (initializer?.isGenericOrNothingType() == true) return
-            report(CodeSmell(issue, Entity.from(typeReference), createMessage(function)))
+            report(CodeSmell(Entity.from(typeReference), createMessage(function)))
         }
     }
 
     private fun checkFunctionWithInferredReturnType(function: KtNamedFunction) {
         val referenceExpression = function.bodyExpression as? KtNameReferenceExpression
         if (referenceExpression != null && referenceExpression.text == UNIT) {
-            report(CodeSmell(issue, Entity.from(referenceExpression), createMessage(function)))
+            report(CodeSmell(Entity.from(referenceExpression), createMessage(function)))
         }
     }
 

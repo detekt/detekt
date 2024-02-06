@@ -48,7 +48,6 @@ class UnnecessarySafeCall(config: Config) : Rule(
         if (compilerReport != null) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(expression),
                     "${expression.text} contains an unnecessary " +
                         "safe call operator"

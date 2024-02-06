@@ -64,7 +64,7 @@ class UnusedUnaryOperator(config: Config) : Rule(
         if (!KotlinBuiltIns.isUnderKotlinPackage(operatorDescriptor)) return
 
         val message = "This '${parentOrSelf.text}' is not used"
-        report(CodeSmell(issue, Entity.from(expression), message))
+        report(CodeSmell(Entity.from(expression), message))
     }
 
     private fun KtExpression.parentBinaryExpressionOrThis(): KtExpression {

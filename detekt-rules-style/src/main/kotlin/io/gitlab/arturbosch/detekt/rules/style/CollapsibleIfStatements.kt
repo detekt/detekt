@@ -39,7 +39,7 @@ class CollapsibleIfStatements(config: Config) : Rule(
 
     override fun visitIfExpression(expression: KtIfExpression) {
         if (isNotElseIfOrElse(expression) && hasOneKtIfExpression(expression)) {
-            report(CodeSmell(issue, Entity.from(expression), issue.description))
+            report(CodeSmell(Entity.from(expression), issue.description))
         }
         super.visitIfExpression(expression)
     }

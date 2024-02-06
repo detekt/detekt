@@ -34,7 +34,6 @@ class UseEntityAtName(config: Config) : Rule(
             if (target != null) {
                 report(
                     CodeSmell(
-                        issue,
                         Entity.from(expression.getCallNameExpression() ?: expression),
                         "Recommended to use Entity.atName(${target.text}) instead."
                     )

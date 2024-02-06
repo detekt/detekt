@@ -72,7 +72,7 @@ class UnnecessaryParentheses(config: Config) : Rule(
 
         val message = "Parentheses in ${expression.text} are unnecessary and can be replaced with: " +
             KtPsiUtil.deparenthesize(expression)?.text
-        report(CodeSmell(issue, Entity.from(expression), message))
+        report(CodeSmell(Entity.from(expression), message))
     }
 
     companion object {

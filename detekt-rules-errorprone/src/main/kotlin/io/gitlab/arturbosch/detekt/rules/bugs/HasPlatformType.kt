@@ -49,7 +49,6 @@ class HasPlatformType(config: Config) : Rule(
         if (element is KtCallableDeclaration && element.hasImplicitPlatformType()) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(element),
                     "$element has implicit platform type. Type must be declared explicitly."
                 )

@@ -53,7 +53,6 @@ class MethodOverloading(config: Config) : Rule(
             for ((name, value) in methods.filterValues { it > allowedOverloads }) {
                 report(
                     ThresholdedCodeSmell(
-                        issue,
                         entity,
                         Metric(value, allowedOverloads),
                         message = "The method '$name' is overloaded $value times."

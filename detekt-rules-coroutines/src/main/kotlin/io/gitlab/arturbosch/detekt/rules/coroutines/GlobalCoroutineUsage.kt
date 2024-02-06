@@ -45,7 +45,7 @@ class GlobalCoroutineUsage(config: Config) : Rule(
         if (expression.receiverExpression.text == "GlobalScope" &&
             expression.getCalleeExpressionIfAny()?.text in listOf("launch", "async")
         ) {
-            report(CodeSmell(issue, Entity.from(expression), MESSAGE))
+            report(CodeSmell(Entity.from(expression), MESSAGE))
         }
 
         super.visitDotQualifiedExpression(expression)

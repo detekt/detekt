@@ -16,7 +16,6 @@ class EmptyElseBlock(config: Config) : EmptyRule(config) {
         expression.`else`?.addFindingIfBlockExprIsEmpty() ?: checkThenBodyForLoneSemicolon(expression) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(it),
                     "This else block is empty and can be removed."
                 )

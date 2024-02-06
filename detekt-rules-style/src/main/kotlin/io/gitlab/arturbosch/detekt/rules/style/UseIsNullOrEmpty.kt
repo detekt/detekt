@@ -62,7 +62,7 @@ class UseIsNullOrEmpty(config: Config) : Rule(
         if (nullCheckedExpression.text != sizeCheckedExpression.text) return
 
         val message = "This '${expression.text}' can be replaced with 'isNullOrEmpty()' call"
-        report(CodeSmell(issue, Entity.from(expression), message))
+        report(CodeSmell(Entity.from(expression), message))
     }
 
     private fun KtExpression.isSimpleNameExpression(): Boolean =

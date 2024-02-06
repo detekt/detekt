@@ -148,7 +148,6 @@ class ForbiddenComment(config: Config) : Rule(
     private fun reportIssue(comment: PsiElement, msg: String) {
         report(
             CodeSmell(
-                issue,
                 Entity.from(comment),
                 msg
             )

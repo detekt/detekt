@@ -63,7 +63,6 @@ class WildcardImport(config: Config) : Rule(
             }
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(importDirective),
                     "$import " +
                         "is a wildcard import. Replace it with fully qualified imports."

@@ -58,7 +58,7 @@ class UnreachableCatchBlock(config: Config) : Rule(
         if (prevCatchClauses.isEmpty()) return
         val catchClassDescriptor = catchClause.catchClassDescriptor() ?: return
         if (prevCatchClauses.any { catchClassDescriptor.isSubclassOf(it) }) {
-            report(CodeSmell(issue, Entity.from(catchClause), "This catch block is unreachable."))
+            report(CodeSmell(Entity.from(catchClause), "This catch block is unreachable."))
         }
     }
 

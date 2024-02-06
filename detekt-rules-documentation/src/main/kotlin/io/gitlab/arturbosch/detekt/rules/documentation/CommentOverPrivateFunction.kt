@@ -27,7 +27,6 @@ class CommentOverPrivateFunction(config: Config) : Rule(
         if (function.hasCommentInPrivateMember()) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atName(function),
                     "The function ${function.nameAsSafeName} " +
                         "has a comment. Prefer renaming the function giving it a more self-explanatory name."

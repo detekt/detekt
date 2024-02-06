@@ -84,7 +84,7 @@ class AbstractClassCanBeConcreteClass(config: Config) : Rule(
             members.isNotEmpty() -> checkMembers(members, nameIdentifier)
             hasInheritedMember(true) && isAnyParentAbstract() -> return
             hasConstructorParameter() ->
-                report(CodeSmell(issue, Entity.from(nameIdentifier), noAbstractMember))
+                report(CodeSmell(Entity.from(nameIdentifier), noAbstractMember))
         }
     }
 
@@ -94,7 +94,7 @@ class AbstractClassCanBeConcreteClass(config: Config) : Rule(
     ) {
         val (abstractMembers, _) = members.partition { it.isAbstract() }
         if (abstractMembers.isEmpty() && !hasInheritedMember(true)) {
-            report(CodeSmell(issue, Entity.from(nameIdentifier), noAbstractMember))
+            report(CodeSmell(Entity.from(nameIdentifier), noAbstractMember))
         }
     }
 

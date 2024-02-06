@@ -124,7 +124,6 @@ class KDocReferencesNonPublicProperty(config: Config) : Rule(
     private fun report(property: KtNamedDeclaration) {
         report(
             CodeSmell(
-                issue,
                 Entity.atName(property),
                 "The property ${property.nameAsSafeName} " +
                     "is non-public and should not be referenced from KDoc comments."

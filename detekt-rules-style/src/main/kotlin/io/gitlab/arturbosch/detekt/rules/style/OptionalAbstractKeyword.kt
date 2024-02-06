@@ -51,7 +51,7 @@ class OptionalAbstractKeyword(config: Config) : Rule(
 
     private fun handleAbstractKeyword(dcl: KtDeclaration) {
         dcl.modifierList?.getModifier(KtTokens.ABSTRACT_KEYWORD)?.let {
-            report(CodeSmell(issue, Entity.from(it), "The abstract keyword on this declaration is unnecessary."))
+            report(CodeSmell(Entity.from(it), "The abstract keyword on this declaration is unnecessary."))
         }
     }
 }

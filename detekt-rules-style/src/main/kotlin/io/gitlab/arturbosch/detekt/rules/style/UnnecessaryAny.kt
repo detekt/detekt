@@ -57,7 +57,6 @@ class UnnecessaryAny(config: Config) : Rule(
         if (msg != null) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(expression),
                     msg
                 )

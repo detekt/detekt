@@ -47,7 +47,6 @@ class DeprecatedBlockTag(config: Config) : Rule(
             section.findTagsByName("deprecated").forEach { tag ->
                 report(
                     CodeSmell(
-                        issue,
                         Entity.from(dcl),
                         "@deprecated tag block does not properly report deprecation in Kotlin, use @Deprecated " +
                             "annotation instead",

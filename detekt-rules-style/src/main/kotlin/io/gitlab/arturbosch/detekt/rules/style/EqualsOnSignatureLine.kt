@@ -42,7 +42,7 @@ class EqualsOnSignatureLine(config: Config) : Rule(
             .takeWhile { it is PsiWhiteSpace || it is PsiComment }
             .any { it is PsiWhiteSpace && it.textContains('\n') }
         if (hasLineBreakBeforeEqualsToken) {
-            report(CodeSmell(issue, Entity.from(equalsToken), MESSAGE))
+            report(CodeSmell(Entity.from(equalsToken), MESSAGE))
         }
     }
 

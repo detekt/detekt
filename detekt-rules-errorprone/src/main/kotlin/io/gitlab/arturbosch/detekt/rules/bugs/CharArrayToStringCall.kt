@@ -74,7 +74,6 @@ class CharArrayToStringCall(config: Config) : Rule(
 
     private fun report(expression: KtExpression) {
         val codeSmell = CodeSmell(
-            issue,
             Entity.from(expression),
             "Use `concatToString()` call instead of `toString()` call."
         )

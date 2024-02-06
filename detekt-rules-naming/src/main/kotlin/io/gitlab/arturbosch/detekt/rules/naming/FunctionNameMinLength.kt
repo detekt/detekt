@@ -33,7 +33,6 @@ class FunctionNameMinLength(config: Config) : Rule(
         if (function.identifierName().length < minimumFunctionNameLength) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atName(function),
                     message = "Function names should be at least $minimumFunctionNameLength characters long."
                 )

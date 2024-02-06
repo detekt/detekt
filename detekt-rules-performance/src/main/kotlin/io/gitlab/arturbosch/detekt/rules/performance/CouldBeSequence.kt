@@ -60,7 +60,7 @@ class CouldBeSequence(config: Config) : Rule(
 
         if (counter > allowedOperations) {
             val message = "${expression.text} could be .asSequence().${expression.text}"
-            report(CodeSmell(issue, Entity.from(expression), message))
+            report(CodeSmell(Entity.from(expression), message))
         }
     }
 

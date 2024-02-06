@@ -111,7 +111,7 @@ open class Rule(
      */
     fun report(finding: Finding) {
         val ktElement = finding.entity.ktElement
-        if (ktElement == null || !ktElement.isSuppressedBy(finding.issue.id, aliases, ruleSetId)) {
+        if (ktElement == null || !ktElement.isSuppressedBy(issue.id, aliases, ruleSetId)) {
             findings.add(finding)
         }
     }

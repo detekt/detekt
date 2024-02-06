@@ -31,6 +31,6 @@ class ForbiddenClassName(config: Config) : Rule(
         }
 
         val message = "Class name $name is forbidden as it contains: ${forbiddenEntries.joinToString(", ")}"
-        report(CodeSmell(issue, Entity.atName(classOrObject), message))
+        report(CodeSmell(Entity.atName(classOrObject), message))
     }
 }

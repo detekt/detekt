@@ -72,7 +72,6 @@ class SuspendFunWithFlowReturnType(config: Config) : Rule(
             ?.also {
                 report(
                     CodeSmell(
-                        issue = issue,
                         entity = Entity.from(suspendModifier),
                         message = "`suspend` function returns Coroutines Flow."
                     )

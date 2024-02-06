@@ -134,7 +134,7 @@ class ForbiddenMethodCall(config: Config) : Rule(
                 } else {
                     "The method `${forbidden.value}` has been forbidden in the detekt config."
                 }
-                report(CodeSmell(issue, Entity.from(expression), message))
+                report(CodeSmell(Entity.from(expression), message))
             }
         }
     }

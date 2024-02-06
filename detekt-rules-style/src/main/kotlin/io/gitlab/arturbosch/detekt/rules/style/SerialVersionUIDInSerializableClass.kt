@@ -54,7 +54,6 @@ class SerialVersionUIDInSerializableClass(config: Config) : Rule(
             if (companionObject == null) {
                 report(
                     CodeSmell(
-                        issue,
                         Entity.atName(klass),
                         klass.getIssueMessage("class")
                     )
@@ -77,7 +76,6 @@ class SerialVersionUIDInSerializableClass(config: Config) : Rule(
     private fun reportFinding(finding: SerialVersionUIDFindings) {
         report(
             CodeSmell(
-                issue,
                 Entity.atName(finding.violatingElement),
                 finding.issueMsg
             )

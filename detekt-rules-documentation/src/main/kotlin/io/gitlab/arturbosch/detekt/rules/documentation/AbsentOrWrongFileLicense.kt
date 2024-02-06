@@ -33,7 +33,6 @@ class AbsentOrWrongFileLicense(config: Config) : Rule(
         if ((file.hasLicenseHeader() || file.hasLicenseHeaderRegex()) && !file.hasValidLicense()) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atPackageOrFirstDecl(file),
                     "Expected license not found or incorrect in the file: ${file.name}."
                 )

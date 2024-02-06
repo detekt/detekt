@@ -30,6 +30,6 @@ class TestProvider2 : RuleSetProvider {
 
 class FindName(config: Config) : Rule(config, "") {
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-        report(CodeSmell(issue, Entity.atName(classOrObject), message = "TestMessage"))
+        report(CodeSmell(Entity.atName(classOrObject), message = "TestMessage"))
     }
 }

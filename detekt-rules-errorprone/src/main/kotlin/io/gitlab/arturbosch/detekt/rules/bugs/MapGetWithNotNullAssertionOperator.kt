@@ -51,7 +51,7 @@ class MapGetWithNotNullAssertionOperator(config: Config) : Rule(
 
     override fun visitPostfixExpression(expression: KtPostfixExpression) {
         if (expression.operationToken == KtTokens.EXCLEXCL && expression.isMapGet()) {
-            report(CodeSmell(issue, Entity.from(expression), "map.get() with not-null assertion operator (!!)"))
+            report(CodeSmell(Entity.from(expression), "map.get() with not-null assertion operator (!!)"))
         }
         super.visitPostfixExpression(expression)
     }

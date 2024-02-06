@@ -93,7 +93,7 @@ class ForbiddenAnnotation(config: Config) : Rule(
                     location.filePath
                 )
             }
-            report(CodeSmell(issue, Entity.from(element, location), message))
+            report(CodeSmell(Entity.from(element, location), message))
         }
     }
 

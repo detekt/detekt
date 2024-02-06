@@ -56,7 +56,6 @@ class ImplicitDefaultLocale(config: Config) : Rule(
         ) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(expression),
                     "${expression.text} uses implicitly default locale for string formatting."
                 )

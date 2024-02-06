@@ -46,7 +46,6 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config) : Rule(
         if (function.isEqualsFunction() && function.returnsBooleanConstant()) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.atName(function),
                     "This equals function always returns the same " +
                         "result regardless of the input parameters."

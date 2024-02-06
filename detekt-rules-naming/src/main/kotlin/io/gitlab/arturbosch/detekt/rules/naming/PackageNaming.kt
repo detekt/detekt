@@ -28,7 +28,6 @@ class PackageNaming(config: Config) : Rule(
         if (name.isNotEmpty() && !name.matches(packagePattern)) {
             report(
                 CodeSmell(
-                    issue,
                     Entity.from(directive),
                     message = "Package name should match the pattern: $packagePattern"
                 )

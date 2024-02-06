@@ -86,7 +86,7 @@ class SwallowedException(config: Config) : Rule(
                 isExceptionSwallowedOrUnused(catchClause) &&
                 !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)
             ) {
-                report(CodeSmell(issue, Entity.from(catchParameter), issue.description))
+                report(CodeSmell(Entity.from(catchParameter), issue.description))
             }
         }
         super.visitCatchSection(catchClause)

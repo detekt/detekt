@@ -45,7 +45,7 @@ class UseEmptyCounterpart(config: Config) : Rule(
 
         if (expression.valueArguments.isEmpty()) {
             val message = "${fqName.shortName()} can be replaced with $emptyCounterpart"
-            report(CodeSmell(issue, Entity.from(expression), message))
+            report(CodeSmell(Entity.from(expression), message))
         }
     }
 }

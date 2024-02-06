@@ -56,7 +56,6 @@ class MaxChainedCallsOnSameLine(config: Config) : Rule(
         if (chainedCalls > maxChainedCalls) {
             report(
                 CodeSmell(
-                    issue = issue,
                     entity = Entity.from(expression),
                     message = "$chainedCalls chained calls on a single line; more than $maxChainedCalls calls should " +
                         "be wrapped to a new line."

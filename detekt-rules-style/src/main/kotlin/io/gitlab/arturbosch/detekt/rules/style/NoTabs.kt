@@ -24,7 +24,7 @@ class NoTabs(config: Config) : Rule(
     override fun visitWhiteSpace(space: PsiWhiteSpace) {
         super.visitWhiteSpace(space)
         if (space.isTab()) {
-            report(CodeSmell(issue, Entity.from(space), "Tab character is in use."))
+            report(CodeSmell(Entity.from(space), "Tab character is in use."))
         }
     }
 

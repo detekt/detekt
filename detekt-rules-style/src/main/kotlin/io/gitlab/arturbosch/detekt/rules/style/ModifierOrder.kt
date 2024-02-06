@@ -87,7 +87,7 @@ class ModifierOrder(config: Config) : Rule(
         if (modifiers != sortedModifiers) {
             val modifierString = sortedModifiers.joinToString(" ") { it.value }
 
-            report(CodeSmell(issue, Entity.from(list), "Modifier order should be: $modifierString"))
+            report(CodeSmell(Entity.from(list), "Modifier order should be: $modifierString"))
         }
     }
 }

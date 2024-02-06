@@ -58,7 +58,7 @@ class UnnecessaryApply(config: Config) : Rule(
             } else {
                 "apply expression can be omitted"
             }
-            report(CodeSmell(issue, Entity.from(expression), message))
+            report(CodeSmell(Entity.from(expression), message))
         }
     }
 
