@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.coroutines
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
@@ -10,7 +11,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
 
-    val subject = RedundantSuspendModifier(Config.empty)
+    private val subject = RedundantSuspendModifier(Config.empty)
 
     @Test
     fun `reports when public function returns expression of platform type`() {
@@ -86,6 +87,20 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report actual suspend function`() {
+        val code = """
+            expect class Foo {
+                suspend fun bar()
+            }
+            
+            actual class Foo {
+                actual suspend fun bar() {}
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
