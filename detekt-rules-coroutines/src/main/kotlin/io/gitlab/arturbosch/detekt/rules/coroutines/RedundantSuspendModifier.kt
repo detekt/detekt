@@ -68,7 +68,7 @@ class RedundantSuspendModifier(config: Config) : Rule(config) {
     override fun visitNamedFunction(function: KtNamedFunction) {
         val suspendModifier = function.modifierList?.getModifier(KtTokens.SUSPEND_KEYWORD) ?: return
         if (!function.hasBody()) return
-        if (function.hasModifier(KtTokens.OVERRIDE_KEYWORD)) return
+        if (function.hasModifier(KtTokens.OVERRIDE_KEYWORD) || function.hasModifier(KtTokens.ACTUAL_KEYWORD)) return
 
         val descriptor = bindingContext[BindingContext.FUNCTION, function] ?: return
         if (descriptor.modality == Modality.OPEN) return
