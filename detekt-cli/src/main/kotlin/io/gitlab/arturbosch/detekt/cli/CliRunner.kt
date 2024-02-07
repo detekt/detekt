@@ -19,7 +19,7 @@ class CliRunner : DetektCli {
 
         val specialRunner = when {
             arguments.showVersion -> VersionPrinter(outputChannel)
-            arguments.generateConfig -> ConfigExporter(arguments, outputChannel)
+            arguments.generateConfig != null -> ConfigExporter(arguments, outputChannel)
             else -> null
         }
 

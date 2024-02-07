@@ -46,10 +46,10 @@ class CliArgs {
 
     @Parameter(
         names = ["--generate-config", "-gc"],
-        description = "Export default config. " +
-            "Path can be specified with --config option (default path: default-detekt-config.yml)"
+        description = "Export default config to the provided path.",
+        converter = PathConverter::class,
     )
-    var generateConfig: Boolean = false
+    var generateConfig: Path? = null
 
     @Parameter(
         names = ["--plugins", "-p"],

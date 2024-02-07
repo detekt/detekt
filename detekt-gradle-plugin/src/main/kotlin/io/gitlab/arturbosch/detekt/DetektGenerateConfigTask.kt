@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.invoke.CliArgument
-import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.DetektWorkAction
 import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
@@ -44,8 +43,7 @@ abstract class DetektGenerateConfigTask @Inject constructor(
     @get:Internal
     internal val arguments
         get() = listOf(
-            GenerateConfigArgument,
-            ConfigArgument(configFile.get())
+            GenerateConfigArgument(configFile.get())
         ).flatMap(CliArgument::toArgument)
 
     @TaskAction

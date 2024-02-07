@@ -61,7 +61,7 @@ fun buildRunner(
     val arguments = parseArguments(args)
     return when {
         arguments.showVersion -> VersionPrinter(outputPrinter)
-        arguments.generateConfig -> ConfigExporter(arguments, outputPrinter)
+        arguments.generateConfig != null -> ConfigExporter(arguments, outputPrinter)
         else -> Runner(arguments, outputPrinter, errorPrinter)
     }
 }
