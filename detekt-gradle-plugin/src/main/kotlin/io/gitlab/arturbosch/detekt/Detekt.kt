@@ -46,7 +46,6 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
-import org.gradle.api.tasks.OutputFiles
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
@@ -158,11 +157,6 @@ abstract class Detekt @Inject constructor(
         @OutputFile
         @Optional
         get() = getTargetFileProvider(reports.md)
-
-    internal val customReportFiles: ConfigurableFileCollection
-        @OutputFiles
-        @Optional
-        get() = objects.fileCollection().from(reports.custom.mapNotNull { it.outputLocation.asFile.orNull })
 
     private val defaultReportsDir: Directory = project.layout.buildDirectory.get()
         .dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
