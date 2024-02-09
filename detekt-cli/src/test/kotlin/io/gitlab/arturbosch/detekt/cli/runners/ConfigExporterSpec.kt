@@ -13,7 +13,7 @@ class ConfigExporterSpec {
     @Test
     fun `should export the given config`() {
         val tmpConfig = createTempFileForTest("ConfigPrinterSpec", ".yml").also { it.deleteExisting() }
-        val cliArgs = parseArguments(arrayOf("--config", tmpConfig.toString()))
+        val cliArgs = parseArguments(arrayOf("--generate-config", tmpConfig.toString()))
 
         ConfigExporter(cliArgs, NullPrintStream()).execute()
 

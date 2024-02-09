@@ -35,8 +35,8 @@ internal data object CreateBaselineArgument : CliArgument() {
     override fun toArgument() = listOf(CREATE_BASELINE_PARAMETER)
 }
 
-internal data object GenerateConfigArgument : CliArgument() {
-    override fun toArgument() = listOf(GENERATE_CONFIG_PARAMETER)
+internal data class GenerateConfigArgument(val file: RegularFile) : CliArgument() {
+    override fun toArgument() = listOf(GENERATE_CONFIG_PARAMETER, file.asFile.absolutePath)
 }
 
 internal data class InputArgument(val fileCollection: FileCollection) : CliArgument() {
