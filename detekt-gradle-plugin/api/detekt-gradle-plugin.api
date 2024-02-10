@@ -62,7 +62,7 @@ public abstract class io/gitlab/arturbosch/detekt/Detekt : org/gradle/api/tasks/
 	public final fun getMdReportFile ()Lorg/gradle/api/provider/Provider;
 	public abstract fun getParallel ()Lorg/gradle/api/provider/Property;
 	public abstract fun getPluginClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
-	public abstract fun getReports ()Lio/gitlab/arturbosch/detekt/extensions/DetektReports;
+	public fun getReports ()Lio/gitlab/arturbosch/detekt/extensions/DetektReports;
 	public abstract fun getReportsDir ()Lorg/gradle/api/file/DirectoryProperty;
 	public final fun getSarifReportFile ()Lorg/gradle/api/provider/Provider;
 	public fun getSource ()Lorg/gradle/api/file/FileTree;
@@ -163,13 +163,13 @@ public final class io/gitlab/arturbosch/detekt/extensions/DetektReportType : jav
 public class io/gitlab/arturbosch/detekt/extensions/DetektReports {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
 	public final fun custom (Lorg/gradle/api/Action;)V
-	public final fun getCustom ()Ljava/util/List;
-	public final fun getHtml ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
-	public final fun getMd ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
+	public fun getCustom ()Ljava/util/List;
+	public fun getHtml ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
+	public fun getMd ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
 	public final fun getObjects ()Lorg/gradle/api/model/ObjectFactory;
-	public final fun getSarif ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
-	public final fun getTxt ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
-	public final fun getXml ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
+	public fun getSarif ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
+	public fun getTxt ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
+	public fun getXml ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
 	public final fun html (Lorg/gradle/api/Action;)V
 	public final fun md (Lorg/gradle/api/Action;)V
 	public final fun sarif (Lorg/gradle/api/Action;)V

@@ -44,6 +44,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.OutputFiles
@@ -128,8 +129,12 @@ abstract class Detekt @Inject constructor(
     @get:Optional
     abstract val basePath: Property<String>
 
-    @get:Internal
-    abstract val reports: DetektReports
+    @get:Nested
+    /*
+    Property must be open (as do the @Nested properties in DetektReports), see
+    https://github.com/gradle/gradle/pull/12601 and https://github.com/gradle/gradle/issues/6619
+     */
+    open val reports: DetektReports = objects.newInstance(DetektReports::class.java)
 
     @get:Internal
     abstract val reportsDir: DirectoryProperty
