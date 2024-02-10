@@ -5,6 +5,7 @@ import dev.detekt.gradle.plugin.DetektBasePlugin
 import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.CONFIG_DIR_NAME
 import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.CONFIG_FILE
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import io.gitlab.arturbosch.detekt.extensions.DetektReport
 import io.gitlab.arturbosch.detekt.internal.DetektAndroid
 import io.gitlab.arturbosch.detekt.internal.DetektJvm
 import io.gitlab.arturbosch.detekt.internal.DetektMultiplatform
@@ -23,7 +24,7 @@ class DetektPlugin : Plugin<Project> {
         val extension = project.extensions.getByType(DetektExtension::class.java)
 
         configurePluginDependencies(project, extension)
-        setTaskDefaults(project)
+        setTaskDefaults(project, extension)
 
         project.registerDetektPlainTask(extension)
         project.registerDetektJvmTasks(extension)
@@ -89,10 +90,30 @@ class DetektPlugin : Plugin<Project> {
         }
     }
 
-    private fun setTaskDefaults(project: Project) {
+    private fun setTaskDefaults(project: Project, extension: DetektExtension) {
         project.tasks.withType(Detekt::class.java).configureEach {
             it.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
             it.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
+            it.reports.html { report ->
+                report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
+                report.outputLocation.convention(extension.reportsDir.file("${DetektReport.DEFAULT_FILENAME}.html"))
+            }
+            it.reports.md { report ->
+                report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
+                report.outputLocation.convention(extension.reportsDir.file("${DetektReport.DEFAULT_FILENAME}.md"))
+            }
+            it.reports.sarif { report ->
+                report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
+                report.outputLocation.convention(extension.reportsDir.file("${DetektReport.DEFAULT_FILENAME}.sarif"))
+            }
+            it.reports.txt { report ->
+                report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
+                report.outputLocation.convention(extension.reportsDir.file("${DetektReport.DEFAULT_FILENAME}.txt"))
+            }
+            it.reports.xml { report ->
+                report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
+                report.outputLocation.convention(extension.reportsDir.file("${DetektReport.DEFAULT_FILENAME}.xml"))
+            }
         }
 
         project.tasks.withType(DetektCreateBaselineTask::class.java).configureEach {
