@@ -30,7 +30,7 @@ class DetektReportMergeSpec {
                     finalizedBy(sarifReportMerge)
                 }
                 sarifReportMerge {
-                  input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.sarifReportFile })
+                  input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.reports.sarif.outputLocation })
                 }
             }
         """.trimIndent()
@@ -96,7 +96,7 @@ class DetektReportMergeSpec {
                     finalizedBy(xmlReportMerge)
                 }
                 xmlReportMerge {
-                    input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.xmlReportFile })
+                    input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.reports.xml.outputLocation })
                 }
             }
         """.trimIndent()

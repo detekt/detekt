@@ -91,7 +91,7 @@ subprojects {
   }
 
   reportMerge.configure {
-    input.from(tasks.withType(io.gitlab.arturbosch.detekt.Detekt).collect { it.xmlReportFile }) // or sarifReportFile
+    input.from(tasks.withType(io.gitlab.arturbosch.detekt.Detekt).collect { it.reports.xml.outputLocation }) // or sarif.outputLocation
   }
 }
 ```
@@ -114,7 +114,7 @@ subprojects {
   }
 
   reportMerge {
-    input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.xmlReportFile }) // or .sarifReportFile
+    input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.reports.xml.outputLocation }) // or sarif.outputLocation
   }
 }
 ```

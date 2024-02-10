@@ -58,7 +58,7 @@ class ReportMergeSpec {
                 plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
                     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                         finalizedBy(reportMerge)
-                        reportMerge.configure { input.from(xmlReportFile) }
+                        reportMerge.configure { input.from(reports.xml.outputLocation) }
                     }
                 }
             }
@@ -169,7 +169,7 @@ class ReportMergeSpec {
                 plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
                     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
                         finalizedBy(reportMerge)
-                        reportMerge.configure { input.from(xmlReportFile) }
+                        reportMerge.configure { input.from(reports.xml.outputLocation) }
                     }
                 }
             }
@@ -195,8 +195,7 @@ class ReportMergeSpec {
             projectLayout.submodules.forEach {
                 assertThat(projectFile("${it.name}/build/reports/detekt/debug.xml")).exists()
             }
-            // #4192 this should exist by default
-            assertThat(projectFile("build/reports/detekt/merge.xml")).doesNotExist()
+            assertThat(projectFile("build/reports/detekt/merge.xml")).exists()
         }
     }
 }

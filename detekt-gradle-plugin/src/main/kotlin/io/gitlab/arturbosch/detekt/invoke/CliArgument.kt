@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.invoke
 
-import io.gitlab.arturbosch.detekt.extensions.DetektReportType
+import io.gitlab.arturbosch.detekt.extensions.DetektReport
 import io.gitlab.arturbosch.detekt.extensions.FailOnSeverity
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
@@ -70,9 +70,14 @@ internal data class BaselineArgument(val baseline: RegularFile?) : CliArgument()
     override fun toArgument() = baseline?.let { listOf(BASELINE_PARAMETER, it.asFile.absolutePath) }.orEmpty()
 }
 
-internal data class DefaultReportArgument(val type: DetektReportType, val file: RegularFile?) : CliArgument() {
-    override fun toArgument() =
-        file?.let { listOf(REPORT_PARAMETER, "${type.reportId}:${it.asFile.absoluteFile}") }.orEmpty()
+internal data class DefaultReportArgument(val report: DetektReport) : CliArgument() {
+    override fun toArgument(): List<String> {
+        return if (report.required.get()) {
+            listOf(REPORT_PARAMETER, "${report.type.reportId}:${report.outputLocation.get().asFile.absoluteFile}")
+        } else {
+            emptyList()
+        }
+    }
 }
 
 internal data class CustomReportArgument(val reportId: String, val file: RegularFile) : CliArgument() {
