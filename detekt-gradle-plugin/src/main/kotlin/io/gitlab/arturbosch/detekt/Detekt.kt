@@ -129,7 +129,7 @@ abstract class Detekt @Inject constructor(
     abstract val basePath: Property<String>
 
     @get:Internal
-    var reports: DetektReports = objects.newInstance(DetektReports::class.java)
+    abstract val reports: DetektReports
 
     @get:Internal
     abstract val reportsDir: DirectoryProperty
