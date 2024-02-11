@@ -483,6 +483,11 @@ potential-bugs:
   MissingPackageDeclaration:
     active: false
     excludes: ['**/*.kts']
+  MissingSuperCall:
+    active: false
+    mustInvokeSuperAnnotations:
+      - 'androidx.annotation.CallSuper'
+      - 'javax.annotation.OverridingMethodsMustInvokeSuper'
   MissingUseCall:
     active: false
   NullCheckOnMutableProperty:

@@ -57,6 +57,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             ::UnusedUnaryOperator,
             ::PropertyUsedBeforeDeclaration,
             ::CharArrayToStringCall,
+            ::MissingSuperCall,
         )
     )
 }
