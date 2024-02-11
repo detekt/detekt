@@ -130,9 +130,6 @@ abstract class Detekt @Inject constructor(
      */
     open val reports: DetektReports = objects.newInstance(DetektReports::class.java)
 
-    @get:Internal
-    abstract val reportsDir: DirectoryProperty
-
     internal val customReportFiles: ConfigurableFileCollection
         @OutputFiles
         @Optional

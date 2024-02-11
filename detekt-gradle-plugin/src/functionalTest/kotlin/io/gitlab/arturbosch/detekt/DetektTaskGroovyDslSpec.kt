@@ -73,7 +73,6 @@ class DetektTaskGroovyDslSpec {
                         outputLocation.set(file("build/reports/mydetekt.sarif"))
                     }
                 }
-                reportsDir = file("config.yml")
             }
         """.trimIndent()
         val groovyBuilder = DslTestBuilder.groovy()
