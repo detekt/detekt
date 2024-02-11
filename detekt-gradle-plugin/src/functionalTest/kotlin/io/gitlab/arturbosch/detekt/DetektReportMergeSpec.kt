@@ -25,7 +25,7 @@ class DetektReportMergeSpec {
             
             subprojects {
                 ${builder.gradleSubprojectsApplyPlugins.reIndent(1)}
-
+            
                 sarifReportMerge {
                   input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.reports.sarif.outputLocation })
                 }
