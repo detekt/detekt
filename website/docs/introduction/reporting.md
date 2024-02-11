@@ -67,6 +67,13 @@ namely XML and SARIF.
 
 ## Merging reports
 
+:::caution Attention
+
+**Gradle 7.4 or higher is required**. Earlier Gradle prevent tasks running if they depend on a failing task, so merge
+tasks will not run if detekt finds issues.
+
+:::
+
 The machine-readable report formats support report merging.
 Detekt Gradle Plugin is not opinionated in how merging is set up and respects each project's build logic, especially 
 the merging makes most sense in a multi-module project. In this spirit, only Gradle tasks are provided.
