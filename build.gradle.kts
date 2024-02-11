@@ -51,7 +51,6 @@ allprojects {
             md.required = true
         }
         basePath = rootDir.absolutePath
-        finalizedBy(detektReportMergeSarif)
     }
     detektReportMergeSarif {
         input.from(tasks.withType<Detekt>().map { it.reports.sarif.outputLocation })

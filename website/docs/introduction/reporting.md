@@ -93,10 +93,6 @@ subprojects {
     // reports.sarif.required.set(true)
   }
 
-  tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
-    finalizedBy(reportMerge)
-  }
-
   reportMerge.configure {
     input.from(tasks.withType(io.gitlab.arturbosch.detekt.Detekt).collect { it.reports.xml.outputLocation }) // or sarif.outputLocation
   }
@@ -114,10 +110,6 @@ subprojects {
   detekt {
     reports.xml.required.set(true)
     // reports.sarif.required.set(true)
-  }
-
-  tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-    finalizedBy(reportMerge)
   }
 
   reportMerge {
