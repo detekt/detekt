@@ -97,6 +97,7 @@ internal class DefaultCliInvoker(
 
 private fun isAnalysisFailure(msg: String) = "Analysis failed with" in msg && "issues" in msg
 
+@Suppress("ThrowsCount")
 private fun processResult(message: String?, reflectionWrapper: Exception, ignoreFailures: Boolean) {
     if (message != null && isAnalysisFailure(message)) {
         when {
