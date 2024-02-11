@@ -41,7 +41,6 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.OutputFiles
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
@@ -129,11 +128,6 @@ abstract class Detekt @Inject constructor(
     https://github.com/gradle/gradle/pull/12601 and https://github.com/gradle/gradle/issues/6619
      */
     open val reports: DetektReports = objects.newInstance(DetektReports::class.java)
-
-    internal val customReportFiles: ConfigurableFileCollection
-        @OutputFiles
-        @Optional
-        get() = objects.fileCollection().from(reports.custom.mapNotNull { it.outputLocation.asFile.orNull })
 
     private val isDryRun = project.providers.gradleProperty(DRY_RUN_PROPERTY)
 
