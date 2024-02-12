@@ -5,7 +5,6 @@ import dev.detekt.gradle.plugin.DetektBasePlugin
 import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.CONFIG_DIR_NAME
 import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.CONFIG_FILE
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-import io.gitlab.arturbosch.detekt.extensions.DetektReport
 import io.gitlab.arturbosch.detekt.internal.DetektAndroid
 import io.gitlab.arturbosch.detekt.internal.DetektJvm
 import io.gitlab.arturbosch.detekt.internal.DetektMultiplatform
@@ -96,23 +95,23 @@ class DetektPlugin : Plugin<Project> {
             it.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
             it.reports.html { report ->
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
-                report.outputLocation.convention(extension.reportsDir.file("${DetektReport.DEFAULT_FILENAME}.html"))
+                report.outputLocation.convention(extension.reportsDir.file("${it.name}.html"))
             }
             it.reports.md { report ->
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
-                report.outputLocation.convention(extension.reportsDir.file("${DetektReport.DEFAULT_FILENAME}.md"))
+                report.outputLocation.convention(extension.reportsDir.file("${it.name}.md"))
             }
             it.reports.sarif { report ->
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
-                report.outputLocation.convention(extension.reportsDir.file("${DetektReport.DEFAULT_FILENAME}.sarif"))
+                report.outputLocation.convention(extension.reportsDir.file("${it.name}.sarif"))
             }
             it.reports.txt { report ->
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
-                report.outputLocation.convention(extension.reportsDir.file("${DetektReport.DEFAULT_FILENAME}.txt"))
+                report.outputLocation.convention(extension.reportsDir.file("${it.name}.txt"))
             }
             it.reports.xml { report ->
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
-                report.outputLocation.convention(extension.reportsDir.file("${DetektReport.DEFAULT_FILENAME}.xml"))
+                report.outputLocation.convention(extension.reportsDir.file("${it.name}.xml"))
             }
         }
 

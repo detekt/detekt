@@ -17,8 +17,4 @@ abstract class DetektReport @Inject constructor(@get:Internal val type: DetektRe
     override fun toString(): String {
         return "DetektReport(type='$type', required=$required, outputLocation=$outputLocation)"
     }
-
-    internal companion object {
-        internal const val DEFAULT_FILENAME = "detekt"
-    }
 }
