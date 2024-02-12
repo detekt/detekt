@@ -30,9 +30,14 @@ the `--report txt:path/to/report` cli flag.
 ```
 
 ### CLI
-To to generate yourself a `baseline.xml` you need to provide the same config as the the rules you are going to scan your project.
+To generate yourself a `baseline.xml` you need to provide the same config as the the rules you are going to scan your project.
 ```shell
-java -jar detekt-cli-all.jar --plugins detekt-formatting.jar --build-upon-default-config --config my-detekt-config.yml --baseline path/to/new/baseline.xml --create-baseline
+java -jar detekt-cli-all.jar \
+  --plugins detekt-formatting.jar \
+  --build-upon-default-config \
+  --config my-detekt-config.yml \
+  --baseline path/to/new/baseline.xml \
+  --create-baseline
 ```
 
 #### Gradle
