@@ -106,7 +106,7 @@ internal class DetektMultiplatform(private val project: Project) {
             }?.let { baselineFile ->
                 baseline.convention(layout.file(provider { baselineFile }))
             }
-            setReportOutputConventions(reports, extension, compilation.name)
+            setReportOutputConventions(reports, extension, taskSuffix.decapitalize())
             description =
                 "Run detekt analysis for target ${target.name} and source set ${compilation.name}"
             if (runWithTypeResolution) {
