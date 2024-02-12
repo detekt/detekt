@@ -75,20 +75,10 @@ buildCache {
     local {
         isEnabled = true
     }
-    remote<HttpBuildCache> {
-        url = uri("https://ge.detekt.dev/cache/")
+    remote(gradleEnterprise.buildCache) {
         isEnabled = true
-
-        val cacheUsername = providers.environmentVariable("GRADLE_CACHE_USERNAME").orNull
-        val cachePassword = providers.environmentVariable("GRADLE_CACHE_PASSWORD").orNull
-        val isAuthenticated = !cacheUsername.isNullOrEmpty() && !cachePassword.isNullOrEmpty()
-
-        // Check credentials presence to avoid build cache errors on PR builds when access key is not present
-        isPush = isCiBuild && isAuthenticated
-        credentials {
-            username = cacheUsername
-            password = cachePassword
-        }
+        val accessKey = System.getenv("GRADLE_ENTERPRISE_ACCESS_KEY")
+        isPush = isCiBuild && !accessKey.isNullOrEmpty()
     }
 }
 
