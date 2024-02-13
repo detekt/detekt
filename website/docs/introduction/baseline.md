@@ -31,6 +31,7 @@ the `--report txt:path/to/report` cli flag.
 
 ### CLI
 To generate yourself a `baseline.xml` you need to provide the same config as the the rules you are going to scan your project.
+
 ```sh
 java -jar detekt-cli-all.jar \
   --plugins detekt-formatting.jar \
