@@ -90,28 +90,28 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun setTaskDefaults(project: Project, extension: DetektExtension) {
-        project.tasks.withType(Detekt::class.java).configureEach {
-            it.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
-            it.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
-            it.reports.html { report ->
+        project.tasks.withType(Detekt::class.java).configureEach { task ->
+            task.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
+            task.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
+            task.reports.html { report ->
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
-                report.outputLocation.convention(extension.reportsDir.file("${it.name}.html"))
+                report.outputLocation.convention(extension.reportsDir.file("${task.name}.html"))
             }
-            it.reports.md { report ->
+            task.reports.md { report ->
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
-                report.outputLocation.convention(extension.reportsDir.file("${it.name}.md"))
+                report.outputLocation.convention(extension.reportsDir.file("${task.name}.md"))
             }
-            it.reports.sarif { report ->
+            task.reports.sarif { report ->
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
-                report.outputLocation.convention(extension.reportsDir.file("${it.name}.sarif"))
+                report.outputLocation.convention(extension.reportsDir.file("${task.name}.sarif"))
             }
-            it.reports.txt { report ->
+            task.reports.txt { report ->
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
-                report.outputLocation.convention(extension.reportsDir.file("${it.name}.txt"))
+                report.outputLocation.convention(extension.reportsDir.file("${task.name}.txt"))
             }
-            it.reports.xml { report ->
+            task.reports.xml { report ->
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
-                report.outputLocation.convention(extension.reportsDir.file("${it.name}.xml"))
+                report.outputLocation.convention(extension.reportsDir.file("${task.name}.xml"))
             }
         }
 
