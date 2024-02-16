@@ -3,10 +3,11 @@ package io.gitlab.arturbosch.detekt.extensions
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputFile
 import javax.inject.Inject
 
-abstract class DetektReport @Inject constructor(val type: DetektReportType) {
+abstract class DetektReport @Inject constructor(@get:Internal val type: DetektReportType) {
     @get:Input
     abstract val required: Property<Boolean>
 
@@ -15,9 +16,5 @@ abstract class DetektReport @Inject constructor(val type: DetektReportType) {
 
     override fun toString(): String {
         return "DetektReport(type='$type', required=$required, outputLocation=$outputLocation)"
-    }
-
-    internal companion object {
-        internal const val DEFAULT_FILENAME = "detekt"
     }
 }

@@ -23,7 +23,7 @@ class DetektPlugin : Plugin<Project> {
         val extension = project.extensions.getByType(DetektExtension::class.java)
 
         configurePluginDependencies(project, extension)
-        setTaskDefaults(project)
+        setTaskDefaults(project, extension)
 
         project.registerDetektPlainTask(extension)
         project.registerDetektJvmTasks(extension)
@@ -89,10 +89,30 @@ class DetektPlugin : Plugin<Project> {
         }
     }
 
-    private fun setTaskDefaults(project: Project) {
-        project.tasks.withType(Detekt::class.java).configureEach {
-            it.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
-            it.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
+    private fun setTaskDefaults(project: Project, extension: DetektExtension) {
+        project.tasks.withType(Detekt::class.java).configureEach { task ->
+            task.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
+            task.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
+            task.reports.html { report ->
+                report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
+                report.outputLocation.convention(extension.reportsDir.file("${task.name}.html"))
+            }
+            task.reports.md { report ->
+                report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
+                report.outputLocation.convention(extension.reportsDir.file("${task.name}.md"))
+            }
+            task.reports.sarif { report ->
+                report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
+                report.outputLocation.convention(extension.reportsDir.file("${task.name}.sarif"))
+            }
+            task.reports.txt { report ->
+                report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
+                report.outputLocation.convention(extension.reportsDir.file("${task.name}.txt"))
+            }
+            task.reports.xml { report ->
+                report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
+                report.outputLocation.convention(extension.reportsDir.file("${task.name}.xml"))
+            }
         }
 
         project.tasks.withType(DetektCreateBaselineTask::class.java).configureEach {

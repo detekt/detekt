@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.extensions.DetektReport
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import io.gitlab.arturbosch.detekt.extensions.FailOnSeverity
@@ -26,16 +25,12 @@ import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import org.gradle.api.Action
 import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileTree
-import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
-import org.gradle.api.provider.Provider
 import org.gradle.api.provider.ProviderFactory
-import org.gradle.api.reporting.ReportingExtension
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Console
@@ -44,9 +39,8 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.OutputFile
-import org.gradle.api.tasks.OutputFiles
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
@@ -128,45 +122,12 @@ abstract class Detekt @Inject constructor(
     @get:Optional
     abstract val basePath: Property<String>
 
-    @get:Internal
-    var reports: DetektReports = objects.newInstance(DetektReports::class.java)
-
-    @get:Internal
-    abstract val reportsDir: DirectoryProperty
-
-    val xmlReportFile: Provider<RegularFile>
-        @OutputFile
-        @Optional
-        get() = getTargetFileProvider(reports.xml)
-
-    val htmlReportFile: Provider<RegularFile>
-        @OutputFile
-        @Optional
-        get() = getTargetFileProvider(reports.html)
-
-    val txtReportFile: Provider<RegularFile>
-        @OutputFile
-        @Optional
-        get() = getTargetFileProvider(reports.txt)
-
-    val sarifReportFile: Provider<RegularFile>
-        @OutputFile
-        @Optional
-        get() = getTargetFileProvider(reports.sarif)
-
-    val mdReportFile: Provider<RegularFile>
-        @OutputFile
-        @Optional
-        get() = getTargetFileProvider(reports.md)
-
-    internal val customReportFiles: ConfigurableFileCollection
-        @OutputFiles
-        @Optional
-        get() = objects.fileCollection().from(reports.custom.mapNotNull { it.outputLocation.asFile.orNull })
-
-    private val defaultReportsDir: Directory = project.layout.buildDirectory.get()
-        .dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
-        .dir("detekt")
+    @get:Nested
+    /*
+    Property must be open (as do the @Nested properties in DetektReports), see
+    https://github.com/gradle/gradle/pull/12601 and https://github.com/gradle/gradle/issues/6619
+     */
+    open val reports: DetektReports = objects.newInstance(DetektReports::class.java)
 
     private val isDryRun = project.providers.gradleProperty(DRY_RUN_PROPERTY)
 
@@ -184,11 +145,11 @@ abstract class Detekt @Inject constructor(
             JdkHomeArgument(jdkHome),
             ConfigArgument(config),
             BaselineArgument(baseline.orNull),
-            DefaultReportArgument(DetektReportType.XML, xmlReportFile.orNull),
-            DefaultReportArgument(DetektReportType.HTML, htmlReportFile.orNull),
-            DefaultReportArgument(DetektReportType.TXT, txtReportFile.orNull),
-            DefaultReportArgument(DetektReportType.SARIF, sarifReportFile.orNull),
-            DefaultReportArgument(DetektReportType.MD, mdReportFile.orNull),
+            DefaultReportArgument(reports.xml),
+            DefaultReportArgument(reports.html),
+            DefaultReportArgument(reports.txt),
+            DefaultReportArgument(reports.sarif),
+            DefaultReportArgument(reports.md),
             DebugArgument(debug.getOrElse(false)),
             ParallelArgument(parallel.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
@@ -250,19 +211,6 @@ abstract class Detekt @Inject constructor(
         check(!destination.isDirectory) { "If a custom report is specified, the destination must be not a directory" }
 
         CustomReportArgument(reportId, objects.fileProperty().getOrElse { destination })
-    }
-
-    private fun getTargetFileProvider(
-        report: DetektReport
-    ): RegularFileProperty {
-        val isEnabled = report.required.getOrElse(DetektPlugin.DEFAULT_REPORT_ENABLED_VALUE)
-        val provider = objects.fileProperty()
-        if (isEnabled) {
-            val destination = report.outputLocation.orNull ?: reportsDir.getOrElse(defaultReportsDir)
-                .file("${DetektReport.DEFAULT_FILENAME}.${report.type.extension}")
-            provider.set(destination)
-        }
-        return provider
     }
 }
 

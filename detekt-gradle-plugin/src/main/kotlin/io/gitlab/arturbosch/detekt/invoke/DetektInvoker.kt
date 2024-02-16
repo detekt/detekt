@@ -7,6 +7,8 @@ import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.FileCollection
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.VerificationException
+import org.gradle.util.GradleVersion
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
 import java.io.PrintStream
@@ -62,16 +64,9 @@ internal abstract class DetektWorkAction : WorkAction<DetektWorkParameters> {
             )
             runner.execute()
         } catch (e: Exception) {
-            if (isBuildFailure(e.message) && parameters.ignoreFailures.get()) {
-                return
-            } else {
-                throw GradleException(e.message ?: "There was a problem running detekt.")
-            }
+            processResult(e.message, e, parameters.ignoreFailures.getOrElse(false))
         }
     }
-
-    private fun isBuildFailure(msg: String?) =
-        msg != null && "Build failed with" in msg && "issues" in msg
 }
 
 internal class DefaultCliInvoker(
@@ -95,15 +90,26 @@ internal class DefaultCliInvoker(
             ).invoke(null, arguments.toTypedArray(), System.out, System.err)
             runner::class.java.getMethod("execute").invoke(runner)
         } catch (reflectionWrapper: InvocationTargetException) {
-            val message = reflectionWrapper.targetException.message
-            if (message != null && isAnalysisFailure(message) && ignoreFailures) {
-                return
-            }
-            throw GradleException(message ?: "There was a problem running detekt.", reflectionWrapper)
+            processResult(reflectionWrapper.targetException.message, reflectionWrapper, ignoreFailures)
         }
     }
+}
 
-    private fun isAnalysisFailure(msg: String) = "Analysis failed with" in msg && "issues" in msg
+private fun isAnalysisFailure(msg: String) = "Analysis failed with" in msg && "issues" in msg
+
+@Suppress("ThrowsCount")
+private fun processResult(message: String?, reflectionWrapper: Exception, ignoreFailures: Boolean) {
+    if (message != null && isAnalysisFailure(message)) {
+        when {
+            ignoreFailures -> return
+            GradleVersion.current() >= GradleVersion.version("8.2") ->
+                throw VerificationException(message, reflectionWrapper)
+            GradleVersion.current() >= GradleVersion.version("7.4") -> throw VerificationException(message)
+            else -> throw GradleException(message, reflectionWrapper)
+        }
+    } else {
+        throw GradleException(message ?: "There was a problem running detekt.", reflectionWrapper)
+    }
 }
 
 private class DryRunInvoker : DetektInvoker {

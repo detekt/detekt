@@ -67,6 +67,13 @@ namely XML and SARIF.
 
 ## Merging reports
 
+:::caution Attention
+
+**Gradle 7.4 or higher is required**. Earlier Gradle prevent tasks running if they depend on a failing task, so merge
+tasks will not run if detekt finds issues.
+
+:::
+
 The machine-readable report formats support report merging.
 Detekt Gradle Plugin is not opinionated in how merging is set up and respects each project's build logic, especially 
 the merging makes most sense in a multi-module project. In this spirit, only Gradle tasks are provided.
@@ -86,12 +93,8 @@ subprojects {
     // reports.sarif.required.set(true)
   }
 
-  tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
-    finalizedBy(reportMerge)
-  }
-
   reportMerge.configure {
-    input.from(tasks.withType(io.gitlab.arturbosch.detekt.Detekt).collect { it.xmlReportFile }) // or sarifReportFile
+    input.from(tasks.withType(io.gitlab.arturbosch.detekt.Detekt).collect { it.reports.xml.outputLocation }) // or sarif.outputLocation
   }
 }
 ```
@@ -109,12 +112,8 @@ subprojects {
     // reports.sarif.required.set(true)
   }
 
-  tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-    finalizedBy(reportMerge)
-  }
-
   reportMerge {
-    input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.xmlReportFile }) // or .sarifReportFile
+    input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.reports.xml.outputLocation }) // or sarif.outputLocation
   }
 }
 ```

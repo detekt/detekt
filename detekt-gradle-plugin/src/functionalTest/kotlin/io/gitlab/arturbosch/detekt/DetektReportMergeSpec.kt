@@ -26,11 +26,8 @@ class DetektReportMergeSpec {
             subprojects {
                 ${builder.gradleSubprojectsApplyPlugins.reIndent(1)}
             
-                tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class).configureEach {
-                    finalizedBy(sarifReportMerge)
-                }
                 sarifReportMerge {
-                  input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.sarifReportFile })
+                  input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.reports.sarif.outputLocation })
                 }
             }
         """.trimIndent()
@@ -92,11 +89,8 @@ class DetektReportMergeSpec {
             subprojects {
                 ${builder.gradleSubprojectsApplyPlugins.reIndent(1)}
             
-                tasks.withType(io.gitlab.arturbosch.detekt.Detekt::class).configureEach {
-                    finalizedBy(xmlReportMerge)
-                }
                 xmlReportMerge {
-                    input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.xmlReportFile })
+                    input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.reports.xml.outputLocation })
                 }
             }
         """.trimIndent()

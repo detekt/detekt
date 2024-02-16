@@ -51,10 +51,9 @@ allprojects {
             md.required = true
         }
         basePath = rootDir.absolutePath
-        finalizedBy(detektReportMergeSarif)
     }
     detektReportMergeSarif {
-        input.from(tasks.withType<Detekt>().map { it.sarifReportFile })
+        input.from(tasks.withType<Detekt>().map { it.reports.sarif.outputLocation })
     }
     tasks.withType<DetektCreateBaselineTask>().configureEach {
         jvmTarget = "1.8"
