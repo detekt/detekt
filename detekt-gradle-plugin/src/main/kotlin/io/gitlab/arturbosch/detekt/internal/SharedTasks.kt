@@ -37,7 +37,7 @@ internal fun Project.registerDetektTask(
         it.autoCorrect.convention(extension.autoCorrect)
         it.ignoreFailures.convention(extension.ignoreFailures)
         it.failOnSeverity.convention(extension.failOnSeverity)
-        it.config.setFrom(provider { extension.config })
+        it.config.from(provider { extension.config })
         it.basePath.convention(extension.basePath.map { basePath -> basePath.asFile.absolutePath })
         it.allRules.convention(extension.allRules)
         configuration(it)
@@ -63,7 +63,7 @@ internal fun Project.registerCreateBaselineTask(
             )
         }
 
-        it.config.setFrom(project.provider { extension.config })
+        it.config.from(project.provider { extension.config })
         it.debug.convention(extension.debug)
         it.parallel.convention(extension.parallel)
         it.disableDefaultRuleSets.convention(extension.disableDefaultRuleSets)
