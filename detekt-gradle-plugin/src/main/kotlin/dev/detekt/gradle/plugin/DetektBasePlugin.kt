@@ -1,12 +1,21 @@
 package dev.detekt.gradle.plugin
 
+import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.extensions.FailOnSeverity
 import io.gitlab.arturbosch.detekt.extensions.loadDetektVersion
+import io.gitlab.arturbosch.detekt.internal.addVariantName
+import io.gitlab.arturbosch.detekt.internal.existingVariantOrBaseFile
+import io.gitlab.arturbosch.detekt.internal.registerCreateBaselineTask
+import io.gitlab.arturbosch.detekt.internal.registerDetektTask
+import io.gitlab.arturbosch.detekt.internal.setReportOutputConventions
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
+import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetContainer
 
 class DetektBasePlugin : Plugin<Project> {
     override fun apply(project: Project) {
@@ -50,6 +59,40 @@ class DetektBasePlugin : Plugin<Project> {
             configuration.description = "The $CONFIGURATION_DETEKT_PLUGINS libraries to be used for this project."
             configuration.isCanBeResolved = true
             configuration.isCanBeConsumed = false
+        }
+
+        project.registerSourceSetTasks(extension)
+    }
+
+    private fun Project.registerSourceSetTasks(extension: DetektExtension) {
+        project.plugins.withType(KotlinBasePlugin::class.java) {
+            project.extensions.getByType(KotlinSourceSetContainer::class.java)
+                .sourceSets
+                .withType(KotlinSourceSet::class.java) { sourceSet ->
+                    val taskName = "${DetektPlugin.DETEKT_TASK_NAME}${sourceSet.name.capitalize()}SourceSet"
+                    project.registerDetektTask(taskName, extension) {
+                        source = sourceSet.kotlin
+                        // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
+                        // We try to find the configured baseline or alternatively a specific variant matching this task.
+                        extension.baseline.asFile.orNull?.existingVariantOrBaseFile("${sourceSet.name}SourceSet")
+                            ?.let { file ->
+                                baseline.convention(project.layout.file(project.provider { file }))
+                            }
+                        setReportOutputConventions(reports, extension, sourceSet.name)
+                        description = "Run detekt analysis for ${sourceSet.name} source set"
+                    }
+
+                    val baseLineTaskName = "${DetektPlugin.BASELINE_TASK_NAME}${sourceSet.name.capitalize()}SourceSet"
+                    project.registerCreateBaselineTask(baseLineTaskName, extension) {
+                        source = sourceSet.kotlin
+
+                        val variantBaselineFile =
+                            extension.baseline.asFile.orNull?.addVariantName("${sourceSet.name}SourceSet")
+                        baseline.convention(project.layout.file(project.provider { variantBaselineFile }))
+
+                        description = "Creates detekt baseline for ${sourceSet.name} source set"
+                    }
+                }
         }
     }
 

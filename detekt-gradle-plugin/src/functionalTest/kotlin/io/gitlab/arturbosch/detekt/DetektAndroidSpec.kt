@@ -140,7 +140,8 @@ class DetektAndroidSpec {
         @DisplayName("task :app:detektMain")
         fun appDetektMain() {
             gradleRunner.runTasksAndExpectFailure(":app:detektMain") { result ->
-                assertThat(result.output).containsIgnoringCase("Task 'detektMain' not found in project")
+                assertThat(result.output)
+                    .contains("Cannot locate tasks that match ':app:detektMain' as task 'detektMain' is ambiguous")
             }
         }
 
@@ -148,7 +149,8 @@ class DetektAndroidSpec {
         @DisplayName("task :app:detektTest")
         fun appDetektTest() {
             gradleRunner.runTasksAndExpectFailure(":app:detektTest") { result ->
-                assertThat(result.output).containsIgnoringCase("Task 'detektTest' not found in project")
+                assertThat(result.output)
+                    .contains("Cannot locate tasks that match ':app:detektTest' as task 'detektTest' is ambiguous")
             }
         }
     }
