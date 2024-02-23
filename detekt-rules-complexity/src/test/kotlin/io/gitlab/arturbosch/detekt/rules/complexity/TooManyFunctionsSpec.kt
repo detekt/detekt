@@ -14,6 +14,7 @@ private const val ALLOWED_FUNCTIONS_PER_ENUM = "allowedFunctionsPerEnum"
 private const val IGNORE_DEPRECATED = "ignoreDeprecated"
 private const val IGNORE_PRIVATE = "ignorePrivate"
 private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
+private const val IGNORE_OPERATOR = "ignoreOperator"
 private const val IGNORE_ANNOTATED_FUNCTIONS = "ignoreAnnotatedFunctions"
 
 class TooManyFunctionsSpec {
@@ -261,6 +262,46 @@ class TooManyFunctionsSpec {
                     ALLOWED_FUNCTIONS_PER_CLASS to "1",
                     ALLOWED_FUNCTIONS_PER_FILE to "1",
                     IGNORE_OVERRIDDEN to "false",
+                )
+            )
+            assertThat(configuredRule.compileAndLint(code)).hasSize(1)
+        }
+    }
+
+    @Nested
+    inner class `operator functions` {
+
+        val code = """
+            class Foo(val i : Int) {
+                operator fun plus(other: Foo): Foo {
+                    return Foo(i + other.i)
+                }
+            
+                operator fun times(other: Foo): Foo {
+                    return Foo(i * other.i)
+                }
+            }
+        """.trimIndent()
+
+        @Test
+        fun `should not report class with operator functions, if ignoreOperator is enabled`() {
+            val configuredRule = TooManyFunctions(
+                TestConfig(
+                    ALLOWED_FUNCTIONS_PER_CLASS to "1",
+                    ALLOWED_FUNCTIONS_PER_FILE to "1",
+                    IGNORE_OPERATOR to "true",
+                )
+            )
+            assertThat(configuredRule.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should count operator functions, if ignoreOperator is disabled`() {
+            val configuredRule = TooManyFunctions(
+                TestConfig(
+                    ALLOWED_FUNCTIONS_PER_CLASS to "1",
+                    ALLOWED_FUNCTIONS_PER_FILE to "1",
+                    IGNORE_OPERATOR to "false",
                 )
             )
             assertThat(configuredRule.compileAndLint(code)).hasSize(1)

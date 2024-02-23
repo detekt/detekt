@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.hasAnnotation
+import io.gitlab.arturbosch.detekt.rules.isOperator
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -53,6 +54,9 @@ class TooManyFunctions(config: Config) : Rule(
 
     @Configuration("ignore overridden functions")
     private val ignoreOverridden: Boolean by config(false)
+
+    @Configuration("ignore operator functions")
+    private val ignoreOperator: Boolean by config(false)
 
     @Configuration("ignore functions annotated with these annotations")
     private val ignoreAnnotatedFunctions: List<String> by config(emptyList())
@@ -155,6 +159,7 @@ class TooManyFunctions(config: Config) : Rule(
         ignorePrivate && function.isPrivate() -> true
         ignoreOverridden && function.isOverride() -> true
         ignoreAnnotatedFunctions.any { function.hasAnnotation(it) } -> true
+        ignoreOperator && function.isOperator() -> true
         else -> false
     }
 
