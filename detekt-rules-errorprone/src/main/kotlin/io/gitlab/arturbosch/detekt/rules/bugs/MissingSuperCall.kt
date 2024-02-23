@@ -65,13 +65,15 @@ class MissingSuperCall(config: Config) : Rule(
 
         if (!function.hasModifier(KtTokens.OVERRIDE_KEYWORD)) return
         val functionDescriptor = bindingContext[DECLARATION_TO_DESCRIPTOR, function] as? CallableDescriptor ?: return
-
-        val superFunctionDescriptor = functionDescriptor.overriddenDescriptors.firstOrNull() ?: return
-        if (superFunctionDescriptor.annotations.none { it.fqName in mustInvokeSuperAnnotations }) return
-
+        val superFunctionDescriptor = functionDescriptor.superFunctionWithAnnotation() ?: return
         if (function.hasSuperCall(superFunctionDescriptor)) return
 
         report(CodeSmell(Entity.from(function), "Overriding method is missing a call to overridden super method."))
+    }
+
+    private fun CallableDescriptor.superFunctionWithAnnotation(): CallableDescriptor? {
+        return overriddenDescriptors.firstOrNull { d -> d.annotations.any { it.fqName in mustInvokeSuperAnnotations } }
+            ?: overriddenDescriptors.firstNotNullOfOrNull { it.superFunctionWithAnnotation() }
     }
 
     private fun KtNamedFunction.hasSuperCall(superFunctionDescriptor: CallableDescriptor): Boolean {
