@@ -67,12 +67,13 @@ class DetektAndroidSpec {
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
-                assertThat(buildResult.tasks.map { it.path }).containsAll(
-                    listOf(
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":app:detekt") }
+                    .containsExactlyInAnyOrder(
+                        ":app:detektDebug",
                         ":app:detektMain",
-                        ":app:detektDebug"
+                        ":app:detektRelease",
                     )
-                )
             }
         }
 
@@ -100,12 +101,14 @@ class DetektAndroidSpec {
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
-                assertThat(buildResult.tasks.map { it.path }).containsAll(
-                    listOf(
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":app:detekt") }
+                    .containsExactlyInAnyOrder(
+                        ":app:detektDebugAndroidTest",
                         ":app:detektDebugUnitTest",
-                        ":app:detektDebugAndroidTest"
+                        ":app:detektReleaseUnitTest",
+                        ":app:detektTest",
                     )
-                )
             }
         }
     }
@@ -191,12 +194,13 @@ class DetektAndroidSpec {
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
-                assertThat(buildResult.tasks.map { it.path }).containsAll(
-                    listOf(
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":lib:detekt") }
+                    .containsExactlyInAnyOrder(
+                        ":lib:detektDebug",
                         ":lib:detektMain",
-                        ":lib:detektDebug"
+                        ":lib:detektRelease",
                     )
-                )
             }
         }
 
@@ -216,12 +220,14 @@ class DetektAndroidSpec {
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
-                assertThat(buildResult.tasks.map { it.path }).containsAll(
-                    listOf(
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":lib:detekt") }
+                    .containsExactlyInAnyOrder(
+                        ":lib:detektDebugAndroidTest",
                         ":lib:detektDebugUnitTest",
-                        ":lib:detektDebugAndroidTest"
+                        ":lib:detektReleaseUnitTest",
+                        ":lib:detektTest",
                     )
-                )
             }
         }
     }
@@ -289,11 +295,13 @@ class DetektAndroidSpec {
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
-                assertThat(buildResult.tasks.map { it.path }).containsAll(
-                    listOf(
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":android_lib:detekt") }
+                    .containsExactlyInAnyOrder(
+                        ":android_lib:detektDebug",
                         ":android_lib:detektMain",
+                        ":android_lib:detektRelease",
                     )
-                )
             }
         }
 
@@ -314,11 +322,14 @@ class DetektAndroidSpec {
                 assertThat(buildResult.output).contains("--report xml:")
                 assertThat(buildResult.output).contains("--report sarif:")
                 assertThat(buildResult.output).doesNotContain("--report txt:")
-                assertThat(buildResult.tasks.map { it.path }).containsAll(
-                    listOf(
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":android_lib:detekt") }
+                    .containsExactlyInAnyOrder(
+                        ":android_lib:detektDebugAndroidTest",
+                        ":android_lib:detektDebugUnitTest",
+                        ":android_lib:detektReleaseUnitTest",
                         ":android_lib:detektTest",
                     )
-                )
             }
         }
     }
@@ -347,13 +358,15 @@ class DetektAndroidSpec {
         @DisplayName("task :lib:detektMain")
         fun libDetektMain() {
             gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
-                assertThat(buildResult.tasks.map { it.path }).containsAll(
-                    listOf(
-                        ":lib:detektYoungHarryDebug",
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":lib:detekt") }
+                    .containsExactlyInAnyOrder(
+                        ":lib:detektMain",
                         ":lib:detektOldHarryDebug",
-                        ":lib:detektOldHarryRelease"
+                        ":lib:detektOldHarryRelease",
+                        ":lib:detektYoungHarryDebug",
+                        ":lib:detektYoungHarryRelease",
                     )
-                )
             }
         }
 
@@ -361,15 +374,17 @@ class DetektAndroidSpec {
         @DisplayName("task :lib:detektTest")
         fun libDetektTest() {
             gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
-                assertThat(buildResult.tasks.map { it.path }).containsAll(
-                    listOf(
-                        ":lib:detektYoungHarryDebugUnitTest",
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":lib:detekt") }
+                    .containsExactlyInAnyOrder(
+                        ":lib:detektOldHarryDebugAndroidTest",
                         ":lib:detektOldHarryDebugUnitTest",
                         ":lib:detektOldHarryReleaseUnitTest",
+                        ":lib:detektTest",
                         ":lib:detektYoungHarryDebugAndroidTest",
-                        ":lib:detektOldHarryDebugAndroidTest"
+                        ":lib:detektYoungHarryDebugUnitTest",
+                        ":lib:detektYoungHarryReleaseUnitTest",
                     )
-                )
             }
         }
     }
@@ -402,14 +417,17 @@ class DetektAndroidSpec {
         @DisplayName("task :lib:detektMain")
         fun libDetektMain() {
             gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
-                assertThat(buildResult.tasks.map { it.path }).containsAll(
-                    listOf(
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":lib:detekt") }
+                    .containsExactlyInAnyOrder(
+                        ":lib:detektMain",
+                        ":lib:detektOldHarryDebug",
                         ":lib:detektYoungHarryDebug",
-                        ":lib:detektOldHarryDebug"
                     )
-                ).doesNotContain(
-                    ":lib:detektOldHarryRelease"
-                )
+                    .doesNotContain(
+                        ":lib:detektOldHarryRelease",
+                        ":lib:detektYoungHarryRelease",
+                    )
             }
         }
 
@@ -417,16 +435,19 @@ class DetektAndroidSpec {
         @DisplayName("task :lib:detektTest")
         fun libDetektTest() {
             gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
-                assertThat(buildResult.tasks.map { it.path }).containsAll(
-                    listOf(
-                        ":lib:detektYoungHarryDebugUnitTest",
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":lib:detekt") }
+                    .containsExactlyInAnyOrder(
+                        ":lib:detektOldHarryDebugAndroidTest",
                         ":lib:detektOldHarryDebugUnitTest",
+                        ":lib:detektTest",
                         ":lib:detektYoungHarryDebugAndroidTest",
-                        ":lib:detektOldHarryDebugAndroidTest"
+                        ":lib:detektYoungHarryDebugUnitTest",
                     )
-                ).doesNotContain(
-                    ":lib:detektOldHarryReleaseUnitTest"
-                )
+                    .doesNotContain(
+                        ":lib:detektOldHarryReleaseUnitTest",
+                        ":lib:detektYoungHarryReleaseUnitTest",
+                    )
             }
         }
     }
@@ -459,14 +480,17 @@ class DetektAndroidSpec {
         @DisplayName("task :lib:detektMain")
         fun libDetektMain() {
             gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
-                assertThat(buildResult.tasks.map { it.path }).containsAll(
-                    listOf(
-                        ":lib:detektOldHarryDebug"
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":lib:detekt") }
+                    .containsExactlyInAnyOrder(
+                        ":lib:detektMain",
+                        ":lib:detektOldHarryDebug",
+                        ":lib:detektYoungHarryRelease",
                     )
-                ).doesNotContain(
-                    ":lib:detektYoungHarryDebug",
-                    ":lib:detektOldHarryRelease"
-                )
+                    .doesNotContain(
+                        ":lib:detektOldHarryRelease",
+                        ":lib:detektYoungHarryDebug",
+                    )
             }
         }
 
@@ -474,16 +498,19 @@ class DetektAndroidSpec {
         @DisplayName("task :lib:detektTest")
         fun libDetektTest() {
             gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
-                assertThat(buildResult.tasks.map { it.path }).containsAll(
-                    listOf(
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":lib:detekt") }
+                    .containsExactlyInAnyOrder(
+                        ":lib:detektOldHarryDebugAndroidTest",
                         ":lib:detektOldHarryDebugUnitTest",
-                        ":lib:detektOldHarryDebugAndroidTest"
+                        ":lib:detektTest",
+                        ":lib:detektYoungHarryReleaseUnitTest",
                     )
-                ).doesNotContain(
-                    ":lib:detektYoungHarryDebugUnitTest",
-                    ":lib:detektYoungHarryDebugAndroidTest",
-                    ":lib:detektOldHarryReleaseUnitTest"
-                )
+                    .doesNotContain(
+                        ":lib:detektOldHarryReleaseUnitTest",
+                        ":lib:detektYoungHarryDebugAndroidTest",
+                        ":lib:detektYoungHarryDebugUnitTest",
+                    )
             }
         }
     }
@@ -516,14 +543,17 @@ class DetektAndroidSpec {
         @DisplayName("task :lib:detektMain")
         fun libDetektMain() {
             gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
-                assertThat(buildResult.tasks.map { it.path }).containsAll(
-                    listOf(
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":lib:detekt") }
+                    .containsExactlyInAnyOrder(
+                        ":lib:detektMain",
                         ":lib:detektOldHarryDebug",
-                        ":lib:detektOldHarryRelease"
+                        ":lib:detektOldHarryRelease",
                     )
-                ).doesNotContain(
-                    ":lib:detektYoungHarryDebug"
-                )
+                    .doesNotContain(
+                        ":lib:detektYoungHarryDebug",
+                        ":lib:detektYoungHarryRelease",
+                    )
             }
         }
 
@@ -531,16 +561,19 @@ class DetektAndroidSpec {
         @DisplayName("task :lib:detektTest")
         fun libDetektTest() {
             gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
-                assertThat(buildResult.tasks.map { it.path }).containsAll(
-                    listOf(
-                        ":lib:detektOldHarryDebugUnitTest",
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":lib:detekt") }
+                    .containsExactlyInAnyOrder(
                         ":lib:detektOldHarryDebugAndroidTest",
-                        ":lib:detektOldHarryReleaseUnitTest"
+                        ":lib:detektOldHarryDebugUnitTest",
+                        ":lib:detektOldHarryReleaseUnitTest",
+                        ":lib:detektTest",
                     )
-                ).doesNotContain(
-                    ":lib:detektYoungHarryDebugUnitTest",
-                    ":lib:detektYoungHarryDebugAndroidTest"
-                )
+                    .doesNotContain(
+                        ":lib:detektYoungHarryDebugAndroidTest",
+                        ":lib:detektYoungHarryDebugUnitTest",
+                        ":lib:detektYoungHarryReleaseUnitTest",
+                    )
             }
         }
 
