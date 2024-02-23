@@ -33,7 +33,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * </noncompliant>
  *
  * <compliant>
- *  open class ParentClass {
+ * open class ParentClass {
  *     @CallSuper
  *     open fun someMethod(arg: Int) {
  *     }
