@@ -59,22 +59,25 @@ class MissingSuperCallSpec(private val env: KotlinCoreEnvironment) {
     @Test
     fun `super method has user defined annotation`() {
         val subject = MissingSuperCall(
-            TestConfig("mustInvokeSuperAnnotations" to listOf("foo.Bar"))
+            TestConfig("mustInvokeSuperAnnotations" to listOf("p.Ann"))
         )
 
         val code = """
-            package foo
-        
-            annotation class Bar
-            
-            open class ParentClass {
-                @Bar
-                open fun someMethod(arg: Int) {
+            package p
+            annotation class Ann
+            open class Foo {
+                open fun x() {}
+            }
+            open class Bar: Foo() {
+                @Ann
+                override fun x() {
+                    super.x()
+                    println("Bar")
                 }
             }
-            
-            class MyClass : ParentClass() {
-                override fun someMethod(arg: Int) {
+            class Baz: Bar() {
+                override fun x() {
+                    println("Baz")
                 }
             }
         """.trimIndent()
@@ -146,11 +149,20 @@ class MissingSuperCallSpec(private val env: KotlinCoreEnvironment) {
                 @Bar
                 open fun someMethod(arg: Int) {
                 }
+                @Bar
+                open fun someMethod(b: Boolean) {
+                }
             }
             
             class MyClass : ParentClass() {
                 override fun someMethod(arg: Int) {
                     super.someMethod(arg)
+                    println()
+                }
+                override fun someMethod(b: Boolean) {
+                    if (b) {
+                        super.someMethod(b)
+                    }
                     println()
                 }
             }
