@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 /**
  * In most cases using a spread operator causes a full copy of the array to be created before calling a method.
  * This has a very high performance penalty. Benchmarks showing this performance penalty can be seen here:
- * https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks
+ * https://web.archive.org/web/20230514162525/https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks
  *
  * The Kotlin compiler since v1.1.60 has an optimization that skips the array copy when an array constructor
  * function is used to create the arguments that are passed to the vararg parameter. This case will not be flagged
