@@ -180,7 +180,7 @@ class DetektMultiplatformSpec {
                                 }
                             }
                             kotlin {
-                                android {
+                                androidTarget {
                                     compilations.all {
                                         kotlinOptions.jvmTarget = "1.8"
                                     }
@@ -190,9 +190,9 @@ class DetektMultiplatformSpec {
                         DETEKT_BLOCK,
                     ),
                     srcDirs = listOf(
-                        "src/debug/kotlin",
-                        "src/release/kotlin",
-                        "src/androidTest/kotlin",
+                        "src/androidDebug/kotlin",
+                        "src/androidRelease/kotlin",
+                        "src/androidUnitTest/kotlin",
                         "src/androidMain/kotlin",
                         "src/commonMain/kotlin",
                         "src/commonTest/kotlin"
@@ -374,8 +374,8 @@ private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGrad
 private fun setupAndroidProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGradleRunner {
     val gradleRunner = setupProject { projectLayoutAction() }
     gradleRunner.writeProjectFile("shared/src/androidMain/AndroidManifest.xml", manifestContent)
-    gradleRunner.writeProjectFile("shared/src/debug/AndroidManifest.xml", manifestContent)
-    gradleRunner.writeProjectFile("shared/src/release/AndroidManifest.xml", manifestContent)
+    gradleRunner.writeProjectFile("shared/src/androidDebug/AndroidManifest.xml", manifestContent)
+    gradleRunner.writeProjectFile("shared/src/androidRelease/AndroidManifest.xml", manifestContent)
     return gradleRunner
 }
 

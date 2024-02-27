@@ -116,7 +116,7 @@ class ReportMergeSpec {
                         implementation(project(":lib"))
                     }
                 """.trimIndent(),
-                srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
+                srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidUnitTest/java"),
             )
             addSubmodule(
                 name = "lib",
@@ -140,7 +140,7 @@ class ReportMergeSpec {
                         }
                     }
                 """.trimIndent(),
-                srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
+                srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidUnitTest/java")
             )
         }
         val mainBuildFileContent: String = """
