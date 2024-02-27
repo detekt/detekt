@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.internal.ActiveByDefault
 import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
+import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtClass
@@ -21,6 +22,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunctionType
 import org.jetbrains.kotlin.psi.KtImportDirective
+import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -148,6 +150,16 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
         override fun visitProperty(property: KtProperty) {
             property.typeReference?.run { registerAccess(this) }
             super.visitProperty(property)
+        }
+
+        override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
+            expression.right?.run { registerAccess(this) }
+            super.visitBinaryWithTypeRHSExpression(expression)
+        }
+
+        override fun visitIsExpression(expression: KtIsExpression) {
+            expression.typeReference?.run { registerAccess(this) }
+            super.visitIsExpression(expression)
         }
 
         override fun visitCallExpression(expression: KtCallExpression) {

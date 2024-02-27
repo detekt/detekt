@@ -306,6 +306,26 @@ class UnusedPrivateClassSpec {
 
             assertThat(findings).isEmpty()
         }
+
+        @Test
+        fun `should not report them if used for type conversion`() {
+            val code = """
+                private class Foo(val bar: String)
+                private fun f(a: Any) = a as Foo
+            """.trimIndent()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should not report them if used for type checking`() {
+            val code = """
+                private class Foo(val bar: String)
+                private fun f(a: Any) = a is Foo
+            """.trimIndent()
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
     }
 
     @Nested
