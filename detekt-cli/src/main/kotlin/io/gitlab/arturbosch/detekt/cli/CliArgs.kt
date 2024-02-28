@@ -214,12 +214,4 @@ class CliArgs {
                 FailureSeverity.Info -> FailOnSeverity(minSeverity.toSeverity())
             }
         }
-
-    companion object {
-        /**
-         * When embedding the cli inside a tool, this closure style configuration
-         * of the arguments should be used.
-         */
-        operator fun invoke(init: CliArgs.() -> Unit): CliArgs = CliArgs().apply(init)
-    }
 }
