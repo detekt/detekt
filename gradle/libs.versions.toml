@@ -25,11 +25,11 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 
 # This represents the oldest AGP version that is supported by detekt.
 # This should only be updated when updating the minimum version supported by detekt's Gradle plugin.
-android-gradle-minSupported = "com.android.tools.build:gradle:7.0.0"
+android-gradle-minSupported = "com.android.tools.build:gradle:8.3.0"
 
 # This version of AGP is used for testing and should be updated when new AGP versions are released to ensure detekt's
 # Gradle plugin remains compatible.
-android-gradle-maxSupported = "com.android.tools.build:gradle:8.2.2"
+android-gradle-maxSupported = "com.android.tools.build:gradle:8.3.0"
 
 ktlintRulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint"  }
 slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4j" }
