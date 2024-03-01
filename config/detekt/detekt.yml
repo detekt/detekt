@@ -68,6 +68,8 @@ formatting:
   active: true
   android: false
   autoCorrect: true
+  BackingPropertyNaming:
+    active: true
   BinaryExpressionWrapping:
     active: true
   BlankLineBeforeDeclaration:
