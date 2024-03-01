@@ -78,6 +78,9 @@ formatting:
     active: false
   FunctionSignature:
     active: false
+  Kdoc:
+    active: true
+    excludes: ['**/*.kts']
   MaximumLineLength:
     active: false
   MultilineExpressionWrapping:
