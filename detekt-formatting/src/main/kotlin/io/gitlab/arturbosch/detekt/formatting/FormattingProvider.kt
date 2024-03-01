@@ -40,6 +40,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.IfElseBracing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.IfElseWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ImportOrdering
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Indentation
+import io.gitlab.arturbosch.detekt.formatting.wrappers.Kdoc
 import io.gitlab.arturbosch.detekt.formatting.wrappers.KdocWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.MaximumLineLength
 import io.gitlab.arturbosch.detekt.formatting.wrappers.MixedConditionOperators
@@ -215,6 +216,7 @@ class FormattingProvider : RuleSetProvider {
             ::FunctionExpressionBody,
             ::FunctionLiteral,
             ::FunctionTypeModifierSpacing,
+            ::Kdoc,
             ::MixedConditionOperators,
             ::MultilineLoop,
         ).sorted()

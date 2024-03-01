@@ -126,6 +126,8 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
+  Kdoc:
+    active: false
   KdocWrapping:
     active: true
     autoCorrect: true
