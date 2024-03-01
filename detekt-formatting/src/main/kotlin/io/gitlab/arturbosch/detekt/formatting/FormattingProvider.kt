@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationOnSeparateLine
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ArgumentListWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.BackingPropertyNaming
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BinaryExpressionWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BlankLineBeforeDeclaration
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BlankLineBetweenWhenConditions
@@ -209,6 +210,7 @@ class FormattingProvider : RuleSetProvider {
             ::ValueParameterComment,
             ::Wrapping,
             // Wrappers for experimental rules. Disabled by default.
+            ::BackingPropertyNaming,
             ::BinaryExpressionWrapping,
             ::BlankLineBetweenWhenConditions,
             ::ChainMethodContinuation,
