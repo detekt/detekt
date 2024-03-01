@@ -84,6 +84,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundKeyword
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundOperators
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundParens
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundRangeOperator
+import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundSquareBrackets
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundUnaryOperator
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithAnnotations
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithComments
@@ -219,6 +220,7 @@ class FormattingProvider : RuleSetProvider {
             ::Kdoc,
             ::MixedConditionOperators,
             ::MultilineLoop,
+            ::SpacingAroundSquareBrackets,
         ).sorted()
     )
 
