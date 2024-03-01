@@ -267,6 +267,9 @@ formatting:
   SpacingAroundRangeOperator:
     active: true
     autoCorrect: true
+  SpacingAroundSquareBrackets:
+    active: false
+    autoCorrect: true
   SpacingAroundUnaryOperator:
     active: true
     autoCorrect: true
