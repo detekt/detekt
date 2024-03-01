@@ -89,6 +89,8 @@ formatting:
     active: true
   NoEmptyFirstLineInClassBody:
     active: false
+  SpacingAroundSquareBrackets:
+    active: true
   StringTemplateIndent:
     active: false
   ValueArgumentComment:
