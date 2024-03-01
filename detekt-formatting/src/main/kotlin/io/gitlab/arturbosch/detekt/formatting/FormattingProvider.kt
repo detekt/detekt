@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ArgumentListWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BinaryExpressionWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BlankLineBeforeDeclaration
+import io.gitlab.arturbosch.detekt.formatting.wrappers.BlankLineBetweenWhenConditions
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BlockCommentInitialStarAlignment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainMethodContinuation
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
@@ -207,6 +208,7 @@ class FormattingProvider : RuleSetProvider {
             ::Wrapping,
             // Wrappers for experimental rules. Disabled by default.
             ::BinaryExpressionWrapping,
+            ::BlankLineBetweenWhenConditions,
             ::ChainMethodContinuation,
             ::ClassSignature,
             ::ConditionWrapping,

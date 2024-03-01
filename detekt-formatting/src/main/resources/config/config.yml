@@ -23,6 +23,10 @@ formatting:
   BlankLineBeforeDeclaration:
     active: true
     autoCorrect: true
+  BlankLineBetweenWhenConditions:
+    active: false
+    autoCorrect: true
+    lineBreakAfterWhenEntries: true
   BlockCommentInitialStarAlignment:
     active: true
     autoCorrect: true
