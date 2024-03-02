@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.tooling
 
 import io.github.detekt.parser.KtCompiler
-import io.gitlab.arturbosch.detekt.core.KtTreeCompiler
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
@@ -23,6 +22,9 @@ fun pathToKtFile(path: Path): ParsingStrategy = { settings ->
 }
 
 val inputPathsToKtFiles: ParsingStrategy = { settings ->
-    val compiler = KtTreeCompiler(settings, settings.spec.projectSpec)
-    settings.spec.projectSpec.inputPaths.flatMap(compiler::compile)
+    val compiler = KtCompiler(settings.environment)
+    val basePath = settings.spec.projectSpec.basePath
+    settings.spec.projectSpec.inputPaths.map { path ->
+        compiler.compile(basePath, path)
+    }
 }
