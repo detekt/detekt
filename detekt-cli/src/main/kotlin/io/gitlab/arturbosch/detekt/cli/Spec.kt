@@ -4,7 +4,14 @@ import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.tooling.api.spec.RulesSpec
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
+import io.gitlab.arturbosch.detekt.api.internal.PathFilters
+import java.nio.file.Path
+import kotlin.io.path.ExperimentalPathApi
+import kotlin.io.path.absolute
+import kotlin.io.path.extension
+import kotlin.io.path.walk
 
+@Suppress("LongMethod")
 internal fun CliArgs.createSpec(output: Appendable, error: Appendable): ProcessingSpec {
     val args = this
     return ProcessingSpec {
@@ -16,9 +23,20 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
 
         project {
             basePath = args.basePath
-            inputPaths = args.inputPaths
-            excludes = args.excludes?.let(::asPatterns).orEmpty()
-            includes = args.includes?.let(::asPatterns).orEmpty()
+            val pathFilters = PathFilters.of(
+                args.excludes?.let(::asPatterns).orEmpty(),
+                args.includes?.let(::asPatterns).orEmpty(),
+            )
+            inputPaths = args.inputPaths.walk()
+                .map { it.absolute().normalize() }
+                .filter { pathFilters?.isIgnored(it) != false }
+                .filter { path ->
+                    path.isKotlinFile()
+                        .also {
+                            if (!it && args.debug) output.appendLine("Ignoring a file detekt cannot handle: $path")
+                        }
+                }
+                .toSet()
         }
 
         rules {
@@ -65,6 +83,15 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
         }
     }
 }
+
+@OptIn(ExperimentalPathApi::class)
+private fun Iterable<Path>.walk(): Sequence<Path> {
+    return asSequence().flatMap { it.walk() }
+}
+
+private fun Path.isKotlinFile() = extension in KT_ENDINGS
+
+private val KT_ENDINGS = setOf("kt", "kts")
 
 private fun asPatterns(rawValue: String): List<String> = rawValue.trim()
     .splitToSequence(",", ";")
