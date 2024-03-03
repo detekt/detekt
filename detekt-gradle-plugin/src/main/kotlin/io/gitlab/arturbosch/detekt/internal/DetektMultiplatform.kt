@@ -3,8 +3,6 @@ package io.gitlab.arturbosch.detekt.internal
 import com.android.build.gradle.BaseExtension
 import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-import io.gitlab.arturbosch.detekt.extensions.DetektReport
-import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
 import org.jetbrains.kotlin.gradle.dsl.KotlinCommonOptions
@@ -102,7 +100,6 @@ internal class DetektMultiplatform(private val project: Project) {
             }?.let { baselineFile ->
                 baseline.convention(layout.file(provider { baselineFile }))
             }
-            setReportOutputConventions(reports, extension, taskSuffix.decapitalize())
             description =
                 "Run detekt analysis for target ${target.name} and source set ${compilation.name}"
             if (runWithTypeResolution) {
@@ -134,23 +131,6 @@ internal class DetektMultiplatform(private val project: Project) {
             }
         }
     }
-}
-
-internal fun setReportOutputConventions(reports: DetektReports, extension: DetektExtension, name: String) {
-    setReportOutputConvention(extension, reports.xml, name, "xml")
-    setReportOutputConvention(extension, reports.html, name, "html")
-    setReportOutputConvention(extension, reports.txt, name, "txt")
-    setReportOutputConvention(extension, reports.sarif, name, "sarif")
-    setReportOutputConvention(extension, reports.md, name, "md")
-}
-
-private fun setReportOutputConvention(
-    extension: DetektExtension,
-    report: DetektReport,
-    name: String,
-    format: String
-) {
-    report.outputLocation.convention(extension.reportsDir.file("$name.$format"))
 }
 
 // We currently run type resolution only for Jvm & Android targets as

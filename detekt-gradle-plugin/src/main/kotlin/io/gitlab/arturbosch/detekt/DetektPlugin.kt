@@ -93,25 +93,30 @@ class DetektPlugin : Plugin<Project> {
         project.tasks.withType(Detekt::class.java).configureEach { task ->
             task.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
             task.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
+            val reportName = if (task.name.startsWith(DETEKT_TASK_NAME) && task.name != DETEKT_TASK_NAME) {
+                task.name.removePrefix(DETEKT_TASK_NAME).decapitalize()
+            } else {
+                task.name
+            }
             task.reports.html { report ->
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
-                report.outputLocation.convention(extension.reportsDir.file("${task.name}.html"))
+                report.outputLocation.convention(extension.reportsDir.file("$reportName.html"))
             }
             task.reports.md { report ->
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
-                report.outputLocation.convention(extension.reportsDir.file("${task.name}.md"))
+                report.outputLocation.convention(extension.reportsDir.file("$reportName.md"))
             }
             task.reports.sarif { report ->
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
-                report.outputLocation.convention(extension.reportsDir.file("${task.name}.sarif"))
+                report.outputLocation.convention(extension.reportsDir.file("$reportName.sarif"))
             }
             task.reports.txt { report ->
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
-                report.outputLocation.convention(extension.reportsDir.file("${task.name}.txt"))
+                report.outputLocation.convention(extension.reportsDir.file("$reportName.txt"))
             }
             task.reports.xml { report ->
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
-                report.outputLocation.convention(extension.reportsDir.file("${task.name}.xml"))
+                report.outputLocation.convention(extension.reportsDir.file("$reportName.xml"))
             }
         }
 

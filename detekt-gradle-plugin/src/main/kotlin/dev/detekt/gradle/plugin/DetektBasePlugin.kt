@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.internal.addVariantName
 import io.gitlab.arturbosch.detekt.internal.existingVariantOrBaseFile
 import io.gitlab.arturbosch.detekt.internal.registerCreateBaselineTask
 import io.gitlab.arturbosch.detekt.internal.registerDetektTask
-import io.gitlab.arturbosch.detekt.internal.setReportOutputConventions
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
@@ -78,7 +77,6 @@ class DetektBasePlugin : Plugin<Project> {
                             ?.let { file ->
                                 baseline.convention(project.layout.file(project.provider { file }))
                             }
-                        setReportOutputConventions(reports, extension, sourceSet.name + "SourceSet")
                         description = "Run detekt analysis for ${sourceSet.name} source set"
                     }
 
