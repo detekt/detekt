@@ -2,10 +2,10 @@
 
 package io.gitlab.arturbosch.detekt.cli
 
+import io.github.detekt.tooling.api.AnalysisResult
 import io.github.detekt.tooling.api.InvalidConfig
 import io.github.detekt.tooling.api.IssuesFound
 import io.github.detekt.tooling.api.UnexpectedError
-import io.github.detekt.tooling.api.exitCode
 import io.github.detekt.tooling.internal.NotApiButProbablyUsedByUsers
 import io.gitlab.arturbosch.detekt.api.internal.whichKotlin
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
@@ -64,4 +64,12 @@ fun buildRunner(
         arguments.generateConfig != null -> ConfigExporter(arguments, outputPrinter)
         else -> Runner(arguments, outputPrinter, errorPrinter)
     }
+}
+
+@Suppress("detekt.MagicNumber")
+internal fun AnalysisResult.exitCode(): Int = when (error) {
+    is UnexpectedError -> 1
+    is IssuesFound -> 2
+    is InvalidConfig -> 3
+    null -> 0
 }
