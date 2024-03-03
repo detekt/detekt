@@ -222,12 +222,12 @@ class DetektMultiplatformSpec {
         fun `configures detekt task with type resolution`() {
             gradleRunner.runTasksAndCheckResult(":shared:detektDebugAndroid") {
                 assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debug.xml """)
-                assertThat(it.output).containsPattern("""--report xml:\S*[/\\]debug.xml""")
+                assertThat(it.output).containsPattern("""--report xml:\S*[/\\]debugAndroid.xml""")
                 assertDetektWithClasspath(it)
             }
             gradleRunner.runTasksAndCheckResult(":shared:detektReleaseAndroid") {
                 assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-release.xml """)
-                assertThat(it.output).containsPattern("""--report xml:\S*[/\\]release.xml""")
+                assertThat(it.output).containsPattern("""--report xml:\S*[/\\]releaseAndroid.xml""")
                 assertDetektWithClasspath(it)
             }
         }

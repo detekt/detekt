@@ -114,10 +114,10 @@ internal fun Project.registerAndroidDetektTask(
     bootClasspath: FileCollection,
     extension: DetektExtension,
     variant: BaseVariant,
-    taskName: String = DetektPlugin.DETEKT_TASK_NAME + variant.name.capitalize(),
+    taskSuffix: String = variant.name.capitalize(),
     extraInputSource: FileCollection? = null
 ): TaskProvider<Detekt> =
-    registerDetektTask(taskName, extension) {
+    registerDetektTask(DetektPlugin.DETEKT_TASK_NAME + taskSuffix, extension) {
         setSource(variant.sourceSets.map { it.javaDirectories + it.kotlinDirectories })
         extraInputSource?.let { source(it) }
         classpath.setFrom(
@@ -130,7 +130,7 @@ internal fun Project.registerAndroidDetektTask(
         extension.baseline.asFile.orNull?.existingVariantOrBaseFile(variant.name)?.let { baselineFile ->
             baseline.convention(layout.file(project.provider { baselineFile }))
         }
-        setReportOutputConventions(reports, extension, variant.name)
+        setReportOutputConventions(reports, extension, taskSuffix.decapitalize())
         description = "EXPERIMENTAL: Run detekt analysis for ${variant.name} classes with type resolution"
     }
 
@@ -138,10 +138,10 @@ internal fun Project.registerAndroidCreateBaselineTask(
     bootClasspath: FileCollection,
     extension: DetektExtension,
     variant: BaseVariant,
-    taskName: String = DetektPlugin.BASELINE_TASK_NAME + variant.name.capitalize(),
+    taskSuffix: String = variant.name.capitalize(),
     extraInputSource: FileCollection? = null
 ): TaskProvider<DetektCreateBaselineTask> =
-    registerCreateBaselineTask(taskName, extension) {
+    registerCreateBaselineTask(DetektPlugin.BASELINE_TASK_NAME + taskSuffix, extension) {
         setSource(variant.sourceSets.map { it.javaDirectories + it.kotlinDirectories })
         extraInputSource?.let { source(it) }
         classpath.setFrom(
