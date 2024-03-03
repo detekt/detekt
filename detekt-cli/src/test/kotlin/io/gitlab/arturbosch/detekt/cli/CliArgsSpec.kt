@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
+import org.junit.jupiter.params.provider.ValueSource
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.absolute
@@ -120,6 +121,40 @@ internal class CliArgsSpec {
     fun `--all-rules lead to all rules being activated`() {
         val spec = parseArguments(arrayOf("--all-rules")).toSpec()
         assertThat(spec.rulesSpec.activateAllRules).isTrue()
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+        strings = [
+            "**/one/**,**/two/**,**/three",
+            "**/one/**;**/two/**;**/three",
+            "**/one/** ,**/two/**, **/three",
+            "**/one/** ;**/two/**; **/three",
+            "**/one/**,**/two/**;**/three",
+            "**/one/** ,**/two/**; **/three",
+            " ,,**/one/**,**/two/**,**/three",
+        ]
+    )
+    fun parseExcludes(param: String) {
+        val spec = parseArguments(arrayOf("--excludes", param)).toSpec()
+        assertThat(spec.projectSpec.excludes).containsExactly("**/one/**", "**/two/**", "**/three")
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+        strings = [
+            "**/one/**,**/two/**,**/three",
+            "**/one/**;**/two/**;**/three",
+            "**/one/** ,**/two/**, **/three",
+            "**/one/** ;**/two/**; **/three",
+            "**/one/**,**/two/**;**/three",
+            "**/one/** ,**/two/**; **/three",
+            " ,,**/one/**,**/two/**,**/three",
+        ]
+    )
+    fun parseIncludes(param: String) {
+        val spec = parseArguments(arrayOf("--includes", param)).toSpec()
+        assertThat(spec.projectSpec.includes).containsExactly("**/one/**", "**/two/**", "**/three")
     }
 
     @Nested
