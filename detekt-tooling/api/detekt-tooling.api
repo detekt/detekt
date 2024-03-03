@@ -3,10 +3,6 @@ public abstract interface class io/github/detekt/tooling/api/AnalysisResult {
 	public abstract fun getError ()Lio/github/detekt/tooling/api/DetektError;
 }
 
-public final class io/github/detekt/tooling/api/AnalysisResultKt {
-	public static final fun exitCode (Lio/github/detekt/tooling/api/AnalysisResult;)I
-}
-
 public abstract interface class io/github/detekt/tooling/api/Baseline {
 	public abstract fun contains (Ljava/lang/String;)Z
 	public abstract fun getCurrentIssues ()Ljava/util/Set;
