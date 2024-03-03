@@ -78,7 +78,7 @@ class DetektBasePlugin : Plugin<Project> {
                             ?.let { file ->
                                 baseline.convention(project.layout.file(project.provider { file }))
                             }
-                        setReportOutputConventions(reports, extension, sourceSet.name)
+                        setReportOutputConventions(reports, extension, sourceSet.name + "SourceSet")
                         description = "Run detekt analysis for ${sourceSet.name} source set"
                     }
 
