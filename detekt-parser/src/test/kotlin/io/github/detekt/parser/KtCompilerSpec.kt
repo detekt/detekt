@@ -42,11 +42,17 @@ class KtCompilerSpec {
         }
 
         @Test
-        fun `throws an exception for an invalid sub path`() {
+        fun `throws an exception for an invalid path`() {
             assertThatIllegalArgumentException()
                 .isThrownBy { ktCompiler.compile(path, path) }
-                .withMessageStartingWith("Given sub path (")
-                .withMessageEndingWith(") should be a regular file!")
+                .withMessage("Given path '$path' should be a regular file!")
+        }
+
+        @Test
+        fun `throws an exception for an non existent path`() {
+            assertThatIllegalArgumentException()
+                .isThrownBy { ktCompiler.compile(Path(""), Path("nonExistent")) }
+                .withMessage("Given path 'nonExistent' should be a regular file!")
         }
 
         @Test

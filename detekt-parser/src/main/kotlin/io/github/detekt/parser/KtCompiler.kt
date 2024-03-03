@@ -21,7 +21,7 @@ open class KtCompiler(
     protected val psiFileFactory = KtPsiFactory(environment.project, markGenerated = false)
 
     fun compile(basePath: Path, path: Path): KtFile {
-        require(path.isRegularFile()) { "Given sub path ($path) should be a regular file!" }
+        require(path.isRegularFile()) { "Given path '$path' should be a regular file!" }
         val content = path.readText()
         return createKtFile(content, basePath, path)
     }
