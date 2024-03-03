@@ -57,22 +57,19 @@ internal class DetektMultiplatform(private val project: Project) {
         // BaseVariant and other AGP apis to properly setup the classpath.
         extensions.findByType(BaseExtension::class.java)?.let {
             val bootClasspath = files(provider { it.bootClasspath })
-            val detektTaskName = DetektPlugin.DETEKT_TASK_NAME +
-                compilation.name.capitalize() + target.name.capitalize()
-            val baselineTaskName = DetektPlugin.BASELINE_TASK_NAME +
-                compilation.name.capitalize() + target.name.capitalize()
+            val taskSuffix = compilation.name.capitalize() + target.name.capitalize()
             registerAndroidDetektTask(
                 bootClasspath,
                 extension,
                 compilation.androidVariant,
-                detektTaskName,
+                taskSuffix,
                 inputSource
             )
             registerAndroidCreateBaselineTask(
                 bootClasspath,
                 extension,
                 compilation.androidVariant,
-                baselineTaskName,
+                taskSuffix,
                 inputSource
             )
         }
