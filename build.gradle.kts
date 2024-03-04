@@ -11,7 +11,6 @@ plugins {
 }
 
 tasks.withType<DokkaMultiModuleTask>().configureEach {
-    notCompatibleWithConfigurationCache("https://github.com/Kotlin/dokka/issues/1217")
     outputDirectory = layout.projectDirectory.dir("website/static/kdoc")
 }
 

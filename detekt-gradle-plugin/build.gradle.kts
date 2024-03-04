@@ -156,7 +156,6 @@ tasks {
         suppressInheritedMembers = true
         failOnWarning = true
         outputDirectory = layout.projectDirectory.dir("../website/static/kdoc/detekt-gradle-plugin")
-        notCompatibleWithConfigurationCache("https://github.com/Kotlin/dokka/issues/1217")
 
         dokkaSourceSets.configureEach {
             apiVersion = "1.4"
