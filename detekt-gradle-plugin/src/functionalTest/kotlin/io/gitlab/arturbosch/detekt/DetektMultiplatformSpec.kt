@@ -42,14 +42,14 @@ class DetektMultiplatformSpec {
 
         @Test
         fun `configures baseline task`() {
-            gradleRunner.runTasks(":shared:detektBaselineMainMetadata")
+            gradleRunner.runTasks(":shared:detektBaselineCommonMainSourceSet")
         }
 
         @Test
         fun `configures detekt task without type resolution`() {
-            gradleRunner.runTasksAndCheckResult(":shared:detektMainMetadata") {
+            gradleRunner.runTasksAndCheckResult(":shared:detektCommonMainSourceSet") {
                 assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
-                assertThat(it.output).containsPattern("""--report xml:\S*[/\\]mainMetadata.xml""")
+                assertThat(it.output).containsPattern("""--report xml:\S*[/\\]commonMainSourceSet.xml""")
                 assertDetektWithoutClasspath(it)
             }
         }
@@ -264,20 +264,20 @@ class DetektMultiplatformSpec {
 
         @Test
         fun `configures baseline task`() {
-            gradleRunner.runTasks(":shared:detektBaselineMainJs")
-            gradleRunner.runTasks(":shared:detektBaselineTestJs")
+            gradleRunner.runTasks(":shared:detektBaselineJsMainSourceSet")
+            gradleRunner.runTasks(":shared:detektBaselineJsTestSourceSet")
         }
 
         @Test
         fun `configures detekt task without type resolution`() {
-            gradleRunner.runTasksAndCheckResult(":shared:detektMainJs") {
+            gradleRunner.runTasksAndCheckResult(":shared:detektJsMainSourceSet") {
                 assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
-                assertThat(it.output).containsPattern("""--report xml:\S*[/\\]mainJs.xml""")
+                assertThat(it.output).containsPattern("""--report xml:\S*[/\\]jsMainSourceSet.xml""")
                 assertDetektWithoutClasspath(it)
             }
-            gradleRunner.runTasksAndCheckResult(":shared:detektTestJs") {
+            gradleRunner.runTasksAndCheckResult(":shared:detektJsTestSourceSet") {
                 assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
-                assertThat(it.output).containsPattern("""--report xml:\S*[/\\]testJs.xml""")
+                assertThat(it.output).containsPattern("""--report xml:\S*[/\\]jsTestSourceSet.xml""")
                 assertDetektWithoutClasspath(it)
             }
         }
@@ -320,32 +320,32 @@ class DetektMultiplatformSpec {
 
         @Test
         fun `configures baseline task`() {
-            gradleRunner.runTasks(":shared:detektBaselineMainIosArm64")
-            gradleRunner.runTasks(":shared:detektBaselineTestIosArm64")
-            gradleRunner.runTasks(":shared:detektBaselineMainIosX64")
-            gradleRunner.runTasks(":shared:detektBaselineTestIosX64")
+            gradleRunner.runTasks(":shared:detektBaselineIosArm64MainSourceSet")
+            gradleRunner.runTasks(":shared:detektBaselineIosArm64TestSourceSet")
+            gradleRunner.runTasks(":shared:detektBaselineIosX64MainSourceSet")
+            gradleRunner.runTasks(":shared:detektBaselineIosX64TestSourceSet")
         }
 
         @Test
         fun `configures detekt task without type resolution`() {
-            gradleRunner.runTasksAndCheckResult(":shared:detektMainIosArm64") {
+            gradleRunner.runTasksAndCheckResult(":shared:detektIosArm64MainSourceSet") {
                 assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
-                assertThat(it.output).containsPattern("""--report xml:\S*[/\\]mainIosArm64.xml""")
+                assertThat(it.output).containsPattern("""--report xml:\S*[/\\]iosArm64MainSourceSet.xml""")
                 assertDetektWithoutClasspath(it)
             }
-            gradleRunner.runTasksAndCheckResult(":shared:detektTestIosArm64") {
+            gradleRunner.runTasksAndCheckResult(":shared:detektIosArm64TestSourceSet") {
                 assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
-                assertThat(it.output).containsPattern("""--report xml:\S*[/\\]testIosArm64.xml""")
+                assertThat(it.output).containsPattern("""--report xml:\S*[/\\]iosArm64TestSourceSet.xml""")
                 assertDetektWithoutClasspath(it)
             }
-            gradleRunner.runTasksAndCheckResult(":shared:detektMainIosX64") {
+            gradleRunner.runTasksAndCheckResult(":shared:detektIosX64MainSourceSet") {
                 assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
-                assertThat(it.output).containsPattern("""--report xml:\S*[/\\]mainIosX64.xml""")
+                assertThat(it.output).containsPattern("""--report xml:\S*[/\\]iosX64MainSourceSet.xml""")
                 assertDetektWithoutClasspath(it)
             }
-            gradleRunner.runTasksAndCheckResult(":shared:detektTestIosX64") {
+            gradleRunner.runTasksAndCheckResult(":shared:detektIosX64TestSourceSet") {
                 assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
-                assertThat(it.output).containsPattern("""--report xml:\S*[/\\]testIosX64.xml""")
+                assertThat(it.output).containsPattern("""--report xml:\S*[/\\]iosX64TestSourceSet.xml""")
                 assertDetektWithoutClasspath(it)
             }
         }

@@ -4,10 +4,10 @@ import dev.detekt.gradle.plugin.CONFIGURATION_DETEKT_PLUGINS
 import dev.detekt.gradle.plugin.DetektBasePlugin
 import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.CONFIG_DIR_NAME
 import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.CONFIG_FILE
+import dev.detekt.gradle.plugin.internal.DetektAndroidCompilations
+import dev.detekt.gradle.plugin.internal.DetektJvmCompilations
+import dev.detekt.gradle.plugin.internal.DetektKmpJvmCompilations
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-import io.gitlab.arturbosch.detekt.internal.DetektAndroid
-import io.gitlab.arturbosch.detekt.internal.DetektJvm
-import io.gitlab.arturbosch.detekt.internal.DetektMultiplatform
 import io.gitlab.arturbosch.detekt.internal.DetektPlain
 import org.gradle.api.Incubating
 import org.gradle.api.Plugin
@@ -38,19 +38,20 @@ class DetektPlugin : Plugin<Project> {
 
     private fun Project.registerDetektJvmTasks(extension: DetektExtension) {
         plugins.withId("org.jetbrains.kotlin.jvm") {
-            DetektJvm(this).registerTasks(extension)
+            DetektJvmCompilations.registerTasks(project, extension)
         }
     }
 
     private fun Project.registerDetektMultiplatformTasks(extension: DetektExtension) {
         plugins.withId("org.jetbrains.kotlin.multiplatform") {
-            DetektMultiplatform(this).registerTasks(extension)
+            DetektKmpJvmCompilations.registerTasks(project, extension)
         }
     }
 
     private fun Project.registerDetektAndroidTasks(extension: DetektExtension) {
         plugins.withId("kotlin-android") {
-            DetektAndroid(this).registerTasks(extension)
+            DetektAndroidCompilations.registerTasks(project, extension)
+            DetektAndroidCompilations.linkTasks(project, extension)
         }
     }
 
