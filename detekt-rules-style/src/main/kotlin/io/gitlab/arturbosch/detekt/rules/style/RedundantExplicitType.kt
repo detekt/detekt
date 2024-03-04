@@ -62,7 +62,7 @@ class RedundantExplicitType(config: Config) : Rule(
             is KtCallExpression -> if (typeReference.text != initializer.calleeExpression?.text) return
             else -> return
         }
-        report(CodeSmell(Entity.atName(property), issue.description))
+        report(CodeSmell(Entity.atName(property), description))
         super.visitProperty(property)
     }
 

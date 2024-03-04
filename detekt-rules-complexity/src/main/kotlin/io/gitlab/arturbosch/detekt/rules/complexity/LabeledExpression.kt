@@ -72,7 +72,7 @@ class LabeledExpression(config: Config) : Rule(
             val label = expression.getTargetLabel()
             val labelName = label?.getReferencedName()
             if (labelName != null && ignoredLabels.none { labelName.contains(it, ignoreCase = true) }) {
-                report(CodeSmell(Entity.from(label), issue.description))
+                report(CodeSmell(Entity.from(label), description))
             }
         }
     }

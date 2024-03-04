@@ -32,7 +32,7 @@ class UseArrayLiteralsInAnnotations(config: Config) : Rule(
     override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry) {
         for (argument in annotationEntry.valueArguments) {
             if (argument.getArgumentExpression().isArrayOfFunctionCall()) {
-                report(CodeSmell(Entity.from(argument.asElement()), issue.description))
+                report(CodeSmell(Entity.from(argument.asElement()), description))
             }
         }
     }
@@ -42,7 +42,7 @@ class UseArrayLiteralsInAnnotations(config: Config) : Rule(
         for (parameter in constructor.valueParameters) {
             val defaultValue = parameter.defaultValue ?: continue
             if (defaultValue.isArrayOfFunctionCall()) {
-                report(CodeSmell(Entity.from(defaultValue), issue.description))
+                report(CodeSmell(Entity.from(defaultValue), description))
             }
         }
     }

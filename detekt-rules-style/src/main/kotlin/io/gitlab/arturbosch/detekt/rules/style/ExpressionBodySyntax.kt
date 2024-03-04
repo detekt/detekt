@@ -62,7 +62,7 @@ class ExpressionBodySyntax(config: Config) : Rule(
             ?.takeUnless { it.containsReturnStmtsInNullableArguments() }
 
         if (stmt != null && (includeLineWrapping || !isLineWrapped(stmt))) {
-            report(CodeSmell(Entity.from(stmt), issue.description))
+            report(CodeSmell(Entity.from(stmt), description))
         }
     }
 

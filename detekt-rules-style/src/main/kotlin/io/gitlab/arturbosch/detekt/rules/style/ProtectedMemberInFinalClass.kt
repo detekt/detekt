@@ -65,7 +65,7 @@ class ProtectedMemberInFinalClass(config: Config) : Rule(
             val isJvmFinalizeFunction = dcl is KtNamedFunction && dcl.isJvmFinalizeFunction()
 
             if (dcl.isProtected() && !dcl.isOverride() && !isJvmFinalizeFunction) {
-                report(CodeSmell(Entity.from(dcl), issue.description))
+                report(CodeSmell(Entity.from(dcl), description))
             }
         }
     }

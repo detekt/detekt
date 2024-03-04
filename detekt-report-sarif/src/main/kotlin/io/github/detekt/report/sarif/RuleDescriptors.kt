@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.ruleId
 import java.util.ServiceLoader
 
 /**
@@ -32,7 +33,7 @@ private fun Rule.toDescriptor(ruleSetId: RuleSet.Id): ReportingDescriptor {
     return ReportingDescriptor(
         id = "detekt.$ruleSetId.$ruleId",
         name = ruleId.value,
-        shortDescription = MultiformatMessageString(text = issue.description),
+        shortDescription = MultiformatMessageString(text = description),
         helpURI = "https://detekt.dev/$formattedRuleSetId.html#$formattedRuleId",
         defaultConfiguration = ReportingConfiguration(
             level = computeSeverity().toResultLevel()

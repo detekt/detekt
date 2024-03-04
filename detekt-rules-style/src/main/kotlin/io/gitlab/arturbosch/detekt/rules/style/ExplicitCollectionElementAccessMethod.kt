@@ -45,7 +45,7 @@ class ExplicitCollectionElementAccessMethod(config: Config) : Rule(
         super.visitDotQualifiedExpression(expression)
         val call = expression.selectorExpression as? KtCallExpression ?: return
         if (isIndexGetterRecommended(call) || isIndexSetterRecommended(call)) {
-            report(CodeSmell(Entity.from(expression), issue.description))
+            report(CodeSmell(Entity.from(expression), description))
         }
     }
 

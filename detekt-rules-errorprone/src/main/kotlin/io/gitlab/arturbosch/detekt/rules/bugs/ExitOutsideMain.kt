@@ -54,7 +54,7 @@ class ExitOutsideMain(config: Config) : Rule(
         val fqName = expression.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() ?: return
 
         if (fqName.asString() in exitCalls) {
-            report(CodeSmell(Entity.from(expression), issue.description))
+            report(CodeSmell(Entity.from(expression), description))
         }
     }
 

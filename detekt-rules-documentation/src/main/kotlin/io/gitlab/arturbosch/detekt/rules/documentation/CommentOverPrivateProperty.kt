@@ -23,7 +23,7 @@ class CommentOverPrivateProperty(config: Config) : Rule(
 
     override fun visitProperty(property: KtProperty) {
         if (property.hasCommentInPrivateMember()) {
-            report(CodeSmell(Entity.atName(property), issue.description))
+            report(CodeSmell(Entity.atName(property), description))
         }
     }
 }

@@ -16,7 +16,7 @@ class TestProvider : RuleSetProvider {
 class TestRule(config: Config) : Rule(config, "A failure") {
     override fun visitClass(klass: KtClass) {
         if (klass.name == "Poko") {
-            report(CodeSmell(Entity.from(klass), issue.description))
+            report(CodeSmell(Entity.from(klass), description))
         }
     }
 }

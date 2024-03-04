@@ -48,7 +48,7 @@ class AlsoCouldBeApply(config: Config) : Rule(
             ?: return
         val statements = lambda.bodyExpression?.statements.orEmpty().ifEmpty { return }
         if (statements.all { (it as? KtQualifiedExpression)?.receiverExpression?.text == IT_LITERAL }) {
-            report(CodeSmell(Entity.from(callee), issue.description))
+            report(CodeSmell(Entity.from(callee), description))
         }
     }
 }

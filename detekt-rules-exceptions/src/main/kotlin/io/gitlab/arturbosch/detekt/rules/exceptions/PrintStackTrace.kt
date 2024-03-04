@@ -54,14 +54,14 @@ class PrintStackTrace(config: Config) : Rule(
         if (callNameExpression?.text == "dumpStack" &&
             callNameExpression.getReceiverExpression()?.text == "Thread"
         ) {
-            report(CodeSmell(Entity.from(expression), issue.description))
+            report(CodeSmell(Entity.from(expression), description))
         }
     }
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         catchClause.catchBody?.forEachDescendantOfType<KtNameReferenceExpression> {
             if (it.text == catchClause.catchParameter?.name && hasPrintStacktraceCallExpression(it)) {
-                report(CodeSmell(Entity.from(it), issue.description))
+                report(CodeSmell(Entity.from(it), description))
             }
         }
     }

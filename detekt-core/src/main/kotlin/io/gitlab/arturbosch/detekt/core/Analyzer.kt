@@ -20,6 +20,7 @@ import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
+import io.gitlab.arturbosch.detekt.api.ruleId
 import io.gitlab.arturbosch.detekt.core.config.AllRulesConfig
 import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.core.config.validation.DeprecatedRule
@@ -140,11 +141,11 @@ internal class Analyzer(
                 val findings = rule.visitFile(file, bindingContext, compilerResources)
                     .filterSuppressedFindings(rule, bindingContext)
                 for (finding in findings) {
-                    val mappedRuleSet = checkNotNull(ruleIdsToRuleSetIds[rule.issue.id]) {
-                        "Mapping for '${rule.issue.id}' expected."
+                    val mappedRuleSet = checkNotNull(ruleIdsToRuleSetIds[rule.ruleId]) {
+                        "Mapping for '${rule.ruleId}' expected."
                     }
                     result.computeIfAbsent(mappedRuleSet) { mutableListOf() }
-                        .add(finding.toFinding2(rule.issue, rule.computeSeverity()))
+                        .add(finding.toFinding2(Issue(rule.ruleId, rule.description), rule.computeSeverity()))
                 }
             }
         }

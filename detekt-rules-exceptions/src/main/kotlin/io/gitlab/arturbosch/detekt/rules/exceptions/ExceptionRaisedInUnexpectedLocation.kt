@@ -48,7 +48,7 @@ class ExceptionRaisedInUnexpectedLocation(config: Config) : Rule(
             report(
                 CodeSmell(
                     Entity.atName(function),
-                    issue.description
+                    description
                 )
             )
         }

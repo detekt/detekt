@@ -79,7 +79,7 @@ class MandatoryBracesLoops(config: Config) : Rule(
                 ?.any { it.textContains('\n') }
                 ?: false
             if (hasNoBraces) {
-                report(CodeSmell(Entity.from(expression.body ?: expression), issue.description))
+                report(CodeSmell(Entity.from(expression.body ?: expression), description))
             }
         }
     }
@@ -92,7 +92,7 @@ class MandatoryBracesLoops(config: Config) : Rule(
                 .filterIsInstance<PsiWhiteSpace>()
                 .any { it.textContains('\n') }
             if (hasNoBraces) {
-                report(CodeSmell(Entity.from(expression.body ?: expression), issue.description))
+                report(CodeSmell(Entity.from(expression.body ?: expression), description))
             }
         }
     }

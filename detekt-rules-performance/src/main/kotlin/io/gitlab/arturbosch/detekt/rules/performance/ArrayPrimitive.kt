@@ -50,7 +50,7 @@ class ArrayPrimitive(config: Config) : Rule(
 
         val descriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor
         if (descriptor != null && isArrayPrimitive(descriptor)) {
-            report(CodeSmell(Entity.from(expression), issue.description))
+            report(CodeSmell(Entity.from(expression), description))
         }
     }
 
@@ -64,7 +64,7 @@ class ArrayPrimitive(config: Config) : Rule(
 
     private fun reportArrayPrimitives(typeReference: KtTypeReference) {
         typeReference.collectDescendantsOfType<KtTypeReference> { isArrayPrimitive(it) }
-            .forEach { report(CodeSmell(Entity.from(it), issue.description)) }
+            .forEach { report(CodeSmell(Entity.from(it), description)) }
     }
 
     private fun isArrayPrimitive(descriptor: CallableDescriptor): Boolean {

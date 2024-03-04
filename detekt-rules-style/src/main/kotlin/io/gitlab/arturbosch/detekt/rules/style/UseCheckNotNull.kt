@@ -31,7 +31,7 @@ class UseCheckNotNull(config: Config) : Rule(
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         if (expression.isCallingWithNonNullCheckArgument(checkFunctionFqName, bindingContext)) {
-            report(CodeSmell(Entity.from(expression), issue.description))
+            report(CodeSmell(Entity.from(expression), description))
         }
     }
 

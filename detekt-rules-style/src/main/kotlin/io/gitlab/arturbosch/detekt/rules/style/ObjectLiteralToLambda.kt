@@ -99,7 +99,7 @@ class ObjectLiteralToLambda(config: Config) : Rule(
                 ?.couldBeSamInterface == true &&
             declaration.hasConvertibleMethod()
         ) {
-            report(CodeSmell(Entity.from(expression), issue.description))
+            report(CodeSmell(Entity.from(expression), description))
         }
     }
 }

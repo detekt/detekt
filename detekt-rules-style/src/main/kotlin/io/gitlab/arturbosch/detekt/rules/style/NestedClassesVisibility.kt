@@ -49,7 +49,7 @@ class NestedClassesVisibility(config: Config) : Rule(
         klass.declarations
             .filterIsInstance<KtClassOrObject>()
             .filter { it.hasModifier(KtTokens.PUBLIC_KEYWORD) && it.isNoEnum() && it.isNoCompanionObj() }
-            .forEach { report(CodeSmell(Entity.from(it), issue.description)) }
+            .forEach { report(CodeSmell(Entity.from(it), description)) }
     }
 
     private fun KtClassOrObject.isNoEnum() = !this.hasModifier(KtTokens.ENUM_KEYWORD) && this !is KtEnumEntry

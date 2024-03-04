@@ -31,7 +31,7 @@ class UseRequireNotNull(config: Config) : Rule(
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         if (expression.isCallingWithNonNullCheckArgument(requireFunctionFqName, bindingContext)) {
-            report(CodeSmell(Entity.from(expression), issue.description))
+            report(CodeSmell(Entity.from(expression), description))
         }
     }
 

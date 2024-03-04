@@ -31,7 +31,7 @@ class ThrowingExceptionFromFinally(config: Config) : Rule(
 
     override fun visitFinallySection(finallySection: KtFinallySection) {
         finallySection.finalExpression.forEachDescendantOfType<KtThrowExpression> {
-            report(CodeSmell(Entity.from(it), issue.description))
+            report(CodeSmell(Entity.from(it), description))
         }
     }
 }

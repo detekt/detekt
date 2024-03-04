@@ -61,7 +61,7 @@ class ThrowingExceptionsWithoutMessageOrCause(config: Config) : Rule(
         if (exceptions.any { calleeExpressionText?.equals(it, ignoreCase = true) == true } &&
             expression.valueArguments.isEmpty()
         ) {
-            report(CodeSmell(Entity.from(expression), issue.description))
+            report(CodeSmell(Entity.from(expression), description))
         }
         super.visitCallExpression(expression)
     }

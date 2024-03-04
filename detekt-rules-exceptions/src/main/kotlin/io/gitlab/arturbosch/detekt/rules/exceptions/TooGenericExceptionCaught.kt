@@ -50,7 +50,7 @@ class TooGenericExceptionCaught(config: Config) : Rule(
             if (isTooGenericException(catchParameter.typeReference) &&
                 !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)
             ) {
-                report(CodeSmell(Entity.from(catchParameter), issue.description))
+                report(CodeSmell(Entity.from(catchParameter), description))
             }
         }
         super.visitCatchSection(catchClause)
