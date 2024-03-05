@@ -88,7 +88,7 @@ internal object DetektAndroidCompilations {
                                 it.dependsOn(DetektPlugin.DETEKT_TASK_NAME + testVariant.name.capitalize())
                             }
                             testBaselineTaskProvider.configure {
-                                DetektPlugin.BASELINE_TASK_NAME + testVariant.name.capitalize()
+                                it.dependsOn(DetektPlugin.BASELINE_TASK_NAME + testVariant.name.capitalize())
                             }
                         }
                 }
