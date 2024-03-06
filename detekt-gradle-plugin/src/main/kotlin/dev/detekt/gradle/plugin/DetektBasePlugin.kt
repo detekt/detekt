@@ -31,12 +31,6 @@ class DetektBasePlugin : Plugin<Project> {
             toolVersion.convention(loadDetektVersion(DetektExtension::class.java.classLoader))
             ignoreFailures.convention(DEFAULT_IGNORE_FAILURES)
             failOnSeverity.convention(DEFAULT_FAIL_ON_SEVERITY)
-            source.setFrom(
-                DEFAULT_SRC_DIR_JAVA,
-                DEFAULT_TEST_SRC_DIR_JAVA,
-                DEFAULT_SRC_DIR_KOTLIN,
-                DEFAULT_TEST_SRC_DIR_KOTLIN,
-            )
             baseline.convention(project.layout.projectDirectory.file("detekt-baseline.xml"))
             enableCompilerPlugin.convention(DEFAULT_COMPILER_PLUGIN_ENABLED)
             debug.convention(DEFAULT_DEBUG_VALUE)
@@ -137,10 +131,6 @@ class DetektBasePlugin : Plugin<Project> {
         internal const val CONFIG_DIR_NAME = "config/detekt"
         internal const val CONFIG_FILE = "detekt.yml"
 
-        private const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
-        private const val DEFAULT_TEST_SRC_DIR_JAVA = "src/test/java"
-        private const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"
-        private const val DEFAULT_TEST_SRC_DIR_KOTLIN = "src/test/kotlin"
         private const val DEFAULT_DEBUG_VALUE = false
         private const val DEFAULT_IGNORE_FAILURES = false
         private val DEFAULT_FAIL_ON_SEVERITY = FailOnSeverity.Error

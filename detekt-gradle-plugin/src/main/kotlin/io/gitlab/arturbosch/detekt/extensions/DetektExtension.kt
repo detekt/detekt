@@ -20,8 +20,6 @@ interface DetektExtension {
 
     val reportsDir: DirectoryProperty
 
-    val source: ConfigurableFileCollection
-
     val baseline: RegularFileProperty
 
     val basePath: DirectoryProperty

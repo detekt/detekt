@@ -187,18 +187,8 @@ class DetektTaskMultiModuleSpec {
             addSubmodule("child2", 4)
         }
 
-        val detektConfig: String = """
-            detekt {
-                source.setFrom(
-                   "${"$"}projectDir/src",
-                   "${"$"}projectDir/child1/src",
-                   "${"$"}projectDir/child2/src"
-                )
-            }
-        """.trimIndent()
         val gradleRunner = DslTestBuilder.kotlin()
             .withProjectLayout(projectLayout)
-            .withDetektConfig(detektConfig)
             .build()
 
         gradleRunner.runDetektTaskAndCheckResult { result ->
