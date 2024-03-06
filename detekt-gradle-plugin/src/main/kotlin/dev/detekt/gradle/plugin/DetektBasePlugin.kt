@@ -14,8 +14,10 @@ import io.gitlab.arturbosch.detekt.internal.setCreateBaselineTaskDefaults
 import io.gitlab.arturbosch.detekt.internal.setDetektTaskDefaults
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetContainer
 
@@ -63,8 +65,22 @@ class DetektBasePlugin : Plugin<Project> {
             configuration.isCanBeConsumed = false
         }
 
+        val detektTask = project.tasks.register(DetektPlugin.DETEKT_TASK_NAME) {
+            it.group = "verification"
+            it.description = "Run detekt analysis on all Kotlin source sets"
+        }
+        project.plugins.withType(BasePlugin::class.java) { _ ->
+            project.tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME).configure {
+                it.dependsOn(detektTask)
+            }
+        }
+
         project.setTaskDefaults(extension)
         project.registerSourceSetTasks(extension)
+
+        project.tasks.named(DetektPlugin.DETEKT_TASK_NAME) {
+            it.dependsOn(project.tasks.withType(Detekt::class.java))
+        }
     }
 
     private fun Project.setTaskDefaults(extension: DetektExtension) {
