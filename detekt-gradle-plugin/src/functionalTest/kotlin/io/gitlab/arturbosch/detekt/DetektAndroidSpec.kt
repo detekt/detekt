@@ -662,7 +662,7 @@ private val KOTLIN_ONLY_LIB_PLUGIN_BLOCK = """
 @Language("gradle.kts")
 private val ANDROID_BLOCK = """
     android {
-        compileSdk = 30
+        compileSdk = 34
         namespace = "io.gitlab.arturbosch.detekt.app"
         compileOptions {
             sourceCompatibility = JavaVersion.VERSION_1_8
@@ -677,7 +677,7 @@ private val ANDROID_BLOCK = """
 @Language("gradle.kts")
 private val ANDROID_BLOCK_WITH_FLAVOR = """
     android {
-        compileSdk = 30
+        compileSdk = 34
         namespace = "io.gitlab.arturbosch.detekt.app"
         flavorDimensions("age", "name")
         productFlavors {
@@ -704,7 +704,7 @@ private val ANDROID_BLOCK_WITH_FLAVOR = """
 @Language("gradle.kts")
 private val ANDROID_BLOCK_WITH_VIEW_BINDING = """
     android {
-        compileSdk = 30
+        compileSdk = 34
         namespace = "io.gitlab.arturbosch.detekt.app"
         defaultConfig {
             applicationId = "io.gitlab.arturbosch.detekt.app"
