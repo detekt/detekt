@@ -14,33 +14,17 @@ import kotlin.io.path.Path
 
 fun createFinding(
     ruleName: String = "TestSmell",
-    fileName: String = "TestFile.kt",
-    entity: Entity = createEntity(location = createLocation(fileName)),
-    severity: Severity = Severity.Error
-) = createFinding(createIssue(ruleName), entity, "TestMessage", severity)
-
-fun createCorrectableFinding(
-    ruleName: String = "TestSmell",
-    fileName: String = "TestFile.kt",
-    severity: Severity = Severity.Error
-): Finding2 = Finding2Impl(
-    issue = createIssue(ruleName),
-    entity = createEntity(location = createLocation(fileName)),
-    message = "TestMessage",
-    severity = severity,
-    autoCorrectEnabled = true
-)
-
-fun createFinding(
-    issue: Issue,
-    entity: Entity,
+    entity: Entity = createEntity(),
     message: String = "TestMessage",
-    severity: Severity = Severity.Error
+    severity: Severity = Severity.Error,
+    autoCorrectEnabled: Boolean = false,
 ): Finding2 = Finding2Impl(
-    issue = issue,
+    issue = Issue(Rule.Id(ruleName), "Description $ruleName"),
     entity = entity,
     message = message,
     severity = severity,
+    autoCorrectEnabled = autoCorrectEnabled,
+    references = emptyList(),
 )
 
 fun createFindingForRelativePath(
@@ -48,7 +32,7 @@ fun createFindingForRelativePath(
     basePath: String = "/Users/tester/detekt/",
     relativePath: String = "TestFile.kt"
 ): Finding2 = Finding2Impl(
-    issue = createIssue(ruleName),
+    issue = Issue(Rule.Id(ruleName), "Description $ruleName"),
     entity = Entity(
         name = "TestEntity",
         signature = "TestEntitySignature",
@@ -60,11 +44,6 @@ fun createFindingForRelativePath(
         ktElement = null
     ),
     message = "TestMessage"
-)
-
-fun createIssue(id: String) = Issue(
-    id = Rule.Id(id),
-    description = "Description $id",
 )
 
 fun createEntity(
@@ -79,7 +58,7 @@ fun createEntity(
 )
 
 fun createLocation(
-    path: String = "File.kt",
+    path: String = "TestFile.kt",
     basePath: String? = null,
     position: Pair<Int, Int> = 1 to 1,
     text: IntRange = 0..0,
@@ -94,7 +73,7 @@ private data class Finding2Impl(
     override val issue: Issue,
     override val entity: Entity,
     override val message: String,
-    override val references: List<Entity> = emptyList(),
     override val severity: Severity = Severity.Error,
     override val autoCorrectEnabled: Boolean = false,
+    override val references: List<Entity> = emptyList(),
 ) : Finding2

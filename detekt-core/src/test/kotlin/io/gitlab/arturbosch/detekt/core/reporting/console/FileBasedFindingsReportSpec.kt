@@ -7,7 +7,9 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
 import io.gitlab.arturbosch.detekt.core.reporting.decolorized
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createFinding
+import io.gitlab.arturbosch.detekt.test.createLocation
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -62,3 +64,7 @@ private fun createFileBasedFindingsReport(): FileBasedFindingsReport {
     report.init(Config.empty)
     return report
 }
+
+private fun createFinding(fileName: String): Finding2 = createFinding(
+    entity = createEntity(location = createLocation(fileName)),
+)

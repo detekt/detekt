@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createFinding
 import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
-import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -57,7 +56,7 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders one reported issue in single file`() {
-        val smell = createFinding(createIssue("id_a"), entity1, message = "TestMessage")
+        val smell = createFinding("id_a", entity1, "TestMessage")
 
         val result = outputFormat.render(TestDetektion(smell))
 
@@ -75,8 +74,8 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders two reported issues in single file`() {
-        val smell1 = createFinding(createIssue("id_a"), entity1, message = "TestMessage")
-        val smell2 = createFinding(createIssue("id_b"), entity1, message = "TestMessage")
+        val smell1 = createFinding("id_a", entity1, "TestMessage")
+        val smell2 = createFinding("id_b", entity1, "TestMessage")
 
         val result = outputFormat.render(TestDetektion(smell1, smell2))
 
@@ -95,8 +94,8 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders one reported issue across multiple files`() {
-        val smell1 = createFinding(createIssue("id_a"), entity1, message = "TestMessage")
-        val smell2 = createFinding(createIssue("id_a"), entity2, message = "TestMessage")
+        val smell1 = createFinding("id_a", entity1, "TestMessage")
+        val smell2 = createFinding("id_a", entity2, "TestMessage")
 
         val result = outputFormat.render(TestDetektion(smell1, smell2))
 
@@ -147,10 +146,10 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders two reported issues across multiple files`() {
-        val smell1 = createFinding(createIssue("id_a"), entity1, message = "TestMessage")
-        val smell2 = createFinding(createIssue("id_b"), entity1, message = "TestMessage")
-        val smell3 = createFinding(createIssue("id_a"), entity2, message = "TestMessage")
-        val smell4 = createFinding(createIssue("id_b"), entity2, message = "TestMessage")
+        val smell1 = createFinding("id_a", entity1, "TestMessage")
+        val smell2 = createFinding("id_b", entity1, "TestMessage")
+        val smell3 = createFinding("id_a", entity2, "TestMessage")
+        val smell4 = createFinding("id_b", entity2, "TestMessage")
 
         val result = outputFormat.render(
             TestDetektion(
@@ -186,10 +185,10 @@ class XmlOutputFormatSpec {
         fun `renders detektion with severity as XML with severity`(severity: Severity) {
             val xmlSeverity = severity.name.lowercase(Locale.US)
             val finding = createFinding(
-                issue = createIssue("issue_id"),
+                ruleName = "issue_id",
                 entity = entity1,
                 message = "message",
-                severity = severity
+                severity = severity,
             )
 
             val expected = """
