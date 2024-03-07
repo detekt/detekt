@@ -100,7 +100,7 @@ class ReportMergeSpec {
                         id("io.gitlab.arturbosch.detekt")
                     }
                     android {
-                       compileSdk = 30
+                       compileSdk = 34
                        namespace = "io.github.detekt.app"
                        compileOptions {
                            sourceCompatibility = JavaVersion.VERSION_11
@@ -127,7 +127,7 @@ class ReportMergeSpec {
                         kotlin("android")
                     }
                     android {
-                        compileSdk = 30
+                        compileSdk = 34
                         namespace = "io.github.detekt.lib"
                         compileOptions {
                             sourceCompatibility = JavaVersion.VERSION_11

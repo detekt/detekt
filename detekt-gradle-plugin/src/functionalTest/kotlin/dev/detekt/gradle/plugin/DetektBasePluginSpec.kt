@@ -70,7 +70,7 @@ class DetektBasePluginSpec {
                 }
                 
                 android {
-                    compileSdk = 30
+                    compileSdk = 34
                     namespace = "dev.detekt.gradle.plugin.app"
                 }
             """.trimIndent(),
@@ -135,7 +135,7 @@ class DetektBasePluginSpec {
                 }
                 
                 android {
-                    compileSdk = 30
+                    compileSdk = 34
                     namespace = "dev.detekt.gradle.plugin.app"
                 }
             """.trimIndent(),
