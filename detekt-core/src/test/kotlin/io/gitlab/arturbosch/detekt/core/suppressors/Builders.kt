@@ -21,7 +21,7 @@ private fun buildEmptyEntity(): Entity = Entity(
     name = "",
     signature = "",
     location = Location(
-        source = SourceLocation(0, 0),
+        source = SourceLocation(1, 1),
         text = TextLocation(0, 0),
         filePath = FilePath.fromAbsolute(Path("/"))
     ),

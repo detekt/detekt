@@ -33,9 +33,9 @@ class Location(
          */
         fun from(element: PsiElement, offset: Int = 0): Location {
             val start = startLineAndColumn(element, offset)
-            val sourceLocation = SourceLocation(start.line, start.column)
+            val sourceLocation = SourceLocation(start.line.coerceAtLeast(1), start.column.coerceAtLeast(1))
             val end = endLineAndColumn(element, offset)
-            val endSourceLocation = SourceLocation(end.line, end.column)
+            val endSourceLocation = SourceLocation(end.line.coerceAtLeast(1), end.column.coerceAtLeast(1))
             val textLocation = TextLocation(element.startOffset + offset, element.endOffset + offset)
             return Location(sourceLocation, endSourceLocation, textLocation, element.containingFile.toFilePath())
         }
@@ -70,6 +70,11 @@ class Location(
  */
 @Poko
 class SourceLocation(val line: Int, val column: Int) {
+    init {
+        require(line > 0) { "The source location line must should be greater than 0" }
+        require(column > 0) { "The source location column must should be greater than 0" }
+    }
+
     override fun toString(): String = "$line:$column"
 }
 
