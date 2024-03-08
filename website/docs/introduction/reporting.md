@@ -74,6 +74,13 @@ tasks will not run if detekt finds issues.
 
 :::
 
+:::caution Attention
+
+Because of [gradle/gradle#28034](https://github.com/gradle/gradle/issues/28034) to make `reportMerge` to work you need
+to [disable the Worker API](https://detekt.dev/docs/gettingstarted/gradle#options-for-detekt-gradle-properties).
+
+:::
+
 The machine-readable report formats support report merging.
 Detekt Gradle Plugin is not opinionated in how merging is set up and respects each project's build logic, especially 
 the merging makes most sense in a multi-module project. In this spirit, only Gradle tasks are provided.

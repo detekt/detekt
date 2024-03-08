@@ -45,7 +45,13 @@ class DetektReportMergeSpec {
             )
         }
 
-        val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, buildFileContent)
+        val gradleRunner = DslGradleRunner(
+            projectLayout,
+            builder.gradleBuildName,
+            buildFileContent,
+            // because of https://github.com/gradle/gradle/issues/28034
+            gradleProperties = mapOf("detekt.use.worker.api" to "false"),
+        )
         gradleRunner.setupProject()
         gradleRunner.runTasksAndExpectFailure("detekt", "sarifReportMerge", "--continue") { result ->
             assertThat(result.output).contains("FAILURE: Build completed with 2 failures.")
@@ -108,7 +114,13 @@ class DetektReportMergeSpec {
             )
         }
 
-        val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, buildFileContent)
+        val gradleRunner = DslGradleRunner(
+            projectLayout,
+            builder.gradleBuildName,
+            buildFileContent,
+            // because of https://github.com/gradle/gradle/issues/28034
+            gradleProperties = mapOf("detekt.use.worker.api" to "false"),
+        )
         gradleRunner.setupProject()
         gradleRunner.runTasksAndExpectFailure("detekt", "xmlReportMerge", "--continue") { result ->
             assertThat(result.output).contains("FAILURE: Build completed with 2 failures.")

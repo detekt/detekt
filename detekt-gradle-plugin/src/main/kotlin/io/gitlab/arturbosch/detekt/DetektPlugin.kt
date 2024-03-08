@@ -151,7 +151,8 @@ class DetektPlugin : Plugin<Project> {
 internal const val CONFIGURATION_DETEKT = "detekt"
 
 internal fun ProviderFactory.isWorkerApiEnabled(): Boolean {
-    return gradleProperty("detekt.use.worker.api").getOrElse("false") == "true"
+    val defaultValue = isGradleVersionAtLeast(major = 7, minor = 6).toString()
+    return gradleProperty("detekt.use.worker.api").getOrElse(defaultValue).toBoolean()
 }
 
 @Incubating
