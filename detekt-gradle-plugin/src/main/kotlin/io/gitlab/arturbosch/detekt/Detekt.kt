@@ -175,7 +175,7 @@ abstract class Detekt @Inject constructor(
 
     @TaskAction
     fun check() {
-        if (providers.gradleProperty(USE_WORKER_API).getOrElse("false") == "true") {
+        if (providers.isWorkerApiEnabled()) {
             logger.info("Executing $name using Worker API")
             val workQueue = workerExecutor.processIsolation()
 

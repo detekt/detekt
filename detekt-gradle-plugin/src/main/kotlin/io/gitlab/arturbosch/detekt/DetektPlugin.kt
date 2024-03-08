@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.internal.DetektPlain
 import org.gradle.api.Incubating
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.provider.ProviderFactory
 import java.net.URL
 import java.util.jar.Manifest
 
@@ -147,7 +148,10 @@ class DetektPlugin : Plugin<Project> {
 }
 
 internal const val CONFIGURATION_DETEKT = "detekt"
-internal const val USE_WORKER_API = "detekt.use.worker.api"
+
+internal fun ProviderFactory.isWorkerApiEnabled(): Boolean {
+    return gradleProperty("detekt.use.worker.api").getOrElse("false") == "true"
+}
 
 @Incubating
 fun getSupportedKotlinVersion(): String {
