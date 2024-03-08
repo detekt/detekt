@@ -9,16 +9,6 @@ import org.junit.jupiter.api.Test
 class EmptyKotlinFileSpec {
     private val subject = EmptyKotlinFile(Config.empty)
 
-    private val codeWithPackageStatement = """
-            package my.packagee
-    """.trimIndent()
-
-    private val codeWithFunction = """
-            package my.packagee
-            
-            fun myFunction() {}
-    """.trimIndent()
-
     @Test
     fun `reports empty if file is blank`() {
         val code = ""
@@ -27,11 +17,19 @@ class EmptyKotlinFileSpec {
 
     @Test
     fun `does report file with package statement`() {
+        val codeWithPackageStatement = """
+            package my.packagee
+        """.trimIndent()
         assertThat(subject.compileAndLint(codeWithPackageStatement)).hasSize(1)
     }
 
     @Test
     fun `does not report file with code`() {
-        assertThat(subject.compileAndLint(codeWithFunction)).hasSize(0)
+        val code = """
+            package my.packagee
+
+            fun myFunction() {}
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }
