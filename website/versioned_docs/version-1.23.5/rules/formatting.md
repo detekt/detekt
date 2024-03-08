@@ -387,6 +387,9 @@ See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/experimental/#
 
 See [ktlint docs](https://pinterest.github.io/ktlint/0.50.0/rules/standard/#no-empty-class-bodies) for documentation.
 
+This rules overlaps with [empty-blocks>EmptyClassBlock](https://detekt.dev/empty-blocks.html#emptyclassblock)
+from the standard rules, make sure to enable just one. The pro of this rule is that it can auto-correct the issue.
+
 **Active by default**: Yes - Since v1.0.0
 
 ### NoEmptyFirstLineInClassBody
