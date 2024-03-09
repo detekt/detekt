@@ -46,7 +46,7 @@ testing {
         register<JvmTestSuite>("functionalTest") {
             dependencies {
                 implementation(libs.assertj)
-                implementation(testFixtures(project(":")))
+                implementation(testFixtures(project()))
             }
 
             targets {
