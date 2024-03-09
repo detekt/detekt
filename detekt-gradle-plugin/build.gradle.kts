@@ -43,7 +43,7 @@ testing {
                 implementation(gradleKotlinDsl())
             }
         }
-        register("functionalTest", JvmTestSuite::class) {
+        register<JvmTestSuite>("functionalTest") {
             dependencies {
                 implementation(libs.assertj)
                 implementation(testFixtures(project(":")))
