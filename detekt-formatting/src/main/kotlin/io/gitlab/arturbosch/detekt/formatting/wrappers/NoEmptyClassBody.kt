@@ -8,6 +8,9 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#no-empty-class-bodies) for documentation.
+ *
+ * This rules overlaps with [empty-blocks>EmptyClassBlock](https://detekt.dev/empty-blocks.html#emptyclassblock)
+ * from the standard rules, make sure to enable just one.
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
