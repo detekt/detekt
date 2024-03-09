@@ -22,7 +22,6 @@ val versionCatalog = versionCatalogs.named("libs")
 jacoco.toolVersion = versionCatalog.findVersion("jacoco").get().requiredVersion
 
 tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
     maxParallelForks = if (providers.environmentVariable("CI").isPresent) {
         Runtime.getRuntime().availableProcessors()
     } else {
@@ -68,7 +67,7 @@ project.tasks.withType<UsesKotlinJavaToolchain>().configureEach {
 
 testing {
     suites {
-        getByName("test", JvmTestSuite::class) {
+        withType<JvmTestSuite> {
             useJUnitJupiter(versionCatalog.findVersion("junit").get().requiredVersion)
         }
     }

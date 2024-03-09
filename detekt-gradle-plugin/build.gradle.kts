@@ -44,8 +44,6 @@ testing {
             }
         }
         register("functionalTest", JvmTestSuite::class) {
-            useJUnitJupiter(libs.versions.junit.get())
-
             dependencies {
                 implementation(libs.assertj)
                 implementation(testFixtures(project(":")))
