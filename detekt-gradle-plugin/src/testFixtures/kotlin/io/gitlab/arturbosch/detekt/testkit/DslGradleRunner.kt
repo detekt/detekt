@@ -22,7 +22,7 @@ constructor(
     val gradleVersionOrNone: String? = null,
     val dryRun: Boolean = false,
     val jvmArgs: String = "-Xmx2g -XX:MaxMetaspaceSize=1g",
-    gradleProperties: Map<String, String> = emptyMap(),
+    val gradleProperties: Map<String, String> = emptyMap(),
     val customPluginClasspath: List<File> = emptyList(),
     val projectScript: Project.() -> Unit = {}
 ) {
@@ -35,9 +35,6 @@ constructor(
         rootProject.name = "rootDir-project"
         include(${projectLayout.submodules.joinToString(",") { "\"${it.name}\"" }})
     """.trimIndent()
-
-    private val propertiesContent = gradleProperties.toList()
-        .joinToString(separator = "\n") { (key, value) -> "$key=$value" }
 
     @Language("xml")
     private val baselineContent = """
@@ -70,7 +67,6 @@ constructor(
     fun setupProject() {
         writeProjectFile(buildFileName, mainBuildFileContent)
         writeProjectFile(SETTINGS_FILENAME, settingsContent)
-        writeProjectFile(PROPERTIES_FILENAME, propertiesContent)
         configFileOrNone?.let { writeProjectFile(it, configFileContent) }
         baselineFiles.forEach { file -> writeProjectFile(file, baselineContent) }
         projectLayout.srcDirs.forEachIndexed { srcDirIdx, sourceDir ->
@@ -142,6 +138,7 @@ constructor(
             if (dryRun) {
                 add("-Pdetekt-dry-run=true")
             }
+            addAll(gradleProperties.toList().map { (key, value) -> "-P$key=$value" })
             addAll(tasks.toList())
         }
 
@@ -181,7 +178,6 @@ constructor(
 
     companion object {
         private const val SETTINGS_FILENAME = "settings.gradle"
-        private const val PROPERTIES_FILENAME = "gradle.properties"
         private const val DETEKT_TASK = "detekt"
     }
 }
