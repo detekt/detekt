@@ -70,7 +70,7 @@ tasks {
 
     processTestResources {
         inputs.property("kotlin-version", libs.versions.kotlin.get())
-        filter(ReplaceTokens::class, "tokens" to mapOf("kotlinVersion" to inputs.properties["kotlin-version"]))
+        filter<ReplaceTokens>("tokens" to mapOf("kotlinVersion" to inputs.properties["kotlin-version"]))
         filteringCharset = "UTF-8"
     }
 

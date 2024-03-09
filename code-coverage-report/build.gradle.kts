@@ -6,6 +6,9 @@ reporting {
     reports {
         create("jacocoMergedReport", JacocoCoverageReport::class) {
             testType = TestSuiteType.UNIT_TEST
+            reportTask {
+                dependsOn(":detekt-generator:generateDocumentation")
+            }
         }
     }
 }
@@ -41,8 +44,4 @@ dependencies {
     jacocoAggregation(projects.detektTestUtils)
     jacocoAggregation(projects.detektTooling)
     jacocoAggregation(projects.detektUtils)
-}
-
-tasks.withType<JacocoReport>().configureEach {
-    dependsOn(":detekt-generator:generateDocumentation")
 }

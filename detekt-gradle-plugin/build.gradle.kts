@@ -43,12 +43,10 @@ testing {
                 implementation(gradleKotlinDsl())
             }
         }
-        register("functionalTest", JvmTestSuite::class) {
-            useJUnitJupiter(libs.versions.junit.get())
-
+        register<JvmTestSuite>("functionalTest") {
             dependencies {
                 implementation(libs.assertj)
-                implementation(testFixtures(project(":")))
+                implementation(testFixtures(project()))
             }
 
             targets {
