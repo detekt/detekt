@@ -33,9 +33,9 @@ class Location(
          */
         fun from(element: PsiElement, offset: Int = 0): Location {
             val start = startLineAndColumn(element, offset)
-            val sourceLocation = SourceLocation(start.line.coerceAtLeast(1), start.column.coerceAtLeast(1))
+            val sourceLocation = SourceLocation(start.line, start.column)
             val end = endLineAndColumn(element, offset)
-            val endSourceLocation = SourceLocation(end.line.coerceAtLeast(1), end.column.coerceAtLeast(1))
+            val endSourceLocation = SourceLocation(end.line, end.column)
             val textLocation = TextLocation(element.startOffset + offset, element.endOffset + offset)
             return Location(sourceLocation, endSourceLocation, textLocation, element.containingFile.toFilePath())
         }
@@ -60,7 +60,7 @@ class Location(
 
         private fun lineAndColumn(element: PsiElement, range: TextRange): PsiDiagnosticUtils.LineAndColumn {
             return getLineAndColumnInPsiFile(element.containingFile, range)
-                ?: PsiDiagnosticUtils.LineAndColumn(-1, -1, null)
+                ?: PsiDiagnosticUtils.LineAndColumn(1, 1, null)
         }
     }
 }
