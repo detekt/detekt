@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.testkit
 
 import org.intellij.lang.annotations.Language
+import java.io.File
 
 abstract class DslTestBuilder {
 
@@ -24,6 +25,7 @@ abstract class DslTestBuilder {
     private var configFile: String? = null
     private var gradleVersion: String? = null
     private var dryRun: Boolean = false
+    private val customPluginClasspath: MutableList<File> = mutableListOf()
 
     fun withDetektConfig(@Language("gradle.kts") config: String): DslTestBuilder {
         detektConfig = config
@@ -50,6 +52,11 @@ abstract class DslTestBuilder {
         return this
     }
 
+    fun withPluginClasspath(files: Collection<File>): DslTestBuilder {
+        customPluginClasspath.addAll(files)
+        return this
+    }
+
     fun dryRun(): DslTestBuilder {
         dryRun = true
         return this
@@ -64,6 +71,7 @@ abstract class DslTestBuilder {
             baselineFiles = baselineFile?.let { listOf(it) }.orEmpty(),
             gradleVersionOrNone = gradleVersion,
             dryRun = dryRun,
+            customPluginClasspath = customPluginClasspath,
         )
         runner.setupProject()
         return runner

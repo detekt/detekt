@@ -22,6 +22,7 @@ constructor(
     val gradleVersionOrNone: String? = null,
     val dryRun: Boolean = false,
     val jvmArgs: String = "-Xmx2g -XX:MaxMetaspaceSize=1g",
+    val customPluginClasspath: List<File> = emptyList(),
     val projectScript: Project.() -> Unit = {}
 ) {
 
@@ -141,7 +142,11 @@ constructor(
 
         return GradleRunner.create().apply {
             withProjectDir(rootDir)
-            withPluginClasspath()
+            if (customPluginClasspath.isNotEmpty()) {
+                withPluginClasspath(customPluginClasspath)
+            } else {
+                withPluginClasspath()
+            }
             withArguments(args)
             gradleVersionOrNone?.let(::withGradleVersion)
         }
