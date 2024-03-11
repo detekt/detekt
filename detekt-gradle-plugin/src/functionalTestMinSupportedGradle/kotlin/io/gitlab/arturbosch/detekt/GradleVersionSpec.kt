@@ -17,7 +17,10 @@ class GradleVersionSpec {
     @EnabledForJreRange(max = JAVA_15, disabledReason = "Gradle $GRADLE_VERSION unsupported on this Java version")
     fun runsOnOldestSupportedGradleVersion() {
         val builder = DslTestBuilder.kotlin()
-        val metadataUrl = Paths.get("build/gradleMinVersionPluginUnderTestMetadata/plugin-under-test-metadata.properties").toUri().toURL()
+        val metadataUrl =
+            Paths.get("build/gradleMinVersionPluginUnderTestMetadata/plugin-under-test-metadata.properties")
+                .toUri()
+                .toURL()
         val gradleRunner = builder
             .withGradleVersion(GRADLE_VERSION)
             .withPluginClasspath(PluginUnderTestMetadataReading.readImplementationClasspath(metadataUrl))
