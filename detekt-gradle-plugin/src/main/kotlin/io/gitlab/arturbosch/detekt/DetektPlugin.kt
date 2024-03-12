@@ -13,7 +13,6 @@ import org.gradle.api.Incubating
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.provider.ProviderFactory
-import org.jetbrains.kotlin.gradle.utils.isGradleVersionAtLeast
 import java.net.URL
 import java.util.jar.Manifest
 
@@ -151,8 +150,7 @@ class DetektPlugin : Plugin<Project> {
 internal const val CONFIGURATION_DETEKT = "detekt"
 
 internal fun ProviderFactory.isWorkerApiEnabled(): Boolean {
-    val defaultValue = isGradleVersionAtLeast(major = 7, minor = 6).toString()
-    return gradleProperty("detekt.use.worker.api").getOrElse(defaultValue).toBoolean()
+    return gradleProperty("detekt.use.worker.api").getOrElse("true").toBoolean()
 }
 
 @Incubating
