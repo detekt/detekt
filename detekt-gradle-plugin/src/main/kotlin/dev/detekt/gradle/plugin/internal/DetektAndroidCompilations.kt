@@ -1,16 +1,9 @@
-@file:Suppress("DEPRECATION")
-
 package dev.detekt.gradle.plugin.internal
 
-import com.android.build.gradle.AppExtension
-import com.android.build.gradle.BaseExtension
-import com.android.build.gradle.LibraryExtension
-import com.android.build.gradle.TestExtension
-import com.android.build.gradle.api.BaseVariant
-import com.android.build.gradle.internal.api.TestedVariant
+import com.android.build.api.variant.AndroidComponentsExtension
+import com.android.build.api.variant.Variant
 import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-import org.gradle.api.DomainObjectSet
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
@@ -22,9 +15,9 @@ internal object DetektAndroidCompilations {
         }
     }
 
-    private fun DetektExtension.matchesIgnoredConfiguration(variant: BaseVariant): Boolean =
+    private fun DetektExtension.matchesIgnoredConfiguration(variant: Variant): Boolean =
         ignoredVariants.get().contains(variant.name) ||
-            ignoredBuildTypes.get().contains(variant.buildType.name) ||
+            ignoredBuildTypes.get().contains(variant.buildType) ||
             ignoredFlavors.get().contains(variant.flavorName)
 
     fun linkTasks(project: Project, extension: DetektExtension) {
@@ -56,42 +49,25 @@ internal object DetektAndroidCompilations {
                     "all variants with type resolution"
             }
 
-        fun variants(extension: BaseExtension): DomainObjectSet<out BaseVariant>? = when (extension) {
-            is AppExtension -> extension.applicationVariants
-            is LibraryExtension -> extension.libraryVariants
-            is TestExtension -> extension.applicationVariants
-            else -> null
-        }
-
-        fun testVariants(baseVariant: BaseVariant): List<BaseVariant> = if (baseVariant is TestedVariant) {
-            listOfNotNull(baseVariant.testVariant, baseVariant.unitTestVariant)
-        } else {
-            emptyList()
-        }
-
-        // There is not a single Android plugin, but each registers an extension based on BaseExtension,
-        // so we catch them all by looking for this one
-        project.extensions.findByType(BaseExtension::class.java)?.let { baseExtension ->
-            variants(baseExtension)
-                ?.matching { !extension.matchesIgnoredConfiguration(it) }
-                ?.all { variant ->
+        project.extensions.findByType(AndroidComponentsExtension::class.java)?.let { componentsExtension ->
+            componentsExtension.onVariants { variant ->
+                if (!extension.matchesIgnoredConfiguration(variant)) {
                     mainTaskProvider.configure {
                         it.dependsOn(DetektPlugin.DETEKT_TASK_NAME + variant.name.capitalize())
                     }
                     mainBaselineTaskProvider.configure {
                         it.dependsOn(DetektPlugin.BASELINE_TASK_NAME + variant.name.capitalize())
                     }
-                    testVariants(variant)
-                        .filter { !extension.matchesIgnoredConfiguration(it) }
-                        .forEach { testVariant ->
-                            testTaskProvider.configure {
-                                it.dependsOn(DetektPlugin.DETEKT_TASK_NAME + testVariant.name.capitalize())
-                            }
-                            testBaselineTaskProvider.configure {
-                                it.dependsOn(DetektPlugin.BASELINE_TASK_NAME + testVariant.name.capitalize())
-                            }
+                    variant.nestedComponents.forEach { testVariant ->
+                        testTaskProvider.configure {
+                            it.dependsOn(DetektPlugin.DETEKT_TASK_NAME + testVariant.name.capitalize())
                         }
+                        testBaselineTaskProvider.configure {
+                            it.dependsOn(DetektPlugin.BASELINE_TASK_NAME + testVariant.name.capitalize())
+                        }
+                    }
                 }
+            }
         }
     }
 }
