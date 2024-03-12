@@ -79,6 +79,7 @@ setOf(
     "detektMain",
     "detektTest",
     "detektFunctionalTest",
+    "detektFunctionalTestMinSupportedGradle",
     "detektTestFixtures",
 ).forEach { taskName ->
     tasks.register(taskName) {

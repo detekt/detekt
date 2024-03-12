@@ -60,11 +60,25 @@ testing {
                 }
             }
         }
+        register<JvmTestSuite>("functionalTestMinSupportedGradle") {
+            dependencies {
+                implementation(libs.assertj)
+                implementation(testFixtures(project()))
+            }
+            targets {
+                all {
+                    testTask {
+                        dependsOn(gradleMinVersionPluginUnderTestMetadata)
+                    }
+                }
+            }
+        }
     }
 }
 
 val testKitRuntimeOnly: Configuration by configurations.creating
 val testKitJava17RuntimeOnly: Configuration by configurations.creating
+val testKitGradleMinVersionRuntimeOnly: Configuration by configurations.creating
 
 dependencies {
     compileOnly(libs.android.gradle.minSupported)
@@ -75,6 +89,11 @@ dependencies {
     compileOnly("io.gitlab.arturbosch.detekt:detekt-cli:1.23.5")
 
     testKitRuntimeOnly(libs.kotlin.gradle)
+    testKitGradleMinVersionRuntimeOnly(libs.kotlin.gradle) {
+        attributes {
+            attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, objects.named("6.8.3"))
+        }
+    }
     testKitJava17RuntimeOnly(libs.android.gradle.maxSupported)
 
     // We use this published version of the detekt-formatting to self analyse this project.
@@ -111,6 +130,7 @@ gradlePlugin {
     testSourceSets(
         sourceSets["testFixtures"],
         sourceSets["functionalTest"],
+        sourceSets["functionalTestMinSupportedGradle"],
     )
 }
 
@@ -127,6 +147,11 @@ tasks.pluginUnderTestMetadata {
     if (tasks.named<Test>("functionalTest").get().javaVersion.isCompatibleWith(JavaVersion.VERSION_17)) {
         pluginClasspath.from(testKitJava17RuntimeOnly)
     }
+}
+
+val gradleMinVersionPluginUnderTestMetadata by tasks.registering(PluginUnderTestMetadata::class) {
+    pluginClasspath.setFrom(sourceSets.main.get().runtimeClasspath, testKitGradleMinVersionRuntimeOnly)
+    outputDirectory = layout.buildDirectory.dir(name)
 }
 
 tasks.validatePlugins {
@@ -164,7 +189,10 @@ tasks {
     }
 
     check {
-        dependsOn(testing.suites.named("functionalTest"))
+        dependsOn(
+            testing.suites.named("functionalTest"),
+            testing.suites.named("functionalTestMinSupportedGradle"),
+        )
     }
 
     ideaModule {
