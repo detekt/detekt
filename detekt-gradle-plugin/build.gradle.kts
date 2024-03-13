@@ -84,6 +84,7 @@ dependencies {
     compileOnly(libs.android.gradle.minSupported)
     compileOnly(libs.kotlin.gradle)
     compileOnly(libs.kotlin.gradlePluginApi)
+    implementation(libs.sarif4k)
     testFixturesCompileOnly("org.jetbrains:annotations:24.1.0")
     compileOnly("org.jetbrains:annotations:24.1.0")
     compileOnly("io.gitlab.arturbosch.detekt:detekt-cli:1.23.5")

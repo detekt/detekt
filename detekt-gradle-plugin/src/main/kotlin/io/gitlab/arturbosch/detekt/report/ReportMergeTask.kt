@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.report
 
+import io.github.detekt.sarif4k.SarifSerializer
+import io.github.detekt.sarif4k.merge
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.RegularFileProperty
@@ -35,7 +37,10 @@ abstract class ReportMergeTask : DefaultTask() {
 
         val sarifs = existingFiles.filter { it.extension == "sarif" || it.name.endsWith(".sarif.json") }
         if (sarifs.isNotEmpty()) {
-            SarifReportMerger.merge(sarifs, output.get().asFile)
+            val sarif = sarifs
+                .map { SarifSerializer.fromJson(it.readText()) }
+                .reduce { acc, next -> acc.merge(next) }
+            output.get().asFile.writeText(SarifSerializer.toJson(sarif))
             logger.lifecycle("Merged SARIF output to ${output.get().asFile.absolutePath}")
         }
     }
