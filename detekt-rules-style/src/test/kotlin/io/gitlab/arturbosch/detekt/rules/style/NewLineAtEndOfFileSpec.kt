@@ -12,7 +12,7 @@ class NewLineAtEndOfFileSpec {
 
     @Test
     fun `should not flag a kt file containing new line at the end`() {
-        val code = "class Test\n\n" // we need double '\n' because .lint() applies .trimIndent() which removes one
+        val code = "class Test\n"
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
