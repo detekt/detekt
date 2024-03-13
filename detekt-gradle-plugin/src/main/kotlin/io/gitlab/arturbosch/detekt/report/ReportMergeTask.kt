@@ -9,7 +9,6 @@ import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
-import java.io.File
 
 @CacheableTask
 abstract class ReportMergeTask : DefaultTask() {
@@ -27,16 +26,16 @@ abstract class ReportMergeTask : DefaultTask() {
         logger.info(input.files.joinToString(separator = "\n") { it.absolutePath })
         logger.info("Output = ${output.get().asFile.absolutePath}")
         val existingFiles = input.files.filter { it.exists() }
-        fun isXmlReport(file: File): Boolean = file.extension == "xml"
-        if (existingFiles.any(::isXmlReport)) {
-            XmlReportMerger.merge(existingFiles.filter(::isXmlReport), output.get().asFile)
+
+        val xmls = existingFiles.filter { it.extension == "xml" }
+        if (xmls.isNotEmpty()) {
+            XmlReportMerger.merge(xmls, output.get().asFile)
             logger.lifecycle("Merged XML output to ${output.get().asFile.absolutePath}")
         }
 
-        fun isSarifReport(file: File): Boolean = file.extension == "sarif" ||
-            file.name.endsWith(".sarif.json")
-        if (existingFiles.any(::isSarifReport)) {
-            SarifReportMerger.merge(existingFiles.filter(::isSarifReport), output.get().asFile)
+        val sarifs = existingFiles.filter { it.extension == "sarif" || it.name.endsWith(".sarif.json") }
+        if (sarifs.isNotEmpty()) {
+            SarifReportMerger.merge(sarifs, output.get().asFile)
             logger.lifecycle("Merged SARIF output to ${output.get().asFile.absolutePath}")
         }
     }
