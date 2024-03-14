@@ -104,7 +104,7 @@ private fun processResult(message: String?, reflectionWrapper: Exception, ignore
             ignoreFailures -> return
             GradleVersion.current() >= GradleVersion.version("8.2") ->
                 throw VerificationException(message, reflectionWrapper)
-            GradleVersion.current() >= GradleVersion.version("7.4") -> throw VerificationException(message)
+            GradleVersion.current() >= GradleVersion.version("7.4.2") -> throw VerificationException(message)
             else -> throw GradleException(message, reflectionWrapper)
         }
     } else {
