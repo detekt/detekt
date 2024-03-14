@@ -25,7 +25,7 @@ import java.net.URI
  */
 class ProcessingSettings(
     val spec: ProcessingSpec,
-    override val config: Config
+    override val config: Config,
 ) : AutoCloseable,
     Closeable,
     LoggingAware by LoggingFacade(spec.loggingSpec),

@@ -75,34 +75,4 @@ class ConfigurationsSpec {
             assertThat(config.valueOrDefault("three", -1)).isEqualTo(3)
         }
     }
-
-    @Nested
-    inner class `build upon default config` {
-
-        private val config = ProcessingSpec {
-            config {
-                resources = listOf(resourceUrl("/configs/activate-all-rules-wont-override-here.yml"))
-                useDefaultConfig = true
-            }
-            rules { activateAllRules = true }
-        }.loadConfiguration()
-
-        @Test
-        fun `should override config when specified`() {
-            val ruleConfig = config.subConfig("style").subConfig("MaxLineLength")
-            val lineLength = ruleConfig.valueOrDefault("maxLineLength", -1)
-            val excludeComments = ruleConfig.valueOrDefault("excludeCommentStatements", false)
-
-            assertThat(lineLength).isEqualTo(100)
-            assertThat(excludeComments).isTrue()
-        }
-
-        @Test
-        fun `should be active=false by default`() {
-            val actual = config.subConfig("comments")
-                .subConfig("CommentOverPrivateFunction")
-                .valueOrDefault("active", true)
-            assertThat(actual).isFalse()
-        }
-    }
 }
