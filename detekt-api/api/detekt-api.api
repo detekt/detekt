@@ -188,9 +188,9 @@ public final class io/gitlab/arturbosch/detekt/api/Finding$DefaultImpls {
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/Finding2 : io/gitlab/arturbosch/detekt/api/HasEntity {
 	public abstract fun getAutoCorrectEnabled ()Z
-	public abstract fun getIssue ()Lio/gitlab/arturbosch/detekt/api/Issue;
 	public abstract fun getMessage ()Ljava/lang/String;
 	public abstract fun getReferences ()Ljava/util/List;
+	public abstract fun getRule ()Lio/gitlab/arturbosch/detekt/api/Finding2$RuleInfo;
 	public abstract fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
 }
 
@@ -200,6 +200,11 @@ public final class io/gitlab/arturbosch/detekt/api/Finding2$DefaultImpls {
 	public static fun getLocation (Lio/gitlab/arturbosch/detekt/api/Finding2;)Lio/gitlab/arturbosch/detekt/api/Location;
 	public static fun getSignature (Lio/gitlab/arturbosch/detekt/api/Finding2;)Ljava/lang/String;
 	public static fun getStartPosition (Lio/gitlab/arturbosch/detekt/api/Finding2;)Lio/gitlab/arturbosch/detekt/api/SourceLocation;
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/Finding2$RuleInfo {
+	public abstract fun getDescription ()Ljava/lang/String;
+	public abstract fun getId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/HasEntity {
@@ -217,13 +222,6 @@ public final class io/gitlab/arturbosch/detekt/api/HasEntity$DefaultImpls {
 	public static fun getLocation (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Lio/gitlab/arturbosch/detekt/api/Location;
 	public static fun getSignature (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Ljava/lang/String;
 	public static fun getStartPosition (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Lio/gitlab/arturbosch/detekt/api/SourceLocation;
-}
-
-public final class io/gitlab/arturbosch/detekt/api/Issue {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Rule$Id;Ljava/lang/String;)V
-	public final fun getDescription ()Ljava/lang/String;
-	public final fun getId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
-	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Location : io/gitlab/arturbosch/detekt/api/Compactable {

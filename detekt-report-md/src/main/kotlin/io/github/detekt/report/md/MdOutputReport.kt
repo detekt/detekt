@@ -85,7 +85,7 @@ private fun MarkdownContent.renderComplexity(complexityReport: List<String>) {
 
 private fun MarkdownContent.renderGroup(group: RuleSet.Id, findings: List<Finding2>) {
     findings
-        .groupBy { it.issue.id }
+        .groupBy { it.rule.id }
         .toList()
         .sortedBy { (rule, _) -> rule.value }
         .forEach { (rule, ruleFindings) ->
@@ -95,7 +95,7 @@ private fun MarkdownContent.renderGroup(group: RuleSet.Id, findings: List<Findin
 
 private fun MarkdownContent.renderRule(rule: Rule.Id, group: RuleSet.Id, findings: List<Finding2>) {
     h3 { "$group, $rule (%,d)".format(Locale.ROOT, findings.size) }
-    paragraph { (findings.first().issue.description) }
+    paragraph { (findings.first().rule.description) }
 
     paragraph {
         link(
