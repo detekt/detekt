@@ -10,23 +10,53 @@ import org.junit.jupiter.api.Test
 class AllRulesConfigSpec {
     private val emptyYamlConfig = yamlConfigFromContent("")
 
-    @Test
-    fun verifyValue() {
-        val subject = AllRulesConfig(
-            wrapped = yamlConfigFromContent(
-                """
+    @Nested
+    inner class ValueVerification {
+
+        @Test
+        fun verifyValue() {
+            val subject = AllRulesConfig(
+                originalConfig = yamlConfigFromContent(
+                    """
                     style:
                       MaxLineLength:
                         maxLineLength: 100
-                """.trimIndent()
-            ),
-            deprecatedRules = emptySet(),
-        )
+                    """.trimIndent()
+                ),
+                defaultConfig = emptyYamlConfig,
+            )
 
-        val subConfig = subject.subConfig("style")
-            .subConfig("MaxLineLength")
-        assertThat(subConfig.valueOrDefault("maxLineLength", 0)).isEqualTo(100)
-        assertThat(subConfig.valueOrNull<Int>("maxLineLength")).isEqualTo(100)
+            val subConfig = subject.subConfig("style")
+                .subConfig("MaxLineLength")
+            assertThat(subConfig.valueOrDefault("maxLineLength", 0)).isEqualTo(100)
+            assertThat(subConfig.valueOrNull<Int>("maxLineLength")).isEqualTo(100)
+        }
+
+        @Test
+        fun verifyValueOverride() {
+            val subject = AllRulesConfig(
+                originalConfig = yamlConfigFromContent(
+                    """
+                    style:
+                      MaxLineLength:
+                        maxLineLength: 100
+                    """.trimIndent()
+                ),
+                defaultConfig = yamlConfigFromContent(
+                    """
+                    style:
+                      MaxLineLength:
+                        maxLineLength: 120
+                    """.trimIndent()
+                ),
+            )
+
+            val actual = subject.subConfig("style")
+                .subConfig("MaxLineLength")
+                .valueOrDefault("maxLineLength", 0)
+
+            assertThat(actual).isEqualTo(100)
+        }
     }
 
     @Nested
@@ -43,8 +73,8 @@ class AllRulesConfigSpec {
         @Test
         fun `is derived from the original config`() {
             val subject = AllRulesConfig(
-                wrapped = rulesetConfig,
-                deprecatedRules = emptySet(),
+                originalConfig = rulesetConfig,
+                defaultConfig = emptyYamlConfig,
             )
             val actual = subject.parentPath
             assertThat(actual).isEqualTo(rulesetId)
@@ -53,11 +83,11 @@ class AllRulesConfigSpec {
         @Test
         fun `is derived from the default config if unavailable in original config`() {
             val subject = AllRulesConfig(
-                wrapped = emptyYamlConfig,
-                deprecatedRules = emptySet(),
+                originalConfig = emptyYamlConfig,
+                defaultConfig = rulesetConfig,
             )
             val actual = subject.parentPath
-            assertThat(actual).isEqualTo(null)
+            assertThat(actual).isEqualTo(rulesetId)
         }
     }
 
@@ -74,8 +104,8 @@ class AllRulesConfigSpec {
         @Test
         fun `is the parent`() {
             val subject = AllRulesConfig(
-                wrapped = rulesetConfig,
-                deprecatedRules = emptySet(),
+                originalConfig = rulesetConfig,
+                defaultConfig = emptyYamlConfig,
             )
             val actual = subject.subConfig("style").parent
             assertThat(actual).isEqualTo(subject)
@@ -84,8 +114,8 @@ class AllRulesConfigSpec {
         @Test
         fun `is the parent for all subConfig`() {
             val subject = AllRulesConfig(
-                wrapped = rulesetConfig,
-                deprecatedRules = emptySet(),
+                originalConfig = rulesetConfig,
+                defaultConfig = emptyYamlConfig,
             )
 
             assertThat(subject.subConfigKeys()).contains("style")
@@ -98,7 +128,8 @@ class AllRulesConfigSpec {
         @Test
         fun `rule is active if not deprecated`() {
             val subject = AllRulesConfig(
-                wrapped = emptyYamlConfig,
+                originalConfig = emptyYamlConfig,
+                defaultConfig = emptyYamlConfig,
                 deprecatedRules = emptySet()
             )
                 .subConfig("ruleset")
@@ -112,8 +143,9 @@ class AllRulesConfigSpec {
         @Test
         fun `rule is inactive if deprecated`() {
             val subject = AllRulesConfig(
-                wrapped = emptyYamlConfig,
-                deprecatedRules = setOf(DeprecatedRule("ruleset", "ARule", "")),
+                originalConfig = emptyYamlConfig,
+                defaultConfig = emptyYamlConfig,
+                deprecatedRules = setOf(DeprecatedRule("ruleset", "ARule", ""))
             )
                 .subConfig("ruleset")
                 .subConfig("ARule")
