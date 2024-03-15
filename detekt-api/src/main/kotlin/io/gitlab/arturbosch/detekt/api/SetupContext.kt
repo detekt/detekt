@@ -12,7 +12,7 @@ interface SetupContext : PropertiesAware {
     val configUris: Collection<URI>
 
     /**
-     * Configuration which is used to set up detekt.
+     * Configuration which is used to setup detekt.
      */
     val config: Config
 
