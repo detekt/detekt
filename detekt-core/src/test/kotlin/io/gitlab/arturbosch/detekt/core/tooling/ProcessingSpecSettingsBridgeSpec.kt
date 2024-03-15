@@ -8,6 +8,20 @@ import org.junit.jupiter.api.Test
 
 class ProcessingSpecSettingsBridgeSpec {
 
+    @Test
+    fun `When no config is provided the default config is used even with useDefaultConfig = false`() {
+        val config = ProcessingSpec {
+            config {
+                useDefaultConfig = false
+            }
+        }.withSettings { config }
+
+        val actual = config.subConfig("style")
+            .subConfig("MaxLineLength")
+            .valueOrNull<Int>("maxLineLength")
+        assertThat(actual).isEqualTo(120)
+    }
+
     @Nested
     inner class `with all rules activated by default` {
 

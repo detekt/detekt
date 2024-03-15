@@ -52,7 +52,7 @@ private fun ProcessingSpec.workaroundConfiguration(config: Config): Config {
         declaredConfig = DisabledAutoCorrectConfig(declaredConfig)
     }
 
-    if (configSpec.useDefaultConfig) {
+    if (configSpec.useDefaultConfig || config === Config.empty) {
         declaredConfig = CompositeConfig(declaredConfig, getDefaultConfiguration())
     }
 
