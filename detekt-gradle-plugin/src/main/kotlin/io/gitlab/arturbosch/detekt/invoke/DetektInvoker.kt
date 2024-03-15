@@ -50,7 +50,7 @@ internal abstract class DetektWorkAction : WorkAction<DetektWorkParameters> {
                 parameters.arguments.get(),
                 parameters.classpath.files,
                 parameters.taskName.get(),
-                parameters.ignoreFailures.getOrElse(false)
+                parameters.ignoreFailures.get()
             )
             return
         }
@@ -59,7 +59,7 @@ internal abstract class DetektWorkAction : WorkAction<DetektWorkParameters> {
             parameters.arguments.get(),
             parameters.classpath.files,
             parameters.taskName.get(),
-            parameters.ignoreFailures.getOrElse(false)
+            parameters.ignoreFailures.get()
         )
     }
 }

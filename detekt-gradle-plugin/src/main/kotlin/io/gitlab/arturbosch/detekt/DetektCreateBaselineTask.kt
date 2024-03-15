@@ -126,13 +126,13 @@ abstract class DetektCreateBaselineTask @Inject constructor(
             BaselineArgument(baseline.get()),
             InputArgument(source),
             ConfigArgument(config),
-            DebugArgument(debug.getOrElse(false)),
-            ParallelArgument(parallel.getOrElse(false)),
-            BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
-            AutoCorrectArgument(autoCorrect.getOrElse(false)),
-            AllRulesArgument(allRules.getOrElse(false)),
+            DebugArgument(debug.get()),
+            ParallelArgument(parallel.get()),
+            BuildUponDefaultConfigArgument(buildUponDefaultConfig.get()),
+            AutoCorrectArgument(autoCorrect.get()),
+            AllRulesArgument(allRules.get()),
             BasePathArgument(basePath.orNull),
-            DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
+            DisableDefaultRuleSetArgument(disableDefaultRuleSets.get())
         ).flatMap(CliArgument::toArgument)
 
     @InputFiles
@@ -157,7 +157,7 @@ abstract class DetektCreateBaselineTask @Inject constructor(
             logger.info("Executing $name using DetektInvoker")
             DetektInvoker.create().invokeCli(
                 arguments = arguments,
-                ignoreFailures = ignoreFailures.getOrElse(false),
+                ignoreFailures = ignoreFailures.get(),
                 classpath = detektClasspath.plus(pluginClasspath).files,
                 taskName = name
             )

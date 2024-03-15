@@ -69,6 +69,7 @@ internal fun Project.registerCreateBaselineTask(
         it.disableDefaultRuleSets.convention(extension.disableDefaultRuleSets)
         it.buildUponDefaultConfig.convention(extension.buildUponDefaultConfig)
         it.autoCorrect.convention(extension.autoCorrect)
+        it.ignoreFailures.convention(extension.ignoreFailures)
         it.basePath.convention(extension.basePath.map { basePath -> basePath.asFile.absolutePath })
         it.allRules.convention(extension.allRules)
         configuration(it)
