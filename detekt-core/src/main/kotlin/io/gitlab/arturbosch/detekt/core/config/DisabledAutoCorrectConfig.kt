@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.core.config.validation.ValidatableConfiguration
 import io.gitlab.arturbosch.detekt.core.config.validation.validateConfig
+import io.gitlab.arturbosch.detekt.core.util.indentCompat
 
 @Suppress("UNCHECKED_CAST")
 class DisabledAutoCorrectConfig(
@@ -32,4 +33,11 @@ class DisabledAutoCorrectConfig(
 
     override fun validate(baseline: Config, excludePatterns: Set<Regex>): List<Notification> =
         validateConfig(wrapped, baseline, excludePatterns)
+
+    @Suppress("MagicNumber")
+    override fun toString() = """
+        DisabledAutoCorrectConfig(
+            ${wrapped.toString().indentCompat(12).trim()},
+        )
+    """.trimIndent()
 }

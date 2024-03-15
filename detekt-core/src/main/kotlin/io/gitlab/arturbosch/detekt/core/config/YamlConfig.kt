@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config.Companion.CONFIG_SEPARATOR
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.core.config.validation.ValidatableConfiguration
 import io.gitlab.arturbosch.detekt.core.config.validation.validateConfig
+import io.gitlab.arturbosch.detekt.core.util.indentCompat
 import org.snakeyaml.engine.v2.api.Load
 import org.snakeyaml.engine.v2.api.LoadSettings
 import java.io.Reader
@@ -49,9 +50,12 @@ class YamlConfig internal constructor(
         return properties[key] as? T?
     }
 
-    override fun toString(): String {
-        return "YamlConfig(properties=$properties)"
-    }
+    @Suppress("MagicNumber")
+    override fun toString() = """
+        YamlConfig(
+            ${properties.toPrettyString(recursive = 1).indentCompat(12).trim()},
+        )
+    """.trimIndent()
 
     override fun validate(baseline: Config, excludePatterns: Set<Regex>): List<Notification> =
         validateConfig(this, baseline, excludePatterns)
@@ -95,5 +99,21 @@ class YamlConfig internal constructor(
                 .setMaxAliasesForCollections(ALIASES_LIMIT)
                 .build()
         )
+    }
+}
+
+@Suppress("MagicNumber")
+private fun Map<*, *>.toPrettyString(recursive: Int): String {
+    return if (isEmpty()) {
+        "{}"
+    } else {
+        toList()
+            .joinToString(separator = ",\n    ", prefix = "{\n    ", postfix = ",\n}") { (key, value) ->
+                when {
+                    recursive == 0 -> "$key=$value"
+                    value is Map<*, *> -> "$key=${value.toPrettyString(recursive - 1).indentCompat(4).trim()}"
+                    else -> "$key=$value"
+                }
+            }
     }
 }
