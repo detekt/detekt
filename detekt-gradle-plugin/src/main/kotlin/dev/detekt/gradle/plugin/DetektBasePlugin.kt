@@ -13,7 +13,6 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetContainer
 
 class DetektBasePlugin : Plugin<Project> {
@@ -67,7 +66,7 @@ class DetektBasePlugin : Plugin<Project> {
         project.plugins.withType(KotlinBasePlugin::class.java) {
             project.extensions.getByType(KotlinSourceSetContainer::class.java)
                 .sourceSets
-                .withType(KotlinSourceSet::class.java) { sourceSet ->
+                .all { sourceSet ->
                     val taskName = "${DetektPlugin.DETEKT_TASK_NAME}${sourceSet.name.capitalize()}SourceSet"
                     project.registerDetektTask(taskName, extension) {
                         source = sourceSet.kotlin
