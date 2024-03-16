@@ -145,13 +145,11 @@ abstract class DetektCreateBaselineTask @Inject constructor(
     fun baseline() {
         if (providers.gradleProperty(USE_WORKER_API).getOrElse("false") == "true") {
             logger.info("Executing $name using Worker API")
-            val workQueue = workerExecutor.processIsolation { workerSpec ->
-                workerSpec.classpath.from(detektClasspath)
-                workerSpec.classpath.from(pluginClasspath)
-            }
+            val workQueue = workerExecutor.processIsolation()
 
             workQueue.submit(DetektWorkAction::class.java) { workParameters ->
                 workParameters.arguments.set(arguments)
+                workParameters.classpath.setFrom(detektClasspath, pluginClasspath)
                 workParameters.ignoreFailures.set(ignoreFailures)
                 workParameters.taskName.set(name)
             }
