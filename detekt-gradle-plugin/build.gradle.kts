@@ -85,8 +85,8 @@ dependencies {
     compileOnly(libs.kotlin.gradle)
     compileOnly(libs.kotlin.gradlePluginApi)
     implementation(libs.sarif4k)
-    testFixturesCompileOnly("org.jetbrains:annotations:24.1.0")
-    compileOnly("org.jetbrains:annotations:24.1.0")
+    testFixturesCompileOnly(libs.jetbrains.annotations)
+    compileOnly(libs.jetbrains.annotations)
 
     testKitRuntimeOnly(libs.kotlin.gradle)
     testKitGradleMinVersionRuntimeOnly(libs.kotlin.gradle) {
