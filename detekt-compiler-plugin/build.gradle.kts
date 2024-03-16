@@ -40,7 +40,7 @@ javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElement
     skip()
 }
 
-tasks.shadowJar.configure {
+tasks.shadowJar {
     relocate("org.jetbrains.kotlin.com.intellij", "com.intellij")
     relocate("org.snakeyaml.engine", "dev.detekt.shaded.snakeyaml")
     mergeServiceFiles()
