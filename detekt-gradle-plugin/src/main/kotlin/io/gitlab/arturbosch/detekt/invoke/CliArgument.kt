@@ -98,7 +98,6 @@ internal data class FailOnSeverityArgument(val ignoreFailures: Boolean, val minS
 
 internal data class ConfigArgument(val files: Collection<File>) : CliArgument() {
 
-    constructor(configFile: RegularFile) : this(listOf(configFile.asFile))
     constructor(config: FileCollection) : this(config.files)
 
     override fun toArgument() = if (files.isEmpty()) {
