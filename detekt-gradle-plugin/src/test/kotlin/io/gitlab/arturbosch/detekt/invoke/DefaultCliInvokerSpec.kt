@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.invoke
 
-import io.gitlab.arturbosch.detekt.gradle.TestFileCollection
 import io.gitlab.arturbosch.detekt.internal.ClassLoaderCache
 import org.assertj.core.api.Assertions.assertThatCode
 import org.gradle.api.GradleException
@@ -15,7 +14,7 @@ class DefaultCliInvokerSpec {
 
         assertThatCode {
             DefaultCliInvoker(stubbedCache)
-                .invokeCli(emptyList(), TestFileCollection(), "detekt", ignoreFailures = false)
+                .invokeCli(emptyList(), emptySet(), "detekt", ignoreFailures = false)
         }.isInstanceOf(GradleException::class.java)
             .hasMessageContaining("testing reflection wrapper...")
     }

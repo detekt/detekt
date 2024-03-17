@@ -68,7 +68,7 @@ abstract class DetektGenerateConfigTask @Inject constructor(
             logger.info("Executing $name using DetektInvoker")
             DetektInvoker.create().invokeCli(
                 arguments = arguments,
-                classpath = detektClasspath.plus(pluginClasspath),
+                classpath = detektClasspath.plus(pluginClasspath).files,
                 taskName = name,
             )
         }

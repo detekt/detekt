@@ -158,7 +158,7 @@ abstract class DetektCreateBaselineTask @Inject constructor(
             DetektInvoker.create().invokeCli(
                 arguments = arguments,
                 ignoreFailures = ignoreFailures.getOrElse(false),
-                classpath = detektClasspath.plus(pluginClasspath),
+                classpath = detektClasspath.plus(pluginClasspath).files,
                 taskName = name
             )
         }

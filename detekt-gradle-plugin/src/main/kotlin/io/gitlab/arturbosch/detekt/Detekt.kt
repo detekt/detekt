@@ -191,7 +191,7 @@ abstract class Detekt @Inject constructor(
             DetektInvoker.create(isDryRun = isDryRun.orNull.toBoolean()).invokeCli(
                 arguments = arguments,
                 ignoreFailures = ignoreFailures.get(),
-                classpath = detektClasspath.plus(pluginClasspath),
+                classpath = detektClasspath.plus(pluginClasspath).files,
                 taskName = name
             )
         }
