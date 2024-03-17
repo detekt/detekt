@@ -174,8 +174,10 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Finding {
 	public abstract fun getReferences ()Ljava/util/List;
 }
 
-public abstract interface class io/gitlab/arturbosch/detekt/api/Finding2 : io/gitlab/arturbosch/detekt/api/HasEntity {
+public abstract interface class io/gitlab/arturbosch/detekt/api/Finding2 {
 	public abstract fun getAutoCorrectEnabled ()Z
+	public abstract fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
+	public abstract fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
 	public abstract fun getMessage ()Ljava/lang/String;
 	public abstract fun getReferences ()Ljava/util/List;
 	public abstract fun getRule ()Lio/gitlab/arturbosch/detekt/api/Finding2$RuleInfo;
@@ -189,15 +191,6 @@ public final class io/gitlab/arturbosch/detekt/api/Finding2$DefaultImpls {
 public abstract interface class io/gitlab/arturbosch/detekt/api/Finding2$RuleInfo {
 	public abstract fun getDescription ()Ljava/lang/String;
 	public abstract fun getId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
-}
-
-public abstract interface class io/gitlab/arturbosch/detekt/api/HasEntity {
-	public abstract fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
-	public abstract fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
-}
-
-public final class io/gitlab/arturbosch/detekt/api/HasEntity$DefaultImpls {
-	public static fun getLocation (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Lio/gitlab/arturbosch/detekt/api/Location;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Location : io/gitlab/arturbosch/detekt/api/Compactable {
