@@ -100,7 +100,7 @@ constructor(
 
         private fun lineAndColumn(element: PsiElement, range: TextRange): PsiDiagnosticUtils.LineAndColumn {
             return getLineAndColumnInPsiFile(element.containingFile, range)
-                ?: PsiDiagnosticUtils.LineAndColumn(-1, -1, null)
+                ?: PsiDiagnosticUtils.LineAndColumn(1, 1, null)
         }
     }
 }
@@ -109,6 +109,11 @@ constructor(
  * Stores line and column information of a location.
  */
 data class SourceLocation(val line: Int, val column: Int) {
+    init {
+        require(line > 0) { "The source location line must be greater than 0" }
+        require(column > 0) { "The source location column must be greater than 0" }
+    }
+
     override fun toString(): String = "$line:$column"
 }
 

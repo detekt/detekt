@@ -88,10 +88,14 @@ fun PsiFile.toFilePath(): FilePath {
 
 // #3317 If any rule mutates the PsiElement, searching the original PsiElement may throw an exception.
 fun getLineAndColumnInPsiFile(file: PsiFile, range: TextRange): PsiDiagnosticUtils.LineAndColumn? {
-    return runCatching {
-        @Suppress("ForbiddenMethodCall")
-        DiagnosticUtils.getLineAndColumnInPsiFile(file, range)
-    }.getOrNull()
+    return if (file.textLength == 0) {
+        null
+    } else {
+        runCatching {
+            @Suppress("ForbiddenMethodCall")
+            DiagnosticUtils.getLineAndColumnInPsiFile(file, range)
+        }.getOrNull()
+    }
 }
 
 /**
