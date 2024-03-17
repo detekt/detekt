@@ -71,7 +71,7 @@ class Location(
 @Poko
 class SourceLocation(val line: Int, val column: Int) {
     init {
-        require(line > 0) { "The source location line must should be greater than 0" }
+        require(line > 0) { "The source location line must be greater than 0" }
         require(column > 0) { "The source location column must should be greater than 0" }
     }
 
