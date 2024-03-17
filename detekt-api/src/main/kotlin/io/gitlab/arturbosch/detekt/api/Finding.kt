@@ -11,20 +11,3 @@ interface Finding {
     val references: List<Entity>
     val message: String
 }
-
-/**
- * Describes a source code position.
- */
-interface HasEntity {
-    val entity: Entity
-    val location: Location
-        get() = entity.location
-    val startPosition: SourceLocation
-        get() = location.source
-    val charPosition: TextLocation
-        get() = location.text
-    val file: String
-        get() = location.filePath.absolutePath.toString()
-    val signature: String
-        get() = entity.signature
-}
