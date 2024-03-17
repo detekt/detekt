@@ -55,17 +55,12 @@ internal abstract class DetektWorkAction : WorkAction<DetektWorkParameters> {
             return
         }
 
-        try {
-            @Suppress("DEPRECATION")
-            val runner = io.gitlab.arturbosch.detekt.cli.buildRunner(
-                parameters.arguments.get().toTypedArray(),
-                System.out,
-                System.err
-            )
-            runner.execute()
-        } catch (e: Exception) {
-            processResult(e.message, e, parameters.ignoreFailures.getOrElse(false))
-        }
+        DefaultCliInvoker().invokeCli(
+            parameters.arguments.get(),
+            parameters.classpath,
+            parameters.taskName.get(),
+            parameters.ignoreFailures.getOrElse(false)
+        )
     }
 }
 
