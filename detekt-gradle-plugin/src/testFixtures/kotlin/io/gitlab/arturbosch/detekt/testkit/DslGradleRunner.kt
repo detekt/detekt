@@ -137,7 +137,7 @@ constructor(
             if (dryRun) {
                 add("-Pdetekt-dry-run=true")
             }
-            addAll(tasks.toList())
+            addAll(tasks)
         }
 
         return GradleRunner.create().apply {
