@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.getContextForPaths
+import io.gitlab.arturbosch.detekt.test.location
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -300,8 +301,8 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvir
 
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(2)
-        assert(findings.any { it.startPosition.line == 9 })
-        assert(findings.any { it.startPosition.line == 14 })
+        assert(findings.any { it.location.source.line == 9 })
+        assert(findings.any { it.location.source.line == 14 })
     }
 
     @Test

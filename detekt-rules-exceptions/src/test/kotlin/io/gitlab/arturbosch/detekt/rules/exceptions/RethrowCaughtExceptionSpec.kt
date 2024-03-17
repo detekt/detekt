@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.location
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -204,7 +205,7 @@ class RethrowCaughtExceptionSpec {
         val result = subject.compileAndLint(code)
         assertThat(result).hasSize(2)
         // ensure correct violation order
-        assertThat(result[0].startPosition.line == 4).isTrue
-        assertThat(result[1].startPosition.line == 7).isTrue
+        assertThat(result[0].location.source.line == 4).isTrue
+        assertThat(result[1].location.source.line == 7).isTrue
     }
 }
