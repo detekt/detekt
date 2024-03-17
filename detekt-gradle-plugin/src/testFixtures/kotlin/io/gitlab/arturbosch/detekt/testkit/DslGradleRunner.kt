@@ -22,6 +22,7 @@ constructor(
     val gradleVersionOrNone: String? = null,
     val dryRun: Boolean = false,
     val jvmArgs: String = "-Xmx2g -XX:MaxMetaspaceSize=1g",
+    val gradleProperties: Map<String, String> = emptyMap(),
     val customPluginClasspath: List<File> = emptyList(),
     val projectScript: Project.() -> Unit = {}
 ) {
@@ -137,6 +138,7 @@ constructor(
             if (dryRun) {
                 add("-Pdetekt-dry-run=true")
             }
+            addAll(gradleProperties.toList().map { (key, value) -> "-P$key=$value" })
             addAll(tasks)
         }
 
@@ -175,7 +177,7 @@ constructor(
     }
 
     companion object {
-        const val SETTINGS_FILENAME = "settings.gradle"
+        private const val SETTINGS_FILENAME = "settings.gradle"
         private const val DETEKT_TASK = "detekt"
     }
 }
