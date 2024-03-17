@@ -4,13 +4,13 @@ import io.gitlab.arturbosch.detekt.internal.ClassLoaderCache
 import io.gitlab.arturbosch.detekt.internal.GlobalClassLoaderCache
 import org.gradle.api.GradleException
 import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.file.FileCollection
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.VerificationException
 import org.gradle.util.GradleVersion
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
+import java.io.File
 import java.io.PrintStream
 import java.lang.reflect.InvocationTargetException
 
@@ -18,7 +18,7 @@ internal interface DetektInvoker {
 
     fun invokeCli(
         arguments: List<String>,
-        classpath: FileCollection,
+        classpath: Set<File>,
         taskName: String,
         ignoreFailures: Boolean = false
     )
@@ -48,7 +48,7 @@ internal abstract class DetektWorkAction : WorkAction<DetektWorkParameters> {
         if (parameters.dryRun.getOrElse(false)) {
             DryRunInvoker().invokeCli(
                 parameters.arguments.get(),
-                parameters.classpath,
+                parameters.classpath.files,
                 parameters.taskName.get(),
                 parameters.ignoreFailures.getOrElse(false)
             )
@@ -75,7 +75,7 @@ internal class DefaultCliInvoker(
 
     override fun invokeCli(
         arguments: List<String>,
-        classpath: FileCollection,
+        classpath: Set<File>,
         taskName: String,
         ignoreFailures: Boolean
     ) {
@@ -116,14 +116,14 @@ private class DryRunInvoker : DetektInvoker {
 
     override fun invokeCli(
         arguments: List<String>,
-        classpath: FileCollection,
+        classpath: Set<File>,
         taskName: String,
         ignoreFailures: Boolean
     ) {
         println("Invoking detekt with dry-run.")
         println("Task: $taskName")
         println("Arguments: ${arguments.joinToString(" ")}")
-        println("Classpath: ${classpath.files}")
+        println("Classpath: $classpath")
         println("Ignore failures: $ignoreFailures")
     }
 }
