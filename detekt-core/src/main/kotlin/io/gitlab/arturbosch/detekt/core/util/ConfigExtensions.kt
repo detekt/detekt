@@ -31,3 +31,8 @@ private fun PathFilters.isIgnored(ktFile: KtFile): Boolean {
     }
     return isIgnored(ktFile.absolutePath())
 }
+
+internal fun String.indentCompat(indent: Int): String {
+    val spaces = " ".repeat(indent)
+    return this.lines().joinToString("\n") { spaces + it }
+}

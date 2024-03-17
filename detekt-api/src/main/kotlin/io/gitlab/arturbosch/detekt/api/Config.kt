@@ -68,6 +68,10 @@ interface Config {
             override fun subConfigKeys(): Set<String> = emptySet()
 
             override fun <T : Any> valueOrNull(key: String): T? = null
+
+            override fun toString(): String {
+                return "Config.empty"
+            }
         }
 
         const val ACTIVE_KEY: String = "active"

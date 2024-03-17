@@ -4,9 +4,10 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.config.validation.DeprecatedRule
 import io.gitlab.arturbosch.detekt.core.config.validation.ValidatableConfiguration
 import io.gitlab.arturbosch.detekt.core.config.validation.validateConfig
+import io.gitlab.arturbosch.detekt.core.util.indentCompat
 
 @Suppress("UNCHECKED_CAST")
-internal data class AllRulesConfig(
+internal class AllRulesConfig(
     private val originalConfig: Config,
     private val defaultConfig: Config,
     private val deprecatedRules: Set<DeprecatedRule> = emptySet(),
@@ -43,4 +44,13 @@ internal data class AllRulesConfig(
     private fun isDeprecated(): Boolean = deprecatedRules.any { parentPath == it.toPath() }
 
     private fun DeprecatedRule.toPath() = "$ruleSetId > $ruleId"
+
+    @Suppress("MagicNumber")
+    override fun toString() = """
+        AllRulesConfig(
+            originalConfig=${originalConfig.toString().indentCompat(12).trim()},
+            defaultConfig=${defaultConfig.toString().indentCompat(12).trim()},
+            deprecatedRules=$deprecatedRules,
+        )
+    """.trimIndent()
 }
