@@ -72,7 +72,7 @@ class Location(
 class SourceLocation(val line: Int, val column: Int) {
     init {
         require(line > 0) { "The source location line must be greater than 0" }
-        require(column > 0) { "The source location column must should be greater than 0" }
+        require(column > 0) { "The source location column must be greater than 0" }
     }
 
     override fun toString(): String = "$line:$column"
