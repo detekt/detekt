@@ -35,4 +35,4 @@ internal const val CURRENT_ISSUES = "CurrentIssues"
 internal const val ID = "ID"
 
 internal val Finding2.baselineId: String
-    get() = "${rule.id}:${this.signature}"
+    get() = "${rule.id}:${this.entity.signature}"

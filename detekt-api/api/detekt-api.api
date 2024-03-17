@@ -183,11 +183,7 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Finding2 : io/gi
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Finding2$DefaultImpls {
-	public static fun getCharPosition (Lio/gitlab/arturbosch/detekt/api/Finding2;)Lio/gitlab/arturbosch/detekt/api/TextLocation;
-	public static fun getFile (Lio/gitlab/arturbosch/detekt/api/Finding2;)Ljava/lang/String;
 	public static fun getLocation (Lio/gitlab/arturbosch/detekt/api/Finding2;)Lio/gitlab/arturbosch/detekt/api/Location;
-	public static fun getSignature (Lio/gitlab/arturbosch/detekt/api/Finding2;)Ljava/lang/String;
-	public static fun getStartPosition (Lio/gitlab/arturbosch/detekt/api/Finding2;)Lio/gitlab/arturbosch/detekt/api/SourceLocation;
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/Finding2$RuleInfo {
@@ -196,20 +192,12 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Finding2$RuleInf
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/HasEntity {
-	public abstract fun getCharPosition ()Lio/gitlab/arturbosch/detekt/api/TextLocation;
 	public abstract fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
-	public abstract fun getFile ()Ljava/lang/String;
 	public abstract fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
-	public abstract fun getSignature ()Ljava/lang/String;
-	public abstract fun getStartPosition ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/HasEntity$DefaultImpls {
-	public static fun getCharPosition (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Lio/gitlab/arturbosch/detekt/api/TextLocation;
-	public static fun getFile (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Ljava/lang/String;
 	public static fun getLocation (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Lio/gitlab/arturbosch/detekt/api/Location;
-	public static fun getSignature (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Ljava/lang/String;
-	public static fun getStartPosition (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Lio/gitlab/arturbosch/detekt/api/SourceLocation;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Location : io/gitlab/arturbosch/detekt/api/Compactable {
