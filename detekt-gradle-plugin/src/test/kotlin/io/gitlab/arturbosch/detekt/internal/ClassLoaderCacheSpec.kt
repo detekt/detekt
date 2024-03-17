@@ -19,7 +19,7 @@ class ClassLoaderCacheSpec {
         val initialClassLoader = cache.getOrCreate(TestFileCollection(File("a/b/c")))
         val secondClassLoader = cache.getOrCreate(TestFileCollection(File("a/b/c")))
 
-        assertThat(initialClassLoader === secondClassLoader).isTrue()
+        assertThat(initialClassLoader).isSameAs(secondClassLoader)
     }
 
     @Test
@@ -28,7 +28,7 @@ class ClassLoaderCacheSpec {
         val firstClassLoader = cache.getOrCreate(TestFileCollection(File("a/b/c")))
         val secondClassLoader = cache.getOrCreate(TestFileCollection(File("c/b/a")))
 
-        assertThat(firstClassLoader === secondClassLoader).isFalse()
+        assertThat(firstClassLoader).isNotSameAs(secondClassLoader)
     }
 
     @Test
@@ -37,7 +37,7 @@ class ClassLoaderCacheSpec {
         val firstClassLoader = cache.getOrCreate(TestFileCollection(File("a/b/c"), File("d/e/f")))
         val secondClassLoader = cache.getOrCreate(TestFileCollection(File("d/e/f"), File("a/b/c")))
 
-        assertThat(firstClassLoader === secondClassLoader).isTrue()
+        assertThat(firstClassLoader).isSameAs(secondClassLoader)
     }
 
     @Test
