@@ -57,7 +57,7 @@ internal abstract class DetektWorkAction : WorkAction<DetektWorkParameters> {
 
         DefaultCliInvoker().invokeCli(
             parameters.arguments.get(),
-            parameters.classpath,
+            parameters.classpath.files,
             parameters.taskName.get(),
             parameters.ignoreFailures.getOrElse(false)
         )
