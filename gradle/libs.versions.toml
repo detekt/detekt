@@ -45,6 +45,7 @@ snakeyaml = "org.snakeyaml:snakeyaml-engine:2.7"
 jcommander = "org.jcommander:jcommander:1.83"
 kotlinCompileTesting = { module = "dev.zacsweers.kctfork:core", version = "0.4.0" }
 poko-annotations = { module = "dev.drewhamilton.poko:poko-annotations", version.ref = "poko" }
+jetbrains-annotations = "org.jetbrains:annotations:24.1.0"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
