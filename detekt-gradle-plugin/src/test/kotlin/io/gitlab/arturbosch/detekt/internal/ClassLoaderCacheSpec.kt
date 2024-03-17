@@ -58,7 +58,6 @@ class ClassLoaderCacheSpec {
                 cache.getOrCreate(collection1)
             }
             val task = CompletableFuture.supplyAsync(supplier, executor)
-            @Suppress("UsePropertyAccessSyntax")
             assertThat(latch2.await(10L, TimeUnit.SECONDS)).isTrue()
             // Will call `getOrCreate` next - wait a moment to be sure
             Thread.sleep(2000L)
