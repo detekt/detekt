@@ -36,7 +36,7 @@ fun generateBindingContext(
         TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
             environment.project,
             files,
-            NoScopeRecordCliBindingTrace(),
+            NoScopeRecordCliBindingTrace(environment.project),
             environment.configuration,
             environment::createPackagePartProvider
         )

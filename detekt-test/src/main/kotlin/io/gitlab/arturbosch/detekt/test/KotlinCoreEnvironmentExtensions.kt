@@ -10,7 +10,7 @@ fun KotlinCoreEnvironment.createBindingContext(files: List<KtFile>): BindingCont
     TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
         this.project,
         files,
-        NoScopeRecordCliBindingTrace(),
+        NoScopeRecordCliBindingTrace(this.project),
         this.configuration,
         this::createPackagePartProvider
     ).bindingContext
