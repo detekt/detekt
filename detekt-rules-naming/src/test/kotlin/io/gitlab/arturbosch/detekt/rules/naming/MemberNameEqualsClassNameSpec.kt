@@ -127,11 +127,11 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `doesn't report overridden methods which are named after the class`() {
             val code = """
-                class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
-                    override fun AbstractMethodNameEqualsClassName() {}
-                }
                 abstract class BaseClassForMethodNameEqualsClassName {
                     abstract fun AbstractMethodNameEqualsClassName()
+                }
+                class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
+                    override fun AbstractMethodNameEqualsClassName() {}
                 }
             """.trimIndent()
             assertThat(MemberNameEqualsClassName(Config.empty).compileAndLint(code)).isEmpty()
@@ -150,11 +150,11 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports overridden methods which are named after the class if they are not ignored`() {
             val code = """
-                class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
-                    override fun AbstractMethodNameEqualsClassName() {}
-                }
                 abstract class BaseClassForMethodNameEqualsClassName {
                     abstract fun AbstractMethodNameEqualsClassName()
+                }
+                class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
+                    override fun AbstractMethodNameEqualsClassName() {}
                 }
             """.trimIndent()
             assertThat(MemberNameEqualsClassName(noIgnoreOverridden).compileAndLint(code)).hasSize(1)
@@ -163,11 +163,11 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `doesn't report overridden properties which are named after the class`() {
             val code = """
-                class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
-                    override val AbstractMethodNameEqualsClassName = ""
-                }
                 abstract class BaseClassForMethodNameEqualsClassName {
                     abstract val AbstractMethodNameEqualsClassName: String
+                }
+                class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
+                    override val AbstractMethodNameEqualsClassName = ""
                 }
             """.trimIndent()
             assertThat(MemberNameEqualsClassName(Config.empty).compileAndLint(code)).isEmpty()
@@ -176,11 +176,11 @@ class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports overridden properties which are named after the class if they are not ignored`() {
             val code = """
-                class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
-                    override val AbstractMethodNameEqualsClassName = ""
-                }
                 abstract class BaseClassForMethodNameEqualsClassName {
                     abstract val AbstractMethodNameEqualsClassName: String
+                }
+                class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
+                    override val AbstractMethodNameEqualsClassName = ""
                 }
             """.trimIndent()
             assertThat(MemberNameEqualsClassName(noIgnoreOverridden).compileAndLint(code)).hasSize(1)

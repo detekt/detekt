@@ -81,14 +81,14 @@ class VariableNamingSpec {
     @Test
     fun `should not flag overridden member properties`() {
         val code = """
-            class C : I {
-                override val SHOULD_NOT_BE_FLAGGED = "banana"
+            interface I2 {
+                @Suppress("VariableNaming") val SHOULD_NOT_BE_FLAGGED: String
             }
             interface I : I2 {
                 override val SHOULD_NOT_BE_FLAGGED: String
             }
-            interface I2 {
-                @Suppress("VariableNaming") val SHOULD_NOT_BE_FLAGGED: String
+            class C : I {
+                override val SHOULD_NOT_BE_FLAGGED = "banana"
             }
         """.trimIndent()
         assertThat(VariableNaming(Config.empty).compileAndLint(code)).isEmpty()

@@ -45,23 +45,23 @@ class FunctionNamingSpec {
     @Test
     fun `flags functions inside functions`() {
         val code = """
+            interface I { fun shouldNotBeFlagged() }
             class C : I {
                 override fun shouldNotBeFlagged() {
                     fun SHOULD_BE_FLAGGED() { }
                 }
             }
-            interface I { fun shouldNotBeFlagged() }
         """.trimIndent()
-        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).hasStartSourceLocation(3, 13)
+        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).hasStartSourceLocation(4, 13)
     }
 
     @Test
     fun `ignores overridden functions`() {
         val code = """
+            interface I { @Suppress("FunctionNaming") fun SHOULD_NOT_BE_FLAGGED() }
             class C : I {
                 override fun SHOULD_NOT_BE_FLAGGED() {}
             }
-            interface I { @Suppress("FunctionNaming") fun SHOULD_NOT_BE_FLAGGED() }
         """.trimIndent()
         assertThat(FunctionNaming(Config.empty).compileAndLint(code)).isEmpty()
     }
@@ -89,14 +89,14 @@ class FunctionNamingSpec {
     @Test
     fun `flags functions with bad names inside overridden functions by default`() {
         val code = """
+            interface I { @Suppress("FunctionNaming") fun SHOULD_BE_FLAGGED() }
             class C : I {
                 override fun SHOULD_BE_FLAGGED() {
                     fun SHOULD_BE_FLAGGED() {}
                 }
             }
-            interface I { @Suppress("FunctionNaming") fun SHOULD_BE_FLAGGED() }
         """.trimIndent()
-        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).hasStartSourceLocation(3, 13)
+        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).hasStartSourceLocation(4, 13)
     }
 
     @Test
