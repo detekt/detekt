@@ -16,6 +16,7 @@ class CodeSmellSpec {
                 signature = "TestEntitySignature",
                 location = Location(
                     source = SourceLocation(1, 1),
+                    endSource = SourceLocation(1, 1),
                     text = TextLocation(0, 0),
                     filePath = FilePath.fromRelative(Path("/Users/tester/detekt/"), Path("TestFile.kt"))
                 ),

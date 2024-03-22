@@ -9,17 +9,15 @@ package io.gitlab.arturbosch.detekt.formatting
 object KtLintLineColCalculator {
     private const val UTF8_BOM = "\uFEFF"
 
-    fun normalizeText(text: String): String {
+    fun calculateLineColByOffset(text: String): (offset: Int) -> Pair<Int, Int> {
+        return buildPositionInTextLocator(normalizeText(text))
+    }
+
+    private fun normalizeText(text: String): String {
         return text
             .replace("\r\n", "\n")
             .replace("\r", "\n")
             .replaceFirst(UTF8_BOM, "")
-    }
-
-    fun calculateLineColByOffset(
-        text: String
-    ): (offset: Int) -> Pair<Int, Int> {
-        return buildPositionInTextLocator(text)
     }
 
     private fun buildPositionInTextLocator(
