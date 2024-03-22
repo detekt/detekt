@@ -150,17 +150,17 @@ abstract class Detekt @Inject constructor(
             DefaultReportArgument(reports.txt),
             DefaultReportArgument(reports.sarif),
             DefaultReportArgument(reports.md),
-            DebugArgument(debug.getOrElse(false)),
-            ParallelArgument(parallel.getOrElse(false)),
-            BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
-            AllRulesArgument(allRules.getOrElse(false)),
-            AutoCorrectArgument(autoCorrect.getOrElse(false)),
+            DebugArgument(debug.get()),
+            ParallelArgument(parallel.get()),
+            BuildUponDefaultConfigArgument(buildUponDefaultConfig.get()),
+            AllRulesArgument(allRules.get()),
+            AutoCorrectArgument(autoCorrect.get()),
             FailOnSeverityArgument(
-                ignoreFailures = ignoreFailures.getOrElse(false),
+                ignoreFailures = ignoreFailures.get(),
                 minSeverity = failOnSeverity.get()
             ),
             BasePathArgument(basePath.orNull),
-            DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
+            DisableDefaultRuleSetArgument(disableDefaultRuleSets.get())
         ).plus(convertCustomReportsToArguments()).flatMap(CliArgument::toArgument)
 
     @InputFiles
