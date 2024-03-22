@@ -43,7 +43,7 @@ class Location(
         /**
          * Determines the start line and column of a [PsiElement] in the source file.
          */
-        fun startLineAndColumn(element: PsiElement, offset: Int = 0): PsiDiagnosticUtils.LineAndColumn =
+        private fun startLineAndColumn(element: PsiElement, offset: Int = 0): PsiDiagnosticUtils.LineAndColumn =
             lineAndColumn(
                 element,
                 TextRange(element.textRange.startOffset + offset, element.textRange.endOffset + offset)

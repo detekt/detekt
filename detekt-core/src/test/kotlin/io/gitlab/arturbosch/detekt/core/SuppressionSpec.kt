@@ -200,8 +200,8 @@ private fun isSuppressedBy(annotation: String, argument: String): Boolean {
 
 private class TestLM(config: Config = Config.empty) : Rule(config, "") {
     override fun visitNamedFunction(function: KtNamedFunction) {
-        val start = Location.startLineAndColumn(function.funKeyword!!).line
-        val end = Location.startLineAndColumn(function.lastBlockStatementOrThis()).line
+        val start = Location.from(function.funKeyword!!).source.line
+        val end = Location.from(function.lastBlockStatementOrThis()).source.line
         val offset = end - start
         if (offset > 10) report(CodeSmell(Entity.from(function), message = "TestMessage"))
     }
