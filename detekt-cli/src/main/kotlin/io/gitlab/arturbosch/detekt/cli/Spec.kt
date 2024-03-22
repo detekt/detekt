@@ -9,6 +9,7 @@ import java.nio.file.Path
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.absolute
 import kotlin.io.path.extension
+import kotlin.io.path.relativeTo
 import kotlin.io.path.walk
 
 @Suppress("LongMethod")
@@ -27,15 +28,12 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
                 args.excludes?.let(::asPatterns).orEmpty(),
                 args.includes?.let(::asPatterns).orEmpty(),
             )
+            val absoluteBasePath = basePath.absolute()
             inputPaths = args.inputPaths.walk()
-                .map { it.absolute().normalize() }
-                .filter { pathFilters?.isIgnored(it) != false }
-                .filter { path ->
-                    path.isKotlinFile()
-                        .also {
-                            if (!it && args.debug) output.appendLine("Ignoring a file detekt cannot handle: $path")
-                        }
-                }
+                .filter { path -> path.isKotlinFile() }
+                .map { path -> path.absolute().relativeTo(absoluteBasePath) }
+                .filter { path -> pathFilters?.isIgnored(path) != false }
+                .map { path -> absoluteBasePath.resolve(path).normalize() }
                 .toSet()
         }
 

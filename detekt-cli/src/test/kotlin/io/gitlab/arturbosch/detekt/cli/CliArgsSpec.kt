@@ -113,11 +113,21 @@ internal class CliArgsSpec {
 
             @Test
             fun `excludes in path normalized`() {
-                val spec = parseArguments(input + arrayOf("--excludes", "**/src/main/kotlin/**")).toSpec()
+                val spec = parseArguments(input + arrayOf("--excludes", "src/main/kotlin/**")).toSpec()
 
                 assertThat(spec.projectSpec.inputPaths).contains(pathBuildGradle)
                 assertThat(spec.projectSpec.inputPaths).doesNotContain(pathCliArgs)
                 assertThat(spec.projectSpec.inputPaths).doesNotContain(pathMain)
+                assertThat(spec.projectSpec.inputPaths).contains(pathAnalyzer)
+            }
+
+            @Test
+            fun `doesn't take into account absolute path`() {
+                val spec = parseArguments(input + arrayOf("--excludes", "/home/**,/Users/**")).toSpec()
+
+                assertThat(spec.projectSpec.inputPaths).contains(pathBuildGradle)
+                assertThat(spec.projectSpec.inputPaths).contains(pathCliArgs)
+                assertThat(spec.projectSpec.inputPaths).contains(pathMain)
                 assertThat(spec.projectSpec.inputPaths).contains(pathAnalyzer)
             }
 
