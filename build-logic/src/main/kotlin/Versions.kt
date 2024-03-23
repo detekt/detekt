@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 object Versions {
 
-    const val DETEKT: String = "1.23.5"
+    const val DETEKT: String = "1.23.6"
     const val SNAPSHOT_NAME: String = "main"
     val JVM_TARGET: JvmTarget = JvmTarget.JVM_1_8
 
