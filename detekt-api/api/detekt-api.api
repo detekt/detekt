@@ -239,8 +239,6 @@ public final class io/gitlab/arturbosch/detekt/api/Location : io/gitlab/arturbos
 public final class io/gitlab/arturbosch/detekt/api/Location$Companion {
 	public final fun from (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;I)Lio/gitlab/arturbosch/detekt/api/Location;
 	public static synthetic fun from$default (Lio/gitlab/arturbosch/detekt/api/Location$Companion;Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;IILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/Location;
-	public final fun startLineAndColumn (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;I)Lorg/jetbrains/kotlin/diagnostics/PsiDiagnosticUtils$LineAndColumn;
-	public static synthetic fun startLineAndColumn$default (Lio/gitlab/arturbosch/detekt/api/Location$Companion;Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;IILjava/lang/Object;)Lorg/jetbrains/kotlin/diagnostics/PsiDiagnosticUtils$LineAndColumn;
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/Notification {
