@@ -27,16 +27,16 @@ abstract class ReportMergeTask : DefaultTask() {
         logger.info("Input")
         logger.info(input.files.joinToString(separator = "\n") { it.absolutePath })
         logger.info("Output = ${output.get().asFile.absolutePath}")
-        val existingFiles = input.files.filter { it.exists() }
+        val existingFiles = input.filter { it.exists() }
 
         val xmls = existingFiles.filter { it.extension == "xml" }
-        if (xmls.isNotEmpty()) {
-            XmlReportMerger.merge(xmls, output.get().asFile)
+        if (!xmls.isEmpty) {
+            XmlReportMerger.merge(xmls.files, output.get().asFile)
             logger.lifecycle("Merged XML output to ${output.get().asFile.absolutePath}")
         }
 
         val sarifs = existingFiles.filter { it.extension == "sarif" || it.name.endsWith(".sarif.json") }
-        if (sarifs.isNotEmpty()) {
+        if (!sarifs.isEmpty) {
             val sarif = sarifs
                 .map { SarifSerializer.fromJson(it.readText()) }
                 .reduce { acc, next -> acc.merge(next) }
