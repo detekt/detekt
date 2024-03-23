@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
-import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConfigAware
@@ -8,14 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.RuleId
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.createLocation
 import org.jetbrains.kotlin.psi.KtElement
-import kotlin.io.path.Path
 
 internal fun buildFinding(element: KtElement?): Finding = CodeSmell(
     issue = Issue("RuleName", Severity.CodeSmell, "", Debt.FIVE_MINS),
@@ -26,7 +22,7 @@ internal fun buildFinding(element: KtElement?): Finding = CodeSmell(
 private fun buildEmptyEntity(): Entity = Entity(
     name = "",
     signature = "",
-    location = Location(SourceLocation(0, 0), TextLocation(0, 0), FilePath.fromAbsolute(Path("/"))),
+    location = createLocation(path = "/"),
     ktElement = null,
 )
 
