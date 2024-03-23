@@ -136,7 +136,7 @@ internal object XmlReportMerger {
     /**
      * Use code instead of XSLT to exclude whitespaces.
      */
-    private fun Sequence<Node>.filterWhitespace(): Sequence<Node> = asSequence().filterNot {
+    private fun Sequence<Node>.filterWhitespace(): Sequence<Node> = filterNot {
         it.nodeType == Node.TEXT_NODE && it.textContent.isBlank()
     }
 
