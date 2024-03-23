@@ -45,7 +45,7 @@ class DoubleNegativeExpressionSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    fun `!`() {
+    fun `exclamation`() {
         val code = """
             fun test(b: Boolean): Boolean {
                 return !b
@@ -56,7 +56,7 @@ class DoubleNegativeExpressionSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    fun `!!`() {
+    fun `double exclamation`() {
         val code = """
             fun test(b: Boolean): Boolean {
                 return !!b
@@ -67,7 +67,7 @@ class DoubleNegativeExpressionSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    fun `!!!`() {
+    fun `triple exclamation`() {
         val code = """
             fun test(b: Boolean): Boolean {
                 return !!!b
@@ -78,7 +78,7 @@ class DoubleNegativeExpressionSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    fun `! not`() {
+    fun `exclamation not`() {
         val code = """
             fun test(b: Boolean): Boolean {
                 return !b.not()
@@ -89,7 +89,7 @@ class DoubleNegativeExpressionSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    fun `!! not`() {
+    fun `double exclamation not`() {
         val code = """
             fun test(b: Boolean): Boolean {
                 return !!b.not()
