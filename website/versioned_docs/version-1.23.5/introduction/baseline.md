@@ -29,6 +29,17 @@ the `--report txt:path/to/report` cli flag.
 </SmellBaseline>
 ```
 
+#### CLI
+To generate yourself a `baseline.xml` you need to provide the same config as the the rules you are going to scan your project.
+
+```diff
+java -jar detekt-cli-all.jar \
+  --plugins detekt-formatting.jar \
+  --build-upon-default-config \
+  --config path/to/config/detekt/detekt.yml \
++ --baseline path/to/new/config/detekt/baseline.xml \
++ --create-baseline
+
 #### Gradle
 
 If you are using the gradle-plugin run the `detektBaseline` task to generate yourself a `baseline.xml`.
