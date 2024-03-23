@@ -37,6 +37,7 @@ fun createFindingForRelativePath(
         signature = "TestEntitySignature",
         location = Location(
             source = SourceLocation(1, 1),
+            endSource = SourceLocation(1, 1),
             text = TextLocation(0, 0),
             filePath = FilePath.fromRelative(Path(basePath), Path(relativePath))
         ),
@@ -60,9 +61,11 @@ fun createLocation(
     path: String = "TestFile.kt",
     basePath: String? = null,
     position: Pair<Int, Int> = 1 to 1,
+    endPosition: Pair<Int, Int> = 1 to 1,
     text: IntRange = 0..0,
 ) = Location(
     source = SourceLocation(position.first, position.second),
+    endSource = SourceLocation(endPosition.first, endPosition.second),
     text = TextLocation(text.first, text.last),
     filePath = basePath?.let { FilePath.fromRelative(Path(it), Path(path)) }
         ?: FilePath.fromAbsolute(Path(path)),

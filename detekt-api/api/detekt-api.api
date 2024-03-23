@@ -227,7 +227,6 @@ public final class io/gitlab/arturbosch/detekt/api/HasEntity$DefaultImpls {
 public final class io/gitlab/arturbosch/detekt/api/Location : io/gitlab/arturbosch/detekt/api/Compactable {
 	public static final field Companion Lio/gitlab/arturbosch/detekt/api/Location$Companion;
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Lio/github/detekt/psi/FilePath;)V
-	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Lio/github/detekt/psi/FilePath;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun compact ()Ljava/lang/String;
 	public fun compactWithSignature ()Ljava/lang/String;
 	public final fun getEndSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;

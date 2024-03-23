@@ -16,9 +16,9 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
  */
 class Location(
     val source: SourceLocation,
-    val endSource: SourceLocation = source,
+    val endSource: SourceLocation,
     val text: TextLocation,
-    val filePath: FilePath
+    val filePath: FilePath,
 ) : Compactable {
 
     override fun compact(): String = "${filePath.absolutePath}:$source"

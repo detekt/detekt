@@ -38,8 +38,7 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
 
     override fun visit(root: KtFile) {
         this.root = root
-        positionByOffset = KtLintLineColCalculator
-            .calculateLineColByOffset(KtLintLineColCalculator.normalizeText(root.text))
+        positionByOffset = KtLintLineColCalculator.calculateLineColByOffset(root.text)
 
         wrapping.beforeFirstNode(computeEditorConfigProperties())
         root.node.visitASTNodes()
@@ -82,6 +81,7 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
         val (line, column) = positionByOffset(offset)
         val location = Location(
             source = SourceLocation(line, column),
+            endSource = SourceLocation(line, column),
             // Use offset + 1 since ktlint always reports a single location.
             text = TextLocation(offset, offset + 1),
             filePath = root.toFilePath()

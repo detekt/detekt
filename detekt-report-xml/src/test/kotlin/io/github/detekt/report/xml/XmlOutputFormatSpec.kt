@@ -1,21 +1,17 @@
 package io.github.detekt.report.xml
 
-import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createFinding
 import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
+import io.gitlab.arturbosch.detekt.test.createLocation
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import java.util.Locale
-import kotlin.io.path.Path
 
 private const val TAB = "\t"
 
@@ -24,19 +20,17 @@ class XmlOutputFormatSpec {
     private val entity1 = Entity(
         "Sample1",
         "",
-        Location(
-            source = SourceLocation(11, 1),
-            text = TextLocation(0, 10),
-            filePath = FilePath.fromAbsolute(Path("src/main/com/sample/Sample1.kt"))
+        createLocation(
+            path = "src/main/com/sample/Sample1.kt",
+            position = 11 to 1,
         )
     )
     private val entity2 = Entity(
         "Sample2",
         "",
-        Location(
-            source = SourceLocation(22, 2),
-            text = TextLocation(0, 20),
-            filePath = FilePath.fromAbsolute(Path("src/main/com/sample/Sample2.kt"))
+        createLocation(
+            path = "src/main/com/sample/Sample2.kt",
+            position = 22 to 2,
         )
     )
     private val outputFormat = XmlOutputReport()
