@@ -70,7 +70,7 @@ internal object XmlReportMerger {
             CheckstyleSourceFileNodes(
                 files.filter { reportFile -> reportFile.exists() }
                     .flatMap { existingReportFile ->
-                        val checkstyleNode = documentBuilder.parse(existingReportFile.inputStream())
+                        val checkstyleNode = documentBuilder.parse(existingReportFile)
                         checkstyleNode.documentElement.childNodes.asSequence().filterWhitespace()
                     }
             )
