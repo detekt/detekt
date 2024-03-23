@@ -4,7 +4,6 @@ import io.github.detekt.tooling.api.spec.ConfigSpec
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.core.tooling.getDefaultConfiguration
 import java.net.URI
 import java.net.URL
 import java.nio.file.FileSystemNotFoundException
@@ -12,26 +11,16 @@ import java.nio.file.FileSystems
 import java.nio.file.Path
 
 internal fun ProcessingSpec.loadConfiguration(): Config = with(configSpec) {
-    var declaredConfig: Config? = when {
+    return when {
         configPaths.isNotEmpty() -> parsePathConfig(configPaths)
         resources.isNotEmpty() -> parseResourceConfig(resources)
-        else -> null
+        else -> Config.empty
     }
-
-    if (useDefaultConfig) {
-        declaredConfig = if (declaredConfig == null) {
-            getDefaultConfiguration()
-        } else {
-            CompositeConfig(declaredConfig, getDefaultConfiguration())
-        }
-    }
-
-    return declaredConfig ?: getDefaultConfiguration()
 }
 
 private fun parseResourceConfig(urls: Collection<URL>): Config =
     if (urls.size == 1) {
-        urls.first().openSafeStream().reader().use(YamlConfig::load)
+        urls.single().openSafeStream().reader().use(YamlConfig::load)
     } else {
         urls.asSequence()
             .map { it.openSafeStream().reader().use(YamlConfig::load) }
@@ -40,7 +29,7 @@ private fun parseResourceConfig(urls: Collection<URL>): Config =
 
 private fun parsePathConfig(paths: Collection<Path>): Config =
     if (paths.size == 1) {
-        YamlConfig.load(paths.first())
+        YamlConfig.load(paths.single())
     } else {
         paths.asSequence()
             .map { YamlConfig.load(it) }
