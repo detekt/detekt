@@ -6,6 +6,25 @@ keywords: [changelog, release-notes, migration]
 
 # Changelog and Migration Guide
 
+#### 1.23.6 - 2024-03-23
+
+This is a point release for Detekt `1.23.0`, where we added support for Kotlin `1.9.23` and fixed several bugs that
+got reported by the community.
+
+##### Changelog
+
+- Don't allow invalid Source Locations - [#7030](https://github.com/detekt/detekt/pull/7030)
+- UnusedPrivateClass: don't report if private classes are used for type conversion - [#6995](https://github.com/detekt/detekt/pull/6995)
+- RedundantSuspendModifier: do not report when the function has 'actual' modifier - [#6951](https://github.com/detekt/detekt/pull/6951)
+- Update dependency gradle to v8.7 - [#7080](https://github.com/detekt/detekt/pull/7080)
+- Update kotlin monorepo to v1.9.23 - [#7027](https://github.com/detekt/detekt/pull/7027)
+- Update dependency gradle to v8.6 - [#6939](https://github.com/detekt/detekt/pull/6939)
+- Update dependency com.android.tools.build:gradle to v8.3.1 - [#7070](https://github.com/detekt/detekt/pull/7070)
+
+##### Contributors
+
+We would like to thank the following contributors that made this release possible: @BraisGabin, @t-kameyama
+
 #### 1.23.5 - 2024-01-31
 
 This is a point release for Detekt `1.23.0`, where we added support for Kotlin `1.9.22` and fixed several bugs that
@@ -68,6 +87,8 @@ We would like to thank the following contributors that made this release possibl
 This is a point release for Detekt `1.23.0`. The changelog is equivalent to `1.23.2`.
 
 #### 1.23.2 - 2023-10-29
+
+**Note: please use version 1.23.3 instead as Kotlin 1.9.10 support was added there**
 
 This is a point release for Detekt `1.23.0`, where we added support for Kotlin `1.9.10` and fixed several bugs that
 got reported by the community.
@@ -1284,7 +1305,7 @@ private val allowedPattern: Regex by config("", String::toRegex)
 - Fail with a meaningful error message for invalid boolean - [#3931](https://github.com/detekt/detekt/pull/3931)
 - UndocumentedPublicProperty and UndocumentedPublicFunction should include objects - [#3940](https://github.com/detekt/detekt/pull/3940)
 - Fix exclusion pattern for InvalidPackageDeclaration - [#3907](https://github.com/detekt/detekt/pull/3907)
-- Allow else when `{...}` in MandatoryBracesIfStatements rule - [#3905](https://github.com/detekt/detekt/pull/3905)
+- Allow else when {...} in MandatoryBracesIfStatements rule - [#3905](https://github.com/detekt/detekt/pull/3905)
 - Remove unnecessary constant declaration - [#3903](https://github.com/detekt/detekt/pull/3903)
 - Check bindingContext only once in MemberNameEqualsClassName - [#3899](https://github.com/detekt/detekt/pull/3899)
 - LongMethod: add 'ignoreAnnotated' configuration option - [#3892](https://github.com/detekt/detekt/pull/3892)
@@ -1721,7 +1742,7 @@ Rule authors can use `TestConfig(Map)` or `yamlConfig(String)` from `detekt-test
 - SARIF export support - [#3045](https://github.com/detekt/detekt/issues/3045)
 - IgnoredReturnValue false positives - [#3043](https://github.com/detekt/detekt/issues/3043)
 - Offset calculation in KtLint deprecated/made private - [#3021](https://github.com/detekt/detekt/issues/3021)
-- Map `{ it }` must return an error - [#2975](https://github.com/detekt/detekt/issues/2975)
+- Map { it } must return an error - [#2975](https://github.com/detekt/detekt/issues/2975)
 - Upload detekt-formatting plugin to Github releases next to precompiled cli binary - [#2927](https://github.com/detekt/detekt/issues/2927)
 - Add a rule to flag places where `ifBlank` and `ifEmpty` can be used - [#2840](https://github.com/detekt/detekt/issues/2840)
 - Remove hardcoded default values from rules - [#2597](https://github.com/detekt/detekt/issues/2597)
@@ -2795,7 +2816,7 @@ See all issues at: [1.3.1](https://github.com/detekt/detekt/milestone/54)
 - Fix exception when running ArrayPrimitive on star-projected arrays - [#2181](https://github.com/detekt/detekt/pull/2181)
 - Gradle cache restoration issue - [#2180](https://github.com/detekt/detekt/issues/2180)
 - Add MacOS JDK13 build job to TravisCI - [#2177](https://github.com/detekt/detekt/pull/2177)
-- Running `ArrayPrimitive` rule on `Array<>` causes detekt to throw exception - [#2176](https://github.com/detekt/detekt/issues/2176)
+- Running "ArrayPrimitive" rule on "Array<*>" causes detekt to throw exception - [#2176](https://github.com/detekt/detekt/issues/2176)
 - Update Spek to v2.0.9 - [#2173](https://github.com/detekt/detekt/pull/2173)
 - Create Rule: MapGetWithNotNullAssertionOperator - [#2171](https://github.com/detekt/detekt/pull/2171)
 - EqualsAlwaysReturnsTrueOrFalse fails hard on `override fun equals(other:Any) = ...` - [#2167](https://github.com/detekt/detekt/issues/2167)

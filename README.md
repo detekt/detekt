@@ -111,7 +111,7 @@ Gradle 6.8.3+ is the minimum requirement. However, the recommended versions toge
 
 | Detekt Version | Gradle | Kotlin   | AGP     | Java Target Level | JDK Max Version |
 |----------------|--------|----------|---------|-------------------|-----------------|
-| `1.23.5`       | `8.5`  | `1.9.22` | `8.2.0` | `1.8`             | `17`            |
+| `1.23.6`       | `8.7`  | `1.9.23` | `8.3.1` | `1.8`             | `17`            |
 
 The list of [recommended versions for previous detekt version is listed here](https://detekt.dev/compatibility.html).
 
