@@ -112,6 +112,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             ::UseSumOfInsteadOfFlatMapSize,
             ::DoubleNegativeLambda,
             ::UseLet,
+            ::DoubleNegativeExpression,
         )
     )
 }
