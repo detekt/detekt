@@ -24,33 +24,22 @@ internal fun Severity.toResultLevel() = when (this) {
 }
 
 private fun Finding2.toResult(ruleSetId: RuleSet.Id): io.github.detekt.sarif4k.Result {
-    val code = entity.ktElement?.containingFile?.text
-
     return io.github.detekt.sarif4k.Result(
         ruleID = "detekt.$ruleSetId.${rule.id}",
         level = severity.toResultLevel(),
-        locations = (listOf(location) + references.map { it.location }).map { it.toLocation(code) }.distinct().toList(),
+        locations = (listOf(location) + references.map { it.location }).map { it.toLocation() }.distinct(),
         message = Message(text = message)
     )
 }
 
-private fun Location.toLocation(code: String?): io.github.detekt.sarif4k.Location {
-    var endLine: Long? = null
-    var endColumn: Long? = null
-
-    if (code != null) {
-        val snippet = code.take(text.end).split('\n')
-        endLine = snippet.size.toLong()
-        endColumn = snippet.last().length.toLong() + 1
-    }
-
+private fun Location.toLocation(): io.github.detekt.sarif4k.Location {
     return io.github.detekt.sarif4k.Location(
         physicalLocation = PhysicalLocation(
             region = Region(
                 startLine = source.line.toLong(),
                 startColumn = source.column.toLong(),
-                endLine = endLine,
-                endColumn = endColumn
+                endLine = endSource.line.toLong(),
+                endColumn = endSource.column.toLong(),
             ),
             artifactLocation = if (filePath.relativePath != null) {
                 ArtifactLocation(

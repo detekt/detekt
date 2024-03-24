@@ -19,6 +19,8 @@
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
+                  "endColumn": 1,
+                  "endLine": 1,
                   "startColumn": 1,
                   "startLine": 1
                 }
@@ -40,6 +42,8 @@
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
+                  "endColumn": 1,
+                  "endLine": 1,
                   "startColumn": 1,
                   "startLine": 1
                 }
@@ -61,6 +65,8 @@
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
+                  "endColumn": 1,
+                  "endLine": 1,
                   "startColumn": 1,
                   "startLine": 1
                 }
