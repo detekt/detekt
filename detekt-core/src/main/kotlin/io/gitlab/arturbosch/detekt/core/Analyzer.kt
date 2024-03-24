@@ -116,18 +116,18 @@ internal class Analyzer(
                     .map { (ruleId, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleId.value) }
                     .filter { (_, config) -> config.isActiveOrDefault(false) }
                     .filter { (_, config) -> config.shouldAnalyzeFile(file) }
-                    .map { (ruleProvider, config) -> ruleProvider(config) }
-                    .filter { rule -> !file.isSuppressedBy(rule.ruleId, rule.aliases, ruleSet.id) }
+                    .map { (ruleProvider, config) -> ruleSet.id to ruleProvider(config) }
+                    .filter { (_, rule) -> !file.isSuppressedBy(rule.ruleId, rule.aliases, ruleSet.id) }
             }
-            .filter { rule ->
+            .filter { (_, rule) ->
                 bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
             }
-            .partition { rule -> rule.autoCorrect }
+            .partition { (_, rule) -> rule.autoCorrect }
 
         val result = HashMap<RuleSet.Id, MutableList<Finding2>>()
 
-        fun executeRules(rules: List<Rule>) {
-            for (rule in rules) {
+        fun executeRules(rules: List<Pair<RuleSet.Id, Rule>>) {
+            for ((ruleSetId, rule) in rules) {
                 val findings = rule.visitFile(file, bindingContext, compilerResources)
                     .filterSuppressedFindings(rule, bindingContext)
                 for (finding in findings) {
@@ -135,7 +135,7 @@ internal class Analyzer(
                         "Mapping for '${rule.ruleId}' expected."
                     }
                     result.computeIfAbsent(mappedRuleSet) { mutableListOf() }
-                        .add(finding.toFinding2(rule.toRuleInfo(), rule.computeSeverity()))
+                        .add(finding.toFinding2(rule.toRuleInfo(ruleSetId), rule.computeSeverity()))
                 }
             }
         }
@@ -201,12 +201,12 @@ private fun Finding.toFinding2(rule: Finding2.RuleInfo, severity: Severity): Fin
     }
 }
 
-private fun Rule.toRuleInfo(): Finding2.RuleInfo {
-    return Finding2Impl.RuleInfo(ruleId, description)
+private fun Rule.toRuleInfo(ruleSetId: RuleSet.Id): Finding2.RuleInfo {
+    return Finding2Impl.RuleInfo(ruleId, ruleSetId, description)
 }
 
 private data class Finding2Impl(
-    override val rule: Finding2.RuleInfo,
+    override val ruleInfo: Finding2.RuleInfo,
     override val entity: Entity,
     override val message: String,
     override val references: List<Entity>,
@@ -215,6 +215,7 @@ private data class Finding2Impl(
 ) : Finding2 {
     data class RuleInfo(
         override val id: Rule.Id,
+        override val ruleSetId: RuleSet.Id,
         override val description: String,
     ) : Finding2.RuleInfo
 }

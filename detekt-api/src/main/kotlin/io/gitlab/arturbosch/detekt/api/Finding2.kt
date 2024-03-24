@@ -7,7 +7,7 @@ package io.gitlab.arturbosch.detekt.api
  * about the position. Entity references can also be considered for deeper characterization.
  */
 interface Finding2 {
-    val rule: RuleInfo
+    val ruleInfo: RuleInfo
     val entity: Entity
     val references: List<Entity>
     val message: String
@@ -19,6 +19,7 @@ interface Finding2 {
 
     interface RuleInfo {
         val id: Rule.Id
+        val ruleSetId: RuleSet.Id
         val description: String
     }
 }

@@ -62,4 +62,4 @@ private fun Finding2.truncatedMessage(): String {
     }
 }
 
-private fun Finding2.detailed(): String = "${rule.id} - [${truncatedMessage()}] at ${location.compact()}"
+private fun Finding2.detailed(): String = "${ruleInfo.id} - [${truncatedMessage()}] at ${location.compact()}"
