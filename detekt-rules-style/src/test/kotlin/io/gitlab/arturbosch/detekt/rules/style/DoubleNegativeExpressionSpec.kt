@@ -45,7 +45,7 @@ class DoubleNegativeExpressionSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
-    fun `exclamation`() {
+    fun exclamation() {
         val code = """
             fun test(b: Boolean): Boolean {
                 return !b
