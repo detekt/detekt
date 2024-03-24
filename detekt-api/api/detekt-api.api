@@ -180,7 +180,7 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Finding2 {
 	public abstract fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
 	public abstract fun getMessage ()Ljava/lang/String;
 	public abstract fun getReferences ()Ljava/util/List;
-	public abstract fun getRule ()Lio/gitlab/arturbosch/detekt/api/Finding2$RuleInfo;
+	public abstract fun getRuleInfo ()Lio/gitlab/arturbosch/detekt/api/Finding2$RuleInfo;
 	public abstract fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
 }
 

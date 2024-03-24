@@ -206,7 +206,7 @@ private fun Rule.toRuleInfo(ruleSetId: RuleSet.Id): Finding2.RuleInfo {
 }
 
 private data class Finding2Impl(
-    override val rule: Finding2.RuleInfo,
+    override val ruleInfo: Finding2.RuleInfo,
     override val entity: Entity,
     override val message: String,
     override val references: List<Entity>,

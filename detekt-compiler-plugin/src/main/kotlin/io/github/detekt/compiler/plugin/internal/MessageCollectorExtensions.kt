@@ -39,5 +39,5 @@ fun Finding2.renderAsCompilerWarningMessage(): Pair<String, CompilerMessageLocat
         )
     }
 
-    return "${rule.id}: $message" to sourceLocation
+    return "${ruleInfo.id}: $message" to sourceLocation
 }

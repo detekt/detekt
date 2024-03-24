@@ -189,7 +189,7 @@ class XmlOutputFormatSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
-                $TAB<error line="${finding.location.source.line}" column="${finding.location.source.column}" severity="$xmlSeverity" message="${finding.message}" source="detekt.${finding.rule.id}" />
+                $TAB<error line="${finding.location.source.line}" column="${finding.location.source.column}" severity="$xmlSeverity" message="${finding.message}" source="detekt.${finding.ruleInfo.id}" />
                 </file>
                 </checkstyle>
             """.trimIndent()

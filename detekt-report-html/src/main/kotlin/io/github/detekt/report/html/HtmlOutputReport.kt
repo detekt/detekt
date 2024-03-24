@@ -107,7 +107,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         h3 { text("$group: %,d".format(Locale.ROOT, findings.size)) }
 
         findings
-            .groupBy { it.rule.id }
+            .groupBy { it.ruleInfo.id }
             .toList()
             .sortedBy { (rule, _) -> rule.value }
             .forEach { (rule, ruleFindings) ->
@@ -122,7 +122,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
 
             summary("rule-container") {
                 span("rule") { text("$rule: %,d ".format(Locale.ROOT, findings.size)) }
-                span("description") { text(findings.first().rule.description) }
+                span("description") { text(findings.first().ruleInfo.description) }
             }
 
             a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.value.lowercase()}#${rule.value.lowercase()}") {
@@ -163,7 +163,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         val psiFile = finding.entity.ktElement?.containingFile
         if (psiFile != null) {
             val lineSequence = psiFile.text.splitToSequence('\n')
-            snippetCode(finding.rule.id, lineSequence, finding.location.source, finding.location.text.length())
+            snippetCode(finding.ruleInfo.id, lineSequence, finding.location.source, finding.location.text.length())
         }
     }
 
