@@ -10,14 +10,9 @@ public final class io/gitlab/arturbosch/detekt/api/AnnotationExcluder {
 public class io/gitlab/arturbosch/detekt/api/CodeSmell : io/gitlab/arturbosch/detekt/api/Finding {
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;)V
 	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun getCharPosition ()Lio/gitlab/arturbosch/detekt/api/TextLocation;
 	public final fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
-	public fun getFile ()Ljava/lang/String;
-	public fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
 	public final fun getMessage ()Ljava/lang/String;
 	public final fun getReferences ()Ljava/util/List;
-	public fun getSignature ()Ljava/lang/String;
-	public fun getStartPosition ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -173,21 +168,16 @@ public final class io/gitlab/arturbosch/detekt/api/FileProcessListener$DefaultIm
 	public static fun onStart (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
 }
 
-public abstract interface class io/gitlab/arturbosch/detekt/api/Finding : io/gitlab/arturbosch/detekt/api/HasEntity {
+public abstract interface class io/gitlab/arturbosch/detekt/api/Finding {
+	public abstract fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
 	public abstract fun getMessage ()Ljava/lang/String;
 	public abstract fun getReferences ()Ljava/util/List;
 }
 
-public final class io/gitlab/arturbosch/detekt/api/Finding$DefaultImpls {
-	public static fun getCharPosition (Lio/gitlab/arturbosch/detekt/api/Finding;)Lio/gitlab/arturbosch/detekt/api/TextLocation;
-	public static fun getFile (Lio/gitlab/arturbosch/detekt/api/Finding;)Ljava/lang/String;
-	public static fun getLocation (Lio/gitlab/arturbosch/detekt/api/Finding;)Lio/gitlab/arturbosch/detekt/api/Location;
-	public static fun getSignature (Lio/gitlab/arturbosch/detekt/api/Finding;)Ljava/lang/String;
-	public static fun getStartPosition (Lio/gitlab/arturbosch/detekt/api/Finding;)Lio/gitlab/arturbosch/detekt/api/SourceLocation;
-}
-
-public abstract interface class io/gitlab/arturbosch/detekt/api/Finding2 : io/gitlab/arturbosch/detekt/api/HasEntity {
+public abstract interface class io/gitlab/arturbosch/detekt/api/Finding2 {
 	public abstract fun getAutoCorrectEnabled ()Z
+	public abstract fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
+	public abstract fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
 	public abstract fun getMessage ()Ljava/lang/String;
 	public abstract fun getReferences ()Ljava/util/List;
 	public abstract fun getRule ()Lio/gitlab/arturbosch/detekt/api/Finding2$RuleInfo;
@@ -195,33 +185,12 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Finding2 : io/gi
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Finding2$DefaultImpls {
-	public static fun getCharPosition (Lio/gitlab/arturbosch/detekt/api/Finding2;)Lio/gitlab/arturbosch/detekt/api/TextLocation;
-	public static fun getFile (Lio/gitlab/arturbosch/detekt/api/Finding2;)Ljava/lang/String;
 	public static fun getLocation (Lio/gitlab/arturbosch/detekt/api/Finding2;)Lio/gitlab/arturbosch/detekt/api/Location;
-	public static fun getSignature (Lio/gitlab/arturbosch/detekt/api/Finding2;)Ljava/lang/String;
-	public static fun getStartPosition (Lio/gitlab/arturbosch/detekt/api/Finding2;)Lio/gitlab/arturbosch/detekt/api/SourceLocation;
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/Finding2$RuleInfo {
 	public abstract fun getDescription ()Ljava/lang/String;
 	public abstract fun getId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
-}
-
-public abstract interface class io/gitlab/arturbosch/detekt/api/HasEntity {
-	public abstract fun getCharPosition ()Lio/gitlab/arturbosch/detekt/api/TextLocation;
-	public abstract fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
-	public abstract fun getFile ()Ljava/lang/String;
-	public abstract fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
-	public abstract fun getSignature ()Ljava/lang/String;
-	public abstract fun getStartPosition ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
-}
-
-public final class io/gitlab/arturbosch/detekt/api/HasEntity$DefaultImpls {
-	public static fun getCharPosition (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Lio/gitlab/arturbosch/detekt/api/TextLocation;
-	public static fun getFile (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Ljava/lang/String;
-	public static fun getLocation (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Lio/gitlab/arturbosch/detekt/api/Location;
-	public static fun getSignature (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Ljava/lang/String;
-	public static fun getStartPosition (Lio/gitlab/arturbosch/detekt/api/HasEntity;)Lio/gitlab/arturbosch/detekt/api/SourceLocation;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Location : io/gitlab/arturbosch/detekt/api/Compactable {

@@ -131,7 +131,13 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
 
             ul {
                 findings
-                    .sortedWith(compareBy({ it.file }, { it.location.source.line }, { it.location.source.column }))
+                    .sortedWith(
+                        compareBy(
+                            { it.location.filePath.absolutePath.toString() },
+                            { it.location.source.line },
+                            { it.location.source.column },
+                        )
+                    )
                     .forEach {
                         li {
                             renderFinding(it)
@@ -157,7 +163,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         val psiFile = finding.entity.ktElement?.containingFile
         if (psiFile != null) {
             val lineSequence = psiFile.text.splitToSequence('\n')
-            snippetCode(finding.rule.id, lineSequence, finding.startPosition, finding.charPosition.length())
+            snippetCode(finding.rule.id, lineSequence, finding.location.source, finding.location.text.length())
         }
     }
 

@@ -106,7 +106,13 @@ private fun MarkdownContent.renderRule(rule: Rule.Id, group: RuleSet.Id, finding
 
     list {
         findings
-            .sortedWith(compareBy({ it.file }, { it.location.source.line }, { it.location.source.column }))
+            .sortedWith(
+                compareBy(
+                    { it.location.filePath.absolutePath.toString() },
+                    { it.location.source.line },
+                    { it.location.source.column },
+                )
+            )
             .forEach {
                 item { renderFinding(it) }
             }
@@ -144,7 +150,7 @@ private fun MarkdownContent.renderFinding(finding: Finding2): String {
     val psiFile = finding.entity.ktElement?.containingFile
     val snippet = if (psiFile != null) {
         val lineSequence = psiFile.text.splitToSequence('\n')
-        snippetCode(lineSequence, finding.startPosition)
+        snippetCode(lineSequence, finding.location.source)
     } else {
         ""
     }
