@@ -50,6 +50,17 @@ class UselessPostfixExpressionSpec {
         }
 
         @Test
+        fun `return with dot expression`() {
+            val code = """
+                fun f(): String {
+                    var id = 0
+                    return id++.toString()
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        @Test
         fun `should not report field increments`() {
             val code = """
                 class Test {
@@ -62,6 +73,11 @@ class UselessPostfixExpressionSpec {
                     fun getId(): Long {
                         return runningId++
                     }
+
+                    fun getIdString(): String {
+                        return runningId++.toString()
+                    }
+
                 }
                 
                 class Foo(var i: Int = 0) {

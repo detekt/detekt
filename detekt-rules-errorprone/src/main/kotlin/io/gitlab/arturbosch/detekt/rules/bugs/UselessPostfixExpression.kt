@@ -82,6 +82,7 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 
         expression.returnedExpression
             ?.let(this::getPostfixExpressionChildren)
+            ?.filter { it.shouldBeReported() }
             ?.forEach(this::report)
     }
 
