@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream
 plugins {
     alias(libs.plugins.shadow)
     id("module")
-    application
+    id("application")
 }
 
 application {

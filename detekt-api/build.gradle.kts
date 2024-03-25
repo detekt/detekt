@@ -1,7 +1,7 @@
 plugins {
     id("module")
     id("public-api")
-    `java-test-fixtures`
+    id("java-test-fixtures")
     alias(libs.plugins.poko)
 }
 

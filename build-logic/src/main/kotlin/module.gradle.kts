@@ -5,8 +5,8 @@ import org.jetbrains.kotlin.gradle.tasks.UsesKotlinJavaToolchain
 plugins {
     id("packaging")
     kotlin("jvm")
-    `maven-publish`
-    jacoco
+    id("maven-publish")
+    id("jacoco")
 }
 
 // Add attributes to JAR manifest, to be used at runtime

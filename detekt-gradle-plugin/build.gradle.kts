@@ -9,9 +9,9 @@ import java.net.URI
 
 plugins {
     id("module")
-    `java-gradle-plugin`
-    `java-test-fixtures`
-    idea
+    id("java-gradle-plugin")
+    id("java-test-fixtures")
+    id("idea")
     alias(libs.plugins.pluginPublishing)
     // We use this published version of the detekt plugin to self analyse this project.
     id("io.gitlab.arturbosch.detekt") version "1.23.6"
