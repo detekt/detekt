@@ -13,8 +13,8 @@ val detektPublication = "DetektPublication"
 
 plugins {
     id("module")
-    alias(libs.plugins.shadow)
-    alias(libs.plugins.download)
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("de.undercouch.download") version "5.6.0"
 }
 
 kotlin {

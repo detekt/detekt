@@ -12,11 +12,11 @@ plugins {
     id("java-gradle-plugin")
     id("java-test-fixtures")
     id("idea")
-    alias(libs.plugins.pluginPublishing)
+    id("com.gradle.plugin-publish") version "1.2.1"
     // We use this published version of the detekt plugin to self analyse this project.
     id("io.gitlab.arturbosch.detekt") version "1.23.6"
-    alias(libs.plugins.binaryCompatibilityValidator)
-    alias(libs.plugins.dokka)
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.14.0"
+    id("org.jetbrains.dokka") version "1.9.20"
 }
 
 repositories {
