@@ -2,9 +2,9 @@ import org.apache.tools.ant.filters.ReplaceTokens
 import java.io.ByteArrayOutputStream
 
 plugins {
-    alias(libs.plugins.shadow)
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("module")
-    application
+    id("application")
 }
 
 application {

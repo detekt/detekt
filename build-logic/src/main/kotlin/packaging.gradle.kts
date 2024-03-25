@@ -1,7 +1,7 @@
 plugins {
-    `java-library`
-    `maven-publish`
-    signing
+    id("java-library")
+    id("maven-publish")
+    id("signing")
 }
 
 publishing {
