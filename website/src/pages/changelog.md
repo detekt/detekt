@@ -6,6 +6,25 @@ keywords: [changelog, release-notes, migration]
 
 # Changelog and Migration Guide
 
+#### 1.23.6 - 2024-03-23
+
+This is a point release for Detekt `1.23.0`, where we added support for Kotlin `1.9.23` and fixed several bugs that got reported by the community.
+
+##### Changelog
+
+- UselessPostfixExpression - Fix #7037 false positive postfix - [#7084](https://github.com/detekt/detekt/pull/7084)
+- Don't allow invalid Source Locations - [#7030](https://github.com/detekt/detekt/pull/7030)
+- UnusedPrivateClass: don't report if private classes are used for type conversion - [#6995](https://github.com/detekt/detekt/pull/6995)
+- RedundantSuspendModifier: do not report when the function has 'actual' modifier - [#6951](https://github.com/detekt/detekt/pull/6951)
+- Update dependency gradle to v8.7 - [#7080](https://github.com/detekt/detekt/pull/7080)
+- Update kotlin monorepo to v1.9.23 - [#7027](https://github.com/detekt/detekt/pull/7027)
+- Update dependency gradle to v8.6 - [#6939](https://github.com/detekt/detekt/pull/6939)
+- Update dependency com.android.tools.build:gradle to v8.3.1 - [#7070](https://github.com/detekt/detekt/pull/7070)
+
+##### Contributors
+
+We would like to thank the following contributors that made this release possible: @BraisGabin, @psuzn, @t-kameyama.
+
 #### 1.23.5 - 2024-01-31
 
 This is a point release for Detekt `1.23.0`, where we added support for Kotlin `1.9.22` and fixed several bugs that
