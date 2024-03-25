@@ -11,14 +11,12 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isExpect
 import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
-import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.ParameterDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.descriptors.impl.ClassDescriptorBase
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtConstructor
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -35,7 +33,6 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getReferenceTargets
-import org.jetbrains.kotlin.resolve.descriptorUtil.classId
 
 /**
  * An unused private property can be removed to simplify the source file.
@@ -89,14 +86,16 @@ private class UnusedPrivatePropertyVisitor(
     private val bindingContext: BindingContext,
 ) : DetektVisitor() {
 
+    // Map<ClassName, Set<ClassProperty>>
     private val classProperties = mutableMapOf<Name, MutableSet<KtNamedDeclaration>>()
-    private val constructorParameters = mutableMapOf<Name, MutableMap<String, MutableSet<KtNamedDeclaration>>>()
-
-    private val usedConstructorParameters = mutableMapOf<Name, MutableMap<String, MutableSet<String>>>()
     private val usedClassProperties = mutableMapOf<Name, MutableSet<String>>()
 
+    // Map<ClassName, Map<ConstructorSignature, Set<ConstructorParameter>>>
+    private val constructorParameters = mutableMapOf<Name, MutableMap<String, MutableSet<KtNamedDeclaration>>>()
+    private val usedConstructorParameters = mutableMapOf<Name, MutableMap<String, MutableSet<String>>>()
+
     fun getUnusedReports(): List<CodeSmell> {
-        val unusedProperties = classProperties.flatMap { (classId, properties) ->
+        val propertiesReport = classProperties.flatMap { (classId, properties) ->
             val usedProperties = usedClassProperties[classId].orEmpty()
             properties.filter { classProperty ->
                 classProperty.nameAsSafeName.identifier !in usedProperties
@@ -109,7 +108,7 @@ private class UnusedPrivatePropertyVisitor(
                 )
             }
 
-        val unusedConstructorParameters = constructorParameters.flatMap { (classId, constructors) ->
+        val constructorParametersReport = constructorParameters.flatMap { (classId, constructors) ->
             constructors.flatMap { (constructor, parameters) ->
                 val usedParameters = usedConstructorParameters[classId].orEmpty()[constructor].orEmpty()
                 parameters.filter { constructorParameter ->
@@ -124,13 +123,13 @@ private class UnusedPrivatePropertyVisitor(
                 )
             }
 
-        return unusedProperties + unusedConstructorParameters
+        return propertiesReport + constructorParametersReport
     }
 
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
         super.visitPrimaryConstructor(constructor)
         val containingClass = constructor.containingClass() ?: return
-        val containingClassId = containingClass.identifier()
+        val containingClassId = containingClass.nameAsSafeName
 
         constructor.valueParameters
             .filter {
@@ -140,9 +139,9 @@ private class UnusedPrivatePropertyVisitor(
             }
             .forEach { valueParameter ->
                 if (valueParameter.isPropertyParameter()) {
-                    classProperties.put(containingClassId, valueParameter)
+                    classProperties.addProperty(containingClassId, valueParameter)
                 } else {
-                    constructorParameters.put(containingClassId, constructor.signature(), valueParameter)
+                    constructorParameters.addParameter(containingClassId, constructor.signature(), valueParameter)
                 }
             }
     }
@@ -150,8 +149,8 @@ private class UnusedPrivatePropertyVisitor(
     override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
         super.visitSecondaryConstructor(constructor)
         constructor.valueParameters.forEach { valueParameter ->
-            constructor.containingClass()?.identifier()?.also { classId ->
-                constructorParameters.put(classId, constructor.signature(), valueParameter)
+            constructor.containingClass()?.nameAsSafeName?.also { classId ->
+                constructorParameters.addParameter(classId, constructor.signature(), valueParameter)
             }
         }
     }
@@ -159,8 +158,8 @@ private class UnusedPrivatePropertyVisitor(
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)
         if (property.isPrivate() && property.isMemberOrTopLevel() || property.isLocal) {
-            val classId = property.containingClassOrObject?.identifier() ?: return
-            classProperties.put(classId, parameter = property)
+            val classId = property.containingClassOrObject?.nameAsSafeName ?: return
+            classProperties.addProperty(classId, property = property)
         }
     }
 
@@ -184,7 +183,7 @@ private class UnusedPrivatePropertyVisitor(
         references.forEach { descriptor ->
             val classId = descriptor.containingDeclaration?.let {
                 it as? ClassDescriptorBase ?: (it as? ClassConstructorDescriptor)?.constructedClass
-            }?.identifier() ?: return@forEach
+            }?.name ?: return@forEach
 
             when (descriptor) {
                 is PropertyDescriptor -> usedClassProperties.getOrPut(classId) { mutableSetOf() }
@@ -192,39 +191,32 @@ private class UnusedPrivatePropertyVisitor(
 
                 is ParameterDescriptor -> {
                     val constructor = descriptor.containingDeclaration as ClassConstructorDescriptor
-                    usedConstructorParameters.put(classId, constructor.signature(), descriptor.name.identifier)
+                    usedConstructorParameters.addParameter(classId, constructor.signature(), descriptor.name.identifier)
                 }
             }
         }
     }
 }
 
-fun <T> MutableMap<Name, MutableMap<String, MutableSet<T>>>.put(
-    classId: Name,
-    signature: String,
+fun <T> MutableMap<Name, MutableMap<String, MutableSet<T>>>.addParameter(
+    className: Name,
+    constructorSignature: String,
     parameter: T
-) {
-    getOrPut(classId) { mutableMapOf() }
-        .getOrPut(signature) { mutableSetOf() }
-        .add(parameter)
-}
+) = getOrPut(className) { mutableMapOf() }
+    .getOrPut(constructorSignature) { mutableSetOf() }
+    .add(parameter)
 
-fun <T> MutableMap<Name, MutableSet<T>>.put(
-    classId: Name,
-    parameter: T
-) {
-    getOrPut(classId) { mutableSetOf() }
-        .add(parameter)
-}
+fun <T> MutableMap<Name, MutableSet<T>>.addProperty(
+    className: Name,
+    property: T
+) = getOrPut(className) { mutableSetOf() }
+    .add(property)
 
 private fun KtConstructor<*>.isExpectClassConstructor() = containingClassOrObject?.isExpect() == true
 private fun KtConstructor<*>.isDataOrValueClassConstructor(): Boolean {
     val parent = parent as? KtClass ?: return false
     return parent.isData() || parent.isValue() || parent.isInline()
 }
-
-private fun KtClassOrObject.identifier(): Name = this.nameAsSafeName
-private fun ClassDescriptor.identifier(): Name = this.name
 
 private fun KtProperty.isMemberOrTopLevel() = isMember || isTopLevel
 
