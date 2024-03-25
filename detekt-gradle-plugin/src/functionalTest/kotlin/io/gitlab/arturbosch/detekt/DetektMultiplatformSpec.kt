@@ -362,6 +362,7 @@ private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGrad
                     mavenLocal()
                     mavenCentral()
                     google()
+                    maven("https://oss.sonatype.org/content/repositories/snapshots")
                 }
             }
         """.trimIndent(),

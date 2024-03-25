@@ -38,9 +38,9 @@ class ObjectExtendsThrowableSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `reports object that extends custom exception`() {
         val code = """
-            object ObjectCustomException : CustomException("singleton custom exception")
-            
             open class CustomException(message: String) : RuntimeException(message)
+            
+            object ObjectCustomException : CustomException("singleton custom exception")            
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
@@ -79,6 +79,7 @@ class ObjectExtendsThrowableSpec(val env: KotlinCoreEnvironment) {
     fun `does not report objects that do not extend Throwable`() {
         val code = """
             object BanException
+            open class CustomException(message: String)
             object AuthException : CustomException(message = "Authentication failed!")
             
             sealed class DomainException {
@@ -86,8 +87,6 @@ class ObjectExtendsThrowableSpec(val env: KotlinCoreEnvironment) {
                 object Exception2 : DomainException()
                 object Exception3 : DomainException()
             }
-            
-            open class CustomException(message: String)
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
@@ -117,6 +116,7 @@ class ObjectExtendsThrowableSpec(val env: KotlinCoreEnvironment) {
             data class AuthException(val code: Int) : RuntimeException()
             class ReportedException : Exception()
             class FatalException : Error()
+            open class CustomException(message: String)
             class ObjectCustomException : CustomException("singleton custom exception")
             
             sealed class DomainException : RuntimeException() {
@@ -124,8 +124,6 @@ class ObjectExtendsThrowableSpec(val env: KotlinCoreEnvironment) {
                 class Exception2 : DomainException()
                 class Exception3 : DomainException()
             }
-            
-            open class CustomException(message: String)
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }

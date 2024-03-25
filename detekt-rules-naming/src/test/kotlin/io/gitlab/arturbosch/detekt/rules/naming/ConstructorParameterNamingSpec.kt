@@ -45,9 +45,9 @@ class ConstructorParameterNamingSpec {
     @Test
     fun `should not complain about override`() {
         val code = """
-            class C(override val PARAM: String) : I
-            
             interface I { val PARAM: String }
+
+            class C(override val PARAM: String) : I
         """.trimIndent()
         assertThat(ConstructorParameterNaming(Config.empty).compileAndLint(code)).isEmpty()
     }

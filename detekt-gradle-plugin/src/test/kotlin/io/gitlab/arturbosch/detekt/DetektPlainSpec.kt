@@ -25,6 +25,7 @@ class DetektPlainSpec {
 
                 repositories {
                     mavenCentral()
+                    maven { it.url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
                 }
 
                 configure<DetektExtension> {
@@ -52,6 +53,7 @@ class DetektPlainSpec {
 
                 repositories {
                     mavenCentral()
+                    maven { it.url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
                 }
 
                 tasks.withType(Detekt::class.java).configureEach {

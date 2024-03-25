@@ -277,12 +277,11 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report an abstract class with a function derived from an interface`() {
             val code = """
-                abstract class A : Interface {
-                    fun g() {}
-                }
-                
                 interface Interface {
                     fun f()
+                }
+                abstract class A : Interface {
+                    fun g() {}
                 }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()

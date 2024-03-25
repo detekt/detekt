@@ -28,14 +28,14 @@ class VariableMaxLengthSpec {
     @Test
     fun `should not report an overridden variable name that is too long`() {
         val code = """
-            class C : I {
-                override val tooLongButShouldNotBeReported = "banana"
+            interface I2 {
+                @Suppress("VariableMaxLength") val tooLongButShouldNotBeReported: String
             }
             interface I : I2 {
                 override val tooLongButShouldNotBeReported: String
             }
-            interface I2 {
-                @Suppress("VariableMaxLength") val tooLongButShouldNotBeReported: String
+            class C : I {
+                override val tooLongButShouldNotBeReported = "banana"
             }
         """.trimIndent()
         assertThat(

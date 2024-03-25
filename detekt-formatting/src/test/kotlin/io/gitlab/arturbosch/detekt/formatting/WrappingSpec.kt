@@ -19,19 +19,18 @@ class WrappingSpec {
     @Test
     fun `Given a wrong wrapping in the class definition`() {
         val code = """
-            class A() : B,
-                C {
-            }
-            
             interface B
             
             interface C
             
+            class A() : B,
+                C {
+            }
         """.trimIndent()
 
         assertThat(subject.compileAndLint(code))
             .hasSize(1)
-            .hasStartSourceLocation(1, 12)
-            .hasTextLocations(11 to 12)
+            .hasStartSourceLocation(5, 12)
+            .hasTextLocations(37 to 38)
     }
 }

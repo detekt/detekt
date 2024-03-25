@@ -11,10 +11,20 @@ abstract class DslTestBuilder {
     abstract val gradleSubprojectsApplyPlugins: String
 
     @Language("gradle.kts")
-    val gradleRepositories = """
+    val gradleRepositoriesKotlin = """
         repositories {
             mavenLocal()
             mavenCentral()
+            maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
+        }
+    """.trimIndent()
+
+    @Language("groovy")
+    val gradleRepositoriesGroovy = """
+        repositories {
+            mavenLocal()
+            mavenCentral()
+            maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
         }
     """.trimIndent()
 
@@ -102,7 +112,7 @@ private class GroovyBuilder : DslTestBuilder() {
     """.trimIndent()
 
     @Language("gradle")
-    override val gradleBuildConfig: String = joinGradleBlocks(gradlePlugins, gradleRepositories, dependencies)
+    override val gradleBuildConfig: String = joinGradleBlocks(gradlePlugins, gradleRepositoriesGroovy, dependencies)
 
     @Language("gradle")
     override val gradleSubprojectsApplyPlugins = """
@@ -131,7 +141,7 @@ private class KotlinBuilder : DslTestBuilder() {
     """.trimIndent()
 
     @Language("gradle.kts")
-    override val gradleBuildConfig: String = joinGradleBlocks(gradlePlugins, gradleRepositories, dependencies)
+    override val gradleBuildConfig: String = joinGradleBlocks(gradlePlugins, gradleRepositoriesKotlin, dependencies)
 
     @Language("gradle.kts")
     override val gradleSubprojectsApplyPlugins = """

@@ -11,7 +11,7 @@ fun KotlinCoreEnvironment.getContextForPaths(paths: List<KtFile>): BindingContex
     TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
         this.project,
         paths,
-        NoScopeRecordCliBindingTrace(),
+        NoScopeRecordCliBindingTrace(this.project),
         this.configuration,
         this::createPackagePartProvider,
         ::FileBasedDeclarationProviderFactory

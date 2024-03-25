@@ -27,10 +27,10 @@ class FunctionParameterNamingSpec {
         @Test
         fun `should not detect violations in overridden function`() {
             val code = """
+                interface I { fun someStuff(@Suppress("FunctionParameterNaming") `object`: String) }
                 class C : I {
                     override fun someStuff(`object`: String) {}
                 }
-                interface I { fun someStuff(@Suppress("FunctionParameterNaming") `object`: String) }
             """.trimIndent()
             assertThat(FunctionParameterNaming(Config.empty).compileAndLint(code)).isEmpty()
         }

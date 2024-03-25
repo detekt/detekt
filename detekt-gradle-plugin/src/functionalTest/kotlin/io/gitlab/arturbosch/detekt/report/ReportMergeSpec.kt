@@ -40,7 +40,7 @@ class ReportMergeSpec {
             }
             
             allprojects {
-                ${builder.gradleRepositories.reIndent(1)}
+                ${builder.gradleRepositoriesKotlin.reIndent(1)}
             }
             
             val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
@@ -151,6 +151,7 @@ class ReportMergeSpec {
                     mavenLocal()
                     mavenCentral()
                     google()
+                    maven("https://oss.sonatype.org/content/repositories/snapshots")
                 }
             }
             
