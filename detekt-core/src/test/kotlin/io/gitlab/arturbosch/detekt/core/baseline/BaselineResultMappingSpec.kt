@@ -6,7 +6,7 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.test.createEntity
-import io.gitlab.arturbosch.detekt.test.createFinding
+import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createRuleInfo
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
@@ -22,8 +22,8 @@ class BaselineResultMappingSpec {
     private val dir = createTempDirectoryForTest("baseline_format")
     private val baselineFile = dir.resolve("baseline.xml")
     private val existingBaselineFile = resourceAsPath("/baseline_feature/valid-baseline.xml")
-    private val findings = listOf(
-        createFinding(
+    private val issues = listOf(
+        createIssue(
             ruleInfo = createRuleInfo("SomeIssueId", "RuleSet"),
             entity = createEntity(signature = "SomeSignature"),
         )
@@ -35,13 +35,13 @@ class BaselineResultMappingSpec {
     }
 
     @Test
-    fun `should not create a new baseline file when no findings occurred`() {
+    fun `should not create a new baseline file when no issues occurred`() {
         val mapping = resultMapping(
             baselineFile = baselineFile,
             createBaseline = true,
         )
 
-        mapping.transformFindings(emptyList())
+        mapping.transformIssues(emptyList())
 
         assertThat(baselineFile).doesNotExist()
     }
@@ -54,7 +54,7 @@ class BaselineResultMappingSpec {
             createBaseline = false,
         )
 
-        mapping.transformFindings(findings)
+        mapping.transformIssues(issues)
 
         val changed = DefaultBaseline.load(existingBaselineFile)
         assertThat(existing).isEqualTo(changed)
@@ -68,7 +68,7 @@ class BaselineResultMappingSpec {
             createBaseline = null,
         )
 
-        mapping.transformFindings(findings)
+        mapping.transformIssues(issues)
 
         val changed = DefaultBaseline.load(existingBaselineFile)
         assertThat(existing).isEqualTo(changed)
@@ -81,7 +81,7 @@ class BaselineResultMappingSpec {
             createBaseline = false,
         )
 
-        mapping.transformFindings(findings)
+        mapping.transformIssues(issues)
 
         assertThat(baselineFile).doesNotExist()
     }
@@ -93,7 +93,7 @@ class BaselineResultMappingSpec {
             createBaseline = true,
         )
 
-        mapping.transformFindings(findings)
+        mapping.transformIssues(issues)
 
         assertThat(baselineFile).exists()
     }
@@ -107,7 +107,7 @@ class BaselineResultMappingSpec {
             createBaseline = true,
         )
 
-        mapping.transformFindings(findings)
+        mapping.transformIssues(issues)
 
         val changed = DefaultBaseline.load(baselineFile)
         assertThat(existing).isNotEqualTo(changed)

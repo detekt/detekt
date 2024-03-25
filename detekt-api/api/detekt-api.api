@@ -107,7 +107,7 @@ public class io/gitlab/arturbosch/detekt/api/DetektVisitor : org/jetbrains/kotli
 public abstract interface class io/gitlab/arturbosch/detekt/api/Detektion : org/jetbrains/kotlin/com/intellij/openapi/util/UserDataHolder {
 	public abstract fun add (Lio/gitlab/arturbosch/detekt/api/Notification;)V
 	public abstract fun add (Lio/gitlab/arturbosch/detekt/api/ProjectMetric;)V
-	public abstract fun getFindings ()Ljava/util/List;
+	public abstract fun getIssues ()Ljava/util/List;
 	public abstract fun getMetrics ()Ljava/util/Collection;
 	public abstract fun getNotifications ()Ljava/util/Collection;
 }
@@ -169,21 +169,21 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Finding {
 	public abstract fun getReferences ()Ljava/util/List;
 }
 
-public abstract interface class io/gitlab/arturbosch/detekt/api/Finding2 {
+public abstract interface class io/gitlab/arturbosch/detekt/api/Issue {
 	public abstract fun getAutoCorrectEnabled ()Z
 	public abstract fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
 	public abstract fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
 	public abstract fun getMessage ()Ljava/lang/String;
 	public abstract fun getReferences ()Ljava/util/List;
-	public abstract fun getRuleInfo ()Lio/gitlab/arturbosch/detekt/api/Finding2$RuleInfo;
+	public abstract fun getRuleInfo ()Lio/gitlab/arturbosch/detekt/api/Issue$RuleInfo;
 	public abstract fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
 }
 
-public final class io/gitlab/arturbosch/detekt/api/Finding2$DefaultImpls {
-	public static fun getLocation (Lio/gitlab/arturbosch/detekt/api/Finding2;)Lio/gitlab/arturbosch/detekt/api/Location;
+public final class io/gitlab/arturbosch/detekt/api/Issue$DefaultImpls {
+	public static fun getLocation (Lio/gitlab/arturbosch/detekt/api/Issue;)Lio/gitlab/arturbosch/detekt/api/Location;
 }
 
-public abstract interface class io/gitlab/arturbosch/detekt/api/Finding2$RuleInfo {
+public abstract interface class io/gitlab/arturbosch/detekt/api/Issue$RuleInfo {
 	public abstract fun getDescription ()Ljava/lang/String;
 	public abstract fun getId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
 	public abstract fun getRuleSetId ()Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
@@ -254,7 +254,7 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/PropertiesAware 
 public abstract interface class io/gitlab/arturbosch/detekt/api/ReportingExtension : io/gitlab/arturbosch/detekt/api/Extension {
 	public abstract fun onFinalResult (Lio/gitlab/arturbosch/detekt/api/Detektion;)V
 	public abstract fun onRawResult (Lio/gitlab/arturbosch/detekt/api/Detektion;)V
-	public abstract fun transformFindings (Ljava/util/List;)Ljava/util/List;
+	public abstract fun transformIssues (Ljava/util/List;)Ljava/util/List;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/ReportingExtension$DefaultImpls {
@@ -263,7 +263,7 @@ public final class io/gitlab/arturbosch/detekt/api/ReportingExtension$DefaultImp
 	public static fun init (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
 	public static fun onFinalResult (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Lio/gitlab/arturbosch/detekt/api/Detektion;)V
 	public static fun onRawResult (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Lio/gitlab/arturbosch/detekt/api/Detektion;)V
-	public static fun transformFindings (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Ljava/util/List;)Ljava/util/List;
+	public static fun transformIssues (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Ljava/util/List;)Ljava/util/List;
 }
 
 public abstract interface annotation class io/gitlab/arturbosch/detekt/api/RequiresTypeResolution : java/lang/annotation/Annotation {
