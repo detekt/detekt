@@ -3,8 +3,8 @@ package io.github.detekt.report.xml
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.TestDetektion
-import io.gitlab.arturbosch.detekt.test.createFinding
-import io.gitlab.arturbosch.detekt.test.createFindingForRelativePath
+import io.gitlab.arturbosch.detekt.test.createIssue
+import io.gitlab.arturbosch.detekt.test.createIssueForRelativePath
 import io.gitlab.arturbosch.detekt.test.createLocation
 import io.gitlab.arturbosch.detekt.test.createRuleInfo
 import org.assertj.core.api.Assertions.assertThat
@@ -51,7 +51,7 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders one reported issue in single file`() {
-        val smell = createFinding("id_a", entity1, "TestMessage")
+        val smell = createIssue("id_a", entity1, "TestMessage")
 
         val result = outputFormat.render(TestDetektion(smell))
 
@@ -69,8 +69,8 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders two reported issues in single file`() {
-        val smell1 = createFinding("id_a", entity1, "TestMessage")
-        val smell2 = createFinding("id_b", entity1, "TestMessage")
+        val smell1 = createIssue("id_a", entity1, "TestMessage")
+        val smell2 = createIssue("id_b", entity1, "TestMessage")
 
         val result = outputFormat.render(TestDetektion(smell1, smell2))
 
@@ -89,8 +89,8 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders one reported issue across multiple files`() {
-        val smell1 = createFinding("id_a", entity1, "TestMessage")
-        val smell2 = createFinding("id_a", entity2, "TestMessage")
+        val smell1 = createIssue("id_a", entity1, "TestMessage")
+        val smell2 = createIssue("id_a", entity2, "TestMessage")
 
         val result = outputFormat.render(TestDetektion(smell1, smell2))
 
@@ -111,18 +111,18 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders issues with relative path`() {
-        val findingA = createFindingForRelativePath(
+        val issueA = createIssueForRelativePath(
             ruleInfo = createRuleInfo("id_a"),
             basePath = "/Users/tester/detekt/",
             relativePath = "Sample1.kt"
         )
-        val findingB = createFindingForRelativePath(
+        val issueB = createIssueForRelativePath(
             ruleInfo = createRuleInfo("id_b"),
             basePath = "/Users/tester/detekt/",
             relativePath = "Sample2.kt"
         )
 
-        val result = outputFormat.render(TestDetektion(findingA, findingB))
+        val result = outputFormat.render(TestDetektion(issueA, issueB))
 
         assertThat(result).isEqualTo(
             """
@@ -141,10 +141,10 @@ class XmlOutputFormatSpec {
 
     @Test
     fun `renders two reported issues across multiple files`() {
-        val smell1 = createFinding("id_a", entity1, "TestMessage")
-        val smell2 = createFinding("id_b", entity1, "TestMessage")
-        val smell3 = createFinding("id_a", entity2, "TestMessage")
-        val smell4 = createFinding("id_b", entity2, "TestMessage")
+        val smell1 = createIssue("id_a", entity1, "TestMessage")
+        val smell2 = createIssue("id_b", entity1, "TestMessage")
+        val smell3 = createIssue("id_a", entity2, "TestMessage")
+        val smell4 = createIssue("id_b", entity2, "TestMessage")
 
         val result = outputFormat.render(
             TestDetektion(
@@ -179,7 +179,7 @@ class XmlOutputFormatSpec {
         @EnumSource(Severity::class)
         fun `renders detektion with severity as XML with severity`(severity: Severity) {
             val xmlSeverity = severity.name.lowercase(Locale.US)
-            val finding = createFinding(
+            val issue = createIssue(
                 ruleName = "issue_id",
                 entity = entity1,
                 message = "message",
@@ -190,12 +190,12 @@ class XmlOutputFormatSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="src/main/com/sample/Sample1.kt">
-                $TAB<error line="${finding.location.source.line}" column="${finding.location.source.column}" severity="$xmlSeverity" message="${finding.message}" source="detekt.${finding.ruleInfo.id}" />
+                $TAB<error line="${issue.location.source.line}" column="${issue.location.source.column}" severity="$xmlSeverity" message="${issue.message}" source="detekt.${issue.ruleInfo.id}" />
                 </file>
                 </checkstyle>
             """.trimIndent()
 
-            val actual = outputFormat.render(TestDetektion(finding))
+            val actual = outputFormat.render(TestDetektion(issue))
 
             assertThat(actual).isEqualTo(expected)
         }

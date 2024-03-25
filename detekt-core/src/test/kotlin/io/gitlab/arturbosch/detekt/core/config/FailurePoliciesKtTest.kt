@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.TestDetektion
-import io.gitlab.arturbosch.detekt.test.createFinding
+import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -22,7 +22,7 @@ class FailurePoliciesKtTest {
         val subject = RulesSpec.FailurePolicy.NeverFail
 
         @Test
-        fun `does not fail without a finding`() {
+        fun `does not fail without an issue`() {
             val result = TestDetektion()
 
             subject.check(result, Config.empty)
@@ -30,8 +30,8 @@ class FailurePoliciesKtTest {
 
         @ParameterizedTest
         @EnumSource(value = Severity::class)
-        fun `does not fail on finding with any severity`(issueSeverity: Severity) {
-            val result = TestDetektion(createFinding(severity = issueSeverity))
+        fun `does not fail on issue with any severity`(issueSeverity: Severity) {
+            val result = TestDetektion(createIssue(severity = issueSeverity))
 
             subject.check(result, Config.empty)
         }
@@ -42,7 +42,7 @@ class FailurePoliciesKtTest {
         val subject = RulesSpec.FailurePolicy.FailOnSeverity(Severity.Warning)
 
         @Test
-        fun `does not fail without a finding`() {
+        fun `does not fail without an issue`() {
             val result = TestDetektion()
 
             subject.check(result, Config.empty)
@@ -50,8 +50,8 @@ class FailurePoliciesKtTest {
 
         @ParameterizedTest
         @EnumSource(value = Severity::class, names = ["Info"], mode = EXCLUDE)
-        fun `fails on at least one finding at or above threshold`(issueSeverity: Severity) {
-            val result = TestDetektion(createFinding(severity = issueSeverity))
+        fun `fails on at least one issue at or above threshold`(issueSeverity: Severity) {
+            val result = TestDetektion(createIssue(severity = issueSeverity))
 
             assertThatThrownBy { subject.check(result, Config.empty) }
                 .isInstanceOf(IssuesFound::class.java)
@@ -59,15 +59,15 @@ class FailurePoliciesKtTest {
 
         @ParameterizedTest
         @EnumSource(value = Severity::class, names = ["Info"], mode = INCLUDE)
-        fun `does not fail on finding below threshold`(issueSeverity: Severity) {
-            val result = TestDetektion(createFinding(severity = issueSeverity))
+        fun `does not fail on issue below threshold`(issueSeverity: Severity) {
+            val result = TestDetektion(createIssue(severity = issueSeverity))
 
             subject.check(result, Config.empty)
         }
 
         @Test
-        fun `does not fail on correctable finding if configured`() {
-            val result = TestDetektion(createFinding(severity = Severity.Error, autoCorrectEnabled = true))
+        fun `does not fail on correctable issue if configured`() {
+            val result = TestDetektion(createIssue(severity = Severity.Error, autoCorrectEnabled = true))
             val config = TestConfig("excludeCorrectable" to "true")
 
             subject.check(result, config)

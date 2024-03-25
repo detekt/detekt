@@ -1,7 +1,7 @@
 package io.github.detekt.report.xml
 
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import java.util.Locale
@@ -16,7 +16,7 @@ class XmlOutputReport : BuiltInOutputReport, OutputReport() {
     override val id: String = "XmlOutputReport"
     override val ending = "xml"
 
-    private val Finding2.severityLabel: String
+    private val Issue.severityLabel: String
         get() = severity.name.lowercase(Locale.US)
 
     override fun render(detektion: Detektion): String {
@@ -24,11 +24,11 @@ class XmlOutputReport : BuiltInOutputReport, OutputReport() {
         lines += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
         lines += "<checkstyle version=\"4.3\">"
 
-        detektion.findings
+        detektion.issues
             .groupBy { it.location.filePath.relativePath ?: it.location.filePath.absolutePath }
-            .forEach { (filePath, findings) ->
+            .forEach { (filePath, issues) ->
                 lines += "<file name=\"${filePath.invariantSeparatorsPathString.toXmlString()}\">"
-                findings.forEach {
+                issues.forEach {
                     lines += arrayOf(
                         "\t<error line=\"${it.location.source.line.toXmlString()}\"",
                         "column=\"${it.location.source.column.toXmlString()}\"",

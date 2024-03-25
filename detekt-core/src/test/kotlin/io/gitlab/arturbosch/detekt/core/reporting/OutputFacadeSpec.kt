@@ -10,7 +10,7 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings
-import io.gitlab.arturbosch.detekt.test.createFinding
+import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createRuleInfo
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -22,7 +22,7 @@ class OutputFacadeSpec {
     fun `Running the output facade with multiple reports`() {
         val printStream = StringPrintStream()
         val inputPath: Path = resourceAsPath("/cases")
-        val defaultResult = DetektResult(listOf(createFinding(createRuleInfo(ruleSetId = "Key"))))
+        val defaultResult = DetektResult(listOf(createIssue(createRuleInfo(ruleSetId = "Key"))))
         val plainOutputPath = createTempFileForTest("detekt", ".txt")
         val htmlOutputPath = createTempFileForTest("detekt", ".html")
         val xmlOutputPath = createTempFileForTest("detekt", ".xml")

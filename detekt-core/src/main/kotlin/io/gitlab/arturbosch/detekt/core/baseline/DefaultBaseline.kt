@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.core.baseline
 import io.github.detekt.tooling.api.Baseline
 import io.github.detekt.tooling.api.FindingId
 import io.github.detekt.tooling.api.FindingsIdList
-import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import java.nio.file.Path
 import kotlin.io.path.exists
 import kotlin.io.path.isRegularFile
@@ -34,5 +34,5 @@ internal const val MANUALLY_SUPPRESSED_ISSUES = "ManuallySuppressedIssues"
 internal const val CURRENT_ISSUES = "CurrentIssues"
 internal const val ID = "ID"
 
-internal val Finding2.baselineId: String
+internal val Issue.baselineId: String
     get() = "${ruleInfo.id}:${this.entity.signature}"
