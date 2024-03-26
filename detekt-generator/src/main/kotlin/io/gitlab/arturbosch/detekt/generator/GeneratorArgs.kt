@@ -14,7 +14,7 @@ class GeneratorArgs {
         required = true,
         description = "Input paths to analyze."
     )
-    private var input: String? = null
+    private var input: String = ""
 
     @Parameter(
         names = ["--documentation", "-d"],
@@ -55,7 +55,7 @@ class GeneratorArgs {
     var textReplacements: Map<String, String> = mutableMapOf()
 
     val inputPath: List<Path> by lazy {
-        checkNotNull(input) { "Input parameter was not initialized by jcommander!" }
+        input
             .splitToSequence(",", ";")
             .map(String::trim)
             .filter { it.isNotEmpty() }
