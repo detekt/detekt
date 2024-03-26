@@ -24,11 +24,10 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                     }
                 """.trimIndent()
                 val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).hasSize(1)
-                assertThat(findings).hasStartSourceLocation(2, 9)
-                assertThat(findings[0]).hasMessage(
+                assertThat(findings).singleElement().hasMessage(
                     "This 'x == null || x.isEmpty()' can be replaced with 'isNullOrEmpty()' call"
                 )
+                assertThat(findings).hasStartSourceLocation(2, 9)
             }
 
             @Test

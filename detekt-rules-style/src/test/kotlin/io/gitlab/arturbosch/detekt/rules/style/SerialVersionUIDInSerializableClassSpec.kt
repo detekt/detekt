@@ -18,15 +18,14 @@ class SerialVersionUIDInSerializableClassSpec {
             class C : Serializable
         """.trimIndent()
         val findings = subject.compileAndLint(code)
-        assertThat(findings)
-            .hasSize(1)
-            .hasStartSourceLocation(3, 7)
-            .hasEndSourceLocation(3, 8)
-        assertThat(findings[0])
+        assertThat(findings).singleElement()
             .hasMessage(
                 "The class C implements the `Serializable` interface and should thus define " +
                     "a `serialVersionUID`."
             )
+        assertThat(findings)
+            .hasStartSourceLocation(3, 7)
+            .hasEndSourceLocation(3, 8)
     }
 
     @Test
@@ -41,13 +40,10 @@ class SerialVersionUIDInSerializableClassSpec {
             }
         """.trimIndent()
         val findings = subject.compileAndLint(code)
+        assertThat(findings).singleElement().hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
         assertThat(findings)
-            .hasSize(1)
             .hasStartSourceLocation(5, 27)
             .hasEndSourceLocation(5, 43)
-        assertThat(findings[0]).hasMessage(
-            WRONG_SERIAL_VERSION_UID_MESSAGE
-        )
     }
 
     @Test
@@ -62,12 +58,10 @@ class SerialVersionUIDInSerializableClassSpec {
             }
         """.trimIndent()
         val findings = subject.compileAndLint(code)
+        assertThat(findings).singleElement().hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
         assertThat(findings)
-            .hasSize(1)
             .hasStartSourceLocation(5, 27)
             .hasEndSourceLocation(5, 43)
-
-        assertThat(findings[0]).hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
     }
 
     @Test
@@ -82,12 +76,10 @@ class SerialVersionUIDInSerializableClassSpec {
             }
         """.trimIndent()
         val findings = subject.compileAndLint(code)
+        assertThat(findings).singleElement().hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
         assertThat(findings)
-            .hasSize(1)
             .hasStartSourceLocation(5, 19)
             .hasEndSourceLocation(5, 35)
-
-        assertThat(findings[0]).hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
     }
 
     @Test

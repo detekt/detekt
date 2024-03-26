@@ -38,7 +38,7 @@ class PropertiesAwareSpec {
 
     @Test
     fun `returns null on absent values`() {
-        assertThat(store.getOrNull<Boolean>("absent")).isEqualTo(null)
+        assertThat(store.getOrNull<Boolean>("absent")).isNull()
     }
 
     @Test

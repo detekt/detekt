@@ -20,12 +20,11 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(2, 17)
-        assertThat(findings[0]).hasMessage(
+        assertThat(findings).singleElement().hasMessage(
             "Use separate `null` assertion and type cast like " +
                 "('(bar ?: error(\"null assertion message\")) as String') instead of 'bar as String'."
         )
+        assertThat(findings).hasStartSourceLocation(2, 17)
     }
 
     @Test
@@ -40,12 +39,11 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(2, 11)
-        assertThat(findings[0]).hasMessage(
+        assertThat(findings).singleElement().hasMessage(
             "Use separate `null` assertion and type cast like " +
                 "('(bar() ?: error(\"null assertion message\")) as Int') instead of 'bar() as Int'."
         )
+        assertThat(findings).hasStartSourceLocation(2, 11)
     }
 
     @Test
@@ -205,8 +203,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0]).hasMessage(
+        assertThat(findings).singleElement().hasMessage(
             "Use separate `null` assertion and type cast like " +
                 "('(array[0] ?: error(\"null assertion message\")) as T') instead of 'array[0] as T'."
         )

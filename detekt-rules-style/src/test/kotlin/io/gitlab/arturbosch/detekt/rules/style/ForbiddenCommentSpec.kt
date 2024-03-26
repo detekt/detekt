@@ -31,8 +31,8 @@ class ForbiddenCommentSpec {
         @DisplayName("should report TODO: usages")
         fun reportTodoColon() {
             val findings = ForbiddenComment(Config.empty).compileAndLint("// TODO: I need to fix this.")
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0]).hasMessage("Forbidden TODO todo marker in comment, please do the changes.")
+            assertThat(findings).singleElement()
+                .hasMessage("Forbidden TODO todo marker in comment, please do the changes.")
         }
 
         @Test
@@ -58,8 +58,7 @@ class ForbiddenCommentSpec {
         @DisplayName("should report STOPSHIP: usages")
         fun reportStopShipColon() {
             val findings = ForbiddenComment(Config.empty).compileAndLint("// STOPSHIP: I need to fix this.")
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0]).hasMessage(
+            assertThat(findings).singleElement().hasMessage(
                 "Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code."
             )
         }
@@ -293,7 +292,7 @@ class ForbiddenCommentSpec {
             val comment = "// STOPSHIP to express in the preview that it's not a normal TextView."
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
-            assertThat(findings[0])
+            assertThat(findings).singleElement()
                 .hasMessage(
                     String.format(
                         Locale.ROOT,
@@ -308,7 +307,7 @@ class ForbiddenCommentSpec {
             val comment = "// REVIEW foo -> flag"
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
-            assertThat(findings[0])
+            assertThat(findings).singleElement()
                 .hasMessage(
                     String.format(
                         Locale.ROOT,
@@ -323,7 +322,7 @@ class ForbiddenCommentSpec {
             val comment = "//REVIEW foo -> flag"
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
-            assertThat(findings[0])
+            assertThat(findings).singleElement()
                 .hasMessage(
                     String.format(
                         Locale.ROOT,

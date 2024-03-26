@@ -161,7 +161,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         with(map) { get("a") }
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
 
@@ -220,7 +220,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = with(list) { get(0) }
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
 

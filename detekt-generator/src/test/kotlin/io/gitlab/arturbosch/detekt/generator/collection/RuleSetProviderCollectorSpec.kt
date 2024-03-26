@@ -130,8 +130,7 @@ class RuleSetProviderCollectorSpec {
         fun `has one rule`() {
             val items = subject.run(code)
             val provider = items[0]
-            assertThat(provider.rules).hasSize(1)
-            assertThat(provider.rules[0]).isEqualTo(ruleName)
+            assertThat(provider.rules).singleElement().isEqualTo(ruleName)
         }
 
         @Test

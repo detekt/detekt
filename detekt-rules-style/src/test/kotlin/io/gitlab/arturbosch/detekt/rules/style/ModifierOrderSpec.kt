@@ -19,16 +19,13 @@ class ModifierOrderSpec {
         @Test
         fun `should report incorrectly ordered modifiers`() {
             subject.compileAndLint(bad1).let {
-                assertThat(it).hasSize(1)
-                assertThat(it[0]).hasMessage("Modifier order should be: internal data")
+                assertThat(it).singleElement().hasMessage("Modifier order should be: internal data")
             }
             subject.lint(bad2).let {
-                assertThat(it).hasSize(1)
-                assertThat(it[0]).hasMessage("Modifier order should be: private actual")
+                assertThat(it).singleElement().hasMessage("Modifier order should be: private actual")
             }
             subject.lint(bad3).let {
-                assertThat(it).hasSize(1)
-                assertThat(it[0]).hasMessage("Modifier order should be: expect annotation")
+                assertThat(it).singleElement().hasMessage("Modifier order should be: expect annotation")
             }
         }
 
