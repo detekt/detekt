@@ -7,7 +7,6 @@ import com.beust.jcommander.ParameterException
 import com.beust.jcommander.converters.IParameterSplitter
 import com.beust.jcommander.converters.PathConverter
 import java.nio.file.Path
-import kotlin.io.path.Path
 import kotlin.io.path.exists
 import kotlin.io.path.isDirectory
 
@@ -25,21 +24,19 @@ class GeneratorArgs {
 
     @Parameter(
         names = ["--documentation", "-d"],
-        required = true,
         converter = PathConverter::class,
         validateValueWith = [DirectoryValidator::class],
         description = "Output path for generated documentation."
     )
-    var documentationPath: Path = Path("")
+    var documentationPath: Path? = null
 
     @Parameter(
         names = ["--config", "-c"],
-        required = true,
         converter = PathConverter::class,
         validateValueWith = [DirectoryValidator::class],
         description = "Output path for generated detekt config."
     )
-    var configPath: Path = Path("")
+    var configPath: Path? = null
 
     @Parameter(
         names = ["--help", "-h"],
