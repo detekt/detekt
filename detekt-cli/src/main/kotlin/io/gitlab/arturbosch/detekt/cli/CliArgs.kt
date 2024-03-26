@@ -88,7 +88,7 @@ class CliArgs {
             "These can also be used in combination with each other " +
             "e.g. '-r txt:reports/detekt.txt -r xml:reports/detekt.xml'"
     )
-    private var reports: List<String>? = null
+    private var reports: List<String> = emptyList()
 
     @Parameter(
         names = ["--fail-on-severity"],
@@ -202,7 +202,7 @@ class CliArgs {
     }
 
     val reportPaths: List<ReportPath> by lazy {
-        reports?.map { ReportPath.from(it) }.orEmpty()
+        reports.map { ReportPath.from(it) }
     }
 
     val failurePolicy: RulesSpec.FailurePolicy
