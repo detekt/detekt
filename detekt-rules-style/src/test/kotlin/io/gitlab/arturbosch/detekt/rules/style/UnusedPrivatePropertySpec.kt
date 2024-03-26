@@ -575,6 +575,51 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
 
     @Nested
     inner class `properties in primary constructors` {
+
+        @Test
+        fun `reports unused vararg parameter`() {
+            val code = """
+               class Test(vararg unused: Any)
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(1)
+        }
+
+        @Test
+        fun `not reports used vararg parameter`() {
+            val code = """
+                open class Parent(private vararg val unused: Any)
+                class Child(private vararg val used: Any) : Parent(used)
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(1)
+        }
+
+        @Test
+        fun `not reports ignored vararg parameter`() {
+            val code = """
+                open class Super(private vararg val ignored: Any)
+                class Foo(private vararg val used: Any) : Super(used)
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .isEmpty()
+        }
+
+        @Test
+        fun `reports destructuring vararg parameters`() {
+            val code = """
+            class TestConfig(val foo: String, vararg pairs: Pair<String, Any>) : Config {
+                val values: Map<String, Any> = mapOf(*pairs)
+            }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(0)
+        }
+
         @Test
         fun `reports unused private property`() {
             val code = """
@@ -697,6 +742,18 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 class Test(used: Any) {
                     val usedString = used.toString()
                 }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `reports parameter used for delegation`() {
+            val code = """
+                interface Detektion
+                class DelegatingResult(
+                    result: Detektion,
+                    val findings: Map<Any,Any>
+                ) : Detektion by result
             """.trimIndent()
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
