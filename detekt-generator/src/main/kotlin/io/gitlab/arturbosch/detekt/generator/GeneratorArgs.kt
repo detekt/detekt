@@ -17,17 +17,17 @@ class GeneratorArgs {
 
     @Parameter(
         names = ["--documentation", "-d"],
-        required = false,
+        required = true,
         description = "Output path for generated documentation."
     )
-    private var documentation: String? = null
+    private var documentation: String = ""
 
     @Parameter(
         names = ["--config", "-c"],
-        required = false,
+        required = true,
         description = "Output path for generated detekt config."
     )
-    private var config: String? = null
+    private var config: String = ""
 
     @Parameter(
         names = ["--help", "-h"],
@@ -63,12 +63,8 @@ class GeneratorArgs {
             .toList()
     }
     val documentationPath: Path
-        get() = Path(
-            checkNotNull(documentation) {
-                "Documentation output path was not initialized by jcommander!"
-            }
-        )
+        get() = Path(documentation)
 
     val configPath: Path
-        get() = Path(checkNotNull(config) { "Configuration output path was not initialized by jcommander!" })
+        get() = Path(config)
 }
