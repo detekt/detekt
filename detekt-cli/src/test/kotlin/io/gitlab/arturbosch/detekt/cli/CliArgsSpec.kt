@@ -53,7 +53,7 @@ internal class CliArgsSpec {
             val pathToNonExistentDirectory = projectPath.resolve("nonExistent")
             val params = arrayOf("--input", "$pathToNonExistentDirectory")
 
-            assertThatExceptionOfType(ParameterException::class.java)
+            assertThatExceptionOfType(HandledArgumentViolation::class.java)
                 .isThrownBy { parseArguments(params).inputPaths }
                 .withMessageContaining("does not exist")
         }
@@ -64,11 +64,9 @@ internal class CliArgsSpec {
 
         @Test
         fun `should fail on invalid config value`() {
-            assertThatIllegalArgumentException()
-                .isThrownBy { parseArguments(arrayOf("--config", ",")).toSpec() }
-            assertThatExceptionOfType(ParameterException::class.java)
+            assertThatExceptionOfType(HandledArgumentViolation::class.java)
                 .isThrownBy { parseArguments(arrayOf("--config", "sfsjfsdkfsd")).toSpec() }
-            assertThatExceptionOfType(ParameterException::class.java)
+            assertThatExceptionOfType(HandledArgumentViolation::class.java)
                 .isThrownBy { parseArguments(arrayOf("--config", "./i.do.not.exist.yml")).toSpec() }
         }
     }

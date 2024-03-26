@@ -7,6 +7,7 @@ import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.NeverFail
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
+import java.net.URL
 import java.nio.file.Path
 import kotlin.io.path.Path
 
@@ -14,10 +15,13 @@ class CliArgs {
 
     @Parameter(
         names = ["--input", "-i"],
+        converter = PathConverter::class,
+        splitter = PathSplitter::class,
+        validateValueWith = [PathValidator::class],
         description = "Input paths to analyze. Multiple paths are separated by comma. If not specified the " +
             "current working directory is used."
     )
-    var input: String? = null
+    var inputPaths: List<Path> = listOf(Path(System.getProperty("user.dir")))
 
     @Parameter(
         names = ["--includes", "-in"],
@@ -34,16 +38,21 @@ class CliArgs {
 
     @Parameter(
         names = ["--config", "-c"],
+        converter = PathConverter::class,
+        splitter = PathSplitter::class,
+        validateValueWith = [PathValidator::class],
         description = "Path to the config file (path/to/config.yml). " +
             "Multiple configuration files can be specified with ',' or ';' as separator."
     )
-    var config: String? = null
+    var config: List<Path> = emptyList()
 
     @Parameter(
         names = ["--config-resource", "-cr"],
+        converter = ClasspathResourceConverter::class,
+        splitter = PathSplitter::class,
         description = "Path to the config resource on detekt's classpath (path/to/config.yml)."
     )
-    var configResource: String? = null
+    var configResource: List<URL> = emptyList()
 
     @Parameter(
         names = ["--generate-config", "-gc"],
@@ -54,9 +63,12 @@ class CliArgs {
 
     @Parameter(
         names = ["--plugins", "-p"],
+        converter = PathConverter::class,
+        splitter = PathSplitter::class,
+        validateValueWith = [PathValidator::class],
         description = "Extra paths to plugin jars separated by ',' or ';'."
     )
-    var plugins: String? = null
+    var plugins: List<Path> = emptyList()
 
     @Parameter(
         names = ["--parallel"],
@@ -196,10 +208,6 @@ class CliArgs {
         description = "Prints the detekt CLI version."
     )
     var showVersion: Boolean = false
-
-    val inputPaths: List<Path> by lazy {
-        MultipleExistingPathConverter().convert(input ?: System.getProperty("user.dir"))
-    }
 
     val reportPaths: List<ReportPath> by lazy {
         reports.map { ReportPath.from(it) }
