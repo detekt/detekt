@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.cli
 
-import com.beust.jcommander.ParameterException
 import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.NeverFail
@@ -8,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
