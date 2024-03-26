@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.generator
 
 import com.beust.jcommander.DynamicParameter
 import com.beust.jcommander.Parameter
+import com.beust.jcommander.converters.PathConverter
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.exists
@@ -18,16 +19,18 @@ class GeneratorArgs {
     @Parameter(
         names = ["--documentation", "-d"],
         required = true,
+        converter = PathConverter::class,
         description = "Output path for generated documentation."
     )
-    private var documentation: String = ""
+    var documentationPath: Path = Path("")
 
     @Parameter(
         names = ["--config", "-c"],
         required = true,
+        converter = PathConverter::class,
         description = "Output path for generated detekt config."
     )
-    private var config: String = ""
+    var configPath: Path = Path("")
 
     @Parameter(
         names = ["--help", "-h"],
@@ -60,9 +63,4 @@ class GeneratorArgs {
             .onEach { require(it.exists()) { "Input path must exist!" } }
             .toList()
     }
-    val documentationPath: Path
-        get() = Path(documentation)
-
-    val configPath: Path
-        get() = Path(config)
 }
