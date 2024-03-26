@@ -20,10 +20,6 @@ class ExistingPathConverter : IStringConverter<Path> {
     }
 }
 
-class PathConverter : IStringConverter<Path> {
-    override fun convert(value: String) = Path(value)
-}
-
 interface DetektInputPathConverter<T> : IStringConverter<List<T>> {
     val converter: IStringConverter<T>
     override fun convert(value: String): List<T> =
