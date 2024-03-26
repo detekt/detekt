@@ -117,6 +117,7 @@ class CliArgs {
         description = "Specifies a directory as the base path." +
             "Currently it impacts all file paths in the formatted reports. " +
             "File paths in console output and txt report are not affected and remain as absolute paths.",
+        validateValueWith = [DirectoryValidator::class],
         converter = PathConverter::class
     )
     var basePath: Path = Path(System.getProperty("user.dir"))
@@ -200,6 +201,7 @@ class CliArgs {
     @Parameter(
         names = ["--jdk-home"],
         description = "EXPERIMENTAL: Use a custom JDK home directory to include into the classpath",
+        validateValueWith = [DirectoryValidator::class],
         converter = PathConverter::class
     )
     var jdkHome: Path? = null

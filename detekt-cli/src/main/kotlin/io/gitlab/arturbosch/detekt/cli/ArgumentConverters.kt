@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.config.LanguageVersion
 import java.net.URL
 import java.nio.file.Path
 import kotlin.io.path.exists
+import kotlin.io.path.isDirectory
 
 class LanguageVersionConverter : IStringConverter<LanguageVersion> {
     override fun convert(value: String): LanguageVersion {
@@ -59,5 +60,11 @@ class PathValidator : IValueValidator<List<Path>> {
         value.forEach {
             if (!it.exists()) throw ParameterException("Input path does not exist: $it")
         }
+    }
+}
+
+class DirectoryValidator : IValueValidator<Path> {
+    override fun validate(name: String, value: Path) {
+        if (!value.isDirectory()) throw ParameterException("Value passed to $name must be a directory.")
     }
 }
