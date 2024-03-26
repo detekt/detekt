@@ -38,7 +38,6 @@ class GeneratorArgs {
 
     @Parameter(
         names = ["--generate-custom-rule-config", "-gcrc"],
-        required = false,
         description = "Generate config for user-defined rules. " +
             "Path to user rules can be specified with --input option"
     )
@@ -46,7 +45,6 @@ class GeneratorArgs {
 
     @DynamicParameter(
         names = ["--replace", "-r"],
-        required = false,
         description = "Any number of key and value pairs that are used to replace placeholders " +
             "during data collection and output generation. Key and value are separated by '='. " +
             "The property may be used multiple times."
