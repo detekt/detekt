@@ -9,15 +9,11 @@ class ProjectSpecBuilder : Builder<ProjectSpec> {
 
     var basePath: Path = Path("")
     var inputPaths: Collection<Path> = emptyList()
-    var excludes: Collection<String> = emptyList()
-    var includes: Collection<String> = emptyList()
 
-    override fun build(): ProjectSpec = ProjectModel(basePath, inputPaths, excludes, includes)
+    override fun build(): ProjectSpec = ProjectModel(basePath, inputPaths)
 }
 
 private data class ProjectModel(
     override val basePath: Path,
     override val inputPaths: Collection<Path>,
-    override val excludes: Collection<String>,
-    override val includes: Collection<String>
 ) : ProjectSpec
