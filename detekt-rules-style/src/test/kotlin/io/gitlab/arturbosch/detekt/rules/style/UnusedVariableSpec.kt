@@ -361,4 +361,38 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
             assertThat(results).anyMatch { it.message == "Variable `detekt` is unused." }
         }
     }
+
+    @Nested
+    inner class `variable lamda` {
+
+        @Test
+        fun `reports unused variable in lambda`() {
+            val code = """
+                val function = Function1<Unit, Unit> {
+                    val used = "used"
+                    val unused = "unused"
+                    println(used)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(1)
+                .hasStartSourceLocations(SourceLocation(3, 9))
+        }
+
+        @Test
+        fun `reports unused variable in lambda with return`() {
+            val code = """
+                val function = Function1<Unit, String> {
+                    val used = "used"
+                    val unused = "unused"
+                    used
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(1)
+                .hasStartSourceLocations(SourceLocation(3, 9))
+        }
+    }
 }
