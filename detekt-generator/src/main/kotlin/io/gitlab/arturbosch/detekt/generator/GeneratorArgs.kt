@@ -1,7 +1,10 @@
 package io.gitlab.arturbosch.detekt.generator
 
 import com.beust.jcommander.DynamicParameter
+import com.beust.jcommander.IValueValidator
 import com.beust.jcommander.Parameter
+import com.beust.jcommander.ParameterException
+import com.beust.jcommander.converters.IParameterSplitter
 import com.beust.jcommander.converters.PathConverter
 import java.nio.file.Path
 import kotlin.io.path.Path
@@ -12,9 +15,12 @@ class GeneratorArgs {
     @Parameter(
         names = ["--input", "-i"],
         required = true,
+        converter = PathConverter::class,
+        splitter = PathSplitter::class,
+        validateValueWith = [PathValidator::class],
         description = "Input paths to analyze."
     )
-    private var input: String = ""
+    var inputPath: List<Path> = emptyList()
 
     @Parameter(
         names = ["--documentation", "-d"],
@@ -54,13 +60,17 @@ class GeneratorArgs {
     )
     var textReplacements: Map<String, String> = mutableMapOf()
 
-    val inputPath: List<Path> by lazy {
-        input
-            .splitToSequence(",", ";")
-            .map(String::trim)
-            .filter { it.isNotEmpty() }
-            .map { first -> Path(first) }
-            .onEach { require(it.exists()) { "Input path must exist!" } }
-            .toList()
+    class PathSplitter : IParameterSplitter {
+        override fun split(value: String): List<String> {
+            return value.split(',', ';')
+        }
+    }
+
+    class PathValidator : IValueValidator<List<Path>> {
+        override fun validate(name: String, value: List<Path>) {
+            value.forEach {
+                if (!it.exists()) throw ParameterException("Input path does not exist: $it")
+            }
+        }
     }
 }
