@@ -42,6 +42,12 @@ class FailureSeverityConverter : IStringConverter<FailureSeverity> {
     }
 }
 
+class ReportPathConverter : IStringConverter<ReportPath> {
+    override fun convert(value: String): ReportPath {
+        return ReportPath.from(value)
+    }
+}
+
 class PathSplitter : IParameterSplitter {
     override fun split(value: String): List<String> {
         return value.split(',', ';')
