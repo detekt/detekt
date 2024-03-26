@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.test
 
 import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
@@ -12,13 +12,13 @@ import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.jetbrains.kotlin.psi.KtElement
 import kotlin.io.path.Path
 
-fun createFinding(
+fun createIssue(
     ruleName: String = "TestSmell",
     entity: Entity = createEntity(),
     message: String = "TestMessage",
     severity: Severity = Severity.Error,
     autoCorrectEnabled: Boolean = false,
-): Finding2 = createFinding(
+): Issue = createIssue(
     ruleInfo = createRuleInfo(ruleName),
     entity = entity,
     message = message,
@@ -26,13 +26,13 @@ fun createFinding(
     autoCorrectEnabled = autoCorrectEnabled,
 )
 
-fun createFinding(
-    ruleInfo: Finding2.RuleInfo,
+fun createIssue(
+    ruleInfo: Issue.RuleInfo,
     entity: Entity = createEntity(),
     message: String = "TestMessage",
     severity: Severity = Severity.Error,
     autoCorrectEnabled: Boolean = false,
-): Finding2 = Finding2Impl(
+): Issue = IssueImpl(
     ruleInfo = ruleInfo,
     entity = entity,
     message = message,
@@ -44,17 +44,17 @@ fun createRuleInfo(
     id: String = "TestSmell",
     ruleSetId: String = "RuleSet$id",
     description: String = "Description $id",
-): Finding2.RuleInfo = Finding2Impl.RuleInfo(
+): Issue.RuleInfo = IssueImpl.RuleInfo(
     id = Rule.Id(id),
     ruleSetId = RuleSet.Id(ruleSetId),
     description = description
 )
 
-fun createFindingForRelativePath(
-    ruleInfo: Finding2.RuleInfo,
+fun createIssueForRelativePath(
+    ruleInfo: Issue.RuleInfo,
     basePath: String = "/Users/tester/detekt/",
     relativePath: String = "TestFile.kt"
-): Finding2 = Finding2Impl(
+): Issue = IssueImpl(
     ruleInfo = ruleInfo,
     entity = Entity(
         name = "TestEntity",
@@ -95,17 +95,17 @@ fun createLocation(
         ?: FilePath.fromAbsolute(Path(path)),
 )
 
-private data class Finding2Impl(
-    override val ruleInfo: Finding2.RuleInfo,
+private data class IssueImpl(
+    override val ruleInfo: Issue.RuleInfo,
     override val entity: Entity,
     override val message: String,
     override val severity: Severity = Severity.Error,
     override val autoCorrectEnabled: Boolean = false,
     override val references: List<Entity> = emptyList(),
-) : Finding2 {
+) : Issue {
     data class RuleInfo(
         override val id: Rule.Id,
         override val ruleSetId: RuleSet.Id,
         override val description: String,
-    ) : Finding2.RuleInfo
+    ) : Issue.RuleInfo
 }

@@ -7,7 +7,7 @@ import io.github.detekt.metrics.processors.logicalLinesKey
 import io.github.detekt.metrics.processors.sourceLinesKey
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.test.TestDetektion
-import io.gitlab.arturbosch.detekt.test.createFinding
+import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -19,7 +19,7 @@ internal class ComplexityReportGeneratorSpec {
 
     @BeforeEach
     fun setupMocks() {
-        detektion = TestDetektion(createFinding(ruleName = "test")).withTestData()
+        detektion = TestDetektion(createIssue(ruleName = "test")).withTestData()
     }
 
     @Nested

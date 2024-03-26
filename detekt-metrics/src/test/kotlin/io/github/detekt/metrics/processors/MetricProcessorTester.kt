@@ -1,7 +1,7 @@
 package io.github.detekt.metrics.processors
 
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
@@ -26,7 +26,7 @@ class MetricProcessorTester(
 }
 
 private class MetricResults : Detektion, UserDataHolderBase() {
-    override val findings: List<Finding2>
+    override val issues: List<Issue>
         get() = throw UnsupportedOperationException()
     override val notifications: Collection<Notification>
         get() = throw UnsupportedOperationException()

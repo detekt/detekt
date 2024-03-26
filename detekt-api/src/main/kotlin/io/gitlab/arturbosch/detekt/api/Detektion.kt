@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolder
  * which needs to be transferred from the detekt engine to the user.
  */
 interface Detektion : UserDataHolder {
-    val findings: List<Finding2>
+    val issues: List<Issue>
     val notifications: Collection<Notification>
     val metrics: Collection<ProjectMetric>
 
