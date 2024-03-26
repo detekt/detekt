@@ -68,7 +68,7 @@ class UnusedPrivateProperty(config: Config) : Rule(
 
     @Configuration("unused property names matching this regex are ignored")
     private val allowedNames: Regex by config(
-        "_|ignored|expected|serialVersionUID",
+        "ignored|expected|serialVersionUID",
         String::toRegex
     )
 
