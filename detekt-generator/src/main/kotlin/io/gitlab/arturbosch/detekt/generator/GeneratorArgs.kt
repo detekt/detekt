@@ -9,6 +9,7 @@ import com.beust.jcommander.converters.PathConverter
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.exists
+import kotlin.io.path.isDirectory
 
 class GeneratorArgs {
 
@@ -26,6 +27,7 @@ class GeneratorArgs {
         names = ["--documentation", "-d"],
         required = true,
         converter = PathConverter::class,
+        validateValueWith = [DirectoryValidator::class],
         description = "Output path for generated documentation."
     )
     var documentationPath: Path = Path("")
@@ -34,6 +36,7 @@ class GeneratorArgs {
         names = ["--config", "-c"],
         required = true,
         converter = PathConverter::class,
+        validateValueWith = [DirectoryValidator::class],
         description = "Output path for generated detekt config."
     )
     var configPath: Path = Path("")
@@ -71,6 +74,12 @@ class GeneratorArgs {
             value.forEach {
                 if (!it.exists()) throw ParameterException("Input path does not exist: $it")
             }
+        }
+    }
+
+    class DirectoryValidator : IValueValidator<Path> {
+        override fun validate(name: String, value: Path) {
+            if (!value.isDirectory()) throw ParameterException("Value passed to $name must be a directory.")
         }
     }
 }
