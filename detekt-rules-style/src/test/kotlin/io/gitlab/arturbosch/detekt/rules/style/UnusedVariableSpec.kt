@@ -205,6 +205,20 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
                 .hasSize(1)
                 .hasStartSourceLocations(SourceLocation(5, 11))
         }
+
+        @Test
+        fun `does not report when variable is used in dot call`() {
+            val code = """
+                fun main() {
+                    val variable = "used variable"
+                    val consumer = Function1<String, String> { it }
+                    consumer.apply(variable)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .isEmpty()
+        }
     }
 
     @Nested
