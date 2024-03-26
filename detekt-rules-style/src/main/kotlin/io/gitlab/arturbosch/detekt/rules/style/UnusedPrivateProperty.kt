@@ -64,7 +64,7 @@ class UnusedPrivateProperty(config: Config) : Rule(
 ) {
 
     override val defaultRuleIdAliases: Set<String> =
-        setOf("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused", "UnusedPrivateMember")
+        setOf("UNUSED_PARAMETER", "unused", "UnusedPrivateMember")
 
     @Configuration("unused property names matching this regex are ignored")
     private val allowedNames: Regex by config(
@@ -196,21 +196,21 @@ private class UnusedPrivatePropertyVisitor(
             }
         }
     }
+
+    private fun <T> MutableMap<Name, MutableMap<String, MutableSet<T>>>.addParameter(
+        className: Name,
+        constructorSignature: String,
+        parameter: T
+    ) = getOrPut(className) { mutableMapOf() }
+        .getOrPut(constructorSignature) { mutableSetOf() }
+        .add(parameter)
+
+    private fun <T> MutableMap<Name, MutableSet<T>>.addProperty(
+        className: Name,
+        property: T
+    ) = getOrPut(className) { mutableSetOf() }
+        .add(property)
 }
-
-fun <T> MutableMap<Name, MutableMap<String, MutableSet<T>>>.addParameter(
-    className: Name,
-    constructorSignature: String,
-    parameter: T
-) = getOrPut(className) { mutableMapOf() }
-    .getOrPut(constructorSignature) { mutableSetOf() }
-    .add(parameter)
-
-fun <T> MutableMap<Name, MutableSet<T>>.addProperty(
-    className: Name,
-    property: T
-) = getOrPut(className) { mutableSetOf() }
-    .add(property)
 
 private fun KtConstructor<*>.isExpectClassConstructor() = containingClassOrObject?.isExpect() == true
 private fun KtConstructor<*>.isDataOrValueClassConstructor(): Boolean {

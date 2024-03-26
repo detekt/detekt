@@ -125,7 +125,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 fun test() {
                     val commonVal = 1
                     class LocalClass {
-                        private val commonVal: Int
+                        private val commonVal: Int = 42
                         fun foo() = println(commonVal)
                     }
                 }
@@ -188,7 +188,6 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 
                     fun publicFunction(usedParam: String) {
                         println(usedParam)
-                        println(PC.THE_CONST)
                         println("Hello " ext "World" ext "!")
                         println(::doubleColonObjectReferenced)
                         println(this::doubleColonThisReferenced)
@@ -236,7 +235,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                             throw UnsupportedOperationException("not implemented")
                         }
                     }
-                    println(o("$\{PC.Companion.OO.BLA.toString() + ""}"))
+                    println(o("$\\{PC.Companion.OO.BLA.toString()}"))
                 }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
@@ -335,7 +334,6 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 
                 fun main(args: Array<String>) {
                     println(stuff.next())
-                    calledFromMain()
                 }
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
@@ -486,7 +484,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         fun `does not report annotated private properties`() {
             val code = """
                 class Test {
-                    @Suppress("unused") private val foo: String
+                    @Suppress("unused") private val foo: String = "foo"
                 }
             """.trimIndent()
 
@@ -497,15 +495,15 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         fun `reports private properties without annotation`() {
             val code = """
                 class Test {
-                    @Suppress("unused") private val foo: String
-                    private val bar: String
+                    @Suppress("unused") private val foo: String = "foo"
+                    private val bar: String = "bar"
                 }
             """.trimIndent()
 
             val lint = subject.compileAndLintWithContext(env, code)
 
             assertThat(lint).hasSize(1)
-            assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String")
+            assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String = \"bar\"")
         }
 
         @Test
@@ -513,8 +511,8 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 @Suppress("unused")
                 class Test {
-                    private val foo: String
-                    private val bar: String
+                    private val foo: String = "foo"
+                    private val bar: String = "bar"
                 }
             """.trimIndent()
 
@@ -526,11 +524,12 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 @Suppress("unused")
                 class Test {
-                    private val foo: String
-                    private val bar: String
-                
+                    private val foo: String = "foo"
+                    private val bar: String = "bar"
+                    
+                    @Suppress("unused")
                     class InnerTest {
-                        private val baz: String
+                        private val baz: String = "baz"
                     }
                 }
             """.trimIndent()
@@ -675,7 +674,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report used parameter for calling super`() {
             val code = """
-                class Parent(val ignored: Any)
+                open class Parent(val ignored: Any)
                 class Test(used: Any) : Parent(used)
             """.trimIndent()
             assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
