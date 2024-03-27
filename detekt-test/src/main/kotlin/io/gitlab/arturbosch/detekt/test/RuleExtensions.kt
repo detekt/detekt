@@ -6,6 +6,8 @@ import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleSet
+import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.languageVersionSettings
@@ -25,12 +27,12 @@ fun Rule.compileAndLint(@Language("kotlin") content: String): List<Finding> {
 
 fun Rule.lint(@Language("kotlin") content: String): List<Finding> {
     val ktFile = compileContentForTest(content)
-    return visitFile(ktFile)
+    return visitFile(ktFile).filterSuppressed(this)
 }
 
 fun Rule.lint(path: Path): List<Finding> {
     val ktFile = compileForTest(path)
-    return visitFile(ktFile)
+    return visitFile(ktFile).filterSuppressed(this)
 }
 
 fun Rule.lintWithContext(
@@ -47,7 +49,7 @@ fun Rule.lintWithContext(
 
     val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
     val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
-    return visitFile(ktFile, bindingContext, compilerResources)
+    return visitFile(ktFile, bindingContext, compilerResources).filterSuppressed(this)
 }
 
 fun Rule.compileAndLintWithContext(
@@ -60,4 +62,10 @@ fun Rule.compileAndLintWithContext(
     return lintWithContext(environment, content)
 }
 
-fun Rule.lint(ktFile: KtFile): List<Finding> = visitFile(ktFile)
+fun Rule.lint(ktFile: KtFile): List<Finding> = visitFile(ktFile).filterSuppressed(this)
+
+private fun List<Finding>.filterSuppressed(rule: Rule): List<Finding> {
+    return filterNot {
+        it.entity.ktElement?.isSuppressedBy(rule.ruleId, rule.aliases, RuleSet.Id("NoARuleSetId")) == true
+    }
+}

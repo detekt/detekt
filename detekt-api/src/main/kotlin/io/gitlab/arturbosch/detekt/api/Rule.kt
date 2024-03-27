@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
 import dev.drewhamilton.poko.Poko
-import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import io.gitlab.arturbosch.detekt.api.internal.validateIdentifier
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -44,8 +43,6 @@ open class Rule(
      *      override val defaultRuleIdAliases = setOf("Name1", "Name2")
      */
     open val defaultRuleIdAliases: Set<String> = emptySet()
-
-    private val ruleSetId: RuleSet.Id? get() = config.parent?.parentPath?.let(RuleSet::Id)
 
     val autoCorrect: Boolean
         get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
@@ -101,15 +98,9 @@ open class Rule(
 
     /**
      * Reports a single code smell finding.
-     *
-     * Before adding a finding, it is checked if it is not suppressed
-     * by @Suppress or @SuppressWarnings annotations.
      */
     fun report(finding: Finding) {
-        val ktElement = finding.entity.ktElement
-        if (ktElement == null || !ktElement.isSuppressedBy(ruleId, aliases, ruleSetId)) {
-            findings.add(finding)
-        }
+        findings.add(finding)
     }
 
     @Poko

@@ -384,6 +384,29 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             }
             assertThat(findings).isEmpty()
         }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["MaxLineLength", "detekt.MaxLineLength", "MLL", "custom", "all"])
+        fun `when the ktElement is suppressed the issue is not raised`(suppress: String) {
+            val config = yamlConfigFromContent(
+                """
+                    custom:
+                      MaxLineLength:
+                        active: true
+                        maxLineLength: 10
+                        aliases: ["MLL"]
+                """.trimIndent()
+            )
+            val code = """
+                @Suppress("$suppress")
+                fun foo() = Unit
+            """.trimIndent()
+            val findings = createProcessingSettings(config = config).use { settings ->
+                Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
+                    .run(listOf(compileContentForTest(code)))
+            }
+            assertThat(findings).isEmpty()
+        }
     }
 }
 
