@@ -129,6 +129,9 @@ internal class Analyzer(
         fun executeRules(rules: List<Pair<RuleSet.Id, Rule>>) {
             for ((ruleSetId, rule) in rules) {
                 val findings = rule.visitFile(file, bindingContext, compilerResources)
+                    .filterNot {
+                        it.entity.ktElement?.isSuppressedBy(rule.ruleId, rule.aliases, ruleSetId) == true
+                    }
                     .filterSuppressedFindings(rule, bindingContext)
                 for (finding in findings) {
                     val mappedRuleSet = checkNotNull(ruleIdsToRuleSetIds[rule.ruleId]) {
