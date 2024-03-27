@@ -18,7 +18,6 @@ import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
-import io.gitlab.arturbosch.detekt.api.ruleId
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
 import io.gitlab.arturbosch.detekt.core.suppressors.buildSuppressors
 import io.gitlab.arturbosch.detekt.core.util.isActiveOrDefault
