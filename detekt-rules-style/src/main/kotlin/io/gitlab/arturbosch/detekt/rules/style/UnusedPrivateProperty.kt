@@ -11,9 +11,11 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isExpect
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
-import org.jetbrains.kotlin.descriptors.ParameterDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
+import org.jetbrains.kotlin.descriptors.Visibilities
+import org.jetbrains.kotlin.descriptors.isTopLevelInPackage
 import org.jetbrains.kotlin.js.resolve.diagnostics.findPsi
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
@@ -86,6 +88,9 @@ private class UnusedPrivatePropertyVisitor(
     private val bindingContext: BindingContext,
 ) : DetektVisitor() {
 
+    private val topLevelProperties = hashSetOf<KtNamedDeclaration>()
+    private val usedTopLevelProperties = hashSetOf<PsiElement>()
+
     private val classProperties = hashSetOf<KtNamedDeclaration>()
     private val usedClassProperties = hashSetOf<PsiElement>()
 
@@ -93,9 +98,9 @@ private class UnusedPrivatePropertyVisitor(
     private val usedConstructorParameters = hashSetOf<PsiElement>()
 
     fun getUnusedReports(): List<CodeSmell> {
-        val propertiesReport = classProperties.filter { classProperty ->
-            classProperty.psiOrParent !in usedClassProperties
-        }.filter { !allowedNames.matches(it.nameAsSafeName.identifier) }
+        val propertiesReport = classProperties
+            .filter { it.psiOrParent !in usedClassProperties }
+            .filter { !allowedNames.matches(it.nameAsSafeName.identifier) }
             .map {
                 CodeSmell(
                     entity = Entity.atName(it),
@@ -103,9 +108,9 @@ private class UnusedPrivatePropertyVisitor(
                 )
             }
 
-        val constructorParametersReport = constructorParameters.filter { constructorParameter ->
-            constructorParameter.psiOrParent !in usedConstructorParameters
-        }.filter { !allowedNames.matches(it.nameAsSafeName.identifier) }
+        val constructorParametersReport = constructorParameters
+            .filter { it.psiOrParent !in usedConstructorParameters }
+            .filter { !allowedNames.matches(it.nameAsSafeName.identifier) }
             .map {
                 CodeSmell(
                     entity = Entity.atName(it),
@@ -113,7 +118,17 @@ private class UnusedPrivatePropertyVisitor(
                 )
             }
 
-        return propertiesReport + constructorParametersReport
+        val topLevelPropertyReport = topLevelProperties
+            .filter { it.psiOrParent !in usedTopLevelProperties }
+            .filter { !allowedNames.matches(it.nameAsSafeName.identifier) }
+            .map {
+                CodeSmell(
+                    entity = Entity.atName(it),
+                    message = "Private top level property `${it.nameAsSafeName.identifier}` is unused.",
+                )
+            }
+
+        return propertiesReport + constructorParametersReport + topLevelPropertyReport
     }
 
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
@@ -141,7 +156,14 @@ private class UnusedPrivatePropertyVisitor(
 
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)
-        if (property.isPrivate() && property.isMember()) {
+
+        if (!property.isPrivate()) {
+            return
+        }
+
+        if (property.isTopLevel) {
+            topLevelProperties.add(property)
+        } else {
             classProperties.add(property)
         }
     }
@@ -150,34 +172,40 @@ private class UnusedPrivatePropertyVisitor(
         super.visitReferenceExpression(expression)
         val references = when (expression) {
             is KtNameReferenceExpression -> expression.getReferenceTargets(bindingContext)
-            is KtCallExpression -> {
-                expression.getChildrenOfType<KtValueArgumentList>()
-                    .flatMap { it.arguments }
-                    .flatMap {
-                        it.getArgumentExpression()?.getReferenceTargets(bindingContext).orEmpty()
-                    }
-            }
+            is KtCallExpression -> expression.getChildrenOfType<KtValueArgumentList>()
+                .flatMap { it.arguments }
+                .flatMap {
+                    it.getArgumentExpression()?.getReferenceTargets(bindingContext).orEmpty()
+                }
 
-            else -> null
-        }?.filter {
-            it is ParameterDescriptor || it is PropertyDescriptor
-        } ?: return
-
-        references.forEach { descriptor ->
-            if (descriptor.isPropertyParameter()) {
-                descriptor.findPsi()?.also(usedClassProperties::add)
-            } else {
-                descriptor.findPsi()?.also(usedConstructorParameters::add)
-            }
+            else -> return
         }
+
+        references
+            .filter {
+                it.containingDeclaration is ClassConstructorDescriptor || it.isPrivateProperty()
+            }
+            .forEach { descriptor ->
+                val psi = descriptor.findPsi() ?: return@forEach
+                when {
+                    descriptor.isTopLevelInPackage() -> usedTopLevelProperties.add(psi)
+                    descriptor.isPropertyParameter() -> usedClassProperties.add(psi)
+                    else -> usedConstructorParameters.add(psi)
+                }
+            }
     }
 }
 
-private fun KtConstructor<*>.isExpectClassConstructor() = containingClassOrObject?.isExpect() == true
+private fun KtConstructor<*>.isExpectClassConstructor() =
+    containingClassOrObject?.isExpect() == true
+
 private fun KtConstructor<*>.isDataOrValueClassConstructor(): Boolean {
     val parent = parent as? KtClass ?: return false
     return parent.isData() || parent.isValue() || parent.isInline()
 }
+
+fun DeclarationDescriptor.isPrivateProperty() =
+    this is PropertyDescriptor && visibility.name == Visibilities.Private.name
 
 private fun DeclarationDescriptor.isPropertyParameter() =
     this is PropertyDescriptor || (findPsi() as? KtParameter)?.isPropertyParameter() ?: false

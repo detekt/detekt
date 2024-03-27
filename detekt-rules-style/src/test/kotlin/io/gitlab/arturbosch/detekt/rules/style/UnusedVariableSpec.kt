@@ -31,18 +31,6 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
             assertThat(subject.lintWithContext(env, code))
                 .hasSize(1)
         }
-
-        @Test
-        fun `not report ignored private variables in top level`() {
-            val code = """
-               private val _ = 1 // ignored
-               private val foo = 2 // not ignored
-               private val ignored = 3 // ignored   
-            """.trimIndent()
-
-            assertThat(subject.lintWithContext(env, code))
-                .hasSize(1)
-        }
     }
 
     @Nested
@@ -57,65 +45,6 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
 
             assertThat(lint.first())
                 .hasMessage("Variable `unused` is unused.")
-        }
-    }
-
-    @Nested
-    inner class `top level variables` {
-
-        @Test
-        fun `not report top level public variables`() {
-            val code = """
-                val notUsedTopLevelVal = 1
-                fun using(){
-                  println("foo")
-                }
-            """.trimIndent()
-
-            assertThat(subject.lintWithContext(env, code))
-                .isEmpty()
-        }
-
-        @Test
-        fun `reports top level variables if they are unused`() {
-            val code = """
-                private val usedTopLevelVal = 1
-                private const val unusedTopLevelConst = 1
-                private val unusedTopLevelVal = usedTopLevelVal
-            """.trimIndent()
-            assertThat(subject.lintWithContext(env, code))
-                .hasSize(2)
-                .hasStartSourceLocations(
-                    SourceLocation(2, 19),
-                    SourceLocation(3, 13),
-                )
-        }
-
-        @Test
-        fun `not report when top level variables are used in function`() {
-            val code = """
-                private val usedTopLevelVal = 1
-                fun using(){
-                  println(usedTopLevelVal)
-                }
-            """.trimIndent()
-
-            assertThat(subject.lintWithContext(env, code))
-                .isEmpty()
-        }
-
-        @Test
-        fun `report when top level variables have same name as function parameter`() {
-            val code = """
-                private val foo = 1
-                fun using(foo:Int){
-                  println(foo)
-                }
-            """.trimIndent()
-
-            assertThat(subject.lintWithContext(env, code))
-                .hasSize(1)
-                .hasStartSourceLocations(SourceLocation(1, 13))
         }
     }
 
@@ -184,7 +113,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `reports unused local variables when they have same name as property`() {
+        fun `reports unused local variables when they have same name as parameter`() {
             val code = """
                 class Test {
                   private val foo = "member"
@@ -225,7 +154,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
     inner class `loop iterators` {
 
         @Test
-        fun `should not report used loop properties`() {
+        fun `should not report used loop parameter`() {
             val code = """
                 fun use() {
                     for (i in 0 until 10) {
@@ -237,7 +166,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `reports unused loop property`() {
+        fun `reports unused loop parameter`() {
             val code = """
                 fun use(){                 
                   for (i in 0 until 10) { }
@@ -249,7 +178,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `reports unused loop property in indexed array`() {
+        fun `reports unused loop parameters in indexed array`() {
             val code = """
                 fun use() {
                     val array = intArrayOf(1, 2, 3)
@@ -263,7 +192,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `reports all unused loop properties in indexed array`() {
+        fun `reports all unused loop parameters in indexed array`() {
             val code = """
                 fun use() {
                     val array = intArrayOf(1, 2, 3)
@@ -275,7 +204,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `does not report used loop properties in indexed array`() {
+        fun `does not report used loop parameters in indexed array`() {
             val code = """
                 fun use() {
                     val array = intArrayOf(1, 2, 3)
@@ -377,7 +306,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    inner class `variable lamda` {
+    inner class `variable in lamda` {
 
         @Test
         fun `reports unused variable in lambda`() {

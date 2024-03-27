@@ -49,7 +49,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `does not report unused public members`() {
+        fun `does not report unused public properties`() {
             val code = """
                 class Test {
                     val unused = "This is not used"
@@ -63,7 +63,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `does not report used members`() {
+        fun `does not report used properties`() {
             val code = """
                 class Test {
                     private val used = "This is used"
@@ -77,7 +77,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `does not report used members but reports unused members`() {
+        fun `does not report used properties but reports unused properties`() {
             val code = """
                 class Test {
                     private val used = "This is used"
@@ -165,7 +165,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `does not report used members`() {
+        fun `does not report used properties`() {
             val code = """
                 class Test {
                     private val used = "This is used"
@@ -180,7 +180,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `does not report used members and properties`() {
+        fun `does not report used properties and properties`() {
             val code = """
                 class C {
                     val myNumber = 5
@@ -313,29 +313,69 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
     inner class `top level properties` {
 
         @Test
-        fun `does not report used top level properties`() {
+        fun `not report top level public properties`() {
             val code = """
-                val stuff = object : Iterator<String?> {
-                
-                    var mutatable: String? = null
-                
-                    private fun preCall() {
-                        mutatable = "done"
-                    }
-                
-                    override fun next(): String? {
-                        preCall()
-                        return mutatable
-                    }
-                
-                    override fun hasNext(): Boolean = true
-                }
-                
-                fun main(args: Array<String>) {
-                    println(stuff.next())
+                val notUsedTopLevelVal = 1
+                fun using(){
+                  println("foo")
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+
+            assertThat(subject.lintWithContext(env, code))
+                .isEmpty()
+        }
+
+        @Test
+        fun `reports top level properties if they are unused`() {
+            val code = """
+                private val usedTopLevelVal = 1
+                private const val unusedTopLevelConst = 1
+                private val unusedTopLevelVal = usedTopLevelVal
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(2)
+                .hasStartSourceLocations(
+                    SourceLocation(2, 19),
+                    SourceLocation(3, 13),
+                )
+        }
+
+        @Test
+        fun `not report when top level properties are used in function`() {
+            val code = """
+                private val usedTopLevelVal = 1
+                fun using(){
+                  println(usedTopLevelVal)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .isEmpty()
+        }
+
+        @Test
+        fun `report when top level properties have same name as function parameter`() {
+            val code = """
+                private val foo = 1
+                fun using(foo:Int){
+                  println(foo)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(1)
+                .hasStartSourceLocations(SourceLocation(1, 13))
+        }
+
+        @Test
+        fun `not report ignored private properties in top level`() {
+            val code = """
+               private val foo = 2 // not ignored
+               private val ignored = 3 // ignored   
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(1)
         }
     }
 

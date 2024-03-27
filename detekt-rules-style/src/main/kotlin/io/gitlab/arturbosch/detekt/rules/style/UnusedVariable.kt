@@ -11,10 +11,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
-import org.jetbrains.kotlin.descriptors.PropertyDescriptor
-import org.jetbrains.kotlin.descriptors.Visibilities
 import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor
-import org.jetbrains.kotlin.descriptors.isTopLevelInPackage
 import org.jetbrains.kotlin.load.kotlin.toSourceElement
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDeclaration
@@ -26,7 +23,6 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtValueArgumentList
 import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
-import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getReferenceTargets
 import org.jetbrains.kotlin.resolve.source.getPsi
@@ -34,8 +30,6 @@ import org.jetbrains.kotlin.resolve.source.toSourceElement
 
 /**
  * An unused variable can be removed to simplify the source file.
- *
- * This rule also detects top level private variables
  *
  * <noncompliant>
  * fun foo() {
@@ -89,6 +83,7 @@ private class UnusedVariableVisitor(
 
         return unusedVariableNames
             .values
+            .filter { !allowedNames.matches(it.nameAsSafeName.identifier) }
             .map {
                 CodeSmell(
                     entity = Entity.atName(it),
@@ -101,14 +96,15 @@ private class UnusedVariableVisitor(
         super.visitDeclaration(dcl)
 
         when (dcl) {
-            is KtProperty -> if (dcl.isLocal || (dcl.isTopLevel && dcl.isPrivate())) {
+            is KtProperty -> if (dcl.isLocal) {
                 registerNewDeclaration(dcl)
             }
 
             is KtParameter -> when {
-                dcl.destructuringDeclaration != null -> dcl.destructuringDeclaration?.entries?.forEach {
-                    registerNewDeclaration(it)
-                }
+                dcl.destructuringDeclaration != null ->
+                    dcl.destructuringDeclaration
+                        ?.entries
+                        ?.forEach(::registerNewDeclaration)
 
                 dcl.isLoopParameter -> registerNewDeclaration(dcl)
             }
@@ -132,7 +128,7 @@ private class UnusedVariableVisitor(
         }
 
         references
-            .filter { it.isTopLevelPrivateVariable() || it is LocalVariableDescriptor }
+            .filterIsInstance<LocalVariableDescriptor>()
             .forEach(::registerVariableUse)
     }
 
@@ -143,15 +139,8 @@ private class UnusedVariableVisitor(
     }
 
     private fun registerNewDeclaration(declaration: KtNamedDeclaration) {
-        if (allowedNames.matches(declaration.name.orEmpty())) {
-            return
-        }
-
         declaration.toSourceElement().getPsi()?.also {
             variables[it] = declaration
         }
     }
-
-    fun DeclarationDescriptor.isTopLevelPrivateVariable() =
-        this is PropertyDescriptor && isTopLevelInPackage() && visibility.name == Visibilities.Private.name
 }
