@@ -1,9 +1,11 @@
 package io.gitlab.arturbosch.detekt.cli
 
+import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.NeverFail
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
@@ -12,48 +14,58 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
-import java.nio.file.Path
+import org.junit.jupiter.params.provider.ValueSource
 import kotlin.io.path.Path
 import kotlin.io.path.absolute
 
 internal class CliArgsSpec {
 
-    private val projectPath: Path = resourceAsPath("/").parent.parent.parent.parent.absolute()
-
     @Nested
     inner class `Parsing the input path` {
+        private val projectPath = resourceAsPath("/").parent.parent.parent.parent
 
         @Test
         fun `the current working directory is used if parameter is not set`() {
-            val cli = parseArguments(emptyArray())
-            assertThat(cli.inputPaths).hasSize(1)
-            assertThat(cli.inputPaths.first()).isEqualTo(Path(System.getProperty("user.dir")))
+            val spec = parseArguments(emptyArray()).toSpec()
+            assertThat(spec.projectSpec.inputPaths).containsExactly(Path("").absolute())
         }
 
         @Test
         fun `a single value is converted to a path`() {
-            val cli = parseArguments(arrayOf("--input", "$projectPath"))
-            assertThat(cli.inputPaths).hasSize(1)
-            assertThat(cli.inputPaths.first().absolute()).isEqualTo(projectPath)
+            val spec = parseArguments(arrayOf("--input", "$projectPath")).toSpec()
+            assertThat(spec.projectSpec.inputPaths).containsExactly(projectPath)
         }
 
         @Test
-        fun `multiple input paths can be separated by comma`() {
-            val mainPath = projectPath.resolve("src/main").absolute()
-            val testPath = projectPath.resolve("src/test").absolute()
-            val cli = parseArguments(arrayOf("--input", "$mainPath,$testPath"))
-            assertThat(cli.inputPaths).hasSize(2)
-            assertThat(cli.inputPaths.map(Path::absolute)).containsExactlyInAnyOrder(mainPath, testPath)
+        fun `a single value is converted to a path absolute`() {
+            val spec = parseArguments(arrayOf("--input", "${projectPath.absolute()}")).toSpec()
+            assertThat(spec.projectSpec.inputPaths).containsExactly(projectPath.absolute())
+        }
+
+        @ParameterizedTest
+        @ValueSource(
+            strings = [
+                "src/main,../detekt-core/src/test,build.gradle.kts",
+                "src/main;../detekt-core/src/test;build.gradle.kts",
+                "src/main,../detekt-core/src/test;build.gradle.kts",
+            ]
+        )
+        fun `when the input is defined it is passed to the spec`(param: String) {
+            val spec = parseArguments(arrayOf("--input", param)).toSpec()
+            assertThat(spec.projectSpec.inputPaths).containsExactly(
+                Path("src/main"),
+                Path("../detekt-core/src/test"),
+                Path("build.gradle.kts"),
+            )
         }
 
         @Test
         fun `reports an error if the input path does not exist`() {
-            val pathToNonExistentDirectory = projectPath.resolve("nonExistent")
-            val params = arrayOf("--input", "$pathToNonExistentDirectory")
+            val params = arrayOf("--input", "nonExistent ")
 
             assertThatExceptionOfType(HandledArgumentViolation::class.java)
-                .isThrownBy { parseArguments(params).inputPaths }
-                .withMessageContaining("does not exist")
+                .isThrownBy { parseArguments(params) }
+                .withMessage("Input path does not exist: 'nonExistent '")
         }
     }
 
@@ -84,10 +96,9 @@ internal class CliArgsSpec {
 
             @Test
             fun `reports an error when using --baseline file does not exist`() {
-                val nonExistingDirectory = projectPath.resolve("nonExistent").toString()
-                assertThatCode { parseArguments(arrayOf("--baseline", nonExistingDirectory)) }
+                assertThatCode { parseArguments(arrayOf("--baseline", "nonExistent")) }
                     .isInstanceOf(HandledArgumentViolation::class.java)
-                    .hasMessage("The file specified by --baseline should exist '$nonExistingDirectory'.")
+                    .hasMessage("The file specified by --baseline should exist 'nonExistent'.")
             }
 
             @Test
@@ -116,6 +127,47 @@ internal class CliArgsSpec {
     fun `--all-rules lead to all rules being activated`() {
         val spec = parseArguments(arrayOf("--all-rules")).toSpec()
         assertThat(spec.rulesSpec.activateAllRules).isTrue()
+    }
+
+    @Test
+    fun `should load single filter`() {
+        val filters = CliArgs { excludes = "**/one/**" }.toSpecFilters()
+        assertThat(filters?.isIgnored(Path("/one/path"))).isTrue()
+        assertThat(filters?.isIgnored(Path("/two/path"))).isFalse()
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+        strings = [
+            "**/one/**,**/two/**,**/three",
+            "**/one/**;**/two/**;**/three",
+            "**/one/** ,**/two/**, **/three",
+            "**/one/** ;**/two/**; **/three",
+            "**/one/**,**/two/**;**/three",
+            "**/one/** ,**/two/**; **/three",
+            " ,,**/one/**,**/two/**,**/three",
+        ]
+    )
+    fun parseExcludes(param: String) {
+        val spec = parseArguments(arrayOf("--excludes", param)).toSpec()
+        assertThat(spec.projectSpec.excludes).containsExactly("**/one/**", "**/two/**", "**/three")
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+        strings = [
+            "**/one/**,**/two/**,**/three",
+            "**/one/**;**/two/**;**/three",
+            "**/one/** ,**/two/**, **/three",
+            "**/one/** ;**/two/**; **/three",
+            "**/one/**,**/two/**;**/three",
+            "**/one/** ,**/two/**; **/three",
+            " ,,**/one/**,**/two/**,**/three",
+        ]
+    )
+    fun parseIncludes(param: String) {
+        val spec = parseArguments(arrayOf("--includes", param)).toSpec()
+        assertThat(spec.projectSpec.includes).containsExactly("**/one/**", "**/two/**", "**/three")
     }
 
     @Nested
@@ -181,4 +233,23 @@ internal class CliArgsSpec {
             }.isInstanceOf(IllegalArgumentException::class.java)
         }
     }
+
+    @Test
+    fun `base-path with a non existent directory`() {
+        assertThatExceptionOfType(HandledArgumentViolation::class.java)
+            .isThrownBy { parseArguments(arrayOf("--base-path", "nonExistent")) }
+            .withMessage("Value passed to --base-path must be a directory.")
+    }
+
+    @Test
+    fun `jdk-home with a non existent directory`() {
+        assertThatExceptionOfType(HandledArgumentViolation::class.java)
+            .isThrownBy { parseArguments(arrayOf("--jdk-home", "nonExistent")) }
+            .withMessage("Value passed to --jdk-home must be a directory.")
+    }
+}
+
+private fun CliArgs.toSpecFilters(): PathFilters? {
+    val spec = this.createSpec(NullPrintStream(), NullPrintStream()).projectSpec
+    return PathFilters.of(spec.includes.toList(), spec.excludes.toList())
 }
