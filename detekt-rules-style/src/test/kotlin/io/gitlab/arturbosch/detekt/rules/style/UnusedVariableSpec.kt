@@ -21,7 +21,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `not report ignored variables in function scope`() {
             val code = """
-                fun test(){
+                fun test() {
                     val _ = 1 // ignored
                     val foo = 2 // not ignored
                     val ignored = 3 // ignored   

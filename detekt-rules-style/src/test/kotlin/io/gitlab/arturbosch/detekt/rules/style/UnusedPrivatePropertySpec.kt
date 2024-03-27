@@ -103,7 +103,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
     inner class `classes with properties and local properties` {
 
         @Test
-        fun `not reports class property when unused with local property with same name`() {
+        fun `not reports class property when unused with local variable with same name`() {
             val code = """
                 class Test {
                     private val commonVal = "This is used"
@@ -119,7 +119,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `does report local fun property is used instead of property in local class`() {
+        fun `does report local fun variable is used instead of property in local class`() {
             val code = """
                 fun test() {
                     val commonVal = 1
