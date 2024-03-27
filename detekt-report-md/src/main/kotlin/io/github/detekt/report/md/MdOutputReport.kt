@@ -15,7 +15,6 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
@@ -83,24 +82,26 @@ private fun MarkdownContent.renderComplexity(complexityReport: List<String>) {
     }
 }
 
-private fun MarkdownContent.renderGroup(group: RuleSet.Id, findings: List<Finding2>) {
+private fun MarkdownContent.renderGroup(findings: List<Finding2>) {
     findings
-        .groupBy { it.ruleInfo.id }
+        .groupBy { it.ruleInfo }
         .toList()
-        .sortedBy { (rule, _) -> rule.value }
-        .forEach { (rule, ruleFindings) ->
-            renderRule(rule, group, ruleFindings)
+        .sortedBy { (ruleInfo, _) -> ruleInfo.id.value }
+        .forEach { (ruleInfo, ruleFindings) ->
+            renderRule(ruleInfo, ruleFindings)
         }
 }
 
-private fun MarkdownContent.renderRule(rule: Rule.Id, group: RuleSet.Id, findings: List<Finding2>) {
-    h3 { "$group, $rule (%,d)".format(Locale.ROOT, findings.size) }
-    paragraph { (findings.first().ruleInfo.description) }
+private fun MarkdownContent.renderRule(ruleInfo: Finding2.RuleInfo, findings: List<Finding2>) {
+    val ruleId = ruleInfo.id.value
+    val ruleSetId = ruleInfo.ruleSetId.value
+    h3 { "$ruleSetId, $ruleId (%,d)".format(Locale.ROOT, findings.size) }
+    paragraph { ruleInfo.description }
 
     paragraph {
         link(
             "Documentation",
-            "$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.value.lowercase()}#${rule.value.lowercase()}"
+            "$DETEKT_WEBSITE_BASE_URL/docs/rules/${ruleSetId.lowercase()}#${ruleId.lowercase()}"
         )
     }
 
@@ -131,8 +132,8 @@ private fun MarkdownContent.renderFindings(findings: Map<RuleSet.Id, List<Findin
         .filter { it.value.isNotEmpty() }
         .toList()
         .sortedBy { (group, _) -> group.value }
-        .forEach { (group, groupFindings) ->
-            renderGroup(group, groupFindings)
+        .forEach { (_, groupFindings) ->
+            renderGroup(groupFindings)
         }
 }
 
