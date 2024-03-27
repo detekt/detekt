@@ -50,7 +50,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `are specific for local variables`() {
             val code = """
-                fun foo(){ val unused = 1 }
+                fun foo() { val unused = 1 }
             """.trimIndent()
 
             val lint = subject.lintWithContext(env, code)
@@ -67,7 +67,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
         fun `not report top level public variables`() {
             val code = """
                 val notUsedTopLevelVal = 1
-                fun using(){
+                fun using() {
                   println("foo")
                 }
             """.trimIndent()
@@ -95,7 +95,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
         fun `not report when top level variables are used in function`() {
             val code = """
                 private val usedTopLevelVal = 1
-                fun using(){
+                fun using() {
                   println(usedTopLevelVal)
                 }
             """.trimIndent()
@@ -108,7 +108,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
         fun `report when top level variables have same name as function parameter`() {
             val code = """
                 private val foo = 1
-                fun using(foo:Int){
+                fun using(foo:Int) {
                   println(foo)
                 }
             """.trimIndent()
@@ -125,7 +125,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports unused variables in top level functions`() {
             val code = """
-                fun foo(){
+                fun foo() {
                     val a = 12
                     val b = 32
                     println(a)
@@ -140,7 +140,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports when variable has same name as function parameter`() {
             val code = """
-                fun foo(a:Int){
+                fun foo(a:Int) {
                     println(a)
                     val a = 12
                     val b = 12
@@ -158,7 +158,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should not report unused function parameters`() {
             val code = """
-                fun foo(bar:Int){ } 
+                fun foo(bar:Int) { }
             """.trimIndent()
 
             assertThat(subject.lintWithContext(env, code)).hasSize(0)
@@ -239,7 +239,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports unused loop property`() {
             val code = """
-                fun use(){                 
+                fun use() {
                   for (i in 0 until 10) { }
                 }
             """.trimIndent()

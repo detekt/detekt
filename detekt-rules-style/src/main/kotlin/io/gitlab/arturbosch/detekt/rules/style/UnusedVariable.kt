@@ -44,7 +44,7 @@ import org.jetbrains.kotlin.resolve.source.toSourceElement
  * </noncompliant>
  *
  * <compliant>
- * fun foo(){
+ * fun foo() {
  *     val used = "used"
  *     println(used)
  * }
