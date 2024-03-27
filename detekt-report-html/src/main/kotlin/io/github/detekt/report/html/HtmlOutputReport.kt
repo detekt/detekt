@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
@@ -107,25 +106,27 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         h3 { text("$group: %,d".format(Locale.ROOT, findings.size)) }
 
         findings
-            .groupBy { it.ruleInfo.id }
+            .groupBy { it.ruleInfo }
             .toList()
-            .sortedBy { (rule, _) -> rule.value }
-            .forEach { (rule, ruleFindings) ->
-                renderRule(rule, group, ruleFindings)
+            .sortedBy { (ruleInfo, _) -> ruleInfo.id.value }
+            .forEach { (ruleInfo, ruleFindings) ->
+                renderRule(ruleInfo, ruleFindings)
             }
     }
 
-    private fun FlowContent.renderRule(rule: Rule.Id, group: RuleSet.Id, findings: List<Finding2>) {
+    private fun FlowContent.renderRule(ruleInfo: Finding2.RuleInfo, findings: List<Finding2>) {
+        val ruleId = ruleInfo.id.value
+        val ruleSetId = ruleInfo.ruleSetId.value
         details {
-            id = rule.value
+            id = ruleId
             open = true
 
             summary("rule-container") {
-                span("rule") { text("$rule: %,d ".format(Locale.ROOT, findings.size)) }
-                span("description") { text(findings.first().ruleInfo.description) }
+                span("rule") { text("$ruleId: %,d ".format(Locale.ROOT, findings.size)) }
+                span("description") { text(ruleInfo.description) }
             }
 
-            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.value.lowercase()}#${rule.value.lowercase()}") {
+            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${ruleSetId.lowercase()}#${ruleId.lowercase()}") {
                 +"Documentation"
             }
 
