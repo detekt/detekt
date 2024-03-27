@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.core
+package io.gitlab.arturbosch.detekt.core.suppressors
 
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.compileForTest
@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
@@ -20,7 +19,7 @@ import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class SuppressionSpec {
+class SuppressionsSpec {
 
     @Nested
     inner class `detekt findings can be suppressed with @Suppress or @SuppressWarnings` {
