@@ -38,21 +38,15 @@ class ClasspathResourceConverter : IStringConverter<URL> {
 }
 
 class FailureSeverityConverter : IStringConverter<FailureSeverity> {
-    override fun convert(value: String): FailureSeverity {
-        return FailureSeverity.fromString(value)
-    }
+    override fun convert(value: String): FailureSeverity = FailureSeverity.fromString(value)
 }
 
 class ReportPathConverter : IStringConverter<ReportPath> {
-    override fun convert(value: String): ReportPath {
-        return ReportPath.from(value)
-    }
+    override fun convert(value: String): ReportPath = ReportPath.from(value)
 }
 
 class PathSplitter : IParameterSplitter {
-    override fun split(value: String): List<String> {
-        return value.split(',', ';')
-    }
+    override fun split(value: String): List<String> = value.split(',', ';')
 }
 
 class PathValidator : IValueValidator<List<Path>> {
