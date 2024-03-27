@@ -1,11 +1,13 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.Parameter
+import com.beust.jcommander.converters.PathConverter
 import io.github.detekt.tooling.api.spec.RulesSpec
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.NeverFail
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
+import java.net.URL
 import java.nio.file.Path
 import kotlin.io.path.Path
 
@@ -13,10 +15,13 @@ class CliArgs {
 
     @Parameter(
         names = ["--input", "-i"],
+        converter = PathConverter::class,
+        splitter = PathSplitter::class,
+        validateValueWith = [PathValidator::class],
         description = "Input paths to analyze. Multiple paths are separated by comma. If not specified the " +
             "current working directory is used."
     )
-    var input: String? = null
+    var inputPaths: List<Path> = listOf(Path(System.getProperty("user.dir")))
 
     @Parameter(
         names = ["--includes", "-in"],
@@ -33,16 +38,21 @@ class CliArgs {
 
     @Parameter(
         names = ["--config", "-c"],
+        converter = PathConverter::class,
+        splitter = PathSplitter::class,
+        validateValueWith = [PathValidator::class],
         description = "Path to the config file (path/to/config.yml). " +
             "Multiple configuration files can be specified with ',' or ';' as separator."
     )
-    var config: String? = null
+    var config: List<Path> = emptyList()
 
     @Parameter(
         names = ["--config-resource", "-cr"],
+        converter = ClasspathResourceConverter::class,
+        splitter = PathSplitter::class,
         description = "Path to the config resource on detekt's classpath (path/to/config.yml)."
     )
-    var configResource: String? = null
+    var configResource: List<URL> = emptyList()
 
     @Parameter(
         names = ["--generate-config", "-gc"],
@@ -53,9 +63,12 @@ class CliArgs {
 
     @Parameter(
         names = ["--plugins", "-p"],
+        converter = PathConverter::class,
+        splitter = PathSplitter::class,
+        validateValueWith = [PathValidator::class],
         description = "Extra paths to plugin jars separated by ',' or ';'."
     )
-    var plugins: String? = null
+    var plugins: List<Path> = emptyList()
 
     @Parameter(
         names = ["--parallel"],
@@ -81,13 +94,14 @@ class CliArgs {
 
     @Parameter(
         names = ["--report", "-r"],
+        converter = ReportPathConverter::class,
         description = "Generates a report for given 'report-id' and stores it on given 'path'. " +
             "Entry should consist of: [report-id:path]. " +
             "Available 'report-id' values: 'txt', 'xml', 'html', 'md', 'sarif'. " +
             "These can also be used in combination with each other " +
             "e.g. '-r txt:reports/detekt.txt -r xml:reports/detekt.xml'"
     )
-    private var reports: List<String>? = null
+    var reportPaths: List<ReportPath> = emptyList()
 
     @Parameter(
         names = ["--fail-on-severity"],
@@ -103,6 +117,7 @@ class CliArgs {
         description = "Specifies a directory as the base path." +
             "Currently it impacts all file paths in the formatted reports. " +
             "File paths in console output and txt report are not affected and remain as absolute paths.",
+        validateValueWith = [DirectoryValidator::class],
         converter = PathConverter::class
     )
     var basePath: Path = Path(System.getProperty("user.dir"))
@@ -186,6 +201,7 @@ class CliArgs {
     @Parameter(
         names = ["--jdk-home"],
         description = "EXPERIMENTAL: Use a custom JDK home directory to include into the classpath",
+        validateValueWith = [DirectoryValidator::class],
         converter = PathConverter::class
     )
     var jdkHome: Path? = null
@@ -195,14 +211,6 @@ class CliArgs {
         description = "Prints the detekt CLI version."
     )
     var showVersion: Boolean = false
-
-    val inputPaths: List<Path> by lazy {
-        MultipleExistingPathConverter().convert(input ?: System.getProperty("user.dir"))
-    }
-
-    val reportPaths: List<ReportPath> by lazy {
-        reports?.map { ReportPath.from(it) }.orEmpty()
-    }
 
     val failurePolicy: RulesSpec.FailurePolicy
         get() {

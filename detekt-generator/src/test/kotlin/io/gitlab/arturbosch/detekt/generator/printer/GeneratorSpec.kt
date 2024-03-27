@@ -21,7 +21,7 @@ class GeneratorSpec {
         val args = arrayOf(
             "--generate-custom-rule-config",
             "--input",
-            "$rulePath1, $rulePath2",
+            "$rulePath1,$rulePath2",
             "--documentation",
             documentationOutput.toString(),
             "--config",

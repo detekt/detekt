@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.cli.runners
 import io.github.detekt.tooling.api.DefaultConfigurationProvider
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.cli.CliArgs
-import io.gitlab.arturbosch.detekt.cli.MultipleExistingPathConverter
 import kotlin.io.path.absolute
 
 class ConfigExporter(
@@ -16,7 +15,7 @@ class ConfigExporter(
         val spec = ProcessingSpec {
             extensions {
                 disableDefaultRuleSets = arguments.disableDefaultRuleSets
-                fromPaths { arguments.plugins?.let { MultipleExistingPathConverter().convert(it) }.orEmpty() }
+                fromPaths { arguments.plugins }
             }
         }
         DefaultConfigurationProvider.load(spec.extensionsSpec).copy(configPath)

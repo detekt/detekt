@@ -37,8 +37,8 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
         config {
             useDefaultConfig = args.buildUponDefaultConfig
             shouldValidateBeforeAnalysis = null
-            configPaths = config?.let { MultipleExistingPathConverter().convert(it) }.orEmpty()
-            resources = configResource?.let { MultipleClasspathResourceConverter().convert(it) }.orEmpty()
+            configPaths = args.config
+            resources = args.configResource
         }
 
         execution {
@@ -48,7 +48,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
 
         extensions {
             disableDefaultRuleSets = args.disableDefaultRuleSets
-            fromPaths { args.plugins?.let { MultipleExistingPathConverter().convert(it) }.orEmpty() }
+            fromPaths { args.plugins }
         }
 
         reports {

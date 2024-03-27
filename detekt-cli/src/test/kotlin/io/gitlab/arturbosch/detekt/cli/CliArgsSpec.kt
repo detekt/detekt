@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.cli
 
-import com.beust.jcommander.ParameterException
 import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.NeverFail
@@ -8,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -53,7 +51,7 @@ internal class CliArgsSpec {
             val pathToNonExistentDirectory = projectPath.resolve("nonExistent")
             val params = arrayOf("--input", "$pathToNonExistentDirectory")
 
-            assertThatExceptionOfType(ParameterException::class.java)
+            assertThatExceptionOfType(HandledArgumentViolation::class.java)
                 .isThrownBy { parseArguments(params).inputPaths }
                 .withMessageContaining("does not exist")
         }
@@ -64,11 +62,9 @@ internal class CliArgsSpec {
 
         @Test
         fun `should fail on invalid config value`() {
-            assertThatIllegalArgumentException()
-                .isThrownBy { parseArguments(arrayOf("--config", ",")).toSpec() }
-            assertThatExceptionOfType(ParameterException::class.java)
+            assertThatExceptionOfType(HandledArgumentViolation::class.java)
                 .isThrownBy { parseArguments(arrayOf("--config", "sfsjfsdkfsd")).toSpec() }
-            assertThatExceptionOfType(ParameterException::class.java)
+            assertThatExceptionOfType(HandledArgumentViolation::class.java)
                 .isThrownBy { parseArguments(arrayOf("--config", "./i.do.not.exist.yml")).toSpec() }
         }
     }

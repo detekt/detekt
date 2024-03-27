@@ -12,7 +12,7 @@ class GeneratorArgsSpec {
         private fun parse(vararg args: String): GeneratorArgs {
             val options = GeneratorArgs()
             val parser = JCommander(options)
-            parser.parse("-i", ".", *args)
+            parser.parse("-i", ".", "-d", ".", "-c", ".", *args)
             return options
         }
 

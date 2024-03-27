@@ -1,47 +1,15 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.IStringConverter
+import com.beust.jcommander.IValueValidator
 import com.beust.jcommander.ParameterException
+import com.beust.jcommander.converters.IParameterSplitter
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.net.URL
 import java.nio.file.Path
-import kotlin.io.path.Path
-import kotlin.io.path.notExists
-
-class ExistingPathConverter : IStringConverter<Path> {
-    override fun convert(value: String): Path {
-        require(value.isNotBlank()) { "Provided path '$value' is empty." }
-        val config = Path(value)
-        if (config.notExists()) {
-            throw ParameterException("Provided path '$value' does not exist!")
-        }
-        return config
-    }
-}
-
-class PathConverter : IStringConverter<Path> {
-    override fun convert(value: String) = Path(value)
-}
-
-interface DetektInputPathConverter<T> : IStringConverter<List<T>> {
-    val converter: IStringConverter<T>
-    override fun convert(value: String): List<T> =
-        value.splitToSequence(SEPARATOR_COMMA, SEPARATOR_SEMICOLON)
-            .map { it.trim() }
-            .map { converter.convert(it) }
-            .toList()
-            .takeIf { it.isNotEmpty() }
-            ?: error("Given input '$value' was impossible to parse!")
-}
-
-class MultipleClasspathResourceConverter : DetektInputPathConverter<URL> {
-    override val converter = ClasspathResourceConverter()
-}
-
-class MultipleExistingPathConverter : DetektInputPathConverter<Path> {
-    override val converter = ExistingPathConverter()
-}
+import kotlin.io.path.exists
+import kotlin.io.path.isDirectory
 
 class LanguageVersionConverter : IStringConverter<LanguageVersion> {
     override fun convert(value: String): LanguageVersion {
@@ -70,7 +38,27 @@ class ClasspathResourceConverter : IStringConverter<URL> {
 }
 
 class FailureSeverityConverter : IStringConverter<FailureSeverity> {
-    override fun convert(value: String): FailureSeverity {
-        return FailureSeverity.fromString(value)
+    override fun convert(value: String): FailureSeverity = FailureSeverity.fromString(value)
+}
+
+class ReportPathConverter : IStringConverter<ReportPath> {
+    override fun convert(value: String): ReportPath = ReportPath.from(value)
+}
+
+class PathSplitter : IParameterSplitter {
+    override fun split(value: String): List<String> = value.split(',', ';')
+}
+
+class PathValidator : IValueValidator<List<Path>> {
+    override fun validate(name: String, value: List<Path>) {
+        value.forEach {
+            if (!it.exists()) throw ParameterException("Input path does not exist: $it")
+        }
+    }
+}
+
+class DirectoryValidator : IValueValidator<Path> {
+    override fun validate(name: String, value: Path) {
+        if (!value.isDirectory()) throw ParameterException("Value passed to $name must be a directory.")
     }
 }
