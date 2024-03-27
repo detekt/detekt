@@ -52,7 +52,7 @@ class PathSplitter : IParameterSplitter {
 class PathValidator : IValueValidator<List<Path>> {
     override fun validate(name: String, value: List<Path>) {
         value.forEach {
-            if (!it.exists()) throw ParameterException("Input path does not exist: $it")
+            if (!it.exists()) throw ParameterException("Input path does not exist: '$it'")
         }
     }
 }
