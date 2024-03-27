@@ -21,6 +21,13 @@ open class Rule(
 ) : DetektVisitor() {
 
     /**
+     * An id this rule is identified with.
+     *
+     * By default, it is the name of the class name. Override to change it.
+     */
+    open val ruleId: Id get() = Id(javaClass.simpleName)
+
+    /**
      * List of rule ids which can optionally be used in suppress annotations to refer to this rule.
      */
     val aliases: Set<String> get() = config.valueOrDefault("aliases", defaultRuleIdAliases.toList()).toSet()
@@ -116,9 +123,3 @@ open class Rule(
         }
     }
 }
-
-/**
- * An id this rule is identified with.
- * Conventionally the rule id is derived from the issue id as these two classes have a coexistence.
- */
-val Rule.ruleId: Rule.Id get() = Rule.Id(javaClass.simpleName)
