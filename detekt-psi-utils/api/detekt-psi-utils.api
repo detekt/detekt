@@ -1,3 +1,8 @@
+public final class io/github/detekt/psi/AnnotationExcluder {
+	public fun <init> (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
+	public final fun shouldExclude (Ljava/util/List;)Z
+}
+
 public final class io/github/detekt/psi/FilePath {
 	public static final field Companion Lio/github/detekt/psi/FilePath$Companion;
 	public fun <init> (Ljava/nio/file/Path;Ljava/nio/file/Path;Ljava/nio/file/Path;)V
