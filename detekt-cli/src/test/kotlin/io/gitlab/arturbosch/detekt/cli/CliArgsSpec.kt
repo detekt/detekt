@@ -79,7 +79,7 @@ internal class CliArgsSpec {
             fun `reports an error when using --create-baseline without a --baseline file`() {
                 assertThatCode { parseArguments(arrayOf("--create-baseline")) }
                     .isInstanceOf(HandledArgumentViolation::class.java)
-                    .hasMessageContaining("Creating a baseline.xml requires the --baseline parameter to specify a path")
+                    .hasMessage("Creating a baseline.xml requires the --baseline parameter to specify a path.")
             }
 
             @Test
@@ -87,7 +87,7 @@ internal class CliArgsSpec {
                 val nonExistingDirectory = projectPath.resolve("nonExistent").toString()
                 assertThatCode { parseArguments(arrayOf("--baseline", nonExistingDirectory)) }
                     .isInstanceOf(HandledArgumentViolation::class.java)
-                    .hasMessageContaining("The file specified by --baseline should exist '$nonExistingDirectory'.")
+                    .hasMessage("The file specified by --baseline should exist '$nonExistingDirectory'.")
             }
 
             @Test
@@ -95,7 +95,7 @@ internal class CliArgsSpec {
                 val directory = resourceAsPath("/cases").toString()
                 assertThatCode { parseArguments(arrayOf("--baseline", directory)) }
                     .isInstanceOf(HandledArgumentViolation::class.java)
-                    .hasMessageContaining("The path specified by --baseline should be a file '$directory'.")
+                    .hasMessage("The path specified by --baseline should be a file '$directory'.")
             }
         }
 

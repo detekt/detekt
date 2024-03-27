@@ -33,22 +33,22 @@ private fun JCommander.usageAsString(): String {
 }
 
 private fun CliArgs.validate(jCommander: JCommander) {
-    val violations = StringBuilder()
+    var violation: String? = null
     val baseline = baseline
 
     if (createBaseline && baseline == null) {
-        violations.appendLine("Creating a baseline.xml requires the --baseline parameter to specify a path.")
+        violation = "Creating a baseline.xml requires the --baseline parameter to specify a path."
     }
 
     if (!createBaseline && baseline != null) {
         if (baseline.notExists()) {
-            violations.appendLine("The file specified by --baseline should exist '$baseline'.")
+            violation = "The file specified by --baseline should exist '$baseline'."
         } else if (!baseline.isRegularFile()) {
-            violations.appendLine("The path specified by --baseline should be a file '$baseline'.")
+            violation = "The path specified by --baseline should be a file '$baseline'."
         }
     }
 
-    if (violations.isNotEmpty()) {
-        throw HandledArgumentViolation(violations.toString(), jCommander.usageAsString())
+    if (violation != null) {
+        throw HandledArgumentViolation(violation, jCommander.usageAsString())
     }
 }
