@@ -1,11 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -44,11 +45,11 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
-        fun `does not report unused public members`() {
+        fun `does not report unused public properties`() {
             val code = """
                 class Test {
                     val unused = "This is not used"
@@ -58,11 +59,11 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
-        fun `does not report used members`() {
+        fun `does not report used properties`() {
             val code = """
                 class Test {
                     private val used = "This is used"
@@ -72,11 +73,11 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
-        fun `does not report used members but reports unused members`() {
+        fun `does not report used properties but reports unused properties`() {
             val code = """
                 class Test {
                     private val used = "This is used"
@@ -87,7 +88,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -102,6 +103,38 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
     inner class `classes with properties and local properties` {
 
         @Test
+        fun `not reports class property when unused with local variable with same name`() {
+            val code = """
+                class Test {
+                    private val commonVal = "This is used"
+        
+                    fun use() {
+                        val commonVal = 1
+                        println(this.commonVal)
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(0)
+        }
+
+        @Test
+        fun `does report local fun variable is used instead of property in local class`() {
+            val code = """
+                fun test() {
+                    val commonVal = 1
+                    class LocalClass {
+                        private val commonVal: Int = 42
+                        fun foo() = println(commonVal)
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(1)
+                .hasStartSourceLocation(4, 21)
+        }
+
+        @Test
         fun `reports multiple unused properties`() {
             val code = """
                 class UnusedPrivatePropertyPositive {
@@ -113,7 +146,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(3)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
 
         @Test
@@ -128,11 +161,11 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
-        fun `does not report used members`() {
+        fun `does not report used properties`() {
             val code = """
                 class Test {
                     private val used = "This is used"
@@ -143,18 +176,17 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
-        fun `does not report used members and properties`() {
+        fun `does not report used properties and properties`() {
             val code = """
                 class C {
                     val myNumber = 5
                 
                     fun publicFunction(usedParam: String) {
                         println(usedParam)
-                        println(PC.THE_CONST)
                         println("Hello " ext "World" ext "!")
                         println(::doubleColonObjectReferenced)
                         println(this::doubleColonThisReferenced)
@@ -180,7 +212,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -202,25 +234,10 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                             throw UnsupportedOperationException("not implemented")
                         }
                     }
-                    println(o("$\{PC.Companion.OO.BLA.toString() + ""}"))
+                    println(o("$\\{PC.Companion.OO.BLA.toString()}"))
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(0)
-        }
-
-        @Test
-        fun `reports unused local properties`() {
-            val code = """
-                class Test {
-                    private val used = "This is used"
-                
-                    fun use() {
-                        val unused = used
-                        println(used)
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(0)
         }
     }
 
@@ -241,7 +258,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(4)
+            assertThat(subject.lintWithContext(env, code)).hasSize(4)
         }
 
         @Test
@@ -255,83 +272,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     const val TEXT = "text"
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-    }
-
-    @Nested
-    inner class `loop iterators` {
-
-        @Test
-        fun `doesn't report loop properties`() {
-            val code = """
-                class Test {
-                    fun use() {
-                        for (i in 0 until 10) {
-                            println(i)
-                        }
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
-        fun `reports unused loop property`() {
-            val code = """
-                class Test {
-                    fun use() {
-                        for (i in 0 until 10) {
-                        }
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
-        }
-
-        @Test
-        fun `reports unused loop property in indexed array`() {
-            val code = """
-                class Test {
-                    fun use() {
-                        val array = intArrayOf(1, 2, 3)
-                        for ((index, value) in array.withIndex()) {
-                            println(index)
-                        }
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
-        }
-
-        @Test
-        fun `reports all unused loop properties in indexed array`() {
-            val code = """
-                class Test {
-                    fun use() {
-                        val array = intArrayOf(1, 2, 3)
-                        for ((index, value) in array.withIndex()) {
-                        }
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(2)
-        }
-
-        @Test
-        fun `does not report used loop properties in indexed array`() {
-            val code = """
-                class Test {
-                    fun use() {
-                        val array = intArrayOf(1, 2, 3)
-                        for ((index, value) in array.withIndex()) {
-                            println(index)
-                            println(value)
-                        }
-                    }
-                }
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -350,7 +291,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -364,47 +305,77 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
     @Nested
     inner class `top level properties` {
+
         @Test
-        fun `reports single parameters if they are unused`() {
+        fun `not report top level public properties`() {
+            val code = """
+                val notUsedTopLevelVal = 1
+                fun using(){
+                  println("foo")
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .isEmpty()
+        }
+
+        @Test
+        fun `reports top level properties if they are unused`() {
             val code = """
                 private val usedTopLevelVal = 1
                 private const val unusedTopLevelConst = 1
                 private val unusedTopLevelVal = usedTopLevelVal
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(2)
+                .hasStartSourceLocations(
+                    SourceLocation(2, 19),
+                    SourceLocation(3, 13),
+                )
         }
 
         @Test
-        fun `does not report used top level properties`() {
+        fun `not report when top level properties are used in function`() {
             val code = """
-                val stuff = object : Iterator<String?> {
-                
-                    var mutatable: String? = null
-                
-                    private fun preCall() {
-                        mutatable = "done"
-                    }
-                
-                    override fun next(): String? {
-                        preCall()
-                        return mutatable
-                    }
-                
-                    override fun hasNext(): Boolean = true
-                }
-                
-                fun main(args: Array<String>) {
-                    println(stuff.next())
-                    calledFromMain()
+                private val usedTopLevelVal = 1
+                fun using(){
+                  println(usedTopLevelVal)
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+
+            assertThat(subject.lintWithContext(env, code))
+                .isEmpty()
+        }
+
+        @Test
+        fun `report when top level properties have same name as function parameter`() {
+            val code = """
+                private val foo = 1
+                fun using (foo:Int) {
+                  println(foo)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(1)
+                .hasStartSourceLocations(SourceLocation(1, 13))
+        }
+
+        @Test
+        fun `not report ignored private properties in top level`() {
+            val code = """
+               private val foo = 2 // not ignored
+               private val ignored = 3 // ignored   
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(1)
         }
     }
 
@@ -418,12 +389,53 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     private val ignored = ""
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
     @Nested
     inner class `nested class declarations` {
+        @Test
+        fun `should report for local classes with same name and property`() {
+            val code = """
+                fun containerFunction() {
+                    class Foo(private val value: Int)
+                }
+        
+                fun containerFunction1() {
+                    class Foo(private val value: Int)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(2)
+                .hasStartSourceLocations(
+                    SourceLocation(2, 27),
+                    SourceLocation(6, 27)
+                )
+        }
+
+        @Test
+        fun `does proper class when variable is common`() {
+            val code = """
+                class Class {
+                    private val commonVal: Int = 0
+                    inner class LocalClass1 {
+                        private val commonVal: Int = 0
+                        inner class LocalClass2 {
+                            private val commonVal: Int = 0
+                            fun test() = println(this@LocalClass1.commonVal)
+                        }
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(2)
+                .hasStartSourceLocations(
+                    SourceLocation(2, 17),
+                    SourceLocation(6, 25)
+                )
+        }
 
         @Test
         fun `reports unused nested private property`() {
@@ -434,7 +446,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -447,21 +459,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-    }
-
-    @Nested
-    inner class `error messages` {
-        @Test
-        fun `are specific for local variables`() {
-            val code = """
-                fun foo(){ val unused = 1 }
-            """.trimIndent()
-
-            val lint = subject.lint(code)
-
-            assertThat(lint.first().message).startsWith("Private property")
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -473,7 +471,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 class Test(@Suppress("unused") private val foo: String) {}
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -485,7 +483,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 ) {}
             """.trimIndent()
 
-            val lint = subject.lint(code)
+            val lint = subject.lintWithContext(env, code)
 
             assertThat(lint).hasSize(1)
             assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String")
@@ -501,7 +499,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 ) {}
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -518,33 +516,33 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
         fun `does not report annotated private properties`() {
             val code = """
                 class Test {
-                    @Suppress("unused") private val foo: String
+                    @Suppress("unused") private val foo: String = "foo"
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
         fun `reports private properties without annotation`() {
             val code = """
                 class Test {
-                    @Suppress("unused") private val foo: String
-                    private val bar: String
+                    @Suppress("unused") private val foo: String = "foo"
+                    private val bar: String = "bar"
                 }
             """.trimIndent()
 
-            val lint = subject.lint(code)
+            val lint = subject.lintWithContext(env, code)
 
             assertThat(lint).hasSize(1)
-            assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String")
+            assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String = \"bar\"")
         }
 
         @Test
@@ -552,12 +550,12 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 @Suppress("unused")
                 class Test {
-                    private val foo: String
-                    private val bar: String
+                    private val foo: String = "foo"
+                    private val bar: String = "bar"
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -565,66 +563,17 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 @Suppress("unused")
                 class Test {
-                    private val foo: String
-                    private val bar: String
-                
+                    private val foo: String = "foo"
+                    private val bar: String = "bar"
+                    
+                    @Suppress("unused")
                     class InnerTest {
-                        private val baz: String
+                        private val baz: String = "baz"
                     }
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
-        }
-    }
-
-    @Nested
-    inner class `backtick identifiers - #3825` {
-
-        @Test
-        fun `does report unused variables with keyword name`() {
-            val code = """
-                fun main() {
-                    val `in` = "foo"
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
-        }
-
-        @Test
-        fun `does not report used variables with keyword name`() {
-            val code = """
-                fun main() {
-                    val `in` = "fee"
-                    val expected = "foo"
-                    println(expected == `in`)
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report used variables when referenced with backticks`() {
-            val code = """
-                fun main() {
-                    val actual = "fee"
-                    val expected = "foo"
-                    println(expected == `actual`)
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-        }
-
-        @Test
-        fun `does not report used variables when declared with backticks`() {
-            val code = """
-                fun main() {
-                    val `actual` = "fee"
-                    val expected = "foo"
-                    println(expected == actual)
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -640,7 +589,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     private val foo = 1
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(5, 17)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1).hasStartSourceLocation(5, 17)
         }
     }
 
@@ -652,7 +601,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 actual class Foo actual constructor(actual val bar: String) {}
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -660,18 +609,78 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 actual class Foo actual constructor(private val bar: String) {}
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
     }
 
     @Nested
     inner class `properties in primary constructors` {
+
+        @Test
+        fun `reports unused vararg parameter`() {
+            val code = """
+               class Test(vararg unused: Any)
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(1)
+        }
+
+        @Test
+        fun `not reports used vararg parameter`() {
+            val code = """
+                open class Parent(private vararg val unused: Any)
+                class Child(private vararg val used: Any) : Parent(used)
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(1)
+        }
+
+        @Test
+        fun `not reports ignored vararg parameter`() {
+            val code = """
+                open class Super(private vararg val ignored: Any)
+                class Foo(private vararg val used: Any) : Super(used)
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .isEmpty()
+        }
+
+        @Test
+        fun `reports destructuring vararg parameters`() {
+            val code = """
+            class TestConfig(val foo: String, vararg pairs: Pair<String, Any>) : Config {
+                val values: Map<String, Any> = mapOf(*pairs)
+            }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(0)
+        }
+
         @Test
         fun `reports unused private property`() {
             val code = """
                 class Test(private val unused: Any)
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports for multiple classes with same properties name in the same file`() {
+            val code = """
+                class C(initial:Int = 0){
+                
+                constructor(c:Float, d:Float):this(c.toInt()){
+                   println(c)
+                }
+                  
+               }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isNotEmpty()
         }
 
         @Test
@@ -679,7 +688,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test(val unused: Any)
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -689,7 +698,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     init { used.toString() }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -701,7 +710,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -712,7 +721,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     private val bar: String,
                 )
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -723,7 +732,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     private val bar: String,
                 )
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -732,7 +741,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 @JvmInline value class Foo(private val value: String)
                 inline class Bar(private val value: String)
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -743,16 +752,16 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test(unused: Any)
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
         fun `does not report used parameter for calling super`() {
             val code = """
-                class Parent(val ignored: Any)
+                open class Parent(val ignored: Any)
                 class Test(used: Any) : Parent(used)
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -764,7 +773,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -774,7 +783,19 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     val usedString = used.toString()
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `reports parameter used for delegation`() {
+            val code = """
+                interface Detektion
+                class DelegatingResult(
+                    result: Detektion,
+                    val findings: Map<Any,Any>
+                ) : Detektion by result
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -788,48 +809,10 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                         used.toString()
                     }
                 
-                    // this is actually unused, but clashes with the other constructor
                     constructor(used: Any)
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
-        }
-    }
-
-    @Nested
-    inner class `irrelevant references are ignored` {
-        @Test
-        fun `package declarations are ignored`() {
-            val code = """
-                package org.detekt
-                fun main() {
-                    val org = 1
-                    val detekt = 1
-                    println("foo")
-                }
-            """.trimIndent()
-
-            val results = subject.lint(code)
-            assertThat(results).hasSize(2)
-            assertThat(results).anyMatch { it.message == "Private property `org` is unused." }
-            assertThat(results).anyMatch { it.message == "Private property `detekt` is unused." }
-        }
-
-        @Test
-        fun `import declarations are ignored`() {
-            val code = """
-                import org.detekt.Foo
-                fun main() {
-                    val org = 1
-                    val detekt = 1
-                    println("foo")
-                }
-            """.trimIndent()
-
-            val results = subject.lint(code)
-            assertThat(results).hasSize(2)
-            assertThat(results).anyMatch { it.message == "Private property `org` is unused." }
-            assertThat(results).anyMatch { it.message == "Private property `detekt` is unused." }
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
     }
 }
