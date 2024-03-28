@@ -158,8 +158,9 @@ class UnusedImport(config: Config) : Rule(
     companion object {
         private val operatorSet = setOf(
             "unaryPlus", "unaryMinus", "not", "inc", "dec", "plus", "minus", "times", "div",
-            "mod", "rangeTo", "contains", "get", "set", "invoke", "plusAssign", "minusAssign", "timesAssign",
-            "divAssign", "modAssign", "equals", "compareTo", "iterator", "getValue", "setValue", "provideDelegate"
+            "mod", "rangeTo", "rangeUntil", "contains", "get", "set", "invoke",
+            "plusAssign", "minusAssign", "timesAssign", "divAssign", "modAssign",
+            "equals", "compareTo", "iterator", "getValue", "setValue", "provideDelegate"
         )
 
         private val kotlinDocReferencesRegExp = Regex("\\[([^]]+)](?!\\[)")
