@@ -1,4 +1,4 @@
-package io.github.detekt.tooling.api
+package io.github.detekt.psi
 
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.descriptors.CallableDescriptor

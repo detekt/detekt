@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.github.detekt.tooling.api.FunctionMatcher
+import io.github.detekt.psi.FunctionMatcher
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config

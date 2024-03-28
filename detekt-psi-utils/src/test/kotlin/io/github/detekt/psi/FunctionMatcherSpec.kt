@@ -1,4 +1,4 @@
-package io.github.detekt.tooling.api
+package io.github.detekt.psi
 
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest

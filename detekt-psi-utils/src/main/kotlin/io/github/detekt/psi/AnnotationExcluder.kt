@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.api
+package io.github.detekt.psi
 
 import io.github.detekt.psi.internal.FullQualifiedNameGuesser
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
