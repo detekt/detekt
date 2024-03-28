@@ -257,6 +257,28 @@ class SuppressionSpec {
         assertThat(compileContentForTest("""@file:Suppress("detekt:$value")""").isSuppressedBy()).isFalse()
         assertThat(compileContentForTest("""@file:Suppress("Detekt.$value")""").isSuppressedBy()).isFalse()
     }
+
+    @Test
+    fun checkAllAnnotations1() {
+        val file = compileContentForTest(
+            """
+                @file:Suppress("Foo")
+                @file:SuppressWarnings("RuleId")
+            """.trimIndent()
+        )
+        assertThat(file.isSuppressedBy()).isTrue()
+    }
+
+    @Test
+    fun checkAllAnnotations2() {
+        val file = compileContentForTest(
+            """
+                @file:Suppress("RuleId")
+                @file:SuppressWarnings("Foo")
+            """.trimIndent()
+        )
+        assertThat(file.isSuppressedBy()).isTrue()
+    }
 }
 
 private fun KtFile.getClass(): KtElement {
