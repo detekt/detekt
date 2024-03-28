@@ -130,7 +130,6 @@ public abstract interface class io/gitlab/arturbosch/detekt/extensions/DetektExt
 	public abstract fun getIgnoredVariants ()Lorg/gradle/api/provider/ListProperty;
 	public abstract fun getParallel ()Lorg/gradle/api/provider/Property;
 	public abstract fun getReportsDir ()Lorg/gradle/api/file/DirectoryProperty;
-	public abstract fun getSource ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public abstract fun getToolVersion ()Lorg/gradle/api/provider/Property;
 }
 

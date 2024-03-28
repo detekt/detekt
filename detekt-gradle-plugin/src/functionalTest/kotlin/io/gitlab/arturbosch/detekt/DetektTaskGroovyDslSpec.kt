@@ -14,7 +14,6 @@ class DetektTaskGroovyDslSpec {
                 toolVersion = "1.0.0.RC8"
                 ignoreFailures = true
                 failOnSeverity = io.gitlab.arturbosch.detekt.extensions.FailOnSeverity.Info
-                source.setFrom(file("src/main/kotlin"))
                 baseline = file("path/to/baseline.xml")
                 basePath = projectDir
                 config.setFrom("config/detekt/detekt.yml")

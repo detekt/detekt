@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.loadDetektVersion
 import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
-import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.DisplayName
@@ -29,25 +28,25 @@ class DetektTaskDslSpec {
 
         @Test
         fun `enables xml report to default location`() {
-            val xmlReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.xml")
+            val xmlReportFile = gradleRunner.projectFile("build/reports/detekt/mainSourceSet.xml")
             assertThat(result.output).contains("--report xml:$xmlReportFile")
         }
 
         @Test
         fun `enables html report to default location`() {
-            val htmlReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.html")
+            val htmlReportFile = gradleRunner.projectFile("build/reports/detekt/mainSourceSet.html")
             assertThat(result.output).contains("--report html:$htmlReportFile")
         }
 
         @Test
         fun `enables text report to default location`() {
-            val textReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.txt")
+            val textReportFile = gradleRunner.projectFile("build/reports/detekt/mainSourceSet.txt")
             assertThat(result.output).contains("--report txt:$textReportFile")
         }
 
         @Test
         fun `enables sarif report to default location`() {
-            val sarifReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.sarif")
+            val sarifReportFile = gradleRunner.projectFile("build/reports/detekt/mainSourceSet.sarif")
             assertThat(result.output).contains("--report sarif:$sarifReportFile")
         }
 
@@ -58,7 +57,8 @@ class DetektTaskDslSpec {
             val file2 = gradleRunner.projectFile("src/test/java/My1Root0Class.kt")
             val file3 = gradleRunner.projectFile("src/main/kotlin/My2Root0Class.kt")
             val file4 = gradleRunner.projectFile("src/test/kotlin/My3Root0Class.kt")
-            assertThat(result.output).contains("--input $file1,$file2,$file3,$file4 ")
+            assertThat(result.output).contains("--input $file3,$file1 ")
+            assertThat(result.output).contains("--input $file4,$file2 ")
         }
     }
 
@@ -129,39 +129,6 @@ class DetektTaskDslSpec {
     }
 
     @Nested
-    inner class `with custom input directories` {
-        val customSrc1 = "gensrc/kotlin"
-        val customSrc2 = "src/main/kotlin"
-        private val builder = kotlin().dryRun()
-
-        private val config = """
-            detekt {
-                source.setFrom(files("$customSrc1", "$customSrc2", "folder_that_does_not_exist"))
-            }
-        """.trimIndent()
-
-        private val projectLayout = ProjectLayout(1, srcDirs = listOf(customSrc1, customSrc2))
-        private val gradleRunner = builder
-            .withProjectLayout(projectLayout)
-            .withDetektConfig(config)
-            .build()
-        private val result = gradleRunner.runDetektTask()
-
-        @Test
-        fun `sets input parameter to absolute filenames of all source files`() {
-            val file1 = gradleRunner.projectFile("$customSrc1/My0Root0Class.kt")
-            val file2 = gradleRunner.projectFile("$customSrc2/My1Root0Class.kt")
-            val expectedInputParam = "--input $file1,$file2"
-            assertThat(result.output).contains(expectedInputParam)
-        }
-
-        @Test
-        fun `ignores input directories that do not exist`() {
-            assertThat(result.output).doesNotContain("folder_that_does_not_exist")
-        }
-    }
-
-    @Nested
     inner class `with custom reports dir` {
         private val config = """
             detekt {
@@ -174,25 +141,25 @@ class DetektTaskDslSpec {
 
         @Test
         fun `configures xml report to custom directory`() {
-            val xmlReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.xml")
+            val xmlReportFile = gradleRunner.projectFile("build/detekt-reports/mainSourceSet.xml")
             assertThat(result.output).contains("--report xml:$xmlReportFile")
         }
 
         @Test
         fun `configures html report to custom directory`() {
-            val htmlReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.html")
+            val htmlReportFile = gradleRunner.projectFile("build/detekt-reports/mainSourceSet.html")
             assertThat(result.output).contains("--report html:$htmlReportFile")
         }
 
         @Test
         fun `configures text report to custom directory`() {
-            val textReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.txt")
+            val textReportFile = gradleRunner.projectFile("build/detekt-reports/mainSourceSet.txt")
             assertThat(result.output).contains("--report txt:$textReportFile")
         }
 
         @Test
         fun `configures sarif report to custom directory`() {
-            val sarifReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.sarif")
+            val sarifReportFile = gradleRunner.projectFile("build/detekt-reports/mainSourceSet.sarif")
             assertThat(result.output).contains("--report sarif:$sarifReportFile")
         }
     }
@@ -204,7 +171,7 @@ class DetektTaskDslSpec {
                 reportsDir = file("build/detekt-reports")
             }
             
-            tasks.detekt {
+            tasks.detektMainSourceSet {
                 reports {
                     xml.outputLocation.set(file("build/xml-reports/custom-detekt.xml"))
                 }
@@ -212,7 +179,7 @@ class DetektTaskDslSpec {
         """.trimIndent()
         private val builder = kotlin().dryRun()
         private val gradleRunner = builder.withDetektConfig(config).build()
-        private val result = gradleRunner.runDetektTask()
+        private val result = gradleRunner.runTasks("detektMainSourceSet")
 
         @Test
         fun `configures xml report to specific absolute filename`() {
@@ -222,13 +189,13 @@ class DetektTaskDslSpec {
 
         @Test
         fun `configures html report to default name in custom directory`() {
-            val htmlReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.html")
+            val htmlReportFile = gradleRunner.projectFile("build/detekt-reports/mainSourceSet.html")
             assertThat(result.output).contains("--report html:$htmlReportFile")
         }
 
         @Test
         fun `configures text report to default name in custom directory`() {
-            val textReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.txt")
+            val textReportFile = gradleRunner.projectFile("build/detekt-reports/mainSourceSet.txt")
             assertThat(result.output).contains("--report txt:$textReportFile")
         }
     }
@@ -236,7 +203,7 @@ class DetektTaskDslSpec {
     @Nested
     inner class `with disabled reports` {
         private val config = """
-            tasks.detekt {
+            tasks.detektMainSourceSet {
                 reports {
                     xml.required.set(false)
                     html {
@@ -256,7 +223,7 @@ class DetektTaskDslSpec {
         """.trimIndent()
         private val builder = kotlin().dryRun()
         private val gradleRunner = builder.withDetektConfig(config).build()
-        private val result = gradleRunner.runDetektTask()
+        private val result = gradleRunner.runTasks("detektMainSourceSet")
 
         @Test
         fun `no report param is set`() {
@@ -269,7 +236,7 @@ class DetektTaskDslSpec {
         @Nested
         inner class `configured correctly` {
             private val config = """
-                tasks.detekt {
+                tasks.detektMainSourceSet {
                     reports {
                         custom {
                            reportId = "customXml"
@@ -476,7 +443,7 @@ class DetektTaskDslSpec {
     inner class `with cmdline args` {
         private val builder = kotlin().dryRun()
         private val gradleRunner = builder.build()
-        private val result = gradleRunner.runDetektTask("--auto-correct")
+        private val result = gradleRunner.runDetektTask("detektMainSourceSet", "--auto-correct")
 
         @Test
         fun `enables auto correcting`() {

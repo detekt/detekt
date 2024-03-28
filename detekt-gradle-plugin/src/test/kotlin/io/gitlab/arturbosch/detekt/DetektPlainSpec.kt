@@ -40,45 +40,6 @@ class DetektPlainSpec {
         }
     }
 
-    @Nested
-    inner class `When applying detekt in a project` {
-        val gradleRunner = DslGradleRunner(
-            projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
-            buildFileName = "build.gradle.kts",
-            baselineFiles = listOf("detekt-baseline.xml"),
-            projectScript = {
-                apply<KotlinPluginWrapper>() // org.jetbrains.kotlin.jvm
-                apply<DetektPlugin>()
-
-                repositories {
-                    mavenCentral()
-                }
-
-                tasks.withType(Detekt::class.java).configureEach {
-                    it.reports { reports ->
-                        reports.sarif.required.set(true)
-                        reports.txt.required.set(false)
-                    }
-                }
-            },
-        ).also { it.setupProject() }
-
-        @Test
-        fun `configures detekt plain task`() {
-            val project = gradleRunner.buildProject()
-
-            val detektTask = project.tasks.getByPath("detekt") as Detekt
-            val argumentString = detektTask.arguments.joinToString(" ")
-
-            assertThat(argumentString).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
-            assertThat(argumentString).contains("--report xml:")
-            assertThat(argumentString).contains("--report sarif:")
-            assertThat(argumentString).doesNotContain("--report txt:")
-            assertThat(argumentString).doesNotContain("--classpath")
-            assertThat(argumentString).contains("--fail-on-severity error")
-        }
-    }
-
     @Test
     fun `resolves kotlin version from manifest`() {
         val version = getSupportedKotlinVersion()

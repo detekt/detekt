@@ -10,8 +10,10 @@ import io.gitlab.arturbosch.detekt.internal.registerCreateBaselineTask
 import io.gitlab.arturbosch.detekt.internal.registerDetektTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetContainer
 
@@ -25,12 +27,6 @@ class DetektBasePlugin : Plugin<Project> {
             toolVersion.convention(loadDetektVersion(DetektExtension::class.java.classLoader))
             ignoreFailures.convention(DEFAULT_IGNORE_FAILURES)
             failOnSeverity.convention(DEFAULT_FAIL_ON_SEVERITY)
-            source.setFrom(
-                DEFAULT_SRC_DIR_JAVA,
-                DEFAULT_TEST_SRC_DIR_JAVA,
-                DEFAULT_SRC_DIR_KOTLIN,
-                DEFAULT_TEST_SRC_DIR_KOTLIN,
-            )
             baseline.convention(project.layout.projectDirectory.file("detekt-baseline.xml"))
             enableCompilerPlugin.convention(DEFAULT_COMPILER_PLUGIN_ENABLED)
             debug.convention(DEFAULT_DEBUG_VALUE)
@@ -59,6 +55,15 @@ class DetektBasePlugin : Plugin<Project> {
             configuration.isCanBeConsumed = false
         }
 
+        val detektTask = project.tasks.register(DetektPlugin.DETEKT_TASK_NAME) {
+            it.group = "verification"
+            it.description = "Run detekt analysis on all Kotlin source sets"
+        }
+        project.plugins.withType(BasePlugin::class.java) { _ ->
+            project.tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME).configure {
+                it.dependsOn(detektTask)
+            }
+        }
         project.registerSourceSetTasks(extension)
     }
 
@@ -68,7 +73,7 @@ class DetektBasePlugin : Plugin<Project> {
                 .sourceSets
                 .all { sourceSet ->
                     val taskName = "${DetektPlugin.DETEKT_TASK_NAME}${sourceSet.name.capitalize()}SourceSet"
-                    project.registerDetektTask(taskName, extension) {
+                    val detektTask = project.registerDetektTask(taskName, extension) {
                         source = sourceSet.kotlin
                         // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
                         // We try to find the configured baseline or alternatively a specific variant matching this task.
@@ -77,6 +82,10 @@ class DetektBasePlugin : Plugin<Project> {
                                 baseline.convention(project.layout.file(project.provider { file }))
                             }
                         description = "Run detekt analysis for ${sourceSet.name} source set"
+                    }
+
+                    project.tasks.named(DetektPlugin.DETEKT_TASK_NAME) {
+                        it.dependsOn(detektTask)
                     }
 
                     val baseLineTaskName = "${DetektPlugin.BASELINE_TASK_NAME}${sourceSet.name.capitalize()}SourceSet"
@@ -98,10 +107,6 @@ class DetektBasePlugin : Plugin<Project> {
         internal const val CONFIG_DIR_NAME = "config/detekt"
         internal const val CONFIG_FILE = "detekt.yml"
 
-        private const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
-        private const val DEFAULT_TEST_SRC_DIR_JAVA = "src/test/java"
-        private const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"
-        private const val DEFAULT_TEST_SRC_DIR_KOTLIN = "src/test/kotlin"
         private const val DEFAULT_DEBUG_VALUE = false
         private const val DEFAULT_IGNORE_FAILURES = false
         private val DEFAULT_FAIL_ON_SEVERITY = FailOnSeverity.Error
