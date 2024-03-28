@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import java.util.concurrent.CompletionException
 import kotlin.io.path.Path
 
 @KotlinCoreEnvironmentTest
@@ -45,9 +44,8 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             )
             val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
 
-            assertThatThrownBy {
-                settings.use { analyzer.run(listOf(compileForTest(testFile))) }
-            }.isInstanceOf(IllegalStateException::class.java)
+            assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
+                .isInstanceOf(IllegalStateException::class.java)
         }
 
         @Test
@@ -72,8 +70,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
-                .isInstanceOf(CompletionException::class.java)
-                .hasCauseInstanceOf(IllegalStateException::class.java)
+                .isInstanceOf(IllegalStateException::class.java)
         }
     }
 
@@ -101,7 +98,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             )
             val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
 
-            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }.values.flatten()).isEmpty()
+            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).isEmpty()
             assertThat(output.toString()).isEqualTo(
                 "The rule 'RequiresTypeResolutionMaxLineLength' requires type resolution but it was run without it.\n"
             )
@@ -128,7 +125,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             )
             val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
 
-            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }.values.flatten()).hasSize(1)
+            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).hasSize(1)
             assertThat(output.toString()).isEqualTo(
                 "The rule 'RequiresTypeResolutionMaxLineLength' requires type resolution but it was run without it.\n"
             )
@@ -157,7 +154,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val ktFile = compileForTest(testFile)
             val bindingContext = env.getContextForPaths(listOf(ktFile))
 
-            assertThat(settings.use { analyzer.run(listOf(ktFile), bindingContext) }.values.flatten()).hasSize(2)
+            assertThat(settings.use { analyzer.run(listOf(ktFile), bindingContext) }).hasSize(2)
             assertThat(output.toString()).isEmpty()
         }
 
@@ -181,7 +178,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             )
             val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
 
-            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }.values.flatten()).isEmpty()
+            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).isEmpty()
             assertThat(output.toString()).isEmpty()
         }
 
@@ -353,8 +350,6 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                 .use { settings ->
                     Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
                         .run(listOf(compileContentForTest("", root, Path(path))))
-                        .values
-                        .flatten()
                         .isNotEmpty()
                 }
         }

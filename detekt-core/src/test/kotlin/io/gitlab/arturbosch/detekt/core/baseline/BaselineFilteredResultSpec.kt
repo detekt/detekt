@@ -12,18 +12,9 @@ class BaselineFilteredResultSpec {
     private val baselineFile = resourceAsPath("/baseline_feature/valid-baseline.xml")
 
     private val result = TestDetektion(
-        createFinding(
-            ruleName = "LongParameterList",
-            entity = createEntity(signature = "Signature"),
-        ),
-        createFinding(
-            ruleName = "LongMethod",
-            entity = createEntity(signature = "Signature"),
-        ),
-        createFinding(
-            ruleName = "FeatureEnvy",
-            entity = createEntity(signature = "Signature"),
-        ),
+        createFinding("LongParameterList", createEntity(signature = "Signature")),
+        createFinding("LongMethod", createEntity(signature = "Signature")),
+        createFinding("FeatureEnvy", createEntity(signature = "Signature")),
     )
 
     @Test
@@ -36,8 +27,6 @@ class BaselineFilteredResultSpec {
     fun `filters with an existing baseline file`() {
         val baseline = DefaultBaseline.load(baselineFile)
         val actual = BaselineFilteredResult(result, baseline)
-        // Note: Detektion works with Map<RuleSetId, List<Finding>
-        // but the TestDetektion maps the RuleId as RuleSetId
-        actual.findings.forEach { (_, value) -> assertThat(value).isEmpty() }
+        assertThat(actual.findings).isEmpty()
     }
 }

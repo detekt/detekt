@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
 import io.gitlab.arturbosch.detekt.api.Finding2
-import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.reporting.printFindings
 
 /**
@@ -12,10 +11,8 @@ class FileBasedFindingsReport : AbstractFindingsReport() {
 
     override val id: String = "FileBasedFindingsReport"
 
-    override fun render(findings: Map<RuleSet.Id, List<Finding2>>): String {
-        val findingsPerFile = findings.values
-            .flatten()
-            .groupBy { it.entity.location.filePath.absolutePath.toString() }
+    override fun render(findings: List<Finding2>): String {
+        val findingsPerFile = findings.groupBy { it.entity.location.filePath.absolutePath.toString() }
         return printFindings(findingsPerFile)
     }
 }

@@ -8,9 +8,9 @@ import io.github.detekt.metrics.processors.logicalLinesKey
 import io.github.detekt.metrics.processors.sourceLinesKey
 import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.test.createFinding
+import io.gitlab.arturbosch.detekt.test.createRuleInfo
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -33,7 +33,7 @@ class ComplexityReportSpec {
     }
 }
 
-private fun createDetektion(): Detektion = DetektResult(mapOf(RuleSet.Id("Key") to listOf(createFinding())))
+private fun createDetektion(): Detektion = DetektResult(listOf(createFinding(createRuleInfo(ruleSetId = "Key"))))
 
 private fun addData(detektion: Detektion) {
     detektion.putUserData(complexityKey, 2)

@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.gitlab.arturbosch.detekt.api.RuleSet
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -31,7 +30,7 @@ class QualifiedNameProcessorSpec {
 
 private val result = object : Detektion, UserDataHolderBase() {
 
-    override val findings: Map<RuleSet.Id, List<Finding2>> = emptyMap()
+    override val findings: List<Finding2> = emptyList()
     override val notifications: Collection<Notification> = emptyList()
     override val metrics: Collection<ProjectMetric> = emptyList()
 
