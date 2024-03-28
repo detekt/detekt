@@ -338,4 +338,21 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
                 .hasStartSourceLocations(SourceLocation(3, 9))
         }
     }
+
+    @Nested
+    inner class `descturing variable` {
+        @Test
+        fun `correctly reports the unused structured variable`() {
+            val code = """
+               fun main(){
+                   val (used, unused) = 1 to 2   
+                   println(used)                
+               }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(1)
+                .hasStartSourceLocations(SourceLocation(2, 16))
+        }
+    }
 }

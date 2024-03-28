@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtValueArgumentList
+import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getReferenceTargets
@@ -105,9 +106,10 @@ private class UnusedVariableVisitor(
                     dcl.destructuringDeclaration
                         ?.entries
                         ?.forEach(::registerNewDeclaration)
-
                 dcl.isLoopParameter -> registerNewDeclaration(dcl)
             }
+
+            is KtVariableDeclaration -> registerNewDeclaration(dcl)
         }
     }
 
