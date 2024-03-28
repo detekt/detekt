@@ -115,9 +115,12 @@ internal class Analyzer(
                     .map { (ruleId, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleId.value) }
                     .filter { (_, config) -> config.isActiveOrDefault(false) }
                     .filter { (_, config) -> config.shouldAnalyzeFile(file) }
-                    .map { (ruleProvider, config) -> ruleSet.id to ruleProvider(config) }
-                    .filter { (_, rule) -> !file.isSuppressedBy(rule.ruleId, rule.aliases, ruleSet.id) }
+                    .map { (ruleProvider, config) ->
+                        val rule = ruleProvider(config)
+                        rule.toRuleInfo(ruleSet.id) to rule
+                    }
             }
+            .filterNot { (ruleInfo, rule) -> file.isSuppressedBy(ruleInfo.id, rule.aliases, ruleInfo.ruleSetId) }
             .filter { (_, rule) ->
                 bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
             }
@@ -125,8 +128,8 @@ internal class Analyzer(
 
         val result = HashMap<RuleSet.Id, MutableList<Finding2>>()
 
-        fun executeRules(rules: List<Pair<RuleSet.Id, Rule>>) {
-            for ((ruleSetId, rule) in rules) {
+        fun executeRules(rules: List<Pair<Finding2.RuleInfo, Rule>>) {
+            for ((ruleInfo, rule) in rules) {
                 val findings = rule.visitFile(file, bindingContext, compilerResources)
                     .filterSuppressedFindings(rule, bindingContext)
                 for (finding in findings) {
@@ -134,7 +137,7 @@ internal class Analyzer(
                         "Mapping for '${rule.ruleId}' expected."
                     }
                     result.computeIfAbsent(mappedRuleSet) { mutableListOf() }
-                        .add(finding.toFinding2(rule.toRuleInfo(ruleSetId), rule.computeSeverity()))
+                        .add(finding.toFinding2(ruleInfo, rule.computeSeverity()))
                 }
             }
         }
