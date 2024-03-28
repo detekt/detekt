@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.api.internal
+package io.gitlab.arturbosch.detekt.core.suppressors
 
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
@@ -42,7 +42,7 @@ private val suppressionAnnotations = setOf("Suppress", "SuppressWarnings")
 /**
  * Checks if this kt element is suppressed by @Suppress or @SuppressWarnings annotations.
  */
-fun KtAnnotated.isSuppressedBy(id: Rule.Id, aliases: Set<String>, ruleSetId: RuleSet.Id? = null): Boolean {
+private fun KtAnnotated.isSuppressedBy(id: Rule.Id, aliases: Set<String>, ruleSetId: RuleSet.Id? = null): Boolean {
     val acceptedSuppressionIds = mutableSetOf(id.value, "ALL", "all", "All")
     if (ruleSetId != null) {
         acceptedSuppressionIds.addAll(listOf(ruleSetId.value, "$ruleSetId.$id", "$ruleSetId:$id"))
