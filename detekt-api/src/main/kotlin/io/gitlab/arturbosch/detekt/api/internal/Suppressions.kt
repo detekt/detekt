@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
@@ -24,7 +23,7 @@ private fun KtElement.findAnnotatedSuppressedParent(
     val parent = getStrictParentOfType<KtAnnotated>()
 
     var suppressed = false
-    if (parent != null && parent !is KtFile) {
+    if (parent != null) {
         suppressed = if (parent.isSuppressedBy(id, aliases, ruleSetId)) {
             true
         } else {
