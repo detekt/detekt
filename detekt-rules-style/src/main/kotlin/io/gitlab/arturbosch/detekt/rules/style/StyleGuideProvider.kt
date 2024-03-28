@@ -70,7 +70,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             ::UnusedPrivateProperty,
             ::ExpressionBodySyntax,
             ::NestedClassesVisibility,
-            ::RedundantVisibilityModifierRule,
+            ::RedundantVisibilityModifier,
             ::RangeUntilInsteadOfRangeTo,
             ::UnnecessaryApply,
             ::UnnecessaryAny,
