@@ -357,7 +357,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         fun `report when top level properties have same name as function parameter`() {
             val code = """
                 private val foo = 1
-                fun using(foo:Int){
+                fun using (foo:Int) {
                   println(foo)
                 }
             """.trimIndent()

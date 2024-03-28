@@ -45,7 +45,7 @@ import org.jetbrains.kotlin.resolve.source.toSourceElement
  * </compliant>
  */
 @RequiresTypeResolution
-@ActiveByDefault(since = "1.23.0")
+@ActiveByDefault(since = "2.0.0")
 class UnusedVariable(config: Config) : Rule(
     config,
     "Variable is unused and should be removed."
