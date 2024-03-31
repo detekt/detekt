@@ -1508,7 +1508,7 @@ See all issues at: [M13](https://github.com/detekt/detekt/milestone/12)
 - MaxLineLength should allow excluding import and package statements - [#111](https://github.com/detekt/detekt/issues/111)
 - Rule: Prohibit usage of `lateinit` - [#106](https://github.com/detekt/detekt/issues/106)
 - Use the latest version in gradle-plugin as default - [#151](https://github.com/detekt/detekt/issues/151)
-- False positive for EmptyFunctionBlock with overriden function - [#151](https://github.com/detekt/detekt/issues/148)
+- False positive for EmptyFunctionBlock with overridden function - [#151](https://github.com/detekt/detekt/issues/148)
 
 See all issues at: [M12.2](https://github.com/detekt/detekt/milestone/9)
 

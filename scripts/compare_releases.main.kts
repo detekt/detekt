@@ -99,7 +99,7 @@ class CompareReleases : CliktCommand() {
         val diff = diffResult.readText().trim()
         if (diff.isNotEmpty()) {
             println(diff)
-            println("There were differences beween results.")
+            println("There were differences between results.")
         } else {
             println("No differences between results.")
         }
