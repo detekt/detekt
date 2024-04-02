@@ -10,6 +10,9 @@ import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.condition.DisabledOnOs
+import org.junit.jupiter.api.condition.EnabledOnOs
+import org.junit.jupiter.api.condition.OS
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.ValueSource
@@ -57,12 +60,23 @@ internal class CliArgsSpec {
         }
 
         @Test
-        fun `reports an error if the input path does not exist`() {
+        @DisabledOnOs(OS.WINDOWS)
+        fun `reports an error if the input path does not exist (non-Windows OS)`() {
             val params = arrayOf("--input", "nonExistent ")
 
             assertThatExceptionOfType(HandledArgumentViolation::class.java)
                 .isThrownBy { parseArguments(params) }
                 .withMessage("Input path does not exist: 'nonExistent '")
+        }
+
+        @Test
+        @EnabledOnOs(OS.WINDOWS)
+        fun `reports an error if the input path does not exist (Windows OS)`() {
+            val params = arrayOf("--input", "nonExistent ")
+
+            assertThatExceptionOfType(HandledArgumentViolation::class.java)
+                .isThrownBy { parseArguments(params) }
+                .withMessage(""""--input": couldn't convert "nonExistent " to a path""")
         }
 
         @Nested
