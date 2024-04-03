@@ -41,7 +41,6 @@ include("detekt-utils")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
-// build scan plugin can only be applied in settings file
 plugins {
     id("com.gradle.develocity") version "3.17"
     id("com.gradle.common-custom-user-data-gradle-plugin") version "1.13"
