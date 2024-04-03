@@ -52,8 +52,6 @@ val isCiBuild = providers.environmentVariable("CI").isPresent
 
 develocity {
     buildScan {
-        publishAlways()
-
         // Publish to scans.gradle.com when `--scan` is used explicitly
         if (!gradle.startParameter.isBuildScan) {
             server = "https://ge.detekt.dev"
