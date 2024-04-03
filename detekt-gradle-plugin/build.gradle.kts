@@ -2,7 +2,6 @@
 // https://github.com/gradle/gradle/issues/21285
 @file:Suppress("StringLiteralDuplication")
 
-import com.gradle.enterprise.gradleplugin.testretry.retry
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import java.net.URI
@@ -222,11 +221,13 @@ kotlin {
 }
 
 tasks.withType<Test>().configureEach {
-    develocity.testRetry {
-        @Suppress("MagicNumber")
-        if (providers.environmentVariable("CI").isPresent) {
-            maxRetries = 2
-            maxFailures = 20
+    develocity {
+        testRetry {
+            @Suppress("MagicNumber")
+            if (providers.environmentVariable("CI").isPresent) {
+                maxRetries = 2
+                maxFailures = 20
+            }
         }
     }
 }

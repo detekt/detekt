@@ -60,15 +60,17 @@ allprojects {
 
 subprojects {
     tasks.withType<Test>().configureEach {
-        develocity.testRetry {
-            @Suppress("MagicNumber")
-            if (providers.environmentVariable("CI").isPresent) {
-                maxRetries = 3
-                maxFailures = 20
+        develocity {
+            testRetry {
+                @Suppress("MagicNumber")
+                if (providers.environmentVariable("CI").isPresent) {
+                    maxRetries = 3
+                    maxFailures = 20
+                }
             }
-        }
-        develocity.predictiveTestSelection {
-            enabled = providers.gradleProperty("enablePTS").map(String::toBooleanStrict)
+            predictiveTestSelection {
+                enabled = providers.gradleProperty("enablePTS").map(String::toBooleanStrict)
+            }
         }
     }
 }
