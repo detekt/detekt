@@ -59,10 +59,6 @@ develocity {
         }
 
         uploadInBackground = !isCiBuild
-
-        capture {
-            isTaskInputFiles = true
-        }
     }
 }
 
