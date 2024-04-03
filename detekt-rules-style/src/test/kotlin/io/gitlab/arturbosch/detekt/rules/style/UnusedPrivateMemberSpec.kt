@@ -133,7 +133,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `should not report in overriden classes`() {
+        fun `should not report in overridden classes`() {
             val code = """
                 abstract class Parent {
                     abstract fun abstractFun(arg: Any)
