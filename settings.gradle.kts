@@ -1,5 +1,3 @@
-import com.gradle.enterprise.gradleplugin.internal.extension.BuildScanExtensionWithHiddenFeatures
-
 rootProject.name = "detekt"
 
 pluginManagement {
@@ -52,18 +50,17 @@ plugins {
 
 val isCiBuild = providers.environmentVariable("CI").isPresent
 
-gradleEnterprise {
+develocity {
     buildScan {
         publishAlways()
 
         // Publish to scans.gradle.com when `--scan` is used explicitly
         if (!gradle.startParameter.isBuildScan) {
             server = "https://ge.detekt.dev"
-            this as BuildScanExtensionWithHiddenFeatures
-            publishIfAuthenticated()
+            publishing.onlyIf { it.isAuthenticated }
         }
 
-        isUploadInBackground = !isCiBuild
+        uploadInBackground = !isCiBuild
 
         capture {
             isTaskInputFiles = true
@@ -75,7 +72,7 @@ buildCache {
     local {
         isEnabled = true
     }
-    remote(gradleEnterprise.buildCache) {
+    remote(develocity.buildCache) {
         isEnabled = true
         val accessKey = System.getenv("GRADLE_ENTERPRISE_ACCESS_KEY")
         isPush = isCiBuild && !accessKey.isNullOrEmpty()

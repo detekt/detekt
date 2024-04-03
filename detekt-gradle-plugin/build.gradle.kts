@@ -222,7 +222,7 @@ kotlin {
 }
 
 tasks.withType<Test>().configureEach {
-    retry {
+    develocity.testRetry {
         @Suppress("MagicNumber")
         if (providers.environmentVariable("CI").isPresent) {
             maxRetries = 2

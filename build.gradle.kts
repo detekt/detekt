@@ -1,4 +1,3 @@
-import com.gradle.enterprise.gradleplugin.testretry.retry
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
@@ -61,14 +60,14 @@ allprojects {
 
 subprojects {
     tasks.withType<Test>().configureEach {
-        retry {
+        develocity.testRetry {
             @Suppress("MagicNumber")
             if (providers.environmentVariable("CI").isPresent) {
                 maxRetries = 3
                 maxFailures = 20
             }
         }
-        predictiveSelection {
+        develocity.predictiveTestSelection {
             enabled = providers.gradleProperty("enablePTS").map(String::toBooleanStrict)
         }
     }
