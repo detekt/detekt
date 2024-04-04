@@ -25,7 +25,7 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 
 # This represents the oldest AGP version that is supported by detekt.
 # This should only be updated when updating the minimum version supported by detekt's Gradle plugin.
-android-gradle-minSupported = "com.android.tools.build:gradle-api:7.1.0"
+android-gradle-minSupported = "com.android.tools.build:gradle-api:8.3.1"
 
 # This version of AGP is used for testing and should be updated when new AGP versions are released to ensure detekt's
 # Gradle plugin remains compatible.
