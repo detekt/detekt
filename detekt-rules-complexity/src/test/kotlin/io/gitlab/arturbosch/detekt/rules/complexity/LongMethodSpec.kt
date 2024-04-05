@@ -76,8 +76,9 @@ class LongMethodSpec {
 
         val findings = subject.compileAndLint(code)
 
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0]).isThresholded().hasValue(6)
+        assertThat(findings).singleElement()
+            .isThresholded()
+            .hasValue(6)
     }
 
     @Test
@@ -100,8 +101,9 @@ class LongMethodSpec {
 
         val findings = subject.compileAndLint(code)
 
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0]).isThresholded().hasValue(8)
+        assertThat(findings).singleElement()
+            .isThresholded()
+            .hasValue(8)
     }
 
     @Test
@@ -155,8 +157,9 @@ class LongMethodSpec {
 
         val findings = subject.compileAndLint(code)
 
-        assertThat(findings).hasSize(1)
+        assertThat(findings).singleElement()
+            .isThresholded()
+            .hasValue(6)
         assertThat(findings).hasTextLocations("nestedLongMethod")
-        assertThat(findings[0]).isThresholded().hasValue(6)
     }
 }
