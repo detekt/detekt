@@ -252,7 +252,7 @@ class SuppressionSpec {
     @ValueSource(
         strings = ["aLL", "ruleid", "RuleId2", "RuleId.RuleSetId", "RuleSetId.alias1", "RuleSetId:alias2"]
     )
-    fun shouldSuppressNotSuppress(value: String) {
+    fun `should not suppress with @Suppress annotation with unexpected value`(value: String) {
         assertThat(compileContentForTest("""@file:Suppress("$value")""").isSuppressedBy()).isFalse()
         assertThat(compileContentForTest("""@file:Suppress("detekt.$value")""").isSuppressedBy()).isFalse()
         assertThat(compileContentForTest("""@file:Suppress("detekt:$value")""").isSuppressedBy()).isFalse()
