@@ -155,8 +155,6 @@ public final class io/github/detekt/tooling/api/spec/ProcessingSpec$Companion {
 
 public abstract interface class io/github/detekt/tooling/api/spec/ProjectSpec {
 	public abstract fun getBasePath ()Ljava/nio/file/Path;
-	public abstract fun getExcludes ()Ljava/util/Collection;
-	public abstract fun getIncludes ()Ljava/util/Collection;
 	public abstract fun getInputPaths ()Ljava/util/Collection;
 }
 
@@ -316,12 +314,8 @@ public final class io/github/detekt/tooling/dsl/ProjectSpecBuilder : io/github/d
 	public fun build ()Lio/github/detekt/tooling/api/spec/ProjectSpec;
 	public synthetic fun build ()Ljava/lang/Object;
 	public final fun getBasePath ()Ljava/nio/file/Path;
-	public final fun getExcludes ()Ljava/util/Collection;
-	public final fun getIncludes ()Ljava/util/Collection;
 	public final fun getInputPaths ()Ljava/util/Collection;
 	public final fun setBasePath (Ljava/nio/file/Path;)V
-	public final fun setExcludes (Ljava/util/Collection;)V
-	public final fun setIncludes (Ljava/util/Collection;)V
 	public final fun setInputPaths (Ljava/util/Collection;)V
 }
 
