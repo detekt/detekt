@@ -11,7 +11,6 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
-import org.jetbrains.kotlin.psi.psiUtil.findFunctionByName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -266,14 +265,18 @@ private fun KtFile.getClass(): KtElement {
 
 private fun KtFile.getMethod(): KtElement {
     return findChildByClass(KtClass::class.java)!!
-        .findFunctionByName("function")!!
+        .body!!
+        .children
+        .single { it is KtFunction }
         .let { it as KtFunction }
         .bodyBlockExpression!!
 }
 
 private fun KtFile.getMethodParameter(): KtElement {
     return findChildByClass(KtClass::class.java)!!
-        .findFunctionByName("function")!!
+        .body!!
+        .children
+        .single { it is KtFunction }
         .findDescendantOfType<KtParameter>()!!
 }
 
