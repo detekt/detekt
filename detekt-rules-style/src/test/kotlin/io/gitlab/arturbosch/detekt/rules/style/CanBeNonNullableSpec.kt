@@ -1408,7 +1408,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         println(a)
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -1420,7 +1420,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         return a
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             @Test

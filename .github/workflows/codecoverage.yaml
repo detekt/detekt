@@ -26,7 +26,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3
+        uses: gradle/actions/setup-gradle@e24011a3b5db78bd5ab798036042d9312002f252 # v3
         with:
           gradle-home-cache-cleanup: true
 
@@ -37,7 +37,7 @@ jobs:
 
       - name: Publish Coverage
         if: success()
-        uses: codecov/codecov-action@c16abc29c95fcf9174b58eb7e1abf4c866893bc8 # v4
+        uses: codecov/codecov-action@7afa10ed9b269c561c2336fd862446844e0cbf71 # v4
         with:
           files: ./code-coverage-report/build/reports/jacoco/jacocoMergedReport/jacocoMergedReport.xml
           verbose: true
