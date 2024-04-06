@@ -1,3 +1,8 @@
+public final class io/github/detekt/psi/AnnotationExcluder {
+	public fun <init> (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
+	public final fun shouldExclude (Ljava/util/List;)Z
+}
+
 public final class io/github/detekt/psi/FilePath {
 	public static final field Companion Lio/github/detekt/psi/FilePath$Companion;
 	public fun <init> (Ljava/nio/file/Path;Ljava/nio/file/Path;Ljava/nio/file/Path;)V
@@ -11,6 +16,16 @@ public final class io/github/detekt/psi/FilePath {
 public final class io/github/detekt/psi/FilePath$Companion {
 	public final fun fromAbsolute (Ljava/nio/file/Path;)Lio/github/detekt/psi/FilePath;
 	public final fun fromRelative (Ljava/nio/file/Path;Ljava/nio/file/Path;)Lio/github/detekt/psi/FilePath;
+}
+
+public abstract class io/github/detekt/psi/FunctionMatcher {
+	public static final field Companion Lio/github/detekt/psi/FunctionMatcher$Companion;
+	public abstract fun match (Lorg/jetbrains/kotlin/descriptors/CallableDescriptor;)Z
+	public abstract fun match (Lorg/jetbrains/kotlin/psi/KtNamedFunction;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
+}
+
+public final class io/github/detekt/psi/FunctionMatcher$Companion {
+	public final fun fromFunctionSignature (Ljava/lang/String;)Lio/github/detekt/psi/FunctionMatcher;
 }
 
 public final class io/github/detekt/psi/KeysKt {
