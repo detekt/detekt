@@ -5,7 +5,6 @@ kotlin = "1.9.23"
 coroutines = "1.8.0"
 ktlint = "1.1.1"
 junit = "5.10.2"
-poko = "0.15.2"
 slf4j = "2.0.12"
 
 [libraries]
@@ -44,7 +43,6 @@ classgraph = "io.github.classgraph:classgraph:4.8.170"
 snakeyaml = "org.snakeyaml:snakeyaml-engine:2.7"
 jcommander = "org.jcommander:jcommander:1.83"
 kotlinCompileTesting = { module = "dev.zacsweers.kctfork:core", version = "0.4.1" }
-poko-annotations = { module = "dev.drewhamilton.poko:poko-annotations", version.ref = "poko" }
 jetbrains-annotations = "org.jetbrains:annotations:24.1.0"
 
 [plugins]
