@@ -62,7 +62,7 @@
   <div class="breadcrumbs"><a href="../../index.html">detekt-api</a><span class="delimiter">/</span><a href="../index.html">io.gitlab.arturbosch.detekt.api</a><span class="delimiter">/</span><span class="current">ReportingExtension</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Reporting</span><wbr><span><span>Extension</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">ReportingExtension</a> : <a href="../-extension/index.html">Extension</a></div><p class="paragraph">Allows to intercept detekt's result container by listening to the initial and final state and manipulate the reported findings.</p></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">ReportingExtension</a> : <a href="../-extension/index.html">Extension</a></div><p class="paragraph">Allows to intercept detekt's result container by listening to the initial and final state and manipulate the reported issues.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
@@ -128,7 +128,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="on-final-result.html"><span class="token function">onFinalResult</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">result<span class="token operator">: </span><a href="../-detektion/index.html">Detektion</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Is called after all extensions's <a href="transform-findings.html">transformFindings</a> were called.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="on-final-result.html"><span class="token function">onFinalResult</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">result<span class="token operator">: </span><a href="../-detektion/index.html">Detektion</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Is called after all extensions's <a href="transform-issues.html">transformIssues</a> were called.</p></div></div></div>
                 </div>
               </div>
             </div>
@@ -143,22 +143,22 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="on-raw-result.html"><span class="token function">onRawResult</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">result<span class="token operator">: </span><a href="../-detektion/index.html">Detektion</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Is called before any <a href="transform-findings.html">transformFindings</a> calls were executed.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="on-raw-result.html"><span class="token function">onRawResult</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">result<span class="token operator">: </span><a href="../-detektion/index.html">Detektion</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Is called before any <a href="transform-issues.html">transformIssues</a> calls were executed.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-135524769%2FFunctions%2F581599712" anchor-label="transformFindings" id="-135524769%2FFunctions%2F581599712" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"></a>
+<a data-name="-1014340229%2FFunctions%2F581599712" anchor-label="transformIssues" id="-1014340229%2FFunctions%2F581599712" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"></a>
           <div class="table-row" data-filterable-current=":detekt-api:dokkaHtmlPartial/main" data-filterable-set=":detekt-api:dokkaHtmlPartial/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="transform-findings.html"><span>transform</span><wbr><span><span>Findings</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-135524769%2FFunctions%2F581599712"></span>
+                  <div><a href="transform-issues.html"><span>transform</span><wbr><span><span>Issues</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1014340229%2FFunctions%2F581599712"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="transform-findings.html"><span class="token function">transformFindings</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">findings<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-finding2/index.html">Finding2</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-finding2/index.html">Finding2</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Allows to transform the reported findings e.g. apply custom filtering.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="transform-issues.html"><span class="token function">transformIssues</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">issues<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-issue/index.html">Issue</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-issue/index.html">Issue</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Allows to transform the reported issues e.g. apply custom filtering.</p></div></div></div>
                 </div>
               </div>
             </div>
