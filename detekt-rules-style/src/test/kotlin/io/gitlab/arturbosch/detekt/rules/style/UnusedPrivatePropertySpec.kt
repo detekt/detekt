@@ -205,7 +205,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     println(o("$\{PC.Companion.OO.BLA.toString() + ""}"))
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test

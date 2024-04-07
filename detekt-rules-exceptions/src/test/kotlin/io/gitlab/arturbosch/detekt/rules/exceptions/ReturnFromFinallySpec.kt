@@ -192,7 +192,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
 
             val finding = subject.compileAndLintWithContext(env, code)
 
-            assertThat(finding).hasSize(0)
+            assertThat(finding).isEmpty()
         }
     }
 
@@ -211,7 +211,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
 
             val finding = subject.compileAndLintWithContext(env, code)
 
-            assertThat(finding).hasSize(0)
+            assertThat(finding).isEmpty()
         }
     }
 
@@ -233,7 +233,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
 
             val finding = subject.compileAndLintWithContext(env, code)
 
-            assertThat(finding).hasSize(0)
+            assertThat(finding).isEmpty()
         }
     }
 
@@ -253,7 +253,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
 
             val finding = subject.compileAndLintWithContext(env, code)
 
-            assertThat(finding).hasSize(0)
+            assertThat(finding).isEmpty()
         }
     }
 

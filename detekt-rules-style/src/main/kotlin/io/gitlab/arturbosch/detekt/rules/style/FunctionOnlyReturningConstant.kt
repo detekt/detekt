@@ -36,7 +36,7 @@ class FunctionOnlyReturningConstant(config: Config) : Rule(
     "A function that only returns a constant is misleading. Consider declaring a constant instead."
 ) {
 
-    @Configuration("if overriden functions should be ignored")
+    @Configuration("if overridden functions should be ignored")
     private val ignoreOverridableFunction: Boolean by config(true)
 
     @Configuration("if actual functions should be ignored")

@@ -225,7 +225,7 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
         )
-        assertThat(findings).hasSize(0)
+        assertThat(findings).isEmpty()
     }
 
     @Test

@@ -1,5 +1,3 @@
-import com.gradle.enterprise.gradleplugin.internal.extension.BuildScanExtensionWithHiddenFeatures
-
 rootProject.name = "detekt"
 
 pluginManagement {
@@ -43,31 +41,23 @@ include("detekt-utils")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
-// build scan plugin can only be applied in settings file
 plugins {
-    id("com.gradle.enterprise") version "3.16.2"
-    id("com.gradle.common-custom-user-data-gradle-plugin") version "1.13"
+    id("com.gradle.develocity") version "3.17"
+    id("com.gradle.common-custom-user-data-gradle-plugin") version "2.0"
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
 val isCiBuild = providers.environmentVariable("CI").isPresent
 
-gradleEnterprise {
+develocity {
     buildScan {
-        publishAlways()
-
         // Publish to scans.gradle.com when `--scan` is used explicitly
         if (!gradle.startParameter.isBuildScan) {
             server = "https://ge.detekt.dev"
-            this as BuildScanExtensionWithHiddenFeatures
-            publishIfAuthenticated()
+            publishing.onlyIf { it.isAuthenticated }
         }
 
-        isUploadInBackground = !isCiBuild
-
-        capture {
-            isTaskInputFiles = true
-        }
+        uploadInBackground = !isCiBuild
     }
 }
 
@@ -75,7 +65,7 @@ buildCache {
     local {
         isEnabled = true
     }
-    remote(gradleEnterprise.buildCache) {
+    remote(develocity.buildCache) {
         isEnabled = true
         val accessKey = System.getenv("GRADLE_ENTERPRISE_ACCESS_KEY")
         isPush = isCiBuild && !accessKey.isNullOrEmpty()

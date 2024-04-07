@@ -55,7 +55,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
         val rule = MaxChainedCallsOnSameLine(TestConfig("maxChainedCalls" to 1))
         val findings = rule.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
-        assertThat(findings[0]).hasMessage(getTestMessage(2, 1))
+        assertThat(findings).singleElement().hasMessage(getTestMessage(2, 1))
     }
 
     @Test
@@ -71,8 +71,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
 
         val rule = MaxChainedCallsOnSameLine(TestConfig("maxChainedCalls" to 1))
         val findings = rule.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0]).hasMessage(getTestMessage(2, 1))
+        assertThat(findings).singleElement().hasMessage(getTestMessage(2, 1))
     }
 
     @Test
@@ -88,8 +87,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
 
         val rule = MaxChainedCallsOnSameLine(TestConfig("maxChainedCalls" to 1))
         val findings = rule.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0]).hasMessage(getTestMessage(2, 1))
+        assertThat(findings).singleElement().hasMessage(getTestMessage(2, 1))
     }
 
     @Test
@@ -186,8 +184,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
             val x = kotlin.math.floor(1.0).plus(1).plus(1).plus(1)
         """.trimIndent()
         val findings = rule.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0]).hasMessage(getTestMessage(4, 3))
+        assertThat(findings).singleElement().hasMessage(getTestMessage(4, 3))
     }
 
     @Test
@@ -205,8 +202,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
             val x = kotlin.run { 1 }.plus(1).plus(1).plus(1)
         """.trimIndent()
         val findings = rule.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0]).hasMessage(getTestMessage(4, 3))
+        assertThat(findings).singleElement().hasMessage(getTestMessage(4, 3))
     }
 
     @Test
@@ -227,8 +223,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
             val x = 1.0.ulp.ulp.ulp
         """.trimIndent()
         val findings = rule.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0]).hasMessage(getTestMessage(4, 3))
+        assertThat(findings).singleElement().hasMessage(getTestMessage(4, 3))
     }
 
     @Test
@@ -269,8 +264,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
                 .plus(0)
         """.trimIndent()
         val findings = rule.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0]).hasMessage(getTestMessage(4, 3))
+        assertThat(findings).singleElement().hasMessage(getTestMessage(4, 3))
     }
 
     @Nested
@@ -319,8 +313,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
             """.trimIndent()
             val rule = MaxChainedCallsOnSameLine(TestConfig("maxChainedCalls" to 1))
             val findings = rule.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0]).hasMessage(getTestMessage(2, 1))
+            assertThat(findings).singleElement().hasMessage(getTestMessage(2, 1))
         }
 
         @Test
@@ -421,8 +414,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
                     )
             """.trimIndent()
             val findings = rule.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0]).hasMessage(getTestMessage(4, 3))
+            assertThat(findings).singleElement().hasMessage(getTestMessage(4, 3))
         }
 
         @Test
@@ -440,8 +432,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
                     )
             """.trimIndent()
             val findings = rule.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0]).hasMessage(getTestMessage(4, 3))
+            assertThat(findings).singleElement().hasMessage(getTestMessage(4, 3))
         }
 
         @Test
@@ -503,8 +494,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
                 ).ulp.ulp.ulp.ulp
             """.trimIndent()
             val findings = rule.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0]).hasMessage(getTestMessage(4, 3))
+            assertThat(findings).singleElement().hasMessage(getTestMessage(4, 3))
         }
 
         @Nested
@@ -524,8 +514,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
                         )
                 """.trimIndent()
                 val findings = rule.compileAndLintWithContext(env, code)
-                assertThat(findings).hasSize(1)
-                assertThat(findings[0]).hasMessage(getTestMessage(4, 3))
+                assertThat(findings).singleElement().hasMessage(getTestMessage(4, 3))
             }
 
             @Test

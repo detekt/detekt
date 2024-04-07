@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.psi.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
