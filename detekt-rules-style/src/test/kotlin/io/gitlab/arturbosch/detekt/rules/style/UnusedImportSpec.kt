@@ -33,6 +33,27 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `does not report range operators`() {
+        val main = """
+            import java.time.Month
+            import ranges.rangeTo
+            import ranges.rangeUntil
+            
+            fun main() {
+                LocalDate.of(2024, Month.MARCH, 27)..LocalDate.of(2024, Month.MARCH, 27)
+                LocalDate.of(2024, Month.MARCH, 27)..<LocalDate.of(2024, Month.MARCH, 27)
+            }
+        """.trimIndent()
+        val additional = """
+            package ranges
+            
+            operator fun LocalDate.rangeTo(that: LocalDate) = TODO()
+            operator fun LocalDate.rangeUntil(that: LocalDate) = TODO()
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
+    }
+
+    @Test
     fun `does not report imports in documentation`() {
         val main = """
             import tasks.success
