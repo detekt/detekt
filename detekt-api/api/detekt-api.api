@@ -107,7 +107,7 @@ public class io/gitlab/arturbosch/detekt/api/DetektVisitor : org/jetbrains/kotli
 public abstract interface class io/gitlab/arturbosch/detekt/api/Detektion : org/jetbrains/kotlin/com/intellij/openapi/util/UserDataHolder {
 	public abstract fun add (Lio/gitlab/arturbosch/detekt/api/Notification;)V
 	public abstract fun add (Lio/gitlab/arturbosch/detekt/api/ProjectMetric;)V
-	public abstract fun getFindings ()Ljava/util/Map;
+	public abstract fun getFindings ()Ljava/util/List;
 	public abstract fun getMetrics ()Ljava/util/Collection;
 	public abstract fun getNotifications ()Ljava/util/Collection;
 }
@@ -149,7 +149,7 @@ public final class io/gitlab/arturbosch/detekt/api/Extension$DefaultImpls {
 public abstract interface class io/gitlab/arturbosch/detekt/api/FileProcessListener : io/gitlab/arturbosch/detekt/api/Extension {
 	public abstract fun onFinish (Ljava/util/List;Lio/gitlab/arturbosch/detekt/api/Detektion;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
 	public abstract fun onProcess (Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
-	public abstract fun onProcessComplete (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/Map;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
+	public abstract fun onProcessComplete (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
 	public abstract fun onStart (Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
 }
 
@@ -159,7 +159,7 @@ public final class io/gitlab/arturbosch/detekt/api/FileProcessListener$DefaultIm
 	public static fun init (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
 	public static fun onFinish (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Ljava/util/List;Lio/gitlab/arturbosch/detekt/api/Detektion;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
 	public static fun onProcess (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
-	public static fun onProcessComplete (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/Map;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
+	public static fun onProcessComplete (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
 	public static fun onStart (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
 }
 
@@ -254,7 +254,7 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/PropertiesAware 
 public abstract interface class io/gitlab/arturbosch/detekt/api/ReportingExtension : io/gitlab/arturbosch/detekt/api/Extension {
 	public abstract fun onFinalResult (Lio/gitlab/arturbosch/detekt/api/Detektion;)V
 	public abstract fun onRawResult (Lio/gitlab/arturbosch/detekt/api/Detektion;)V
-	public abstract fun transformFindings (Ljava/util/Map;)Ljava/util/Map;
+	public abstract fun transformFindings (Ljava/util/List;)Ljava/util/List;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/ReportingExtension$DefaultImpls {
@@ -263,7 +263,7 @@ public final class io/gitlab/arturbosch/detekt/api/ReportingExtension$DefaultImp
 	public static fun init (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
 	public static fun onFinalResult (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Lio/gitlab/arturbosch/detekt/api/Detektion;)V
 	public static fun onRawResult (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Lio/gitlab/arturbosch/detekt/api/Detektion;)V
-	public static fun transformFindings (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Ljava/util/Map;)Ljava/util/Map;
+	public static fun transformFindings (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Ljava/util/List;)Ljava/util/List;
 }
 
 public abstract interface annotation class io/gitlab/arturbosch/detekt/api/RequiresTypeResolution : java/lang/annotation/Annotation {

@@ -21,7 +21,7 @@ fun MessageCollector.error(msg: String) {
 }
 
 fun MessageCollector.reportFindings(result: Detektion) {
-    for (finding in result.findings.values.flatten()) {
+    result.findings.forEach { finding ->
         val (message, location) = finding.renderAsCompilerWarningMessage()
         warn(message, location)
     }

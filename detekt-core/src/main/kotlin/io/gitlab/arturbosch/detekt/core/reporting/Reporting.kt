@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.OutputReport
-import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 
 internal fun defaultReportMapping(report: OutputReport) =
@@ -35,21 +34,16 @@ private val messageReplacementRegex = Regex("\\s+")
 
 fun Config.excludeCorrectable(): Boolean = subConfig(BUILD).valueOrDefault(EXCLUDE_CORRECTABLE, false)
 
-fun Detektion.filterEmptyIssues(config: Config): Map<RuleSet.Id, List<Finding2>> {
+fun Detektion.filterEmptyIssues(config: Config): List<Finding2> {
     return this
         .filterAutoCorrectedIssues(config)
-        .filter { it.value.isNotEmpty() }
 }
 
-fun Detektion.filterAutoCorrectedIssues(config: Config): Map<RuleSet.Id, List<Finding2>> {
+fun Detektion.filterAutoCorrectedIssues(config: Config): List<Finding2> {
     if (!config.excludeCorrectable()) {
         return findings
     }
-    val filteredFindings = HashMap<RuleSet.Id, List<Finding2>>()
-    findings.forEach { (ruleSetId, findingsList) ->
-        filteredFindings[ruleSetId] = findingsList.filter { finding -> !finding.autoCorrectEnabled }
-    }
-    return filteredFindings
+    return findings.filter { finding -> !finding.autoCorrectEnabled }
 }
 
 private fun Finding2.truncatedMessage(): String {

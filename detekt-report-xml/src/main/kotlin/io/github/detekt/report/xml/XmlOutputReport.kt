@@ -20,13 +20,12 @@ class XmlOutputReport : BuiltInOutputReport, OutputReport() {
         get() = severity.name.lowercase(Locale.US)
 
     override fun render(detektion: Detektion): String {
-        val smells = detektion.findings.flatMap { it.value }
-
         val lines = ArrayList<String>()
         lines += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
         lines += "<checkstyle version=\"4.3\">"
 
-        smells.groupBy { it.location.filePath.relativePath ?: it.location.filePath.absolutePath }
+        detektion.findings
+            .groupBy { it.location.filePath.relativePath ?: it.location.filePath.absolutePath }
             .forEach { (filePath, findings) ->
                 lines += "<file name=\"${filePath.invariantSeparatorsPathString.toXmlString()}\">"
                 findings.forEach {

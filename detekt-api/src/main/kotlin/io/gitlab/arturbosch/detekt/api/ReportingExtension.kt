@@ -16,7 +16,7 @@ interface ReportingExtension : Extension {
     /**
      * Allows to transform the reported findings e.g. apply custom filtering.
      */
-    fun transformFindings(findings: Map<RuleSet.Id, List<Finding2>>): Map<RuleSet.Id, List<Finding2>> = findings
+    fun transformFindings(findings: List<Finding2>): List<Finding2> = findings
 
     /**
      * Is called after all extensions's [transformFindings] were called.

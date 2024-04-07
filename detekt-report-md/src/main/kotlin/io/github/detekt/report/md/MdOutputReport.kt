@@ -15,7 +15,6 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding2
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
@@ -120,16 +119,13 @@ private fun MarkdownContent.renderRule(ruleInfo: Finding2.RuleInfo, findings: Li
     }
 }
 
-private fun MarkdownContent.renderFindings(findings: Map<RuleSet.Id, List<Finding2>>) {
-    val total = findings.values
-        .asSequence()
-        .map { it.size }
-        .fold(0) { a, b -> a + b }
+private fun MarkdownContent.renderFindings(findings: List<Finding2>) {
+    val total = findings.count()
 
     h2 { "Findings (%,d)".format(Locale.ROOT, total) }
 
     findings
-        .filter { it.value.isNotEmpty() }
+        .groupBy { it.ruleInfo.ruleSetId }
         .toList()
         .sortedBy { (group, _) -> group.value }
         .forEach { (_, groupFindings) ->
