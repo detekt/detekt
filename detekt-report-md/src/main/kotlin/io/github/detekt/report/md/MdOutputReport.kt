@@ -12,7 +12,7 @@ import io.github.detekt.utils.list
 import io.github.detekt.utils.markdown
 import io.github.detekt.utils.paragraph
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.SourceLocation
@@ -48,7 +48,7 @@ class MdOutputReport : BuiltInOutputReport, OutputReport() {
         h2 { "Complexity Report" }
         renderComplexity(getComplexityMetrics(detektion))
 
-        renderFindings(detektion.findings)
+        renderIssues(detektion.issues)
         emptyLine()
 
         paragraph {
@@ -81,20 +81,20 @@ private fun MarkdownContent.renderComplexity(complexityReport: List<String>) {
     }
 }
 
-private fun MarkdownContent.renderGroup(findings: List<Finding2>) {
-    findings
+private fun MarkdownContent.renderGroup(issues: List<Issue>) {
+    issues
         .groupBy { it.ruleInfo }
         .toList()
         .sortedBy { (ruleInfo, _) -> ruleInfo.id.value }
-        .forEach { (ruleInfo, ruleFindings) ->
-            renderRule(ruleInfo, ruleFindings)
+        .forEach { (ruleInfo, ruleIssues) ->
+            renderRule(ruleInfo, ruleIssues)
         }
 }
 
-private fun MarkdownContent.renderRule(ruleInfo: Finding2.RuleInfo, findings: List<Finding2>) {
+private fun MarkdownContent.renderRule(ruleInfo: Issue.RuleInfo, issues: List<Issue>) {
     val ruleId = ruleInfo.id.value
     val ruleSetId = ruleInfo.ruleSetId.value
-    h3 { "$ruleSetId, $ruleId (%,d)".format(Locale.ROOT, findings.size) }
+    h3 { "$ruleSetId, $ruleId (%,d)".format(Locale.ROOT, issues.size) }
     paragraph { ruleInfo.description }
 
     paragraph {
@@ -105,7 +105,7 @@ private fun MarkdownContent.renderRule(ruleInfo: Finding2.RuleInfo, findings: Li
     }
 
     list {
-        findings
+        issues
             .sortedWith(
                 compareBy(
                     { it.location.filePath.absolutePath.toString() },
@@ -114,40 +114,40 @@ private fun MarkdownContent.renderRule(ruleInfo: Finding2.RuleInfo, findings: Li
                 )
             )
             .forEach {
-                item { renderFinding(it) }
+                item { renderIssue(it) }
             }
     }
 }
 
-private fun MarkdownContent.renderFindings(findings: List<Finding2>) {
-    val total = findings.count()
+private fun MarkdownContent.renderIssues(issues: List<Issue>) {
+    val total = issues.count()
 
-    h2 { "Findings (%,d)".format(Locale.ROOT, total) }
+    h2 { "Issues (%,d)".format(Locale.ROOT, total) }
 
-    findings
+    issues
         .groupBy { it.ruleInfo.ruleSetId }
         .toList()
         .sortedBy { (group, _) -> group.value }
-        .forEach { (_, groupFindings) ->
-            renderGroup(groupFindings)
+        .forEach { (_, groupIssues) ->
+            renderGroup(groupIssues)
         }
 }
 
-private fun MarkdownContent.renderFinding(finding: Finding2): String {
-    val filePath = finding.location.filePath.relativePath ?: finding.location.filePath.absolutePath
+private fun MarkdownContent.renderIssue(issue: Issue): String {
+    val filePath = issue.location.filePath.relativePath ?: issue.location.filePath.absolutePath
     val location =
-        "${filePath.invariantSeparatorsPathString}:${finding.location.source.line}:${finding.location.source.column}"
+        "${filePath.invariantSeparatorsPathString}:${issue.location.source.line}:${issue.location.source.column}"
 
-    val message = if (finding.message.isNotEmpty()) {
-        codeBlock("") { finding.message }
+    val message = if (issue.message.isNotEmpty()) {
+        codeBlock("") { issue.message }
     } else {
         ""
     }
 
-    val psiFile = finding.entity.ktElement?.containingFile
+    val psiFile = issue.entity.ktElement?.containingFile
     val snippet = if (psiFile != null) {
         val lineSequence = psiFile.text.splitToSequence('\n')
-        snippetCode(lineSequence, finding.location.source)
+        snippetCode(lineSequence, issue.location.source)
     } else {
         ""
     }

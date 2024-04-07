@@ -5,22 +5,22 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
 import io.gitlab.arturbosch.detekt.core.reporting.decolorized
 import io.gitlab.arturbosch.detekt.test.TestDetektion
-import io.gitlab.arturbosch.detekt.test.createFinding
+import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createRuleInfo
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FindingsReportSpec {
+class IssuesReportSpec {
 
-    private val subject = createFindingsReport()
+    private val subject = createIssuesReport()
 
     @Test
     fun `has the reference content`() {
-        val expectedContent = readResourceContent("/reporting/findings-report.txt")
+        val expectedContent = readResourceContent("/reporting/issues-report.txt")
         val detektion = TestDetektion(
-            createFinding(createRuleInfo(ruleSetId = "Ruleset1")),
-            createFinding(createRuleInfo(ruleSetId = "Ruleset1")),
-            createFinding(createRuleInfo(ruleSetId = "Ruleset2")),
+            createIssue(createRuleInfo(ruleSetId = "Ruleset1")),
+            createIssue(createRuleInfo(ruleSetId = "Ruleset1")),
+            createIssue(createRuleInfo(ruleSetId = "Ruleset2")),
         )
 
         val output = subject.render(detektion)?.decolorized()
@@ -29,14 +29,14 @@ class FindingsReportSpec {
     }
 
     @Test
-    fun `reports no findings`() {
+    fun `reports no issues`() {
         val detektion = TestDetektion()
         assertThat(subject.render(detektion)).isNull()
     }
 
     @Test
     fun `should not add auto corrected issues to report`() {
-        val report = FindingsReport()
+        val report = IssuesReport()
         AutoCorrectableIssueAssert.isReportNull(report)
     }
 
@@ -52,15 +52,15 @@ class FindingsReportSpec {
             "threshold is reached."
         val multilineMessage = "A multiline\n\r\tmessage.\t "
         val detektion = TestDetektion(
-            createFinding(createRuleInfo("LongRule", "Ruleset"), message = longMessage),
-            createFinding(createRuleInfo("MultilineRule", "Ruleset"), message = multilineMessage),
+            createIssue(createRuleInfo("LongRule", "Ruleset"), message = longMessage),
+            createIssue(createRuleInfo("MultilineRule", "Ruleset"), message = multilineMessage),
         )
         assertThat(subject.render(detektion)?.decolorized()).isEqualTo(expectedContent)
     }
 }
 
-private fun createFindingsReport(): FindingsReport {
-    val report = FindingsReport()
+private fun createIssuesReport(): IssuesReport {
+    val report = IssuesReport()
     report.init(Config.empty)
     return report
 }

@@ -6,13 +6,13 @@ import io.github.detekt.sarif4k.Message
 import io.github.detekt.sarif4k.PhysicalLocation
 import io.github.detekt.sarif4k.Region
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Severity
 import kotlin.io.path.invariantSeparatorsPathString
 
 internal fun toResults(detektion: Detektion): List<io.github.detekt.sarif4k.Result> =
-    detektion.findings.map { it.toResult() }
+    detektion.issues.map { it.toResult() }
 
 internal fun Severity.toResultLevel() = when (this) {
     Severity.Error -> Level.Error
@@ -20,7 +20,7 @@ internal fun Severity.toResultLevel() = when (this) {
     Severity.Info -> Level.Note
 }
 
-private fun Finding2.toResult(): io.github.detekt.sarif4k.Result {
+private fun Issue.toResult(): io.github.detekt.sarif4k.Result {
     return io.github.detekt.sarif4k.Result(
         ruleID = "detekt.${ruleInfo.ruleSetId}.${ruleInfo.id}",
         level = severity.toResultLevel(),

@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
@@ -35,7 +35,7 @@ internal class Analyzer(
     fun run(
         ktFiles: Collection<KtFile>,
         bindingContext: BindingContext = BindingContext.EMPTY
-    ): List<Finding2> {
+    ): List<Issue> {
         val languageVersionSettings = settings.environment.configuration.languageVersionSettings
 
         val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
@@ -54,28 +54,28 @@ internal class Analyzer(
         ktFiles: Collection<KtFile>,
         bindingContext: BindingContext,
         compilerResources: CompilerResources
-    ): List<Finding2> =
+    ): List<Issue> =
         ktFiles.flatMap { file ->
             processors.forEach { it.onProcess(file, bindingContext) }
-            val findings = runCatching { analyze(file, bindingContext, compilerResources) }
+            val issues = runCatching { analyze(file, bindingContext, compilerResources) }
                 .onFailure { throwIllegalStateException(file, it) }
                 .getOrDefault(emptyList())
-            processors.forEach { it.onProcessComplete(file, findings, bindingContext) }
-            findings
+            processors.forEach { it.onProcessComplete(file, issues, bindingContext) }
+            issues
         }
 
     private fun runAsync(
         ktFiles: Collection<KtFile>,
         bindingContext: BindingContext,
         compilerResources: CompilerResources
-    ): List<Finding2> {
+    ): List<Issue> {
         val service = settings.taskPool
-        val tasks: TaskList<List<Finding2>?> = ktFiles.map { file ->
+        val tasks: TaskList<List<Issue>?> = ktFiles.map { file ->
             service.task {
                 processors.forEach { it.onProcess(file, bindingContext) }
-                val findings = analyze(file, bindingContext, compilerResources)
-                processors.forEach { it.onProcessComplete(file, findings, bindingContext) }
-                findings
+                val issues = analyze(file, bindingContext, compilerResources)
+                processors.forEach { it.onProcessComplete(file, issues, bindingContext) }
+                issues
             }.recover { throwIllegalStateException(file, it) }
         }
         return awaitAll(tasks).filterNotNull().flatten()
@@ -85,7 +85,7 @@ internal class Analyzer(
         file: KtFile,
         bindingContext: BindingContext,
         compilerResources: CompilerResources
-    ): List<Finding2> {
+    ): List<Issue> {
         val activeRuleSetsToRuleSetConfigs = providers.asSequence()
             .map { it to settings.config.subConfig(it.ruleSetId.value) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
@@ -113,7 +113,7 @@ internal class Analyzer(
         return (correctableRules + otherRules).flatMap { (ruleInfo, rule) ->
             rule.visitFile(file, bindingContext, compilerResources)
                 .filterSuppressedFindings(rule, bindingContext)
-                .map { it.toFinding2(ruleInfo, rule.computeSeverity()) }
+                .map { it.toIssue(ruleInfo, rule.computeSeverity()) }
         }
     }
 
@@ -156,33 +156,33 @@ private fun throwIllegalStateException(file: KtFile, error: Throwable): Nothing 
     throw IllegalStateException(message, error)
 }
 
-private fun Finding.toFinding2(rule: Finding2.RuleInfo, severity: Severity): Finding2 {
+private fun Finding.toIssue(rule: Issue.RuleInfo, severity: Severity): Issue {
     return when (this) {
-        is CorrectableCodeSmell -> Finding2Impl(rule, entity, message, references, severity, autoCorrectEnabled)
+        is CorrectableCodeSmell -> IssueImpl(rule, entity, message, references, severity, autoCorrectEnabled)
 
-        is CodeSmell -> Finding2Impl(rule, entity, message, references, severity)
+        is CodeSmell -> IssueImpl(rule, entity, message, references, severity)
 
         else -> error("wtf?")
     }
 }
 
-private fun Rule.toRuleInfo(ruleSetId: RuleSet.Id): Finding2.RuleInfo {
-    return Finding2Impl.RuleInfo(ruleId, ruleSetId, description)
+private fun Rule.toRuleInfo(ruleSetId: RuleSet.Id): Issue.RuleInfo {
+    return IssueImpl.RuleInfo(ruleId, ruleSetId, description)
 }
 
-private data class Finding2Impl(
-    override val ruleInfo: Finding2.RuleInfo,
+private data class IssueImpl(
+    override val ruleInfo: Issue.RuleInfo,
     override val entity: Entity,
     override val message: String,
     override val references: List<Entity>,
     override val severity: Severity,
     override val autoCorrectEnabled: Boolean = false,
-) : Finding2 {
+) : Issue {
     data class RuleInfo(
         override val id: Rule.Id,
         override val ruleSetId: RuleSet.Id,
         override val description: String,
-    ) : Finding2.RuleInfo
+    ) : Issue.RuleInfo
 }
 
 /**

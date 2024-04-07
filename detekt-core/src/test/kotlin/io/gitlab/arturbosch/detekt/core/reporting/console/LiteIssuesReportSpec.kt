@@ -4,40 +4,40 @@ import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
 import io.gitlab.arturbosch.detekt.test.TestDetektion
-import io.gitlab.arturbosch.detekt.test.createFinding
+import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class LiteFindingsReportSpec {
+class LiteIssuesReportSpec {
 
-    private val subject = createFindingsReport()
+    private val subject = createIssuesReport()
 
     @Test
-    fun `reports non-empty findings`() {
+    fun `reports non-empty issues`() {
         assertThat(
             subject
                 .render(
                     TestDetektion(
-                        createFinding("SpacingAfterPackageDeclaration"),
-                        createFinding("UnnecessarySafeCall")
+                        createIssue("SpacingAfterPackageDeclaration"),
+                        createIssue("UnnecessarySafeCall")
                     )
                 )
-        ).isEqualTo(readResourceContent("/reporting/lite-findings-report.txt"))
+        ).isEqualTo(readResourceContent("/reporting/lite-issues-report.txt"))
     }
 
     @Test
-    fun `reports no findings`() {
+    fun `reports no issues`() {
         val detektion = TestDetektion()
         assertThat(subject.render(detektion)).isNull()
     }
 
     @Test
     fun `should not add auto corrected issues to report`() {
-        val report = LiteFindingsReport()
+        val report = LiteIssuesReport()
         AutoCorrectableIssueAssert.isReportNull(report)
     }
 }
 
-private fun createFindingsReport() = LiteFindingsReport().apply {
+private fun createIssuesReport() = LiteIssuesReport().apply {
     init(Config.empty)
 }

@@ -1,7 +1,7 @@
 package io.github.detekt.compiler.plugin.internal
 
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSourceLocation
@@ -20,14 +20,14 @@ fun MessageCollector.error(msg: String) {
     this.report(CompilerMessageSeverity.ERROR, msg)
 }
 
-fun MessageCollector.reportFindings(result: Detektion) {
-    result.findings.forEach { finding ->
-        val (message, location) = finding.renderAsCompilerWarningMessage()
+fun MessageCollector.reportIssues(result: Detektion) {
+    result.issues.forEach { issue ->
+        val (message, location) = issue.renderAsCompilerWarningMessage()
         warn(message, location)
     }
 }
 
-fun Finding2.renderAsCompilerWarningMessage(): Pair<String, CompilerMessageLocation?> {
+fun Issue.renderAsCompilerWarningMessage(): Pair<String, CompilerMessageLocation?> {
     val location = MessageUtil.psiElementToMessageLocation(entity.ktElement)
 
     val sourceLocation = location?.let {
