@@ -43,7 +43,7 @@ jobs:
 
       - name: Install Yarn Dependencies
         working-directory: website/
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
       - name: Build the Detekt Website
         working-directory: website/
