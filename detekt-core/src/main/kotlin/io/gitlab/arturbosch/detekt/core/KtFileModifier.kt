@@ -19,9 +19,9 @@ class KtFileModifier : FileProcessListener {
     override fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
         files.filter { it.modificationStamp > 0 }
             .map { it.absolutePath() to it.unnormalizeContent() }
-            .forEach {
-                result.add(ModificationNotification(it.first))
-                it.first.writeText(it.second)
+            .forEach { (path, content) ->
+                result.add(ModificationNotification(path))
+                path.writeText(content)
             }
     }
 
