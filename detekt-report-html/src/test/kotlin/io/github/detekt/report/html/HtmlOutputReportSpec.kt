@@ -158,11 +158,10 @@ class HtmlOutputReportSpec {
     @Test
     fun `asserts that the generated HTML is the same as expected`() {
         val expected = resourceAsPath("HtmlOutputFormatTest.html")
-        var result = htmlReport.render(createTestDetektionWithMultipleSmells())
-        result = generatedRegex.replace(result, REPLACEMENT)
+        val result = htmlReport.render(createTestDetektionWithMultipleSmells())
+            .replace(generatedRegex, REPLACEMENT)
 
-        val actual = createTempFileForTest("actual-report", ".html")
-        actual.writeText(result)
+        val actual = createTempFileForTest("actual-report", ".html").apply { writeText(result) }
 
         assertThat(actual).hasSameTextualContentAs(expected)
     }

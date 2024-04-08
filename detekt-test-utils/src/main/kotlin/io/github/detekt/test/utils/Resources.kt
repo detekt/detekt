@@ -3,7 +3,6 @@ package io.github.detekt.test.utils
 import java.net.URI
 import java.net.URL
 import java.nio.file.Path
-import kotlin.io.path.readLines
 import kotlin.io.path.toPath
 
 internal object Resources
@@ -18,6 +17,5 @@ fun resource(name: String): URI = resourceUrl(name).toURI()
 fun resourceAsPath(name: String): Path = resource(name).toPath()
 
 fun readResourceContent(name: String): String {
-    val path = resourceAsPath(name)
-    return path.readLines().joinToString("\n") + "\n"
+    return resourceUrl(name).readText()
 }

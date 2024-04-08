@@ -9,34 +9,33 @@ class TxtOutputReportSpec {
 
     @Test
     fun `renders none`() {
-        val report = TxtOutputReport()
         val detektion = TestDetektion()
-        val renderedText = ""
-        assertThat(report.render(detektion)).isEqualTo(renderedText)
+        assertThat(TxtOutputReport().render(detektion))
+            .isEqualTo("")
     }
 
     @Test
     fun `renders one`() {
-        val report = TxtOutputReport()
         val detektion = TestDetektion(createIssue())
-        val renderedText = "TestSmell - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature\n"
-        assertThat(report.render(detektion)).isEqualTo(renderedText)
+        assertThat(TxtOutputReport().render(detektion))
+            .isEqualTo("TestSmell - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature\n")
     }
 
     @Test
     fun `renders multiple`() {
-        val report = TxtOutputReport()
         val detektion = TestDetektion(
             createIssue(ruleName = "TestSmellA"),
             createIssue(ruleName = "TestSmellB"),
-            createIssue(ruleName = "TestSmellC")
+            createIssue(ruleName = "TestSmellC"),
         )
-        val renderedText = """
-            TestSmellA - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature
-            TestSmellB - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature
-            TestSmellC - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature
+        assertThat(TxtOutputReport().render(detektion))
+            .isEqualTo(
+                """
+                    TestSmellA - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature
+                    TestSmellB - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature
+                    TestSmellC - [TestEntity] at TestFile.kt:1:1 - Signature=TestEntitySignature
 
-        """.trimIndent()
-        assertThat(report.render(detektion)).isEqualTo(renderedText)
+                """.trimIndent()
+            )
     }
 }

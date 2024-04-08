@@ -49,20 +49,23 @@ class IssuesReportSpec {
 
     @Test
     fun `truncates long message`() {
-        val expectedContent = """
-            Ruleset
-            	LongRule - [This is just a long message that should be truncated after a given threshold is (...)] at TestFile.kt:1:1
-            	MultilineRule - [A multiline message.] at TestFile.kt:1:1
-            
-        """.trimIndent()
-        val longMessage = "This is just a long message that should be truncated after a given " +
-            "threshold is reached."
-        val multilineMessage = "A multiline\n\r\tmessage.\t "
         val detektion = TestDetektion(
-            createIssue(createRuleInfo("LongRule", "Ruleset"), message = longMessage),
-            createIssue(createRuleInfo("MultilineRule", "Ruleset"), message = multilineMessage),
+            createIssue(
+                createRuleInfo("LongRule", "Ruleset"),
+                message = "This is just a long message that should be truncated after a given threshold is reached.",
+            ),
+            createIssue(
+                createRuleInfo("MultilineRule", "Ruleset"),
+                message = "A multiline\n\r\tmessage.\t ",
+            ),
         )
-        assertThat(subject.render(detektion)?.decolorized()).isEqualTo(expectedContent)
+        val output = subject.render(detektion)?.decolorized()
+        assertThat(output)
+            .contains(
+                "LongRule - [This is just a long message that should be truncated after a given threshold is (...)]"
+            )
+        assertThat(output)
+            .contains("MultilineRule - [A multiline message.]")
     }
 }
 

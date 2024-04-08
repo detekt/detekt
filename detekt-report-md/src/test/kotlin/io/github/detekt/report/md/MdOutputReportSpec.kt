@@ -93,7 +93,7 @@ class MdOutputReportSpec {
     }
 
     @Test
-    fun `asserts that the generated HTML is the same even if we change the order of the issues`() {
+    fun `asserts that the generated md is the same even if we change the order of the issues`() {
         val issues = issues()
         val reversedIssues = issues.reversedArray()
 
