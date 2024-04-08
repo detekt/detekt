@@ -30,7 +30,7 @@ jobs:
 
       - name: Install Yarn Dependencies
         working-directory: bots/
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
       - name: Run Danger
         working-directory: bots/
