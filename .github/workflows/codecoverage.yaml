@@ -33,7 +33,7 @@ jobs:
       - name: Generate Coverage Report
         run: ./gradlew jacocoMergedReport
         env:
-          GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
+          DEVELOCITY_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
 
       - name: Publish Coverage
         if: success()
