@@ -63,7 +63,7 @@ develocity {
 
 buildCache {
     local {
-        isEnabled = true
+        isEnabled = !isCiBuild
     }
     remote(develocity.buildCache) {
         isEnabled = true
