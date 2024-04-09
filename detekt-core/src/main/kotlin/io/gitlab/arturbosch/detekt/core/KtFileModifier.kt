@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Notification
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
-import org.jetbrains.kotlin.fileClasses.javaFileFacadeFqName
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import java.nio.file.Path
@@ -26,9 +25,6 @@ class KtFileModifier : FileProcessListener {
     }
 
     private fun KtFile.unnormalizeContent(): String {
-        val lineSeparator = requireNotNull(this.lineSeparator) {
-            "No line separator entry for ktFile ${javaFileFacadeFqName.asString()}"
-        }
         return StringUtilRt.convertLineSeparators(text, lineSeparator)
     }
 }
