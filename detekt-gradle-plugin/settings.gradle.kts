@@ -19,17 +19,15 @@ plugins {
 
 val isCiBuild = providers.environmentVariable("CI").isPresent
 
+// Ensure buildCache config is kept in sync with all builds (root, build-logic & detekt-gradle-plugin)
 buildCache {
     local {
         isEnabled = !isCiBuild
     }
-    remote<HttpBuildCache> {
-        isPush = isCiBuild
+    remote(develocity.buildCache) {
+        server = "https://ge.detekt.dev"
         isEnabled = true
-        url = uri("https://ge.detekt.dev/cache/")
-        credentials {
-            username = providers.environmentVariable("GRADLE_CACHE_USERNAME").orNull
-            password = providers.environmentVariable("GRADLE_CACHE_PASSWORD").orNull
-        }
+        val accessKey = System.getenv("DEVELOCITY_ACCESS_KEY")
+        isPush = isCiBuild && !accessKey.isNullOrEmpty()
     }
 }
