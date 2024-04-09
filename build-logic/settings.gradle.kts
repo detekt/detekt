@@ -15,6 +15,7 @@ dependencyResolutionManagement {
 
 val isCiBuild = providers.environmentVariable("CI").isPresent
 
+// Ensure buildCache config is kept in sync with all builds (root, build-logic & detekt-gradle-plugin)
 buildCache {
     local {
         isEnabled = !isCiBuild

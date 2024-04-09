@@ -61,6 +61,7 @@ develocity {
     }
 }
 
+// Ensure buildCache config is kept in sync with all builds (root, build-logic & detekt-gradle-plugin)
 buildCache {
     local {
         isEnabled = !isCiBuild
