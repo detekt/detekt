@@ -67,7 +67,7 @@ buildCache {
     }
     remote(develocity.buildCache) {
         isEnabled = true
-        val accessKey = System.getenv("GRADLE_ENTERPRISE_ACCESS_KEY")
+        val accessKey = System.getenv("DEVELOCITY_ACCESS_KEY")
         isPush = isCiBuild && !accessKey.isNullOrEmpty()
     }
 }

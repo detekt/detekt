@@ -7,7 +7,7 @@ on:
   pull_request:
 
 env:
-  GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
+  DEVELOCITY_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
 
 permissions:
   contents: write  # for JamesIves/github-pages-deploy-action to push changes in repo

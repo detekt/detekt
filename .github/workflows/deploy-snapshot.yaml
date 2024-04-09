@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
+  DEVELOCITY_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
   ORG_GRADLE_PROJECT_enablePTS: false
 
 permissions:
