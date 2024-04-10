@@ -29,7 +29,6 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@1168cd3d07c1876a65e1724114de42ccbdfa7b78 # v3
         with:
-          gradle-home-cache-cleanup: true
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Assemble and publish artifacts to Maven Local
