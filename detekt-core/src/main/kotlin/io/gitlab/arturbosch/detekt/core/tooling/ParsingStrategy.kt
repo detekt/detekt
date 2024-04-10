@@ -15,12 +15,6 @@ fun contentToKtFile(content: String, path: Path): ParsingStrategy = { settings -
     )
 }
 
-fun pathToKtFile(path: Path): ParsingStrategy = { settings ->
-    listOf(
-        KtCompiler(settings.environment).compile(settings.spec.projectSpec.basePath, path)
-    )
-}
-
 val inputPathsToKtFiles: ParsingStrategy = { settings ->
     val compiler = KtCompiler(settings.environment)
     val basePath = settings.spec.projectSpec.basePath
