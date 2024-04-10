@@ -10,9 +10,12 @@ import org.jetbrains.kotlin.resolve.BindingContext
  */
 interface Detekt {
 
+    // Used by detekt-cli
     fun run(): AnalysisResult
 
+    // Used by detekt-intellij-plugin
     fun run(sourceCode: String, filename: String): AnalysisResult
 
+    // Used by detekt-compiler-plugin
     fun run(files: Collection<KtFile>, bindingContext: BindingContext): AnalysisResult
 }
