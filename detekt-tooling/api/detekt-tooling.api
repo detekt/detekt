@@ -36,7 +36,6 @@ public final class io/github/detekt/tooling/api/DefaultConfigurationProvider$Com
 public abstract interface class io/github/detekt/tooling/api/Detekt {
 	public abstract fun run ()Lio/github/detekt/tooling/api/AnalysisResult;
 	public abstract fun run (Ljava/lang/String;Ljava/lang/String;)Lio/github/detekt/tooling/api/AnalysisResult;
-	public abstract fun run (Ljava/nio/file/Path;)Lio/github/detekt/tooling/api/AnalysisResult;
 	public abstract fun run (Ljava/util/Collection;Lorg/jetbrains/kotlin/resolve/BindingContext;)Lio/github/detekt/tooling/api/AnalysisResult;
 }
 
