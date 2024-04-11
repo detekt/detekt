@@ -6,6 +6,8 @@ permalink: configurations.html
 sidebar_position: 3
 ---
 
+import { DefaultConfigurationFile } from "./../../src/components/ConfigurationFile"
+
 _detekt_ uses a [YAML style configuration](https://yaml.org/spec/1.2/spec.html) file for various things:
 
 - rule set and rule properties
@@ -14,8 +16,7 @@ _detekt_ uses a [YAML style configuration](https://yaml.org/spec/1.2/spec.html) 
 - output reports
 - processors
 
-See the [default-detekt-config.yml](https://github.com/detekt/detekt/blob/main/detekt-core/src/main/resources/default-detekt-config.yml)
-file for all defined configuration options and their default values. 
+See the <DefaultConfigurationFile /> file for all defined configuration options and their default values. 
 
 _Note:_ When using a custom config file, the default values are ignored unless you also set the `--build-upon-default-config` flag.
 
@@ -78,29 +79,32 @@ naming:
     excludes: *testFolders
 ```
 
-## Build failure
+### Severity
 
-_Detekt_ supports the option to fail your build if a threshold of code smell issues is met.
-
-For this the following code must be inside the detekt config:
+By default, all findings have a severity of `error` but is possible to configure the severity of each rule to fit
+your CI policy with respects to errors. You may specify the severity level in the config file at the rule or ruleset
+level:
 
 ```yaml
-build:
-  maxIssues: 10 # break the build if more than ten weighted issues are found
-  weights:
-    complexity: 2 # every rule of the complexity rule set should count as if two issues were found...
-    LongParameterList: 1 # ...with the exception of the LongParameterList rule.
-    comments: 0 # comment rules are just a nice to know?!
+empty-blocks:
+    active: true
+    severity: error
+    EmptyCatchBlock:
+        active: true
+        severity: info
 ```
 
-Every rule and rule set can be attached with an integer value which is the weight of the finding.
-For example: If you have 5 findings of the category _complexity_, then your failThreshold of 10 is reached as
-5 x 2 = 10. 
+The severity will be computed in the priority order:
 
-Weights are respected in the following priority order:
-- The specified weight for a rule
-- The specified weight for a rule set
-- By default, the weight is 1.
+- Severity of the rule if exists
+- Severity of the parent ruleset if exists
+- Default severity: error
+
+## Build failure
+
+_detekt_ will fail your build if there is at least one issue with a severity of error. You can lower that threshold
+or completely disable build failures by using the `failOnSeverity` setting. Details can be found in the
+[gradle](/docs/gettingstarted/gradle) and the [cli](/docs/gettingstarted/cli) sections.
 
 ## Console Reports
 
@@ -142,7 +146,7 @@ output-reports:
   #  - 'HtmlOutputReport'
   #  - 'TxtOutputReport'
   #  - 'XmlOutputReport'
-  #  - 'SarifOutputReport'
+  #  - 'sarif'
   #  - 'MdOutputReport'
 ```
 

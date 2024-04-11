@@ -6,6 +6,8 @@ permalink: configurations.html
 sidebar_position: 3
 ---
 
+import { DefaultConfigurationFile } from "./../../../src/components/ConfigurationFile"
+
 _detekt_ uses a [YAML style configuration](https://yaml.org/spec/1.2/spec.html) file for various things:
 
 - rule set and rule properties
@@ -14,8 +16,7 @@ _detekt_ uses a [YAML style configuration](https://yaml.org/spec/1.2/spec.html) 
 - output reports
 - processors
 
-See the [default-detekt-config.yml](https://github.com/detekt/detekt/blob/main/detekt-core/src/main/resources/default-detekt-config.yml)
-file for all defined configuration options and their default values. 
+See the <DefaultConfigurationFile /> file for all defined configuration options and their default values.
 
 _Note:_ When using a custom config file, the default values are ignored unless you also set the `--build-upon-default-config` flag.
 
