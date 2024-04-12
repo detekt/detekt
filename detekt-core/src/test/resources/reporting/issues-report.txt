@@ -1,5 +1,0 @@
-Ruleset1
-	TestSmell - [TestMessage] at TestFile.kt:1:1
-	TestSmell - [TestMessage] at TestFile.kt:1:1
-Ruleset2
-	TestSmell - [TestMessage] at TestFile.kt:1:1
