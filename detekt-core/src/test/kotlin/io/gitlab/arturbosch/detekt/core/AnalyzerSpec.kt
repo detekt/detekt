@@ -405,7 +405,7 @@ private class NoEmptyFile(config: Config) : Rule(config, "TestDescription") {
     }
 }
 
-private class MaxLineLength(config: Config) : Rule(config, "TestDescription") {
+private open class MaxLineLength(config: Config) : Rule(config, "TestDescription") {
     private val lengthThreshold: Int = config.valueOrDefault("maxLineLength", 10)
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
@@ -418,17 +418,7 @@ private class MaxLineLength(config: Config) : Rule(config, "TestDescription") {
 }
 
 @RequiresTypeResolution
-private class RequiresTypeResolutionMaxLineLength(config: Config) : Rule(config, "TestDescription") {
-    private val lengthThreshold: Int = config.valueOrDefault("maxLineLength", 10)
-    override fun visitKtFile(file: KtFile) {
-        super.visitKtFile(file)
-        for (line in file.text.lineSequence()) {
-            if (line.length > lengthThreshold) {
-                report(CodeSmell(Entity.atPackageOrFirstDecl(file), description))
-            }
-        }
-    }
-}
+private class RequiresTypeResolutionMaxLineLength(config: Config) : MaxLineLength(config)
 
 private class FaultyRule(config: Config) : Rule(config, "") {
     override fun visitKtFile(file: KtFile) {
