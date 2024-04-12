@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.core
+package io.github.detekt.parser
 
 import org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 
-internal fun generateBindingContext(
+fun generateBindingContext(
     environment: KotlinCoreEnvironment,
     classpath: List<String>,
     files: List<KtFile>,
