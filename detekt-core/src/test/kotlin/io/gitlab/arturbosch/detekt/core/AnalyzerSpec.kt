@@ -16,7 +16,11 @@ import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.psiUtil.elementsInRange
+import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -409,11 +413,22 @@ private open class MaxLineLength(config: Config) : Rule(config, "TestDescription
     private val lengthThreshold: Int = config.valueOrDefault("maxLineLength", 10)
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
+        var offset = 0
         for (line in file.text.lineSequence()) {
             if (line.length > lengthThreshold) {
-                report(CodeSmell(Entity.atPackageOrFirstDecl(file), description))
+                val ktElement = file.findFirstMeaningfulKtElementInParents(offset..(offset + line.length))
+                report(CodeSmell(Entity.from(ktElement), description))
             }
+            offset += line.length + 1 // \n
         }
+    }
+
+    private fun KtFile.findFirstMeaningfulKtElementInParents(range: IntRange): PsiElement {
+        return elementsInRange(TextRange.create(range.first, range.last))
+            .asSequence()
+            .plus(findElementAt(range.last))
+            .mapNotNull { it?.getNonStrictParentOfType() }
+            .first { it.text.isNotBlank() }
     }
 }
 
