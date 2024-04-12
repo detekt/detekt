@@ -5,7 +5,7 @@ kotlin = "1.9.23"
 coroutines = "1.8.0"
 ktlint = "1.1.1"
 junit = "5.10.2"
-slf4j = "2.0.12"
+slf4j = "2.0.13"
 
 [libraries]
 semver4j = "org.semver4j:semver4j:5.2.3"
