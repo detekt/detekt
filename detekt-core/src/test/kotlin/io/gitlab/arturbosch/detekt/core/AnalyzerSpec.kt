@@ -11,7 +11,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.getContextForPaths
+import io.gitlab.arturbosch.detekt.test.createBindingContext
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -152,7 +152,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             )
             val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
             val ktFile = compileForTest(testFile)
-            val bindingContext = env.getContextForPaths(listOf(ktFile))
+            val bindingContext = env.createBindingContext(listOf(ktFile))
 
             assertThat(settings.use { analyzer.run(listOf(ktFile), bindingContext) }).hasSize(2)
             assertThat(output.toString()).isEmpty()
