@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
-import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
@@ -19,7 +18,6 @@ class FileBasedIssuesReportSpec {
 
     @Test
     fun `has the reference content`() {
-        val expectedContent = readResourceContent("/reporting/grouped-issues-report.txt")
         val detektion = TestDetektion(
             createIssue(ruleSetId = "Ruleset1", fileName = "File1.kt"),
             createIssue(ruleSetId = "Ruleset1", fileName = "File2.kt"),
@@ -28,7 +26,16 @@ class FileBasedIssuesReportSpec {
 
         val output = subject.render(detektion)?.decolorized()
 
-        assertThat(output).isEqualTo(expectedContent)
+        assertThat(output).isEqualTo(
+            """
+                File1.kt
+                	TestSmell - [TestMessage] at File1.kt:1:1
+                	TestSmell - [TestMessage] at File1.kt:1:1
+                File2.kt
+                	TestSmell - [TestMessage] at File2.kt:1:1
+                
+            """.trimIndent()
+        )
     }
 
     @Test

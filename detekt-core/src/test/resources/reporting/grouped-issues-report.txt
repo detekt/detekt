@@ -1,5 +1,0 @@
-File1.kt
-	TestSmell - [TestMessage] at File1.kt:1:1
-	TestSmell - [TestMessage] at File1.kt:1:1
-File2.kt
-	TestSmell - [TestMessage] at File2.kt:1:1

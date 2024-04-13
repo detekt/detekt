@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
-import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
 import io.gitlab.arturbosch.detekt.test.TestDetektion
@@ -14,15 +13,17 @@ class LiteIssuesReportSpec {
 
     @Test
     fun `reports non-empty issues`() {
-        assertThat(
-            subject
-                .render(
-                    TestDetektion(
-                        createIssue("SpacingAfterPackageDeclaration"),
-                        createIssue("UnnecessarySafeCall")
-                    )
-                )
-        ).isEqualTo(readResourceContent("/reporting/lite-issues-report.txt"))
+        val detektion = TestDetektion(
+            createIssue("SpacingAfterPackageDeclaration"),
+            createIssue("UnnecessarySafeCall")
+        )
+        assertThat(subject.render(detektion)).isEqualTo(
+            """
+                TestFile.kt:1:1: TestMessage [SpacingAfterPackageDeclaration]
+                TestFile.kt:1:1: TestMessage [UnnecessarySafeCall]
+
+            """.trimIndent()
+        )
     }
 
     @Test
