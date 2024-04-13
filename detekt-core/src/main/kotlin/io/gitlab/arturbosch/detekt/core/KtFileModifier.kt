@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Notification
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
 import java.nio.file.Path
 import kotlin.io.path.writeText
 
@@ -15,7 +14,7 @@ class KtFileModifier : FileProcessListener {
 
     override val id: String = "KtFileModifier"
 
-    override fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
+    override fun onFinish(files: List<KtFile>, result: Detektion) {
         files.filter { it.modificationStamp > 0 }
             .map { it.absolutePath() to it.unnormalizeContent() }
             .forEach { (path, content) ->

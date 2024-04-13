@@ -147,20 +147,20 @@ public final class io/gitlab/arturbosch/detekt/api/Extension$DefaultImpls {
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/FileProcessListener : io/gitlab/arturbosch/detekt/api/Extension {
-	public abstract fun onFinish (Ljava/util/List;Lio/gitlab/arturbosch/detekt/api/Detektion;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
-	public abstract fun onProcess (Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
-	public abstract fun onProcessComplete (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
-	public abstract fun onStart (Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
+	public abstract fun onFinish (Ljava/util/List;Lio/gitlab/arturbosch/detekt/api/Detektion;)V
+	public abstract fun onProcess (Lorg/jetbrains/kotlin/psi/KtFile;)V
+	public abstract fun onProcessComplete (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;)V
+	public abstract fun onStart (Ljava/util/List;)V
 }
 
 public final class io/gitlab/arturbosch/detekt/api/FileProcessListener$DefaultImpls {
 	public static fun getPriority (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;)I
 	public static fun init (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Lio/gitlab/arturbosch/detekt/api/Config;)V
 	public static fun init (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
-	public static fun onFinish (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Ljava/util/List;Lio/gitlab/arturbosch/detekt/api/Detektion;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
-	public static fun onProcess (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
-	public static fun onProcessComplete (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
-	public static fun onStart (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
+	public static fun onFinish (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Ljava/util/List;Lio/gitlab/arturbosch/detekt/api/Detektion;)V
+	public static fun onProcess (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Lorg/jetbrains/kotlin/psi/KtFile;)V
+	public static fun onProcessComplete (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;)V
+	public static fun onStart (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Ljava/util/List;)V
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/Finding {

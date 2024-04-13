@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Test
 
 class QualifiedNameProcessorSpec {
@@ -16,8 +15,8 @@ class QualifiedNameProcessorSpec {
     fun fqNamesOfTestFiles() {
         val ktFile = compileContentForTest(code)
         val processor = QualifiedNameProcessor()
-        processor.onProcess(ktFile, BindingContext.EMPTY)
-        processor.onFinish(listOf(ktFile), result, BindingContext.EMPTY)
+        processor.onProcess(ktFile)
+        processor.onFinish(listOf(ktFile), result)
 
         val data = result.getUserData(fqNamesKey)
         assertThat(data).contains(

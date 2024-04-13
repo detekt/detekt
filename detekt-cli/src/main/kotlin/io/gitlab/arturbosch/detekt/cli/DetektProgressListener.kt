@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
 
 class DetektProgressListener : FileProcessListener {
 
@@ -16,11 +15,11 @@ class DetektProgressListener : FileProcessListener {
         this.outPrinter = context.outputChannel
     }
 
-    override fun onProcess(file: KtFile, bindingContext: BindingContext) {
+    override fun onProcess(file: KtFile) {
         outPrinter.append('.')
     }
 
-    override fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
+    override fun onFinish(files: List<KtFile>, result: Detektion) {
         val middlePart = if (files.size == 1) "file was" else "files were"
         outPrinter.appendLine("\n\n${files.size} kotlin $middlePart analyzed.")
     }
