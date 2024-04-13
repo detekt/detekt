@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -21,6 +21,9 @@ class ExplicitItLambdaParameterSpec {
                 """.trimIndent()
             )
             assertThat(findings).hasSize(1)
+            assertThat(findings[0]).hasMessage(
+                "This explicit usage of `it` as the lambda parameter name can be omitted."
+            )
         }
 
         @Test
@@ -33,6 +36,50 @@ class ExplicitItLambdaParameterSpec {
                 """.trimIndent()
             )
             assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `does not reports when parameter type is declared explicitly when variable name is not it`() {
+            val findings = subject.compileAndLint(
+                """
+                    fun f() {
+                        val lambda = { value: Int -> value.toString() }
+                    }
+                """.trimIndent()
+            )
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when parameter type is declared explicitly for un-inferrable lambda`() {
+            val findings = subject.compileAndLint(
+                """
+                    fun f1(): (Int) -> Int {
+                        return { value: Int -> value.inc() }::invoke
+                    }
+
+                    fun f2(): (Int) -> Int {
+                        return { value: Int -> value.inc() }::invoke
+                    }
+
+                    fun f3(): (((Int) -> Int) -> Unit) -> (Int) -> Int {
+                        return { value: Int -> value.inc() }::also
+                    }
+                """.trimIndent()
+            )
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when parameter type is declared explicitly for un-inferrable lambda wrapped in paren`() {
+            val findings = subject.compileAndLint(
+                """
+                    fun f(): (Int) -> Int {
+                        return ({ value: Int -> value.inc() })::invoke
+                    }
+                """.trimIndent()
+            )
+            assertThat(findings).isEmpty()
         }
     }
 
@@ -78,5 +125,46 @@ class ExplicitItLambdaParameterSpec {
             )
             assertThat(findings).hasSize(1)
         }
+<<<<<<< HEAD
+||||||| parent of 5ca4be75f8 (Fix false positive on `it` usages when type parameter is specified (#6850))
+
+        @Test
+        fun `does not report when parameter type is declared explicitly for multi params un-inferrable lambda`() {
+            val findings = subject.compileAndLint(
+                """
+                    fun f(): (Int, Int) -> Int {
+                        return { it: Int, a: Int -> (it + a).inc() }::invoke
+                    }
+                """.trimIndent()
+            )
+            assertThat(findings).isEmpty()
+        }
+=======
+
+        @Test
+        fun `does not report when parameter type with is declared explicitly for multi params un-inferrable lambda`() {
+            val findings = subject.compileAndLint(
+                """
+                    fun f(): (Int, Int) -> Int {
+                        return { value: Int, a: Int -> (value + a).inc() }::invoke
+                    }
+                """.trimIndent()
+            )
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does report when parameter type with name it when declared explicitly for multi params un-inferrable lambda`() {
+            val findings = subject.compileAndLint(
+                """
+                    fun f(): (Int, Int) -> Int {
+                        return { it: Int, a: Int -> (it + a).inc() }::invoke
+                    }
+                """.trimIndent()
+            )
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0]).hasMessage("`it` should not be used as name for a lambda parameter.")
+        }
+>>>>>>> 5ca4be75f8 (Fix false positive on `it` usages when type parameter is specified (#6850))
     }
 }
