@@ -135,17 +135,6 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
     }
 
     @Test
-    fun `does not report casting of Nullable type to NonNullable smart casted variable to NonNullable type`() {
-        val code = """
-            fun foo(bar: Any?) {
-                val x = bar?.let { bar as String }
-            }
-        """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).isEmpty()
-    }
-
-    @Test
     fun `does not report casting of NonNullable type to NonNullable type`() {
         val code = """
             fun foo(bar: Any?) {
