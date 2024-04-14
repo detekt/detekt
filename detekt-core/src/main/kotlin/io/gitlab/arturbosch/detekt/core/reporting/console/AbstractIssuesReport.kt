@@ -3,11 +3,10 @@ package io.gitlab.arturbosch.detekt.core.reporting.console
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding2
-import io.gitlab.arturbosch.detekt.api.RuleSet
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.core.reporting.filterEmptyIssues
 
-abstract class AbstractFindingsReport : ConsoleReport() {
+abstract class AbstractIssuesReport : ConsoleReport() {
 
     private lateinit var config: Config
 
@@ -18,12 +17,12 @@ abstract class AbstractFindingsReport : ConsoleReport() {
     }
 
     override fun render(detektion: Detektion): String? {
-        val findings = detektion.filterEmptyIssues(config)
-        if (findings.isEmpty()) {
+        val issues = detektion.filterEmptyIssues(config)
+        if (issues.isEmpty()) {
             return null
         }
-        return render(findings)
+        return render(issues)
     }
 
-    abstract fun render(findings: Map<RuleSet.Id, List<Finding2>>): String
+    abstract fun render(issues: List<Issue>): String
 }

@@ -3,10 +3,10 @@ package io.gitlab.arturbosch.detekt.api
 /**
  * Represents a problem detected by detekt on the source code
  *
- * A finding has information about the rule that detected the problem, a severity and an entity with information
+ * An Issue has information about the rule that detected the problem, a severity and an entity with information
  * about the position. Entity references can also be considered for deeper characterization.
  */
-interface Finding2 {
+interface Issue {
     val ruleInfo: RuleInfo
     val entity: Entity
     val references: List<Entity>

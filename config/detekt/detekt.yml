@@ -241,7 +241,7 @@ style:
     active: true
   RedundantHigherOrderMapUsage:
     active: true
-  RedundantVisibilityModifierRule:
+  RedundantVisibilityModifier:
     active: true
   ReturnCount:
     active: true

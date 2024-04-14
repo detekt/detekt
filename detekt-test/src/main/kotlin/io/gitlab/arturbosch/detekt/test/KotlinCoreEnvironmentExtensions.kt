@@ -7,10 +7,10 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 
-fun KotlinCoreEnvironment.getContextForPaths(paths: List<KtFile>): BindingContext =
+fun KotlinCoreEnvironment.createBindingContext(files: List<KtFile>): BindingContext =
     TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
         this.project,
-        paths,
+        files,
         NoScopeRecordCliBindingTrace(),
         this.configuration,
         this::createPackagePartProvider,

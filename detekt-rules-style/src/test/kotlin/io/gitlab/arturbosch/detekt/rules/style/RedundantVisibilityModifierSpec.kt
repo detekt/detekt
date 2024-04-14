@@ -16,8 +16,8 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class RedundantVisibilityModifierRuleSpec {
-    val subject = RedundantVisibilityModifierRule(Config.empty)
+class RedundantVisibilityModifierSpec {
+    val subject = RedundantVisibilityModifier(Config.empty)
 
     @Test
     fun `does not report overridden function of abstract class with public modifier`() {
@@ -56,17 +56,6 @@ class RedundantVisibilityModifierRuleSpec {
             
             class Test : A {
                 override public fun f() {}
-            }
-        """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
-    }
-
-    @Test
-    fun `should ignore the issue by alias suppression`() {
-        val code = """
-            class Test {
-                @Suppress("RedundantVisibilityModifier")
-                public fun f() {}
             }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
@@ -191,7 +180,7 @@ class RedundantVisibilityModifierRuleSpec {
             """.trimIndent()
         )
 
-        val rule = RedundantVisibilityModifierRule(Config.empty)
+        val rule = RedundantVisibilityModifier(Config.empty)
 
         private fun fakeCompilerResources(mode: ExplicitApiMode): CompilerResources {
             val languageVersionSettings = object : LanguageVersionSettings {

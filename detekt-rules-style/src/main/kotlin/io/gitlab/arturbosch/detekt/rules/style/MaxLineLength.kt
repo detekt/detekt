@@ -48,13 +48,8 @@ class MaxLineLength(config: Config) : Rule(
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
-        visit(file.toFileContent())
-    }
-
-    private fun visit(element: KtFileContent) {
         var offset = 0
-        val lines = element.content
-        val file = element.file
+        val lines = file.text.lines()
 
         for (line in lines) {
             offset += line.length

@@ -3,10 +3,9 @@ package io.github.detekt.report.html
 import io.github.detekt.metrics.ComplexityReportGenerator
 import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
@@ -36,7 +35,7 @@ import kotlin.io.path.invariantSeparatorsPathString
 
 private const val DEFAULT_TEMPLATE = "default-html-report-template.html"
 private const val PLACEHOLDER_METRICS = "@@@metrics@@@"
-private const val PLACEHOLDER_FINDINGS = "@@@findings@@@"
+private const val PLACEHOLDER_ISSUES = "@@@issues@@@"
 private const val PLACEHOLDER_COMPLEXITY_REPORT = "@@@complexity@@@"
 private const val PLACEHOLDER_VERSION = "@@@version@@@"
 private const val PLACEHOLDER_DATE = "@@@date@@@"
@@ -61,7 +60,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
             .replace(PLACEHOLDER_DATE, renderDate())
             .replace(PLACEHOLDER_METRICS, renderMetrics(detektion.metrics))
             .replace(PLACEHOLDER_COMPLEXITY_REPORT, renderComplexity(getComplexityMetrics(detektion)))
-            .replace(PLACEHOLDER_FINDINGS, renderFindings(detektion.findings))
+            .replace(PLACEHOLDER_ISSUES, renderIssues(detektion.issues))
 
     private fun renderVersion(): String = whichDetekt()
 
@@ -86,51 +85,50 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         }
     }
 
-    private fun renderFindings(findings: Map<RuleSet.Id, List<Finding2>>) = createHTML().div {
-        val total = findings.values
-            .asSequence()
-            .map { it.size }
-            .fold(0) { a, b -> a + b }
+    private fun renderIssues(issues: List<Issue>) = createHTML().div {
+        val total = issues.count()
 
         text("Total: %,d".format(Locale.ROOT, total))
 
-        findings
-            .filter { it.value.isNotEmpty() }
+        issues
+            .groupBy { it.ruleInfo.ruleSetId }
             .toList()
             .sortedBy { (group, _) -> group.value }
-            .forEach { (group, groupFindings) ->
-                renderGroup(group, groupFindings)
+            .forEach { (group, groupIssues) ->
+                renderGroup(group, groupIssues)
             }
     }
 
-    private fun FlowContent.renderGroup(group: RuleSet.Id, findings: List<Finding2>) {
-        h3 { text("$group: %,d".format(Locale.ROOT, findings.size)) }
+    private fun FlowContent.renderGroup(group: RuleSet.Id, issues: List<Issue>) {
+        h3 { text("$group: %,d".format(Locale.ROOT, issues.size)) }
 
-        findings
-            .groupBy { it.ruleInfo.id }
+        issues
+            .groupBy { it.ruleInfo }
             .toList()
-            .sortedBy { (rule, _) -> rule.value }
-            .forEach { (rule, ruleFindings) ->
-                renderRule(rule, group, ruleFindings)
+            .sortedBy { (ruleInfo, _) -> ruleInfo.id.value }
+            .forEach { (ruleInfo, ruleIssues) ->
+                renderRule(ruleInfo, ruleIssues)
             }
     }
 
-    private fun FlowContent.renderRule(rule: Rule.Id, group: RuleSet.Id, findings: List<Finding2>) {
+    private fun FlowContent.renderRule(ruleInfo: Issue.RuleInfo, issues: List<Issue>) {
+        val ruleId = ruleInfo.id.value
+        val ruleSetId = ruleInfo.ruleSetId.value
         details {
-            id = rule.value
+            id = ruleId
             open = true
 
             summary("rule-container") {
-                span("rule") { text("$rule: %,d ".format(Locale.ROOT, findings.size)) }
-                span("description") { text(findings.first().ruleInfo.description) }
+                span("rule") { text("$ruleId: %,d ".format(Locale.ROOT, issues.size)) }
+                span("description") { text(ruleInfo.description) }
             }
 
-            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${group.value.lowercase()}#${rule.value.lowercase()}") {
+            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${ruleSetId.lowercase()}#${ruleId.lowercase()}") {
                 +"Documentation"
             }
 
             ul {
-                findings
+                issues
                     .sortedWith(
                         compareBy(
                             { it.location.filePath.absolutePath.toString() },
@@ -140,30 +138,30 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
                     )
                     .forEach {
                         li {
-                            renderFinding(it)
+                            renderIssue(it)
                         }
                     }
             }
         }
     }
 
-    private fun FlowContent.renderFinding(finding: Finding2) {
-        val filePath = finding.location.filePath.relativePath ?: finding.location.filePath.absolutePath
+    private fun FlowContent.renderIssue(issue: Issue) {
+        val filePath = issue.location.filePath.relativePath ?: issue.location.filePath.absolutePath
         val pathString = filePath.invariantSeparatorsPathString
         span("location") {
             text(
-                "$pathString:${finding.location.source.line}:${finding.location.source.column}"
+                "$pathString:${issue.location.source.line}:${issue.location.source.column}"
             )
         }
 
-        if (finding.message.isNotEmpty()) {
-            span("message") { text(finding.message) }
+        if (issue.message.isNotEmpty()) {
+            span("message") { text(issue.message) }
         }
 
-        val psiFile = finding.entity.ktElement?.containingFile
+        val psiFile = issue.entity.ktElement?.containingFile
         if (psiFile != null) {
             val lineSequence = psiFile.text.splitToSequence('\n')
-            snippetCode(finding.ruleInfo.id, lineSequence, finding.location.source, finding.location.text.length())
+            snippetCode(issue.ruleInfo.id, lineSequence, issue.location.source, issue.location.text.length())
         }
     }
 

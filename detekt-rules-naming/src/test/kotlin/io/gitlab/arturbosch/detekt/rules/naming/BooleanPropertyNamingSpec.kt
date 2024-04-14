@@ -194,7 +194,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
 
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
 
         @Test

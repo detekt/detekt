@@ -13,8 +13,8 @@ import java.nio.file.Path
 import kotlin.io.path.Path
 
 class DetektPrinter(
-    private val documentationPath: Path,
-    private val configPath: Path,
+    private val documentationPath: Path?,
+    private val configPath: Path?,
 ) {
 
     private val markdownWriter = MarkdownWriter(System.out)
@@ -22,20 +22,24 @@ class DetektPrinter(
     private val propertiesWriter = PropertiesWriter(System.out)
 
     fun print(pages: List<RuleSetPage>) {
-        pages.forEach {
-            markdownWriter.write(documentationPath, it.ruleSet.name) {
-                markdownHeader(it.ruleSet.name) + "\n" + RuleSetPagePrinter.print(it)
+        if (documentationPath != null) {
+            pages.forEach {
+                markdownWriter.write(documentationPath, it.ruleSet.name) {
+                    markdownHeader(it.ruleSet.name) + "\n" + RuleSetPagePrinter.print(it)
+                }
             }
         }
-        yamlWriter.write(configPath, "default-detekt-config") {
-            ConfigPrinter.print(
-                pages.filterNot { it.ruleSet.name in listOf("formatting", "libraries", "ruleauthors") }
-            )
-        }
-        propertiesWriter.write(configPath, "deprecation") {
-            // We intentionally not filter for "formatting" as we want to be able to deprecate
-            // properties from that ruleset as well.
-            DeprecatedPrinter.print(pages)
+        if (configPath != null) {
+            yamlWriter.write(configPath, "default-detekt-config") {
+                ConfigPrinter.print(
+                    pages.filterNot { it.ruleSet.name in listOf("formatting", "libraries", "ruleauthors") }
+                )
+            }
+            propertiesWriter.write(configPath, "deprecation") {
+                // We intentionally not filter for "formatting" as we want to be able to deprecate
+                // properties from that ruleset as well.
+                DeprecatedPrinter.print(pages)
+            }
         }
         yamlWriter.write(Path("../detekt-formatting/src/main/resources/config"), "config") {
             yaml {

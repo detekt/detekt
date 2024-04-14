@@ -12,8 +12,6 @@ dependencies {
 
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
-
-    testFixturesCompileOnly(libs.poko.annotations)
 }
 
 detekt {

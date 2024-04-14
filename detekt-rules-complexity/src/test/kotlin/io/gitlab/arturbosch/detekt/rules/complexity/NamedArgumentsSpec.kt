@@ -39,7 +39,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(0)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -67,7 +67,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(0)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -81,7 +81,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(0)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -103,7 +103,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             val obj = C(a = 1, b = 2, c= 3)
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(0)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -114,7 +114,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             val obj = C(1, 2)
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(0)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -127,7 +127,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(0)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -141,7 +141,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(0)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -181,7 +181,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -206,7 +206,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
             """.trimIndent()
             val subject = NamedArguments(TestConfig("threshold" to 1))
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
     }
 
@@ -226,7 +226,7 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
                     }
                 """.trimIndent()
                 val findings = subject.compileAndLintWithContext(env, code)
-                assertThat(findings).hasSize(0)
+                assertThat(findings).isEmpty()
             }
 
             @Test

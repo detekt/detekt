@@ -1,8 +1,8 @@
-package io.github.detekt.tooling.api
+package io.github.detekt.psi
 
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.getContextForPaths
+import io.gitlab.arturbosch.detekt.test.createBindingContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.psi.KtClass
@@ -328,7 +328,7 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
                     }
                 """.trimIndent()
             )
-            val bindingContext = env.getContextForPaths(listOf(ktFile))
+            val bindingContext = env.createBindingContext(listOf(ktFile))
             val function = ktFile.findChildByClass(KtClass::class.java)!!
                 .findFunctionByName("bar") as KtNamedFunction
 
@@ -355,6 +355,6 @@ private fun buildKtFunction(
             $code
         """.trimIndent()
     )
-    val bindingContext = environment.getContextForPaths(listOf(ktFile))
+    val bindingContext = environment.createBindingContext(listOf(ktFile))
     return ktFile.findChildByClass(KtNamedFunction::class.java)!! to bindingContext
 }

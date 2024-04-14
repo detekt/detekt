@@ -9,8 +9,6 @@ val kotlinCompilerChecksum: String by project
 group = "io.github.detekt"
 version = "$kotlinVersion-$detektVersion"
 
-val detektPublication = "DetektPublication"
-
 plugins {
     id("module")
     id("com.github.johnrengelman.shadow") version "8.1.1"
@@ -38,6 +36,12 @@ dependencies {
 val javaComponent = components["java"] as AdhocComponentWithVariants
 javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElements"]) {
     skip()
+}
+
+publishing {
+    publications.named<MavenPublication>(DETEKT_PUBLICATION) {
+        artifact(tasks.shadowJar)
+    }
 }
 
 tasks.shadowJar {

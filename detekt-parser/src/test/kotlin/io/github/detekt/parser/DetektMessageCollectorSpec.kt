@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.core
+package io.github.detekt.parser
 
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity

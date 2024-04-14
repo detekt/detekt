@@ -19,7 +19,7 @@ internal class DetektService(
         val detekt = DetektProvider.load().get(spec)
         val result = detekt.run(files, context)
         log.info("${files.size} files analyzed")
-        result.container?.let { log.reportFindings(it) }
+        result.container?.let { log.reportIssues(it) }
         log.info("Success?: ${result.error == null}")
         when (val error = result.error) {
             is UnexpectedError -> throw error

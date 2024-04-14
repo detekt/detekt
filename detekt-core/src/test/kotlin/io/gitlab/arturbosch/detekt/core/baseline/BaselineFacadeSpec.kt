@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.core.baseline
 import io.github.detekt.test.utils.createTempDirectoryForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.test.TestDetektion
-import io.gitlab.arturbosch.detekt.test.createFinding
+import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -36,14 +36,14 @@ class BaselineFacadeSpec {
     }
 
     @Test
-    fun `doesn't create a baseline file without findings`() {
+    fun `doesn't create a baseline file without issues`() {
         BaselineFacade().createOrUpdate(baselineFile, emptyList())
 
         assertThat(baselineFile).doesNotExist()
     }
 
     @Test
-    fun `creates on top of an existing a baseline file without findings`() {
+    fun `creates on top of an existing a baseline file without issues`() {
         validBaseline.copyTo(baselineFile)
 
         BaselineFacade().createOrUpdate(baselineFile, emptyList())
@@ -63,10 +63,10 @@ class BaselineFacadeSpec {
     }
 
     @Test
-    fun `creates on top of an existing a baseline file with findings`() {
+    fun `creates on top of an existing a baseline file with issues`() {
         validBaseline.copyTo(baselineFile)
 
-        BaselineFacade().createOrUpdate(baselineFile, listOf(createFinding()))
+        BaselineFacade().createOrUpdate(baselineFile, listOf(createIssue()))
 
         assertThat(baselineFile).hasContent(
             """

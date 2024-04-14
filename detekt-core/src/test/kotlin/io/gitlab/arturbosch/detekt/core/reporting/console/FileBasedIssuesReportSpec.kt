@@ -1,34 +1,41 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
-import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
 import io.gitlab.arturbosch.detekt.core.reporting.decolorized
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createEntity
-import io.gitlab.arturbosch.detekt.test.createFinding
+import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
 import io.gitlab.arturbosch.detekt.test.createRuleInfo
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FileBasedFindingsReportSpec {
+class FileBasedIssuesReportSpec {
 
-    private val subject = createFileBasedFindingsReport()
+    private val subject = createFileBasedIssuesReport()
 
     @Test
     fun `has the reference content`() {
-        val expectedContent = readResourceContent("/reporting/grouped-findings-report.txt")
         val detektion = TestDetektion(
-            createFinding(ruleSetId = "Ruleset1", fileName = "File1.kt"),
-            createFinding(ruleSetId = "Ruleset1", fileName = "File2.kt"),
-            createFinding(ruleSetId = "Ruleset2", fileName = "File1.kt"),
+            createIssue(ruleSetId = "Ruleset1", fileName = "File1.kt"),
+            createIssue(ruleSetId = "Ruleset1", fileName = "File2.kt"),
+            createIssue(ruleSetId = "Ruleset2", fileName = "File1.kt"),
         )
 
         val output = subject.render(detektion)?.decolorized()
 
-        assertThat(output).isEqualTo(expectedContent)
+        assertThat(output).isEqualTo(
+            """
+                File1.kt
+                	TestSmell - [TestMessage] at File1.kt:1:1
+                	TestSmell - [TestMessage] at File1.kt:1:1
+                File2.kt
+                	TestSmell - [TestMessage] at File2.kt:1:1
+                
+            """.trimIndent()
+        )
     }
 
     @Test
@@ -39,18 +46,18 @@ class FileBasedFindingsReportSpec {
 
     @Test
     fun `should not add auto corrected issues to report`() {
-        val report = FileBasedFindingsReport()
+        val report = FileBasedIssuesReport()
         AutoCorrectableIssueAssert.isReportNull(report)
     }
 }
 
-private fun createFileBasedFindingsReport(): FileBasedFindingsReport {
-    val report = FileBasedFindingsReport()
+private fun createFileBasedIssuesReport(): FileBasedIssuesReport {
+    val report = FileBasedIssuesReport()
     report.init(Config.empty)
     return report
 }
 
-private fun createFinding(ruleSetId: String, fileName: String): Finding2 = createFinding(
+private fun createIssue(ruleSetId: String, fileName: String): Issue = createIssue(
     ruleInfo = createRuleInfo(ruleSetId = ruleSetId),
     entity = createEntity(location = createLocation(fileName)),
 )

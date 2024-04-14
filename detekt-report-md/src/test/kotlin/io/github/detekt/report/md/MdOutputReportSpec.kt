@@ -9,12 +9,12 @@ import io.github.detekt.metrics.processors.sourceLinesKey
 import io.github.detekt.test.utils.internal.FakeKtElement
 import io.github.detekt.test.utils.internal.FakePsiFile
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createEntity
-import io.gitlab.arturbosch.detekt.test.createFinding
+import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
 import io.gitlab.arturbosch.detekt.test.createRuleInfo
 import org.assertj.core.api.Assertions.assertThat
@@ -31,19 +31,19 @@ class MdOutputReportSpec {
     fun `renders Markdown structure correctly`() {
         assertThat(result).contains("Metrics")
         assertThat(result).contains("Complexity Report")
-        assertThat(result).contains("Findings")
+        assertThat(result).contains("Issues")
     }
 
     @Test
-    fun `contains zero findings`() {
+    fun `contains zero issues`() {
         val result = mdReport.render(TestDetektion())
 
-        assertThat(result).contains("Findings (0)")
+        assertThat(result).contains("Issues (0)")
     }
 
     @Test
-    fun `contains the total number of findings`() {
-        assertThat(result).contains("Findings (3)")
+    fun `contains the total number of issues`() {
+        assertThat(result).contains("Issues (3)")
     }
 
     @Test
@@ -68,8 +68,8 @@ class MdOutputReportSpec {
 
     @Test
     fun `renders the right violation messages for the rules`() {
-        assertThat(result).contains("Message finding 1")
-        assertThat(result).contains("Message finding 2")
+        assertThat(result).contains("Issue message 1")
+        assertThat(result).contains("Issue message 2")
     }
 
     @Test
@@ -81,9 +81,9 @@ class MdOutputReportSpec {
     @Test
     fun `renders the right documentation links for the rules`() {
         val detektion = TestDetektion(
-            createFinding(createRuleInfo("ValCouldBeVar", "Style")),
-            createFinding(createRuleInfo("EmptyBody", "empty")),
-            createFinding(createRuleInfo("EmptyIf", "empty")),
+            createIssue(createRuleInfo("ValCouldBeVar", "Style")),
+            createIssue(createRuleInfo("EmptyBody", "empty")),
+            createIssue(createRuleInfo("EmptyIf", "empty")),
         )
 
         val result = mdReport.render(detektion)
@@ -93,12 +93,12 @@ class MdOutputReportSpec {
     }
 
     @Test
-    fun `asserts that the generated HTML is the same even if we change the order of the findings`() {
-        val findings = findings()
-        val reversedFindings = findings.reversedArray()
+    fun `asserts that the generated HTML is the same even if we change the order of the issues`() {
+        val issues = issues()
+        val reversedIssues = issues.reversedArray()
 
-        val firstDetektion = createMdDetektion(*findings)
-        val secondDetektion = createMdDetektion(*reversedFindings)
+        val firstDetektion = createMdDetektion(*issues)
+        val secondDetektion = createMdDetektion(*reversedIssues)
 
         val firstReport = mdReport.render(firstDetektion)
         val secondReport = mdReport.render(secondDetektion)
@@ -161,9 +161,9 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     )
 
     return createMdDetektion(
-        createFinding(createRuleInfo("id_a", "Section-1"), entity1, "Message finding 1"),
-        createFinding(createRuleInfo("id_a", "Section-1"), entity2, "Message finding 2"),
-        createFinding(createRuleInfo("id_b", "Section-2"), entity3, "Message finding 3"),
+        createIssue(createRuleInfo("id_a", "Section-1"), entity1, "Issue message 1"),
+        createIssue(createRuleInfo("id_a", "Section-1"), entity2, "Issue message 2"),
+        createIssue(createRuleInfo("id_b", "Section-2"), entity3, "Issue message 3"),
     ).also {
         it.putUserData(complexityKey, 10)
         it.putUserData(CognitiveComplexity.KEY, 10)
@@ -174,29 +174,29 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     }
 }
 
-private fun createMdDetektion(vararg findings: Finding2): Detektion {
+private fun createMdDetektion(vararg issues: Issue): Detektion {
     return TestDetektion(
-        *findings,
+        *issues,
         metrics = listOf(ProjectMetric("M1", 10_000), ProjectMetric("M2", 2))
     )
 }
 
-private fun findings(): Array<Finding2> {
+private fun issues(): Array<Issue> {
     val entity1 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 5))
     val entity2 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 22 to 2))
     val entity3 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 2))
     val entity4 = createEntity(location = createLocation("src/main/com/sample/Sample2.kt", position = 1 to 1))
 
     return arrayOf(
-        createFinding(createRuleInfo("id_a", "RuleSet1"), entity1),
-        createFinding(createRuleInfo("id_a", "RuleSet1"), entity2),
-        createFinding(createRuleInfo("id_a", "RuleSet1"), entity3),
-        createFinding(createRuleInfo("id_a", "RuleSet1"), entity4),
-        createFinding(createRuleInfo("id_b", "RuleSet1"), entity2),
-        createFinding(createRuleInfo("id_b", "RuleSet1"), entity1),
-        createFinding(createRuleInfo("id_b", "RuleSet1"), entity4),
-        createFinding(createRuleInfo("id_b", "RuleSet2"), entity3),
-        createFinding(createRuleInfo("id_c", "RuleSet2"), entity1),
-        createFinding(createRuleInfo("id_c", "RuleSet2"), entity2),
+        createIssue(createRuleInfo("id_a", "RuleSet1"), entity1),
+        createIssue(createRuleInfo("id_a", "RuleSet1"), entity2),
+        createIssue(createRuleInfo("id_a", "RuleSet1"), entity3),
+        createIssue(createRuleInfo("id_a", "RuleSet1"), entity4),
+        createIssue(createRuleInfo("id_b", "RuleSet1"), entity2),
+        createIssue(createRuleInfo("id_b", "RuleSet1"), entity1),
+        createIssue(createRuleInfo("id_b", "RuleSet1"), entity4),
+        createIssue(createRuleInfo("id_b", "RuleSet2"), entity3),
+        createIssue(createRuleInfo("id_c", "RuleSet2"), entity1),
+        createIssue(createRuleInfo("id_c", "RuleSet2"), entity2),
     )
 }

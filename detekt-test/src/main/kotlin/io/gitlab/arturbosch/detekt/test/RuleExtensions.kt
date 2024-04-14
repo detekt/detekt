@@ -42,7 +42,7 @@ fun Rule.lintWithContext(
     val additionalKtFiles = additionalContents.mapIndexed { index, additionalContent ->
         compileContentForTest(additionalContent, "AdditionalTest$index.kt")
     }
-    val bindingContext = environment.getContextForPaths(listOf(ktFile) + additionalKtFiles)
+    val bindingContext = environment.createBindingContext(listOf(ktFile) + additionalKtFiles)
     val languageVersionSettings = environment.configuration.languageVersionSettings
 
     val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)

@@ -4,7 +4,15 @@ import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.tooling.api.spec.RulesSpec
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
+import io.gitlab.arturbosch.detekt.api.internal.PathFilters
+import java.nio.file.Path
+import kotlin.io.path.ExperimentalPathApi
+import kotlin.io.path.absolute
+import kotlin.io.path.extension
+import kotlin.io.path.relativeTo
+import kotlin.io.path.walk
 
+@Suppress("LongMethod")
 internal fun CliArgs.createSpec(output: Appendable, error: Appendable): ProcessingSpec {
     val args = this
     return ProcessingSpec {
@@ -16,9 +24,17 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
 
         project {
             basePath = args.basePath
-            inputPaths = args.inputPaths
-            excludes = args.excludes?.let(::asPatterns).orEmpty()
-            includes = args.includes?.let(::asPatterns).orEmpty()
+            val pathFilters = PathFilters.of(
+                args.excludes?.let(::asPatterns).orEmpty(),
+                args.includes?.let(::asPatterns).orEmpty(),
+            )
+            val absoluteBasePath = basePath.absolute()
+            inputPaths = args.inputPaths.walk()
+                .filter { path -> path.isKotlinFile() }
+                .map { path -> path.absolute().relativeTo(absoluteBasePath) }
+                .filter { path -> pathFilters?.isIgnored(path) != false }
+                .map { path -> absoluteBasePath.resolve(path).normalize() }
+                .toSet()
         }
 
         rules {
@@ -37,8 +53,8 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
         config {
             useDefaultConfig = args.buildUponDefaultConfig
             shouldValidateBeforeAnalysis = null
-            configPaths = config?.let { MultipleExistingPathConverter().convert(it) }.orEmpty()
-            resources = configResource?.let { MultipleClasspathResourceConverter().convert(it) }.orEmpty()
+            configPaths = args.config
+            resources = args.configResource
         }
 
         execution {
@@ -48,7 +64,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
 
         extensions {
             disableDefaultRuleSets = args.disableDefaultRuleSets
-            fromPaths { args.plugins?.let { MultipleExistingPathConverter().convert(it) }.orEmpty() }
+            fromPaths { args.plugins }
         }
 
         reports {
@@ -65,6 +81,15 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
         }
     }
 }
+
+@OptIn(ExperimentalPathApi::class)
+private fun Iterable<Path>.walk(): Sequence<Path> {
+    return asSequence().flatMap { it.walk() }
+}
+
+private fun Path.isKotlinFile() = extension in KT_ENDINGS
+
+private val KT_ENDINGS = setOf("kt", "kts")
 
 private fun asPatterns(rawValue: String): List<String> = rawValue.trim()
     .splitToSequence(",", ";")

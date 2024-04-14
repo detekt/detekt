@@ -13,8 +13,8 @@ import kotlin.system.measureTimeMillis
 class Generator(
     private val inputPaths: List<Path>,
     private val textReplacements: Map<String, String>,
-    documentationPath: Path,
-    configPath: Path,
+    documentationPath: Path?,
+    configPath: Path?,
     private val outPrinter: PrintStream = System.out
 ) {
     private val collector = DetektCollector(textReplacements)

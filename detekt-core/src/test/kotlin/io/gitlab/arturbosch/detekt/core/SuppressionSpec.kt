@@ -1,215 +1,307 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.test.utils.compileContentForTest
-import io.github.detekt.test.utils.compileForTest
-import io.github.detekt.test.utils.resourceAsPath
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
-import io.gitlab.arturbosch.detekt.test.lint
-import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
-import org.intellij.lang.annotations.Language
-import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
+import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtFunction
+import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class SuppressionSpec {
 
+    private fun KtElement.isSuppressedBy(): Boolean {
+        return isSuppressedBy(Rule.Id("RuleId"), setOf("alias1", "alias2"), RuleSet.Id("RuleSetId"))
+    }
+
     @Nested
-    inner class `detekt findings can be suppressed with @Suppress or @SuppressWarnings` {
+    inner class DifferentSuppressLocation {
+        @Nested
+        inner class AtFile {
+            val file = compileContentForTest(
+                """
+                    @file:Suppress("RuleId")
+                    
+                    class OneClass {
+                        fun function(parameter: String) {
+                            val a = 0
+                        }
+                    }
+                    
+                    fun topLevelFunction() = Unit
+                """.trimIndent()
+            )
 
-        @Test
-        fun `should not be suppressed by a @Deprecated annotation`() {
-            assertThat(isSuppressedBy("Deprecated", "This should no longer be used")).isFalse()
+            @Test
+            fun file() {
+                assertThat(file.isSuppressedBy()).isTrue()
+            }
+
+            @Test
+            fun `class`() {
+                assertThat(file.getClass().isSuppressedBy()).isTrue()
+            }
+
+            @Test
+            fun method() {
+                assertThat(file.getMethod().isSuppressedBy()).isTrue()
+            }
+
+            @Test
+            fun methodParameter() {
+                assertThat(file.getMethodParameter().isSuppressedBy()).isTrue()
+            }
+
+            @Test
+            fun function() {
+                assertThat(file.getFunction().isSuppressedBy()).isTrue()
+            }
         }
 
-        @Test
-        fun `should not be suppressed by a @Suppress annotation for another rule`() {
-            assertThat(isSuppressedBy("Suppress", "NotATest")).isFalse()
+        @Nested
+        inner class AtClass {
+            val file = compileContentForTest(
+                """
+                    @Suppress("RuleId")
+                    class OneClass {
+                        fun function(parameter: String) {
+                            val a = 0
+                        }
+                    }
+                    
+                    fun topLevelFunction() = Unit
+                """.trimIndent()
+            )
+
+            @Test
+            fun file() {
+                assertThat(file.isSuppressedBy()).isFalse()
+            }
+
+            @Test
+            fun `class`() {
+                assertThat(file.getClass().isSuppressedBy()).isTrue()
+            }
+
+            @Test
+            fun method() {
+                assertThat(file.getMethod().isSuppressedBy()).isTrue()
+            }
+
+            @Test
+            fun methodParameter() {
+                assertThat(file.getMethodParameter().isSuppressedBy()).isTrue()
+            }
+
+            @Test
+            fun function() {
+                assertThat(file.getFunction().isSuppressedBy()).isFalse()
+            }
         }
 
-        @Test
-        fun `should not be suppressed by a @SuppressWarnings annotation for another rule`() {
-            assertThat(isSuppressedBy("SuppressWarnings", "NotATest")).isFalse()
+        @Nested
+        inner class AtMethod {
+            val file = compileContentForTest(
+                """
+                    class OneClass {
+                        @Suppress("RuleId")
+                        fun function(parameter: String) {
+                            val a = 0
+                        }
+                    }
+                    
+                    fun topLevelFunction() = Unit
+                """.trimIndent()
+            )
+
+            @Test
+            fun file() {
+                assertThat(file.isSuppressedBy()).isFalse()
+            }
+
+            @Test
+            fun `class`() {
+                assertThat(file.getClass().isSuppressedBy()).isFalse()
+            }
+
+            @Test
+            fun method() {
+                assertThat(file.getMethod().isSuppressedBy()).isTrue()
+            }
+
+            @Test
+            fun methodParameter() {
+                assertThat(file.getMethodParameter().isSuppressedBy()).isTrue()
+            }
+
+            @Test
+            fun function() {
+                assertThat(file.getFunction().isSuppressedBy()).isFalse()
+            }
         }
 
-        @Test
-        fun `should be suppressed by a @Suppress annotation for the rule`() {
-            assertThat(isSuppressedBy("Suppress", "Test")).isTrue()
+        @Nested
+        inner class AtMethodParameter {
+            val file = compileContentForTest(
+                """
+                    class OneClass {
+                        fun function(@Suppress("RuleId") parameter: String) {
+                            val a = 0
+                        }
+                    }
+                    
+                    fun topLevelFunction() = Unit
+                """.trimIndent()
+            )
+
+            @Test
+            fun file() {
+                assertThat(file.isSuppressedBy()).isFalse()
+            }
+
+            @Test
+            fun `class`() {
+                assertThat(file.getClass().isSuppressedBy()).isFalse()
+            }
+
+            @Test
+            fun method() {
+                assertThat(file.getMethod().isSuppressedBy()).isFalse()
+            }
+
+            @Test
+            fun methodParameter() {
+                assertThat(file.getMethodParameter().isSuppressedBy()).isTrue()
+            }
+
+            @Test
+            fun function() {
+                assertThat(file.getFunction().isSuppressedBy()).isFalse()
+            }
         }
 
-        @Test
-        fun `should be suppressed by a @SuppressWarnings annotation for the rule`() {
-            assertThat(isSuppressedBy("SuppressWarnings", "Test")).isTrue()
-        }
+        @Nested
+        inner class AtFunction {
+            val file = compileContentForTest(
+                """
+                    class OneClass {
+                        fun function(parameter: String) {
+                            val a = 0
+                        }
+                    }
+                    
+                    @Suppress("RuleId")
+                    fun topLevelFunction() = Unit
+                """.trimIndent()
+            )
 
-        @Test
-        fun `should be suppressed by a @SuppressWarnings annotation for 'all' rules`() {
-            assertThat(isSuppressedBy("Suppress", "all")).isTrue()
-        }
+            @Test
+            fun file() {
+                assertThat(file.isSuppressedBy()).isFalse()
+            }
 
-        @Test
-        fun `should be suppressed by a @SuppressWarnings annotation for 'ALL' rules`() {
-            assertThat(isSuppressedBy("SuppressWarnings", "ALL")).isTrue()
-        }
+            @Test
+            fun `class`() {
+                assertThat(file.getClass().isSuppressedBy()).isFalse()
+            }
 
-        @Test
-        fun `should not be suppressed by a @Suppress annotation with a Checkstyle prefix`() {
-            assertThat(isSuppressedBy("Suppress", "Checkstyle:Test")).isFalse()
-        }
+            @Test
+            fun method() {
+                assertThat(file.getMethod().isSuppressedBy()).isFalse()
+            }
 
-        @Test
-        fun `should not be suppressed by a @SuppressWarnings annotation with a Checkstyle prefix`() {
-            assertThat(isSuppressedBy("SuppressWarnings", "Checkstyle:Test")).isFalse()
-        }
+            @Test
+            fun methodParameter() {
+                assertThat(file.getMethodParameter().isSuppressedBy()).isFalse()
+            }
 
-        @Test
-        fun `should be suppressed by a @Suppress annotation with a 'Detekt' prefix`() {
-            assertThat(isSuppressedBy("Suppress", "Detekt:Test")).isTrue()
+            @Test
+            fun function() {
+                assertThat(file.getFunction().isSuppressedBy()).isTrue()
+            }
         }
+    }
 
-        @Test
-        fun `should be suppressed by a @SuppressWarnings annotation with a 'Detekt' prefix`() {
-            assertThat(isSuppressedBy("SuppressWarnings", "Detekt:Test")).isTrue()
-        }
+    @ParameterizedTest
+    @ValueSource(strings = ["Suppress", "SuppressWarnings"])
+    fun `works with both annotations`(annotation: String) {
+        assertThat(compileContentForTest("""@file:$annotation("RuleId")""").isSuppressedBy()).isTrue()
+    }
 
-        @Test
-        fun `should be suppressed by a @Suppress annotation with a 'detekt' prefix`() {
-            assertThat(isSuppressedBy("Suppress", "detekt:Test")).isTrue()
-        }
+    @ParameterizedTest
+    @ValueSource(
+        strings = ["all", "All", "ALL", "RuleId", "RuleSetId", "RuleSetId.RuleId", "RuleSetId:RuleId", "alias1", "alias2"]
+    )
+    fun shouldSuppress(value: String) {
+        assertThat(compileContentForTest("""@file:Suppress("$value")""").isSuppressedBy()).isTrue()
+        assertThat(compileContentForTest("""@file:Suppress("detekt.$value")""").isSuppressedBy()).isTrue()
+        assertThat(compileContentForTest("""@file:Suppress("detekt:$value")""").isSuppressedBy()).isTrue()
+        assertThat(compileContentForTest("""@file:Suppress("Detekt.$value")""").isSuppressedBy()).isTrue()
+    }
 
-        @Test
-        fun `should be suppressed by a @SuppressWarnings annotation with a 'detekt' prefix`() {
-            assertThat(isSuppressedBy("SuppressWarnings", "detekt:Test")).isTrue()
-        }
-
-        @Test
-        fun `should be suppressed by a @Suppress annotation with a 'detekt' prefix with a dot`() {
-            assertThat(isSuppressedBy("Suppress", "detekt.Test")).isTrue()
-        }
-
-        @Test
-        fun `should be suppressed by a @SuppressWarnings annotation with a 'detekt' prefix with a dot`() {
-            assertThat(isSuppressedBy("SuppressWarnings", "detekt.Test")).isTrue()
-        }
-
-        @Test
-        fun `should not be suppressed by a @Suppress annotation with a 'detekt' prefix with a wrong separator`() {
-            assertThat(isSuppressedBy("Suppress", "detekt/Test")).isFalse()
-        }
-
-        @Test
-        fun `should not be suppressed by a @SuppressWarnings annotation with a 'detekt' prefix with a wrong separator`() {
-            assertThat(isSuppressedBy("SuppressWarnings", "detekt/Test")).isFalse()
-        }
-
-        @Test
-        fun `should be suppressed by a @Suppress annotation with an alias`() {
-            assertThat(isSuppressedBy("Suppress", "alias")).isTrue()
-        }
-
-        @Test
-        fun `should be suppressed by a @SuppressWarnings annotation with an alias`() {
-            assertThat(isSuppressedBy("SuppressWarnings", "alias")).isTrue()
-        }
+    @ParameterizedTest
+    @ValueSource(
+        strings = ["aLL", "ruleid", "RuleId2", "RuleId.RuleSetId", "RuleSetId.alias1", "RuleSetId:alias2"]
+    )
+    fun `should not suppress with @Suppress annotation with unexpected value`(value: String) {
+        assertThat(compileContentForTest("""@file:Suppress("$value")""").isSuppressedBy()).isFalse()
+        assertThat(compileContentForTest("""@file:Suppress("detekt.$value")""").isSuppressedBy()).isFalse()
+        assertThat(compileContentForTest("""@file:Suppress("detekt:$value")""").isSuppressedBy()).isFalse()
+        assertThat(compileContentForTest("""@file:Suppress("Detekt.$value")""").isSuppressedBy()).isFalse()
     }
 
     @Test
-    fun `findings are suppressed`() {
-        val ktFile = compileForTest(resourceAsPath("/suppression/SuppressedElements.kt"))
-        val findings = listOf(TestLM(), TestLPL()).flatMap { it.visitFile(ktFile) }
-        assertThat(findings).isEmpty()
-    }
-
-    @Nested
-    inner class `suppression's via rule set id` {
-
-        val code = """
-            fun lpl(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int) = Unit
-        """.trimIndent()
-
-        val config = yamlConfigFromContent(
+    fun checkAllAnnotations1() {
+        val file = compileContentForTest(
             """
-                complexity:
-                  TestLPL:
-                    active: true
-                    threshold: 5
+                @file:Suppress("Foo")
+                @file:SuppressWarnings("RuleId")
             """.trimIndent()
         )
-            .subConfig("complexity")
-            .subConfig("TestLPL")
+        assertThat(file.isSuppressedBy()).isTrue()
+    }
 
-        @Test
-        fun `reports without a suppression`() {
-            assertThat(TestLPL(config).lint(code)).isNotEmpty()
-        }
-
-        @Test
-        fun `reports with wrong suppression`() {
-            assertThat(TestLPL(config).lint("""@Suppress("wrong_name_used")$code""")).isNotEmpty()
-        }
-
-        @Test
-        fun `suppresses by rule set id`() {
-            assertCodeIsSuppressed("""@Suppress("complexity")$code""", config)
-        }
-
-        @Test
-        fun `suppresses by rule set id and detekt prefix`() {
-            assertCodeIsSuppressed("""@Suppress("detekt.complexity")$code""", config)
-        }
-
-        @Test
-        fun `suppresses by rule id`() {
-            assertCodeIsSuppressed("""@Suppress("TestLPL")$code""", config)
-        }
-
-        @Test
-        fun `suppresses by combination of rule set and rule id`() {
-            assertCodeIsSuppressed("""@Suppress("complexity.TestLPL")$code""", config)
-        }
-
-        @Test
-        fun `suppresses by combination of detekt prefix, rule set and rule id`() {
-            assertCodeIsSuppressed("""@Suppress("detekt:complexity:TestLPL")$code""", config)
-        }
-
-        private fun assertCodeIsSuppressed(@Language("kotlin") code: String, config: Config) {
-            val findings = TestLPL(config).lint(code)
-            assertThat(findings).isEmpty()
-        }
+    @Test
+    fun checkAllAnnotations2() {
+        val file = compileContentForTest(
+            """
+                @file:Suppress("RuleId")
+                @file:SuppressWarnings("Foo")
+            """.trimIndent()
+        )
+        assertThat(file.isSuppressedBy()).isTrue()
     }
 }
 
-private fun isSuppressedBy(annotation: String, argument: String): Boolean {
-    val annotated = """
-        @$annotation("$argument")
-        class Test
-    """.trimIndent()
-    val file = compileContentForTest(annotated)
-    val annotatedClass = file.children.first { it is KtClass } as KtAnnotated
-    return annotatedClass.isSuppressedBy(Rule.Id("Test"), setOf("alias"))
+private fun KtFile.getClass(): KtElement {
+    return findChildByClass(KtClass::class.java)!!
 }
 
-private class TestLM(config: Config = Config.empty) : Rule(config, "") {
-    override fun visitNamedFunction(function: KtNamedFunction) {
-        val start = Location.from(function.funKeyword!!).source.line
-        val end = Location.from(function.lastBlockStatementOrThis()).source.line
-        val offset = end - start
-        if (offset > 10) report(CodeSmell(Entity.from(function), message = "TestMessage"))
-    }
+private fun KtFile.getMethod(): KtElement {
+    return findChildByClass(KtClass::class.java)!!
+        .body!!
+        .children
+        .single { it is KtFunction }
+        .let { it as KtFunction }
+        .bodyBlockExpression!!
 }
 
-private class TestLPL(config: Config = Config.empty) : Rule(config, "") {
-    override fun visitNamedFunction(function: KtNamedFunction) {
-        val size = function.valueParameters.size
-        if (size > 5) report(CodeSmell(Entity.from(function), message = "TestMessage"))
-    }
+private fun KtFile.getMethodParameter(): KtElement {
+    return findChildByClass(KtClass::class.java)!!
+        .body!!
+        .children
+        .single { it is KtFunction }
+        .findDescendantOfType<KtParameter>()!!
+}
+
+private fun KtFile.getFunction(): KtElement {
+    return findChildByClass(KtFunction::class.java)!!
 }
