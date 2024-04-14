@@ -4,6 +4,7 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProper
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPERTY
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.MAX_LINE_LENGTH_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.ArgumentListWrappingRule
+import com.pinterest.ktlint.ruleset.standard.rules.ArgumentListWrappingRule.Companion.IGNORE_WHEN_PARAMETER_COUNT_GREATER_OR_EQUAL_THAN_PROPERTY
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
@@ -30,9 +31,13 @@ class ArgumentListWrapping(config: Config) : FormattingRule(
     @Configuration("maximum line length")
     private val maxLineLength by configWithAndroidVariants(120, 100)
 
+    @Configuration("paremeter threshold to ignore rule")
+    private val ignoreRuleParameterThreshold by config(8)
+
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
         mapOf(
             INDENT_SIZE_PROPERTY to indentSize.toString(),
-            MAX_LINE_LENGTH_PROPERTY to maxLineLength.toString()
+            MAX_LINE_LENGTH_PROPERTY to maxLineLength.toString(),
+            IGNORE_WHEN_PARAMETER_COUNT_GREATER_OR_EQUAL_THAN_PROPERTY to ignoreRuleParameterThreshold.toString(),
         )
 }

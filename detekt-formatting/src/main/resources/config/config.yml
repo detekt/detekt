@@ -14,6 +14,7 @@ formatting:
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120
+    ignoreRuleParameterThreshold: 8
   BinaryExpressionWrapping:
     active: false
     autoCorrect: true
