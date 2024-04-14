@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
+import kotlin.io.path.absolutePathString
 import kotlin.io.path.readLines
 
 class RunnerSpec {
@@ -196,5 +197,32 @@ class RunnerSpec {
                 .isExactlyInstanceOf(IllegalArgumentException::class.java)
                 .hasMessage("Pattern 'RuleSetId:RuleId' expected.")
         }
+    }
+
+    @Test
+    fun `succeeds with --autocorrect`() {
+        val outPrintStream = StringPrintStream()
+        val errPrintStream = StringPrintStream()
+
+        val config = resourceAsPath("/configs/formatting-config.yml")
+        val inputPath = resourceAsPath("/autocorrect/Test.kt")
+
+        val args = arrayOf(
+            "--input",
+            inputPath.toString(),
+            "--auto-correct",
+            "--config",
+            config.toString()
+        )
+
+        assertThatThrownBy {
+            Runner(parseArguments(args), outPrintStream, errPrintStream).execute()
+        }.isInstanceOf(IssuesFound::class.java)
+
+        assertThat(errPrintStream.toString()).isEmpty()
+        assertThat(outPrintStream.toString())
+            .contains("${inputPath.absolutePathString()}:1:30: File must end with a newline (\\n) [FinalNewline]")
+            .contains("File ${inputPath.absolutePathString()} was modified")
+        assertThat(inputPath).content().endsWith("\n")
     }
 }

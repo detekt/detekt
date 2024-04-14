@@ -1,0 +1,5 @@
+formatting:
+  autoCorrect: true
+  FinalNewline:
+    active: true
+    autoCorrect: true
