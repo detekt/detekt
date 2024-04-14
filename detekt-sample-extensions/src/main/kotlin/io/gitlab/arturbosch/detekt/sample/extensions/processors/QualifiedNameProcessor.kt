@@ -6,13 +6,12 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
 
 class QualifiedNameProcessor : FileProcessListener {
 
     override val id: String = "QualifiedNameProcessor"
 
-    override fun onProcess(file: KtFile, bindingContext: BindingContext) {
+    override fun onProcess(file: KtFile) {
         val packageName = file.packageFqName.asString()
         val nameVisitor = ClassNameVisitor()
         file.accept(nameVisitor)
@@ -21,7 +20,7 @@ class QualifiedNameProcessor : FileProcessListener {
         file.putUserData(fqNamesKey, fqNames)
     }
 
-    override fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
+    override fun onFinish(files: List<KtFile>, result: Detektion) {
         val fqNames = files
             .mapNotNull { it.getUserData(fqNamesKey) }
             .flatMapTo(HashSet()) { it }

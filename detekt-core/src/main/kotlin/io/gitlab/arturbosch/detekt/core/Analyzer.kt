@@ -56,11 +56,11 @@ internal class Analyzer(
         compilerResources: CompilerResources
     ): List<Issue> =
         ktFiles.flatMap { file ->
-            processors.forEach { it.onProcess(file, bindingContext) }
+            processors.forEach { it.onProcess(file) }
             val issues = runCatching { analyze(file, bindingContext, compilerResources) }
                 .onFailure { throwIllegalStateException(file, it) }
                 .getOrDefault(emptyList())
-            processors.forEach { it.onProcessComplete(file, issues, bindingContext) }
+            processors.forEach { it.onProcessComplete(file, issues) }
             issues
         }
 
@@ -72,9 +72,9 @@ internal class Analyzer(
         val service = settings.taskPool
         val tasks: TaskList<List<Issue>?> = ktFiles.map { file ->
             service.task {
-                processors.forEach { it.onProcess(file, bindingContext) }
+                processors.forEach { it.onProcess(file) }
                 val issues = analyze(file, bindingContext, compilerResources)
-                processors.forEach { it.onProcessComplete(file, issues, bindingContext) }
+                processors.forEach { it.onProcessComplete(file, issues) }
                 issues
             }.recover { throwIllegalStateException(file, it) }
         }

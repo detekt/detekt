@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
 
 class MetricProcessorTester(
     private val file: KtFile,
@@ -16,10 +15,10 @@ class MetricProcessorTester(
 
     fun <T : Any> test(processor: AbstractProcessor, key: Key<T>): T {
         with(processor) {
-            onStart(listOf(file), BindingContext.EMPTY)
-            onProcess(file, BindingContext.EMPTY)
-            onProcessComplete(file, emptyList(), BindingContext.EMPTY)
-            onFinish(listOf(file), result, BindingContext.EMPTY)
+            onStart(listOf(file))
+            onProcess(file)
+            onProcessComplete(file, emptyList())
+            onFinish(listOf(file), result)
         }
         return checkNotNull(result.getUserData(key))
     }

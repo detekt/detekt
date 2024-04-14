@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.sample.extensions.processors
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Test
 
 class NumberOfLoopsProcessorSpec {
@@ -22,7 +21,7 @@ class NumberOfLoopsProcessorSpec {
 
         val ktFile = compileContentForTest(code)
         ktFile.accept(DetektVisitor())
-        NumberOfLoopsProcessor().onProcess(ktFile, BindingContext.EMPTY)
+        NumberOfLoopsProcessor().onProcess(ktFile)
 
         assertThat(ktFile.getUserData(NumberOfLoopsProcessor.numberOfLoopsKey)).isEqualTo(2)
     }
