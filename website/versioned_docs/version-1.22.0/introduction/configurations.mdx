@@ -1,10 +1,12 @@
 ---
 id: configurations
-title: "detekt Configuration File"
+title: "Detekt Configuration File"
 keywords: [config, configuration, yaml]
 permalink: configurations.html
 sidebar_position: 3
 ---
+
+import { DefaultConfigurationFile } from "./../../../src/components/ConfigurationFile"
 
 _detekt_ uses a [YAML style configuration](https://yaml.org/spec/1.2/spec.html) file for various things:
 
@@ -14,8 +16,7 @@ _detekt_ uses a [YAML style configuration](https://yaml.org/spec/1.2/spec.html) 
 - output reports
 - processors
 
-See the [default-detekt-config.yml](https://github.com/detekt/detekt/blob/main/detekt-core/src/main/resources/default-detekt-config.yml)
-file for all defined configuration options and their default values. 
+See the <DefaultConfigurationFile /> file for all defined configuration options and their default values.
 
 _Note:_ When using a custom config file, the default values are ignored unless you also set the `--build-upon-default-config` flag.
 
@@ -142,7 +143,7 @@ output-reports:
   #  - 'HtmlOutputReport'
   #  - 'TxtOutputReport'
   #  - 'XmlOutputReport'
-  #  - 'SarifOutputReport'
+  #  - 'sarif'
   #  - 'MdOutputReport'
 ```
 
@@ -179,7 +180,7 @@ processors:
 
 ## Config JSON Schema
 
-A JSON Schema for the config file is available on: [json.schemastore.org/detekt-1.22.0.json](https://json.schemastore.org/detekt-1.22.0.json).
+A JSON Schema for the config file is available on: [json.schemastore.org/detekt](https://json.schemastore.org/detekt).
 
 You can configure your IDE (e.g. IntelliJ or Android Studio have built-in support)
 to use that schema to give you **autocompletion** capabilities on your config file.
