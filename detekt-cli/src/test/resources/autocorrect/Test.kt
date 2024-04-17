@@ -1,1 +1,9 @@
-class Test // no final newline
+class Test {
+
+
+
+
+
+
+
+}
