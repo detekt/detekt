@@ -1,5 +1,5 @@
 formatting:
   autoCorrect: true
-  FinalNewline:
+  NoConsecutiveBlankLines:
     active: true
     autoCorrect: true

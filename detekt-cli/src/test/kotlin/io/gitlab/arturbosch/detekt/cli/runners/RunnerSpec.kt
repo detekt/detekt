@@ -221,7 +221,7 @@ class RunnerSpec {
 
         assertThat(errPrintStream.toString()).isEmpty()
         assertThat(outPrintStream.toString())
-            .contains("${inputPath.absolutePathString()}:1:30: File must end with a newline (\\n) [FinalNewline]")
+            .contains("${inputPath.absolutePathString()}:3:1: Needless blank line(s) [NoConsecutiveBlankLines]")
             .contains("File ${inputPath.absolutePathString()} was modified")
         assertThat(inputPath).content().endsWith("\n")
     }
