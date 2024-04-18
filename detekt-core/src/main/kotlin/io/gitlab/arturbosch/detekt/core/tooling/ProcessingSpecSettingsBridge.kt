@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.tooling
 
 import io.github.detekt.tooling.api.spec.ProcessingSpec
+import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.baseline.DETEKT_BASELINE_CREATION_KEY
@@ -8,7 +9,7 @@ import io.gitlab.arturbosch.detekt.core.baseline.DETEKT_BASELINE_PATH_KEY
 import io.gitlab.arturbosch.detekt.core.config.AllRulesConfig
 import io.gitlab.arturbosch.detekt.core.config.CompositeConfig
 import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
-import io.gitlab.arturbosch.detekt.core.config.loadConfiguration
+import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import io.gitlab.arturbosch.detekt.core.config.validation.DeprecatedRule
 import io.gitlab.arturbosch.detekt.core.config.validation.loadDeprecations
 import io.gitlab.arturbosch.detekt.core.reporting.DETEKT_OUTPUT_REPORT_BASE_PATH_KEY
@@ -38,6 +39,15 @@ internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R
         }
     }
     return result
+}
+
+internal fun ProcessingSpec.loadConfiguration(): Config = with(configSpec) {
+    return when {
+        configPaths.isNotEmpty() -> configPaths.map { YamlConfig.load(it) }
+        resources.isNotEmpty() -> resources.map { it.openSafeStream().reader().use(YamlConfig::load) }
+        else -> listOf(Config.empty)
+    }
+        .reduce { composite, config -> CompositeConfig(config, composite) }
 }
 
 private fun ProcessingSpec.workaroundConfiguration(config: Config): Config {

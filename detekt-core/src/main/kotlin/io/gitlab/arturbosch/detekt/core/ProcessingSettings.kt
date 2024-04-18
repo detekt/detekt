@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.core
 
+import io.github.detekt.tooling.api.spec.ConfigSpec
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.PropertiesAware
 import io.gitlab.arturbosch.detekt.api.SetupContext
-import io.gitlab.arturbosch.detekt.core.config.extractUris
 import io.gitlab.arturbosch.detekt.core.settings.ClassloaderAware
 import io.gitlab.arturbosch.detekt.core.settings.EnvironmentAware
 import io.gitlab.arturbosch.detekt.core.settings.EnvironmentFacade
@@ -16,6 +16,10 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.utils.closeQuietly
 import java.io.Closeable
 import java.net.URI
+import java.net.URL
+import java.nio.file.FileSystemNotFoundException
+import java.nio.file.FileSystems
+import java.nio.file.Path
 
 /**
  * Settings to be used by the detekt engine.
@@ -46,4 +50,22 @@ class ProcessingSettings(
         Disposer.dispose(disposable)
         closeLoaderIfNeeded()
     }
+}
+
+private fun ConfigSpec.extractUris(): Collection<URI> {
+    fun initFileSystem(uri: URI) {
+        runCatching {
+            @Suppress("SwallowedException") // Create file system inferred from URI if it does not exist.
+            try {
+                FileSystems.getFileSystem(uri)
+            } catch (e: FileSystemNotFoundException) {
+                FileSystems.newFileSystem(uri, mapOf("create" to "true"))
+            }
+        }
+    }
+
+    val pathUris = configPaths.map(Path::toUri)
+    val resourceUris = resources.map(URL::toURI)
+    resourceUris.forEach(::initFileSystem)
+    return resourceUris + pathUris
 }
