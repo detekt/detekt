@@ -200,12 +200,12 @@ class RunnerSpec {
     }
 
     @Test
-    fun `succeeds with --autocorrect`() {
+    fun `succeeds with --autocorrect with single autocorrectable fix`() {
         val outPrintStream = StringPrintStream()
         val errPrintStream = StringPrintStream()
 
         val config = resourceAsPath("/configs/formatting-config.yml")
-        val inputPath = resourceAsPath("/autocorrect/Test.kt")
+        val inputPath = resourceAsPath("/autocorrect/SingleRule.kt")
 
         val args = arrayOf(
             "--input",
@@ -226,6 +226,54 @@ class RunnerSpec {
         assertThat(inputPath).content().isEqualToIgnoringNewLines(
             """
                 class Test {
+
+                }
+
+            """.trimIndent()
+        )
+    }
+
+    @Test
+    fun `succeeds with --autocorrect with multiple autocorrectable fixes`() {
+        val outPrintStream = StringPrintStream()
+        val errPrintStream = StringPrintStream()
+
+        val config = resourceAsPath("/configs/formatting-config.yml")
+        val inputPath = resourceAsPath("/autocorrect/MultipleRules.kt")
+
+        val args = arrayOf(
+            "--input",
+            inputPath.toString(),
+            "--auto-correct",
+            "--config",
+            config.toString()
+        )
+
+        assertThatThrownBy {
+            Runner(parseArguments(args), outPrintStream, errPrintStream).execute()
+        }.isInstanceOf(IssuesFound::class.java)
+
+        assertThat(errPrintStream.toString()).isEmpty()
+        assertThat(outPrintStream.toString())
+            .contains("${inputPath.absolutePathString()}:5:24: Line must not end with \".\" [ChainWrapping]")
+            .contains("${inputPath.absolutePathString()}:6:28: Line must not end with \".\" [ChainWrapping]")
+            .contains("${inputPath.absolutePathString()}:7:36: Line must not end with \"?.\" [ChainWrapping]")
+            .contains("${inputPath.absolutePathString()}:10:15: Line must not end with \"?:\" [ChainWrapping]")
+            .contains("${inputPath.absolutePathString()}:3:1: Needless blank line(s) [NoConsecutiveBlankLines]")
+            .contains("${inputPath.absolutePathString()}:12:1: Needless blank line(s) [NoConsecutiveBlankLines]")
+            .contains("File ${inputPath.absolutePathString()} was modified")
+        assertThat(inputPath).content().isEqualToIgnoringNewLines(
+            """
+                class Test {
+
+                    val foo =
+                        listOf(1, 2, 3)
+                        .filter { it > 2 }!!
+                        .takeIf { it.count() > 100 }
+                        ?.sum()
+                    val foobar =
+                        foo()
+                            ?: bar
 
                 }
 
