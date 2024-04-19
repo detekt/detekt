@@ -223,6 +223,13 @@ class RunnerSpec {
         assertThat(outPrintStream.toString())
             .contains("${inputPath.absolutePathString()}:3:1: Needless blank line(s) [NoConsecutiveBlankLines]")
             .contains("File ${inputPath.absolutePathString()} was modified")
-        assertThat(inputPath).content().endsWith("\n")
+        assertThat(inputPath).content().isEqualToIgnoringNewLines(
+            """
+                class Test {
+
+                }
+
+            """.trimIndent()
+        )
     }
 }
