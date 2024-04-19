@@ -41,6 +41,20 @@ fun createIssue(
     autoCorrectEnabled = autoCorrectEnabled,
 )
 
+fun createIssue(
+    ruleInfo: Issue.RuleInfo,
+    location: Location,
+    message: String = "TestMessage",
+    severity: Severity = Severity.Error,
+    autoCorrectEnabled: Boolean = false,
+): Issue = IssueImpl(
+    ruleInfo = ruleInfo,
+    entity = createEntity(location = location),
+    message = message,
+    severity = severity,
+    autoCorrectEnabled = autoCorrectEnabled,
+)
+
 fun createRuleInfo(
     id: String = "TestSmell",
     ruleSetId: String = "RuleSet$id",
