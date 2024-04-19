@@ -26,7 +26,19 @@ class BaselineResultMappingSpec {
         createIssue(
             ruleInfo = createRuleInfo("SomeIssueId", "RuleSet"),
             entity = createEntity(signature = "SomeSignature"),
-        )
+        ),
+        createIssue(
+            ruleName = "LongParameterList",
+            entity = createEntity(signature = "Signature")
+        ),
+        createIssue(
+            ruleName = "LongMethod",
+            entity = createEntity(signature = "Signature")
+        ),
+        createIssue(
+            ruleName = "FeatureEnvy",
+            entity = createEntity(signature = "Signature")
+        ),
     )
 
     @AfterEach
@@ -111,6 +123,94 @@ class BaselineResultMappingSpec {
 
         val changed = DefaultBaseline.load(baselineFile)
         assertThat(existing).isNotEqualTo(changed)
+    }
+
+    @Test
+    fun `returns a filtered issues list when the baseline exists`() {
+        existingBaselineFile.copyTo(baselineFile)
+
+        val mapping = resultMapping(
+            baselineFile = baselineFile,
+            createBaseline = true,
+        )
+
+        val filtered = mapping.filterByBaseline(baselineFile, issues)
+
+        assertThat(issues).isNotEqualTo(filtered)
+    }
+
+    @Test
+    fun `returns the same issues list when the baseline doesn't exist`() {
+        val mapping = resultMapping(
+            baselineFile = baselineFile,
+            createBaseline = false,
+        )
+
+        val filtered = mapping.filterByBaseline(baselineFile, issues)
+
+        assertThat(issues).isEqualTo(filtered)
+    }
+
+    @Test
+    fun `doesn't create a baseline file without issues`() {
+        val mapping = resultMapping(
+            baselineFile = baselineFile,
+            createBaseline = false,
+        )
+
+        mapping.createOrUpdate(baselineFile, emptyList())
+
+        assertThat(baselineFile).doesNotExist()
+    }
+
+    @Test
+    fun `creates on top of an existing a baseline file without issues`() {
+        existingBaselineFile.copyTo(baselineFile)
+        val mapping = resultMapping(
+            baselineFile = baselineFile,
+            createBaseline = true,
+        )
+
+        mapping.createOrUpdate(baselineFile, emptyList())
+
+        assertThat(baselineFile).hasContent(
+            """
+                <?xml version="1.0" ?>
+                <SmellBaseline>
+                  <ManuallySuppressedIssues>
+                    <ID>LongParameterList:Signature</ID>
+                    <ID>LongMethod:Signature</ID>
+                  </ManuallySuppressedIssues>
+                  <CurrentIssues></CurrentIssues>
+                </SmellBaseline>
+            """.trimIndent()
+        )
+    }
+
+    @Test
+    fun `creates on top of an existing a baseline file with issues`() {
+        existingBaselineFile.copyTo(baselineFile)
+        val mapping = resultMapping(
+            baselineFile = baselineFile,
+            createBaseline = true,
+        )
+
+        mapping.createOrUpdate(baselineFile, listOf(createIssue()))
+
+        assertThat(baselineFile).hasContent(
+            """
+                <?xml version="1.0" ?>
+                <SmellBaseline>
+                  <ManuallySuppressedIssues>
+                    <ID>LongParameterList:Signature</ID>
+                    <ID>LongMethod:Signature</ID>
+                  </ManuallySuppressedIssues>
+                  <CurrentIssues>
+                    <ID>TestSmell:TestEntitySignature</ID>
+                  </CurrentIssues>
+                </SmellBaseline>
+            """.trimIndent()
+        )
     }
 }
 
