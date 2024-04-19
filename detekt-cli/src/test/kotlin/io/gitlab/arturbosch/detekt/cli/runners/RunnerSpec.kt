@@ -200,6 +200,31 @@ class RunnerSpec {
     }
 
     @Test
+    fun `succeeds with --autocorrect with zero autocorrectable fixes`() {
+        val outPrintStream = StringPrintStream()
+        val errPrintStream = StringPrintStream()
+
+        val config = resourceAsPath("/configs/formatting-config.yml")
+        val inputPath = resourceAsPath("/autocorrect/CompliantSample.kt")
+
+        val args = arrayOf(
+            "--input",
+            inputPath.toString(),
+            "--auto-correct",
+            "--config",
+            config.toString()
+        )
+
+        assertThatCode {
+            Runner(parseArguments(args), outPrintStream, errPrintStream).execute()
+        }.doesNotThrowAnyException()
+
+        assertThat(errPrintStream.toString()).isEmpty()
+        assertThat(outPrintStream.toString())
+            .doesNotContain("File ${inputPath.absolutePathString()} was modified")
+    }
+
+    @Test
     fun `succeeds with --autocorrect with single autocorrectable fix`() {
         val outPrintStream = StringPrintStream()
         val errPrintStream = StringPrintStream()
