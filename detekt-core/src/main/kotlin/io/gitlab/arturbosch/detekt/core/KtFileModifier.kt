@@ -5,6 +5,7 @@ import io.github.detekt.psi.lineSeparator
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Notification
+import io.gitlab.arturbosch.detekt.api.modifiedText
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
@@ -15,7 +16,7 @@ class KtFileModifier : FileProcessListener {
     override val id: String = "KtFileModifier"
 
     override fun onFinish(files: List<KtFile>, result: Detektion) {
-        files.filter { it.modificationStamp > 0 }
+        files.filter { it.modifiedText != null }
             .map { it.absolutePath() to it.unnormalizeContent() }
             .forEach { (path, content) ->
                 result.add(ModificationNotification(path))
@@ -23,9 +24,11 @@ class KtFileModifier : FileProcessListener {
             }
     }
 
-    private fun KtFile.unnormalizeContent(): String {
-        return StringUtilRt.convertLineSeparators(text, lineSeparator)
-    }
+    private fun KtFile.unnormalizeContent(): String =
+        StringUtilRt.convertLineSeparators(
+            checkNotNull(modifiedText),
+            lineSeparator
+        )
 }
 
 private class ModificationNotification(path: Path) : Notification {

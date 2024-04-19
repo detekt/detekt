@@ -2,6 +2,11 @@ public abstract interface annotation class io/gitlab/arturbosch/detekt/api/Activ
 	public abstract fun since ()Ljava/lang/String;
 }
 
+public final class io/gitlab/arturbosch/detekt/api/AutocorrectKt {
+	public static final fun getModifiedText (Lorg/jetbrains/kotlin/psi/KtFile;)Ljava/lang/String;
+	public static final fun setModifiedText (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/lang/String;)V
+}
+
 public class io/gitlab/arturbosch/detekt/api/CodeSmell : io/gitlab/arturbosch/detekt/api/Finding {
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;)V
 	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
