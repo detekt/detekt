@@ -51,7 +51,9 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
         this.root.node.visitASTNodes()
         wrapping.afterLastNode()
 
-        root.modifiedText = this.root.text
+        if (this.root.modificationStamp > 0) {
+            root.modifiedText = this.root.text
+        }
     }
 
     open fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String>? = null
