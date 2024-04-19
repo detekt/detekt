@@ -16,7 +16,7 @@ internal fun buildFinding(element: KtElement?): Finding = CodeSmell(
 private fun buildEmptyEntity(): Entity = Entity(
     name = "",
     signature = "",
-    location = createLocation(path = "/"),
+    location = createLocation(""),
     ktElement = null,
 )
 

@@ -5,7 +5,7 @@
     {
       "originalUriBaseIds": {
         "%SRCROOT%": {
-          "uri": "file:///Users/tester/detekt"
+          "uri": "<BASE_URI>"
         }
       },
       "results": [

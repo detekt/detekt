@@ -9,7 +9,7 @@ import io.github.detekt.metrics.processors.sourceLinesKey
 import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.internal.FakeKtElement
 import io.github.detekt.test.utils.internal.FakePsiFile
-import io.github.detekt.test.utils.resourceAsPath
+import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
@@ -23,6 +23,9 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtElement
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
+import kotlin.io.path.Path
+import kotlin.io.path.absolute
+import kotlin.io.path.invariantSeparatorsPathString
 import kotlin.io.path.writeText
 
 class HtmlOutputReportSpec {
@@ -70,10 +73,11 @@ class HtmlOutputReportSpec {
     @Test
     fun `renders the right file locations`() {
         val result = htmlReport.render(createTestDetektionWithMultipleSmells())
+        val root = Path("/").absolute().invariantSeparatorsPathString
 
-        assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample1.kt:11:1</span>")
-        assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample2.kt:22:2</span>")
-        assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample3.kt:33:3</span>")
+        assertThat(result).contains("<span class=\"location\">${root}src/main/com/sample/Sample1.kt:11:1</span>")
+        assertThat(result).contains("<span class=\"location\">${root}src/main/com/sample/Sample2.kt:22:2</span>")
+        assertThat(result).contains("<span class=\"location\">${root}src/main/com/sample/Sample3.kt:33:3</span>")
     }
 
     @Test
@@ -157,10 +161,12 @@ class HtmlOutputReportSpec {
 
     @Test
     fun `asserts that the generated HTML is the same as expected`() {
-        val expected = resourceAsPath("HtmlOutputFormatTest.html")
+        val expectedString = readResourceContent("HtmlOutputFormatTest.html")
+            .replace("<PREFIX>", Path("/").absolute().invariantSeparatorsPathString)
+        val expected = createTempFileForTest("expected-report", ".html").apply { writeText(expectedString) }
+
         val result = htmlReport.render(createTestDetektionWithMultipleSmells())
             .replace(generatedRegex, REPLACEMENT)
-
         val actual = createTempFileForTest("actual-report", ".html").apply { writeText(result) }
 
         assertThat(actual).hasSameTextualContentAs(expected)
@@ -205,7 +211,7 @@ private fun createTestDetektionFromRelativePath(): Detektion {
     val entity1 = createEntity(
         location = createLocation(
             path = "src/main/com/sample/Sample1.kt",
-            basePath = "/Users/tester/detekt/",
+            basePath = "Users/tester/detekt/",
             position = 11 to 1,
             text = 10..14,
         ),
@@ -214,14 +220,14 @@ private fun createTestDetektionFromRelativePath(): Detektion {
     val entity2 = createEntity(
         location = createLocation(
             path = "src/main/com/sample/Sample2.kt",
-            basePath = "/Users/tester/detekt/",
+            basePath = "Users/tester/detekt/",
             position = 22 to 2,
         )
     )
     val entity3 = createEntity(
         location = createLocation(
             path = "src/main/com/sample/Sample3.kt",
-            basePath = "/Users/tester/detekt/",
+            basePath = "Users/tester/detekt/",
             position = 33 to 3,
         )
     )

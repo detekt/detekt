@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import java.util.Locale
+import kotlin.io.path.invariantSeparatorsPathString
 
 private const val TAB = "\t"
 
@@ -59,7 +60,7 @@ class XmlOutputFormatSpec {
             """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
-                <file name="src/main/com/sample/Sample1.kt">
+                <file name="${entity1.location.filePath.absolutePath.invariantSeparatorsPathString}">
                 $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.id_a" />
                 </file>
                 </checkstyle>
@@ -78,7 +79,7 @@ class XmlOutputFormatSpec {
             """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
-                <file name="src/main/com/sample/Sample1.kt">
+                <file name="${entity1.location.filePath.absolutePath.invariantSeparatorsPathString}">
                 $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.id_a" />
                 $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.id_b" />
                 </file>
@@ -98,10 +99,10 @@ class XmlOutputFormatSpec {
             """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
-                <file name="src/main/com/sample/Sample1.kt">
+                <file name="${entity1.location.filePath.absolutePath.invariantSeparatorsPathString}">
                 $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.id_a" />
                 </file>
-                <file name="src/main/com/sample/Sample2.kt">
+                <file name="${entity2.location.filePath.absolutePath.invariantSeparatorsPathString}">
                 $TAB<error line="22" column="2" severity="error" message="TestMessage" source="detekt.id_a" />
                 </file>
                 </checkstyle>
@@ -113,12 +114,10 @@ class XmlOutputFormatSpec {
     fun `renders issues with relative path`() {
         val issueA = createIssueForRelativePath(
             ruleInfo = createRuleInfo("id_a"),
-            basePath = "/Users/tester/detekt/",
             relativePath = "Sample1.kt"
         )
         val issueB = createIssueForRelativePath(
             ruleInfo = createRuleInfo("id_b"),
-            basePath = "/Users/tester/detekt/",
             relativePath = "Sample2.kt"
         )
 
@@ -159,11 +158,11 @@ class XmlOutputFormatSpec {
             """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
-                <file name="src/main/com/sample/Sample1.kt">
+                <file name="${entity1.location.filePath.absolutePath.invariantSeparatorsPathString}">
                 $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.id_a" />
                 $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.id_b" />
                 </file>
-                <file name="src/main/com/sample/Sample2.kt">
+                <file name="${entity2.location.filePath.absolutePath.invariantSeparatorsPathString}">
                 $TAB<error line="22" column="2" severity="error" message="TestMessage" source="detekt.id_a" />
                 $TAB<error line="22" column="2" severity="error" message="TestMessage" source="detekt.id_b" />
                 </file>
@@ -189,7 +188,7 @@ class XmlOutputFormatSpec {
             val expected = """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
-                <file name="src/main/com/sample/Sample1.kt">
+                <file name="${entity1.location.filePath.absolutePath.invariantSeparatorsPathString}">
                 $TAB<error line="${issue.location.source.line}" column="${issue.location.source.column}" severity="$xmlSeverity" message="${issue.message}" source="detekt.${issue.ruleInfo.id}" />
                 </file>
                 </checkstyle>

@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.test.location
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
+import kotlin.io.path.absolute
 
 class CodeSmellSpec {
 
@@ -18,7 +19,10 @@ class CodeSmellSpec {
                     source = SourceLocation(1, 1),
                     endSource = SourceLocation(1, 1),
                     text = TextLocation(0, 0),
-                    filePath = fromRelative(Path("/Users/tester/detekt/"), Path("TestFile.kt"))
+                    filePath = fromRelative(
+                        Path("/").absolute().resolve("Users/tester/detekt/"),
+                        Path("TestFile.kt"),
+                    ),
                 ),
                 ktElement = null
             ),

@@ -4,6 +4,7 @@ import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import kotlin.io.path.Path
+import kotlin.io.path.absolute
 
 /**
  * Use this method if you define a kt file/class as a plain string in your test.
@@ -23,8 +24,8 @@ fun compileContentForTest(
  */
 fun compileContentForTest(
     @Language("kotlin") content: String,
-    basePath: Path = Path("/"),
-    path: Path = Path("/Test.kt"),
+    basePath: Path = Path("/").absolute(),
+    path: Path = basePath.resolve("Test.kt"),
 ): KtFile {
     return KtTestCompiler.createKtFile(content, basePath, path)
 }
