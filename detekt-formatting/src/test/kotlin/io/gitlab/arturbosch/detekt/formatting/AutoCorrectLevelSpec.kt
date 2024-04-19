@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.modifiedText
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
@@ -81,7 +82,7 @@ private fun runRule(config: Config): Pair<KtFile, List<Finding>> {
     return testFile to rules.flatMap { it.visitFile(testFile) }
 }
 
-private fun wasFormatted(file: KtFile) = file.text == contentAfterChainWrapping
+private fun wasFormatted(file: KtFile) = file.modifiedText == contentAfterChainWrapping
 
 private inline fun <reified T : RuleSetProvider> loadRuleSet(): RuleSet {
     val provider = T::class.java.constructors[0].newInstance() as? T
