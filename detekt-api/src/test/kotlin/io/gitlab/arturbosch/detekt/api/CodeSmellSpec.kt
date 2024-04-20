@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
-import io.github.detekt.psi.FilePath
+import io.gitlab.arturbosch.detekt.test.fromRelative
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -18,7 +18,7 @@ class CodeSmellSpec {
                     source = SourceLocation(1, 1),
                     endSource = SourceLocation(1, 1),
                     text = TextLocation(0, 0),
-                    filePath = FilePath.fromRelative(Path("/Users/tester/detekt/"), Path("TestFile.kt"))
+                    filePath = fromRelative(Path("/Users/tester/detekt/"), Path("TestFile.kt"))
                 ),
                 ktElement = null
             ),

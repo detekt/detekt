@@ -5,7 +5,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.io.File
 
 class KtFilesSpec {
 
@@ -44,26 +43,4 @@ class KtFilesSpec {
     }
 
     private fun makeFile(filename: String): PsiFile = FakePsiFile(name = filename)
-
-    @Nested
-    inner class FilePathSpec {
-
-        // Path separator for the current platform, short name, because lots of usages.
-        private val ps = File.separator
-
-        @Test fun `toString of absolute path`() {
-            val filePath = FilePath.fromAbsolute(File("/a/b/c").toPath())
-
-            assertThat(filePath.toString())
-                .isEqualTo("FilePath(absolutePath=${ps}a${ps}b${ps}c, basePath=null, relativePath=null)")
-        }
-
-        @Test fun `toString of relative path`() {
-            val filePath = FilePath.fromRelative(File("/a/b").toPath(), File("c/d").toPath())
-
-            assertThat(filePath.toString()).isEqualTo(
-                "FilePath(absolutePath=${ps}a${ps}b${ps}c${ps}d, basePath=${ps}a${ps}b, relativePath=c${ps}d)"
-            )
-        }
-    }
 }

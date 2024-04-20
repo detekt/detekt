@@ -57,15 +57,6 @@ class FilePath(
 
     override fun toString(): String =
         "FilePath(absolutePath=$absolutePath, basePath=$basePath, relativePath=$relativePath)"
-
-    companion object {
-        fun fromAbsolute(path: Path) = FilePath(absolutePath = path.normalize())
-        fun fromRelative(basePath: Path, relativePath: Path) = FilePath(
-            absolutePath = basePath.resolve(relativePath).normalize(),
-            basePath = basePath.normalize(),
-            relativePath = relativePath
-        )
-    }
 }
 
 fun PsiFile.toFilePath(): FilePath {
