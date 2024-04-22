@@ -91,6 +91,23 @@ tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
 }
 ```
 
+Additionally, if your project uses `.gradle.kts` files and you want to use type resolution for pre-commit detekt checks,
+you must exclude them from pre-commit hook. Otherwise, you will be unable to commit any changes to the
+`.gradle.kts` files, since detekt pre-commit check would crash every time due to https://github.com/detekt/detekt/issues/5501:
+ 
+```kotlin
+afterEvaluate {
+   tasks.withType(Detekt::class.java).configureEach {
+      val typeResolutionEnabled = !classpath.isEmpty 
+      if (typeResolutionEnabled && project.hasProperty("precommit")) {
+         // We must exclude kts files from pre-commit hook to prevent detekt from crashing
+         // This is a workaround for the https://github.com/detekt/detekt/issues/5501
+         exclude("*.gradle.kts")
+      }
+   }
+}
+```
+
 Finally, we need to add `-Pprecommit=true` to the pre-commit script to tell Gradle to run detekt in "pre-commit mode".
 For example, from above `detekt.sh` 
 
