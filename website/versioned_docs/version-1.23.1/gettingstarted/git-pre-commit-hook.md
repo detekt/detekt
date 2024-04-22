@@ -46,64 +46,25 @@ It is possible to configure Gradle to only run on staged files in pre-commit hoo
 This has the advantage of speedier execution, by running on fewer files and
 of lowered false positives by not scanning files that are not yet ready to be commited.
 
-First, we need to declare `GitPreCommitFilesTask` task - a gradle task that will retrieve list of staged files
+First, we need to declare a `getGitStagedFiles` function - a function task that will retrieve list of staged files
 in a configuration-cache compatible way. Paste following into your project's `build.gradle.kts`:
 
 ```kotlin
-abstract class GitPreCommitFilesTask : DefaultTask() {
-    @get:OutputFile
-    abstract val gitStagedListFile: RegularFileProperty
-
-    @TaskAction
-    fun taskAction() {
-        val gitProcess =
-            ProcessBuilder("git", "--no-pager", "diff", "--name-only", "--cached").start()
-        val error = gitProcess.errorStream.readBytes().decodeToString()
-        if (error.isNotBlank()) {
-            error("Git error : $error")
-        }
-
-        val gitVersion = gitProcess.inputStream.readBytes().decodeToString().trim()
-
-        gitStagedListFile.get().asFile.writeText(gitVersion)
-    }
-}
-
-fun GitPreCommitFilesTask.getStagedFiles(rootDir: File): Provider<List<File>> {
-    return gitStagedListFile.map {
-        try {
-            it.asFile.readLines()
+fun Project.getGitStagedFiles(rootDir: File): Provider<List<File>> {
+    return providers.exec {
+        it.commandLine("git", "--no-pager", "diff", "--name-only", "--cached")
+    }.standardOutput.asText
+        .map { outputText ->
+            outputText.trim()
+                .split("\n")
                 .filter { it.isNotBlank() }
                 .map { File(rootDir, it) }
-        } catch (e: FileNotFoundException) {
-            // First build on configuration cache might fail
-            // see https://github.com/gradle/gradle/issues/19252
-            throw IllegalStateException(
-                "Failed to load git configuration. " +
-                    "Please disable configuration cache for the first commit and " +
-                    "try again",
-                e
-            )
         }
-    }
-}
-
-val gitPreCommitFileList = tasks.register<GitPreCommitFilesTask>("gitPreCommitFileList") {
-    val targetFile = File(
-        project.layout.buildDirectory.asFile.get(),
-        "intermediates/gitPreCommitFileList/output"
-    )
-
-    targetFile.also {
-        it.parentFile.mkdirs()
-        gitStagedListFile.set(it)
-    }
-    outputs.upToDateWhen { false }
 }
 ```
 
 Then we need to configure `Detekt` task and change its `source` from the entire `src` foler (by default) to only set of
-files that have been staged by git. Paste following into your project's `build.gradle.kts`::
+files that have been staged by git. Paste following into your project's `build.gradle.kts`:
 
 ```kotlin
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
@@ -116,19 +77,34 @@ tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
         val fileCollection = files()
 
         setSource(
-            gitPreCommitFileList.flatMap { task ->
-                task.getStagedFiles(rootDir)
-                    .map { stagedFiles ->
-                        val stagedFilesFromThisProject = stagedFiles
-                            .filter { it.startsWith(projectDir) }
+            getGitStagedFiles(rootDir)
+                .map { stagedFiles ->
+                    val stagedFilesFromThisProject = stagedFiles
+                        .filter { it.startsWith(projectDir) }
 
-                        fileCollection.setFrom(*stagedFilesFromThisProject.toTypedArray())
+                    fileCollection.setFrom(*stagedFilesFromThisProject.toTypedArray())
 
-                        fileCollection.asFileTree
-                    }
-            }
+                    fileCollection.asFileTree
+                }
         )
     }
+}
+```
+
+Additionally, if your project uses `.gradle.kts` files and you want to use type resolution for pre-commit detekt checks,
+you must exclude them from pre-commit hook. Otherwise, you will be unable to commit any changes to the
+`.gradle.kts` files, since detekt pre-commit check would crash every time due to https://github.com/detekt/detekt/issues/5501:
+
+```kotlin
+afterEvaluate {
+   tasks.withType(Detekt::class.java).configureEach {
+      val typeResolutionEnabled = !classpath.isEmpty 
+      if (typeResolutionEnabled && project.hasProperty("precommit")) {
+         // We must exclude kts files from pre-commit hook to prevent detekt from crashing
+         // This is a workaround for the https://github.com/detekt/detekt/issues/5501
+         exclude("*.gradle.kts")
+      }
+   }
 }
 ```
 
