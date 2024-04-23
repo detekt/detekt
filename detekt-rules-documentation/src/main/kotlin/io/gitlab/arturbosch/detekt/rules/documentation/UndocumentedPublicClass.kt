@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.psi.psiUtil.isPublic
 
 /**
  * This rule reports public classes, objects and interfaces which do not have the required documentation.
@@ -50,10 +51,16 @@ class UndocumentedPublicClass(config: Config) : Rule(
 
     private fun requiresDocumentation(
         klass: KtClass
-    ) = klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface()
+    ) =
+        klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface()
 
+    @Suppress("ComplexCondition")
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
-        if (declaration.isCompanionWithoutName() || declaration.isLocal || !searchInInnerObject) {
+        if (
+            (declaration.isCompanionWithoutName() && !declaration.isPublic) ||
+            declaration.isLocal ||
+            !searchInInnerObject
+        ) {
             return
         }
 
@@ -76,16 +83,21 @@ class UndocumentedPublicClass(config: Config) : Rule(
     }
 
     private fun isPublicAndPublicInherited(element: KtClassOrObject) =
-        element.isPublicInherited(searchInProtectedClass) && element.isPublicNotOverridden(searchInProtectedClass)
+        element.isPublicInherited(searchInProtectedClass) &&
+            element.isPublicNotOverridden(
+                searchInProtectedClass
+            )
 
     private fun KtObjectDeclaration.isCompanionWithoutName() =
         isCompanion() && nameAsSafeName.asString() == "Companion"
 
-    private fun KtClass.isNestedClass() = !isInterface() && !isTopLevel() && !isInner() && searchInNestedClass
+    private fun KtClass.isNestedClass() =
+        !isInterface() && !isTopLevel() && !isInner() && searchInNestedClass
 
     private fun KtClass.isInnerClass() = !isInterface() && isInner() && searchInInnerClass
 
-    private fun KtClass.isInnerInterface() = !isTopLevel() && isInterface() && searchInInnerInterface
+    private fun KtClass.isInnerInterface() =
+        !isTopLevel() && isInterface() && searchInInnerInterface
 
     private fun KtClassOrObject.notEnumEntry() = this !is KtEnumEntry
 }
