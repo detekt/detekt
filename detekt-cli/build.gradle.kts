@@ -2,9 +2,9 @@ import org.apache.tools.ant.filters.ReplaceTokens
 import java.io.ByteArrayOutputStream
 
 plugins {
-    alias(libs.plugins.shadow)
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("module")
-    application
+    id("application")
 }
 
 application {
@@ -37,6 +37,7 @@ dependencies {
 
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj)
+    testRuntimeOnly(projects.detektFormatting)
 
     pluginsJar(projects.detektFormatting)
     pluginsJar(projects.detektRulesLibraries)

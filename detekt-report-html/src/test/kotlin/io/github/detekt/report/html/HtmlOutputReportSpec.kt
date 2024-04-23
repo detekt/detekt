@@ -11,14 +11,14 @@ import io.github.detekt.test.utils.internal.FakeKtElement
 import io.github.detekt.test.utils.internal.FakePsiFile
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createEntity
-import io.gitlab.arturbosch.detekt.test.createFinding
+import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
+import io.gitlab.arturbosch.detekt.test.createRuleInfo
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtElement
 import org.junit.jupiter.api.Test
@@ -38,7 +38,7 @@ class HtmlOutputReportSpec {
 
         assertThat(result).contains("<h2>Metrics</h2>")
         assertThat(result).contains("<h2>Complexity Report</h2>")
-        assertThat(result).contains("<h2>Findings</h2>")
+        assertThat(result).contains("<h2>Issues</h2>")
     }
 
     @Test
@@ -54,19 +54,15 @@ class HtmlOutputReportSpec {
     }
 
     @Test
-    fun `contains the total number of findings`() {
+    fun `contains the total number of issues`() {
         val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
         assertThat(result).contains("Total: 3")
     }
 
     @Test
-    fun `contains no findings`() {
-        val detektion = object : TestDetektion() {
-            override val findings: Map<RuleSet.Id, List<Finding2>> = mapOf(
-                RuleSet.Id("EmptyRuleset") to emptyList()
-            )
-        }
+    fun `contains no issues`() {
+        val detektion = TestDetektion()
         val result = htmlReport.render(detektion)
         assertThat(result).contains("Total: 0")
     }
@@ -101,8 +97,8 @@ class HtmlOutputReportSpec {
     fun `renders the right violation messages for the rules`() {
         val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
-        assertThat(result).contains("<span class=\"message\">Message finding 1</span>")
-        assertThat(result).contains("<span class=\"message\">Message finding 2</span>")
+        assertThat(result).contains("<span class=\"message\">Issue message 1</span>")
+        assertThat(result).contains("<span class=\"message\">Issue message 2</span>")
         assertThat(result).doesNotContain("<span class=\"message\"></span>")
     }
 
@@ -116,17 +112,11 @@ class HtmlOutputReportSpec {
 
     @Test
     fun `renders the right documentation links for the rules`() {
-        val detektion = object : TestDetektion() {
-            override val findings: Map<RuleSet.Id, List<Finding2>> = mapOf(
-                RuleSet.Id("Style") to listOf(
-                    createFinding("ValCouldBeVar", createEntity())
-                ),
-                RuleSet.Id("empty") to listOf(
-                    createFinding("EmptyBody", createEntity()),
-                    createFinding("EmptyIf", createEntity())
-                )
-            )
-        }
+        val detektion = TestDetektion(
+            createIssue(createRuleInfo("ValCouldBeVar", "Style")),
+            createIssue(createRuleInfo("EmptyBody", "empty")),
+            createIssue(createRuleInfo("EmptyIf", "empty")),
+        )
 
         val result = htmlReport.render(detektion)
         assertThat(result).contains("<a href=\"https://detekt.dev/docs/rules/style#valcouldbevar\">Documentation</a>")
@@ -136,12 +126,9 @@ class HtmlOutputReportSpec {
 
     @Test
     fun `renders a metric report correctly`() {
-        val detektion = object : TestDetektion() {
-            override val metrics: Collection<ProjectMetric> = listOf(
-                ProjectMetric("M1", 10_000),
-                ProjectMetric("M2", 2)
-            )
-        }
+        val detektion = TestDetektion(
+            metrics = listOf(ProjectMetric("M1", 10_000), ProjectMetric("M2", 2))
+        )
         val result = htmlReport.render(detektion)
         assertThat(result).contains("<li>10,000 M1</li>")
         assertThat(result).contains("<li>2 M2</li>")
@@ -181,15 +168,12 @@ class HtmlOutputReportSpec {
     }
 
     @Test
-    fun `asserts that the generated HTML is the same even if we change the order of the findings`() {
-        val findings = findings()
-        val reversedFindings = findings
-            .reversedArray()
-            .map { (section, findings) -> section to findings.asReversed() }
-            .toTypedArray()
+    fun `asserts that the generated HTML is the same even if we change the order of the issues`() {
+        val issues = issues()
+        val reversedIssues = issues.reversedArray()
 
-        val firstReport = createReportWithFindings(findings)
-        val secondReport = createReportWithFindings(reversedFindings)
+        val firstReport = createReportWithIssues(*issues)
+        val secondReport = createReportWithIssues(*reversedIssues)
 
         assertThat(firstReport).hasSameTextualContentAs(secondReport)
     }
@@ -211,12 +195,10 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     val entity2 = createEntity(location = createLocation("src/main/com/sample/Sample2.kt", position = 22 to 2))
     val entity3 = createEntity(location = createLocation("src/main/com/sample/Sample3.kt", position = 33 to 3))
 
-    return createHtmlDetektion(
-        "RuleSet1" to listOf(
-            createFinding("id_a", entity1, "Message finding 1"),
-            createFinding("id_a", entity2, "Message finding 2")
-        ),
-        "RuleSet2" to listOf(createFinding("id_b", entity3, "Message finding 3"))
+    return TestDetektion(
+        createIssue(createRuleInfo("id_a", "RuleSet1"), entity1, "Issue message 1"),
+        createIssue(createRuleInfo("id_a", "RuleSet1"), entity2, "Issue message 2"),
+        createIssue(createRuleInfo("id_b", "RuleSet2"), entity3, "Issue message 3"),
     )
 }
 
@@ -245,52 +227,39 @@ private fun createTestDetektionFromRelativePath(): Detektion {
         )
     )
 
-    return createHtmlDetektion(
-        "RuleSet1" to listOf(
-            createFinding("id_a", entity1, "Message finding 1"),
-            createFinding("id_a", entity2, "Message finding 2")
-        ),
-        "RuleSet2" to listOf(createFinding("id_b", entity3, "Message finding 3"))
+    return TestDetektion(
+        createIssue(createRuleInfo("id_a", "RuleSet1"), entity1, "Issue message 1"),
+        createIssue(createRuleInfo("id_a", "RuleSet1"), entity2, "Issue message 2"),
+        createIssue(createRuleInfo("id_b", "RuleSet2"), entity3, "Issue message 3"),
     )
 }
 
-private fun findings(): Array<Pair<String, List<Finding2>>> {
+private fun issues(): Array<Issue> {
     val entity1 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 5))
     val entity2 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 22 to 2))
     val entity3 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 2))
     val entity4 = createEntity(location = createLocation("src/main/com/sample/Sample2.kt", position = 1 to 1))
 
     return arrayOf(
-        "RuleSet1" to listOf(
-            createFinding("id_a", entity1),
-            createFinding("id_a", entity2),
-            createFinding("id_a", entity3),
-            createFinding("id_a", entity4),
-            createFinding("id_b", entity2),
-            createFinding("id_b", entity1),
-            createFinding("id_b", entity4)
-        ),
-        "RuleSet2" to listOf(
-            createFinding("id_b", entity3),
-            createFinding("id_c", entity1),
-            createFinding("id_c", entity2)
-        )
+        createIssue(createRuleInfo("id_a", "RuleSet1"), entity1),
+        createIssue(createRuleInfo("id_a", "RuleSet1"), entity2),
+        createIssue(createRuleInfo("id_a", "RuleSet1"), entity3),
+        createIssue(createRuleInfo("id_a", "RuleSet1"), entity4),
+        createIssue(createRuleInfo("id_b", "RuleSet1"), entity2),
+        createIssue(createRuleInfo("id_b", "RuleSet1"), entity1),
+        createIssue(createRuleInfo("id_b", "RuleSet1"), entity4),
+        createIssue(createRuleInfo("id_b", "RuleSet2"), entity3),
+        createIssue(createRuleInfo("id_c", "RuleSet2"), entity1),
+        createIssue(createRuleInfo("id_c", "RuleSet2"), entity2),
     )
-}
-
-private fun createHtmlDetektion(vararg findingPairs: Pair<String, List<Finding2>>): Detektion {
-    return object : TestDetektion() {
-        override val findings: Map<RuleSet.Id, List<Finding2>> = findingPairs.toMap()
-            .mapKeys { (key, _) -> RuleSet.Id(key) }
-    }
 }
 
 private val generatedRegex = """^generated\swith.*$""".toRegex(RegexOption.MULTILINE)
 private const val REPLACEMENT = "generated with..."
 
-private fun createReportWithFindings(findings: Array<Pair<String, List<Finding2>>>): Path {
+private fun createReportWithIssues(vararg issues: Issue): Path {
     val htmlReport = HtmlOutputReport()
-    val detektion = createHtmlDetektion(*findings)
+    val detektion = TestDetektion(*issues)
     var result = htmlReport.render(detektion)
     result = generatedRegex.replace(result, REPLACEMENT)
     val reportPath = createTempFileForTest("report", ".html")

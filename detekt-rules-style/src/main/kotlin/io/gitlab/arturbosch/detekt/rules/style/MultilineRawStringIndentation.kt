@@ -23,6 +23,8 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * The content of a multi line raw string should have the same indentation as the enclosing expression plus the
  * configured indentSize. The closing triple-quotes (`"""`)  must have the same indentation as the enclosing expression.
  *
+ * Warning: Rule `MultilineRawStringIndentation` overlaps with `StringTemplateIndent` from the formatting rule set.
+ *
  * <noncompliant>
  * val a = """
  * Hello World!

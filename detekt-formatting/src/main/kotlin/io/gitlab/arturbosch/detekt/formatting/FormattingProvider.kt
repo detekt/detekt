@@ -11,8 +11,10 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationOnSeparateLine
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ArgumentListWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.BackingPropertyNaming
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BinaryExpressionWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BlankLineBeforeDeclaration
+import io.gitlab.arturbosch.detekt.formatting.wrappers.BlankLineBetweenWhenConditions
 import io.gitlab.arturbosch.detekt.formatting.wrappers.BlockCommentInitialStarAlignment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainMethodContinuation
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
@@ -39,6 +41,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.IfElseBracing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.IfElseWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ImportOrdering
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Indentation
+import io.gitlab.arturbosch.detekt.formatting.wrappers.Kdoc
 import io.gitlab.arturbosch.detekt.formatting.wrappers.KdocWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.MaximumLineLength
 import io.gitlab.arturbosch.detekt.formatting.wrappers.MixedConditionOperators
@@ -82,6 +85,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundKeyword
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundOperators
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundParens
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundRangeOperator
+import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundSquareBrackets
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundUnaryOperator
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithAnnotations
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingBetweenDeclarationsWithComments
@@ -206,15 +210,19 @@ class FormattingProvider : RuleSetProvider {
             ::ValueParameterComment,
             ::Wrapping,
             // Wrappers for experimental rules. Disabled by default.
+            ::BackingPropertyNaming,
             ::BinaryExpressionWrapping,
+            ::BlankLineBetweenWhenConditions,
             ::ChainMethodContinuation,
             ::ClassSignature,
             ::ConditionWrapping,
             ::FunctionExpressionBody,
             ::FunctionLiteral,
             ::FunctionTypeModifierSpacing,
+            ::Kdoc,
             ::MixedConditionOperators,
             ::MultilineLoop,
+            ::SpacingAroundSquareBrackets,
         ).sorted()
     )
 

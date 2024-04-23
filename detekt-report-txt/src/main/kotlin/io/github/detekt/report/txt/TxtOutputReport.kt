@@ -1,7 +1,7 @@
 package io.github.detekt.report.txt
 
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 
@@ -15,12 +15,11 @@ class TxtOutputReport : BuiltInOutputReport, OutputReport() {
     override val ending: String = "txt"
 
     override fun render(detektion: Detektion): String {
-        return detektion.findings
-            .flatMap { it.value }
+        return detektion.issues
             .ifEmpty { return "" }
             .joinToString("\n", postfix = "\n") { it.compactWithSignature() }
     }
 }
 
-private fun Finding2.compactWithSignature(): String =
-    "${rule.id} - ${entity.compact()} - Signature=${entity.signature}"
+private fun Issue.compactWithSignature(): String =
+    "${ruleInfo.id} - ${entity.compact()} - Signature=${entity.signature}"

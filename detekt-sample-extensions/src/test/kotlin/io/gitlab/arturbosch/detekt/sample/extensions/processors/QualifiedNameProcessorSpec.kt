@@ -2,13 +2,11 @@ package io.gitlab.arturbosch.detekt.sample.extensions.processors
 
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.gitlab.arturbosch.detekt.api.RuleSet
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Test
 
 class QualifiedNameProcessorSpec {
@@ -17,8 +15,8 @@ class QualifiedNameProcessorSpec {
     fun fqNamesOfTestFiles() {
         val ktFile = compileContentForTest(code)
         val processor = QualifiedNameProcessor()
-        processor.onProcess(ktFile, BindingContext.EMPTY)
-        processor.onFinish(listOf(ktFile), result, BindingContext.EMPTY)
+        processor.onProcess(ktFile)
+        processor.onFinish(listOf(ktFile), result)
 
         val data = result.getUserData(fqNamesKey)
         assertThat(data).contains(
@@ -31,7 +29,7 @@ class QualifiedNameProcessorSpec {
 
 private val result = object : Detektion, UserDataHolderBase() {
 
-    override val findings: Map<RuleSet.Id, List<Finding2>> = emptyMap()
+    override val issues: List<Issue> = emptyList()
     override val notifications: Collection<Notification> = emptyList()
     override val metrics: Collection<ProjectMetric> = emptyList()
 

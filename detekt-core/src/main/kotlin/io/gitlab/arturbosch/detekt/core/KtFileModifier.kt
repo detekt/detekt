@@ -5,10 +5,9 @@ import io.github.detekt.psi.lineSeparator
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Notification
+import io.gitlab.arturbosch.detekt.api.modifiedText
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
-import org.jetbrains.kotlin.fileClasses.javaFileFacadeFqName
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
 import java.nio.file.Path
 import kotlin.io.path.writeText
 
@@ -16,21 +15,20 @@ class KtFileModifier : FileProcessListener {
 
     override val id: String = "KtFileModifier"
 
-    override fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
-        files.filter { it.modificationStamp > 0 }
+    override fun onFinish(files: List<KtFile>, result: Detektion) {
+        files.filter { it.modifiedText != null }
             .map { it.absolutePath() to it.unnormalizeContent() }
-            .forEach {
-                result.add(ModificationNotification(it.first))
-                it.first.writeText(it.second)
+            .forEach { (path, content) ->
+                result.add(ModificationNotification(path))
+                path.writeText(content)
             }
     }
 
-    private fun KtFile.unnormalizeContent(): String {
-        val lineSeparator = requireNotNull(this.lineSeparator) {
-            "No line separator entry for ktFile ${javaFileFacadeFqName.asString()}"
-        }
-        return StringUtilRt.convertLineSeparators(text, lineSeparator)
-    }
+    private fun KtFile.unnormalizeContent(): String =
+        StringUtilRt.convertLineSeparators(
+            checkNotNull(modifiedText),
+            lineSeparator
+        )
 }
 
 private class ModificationNotification(path: Path) : Notification {

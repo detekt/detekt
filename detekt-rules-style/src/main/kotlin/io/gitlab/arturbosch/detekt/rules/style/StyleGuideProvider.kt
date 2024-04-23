@@ -68,9 +68,10 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             ::UnusedPrivateClass,
             ::UnusedPrivateMember,
             ::UnusedPrivateProperty,
+            ::UnusedVariable,
             ::ExpressionBodySyntax,
             ::NestedClassesVisibility,
-            ::RedundantVisibilityModifierRule,
+            ::RedundantVisibilityModifier,
             ::RangeUntilInsteadOfRangeTo,
             ::UnnecessaryApply,
             ::UnnecessaryAny,
@@ -112,6 +113,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             ::UseSumOfInsteadOfFlatMapSize,
             ::DoubleNegativeLambda,
             ::UseLet,
+            ::DoubleNegativeExpression,
         )
     )
 }

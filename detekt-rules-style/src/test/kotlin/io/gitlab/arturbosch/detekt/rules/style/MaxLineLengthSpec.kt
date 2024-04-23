@@ -110,7 +110,7 @@ class MaxLineLengthSpec {
             val rule = MaxLineLength(Config.empty)
 
             val findings = rule.compileAndLint(code)
-            val locations = findings.map { it.signature.substringAfterLast('$') }
+            val locations = findings.map { it.entity.signature.substringAfterLast('$') }
             doAssert(locations).allSatisfy { doAssert(it).isNotBlank() }
         }
     }

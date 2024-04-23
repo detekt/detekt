@@ -31,9 +31,9 @@ console-reports:
      - 'ProjectStatisticsReport'
      - 'ComplexityReport'
      - 'NotificationReport'
-     - 'FindingsReport'
-     - 'FileBasedFindingsReport'
-  #  - 'LiteFindingsReport'
+     - 'IssuesReport'
+     - 'FileBasedIssuesReport'
+  #  - 'LiteIssuesReport'
 
 output-reports:
   active: true
@@ -559,6 +559,8 @@ style:
   DestructuringDeclarationWithTooManyEntries:
     active: true
     maxDestructuringEntries: 3
+  DoubleNegativeExpression:
+    active: false
   DoubleNegativeLambda:
     active: false
     negativeFunctions:
@@ -703,7 +705,7 @@ style:
     active: false
   RedundantHigherOrderMapUsage:
     active: true
-  RedundantVisibilityModifierRule:
+  RedundantVisibilityModifier:
     active: false
   ReturnCount:
     active: true
@@ -771,7 +773,10 @@ style:
     allowedNames: ''
   UnusedPrivateProperty:
     active: true
-    allowedNames: '_|ignored|expected|serialVersionUID'
+    allowedNames: 'ignored|expected|serialVersionUID'
+  UnusedVariable:
+    active: true
+    allowedNames: 'ignored|_'
   UseAnyOrNoneInsteadOfFind:
     active: true
   UseArrayLiteralsInAnnotations:

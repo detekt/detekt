@@ -5,8 +5,13 @@ import org.jetbrains.kotlin.gradle.tasks.UsesKotlinJavaToolchain
 plugins {
     id("packaging")
     kotlin("jvm")
-    `maven-publish`
-    jacoco
+    id("maven-publish")
+    id("jacoco")
+}
+
+tasks.withType<AbstractArchiveTask>().configureEach {
+    isPreserveFileTimestamps = false
+    isReproducibleFileOrder = true
 }
 
 // Add attributes to JAR manifest, to be used at runtime

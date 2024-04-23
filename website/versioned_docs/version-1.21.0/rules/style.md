@@ -626,7 +626,7 @@ as a `const val`.
 
 * ``ignoreOverridableFunction`` (default: ``true``)
 
-  if overriden functions should be ignored
+  if overridden functions should be ignored
 
 * ``ignoreActualFunction`` (default: ``true``)
 

@@ -394,7 +394,7 @@ class MultilineRawStringIndentationSpec {
             """.trimIndent()
             val findings = subject.compileAndLint(code)
             assertThat(findings)
-                .hasSize(0)
+                .isEmpty()
         }
     }
 }

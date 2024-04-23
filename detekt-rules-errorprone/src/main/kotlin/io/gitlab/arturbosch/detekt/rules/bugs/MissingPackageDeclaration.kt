@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtPackageDirective
 
 /**
  * Reports when the package declaration is missing.
@@ -15,17 +14,9 @@ class MissingPackageDeclaration(config: Config) : Rule(
     "Kotlin source files should define a package."
 ) {
 
-    private var packageDeclaration: KtPackageDirective? = null
-
-    override fun visitPackageDirective(directive: KtPackageDirective) {
-        super.visitPackageDirective(directive)
-        packageDeclaration = directive
-    }
-
-    override fun postVisit(root: KtFile) {
-        super.postVisit(root)
-        if (packageDeclaration?.text.isNullOrBlank()) {
-            report(CodeSmell(Entity.from(root), "The file does not contain a package declaration."))
+    override fun visitKtFile(file: KtFile) {
+        if (file.packageDirective?.text.isNullOrBlank()) {
+            report(CodeSmell(Entity.from(file), "The file does not contain a package declaration."))
         }
     }
 }

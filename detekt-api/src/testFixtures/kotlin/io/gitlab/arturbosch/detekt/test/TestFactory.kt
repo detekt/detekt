@@ -2,36 +2,61 @@ package io.gitlab.arturbosch.detekt.test
 
 import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.jetbrains.kotlin.psi.KtElement
+import java.nio.file.Path
 import kotlin.io.path.Path
 
-fun createFinding(
+fun createIssue(
     ruleName: String = "TestSmell",
     entity: Entity = createEntity(),
     message: String = "TestMessage",
     severity: Severity = Severity.Error,
     autoCorrectEnabled: Boolean = false,
-): Finding2 = Finding2Impl(
-    rule = Finding2Impl.RuleInfo(Rule.Id(ruleName), "Description $ruleName"),
+): Issue = createIssue(
+    ruleInfo = createRuleInfo(ruleName),
     entity = entity,
     message = message,
     severity = severity,
     autoCorrectEnabled = autoCorrectEnabled,
-    references = emptyList(),
 )
 
-fun createFindingForRelativePath(
-    ruleName: String = "TestSmell",
+fun createIssue(
+    ruleInfo: Issue.RuleInfo,
+    entity: Entity = createEntity(),
+    message: String = "TestMessage",
+    severity: Severity = Severity.Error,
+    autoCorrectEnabled: Boolean = false,
+): Issue = IssueImpl(
+    ruleInfo = ruleInfo,
+    entity = entity,
+    message = message,
+    severity = severity,
+    autoCorrectEnabled = autoCorrectEnabled,
+)
+
+fun createRuleInfo(
+    id: String = "TestSmell",
+    ruleSetId: String = "RuleSet$id",
+    description: String = "Description $id",
+): Issue.RuleInfo = IssueImpl.RuleInfo(
+    id = Rule.Id(id),
+    ruleSetId = RuleSet.Id(ruleSetId),
+    description = description
+)
+
+fun createIssueForRelativePath(
+    ruleInfo: Issue.RuleInfo,
     basePath: String = "/Users/tester/detekt/",
     relativePath: String = "TestFile.kt"
-): Finding2 = Finding2Impl(
-    rule = Finding2Impl.RuleInfo(Rule.Id(ruleName), "Description $ruleName"),
+): Issue = IssueImpl(
+    ruleInfo = ruleInfo,
     entity = Entity(
         name = "TestEntity",
         signature = "TestEntitySignature",
@@ -39,7 +64,7 @@ fun createFindingForRelativePath(
             source = SourceLocation(1, 1),
             endSource = SourceLocation(1, 1),
             text = TextLocation(0, 0),
-            filePath = FilePath.fromRelative(Path(basePath), Path(relativePath))
+            filePath = fromRelative(Path(basePath), Path(relativePath))
         ),
         ktElement = null
     ),
@@ -67,17 +92,28 @@ fun createLocation(
     source = SourceLocation(position.first, position.second),
     endSource = SourceLocation(endPosition.first, endPosition.second),
     text = TextLocation(text.first, text.last),
-    filePath = basePath?.let { FilePath.fromRelative(Path(it), Path(path)) }
-        ?: FilePath.fromAbsolute(Path(path)),
+    filePath = basePath?.let { fromRelative(Path(it), Path(path)) }
+        ?: fromAbsolute(Path(path)),
 )
 
-private data class Finding2Impl(
-    override val rule: RuleInfo,
+private data class IssueImpl(
+    override val ruleInfo: Issue.RuleInfo,
     override val entity: Entity,
     override val message: String,
     override val severity: Severity = Severity.Error,
     override val autoCorrectEnabled: Boolean = false,
     override val references: List<Entity> = emptyList(),
-) : Finding2 {
-    data class RuleInfo(override val id: Rule.Id, override val description: String) : Finding2.RuleInfo
+) : Issue {
+    data class RuleInfo(
+        override val id: Rule.Id,
+        override val ruleSetId: RuleSet.Id,
+        override val description: String,
+    ) : Issue.RuleInfo
 }
+
+fun fromAbsolute(path: Path) = FilePath(absolutePath = path.normalize())
+fun fromRelative(basePath: Path, relativePath: Path) = FilePath(
+    absolutePath = basePath.resolve(relativePath).normalize(),
+    basePath = basePath.normalize(),
+    relativePath = relativePath
+)

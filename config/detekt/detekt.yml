@@ -68,6 +68,8 @@ formatting:
   active: true
   android: false
   autoCorrect: true
+  BackingPropertyNaming:
+    active: true
   BinaryExpressionWrapping:
     active: true
   BlankLineBeforeDeclaration:
@@ -78,6 +80,9 @@ formatting:
     active: false
   FunctionSignature:
     active: false
+  Kdoc:
+    active: true
+    excludes: ['**/*.kts']
   MaximumLineLength:
     active: false
   MultilineExpressionWrapping:
@@ -86,6 +91,8 @@ formatting:
     active: true
   NoEmptyFirstLineInClassBody:
     active: false
+  SpacingAroundSquareBrackets:
+    active: true
   StringTemplateIndent:
     active: false
   ValueArgumentComment:
@@ -241,7 +248,7 @@ style:
     active: true
   RedundantHigherOrderMapUsage:
     active: true
-  RedundantVisibilityModifierRule:
+  RedundantVisibilityModifier:
     active: true
   ReturnCount:
     active: true

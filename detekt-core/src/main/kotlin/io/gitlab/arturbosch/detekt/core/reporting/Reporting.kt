@@ -2,17 +2,16 @@ package io.gitlab.arturbosch.detekt.core.reporting
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.OutputReport
-import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 
 internal fun defaultReportMapping(report: OutputReport) =
     if (report is BuiltInOutputReport) report.ending else report.id
 
-internal fun printFindings(findings: Map<String, List<Finding2>>): String {
+internal fun printIssues(issues: Map<String, List<Issue>>): String {
     return buildString {
-        findings.forEach { (key, issues) ->
+        issues.forEach { (key, issues) ->
             append(key)
             append("\n")
             issues.forEach {
@@ -35,24 +34,19 @@ private val messageReplacementRegex = Regex("\\s+")
 
 fun Config.excludeCorrectable(): Boolean = subConfig(BUILD).valueOrDefault(EXCLUDE_CORRECTABLE, false)
 
-fun Detektion.filterEmptyIssues(config: Config): Map<RuleSet.Id, List<Finding2>> {
+fun Detektion.filterEmptyIssues(config: Config): List<Issue> {
     return this
         .filterAutoCorrectedIssues(config)
-        .filter { it.value.isNotEmpty() }
 }
 
-fun Detektion.filterAutoCorrectedIssues(config: Config): Map<RuleSet.Id, List<Finding2>> {
+fun Detektion.filterAutoCorrectedIssues(config: Config): List<Issue> {
     if (!config.excludeCorrectable()) {
-        return findings
+        return issues
     }
-    val filteredFindings = HashMap<RuleSet.Id, List<Finding2>>()
-    findings.forEach { (ruleSetId, findingsList) ->
-        filteredFindings[ruleSetId] = findingsList.filter { finding -> !finding.autoCorrectEnabled }
-    }
-    return filteredFindings
+    return issues.filter { issue -> !issue.autoCorrectEnabled }
 }
 
-private fun Finding2.truncatedMessage(): String {
+private fun Issue.truncatedMessage(): String {
     val message = message
         .replace(messageReplacementRegex, " ")
         .trim()
@@ -62,4 +56,4 @@ private fun Finding2.truncatedMessage(): String {
     }
 }
 
-private fun Finding2.detailed(): String = "${rule.id} - [${truncatedMessage()}] at ${location.compact()}"
+private fun Issue.detailed(): String = "${ruleInfo.id} - [${truncatedMessage()}] at ${location.compact()}"

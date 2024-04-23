@@ -1,5 +1,6 @@
 {
   "labels": ["dependencies"],
+  "ignoreDeps": ["com.android.tools.build:gradle-api"],
   "extends": [
     "config:base",
     "helpers:pinGitHubActionDigests"

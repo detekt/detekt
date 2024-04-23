@@ -5,6 +5,10 @@ public final class io/gitlab/arturbosch/detekt/test/FindingAssert : org/assertj/
 	public final fun hasSourceLocation (II)Lio/gitlab/arturbosch/detekt/test/FindingAssert;
 }
 
+public final class io/gitlab/arturbosch/detekt/test/FindingExtensionsKt {
+	public static final fun getLocation (Lio/gitlab/arturbosch/detekt/api/Finding;)Lio/gitlab/arturbosch/detekt/api/Location;
+}
+
 public final class io/gitlab/arturbosch/detekt/test/FindingsAssert : org/assertj/core/api/AbstractListAssert {
 	public fun <init> (Ljava/util/List;)V
 	public final fun hasEndSourceLocation (II)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
@@ -23,7 +27,7 @@ public final class io/gitlab/arturbosch/detekt/test/FindingsAssertionsKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/test/KotlinCoreEnvironmentExtensionsKt {
-	public static final fun getContextForPaths (Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/util/List;)Lorg/jetbrains/kotlin/resolve/BindingContext;
+	public static final fun createBindingContext (Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/util/List;)Lorg/jetbrains/kotlin/resolve/BindingContext;
 }
 
 public final class io/gitlab/arturbosch/detekt/test/ResourcesKt {

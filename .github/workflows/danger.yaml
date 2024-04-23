@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4
 
       - name: Setup Node
         uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4
@@ -30,7 +30,7 @@ jobs:
 
       - name: Install Yarn Dependencies
         working-directory: bots/
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
       - name: Run Danger
         working-directory: bots/

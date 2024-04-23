@@ -6,11 +6,10 @@ import io.github.detekt.metrics.processors.complexityKey
 import io.github.detekt.metrics.processors.linesKey
 import io.github.detekt.metrics.processors.logicalLinesKey
 import io.github.detekt.metrics.processors.sourceLinesKey
-import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.DetektResult
-import io.gitlab.arturbosch.detekt.test.createFinding
+import io.gitlab.arturbosch.detekt.test.createIssue
+import io.gitlab.arturbosch.detekt.test.createRuleInfo
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -18,11 +17,30 @@ class ComplexityReportSpec {
 
     @Test
     fun `successfully generates a complexity report`() {
-        val report = ComplexityReport()
-        val expectedContent = readResourceContent("/reporting/complexity-report.txt")
-        val detektion = createDetektion()
-        addData(detektion)
-        assertThat(report.render(detektion)).isEqualTo(expectedContent)
+        val detektion = createDetektion().apply {
+            putUserData(complexityKey, 2)
+            putUserData(CognitiveComplexity.KEY, 2)
+            putUserData(linesKey, 10)
+            putUserData(sourceLinesKey, 6)
+            putUserData(logicalLinesKey, 5)
+            putUserData(commentLinesKey, 4)
+        }
+        assertThat(ComplexityReport().render(detektion)).isEqualTo(
+            """
+                Complexity Report:
+                	- 10 lines of code (loc)
+                	- 6 source lines of code (sloc)
+                	- 5 logical lines of code (lloc)
+                	- 4 comment lines of code (cloc)
+                	- 2 cyclomatic complexity (mcc)
+                	- 2 cognitive complexity
+                	- 1 number of total code smells
+                	- 66% comment source ratio
+                	- 400 mcc per 1,000 lloc
+                	- 200 code smells per 1,000 lloc
+                
+            """.trimIndent()
+        )
     }
 
     @Test
@@ -33,13 +51,4 @@ class ComplexityReportSpec {
     }
 }
 
-private fun createDetektion(): Detektion = DetektResult(mapOf(RuleSet.Id("Key") to listOf(createFinding())))
-
-private fun addData(detektion: Detektion) {
-    detektion.putUserData(complexityKey, 2)
-    detektion.putUserData(CognitiveComplexity.KEY, 2)
-    detektion.putUserData(linesKey, 10)
-    detektion.putUserData(sourceLinesKey, 6)
-    detektion.putUserData(logicalLinesKey, 5)
-    detektion.putUserData(commentLinesKey, 4)
-}
+private fun createDetektion(): Detektion = DetektResult(listOf(createIssue(createRuleInfo(ruleSetId = "Key"))))

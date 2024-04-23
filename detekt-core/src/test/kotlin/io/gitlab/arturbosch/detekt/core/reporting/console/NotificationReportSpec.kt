@@ -12,9 +12,7 @@ class NotificationReportSpec {
 
     @Test
     fun `reports two notifications`() {
-        val detektion = object : TestDetektion() {
-            override val notifications = listOf(SimpleNotification("test"), SimpleNotification("test"))
-        }
+        val detektion = TestDetektion(notifications = listOf(SimpleNotification("test"), SimpleNotification("test")))
         assertThat(subject.render(detektion)).isEqualTo("test${NL}test")
     }
 

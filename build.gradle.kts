@@ -1,4 +1,3 @@
-import com.gradle.enterprise.gradleplugin.testretry.retry
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
@@ -7,7 +6,7 @@ import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
 plugins {
     id("releasing")
     id("io.gitlab.arturbosch.detekt")
-    alias(libs.plugins.dokka)
+    id("org.jetbrains.dokka") version "1.9.20"
 }
 
 tasks.withType<DokkaMultiModuleTask>().configureEach {
@@ -61,15 +60,17 @@ allprojects {
 
 subprojects {
     tasks.withType<Test>().configureEach {
-        retry {
-            @Suppress("MagicNumber")
-            if (providers.environmentVariable("CI").isPresent) {
-                maxRetries = 3
-                maxFailures = 20
+        develocity {
+            testRetry {
+                @Suppress("MagicNumber")
+                if (providers.environmentVariable("CI").isPresent) {
+                    maxRetries = 3
+                    maxFailures = 20
+                }
             }
-        }
-        predictiveSelection {
-            enabled = providers.gradleProperty("enablePTS").map(String::toBooleanStrict)
+            predictiveTestSelection {
+                enabled = providers.gradleProperty("enablePTS").map(String::toBooleanStrict)
+            }
         }
     }
 }

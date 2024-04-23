@@ -13,6 +13,8 @@
                   "uri": "<PREFIX>TestFile.kt"
                 },
                 "region": {
+                  "endColumn": 3,
+                  "endLine": 2,
                   "startColumn": 1,
                   "startLine": 1
                 }
@@ -22,7 +24,7 @@
           "message": {
             "text": "TestMessage"
           },
-          "ruleId": "detekt.TestSmellA.TestSmellA"
+          "ruleId": "detekt.RuleSet1.TestSmellA"
         },
         {
           "level": "warning",
@@ -33,8 +35,10 @@
                   "uri": "<PREFIX>TestFile.kt"
                 },
                 "region": {
-                  "startColumn": 1,
-                  "startLine": 1
+                  "endColumn": 5,
+                  "endLine": 3,
+                  "startColumn": 5,
+                  "startLine": 3
                 }
               }
             }
@@ -42,7 +46,7 @@
           "message": {
             "text": "TestMessage"
           },
-          "ruleId": "detekt.TestSmellB.TestSmellB"
+          "ruleId": "detekt.RuleSet2.TestSmellB"
         },
         {
           "level": "note",
@@ -53,8 +57,10 @@
                   "uri": "<PREFIX>TestFile.kt"
                 },
                 "region": {
+                  "endColumn": 1,
+                  "endLine": 3,
                   "startColumn": 1,
-                  "startLine": 1
+                  "startLine": 2
                 }
               }
             }
@@ -62,7 +68,7 @@
           "message": {
             "text": "TestMessage"
           },
-          "ruleId": "detekt.TestSmellC.TestSmellC"
+          "ruleId": "detekt.RuleSet2.TestSmellC"
         }
       ],
       "tool": {

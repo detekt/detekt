@@ -1,7 +1,7 @@
 package io.github.detekt.report.xml
 
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding2
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import java.util.Locale
@@ -16,26 +16,25 @@ class XmlOutputReport : BuiltInOutputReport, OutputReport() {
     override val id: String = "XmlOutputReport"
     override val ending = "xml"
 
-    private val Finding2.severityLabel: String
+    private val Issue.severityLabel: String
         get() = severity.name.lowercase(Locale.US)
 
     override fun render(detektion: Detektion): String {
-        val smells = detektion.findings.flatMap { it.value }
-
         val lines = ArrayList<String>()
         lines += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
         lines += "<checkstyle version=\"4.3\">"
 
-        smells.groupBy { it.location.filePath.relativePath ?: it.location.filePath.absolutePath }
-            .forEach { (filePath, findings) ->
+        detektion.issues
+            .groupBy { it.location.filePath.relativePath ?: it.location.filePath.absolutePath }
+            .forEach { (filePath, issues) ->
                 lines += "<file name=\"${filePath.invariantSeparatorsPathString.toXmlString()}\">"
-                findings.forEach {
+                issues.forEach {
                     lines += arrayOf(
                         "\t<error line=\"${it.location.source.line.toXmlString()}\"",
                         "column=\"${it.location.source.column.toXmlString()}\"",
                         "severity=\"${it.severityLabel.toXmlString()}\"",
                         "message=\"${it.message.toXmlString()}\"",
-                        "source=\"${"detekt.${it.rule.id.value.toXmlString()}"}\" />"
+                        "source=\"${"detekt.${it.ruleInfo.id.value.toXmlString()}"}\" />"
                     ).joinToString(separator = " ")
                 }
                 lines += "</file>"

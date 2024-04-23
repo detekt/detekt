@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
+import kotlin.io.path.absolutePathString
 import kotlin.io.path.readLines
 
 class RunnerSpec {
@@ -195,6 +196,95 @@ class RunnerSpec {
             assertThatThrownBy { executeDetekt("--run-rule", "") }
                 .isExactlyInstanceOf(IllegalArgumentException::class.java)
                 .hasMessage("Pattern 'RuleSetId:RuleId' expected.")
+        }
+    }
+
+    @Nested
+    inner class AutoCorrect {
+        private val outPrintStream = StringPrintStream()
+        private val errPrintStream = StringPrintStream()
+
+        private val config = resourceAsPath("/configs/formatting-config.yml")
+
+        private val args = arrayOf(
+            "--auto-correct",
+            "--config",
+            config.toString(),
+            "--input",
+        )
+
+        private val modificationMessagePrefix = "File "
+        private val modificationMessageSuffix = " was modified"
+
+        @Test
+        fun `succeeds with --autocorrect with zero autocorrectable fixes`() {
+            val inputPath = resourceAsPath("/autocorrect/CompliantSample.kt")
+
+            assertThatCode {
+                Runner(parseArguments(args + inputPath.toString()), outPrintStream, errPrintStream).execute()
+            }.doesNotThrowAnyException()
+
+            assertThat(errPrintStream.toString()).isEmpty()
+            assertThat(outPrintStream.toString())
+                .doesNotContain("$modificationMessagePrefix${inputPath.absolutePathString()}$modificationMessageSuffix")
+        }
+
+        @Test
+        fun `succeeds with --autocorrect with single autocorrectable fix`() {
+            val inputPath = resourceAsPath("/autocorrect/SingleRule.kt")
+
+            assertThatThrownBy {
+                Runner(parseArguments(args + inputPath.toString()), outPrintStream, errPrintStream).execute()
+            }.isInstanceOf(IssuesFound::class.java)
+
+            assertThat(errPrintStream.toString()).isEmpty()
+            assertThat(outPrintStream.toString())
+                .contains("${inputPath.absolutePathString()}:3:1: Needless blank line(s) [NoConsecutiveBlankLines]")
+                .contains("$modificationMessagePrefix${inputPath.absolutePathString()}$modificationMessageSuffix")
+            assertThat(inputPath).content().isEqualToNormalizingNewlines(
+                """
+                    class Test {
+    
+                    }
+    
+                """.trimIndent()
+            )
+        }
+
+        @Test
+        fun `succeeds with --autocorrect with multiple autocorrectable fixes`() {
+            val inputPath = resourceAsPath("/autocorrect/MultipleRules.kt")
+
+            assertThatThrownBy {
+                Runner(parseArguments(args + inputPath.toString()), outPrintStream, errPrintStream).execute()
+            }.isInstanceOf(IssuesFound::class.java)
+
+            assertThat(errPrintStream.toString()).isEmpty()
+            assertThat(outPrintStream.toString())
+                .contains("${inputPath.absolutePathString()}:5:24: Line must not end with \".\" [ChainWrapping]")
+                .contains("${inputPath.absolutePathString()}:6:28: Line must not end with \".\" [ChainWrapping]")
+                .contains("${inputPath.absolutePathString()}:7:36: Line must not end with \"?.\" [ChainWrapping]")
+                .contains("${inputPath.absolutePathString()}:10:15: Line must not end with \"?:\" [ChainWrapping]")
+                .contains("${inputPath.absolutePathString()}:3:1: Needless blank line(s) [NoConsecutiveBlankLines]")
+                .contains("${inputPath.absolutePathString()}:12:1: Needless blank line(s) [NoConsecutiveBlankLines]")
+                .contains("$modificationMessagePrefix${inputPath.absolutePathString()}$modificationMessageSuffix")
+            assertThat(inputPath).content().isEqualToNormalizingNewlines(
+                """
+                    class Test {
+    
+                        val foo =
+                            listOf(1, 2, 3)
+                            .filter { it > 2 }!!
+                            .takeIf { it.count() > 100 }
+                            ?.sum()
+                        val foobar =
+                            foo()
+                                ?: bar
+    
+                    }
+    
+                """.trimIndent()
+            )
         }
     }
 }

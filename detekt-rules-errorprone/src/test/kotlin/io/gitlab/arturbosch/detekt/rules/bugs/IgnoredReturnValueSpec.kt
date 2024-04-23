@@ -207,9 +207,9 @@ class IgnoredReturnValueSpec {
             """.trimIndent()
 
             val findings = subject.lintWithContext(env, code, annotationClass)
-            assertThat(findings).hasSize(1)
+            assertThat(findings).singleElement()
+                .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(7, 5)
-            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
         @Test
@@ -228,9 +228,9 @@ class IgnoredReturnValueSpec {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1)
+            assertThat(findings).singleElement()
+                .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(9, 5)
-            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
         @Test
@@ -295,9 +295,9 @@ class IgnoredReturnValueSpec {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1)
+            assertThat(findings).singleElement()
+                .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(12, 10)
-            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
         @Test
@@ -315,9 +315,9 @@ class IgnoredReturnValueSpec {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1)
+            assertThat(findings).singleElement()
+                .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(9, 5)
-            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
         @Test
@@ -336,9 +336,9 @@ class IgnoredReturnValueSpec {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1)
+            assertThat(findings).singleElement()
+                .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(9, 20)
-            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
         @Test
@@ -357,9 +357,9 @@ class IgnoredReturnValueSpec {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1)
+            assertThat(findings).singleElement()
+                .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(9, 14)
-            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
         @Test
@@ -377,9 +377,9 @@ class IgnoredReturnValueSpec {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1)
+            assertThat(findings).singleElement()
+                .hasMessage("The call isTheAnswer is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(8, 11)
-            assertThat(findings[0]).hasMessage("The call isTheAnswer is returning a value that is ignored.")
         }
 
         @Test
@@ -814,9 +814,9 @@ class IgnoredReturnValueSpec {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1)
+            assertThat(findings).singleElement()
+                .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(8, 5)
-            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
         @Test
@@ -876,9 +876,9 @@ class IgnoredReturnValueSpec {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1)
+            assertThat(findings).singleElement()
+                .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(9, 5)
-            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
         @Test
@@ -892,9 +892,9 @@ class IgnoredReturnValueSpec {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1)
+            assertThat(findings).singleElement()
+                .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(4, 5)
-            assertThat(findings[0]).hasMessage("The call listOfChecked is returning a value that is ignored.")
         }
 
         @Test
@@ -907,9 +907,9 @@ class IgnoredReturnValueSpec {
                 fun ignoredReturn(): String = "asd"
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).hasSize(1)
+            assertThat(findings).singleElement()
+                .hasMessage("The call ignoredReturn is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(2, 5)
-            assertThat(findings[0]).hasMessage("The call ignoredReturn is returning a value that is ignored.")
         }
 
         @Test

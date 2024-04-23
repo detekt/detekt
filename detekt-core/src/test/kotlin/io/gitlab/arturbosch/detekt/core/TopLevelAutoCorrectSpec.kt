@@ -17,7 +17,6 @@ import io.gitlab.arturbosch.detekt.core.tooling.inputPathsToKtFiles
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtAnnotation
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Test
 
 class TopLevelAutoCorrectSpec {
@@ -45,7 +44,7 @@ class TopLevelAutoCorrectSpec {
         val contentChangedListener = object : FileProcessListener {
             override val id: String = "ContentChangedListener"
 
-            override fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
+            override fun onFinish(files: List<KtFile>, result: Detektion) {
                 assertThat(files).hasSize(1)
                 assertThat(files[0].text).isNotEqualToIgnoringWhitespace(fileContentBeforeAutoCorrect)
             }

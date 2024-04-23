@@ -1,8 +1,8 @@
 plugins {
     id("module")
     id("public-api")
-    `java-test-fixtures`
-    alias(libs.plugins.poko)
+    id("java-test-fixtures")
+    id("dev.drewhamilton.poko") version "0.15.2"
 }
 
 dependencies {
@@ -12,8 +12,6 @@ dependencies {
 
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
-
-    testFixturesCompileOnly(libs.poko.annotations)
 }
 
 detekt {

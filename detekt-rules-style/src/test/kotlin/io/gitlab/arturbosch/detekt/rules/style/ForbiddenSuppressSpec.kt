@@ -115,7 +115,7 @@ internal class ForbiddenSuppressSpec {
                 fun foo() { }
             """.trimIndent()
             val findings = subject.compileAndLint(code)
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
     }
 
@@ -172,7 +172,7 @@ internal class ForbiddenSuppressSpec {
                 class Foo
             """.trimIndent()
             val findings = subject.compileAndLint(code)
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -184,7 +184,7 @@ internal class ForbiddenSuppressSpec {
                 class Foo
             """.trimIndent()
             val findings = subject.compileAndLint(code)
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
     }
 
@@ -199,7 +199,7 @@ internal class ForbiddenSuppressSpec {
                 package config
             """.trimIndent()
             val findings = subject.compileAndLint(code)
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
     }
 }

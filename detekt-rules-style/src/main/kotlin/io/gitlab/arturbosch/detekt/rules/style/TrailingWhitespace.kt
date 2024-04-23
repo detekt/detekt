@@ -26,16 +26,11 @@ class TrailingWhitespace(config: Config) : Rule(
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
-        visit(file.toFileContent())
-    }
-
-    private fun visit(fileContent: KtFileContent) {
         var offset = 0
-        fileContent.content.forEachIndexed { index, line ->
+        file.text.lineSequence().forEachIndexed { index, line ->
             offset += line.length
             val trailingWhitespaces = countTrailingWhitespace(line)
             if (trailingWhitespaces > 0) {
-                val file = fileContent.file
                 val ktElement = findFirstKtElementInParentsOrNull(file, offset, line)
                 if (ktElement == null || !ktElement.isPartOfString()) {
                     val entity = Entity.from(file, offset - trailingWhitespaces).let { entity ->

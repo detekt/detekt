@@ -2,21 +2,20 @@
 // https://github.com/gradle/gradle/issues/21285
 @file:Suppress("StringLiteralDuplication")
 
-import com.gradle.enterprise.gradleplugin.testretry.retry
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import java.net.URI
 
 plugins {
     id("module")
-    `java-gradle-plugin`
-    `java-test-fixtures`
-    idea
-    alias(libs.plugins.pluginPublishing)
+    id("java-gradle-plugin")
+    id("java-test-fixtures")
+    id("idea")
+    id("com.gradle.plugin-publish") version "1.2.1"
     // We use this published version of the detekt plugin to self analyse this project.
-    id("io.gitlab.arturbosch.detekt") version "1.23.5"
-    alias(libs.plugins.binaryCompatibilityValidator)
-    alias(libs.plugins.dokka)
+    id("io.gitlab.arturbosch.detekt") version "1.23.6"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.14.0"
+    id("org.jetbrains.dokka") version "1.9.20"
 }
 
 repositories {
@@ -97,7 +96,7 @@ dependencies {
     testKitJava17RuntimeOnly(libs.android.gradle.maxSupported)
 
     // We use this published version of the detekt-formatting to self analyse this project.
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.5")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
 }
 
 gradlePlugin {
@@ -222,11 +221,13 @@ kotlin {
 }
 
 tasks.withType<Test>().configureEach {
-    retry {
-        @Suppress("MagicNumber")
-        if (providers.environmentVariable("CI").isPresent) {
-            maxRetries = 2
-            maxFailures = 20
+    develocity {
+        testRetry {
+            @Suppress("MagicNumber")
+            if (providers.environmentVariable("CI").isPresent) {
+                maxRetries = 2
+                maxFailures = 20
+            }
         }
     }
 }

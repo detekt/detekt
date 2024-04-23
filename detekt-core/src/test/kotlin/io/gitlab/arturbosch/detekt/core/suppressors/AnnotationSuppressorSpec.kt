@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.core.suppressors
 
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.getContextForPaths
+import io.gitlab.arturbosch.detekt.test.createBindingContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.psi.KtClass
@@ -317,7 +317,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             )
 
             val bindings = listOf(
-                env.getContextForPaths(listOf(root, *composableFiles)),
+                env.createBindingContext(listOf(root, *composableFiles)),
                 BindingContext.EMPTY,
             )
 
@@ -414,7 +414,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
 
             val suppressor = annotationSuppressorFactory(
                 buildRule("ignoreAnnotated" to listOf("androidx.compose.runtime.Composable")),
-                env.getContextForPaths(listOf(root, *composableFiles)),
+                env.createBindingContext(listOf(root, *composableFiles)),
             )!!
 
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!
@@ -435,7 +435,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
 
             val suppressor = annotationSuppressorFactory(
                 buildRule("ignoreAnnotated" to listOf("androidx.compose.runtime.Composable")),
-                env.getContextForPaths(listOf(root, *composableFiles)),
+                env.createBindingContext(listOf(root, *composableFiles)),
             )!!
 
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!
@@ -458,7 +458,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
 
             val suppressor = annotationSuppressorFactory(
                 buildRule("ignoreAnnotated" to listOf("androidx.compose.runtime.Composable")),
-                env.getContextForPaths(listOf(root, *composableFiles)),
+                env.createBindingContext(listOf(root, *composableFiles)),
             )!!
 
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!
@@ -501,7 +501,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
         fun `suppress if it has parameters with type solving`() {
             val suppressor = annotationSuppressorFactory(
                 buildRule("ignoreAnnotated" to listOf("Preview")),
-                env.getContextForPaths(listOf(root, *composableFiles)),
+                env.createBindingContext(listOf(root, *composableFiles)),
             )!!
 
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!

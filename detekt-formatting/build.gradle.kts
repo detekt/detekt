@@ -46,9 +46,3 @@ tasks.jar {
         extraDepsToPackage.map { zipTree(it) },
     )
 }
-
-tasks.test {
-    if (javaVersion.isJava9Compatible) {
-        jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
-    }
-}

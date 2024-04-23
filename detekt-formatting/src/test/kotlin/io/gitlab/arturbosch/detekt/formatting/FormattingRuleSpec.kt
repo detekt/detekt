@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakBeforeAssignment
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.location
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -49,7 +50,7 @@ class FormattingRuleSpec {
                 """.trimIndent()
             )
 
-            assertThat(findings.first().signature).isEqualTo("Test.kt\$=")
+            assertThat(findings.first().entity.signature).isEqualTo("Test.kt\$=")
         }
 
         @Test
@@ -62,7 +63,7 @@ class FormattingRuleSpec {
                 """.trimIndent()
             )
 
-            assertThat(findings.first().signature).isEqualTo("Test.kt\$=")
+            assertThat(findings.first().entity.signature).isEqualTo("Test.kt\$=")
         }
     }
 

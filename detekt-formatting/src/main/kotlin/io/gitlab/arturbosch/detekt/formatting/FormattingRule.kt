@@ -4,6 +4,7 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.CODE_STYLE_PROPERT
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfig
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_STYLE_PROPERTY
+import io.github.detekt.psi.FilePath
 import io.github.detekt.psi.toFilePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
@@ -13,11 +14,13 @@ import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
+import io.gitlab.arturbosch.detekt.api.modifiedText
 import org.ec4j.core.model.Property
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyHolder
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtPsiFactory
 
 /**
  * Rule to detect formatting violations.
@@ -35,14 +38,22 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
 
     private lateinit var positionByOffset: (offset: Int) -> Pair<Int, Int>
     private lateinit var root: KtFile
+    private lateinit var originalFilePath: FilePath
 
     override fun visit(root: KtFile) {
-        this.root = root
-        positionByOffset = KtLintLineColCalculator.calculateLineColByOffset(root.text)
+        val fileCopy = KtPsiFactory(root.project).createPhysicalFile(root.name, root.modifiedText ?: root.text)
+
+        this.root = fileCopy
+        originalFilePath = root.toFilePath()
+        positionByOffset = KtLintLineColCalculator.calculateLineColByOffset(fileCopy.text)
 
         wrapping.beforeFirstNode(computeEditorConfigProperties())
-        root.node.visitASTNodes()
+        this.root.node.visitASTNodes()
         wrapping.afterLastNode()
+
+        if (this.root.modificationStamp > 0) {
+            root.modifiedText = this.root.text
+        }
     }
 
     open fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String>? = null
@@ -84,7 +95,7 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
             endSource = SourceLocation(line, column),
             // Use offset + 1 since ktlint always reports a single location.
             text = TextLocation(offset, offset + 1),
-            filePath = root.toFilePath()
+            filePath = originalFilePath
         )
         val entity = Entity.from(node.psi, location)
 

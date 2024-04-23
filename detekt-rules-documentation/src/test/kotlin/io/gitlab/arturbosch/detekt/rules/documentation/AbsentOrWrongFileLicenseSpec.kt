@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.intellij.lang.annotations.Language
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.io.PrintStream
@@ -198,7 +197,7 @@ private fun checkLicence(@Language("kotlin") content: String, isRegexLicense: Bo
                 properties[key] = value
             }
         })
-        onStart(listOf(file), BindingContext.EMPTY)
+        onStart(listOf(file))
     }
 
     return AbsentOrWrongFileLicense(Config.empty).lint(file)

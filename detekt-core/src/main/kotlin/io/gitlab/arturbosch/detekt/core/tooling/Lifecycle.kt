@@ -1,10 +1,9 @@
 package io.gitlab.arturbosch.detekt.core.tooling
 
+import io.github.detekt.parser.generateBindingContext
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
-import io.gitlab.arturbosch.detekt.api.Finding2
-import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.core.Analyzer
 import io.gitlab.arturbosch.detekt.core.DetektResult
@@ -12,7 +11,6 @@ import io.gitlab.arturbosch.detekt.core.FileProcessorLocator
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.config.validation.checkConfiguration
 import io.gitlab.arturbosch.detekt.core.extensions.handleReportingExtensions
-import io.gitlab.arturbosch.detekt.core.generateBindingContext
 import io.gitlab.arturbosch.detekt.core.reporting.OutputFacade
 import io.gitlab.arturbosch.detekt.core.rules.createRuleProviders
 import io.gitlab.arturbosch.detekt.core.util.PerformanceMonitor.Phase
@@ -41,10 +39,10 @@ internal interface Lifecycle {
 
         val result = measure(Phase.Analyzer) {
             val analyzer = Analyzer(settings, ruleSets, processors)
-            processors.forEach { it.onStart(filesToAnalyze, bindingContext) }
-            val findings: Map<RuleSet.Id, List<Finding2>> = analyzer.run(filesToAnalyze, bindingContext)
-            val result: Detektion = DetektResult(findings.toSortedMap { o1, o2 -> o1.value.compareTo(o2.value) })
-            processors.forEach { it.onFinish(filesToAnalyze, result, bindingContext) }
+            processors.forEach { it.onStart(filesToAnalyze) }
+            val issues = analyzer.run(filesToAnalyze, bindingContext)
+            val result: Detektion = DetektResult(issues)
+            processors.forEach { it.onFinish(filesToAnalyze, result) }
             result
         }
 

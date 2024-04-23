@@ -23,7 +23,7 @@ class SleepInsteadOfDelaySpec(private val env: KotlinCoreEnvironment) {
                 delay(1000L)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test

@@ -4,11 +4,10 @@ import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.createTempDirectoryForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Finding2
-import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.test.createEntity
-import io.gitlab.arturbosch.detekt.test.createFinding
+import io.gitlab.arturbosch.detekt.test.createIssue
+import io.gitlab.arturbosch.detekt.test.createRuleInfo
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -23,11 +22,24 @@ class BaselineResultMappingSpec {
     private val dir = createTempDirectoryForTest("baseline_format")
     private val baselineFile = dir.resolve("baseline.xml")
     private val existingBaselineFile = resourceAsPath("/baseline_feature/valid-baseline.xml")
-    private val finding: Finding2 = createFinding(
-        ruleName = "SomeIssueId",
-        entity = createEntity(signature = "SomeSignature"),
+    private val issues = listOf(
+        createIssue(
+            ruleInfo = createRuleInfo("SomeIssueId", "RuleSet"),
+            entity = createEntity(signature = "SomeSignature"),
+        ),
+        createIssue(
+            ruleName = "LongParameterList",
+            entity = createEntity(signature = "Signature")
+        ),
+        createIssue(
+            ruleName = "LongMethod",
+            entity = createEntity(signature = "Signature")
+        ),
+        createIssue(
+            ruleName = "FeatureEnvy",
+            entity = createEntity(signature = "Signature")
+        ),
     )
-    private val findings: Map<RuleSet.Id, List<Finding2>> = mapOf(RuleSet.Id("RuleSet") to listOf(finding))
 
     @AfterEach
     fun tearDown() {
@@ -35,13 +47,13 @@ class BaselineResultMappingSpec {
     }
 
     @Test
-    fun `should not create a new baseline file when no findings occurred`() {
+    fun `should not create a new baseline file when no issues occurred`() {
         val mapping = resultMapping(
             baselineFile = baselineFile,
             createBaseline = true,
         )
 
-        mapping.transformFindings(emptyMap())
+        mapping.transformIssues(emptyList())
 
         assertThat(baselineFile).doesNotExist()
     }
@@ -54,7 +66,7 @@ class BaselineResultMappingSpec {
             createBaseline = false,
         )
 
-        mapping.transformFindings(findings)
+        mapping.transformIssues(issues)
 
         val changed = DefaultBaseline.load(existingBaselineFile)
         assertThat(existing).isEqualTo(changed)
@@ -68,7 +80,7 @@ class BaselineResultMappingSpec {
             createBaseline = null,
         )
 
-        mapping.transformFindings(findings)
+        mapping.transformIssues(issues)
 
         val changed = DefaultBaseline.load(existingBaselineFile)
         assertThat(existing).isEqualTo(changed)
@@ -81,7 +93,7 @@ class BaselineResultMappingSpec {
             createBaseline = false,
         )
 
-        mapping.transformFindings(findings)
+        mapping.transformIssues(issues)
 
         assertThat(baselineFile).doesNotExist()
     }
@@ -93,7 +105,7 @@ class BaselineResultMappingSpec {
             createBaseline = true,
         )
 
-        mapping.transformFindings(findings)
+        mapping.transformIssues(issues)
 
         assertThat(baselineFile).exists()
     }
@@ -107,10 +119,98 @@ class BaselineResultMappingSpec {
             createBaseline = true,
         )
 
-        mapping.transformFindings(findings)
+        mapping.transformIssues(issues)
 
         val changed = DefaultBaseline.load(baselineFile)
         assertThat(existing).isNotEqualTo(changed)
+    }
+
+    @Test
+    fun `returns a filtered issues list when the baseline exists`() {
+        existingBaselineFile.copyTo(baselineFile)
+
+        val mapping = resultMapping(
+            baselineFile = baselineFile,
+            createBaseline = true,
+        )
+
+        val filtered = mapping.filterByBaseline(baselineFile, issues)
+
+        assertThat(issues).isNotEqualTo(filtered)
+    }
+
+    @Test
+    fun `returns the same issues list when the baseline doesn't exist`() {
+        val mapping = resultMapping(
+            baselineFile = baselineFile,
+            createBaseline = false,
+        )
+
+        val filtered = mapping.filterByBaseline(baselineFile, issues)
+
+        assertThat(issues).isEqualTo(filtered)
+    }
+
+    @Test
+    fun `doesn't create a baseline file without issues`() {
+        val mapping = resultMapping(
+            baselineFile = baselineFile,
+            createBaseline = false,
+        )
+
+        mapping.createOrUpdate(baselineFile, emptyList())
+
+        assertThat(baselineFile).doesNotExist()
+    }
+
+    @Test
+    fun `creates on top of an existing a baseline file without issues`() {
+        existingBaselineFile.copyTo(baselineFile)
+        val mapping = resultMapping(
+            baselineFile = baselineFile,
+            createBaseline = true,
+        )
+
+        mapping.createOrUpdate(baselineFile, emptyList())
+
+        assertThat(baselineFile).hasContent(
+            """
+                <?xml version="1.0" ?>
+                <SmellBaseline>
+                  <ManuallySuppressedIssues>
+                    <ID>LongParameterList:Signature</ID>
+                    <ID>LongMethod:Signature</ID>
+                  </ManuallySuppressedIssues>
+                  <CurrentIssues></CurrentIssues>
+                </SmellBaseline>
+            """.trimIndent()
+        )
+    }
+
+    @Test
+    fun `creates on top of an existing a baseline file with issues`() {
+        existingBaselineFile.copyTo(baselineFile)
+        val mapping = resultMapping(
+            baselineFile = baselineFile,
+            createBaseline = true,
+        )
+
+        mapping.createOrUpdate(baselineFile, listOf(createIssue()))
+
+        assertThat(baselineFile).hasContent(
+            """
+                <?xml version="1.0" ?>
+                <SmellBaseline>
+                  <ManuallySuppressedIssues>
+                    <ID>LongParameterList:Signature</ID>
+                    <ID>LongMethod:Signature</ID>
+                  </ManuallySuppressedIssues>
+                  <CurrentIssues>
+                    <ID>TestSmell:TestEntitySignature</ID>
+                  </CurrentIssues>
+                </SmellBaseline>
+            """.trimIndent()
+        )
     }
 }
 

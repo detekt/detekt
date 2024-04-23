@@ -13,23 +13,21 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("com.gradle.enterprise") version "3.16.2"
+    id("com.gradle.develocity") version "3.17.2"
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
 val isCiBuild = providers.environmentVariable("CI").isPresent
 
+// Ensure buildCache config is kept in sync with all builds (root, build-logic & detekt-gradle-plugin)
 buildCache {
     local {
-        isEnabled = true
+        isEnabled = !isCiBuild
     }
-    remote<HttpBuildCache> {
-        isPush = isCiBuild
+    remote(develocity.buildCache) {
+        server = "https://ge.detekt.dev"
         isEnabled = true
-        url = uri("https://ge.detekt.dev/cache/")
-        credentials {
-            username = providers.environmentVariable("GRADLE_CACHE_USERNAME").orNull
-            password = providers.environmentVariable("GRADLE_CACHE_PASSWORD").orNull
-        }
+        val accessKey = System.getenv("DEVELOCITY_ACCESS_KEY")
+        isPush = isCiBuild && !accessKey.isNullOrEmpty()
     }
 }
