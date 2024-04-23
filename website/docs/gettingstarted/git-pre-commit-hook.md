@@ -69,8 +69,6 @@ files that have been staged by git. Paste following into your project's `build.g
 ```kotlin
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
     if (project.hasProperty("precommit")) {
-        dependsOn(gitPreCommitFileList)
-
         val rootDir = project.rootDir
         val projectDir = projectDir
 
