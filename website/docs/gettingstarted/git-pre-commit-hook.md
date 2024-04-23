@@ -63,7 +63,7 @@ fun Project.getGitStagedFiles(rootDir: File): Provider<List<File>> {
 }
 ```
 
-Then we need to configure `Detekt` task and change its `source` from the entire `src` foler (by default) to only set of
+Then we need to configure `detekt` task and change its `source` from the entire `src` folder (by default) to only set of
 files that have been staged by git. Paste following into your project's `build.gradle.kts`:
 
 ```kotlin
