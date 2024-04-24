@@ -131,7 +131,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `does not report when statement has no nested statements`() {
+        fun `reports when statement has multiple line arguments`() {
             val code = """
                 data class Foo(val x: Int, val y: Int)
                 
@@ -145,7 +145,23 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
-            assertThat(findings).isEmpty()
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `reports when statement has multiple line calls`() {
+            val code = """
+                fun test(strings: List<String>): List<String> {
+                  return strings
+                    .flatMap {
+                      it
+                        .reader()
+                        .readLines()
+                    }
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).hasSize(1)
         }
     }
 
