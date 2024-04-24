@@ -8,11 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import io.gitlab.arturbosch.detekt.rules.hasImplicitParameterReference
 import io.gitlab.arturbosch.detekt.rules.implicitParameter
-import org.jetbrains.kotlin.psi.KtBlockExpression
-import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
-import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
-import org.jetbrains.kotlin.utils.ifEmpty
 
 /**
  * Lambda expressions are very useful in a lot of cases, and they often include very small chunks of
@@ -73,13 +69,11 @@ class MultilineLambdaItParameter(config: Config) : Rule(
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
 
-        val statements = lambdaExpression.bodyExpression?.statements.orEmpty().ifEmpty { return }
-        val single = statements.singleOrNull()
-        if (single != null && (single.hasNoLineBreak() || single.hasNoStatements())) return
+        if (!lambdaExpression.isMultiline()) return
 
         val parameterNames = lambdaExpression.valueParameters.map { it.name }
-        // Explicit `it`
         if (IT_LITERAL in parameterNames) {
+            // Explicit `it`
             report(
                 CodeSmell(
                     Entity.from(lambdaExpression),
@@ -87,24 +81,29 @@ class MultilineLambdaItParameter(config: Config) : Rule(
                         "Consider giving your parameter a readable and descriptive name."
                 )
             )
-        } else if (parameterNames.isEmpty()) { // Implicit `it`
-            val implicitParameter = lambdaExpression.implicitParameter(bindingContext)
-            if (implicitParameter != null &&
-                lambdaExpression.hasImplicitParameterReference(implicitParameter, bindingContext)
-            ) {
-                report(
-                    CodeSmell(
-                        Entity.from(lambdaExpression),
-                        "The implicit `it` should not be used in a multiline lambda. " +
-                            "Consider giving your parameter a readable and descriptive name."
-                    )
+        } else if (parameterNames.isEmpty() && lambdaExpression.isUsingImplicitParameter()) {
+            // Implicit `it`
+            report(
+                CodeSmell(
+                    Entity.from(lambdaExpression),
+                    "The implicit `it` should not be used in a multiline lambda. " +
+                        "Consider giving your parameter a readable and descriptive name."
                 )
-            }
+            )
         }
     }
 
-    private fun KtExpression.hasNoLineBreak() = !textContains('\n')
+    private fun KtLambdaExpression.isMultiline(): Boolean {
+        val statements = bodyExpression?.statements ?: return false
+        return when (statements.size) {
+            0 -> false
+            1 -> statements.single().textContains('\n')
+            else -> true
+        }
+    }
 
-    private fun KtExpression.hasNoStatements() =
-        !anyDescendantOfType<KtBlockExpression> { it.statements.isNotEmpty() }
+    private fun KtLambdaExpression.isUsingImplicitParameter(): Boolean {
+        val implicitParameter = implicitParameter(bindingContext) ?: return false
+        return hasImplicitParameterReference(implicitParameter, bindingContext)
+    }
 }
