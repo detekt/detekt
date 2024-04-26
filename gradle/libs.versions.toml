@@ -8,7 +8,7 @@ junit = "5.10.2"
 slf4j = "2.0.13"
 
 [libraries]
-semver4j = "org.semver4j:semver4j:5.2.3"
+semver4j = "org.semver4j:semver4j:5.3.0"
 
 kotlin-compiler = { module = "org.jetbrains.kotlin:kotlin-compiler", version.ref = "kotlin" }
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
