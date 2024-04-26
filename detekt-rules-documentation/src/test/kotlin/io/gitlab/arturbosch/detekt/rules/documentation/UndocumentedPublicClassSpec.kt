@@ -267,4 +267,30 @@ class UndocumentedPublicClassSpec {
         val subject = UndocumentedPublicClass(TestConfig(SEARCH_IN_PROTECTED_CLASS to "true"))
         assertThat(subject.compileAndLint(code)).hasSize(1)
     }
+
+    @Test
+    fun `should report in public companion class - #7217`() {
+        val code = """
+            public object PublicObject
+
+            public class PublicClass {
+                public companion object
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).hasSize(3)
+    }
+
+    @Test
+    fun `should not report in private or internal companion class - #7217`() {
+        val code = """
+            public class PublicObject {
+                internal companion object
+            }
+
+            public class PublicClass {
+                private companion object
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).hasSize(2)
+    }
 }
