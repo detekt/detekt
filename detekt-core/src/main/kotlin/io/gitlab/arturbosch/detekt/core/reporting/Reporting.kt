@@ -55,4 +55,4 @@ private fun Issue.truncatedMessage(): String {
     }
 }
 
-private fun Issue.detailed(): String = "${ruleInstance.id} - [${truncatedMessage()}] at ${location.compact()}"
+private fun Issue.detailed(): String = "${ruleInstance.name} - [${truncatedMessage()}] at ${location.compact()}"

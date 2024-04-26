@@ -39,5 +39,5 @@ fun Issue.renderAsCompilerWarningMessage(): Pair<String, CompilerMessageLocation
         )
     }
 
-    return "${ruleInstance.id}: $message" to sourceLocation
+    return "${ruleInstance.name}: $message" to sourceLocation
 }

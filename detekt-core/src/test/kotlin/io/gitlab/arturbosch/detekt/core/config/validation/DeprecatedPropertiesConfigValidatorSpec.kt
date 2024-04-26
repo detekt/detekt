@@ -10,7 +10,7 @@ internal class DeprecatedPropertiesConfigValidatorSpec {
     private val deprecatedProperties = setOf(
         DeprecatedProperty(
             ruleSetId = "naming",
-            ruleId = "FunctionParameterNaming",
+            ruleName = "FunctionParameterNaming",
             propertyName = "ignoreOverriddenFunctions",
             description = "Use `ignoreOverridden` instead"
         )

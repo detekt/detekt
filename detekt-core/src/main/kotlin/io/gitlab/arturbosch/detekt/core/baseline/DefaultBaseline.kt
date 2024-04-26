@@ -35,4 +35,4 @@ internal const val CURRENT_ISSUES = "CurrentIssues"
 internal const val ID = "ID"
 
 internal val Issue.baselineId: String
-    get() = "${ruleInstance.id}:${this.entity.signature}"
+    get() = "${ruleInstance.name}:${this.entity.signature}"

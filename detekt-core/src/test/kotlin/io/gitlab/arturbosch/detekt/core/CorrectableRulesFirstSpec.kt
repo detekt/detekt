@@ -45,20 +45,20 @@ class CorrectableRulesFirstSpec {
 
         settings.use { detector.run(listOf(compileForTest(testFile))) }
 
-        assertThat(actualLastRuleId).isEqualTo("NonCorrectable")
+        assertThat(actualLastRuleName).isEqualTo("NonCorrectable")
     }
 }
 
-private var actualLastRuleId = ""
+private var actualLastRuleName = ""
 
 private class NonCorrectable(config: Config) : Rule(config, "") {
     override fun visitClass(klass: KtClass) {
-        actualLastRuleId = ruleId.value
+        actualLastRuleName = ruleName.value
     }
 }
 
 private class Correctable(config: Config) : Rule(config, "") {
     override fun visitClass(klass: KtClass) {
-        actualLastRuleId = ruleId.value
+        actualLastRuleName = ruleName.value
     }
 }

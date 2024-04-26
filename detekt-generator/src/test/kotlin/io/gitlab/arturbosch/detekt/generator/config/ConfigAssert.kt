@@ -52,9 +52,9 @@ class ConfigAssert(
 
     private fun verifyIssueIdMatchesName(rule: Rule) {
         val clazz = rule::class.java
-        assertThat(rule.ruleId)
-            .withFailMessage { "rule $clazz declares the rule id ${rule.ruleId} instead of ${clazz.simpleName}" }
-            .isEqualTo(Rule.Id(clazz.simpleName))
+        assertThat(rule.ruleName)
+            .withFailMessage { "rule $clazz declares the rule id ${rule.ruleName} instead of ${clazz.simpleName}" }
+            .isEqualTo(Rule.Name(clazz.simpleName))
     }
 
     private fun getYmlRuleConfig() = config.subConfig(name) as? YamlConfig

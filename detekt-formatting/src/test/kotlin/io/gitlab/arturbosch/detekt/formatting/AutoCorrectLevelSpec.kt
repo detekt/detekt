@@ -80,7 +80,7 @@ private fun runRule(config: Config): Pair<KtFile, List<Finding>> {
 
     val ruleSet = loadRuleSet<FormattingProvider>()
     val rules = ruleSet.rules
-        .map { (ruleId, provider) -> provider(config.subConfig(ruleSet.id.value).subConfig(ruleId.value)) }
+        .map { (ruleName, provider) -> provider(config.subConfig(ruleSet.id.value).subConfig(ruleName.value)) }
         .filter { it.config.valueOrDefault("active", false) }
     return testFile to rules.flatMap { it.visitFile(testFile) }
 }

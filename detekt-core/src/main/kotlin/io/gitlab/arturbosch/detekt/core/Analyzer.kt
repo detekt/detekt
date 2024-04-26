@@ -97,9 +97,9 @@ internal class Analyzer(
             .flatMap { (ruleSet, ruleSetConfig) ->
                 ruleSetConfig.subConfigKeys()
                     .asSequence()
-                    .mapNotNull { runCatching { Rule.Id(it) }.getOrNull() }
-                    .mapNotNull { ruleId ->
-                        ruleSet.rules[ruleId]?.let { it to ruleSetConfig.subConfig(ruleId.value) }
+                    .mapNotNull { runCatching { Rule.Name(it) }.getOrNull() }
+                    .mapNotNull { ruleName ->
+                        ruleSet.rules[ruleName]?.let { it to ruleSetConfig.subConfig(ruleName.value) }
                     }
                     .filter { (_, config) -> config.isActiveOrDefault(false) }
                     .filter { (_, config) -> config.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath) }
@@ -109,7 +109,7 @@ internal class Analyzer(
                     }
             }
             .filterNot { (ruleInstance, rule) ->
-                file.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
+                file.isSuppressedBy(ruleInstance.name, rule.aliases, ruleInstance.ruleSetId)
             }
             .filter { (_, rule) ->
                 bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
@@ -119,7 +119,7 @@ internal class Analyzer(
         return (correctableRules + otherRules).flatMap { (ruleInstance, rule) ->
             rule.visitFile(file, bindingContext, compilerResources)
                 .filterNot {
-                    it.entity.ktElement?.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId) == true
+                    it.entity.ktElement?.isSuppressedBy(ruleInstance.name, rule.aliases, ruleInstance.ruleSetId) == true
                 }
                 .filterSuppressedFindings(rule, bindingContext)
                 .map { it.toIssue(ruleInstance, rule.computeSeverity()) }
@@ -134,13 +134,13 @@ internal class Analyzer(
             .flatMap { (ruleSet, ruleSetConfig) ->
                 ruleSet.rules
                     .asSequence()
-                    .map { (ruleId, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleId.value) }
+                    .map { (ruleName, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleName.value) }
                     .filter { (_, config) -> config.isActiveOrDefault(false) }
                     .map { (ruleProvider, config) -> ruleProvider(config) }
             }
             .filter { rule -> rule::class.hasAnnotation<RequiresTypeResolution>() }
             .forEach { rule ->
-                settings.debug { "The rule '${rule.ruleId}' requires type resolution but it was run without it." }
+                settings.debug { "The rule '${rule.ruleName}' requires type resolution but it was run without it." }
             }
     }
 }
@@ -176,7 +176,7 @@ private fun Finding.toIssue(rule: RuleInstance, severity: Severity): Issue {
 }
 
 private fun Rule.toRuleInstance(ruleSetId: RuleSet.Id): RuleInstance {
-    return RuleInstanceImpl(ruleId, ruleSetId, description)
+    return RuleInstanceImpl(ruleName, ruleSetId, description)
 }
 
 private data class IssueImpl(
@@ -189,7 +189,7 @@ private data class IssueImpl(
 ) : Issue
 
 private data class RuleInstanceImpl(
-    override val id: Rule.Id,
+    override val name: Rule.Name,
     override val ruleSetId: RuleSet.Id,
     override val description: String,
 ) : RuleInstance

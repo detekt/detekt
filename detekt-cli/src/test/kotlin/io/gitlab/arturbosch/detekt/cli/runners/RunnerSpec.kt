@@ -195,7 +195,7 @@ class RunnerSpec {
         fun `should throw on non existing run-rule`() {
             assertThatThrownBy { executeDetekt("--run-rule", "") }
                 .isExactlyInstanceOf(IllegalArgumentException::class.java)
-                .hasMessage("Pattern 'RuleSetId:RuleId' expected.")
+                .hasMessage("Pattern 'RuleSetId:RuleName' expected.")
         }
     }
 

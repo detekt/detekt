@@ -117,25 +117,25 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         issues
             .groupBy { it.ruleInstance }
             .toList()
-            .sortedBy { (ruleInstance, _) -> ruleInstance.id.value }
+            .sortedBy { (ruleInstance, _) -> ruleInstance.name.value }
             .forEach { (ruleInstance, ruleIssues) ->
                 renderRule(ruleInstance, ruleIssues)
             }
     }
 
     private fun FlowContent.renderRule(ruleInstance: RuleInstance, issues: List<Issue>) {
-        val ruleId = ruleInstance.id.value
+        val ruleName = ruleInstance.name.value
         val ruleSetId = ruleInstance.ruleSetId.value
         details {
-            id = ruleId
+            id = ruleName
             open = true
 
             summary("rule-container") {
-                span("rule") { text("$ruleId: %,d ".format(Locale.ROOT, issues.size)) }
+                span("rule") { text("$ruleName: %,d ".format(Locale.ROOT, issues.size)) }
                 span("description") { text(ruleInstance.description) }
             }
 
-            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${ruleSetId.lowercase()}#${ruleId.lowercase()}") {
+            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${ruleSetId.lowercase()}#${ruleName.lowercase()}") {
                 +"Documentation"
             }
 
@@ -173,7 +173,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         val psiFile = issue.entity.ktElement?.containingFile
         if (psiFile != null) {
             val lineSequence = psiFile.text.splitToSequence('\n')
-            snippetCode(issue.ruleInstance.id, lineSequence, issue.location.source, issue.location.text.length())
+            snippetCode(issue.ruleInstance.name, lineSequence, issue.location.source, issue.location.text.length())
         }
     }
 

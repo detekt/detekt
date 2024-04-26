@@ -18,7 +18,7 @@ internal class InvalidPropertiesConfigValidatorSpec {
     private val deprecatedProperties = setOf(
         DeprecatedProperty(
             ruleSetId = "complexity",
-            ruleId = "LongParameterList",
+            ruleName = "LongParameterList",
             propertyName = "threshold",
             description = "use xxx instead"
         )

@@ -19,7 +19,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 internal fun FlowContent.snippetCode(
-    ruleName: Rule.Id,
+    ruleName: Rule.Name,
     lines: Sequence<String>,
     location: SourceLocation,
     length: Int,
@@ -67,7 +67,7 @@ private fun FlowContent.writeErrorLine(line: String, errorStarts: Int, length: I
     return errorEnds - errorStarts
 }
 
-private fun FlowContent.showError(ruleName: Rule.Id, throwable: Throwable) {
+private fun FlowContent.showError(ruleName: Rule.Name, throwable: Throwable) {
     div("exception") {
         h4 {
             text("Error showing the code snippet")
@@ -83,7 +83,7 @@ private fun FlowContent.showError(ruleName: Rule.Id, throwable: Throwable) {
     }
 }
 
-private fun createReportUrl(ruleName: Rule.Id, throwable: Throwable): String {
+private fun createReportUrl(ruleName: Rule.Name, throwable: Throwable): String {
     val title = URLEncoder.encode("HtmlReport error in rule: $ruleName", "UTF8")
     val stackTrace = throwable.printStackTraceString()
         .lineSequence()

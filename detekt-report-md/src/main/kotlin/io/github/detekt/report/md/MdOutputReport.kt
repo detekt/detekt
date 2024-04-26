@@ -97,22 +97,22 @@ private fun MarkdownContent.renderGroup(issues: List<Issue>, basePath: Path?) {
     issues
         .groupBy { it.ruleInstance }
         .toList()
-        .sortedBy { (ruleInstance, _) -> ruleInstance.id.value }
+        .sortedBy { (ruleInstance, _) -> ruleInstance.name.value }
         .forEach { (ruleInstance, ruleIssues) ->
             renderRule(ruleInstance, ruleIssues, basePath)
         }
 }
 
 private fun MarkdownContent.renderRule(ruleInstance: RuleInstance, issues: List<Issue>, basePath: Path?) {
-    val ruleId = ruleInstance.id.value
+    val ruleName = ruleInstance.name.value
     val ruleSetId = ruleInstance.ruleSetId.value
-    h3 { "$ruleSetId, $ruleId (%,d)".format(Locale.ROOT, issues.size) }
+    h3 { "$ruleSetId, $ruleName (%,d)".format(Locale.ROOT, issues.size) }
     paragraph { ruleInstance.description }
 
     paragraph {
         link(
             "Documentation",
-            "$DETEKT_WEBSITE_BASE_URL/docs/rules/${ruleSetId.lowercase()}#${ruleId.lowercase()}"
+            "$DETEKT_WEBSITE_BASE_URL/docs/rules/${ruleSetId.lowercase()}#${ruleName.lowercase()}"
         )
     }
 

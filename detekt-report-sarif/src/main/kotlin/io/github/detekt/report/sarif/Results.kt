@@ -24,7 +24,7 @@ internal fun Severity.toResultLevel() = when (this) {
 
 private fun Issue.toResult(basePath: String?): io.github.detekt.sarif4k.Result {
     return io.github.detekt.sarif4k.Result(
-        ruleID = "detekt.${ruleInstance.ruleSetId}.${ruleInstance.id}",
+        ruleID = "detekt.${ruleInstance.ruleSetId}.${ruleInstance.name}",
         level = severity.toResultLevel(),
         locations = (listOf(location) + references.map { it.location }).map { it.toLocation(basePath) }.distinct(),
         message = Message(text = message)

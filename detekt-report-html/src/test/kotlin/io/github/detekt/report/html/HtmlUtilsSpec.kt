@@ -31,7 +31,7 @@ class HtmlUtilsSpec {
     @Test
     fun `all line`() {
         val snippet = createHTML().div {
-            snippetCode(Rule.Id("ruleName"), code, SourceLocation(7, 1), 34)
+            snippetCode(Rule.Name("ruleName"), code, SourceLocation(7, 1), 34)
         }
 
         assertThat(snippet).isEqualTo(
@@ -54,7 +54,7 @@ class HtmlUtilsSpec {
     @Test
     fun `part of line`() {
         val snippet = createHTML().div {
-            snippetCode(Rule.Id("ruleName"), code, SourceLocation(7, 7), 26)
+            snippetCode(Rule.Name("ruleName"), code, SourceLocation(7, 7), 26)
         }
 
         assertThat(snippet).isEqualTo(
@@ -77,7 +77,7 @@ class HtmlUtilsSpec {
     @Test
     fun `more than one line`() {
         val snippet = createHTML().div {
-            snippetCode(Rule.Id("ruleName"), code, SourceLocation(7, 7), 66)
+            snippetCode(Rule.Name("ruleName"), code, SourceLocation(7, 7), 66)
         }
 
         assertThat(snippet).isEqualTo(
@@ -100,7 +100,7 @@ class HtmlUtilsSpec {
     @Test
     fun `first line`() {
         val snippet = createHTML().div {
-            snippetCode(Rule.Id("ruleName"), code, SourceLocation(1, 1), 1)
+            snippetCode(Rule.Name("ruleName"), code, SourceLocation(1, 1), 1)
         }
 
         assertThat(snippet).contains((1..4).map { "  $it " })
@@ -109,7 +109,7 @@ class HtmlUtilsSpec {
     @Test
     fun `second line`() {
         val snippet = createHTML().div {
-            snippetCode(Rule.Id("ruleName"), code, SourceLocation(2, 1), 1)
+            snippetCode(Rule.Name("ruleName"), code, SourceLocation(2, 1), 1)
         }
 
         assertThat(snippet).contains((1..5).map { "  $it " })
@@ -118,7 +118,7 @@ class HtmlUtilsSpec {
     @Test
     fun `penultimate line`() {
         val snippet = createHTML().div {
-            snippetCode(Rule.Id("ruleName"), code, SourceLocation(15, 1), 1)
+            snippetCode(Rule.Name("ruleName"), code, SourceLocation(15, 1), 1)
         }
 
         assertThat(snippet).contains((12..16).map { "  $it " })
@@ -127,7 +127,7 @@ class HtmlUtilsSpec {
     @Test
     fun `last line`() {
         val snippet = createHTML().div {
-            snippetCode(Rule.Id("ruleName"), code, SourceLocation(16, 1), 1)
+            snippetCode(Rule.Name("ruleName"), code, SourceLocation(16, 1), 1)
         }
 
         assertThat(snippet).contains((13..16).map { "  $it " })
@@ -136,7 +136,7 @@ class HtmlUtilsSpec {
     @Test
     fun `when we provide an invalid source location the exception div is shown`() {
         val snippet = createHTML().div {
-            snippetCode(Rule.Id("ruleName"), code, SourceLocation(7, 100), 1)
+            snippetCode(Rule.Name("ruleName"), code, SourceLocation(7, 100), 1)
         }
 
         assertThat(snippet).contains("""<div class="exception">""")

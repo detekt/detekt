@@ -196,7 +196,7 @@ class XmlOutputReportSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="${entity1.location.path.invariantSeparatorsPathString}">
-                $TAB<error line="${issue.location.source.line}" column="${issue.location.source.column}" severity="$xmlSeverity" message="${issue.message}" source="detekt.${issue.ruleInstance.id}" />
+                $TAB<error line="${issue.location.source.line}" column="${issue.location.source.column}" severity="$xmlSeverity" message="${issue.message}" source="detekt.${issue.ruleInstance.name}" />
                 </file>
                 </checkstyle>
             """.trimIndent()

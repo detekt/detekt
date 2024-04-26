@@ -279,7 +279,7 @@ public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/
 	public final fun getCompilerResources ()Lio/gitlab/arturbosch/detekt/api/CompilerResources;
 	public final fun getConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public final fun getDescription ()Ljava/lang/String;
-	public fun getRuleId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
+	public fun getRuleName ()Lio/gitlab/arturbosch/detekt/api/Rule$Name;
 	protected fun postVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	protected fun preVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	public final fun report (Lio/gitlab/arturbosch/detekt/api/Finding;)V
@@ -290,7 +290,7 @@ public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/
 	public static synthetic fun visitFile$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;Lio/gitlab/arturbosch/detekt/api/CompilerResources;ILjava/lang/Object;)Ljava/util/List;
 }
 
-public final class io/gitlab/arturbosch/detekt/api/Rule$Id {
+public final class io/gitlab/arturbosch/detekt/api/Rule$Name {
 	public fun <init> (Ljava/lang/String;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getValue ()Ljava/lang/String;
@@ -300,7 +300,7 @@ public final class io/gitlab/arturbosch/detekt/api/Rule$Id {
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/RuleInstance {
 	public abstract fun getDescription ()Ljava/lang/String;
-	public abstract fun getId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
+	public abstract fun getName ()Lio/gitlab/arturbosch/detekt/api/Rule$Name;
 	public abstract fun getRuleSetId ()Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
 }
 

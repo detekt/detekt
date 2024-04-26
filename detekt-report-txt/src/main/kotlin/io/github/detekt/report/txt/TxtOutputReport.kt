@@ -22,4 +22,4 @@ class TxtOutputReport : BuiltInOutputReport, OutputReport() {
 }
 
 private fun Issue.compactWithSignature(): String =
-    "${ruleInstance.id} - ${entity.compact()} - Signature=${entity.signature}"
+    "${ruleInstance.name} - ${entity.compact()} - Signature=${entity.signature}"

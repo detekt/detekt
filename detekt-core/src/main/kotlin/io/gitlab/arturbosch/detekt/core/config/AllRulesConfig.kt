@@ -42,7 +42,7 @@ internal data class AllRulesConfig(
 
     private fun isDeprecated(): Boolean = deprecatedRules.any { parentPath == it.toPath() }
 
-    private fun DeprecatedRule.toPath() = "$ruleSetId > $ruleId"
+    private fun DeprecatedRule.toPath() = "$ruleSetId > $ruleName"
 
     @Suppress("MagicNumber")
     override fun toString() = """
