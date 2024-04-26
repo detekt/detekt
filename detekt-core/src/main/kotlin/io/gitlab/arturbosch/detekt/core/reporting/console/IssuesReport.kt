@@ -12,6 +12,6 @@ class IssuesReport : AbstractIssuesReport() {
     override val id: String = "IssuesReport"
 
     override fun render(issues: List<Issue>): String {
-        return printIssues(issues.groupBy { it.ruleInfo.ruleSetId }.mapKeys { (key, _) -> key.value })
+        return printIssues(issues.groupBy { it.ruleInstance.ruleSetId }.mapKeys { (key, _) -> key.value })
     }
 }

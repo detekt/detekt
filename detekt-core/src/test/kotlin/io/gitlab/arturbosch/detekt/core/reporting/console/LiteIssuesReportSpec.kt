@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
-import io.gitlab.arturbosch.detekt.test.createRuleInfo
+import io.gitlab.arturbosch.detekt.test.createRuleInstance
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,8 +17,8 @@ class LiteIssuesReportSpec {
     fun `reports non-empty issues`() {
         val location = createLocation()
         val detektion = TestDetektion(
-            createIssue(createRuleInfo("SpacingAfterPackageDeclaration"), location),
-            createIssue(createRuleInfo("UnnecessarySafeCall"), location),
+            createIssue(createRuleInstance("SpacingAfterPackageDeclaration"), location),
+            createIssue(createRuleInstance("UnnecessarySafeCall"), location),
         )
         assertThat(subject.render(detektion)).isEqualTo(
             """

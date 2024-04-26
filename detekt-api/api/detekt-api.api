@@ -180,18 +180,12 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Issue {
 	public abstract fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
 	public abstract fun getMessage ()Ljava/lang/String;
 	public abstract fun getReferences ()Ljava/util/List;
-	public abstract fun getRuleInfo ()Lio/gitlab/arturbosch/detekt/api/Issue$RuleInfo;
+	public abstract fun getRuleInstance ()Lio/gitlab/arturbosch/detekt/api/RuleInstance;
 	public abstract fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Issue$DefaultImpls {
 	public static fun getLocation (Lio/gitlab/arturbosch/detekt/api/Issue;)Lio/gitlab/arturbosch/detekt/api/Location;
-}
-
-public abstract interface class io/gitlab/arturbosch/detekt/api/Issue$RuleInfo {
-	public abstract fun getDescription ()Ljava/lang/String;
-	public abstract fun getId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
-	public abstract fun getRuleSetId ()Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Location : io/gitlab/arturbosch/detekt/api/Compactable {
@@ -302,6 +296,12 @@ public final class io/gitlab/arturbosch/detekt/api/Rule$Id {
 	public final fun getValue ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/RuleInstance {
+	public abstract fun getDescription ()Ljava/lang/String;
+	public abstract fun getId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
+	public abstract fun getRuleSetId ()Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/RuleSet {

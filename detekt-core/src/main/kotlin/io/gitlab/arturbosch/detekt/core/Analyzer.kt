@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleInstance
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
@@ -104,22 +105,24 @@ internal class Analyzer(
                     .filter { (_, config) -> config.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath) }
                     .map { (ruleProvider, config) ->
                         val rule = ruleProvider(config)
-                        rule.toRuleInfo(ruleSet.id) to rule
+                        rule.toRuleInstance(ruleSet.id) to rule
                     }
             }
-            .filterNot { (ruleInfo, rule) -> file.isSuppressedBy(ruleInfo.id, rule.aliases, ruleInfo.ruleSetId) }
+            .filterNot { (ruleInstance, rule) ->
+                file.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
+            }
             .filter { (_, rule) ->
                 bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
             }
             .partition { (_, rule) -> rule.autoCorrect }
 
-        return (correctableRules + otherRules).flatMap { (ruleInfo, rule) ->
+        return (correctableRules + otherRules).flatMap { (ruleInstance, rule) ->
             rule.visitFile(file, bindingContext, compilerResources)
                 .filterNot {
-                    it.entity.ktElement?.isSuppressedBy(ruleInfo.id, rule.aliases, ruleInfo.ruleSetId) == true
+                    it.entity.ktElement?.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId) == true
                 }
                 .filterSuppressedFindings(rule, bindingContext)
-                .map { it.toIssue(ruleInfo, rule.computeSeverity()) }
+                .map { it.toIssue(ruleInstance, rule.computeSeverity()) }
         }
     }
 
@@ -162,7 +165,7 @@ private fun throwIllegalStateException(file: KtFile, error: Throwable): Nothing 
     throw IllegalStateException(message, error)
 }
 
-private fun Finding.toIssue(rule: Issue.RuleInfo, severity: Severity): Issue {
+private fun Finding.toIssue(rule: RuleInstance, severity: Severity): Issue {
     return when (this) {
         is CorrectableCodeSmell -> IssueImpl(rule, entity, message, references, severity, autoCorrectEnabled)
 
@@ -172,24 +175,24 @@ private fun Finding.toIssue(rule: Issue.RuleInfo, severity: Severity): Issue {
     }
 }
 
-private fun Rule.toRuleInfo(ruleSetId: RuleSet.Id): Issue.RuleInfo {
-    return IssueImpl.RuleInfo(ruleId, ruleSetId, description)
+private fun Rule.toRuleInstance(ruleSetId: RuleSet.Id): RuleInstance {
+    return RuleInstanceImpl(ruleId, ruleSetId, description)
 }
 
 private data class IssueImpl(
-    override val ruleInfo: Issue.RuleInfo,
+    override val ruleInstance: RuleInstance,
     override val entity: Entity,
     override val message: String,
     override val references: List<Entity>,
     override val severity: Severity,
     override val autoCorrectEnabled: Boolean = false,
-) : Issue {
-    data class RuleInfo(
-        override val id: Rule.Id,
-        override val ruleSetId: RuleSet.Id,
-        override val description: String,
-    ) : Issue.RuleInfo
-}
+) : Issue
+
+private data class RuleInstanceImpl(
+    override val id: Rule.Id,
+    override val ruleSetId: RuleSet.Id,
+    override val description: String,
+) : RuleInstance
 
 /**
  * Compute severity in the priority order:

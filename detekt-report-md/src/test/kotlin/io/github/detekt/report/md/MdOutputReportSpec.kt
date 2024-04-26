@@ -16,7 +16,7 @@ import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
-import io.gitlab.arturbosch.detekt.test.createRuleInfo
+import io.gitlab.arturbosch.detekt.test.createRuleInstance
 import org.assertj.core.api.Assertions.assertThat
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.psi.KtElement
@@ -81,9 +81,9 @@ class MdOutputReportSpec {
     @Test
     fun `renders the right documentation links for the rules`() {
         val detektion = TestDetektion(
-            createIssue(createRuleInfo("ValCouldBeVar", "Style")),
-            createIssue(createRuleInfo("EmptyBody", "empty")),
-            createIssue(createRuleInfo("EmptyIf", "empty")),
+            createIssue(createRuleInstance("ValCouldBeVar", "Style")),
+            createIssue(createRuleInstance("EmptyBody", "empty")),
+            createIssue(createRuleInstance("EmptyIf", "empty")),
         )
 
         val result = mdReport.render(detektion)
@@ -161,9 +161,9 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     )
 
     return createMdDetektion(
-        createIssue(createRuleInfo("rule_a", "Section-1"), entity1, "Issue message 1"),
-        createIssue(createRuleInfo("rule_a", "Section-1"), entity2, "Issue message 2"),
-        createIssue(createRuleInfo("rule_b", "Section-2"), entity3, "Issue message 3"),
+        createIssue(createRuleInstance("rule_a", "Section-1"), entity1, "Issue message 1"),
+        createIssue(createRuleInstance("rule_a", "Section-1"), entity2, "Issue message 2"),
+        createIssue(createRuleInstance("rule_b", "Section-2"), entity3, "Issue message 3"),
     ).also {
         it.putUserData(complexityKey, 10)
         it.putUserData(CognitiveComplexity.KEY, 10)
@@ -188,15 +188,15 @@ private fun issues(): Array<Issue> {
     val entity4 = createEntity(location = createLocation("src/main/com/sample/Sample2.kt", position = 1 to 1))
 
     return arrayOf(
-        createIssue(createRuleInfo("rule_a", "RuleSet1"), entity1),
-        createIssue(createRuleInfo("rule_a", "RuleSet1"), entity2),
-        createIssue(createRuleInfo("rule_a", "RuleSet1"), entity3),
-        createIssue(createRuleInfo("rule_a", "RuleSet1"), entity4),
-        createIssue(createRuleInfo("rule_b", "RuleSet1"), entity2),
-        createIssue(createRuleInfo("rule_b", "RuleSet1"), entity1),
-        createIssue(createRuleInfo("rule_b", "RuleSet1"), entity4),
-        createIssue(createRuleInfo("rule_b", "RuleSet2"), entity3),
-        createIssue(createRuleInfo("rule_c", "RuleSet2"), entity1),
-        createIssue(createRuleInfo("rule_c", "RuleSet2"), entity2),
+        createIssue(createRuleInstance("rule_a", "RuleSet1"), entity1),
+        createIssue(createRuleInstance("rule_a", "RuleSet1"), entity2),
+        createIssue(createRuleInstance("rule_a", "RuleSet1"), entity3),
+        createIssue(createRuleInstance("rule_a", "RuleSet1"), entity4),
+        createIssue(createRuleInstance("rule_b", "RuleSet1"), entity2),
+        createIssue(createRuleInstance("rule_b", "RuleSet1"), entity1),
+        createIssue(createRuleInstance("rule_b", "RuleSet1"), entity4),
+        createIssue(createRuleInstance("rule_b", "RuleSet2"), entity3),
+        createIssue(createRuleInstance("rule_c", "RuleSet2"), entity1),
+        createIssue(createRuleInstance("rule_c", "RuleSet2"), entity2),
     )
 }

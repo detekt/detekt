@@ -15,6 +15,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
+import io.gitlab.arturbosch.detekt.api.RuleInstance
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.getOrNull
@@ -94,19 +95,19 @@ private fun MarkdownContent.renderComplexity(complexityReport: List<String>) {
 
 private fun MarkdownContent.renderGroup(issues: List<Issue>, basePath: Path?) {
     issues
-        .groupBy { it.ruleInfo }
+        .groupBy { it.ruleInstance }
         .toList()
-        .sortedBy { (ruleInfo, _) -> ruleInfo.id.value }
-        .forEach { (ruleInfo, ruleIssues) ->
-            renderRule(ruleInfo, ruleIssues, basePath)
+        .sortedBy { (ruleInstance, _) -> ruleInstance.id.value }
+        .forEach { (ruleInstance, ruleIssues) ->
+            renderRule(ruleInstance, ruleIssues, basePath)
         }
 }
 
-private fun MarkdownContent.renderRule(ruleInfo: Issue.RuleInfo, issues: List<Issue>, basePath: Path?) {
-    val ruleId = ruleInfo.id.value
-    val ruleSetId = ruleInfo.ruleSetId.value
+private fun MarkdownContent.renderRule(ruleInstance: RuleInstance, issues: List<Issue>, basePath: Path?) {
+    val ruleId = ruleInstance.id.value
+    val ruleSetId = ruleInstance.ruleSetId.value
     h3 { "$ruleSetId, $ruleId (%,d)".format(Locale.ROOT, issues.size) }
-    paragraph { ruleInfo.description }
+    paragraph { ruleInstance.description }
 
     paragraph {
         link(
@@ -136,7 +137,7 @@ private fun MarkdownContent.renderIssues(issues: List<Issue>, basePath: Path?) {
     h2 { "Issues (%,d)".format(Locale.ROOT, total) }
 
     issues
-        .groupBy { it.ruleInfo.ruleSetId }
+        .groupBy { it.ruleInstance.ruleSetId }
         .toList()
         .sortedBy { (group, _) -> group.value }
         .forEach { (_, groupIssues) ->

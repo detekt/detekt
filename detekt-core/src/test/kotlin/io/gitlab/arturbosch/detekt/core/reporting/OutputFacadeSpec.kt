@@ -13,7 +13,7 @@ import io.gitlab.arturbosch.detekt.core.tooling.withSettings
 import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
-import io.gitlab.arturbosch.detekt.test.createRuleInfo
+import io.gitlab.arturbosch.detekt.test.createRuleInstance
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
@@ -27,13 +27,8 @@ class OutputFacadeSpec {
         val defaultResult = DetektResult(
             listOf(
                 createIssue(
-                    createRuleInfo(ruleSetId = "Key"),
-                    createEntity(
-                        location = createLocation(
-                            "TestFile.kt",
-                            System.getProperty("user.dir")
-                        )
-                    )
+                    createRuleInstance(ruleSetId = "Key"),
+                    createEntity(location = createLocation("TestFile.kt", System.getProperty("user.dir")))
                 )
             )
         )
