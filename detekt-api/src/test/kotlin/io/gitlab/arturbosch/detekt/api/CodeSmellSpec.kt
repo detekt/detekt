@@ -1,10 +1,11 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.test.fromRelative
+import io.gitlab.arturbosch.detekt.test.location
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.io.File
 import kotlin.io.path.Path
+import kotlin.io.path.absolute
 
 class CodeSmellSpec {
 
@@ -18,19 +19,20 @@ class CodeSmellSpec {
                     source = SourceLocation(1, 1),
                     endSource = SourceLocation(1, 1),
                     text = TextLocation(0, 0),
-                    filePath = fromRelative(Path("/Users/tester/detekt/"), Path("TestFile.kt"))
+                    filePath = fromRelative(
+                        Path("/").absolute().resolve("Users/tester/detekt/"),
+                        Path("TestFile.kt"),
+                    ),
                 ),
                 ktElement = null
             ),
             message = "TestMessage"
         )
-        val basePath = "${File.separator}Users${File.separator}tester${File.separator}detekt"
 
         assertThat(codeSmell.toString()).isEqualTo(
             "CodeSmell(entity=Entity(name=TestEntity, signature=TestEntitySignature, " +
                 "location=Location(source=1:1, endSource=1:1, text=0:0, " +
-                "filePath=FilePath(absolutePath=$basePath${File.separator}TestFile.kt, " +
-                "basePath=$basePath, relativePath=TestFile.kt)), ktElement=null), message=TestMessage, " +
+                "filePath=${codeSmell.location.filePath}), ktElement=null), message=TestMessage, " +
                 "references=[])"
         )
     }

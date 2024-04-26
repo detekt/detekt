@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.jetbrains.kotlin.psi.KtElement
 import java.nio.file.Path
 import kotlin.io.path.Path
+import kotlin.io.path.absolute
 
 fun createIssue(
     ruleName: String = "TestSmell",
@@ -41,6 +42,20 @@ fun createIssue(
     autoCorrectEnabled = autoCorrectEnabled,
 )
 
+fun createIssue(
+    ruleInfo: Issue.RuleInfo,
+    location: Location,
+    message: String = "TestMessage",
+    severity: Severity = Severity.Error,
+    autoCorrectEnabled: Boolean = false,
+): Issue = IssueImpl(
+    ruleInfo = ruleInfo,
+    entity = createEntity(location = location),
+    message = message,
+    severity = severity,
+    autoCorrectEnabled = autoCorrectEnabled,
+)
+
 fun createRuleInfo(
     id: String = "TestSmell",
     ruleSetId: String = "RuleSet$id",
@@ -53,23 +68,26 @@ fun createRuleInfo(
 
 fun createIssueForRelativePath(
     ruleInfo: Issue.RuleInfo,
-    basePath: String = "/Users/tester/detekt/",
+    basePath: String = "Users/tester/detekt/",
     relativePath: String = "TestFile.kt"
-): Issue = IssueImpl(
-    ruleInfo = ruleInfo,
-    entity = Entity(
-        name = "TestEntity",
-        signature = "TestEntitySignature",
-        location = Location(
-            source = SourceLocation(1, 1),
-            endSource = SourceLocation(1, 1),
-            text = TextLocation(0, 0),
-            filePath = fromRelative(Path(basePath), Path(relativePath))
+): Issue {
+    require(!basePath.startsWith("/")) { "The path shouldn't start with '/'" }
+    return IssueImpl(
+        ruleInfo = ruleInfo,
+        entity = Entity(
+            name = "TestEntity",
+            signature = "TestEntitySignature",
+            location = Location(
+                source = SourceLocation(1, 1),
+                endSource = SourceLocation(1, 1),
+                text = TextLocation(0, 0),
+                filePath = fromRelative(Path("/").absolute().resolve(basePath), Path(relativePath))
+            ),
+            ktElement = null
         ),
-        ktElement = null
-    ),
-    message = "TestMessage"
-)
+        message = "TestMessage"
+    )
+}
 
 fun createEntity(
     signature: String = "TestEntitySignature",
@@ -88,13 +106,16 @@ fun createLocation(
     position: Pair<Int, Int> = 1 to 1,
     endPosition: Pair<Int, Int> = 1 to 1,
     text: IntRange = 0..0,
-) = Location(
-    source = SourceLocation(position.first, position.second),
-    endSource = SourceLocation(endPosition.first, endPosition.second),
-    text = TextLocation(text.first, text.last),
-    filePath = basePath?.let { fromRelative(Path(it), Path(path)) }
-        ?: fromAbsolute(Path(path)),
-)
+): Location {
+    require(!path.startsWith("/")) { "The path shouldn't start with '/'" }
+    return Location(
+        source = SourceLocation(position.first, position.second),
+        endSource = SourceLocation(endPosition.first, endPosition.second),
+        text = TextLocation(text.first, text.last),
+        filePath = basePath?.let { fromRelative(Path("/").absolute().resolve(it), Path(path)) }
+            ?: fromAbsolute(Path("/").absolute().resolve(path)),
+    )
+}
 
 private data class IssueImpl(
     override val ruleInfo: Issue.RuleInfo,

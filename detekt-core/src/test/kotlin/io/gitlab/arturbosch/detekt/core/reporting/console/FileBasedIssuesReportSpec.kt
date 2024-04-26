@@ -1,11 +1,9 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
 import io.gitlab.arturbosch.detekt.core.reporting.decolorized
 import io.gitlab.arturbosch.detekt.test.TestDetektion
-import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
 import io.gitlab.arturbosch.detekt.test.createRuleInfo
@@ -18,21 +16,23 @@ class FileBasedIssuesReportSpec {
 
     @Test
     fun `has the reference content`() {
+        val location1 = createLocation("File1.kt")
+        val location2 = createLocation("File2.kt")
         val detektion = TestDetektion(
-            createIssue(ruleSetId = "Ruleset1", fileName = "File1.kt"),
-            createIssue(ruleSetId = "Ruleset1", fileName = "File2.kt"),
-            createIssue(ruleSetId = "Ruleset2", fileName = "File1.kt"),
+            createIssue(createRuleInfo(ruleSetId = "Ruleset1"), location1),
+            createIssue(createRuleInfo(ruleSetId = "Ruleset1"), location2),
+            createIssue(createRuleInfo(ruleSetId = "Ruleset2"), location1),
         )
 
         val output = subject.render(detektion)?.decolorized()
 
         assertThat(output).isEqualTo(
             """
-                File1.kt
-                	TestSmell - [TestMessage] at File1.kt:1:1
-                	TestSmell - [TestMessage] at File1.kt:1:1
-                File2.kt
-                	TestSmell - [TestMessage] at File2.kt:1:1
+                ${location1.filePath.absolutePath}
+                	TestSmell - [TestMessage] at ${location1.compact()}
+                	TestSmell - [TestMessage] at ${location1.compact()}
+                ${location2.filePath.absolutePath}
+                	TestSmell - [TestMessage] at ${location2.compact()}
                 
             """.trimIndent()
         )
@@ -56,8 +56,3 @@ private fun createFileBasedIssuesReport(): FileBasedIssuesReport {
     report.init(Config.empty)
     return report
 }
-
-private fun createIssue(ruleSetId: String, fileName: String): Issue = createIssue(
-    ruleInfo = createRuleInfo(ruleSetId = ruleSetId),
-    entity = createEntity(location = createLocation(fileName)),
-)

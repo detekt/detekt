@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
 import io.gitlab.arturbosch.detekt.core.reporting.decolorized
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createIssue
+import io.gitlab.arturbosch.detekt.test.createLocation
 import io.gitlab.arturbosch.detekt.test.createRuleInfo
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -15,10 +16,11 @@ class IssuesReportSpec {
 
     @Test
     fun `has the reference content`() {
+        val location = createLocation()
         val detektion = TestDetektion(
-            createIssue(createRuleInfo(ruleSetId = "Ruleset1")),
-            createIssue(createRuleInfo(ruleSetId = "Ruleset1")),
-            createIssue(createRuleInfo(ruleSetId = "Ruleset2")),
+            createIssue(createRuleInfo(ruleSetId = "Ruleset1"), location),
+            createIssue(createRuleInfo(ruleSetId = "Ruleset1"), location),
+            createIssue(createRuleInfo(ruleSetId = "Ruleset2"), location),
         )
 
         val output = subject.render(detektion)?.decolorized()
@@ -26,10 +28,10 @@ class IssuesReportSpec {
         assertThat(output).isEqualTo(
             """
                 Ruleset1
-                	TestSmell - [TestMessage] at TestFile.kt:1:1
-                	TestSmell - [TestMessage] at TestFile.kt:1:1
+                	TestSmell - [TestMessage] at ${location.compact()}
+                	TestSmell - [TestMessage] at ${location.compact()}
                 Ruleset2
-                	TestSmell - [TestMessage] at TestFile.kt:1:1
+                	TestSmell - [TestMessage] at ${location.compact()}
                 
             """.trimIndent()
         )
@@ -49,20 +51,23 @@ class IssuesReportSpec {
 
     @Test
     fun `truncates long message`() {
-        val expectedContent = """
-            Ruleset
-            	LongRule - [This is just a long message that should be truncated after a given threshold is (...)] at TestFile.kt:1:1
-            	MultilineRule - [A multiline message.] at TestFile.kt:1:1
-            
-        """.trimIndent()
-        val longMessage = "This is just a long message that should be truncated after a given " +
-            "threshold is reached."
-        val multilineMessage = "A multiline\n\r\tmessage.\t "
         val detektion = TestDetektion(
-            createIssue(createRuleInfo("LongRule", "Ruleset"), message = longMessage),
-            createIssue(createRuleInfo("MultilineRule", "Ruleset"), message = multilineMessage),
+            createIssue(
+                createRuleInfo("LongRule", "Ruleset"),
+                message = "This is just a long message that should be truncated after a given threshold is reached.",
+            ),
+            createIssue(
+                createRuleInfo("MultilineRule", "Ruleset"),
+                message = "A multiline\n\r\tmessage.\t ",
+            ),
         )
-        assertThat(subject.render(detektion)?.decolorized()).isEqualTo(expectedContent)
+        val output = subject.render(detektion)?.decolorized()
+        assertThat(output)
+            .contains(
+                "LongRule - [This is just a long message that should be truncated after a given threshold is (...)]"
+            )
+        assertThat(output)
+            .contains("MultilineRule - [A multiline message.]")
     }
 }
 

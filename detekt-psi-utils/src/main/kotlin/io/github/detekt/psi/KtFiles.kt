@@ -53,6 +53,9 @@ class FilePath(
         ) {
             "Absolute path = $absolutePath much match base path = $basePath and relative path = $relativePath"
         }
+        require(absolutePath.isAbsolute) { "absolutePath should be absolute" }
+        require(basePath?.isAbsolute != false) { "basePath should be absolute" }
+        require(relativePath?.isAbsolute != true) { "relativePath should not be absolute" }
     }
 
     override fun toString(): String =

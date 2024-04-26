@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.test.EmptySetupContext
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createEntity
@@ -23,7 +22,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.junit.jupiter.api.Test
 import java.net.URI
 import kotlin.io.path.Path
-import kotlin.io.path.absolutePathString
+import kotlin.io.path.absolute
 
 class SarifOutputReportSpec {
 
@@ -52,7 +51,7 @@ class SarifOutputReportSpec {
             .render(result)
 
         val expectedReport = readResourceContent("vanilla.sarif.json")
-            .replace("<PREFIX>", Path(System.getProperty("user.dir")).toUri().toString())
+            .replace("<PREFIX>", Path("/").absolute().toUri().toString())
 
         assertThat(report).isEqualToIgnoringWhitespace(expectedReport)
     }
@@ -83,25 +82,25 @@ class SarifOutputReportSpec {
             .render(result)
 
         val expectedReport = readResourceContent("rule_warning.sarif.json")
-            .replace("<PREFIX>", Path(System.getProperty("user.dir")).toUri().toString())
+            .replace("<PREFIX>", Path("/").absolute().toUri().toString())
 
         assertThat(report).isEqualToIgnoringWhitespace(expectedReport)
     }
 
     @Test
     fun `renders multiple issues with relative path`() {
-        val basePath = "/Users/tester/detekt/"
         val result = TestDetektion(
-            createIssueForRelativePath(createRuleInfo("TestSmellA", "RuleSet1"), basePath = basePath),
-            createIssueForRelativePath(createRuleInfo("TestSmellB", "RuleSet2"), basePath = basePath),
-            createIssueForRelativePath(createRuleInfo("TestSmellC", "RuleSet2"), basePath = basePath),
+            createIssueForRelativePath(createRuleInfo("TestSmellA", "RuleSet1")),
+            createIssueForRelativePath(createRuleInfo("TestSmellB", "RuleSet2")),
+            createIssueForRelativePath(createRuleInfo("TestSmellC", "RuleSet2")),
         )
 
+        val basePath = Path("/").absolute().resolve("Users/tester/detekt/")
         val report = SarifOutputReport()
             .apply {
                 init(
                     EmptySetupContext().apply {
-                        register(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY, Path(basePath))
+                        register(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY, basePath)
                     }
                 )
             }
@@ -109,16 +108,9 @@ class SarifOutputReportSpec {
             .stripWhitespace()
 
         val expectedReport = readResourceContent("relative_path.sarif.json")
+            .replace("<BASE_URI>", basePath.toUri().toString())
 
-        // Note: GitHub CI uses D: drive, but it could be any drive for local development
-        val systemAwareExpectedReport = if (whichOS().startsWith("windows", ignoreCase = true)) {
-            val winRoot = Path("/").absolutePathString().replace("\\", "/")
-            expectedReport.replace("file:///", "file:///$winRoot")
-        } else {
-            expectedReport
-        }
-
-        assertThat(report).isEqualToIgnoringWhitespace(systemAwareExpectedReport)
+        assertThat(report).isEqualToIgnoringWhitespace(expectedReport)
     }
 }
 

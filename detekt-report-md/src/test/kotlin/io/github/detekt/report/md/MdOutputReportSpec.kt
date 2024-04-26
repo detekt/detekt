@@ -93,7 +93,7 @@ class MdOutputReportSpec {
     }
 
     @Test
-    fun `asserts that the generated HTML is the same even if we change the order of the issues`() {
+    fun `asserts that the generated md is the same even if we change the order of the issues`() {
         val issues = issues()
         val reversedIssues = issues.reversedArray()
 
@@ -137,7 +137,7 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     val entity1 = createEntity(
         location = createLocation(
             path = "src/main/com/sample/Sample1.kt",
-            basePath = "/Users/tester/detekt/",
+            basePath = "Users/tester/detekt/",
             position = 9 to 17,
             text = 17..20,
         ),
@@ -146,7 +146,7 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     val entity2 = createEntity(
         location = createLocation(
             path = "src/main/com/sample/Sample2.kt",
-            basePath = "/Users/tester/detekt/",
+            basePath = "Users/tester/detekt/",
             position = 13 to 17,
         ),
         ktElement = fakeKtElement(),
@@ -154,7 +154,7 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     val entity3 = createEntity(
         location = createLocation(
             path = "src/main/com/sample/Sample3.kt",
-            basePath = "/Users/tester/detekt/",
+            basePath = "Users/tester/detekt/",
             position = 14 to 16,
         ),
         ktElement = fakeKtElement(),
