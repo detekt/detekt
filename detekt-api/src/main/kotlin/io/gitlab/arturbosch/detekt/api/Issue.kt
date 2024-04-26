@@ -19,6 +19,7 @@ interface Issue {
 }
 
 interface RuleInstance {
+    val id: String
     val name: Rule.Name
     val ruleSetId: RuleSet.Id
     val description: String

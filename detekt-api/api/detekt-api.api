@@ -300,6 +300,7 @@ public final class io/gitlab/arturbosch/detekt/api/Rule$Name {
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/RuleInstance {
 	public abstract fun getDescription ()Ljava/lang/String;
+	public abstract fun getId ()Ljava/lang/String;
 	public abstract fun getName ()Lio/gitlab/arturbosch/detekt/api/Rule$Name;
 	public abstract fun getRuleSetId ()Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
 }
