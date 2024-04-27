@@ -34,9 +34,9 @@ internal class CliArgsSpec {
         @Test
         fun `the current working directory is used if parameter is not set`() {
             val spec = parseArguments(emptyArray()).toSpec()
-            val workingDir = Path("").toAbsolutePath()
+            val workingDir = Path("").absolute()
 
-            assertThat(spec.projectSpec.inputPaths).allSatisfy { it.toAbsolutePath().startsWith(workingDir) }
+            assertThat(spec.projectSpec.inputPaths).allSatisfy { it.absolute().startsWith(workingDir) }
             assertThat(spec.projectSpec.inputPaths).contains(pathBuildGradle)
             assertThat(spec.projectSpec.inputPaths).contains(pathCliArgs)
             assertThat(spec.projectSpec.inputPaths).contains(pathCliArgsSpec)

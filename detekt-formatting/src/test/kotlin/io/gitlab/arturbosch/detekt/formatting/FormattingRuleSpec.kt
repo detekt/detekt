@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
+import kotlin.io.path.absolute
 
 class FormattingRuleSpec {
 
@@ -69,7 +70,7 @@ class FormattingRuleSpec {
 
     @Test
     fun `#3063_ formatting issues have an absolute path`() {
-        val expectedPath = Path("src/test/resources/configTests/chain-wrapping-before.kt").toAbsolutePath()
+        val expectedPath = Path("src/test/resources/configTests/chain-wrapping-before.kt").absolute()
 
         val rule = ChainWrapping(Config.empty)
         val findings = rule.visitFile(compileForTest(expectedPath))
