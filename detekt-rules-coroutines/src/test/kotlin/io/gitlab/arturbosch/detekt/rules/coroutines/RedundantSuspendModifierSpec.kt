@@ -139,4 +139,17 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
+
+    @Test
+    fun `does not report when suspend function is called in extension method`() {
+        val code = """
+            import kotlinx.coroutines.delay
+            suspend fun foo() { delay(1000) }
+            suspend fun String.bar() {
+                foo()
+            }
+            suspend fun  String.baz() = foo()
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+    }
 }
