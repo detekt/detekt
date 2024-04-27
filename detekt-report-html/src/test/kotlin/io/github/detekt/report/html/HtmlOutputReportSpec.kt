@@ -82,6 +82,9 @@ class HtmlOutputReportSpec {
 
     @Test
     fun `renders the right file locations for relative paths`() {
+        val htmlReport = HtmlOutputReport()
+        htmlReport.basePath = Path("Users/tester/detekt/").absolute()
+
         val result = htmlReport.render(createTestDetektionFromRelativePath())
 
         assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample1.kt:11:1</span>")
@@ -208,10 +211,11 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
 }
 
 private fun createTestDetektionFromRelativePath(): Detektion {
+    val basePath = "${System.getProperty("user.dir")}/Users/tester/detekt/"
     val entity1 = createEntity(
         location = createLocation(
             path = "src/main/com/sample/Sample1.kt",
-            basePath = "Users/tester/detekt/",
+            basePath = basePath,
             position = 11 to 1,
             text = 10..14,
         ),
@@ -220,14 +224,14 @@ private fun createTestDetektionFromRelativePath(): Detektion {
     val entity2 = createEntity(
         location = createLocation(
             path = "src/main/com/sample/Sample2.kt",
-            basePath = "Users/tester/detekt/",
+            basePath = basePath,
             position = 22 to 2,
         )
     )
     val entity3 = createEntity(
         location = createLocation(
             path = "src/main/com/sample/Sample3.kt",
-            basePath = "Users/tester/detekt/",
+            basePath = basePath,
             position = 33 to 3,
         )
     )
