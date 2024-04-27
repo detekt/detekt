@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.ReportingExtension
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.getOrNull
 import java.nio.file.Path
-import kotlin.io.path.createDirectories
+import kotlin.io.path.createParentDirectories
 import kotlin.io.path.exists
 import kotlin.io.path.isRegularFile
 
@@ -59,7 +59,7 @@ class BaselineResultMapping : ReportingExtension {
         val baselineFormat = BaselineFormat()
         val baseline = baselineFormat.of(oldBaseline.manuallySuppressedIssues, ids)
         if (oldBaseline != baseline) {
-            baselineFile.parent?.createDirectories()
+            baselineFile.createParentDirectories()
             baselineFormat.write(baselineFile, baseline)
         }
     }

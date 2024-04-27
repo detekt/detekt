@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
 import java.nio.file.Path
-import kotlin.io.path.createDirectories
+import kotlin.io.path.createParentDirectories
 import kotlin.io.path.extension
 import kotlin.io.path.writeText
 
@@ -25,8 +25,7 @@ abstract class OutputReport : Extension {
             assert(filePath.extension == ending) {
                 "The $id needs to have a file ending of type .$ending, but was ${filePath.fileName}."
             }
-            filePath.parent?.createDirectories()
-            filePath.writeText(reportData)
+            filePath.createParentDirectories().writeText(reportData)
         }
     }
 
