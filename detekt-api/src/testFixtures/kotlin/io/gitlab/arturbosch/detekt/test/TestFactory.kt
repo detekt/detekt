@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.test
 
-import io.github.detekt.psi.FilePath
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
@@ -10,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.jetbrains.kotlin.psi.KtElement
-import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.absolute
 
@@ -80,7 +78,7 @@ fun createIssueForRelativePath(
                 source = SourceLocation(1, 1),
                 endSource = SourceLocation(1, 1),
                 text = TextLocation(0, 0),
-                filePath = fromRelative(Path("/").absolute().resolve(basePath), Path(relativePath))
+                path = Path("/").absolute().resolve(basePath).resolve(relativePath)
             ),
             ktElement = null
         ),
@@ -111,8 +109,7 @@ fun createLocation(
         source = SourceLocation(position.first, position.second),
         endSource = SourceLocation(endPosition.first, endPosition.second),
         text = TextLocation(text.first, text.last),
-        filePath = basePath?.let { fromRelative(Path("/").absolute().resolve(it), Path(path)) }
-            ?: fromAbsolute(Path("/").absolute().resolve(path)),
+        path = basePath?.let { Path(it).absolute().resolve(path) } ?: Path(path).absolute(),
     )
 }
 
@@ -130,10 +127,3 @@ private data class IssueImpl(
         override val description: String,
     ) : Issue.RuleInfo
 }
-
-fun fromAbsolute(path: Path) = FilePath(absolutePath = path.normalize())
-fun fromRelative(basePath: Path, relativePath: Path) = FilePath(
-    absolutePath = basePath.resolve(relativePath).normalize(),
-    basePath = basePath.normalize(),
-    relativePath = relativePath
-)

@@ -18,8 +18,9 @@ class CorrectableCodeSmellSpec {
         assertThat(codeSmell.toString()).isEqualTo(
             "CorrectableCodeSmell(autoCorrectEnabled=true, " +
                 "entity=Entity(name=TestEntity, signature=TestEntitySignature, " +
-                "location=Location(source=1:1, endSource=1:1, text=0:0, filePath=${codeSmell.location.filePath}), " +
-                "ktElement=null), message=TestMessage, references=[])"
+                "location=Location(source=1:1, endSource=1:1, text=0:0, " +
+                "path=${codeSmell.location.path}), ktElement=null), " +
+                "message=TestMessage, references=[])"
         )
     }
 }

@@ -47,8 +47,7 @@ class LocationSpec {
 
         assertThat(location.toString()).isEqualTo(
             "Location(source=2:5, endSource=2:11, text=22:28, " +
-                "filePath=FilePath(absolutePath=${location.filePath.absolutePath}, " +
-                "basePath=${location.filePath.basePath}, relativePath=${location.filePath.relativePath}))"
+                "path=${location.path})"
         )
     }
 }
