@@ -64,7 +64,7 @@ class SarifOutputReport : BuiltInOutputReport, OutputReport() {
                     originalURIBaseIDS = basePath?.let {
                         mapOf(SRCROOT to ArtifactLocation(uri = Path(it).toUri().toString()))
                     },
-                    results = toResults(detektion)
+                    results = toResults(detektion, basePath)
                 )
             )
         )

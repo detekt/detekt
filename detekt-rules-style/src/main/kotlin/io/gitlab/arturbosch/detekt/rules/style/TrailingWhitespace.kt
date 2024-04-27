@@ -41,7 +41,7 @@ class TrailingWhitespace(config: Config) : Rule(
                                 entity.location.source,
                                 entity.location.endSource,
                                 TextLocation(entity.location.text.start, offset),
-                                entity.location.filePath
+                                entity.location.path
                             )
                         )
                     }

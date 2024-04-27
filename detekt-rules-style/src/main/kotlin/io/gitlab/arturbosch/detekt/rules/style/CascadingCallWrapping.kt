@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.psi.toFilePath
+import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
@@ -115,7 +115,7 @@ class CascadingCallWrapping(config: Config) : Rule(
                 val textLocation = TextLocation(operationReference.startOffset, rhs.endOffset)
                 Entity.from(
                     this,
-                    Location(operationSourceLocation, rhsSourceLocation, textLocation, containingFile.toFilePath())
+                    Location(operationSourceLocation, rhsSourceLocation, textLocation, containingFile.absolutePath())
                 )
             }
             else -> Entity.from(this)

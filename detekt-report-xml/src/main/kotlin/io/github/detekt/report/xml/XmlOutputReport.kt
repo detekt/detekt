@@ -36,10 +36,7 @@ class XmlOutputReport : BuiltInOutputReport, OutputReport() {
         lines += "<checkstyle version=\"4.3\">"
 
         detektion.issues
-            .groupBy {
-                basePath?.let { path -> it.location.filePath.absolutePath.relativeTo(path) }
-                    ?: it.location.filePath.absolutePath
-            }
+            .groupBy { basePath?.let { path -> it.location.path.relativeTo(path) } ?: it.location.path }
             .forEach { (filePath, issues) ->
                 lines += "<file name=\"${filePath.invariantSeparatorsPathString.toXmlString()}\">"
                 issues.forEach {

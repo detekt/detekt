@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.api
 
 import dev.drewhamilton.poko.Poko
-import io.github.detekt.psi.FilePath
+import io.github.detekt.psi.absolutePath
 import io.github.detekt.psi.getLineAndColumnInPsiFile
-import io.github.detekt.psi.toFilePath
 import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
+import java.nio.file.Path
 
 /**
  * Specifies a position within a source code fragment.
@@ -18,13 +18,13 @@ class Location(
     val source: SourceLocation,
     val endSource: SourceLocation,
     val text: TextLocation,
-    val filePath: FilePath,
+    val path: Path,
 ) : Compactable {
 
-    override fun compact(): String = "${filePath.absolutePath}:$source"
+    override fun compact(): String = "$path:$source"
 
     override fun toString(): String =
-        "Location(source=$source, endSource=$endSource, text=$text, filePath=$filePath)"
+        "Location(source=$source, endSource=$endSource, text=$text, path=$path)"
 
     companion object {
         /**
@@ -37,7 +37,7 @@ class Location(
             val end = endLineAndColumn(element, offset)
             val endSourceLocation = SourceLocation(end.line, end.column)
             val textLocation = TextLocation(element.startOffset + offset, element.endOffset + offset)
-            return Location(sourceLocation, endSourceLocation, textLocation, element.containingFile.toFilePath())
+            return Location(sourceLocation, endSourceLocation, textLocation, element.containingFile.absolutePath())
         }
 
         /**

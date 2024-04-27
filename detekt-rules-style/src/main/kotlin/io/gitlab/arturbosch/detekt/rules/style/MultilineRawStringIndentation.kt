@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.psi.absolutePath
 import io.github.detekt.psi.getLineAndColumnInPsiFile
-import io.github.detekt.psi.toFilePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
@@ -199,6 +199,6 @@ private fun PsiFile.getLocation(start: SourceLocation, end: SourceLocation): Loc
         start,
         end,
         TextLocation(startOffset + start.column - 1, endOffset + end.column - 1),
-        toFilePath()
+        absolutePath()
     )
 }

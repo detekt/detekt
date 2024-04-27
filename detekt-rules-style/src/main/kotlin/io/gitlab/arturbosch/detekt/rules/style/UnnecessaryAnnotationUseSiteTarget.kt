@@ -58,7 +58,7 @@ class UnnecessaryAnnotationUseSiteTarget(config: Config) : Rule(
                 location.source,
                 location.endSource,
                 TextLocation(location.text.start, location.text.end + 1),
-                location.filePath
+                location.path
             )
         }
         report(CodeSmell(Entity.from(useSite, location), message))

@@ -60,7 +60,7 @@ class MaxLineLength(config: Config) : Rule(
                         source = location.source,
                         endSource = SourceLocation(location.source.line, line.length + 1),
                         text = TextLocation(offset - line.length, offset),
-                        filePath = location.filePath,
+                        path = location.path,
                     )
                 }
                 report(CodeSmell(Entity.from(ktElement, location), description))
