@@ -9,12 +9,13 @@ import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
+import kotlin.io.path.absolute
 import kotlin.io.path.relativeToOrSelf
 import kotlin.io.path.toPath
 
 class EntitySpec {
 
-    private val path = Path("src/test/resources/EntitySpecFixture.kt").toAbsolutePath()
+    private val path = Path("src/test/resources/EntitySpecFixture.kt").absolute()
     private val basePath = EntitySpec::class.java.getResource("/")!!.toURI().toPath()
     private val relativePath = path.relativeToOrSelf(basePath)
     private val code = compileForTest(path)
