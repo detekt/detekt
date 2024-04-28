@@ -9,9 +9,7 @@ import org.jetbrains.kotlin.psi.UserDataProperty
 import java.nio.file.Path
 import kotlin.io.path.Path
 
-const val KOTLIN_SUFFIX = ".kt"
-const val KOTLIN_SCRIPT_SUFFIX = ".kts"
-private val KOTLIN_GENERIC_SUFFIXES = listOf(KOTLIN_SUFFIX, KOTLIN_SCRIPT_SUFFIX)
+private val KOTLIN_GENERIC_SUFFIXES = listOf(".kt", ".kts")
 
 /**
  * Removes kotlin specific file name suffixes, e.g. .kt.
