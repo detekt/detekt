@@ -59,5 +59,5 @@ private fun parseAll(parser: KtCompiler, root: Path): Collection<KtFile> =
     Files.walk(root)
         .asSequence()
         .filter { it.extension == "kt" }
-        .map { parser.compile(root, it) }
+        .map { parser.compile(it) }
         .toList()

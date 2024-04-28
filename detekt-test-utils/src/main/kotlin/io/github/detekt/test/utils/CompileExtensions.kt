@@ -27,10 +27,10 @@ fun compileContentForTest(
     basePath: Path = Path("/").absolute(),
     path: Path = basePath.resolve("Test.kt"),
 ): KtFile {
-    return KtTestCompiler.createKtFile(content, basePath, path)
+    return KtTestCompiler.createKtFile(content, path)
 }
 
 /**
  * Use this method if you test a kt file/class in the test resources.
  */
-fun compileForTest(path: Path) = KtTestCompiler.compile(resourceAsPath("/"), path)
+fun compileForTest(path: Path) = KtTestCompiler.compile(path)

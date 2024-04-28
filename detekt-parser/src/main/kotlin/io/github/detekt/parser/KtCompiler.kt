@@ -19,12 +19,12 @@ open class KtCompiler(
 
     protected val psiFileFactory = KtPsiFactory(environment.project, markGenerated = false)
 
-    fun compile(basePath: Path, path: Path): KtFile {
+    fun compile(path: Path): KtFile {
         require(path.isRegularFile()) { "Given path '$path' should be a regular file!" }
-        return createKtFile(path.readText(), basePath, path)
+        return createKtFile(path.readText(), path)
     }
 
-    fun createKtFile(@Language("kotlin") content: String, basePath: Path, path: Path): KtFile {
+    fun createKtFile(@Language("kotlin") content: String, path: Path): KtFile {
         val psiFile = psiFileFactory.createPhysicalFile(path.name, StringUtilRt.convertLineSeparators(content))
 
         return psiFile.apply {
