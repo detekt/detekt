@@ -27,7 +27,6 @@ const val BUILD = "build"
 const val EXCLUDE_CORRECTABLE = "excludeCorrectable"
 
 const val DETEKT_OUTPUT_REPORT_PATHS_KEY = "detekt.output.report.paths.key"
-const val DETEKT_OUTPUT_REPORT_BASE_PATH_KEY = "detekt.output.report.base.path"
 
 private const val REPORT_MESSAGE_SIZE_LIMIT = 80
 private val messageReplacementRegex = Regex("\\s+")

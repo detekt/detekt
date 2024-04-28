@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.core.tooling
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.OutputReport.Companion.DETEKT_OUTPUT_REPORT_BASE_PATH_KEY
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.baseline.DETEKT_BASELINE_CREATION_KEY
 import io.gitlab.arturbosch.detekt.core.baseline.DETEKT_BASELINE_PATH_KEY
@@ -12,7 +13,6 @@ import io.gitlab.arturbosch.detekt.core.config.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import io.gitlab.arturbosch.detekt.core.config.validation.DeprecatedRule
 import io.gitlab.arturbosch.detekt.core.config.validation.loadDeprecations
-import io.gitlab.arturbosch.detekt.core.reporting.DETEKT_OUTPUT_REPORT_BASE_PATH_KEY
 import io.gitlab.arturbosch.detekt.core.reporting.DETEKT_OUTPUT_REPORT_PATHS_KEY
 import io.gitlab.arturbosch.detekt.core.util.MONITOR_PROPERTY_KEY
 import io.gitlab.arturbosch.detekt.core.util.PerformanceMonitor
