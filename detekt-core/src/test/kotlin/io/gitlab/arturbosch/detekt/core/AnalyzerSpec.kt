@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import kotlin.io.path.Path
+import kotlin.io.path.absolute
 
 @KotlinCoreEnvironmentTest
 class AnalyzerSpec(val env: KotlinCoreEnvironment) {
@@ -348,7 +349,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             path: String,
             config: Config,
         ): Boolean {
-            val root = Path("/foo/bar/sample/")
+            val root = Path("").absolute()
 
             return createProcessingSettings(config = config) { project { basePath = root } }
                 .use { settings ->
