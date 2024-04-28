@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
+import kotlin.io.path.absolute
 
 class IsActiveOrDefaultSpec {
 
@@ -34,25 +35,26 @@ class IsActiveOrDefaultSpec {
 @Nested
 class ShouldAnalyzeFileSpec {
 
-    private val file = compileContentForTest("", basePath = Path("/cases"), path = Path("/cases/Default.kt"))
+    private val basePath = Path("/cases").absolute()
+    private val file = compileContentForTest("", basePath = basePath, path = Path("/cases/Default.kt"))
 
     @Test
     fun `analyzes file with an empty config`() {
         val config = Config.empty
-        assertThat(config.shouldAnalyzeFile(file)).isTrue()
+        assertThat(config.shouldAnalyzeFile(file, basePath)).isTrue()
     }
 
     @Test
     @DisplayName("should not analyze file with **/*.kt excludes")
     fun ignoreExcludedKt() {
         val config = TestConfig(Config.EXCLUDES_KEY to listOf("**/*.kt"))
-        assertThat(config.shouldAnalyzeFile(file)).isFalse()
+        assertThat(config.shouldAnalyzeFile(file, basePath)).isFalse()
     }
 
     @Test
     fun `Only check relative path`() {
         val config = TestConfig(Config.EXCLUDES_KEY to listOf("**/cases/*.kt"))
-        assertThat(config.shouldAnalyzeFile(file)).isTrue()
+        assertThat(config.shouldAnalyzeFile(file, basePath)).isTrue()
     }
 
     @Test
@@ -61,6 +63,6 @@ class ShouldAnalyzeFileSpec {
             Config.EXCLUDES_KEY to listOf("**/*.kt"),
             Config.INCLUDES_KEY to listOf("**/*.kt"),
         )
-        assertThat(config.shouldAnalyzeFile(file)).isFalse()
+        assertThat(config.shouldAnalyzeFile(file, basePath)).isFalse()
     }
 }

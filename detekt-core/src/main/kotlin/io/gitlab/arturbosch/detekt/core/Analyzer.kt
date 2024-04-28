@@ -90,7 +90,7 @@ internal class Analyzer(
             .map { it to settings.config.subConfig(it.ruleSetId.value) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
             .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
-            .filter { (_, ruleSetConfig) -> ruleSetConfig.shouldAnalyzeFile(file) }
+            .filter { (_, ruleSetConfig) -> ruleSetConfig.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath) }
 
         val (correctableRules, otherRules) = activeRuleSetsToRuleSetConfigs
             .flatMap { (ruleSet, ruleSetConfig) ->
@@ -98,7 +98,7 @@ internal class Analyzer(
                     .asSequence()
                     .map { (ruleId, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleId.value) }
                     .filter { (_, config) -> config.isActiveOrDefault(false) }
-                    .filter { (_, config) -> config.shouldAnalyzeFile(file) }
+                    .filter { (_, config) -> config.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath) }
                     .map { (ruleProvider, config) ->
                         val rule = ruleProvider(config)
                         rule.toRuleInfo(ruleSet.id) to rule
