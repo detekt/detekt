@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.psi.absolutePath
-import io.github.detekt.psi.lineSeparator
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Notification
@@ -27,7 +26,9 @@ class KtFileModifier : FileProcessListener {
     private fun KtFile.unnormalizeContent(): String =
         StringUtilRt.convertLineSeparators(
             checkNotNull(modifiedText),
-            lineSeparator
+            checkNotNull(virtualFile.detectedLineSeparator) {
+                "Line separator was not automatically detected. This is unexpected."
+            }
         )
 }
 

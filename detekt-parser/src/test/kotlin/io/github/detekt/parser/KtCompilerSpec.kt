@@ -1,6 +1,5 @@
 package io.github.detekt.parser
 
-import io.github.detekt.psi.lineSeparator
 import io.github.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
@@ -21,14 +20,14 @@ class KtCompilerSpec {
         fun `Kotlin file with LF line separators has extra user data`() {
             val ktFile = ktCompiler.compile(path.resolve("DefaultLf.kt"))
 
-            assertThat(ktFile.lineSeparator).isEqualTo("\n")
+            assertThat(ktFile.virtualFile.detectedLineSeparator).isEqualTo("\n")
         }
 
         @Test
         fun `Kotlin file with CRLF line separators has extra user data`() {
             val ktFile = ktCompiler.compile(path.resolve("DefaultCrLf.kt"))
 
-            assertThat(ktFile.lineSeparator).isEqualTo("\r\n")
+            assertThat(ktFile.virtualFile.detectedLineSeparator).isEqualTo("\r\n")
         }
 
         @Test
