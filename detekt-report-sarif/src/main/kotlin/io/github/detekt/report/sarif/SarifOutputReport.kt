@@ -19,7 +19,6 @@ import kotlin.io.path.Path
 import kotlin.io.path.absolute
 import kotlin.io.path.invariantSeparatorsPathString
 
-const val DETEKT_OUTPUT_REPORT_BASE_PATH_KEY = "detekt.output.report.base.path"
 const val SRCROOT = "%SRCROOT%"
 
 class SarifOutputReport : BuiltInOutputReport, OutputReport() {

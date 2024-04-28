@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import java.util.Locale
+import kotlin.io.path.Path
+import kotlin.io.path.absolute
 import kotlin.io.path.invariantSeparatorsPathString
 
 private const val TAB = "\t"
@@ -114,12 +116,17 @@ class XmlOutputFormatSpec {
     fun `renders issues with relative path`() {
         val issueA = createIssueForRelativePath(
             ruleInfo = createRuleInfo("id_a"),
+            basePath = "${System.getProperty("user.dir")}/Users/tester/detekt/",
             relativePath = "Sample1.kt"
         )
         val issueB = createIssueForRelativePath(
             ruleInfo = createRuleInfo("id_b"),
+            basePath = "${System.getProperty("user.dir")}/Users/tester/detekt/",
             relativePath = "Sample2.kt"
         )
+
+        val outputFormat = XmlOutputReport()
+        outputFormat.basePath = Path("Users/tester/detekt/").absolute()
 
         val result = outputFormat.render(TestDetektion(issueA, issueB))
 

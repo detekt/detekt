@@ -71,7 +71,6 @@ fun createIssueForRelativePath(
     basePath: String = "Users/tester/detekt/",
     relativePath: String = "TestFile.kt"
 ): Issue {
-    require(!basePath.startsWith("/")) { "The path shouldn't start with '/'" }
     return IssueImpl(
         ruleInfo = ruleInfo,
         entity = Entity(
