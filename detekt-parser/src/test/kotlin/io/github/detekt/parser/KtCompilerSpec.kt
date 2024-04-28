@@ -1,7 +1,6 @@
 package io.github.detekt.parser
 
 import io.github.detekt.psi.lineSeparator
-import io.github.detekt.psi.relativePath
 import io.github.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
@@ -23,8 +22,6 @@ class KtCompilerSpec {
             val ktFile = ktCompiler.compile(path, path.resolve("DefaultLf.kt"))
 
             assertThat(ktFile.lineSeparator).isEqualTo("\n")
-            assertThat(ktFile.relativePath)
-                .isEqualTo(Path("DefaultLf.kt"))
         }
 
         @Test
@@ -32,8 +29,6 @@ class KtCompilerSpec {
             val ktFile = ktCompiler.compile(path, path.resolve("DefaultCrLf.kt"))
 
             assertThat(ktFile.lineSeparator).isEqualTo("\r\n")
-            assertThat(ktFile.relativePath)
-                .isEqualTo(Path("DefaultCrLf.kt"))
         }
 
         @Test
