@@ -1,7 +1,6 @@
 package io.github.detekt.parser
 
 import io.github.detekt.psi.absolutePath
-import io.github.detekt.psi.basePath
 import io.github.detekt.psi.lineSeparator
 import io.github.detekt.psi.relativePath
 import org.intellij.lang.annotations.Language
@@ -34,7 +33,6 @@ open class KtCompiler(
             this.absolutePath = normalizedAbsolutePath
             this.lineSeparator = content.determineLineSeparator()
             val normalizedBasePath = basePath.absolute().normalize()
-            this.basePath = normalizedBasePath.absolute()
             this.relativePath = normalizedBasePath.relativize(normalizedAbsolutePath)
         }
     }

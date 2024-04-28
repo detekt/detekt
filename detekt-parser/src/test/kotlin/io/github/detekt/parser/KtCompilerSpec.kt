@@ -1,6 +1,5 @@
 package io.github.detekt.parser
 
-import io.github.detekt.psi.basePath
 import io.github.detekt.psi.lineSeparator
 import io.github.detekt.psi.relativePath
 import io.github.detekt.test.utils.resourceAsPath
@@ -26,8 +25,6 @@ class KtCompilerSpec {
             assertThat(ktFile.lineSeparator).isEqualTo("\n")
             assertThat(ktFile.relativePath)
                 .isEqualTo(Path("DefaultLf.kt"))
-            assertThat(ktFile.basePath)
-                .endsWith(Path("cases"))
         }
 
         @Test
@@ -37,8 +34,6 @@ class KtCompilerSpec {
             assertThat(ktFile.lineSeparator).isEqualTo("\r\n")
             assertThat(ktFile.relativePath)
                 .isEqualTo(Path("DefaultCrLf.kt"))
-            assertThat(ktFile.basePath)
-                .endsWith(Path("cases"))
         }
 
         @Test
