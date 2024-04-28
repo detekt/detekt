@@ -14,6 +14,7 @@ class PerformanceMonitorSpec {
         val actual = StringPrintStream()
         val spec = ProcessingSpec {
             project {
+                basePath = resourceAsPath("")
                 inputPaths = listOf(resourceAsPath("cases/Test.kt"))
             }
             logging {
