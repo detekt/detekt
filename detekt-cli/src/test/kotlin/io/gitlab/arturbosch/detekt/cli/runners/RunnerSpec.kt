@@ -286,5 +286,35 @@ class RunnerSpec {
                 """.trimIndent()
             )
         }
+
+        @Test
+        fun `keeps LF line endings after autocorrect`() {
+            val inputPath = resourceAsPath("/autocorrect/SingleRuleLF.kt")
+
+            assertThatThrownBy {
+                Runner(parseArguments(args + inputPath.toString()), outPrintStream, errPrintStream).execute()
+            }.isInstanceOf(IssuesFound::class.java)
+
+            assertThat(errPrintStream.toString()).isEmpty()
+            assertThat(outPrintStream.toString())
+                .contains("${inputPath.absolutePathString()}:3:1: Needless blank line(s) [NoConsecutiveBlankLines]")
+                .contains("$modificationMessagePrefix${inputPath.absolutePathString()}$modificationMessageSuffix")
+            assertThat(inputPath).content().isEqualTo("class Test {\n\n}\n")
+        }
+
+        @Test
+        fun `keeps CRLF line endings after autocorrect`() {
+            val inputPath = resourceAsPath("/autocorrect/SingleRuleCRLF.kt")
+
+            assertThatThrownBy {
+                Runner(parseArguments(args + inputPath.toString()), outPrintStream, errPrintStream).execute()
+            }.isInstanceOf(IssuesFound::class.java)
+
+            assertThat(errPrintStream.toString()).isEmpty()
+            assertThat(outPrintStream.toString())
+                .contains("${inputPath.absolutePathString()}:3:1: Needless blank line(s) [NoConsecutiveBlankLines]")
+                .contains("$modificationMessagePrefix${inputPath.absolutePathString()}$modificationMessageSuffix")
+            assertThat(inputPath).content().isEqualTo("class Test {\r\n\r\n}\r\n")
+        }
     }
 }
