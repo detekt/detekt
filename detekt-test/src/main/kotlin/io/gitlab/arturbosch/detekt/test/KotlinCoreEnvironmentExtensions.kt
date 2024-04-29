@@ -5,7 +5,6 @@ import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 
 fun KotlinCoreEnvironment.createBindingContext(files: List<KtFile>): BindingContext =
     TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
@@ -13,6 +12,5 @@ fun KotlinCoreEnvironment.createBindingContext(files: List<KtFile>): BindingCont
         files,
         NoScopeRecordCliBindingTrace(),
         this.configuration,
-        this::createPackagePartProvider,
-        ::FileBasedDeclarationProviderFactory
+        this::createPackagePartProvider
     ).bindingContext
