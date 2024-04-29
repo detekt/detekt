@@ -11,7 +11,6 @@ import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 
 fun generateBindingContext(
     environment: KotlinCoreEnvironment,
@@ -39,8 +38,7 @@ fun generateBindingContext(
             files,
             NoScopeRecordCliBindingTrace(),
             environment.configuration,
-            environment::createPackagePartProvider,
-            ::FileBasedDeclarationProviderFactory
+            environment::createPackagePartProvider
         )
     }
 
