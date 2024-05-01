@@ -166,7 +166,7 @@ As mentioned in...
 Integrations:
 
 - [IntelliJ integration](https://github.com/detekt/detekt-intellij-plugin)
-- [SonarQube integration](https://github.com/detekt/sonar-kotlin)
+- [SonarQube integration](https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/importing-external-issues/external-analyzer-reports/)
 - [TCA(Tencent CodeAnalysis) integration](https://github.com/Tencent/CodeAnalysis/blob/main/client/tool/detekt.py)
 - [Codacy](https://www.codacy.com)
 - [Gradle plugin that configures Error Prone, Checkstyle, PMD, CPD, Lint, Detekt & Ktlint](https://github.com/vanniktech/gradle-code-quality-tools-plugin)
