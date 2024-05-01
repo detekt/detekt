@@ -44,6 +44,10 @@ compiler-plugin:
   - changed-files:
       - any-glob-to-any-file: ["detekt-compiler-plugin/src/**/*"]
 
+parser:
+  - changed-files:
+      - any-glob-to-any-file: ["detekt-parser/src/**/*"]
+
 reports:
   - changed-files:
       - any-glob-to-any-file:
