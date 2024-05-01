@@ -178,7 +178,6 @@ Integrations:
 - [Codefactor](http://codefactor.io/)
 - [GitHub Action: Detekt All](https://github.com/marketplace/actions/detekt-all)
 - [GitHub Action: Setup detekt](https://github.com/marketplace/actions/setup-detekt)
-- [Sonatype Lift](https://github.com/marketplace/muse-dev)
 
 Custom rules and reports from 3rd parties can be found on our [**Detekt Marketplace**](https://detekt.dev/marketplace).
 
