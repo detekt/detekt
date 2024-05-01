@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isConstant
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
@@ -32,7 +33,8 @@ class TopLevelPropertyNaming(config: Config) : Rule(
 
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)
-        if (!property.isTopLevel) return
+        if (!property.isTopLevel || property.psiOrParent.isExtensionDeclaration()) return
+
         if (property.isConstant()) {
             handleConstant(property)
         } else {
