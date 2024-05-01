@@ -100,7 +100,12 @@ fun createCompilerConfiguration(
         addKotlinSourceRoots(kotlinFiles)
         addJvmClasspathRoots(classpathFiles)
 
-        jdkHome?.let { put(JVMConfigurationKeys.JDK_HOME, it.toFile()) }
+        if (jdkHome != null) {
+            put(JVMConfigurationKeys.JDK_HOME, jdkHome.toFile())
+        } else {
+            put(JVMConfigurationKeys.JDK_HOME, File(System.getProperty("java.home")))
+        }
+
         configureJdkClasspathRoots()
     }
 }
