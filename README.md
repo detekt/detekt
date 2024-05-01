@@ -166,20 +166,18 @@ As mentioned in...
 Integrations:
 
 - [IntelliJ integration](https://github.com/detekt/detekt-intellij-plugin)
-- [SonarQube integration](https://github.com/detekt/sonar-kotlin)
+- [SonarQube integration](https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/importing-external-issues/external-analyzer-reports/)
 - [TCA(Tencent CodeAnalysis) integration](https://github.com/Tencent/CodeAnalysis/blob/main/client/tool/detekt.py)
 - [Codacy](https://www.codacy.com)
 - [Gradle plugin that configures Error Prone, Checkstyle, PMD, CPD, Lint, Detekt & Ktlint](https://github.com/vanniktech/gradle-code-quality-tools-plugin)
 - [Violations Lib](https://github.com/tomasbjerre/violations-lib) is a Java library for parsing report files like static code analysis.
 - [sputnik](https://github.com/TouK/sputnik) is a free tool for static code review and provides support for detekt
-- [Gradle Static Analysis plugin](https://github.com/GradleUp/static-analysis-plugin)
 - [Detekt Maven plugin](https://github.com/Ozsie/detekt-maven-plugin) that wraps the Detekt CLI
 - [Detekt Bazel plugin](https://github.com/buildfoundation/bazel_rules_detekt) that wraps the Detekt CLI
 - [Gradle plugin that helps facilitate GitHub PR checking and automatic commenting of violations](https://github.com/btkelly/gnag)
 - [Codefactor](http://codefactor.io/)
 - [GitHub Action: Detekt All](https://github.com/marketplace/actions/detekt-all)
 - [GitHub Action: Setup detekt](https://github.com/marketplace/actions/setup-detekt)
-- [Sonatype Lift](https://github.com/marketplace/muse-dev)
 
 Custom rules and reports from 3rd parties can be found on our [**Detekt Marketplace**](https://detekt.dev/marketplace).
 
