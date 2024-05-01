@@ -45,6 +45,15 @@ class TopLevelPropertyNamingSpec {
         }
     }
 
+    @Test
+    fun `should not report on top level extension properties`() {
+        val code = """
+            val String._foo = "foo"
+        """.trimIndent()
+
+        assertThat(subject.lint(code)).isEmpty()
+    }
+
     @Nested
     inner class `variables on top level` {
 
