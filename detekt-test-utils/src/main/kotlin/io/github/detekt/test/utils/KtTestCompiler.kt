@@ -34,10 +34,6 @@ internal object KtTestCompiler : KtCompiler() {
         configuration.put(CommonConfigurationKeys.MODULE_NAME, "test_module")
         configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
 
-        if (System.getenv("JAVA_HOME") != null) {
-            configuration.put(JVMConfigurationKeys.JDK_HOME, File(System.getenv("JAVA_HOME")))
-        }
-
         // Get the runtime locations of both the stdlib and kotlinx coroutines core jars and pass
         // to the compiler so it's available to generate the BindingContext for rules under test.
         configuration.apply {
@@ -45,6 +41,7 @@ internal object KtTestCompiler : KtCompiler() {
             addJvmClasspathRoot(kotlinxCoroutinesCorePath())
             addJvmClasspathRoots(additionalRootPaths)
             addJavaSourceRoots(additionalJavaSourceRootPaths)
+            put(JVMConfigurationKeys.JDK_HOME, File(System.getProperty("java.home")))
             configureJdkClasspathRoots()
         }
 
