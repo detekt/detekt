@@ -3,7 +3,6 @@ package io.github.detekt.parser
 import io.github.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
-import org.jetbrains.kotlin.com.intellij.psi.PsiErrorElement
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
