@@ -11,7 +11,6 @@ import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoot
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.cli.jvm.config.configureJdkClasspathRoots
-import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
@@ -62,8 +61,6 @@ internal object KtTestCompiler : KtCompiler() {
             )
         return KotlinCoreEnvironmentWrapper(kotlinCoreEnvironment, parentDisposable)
     }
-
-    fun project(): Project = environment.project
 
     fun createKtFile(@Language("kotlin") content: String, path: Path): KtFile =
         psiFileFactory.createPhysicalFile(path.name, StringUtilRt.convertLineSeparators(content))
