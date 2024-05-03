@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
+import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import kotlin.io.path.Path
 
@@ -25,6 +26,9 @@ fun PsiFile.fileNameWithoutSuffix(multiplatformTargetSuffixes: List<String> = em
 }
 
 fun PsiFile.absolutePath(): Path = Path(virtualFile.path)
+
+// KtFile.virtualFilePath is cached so should be a tiny bit more performant when called repeatedly for the same file.
+fun KtFile.absolutePath(): Path = Path(virtualFilePath)
 
 // #3317 If any rule mutates the PsiElement, searching the original PsiElement may throw an exception.
 fun getLineAndColumnInPsiFile(file: PsiFile, range: TextRange): PsiDiagnosticUtils.LineAndColumn? {
