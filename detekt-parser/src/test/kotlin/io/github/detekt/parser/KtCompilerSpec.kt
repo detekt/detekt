@@ -51,17 +51,11 @@ class KtCompilerSpec {
 
         @Test
         fun `parses with errors for non kotlin files`() {
-            val cssPath = resourceAsPath("css")
-            val ktFile = ktCompiler.compile(cssPath.resolve("test.css"))
+            val cssPath = resourceAsPath("css/test.css")
 
-            val errors = mutableListOf<PsiErrorElement>()
-            ktFile.accept(object : KtTreeVisitorVoid() {
-                override fun visitErrorElement(element: PsiErrorElement) {
-                    errors.add(element)
-                }
-            })
-
-            assertThat(errors).isNotEmpty()
+            assertThatIllegalArgumentException()
+                .isThrownBy { ktCompiler.compile(cssPath) }
+                .withMessage("$cssPath is not a Kotlin file")
         }
     }
 
