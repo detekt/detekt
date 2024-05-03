@@ -58,22 +58,4 @@ class KtCompilerSpec {
                 .withMessage("$cssPath is not a Kotlin file")
         }
     }
-
-    @Nested
-    inner class `line ending detection` {
-        @Test
-        fun `detects CRLF line endings`() {
-            assertThat("1\r\n2".determineLineSeparator()).isEqualTo("\r\n")
-        }
-
-        @Test
-        fun `detects LF line endings`() {
-            assertThat("1\n2".determineLineSeparator()).isEqualTo("\n")
-        }
-
-        @Test
-        fun `detects CR line endings`() {
-            assertThat("1\r2".determineLineSeparator()).isEqualTo("\r")
-        }
-    }
 }
