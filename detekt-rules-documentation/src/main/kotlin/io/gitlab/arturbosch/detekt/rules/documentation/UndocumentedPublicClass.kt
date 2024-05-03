@@ -42,7 +42,7 @@ class UndocumentedPublicClass(config: Config) : Rule(
     private val searchInProtectedClass: Boolean by config(false)
 
     @Configuration("a list of class names to exclude from this rule")
-    private val excludeClassNames: List<String> by config(listOf())
+    private val excludeClassNames: List<String> by config(emptyList())
 
     override fun visitClass(klass: KtClass) {
         if (requiresDocumentation(klass)) {
