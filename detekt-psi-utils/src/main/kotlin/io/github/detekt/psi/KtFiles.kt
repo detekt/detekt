@@ -1,11 +1,9 @@
 package io.github.detekt.psi
 
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
-import org.jetbrains.kotlin.psi.UserDataProperty
 import java.nio.file.Path
 import kotlin.io.path.Path
 
@@ -26,13 +24,7 @@ fun PsiFile.fileNameWithoutSuffix(multiplatformTargetSuffixes: List<String> = em
     return fileName
 }
 
-var PsiFile.absolutePath: Path? by UserDataProperty(Key("absolutePath"))
-
-/*
-absolutePath will be null when the Kotlin compiler plugin is used. The file's path can be obtained from the virtual file
-instead.
-*/
-fun PsiFile.absolutePath(): Path = absolutePath ?: Path(virtualFile.path)
+fun PsiFile.absolutePath(): Path = Path(virtualFile.path)
 
 // #3317 If any rule mutates the PsiElement, searching the original PsiElement may throw an exception.
 fun getLineAndColumnInPsiFile(file: PsiFile, range: TextRange): PsiDiagnosticUtils.LineAndColumn? {

@@ -6,7 +6,6 @@ plugins {
 
 dependencies {
     api(libs.kotlin.compilerEmbeddable)
-    implementation(projects.detektPsiUtils)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj)
 }
