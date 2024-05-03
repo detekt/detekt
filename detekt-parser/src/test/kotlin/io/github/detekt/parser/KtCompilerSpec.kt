@@ -20,12 +20,18 @@ class KtCompilerSpec {
         fun `Kotlin file with LF line separators has extra user data`() {
             val ktFile = ktCompiler.compile(path.resolve("DefaultLf.kt"))
 
+            // visit file to trigger line detection
+            ktFile.accept(KtTreeVisitorVoid())
+
             assertThat(ktFile.virtualFile.detectedLineSeparator).isEqualTo("\n")
         }
 
         @Test
         fun `Kotlin file with CRLF line separators has extra user data`() {
             val ktFile = ktCompiler.compile(path.resolve("DefaultCrLf.kt"))
+
+            // visit file to trigger line detection
+            ktFile.accept(KtTreeVisitorVoid())
 
             assertThat(ktFile.virtualFile.detectedLineSeparator).isEqualTo("\r\n")
         }
