@@ -16,10 +16,12 @@ class KtFileModifier : FileProcessListener {
 
     override fun onFinish(files: List<KtFile>, result: Detektion) {
         files.filter { it.modifiedText != null }
-            .map { it.absolutePath() to it.unnormalizeContent() }
-            .forEach { (path, content) ->
+            .forEach { ktFile ->
+                val path = ktFile.absolutePath()
                 result.add(ModificationNotification(path))
-                path.writeText(content)
+                path.writeText(ktFile.unnormalizeContent())
+                // reset modification text after writing as the PsiFile may be reused in tests or an IDE session
+                ktFile.modifiedText = null
             }
     }
 

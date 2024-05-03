@@ -75,6 +75,9 @@ private fun createConfig(ruleSet: AutoCorrectConfig, rule: AutoCorrectConfig): S
 
 private fun runRule(config: Config): Pair<KtFile, List<Finding>> {
     val testFile = loadFile("configTests/fixed.kt")
+    // reset modification text, otherwise it will be persisted between tests
+    testFile.modifiedText = null
+
     val ruleSet = loadRuleSet<FormattingProvider>()
     val rules = ruleSet.rules
         .map { (ruleId, provider) -> provider(config.subConfig(ruleSet.id.value).subConfig(ruleId.value)) }
