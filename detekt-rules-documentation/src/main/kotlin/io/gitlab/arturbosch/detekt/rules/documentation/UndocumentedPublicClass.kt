@@ -41,6 +41,9 @@ class UndocumentedPublicClass(config: Config) : Rule(
     @Configuration("if protected classes should be searched")
     private val searchInProtectedClass: Boolean by config(false)
 
+    @Configuration("a list of class names to exclude from this rule")
+    private val excludeClassNames: List<String> by config(listOf())
+
     override fun visitClass(klass: KtClass) {
         if (requiresDocumentation(klass)) {
             reportIfUndocumented(klass)
@@ -69,17 +72,16 @@ class UndocumentedPublicClass(config: Config) : Rule(
     }
 
     private fun reportIfUndocumented(element: KtClassOrObject) {
-        if (isPublicAndPublicInherited(element) &&
-            element.notEnumEntry() &&
-            element.docComment == null
-        ) {
-            report(
-                CodeSmell(
-                    Entity.atName(element),
-                    "${element.nameAsSafeName} is missing required documentation."
-                )
+        if (!isPublicAndPublicInherited(element)) return
+        if (!element.notEnumEntry()) return
+        if (element.docComment != null) return
+        if (element.name in excludeClassNames) return
+        report(
+            CodeSmell(
+                Entity.atName(element),
+                "${element.nameAsSafeName} is missing required documentation."
             )
-        }
+        )
     }
 
     private fun isPublicAndPublicInherited(element: KtClassOrObject) =

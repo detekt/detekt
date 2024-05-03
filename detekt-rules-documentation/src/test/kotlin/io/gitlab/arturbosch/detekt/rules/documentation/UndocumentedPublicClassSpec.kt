@@ -11,6 +11,7 @@ private const val SEARCH_IN_INNER_CLASS = "searchInInnerClass"
 private const val SEARCH_IN_INNER_OBJECT = "searchInInnerObject"
 private const val SEARCH_IN_INNER_INTERFACE = "searchInInnerInterface"
 private const val SEARCH_IN_PROTECTED_CLASS = "searchInProtectedClass"
+private const val EXCLUDE_CLASS_NAMES = "excludeClassNames"
 
 class UndocumentedPublicClassSpec {
     val subject = UndocumentedPublicClass(Config.empty)
@@ -301,5 +302,33 @@ class UndocumentedPublicClassSpec {
             }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(2)
+    }
+
+    @Test
+    fun `should not report excluded class names`() {
+        val code = """
+            /**
+             * Sample KDoc for parent class.
+             */
+            class Test {
+                class Factory
+            }
+        """.trimIndent()
+        val subject = UndocumentedPublicClass(TestConfig(EXCLUDE_CLASS_NAMES to listOf("Factory")))
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
+    @Test
+    fun `should not report excluded object names`() {
+        val code = """
+            /**
+             * Sample KDoc for parent class.
+             */
+            class Test {
+                object Factory
+            }
+        """.trimIndent()
+        val subject = UndocumentedPublicClass(TestConfig(EXCLUDE_CLASS_NAMES to listOf("Factory")))
+        assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }
