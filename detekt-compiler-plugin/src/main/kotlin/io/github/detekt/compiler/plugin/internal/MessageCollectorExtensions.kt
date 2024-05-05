@@ -32,7 +32,7 @@ fun Issue.renderAsCompilerWarningMessage(): Pair<String, CompilerMessageLocation
 
     val sourceLocation = location?.let {
         CompilerMessageLocation.create(
-            location.path,
+            entity.location.path.toString(),
             entity.location.source.line,
             entity.location.source.column,
             location.lineContent
