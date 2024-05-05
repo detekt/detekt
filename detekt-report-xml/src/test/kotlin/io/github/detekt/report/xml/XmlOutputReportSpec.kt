@@ -19,7 +19,7 @@ import kotlin.io.path.invariantSeparatorsPathString
 
 private const val TAB = "\t"
 
-class XmlOutputFormatSpec {
+class XmlOutputReportSpec {
 
     private val entity1 = Entity(
         "Sample1",
@@ -37,11 +37,11 @@ class XmlOutputFormatSpec {
             position = 22 to 2,
         )
     )
-    private val outputFormat = XmlOutputReport()
+    private val outputReport = XmlOutputReport()
 
     @Test
     fun `renders empty report`() {
-        val result = outputFormat.render(TestDetektion())
+        val result = outputReport.render(TestDetektion())
 
         assertThat(result).isEqualTo(
             """
@@ -56,7 +56,7 @@ class XmlOutputFormatSpec {
     fun `renders one reported issue in single file`() {
         val smell = createIssue("id_a", entity1, "TestMessage")
 
-        val result = outputFormat.render(TestDetektion(smell))
+        val result = outputReport.render(TestDetektion(smell))
 
         assertThat(result).isEqualTo(
             """
@@ -75,7 +75,7 @@ class XmlOutputFormatSpec {
         val smell1 = createIssue("id_a", entity1, "TestMessage")
         val smell2 = createIssue("id_b", entity1, "TestMessage")
 
-        val result = outputFormat.render(TestDetektion(smell1, smell2))
+        val result = outputReport.render(TestDetektion(smell1, smell2))
 
         assertThat(result).isEqualTo(
             """
@@ -95,7 +95,7 @@ class XmlOutputFormatSpec {
         val smell1 = createIssue("id_a", entity1, "TestMessage")
         val smell2 = createIssue("id_a", entity2, "TestMessage")
 
-        val result = outputFormat.render(TestDetektion(smell1, smell2))
+        val result = outputReport.render(TestDetektion(smell1, smell2))
 
         assertThat(result).isEqualTo(
             """
@@ -125,10 +125,10 @@ class XmlOutputFormatSpec {
             relativePath = "Sample2.kt"
         )
 
-        val outputFormat = XmlOutputReport()
-        outputFormat.basePath = Path("Users/tester/detekt/").absolute()
+        val outputReport = XmlOutputReport()
+        outputReport.basePath = Path("Users/tester/detekt/").absolute()
 
-        val result = outputFormat.render(TestDetektion(issueA, issueB))
+        val result = outputReport.render(TestDetektion(issueA, issueB))
 
         assertThat(result).isEqualTo(
             """
@@ -152,7 +152,7 @@ class XmlOutputFormatSpec {
         val smell3 = createIssue("id_a", entity2, "TestMessage")
         val smell4 = createIssue("id_b", entity2, "TestMessage")
 
-        val result = outputFormat.render(
+        val result = outputReport.render(
             TestDetektion(
                 smell1,
                 smell2,
@@ -201,7 +201,7 @@ class XmlOutputFormatSpec {
                 </checkstyle>
             """.trimIndent()
 
-            val actual = outputFormat.render(TestDetektion(issue))
+            val actual = outputReport.render(TestDetektion(issue))
 
             assertThat(actual).isEqualTo(expected)
         }
