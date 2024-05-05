@@ -1,7 +1,7 @@
 public final class io/github/detekt/test/utils/CompileExtensionsKt {
 	public static final fun compileContentForTest (Ljava/lang/String;Ljava/lang/String;)Lorg/jetbrains/kotlin/psi/KtFile;
-	public static final fun compileContentForTest (Ljava/lang/String;Ljava/nio/file/Path;Ljava/nio/file/Path;)Lorg/jetbrains/kotlin/psi/KtFile;
-	public static synthetic fun compileContentForTest$default (Ljava/lang/String;Ljava/nio/file/Path;Ljava/nio/file/Path;ILjava/lang/Object;)Lorg/jetbrains/kotlin/psi/KtFile;
+	public static final fun compileContentForTest (Ljava/lang/String;Ljava/nio/file/Path;)Lorg/jetbrains/kotlin/psi/KtFile;
+	public static synthetic fun compileContentForTest$default (Ljava/lang/String;Ljava/nio/file/Path;ILjava/lang/Object;)Lorg/jetbrains/kotlin/psi/KtFile;
 	public static final fun compileForTest (Ljava/nio/file/Path;)Lorg/jetbrains/kotlin/psi/KtFile;
 }
 

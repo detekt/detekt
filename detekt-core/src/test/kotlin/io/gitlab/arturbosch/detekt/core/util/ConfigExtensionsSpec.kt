@@ -36,7 +36,7 @@ class IsActiveOrDefaultSpec {
 class ShouldAnalyzeFileSpec {
 
     private val basePath = Path("/cases").absolute()
-    private val file = compileContentForTest("", basePath = basePath, path = Path("/cases/Default.kt"))
+    private val file = compileContentForTest("", path = Path("/cases/Default.kt"))
 
     @Test
     fun `analyzes file with an empty config`() {

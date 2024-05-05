@@ -2,7 +2,6 @@ package io.github.detekt.parser
 
 import io.github.detekt.psi.absolutePath
 import io.github.detekt.psi.lineSeparator
-import io.github.detekt.psi.relativePath
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
@@ -20,20 +19,18 @@ open class KtCompiler(
 
     protected val psiFileFactory = KtPsiFactory(environment.project, markGenerated = false)
 
-    fun compile(basePath: Path, path: Path): KtFile {
+    fun compile(path: Path): KtFile {
         require(path.isRegularFile()) { "Given path '$path' should be a regular file!" }
-        return createKtFile(path.readText(), basePath, path)
+        return createKtFile(path.readText(), path)
     }
 
-    fun createKtFile(@Language("kotlin") content: String, basePath: Path, path: Path): KtFile {
+    fun createKtFile(@Language("kotlin") content: String, path: Path): KtFile {
         val psiFile = psiFileFactory.createPhysicalFile(path.name, StringUtilRt.convertLineSeparators(content))
 
         return psiFile.apply {
             val normalizedAbsolutePath = path.absolute().normalize()
             this.absolutePath = normalizedAbsolutePath
             this.lineSeparator = content.determineLineSeparator()
-            val normalizedBasePath = basePath.absolute().normalize()
-            this.relativePath = normalizedBasePath.relativize(normalizedAbsolutePath)
         }
     }
 }

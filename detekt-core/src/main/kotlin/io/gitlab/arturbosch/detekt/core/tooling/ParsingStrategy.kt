@@ -11,14 +11,13 @@ typealias ParsingStrategy = (settings: ProcessingSettings) -> List<KtFile>
 fun contentToKtFile(content: String, path: Path): ParsingStrategy = { settings ->
     require(path.isRegularFile()) { "Given sub path ($path) should be a regular file!" }
     listOf(
-        KtCompiler(settings.environment).createKtFile(content, settings.spec.projectSpec.basePath, path)
+        KtCompiler(settings.environment).createKtFile(content, path)
     )
 }
 
 val inputPathsToKtFiles: ParsingStrategy = { settings ->
     val compiler = KtCompiler(settings.environment)
-    val basePath = settings.spec.projectSpec.basePath
     settings.spec.projectSpec.inputPaths.map { path ->
-        compiler.compile(basePath, path)
+        compiler.compile(path)
     }
 }
